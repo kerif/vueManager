@@ -5,7 +5,7 @@ const loadonDemand = (path) => {
 const LayoutContainer = loadonDemand('layout/layoutcontainer')
 const Panel = loadonDemand('home/panel')
 // 修改密码
-const ResetPassword = loadonDemand('home/resetpassword')
+const ResetPassword = loadonDemand('home/reset-password')
 // 员工列表
 const StaffList = loadonDemand('staff/stafflist')
 // 员工组列表
@@ -34,8 +34,8 @@ export default [
         }
       },
       {
-        path: '/home/resetpassword',
-        name: 'resetpassword',
+        path: '/home/reset-password',
+        name: 'reset-password',
         component: ResetPassword,
         meta: {
           level: 2,
