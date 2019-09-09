@@ -5,7 +5,7 @@
       <span>管理员</span>
     </div>
     <el-menu
-      :default-active="$route.path"
+      :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"
       background-color="#171B42"
       text-color="#7E8BFF"
       :router="true"
@@ -34,6 +34,7 @@ export default {
     $route (newValue, oldValue) {
       console.log('old', oldValue)
       console.log('v', newValue)
+      console.log('a', newValue.meta.level === 3)
     }
   },
   computed: {

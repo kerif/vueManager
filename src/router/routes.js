@@ -61,6 +61,16 @@ export default [
         }
       },
       {
+        path: '/staff/staffadd',
+        name: 'staffadd',
+        component: StaffEdit,
+        meta: {
+          level: 3,
+          group: '员工',
+          parent: '/staff/stafflist'
+        }
+      },
+      {
         path: '/staff/staffgrouplist',
         name: 'staffgrouplist',
         component: StaffGroupList,
@@ -68,15 +78,6 @@ export default [
           level: 2,
           group: '员工',
           name: '员工组列表'
-        }
-      },
-      {
-        path: '/staff/staffadd',
-        name: 'staffadd',
-        component: StaffEdit,
-        meta: {
-          level: 3,
-          group: '员工'
         }
       }
     ]
