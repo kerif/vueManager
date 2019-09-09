@@ -1,3 +1,17 @@
 <template>
-  <div class="panel-contaniner">首页</div>
+  <div class="panel-container">
+    首页
+  </div>
 </template>
+
+<script>
+export default {
+  
+}
+</script>
+
+<style lang="scss">
+.panel-container {
+
+}
+</style>

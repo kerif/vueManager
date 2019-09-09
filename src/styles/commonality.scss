@@ -1,0 +1,187 @@
+@import 'communalVariate.scss';
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: $white;
+    font-size: 14px;
+    color: $font-color;
+    height: 100%;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: Helvetica, Tahoma, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif !important;
+}
+
+#app {
+    height: 100%;
+}
+
+::selection {
+    background: $light-blue;
+    color: $white;
+}
+
+// 表格公共样式
+.el-table {
+    tr th.is-leaf {
+        border-bottom: $hr 4px solid;
+        background-color: $white;
+
+        div {
+            background-color: $white;
+            color: $font-color;
+        }
+    }
+
+    td {
+        border-right: solid 1px $hr;
+        color: $font-color;
+    }
+
+    .el-table--border td,
+    .el-table--border th {
+        border-right: solid 1px $hr;
+    }
+}
+
+.el-notification {
+    z-index: 3011 !important;
+}
+
+.el-message-box__wrapper {
+    z-index: 3011 !important;
+}
+
+.v-modal {
+    z-index: 3000 !important;
+}
+
+.el-dialog__wrapper {
+    z-index: 3010 !important;
+}
+
+.el-select-dropdown {
+    z-index: 3011 !important;
+}
+
+.el-message {
+    z-index: 3011 !important;
+}
+
+.el-picker-panel {
+    z-index: 3010 !important;
+}
+
+// 按钮公共样式
+@mixin action-btn ($color) {
+    padding: 7px 9px !important;
+    background: $white !important;
+    border: 1px solid $color !important;
+    color: $color !important;
+    transition: 0.4s all ease !important;
+
+    span {
+        font-size: 14px !important;
+    }
+
+    &:focus {
+        background: lighten($color, 10%) !important;
+        border: 1px solid lighten($color, 10%) !important;
+        color: $white !important;
+    }
+
+    &:hover {
+        background: $color !important;
+        border: 1px solid $color !important;
+        color: $white !important;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .top-20 {
+        margin-top: 20px;
+    }
+}
+
+.btn-blue {
+    @include action-btn($blue);
+}
+
+.btn-green {
+    @include action-btn($green);
+}
+
+.btn-dark-green {
+    @include action-btn($dark-green);
+}
+
+.btn-blue-green {
+    @include action-btn($blue-green);
+}
+
+.btn-light-red {
+    @include action-btn($light-red);
+}
+
+.btn-purple {
+    @include action-btn($purple);
+}
+
+.btn-deep-purple {
+    @include action-btn($deep-purple);
+}
+
+.btn-yellow {
+    @include action-btn($yellow);
+}
+
+.btn-pink {
+    @include action-btn($pink);
+}
+
+.btn-orangey-red {
+    @include action-btn($orangey-red);
+}
+
+// 列表页公共间距
+.list-main {
+    padding: 16px 40px;
+    background-color: $white;
+}
+
+// 保存按钮
+.save-btn {
+    width: 10em;
+    margin-bottom: 1em;
+}
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+    border-color: #20a0ff;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+}

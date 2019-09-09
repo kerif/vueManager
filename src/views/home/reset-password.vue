@@ -1,0 +1,102 @@
+<template>
+  <div class="password">
+    <el-form :model="params" :rules="rules" ref="passwordForm" label-width="100px" class="password-form">
+      <el-form-item prop="old_password" class="input teshu" label="原密码">
+        <el-input type="password" v-model="params.old_password" auto-complete="off" placeholder="请输入旧密码"></el-input>
+      </el-form-item>
+      <el-form-item prop="new_password" class="input" label="新密码">
+        <el-input type="password" v-model="params.new_password" auto-complete="off" placeholder="请输入新密码"></el-input>
+      </el-form-item>
+      <el-form-item prop="new_password2" class="input" label="确认新密码">
+        <el-input type="password" v-model="params.new_password2" auto-complete="off" placeholder="请再次输入新密码"></el-input>
+      </el-form-item>
+      <el-form-item class="submit" label-width="100px">
+        <el-button type="primary" @click="submit('passwordForm')" :loading="$store.state.btn_loading">保存</el-button>
+        <el-button @click="clear" :disabled="$store.state.btn_loading">重置</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+</template>
+<script>
+export default {
+  name: 'password',
+  data () {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.params.new_password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      params: {
+        old_password: '',
+        new_password: '',
+        new_password2: ''
+      },
+      rules: {
+        old_password: [
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
+        ],
+        new_password: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
+        ],
+        new_password2: [
+          { required: true, validator: validatePass2, trigger: 'blur' },
+          { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
+        ]
+      }
+    }
+  },
+  methods: {
+    submit (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$http.post('user/changePSD', {
+            password: this.params.old_password,
+            newpassword: this.params.new_password,
+            secondpassword: this.params.new_password2
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '成功',
+                message: res.msg
+              })
+              this.$store.commit('token/removeToken')
+              this.$router.push('/login')
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    clear () {
+      this.params = {
+        old_password: '',
+        new_password: '',
+        new_password2: ''
+      }
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+.password {
+  .password-form {
+    width: 40%;
+    margin-left: 10%;
+    padding: 5% 0 12%;
+  }
+}
+</style>
