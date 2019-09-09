@@ -69,7 +69,7 @@ export default {
 </script>
 <style lang="scss">
 .layout-aside {
-  width: 230px;
+  width: 230px !important;
   min-height: 100vh;
   background-color: #171B42;
   .aside-top {

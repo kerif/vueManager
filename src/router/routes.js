@@ -67,6 +67,7 @@ export default [
         meta: {
           level: 3,
           group: '员工',
+          name: '添加员工',
           parent: '/staff/stafflist'
         }
       },

@@ -5,7 +5,7 @@
 </template>
 <style lang="scss">
 .layout-footer {
-  height: 50px;
+  height: 50px !important;
   line-height: 50px;
   border-top: 1px solid #ECEDF0;
   color: #3540A5;
