@@ -30,6 +30,12 @@
 <script>
 import { routes } from '@/router'
 export default {
+  watch: {
+    $route (newValue, oldValue) {
+      console.log('old', oldValue)
+      console.log('v', newValue)
+    }
+  },
   computed: {
     routers () {
       return routes
