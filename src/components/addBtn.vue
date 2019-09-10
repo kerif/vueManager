@@ -27,7 +27,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../style/communalVariate.scss';
+@import '../styles/communalVariate.scss';
 .add-btn {
   background: $white;
   margin: 1.5em 1em;

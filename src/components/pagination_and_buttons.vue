@@ -6,7 +6,8 @@
       @click="item.method"
       :loading="item.loading"
       :disabled="item.disabled?item.disabled:false">
-        {{item.name ? $t(item.name) : item.CName}}
+        <!-- {{item.name ? item.name : item.CName}} -->
+        {{item.name}}
       </el-button>
     </div>
     <div class="pagination">
