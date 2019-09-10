@@ -1,63 +1,50 @@
 <template>
-  <div class="add-btn" @click="clickMethod">
+  <div class="add-btn-container" @click="clickMethod">
     <span class="add">+</span>
-    <el-button size="small">{{$t(text) || $t(router.name)}}</el-button>
+    <span class="add-btn">
+      <slot></slot>
+    </span>
   </div>
 </template>
 <script>
 export default {
   props: {
-    text: {
-      type: String,
-      default: ''
-    },
-    router: {
-      type: Object
-    }
+    router: String
   },
   methods: {
     clickMethod () {
-      if (!this.text) {
-        this.$router.push(this.router)
-      } else {
-        this.$emit('click')
+      if (this.router) {
+        this.$router.push({ name: this.router })
       }
     }
   }
 }
 </script>
 <style lang="scss">
-@import '../style/communalVariate.scss';
-.add-btn {
-  background: $white;
-  margin: 1.5em 1em;
-  border: 1px solid $hr;
-  border-radius: 4px;
-  display: inline-block;
+@import '@/styles/communalVariate.scss';
+.add-btn-container {
+  background-color: $bg-btn;
+  border-radius: 6px;
+  color: $main-color;
+  line-height: 40px;
+  padding: 0 10px;
+  float: right;
   cursor: pointer;
   .add {
-    border-right: 1px solid $hr;
-    font-size: 17px;
-    vertical-align: middle;
-    padding: 0.1em 0.4em;
-    color: $font-color;
+    font-size: 18px;
+    font-weight: bold;
   }
-  .el-button {
+  .add-btn {
     border-radius: 0;
     border: none;
     font-size: 12px;
-    color: $font-color;
-    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
   }
   &:hover {
-    border: 1px solid $light-blue;
-    .add {
-      color: $light-blue;
-      border-right: 1px solid $light-blue;
-    }
-    .el-button {
-      color: $light-blue;
-    }
+    color: #fff;
+    background-color: $main-color;
+    transition: all .5s ease-in;
   }
 }
 </style>

@@ -90,6 +90,9 @@
 .btn-blue {
     @include action-btn($blue);
 }
+.btn-main {
+    @include action-btn($main-color);
+}
 
 .btn-green {
     @include action-btn($green);
