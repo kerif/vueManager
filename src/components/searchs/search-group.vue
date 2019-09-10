@@ -1,9 +1,9 @@
 <template>
     <el-row :gutter="10" class="search-group">
       <slot></slot>
-      <el-col :lg="4" :sm="12" class="pull-right">
-        <el-input class="top-20" :value="value" ref="input" @input="updateValue"  @keyup.enter.native="Enter">
-          <el-button slot="append" @click="Enter"  icon="el-icon-search" :loading="$store.state.btn_loading"></el-button>
+      <el-col :lg="6" :sm="12" class="pull-right">
+        <el-input class="top-20" :value="value" :placeholder="placeholder" ref="input" @input="updateValue"  @keyup.enter.native="Enter">
+          <el-button class="search-btn" slot="append" @click="Enter" :loading="$store.state.btn_loading">搜索</el-button>
         </el-input>
       </el-col>
     </el-row>
@@ -13,6 +13,10 @@ export default {
   props: {
     value: {
       type: String
+    },
+    placeholder: {
+      type: String,
+      default: '请输入关键字'
     }
   },
   data () {
@@ -32,9 +36,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-group {
-  line-height: 4em;
+  // line-height: 4em;
   .pull-right {
     float: right
+  }
+  .search-btn {
+    color: #fff;
+    background-color: #3540A5;
+    border: 1px solid #3540A5;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
   }
   padding-bottom: 15px;
 }

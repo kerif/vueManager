@@ -12,16 +12,18 @@ const StaffList = loadonDemand('staff/stafflist')
 const StaffGroupList = loadonDemand('staff/staffgrouplist')
 // 添加、编辑员工
 const StaffEdit = loadonDemand('staff/staffaddedit')
+// 客户列表
+const VipList = loadonDemand('vip/vip/viplist')
+// 客户组列表
+const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
+// 客户地址
+const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 
 export default [
   {
     path: 'home',
-    name: 'home',
     redirect: 'home/panel',
     component: LayoutContainer,
-    meta: {
-      level: 1
-    },
     children: [
       {
         path: '/home/panel',
@@ -47,7 +49,6 @@ export default [
   },
   {
     path: 'staff',
-    name: 'staff',
     component: LayoutContainer,
     children: [
       {
@@ -79,6 +80,42 @@ export default [
           level: 2,
           group: '员工',
           name: '员工组列表'
+        }
+      }
+    ]
+  },
+  {
+    path: 'vip',
+    component: LayoutContainer,
+    children: [
+      {
+        path: '/vip/viplist',
+        name: 'viplist',
+        component: VipList,
+        meta: {
+          group: '客户',
+          level: 2,
+          name: '客户'
+        }
+      },
+      {
+        path: '/vip/vipgrouplist',
+        name: 'vipgrouplist',
+        component: VipGroupList,
+        meta: {
+          level: 2,
+          group: '客户',
+          name: '客户组'
+        }
+      },
+      {
+        path: '/vip/vipaddress',
+        name: 'vipaddress',
+        component: VipAddressList,
+        meta: {
+          level: 2,
+          group: '客户',
+          name: '客户地址'
         }
       }
     ]

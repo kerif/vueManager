@@ -1,6 +1,6 @@
 <template>
-    <el-col :lg="3" :md="12">
-      <el-select class="top-20" style="width: 100%;" @change="selectChange" v-model="select_value" :placeholder="$t(placeholder)" :clearable="true" :disabled="disabled">
+    <el-col :lg="6" :md="12">
+      <el-select class="top-20" style="width: 100%;" @change="selectChange" v-model="select_value" :placeholder="placeholder" :clearable="true" :disabled="disabled">
         <el-option
           v-for="item in selectArr"
           :key="item.value"
@@ -19,7 +19,8 @@ export default {
     },
     value: [String, Number],
     placeholder: {
-      type: String
+      type: String,
+      default: '请选择'
     },
     width: {
       type: Number,
@@ -56,5 +57,4 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../../style/commonality.scss';
 </style>
