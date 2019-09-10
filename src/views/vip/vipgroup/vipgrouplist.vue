@@ -16,6 +16,11 @@
           <el-button class="btn-main">成员</el-button>
         </template>
       </el-table-column>
+      <template slot="append">
+        <div class="append-box">
+          <el-button size="small">删除</el-button>
+        </div>
+      </template>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>
