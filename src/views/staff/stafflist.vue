@@ -1,14 +1,16 @@
 <template>
   <div class="staff-list-container list-main">
+    <div>
     <search-group v-model="page_params.keyword" @search="goSearch">
+    </search-group>
+    </div>
+    <div class="select-box">
   <search-select v-model="change_params.checked" :selectArr="refundState" placeholder="审核状态">
     </search-select>
-    </search-group>
-  <el-button @click="addHumans">添加员工</el-button>
-    <div style="text-align:right;">
-      <!-- <add-btn :router="{name: 'VIPGroupInfoAdd'}"></add-btn> -->
+      <add-btn router="staffadd">添加客户组</add-btn>
     </div>
       <el-table
+        class="data-list"
         :data="vip_group_list"
         border
         @selection-change="selectionChange"
@@ -65,23 +67,34 @@
         </el-button>
       </template>
       </el-table-column>
+      <template slot="append">
+        <div class="append-box">
+          <!-- 禁止登录 -->
+          <el-button size="small" class="btn-deep-blue">禁止登录</el-button>
+          <!-- 删除 -->
+          <el-button size="small" class="btn-light-red">删除</el-button>
+        </div>
+      </template>
     </el-table>
     <!-- <my-page-and-btn
       :pageParams="page_params"
       :lists="btn_list">
     </my-page-and-btn > -->
+      <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>
 </template>
 <script>
-// import MyPageAndBtn from '@/components/pagination_and_buttons'
-import { pagination, selection } from '@/mixin'
 import { SearchGroup, SearchSelect } from '@/components/searchs/index'
+import NlePagination from '@/components/pagination'
+import { pagination, selection }  from '@/mixin'
+import AddBtn from '@/components/addBtn'
 export default {
   mixins: [pagination, selection],
-  // components: { MyPageAndBtn },
   components: {
     SearchGroup,
-    SearchSelect
+    SearchSelect,
+    AddBtn,
+    NlePagination
   },
   name: 'staffListContainer',
   data () {
@@ -231,6 +244,9 @@ export default {
 .staff-list-container {
   .el-button {
     margin-bottom: 8px;
+  }
+  .select-box {
+    overflow: hidden;
   }
 }
 </style>
