@@ -97,27 +97,27 @@ export default {
       }],
       rules: { // 必填项校验
         full_name: [
-            { required: true, message: '请输入姓名', trigger: 'change' }
+          { required: true, message: '请输入姓名', trigger: 'change' }
           ],
-         name: [
-            { required: true, message: '请输入名字', trigger: 'change' }
-          ],
-          email: [
-            { required: true, message: '请输入邮箱', trigger: 'blur' },
-            { type: 'email', message: '', trigger: ['blur', 'change'] }
-          ],
-          tel: [
-            { required: true, message: '请输入电话号码', trigger: 'change' }
-          ],
-          password: [
-            { required: true, message: '请输入密码', trigger: 'change' }
-          ],
-          password_confirmation: [
-            { required: true, message: '请再次输入密码', trigger: 'change' }
-          ],
-          group: [
-            { required: true, message: '请输入员工组', trigger: 'change' }
-          ]
+        name: [
+          { required: true, message: '请输入名字', trigger: 'change' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { type: 'email', message: '', trigger: ['blur', 'change'] }
+        ],
+        tel: [
+          { required: true, message: '请输入电话号码', trigger: 'change' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'change' }
+        ],
+        password_confirmation: [
+          { required: true, message: '请再次输入密码', trigger: 'change' }
+        ],
+        group: [
+          { required: true, message: '请输入员工组', trigger: 'change' }
+        ]
       },
       user: {}
     }

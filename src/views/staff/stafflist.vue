@@ -82,7 +82,7 @@
   </div>
 </template>
 <script>
-import { SearchGroup, SearchSelect } from '@/components/searchs/index'
+import { SearchGroup, SearchSelect } from'@/components/searchs/index'
 import NlePagination from '@/components/pagination'
 import { pagination, selection } from '@/mixin'
 import AddBtn from '@/components/addBtn'
