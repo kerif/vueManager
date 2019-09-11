@@ -98,7 +98,7 @@ export default {
       rules: { // 必填项校验
         full_name: [
           { required: true, message: '请输入姓名', trigger: 'change' }
-          ],
+        ],
         name: [
           { required: true, message: '请输入名字', trigger: 'change' }
         ],
@@ -143,33 +143,33 @@ export default {
     // 保存
     update (formName) {
       if (this.$route.params.id) { // 如果是编辑状态
-       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$http.put(`user/${this.$route.params.id}`,{
-            name: this.user.name,
-            full_name: this.user.full_name,
-            email: this.user.email,
-            note: this.user.note,
-            phone: this.user.phone,
-            id: this.$route.params.id
-          }).then((res) => {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.$http.put(`user/${this.$route.params.id}`, {
+              name: this.user.name,
+              full_name: this.user.full_name,
+              email: this.user.email,
+              note: this.user.note,
+              phone: this.user.phone,
+              id: this.$route.params.id
+            }).then((res) => {
               if (res.ret) {
-              this.$notify({
-                title: '成功操作',
-                message: res.msg,
-                type: 'success'
-              })
-            }
-            this.$router.push({name: 'userList'})
-          })
-        } else {
-          return false
-        }
-       })
+                this.$notify({
+                  title: '成功操作',
+                  message: res.msg,
+                  type: 'success'
+                })
+              }
+              this.$router.push({ name: 'userList' })
+            })
+          } else {
+            return false
+          }
+        })
       } else { // 添加员工
         this.$refs[formName].validate((valid) => {
-        if (valid) {
-            this.$http.post(`user`,{
+          if (valid) {
+            this.$http.post(`user`, {
               name: this.user.name,
               full_name: this.user.full_name,
               email: this.user.email,
@@ -177,17 +177,17 @@ export default {
               phone: this.user.phone,
               password: this.user.password,
               password_confirmation: this.user.password_confirmation
-          }).then((res) => {
-             this.$notify({
-              title: '操作成功',
-              message: res.tips,
-              type: 'success'
+            }).then((res) => {
+              this.$notify({
+                title: '操作成功',
+                message: res.tips,
+                type: 'success'
+              })
+              this.$router.push({ name: 'userList' })
             })
-            this.$router.push({name: 'userList'})
-          })
-        }else{
-          return false
-        }
+          } else {
+            return false
+          }
         })
       }
     }
