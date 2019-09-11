@@ -1,12 +1,10 @@
 <template>
   <div class="staff-list-container list-main">
     <div>
-    <search-group v-model="page_params.keyword" @search="goSearch">
-    </search-group>
+    <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <div class="select-box">
-  <search-select v-model="change_params.checked" :selectArr="refundState" placeholder="审核状态">
-    </search-select>
+    <search-select v-model="change_params.checked" :selectArr="refundState" placeholder="审核状态"></search-select>
       <add-btn router="staffadd">添加客户组</add-btn>
     </div>
       <el-table
@@ -86,7 +84,7 @@
 <script>
 import { SearchGroup, SearchSelect } from '@/components/searchs/index'
 import NlePagination from '@/components/pagination'
-import { pagination, selection }  from '@/mixin'
+import { pagination, selection } from '@/mixin'
 import AddBtn from '@/components/addBtn'
 export default {
   mixins: [pagination, selection],
@@ -107,8 +105,8 @@ export default {
         checked: ''
       },
       refundState: [
-      { value: '1', label: '未审核' },
-      { value: '2', label: '已拒绝' }
+        { value: '1', label: '未审核' },
+        { value: '2', label: '已拒绝' }
       ]
     }
   },
@@ -146,7 +144,7 @@ export default {
       //     page: this.page_params.page,
       //     size: this.page_params.size,
       //     keyword: this.page_params.keyword,
-            //  checked: this.change_params.checked || 0
+      //  checked: this.change_params.checked || 0
       //   }
       // }).then(res => {
       //   this.tableLoading = false
@@ -224,7 +222,7 @@ export default {
       })
     }
   },
-    watch: {
+  watch: {
     // 监听已选择的行
     selection (newValue) {
       if (newValue.length) {

@@ -36,26 +36,26 @@
 </template>
 <script>
 export default {
-  data() {
-      return {
-        ruleForm: {
-            name: '',
-            enName: '',
-            desc: ''
-        },
-        rules: {
-          name: [
-            { required: true, message: '请输入员工组中文名', trigger: 'blur' }
-         ],
-         enName: [
-            { required: true, message: '请输入员工组英文名', trigger: 'blur' }
-         ]
-        }
+  data () {
+    return {
+      ruleForm: {
+        name: '',
+        enName: '',
+        desc: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入员工组中文名', trigger: 'blur' }
+        ],
+        enName: [
+          { required: true, message: '请输入员工组英文名', trigger: 'blur' }
+        ]
       }
+    }
   },
   methods: {
-      confirm (formName) {
-        this.$refs[formName].validate((valid) => {
+    confirm (formName) {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$http.post('user/changePSD', {
             password: this.params.old_password,
@@ -81,8 +81,8 @@ export default {
           return false
         }
       })
-      }
-  },
+    }
+  }
 }
 </script>
 <style lang="scss">
