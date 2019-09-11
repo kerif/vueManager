@@ -1,8 +1,7 @@
 <template>
   <div class="staff-group-container list-main">
     <div>
-    <search-group v-model="page_params.keyword" @search="goSearch">
-    </search-group>
+    <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <div class="select-box">
       <add-btn @click.native="addStaff">添加员工组</add-btn>
@@ -85,9 +84,9 @@
   </div>
 </template>
 <script>
-import { SearchGroup } from '@/components/searchs/index'
+import { SearchGroup } from '@/components/searchs/index'
 import NlePagination from '@/components/pagination'
-import { pagination, selection }  from '@/mixin'
+import { pagination, selection } from '@/mixin'
 import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
 export default {
@@ -108,8 +107,8 @@ export default {
         checked: ''
       },
       refundState: [
-      { value: '1', label: '未审核' },
-      { value: '2', label: '已拒绝' }
+        { value: '1', label: '未审核' },
+        { value: '2', label: '已拒绝' }
       ]
     }
   },
@@ -142,7 +141,7 @@ export default {
       //     page: this.page_params.page,
       //     size: this.page_params.size,
       //     keyword: this.page_params.keyword,
-            //  checked: this.change_params.checked || 0
+      //  checked: this.change_params.checked || 0
       //   }
       // }).then(res => {
       //   this.tableLoading = false
@@ -232,7 +231,7 @@ export default {
       })
     }
   },
-    watch: {
+  watch: {
     // 监听已选择的行
     selection (newValue) {
       if (newValue.length) {

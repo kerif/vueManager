@@ -1,10 +1,10 @@
 <template>
   <div class="staff-list-container list-main">
     <div>
-    <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+    <search-group v-model="page_params.keyword"></search-group>
     </div>
     <div class="select-box">
-    <search-select v-model="change_params.checked" :selectArr="refundState" placeholder="审核状态"></search-select>
+    <search-select v-model="change_params.checked" :selectArr="refundState" placeholder="审核状态"></search-select>
       <add-btn router="staffadd">添加客户组</add-btn>
     </div>
       <el-table
@@ -82,7 +82,7 @@
   </div>
 </template>
 <script>
-import { SearchGroup, SearchSelect } from '@/components/searchs/index'
+import { SearchGroup, SearchSelect } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination, selection } from '@/mixin'
 import AddBtn from '@/components/addBtn'
