@@ -11,7 +11,7 @@
     </div>
       <el-table
         class="data-list"
-        :data="vip_group_list"
+        :data="staff_list"
         border
         @selection-change="selectionChange"
         @row-click="rowClick"
@@ -99,7 +99,7 @@ export default {
   name: 'staffListContainer',
   data () {
     return {
-      vip_group_list: [],
+      staff_list: [],
       deleteSelectionLoading: false,
       tableLoading: false,
       normal: 1,
@@ -151,8 +151,8 @@ export default {
       // }).then(res => {
       //   this.tableLoading = false
       //   // this.show_agent_setting = !!res.data.show_agent_setting
-      //   this.vip_group_list = res.data.data
-      //   // this.getPermission(this.vip_group_list)
+      //   this.staff_list = res.data.data
+      //   // this.getPermission(this.staff_list)
       //   this.page_params.total = res.data.total
       // }).catch(() => {
       //   this.tableLoading = false

@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import VipGroup from './vipgroup.vue'
+import addStaff from './addStaff.vue'
+import staffList from './staffList.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
+const AddStaffController = Vue.extend(addStaff)
+const StaffListController = Vue.extend(staffList)
 
 const mixin = {
   data () {
@@ -17,6 +21,20 @@ function initInstance (type) {
   switch (type) {
     case 'vipgroup':
       instance = new VipGroupController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 添加员工组
+    case 'addStaff':
+      instance = new AddStaffController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 员工组成员
+    case 'staffList':
+      instance = new StaffListController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -12,6 +12,8 @@ const StaffList = loadonDemand('staff/stafflist')
 const StaffGroupList = loadonDemand('staff/staffgrouplist')
 // 添加、编辑员工
 const StaffEdit = loadonDemand('staff/staffaddedit')
+// 员工组修改权限
+const modifyPre = loadonDemand('staff/modify_permissions')
 // 客户列表
 const VipList = loadonDemand('vip/vip/viplist')
 // 客户组列表
@@ -80,6 +82,17 @@ export default [
           level: 2,
           group: '员工',
           name: '员工组列表'
+        }
+      },
+      {
+        path: '/staff/modify_permissions',
+        name: 'modifyPermissions',
+        component: modifyPre,
+        meta: {
+          level: 3,
+          group: '员工',
+          name: '修改权限',
+          parent: '/staff/stafflist'
         }
       }
     ]

@@ -67,8 +67,8 @@ export default {
                 title: '成功',
                 message: res.msg
               })
-              this.$store.commit('token/removeToken')
-              this.$router.push('/login')
+              // this.$store.commit('token/removeToken')
+              // this.$router.push('/login')
             } else {
               this.$message({
                 message: res.msg,
