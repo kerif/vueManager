@@ -14,7 +14,7 @@
       <el-table-column label="最后登录时间" prop="last_login"></el-table-column>
       <el-table-column label="操作">
         <template>
-          <el-button class="btn-main">修改客户组</el-button>
+          <el-button class="btn-main" @click="onUpdateGroup">修改客户组</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -30,6 +30,7 @@
 import { SearchSelect, SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   data () {
     return {
@@ -44,6 +45,12 @@ export default {
     }
   },
   mixins: [pagination],
+  methods: {
+    // 修改客户组
+    onUpdateGroup () {
+      dialog({ type: 'vipgroup' })
+    }
+  },
   components: {
     SearchSelect,
     SearchGroup,
