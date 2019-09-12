@@ -30,6 +30,10 @@ const Storage = loadonDemand('station/storage')
 const Ship = loadonDemand('station/ship')
 // 拣货日志
 const Picking = loadonDemand('station/picking')
+// 订单 订单列表
+const OrderList = loadonDemand('order/order/OrderList')
+// 订单 运单列表
+const WaybillList = loadonDemand('order/waybill/WaybillList')
 
 export default [
   {
@@ -139,6 +143,30 @@ export default [
           level: 2,
           group: '客户',
           name: '客户地址'
+        }
+      }
+    ]
+  },
+  {
+    path: 'order',
+    component: LayoutContainer,
+    children: [
+      {
+        path: '/order/orderlist',
+        component: OrderList,
+        meta: {
+          level: 2,
+          group: '订单',
+          name: '国内订单'
+        }
+      },
+      {
+        path: '/order/waybill_list',
+        component: WaybillList,
+        meta: {
+          level: 2,
+          group: '订单',
+          name: '运单'
         }
       }
     ]
