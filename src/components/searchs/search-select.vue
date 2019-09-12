@@ -1,6 +1,6 @@
 <template>
     <el-col :lg="6" :md="12">
-      <el-select class="top-20" style="width: 100%;" @change="selectChange" v-model="select_value" :placeholder="placeholder" :clearable="true" :disabled="disabled">
+      <el-select style="width: 100%;" @change="selectChange" v-model="select_value" :placeholder="placeholder" :clearable="true" :disabled="disabled">
         <el-option
           v-for="item in selectArr"
           :key="item.value"
