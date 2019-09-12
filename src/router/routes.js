@@ -22,6 +22,8 @@ const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
 const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 // 财务 流水记录
 const Transaction = loadonDemand('finance/Transaction')
+// 配置 路线列表
+const LineList = loadonDemand('config/line/LineList')
 
 export default [
   {
@@ -136,6 +138,20 @@ export default [
     ]
   },
   {
+    path: 'config',
+    children: [
+      {
+        path: 'config/line/linelist',
+        component: LineList,
+        meta: {
+          group: '配置',
+          level: 2,
+          name: '路线'
+        }
+      }
+    ]
+  },
+  {
     path: 'finance',
     component: LayoutContainer,
     children: [
@@ -148,7 +164,6 @@ export default [
           name: '流水记录'
         }
       }
-
     ]
   }
 ]
