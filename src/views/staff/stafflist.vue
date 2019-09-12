@@ -82,15 +82,14 @@
   </div>
 </template>
 <script>
-import { SearchGroup, SearchSelect } from '@/components/searchs'
+import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
-import { pagination, selection } from '@/mixin'
+import { pagination } from '@/mixin'
 import AddBtn from '@/components/addBtn'
 export default {
-  mixins: [pagination, selection],
+  mixins: [pagination],
   components: {
     SearchGroup,
-    SearchSelect,
     AddBtn,
     NlePagination
   },

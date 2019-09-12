@@ -223,9 +223,6 @@ export default {
     .client_detail{
       .Info{
         padding: 1em 1.5em;
-        h3{
-          font-size: 16px;
-        }
       }
     }
     .btn_box{
