@@ -2,10 +2,12 @@ import Vue from 'vue'
 import VipGroup from './vipgroup.vue'
 import addStaff from './addStaff.vue'
 import staffList from './staffList.vue'
+import invoice from './Invoice.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
 const StaffListController = Vue.extend(staffList)
+const InvoiceController = Vue.extend(invoice)
 
 const mixin = {
   data () {
@@ -35,6 +37,13 @@ function initInstance (type) {
     // 员工组成员
     case 'staffList':
       instance = new StaffListController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 创建发货单
+    case 'invoice':
+      instance = new InvoiceController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -24,6 +24,12 @@ const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 const Transaction = loadonDemand('finance/Transaction')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
+// 入库
+const Storage = loadonDemand('station/storage')
+// 发货
+const Ship = loadonDemand('station/ship')
+// 拣货日志
+const Picking = loadonDemand('station/picking')
 
 export default [
   {
@@ -133,6 +139,42 @@ export default [
           level: 2,
           group: '客户',
           name: '客户地址'
+        }
+      }
+    ]
+  },
+  {
+    path: 'station',
+    component: LayoutContainer,
+    children: [
+      {
+        path: '/station/storage',
+        name: 'storageContainer',
+        component: Storage,
+        meta: {
+          level: 2,
+          group: '货站',
+          name: '入库'
+        }
+      },
+      {
+        path: '/station/ship',
+        name: 'shipContainer',
+        component: Ship,
+        meta: {
+          level: 2,
+          group: '货站',
+          name: '发货'
+        }
+      },
+      {
+        path: '/station/picking',
+        name: 'shipContainer',
+        component: Picking,
+        meta: {
+          level: 2,
+          group: '货站',
+          name: '拣货日志'
         }
       }
     ]
