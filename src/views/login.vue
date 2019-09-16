@@ -9,17 +9,17 @@
         <p class="info-title">欢迎登录</p>
         <el-form>
           <el-form-item>
-            <el-input prefix-icon="el-icon-user" placeholder="请输入账户"></el-input>
+            <el-input prefix-icon="el-icon-user" placeholder="请输入账户" v-model="userInfo.username"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock"></el-input>
+            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="userInfo.password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-checkbox class="login-checkbox"></el-checkbox>
+            <el-checkbox class="login-checkbox" v-model="keep"></el-checkbox>
             <span class="info-text">此设备上保留登录信息</span>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn">登录</el-button>
+            <el-button class="login-btn" @click="onLogin">登录</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -27,6 +27,55 @@
     <div class="login-footer">© (2019) NLETECH科技</div>
   </div>
 </template>
+<script>
+import { commonApi } from '@/lib/request'
+export default {
+  data () {
+    return {
+      keep: false,
+      userInfo: {
+        username: '',
+        password: ''
+      }
+    }
+  },
+  mounted () {
+    this.userInfo.username = localStorage.getItem('USERNAME') || ''
+    this.userInfo.password = localStorage.getItem('PASSWORD') || ''
+    if (this.userInfo.username && this.userInfo.password) this.keep = true
+  },
+  methods: {
+    // 登录
+    onLogin () {
+      if (!this.userInfo.username.trim()) {
+        return this.$message.info('请输入同户名')
+      } else if (!this.userInfo.password.trim()) {
+        return this.$message.info('请输入密码')
+      }
+      if (this.keep) {
+        localStorage.setItem('USERNAME', this.userInfo.username.trim())
+        localStorage.setItem('PASSWORD', this.userInfo.password.trim())
+      } else {
+        localStorage.removeItem('USERNAME')
+        localStorage.removeItem('PASSWORD')
+      }
+      commonApi.login(this.userInfo).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+          this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
+          this.$router.push('/')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    }
+  }
+}
+</script>
 <style lang="scss">
 .login-container {
   height: 100%;

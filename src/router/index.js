@@ -34,9 +34,12 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   // to and from are Route Object,next() must be called to resolve the hook}
   if (to.name !== 'login') {
-    console.log('to', to)
-    let pagePath = `${to.meta.group},${to.meta.name}`
-    store.commit('savePagePath', pagePath)
+    if (store.state.token) {
+      let pagePath = `${to.meta.group},${to.meta.name}`
+      store.commit('savePagePath', pagePath)
+    } else {
+      next('/login')
+    }
   }
   next()
 })
