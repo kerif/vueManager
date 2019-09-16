@@ -31,6 +31,40 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 客服备注 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="客服备注" prop="email" class="customer">
+                <el-input type="textarea" placeholder="请输入备注"
+                :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <!-- 上传打包照片 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="上传打包照片" class="updateChe">
+                  <el-upload
+                    class="avatar-uploader"
+                    list-type="picture-card"
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    name="image"
+                    :on-success="filesuccess"
+                    :on-error="fileerror"
+                    :before-upload="beforeAvatarUpload"
+                    :show-file-list="false">
+                    <i class="el-icon-plus">
+                    </i>
+                </el-upload>
+                <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+                <div v-show="icon">
+                    <div class="upload_ball">
+                    <img :src="icon" width="200px" height="200px"/>
+                    </div>
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
       </el-col>
       <el-col :lg="12">
           <!-- 留仓单号 -->
@@ -41,83 +75,53 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- 上传打包照片 -->
+          <!-- 物品照片 -->
+        <!-- :action="$baseUrl.BASE_API_URL + '/user/upload-image'" -->
+                            <!-- :headers = "Authorization" -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item prop="password_confirmation" class="updateChe">
+              <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
                 <el-upload
-                    class="upload-demo"
-                    :action="$baseUrl.BASE_API_URL + '/user/upload-image'"
-                    :headers = "Authorization"
+                    class="avatar-uploader"
+                    list-type="picture-card"
+                    action="https://jsonplaceholder.typicode.com/posts/"
                     name="image"
                     :on-success="filesuccess"
                     :on-error="fileerror"
+                    :before-upload="beforeAvatarUpload"
                     :show-file-list="false">
-                    <div class="upload_btn">点击上传</div>
+                    <i class="el-icon-plus">
+                    </i>
                 </el-upload>
+                <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+                <div v-show="icon">
+                    <div class="upload_ball">
+                    <img :src="icon" width="200px" height="200px"/>
+                    </div>
+                </div>
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- 联系电话 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item prop="tel" class="saveBtn updateChe">
-                <el-button>保存</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-      </el-col>
-    </el-form>
+       </el-col>
+       <!-- 保存 -->
+        <el-row :gutter="20">
+        <el-col :span="18">
+            <el-form-item prop="tel" class="saveBtn updateChe">
+            <el-button>保存</el-button>
+            </el-form-item>
+        </el-col>
+        </el-row>
+     </el-form>
       </el-row>
-      <el-table
-        :data="tableData"
-        border
-        class="data-list"
-        style="width: 100%">
-        <!-- 时间 -->
-        <el-table-column
-        prop="date"
-        label="时间">
-        </el-table-column>
-        <!-- 快递单号 -->
-        <el-table-column
-        prop="name"
-        label="快递单号">
-        </el-table-column>
-        <!-- 重量 -->
-        <el-table-column
-        prop="address"
-        label="重量kg">
-        </el-table-column>
-        <!-- 长 -->
-        <el-table-column
-        label="长">
-        </el-table-column>
-        <!-- 宽 -->
-        <el-table-column
-        label="宽">
-        </el-table-column>
-        <!-- 高 -->
-        <el-table-column
-        label="高">
-        </el-table-column>
-    </el-table>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
     </div>
 </template>
 
 <script>
-import NlePagination from '@/components/pagination'
-import { pagination } from '@/mixin'
 export default {
-  mixins: [pagination],
-  components: {
-    NlePagination
-  },
   data () {
     return {
       checked: false,
-      tableData: [],
+      icon: '',
       rules: { // 必填项校验
         // full_name: [
         //   { required: true, message: '请输入姓名', trigger: 'change' }
@@ -144,6 +148,34 @@ export default {
       },
       user: {}
     }
+  },
+  methods: {
+    filesuccess (file) {
+      this.$notify({
+        title: '操作成功',
+        message: '上传成功',
+        type: 'success'
+      })
+      this.form.icon = file.data
+    },
+    fileerror (file) {
+      this.$notify({
+        title: '操作失败',
+        message: '文件上传失败',
+        type: 'warning'
+      })
+    },
+    beforeAvatarUpload (file) {
+    //   const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      //   if (!isJPG) {
+      //     this.$message.error('上传头像图片只能是 JPG 格式!')
+      //   }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+    //   return isJPG && isLt2M
+    }
   }
 }
 </script>
@@ -157,6 +189,21 @@ export default {
     .el-form-item__content {
       margin-left: 0 !important;
     }
+    .el-form-item__label {
+      width: 500px !important;
+    }
+  }
+  .upload_ball{
+  text-align:center;
+  border:1px solid #ccc;
+  margin-top:10px;
+  border-radius:5px;
+  padding-top:10px;
+  }
+  .customer {
+    .el-textarea {
+      width: 100%;
+    }
   }
   .saveBtn {
     .el-button {
@@ -164,6 +211,26 @@ export default {
       color: #fff;
       padding: 15px 35px;
     }
+  }
+  .upload_btn{
+    color:#000;
+    padding:1px 60px;
+    border-radius:5px;
+    border:1px solid #BFCBD9;
+    outline:none;
+    cursor:pointer;
+    background-color:#fff;
+    }
+  .upload_btn:hover{
+    color:#009FEF;
+    cursor:pointer;
+    outline:none;
+    border:1px solid #009FEF;
+    background-color:#fff;
+    }
+  .updateImg {
+    margin-top: 10px;
+    color: #ccc;
   }
 }
 </style>
