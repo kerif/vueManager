@@ -91,5 +91,8 @@ export default {
   .route-item {
     padding-left: 80px !important;
   }
+  .el-menu-item-group__title {
+    padding: 0;
+  }
 }
 </style>
