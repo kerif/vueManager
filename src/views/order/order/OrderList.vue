@@ -52,7 +52,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  data() {
+  data () {
     return {
       activeName: '',
       oderData: [{
@@ -79,9 +79,9 @@ export default {
       this.$router.push({ name: 'storageContainer' })
     }
   },
-  created() {
+  created () {
     this.activeName = '1'
-  },
+  }
 }
 </script>
 
