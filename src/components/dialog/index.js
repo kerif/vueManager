@@ -3,11 +3,13 @@ import VipGroup from './vipgroup.vue'
 import addStaff from './addStaff.vue'
 import staffList from './staffList.vue'
 import invoice from './Invoice.vue'
+import ChangeStatus from './changeStatus.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
 const StaffListController = Vue.extend(staffList)
 const InvoiceController = Vue.extend(invoice)
+const ChangeStatusController = Vue.extend(ChangeStatus)
 
 const mixin = {
   data () {
@@ -48,6 +50,11 @@ function initInstance (type) {
         mixins: [mixin]
       })
       break
+    case 'changestatus':
+      instance = new ChangeStatusController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
   }
   instance.constrctType = type
 }

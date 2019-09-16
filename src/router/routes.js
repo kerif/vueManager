@@ -32,6 +32,8 @@ const WareHouse = loadonDemand('config/warehouse/warehouse')
 const NoticeList = loadonDemand('config/notice/NoticeList')
 // 配置 添加、修改下单须知
 const NoticeAddEdit = loadonDemand('config/notice/NoticeAddEdit')
+// 配置 投诉建议列表
+const SuggestList = loadonDemand('config/suggest/Suggest')
 // 入库
 const Storage = loadonDemand('station/storage')
 // 发货
@@ -279,6 +281,16 @@ export default [
           level: 3,
           name: '新增下单须知',
           parent: '/config/notice'
+        }
+      },
+      {
+        path: '/config/suggest',
+        name: 'suggestlist',
+        component: SuggestList,
+        meta: {
+          level: 2,
+          group: '配置',
+          name: '投诉建议'
         }
       }
     ]
