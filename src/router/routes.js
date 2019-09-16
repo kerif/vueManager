@@ -24,6 +24,10 @@ const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 const Transaction = loadonDemand('finance/Transaction')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
+// 配置 添加、修改路线
+const LineAddEdit = loadonDemand('config/line/LineAddEdit')
+// 配置 仓库地址
+const WareHouse = loadonDemand('config/warehouse/warehouse')
 // 入库
 const Storage = loadonDemand('station/storage')
 // 发货
@@ -209,14 +213,47 @@ export default [
   },
   {
     path: 'config',
+    component: LayoutContainer,
     children: [
       {
-        path: 'config/line/linelist',
+        path: '/config/line/linelist',
         component: LineList,
         meta: {
           group: '配置',
           level: 2,
           name: '路线'
+        }
+      },
+      {
+        path: '/config/line/lineadd',
+        component: LineAddEdit,
+        name: 'lineadd',
+        meta: {
+          group: '配置',
+          level: 3,
+          name: '添加路线',
+          parent: '/config/line/linelist'
+        }
+      },
+      {
+        path: '/config/line/lineedit',
+        component: LineAddEdit,
+        name: 'lineedit',
+        meta: {
+          group: '配置',
+          level: 3,
+          name: '修改路线',
+          parent: '/config/line/linelist'
+        }
+      },
+      {
+        path: '/config/warehouse',
+        component: WareHouse,
+        name: 'warehouse',
+        meta: {
+          group: '配置',
+          level: 2,
+          name: '仓库地址配置'
         }
       }
     ]
