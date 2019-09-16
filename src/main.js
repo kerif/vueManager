@@ -7,6 +7,7 @@ import './styles/element-variable.scss'
 
 Vue.use(Element)
 Vue.config.productionTip = false
+store.commit('initToken')
 
 new Vue({
   router,
