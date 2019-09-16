@@ -28,6 +28,10 @@ const LineList = loadonDemand('config/line/LineList')
 const LineAddEdit = loadonDemand('config/line/LineAddEdit')
 // 配置 仓库地址
 const WareHouse = loadonDemand('config/warehouse/warehouse')
+// 配置 下单须知列表
+const NoticeList = loadonDemand('config/notice/NoticeList')
+// 配置 添加、修改下单须知
+const NoticeAddEdit = loadonDemand('config/notice/NoticeAddEdit')
 // 入库
 const Storage = loadonDemand('station/storage')
 // 发货
@@ -254,6 +258,27 @@ export default [
           group: '配置',
           level: 2,
           name: '仓库地址配置'
+        }
+      },
+      {
+        path: '/config/notice',
+        component: NoticeList,
+        name: 'noticelist',
+        meta: {
+          group: '配置',
+          level: 2,
+          name: '下单须知'
+        }
+      },
+      {
+        path: '/config/notice/add',
+        component: NoticeAddEdit,
+        name: 'noticeadd',
+        meta: {
+          group: '配置',
+          level: 3,
+          name: '新增下单须知',
+          parent: '/config/notice'
         }
       }
     ]
