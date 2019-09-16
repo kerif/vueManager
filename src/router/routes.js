@@ -34,6 +34,10 @@ const Picking = loadonDemand('station/picking')
 const OrderList = loadonDemand('order/order/OrderList')
 // 订单 运单列表
 const WaybillList = loadonDemand('order/waybill/WaybillList')
+// 订单 运单详情
+const Billdetails = loadonDemand('order/waybill/billDetails')
+// 订单 运单打包
+const Billpacked = loadonDemand('order/waybill/billPacked')
 
 export default [
   {
@@ -167,6 +171,28 @@ export default [
           level: 2,
           group: '订单',
           name: '运单'
+        }
+      },
+      {
+        path: '/order/billDetails',
+        name: 'billDetails',
+        component: Billdetails,
+        meta: {
+          level: 3,
+          group: '订单',
+          name: '详情',
+          parent: '/order/waybill_list'
+        }
+      },
+      {
+        path: '/order/billPacked',
+        name: 'billPacked',
+        component: Billpacked,
+        meta: {
+          level: 3,
+          group: '订单',
+          name: '打包处理',
+          parent: '/order/waybill_list'
         }
       }
     ]
