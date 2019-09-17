@@ -84,6 +84,29 @@
       <!-- 备注 -->
       <el-table-column label="备注"></el-table-column>
     </el-table>
+    <div class="bale">
+      <div class="bale-left">
+        <span>打包照片</span>
+        <div class="left-img">
+          <img src="../../../assets/tree.png" class="productImg">
+          <img src="../../../assets/tree.png" class="productImg">
+          <img src="../../../assets/tree.png" class="productImg">
+          <img src="../../../assets/tree.png" class="productImg">
+          <img src="../../../assets/tree.png" class="productImg">
+          <img src="../../../assets/tree.png" class="productImg">
+        </div>
+      </div>
+      <div class="bale-left">
+        <span>物品照片</span>
+        <div class="left-img">
+          <img src="../../../assets/tree.png" class="productImg">
+        </div>
+      </div>
+    </div>
+    <div class="packed-details">
+      <span>留仓物品</span>
+      <span class="nullProduct">无</span>
+    </div>
   </div>
 </template>
 
@@ -126,6 +149,31 @@ export default {
   .leftWidth {
     display: inline-block;
     width: 120px;
+  }
+  .bale {
+    .bale-left {
+      width: 50%;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .left-img {
+      margin-top: 20px;
+      padding: 10px 5px;
+    }
+    .productImg {
+      border: 1px dashed #ccc;
+      display: inline-block;
+      margin-right: 15px;
+      width: 120px;
+      height: 100px;
+    }
+  }
+  .packed-details {
+    margin-top: 20px;
+  }
+  .nullProduct {
+    padding-left: 70px;
+    color: #ccc;
   }
 }
 </style>
