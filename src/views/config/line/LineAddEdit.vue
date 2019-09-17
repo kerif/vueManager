@@ -10,17 +10,14 @@
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="10">
             <div>支持国家</div>
             <el-select
               v-model="value"
               multiple
-              filterable
-              allow-create
-              default-first-option
               class="country-select"
-              placeholder="请选择文章标签">
+              placeholder="请选择国家">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -28,6 +25,9 @@
                 :value="item.value">
               </el-option>
             </el-select>
+          </el-col>
+          <el-col :span="10">
+            <el-button type="primary" style="margin-top: 40px" @click="onAddCountry">新增国家</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -100,6 +100,7 @@
   </div>
 </template>
 <script>
+import dialog from '@/components/dialog'
 export default {
   data () {
     return {
@@ -116,6 +117,14 @@ export default {
       }],
       typeList: ['普货', '带电', '带磁', '粉末', '液体'],
       checkList: []
+    }
+  },
+  methods: {
+    // 添加国家
+    onAddCountry () {
+      dialog({
+        type: 'addcountry'
+      })
     }
   }
 }
