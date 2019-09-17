@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: '',
+    btnLoading: false,
     pagePath: '' // 路径列表
   },
   mutations: {
@@ -22,6 +23,9 @@ export default new Vuex.Store({
     },
     savePagePath (state, data) {
       state.pagePath = data
+    },
+    switchBtnLoading (state, data) {
+      state.btnLoading = data.status
     }
   },
   actions: {

@@ -24,6 +24,7 @@
 </template>
 <script>
 import AddBtn from '@/components/addBtn'
+import { configApi } from '@/lib/request'
 export default {
   data () {
     return {
@@ -41,6 +42,18 @@ export default {
           min_weight: 1
         }
       ]
+    }
+  },
+  created () {
+    this.getList()
+  },
+  methods: {
+    getList () {
+      configApi.getLines().then(res => {
+        if (res.ret) {
+          this.lineList = res.data
+        }
+      })
     }
   },
   components: {

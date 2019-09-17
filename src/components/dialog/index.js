@@ -6,6 +6,7 @@ import invoice from './Invoice.vue'
 import ChangeStatus from './changeStatus.vue'
 import editVip from './editVip.vue'
 import vipList from './vipList.vue'
+import AddCountry from './addCountry.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
@@ -14,6 +15,7 @@ const InvoiceController = Vue.extend(invoice)
 const ChangeStatusController = Vue.extend(ChangeStatus)
 const EditVipController = Vue.extend(editVip)
 const VipListController = Vue.extend(vipList)
+const AddCountryController = Vue.extend(AddCountry)
 
 const mixin = {
   data () {
@@ -70,6 +72,12 @@ function initInstance (type) {
       break
     case 'changestatus':
       instance = new ChangeStatusController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'addcountry':
+      instance = new AddCountryController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
