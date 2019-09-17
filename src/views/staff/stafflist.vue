@@ -3,17 +3,13 @@
     <div>
     <search-group v-model="page_params.keyword"></search-group>
     </div>
-    <div class="select-box">
-    <search-select v-model="change_params.checked" :selectArr="refundState" placeholder="审核状态"></search-select>
-      <add-btn router="staffadd">添加客户组</add-btn>
-    </div>
+      <div class="select-box">
+        <add-btn router="staffadd">添加客户组</add-btn>
+      </div>
       <el-table
         class="data-list"
         :data="staff_list"
         border
-        @selection-change="selectionChange"
-        @row-click="rowClick"
-        v-loading='tableLoading'
         ref="table">
       <el-table-column
         type="selection"
@@ -21,27 +17,27 @@
       </el-table-column>
       <!-- 用户名 -->
       <el-table-column
-        prop="name"
+        prop="username"
         label="用户名">
       </el-table-column>
       <!-- 姓名 -->
       <el-table-column
-        prop="human_count"
+        prop="name"
         label="姓名">
       </el-table-column>
       <!-- 邮箱 -->
       <el-table-column
-        prop="sort_index"
+        prop="email"
         label="邮箱">
       </el-table-column>
       <!-- 员工组 -->
       <el-table-column
-        prop="created_at"
+        prop="admin_group.name_cn"
         label="员工组">
       </el-table-column>
       <!-- 电话 -->
       <el-table-column
-        prop="created_at"
+        prop="tel"
         label="电话">
       </el-table-column>
       <!-- 最后登录时间 -->
@@ -60,7 +56,7 @@
           <!-- 修改密码 -->
         <el-button
           class="btn-purple"
-          @click.stop="memberDetail(scope.row.id)">
+          @click.stop="editPassword(scope.row.id)">
           修改密码
         </el-button>
       </template>
@@ -85,6 +81,7 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
 export default {
   mixins: [pagination],
@@ -102,15 +99,11 @@ export default {
       normal: 1,
       change_params: {
         checked: ''
-      },
-      refundState: [
-        { value: '1', label: '未审核' },
-        { value: '2', label: '已拒绝' }
-      ]
+      }
     }
   },
   created () {
-    // this.getShopAgent()
+    this.getList()
   },
   computed: {
     btn_list () {
@@ -129,40 +122,26 @@ export default {
         loading: this.deleteSelectionLoading
       }]
     }
-    // headers () {
-    //   return {
-    //     Authorization: this.$store.state.token.token
-    //   }
-    // }
   },
   methods: {
     getList () {
-      // this.tableLoading = true
-      // this.$http.get(`agent-group`, {
-      //   params: {
-      //     page: this.page_params.page,
-      //     size: this.page_params.size,
-      //     keyword: this.page_params.keyword,
-      //  checked: this.change_params.checked || 0
-      //   }
-      // }).then(res => {
-      //   this.tableLoading = false
-      //   // this.show_agent_setting = !!res.data.show_agent_setting
-      //   this.staff_list = res.data.data
-      //   // this.getPermission(this.staff_list)
-      //   this.page_params.total = res.data.total
-      // }).catch(() => {
-      //   this.tableLoading = false
-      // })
+      this.$http.get(`admins`).then(res => {
+        this.staff_list = res.data
+      })
     },
     // 编辑
     editInfo (id) {
       this.$router.push({
-        name: 'VIPGroupInfoEdit',
-        query: {
+        name: 'staffEdit',
+        params: {
+          state: 'edit',
           id: id
         }
       })
+    },
+    // 修改密码
+    editPassword (id) {
+      dialog({ type: 'editPsd', id: id })
     },
     // 删除
     deleteData () {

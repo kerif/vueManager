@@ -1,28 +1,30 @@
 <template>
-  <el-dialog :visible.sync="show" title="添加员工组" class="dialog-container" width="35%">
+  <el-dialog :visible.sync="show" title="修改客户组" class="dialog-container">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
     <el-row :gutter="20">
-        <!-- 员工组中文名 -->
-        <el-col :span="8" :offset="5">
-            <el-form-item label="员工组中文名" prop="name">
-                <el-select v-model="ruleForm.name" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
+        <!-- 用户名 -->
+        <el-col :span="6" :offset="5">
+            <p>用户名</p>
+            <p>&nbsp;&nbsp;大大</p>
         </el-col>
-        <!-- 用户组描述 -->
+        <!-- 邮箱 -->
+        <el-col :span="7" :offset="2">
+            <p>邮箱</p>
+            <p>&nbsp;&nbsp;1270754175@qq.com</p>
+        </el-col>
+        <!-- 备注 -->
         <el-row :gutter="20">
-           <el-col :span="8" :offset="5">
-                <el-form-item label="用户组描述">
-                <el-input type="textarea" v-model="ruleForm.desc"
-                :autosize="{ minRows: 2, maxRows: 4}"
-                placeholder="请输入用户组描述"></el-input>
-                </el-form-item>
+            <el-col :span="6" :offset="5">
+            <el-form-item label="新密码" prop="enName">
+            <el-input v-model="ruleForm.enName"
+            placeholder="请输入密码"></el-input>
+            </el-form-item>
+           </el-col>
+           <el-col :span="7" :offset="2">
+            <el-form-item label="确认密码" prop="enName">
+            <el-input v-model="ruleForm.enName"
+            placeholder="请再次输入密码"></el-input>
+            </el-form-item>
            </el-col>
         </el-row>
     </el-row>
@@ -39,17 +41,25 @@ export default {
     return {
       ruleForm: {
         name: '',
+        enName: '',
         desc: ''
       },
-      options: [],
       rules: {
         name: [
-          { required: true, message: '请输入员工组中文名', trigger: 'blur' }
+          { required: true, message: '请输入客户组中文名', trigger: 'blur' }
+        ],
+        enName: [
+          { required: true, message: '请输入客户组英文名', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
+    getList () {
+      this.$http.get(`admins/${this.id}`).then(res => {
+        this.customer = res.data.data
+      })
+    },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -77,6 +87,9 @@ export default {
           return false
         }
       })
+    },
+    init () {
+      this.getList()
     }
   }
 }

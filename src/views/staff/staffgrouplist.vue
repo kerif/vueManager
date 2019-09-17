@@ -172,7 +172,7 @@ export default {
     },
     // 成员
     member () {
-      dialog({ type: 'staffList' })
+      dialog({ type: 'staffGroup' })
     },
     // 修改权限
     changePre () {

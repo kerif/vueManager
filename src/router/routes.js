@@ -103,6 +103,17 @@ export default [
         }
       },
       {
+        path: '/staff/staffEdit/:state/:id',
+        name: 'staffEdit',
+        component: StaffEdit,
+        meta: {
+          level: 3,
+          group: '员工',
+          name: '修改资料',
+          parent: '/staff/stafflist'
+        }
+      },
+      {
         path: '/staff/staffgrouplist',
         name: 'staffgrouplist',
         component: StaffGroupList,

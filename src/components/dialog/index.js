@@ -1,21 +1,23 @@
 import Vue from 'vue'
 import VipGroup from './vipgroup.vue'
 import addStaff from './addStaff.vue'
-import staffList from './staffList.vue'
+import staffGroup from './staffGroup.vue'
 import invoice from './Invoice.vue'
 import ChangeStatus from './changeStatus.vue'
 import editVip from './editVip.vue'
 import vipList from './vipList.vue'
 import AddCountry from './addCountry.vue'
+import editPsd from './editPassword.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
-const StaffListController = Vue.extend(staffList)
+const StaffGroupController = Vue.extend(staffGroup)
 const InvoiceController = Vue.extend(invoice)
 const ChangeStatusController = Vue.extend(ChangeStatus)
 const EditVipController = Vue.extend(editVip)
 const VipListController = Vue.extend(vipList)
 const AddCountryController = Vue.extend(AddCountry)
+const EditPasswordController = Vue.extend(editPsd)
 
 const mixin = {
   data () {
@@ -49,9 +51,16 @@ function initInstance (type) {
         mixins: [mixin]
       })
       break
+    // 修改员工密码
+    case 'editPsd':
+      instance = new EditPasswordController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 员工组成员
-    case 'staffList':
-      instance = new StaffListController({
+    case 'staffGroup':
+      instance = new StaffGroupController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
@@ -95,6 +104,9 @@ export default (props, callback) => {
     }
   }
   instance.show = true
+  if (instance.init) {
+    instance.init()
+  }
   instance.success = (data) => {
     callback(data)
   }

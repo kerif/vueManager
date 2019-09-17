@@ -7,16 +7,16 @@
           <!-- 用户名 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="用户名" prop="name">
-                <el-input v-model="user.name" placeholder="请输入用户名"></el-input>
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model="user.username" placeholder="请输入用户名"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 密码 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="密码" prop="password">
-                <el-input v-model="user.full_name" placeholder="请输入密码"></el-input>
+              <el-form-item label="密码" prop="password" v-if="!this.$route.params.id">
+                <el-input v-model="user.password" placeholder="请输入密码"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -31,9 +31,7 @@
           <!-- 员工组 -->
            <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="员工组" prop="group" class="employ">
-                <!-- <el-input v-model="user.group" type="password"></el-input> -->
-                <!-- <template slot-scope="scope"> -->
+              <el-form-item label="员工组" prop="group_id" class="employ">
                 <el-select v-model="user.group" placeholder="请选择员工组" clearable>
                 <el-option
                   v-for="item in employeeGroup"
@@ -51,17 +49,17 @@
           <!-- 姓名 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="姓名" prop="full_name">
-                <el-input v-model="user.full_name" placeholder="请输入姓名"></el-input>
+              <el-form-item label="姓名" prop="name">
+                <el-input v-model="user.name" placeholder="请输入姓名"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 确认密码 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="确认密码" prop="password_confirmation"
+              <el-form-item label="确认密码" prop="confirm_password"
                v-if="!this.$route.params.id">
-                <el-input v-model="user.password_confirmation" type="password" placeholder="请再次输入密码"></el-input>
+                <el-input v-model="user.confirm_password" type="password" placeholder="请再次输入密码"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -88,19 +86,13 @@ export default {
   data () {
     return {
       btn_loading: false,
-      employeeGroup: [{
-        value: 1,
-        label: 'bababa'
-      }, {
-        value: 2,
-        label: 'lalala'
-      }],
+      employeeGroup: [],
       rules: { // 必填项校验
-        full_name: [
-          { required: true, message: '请输入姓名', trigger: 'change' }
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'change' }
         ],
         name: [
-          { required: true, message: '请输入名字', trigger: 'change' }
+          { required: true, message: '请输入姓名', trigger: 'change' }
         ],
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
@@ -112,7 +104,7 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'change' }
         ],
-        password_confirmation: [
+        confirm_password: [
           { required: true, message: '请再次输入密码', trigger: 'change' }
         ],
         group: [
@@ -126,6 +118,7 @@ export default {
     if (this.$route.params.id) {
       // 编辑用户
       this.getInfo()
+      this.getVipGroup()
     }
   },
   watch: {
@@ -134,23 +127,25 @@ export default {
   methods: {
     // 获取数据
     getInfo () {
-      this.$http.get(`user/${this.$route.params.id}`).then(res => {
+      this.$http.get(`admins/${this.$route.params.id}`).then(res => {
         if (res.ret) {
           this.user = res.data
         }
       })
+    },
+    getVipGroup () {
+      this.$http.get(``)
     },
     // 保存
     update (formName) {
       if (this.$route.params.id) { // 如果是编辑状态
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$http.put(`user/${this.$route.params.id}`, {
+            this.$http.put(`admins/${this.$route.params.id}`, {
+              username: this.user.username,
               name: this.user.name,
-              full_name: this.user.full_name,
               email: this.user.email,
-              note: this.user.note,
-              phone: this.user.phone,
+              tel: this.user.tel,
               id: this.$route.params.id
             }).then((res) => {
               if (res.ret) {
@@ -160,7 +155,7 @@ export default {
                   type: 'success'
                 })
               }
-              this.$router.push({ name: 'userList' })
+              this.$router.push({ name: 'stafflist' })
             })
           } else {
             return false
@@ -169,21 +164,20 @@ export default {
       } else { // 添加员工
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$http.post(`user`, {
+            this.$http.post(`admins`, {
+              username: this.user.username,
               name: this.user.name,
-              full_name: this.user.full_name,
               email: this.user.email,
-              note: this.user.note,
-              phone: this.user.phone,
+              tel: this.user.tel,
               password: this.user.password,
-              password_confirmation: this.user.password_confirmation
+              confirm_password: this.user.confirm_password
             }).then((res) => {
               this.$notify({
                 title: '操作成功',
                 message: res.tips,
                 type: 'success'
               })
-              this.$router.push({ name: 'userList' })
+              this.$router.push({ name: 'stafflist' })
             })
           } else {
             return false
