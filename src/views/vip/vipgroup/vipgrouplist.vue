@@ -12,8 +12,8 @@
       <el-table-column label="客户组" prop="name"></el-table-column>
       <el-table-column label="操作">
         <template>
-          <el-button class="btn-green">修改资料</el-button>
-          <el-button class="btn-main">成员</el-button>
+          <el-button class="btn-green" @click="editVip">修改资料</el-button>
+          <el-button class="btn-main" @click="member">成员</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -30,7 +30,15 @@ import { SearchSelect, SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
+  components: {
+    SearchSelect,
+    SearchGroup,
+    NlePagination,
+    AddBtn
+  },
+  mixins: [pagination],
   data () {
     return {
       vipGroupList: [
@@ -43,13 +51,14 @@ export default {
       ]
     }
   },
-  components: {
-    SearchSelect,
-    SearchGroup,
-    NlePagination,
-    AddBtn
-  },
-  mixins: [pagination]
+  methods: {
+    editVip () {
+      dialog({ type: 'editVip' })
+    },
+    member () {
+      dialog({ type: 'vipList' })
+    }
+  }
 }
 </script>
 <style lang="scss">

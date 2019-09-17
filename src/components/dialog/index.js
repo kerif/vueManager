@@ -4,12 +4,16 @@ import addStaff from './addStaff.vue'
 import staffList from './staffList.vue'
 import invoice from './Invoice.vue'
 import ChangeStatus from './changeStatus.vue'
+import editVip from './editVip.vue'
+import vipList from './vipList.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
 const StaffListController = Vue.extend(staffList)
 const InvoiceController = Vue.extend(invoice)
 const ChangeStatusController = Vue.extend(ChangeStatus)
+const EditVipController = Vue.extend(editVip)
+const VipListController = Vue.extend(vipList)
 
 const mixin = {
   data () {
@@ -36,6 +40,13 @@ function initInstance (type) {
         mixins: [mixin]
       })
       break
+    // 修改客户组
+    case 'editVip':
+      instance = new EditVipController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 员工组成员
     case 'staffList':
       instance = new StaffListController({
@@ -46,6 +57,13 @@ function initInstance (type) {
     // 创建发货单
     case 'invoice':
       instance = new InvoiceController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 客户组成员
+    case 'vipList':
+      instance = new VipListController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -6,7 +6,7 @@
     <div class="select-box">
       <add-btn @click.native="addStaff">添加员工组</add-btn>
     </div>
-    <el-button>编辑</el-button>
+    <el-button @click="editStaff">编辑</el-button>
     <el-button @click="changePre">修改权限</el-button>
     <el-button @click="member">成员</el-button>
       <el-table
@@ -165,6 +165,10 @@ export default {
     // 添加员工组
     addStaff () {
       dialog({ type: 'addStaff' })
+    },
+    // 编辑
+    editStaff () {
+      dialog({ name: 'addStaff' })
     },
     // 成员
     member () {

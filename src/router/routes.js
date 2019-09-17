@@ -62,7 +62,7 @@ export default [
         meta: {
           level: 2,
           group: '首页',
-          name: '首页'
+          name: '控制面板'
         }
       },
       {
