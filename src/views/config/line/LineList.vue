@@ -24,7 +24,6 @@
 </template>
 <script>
 import AddBtn from '@/components/addBtn'
-import { configApi } from '@/lib/request'
 export default {
   data () {
     return {
@@ -49,7 +48,7 @@ export default {
   },
   methods: {
     getList () {
-      configApi.getLines().then(res => {
+      this.$request.getLines().then(res => {
         if (res.ret) {
           this.lineList = res.data
         }

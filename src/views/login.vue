@@ -28,7 +28,6 @@
   </div>
 </template>
 <script>
-import { commonApi } from '@/lib/request'
 export default {
   data () {
     return {
@@ -59,7 +58,7 @@ export default {
         localStorage.removeItem('USERNAME')
         localStorage.removeItem('PASSWORD')
       }
-      commonApi.login(this.userInfo).then(res => {
+      this.$request.login(this.userInfo).then(res => {
         if (res.ret) {
           this.$notify({
             title: '操作成功',

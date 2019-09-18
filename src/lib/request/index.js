@@ -1,4 +1,21 @@
-import commonApi from './common'
-import configApi from './config'
+import { $form, $json } from '@/lib/axios'
+let exports = {}
 
-export { commonApi, configApi }
+/**
+ * 管理员登录
+ * @param {Object} params
+ *  username 用户名
+ *  password 密码
+ */
+exports.login = (params) => {
+  return $json.post('login', params)
+}
+
+exports.getLines = () => {
+  return $form.get('express-lines')
+}
+exports.getStaff = () => {
+  return $form.get('admins')
+}
+
+export default exports
