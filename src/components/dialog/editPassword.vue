@@ -57,7 +57,8 @@ export default {
   methods: {
     getList () {
       this.$http.get(`admins/${this.id}`).then(res => {
-        this.customer = res.data.data
+        this.ruleForm = res.data
+        console.log(this.ruleForm)
       })
     },
     confirm (formName) {

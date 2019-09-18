@@ -125,9 +125,9 @@ export default {
   },
   methods: {
     getList () {
-      this.$http.get(`admins`).then(res => {
-        this.staff_list = res.data
-      })
+      // this.$http.get(`admins`).then(res => {
+      //   this.staff_list = res.data
+      // })
     },
     // 编辑
     editInfo (id) {
