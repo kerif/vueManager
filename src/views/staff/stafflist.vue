@@ -1,7 +1,7 @@
 <template>
   <div class="staff-list-container list-main">
     <div>
-    <search-group v-model="page_params.keyword"></search-group>
+    <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
       <div class="select-box">
         <add-btn router="staffadd">添加客户组</add-btn>
@@ -17,8 +17,11 @@
       </el-table-column>
       <!-- 用户名 -->
       <el-table-column
-        prop="username"
         label="用户名">
+        <template slot-scope="scope">
+        <span>{{scope.row.username}}</span>
+        <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
+        </template>
       </el-table-column>
       <!-- 姓名 -->
       <el-table-column
@@ -64,16 +67,13 @@
       <template slot="append">
         <div class="append-box">
           <!-- 禁止登录 -->
-          <el-button size="small" class="btn-deep-blue">禁止登录</el-button>
+          <el-button size="small" class="btn-deep-blue" @click="forbidLogin">禁止登录</el-button>
+          <el-button size="small" class="btn-green">允许登录</el-button>
           <!-- 删除 -->
-          <el-button size="small" class="btn-light-red">删除</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
       </template>
     </el-table>
-    <!-- <my-page-and-btn
-      :pageParams="page_params"
-      :lists="btn_list">
-    </my-page-and-btn > -->
       <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>
 </template>
@@ -125,9 +125,9 @@ export default {
   },
   methods: {
     getList () {
-      // this.$http.get(`admins`).then(res => {
-      //   this.staff_list = res.data
-      // })
+      this.$request.getStaff().then(res => {
+        this.staff_list = res.data
+      })
     },
     // 编辑
     editInfo (id) {
@@ -147,7 +147,7 @@ export default {
     deleteData () {
       this.formatData('id')
       this.deleteSelectionLoading = true
-      this.$http.delete(`agent-group/${this.format_selection.join(',')}`).then(res => {
+      this.$request.deleteVip().then(res => {
         if (res.ret) {
           this.$notify({
             title: '操作成功',

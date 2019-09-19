@@ -16,7 +16,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="密码" prop="password" v-if="!this.$route.params.id">
-                <el-input v-model="user.password" placeholder="请输入密码"></el-input>
+                <el-input v-model="user.password"  type="password" placeholder="请输入密码"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -32,12 +32,12 @@
            <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="员工组" prop="group_id" class="employ">
-                <el-select v-model="user.group" placeholder="请选择员工组" clearable>
+                <el-select v-model="user.group_id" placeholder="请选择员工组" clearable>
                 <el-option
                   v-for="item in employeeGroup"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  :key="item.id"
+                  :label="item.name_cn"
+                  :value="item.id">
                 </el-option>
                 </el-select>
               <!-- </template> -->
@@ -84,6 +84,15 @@
 <script>
 export default {
   data () {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.user.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       btn_loading: false,
       employeeGroup: [],
@@ -102,23 +111,35 @@ export default {
           { required: true, message: '请输入电话号码', trigger: 'change' }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'change' }
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 8, max: 32, message: '长度在 8 到 20 个字符', trigger: 'change' }
         ],
         confirm_password: [
-          { required: true, message: '请再次输入密码', trigger: 'change' }
+          { required: true, validator: validatePass2, trigger: 'blur' },
+          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'change' }
         ],
         group: [
           { required: true, message: '请输入员工组', trigger: 'change' }
         ]
       },
-      user: {}
+      user: {
+        username: '',
+        name: '',
+        email: '',
+        tel: '',
+        group_id: '',
+        password: '',
+        confirm_password: ''
+      }
     }
   },
   created () {
     if (this.$route.params.id) {
       // 编辑用户
       this.getInfo()
-      this.getVipGroup()
+      this.getVipGroup() // 员工组列表
+    } else {
+      this.getVipGroup() // 员工组列表
     }
   },
   watch: {
@@ -127,27 +148,26 @@ export default {
   methods: {
     // 获取数据
     getInfo () {
-      this.$http.get(`admins/${this.$route.params.id}`).then(res => {
+      this.$request.EditVip(this.$route.params.id).then(res => {
         if (res.ret) {
           this.user = res.data
+          console.log(res.data)
+          this.user.group_id = res.data.admin_group.id
         }
       })
     },
+    // 获取员工组数据
     getVipGroup () {
-      this.$http.get(``)
+      this.$request.getVips().then(res => {
+        this.employeeGroup = res.data
+      })
     },
     // 保存
     update (formName) {
       if (this.$route.params.id) { // 如果是编辑状态
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$http.put(`admins/${this.$route.params.id}`, {
-              username: this.user.username,
-              name: this.user.name,
-              email: this.user.email,
-              tel: this.user.tel,
-              id: this.$route.params.id
-            }).then((res) => {
+            this.$request.updateVip(this.$route.params.id, this.user).then((res) => {
               if (res.ret) {
                 this.$notify({
                   title: '成功操作',
@@ -164,20 +184,21 @@ export default {
       } else { // 添加员工
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$http.post(`admins`, {
-              username: this.user.username,
-              name: this.user.name,
-              email: this.user.email,
-              tel: this.user.tel,
-              password: this.user.password,
-              confirm_password: this.user.confirm_password
-            }).then((res) => {
-              this.$notify({
-                title: '操作成功',
-                message: res.tips,
-                type: 'success'
-              })
-              this.$router.push({ name: 'stafflist' })
+            this.$request.saveVip(this.user).then((res) => {
+              if (res.ret) {
+                this.$notify({
+                  title: '操作成功',
+                  message: res.tips,
+                  type: 'success'
+                })
+                this.$router.push({ name: 'stafflist' })
+              } else {
+                this.$notify({
+                  title: '操作失败',
+                  message: res.msg,
+                  type: 'warning'
+                })
+              }
             })
           } else {
             return false

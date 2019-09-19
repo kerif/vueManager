@@ -54,48 +54,16 @@ export default {
     }
   },
   methods: {
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$http.post('user/changePSD', {
-            password: this.params.old_password,
-            newpassword: this.params.new_password,
-            secondpassword: this.params.new_password2
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '成功',
-                message: res.msg
-              })
-              // this.$store.commit('token/removeToken')
-              // this.$router.push('/login')
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
-        } else {
-          return false
-        }
+    getList () {
+      this.$request.getVipMember(this.id).then(res => {
+        this.tableData = res.data
       })
+    },
+    init () {
+      this.getList()
     }
   }
 }
 </script>
 <style lang="scss">
-// .dialog-container {
-//   .el-dialog__header {
-//     background-color: #0E102A;
-//   }
-//   .el-dialog__title {
-//     font-size: 14px;
-//     color: #FFF;
-//   }
-//   .el-dialog__close {
-//     color: #FFF;
-//   }
-// }
 </style>

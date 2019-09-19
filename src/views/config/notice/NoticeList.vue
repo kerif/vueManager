@@ -8,8 +8,8 @@
       <el-table-column label="创建人" prop="user"></el-table-column>
       <el-table-column label="创建时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
-        <template>
-          <el-button class="btn-green">修改</el-button>
+        <template slot-scope="scope">
+          <el-button class="btn-green" @click="noticeEdit(scope.row.id)">修改</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -26,23 +26,34 @@ import AddBtn from '@/components/addBtn'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
-  data () {
-    return {
-      noticeList: [
-        {
-          id: 1,
-          title: '如何下单',
-          type: '常见问题',
-          user: 'admin',
-          created_at: '2017-11-08 11:01:11'
-        }
-      ]
-    }
-  },
   mixins: [pagination],
   components: {
     AddBtn,
     NlePagination
+  },
+  data () {
+    return {
+      noticeList: []
+    }
+  },
+  created () {
+    this.getList()
+  },
+  methods: {
+    getList () {
+      this.$request.getNotice().then(res => {
+        this.noticeList = res.data
+      })
+    },
+    noticeEdit (id) {
+      this.$router.push({
+        name: 'noticeEdit',
+        params: {
+          state: 'edit',
+          id: id
+        }
+      })
+    }
   }
 }
 </script>

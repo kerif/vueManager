@@ -321,6 +321,17 @@ export default [
         }
       },
       {
+        path: '/config/notice/edit/:state/:id',
+        component: NoticeAddEdit,
+        name: 'noticeEdit',
+        meta: {
+          group: '配置',
+          level: 3,
+          name: '修改下单须知',
+          parent: '/config/notice'
+        }
+      },
+      {
         path: '/config/suggest',
         name: 'suggestlist',
         component: SuggestList,

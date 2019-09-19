@@ -6,9 +6,6 @@
     <div class="select-box">
       <add-btn @click.native="addStaff">添加员工组</add-btn>
     </div>
-    <el-button @click="editStaff">编辑</el-button>
-    <el-button @click="changePre">修改权限</el-button>
-    <el-button @click="member">成员</el-button>
       <el-table
         class="data-list"
         :data="staff_group_list"
@@ -21,35 +18,20 @@
         type="selection"
         width="55">
       </el-table-column>
-      <!-- 用户名 -->
+      <!-- 员工组中文名 -->
       <el-table-column
-        prop="name"
-        label="用户名">
+        prop="name_cn"
+        label="员工组中文名">
       </el-table-column>
-      <!-- 姓名 -->
+      <!-- 员工组英文名 -->
       <el-table-column
-        prop="human_count"
-        label="姓名">
+        prop="name_en"
+        label="员工组英文名">
       </el-table-column>
-      <!-- 邮箱 -->
+      <!-- 成员数量 -->
       <el-table-column
-        prop="sort_index"
-        label="邮箱">
-      </el-table-column>
-      <!-- 员工组 -->
-      <el-table-column
-        prop="created_at"
-        label="员工组">
-      </el-table-column>
-      <!-- 电话 -->
-      <el-table-column
-        prop="created_at"
-        label="电话">
-      </el-table-column>
-      <!-- 最后登录时间 -->
-        <el-table-column
-        prop="created_at"
-        label="最后登录时间">
+        prop="admin_count"
+        label="成员数量">
       </el-table-column>
       <!-- 操作 -->
       <el-table-column
@@ -58,15 +40,15 @@
           <!-- 编辑 -->
         <el-button
           class="btn-blue"
-          @click.stop="editInfo(scope.row.id)">编辑</el-button>
+          @click.stop="editStaff(scope.row.id)">编辑</el-button>
           <!-- 修改权限 -->
         <el-button
           class="btn-purple"
-          @click.stop="memberDetail(scope.row.id)">
+          @click.stop="changePre(scope.row.id)">
           修改权限
         </el-button>
         <!-- 成员 -->
-        <el-button>成员</el-button>
+        <el-button @click.stop="member(scope.row.id)" class="btn-green">成员</el-button>
       </template>
       </el-table-column>
       <template slot="append">
@@ -76,10 +58,6 @@
         </div>
       </template>
     </el-table>
-    <!-- <my-page-and-btn
-      :pageParams="page_params"
-      :lists="btn_list">
-    </my-page-and-btn > -->
       <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>
 </template>
@@ -114,6 +92,7 @@ export default {
   },
   created () {
     // this.getShopAgent()
+    this.getList()
   },
   computed: {
     btn_list () {
@@ -135,23 +114,9 @@ export default {
   },
   methods: {
     getList () {
-      // this.tableLoading = true
-      // this.$http.get(`agent-group`, {
-      //   params: {
-      //     page: this.page_params.page,
-      //     size: this.page_params.size,
-      //     keyword: this.page_params.keyword,
-      //  checked: this.change_params.checked || 0
-      //   }
-      // }).then(res => {
-      //   this.tableLoading = false
-      //   // this.show_agent_setting = !!res.data.show_agent_setting
-      //   this.staff_group_list = res.data.data
-      //   // this.getPermission(this.staff_group_list)
-      //   this.page_params.total = res.data.total
-      // }).catch(() => {
-      //   this.tableLoading = false
-      // })
+      this.$request.getVipGroup().then(res => {
+        this.staff_group_list = res.data
+      })
     },
     // 编辑
     editInfo (id) {
@@ -164,15 +129,18 @@ export default {
     },
     // 添加员工组
     addStaff () {
-      dialog({ type: 'addStaff' })
+      dialog({ type: 'addStaff' }, () => {
+        this.getList()
+      })
     },
     // 编辑
-    editStaff () {
-      dialog({ name: 'addStaff' })
+    editStaff (id) {
+      dialog({ type: 'addStaff', id: id })
     },
     // 成员
-    member () {
-      dialog({ type: 'staffGroup' })
+    member (id) {
+      console.log('id', id)
+      dialog({ type: 'staffGroup', id: id })
     },
     // 修改权限
     changePre () {

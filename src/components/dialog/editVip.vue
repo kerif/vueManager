@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="修改客户组" class="dialog-container">
+  <el-dialog :visible.sync="show" title="修改客户组" class="dialog-container" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
     <el-row :gutter="20">
         <!-- 员工组中文名 -->
@@ -81,6 +81,10 @@ export default {
           return false
         }
       })
+    },
+    methods: {
+      clear () {
+      }
     }
   }
 }

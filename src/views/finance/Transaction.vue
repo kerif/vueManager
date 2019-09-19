@@ -22,16 +22,7 @@ import { pagination } from '@/mixin'
 export default {
   data () {
     return {
-      transactionList: [
-        {
-          id: 1,
-          user: '904412',
-          type: '消费',
-          price: '62.10',
-          order_sn: 'NL12345678',
-          created_at: '2019-08-23 12:12:45'
-        }
-      ]
+      transactionList: []
     }
   },
   mixins: [pagination],
@@ -39,6 +30,16 @@ export default {
     SearchGroup,
     SearchDatePicker,
     NlePagination
+  },
+  created () {
+    this.getList()
+  },
+  methods: {
+    getList () {
+      this.$request.getTransaction().then(res => {
+        this.transactionList = res.data
+      })
+    }
   }
 }
 </script>

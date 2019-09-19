@@ -108,6 +108,7 @@ export default (props, callback) => {
     instance.init()
   }
   instance.success = (data) => {
+    console.log(11)
     callback(data)
   }
   document.body.appendChild(instance.$el)

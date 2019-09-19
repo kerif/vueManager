@@ -27,20 +27,7 @@ import AddBtn from '@/components/addBtn'
 export default {
   data () {
     return {
-      lineList: [
-        {
-          id: '',
-          name: '荷兰普货专线',
-          country: '荷兰',
-          expire: '8-10天',
-          first_weight: 8,
-          first_price: 10,
-          next_weight: 12,
-          next_price: 12,
-          max_weight: 30,
-          min_weight: 1
-        }
-      ]
+      lineList: []
     }
   },
   created () {
