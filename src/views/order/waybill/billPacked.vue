@@ -1,21 +1,20 @@
 <template>
     <div class="packed-container">
-      <el-row>
-           <el-form ref="params" :model="user" :rules="rules" label-width="140px" label-position="left">
-         <el-col :lg="12">
-          <!-- 快递单号 -->
+      <el-form ref="params" :model="user" class="package-form" label-width="140px" label-position="left">
+        <el-col :lg="12">
+          <!-- 转运单号 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="快递单号" prop="name">
-                <el-input v-model="user.name" placeholder="请输入快递单号"></el-input>
+              <el-form-item label="转运单号" prop="name">
+                <el-input v-model="this.$route.params.order_sn" :disabled="true"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 重量 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="重量" prop="password">
-                <el-input v-model="user.full_name" placeholder="请输入重量">
+              <el-form-item label="重量" prop="weight">
+                <el-input v-model="user.weight" placeholder="请输入重量">
                 <template slot="append">KG</template>
                 </el-input>
               </el-form-item>
@@ -24,18 +23,19 @@
           <!-- 尺寸 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="尺寸" prop="email">
-                <el-input v-model="user.email"  class="sizeLength" placeholder="长 cm"></el-input>
-                <el-input v-model="user.email" class="sizeLength" placeholder="宽 cm"></el-input>
-                <el-input v-model="user.email"  class="sizeLength" placeholder="高 cm"></el-input>
+              <el-form-item label="尺寸">
+                <el-input v-model="user.length"  class="sizeLength" placeholder="长 cm"></el-input>
+                <el-input v-model="user.width" class="sizeLength" placeholder="宽 cm"></el-input>
+                <el-input v-model="user.height"  class="sizeLength" placeholder="高 cm"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 客服备注 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="客服备注" prop="email" class="customer">
+              <el-form-item label="客服备注" class="customer">
                 <el-input type="textarea" placeholder="请输入备注"
+                v-model="user.remark"
                 :autosize="{ minRows: 2, maxRows: 4}"></el-input>
               </el-form-item>
             </el-col>
@@ -47,8 +47,8 @@
                   <el-upload
                     class="avatar-uploader"
                     list-type="picture-card"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    name="image"
+                    :action="$baseUrl.BASE_API_URL + '/upload/images'"
+                    name="images"
                     :on-success="filesuccess"
                     :on-error="fileerror"
                     :before-upload="beforeAvatarUpload"
@@ -65,13 +65,13 @@
               </el-form-item>
             </el-col>
           </el-row>
-      </el-col>
-      <el-col :lg="12">
+        </el-col>
+        <el-col :lg="12">
           <!-- 留仓单号 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="留仓单号" prop="full_name">
-                <el-input v-model="user.full_name" placeholder="请输入留仓单号"></el-input>
+              <el-form-item label="留仓单号">
+                <el-input v-model="user.in_warehouse_item" placeholder="请输入留仓单号"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -85,7 +85,7 @@
                     class="avatar-uploader"
                     list-type="picture-card"
                     action="https://jsonplaceholder.typicode.com/posts/"
-                    name="image"
+                    name="images"
                     :on-success="filesuccess"
                     :on-error="fileerror"
                     :before-upload="beforeAvatarUpload"
@@ -103,16 +103,13 @@
             </el-col>
           </el-row>
        </el-col>
-       <!-- 保存 -->
-        <el-row :gutter="20">
-        <el-col :span="18">
-            <el-form-item prop="tel" class="saveBtn updateChe">
-            <el-button>保存</el-button>
-            </el-form-item>
-        </el-col>
-        </el-row>
      </el-form>
-      </el-row>
+    <!-- 保存 -->
+    <el-row :gutter="20">
+    <el-col :span="18">
+      <el-button @click="savePacked" type="primary">保存</el-button>
+    </el-col>
+    </el-row>
     </div>
 </template>
 
@@ -122,34 +119,35 @@ export default {
     return {
       checked: false,
       icon: '',
-      rules: { // 必填项校验
-        // full_name: [
-        //   { required: true, message: '请输入姓名', trigger: 'change' }
-        // ],
-        // name: [
-        //   { required: true, message: '请输入名字', trigger: 'change' }
-        // ],
-        // email: [
-        //   { required: true, message: '请输入邮箱', trigger: 'blur' },
-        //   { type: 'email', message: '', trigger: ['blur', 'change'] }
-        // ],
-        // tel: [
-        //   { required: true, message: '请输入电话号码', trigger: 'change' }
-        // ],
-        // password: [
-        //   { required: true, message: '请输入密码', trigger: 'change' }
-        // ],
-        // password_confirmation: [
-        //   { required: true, message: '请再次输入密码', trigger: 'change' }
-        // ],
-        // group: [
-        //   { required: true, message: '请输入员工组', trigger: 'change' }
-        // ]
-      },
-      user: {}
+      user: {
+        weight: '',
+        width: '',
+        length: '',
+        height: '',
+        remark: '',
+        in_warehouse_item: ''
+      }
     }
   },
   methods: {
+    savePacked () {
+      console.log(this.user)
+      this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.$router.push({ name: 'wayBillList' })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     filesuccess (file) {
       this.$notify({
         title: '操作成功',
@@ -231,6 +229,9 @@ export default {
   .updateImg {
     margin-top: 10px;
     color: #ccc;
+  }
+  .package-form {
+    overflow: hidden;
   }
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="vip-list-container">
     <div>
       <search-select placeholder="请选择客户组"></search-select>
-      <search-group></search-group>
+      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <el-table class="data-list" border stripe
       :data="vipList">
@@ -10,11 +10,11 @@
       <el-table-column label="序号" type="index" :index="1" width="60"></el-table-column>
       <el-table-column label="客户ID" prop="id"></el-table-column>
       <el-table-column label="客户昵称" prop="name"></el-table-column>
-      <el-table-column label="客户组" prop="group"></el-table-column>
+      <el-table-column label="客户组" prop="user_group.name_cn"></el-table-column>
       <el-table-column label="最后登录时间" prop="last_login"></el-table-column>
       <el-table-column label="操作">
-        <template>
-          <el-button class="btn-main" @click="onUpdateGroup">修改客户组</el-button>
+        <template slot-scope="scope">
+          <el-button class="btn-main" @click="onUpdateGroup(scope.row.id)">修改客户组</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -34,21 +34,24 @@ import dialog from '@/components/dialog'
 export default {
   data () {
     return {
-      vipList: [
-        {
-          id: '9012456',
-          name: '1111@11111',
-          group: '普通客户',
-          last_login: '2017-11-08 11:01:11'
-        }
-      ]
+      vipList: []
     }
   },
   mixins: [pagination],
+  created () {
+    this.getList()
+  },
   methods: {
+    getList () {
+      this.$request.getUsers().then(res => {
+        this.vipList = res.data
+      })
+    },
     // 修改客户组
-    onUpdateGroup () {
-      dialog({ type: 'vipgroup' })
+    onUpdateGroup (id) {
+      dialog({ type: 'vipgroup', id: id }, () => {
+        this.getList()
+      })
     }
   },
   components: {

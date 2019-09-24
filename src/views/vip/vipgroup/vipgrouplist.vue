@@ -1,19 +1,22 @@
 <template>
   <div class="vipgroup-list-container">
-    <div><search-group></search-group></div>
+    <div>
+      <search-group v-model="page_params.keyword" @search="goSearch">
+      </search-group>
+      </div>
     <div class="select-box">
       <search-select placeholder="请选择客户组"></search-select>
-      <add-btn>添加客户组</add-btn>
+      <add-btn @click.native="addVip">添加客户组</add-btn>
     </div>
     <el-table :data="vipGroupList" stripe border class="data-list">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <el-table-column label="客户组中文名" prop="cn_name"></el-table-column>
-      <el-table-column label="客户组英文名" prop="en_name"></el-table-column>
-      <el-table-column label="客户组" prop="name"></el-table-column>
+      <el-table-column label="客户组中文名" prop="name_cn"></el-table-column>
+      <el-table-column label="客户组英文名" prop="name_en"></el-table-column>
+      <el-table-column label="成员数量" prop="user_count"></el-table-column>
       <el-table-column label="操作">
-        <template>
-          <el-button class="btn-green" @click="editVip">修改资料</el-button>
-          <el-button class="btn-main" @click="member">成员</el-button>
+        <template slot-scope="scope">
+          <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.name_cn,scope.row.name_en)">修改资料</el-button>
+          <el-button class="btn-main" @click="member(scope.row.id)">成员</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -41,22 +44,28 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      vipGroupList: [
-        {
-          id: 1,
-          cn_name: '秦奋',
-          en_name: 'Super_Admin',
-          name: '15'
-        }
-      ]
+      vipGroupList: []
     }
   },
+  created () {
+    this.getList()
+  },
   methods: {
-    editVip () {
-      dialog({ type: 'editVip' })
+    getList () {
+      this.$request.getUserGroup().then(res => {
+        this.vipGroupList = res.data
+      })
     },
-    member () {
-      dialog({ type: 'vipList' })
+    addVip () {
+      dialog({ type: 'editVip'})
+    },
+    // 修改资料
+    editVip (id, name_cn, name_en) {
+      dialog({ type: 'editVip', id: id, name_cn: name_cn, name_en: name_en })
+    },
+    // 成员
+    member (id) {
+      dialog({ type: 'vipList', id: id })
     }
   }
 }

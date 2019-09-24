@@ -4,15 +4,15 @@
     <el-row :gutter="20">
         <!-- 员工组中文名 -->
         <el-col :span="6" :offset="5">
-            <el-form-item label="客户组中文名" prop="name">
-            <el-input v-model="ruleForm.name"
+            <el-form-item label="客户组中文名">
+            <el-input v-model="ruleForm.name_cn"
             placeholder="请输入客户组中文名"></el-input>
             </el-form-item>
         </el-col>
         <!-- 员工组英文名 -->
         <el-col :span="6" :offset="2">
-            <el-form-item label="客户组英文名" prop="enName">
-            <el-input v-model="ruleForm.enName"
+            <el-form-item label="客户组英文名">
+            <el-input v-model="ruleForm.name_en"
             placeholder="请输入客户组英文名"></el-input>
             </el-form-item>
         </el-col>
@@ -20,7 +20,7 @@
         <el-row :gutter="20">
            <el-col :span="14" :offset="5">
                 <el-form-item label="备注">
-                <el-input type="textarea" v-model="ruleForm.desc"
+                <el-input type="textarea" v-model="ruleForm.description"
                 :autosize="{ minRows: 2, maxRows: 4}"
                 placeholder="请输入备注"></el-input>
                 </el-form-item>
@@ -39,9 +39,9 @@ export default {
   data () {
     return {
       ruleForm: {
-        name: '',
-        enName: '',
-        desc: ''
+        name_cn: '',
+        name_en: '',
+        description: ''
       },
       rules: {
         name: [
@@ -54,6 +54,11 @@ export default {
     }
   },
   methods: {
+    getList () {
+      this.$request.editUserGroup(this.id).then(res => {
+        this.ruleForm = res.data
+      })
+    },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -82,9 +87,15 @@ export default {
         }
       })
     },
-    methods: {
-      clear () {
+    init () {
+      if (this.id) {
+        // this.getList()
       }
+    },
+    clear () {
+      this.ruleForm.name_cn = ''
+      this.ruleForm.name_en = ''
+      this.ruleForm.description = ''
     }
   }
 }

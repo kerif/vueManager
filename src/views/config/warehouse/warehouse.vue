@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getWarehouse().then(res => {
+      this.$request.getBill().then(res => {
         this.ruleForm = res.data
       })
     },

@@ -19,7 +19,7 @@
       <el-form-item label="内容">
         <el-row>
           <el-col :span="20">
-            <div id="editor" :value="params.content"  @input="changeText"></div>
+            <div id="editor" :value="params.content" @input="changeText"></div>
             </el-col>
         </el-row>
       </el-form-item>

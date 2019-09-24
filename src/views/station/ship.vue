@@ -1,6 +1,6 @@
 <template>
   <div class="ship-container">
-    <div><search-group></search-group></div>
+    <div><search-group v-model="page_params.keyword" @search="getList"></search-group></div>
     <div class="select-box">
       <search-select placeholder="状态"></search-select>
       <add-btn @click.native="updateInvoice">创建发货单</add-btn>
@@ -15,7 +15,12 @@
       <!-- 目的国 -->
       <el-table-column label="目的国" prop="destination_country"></el-table-column>
       <!-- 状态 -->
-      <el-table-column label="状态" prop="status"></el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === 0">未发货</span>
+          <span v-else>已发货</span>
+        </template>
+      </el-table-column>
       <!-- 箱数 -->
       <el-table-column label="箱数" prop="box_count"></el-table-column>
       <!-- 体积 -->
@@ -23,13 +28,13 @@
       <!-- 价值 -->
       <el-table-column label="价值" prop="value"></el-table-column>
       <!-- 物品属性 -->
-      <el-table-column label="物品属性" prop="props.cn_name"></el-table-column>
+      <el-table-column label="物品属性" prop="props"></el-table-column>
       <!-- 备注 -->
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click.native="goInvoice(scope.row.id)">发货</el-button>
+          <el-button class="btn-green" @click="goInvoice(scope.row.id)">发货</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,7 +57,8 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      tableShip: []
+      tableShip: [],
+      page_params: {}
     }
   },
   created () {
@@ -70,9 +76,27 @@ export default {
       })
     },
     goInvoice (id) {
-      console.log(id, '发货')
-      dialog({ type: 'invoice', id: id }, () => {
-        this.getList()
+      this.$confirm(`您真的要发货吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request.getShipments(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     }
   }

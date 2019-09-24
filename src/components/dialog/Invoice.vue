@@ -59,11 +59,6 @@ export default {
         this.country = res.data
       })
     },
-    getShipment () {
-      this.$request.getShipments(this.id).then(res => {
-        this.ruleForm = res.data
-      })
-    },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -92,12 +87,6 @@ export default {
     clear () {
       this.ruleForm.country_id = ''
       this.ruleForm.remark = ''
-    },
-    init () {
-      if (this.id) {
-        console.log(this.id, 'id')
-        this.getShipment()
-      }
     }
   }
 }

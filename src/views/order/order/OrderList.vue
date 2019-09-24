@@ -1,35 +1,42 @@
 <template>
   <div class="order-list-container">
-    <search-group placeholder="请输入关键字"></search-group>
+    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
       <el-tabs v-model="activeName" class="tabLength">
         <!-- 未入库 -->
         <el-tab-pane label="未入库" name="1"></el-tab-pane>
         <!-- 已入库 -->
         <el-tab-pane label="已入库" name="2"></el-tab-pane>
     </el-tabs>
-<el-table class="data-list" border stripe
+      <el-table class="data-list" border stripe
       :data="oderData">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column label="客户ID" prop="id"></el-table-column>
+      <el-table-column label="客户ID" prop="user_id"></el-table-column>
       <!-- 快递单号 -->
-      <el-table-column label="快递单号" prop="name"></el-table-column>
+      <el-table-column label="快递单号" prop="express_num"></el-table-column>
       <!-- 物品名称 -->
-      <el-table-column label="物品名称" prop="group"></el-table-column>
+      <el-table-column label="物品名称" prop="package_name"></el-table-column>
       <!-- 物品价值 -->
-      <el-table-column label="物品价值"></el-table-column>
+      <el-table-column label="物品价值" prop="package_value"></el-table-column>
       <!-- 物品属性 -->
-      <el-table-column label="物品属性" prop="last_login"></el-table-column>
+      <el-table-column label="物品属性">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.props" :key="item.id">
+            {{item.cn_name}}
+          </span>
+        </template>
+      </el-table-column>
       <!-- 规格 -->
-      <el-table-column label="规格(长宽高cm)" v-if="activeName == '2'" width="120px"></el-table-column>
+      <el-table-column label="规格(长宽高cm)" prop="dimension" v-if="activeName === '2'" width="120px"></el-table-column>
       <!-- 称重时间 -->
-      <el-table-column label="称重时间" v-if="activeName == '2'"></el-table-column>
+      <el-table-column label="称重时间" v-if="activeName === '2'"></el-table-column>
       <!-- 提交时间 -->
-      <el-table-column label="提交时间"></el-table-column>
+      <el-table-column label="提交时间" prop="created_at"></el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" v-if="activeName == '1'">
-        <template>
-          <el-button class="btn-green" @click="storage">入库</el-button>
+      <el-table-column label="操作" v-if="activeName === '1'">
+        <template slot-scope="scope">
+          <!-- 入库 -->
+          <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num)">入库</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -55,32 +62,45 @@ export default {
   data () {
     return {
       activeName: '',
-      oderData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      oderData: [],
+      status: 1,
+      page_params: {
+        status: ''
+      }
     }
   },
   methods: {
-    storage () {
-      this.$router.push({ name: 'storageContainer' })
+    getList () {
+      this.$request.getWarehouse({
+        params: {
+          status: this.page_params.status
+        }
+      }).then(res => {
+        this.oderData = res.data
+      })
+    },
+    storage (id, express_num) {
+      this.$router.push({ name: 'editStorage', params: { id: id, express_num: express_num } })
     }
   },
   created () {
     this.activeName = '1'
+    // this.getList()
+  },
+  watch: {
+    // 监听tab组件参数
+    activeName (newValue) {
+      switch (newValue) {
+        case '1': // 未入库
+          this.page_params.status = 1
+          break
+        case '2': // 已入库
+          this.page_params.page = 1
+          this.page_params.status = 2
+          break
+      }
+      this.getList()
+    }
   }
 }
 </script>

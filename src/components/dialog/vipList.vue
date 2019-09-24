@@ -24,7 +24,7 @@
     </el-table>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm(ruleForm)">确定</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
     </div>
   </el-dialog>
 </template>

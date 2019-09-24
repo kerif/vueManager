@@ -7,34 +7,34 @@
       <!-- 姓名 -->
       <el-col :span="6">
         <span class="leftWidth">姓名</span>
-        <span>vanora</span>
+        <span>{{form.address && form.address.receiver_name}}</span>
       </el-col>
       <!-- 手机/联系电话 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">手机/联系电话</span>
-         <span>12345678</span>
+         <span>{{form.address &&form.address.phone}}</span>
       </el-col>
-      <!-- 发货地址 -->
+      <!-- 国家 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">发货地址</span>
-         <span>湖南省长沙市岳麓区麓谷企业广场</span>
+         <span class="leftWidth">国家</span>
+         <span>{{form.address && form.address.country.cn_name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
-     <!-- 邮箱 -->
+     <!-- 城市 -->
       <el-col :span="6">
-        <span class="leftWidth">邮箱</span>
-        <span>1270754175@qq.com</span>
+        <span class="leftWidth">城市</span>
+        <span>{{form.address && form.address.city}}</span>
       </el-col>
-      <!-- 备用邮箱1 -->
+      <!-- 街道/门牌号 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">备用邮箱1</span>
-         <span>12345678@qq.com</span>
+         <span class="leftWidth">街道门牌号</span>
+         <span>{{form.address && form.address.street}}{{form.address && form.address.door_no}}</span>
       </el-col>
-      <!-- 备用邮箱2 -->
+      <!-- 邮编 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">备用邮箱2</span>
-         <span>1212121212@qq.com</span>
+         <span class="leftWidth">邮编</span>
+         <span>{{form.address && form.address.postcode}}</span>
       </el-col>
     </el-row>
     </div>
@@ -44,55 +44,61 @@
       <!-- 转运单号 -->
       <el-col :span="6">
         <span class="leftWidth">转运单号</span>
-        <span>1212121</span>
+        <span>{{form.order_sn}}</span>
       </el-col>
       <!-- 线路名称 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">线路名称</span>
-         <span>荷兰荷兰憨憨</span>
+         <span>{{form.express_line && form.express_line.cn_name}}</span>
       </el-col>
       <!-- 提交时间 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">提交时间</span>
-         <span>2019-11-11</span>
+         <span>{{form.created_at}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center"  :gutter="20">
      <!-- 增值服务 -->
       <el-col :span="6">
         <span class="leftWidth">增值服务</span>
-        <span>外箱加固/保险费¥20</span>
+        <span>{{form.add_service}}</span>
       </el-col>
     </el-row>
     </div>
     </div>
    <el-table class="data-list" border stripe :data="oderData">
       <!-- 预计重量kg -->
-      <el-table-column label="预计重量kg" prop="id"></el-table-column>
+      <el-table-column label="预计重量kg" prop="except_weight"></el-table-column>
       <!-- 称重重量kg -->
-      <el-table-column label="称重重量kg" prop="name"></el-table-column>
+      <el-table-column label="称重重量kg" prop="actual_weight"></el-table-column>
       <!-- 尺寸（长宽高cm） -->
-      <el-table-column label="尺寸（长宽高cm）" prop="group"></el-table-column>
+      <el-table-column label="尺寸（长宽高cm）">
+        <template slot-scope="scope">
+          <span>{{scope.row.width}}</span>
+          <span>{{scope.row.height}}</span>
+          <span>{{scope.row.length}}</span>
+        </template>
+      </el-table-column>
       <!-- 预计费用¥ -->
-      <el-table-column label="预计费用¥"></el-table-column>
+      <el-table-column label="预计费用¥" prop="payment_fee"></el-table-column>
       <!-- 实际费用¥ -->
-      <el-table-column label="实际费用¥" prop="last_login"></el-table-column>
+      <el-table-column label="实际费用¥" prop="actual_payment_fee"></el-table-column>
       <!-- 包裹价值 -->
-      <el-table-column label="包裹价值"></el-table-column>
+      <el-table-column label="包裹价值" prop="value"></el-table-column>
       <!-- 包含的包裹 -->
-      <el-table-column label="包含的包裹"></el-table-column>
+      <el-table-column label="包含的包裹">
+        <template slot-scope="scope">
+          <span>{{scope.row.packages.map(item => item.express_num).join(' ')}}</span>
+           <!-- <span v-for="item in scope.row.packages" :key="item.id">{{item.express_num}}</span> -->
+        </template>
+      </el-table-column>
       <!-- 备注 -->
-      <el-table-column label="备注"></el-table-column>
+      <el-table-column label="备注" prop="remark"></el-table-column>
     </el-table>
     <div class="bale">
       <div class="bale-left">
         <span>打包照片</span>
         <div class="left-img">
-          <img src="../../../assets/tree.png" class="productImg">
-          <img src="../../../assets/tree.png" class="productImg">
-          <img src="../../../assets/tree.png" class="productImg">
-          <img src="../../../assets/tree.png" class="productImg">
-          <img src="../../../assets/tree.png" class="productImg">
           <img src="../../../assets/tree.png" class="productImg">
         </div>
       </div>
@@ -105,7 +111,10 @@
     </div>
     <div class="packed-details">
       <span>留仓物品</span>
-      <span class="nullProduct">无</span>
+      <span v-if="form.in_warehouse_item">
+        {{form.in_warehouse_item}}
+        </span>
+      <span v-else class="nullProduct">无</span>
     </div>
   </div>
 </template>
@@ -114,26 +123,22 @@
 export default {
   data () {
     return {
-      oderData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      form: {},
+      oderData: []
+    }
+  },
+  created () {
+    if (this.$route.params.id) {
+      this.getList()
     }
   },
   methods: {
+    getList () {
+      this.$request.getOrderDetails(this.$route.params.id).then(res => {
+        this.form = res.data
+        this.oderData = [res.data.details]
+      })
+    }
   }
 }
 </script>
@@ -164,7 +169,7 @@ export default {
       border: 1px dashed #ccc;
       display: inline-block;
       margin-right: 15px;
-      width: 120px;
+      width: 110px;
       height: 100px;
     }
   }

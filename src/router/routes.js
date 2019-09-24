@@ -188,6 +188,7 @@ export default [
       {
         path: '/order/waybill_list',
         component: WaybillList,
+        name: 'wayBillList',
         meta: {
           level: 2,
           group: '订单',
@@ -195,7 +196,7 @@ export default [
         }
       },
       {
-        path: '/order/billDetails',
+        path: '/order/billDetails/:id',
         name: 'billDetails',
         component: Billdetails,
         meta: {
@@ -206,7 +207,7 @@ export default [
         }
       },
       {
-        path: '/order/billPacked',
+        path: '/order/billPacked/:id/:order_sn',
         name: 'billPacked',
         component: Billpacked,
         meta: {
@@ -233,6 +234,17 @@ export default [
         }
       },
       {
+        path: '/station/storage/:id/:express_num',
+        name: 'editStorage',
+        component: Storage,
+        meta: {
+          level: 3,
+          group: '货站',
+          name: '入库',
+          parent: '/station/storage'
+        }
+      },
+      {
         path: '/station/ship',
         name: 'shipContainer',
         component: Ship,
@@ -244,7 +256,7 @@ export default [
       },
       {
         path: '/station/picking',
-        name: 'shipContainer',
+        name: 'pickingContainer',
         component: Picking,
         meta: {
           level: 2,
@@ -260,6 +272,7 @@ export default [
     children: [
       {
         path: '/config/line/linelist',
+        name: 'linelist',
         component: LineList,
         meta: {
           group: '配置',
@@ -279,7 +292,7 @@ export default [
         }
       },
       {
-        path: '/config/line/lineedit',
+        path: '/config/line/lineedit/:state/:id',
         component: LineAddEdit,
         name: 'lineedit',
         meta: {

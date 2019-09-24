@@ -1,21 +1,21 @@
 <template>
     <div class="storage-container">
       <el-row>
-           <el-form ref="params" :model="user" :rules="rules" label-width="140px" label-position="left">
+      <el-form ref="user" :model="user" label-width="140px" label-position="left">
          <el-col :lg="12">
           <!-- 快递单号 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="快递单号" prop="name">
-                <el-input v-model="user.name" placeholder="请输入快递单号"></el-input>
+              <el-form-item label="快递单号">
+                <el-input v-model="user.express_num" placeholder="请输入快递单号"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 重量 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="重量" prop="password">
-                <el-input v-model="user.full_name" placeholder="请输入重量">
+              <el-form-item label="重量">
+                <el-input v-model="user.package_weight" placeholder="请输入重量">
                 <template slot="append">KG</template>
                 </el-input>
               </el-form-item>
@@ -24,10 +24,10 @@
           <!-- 尺寸 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="尺寸" prop="email">
-                <el-input v-model="user.email"  class="sizeLength" placeholder="长 cm"></el-input>
-                <el-input v-model="user.email" class="sizeLength" placeholder="宽 cm"></el-input>
-                <el-input v-model="user.email"  class="sizeLength" placeholder="高 cm"></el-input>
+              <el-form-item label="尺寸">
+                <el-input v-model="user.length"  class="sizeLength" placeholder="长 cm"></el-input>
+                <el-input v-model="user.width" class="sizeLength" placeholder="宽 cm"></el-input>
+                <el-input v-model="user.height"  class="sizeLength" placeholder="高 cm"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -36,8 +36,8 @@
           <!-- 备注 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="备注" prop="full_name">
-                <el-input v-model="user.full_name" placeholder="请输入备注"
+              <el-form-item label="备注">
+                <el-input v-model="user.remark" placeholder="请输入备注"
                 type="textarea"  :autosize="{ minRows: 1, maxRows: 2}"></el-input>
               </el-form-item>
             </el-col>
@@ -45,16 +45,19 @@
           <!-- 更新 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item prop="password_confirmation" class="updateChe">
-                <el-checkbox v-model="checked">更新</el-checkbox>
+              <el-form-item class="updateChe">
+                <el-checkbox-group v-model="user.props">
+                  <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id">{{item.cn_name}}
+                  </el-checkbox>
+                </el-checkbox-group>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 联系电话 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item prop="tel" class="saveBtn updateChe">
-                <el-button>保存</el-button>
+              <el-form-item class="saveBtn updateChe">
+                <el-button @click="submitStorage">保存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -68,29 +71,32 @@
         style="width: 100%">
         <!-- 时间 -->
         <el-table-column
-        prop="date"
+        prop="created_at"
         label="时间">
         </el-table-column>
         <!-- 快递单号 -->
         <el-table-column
-        prop="name"
+        prop="express_num"
         label="快递单号">
         </el-table-column>
         <!-- 重量 -->
         <el-table-column
-        prop="address"
+        prop="package_weight"
         label="重量kg">
         </el-table-column>
         <!-- 长 -->
         <el-table-column
-        label="长">
+        label="长"
+        prop="length">
         </el-table-column>
         <!-- 宽 -->
         <el-table-column
+        prop="width"
         label="宽">
         </el-table-column>
         <!-- 高 -->
         <el-table-column
+        prop="height"
         label="高">
         </el-table-column>
     </el-table>
@@ -108,33 +114,83 @@ export default {
   },
   data () {
     return {
-      checked: false,
-      tableData: [],
-      rules: { // 必填项校验
-        // full_name: [
-        //   { required: true, message: '请输入姓名', trigger: 'change' }
-        // ],
-        // name: [
-        //   { required: true, message: '请输入名字', trigger: 'change' }
-        // ],
-        // email: [
-        //   { required: true, message: '请输入邮箱', trigger: 'blur' },
-        //   { type: 'email', message: '', trigger: ['blur', 'change'] }
-        // ],
-        // tel: [
-        //   { required: true, message: '请输入电话号码', trigger: 'change' }
-        // ],
-        // password: [
-        //   { required: true, message: '请输入密码', trigger: 'change' }
-        // ],
-        // password_confirmation: [
-        //   { required: true, message: '请再次输入密码', trigger: 'change' }
-        // ],
-        // group: [
-        //   { required: true, message: '请输入员工组', trigger: 'change' }
-        // ]
+      user: {
+        express_num: '',
+        package_weight: '',
+        props: [],
+        length: '',
+        width: '',
+        height: '',
+        remark: ''
       },
-      user: {}
+      updateProp: [],
+      tableData: []
+    }
+  },
+  created () {
+    this.getProp() // 获取多选框数据
+    if (this.$route.params.id) {
+      this.getWarehouseInfo() // 从订单跳转过来时加载的表格数据
+      this.user.express_num = this.$route.params.express_num
+    } else {
+      this.getList() // 直接添加时加载的表格数据
+    }
+  },
+  methods: {
+    // 获取多选框
+    getProp () {
+      this.$request.getProps().then(res => {
+        this.updateProp = res.data
+      })
+    },
+    // 从订单跳转到入库时加载的表格数据
+    getWarehouseInfo () {
+      this.$request.getWarehouseList().then(res => {
+        this.tableData = res.data
+        console.log(this.tableData)
+      })
+    },
+    // 直接添加时加载的表格数据
+    getList () {
+      this.$request.getStorageList().then(res => {
+        this.tableData = res.data
+      })
+    },
+    // 保存
+    submitStorage () {
+      if (this.$route.params.id) { // 如果是从订单跳转过来
+        this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
+          if (res.ret) {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '操作成功',
+                message: res.msg
+              })
+              this.getWarehouseInfo()
+              this.user = ''
+              this.user.props = []
+              this.user.length = ''
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          }
+        })
+      } else { // 如果是添加
+        this.$request.getExpress(this.user).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '操作成功',
+              message: res.msg
+            })
+            this.getList()
+          }
+        })
+      }
     }
   }
 }

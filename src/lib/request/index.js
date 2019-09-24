@@ -48,7 +48,7 @@ exports.addGroup = (params) => {
 exports.getVipMember = (id) => {
   return $form.get(`admin-groups/${id}/members`)
 }
-exports.getWarehouse = () => {
+exports.getBill = () => {
   return $form.get('warehouse-address')
 }
 exports.saveWareHouse = (params) => {
@@ -78,6 +78,9 @@ exports.getShip = () => {
 exports.getCountry = () => {
   return $form.get('countries')
 }
+exports.saveCountries = (params) => {
+  return $form.post('countries', params)
+}
 exports.getTransaction = () => {
   return $form.get('transaction-records')
 }
@@ -86,5 +89,67 @@ exports.saveShip = (params) => {
 }
 exports.getShipments = (id) => {
   return $form.put(`shipments/${id}/ship`)
+}
+exports.getStorage = () => {
+  return $form.get('shipment-logs/in-storage')
+}
+exports.getPick = () => {
+  return $form.get('shipment-logs/picking')
+}
+exports.getProps = () => {
+  return $form.get('package-props')
+}
+exports.getWarehouse = (params) => {
+  return $form.get('packages', params)
+}
+exports.submitPackage = (id, params) => {
+  return $form.put(`packages/${id}`, params)
+}
+exports.getWarehouseList = () => {
+  return $form.get('packages/in-warehouse-info')
+}
+exports.getStorageList = () => {
+  return $form.get('shipments/in-warehouse-info')
+}
+exports.getExpress = (params) => {
+  return $form.post(`shipments/in-storage`, params)
+}
+exports.getExpressLine = (id) => {
+  return $form.get(`express-lines/${id}`)
+}
+exports.saveEditLine = (id, params) => {
+  return $form.put(`express-lines/${id}`, params)
+}
+exports.updateLines = (params) => {
+  return $form.post('express-lines', params)
+}
+exports.getOrder = (params) => {
+  return $form.get('orders', params)
+}
+exports.getOrderDetails = (id) => {
+  return $form.get(`orders/${id}`)
+}
+exports.saveOrderPack = (id, params) => {
+  return $form.put(`orders/${id}/pack`, params)
+}
+// 获取客户列表
+exports.getUsers = () => {
+  return $form.get('users')
+}
+// 获取客户组列表
+exports.getUserGroup = () => {
+  return $form.get('user-groups')
+}
+// 获取用户组列表
+exports.getSimple = () => {
+  return $form.get('user-groups/simple-list')
+}
+// 修改客户组资料
+exports.editUserGroup = (id) => {
+  return $form.put(`user-groups/${id}`)
+}
+// 修改客户组
+exports.changeUserList = (id, groupId) => {
+  return $form.put(`users/${id}/group/${groupId}`)
 }
 export default exports
