@@ -2,7 +2,7 @@
     <el-row :gutter="10" class="search-group">
       <slot></slot>
       <el-col :lg="6" :sm="12" class="pull-right">
-        <el-input class="top-20" :value="value" :placeholder="placeholder" ref="input" @input="updateValue"  @keyup.enter.native="Enter">
+        <el-input class="top-20" :value="value" :placeholder="placeholder" ref="input" @input="updateValue" @keyup.enter.native="Enter">
           <el-button class="search-btn" slot="append" @click="Enter" :loading="$store.state.btn_loading">搜索</el-button>
         </el-input>
       </el-col>

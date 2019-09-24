@@ -79,8 +79,8 @@ export default {
         this.oderData = res.data
       })
     },
-    storage (id, express_num) {
-      this.$router.push({ name: 'editStorage', params: { id: id, express_num: express_num } })
+    storage (id, expressNum) {
+      this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum } })
     }
   },
   created () {

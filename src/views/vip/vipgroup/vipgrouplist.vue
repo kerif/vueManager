@@ -57,11 +57,11 @@ export default {
       })
     },
     addVip () {
-      dialog({ type: 'editVip'})
+      dialog({ type: 'editVip' })
     },
     // 修改资料
-    editVip (id, name_cn, name_en) {
-      dialog({ type: 'editVip', id: id, name_cn: name_cn, name_en: name_en })
+    editVip (id, nameCn, nameEn) {
+      dialog({ type: 'editVip', id: id, name_cn: nameCn, name_en: nameEn })
     },
     // 成员
     member (id) {

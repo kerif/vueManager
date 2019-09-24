@@ -124,7 +124,7 @@ exports.updateLines = (params) => {
   return $form.post('express-lines', params)
 }
 exports.getOrder = (params) => {
-  return $form.get('orders', params)
+  return $form.get('orders', { params })
 }
 exports.getOrderDetails = (id) => {
   return $form.get(`orders/${id}`)
@@ -152,4 +152,6 @@ exports.editUserGroup = (id) => {
 exports.changeUserList = (id, groupId) => {
   return $form.put(`users/${id}/group/${groupId}`)
 }
+
+exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids })
 export default exports

@@ -5,7 +5,7 @@
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <el-table class="data-list" border stripe
-      :data="vipList">
+      :data="vipList" @selection-change="onSelectChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="序号" type="index" :index="1" width="60"></el-table-column>
       <el-table-column label="客户ID" prop="id"></el-table-column>
@@ -19,7 +19,8 @@
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small">禁止登录</el-button>
+          <el-button size="small" @click="onUserLogin">禁止登录</el-button>
+          <el-button size="small">允许登录</el-button>
         </div>
       </template>
     </el-table>
@@ -34,7 +35,8 @@ import dialog from '@/components/dialog'
 export default {
   data () {
     return {
-      vipList: []
+      vipList: [],
+      selectIds: []
     }
   },
   mixins: [pagination],
@@ -50,6 +52,16 @@ export default {
     // 修改客户组
     onUpdateGroup (id) {
       dialog({ type: 'vipgroup', id: id }, () => {
+        this.getList()
+      })
+    },
+    onSelectChange (selection) {
+      console.log('select', selection)
+      this.selectIds = selection.map(item => item.id)
+    },
+    // 禁止登录
+    onUserLogin () {
+      this.$request.forbidLogin(this.selectIds).then(res => {
         this.getList()
       })
     }

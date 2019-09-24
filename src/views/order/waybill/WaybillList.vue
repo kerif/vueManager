@@ -1,6 +1,6 @@
 <template>
   <div class="way-list-container">
-    <search-group placeholder="请输入关键字"></search-group>
+    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
       <el-tabs v-model="activeName" class="tabLength">
         <!-- 待处理 -->
         <el-tab-pane label="待处理" name="1"></el-tab-pane>
@@ -14,7 +14,7 @@
         <el-tab-pane label="已签收" name="5"></el-tab-pane>
     </el-tabs>
       <el-table class="data-list" border stripe
-      :data="oderData">
+      :data="oderData" @selection-change="onSelectChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
@@ -66,7 +66,8 @@ export default {
   data () {
     return {
       activeName: '',
-      oderData: []
+      oderData: [],
+      status: ''
     }
   },
   created () {
@@ -74,21 +75,28 @@ export default {
   },
   methods: {
     getList () {
+      // let params = {
+      //   status: this.status
+      // }
+      // if (this.page_params.keyword) params.keyword = this.page_params.keyword
       this.$request.getOrder({
-        params: {
-          status: this.page_params.status
-        }
+        status: this.status,
+        keyword: this.page_params.keyword
       }).then(res => {
         this.oderData = res.data
+        this.page_params.total = res.meta.total
       })
     },
     // 打包
-    packed (id, order_sn) {
-      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: order_sn } })
+    packed (id, orderSN) {
+      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN } })
     },
     // 详情
     details (id) {
       this.$router.push({ name: 'billDetails', params: { id: id } })
+    },
+    onSelectChange (selection) {
+      console.log('select', selection)
     }
   },
   watch: {
@@ -96,23 +104,23 @@ export default {
     activeName (newValue) {
       switch (newValue) {
         case '1': // 待处理
-          this.page_params.status = 1
+          this.status = 1
           break
         case '2': // 待支付
           this.page_params.page = 1
-          this.page_params.status = 2
+          this.status = 2
           break
         case '3': // 待发货
           this.page_params.page = 1
-          this.page_params.status = 2
+          this.status = 2
           break
         case '4': // 已发货
           this.page_params.page = 1
-          this.page_params.status = 2
+          this.status = 2
           break
         case '5': // 已签收
           this.page_params.page = 1
-          this.page_params.status = 2
+          this.status = 2
           break
       }
       this.getList()

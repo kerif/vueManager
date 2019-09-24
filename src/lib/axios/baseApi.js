@@ -3,9 +3,9 @@ let baseUrl
 switch (hostName) {
   default:
     baseUrl = {
-      // BASE_API_URL: 'https://dev-jiyun.nle-tech.com/jiyun-api/admin',
+      BASE_API_URL: 'https://dev-jiyun.nle-tech.com/jiyun-api/admin'
       // IMAGE_URL: 'https://dev-jiyun.nle-tech.com'
-      BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
+      // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     break
 }
