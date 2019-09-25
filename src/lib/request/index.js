@@ -15,8 +15,8 @@ exports.getLines = () => {
   return $form.get('express-lines')
 }
 
-exports.getStaff = () => {
-  return $form.get('admins')
+exports.getStaff = (params) => {
+  return $form.get('admins', { params })
 }
 exports.getVips = () => {
   return $form.get('admin-groups/simple-list')
@@ -39,8 +39,8 @@ exports.editVipPsd = (id, params) => {
 exports.deleteVip = () => {
   return $form.put('admins/batch-delete')
 }
-exports.getVipGroup = () => {
-  return $form.get('admin-groups')
+exports.getVipGroup = (params) => {
+  return $form.get('admin-groups', { params })
 }
 exports.addGroup = (params) => {
   return $json.post('admin-groups', params)
@@ -72,8 +72,8 @@ exports.getNoticeDetails = (id) => {
 exports.saveNoticeDetails = (id, params) => {
   return $form.put(`order-notices/${id}`, params)
 }
-exports.getShip = () => {
-  return $form.get('shipments')
+exports.getShip = (params) => {
+  return $form.get('shipments', { params })
 }
 exports.getCountry = () => {
   return $form.get('countries')
@@ -90,8 +90,8 @@ exports.saveShip = (params) => {
 exports.getShipments = (id) => {
   return $form.put(`shipments/${id}/ship`)
 }
-exports.getStorage = () => {
-  return $form.get('shipment-logs/in-storage')
+exports.getStorage = (params) => {
+  return $form.get('shipment-logs/in-storage', { params })
 }
 exports.getPick = () => {
   return $form.get('shipment-logs/picking')
@@ -100,7 +100,7 @@ exports.getProps = () => {
   return $form.get('package-props')
 }
 exports.getWarehouse = (params) => {
-  return $form.get('packages', params)
+  return $form.get('packages', { params })
 }
 exports.submitPackage = (id, params) => {
   return $form.put(`packages/${id}`, params)
@@ -132,13 +132,17 @@ exports.getOrderDetails = (id) => {
 exports.saveOrderPack = (id, params) => {
   return $form.put(`orders/${id}/pack`, params)
 }
+// 客户地址
+exports.getUserAddress = (params) => {
+  return $form.get('user-addresses', { params })
+}
 // 获取客户列表
-exports.getUsers = () => {
-  return $form.get('users')
+exports.getUsers = (params) => {
+  return $form.get('users', { params })
 }
 // 获取客户组列表
-exports.getUserGroup = () => {
-  return $form.get('user-groups')
+exports.getUserGroup = (params) => {
+  return $form.get('user-groups', { params })
 }
 // 获取用户组列表
 exports.getSimple = () => {

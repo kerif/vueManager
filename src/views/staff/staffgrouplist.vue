@@ -78,44 +78,25 @@ export default {
   data () {
     return {
       staff_group_list: [],
-      deleteSelectionLoading: false,
       tableLoading: false,
-      normal: 1,
-      change_params: {
-        checked: ''
-      },
-      refundState: [
-        { value: '1', label: '未审核' },
-        { value: '2', label: '已拒绝' }
-      ]
+      normal: 1
     }
   },
   created () {
     // this.getShopAgent()
     this.getList()
   },
-  computed: {
-    btn_list () {
-      return [{
-        name: '反选', // 反选
-        method: this.antiSelection
-      }, {
-        name: this.normal === 1 ? '禁止登录' : '允许登录', // 禁止登录
-        method: this.forbidLogin,
-        disabled: this.void_disabled,
-        loading: this.forbidLoginLoading
-      }, {
-        name: '删除', // 删除
-        method: this.deleteSelection,
-        disabled: this.void_disabled,
-        loading: this.deleteSelectionLoading
-      }]
-    }
-  },
   methods: {
     getList () {
-      this.$request.getVipGroup().then(res => {
-        this.staff_group_list = res.data
+      this.tableLoading = true
+      this.$request.getVipGroup({
+        keyword: this.page_params.keyword
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.staff_group_list = res.data
+          this.page_params.total = res.meta.total
+        }
       })
     },
     // 编辑

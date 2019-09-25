@@ -8,7 +8,8 @@
         <el-tab-pane label="已入库" name="2"></el-tab-pane>
     </el-tabs>
       <el-table class="data-list" border stripe
-      :data="oderData">
+      :data="oderData"
+      v-loading="tableLoading">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
@@ -31,7 +32,8 @@
       <!-- 称重时间 -->
       <el-table-column label="称重时间" v-if="activeName === '2'"></el-table-column>
       <!-- 提交时间 -->
-      <el-table-column label="提交时间" prop="created_at"></el-table-column>
+      <el-table-column label="提交时间" prop="created_at">
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作" v-if="activeName === '1'">
         <template slot-scope="scope">
@@ -63,20 +65,28 @@ export default {
     return {
       activeName: '',
       oderData: [],
-      status: 1,
-      page_params: {
-        status: ''
-      }
+      status: '',
+      tableLoading: false
     }
   },
   methods: {
     getList () {
+      this.tableLoading = true
       this.$request.getWarehouse({
-        params: {
-          status: this.page_params.status
-        }
+        status: this.status,
+        keyword: this.page_params.keyword
       }).then(res => {
-        this.oderData = res.data
+        this.tableLoading = false
+        if (res.ret) {
+          this.oderData = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     storage (id, expressNum) {
@@ -92,11 +102,11 @@ export default {
     activeName (newValue) {
       switch (newValue) {
         case '1': // 未入库
-          this.page_params.status = 1
+          this.status = 1
           break
         case '2': // 已入库
           this.page_params.page = 1
-          this.page_params.status = 2
+          this.status = 2
           break
       }
       this.getList()

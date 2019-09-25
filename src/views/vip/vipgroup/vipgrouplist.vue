@@ -8,7 +8,8 @@
       <search-select placeholder="请选择客户组"></search-select>
       <add-btn @click.native="addVip">添加客户组</add-btn>
     </div>
-    <el-table :data="vipGroupList" stripe border class="data-list">
+    <el-table :data="vipGroupList" stripe border class="data-list"
+    v-loading="tableLoading">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="客户组中文名" prop="name_cn"></el-table-column>
       <el-table-column label="客户组英文名" prop="name_en"></el-table-column>
@@ -44,7 +45,8 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      vipGroupList: []
+      vipGroupList: [],
+      tableLoading: false
     }
   },
   created () {
@@ -52,8 +54,21 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getUserGroup().then(res => {
-        this.vipGroupList = res.data
+      this.tableLoading = true
+      this.$request.getUserGroup({
+        keyword: this.page_params.keyword
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.vipGroupList = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     addVip () {

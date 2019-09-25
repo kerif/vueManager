@@ -5,7 +5,9 @@
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <el-table class="data-list" border stripe
-      :data="vipList" @selection-change="onSelectChange">
+      v-loading="tableLoading"
+      :data="vipList"
+       @selection-change="onSelectChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="序号" type="index" :index="1" width="60"></el-table-column>
       <el-table-column label="客户ID" prop="id"></el-table-column>
@@ -36,7 +38,8 @@ export default {
   data () {
     return {
       vipList: [],
-      selectIds: []
+      selectIds: [],
+      tableLoading: false
     }
   },
   mixins: [pagination],
@@ -45,8 +48,21 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getUsers().then(res => {
-        this.vipList = res.data
+      this.tableLoading = true
+      this.$request.getUsers({
+        keyword: this.page_params.keyword
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.vipList = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 修改客户组

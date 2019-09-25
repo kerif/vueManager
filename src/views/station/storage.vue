@@ -57,6 +57,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item class="saveBtn updateChe">
+                <!-- 保存 -->
                 <el-button @click="submitStorage">保存</el-button>
               </el-form-item>
             </el-col>
@@ -67,6 +68,7 @@
       <el-table
         :data="tableData"
         border
+        v-loading="tableLoading"
         class="data-list"
         style="width: 100%">
         <!-- 时间 -->
@@ -123,8 +125,9 @@ export default {
         height: '',
         remark: ''
       },
-      updateProp: [],
-      tableData: []
+      updateProp: [], // checkbox数据
+      tableData: [], // 表格数据
+      tableLoading: false
     }
   },
   created () {
@@ -145,21 +148,44 @@ export default {
     },
     // 从订单跳转到入库时加载的表格数据
     getWarehouseInfo () {
+      this.tableLoading = true
       this.$request.getWarehouseList().then(res => {
-        this.tableData = res.data
-        console.log(this.tableData)
+        this.tableLoading = false
+        if (res.ret) {
+          this.tableData = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 直接添加时加载的表格数据
     getList () {
+      this.tableLoading = true
       this.$request.getStorageList().then(res => {
-        this.tableData = res.data
+        this.tableLoading = false
+        if (res.ret) {
+          this.tableData = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 保存
     submitStorage () {
       if (this.$route.params.id) { // 如果是从订单跳转过来
+        this.tableLoading = true
         this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
+          this.tableLoading = false
           if (res.ret) {
             if (res.ret) {
               this.$notify({
@@ -173,14 +199,17 @@ export default {
               this.user.length = ''
             } else {
               this.$message({
+                title: '操作失败',
                 message: res.msg,
-                type: 'error'
+                type: 'warning'
               })
             }
           }
         })
       } else { // 如果是添加
+        this.tableLoading = true
         this.$request.getExpress(this.user).then(res => {
+          this.tableLoading = false
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -188,6 +217,12 @@ export default {
               message: res.msg
             })
             this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
           }
         })
       }

@@ -1,11 +1,16 @@
 <template>
   <div class="ship-container">
-    <div><search-group v-model="page_params.keyword" @search="getList"></search-group></div>
+    <div>
+      <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
+        </search-group>
+      </div>
     <div class="select-box">
       <search-select placeholder="状态"></search-select>
       <add-btn @click.native="updateInvoice">创建发货单</add-btn>
     </div>
-    <el-table :data="tableShip" stripe border class="data-list">
+    <el-table :data="tableShip" stripe
+    border class="data-list"
+    v-loading="tableLoading">
       <!-- 发货单号 -->
       <el-table-column label="发货单号" prop="sn"></el-table-column>
       <!-- 创建时间 -->
@@ -57,8 +62,8 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      tableShip: [],
-      page_params: {}
+      tableShip: [], // 表格数据
+      tableLoading: false
     }
   },
   created () {
@@ -66,8 +71,21 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getShip().then(res => {
-        this.tableShip = res.data
+      this.tableLoading = true
+      this.$request.getShip({
+        keyword: this.page_params.keyword
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.tableShip = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     updateInvoice () {

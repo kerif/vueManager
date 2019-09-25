@@ -10,7 +10,8 @@
         class="data-list"
         :data="staff_list"
         border
-        ref="table">
+        ref="table"
+        v-loading="tableLoading">
       <el-table-column
         type="selection"
         width="55">
@@ -96,37 +97,24 @@ export default {
       staff_list: [],
       deleteSelectionLoading: false,
       tableLoading: false,
-      normal: 1,
-      change_params: {
-        checked: ''
-      }
+      normal: 1
     }
   },
   created () {
     this.getList()
   },
-  computed: {
-    btn_list () {
-      return [{
-        name: '反选', // 反选
-        method: this.antiSelection
-      }, {
-        name: this.normal === 1 ? '禁止登录' : '允许登录', // 禁止登录
-        method: this.forbidLogin,
-        disabled: this.void_disabled,
-        loading: this.forbidLoginLoading
-      }, {
-        name: '删除', // 删除
-        method: this.deleteSelection,
-        disabled: this.void_disabled,
-        loading: this.deleteSelectionLoading
-      }]
-    }
-  },
   methods: {
     getList () {
-      this.$request.getStaff().then(res => {
-        this.staff_list = res.data
+      this.tableLoading = true
+      this.$request.getStaff({
+        keyword: this.page_params.keyword
+      }).then(res => {
+        if (res.ret) {
+          this.staff_list = res.data
+          this.page_params.total = res.meta.total
+        }
+      }).finally(() => {
+        this.tableLoading = false
       })
     },
     // 编辑

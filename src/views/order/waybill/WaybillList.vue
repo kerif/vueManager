@@ -14,6 +14,7 @@
         <el-tab-pane label="已签收" name="5"></el-tab-pane>
     </el-tabs>
       <el-table class="data-list" border stripe
+      v-loading="tableLoading"
       :data="oderData" @selection-change="onSelectChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
@@ -67,7 +68,8 @@ export default {
     return {
       activeName: '',
       oderData: [],
-      status: ''
+      status: '',
+      tableLoading: false
     }
   },
   created () {
@@ -75,16 +77,22 @@ export default {
   },
   methods: {
     getList () {
-      // let params = {
-      //   status: this.status
-      // }
-      // if (this.page_params.keyword) params.keyword = this.page_params.keyword
+      this.tableLoading = true
       this.$request.getOrder({
         status: this.status,
         keyword: this.page_params.keyword
       }).then(res => {
-        this.oderData = res.data
-        this.page_params.total = res.meta.total
+        this.tableLoading = false
+        if (res.ret) {
+          this.oderData = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 打包

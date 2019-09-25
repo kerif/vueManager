@@ -1,9 +1,10 @@
 <template>
   <div class="line-list-container">
     <div class="add-btn-box"><add-btn router="lineadd">添加路线</add-btn></div>
-    <el-table stripe border class="data-list" :data="lineList">
+    <el-table stripe border class="data-list" :data="lineList"
+    v-loading="tableLoading">
       <el-table-column type="expand">
-        <div>备注：计费方式以实重、体积重量取大者，不足1公斤按1公斤计费；体积重量：长*宽*高/6000</div>
+        <div>{{remark}}</div>
       </el-table-column>
       <el-table-column label="线路名称" prop="cn_name"></el-table-column>
       <el-table-column label="支持国家" prop="countries.cn_name"></el-table-column>
@@ -27,7 +28,8 @@ import AddBtn from '@/components/addBtn'
 export default {
   data () {
     return {
-      lineList: []
+      lineList: [],
+      tableLoading: false
     }
   },
   created () {
@@ -35,9 +37,17 @@ export default {
   },
   methods: {
     getList () {
+      this.tableLoading = true
       this.$request.getLines().then(res => {
+        this.tableLoading = false
         if (res.ret) {
           this.lineList = res.data
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },

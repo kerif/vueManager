@@ -1,6 +1,6 @@
 <template>
   <div class="picking-list-container">
-    <search-group placeholder="请输入关键字"></search-group>
+    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
       <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
         <!-- 入库日志 -->
         <el-tab-pane label="入库日志" name="1"></el-tab-pane>
@@ -8,6 +8,7 @@
         <el-tab-pane label="拣货日志" name="2"></el-tab-pane>
     </el-tabs>
    <el-table class="data-list" border stripe
+    v-loading="tableLoading"
       :data="oderData">
       <!-- 操作人 -->
       <el-table-column label="操作人" prop="operator"></el-table-column>
@@ -65,7 +66,8 @@ export default {
       activeName: '',
       oderData: [],
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      tableLoading: false
     }
   },
   methods: {
@@ -78,9 +80,21 @@ export default {
     },
     // 入库日志
     getList () {
-      this.$request.getStorage().then(res => {
-        this.oderData = res.data
-        console.log(this.orderData)
+      this.tableLoading = true
+      this.$request.getStorage({
+        keyword: this.page_params.keyword
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.oderData = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 拣货日志
