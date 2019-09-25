@@ -81,8 +81,8 @@ exports.getCountry = () => {
 exports.saveCountries = (params) => {
   return $form.post('countries', params)
 }
-exports.getTransaction = () => {
-  return $form.get('transaction-records')
+exports.getTransaction = (params) => {
+  return $form.get('transaction-records', { params })
 }
 exports.saveShip = (params) => {
   return $form.post(`shipments`, params)

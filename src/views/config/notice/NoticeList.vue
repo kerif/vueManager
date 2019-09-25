@@ -1,7 +1,8 @@
 <template>
   <div class="notice-list-container">
     <div class="clear-box"><add-btn router="noticeadd">添加</add-btn></div>
-    <el-table class="data-list" stripe border :data="noticeList">
+    <el-table class="data-list" stripe border :data="noticeList"
+    v-loading="tableLoading">
       <el-table-column type="selection"></el-table-column>
       <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="类型" prop="type"></el-table-column>
@@ -33,7 +34,8 @@ export default {
   },
   data () {
     return {
-      noticeList: []
+      noticeList: [],
+      tableLoading: false
     }
   },
   created () {
@@ -41,8 +43,19 @@ export default {
   },
   methods: {
     getList () {
+      this.tableLoading = true
       this.$request.getNotice().then(res => {
-        this.noticeList = res.data
+        this.tableLoading = false
+        if (res.ret) {
+          this.noticeList = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     noticeEdit (id) {

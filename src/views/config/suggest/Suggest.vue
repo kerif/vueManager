@@ -1,6 +1,7 @@
 <template>
   <div class="suggest-list-container">
-    <el-table class="data-list" border stripe :data="suggestList">
+    <el-table class="data-list" border stripe :data="suggestList"
+    v-loading="tableLoading">
       <el-table-column label="标题" prop="title">
       </el-table-column>
       <el-table-column label="内容" prop="content">
@@ -33,7 +34,8 @@ import dialog from '@/components/dialog'
 export default {
   data () {
     return {
-      suggestList: []
+      suggestList: [], // 表格数据
+      tableLoading: false
     }
   },
   mixins: [pagination],
@@ -45,8 +47,19 @@ export default {
   },
   methods: {
     getList () {
+      this.tableLoading = true
       this.$request.getSuggest().then(res => {
-        this.suggestList = res.data
+        this.tableLoading = false
+        if (res.ret) {
+          this.suggestList = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     onChangeStatus (id) {

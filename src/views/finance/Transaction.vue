@@ -13,7 +13,8 @@
         </search-date-picker>
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
-    <el-table :data="transactionList" stripe border class="data-list">
+    <el-table :data="transactionList" stripe border class="data-list"
+    v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 客户ID -->
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
@@ -41,8 +42,8 @@ export default {
   data () {
     return {
       transactionList: [],
+      tableLoading: false,
       page_params: {
-        keyword: '',
         time: []
       }
     }
@@ -58,8 +59,21 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getTransaction().then(res => {
-        this.transactionList = res.data
+      this.tableLoading = true
+      this.$request.getTransaction({
+        keyword: this.page_params.keyword
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.transactionList = res.data
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     getDate (val) {

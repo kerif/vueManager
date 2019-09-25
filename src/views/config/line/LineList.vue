@@ -4,11 +4,19 @@
     <el-table stripe border class="data-list" :data="lineList"
     v-loading="tableLoading">
       <el-table-column type="expand">
-        <div>{{remark}}</div>
+        <template slot-scope="scope">
+          {{scope.row.remark || "无" }}
+        </template>
       </el-table-column>
       <el-table-column label="线路名称" prop="cn_name"></el-table-column>
-      <el-table-column label="支持国家" prop="countries.cn_name"></el-table-column>
-      <el-table-column label="参考时效" prop="expire"></el-table-column>
+      <el-table-column label="支持国家">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.countries" :key="item.id">
+            {{item.cn_name}}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="参考时效" prop="reference_time"></el-table-column>
       <el-table-column label="首重" prop="first_weight"></el-table-column>
       <el-table-column label="首费" prop="first_money"></el-table-column>
       <el-table-column label="续重" prop="next_weight"></el-table-column>
