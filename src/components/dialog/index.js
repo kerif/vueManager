@@ -8,6 +8,7 @@ import editVip from './editVip.vue'
 import vipList from './vipList.vue'
 import AddCountry from './addCountry.vue'
 import editPsd from './editPassword.vue'
+import PreviewImage from './PreviewImage.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
@@ -18,6 +19,7 @@ const EditVipController = Vue.extend(editVip)
 const VipListController = Vue.extend(vipList)
 const AddCountryController = Vue.extend(AddCountry)
 const EditPasswordController = Vue.extend(editPsd)
+const PreviewImageController = Vue.extend(PreviewImage)
 
 const mixin = {
   data () {
@@ -90,6 +92,14 @@ function initInstance (type) {
         el: document.createElement('div'),
         mixins: [mixin]
       })
+      break
+    // 预览图片
+    case 'previewimage':
+      instance = new PreviewImageController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
   }
   instance.constrctType = type
 }
@@ -108,7 +118,6 @@ export default (props, callback) => {
     instance.init()
   }
   instance.success = (data) => {
-    console.log(11)
     callback(data)
   }
   document.body.appendChild(instance.$el)

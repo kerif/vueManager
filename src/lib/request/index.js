@@ -1,4 +1,4 @@
-import { $form, $json } from '@/lib/axios'
+import { $form, $json, $file } from '@/lib/axios'
 let exports = {}
 
 /**
@@ -160,5 +160,13 @@ exports.changeUserList = (id, groupId) => {
 exports.changePassword = (params) => {
   return $form.put('modify-password', params)
 }
+
+/**
+ * 上传图片
+ * @param {Array} images 图片对象数组
+ *  iamges[*].file 文件
+ */
+exports.uploadImg = (images) => $file.post('upload/images', images)
+
 exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids })
 export default exports

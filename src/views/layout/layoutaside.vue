@@ -30,13 +30,6 @@
 <script>
 import { routes } from '@/router'
 export default {
-  watch: {
-    $route (newValue, oldValue) {
-      console.log('old', oldValue)
-      console.log('v', newValue)
-      console.log('a', newValue.meta.level === 3)
-    }
-  },
   computed: {
     routers () {
       return routes
@@ -57,12 +50,12 @@ export default {
   },
   methods: {
     onMenuSelect (index, indexPath) {
-      console.log('index', index)
-      console.log('indexPath', indexPath)
+      // console.log('index', index)
+      // console.log('indexPath', indexPath)
     },
     onRoute (route) {
-      console.log('route', route)
-      console.log('$route', this.$route)
+      // console.log('route', route)
+      // console.log('$route', this.$route)
     }
   }
 }
