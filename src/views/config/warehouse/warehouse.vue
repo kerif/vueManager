@@ -30,7 +30,8 @@
       </el-row>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" class="save-btn" @click="submit('ruleForm')">保存</el-button>
+      <el-button type="primary" class="save-btn" @click="submit('ruleForm')"
+      :loading="$store.state.btnLoading">保存</el-button>
       </el-form-item>
   </el-form>
   </div>

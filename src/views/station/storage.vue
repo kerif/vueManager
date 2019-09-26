@@ -58,7 +58,7 @@
             <el-col :span="18">
               <el-form-item class="saveBtn updateChe">
                 <!-- 保存 -->
-                <el-button @click="submitStorage">保存</el-button>
+                <el-button @click="submitStorage" :loading="$store.state.btnLoading">保存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
