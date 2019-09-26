@@ -5,7 +5,6 @@
         <el-autocomplete
           :fetch-suggestions="queryCNSearch"
           @select="handleSelect"
-          :trigger-on-focus="false"
           placeholder="请输入国家中文名"
           v-model="ruleForm.cn_name">
         </el-autocomplete>
@@ -13,7 +12,6 @@
       <el-form-item label="英文：">
         <el-autocomplete
           :fetch-suggestions="queryENSearch"
-          :trigger-on-focus="false"
           placeholder="请输入国家英文名"
           v-model="ruleForm.en_name">
         </el-autocomplete>

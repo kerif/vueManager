@@ -34,7 +34,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>参考失效</div>
+            <div>参考时效</div>
             <el-input v-model="form.reference_time" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
@@ -95,7 +95,7 @@
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="sava-btn" @click="saveLine">保存</el-button>
+        <el-button type="primary" class="sava-btn" :loading="$store.state.btnLoading" @click="saveLine">保存</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -135,6 +135,8 @@ export default {
     getList () {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         this.form = res.data
+        this.form.types = res.data.types.map(item => item.id)
+        this.form.countries = res.data.countries.map(item => item.id)
       })
     },
     // 添加国家
@@ -161,7 +163,7 @@ export default {
     // 保存
     saveLine () {
       if (this.$route.params.id) { // 编辑状态
-        this.$request.saveEditLine(this.$route.params.id, this.form).then(res => {
+        this.$request.saveEditLine(this.$route.params.id, { ...this.form }).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',

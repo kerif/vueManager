@@ -72,6 +72,16 @@ let $json = $form.create({
   }]
 })
 
+let $file = $form.create({
+  baseURL: baseApi.BASE_API_URL,
+  headers: {
+    'Content-Type': 'multipart/form-data;'
+  }
+})
+
+$file.interceptors.request.use(interceptorsRequestSuccess, interceptorsRequestError)
+$file.interceptors.response.use(interceptorsResponseSuccess, interceptorsResponseError)
+
 $json.interceptors.request.use(interceptorsRequestSuccess, interceptorsRequestError)
 $json.interceptors.response.use(interceptorsResponseSuccess, interceptorsResponseError)
 
@@ -83,4 +93,4 @@ axios.install = function (Vue, options = {}) {
 }
 
 export default axios
-export { $form, $json }
+export { $form, $json, $file }

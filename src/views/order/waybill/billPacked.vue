@@ -47,11 +47,11 @@
                   <el-upload
                     class="avatar-uploader"
                     list-type="picture-card"
-                    :action="$baseUrl.BASE_API_URL + '/upload/images'"
-                    name="images"
+                    action=""
                     :on-success="filesuccess"
                     :on-error="fileerror"
-                    :before-upload="beforeAvatarUpload"
+                    :before-upload="beforeUploadImg"
+                    :http-request="onUpload"
                     :show-file-list="false">
                     <i class="el-icon-plus">
                     </i>
@@ -88,7 +88,7 @@
                     name="images"
                     :on-success="filesuccess"
                     :on-error="fileerror"
-                    :before-upload="beforeAvatarUpload"
+                    :before-upload="beforeUploadImg"
                     :show-file-list="false">
                     <i class="el-icon-plus">
                     </i>
@@ -163,16 +163,30 @@ export default {
         type: 'warning'
       })
     },
-    beforeAvatarUpload (file) {
-    //   const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-      //   if (!isJPG) {
-      //     this.$message.error('上传头像图片只能是 JPG 格式!')
-      //   }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+    beforeUploadImg (file) {
+      if (!(/^image/.test(file.type))) {
+        this.$message.info('请上传图片类型文件')
+        return false
+      } else if (file.size > 1024 * 1024 * 2) {
+        this.$message.info('上传图片大小不能超过2M')
+        return false
       }
-    //   return isJPG && isLt2M
+      return true
+    },
+    // 上传图片
+    onUpload (item) {
+      console.log('item', item)
+      let file = item.file
+      console.log(file)
+      let params = new FormData()
+      params.append('file', file)
+      // params.append('age', '13')
+      let arr = []
+      arr.push({
+        params
+      })
+      console.log(params.get('file'))
+      this.$request.uploadImg(arr).then(res => {})
     }
   }
 }
