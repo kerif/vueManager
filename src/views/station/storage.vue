@@ -166,11 +166,17 @@ export default {
     // 直接添加时加载的表格数据
     getList () {
       this.tableLoading = true
-      this.$request.getStorageList().then(res => {
+      this.$request.getStorageList({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.tableData = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          console.log(this.page_params.page, 'page_no')
+          console.log(this.page_params.page, 'page_size')
         } else {
           this.$notify({
             title: '操作失败',
