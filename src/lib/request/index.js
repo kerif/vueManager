@@ -108,8 +108,8 @@ exports.submitPackage = (id, params) => {
 exports.getWarehouseList = () => {
   return $form.get('packages/in-warehouse-info')
 }
-exports.getStorageList = () => {
-  return $form.get('shipments/in-warehouse-info')
+exports.getStorageList = (params) => {
+  return $form.get('shipments/in-warehouse-info', { params })
 }
 exports.getExpress = (params) => {
   return $form.post(`shipments/in-storage`, params)
