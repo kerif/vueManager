@@ -32,16 +32,19 @@
       <!-- 包裹数 -->
       <el-table-column label="包裹数" prop="package_count"></el-table-column>
       <!-- 预计重量KG -->
-      <el-table-column label="预计重量kg" prop="except_weight"></el-table-column>
+      <el-table-column :label="activeName === '1' ? '预计重量kg' : '实际重量kg'" :prop="activeName === '1' ? 'except_weight' : 'except_weight'"></el-table-column>
       <!-- 详见产品图 -->
-      <el-table-column label="详见产品图"></el-table-column>
+      <el-table-column :label="activeName === '1' ? '预计费用' : '实际费用'" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
+      <el-table-column label="申报价值￥" prop="declare_value"></el-table-column>
+      <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column label="提交时间" prop="updated_at"></el-table-column>
+      <el-table-column label="拣货时间" prop="packed_at" v-show="activeName === '2'"></el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-purple detailsBtn" @click="details(scope.row.id)">详情</el-button>
-          <el-button class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">打包</el-button>
+          <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">打包</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -120,15 +123,15 @@ export default {
           break
         case '3': // 待发货
           this.page_params.page = 1
-          this.status = 2
+          this.status = 3
           break
         case '4': // 已发货
           this.page_params.page = 1
-          this.status = 2
+          this.status = 4
           break
         case '5': // 已签收
           this.page_params.page = 1
-          this.status = 2
+          this.status = 5
           break
       }
       this.getList()
