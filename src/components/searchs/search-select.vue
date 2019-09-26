@@ -51,7 +51,8 @@ export default {
   },
   methods: {
     selectChange (val) {
-      this.$parent.$parent.$emit('search')
+      console.log(val)
+      this.$emit('search')
     }
   }
 }

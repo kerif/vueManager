@@ -1,8 +1,12 @@
 <template>
   <div class="vip-list-container">
     <div>
-      <search-select placeholder="请选择客户组"></search-select>
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+    </div>
+    <div class="select-box">
+     <search-select placeholder="请选择客户组" :selectArr="clientGroupList"
+        v-model="page_params.group" @search="getList">
+      </search-select>
     </div>
     <el-table class="data-list" border stripe
       v-loading="tableLoading"
@@ -39,22 +43,31 @@ export default {
     return {
       vipList: [],
       selectIds: [],
-      tableLoading: false
+      tableLoading: false,
+      clientGroupList: [],
+      page_params: {
+        group: ''
+      }
     }
   },
   mixins: [pagination],
   created () {
     this.getList()
+    this.getCategory()
   },
   methods: {
     getList () {
       this.tableLoading = true
       this.$request.getUsers({
-        keyword: this.page_params.keyword
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size,
+        status: this.page_params.group
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.vipList = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
@@ -63,6 +76,17 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    // 获取客户组
+    getCategory () {
+      this.$request.getSimple().then(res => {
+        res.data.forEach(item => {
+          this.clientGroupList.push({
+            value: item.id,
+            label: item.name_cn
+          })
+        })
       })
     },
     // 修改客户组
@@ -89,3 +113,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.vip-list-container {
+  .select-box {
+    overflow: hidden
+  }
+}
+</style>

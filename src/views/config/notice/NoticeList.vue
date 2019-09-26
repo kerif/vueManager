@@ -44,10 +44,14 @@ export default {
   methods: {
     getList () {
       this.tableLoading = true
-      this.$request.getNotice().then(res => {
+      this.$request.getNotice({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.noticeList = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
           this.$notify({

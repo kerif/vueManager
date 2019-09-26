@@ -5,7 +5,8 @@
         </search-group>
       </div>
     <div class="select-box">
-      <search-select placeholder="状态"></search-select>
+      <search-select placeholder="状态" :selectArr="statusList" @search="getList"
+      v-model="page_params.status"></search-select>
       <add-btn @click.native="updateInvoice">创建发货单</add-btn>
     </div>
     <el-table :data="tableShip" stripe
@@ -63,7 +64,20 @@ export default {
   data () {
     return {
       tableShip: [], // 表格数据
-      tableLoading: false
+      tableLoading: false,
+      page_params: {
+        status: ''
+      },
+      statusList: [
+        {
+          value: 0,
+          label: '未发货'
+        },
+        {
+          value: 1,
+          label: '已发货'
+        }
+      ]
     }
   },
   created () {
@@ -73,11 +87,15 @@ export default {
     getList () {
       this.tableLoading = true
       this.$request.getShip({
-        keyword: this.page_params.keyword
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size,
+        status: this.page_params.status
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.tableShip = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
           this.$notify({

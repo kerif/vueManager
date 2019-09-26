@@ -1,7 +1,8 @@
 <template>
   <div class="vip-address-container">
     <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+      <search-group v-model="page_params.keyword" @search="goSearch"
+      ></search-group>
     </div>
     <el-table border stripe :data="addressList" class="data-list"
     v-loading="tableLoading">
@@ -41,11 +42,14 @@ export default {
     getList () {
       this.tableLoading = true
       this.$request.getUserAddress({
-        keyword: this.page_params.keyword
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.addressList = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
           this.$notify({

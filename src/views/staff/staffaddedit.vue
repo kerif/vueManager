@@ -75,7 +75,7 @@
       </el-form>
     </el-row>
     <div class="btn_box">
-      <el-button type="primary" @click="update('params')" :loading="btn_loading">
+      <el-button type="primary" @click="update('params')" :loading="$store.state.btnLoading">
         保存
         </el-button>
       </div>

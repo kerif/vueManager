@@ -48,10 +48,14 @@ export default {
   methods: {
     getList () {
       this.tableLoading = true
-      this.$request.getSuggest().then(res => {
+      this.$request.getSuggest({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.suggestList = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
           this.$notify({

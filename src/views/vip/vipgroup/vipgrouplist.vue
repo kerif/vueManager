@@ -5,7 +5,6 @@
       </search-group>
       </div>
     <div class="select-box">
-      <search-select placeholder="请选择客户组"></search-select>
       <add-btn @click.native="addVip">添加客户组</add-btn>
     </div>
     <el-table :data="vipGroupList" stripe border class="data-list"
@@ -30,14 +29,13 @@
   </div>
 </template>
 <script>
-import { SearchSelect, SearchGroup } from '@/components/searchs'
+import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
-    SearchSelect,
     SearchGroup,
     NlePagination,
     AddBtn
@@ -56,11 +54,14 @@ export default {
     getList () {
       this.tableLoading = true
       this.$request.getUserGroup({
-        keyword: this.page_params.keyword
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.vipGroupList = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
@@ -71,6 +72,13 @@ export default {
         }
       })
     },
+    // 用户组分类选择值加载
+    goSearchType (val) {
+      this.page_params.page = 1
+      this.page_params.name_cn = val
+      this.getList()
+    },
+    // 添加客户组
     addVip () {
       dialog({ type: 'editVip' })
     },

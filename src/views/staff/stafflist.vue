@@ -4,6 +4,9 @@
     <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
       <div class="select-box">
+        <search-select placeholder="请选择客户组" :selectArr="clientGroupList"
+        v-model="page_params.group" @search="getList">
+      </search-select>
         <add-btn router="staffadd">添加客户组</add-btn>
       </div>
       <el-table
@@ -79,7 +82,7 @@
   </div>
 </template>
 <script>
-import { SearchGroup } from '@/components/searchs'
+import { SearchGroup, SearchSelect } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
@@ -89,7 +92,8 @@ export default {
   components: {
     SearchGroup,
     AddBtn,
-    NlePagination
+    NlePagination,
+    SearchSelect
   },
   name: 'staffListContainer',
   data () {
@@ -97,24 +101,44 @@ export default {
       staff_list: [],
       deleteSelectionLoading: false,
       tableLoading: false,
-      normal: 1
+      normal: 1,
+      clientGroupList: [],
+      page_params: {
+        group: ''
+      }
     }
   },
   created () {
     this.getList()
+    this.getCategory()
   },
   methods: {
     getList () {
       this.tableLoading = true
       this.$request.getStaff({
-        keyword: this.page_params.keyword
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size,
+        group: this.page_params.group
       }).then(res => {
         if (res.ret) {
           this.staff_list = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         }
       }).finally(() => {
         this.tableLoading = false
+      })
+    },
+    // 获取员工组
+    getCategory () {
+      this.$request.getVips().then(res => {
+        res.data.forEach(item => {
+          this.clientGroupList.push({
+            value: item.id,
+            label: item.name_cn
+          })
+        })
       })
     },
     // 编辑

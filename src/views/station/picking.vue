@@ -82,11 +82,14 @@ export default {
     getList () {
       this.tableLoading = true
       this.$request.getStorage({
-        keyword: this.page_params.keyword
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.oderData = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
           this.$notify({

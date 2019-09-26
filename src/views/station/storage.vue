@@ -149,10 +149,14 @@ export default {
     // 从订单跳转到入库时加载的表格数据
     getWarehouseInfo () {
       this.tableLoading = true
-      this.$request.getWarehouseList().then(res => {
+      this.$request.getWarehouseList({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.tableData = res.data
+          this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
@@ -166,25 +170,27 @@ export default {
     // 直接添加时加载的表格数据
     getList () {
       this.tableLoading = true
-      this.$request.getStorageList({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.tableData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          console.log(this.page_params.page, 'page_no')
-          console.log(this.page_params.page, 'page_size')
-        } else {
-          this.$notify({
-            title: '操作失败',
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      if (this.$route.params.id) {
+        this.getWarehouseInfo()
+      } else {
+        this.$request.getStorageList({
+          page: this.page_params.page,
+          size: this.page_params.size
+        }).then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.tableData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     },
     // 保存
     submitStorage () {

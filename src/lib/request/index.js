@@ -54,14 +54,14 @@ exports.getBill = () => {
 exports.saveWareHouse = (params) => {
   return $form.put('warehouse-address', params)
 }
-exports.getNotice = () => {
-  return $form.get('order-notices')
+exports.getNotice = (params) => {
+  return $form.get('order-notices', { params })
 }
 exports.saveNotice = (params) => {
   return $form.post(`order-notices`, params)
 }
-exports.getSuggest = () => {
-  return $form.get('suggestions')
+exports.getSuggest = (params) => {
+  return $form.get('suggestions', { params })
 }
 exports.submitSuggest = (id, params) => {
   return $form.put(`suggestions/${id}/status`, params)
@@ -105,8 +105,8 @@ exports.getWarehouse = (params) => {
 exports.submitPackage = (id, params) => {
   return $form.put(`packages/${id}`, params)
 }
-exports.getWarehouseList = () => {
-  return $form.get('packages/in-warehouse-info')
+exports.getWarehouseList = (params) => {
+  return $form.get('packages/in-warehouse-info', { params })
 }
 exports.getStorageList = (params) => {
   return $form.get('shipments/in-warehouse-info', { params })
@@ -156,6 +156,9 @@ exports.editUserGroup = (id) => {
 exports.changeUserList = (id, groupId) => {
   return $form.put(`users/${id}/group/${groupId}`)
 }
-
+// 修改密码
+exports.changePassword = (params) => {
+  return $form.put('modify-password', params)
+}
 exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids })
 export default exports
