@@ -44,24 +44,26 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="上传打包照片" class="updateChe">
+                  <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                    <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                    <span class="model-box"></span>
+                    <span class="operat-box">
+                      <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                      <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i>
+                    </span>
+                  </span>
                   <el-upload
+                    v-show="baleImgList.length < 3"
                     class="avatar-uploader"
-                    list-type="picture-card"
                     action=""
-                    :on-success="filesuccess"
-                    :on-error="fileerror"
+                    list-type="picture-card"
                     :before-upload="beforeUploadImg"
-                    :http-request="onUpload"
+                    :http-request="uploadBaleImg"
                     :show-file-list="false">
                     <i class="el-icon-plus">
                     </i>
                 </el-upload>
                 <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
-                <div v-show="icon">
-                    <div class="upload_ball">
-                    <img :src="icon" width="200px" height="200px"/>
-                    </div>
-                </div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -76,29 +78,30 @@
             </el-col>
           </el-row>
           <!-- 物品照片 -->
-        <!-- :action="$baseUrl.BASE_API_URL + '/user/upload-image'" -->
-                            <!-- :headers = "Authorization" -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
+                <span class="img-item" v-for="(item, index) in goodsImgList" :key="item.name">
+                  <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteImg('goods', index)"></i>
+                  </span>
+                </span>
                 <el-upload
-                    class="avatar-uploader"
-                    list-type="picture-card"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    name="images"
-                    :on-success="filesuccess"
-                    :on-error="fileerror"
-                    :before-upload="beforeUploadImg"
-                    :show-file-list="false">
-                    <i class="el-icon-plus">
-                    </i>
+                  v-show="goodsImgList.length < 3"
+                  class="avatar-uploader"
+                  list-type="picture-card"
+                  action=""
+                  :before-upload="beforeUploadImg"
+                  :http-request="uploadGoodsImg"
+                  :show-file-list="false"
+                  >
+                  <i class="el-icon-plus">
+                  </i>
                 </el-upload>
                 <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
-                <div v-show="icon">
-                    <div class="upload_ball">
-                    <img :src="icon" width="200px" height="200px"/>
-                    </div>
-                </div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -107,31 +110,44 @@
     <!-- 保存 -->
     <el-row :gutter="20">
     <el-col :span="18">
-      <el-button @click="savePacked" type="primary">保存</el-button>
+      <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">保存</el-button>
     </el-col>
     </el-row>
     </div>
 </template>
-
 <script>
+import dialog from '@/components/dialog'
 export default {
   data () {
     return {
       checked: false,
-      icon: '',
       user: {
         weight: '',
         width: '',
         length: '',
         height: '',
         remark: '',
-        in_warehouse_item: ''
-      }
+        in_warehouse_item: '',
+        in_warehouse_pictures: [], // 留仓物品照片
+        pack_pictures: [] // 打包照片
+      },
+      baleImgList: [],
+      goodsImgList: []
     }
   },
   methods: {
     savePacked () {
       console.log(this.user)
+      this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
+        return {
+          url: item.url + '/'
+        }
+      })
+      this.user.pack_pictures = this.baleImgList.map(item => {
+        return {
+          url: item.url + '/'
+        }
+      })
       this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
         if (res.ret) {
           this.$notify({
@@ -148,20 +164,20 @@ export default {
         }
       })
     },
-    filesuccess (file) {
-      this.$notify({
-        title: '操作成功',
-        message: '上传成功',
-        type: 'success'
+    // 预览图片
+    onPreview (image) {
+      dialog({
+        type: 'previewimage',
+        image
       })
-      this.form.icon = file.data
     },
-    fileerror (file) {
-      this.$notify({
-        title: '操作失败',
-        message: '文件上传失败',
-        type: 'warning'
-      })
+    // 删除图片
+    onDeleteImg (type, index) {
+      if (type === 'bale') {
+        this.baleImgList.splice(index, 1)
+      } else if (type === 'goods') {
+        this.goodsImgList.splice(index, 1)
+      }
     },
     beforeUploadImg (file) {
       if (!(/^image/.test(file.type))) {
@@ -173,20 +189,39 @@ export default {
       }
       return true
     },
-    // 上传图片
-    onUpload (item) {
-      console.log('item', item)
+    // 上传打包照片
+    uploadBaleImg (item) {
       let file = item.file
-      console.log(file)
-      let params = new FormData()
-      params.append('file', file)
-      // params.append('age', '13')
-      let arr = []
-      arr.push({
-        params
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.baleImgList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
       })
-      console.log(params.get('file'))
-      this.$request.uploadImg(arr).then(res => {})
+    },
+    // 上传物品照片
+    uploadGoodsImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.goodsImgList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 上传图片
+    onUpload (file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
     }
   }
 }
@@ -224,28 +259,60 @@ export default {
       padding: 15px 35px;
     }
   }
-  .upload_btn{
-    color:#000;
-    padding:1px 60px;
-    border-radius:5px;
-    border:1px solid #BFCBD9;
-    outline:none;
-    cursor:pointer;
-    background-color:#fff;
-    }
-  .upload_btn:hover{
-    color:#009FEF;
-    cursor:pointer;
-    outline:none;
-    border:1px solid #009FEF;
-    background-color:#fff;
-    }
   .updateImg {
     margin-top: 10px;
     color: #ccc;
   }
   .package-form {
     overflow: hidden;
+  }
+  .img-item {
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    width: 148px;
+    height: 148px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box, .operat-box {
+        opacity: 1;
+        transition: all .5s ease-in;
+      }
+    }
+  }
+  .model-box {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, .3);
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    i {
+      font-size: 20px;
+      color: #fff;
+      margin-right: 10px;
+    }
+  }
+  .goods-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+  .avatar-uploader {
+    display: inline-block;
+    vertical-align: top;
   }
 }
 </style>

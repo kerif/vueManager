@@ -162,7 +162,7 @@ exports.changeUserList = (id, groupId) => {
  * @param {Array} images 图片对象数组
  *  iamges[*].file 文件
  */
-exports.uploadImg = (images) => $file.post('upload/images', { images })
+exports.uploadImg = (images) => $file.post('upload/images', images)
 
 exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids })
 export default exports
