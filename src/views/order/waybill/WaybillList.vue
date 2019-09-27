@@ -22,13 +22,13 @@
       <!-- 转运单号 -->
       <el-table-column label="转运单号" prop="order_sn"></el-table-column>
       <!-- 物流单号 -->
-      <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2' 
-      || activeName === '4' || activeName === '5'" prop="logistics_sn"></el-table-column>
-      <el-table-column label="物流单号" v-if="activeName === '3'">
-        <template slot-scope="scope">
-          <el-input type="text"></el-input>
-        </template>
+      <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2'   || activeName === '4' || activeName === '5'" prop="logistics_sn">
       </el-table-column>
+      <!-- <el-table-column label="物流单号" v-if="activeName === '3'">
+        <template slot-scope="scope" v-if="activeName === '3'">
+          <el-input type="text" v-model="scope.row.logistics_sn"></el-input>
+        </template>
+      </el-table-column> -->
       <!-- 线路名称 -->
       <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
       <!-- 收货人 -->
@@ -44,13 +44,25 @@
       <el-table-column label="申报价值￥" prop="declare_value"></el-table-column>
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 提交时间 -->
-      <el-table-column label="提交时间" prop="updated_at"></el-table-column>
-      <el-table-column label="拣货时间" prop="packed_at" v-show="activeName === '2'"></el-table-column>
+      <el-table-column label="提交时间" prop="updated_at" v-if="activeName === '1' || activeName === '2' || activeName === '3'"></el-table-column>
+      <!-- 拣货时间 -->
+      <el-table-column label="拣货时间" prop="packed_at" v-if="activeName === '2' || activeName === '3'"></el-table-column>
+      <!-- 签收时间 -->
+      <el-table-column label="签收时间" prop="updated_at" v-if="activeName === '5'">
+      </el-table-column>
+      <!-- 所属发货单 -->
+      <el-table-column label="所属发货单" prop="shipment_sn" v-if="activeName === '4'">
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <!-- 详情 -->
           <el-button class="btn-purple detailsBtn" @click="details(scope.row.id)">详情</el-button>
+          <!-- 打包 -->
           <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">打包</el-button>
+          <!-- 加入发货单 -->
+          <el-button v-show="activeName === '3'" class="btn-deep-blue detailsBtn"
+          @click="addInvoice(scope.row.id)">加入发货单</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -69,6 +81,7 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   components: {
     SearchGroup,
@@ -119,6 +132,12 @@ export default {
     },
     onSelectChange (selection) {
       console.log('select', selection)
+    },
+    // 加入发货单
+    addInvoice (id) {
+      dialog({ type: 'addInvoice', id: id }, () => {
+        this.getList()
+      })
     }
   },
   watch: {
