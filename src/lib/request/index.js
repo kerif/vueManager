@@ -113,6 +113,10 @@ exports.getWarehouseList = (params) => {
 exports.getStorageList = (params) => {
   return $form.get('shipments/in-warehouse-info', { params })
 }
+// 完成已支付
+exports.getPay = (id) => {
+  return $form.put(`orders/${id}/paid`)
+}
 exports.getExpress = (params) => {
   return $form.post(`shipments/in-storage`, params)
 }

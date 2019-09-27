@@ -63,12 +63,17 @@
           <!-- 加入发货单 -->
           <el-button v-show="activeName === '3'" class="btn-deep-blue detailsBtn"
           @click="addInvoice(scope.row.id)">加入发货单</el-button>
+           <!-- 完成支付 -->
+          <el-button size="small" v-if="activeName === '2'" class="btn-light-red detailsBtn" @click="completePay(scope.row.id)">完成支付</el-button>
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
+          <!-- 删除 -->
           <el-button size="small">删除</el-button>
+          <!-- 加入发货单 -->
           <el-button size="small" v-if="activeName === '3'">加入发货单</el-button>
+          <!-- 添加物流单号 -->
           <el-button size="small" v-if="activeName === '3'">添加物流单号</el-button>
         </div>
       </template>
@@ -137,6 +142,25 @@ export default {
     addInvoice (id) {
       dialog({ type: 'addInvoice', id: id }, () => {
         this.getList()
+      })
+    },
+    // 完成支付
+    completePay (id) {
+      this.$request.getPay(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     }
   },
