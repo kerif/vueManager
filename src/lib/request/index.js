@@ -154,6 +154,14 @@ exports.getSimple = () => {
 exports.editUserGroup = (id) => {
   return $form.put(`user-groups/${id}`)
 }
+// 获得发货单
+exports.getInvoice = () => {
+  return $form.get('orders/shipments')
+}
+// 加入发货单
+exports.updateShipment = (id, params) => {
+  return $form.put(`orders/add-to-shipment`, id, params)
+}
 // 修改客户组
 exports.changeUserList = (id, groupId) => {
   return $form.put(`users/${id}/group/${groupId}`)

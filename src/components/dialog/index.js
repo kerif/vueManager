@@ -9,6 +9,7 @@ import vipList from './vipList.vue'
 import AddCountry from './addCountry.vue'
 import editPsd from './editPassword.vue'
 import PreviewImage from './PreviewImage.vue'
+import addInvoice from './addInvoice.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
@@ -20,6 +21,7 @@ const VipListController = Vue.extend(vipList)
 const AddCountryController = Vue.extend(AddCountry)
 const EditPasswordController = Vue.extend(editPsd)
 const PreviewImageController = Vue.extend(PreviewImage)
+const AddInvoiceController = Vue.extend(addInvoice)
 
 const mixin = {
   data () {
@@ -96,6 +98,13 @@ function initInstance (type) {
     // 预览图片
     case 'previewimage':
       instance = new PreviewImageController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 加入发货单
+    case 'addInvoice':
+      instance = new AddInvoiceController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
