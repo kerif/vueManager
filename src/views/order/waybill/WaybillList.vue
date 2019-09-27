@@ -22,7 +22,13 @@
       <!-- 转运单号 -->
       <el-table-column label="转运单号" prop="order_sn"></el-table-column>
       <!-- 物流单号 -->
-      <el-table-column label="物流单号" prop="logistics_sn"></el-table-column>
+      <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2' 
+      || activeName === '4' || activeName === '5'" prop="logistics_sn"></el-table-column>
+      <el-table-column label="物流单号" v-if="activeName === '3'">
+        <template slot-scope="scope">
+          <el-input type="text"></el-input>
+        </template>
+      </el-table-column>
       <!-- 线路名称 -->
       <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
       <!-- 收货人 -->
@@ -50,6 +56,8 @@
       <template slot="append">
         <div class="append-box">
           <el-button size="small">删除</el-button>
+          <el-button size="small" v-if="activeName === '3'">加入发货单</el-button>
+          <el-button size="small" v-if="activeName === '3'">添加物流单号</el-button>
         </div>
       </template>
     </el-table>

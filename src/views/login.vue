@@ -19,7 +19,7 @@
             <span class="info-text">此设备上保留登录信息</span>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="onLogin">登录</el-button>
+            <el-button class="login-btn" @click="onLogin"         :loading="$store.state.btnLoading">登录</el-button>
           </el-form-item>
         </el-form>
       </div>

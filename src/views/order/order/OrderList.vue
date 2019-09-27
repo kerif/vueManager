@@ -28,15 +28,16 @@
         </template>
       </el-table-column>
       <!-- 规格 -->
-      <el-table-column label="规格(长宽高cm)" prop="dimension" v-if="activeName === '2'" width="120px"></el-table-column>
+      <el-table-column label="规格(长宽高cm)" prop="dimension" 
+      v-show="activeName === '2'" width="120px"></el-table-column>
       <!-- 称重时间 -->
-      <el-table-column label="称重时间" v-if="activeName === '2'"></el-table-column>
+      <el-table-column label="称重时间" v-show="activeName === '2'"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column label="提交时间" prop="created_at">
       </el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作" v-if="activeName === '1'">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="activeName === '1'">
           <!-- 入库 -->
           <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num)">入库</el-button>
         </template>
