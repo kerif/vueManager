@@ -22,12 +22,12 @@
       <!-- 转运单号 -->
       <el-table-column label="转运单号" prop="order_sn"></el-table-column>
       <!-- 物流单号 -->
-      <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2' 
+      <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2'
       || activeName === '4' || activeName === '5'" prop="logistics_sn"></el-table-column>
       <el-table-column label="物流单号" v-if="activeName === '3'">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <el-input type="text"></el-input>
-        </template>
+        </template> -->
       </el-table-column>
       <!-- 线路名称 -->
       <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>

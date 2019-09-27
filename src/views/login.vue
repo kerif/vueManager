@@ -12,14 +12,14 @@
             <el-input prefix-icon="el-icon-user" placeholder="请输入账户" v-model="userInfo.username"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="userInfo.password"></el-input>
+            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="userInfo.password" @keyup.native.enter="onLogin"></el-input>
           </el-form-item>
           <el-form-item>
             <el-checkbox class="login-checkbox" v-model="keep"></el-checkbox>
             <span class="info-text">此设备上保留登录信息</span>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="onLogin"         :loading="$store.state.btnLoading">登录</el-button>
+            <el-button class="login-btn" @click="onLogin" :loading="$store.state.btnLoading">登录</el-button>
           </el-form-item>
         </el-form>
       </div>

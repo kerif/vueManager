@@ -5,7 +5,6 @@ import store from '@/store'
 import { Message } from 'element-ui'
 import nprogress from 'nprogress'
 import baseApi from './baseApi'
-
 // 表单格式提交
 $form.defaults.timeout = 900000 // 响应时间
 $form.defaults.responseType = 'json'

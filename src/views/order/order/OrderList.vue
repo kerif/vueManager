@@ -28,7 +28,7 @@
         </template>
       </el-table-column>
       <!-- 规格 -->
-      <el-table-column label="规格(长宽高cm)" prop="dimension" 
+      <el-table-column label="规格(长宽高cm)" prop="dimension"
       v-show="activeName === '2'" width="120px"></el-table-column>
       <!-- 称重时间 -->
       <el-table-column label="称重时间" v-show="activeName === '2'"></el-table-column>

@@ -10,6 +10,8 @@ let exports = {}
 exports.login = (params) => {
   return $json.post('login', params)
 }
+// 退出登录
+exports.logout = () => $form.post('logout')
 
 exports.getLines = () => {
   return $form.get('express-lines')
