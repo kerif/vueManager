@@ -77,7 +77,7 @@
       <template slot="append">
         <div class="append-box">
           <!-- 删除 -->
-          <el-button size="small">删除</el-button>
+          <!-- <el-button size="small">删除</el-button> -->
           <!-- 加入发货单 -->
           <el-button size="small" v-if="activeName === '3'">加入发货单</el-button>
         </div>

@@ -2,6 +2,7 @@
   <div class="notice-list-container">
     <div class="clear-box"><add-btn router="noticeadd">添加</add-btn></div>
     <el-table class="data-list" stripe border :data="noticeList"
+    @selection-change="selectionChange"
     v-loading="tableLoading">
       <el-table-column type="selection"></el-table-column>
       <el-table-column label="标题" prop="title"></el-table-column>
@@ -20,7 +21,7 @@
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small">删除</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
       </template>
     </el-table>
@@ -40,7 +41,8 @@ export default {
   data () {
     return {
       noticeList: [],
-      tableLoading: false
+      tableLoading: false,
+      deleteNum: []
     }
   },
   created () {
@@ -72,6 +74,30 @@ export default {
         name: 'noticeEdit',
         params: {
           id: id
+        }
+      })
+    },
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 删除
+    deleteData () {
+      this.$request.deleteNotice({
+        DELETE: this.deleteNum
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     }

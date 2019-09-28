@@ -42,11 +42,11 @@
           <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num)">入库</el-button>
         </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
           <el-button size="small">删除</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>

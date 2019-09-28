@@ -10,7 +10,7 @@
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
       <el-table-column label="收件人" prop="receiver_name"></el-table-column>
       <el-table-column label="联系电话" prop="phone"></el-table-column>
-      <el-table-column label="国家" prop="country"></el-table-column>
+      <el-table-column label="国家" prop="country.cn_name"></el-table-column>
       <el-table-column label="城市" prop="city"></el-table-column>
       <el-table-column label="街道" prop="street"></el-table-column>
       <el-table-column label="门牌号" prop="door_no"></el-table-column>

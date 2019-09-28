@@ -192,6 +192,10 @@ exports.getSimple = () => {
 exports.editUserGroup = (id, params) => {
   return $form.put(`user-groups/${id}`, params)
 }
+// 删除下单须知
+exports.deleteNotice = (params) => {
+  return $form.put('order-notices/batch-delete', params)
+}
 // 新建客户组资料
 exports.addUserGroup = (params) => {
   return $form.post('user-groups', params)
