@@ -27,7 +27,7 @@
       <!-- 状态为待发货才会出现输入框 -->
       <el-table-column label="物流单号" v-if="activeName === '3'" width="140px">
         <template slot-scope="scope"  v-if="activeName === '3'">
-          <el-input v-if="activeName === '3'" type="text" v-model="scope.row.logistics_sn" :disabled="scope.row.locked"></el-input>
+          <el-input v-if="activeName === '3'" v-model="scope.row.logistics_sn" :disabled="scope.row.disabled"></el-input>
         </template>
       </el-table-column>
       <!-- 线路名称 -->
@@ -63,15 +63,14 @@
           <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">打包</el-button>
           <!-- 加入发货单 -->
           <el-button v-show="activeName === '3'" class="btn-deep-blue detailsBtn"
-          @click="addInvoice(scope.row.id)">加入发货单</el-button>
+          @click="addInvoice([scope.row.id])">加入发货单</el-button>
           <!-- 添加物流单号 -->
-          <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3'" class="btn-deep-purple detailsBtn">添加物流单号</el-button>
+          <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加物流单号</el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
-           v-show="activeName === '3' && !scope.row.locked"
-           :disabled="scope.row.locked"
-           @click="saveLogistics(scope.row.id, scope.row.logistics_sn)">保存</el-button>
+           v-show="activeName === '3' && !scope.row.disabled"
+           @click="saveLogistics(scope.row)">保存</el-button>
           <el-button size="small" class="btn-dark-green detailsBtn"
-          v-show="activeName === '3' && !scope.row.locked" @click="cancel(scope.row)">取消</el-button>
+          v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">取消</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -79,7 +78,7 @@
           <!-- 删除 -->
           <el-button size="small">删除</el-button>
           <!-- 加入发货单 -->
-          <el-button size="small" v-if="activeName === '3'">加入发货单</el-button>
+          <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">加入发货单</el-button>
         </div>
       </template>
     </el-table>
@@ -103,9 +102,8 @@ export default {
       activeName: '',
       oderData: [],
       status: '',
-      corderSnId: [],
-      tableLoading: false,
-      corderSn: []
+      selectIDs: [],
+      tableLoading: false
     }
   },
   created () {
@@ -122,6 +120,10 @@ export default {
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
+          // 待发货列表的物流单号添加
+          res.data.forEach(item => {
+            item.disabled = true
+          })
           this.oderData = res.data
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
@@ -143,38 +145,54 @@ export default {
       this.$router.push({ name: 'billDetails', params: { id: id } })
     },
     onSelectChange (selection) {
-      // this.corderSn = selection.map(item => ({ id: item.id, sn: item.logistics_sn }))
+      this.selectIDs = selection.map(item => item.id)
     },
     // 加入发货单
-    addInvoice (id) {
-      dialog({ type: 'addInvoice', id: id }, () => {
-        this.getList()
+    addInvoice (ids) {
+      if (!ids.length) {
+        return this.$message.info('请选择商品')
+      }
+      dialog({ type: 'addInvoice' }, (data) => {
+        this.$request.updateShipment(ids, data).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '操作成功',
+              message: res.msg
+            })
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     // 添加物流单号
     edit (row) {
-      row.locked = !row.locked
-      this.rowInfo = { ...row }
+      row.disabled = !row.disabled
     },
     // 取消
     cancel (row) {
-      this.$set(row, 'locked', true)
-      this.$set(row, 'logistics_sn', this.rowInfo.logistics_sn)
-      console.log(this.rowInfo, row)
+      row.disabled = true
     },
     // 保存添加物流单号
-    saveLogistics (id, sn) {
-      console.log(id, sn, '2232323')
-      this.$request.updateLogistics({
-        id: this.id,
-        sn: this.logistics_sn
-      }).then(res => {
+    saveLogistics (row) {
+      if (!row.logistics_sn) {
+        return this.$message.info('请输入物流单号')
+      }
+      this.$request.updateLogistics([{
+        id: row.id,
+        sn: row.logistics_sn
+      }]).then(res => {
         if (res.ret) {
           this.$notify({
-            title: '操作成功',
+            title: '保存成功',
             message: res.msg,
             type: 'success'
           })
+          row.disabled = true
         } else {
           this.$notify({
             title: '操作失败',
