@@ -27,8 +27,10 @@
       </el-table-column>
       <!-- 状态为待发货才会出现输入框 -->
       <el-table-column label="物流单号" v-if="activeName === '3'" width="140px">
-        <template slot-scope="scope"  v-if="activeName === '3'">
-          <el-input v-if="activeName === '3'" v-model="scope.row.logistics_sn" :disabled="scope.row.disabled"></el-input>
+        <template slot-scope="scope">
+          <template v-if="activeName === '3'">
+          <el-input v-model="scope.row.logistics_sn" :disabled="scope.row.disabled"></el-input>
+          </template>
         </template>
       </el-table-column>
       <!-- 线路名称 -->
