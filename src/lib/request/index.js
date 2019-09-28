@@ -117,6 +117,10 @@ exports.getStorageList = (params) => {
 exports.getPay = (id) => {
   return $form.put(`orders/${id}/paid`)
 }
+// 添加物流单号
+exports.updateLogistics = (params) => {
+  return $form.put('orders/update-logistics', params)
+}
 exports.getExpress = (params) => {
   return $form.post(`shipments/in-storage`, params)
 }
