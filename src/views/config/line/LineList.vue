@@ -17,12 +17,12 @@
         </template>
       </el-table-column>
       <el-table-column label="参考时效" prop="reference_time"></el-table-column>
-      <el-table-column label="首重" prop="first_weight"></el-table-column>
-      <el-table-column label="首费" prop="first_money"></el-table-column>
-      <el-table-column label="续重" prop="next_weight"></el-table-column>
-      <el-table-column label="续费" prop="next_money"></el-table-column>
-      <el-table-column label="最大重量" prop="max_weight"></el-table-column>
-      <el-table-column label="最小重量" prop="min_weight"></el-table-column>
+      <el-table-column label="首重KG" prop="first_weight"></el-table-column>
+      <el-table-column label="首费¥" prop="first_money"></el-table-column>
+      <el-table-column label="续重KG" prop="next_weight"></el-table-column>
+      <el-table-column label="续费¥" prop="next_money"></el-table-column>
+      <el-table-column label="最大重量KG" prop="max_weight"></el-table-column>
+      <el-table-column label="最小重量KG" prop="min_weight"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editLine(scope.row.id)">修改</el-button>

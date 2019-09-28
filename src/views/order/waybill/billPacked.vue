@@ -69,11 +69,11 @@
           </el-row>
         </el-col>
         <el-col :lg="12">
-          <!-- 留仓单号 -->
+          <!-- 留仓物品 -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="留仓单号">
-                <el-input v-model="user.in_warehouse_item" placeholder="请输入留仓单号"></el-input>
+                <el-input v-model="user.in_warehouse_item" placeholder="请输入留仓物品"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -140,12 +140,12 @@ export default {
       console.log(this.user)
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
         return {
-          url: item.url + '/'
+          url: item.url
         }
       })
       this.user.pack_pictures = this.baleImgList.map(item => {
         return {
-          url: item.url + '/'
+          url: item.url
         }
       })
       this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {

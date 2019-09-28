@@ -5,7 +5,12 @@
     v-loading="tableLoading">
       <el-table-column type="selection"></el-table-column>
       <el-table-column label="标题" prop="title"></el-table-column>
-      <el-table-column label="类型" prop="type"></el-table-column>
+      <el-table-column label="类型" prop="type">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type === 1">常见问题</span>
+          <span v-if="scope.row.type === 2">其他问题</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建人" prop="user"></el-table-column>
       <el-table-column label="创建时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">

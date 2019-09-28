@@ -4,7 +4,7 @@
     <el-container direction="vertical">
       <layout-header></layout-header>
       <div class="layout-nav">
-        <div class="back-box">
+        <div class="back-box" @click="$router.go(-1)">
           <span class="el-icon-back back-icon"></span>
           <span class="back-text">返回</span>
         </div>

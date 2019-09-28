@@ -88,18 +88,18 @@
         </el-table-column>
         <!-- 长 -->
         <el-table-column
-        label="长"
+        label="长cm"
         prop="length">
         </el-table-column>
         <!-- 宽 -->
         <el-table-column
         prop="width"
-        label="宽">
+        label="宽cm">
         </el-table-column>
         <!-- 高 -->
         <el-table-column
         prop="height"
-        label="高">
+        label="高cm">
         </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
