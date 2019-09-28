@@ -16,10 +16,8 @@ $form.defaults.transformRequest = [function (params) {
 
 function interceptorsRequestSuccess (config) {
   nprogress.start()
-  console.log('config', config)
   store.commit('switchBtnLoading', { status: true })
   store.state.token && (config.headers.Authorization = store.state.token)
-  // config.headers.Authorization = store.state.token && store.state.token
   return config
 }
 

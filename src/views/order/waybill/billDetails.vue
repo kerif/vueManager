@@ -99,13 +99,13 @@
       <div class="bale-left">
         <span>打包照片</span>
         <div class="left-img">
-          <img src="../../../assets/tree.png" class="productImg">
+          <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="item in form.pack_pictures" :key="item.id">
         </div>
       </div>
       <div class="bale-left">
         <span>物品照片</span>
         <div class="left-img">
-          <img src="../../../assets/tree.png" class="productImg">
+          <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="item in form.in_warehouse_pictures" :key="item.id">
         </div>
       </div>
     </div>

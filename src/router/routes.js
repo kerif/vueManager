@@ -334,7 +334,7 @@ export default [
         }
       },
       {
-        path: '/config/notice/edit/:state/:id',
+        path: '/config/notice/edit/:id',
         component: NoticeAddEdit,
         name: 'noticeEdit',
         meta: {

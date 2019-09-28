@@ -71,7 +71,6 @@ export default {
       this.$router.push({
         name: 'noticeEdit',
         params: {
-          state: 'edit',
           id: id
         }
       })

@@ -52,7 +52,7 @@ export default {
     this.editor.customConfig.uploadImgServer = ``
     this.editor.customConfig.uploadImgParams = {}
     this.editor.customConfig.uploadImgHeaders = {
-      // 'Authorization': this.$store.state.token.token
+      'Authorization': this.$store.state.token.token
     }
     this.editor.customConfig.uploadFileName = 'image'
     this.editor.customConfig.uploadImgHooks = {
@@ -68,16 +68,19 @@ export default {
     this.editor.create()
   },
   created () {
-    if (this.$route.params.state === 'edit') {
+    if (this.$route.params.id) {
       this.getList()
     }
   },
   methods: {
     getList () {
       this.$request.getNoticeDetails(this.$route.params.id).then(res => {
-        this.params.title = res.data.title
-        this.params.content = res.data.content
-        this.params.type_id = res.data.type
+        if (res.ret) {
+          this.params.title = res.data.title
+          this.params.content = res.data.content
+          this.params.type_id = res.data.type
+          this.editor.txt.html(this.params.content)
+        }
       })
     },
     // 判断是新增 还是 编辑
