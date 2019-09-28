@@ -40,7 +40,7 @@
       <!-- 操作 -->
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="goInvoice(scope.row.id)">发货</el-button>
+          <el-button class="btn-green" @click="goInvoice(scope.row.id)" v-show="scope.row.status === 0">发货</el-button>
         </template>
       </el-table-column>
     </el-table>

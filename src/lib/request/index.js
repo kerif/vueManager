@@ -205,8 +205,11 @@ exports.getInvoice = () => {
   return $form.get('orders/shipments')
 }
 // 加入发货单
-exports.updateShipment = (id, params) => {
-  return $form.put(`orders/add-to-shipment`, id, params)
+exports.updateShipment = (ids, shipment) => {
+  return $form.put(`orders/add-to-shipment`, {
+    order_ids: ids,
+    shipment_id: shipment
+  })
 }
 // 修改客户组
 exports.changeUserList = (id, groupId) => {

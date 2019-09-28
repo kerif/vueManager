@@ -32,23 +32,25 @@ export default {
       })
     },
     confirm () {
-      this.$request.updateShipment(this.id, this.invoice.sn).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: '操作成功',
-            message: res.msg
-          })
-          this.show = false
-          this.success()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-        this.show = false
-      })
+      this.show = false
+      this.success(this.invoice.sn)
+      // this.$request.updateShipment(this.id, this.invoice.sn).then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       type: 'success',
+      //       title: '操作成功',
+      //       message: res.msg
+      //     })
+      //     this.show = false
+      //     this.success()
+      //   } else {
+      //     this.$message({
+      //       message: res.msg,
+      //       type: 'error'
+      //     })
+      //   }
+      //   this.show = false
+      // })
     },
     clear () {
       this.invoice.sn = ''
