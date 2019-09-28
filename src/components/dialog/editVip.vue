@@ -1,36 +1,27 @@
 <template>
-  <el-dialog :visible.sync="show" title="修改客户组" class="dialog-container" @close="clear">
+  <el-dialog :visible.sync="show" title="添加员工组" class="dialog-addStaff"
+  size="small" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-    <el-row :gutter="20">
         <!-- 员工组中文名 -->
-        <el-col :span="6" :offset="5">
-            <el-form-item label="客户组中文名">
-            <el-input v-model="ruleForm.name_cn"
-            placeholder="请输入客户组中文名"></el-input>
-            </el-form-item>
-        </el-col>
+        <el-form-item label="员工组中文名" prop="name_cn">
+          <el-input v-model="ruleForm.name_cn"
+          placeholder="请输入员工组中文名"></el-input>
+          </el-form-item>
         <!-- 员工组英文名 -->
-        <el-col :span="6" :offset="2">
-            <el-form-item label="客户组英文名">
-            <el-input v-model="ruleForm.name_en"
-            placeholder="请输入客户组英文名"></el-input>
-            </el-form-item>
-        </el-col>
-        <!-- 备注 -->
-        <el-row :gutter="20">
-           <el-col :span="14" :offset="5">
-                <el-form-item label="备注">
-                <el-input type="textarea" v-model="ruleForm.description"
-                :autosize="{ minRows: 2, maxRows: 4}"
-                placeholder="请输入备注"></el-input>
-                </el-form-item>
-           </el-col>
-        </el-row>
-    </el-row>
+          <el-form-item label="员工组英文名" prop="name_en">
+          <el-input v-model="ruleForm.name_en"
+          placeholder="请输入员工组英文名"></el-input>
+          </el-form-item>
+        <!-- 用户组描述 -->
+          <el-form-item label="用户组描述">
+          <el-input type="textarea" v-model="ruleForm.description"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          placeholder="请输入用户组描述"></el-input>
+          </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm(ruleForm)">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -44,61 +35,94 @@ export default {
         description: ''
       },
       rules: {
-        name: [
-          { required: true, message: '请输入客户组中文名', trigger: 'blur' }
+        name_cn: [
+          { required: true, message: '请输入员工组中文名', trigger: 'blur' }
         ],
-        enName: [
-          { required: true, message: '请输入客户组英文名', trigger: 'blur' }
+        name_en: [
+          { required: true, message: '请输入员工组英文名', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    getList () {
-      this.$request.editUserGroup(this.id).then(res => {
-        this.ruleForm = res.data
-      })
-    },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$http.post('user/changePSD', {
-            password: this.params.old_password,
-            newpassword: this.params.new_password,
-            secondpassword: this.params.new_password2
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '成功',
-                message: res.msg
-              })
-              // this.$store.commit('token/removeToken')
-              // this.$router.push('/login')
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
+          if (this.id) { // 如果是编辑状态
+            this.$request.editUserGroup(this.id, this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+          } else { // 如果是添加状态
+            this.$request.addUserGroup(this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+          }
         } else {
           return false
         }
       })
     },
-    init () {
-      if (this.id) {
-        // this.getList()
-      }
-    },
     clear () {
       this.ruleForm.name_cn = ''
       this.ruleForm.name_en = ''
       this.ruleForm.description = ''
+    },
+    cancelDialog (ruleForm) {
+      this.$refs[ruleForm].resetFields()
+      this.show = false
+    },
+    init () {
+      if (this.id) {
+        this.ruleForm.name_cn = this.name_cn
+        this.ruleForm.name_en = this.name_en
+      }
     }
   }
 }
 </script>
 <style lang="scss">
+.dialog-addStaff {
+  .el-input {
+    width: 40%;
+    margin-left: 50px;
+  }
+  .el-textarea {
+    width: 40%;
+    margin-left: 50px;
+  }
+  .el-form-item__label {
+    width: 200px;
+  }
+  .el-form-item__error {
+    margin-left: 300px !important;
+  }
+}
 </style>

@@ -20,7 +20,7 @@
           </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
+      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
       <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
     </div>
   </el-dialog>
@@ -48,23 +48,43 @@ export default {
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.addGroup(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '操作成功',
-                message: res.msg
-              })
+          if (this.id) { // 如果是编辑状态
+            this.$request.editGroup(this.id, this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+          } else { // 如果是添加状态
+            this.$request.addGroup(this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+          }
         } else {
           return false
         }
@@ -74,6 +94,16 @@ export default {
       this.ruleForm.name_cn = ''
       this.ruleForm.name_en = ''
       this.ruleForm.description = ''
+    },
+    cancelDialog (ruleForm) {
+      this.$refs[ruleForm].resetFields()
+      this.show = false
+    },
+    init () {
+      if (this.id) {
+        this.ruleForm.name_cn = this.name_cn
+        this.ruleForm.name_en = this.name_en
+      }
     }
   }
 }
@@ -90,6 +120,9 @@ export default {
   }
   .el-form-item__label {
     width: 200px;
+  }
+  .el-form-item__error {
+    margin-left: 300px !important;
   }
 }
 </style>

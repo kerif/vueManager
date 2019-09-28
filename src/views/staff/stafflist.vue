@@ -14,6 +14,7 @@
         :data="staff_list"
         border
         ref="table"
+        @selection-change="selectionChange"
         v-loading="tableLoading">
       <el-table-column
         type="selection"
@@ -71,8 +72,8 @@
       <template slot="append">
         <div class="append-box">
           <!-- 禁止登录 -->
-          <el-button size="small" class="btn-deep-blue" @click="forbidLogin">禁止登录</el-button>
-          <el-button size="small" class="btn-green">允许登录</el-button>
+          <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">禁止登录</el-button>
+          <el-button size="small" class="btn-green" @click="forbidLogin(1)">允许登录</el-button>
           <!-- 删除 -->
           <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
@@ -99,6 +100,7 @@ export default {
   data () {
     return {
       staff_list: [],
+      deleteNum: [],
       deleteSelectionLoading: false,
       tableLoading: false,
       normal: 1,
@@ -151,22 +153,25 @@ export default {
         }
       })
     },
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
     // 修改密码
     editPassword (id) {
       dialog({ type: 'editPsd', id: id })
     },
     // 删除
     deleteData () {
-      this.formatData('id')
-      this.deleteSelectionLoading = true
-      this.$request.deleteVip().then(res => {
+      this.$request.deleteVip({
+        DELETE: this.deleteNum
+      }).then(res => {
         if (res.ret) {
           this.$notify({
             title: '操作成功',
             message: res.msg,
             type: 'success'
           })
-          this.deleteSelectionLoading = false
           this.getList()
         } else {
           this.$message({
@@ -174,42 +179,50 @@ export default {
             type: 'error'
           })
         }
-      }).catch(() => {
-        this.deleteSelectionLoading = false
-      })
-    },
-    addHumans () {
-      this.$router.push({
-        name: 'addHumans'
       })
     },
     // 禁止/允许登录
-    forbidLogin () {
-      this.formatData('id')
-      this.forbidLoginLoading = true
-      let type = (this.normal === 1) ? 0 : 1
-      this.$http.post(`customer/normal`, {
-        customer_id: this.format_selection.join(','),
-        normal: type
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('success'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.forbidLoginLoading = false
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-          this.forbidLoginLoading = false
-        }
-      }).catch(() => {
-        this.forbidLoginLoading = false
-      })
+    forbidLogin (type) {
+      console.log(type)
+      if (type === 0) {
+        this.$request.forbidUser({
+          forbid_id: this.deleteNum
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$request.allowUser({
+          allow_id: this.deleteNum
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     }
   },
   watch: {
