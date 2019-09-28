@@ -11,10 +11,15 @@
     <el-table class="data-list" border stripe
       v-loading="tableLoading"
       :data="vipList"
-       @selection-change="onSelectChange">
+       @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="序号" type="index" :index="1" width="60"></el-table-column>
-      <el-table-column label="客户ID" prop="id"></el-table-column>
+      <el-table-column label="客户ID">
+        <template slot-scope="scope">
+        <span>{{scope.row.id}}</span>
+        <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
+        </template>
+      </el-table-column>
       <el-table-column label="客户昵称" prop="name"></el-table-column>
       <el-table-column label="客户组" prop="user_group.name_cn"></el-table-column>
       <el-table-column label="最后登录时间" prop="last_login"></el-table-column>
@@ -25,8 +30,8 @@
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" @click="onUserLogin">禁止登录</el-button>
-          <el-button size="small">允许登录</el-button>
+          <el-button size="small" @click="forbidLogin(0)">禁止登录</el-button>
+          <el-button size="small" @click="forbidLogin(1)">允许登录</el-button>
         </div>
       </template>
     </el-table>
@@ -42,7 +47,7 @@ export default {
   data () {
     return {
       vipList: [],
-      selectIds: [],
+      deleteNum: [],
       tableLoading: false,
       clientGroupList: [],
       page_params: {
@@ -95,15 +100,52 @@ export default {
         this.getList()
       })
     },
-    onSelectChange (selection) {
-      console.log('select', selection)
-      this.selectIds = selection.map(item => item.id)
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
     },
-    // 禁止登录
-    onUserLogin () {
-      this.$request.forbidLogin(this.selectIds).then(res => {
-        this.getList()
-      })
+    // 禁止/允许登录
+    forbidLogin (type) {
+      console.log(type)
+      if (type === 0) {
+        this.$request.customerForbid({
+          forbid_id: this.deleteNum
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$request.customerLogin({
+          allow_id: this.deleteNum
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     }
   },
   components: {
@@ -118,6 +160,9 @@ export default {
 .vip-list-container {
   .select-box {
     overflow: hidden
+  }
+  .el-icon-lock {
+    color: red;
   }
 }
 </style>

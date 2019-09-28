@@ -11,7 +11,6 @@
         :data="staff_group_list"
         border
         @selection-change="selectionChange"
-        @row-click="rowClick"
         v-loading='tableLoading'
         ref="table">
       <el-table-column
@@ -40,7 +39,7 @@
           <!-- 编辑 -->
         <el-button
           class="btn-blue"
-          @click.stop="editStaff(scope.row.id)">编辑</el-button>
+          @click.stop="editStaff(scope.row.id, scope.row.name_cn, scope.row.name_en)">编辑</el-button>
           <!-- 修改权限 -->
         <el-button
           class="btn-purple"
@@ -54,7 +53,7 @@
       <template slot="append">
         <div class="append-box">
           <!-- 删除 -->
-          <el-button size="small" class="btn-light-red">删除</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
       </template>
     </el-table>
@@ -118,8 +117,10 @@ export default {
       })
     },
     // 编辑
-    editStaff (id) {
-      dialog({ type: 'addStaff', id: id })
+    editStaff (id, nameCn, nameEn) {
+      dialog({ type: 'addStaff', id: id, name_cn: nameCn, name_en: nameEn }, () => {
+        this.getList()
+      })
     },
     // 成员
     member (id) {
@@ -132,16 +133,16 @@ export default {
     },
     // 删除
     deleteData () {
-      this.formatData('id')
-      this.deleteSelectionLoading = true
-      this.$http.delete(`agent-group/${this.format_selection.join(',')}`).then(res => {
+      console.log(this.deleteNum, '2222')
+      this.$request.deleteGroup({
+        DELETE: this.deleteNum
+      }).then(res => {
         if (res.ret) {
           this.$notify({
             title: '操作成功',
             message: res.msg,
             type: 'success'
           })
-          this.deleteSelectionLoading = false
           this.getList()
         } else {
           this.$message({
@@ -149,42 +150,11 @@ export default {
             type: 'error'
           })
         }
-      }).catch(() => {
-        this.deleteSelectionLoading = false
       })
     },
-    addHumans () {
-      this.$router.push({
-        name: 'addHumans'
-      })
-    },
-    // 禁止/允许登录
-    forbidLogin () {
-      this.formatData('id')
-      this.forbidLoginLoading = true
-      let type = (this.normal === 1) ? 0 : 1
-      this.$http.post(`customer/normal`, {
-        customer_id: this.format_selection.join(','),
-        normal: type
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('success'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.forbidLoginLoading = false
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-          this.forbidLoginLoading = false
-        }
-      }).catch(() => {
-        this.forbidLoginLoading = false
-      })
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
     }
   },
   watch: {

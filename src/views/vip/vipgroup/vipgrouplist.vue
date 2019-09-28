@@ -8,7 +8,8 @@
       <add-btn @click.native="addVip">添加客户组</add-btn>
     </div>
     <el-table :data="vipGroupList" stripe border class="data-list"
-    v-loading="tableLoading">
+    v-loading="tableLoading"
+    @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="客户组中文名" prop="name_cn"></el-table-column>
       <el-table-column label="客户组英文名" prop="name_en"></el-table-column>
@@ -21,7 +22,7 @@
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small">删除</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
       </template>
     </el-table>
@@ -44,7 +45,8 @@ export default {
   data () {
     return {
       vipGroupList: [],
-      tableLoading: false
+      tableLoading: false,
+      deleteNum: []
     }
   },
   created () {
@@ -80,15 +82,44 @@ export default {
     },
     // 添加客户组
     addVip () {
-      dialog({ type: 'editVip' })
+      dialog({ type: 'editVip' }, () => {
+        this.getList()
+      })
     },
     // 修改资料
     editVip (id, nameCn, nameEn) {
-      dialog({ type: 'editVip', id: id, name_cn: nameCn, name_en: nameEn })
+      dialog({ type: 'editVip', id: id, name_cn: nameCn, name_en: nameEn }, () => {
+        this.getList()
+      })
     },
     // 成员
     member (id) {
       dialog({ type: 'vipList', id: id })
+    },
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 删除
+    deleteData () {
+      console.log(this.deleteNum, '2222')
+      this.$request.userGroupDelete({
+        DELETE: this.deleteNum
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }
