@@ -24,11 +24,12 @@
       <!-- 物流单号 -->
       <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2'   || activeName === '4' || activeName === '5'" prop="logistics_sn">
       </el-table-column>
-      <!-- <el-table-column label="物流单号" v-if="activeName === '3'">
-        <template slot-scope="scope" v-if="activeName === '3'">
-          <el-input type="text" v-model="scope.row.logistics_sn"></el-input>
+      <!-- 状态为待发货才会出现输入框 -->
+      <el-table-column label="物流单号" v-show="activeName === '3'">
+        <template slot-scope="scope"  v-show="activeName === '3'">
+          <el-input :disabled="!corderSnId.map(item => item.id).includes(scope.row.id)" v-show="activeName === '3'" type="text" v-model="scope.row.logistics_sn"></el-input>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <!-- 线路名称 -->
       <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
       <!-- 收货人 -->
@@ -54,7 +55,7 @@
       <el-table-column label="所属发货单" prop="shipment_sn" v-if="activeName === '4'">
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="200px">
         <template slot-scope="scope">
           <!-- 详情 -->
           <el-button class="btn-purple detailsBtn" @click="details(scope.row.id)">详情</el-button>
@@ -63,8 +64,12 @@
           <!-- 加入发货单 -->
           <el-button v-show="activeName === '3'" class="btn-deep-blue detailsBtn"
           @click="addInvoice(scope.row.id)">加入发货单</el-button>
+          <!-- 添加物流单号 -->
+          <el-button size="small" @click="_addExpressNumber(scope.row.id)" v-if="activeName === '3'" class="btn-deep-purple detailsBtn">添加物流单号</el-button>
+          <el-button size="small" class="btn-light-red detailsBtn" v-show="activeName === '3'">保存</el-button>
+          <el-button size="small" class="btn-dark-green detailsBtn" v-show="activeName === '3'">取消</el-button>
            <!-- 完成支付 -->
-          <el-button size="small" v-if="activeName === '2'" class="btn-light-red detailsBtn" @click="completePay(scope.row.id)">完成支付</el-button>
+          <!-- <el-button size="small" v-if="activeName === '2'" class="btn-light-red detailsBtn" @click="completePay(scope.row.id)">完成支付</el-button> -->
         </template>
       </el-table-column>
       <template slot="append">
@@ -73,8 +78,6 @@
           <el-button size="small">删除</el-button>
           <!-- 加入发货单 -->
           <el-button size="small" v-if="activeName === '3'">加入发货单</el-button>
-          <!-- 添加物流单号 -->
-          <el-button size="small" v-if="activeName === '3'">添加物流单号</el-button>
         </div>
       </template>
     </el-table>
@@ -98,7 +101,9 @@ export default {
       activeName: '',
       oderData: [],
       status: '',
-      tableLoading: false
+      corderSnId: [],
+      tableLoading: false,
+      corderSn: []
     }
   },
   created () {
@@ -136,7 +141,7 @@ export default {
       this.$router.push({ name: 'billDetails', params: { id: id } })
     },
     onSelectChange (selection) {
-      console.log('select', selection)
+      this.corderSn = selection.map(item => ({ id: item.id, sn: item.logistics_sn }))
     },
     // 加入发货单
     addInvoice (id) {
@@ -162,6 +167,9 @@ export default {
           })
         }
       })
+    },
+    _addExpressNumber () {
+      this.corderSnId = this.corderSn
     }
   },
   watch: {
@@ -200,7 +208,7 @@ export default {
     width: 400px !important;
   }
   .detailsBtn {
-    margin: 5px 3px !important;
+    margin: 3px 2px !important;
   }
 }
 </style>

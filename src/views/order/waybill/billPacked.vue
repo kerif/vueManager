@@ -72,7 +72,7 @@
           <!-- 留仓物品 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="留仓单号">
+              <el-form-item label="留仓物品">
                 <el-input v-model="user.in_warehouse_item" placeholder="请输入留仓物品"></el-input>
               </el-form-item>
             </el-col>
