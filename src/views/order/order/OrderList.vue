@@ -7,7 +7,7 @@
         <!-- 已入库 -->
         <el-tab-pane label="已入库" name="2"></el-tab-pane>
     </el-tabs>
-      <el-table class="data-list" border stripe
+      <el-table v-if="oderData.length" class="data-list" border stripe
       :data="oderData"
       v-loading="tableLoading">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -29,17 +29,17 @@
       </el-table-column>
       <!-- 规格 -->
       <el-table-column label="规格(长宽高cm)" prop="dimension"
-      v-show="activeName === '2'" width="120px"></el-table-column>
+      v-if="activeName === '2'" width="120px"></el-table-column>
       <!-- 称重时间 -->
-      <el-table-column label="称重时间" v-show="activeName === '2'"></el-table-column>
+      <el-table-column label="称重时间" v-if="activeName === '2'" prop="in_storage_at"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column label="提交时间" prop="created_at">
       </el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作" v-if="activeName === '1'">
-        <template slot-scope="scope" v-if="activeName === '1'">
+        <template slot-scope="scope" >
           <!-- 入库 -->
-          <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num)">入库</el-button>
+            <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num)">入库</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -64,15 +64,16 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      activeName: '',
+      activeName: '1',
       oderData: [],
-      status: '',
+      status: 1,
       tableLoading: false
     }
   },
   methods: {
     getList () {
       this.tableLoading = true
+      this.oderData = []
       this.$request.getWarehouse({
         status: this.status,
         keyword: this.page_params.keyword,
@@ -97,9 +98,8 @@ export default {
       this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum } })
     }
   },
-  created () {
-    this.activeName = '1'
-    // this.getList()
+  mounted () {
+    this.getList()
   },
   watch: {
     // 监听tab组件参数

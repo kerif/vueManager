@@ -30,8 +30,8 @@
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" @click="forbidLogin(0)">禁止登录</el-button>
-          <el-button size="small" @click="forbidLogin(1)">允许登录</el-button>
+          <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">禁止登录</el-button>
+          <el-button size="small" class="btn-green" @click="forbidLogin(1)">允许登录</el-button>
         </div>
       </template>
     </el-table>

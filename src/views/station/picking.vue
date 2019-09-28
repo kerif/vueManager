@@ -8,6 +8,7 @@
         <el-tab-pane label="拣货日志" name="2"></el-tab-pane>
     </el-tabs>
    <el-table class="data-list" border stripe
+   v-if="oderData.length"
     v-loading="tableLoading"
       :data="oderData">
       <!-- 操作人 -->
@@ -31,8 +32,8 @@
         <template slot-scope="scope">
           <span v-for="item in scope.row.pictures"
           :key="item.id" style="cursor:pointer;"
-          @click.stop="imgSrc=item.url, imgVisible=true">
-           <img :src="item.url" style="width: 40px; margin-right: 5px;">
+          @click.stop="imgSrc=item.full_path, imgVisible=true">
+           <img :src="item.full_path" style="width: 40px; margin-right: 5px;">
           </span>
         </template>
       </el-table-column>
@@ -81,6 +82,7 @@ export default {
     // 入库日志
     getList () {
       this.tableLoading = true
+      this.oderData = []
       this.$request.getStorage({
         keyword: this.page_params.keyword,
         page: this.page_params.page,

@@ -14,6 +14,7 @@
         <el-tab-pane label="已签收" name="5"></el-tab-pane>
     </el-tabs>
       <el-table class="data-list" border stripe
+      v-if="oderData.length"
       v-loading="tableLoading"
       :data="oderData" @selection-change="onSelectChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -114,6 +115,7 @@ export default {
   methods: {
     getList () {
       this.tableLoading = true
+      this.oderData = []
       this.$request.getOrder({
         status: this.status,
         keyword: this.page_params.keyword,

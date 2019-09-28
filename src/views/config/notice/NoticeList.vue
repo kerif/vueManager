@@ -12,7 +12,7 @@
           <span v-if="scope.row.type === 2">其他问题</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" prop="user"></el-table-column>
+      <el-table-column label="创建人" prop="creator"></el-table-column>
       <el-table-column label="创建时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
