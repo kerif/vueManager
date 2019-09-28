@@ -109,6 +109,9 @@ export default {
       })
     }
   },
+  mounted () {
+    this.getList()
+  },
   created () {
     this.activeName = '1'
     this.getList()

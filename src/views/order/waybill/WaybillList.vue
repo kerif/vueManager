@@ -187,6 +187,9 @@ export default {
       })
     }
   },
+  mounted () {
+    this.getList()
+  },
   watch: {
     // 监听tab组件参数
     activeName (newValue) {
