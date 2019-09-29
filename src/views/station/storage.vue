@@ -6,7 +6,7 @@
           <!-- 快递单号 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="快递单号">
+              <el-form-item label="*快递单号">
                 <el-input v-model="user.express_num" placeholder="请输入快递单号"></el-input>
               </el-form-item>
             </el-col>
@@ -14,7 +14,7 @@
           <!-- 重量 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="重量">
+              <el-form-item label="*重量">
                 <el-input v-model="user.package_weight" placeholder="请输入重量">
                 <template slot="append">KG</template>
                 </el-input>
@@ -24,7 +24,7 @@
           <!-- 尺寸 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="尺寸">
+              <el-form-item label="*尺寸">
                 <el-input v-model="user.length"  class="sizeLength" placeholder="长 cm"></el-input>
                 <el-input v-model="user.width" class="sizeLength" placeholder="宽 cm"></el-input>
                 <el-input v-model="user.height"  class="sizeLength" placeholder="高 cm"></el-input>
@@ -36,7 +36,7 @@
           <!-- 备注 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="备注">
+              <el-form-item label="*备注">
                 <el-input v-model="user.remark" placeholder="请输入备注"
                 type="textarea"  :autosize="{ minRows: 1, maxRows: 2}"></el-input>
               </el-form-item>
@@ -199,23 +199,21 @@ export default {
         this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
           this.tableLoading = false
           if (res.ret) {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '操作成功',
-                message: res.msg
-              })
-              this.getWarehouseInfo()
-              this.user = ''
-              this.user.props = []
-              this.user.length = ''
-            } else {
-              this.$message({
-                title: '操作失败',
-                message: res.msg,
-                type: 'warning'
-              })
-            }
+            this.$notify({
+              type: 'success',
+              title: '操作成功',
+              message: res.msg
+            })
+            this.getWarehouseInfo()
+            this.user = ''
+            this.user.props = []
+            this.user.length = ''
+          } else {
+            this.$message({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
           }
         })
       } else { // 如果是添加

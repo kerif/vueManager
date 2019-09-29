@@ -2,7 +2,7 @@
   <el-aside class="layout-aside">
     <div class="aside-top">
       <span class="app-name">TKK</span>
-      <span>管理员</span>
+      <span>管理系统</span>
     </div>
     <el-menu
       :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"

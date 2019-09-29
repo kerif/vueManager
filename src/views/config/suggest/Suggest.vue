@@ -10,8 +10,8 @@
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-        <span v-if="scope.row.status == '0'">未处理</span>
-        <span v-else>已处理</span>
+        <span v-if="scope.row.status == '1'">未处理</span>
+        <span v-if="scope.row.status == '2'">已处理</span>
         </template>
       </el-table-column>
       <el-table-column label="客户ID" prop="user_id">

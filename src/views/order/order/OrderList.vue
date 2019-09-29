@@ -9,6 +9,7 @@
     </el-tabs>
       <el-table v-if="oderData.length" class="data-list" border stripe
       :data="oderData"
+      @selection-change="selectionChange"
       v-loading="tableLoading">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
@@ -42,11 +43,11 @@
             <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num)">入库</el-button>
         </template>
       </el-table-column>
-      <!-- <template slot="append">
+      <template slot="append">
         <div class="append-box">
-          <el-button size="small">删除</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
-      </template> -->
+      </template>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>
@@ -96,6 +97,31 @@ export default {
     },
     storage (id, expressNum) {
       this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum } })
+    },
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 删除
+    deleteData () {
+      console.log(this.deleteNum, '2222')
+      this.$request.deletePackages({
+        DELETE: this.deleteNum
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   },
   mounted () {

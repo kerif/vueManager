@@ -5,7 +5,7 @@
     <h4>收货人信息</h4>
     <el-row class="container-center" :gutter="20">
       <!-- 姓名 -->
-      <el-col :span="6">
+      <el-col :span="7">
         <span class="leftWidth">姓名</span>
         <span>{{form.address && form.address.receiver_name}}</span>
       </el-col>
@@ -22,7 +22,7 @@
     </el-row>
     <el-row class="container-center" :gutter="20">
      <!-- 城市 -->
-      <el-col :span="6">
+      <el-col :span="7">
         <span class="leftWidth">城市</span>
         <span>{{form.address && form.address.city}}</span>
       </el-col>
@@ -42,9 +42,10 @@
     <h4>运单详情</h4>
     <el-row class="container-center"  :gutter="20">
       <!-- 转运单号 -->
-      <el-col :span="6">
+      <el-col :span="7">
         <span class="leftWidth">转运单号</span>
         <span>{{form.order_sn}}</span>
+        <el-button size="small" v-if="form.order_sn" @click="copyUrl">复制</el-button>
       </el-col>
       <!-- 线路名称 -->
         <el-col :span="7" :offset="1">
@@ -74,9 +75,9 @@
       <!-- 尺寸（长宽高cm） -->
       <el-table-column label="尺寸（长宽高cm）">
         <template slot-scope="scope">
-          <span>{{scope.row.width}}</span>
-          <span>{{scope.row.height}}</span>
-          <span>{{scope.row.length}}</span>
+          <span>{{scope.row.width}}*</span>
+          <span>{{scope.row.height}}*</span>
+          <span>{{scope.row.length}}*</span>
         </template>
       </el-table-column>
       <!-- 预计费用¥ -->
@@ -84,9 +85,9 @@
       <!-- 实际费用¥ -->
       <el-table-column label="实际费用¥" prop="actual_payment_fee"></el-table-column>
       <!-- 包裹价值 -->
-      <el-table-column label="包裹价值" prop="value"></el-table-column>
+      <el-table-column label="包裹价值¥" prop="value"></el-table-column>
       <!-- 包含的包裹 -->
-      <el-table-column label="包含的包裹">
+      <el-table-column label="包含的包裹" width="240px">
         <template slot-scope="scope">
           <span>{{scope.row.packages.map(item => item.express_num).join(' ')}}</span>
            <!-- <span v-for="item in scope.row.packages" :key="item.id">{{item.express_num}}</span> -->
@@ -138,6 +139,17 @@ export default {
         this.form = res.data
         this.oderData = [res.data.details]
       })
+    },
+    copyUrl () {
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', this.form.order_sn)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success('复制成功')
+      }
+      document.body.removeChild(input)
     }
   }
 }
@@ -179,6 +191,10 @@ export default {
   .nullProduct {
     padding-left: 70px;
     color: #ccc;
+  }
+  .el-button--small {
+    padding: 8px;
+    margin-left: 5px;
   }
 }
 </style>

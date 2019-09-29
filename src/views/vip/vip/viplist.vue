@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column label="客户昵称" prop="name"></el-table-column>
       <el-table-column label="客户组" prop="user_group.name_cn"></el-table-column>
-      <el-table-column label="最后登录时间" prop="last_login"></el-table-column>
+      <el-table-column label="最后登录时间" prop="last_login_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-main" @click="onUpdateGroup(scope.row.id)">修改客户组</el-button>

@@ -42,9 +42,9 @@
       <!-- 包裹数 -->
       <el-table-column label="包裹数" prop="package_count"></el-table-column>
       <!-- 预计重量KG -->
-      <el-table-column :label="activeName === '1' ? '预计重量kg' : '实际重量kg'" :prop="activeName === '1' ? 'except_weight' : 'except_weight'"></el-table-column>
+      <el-table-column :label="activeName === '1' ? '预计重量kg' : '实际重量kg'" :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"></el-table-column>
       <!-- 详见产品图 -->
-      <el-table-column :label="activeName === '1' ? '预计费用' : '实际费用'" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
+      <el-table-column :label="activeName === '1' ? '预计费用¥' : '实际费用¥'" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
       <el-table-column label="申报价值￥" prop="declare_value"></el-table-column>
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 提交时间 -->

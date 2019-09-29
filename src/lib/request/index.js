@@ -204,6 +204,10 @@ exports.addUserGroup = (params) => {
 exports.getInvoice = () => {
   return $form.get('orders/shipments')
 }
+// 删除国内订单
+exports.deletePackages = (ids) => {
+  return $form.put('packages/batch-delete', ids)
+}
 // 加入发货单
 exports.updateShipment = (ids, shipment) => {
   return $form.put(`orders/add-to-shipment`, {
