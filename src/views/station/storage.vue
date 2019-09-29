@@ -205,9 +205,9 @@ export default {
               message: res.msg
             })
             this.getWarehouseInfo()
-            this.user = ''
+            this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
+            this.user.express_num = this.user.remark = ''
             this.user.props = []
-            this.user.length = ''
           } else {
             this.$message({
               title: '操作失败',

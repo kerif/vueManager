@@ -2,15 +2,17 @@
   <div class="transaction-list-container">
     <div>
       <search-date-picker
-          v-model="page_params.time"
-          type="datetimerange"
-          @change="getDate"
-          format="yyyy-MM-dd HH:mm:ss"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </search-date-picker>
+        v-model="page_params.time"
+        type="datetimerange"
+        @change="getDate"
+        format="yyyy-MM-dd HH:mm:ss"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期">
+      </search-date-picker>
+    </div>
+    <div style="overflow:hidden">
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <el-table :data="transactionList" stripe border class="data-list"
