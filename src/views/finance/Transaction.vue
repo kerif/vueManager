@@ -82,6 +82,8 @@ export default {
       })
     },
     getDate (val) {
+      console.log(1)
+      console.log(this.page_params.time)
       this.page_params.page_no = 1
       this.page_params.time = val
       this.getList()

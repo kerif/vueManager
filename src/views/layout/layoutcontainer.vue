@@ -1,7 +1,7 @@
 <template>
   <el-container class="layout-contaniner">
     <layout-aside></layout-aside>
-    <el-container direction="vertical">
+    <el-container direction="vertical" :class="['layout', isCollapse ? 'is-collapse' : '']">
       <layout-header></layout-header>
       <div class="layout-nav">
         <div class="back-box" @click="$router.go(-1)">
@@ -35,6 +35,9 @@ export default {
     pagePath () {
       console.log(this.$store.state.pagePath)
       return this.$store.state.pagePath
+    },
+    isCollapse () {
+      return this.$store.state.isCollapse
     }
   }
 }
@@ -76,6 +79,9 @@ export default {
     // .back-text {
     //   display: none;
     // }
+  }
+  .isCollapse {
+    width: 66px !important;
   }
 }
 </style>

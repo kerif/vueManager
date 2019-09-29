@@ -1,9 +1,13 @@
 @import './commonality.scss';
-html, body, #app {
+
+html,
+body,
+#app {
   width: 100%;
   margin: 0;
   padding: 0;
 }
+
 html {
   min-height: 100vh;
 }
@@ -12,23 +16,29 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 .data-list {
   margin: 35px 0;
 }
+
 .append-box {
   margin: 15px;
 }
+
 .clear-box {
   overflow: hidden;
 }
+
 .dialog-container {
   .el-dialog__header {
     background-color: #0E102A;
   }
+
   .el-dialog__title {
     font-size: 14px;
     color: #FFF;
   }
+
   .el-dialog__close {
     color: #FFF;
   }

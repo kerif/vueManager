@@ -54,10 +54,12 @@ export default [
     path: 'home',
     redirect: 'home/panel',
     component: LayoutContainer,
+    icon: 'icon-ico_home',
     children: [
       {
         path: '/home/panel',
         name: 'panel',
+        icon: '',
         component: Panel,
         meta: {
           level: 2,
@@ -80,6 +82,7 @@ export default [
   {
     path: 'staff',
     component: LayoutContainer,
+    icon: '',
     children: [
       {
         path: '/staff/stafflist',

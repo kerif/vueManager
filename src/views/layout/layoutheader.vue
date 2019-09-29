@@ -1,5 +1,9 @@
 <template>
   <el-header class="layout-header">
+   <div @click="switchLeft" class="TransferLeft">
+     <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
+       style="font-size:24px;"></i>
+    </div>
     <span class="user-box">momo.zxy</span>
     <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
   </el-header>
@@ -31,6 +35,14 @@ export default {
           }
         })
       })
+    },
+    switchLeft () {
+      this.$store.commit('switchCollapse', !this.$store.state.isCollapse)
+    }
+  },
+  computed: {
+    isCollapse () {
+      return this.$store.state.isCollapse
     }
   }
 }
@@ -63,6 +75,13 @@ export default {
       color: #3540A5;
       animation: move .3s ease-in 2;
     }
+  }
+  .TransferLeft {
+    float: left;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
   }
 }
 </style>

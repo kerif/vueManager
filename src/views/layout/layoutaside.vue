@@ -1,5 +1,5 @@
 <template>
-  <el-aside class="layout-aside">
+  <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']" style="width:240px;">
     <div class="aside-top">
       <span class="app-name">TKK</span>
       <span>管理系统</span>
@@ -9,6 +9,7 @@
       background-color="#171B42"
       text-color="#7E8BFF"
       :router="true"
+      :collapse="isCollapse"
       active-text-color="#fff"
       :unique-opened="true"
       class="route-menu"
@@ -16,6 +17,7 @@
       <el-submenu v-for="(route, index) in formatRouterMap" :key="route.name"
         :index="index + ''">
         <template slot="title">
+          <i class="iconfont" :class="route.icon"></i>
           <span>{{ route.name }}</span>
         </template>
         <el-menu-item-group v-for="(childRoute, childIndex) in route.children" :key="childIndex">
@@ -46,6 +48,9 @@ export default {
         })
       })
       return formatRouterMap
+    },
+    isCollapse () {
+      return this.$store.state.isCollapse
     }
   },
   methods: {
@@ -65,6 +70,7 @@ export default {
   width: 230px !important;
   min-height: 100vh;
   background-color: #171B42;
+  transition: width .3s ease-in-out;
   .aside-top {
     height: 60px;
     line-height: 60px;
@@ -86,6 +92,12 @@ export default {
   }
   .el-menu-item-group__title {
     padding: 0;
+  }
+  .isCollapse {
+    width: 66px !important;
+  }
+  .el-submenu__title {
+    padding-left: 80px !important;
   }
 }
 </style>

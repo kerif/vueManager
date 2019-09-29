@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     token: '',
     btnLoading: false,
+    isCollapse: false,
     pagePath: '' // 路径列表
   },
   mutations: {
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     },
     switchBtnLoading (state, data) {
       state.btnLoading = data.status
+    },
+    switchCollapse (state, isCollapse) {
+      state.isCollapse = isCollapse
     }
   },
   actions: {

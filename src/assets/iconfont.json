@@ -1,0 +1,58 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "41934924",
+      "name": "客户档案",
+      "font_class": "gaiicon-",
+      "unicode": "e6d8",
+      "unicode_decimal": 59096
+    },
+    {
+      "icon_id": "41934973",
+      "name": "人才管理",
+      "font_class": "ico_rencai",
+      "unicode": "e6db",
+      "unicode_decimal": 59099
+    },
+    {
+      "icon_id": "41934925",
+      "name": "共保",
+      "font_class": "gongbao",
+      "unicode": "e6f4",
+      "unicode_decimal": 59124
+    },
+    {
+      "icon_id": "41934926",
+      "name": "月报",
+      "font_class": "ico_yuebao",
+      "unicode": "e6f8",
+      "unicode_decimal": 59128
+    },
+    {
+      "icon_id": "41934927",
+      "name": "首页",
+      "font_class": "ico_home",
+      "unicode": "e6f9",
+      "unicode_decimal": 59129
+    },
+    {
+      "icon_id": "41934928",
+      "name": "追踪",
+      "font_class": "ico_zhuizon",
+      "unicode": "e6fe",
+      "unicode_decimal": 59134
+    },
+    {
+      "icon_id": "41934929",
+      "name": "费用分析",
+      "font_class": "feiyongduoweifenxi",
+      "unicode": "e702",
+      "unicode_decimal": 59138
+    }
+  ]
+}
