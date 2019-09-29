@@ -179,6 +179,7 @@ export default [
       {
         path: '/order/orderlist',
         component: OrderList,
+        name: 'orderlist',
         meta: {
           level: 2,
           group: '订单',

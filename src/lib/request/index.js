@@ -232,4 +232,9 @@ exports.changePassword = (params) => {
 exports.uploadImg = (images) => $file.post('upload/images', images)
 
 exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids })
+
+// 获取首页统计数据
+exports.getIndexNumber = () => $form.get('statistics/index-data')
+// 获取首页图表数据
+exports.getIndexData = (params) => $form.get('statistics/index-log', { params })
 export default exports
