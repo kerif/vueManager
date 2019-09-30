@@ -85,7 +85,7 @@ export default {
     onTime (val) {
       this.begin_date = val[0]
       this.end_date = val[1]
-      this.page = 1
+      this.page_params.page = 1
       this.getList()
     }
   }
