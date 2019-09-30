@@ -112,13 +112,13 @@ export default {
     },
     // 添加员工组
     addStaff () {
-      dialog({ type: 'addStaff' }, () => {
+      dialog({ type: 'addStaff', staff: 'add' }, () => {
         this.getList()
       })
     },
     // 编辑
     editStaff (id, nameCn, nameEn) {
-      dialog({ type: 'addStaff', id: id, name_cn: nameCn, name_en: nameEn }, () => {
+      dialog({ type: 'addStaff', id: id, name_cn: nameCn, name_en: nameEn, staff: 'edit' }, () => {
         this.getList()
       })
     },

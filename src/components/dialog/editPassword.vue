@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="修改客户组" class="dialog-container" @close="clear">
+  <el-dialog :visible.sync="show" title="修改密码" class="dialog-container" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
     <el-row :gutter="20">
         <!-- 用户名 -->

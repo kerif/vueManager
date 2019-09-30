@@ -4,10 +4,10 @@
     <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
       <div class="select-box">
-        <search-select placeholder="请选择客户组" :selectArr="clientGroupList"
+        <search-select placeholder="请选择员工组" :selectArr="clientGroupList"
         v-model="page_params.group" @search="getList">
       </search-select>
-        <add-btn router="staffadd">添加客户组</add-btn>
+        <add-btn router="staffadd">添加员工组</add-btn>
       </div>
       <el-table
         class="data-list"

@@ -33,6 +33,8 @@
           </template>
         </template>
       </el-table-column>
+      <!-- 所属发货单 -->
+      <el-table-column label="所属发货单" v-if="activeName === '3' || activeName === '5'" prop="shipment_sn"></el-table-column>
       <!-- 线路名称 -->
       <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
       <!-- 收货人 -->

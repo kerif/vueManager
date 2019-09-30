@@ -1,14 +1,14 @@
 <template>
-  <el-dialog :visible.sync="show" title="添加员工组" class="dialog-addStaff"
+  <el-dialog :visible.sync="show" :title="state === 'edit' ? '修改客户组' : '添加客户组'" class="dialog-addStaff"
   size="small" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 员工组中文名 -->
-        <el-form-item label="员工组中文名" prop="name_cn">
+        <el-form-item label="客户组中文名" prop="name_cn">
           <el-input v-model="ruleForm.name_cn"
           placeholder="请输入员工组中文名"></el-input>
           </el-form-item>
         <!-- 员工组英文名 -->
-          <el-form-item label="员工组英文名" prop="name_en">
+          <el-form-item label="客户组英文名" prop="name_en">
           <el-input v-model="ruleForm.name_en"
           placeholder="请输入员工组英文名"></el-input>
           </el-form-item>
@@ -34,6 +34,7 @@ export default {
         name_en: '',
         description: ''
       },
+      state: '',
       rules: {
         name_cn: [
           { required: true, message: '请输入员工组中文名', trigger: 'blur' }
@@ -94,6 +95,8 @@ export default {
       this.ruleForm.name_cn = ''
       this.ruleForm.name_en = ''
       this.ruleForm.description = ''
+      this.name_cn = ''
+      this.name_en = ''
     },
     cancelDialog (ruleForm) {
       this.$refs[ruleForm].resetFields()
@@ -122,7 +125,7 @@ export default {
     width: 200px;
   }
   .el-form-item__error {
-    margin-left: 300px !important;
+    margin-left: 250px !important;
   }
 }
 </style>

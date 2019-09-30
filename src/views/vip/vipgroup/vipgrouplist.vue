@@ -82,13 +82,13 @@ export default {
     },
     // 添加客户组
     addVip () {
-      dialog({ type: 'editVip' }, () => {
+      dialog({ type: 'editVip', state: 'add' }, () => {
         this.getList()
       })
     },
     // 修改资料
     editVip (id, nameCn, nameEn) {
-      dialog({ type: 'editVip', id: id, name_cn: nameCn, name_en: nameEn }, () => {
+      dialog({ type: 'editVip', id: id, name_cn: nameCn, name_en: nameEn, state: 'edit' }, () => {
         this.getList()
       })
     },

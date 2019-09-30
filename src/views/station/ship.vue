@@ -12,6 +12,11 @@
     <el-table :data="tableShip" stripe
     border class="data-list"
     v-loading="tableLoading">
+    <el-table-column type="expand">
+      <!-- <template slot-scope="props">
+        <el-table :data="props.row."
+      </template> -->
+    </el-table-column>
       <!-- 发货单号 -->
       <el-table-column label="发货单号" prop="sn"></el-table-column>
       <!-- 创建时间 -->
@@ -29,8 +34,8 @@
       </el-table-column>
       <!-- 箱数 -->
       <el-table-column label="箱数" prop="box_count"></el-table-column>
-      <!-- 体积 -->
-      <el-table-column label="体积" prop="volume"></el-table-column>
+      <!-- 重量 -->
+      <el-table-column label="重量" prop="volume"></el-table-column>
       <!-- 价值 -->
       <el-table-column label="价值" prop="value"></el-table-column>
       <!-- 物品属性 -->

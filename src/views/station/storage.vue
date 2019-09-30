@@ -36,7 +36,7 @@
           <!-- 备注 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="*备注">
+              <el-form-item label="备注">
                 <el-input v-model="user.remark" placeholder="请输入备注"
                 type="textarea"  :autosize="{ minRows: 1, maxRows: 2}"></el-input>
               </el-form-item>
