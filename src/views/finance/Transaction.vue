@@ -4,10 +4,10 @@
       <search-group v-model="page_params.keyword" @search="goSearch">
         <el-date-picker
         v-model="timeList"
-        type="datetimerange"
+        type="daterange"
         @change="onTime"
-        format="yyyy-MM-dd HH:mm:ss"
-        value-format="yyyy-MM-dd HH:mm:ss"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期">

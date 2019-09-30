@@ -43,6 +43,7 @@
         </div>
       </template> -->
     </el-table>
+    <div class="noDate">暂无数据</div>
     <nle-pagination :pageParams="page_params"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -126,6 +127,10 @@ export default {
     .imgDialog{
       width: 50%;
     }
+  }
+  .noDate {
+    text-align: center;
+    color: #ccc;
   }
 }
 </style>

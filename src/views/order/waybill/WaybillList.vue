@@ -87,6 +87,7 @@
         </div>
       </template>
     </el-table>
+    <div class="noDate" v-else>暂无数据</div>
     <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>
 </template>
@@ -249,6 +250,10 @@ export default {
   }
   .detailsBtn {
     margin: 3px 2px !important;
+  }
+  .noDate {
+    text-align: center;
+    color: #ccc;
   }
 }
 </style>
