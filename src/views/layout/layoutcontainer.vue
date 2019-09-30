@@ -81,7 +81,7 @@ export default {
     // }
   }
   .isCollapse {
-    width: 66px !important;
+    width: 0 !important;
   }
 }
 </style>

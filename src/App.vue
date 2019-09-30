@@ -6,5 +6,5 @@
 <style lang="scss">
 @import './styles/main.scss';
 @import './styles/nprogress.scss';
-@import './assets/iconfont.css';
+@import './assets/iconfont/iconfont.css';
 </style>

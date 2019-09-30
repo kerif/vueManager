@@ -17,7 +17,7 @@
       <el-submenu v-for="(route, index) in formatRouterMap" :key="route.name"
         :index="index + ''">
         <template slot="title">
-          <i class="iconfont" :class="route.icon"></i>
+          <i :class="['iconfont', 'icon-title', route.icon]"></i>
           <span>{{ route.name }}</span>
         </template>
         <el-menu-item-group v-for="(childRoute, childIndex) in route.children" :key="childIndex">
@@ -33,9 +33,6 @@
 import { routes } from '@/router'
 export default {
   computed: {
-    routers () {
-      return routes
-    },
     formatRouterMap () {
       let formatRouterMap = {}
       routes[0].children.forEach((item, index) => {
@@ -43,7 +40,7 @@ export default {
           if (formatRouterMap[ele.meta.group]) {
             formatRouterMap[ele.meta.group].children.push({ name: ele.meta.name, path: ele.path, level: ele.meta.level })
           } else {
-            formatRouterMap[ele.meta.group] = { children: [{ name: ele.meta.name, path: ele.path, level: ele.meta.level }], name: ele.meta.group, level: 1 }
+            formatRouterMap[ele.meta.group] = { children: [{ name: ele.meta.name, path: ele.path, level: ele.meta.level }], name: ele.meta.group, level: 1, icon: item.icon }
           }
         })
       })
@@ -86,6 +83,7 @@ export default {
   }
   .route-menu {
     border: none;
+    margin-top: 50px;
   }
   .route-item {
     padding-left: 80px !important;
@@ -94,10 +92,20 @@ export default {
     padding: 0;
   }
   .isCollapse {
-    width: 66px !important;
+    width: 0 !important;
   }
   .el-submenu__title {
-    padding-left: 80px !important;
+    padding-left: 40px !important;
+  }
+  .icon-title {
+    font-size: 18px;
+    margin-right: 22px;
+    color: #7E8BFF;
+  }
+  .el-submenu.is-active {
+    .el-submenu__title {
+      background-color: #3540A5 !important;
+    }
   }
 }
 </style>

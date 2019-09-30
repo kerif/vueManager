@@ -37,14 +37,12 @@ function interceptorsResponseError (error) {
   store.commit('switchBtnLoading', { status: false })
   if (error.response && error.response.status === 401) {
     store.commit('removeToken')
-    router.push('/login')
-    // Message({
-    //   message: '请重新登录',
-    //   type: 'error'
-    // })
+    if (error.reponse && error.response.config.url.indexOf('/login') === -1) {
+      router.push('/login')
+    }
   } else {
-    if (error.response && error.response.data && error.response.data.tips) {
-      msg = error.response.data.tips
+    if (error.response && error.response.data && error.response.data.msg) {
+      msg = error.response.data.msg
     } else {
       msg = '请求失败'
     }

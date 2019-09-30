@@ -82,7 +82,7 @@ export default [
   {
     path: 'staff',
     component: LayoutContainer,
-    icon: '',
+    icon: 'icon-ico_rencai',
     children: [
       {
         path: '/staff/stafflist',
@@ -142,6 +142,7 @@ export default [
   {
     path: 'vip',
     component: LayoutContainer,
+    icon: 'icon-gaiicon-',
     children: [
       {
         path: '/vip/viplist',
@@ -178,6 +179,7 @@ export default [
   {
     path: 'order',
     component: LayoutContainer,
+    icon: 'icon-ico_yuebao',
     children: [
       {
         path: '/order/orderlist',
@@ -226,6 +228,7 @@ export default [
   {
     path: 'station',
     component: LayoutContainer,
+    icon: 'icon-gongbao',
     children: [
       {
         path: '/station/storage',
@@ -273,6 +276,7 @@ export default [
   {
     path: 'config',
     component: LayoutContainer,
+    icon: 'icon-ico_zhuizon',
     children: [
       {
         path: '/config/line/linelist',
@@ -363,6 +367,7 @@ export default [
   {
     path: 'finance',
     component: LayoutContainer,
+    icon: 'icon-feiyongduoweifenxi',
     children: [
       {
         path: '/finance/transaction',
