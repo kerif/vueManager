@@ -24,7 +24,7 @@
         </el-form>
       </div>
     </div>
-    <div class="login-footer">© (2019) NLETECH科技</div>
+    <div class="login-footer">© (2019) NLETECH</div>
   </div>
 </template>
 <script>
