@@ -7,10 +7,10 @@
     <el-menu
       :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"
       background-color="#171B42"
-      text-color="#7E8BFF"
+      text-color="#fff"
       :router="true"
       :collapse="isCollapse"
-      active-text-color="#fff"
+      active-text-color="#7E8BFF"
       :unique-opened="true"
       class="route-menu"
       @select="onMenuSelect">
@@ -100,7 +100,7 @@ export default {
   .icon-title {
     font-size: 18px;
     margin-right: 22px;
-    color: #7E8BFF;
+    color: #fff;
   }
   .el-submenu.is-active {
     .el-submenu__title {

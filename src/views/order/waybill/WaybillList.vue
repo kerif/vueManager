@@ -104,15 +104,15 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      activeName: '',
+      activeName: '1',
       oderData: [],
-      status: '',
+      status: 1,
       selectIDs: [],
       tableLoading: false
     }
   },
   created () {
-    this.activeName = '1'
+    this.getList()
   },
   methods: {
     getList () {
@@ -208,9 +208,6 @@ export default {
         }
       })
     }
-  },
-  mounted () {
-    this.getList()
   },
   watch: {
     // 监听tab组件参数
