@@ -1,19 +1,18 @@
 <template>
   <div class="transaction-list-container">
     <div>
-      <search-date-picker
-        v-model="page_params.time"
+      <search-group v-model="page_params.keyword" @search="goSearch">
+        <el-date-picker
+        v-model="timeList"
         type="datetimerange"
-        @change="getDate"
+        @change="onTime"
         format="yyyy-MM-dd HH:mm:ss"
         value-format="yyyy-MM-dd HH:mm:ss"
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期">
-      </search-date-picker>
-    </div>
-    <div style="overflow:hidden">
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+      </el-date-picker>
+      </search-group>
     </div>
     <el-table :data="transactionList" stripe border class="data-list"
     v-loading="tableLoading">
@@ -37,7 +36,7 @@
   </div>
 </template>
 <script>
-import { SearchGroup, SearchDatePicker } from '@/components/searchs'
+import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
@@ -45,15 +44,14 @@ export default {
     return {
       transactionList: [],
       tableLoading: false,
-      page_params: {
-        time: []
-      }
+      timeList: [],
+      begin_date: '',
+      end_date: ''
     }
   },
   mixins: [pagination],
   components: {
     SearchGroup,
-    SearchDatePicker,
     NlePagination
   },
   created () {
@@ -62,11 +60,14 @@ export default {
   methods: {
     getList () {
       this.tableLoading = true
-      this.$request.getTransaction({
-        keyword: this.page_params.keyword,
+      let params = {
         page: this.page_params.page,
         size: this.page_params.size
-      }).then(res => {
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.getTransaction(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.transactionList = res.data
@@ -81,11 +82,10 @@ export default {
         }
       })
     },
-    getDate (val) {
-      console.log(1)
-      console.log(this.page_params.time)
-      this.page_params.page_no = 1
-      this.page_params.time = val
+    onTime (val) {
+      this.begin_date = val[0]
+      this.end_date = val[1]
+      this.page = 1
       this.getList()
     }
   }
