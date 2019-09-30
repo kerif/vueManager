@@ -50,9 +50,9 @@
       <!-- 箱数 -->
       <el-table-column label="箱数" prop="box_count"></el-table-column>
       <!-- 重量 -->
-      <el-table-column label="重量" prop="volume"></el-table-column>
+      <el-table-column label="重量kg" prop="weight"></el-table-column>
       <!-- 价值 -->
-      <el-table-column label="价值" prop="value"></el-table-column>
+      <el-table-column label="价值¥" prop="value"></el-table-column>
       <!-- 物品属性 -->
       <el-table-column label="物品属性" prop="props"></el-table-column>
       <!-- 备注 -->

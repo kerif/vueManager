@@ -77,7 +77,7 @@
         <template slot-scope="scope">
           <span>{{scope.row.width}}*</span>
           <span>{{scope.row.height}}*</span>
-          <span>{{scope.row.length}}*</span>
+          <span>{{scope.row.length}}</span>
         </template>
       </el-table-column>
       <!-- 预计费用¥ -->

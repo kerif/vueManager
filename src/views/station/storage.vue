@@ -194,47 +194,61 @@ export default {
     },
     // 保存
     submitStorage () {
-      if (this.$route.params.id) { // 如果是从订单跳转过来
-        this.tableLoading = true
-        this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
-          this.tableLoading = false
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '操作成功',
-              message: res.msg
-            })
-            this.getWarehouseInfo()
-            this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
-            this.user.express_num = this.user.remark = ''
-            this.user.props = []
-          } else {
-            this.$message({
-              title: '操作失败',
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-      } else { // 如果是添加
-        this.tableLoading = true
-        this.$request.getExpress(this.user).then(res => {
-          this.tableLoading = false
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '操作成功',
-              message: res.msg
-            })
-            this.getList()
-          } else {
-            this.$notify({
-              title: '操作失败',
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      if (this.user.express_num === '') {
+        this.$message.error('请输入快递单号')
+      } else if (this.user.package_weight === '') {
+        this.$message.error('请输入重量')
+      } else if (this.user.length === '') {
+        this.$message.error('请输入长度')
+      } else if (this.user.width === '') {
+        this.$message.error('请输入长度')
+      } else if (this.user.height === '') {
+        this.$message.error('请输入高度')
+      } else if (!this.user.props.length) {
+        this.$message.error('请选择属性')
+      } else {
+        if (this.$route.params.id) { // 如果是从订单跳转过来
+          this.tableLoading = true
+          this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
+            this.tableLoading = false
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '操作成功',
+                message: res.msg
+              })
+              this.getWarehouseInfo()
+              this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
+              this.user.express_num = this.user.remark = ''
+              this.user.props = []
+            } else {
+              this.$message({
+                title: '操作失败',
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        } else { // 如果是添加
+          this.tableLoading = true
+          this.$request.getExpress(this.user).then(res => {
+            this.tableLoading = false
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '操作成功',
+                message: res.msg
+              })
+              this.getList()
+            } else {
+              this.$notify({
+                title: '操作失败',
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        }
       }
     }
   }

@@ -166,6 +166,7 @@ export default {
               title: '操作成功',
               message: res.msg
             })
+            this.getList()
           } else {
             this.$message({
               message: res.msg,
