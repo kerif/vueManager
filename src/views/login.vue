@@ -66,10 +66,11 @@ export default {
             type: 'success'
           })
           this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
+          this.$store.commit('saveName', res.data.username)
           this.$router.push('/')
-        } else {
-          this.$message.error(res.msg)
         }
+      }).catch((err) => {
+        this.$message.error(err.msg)
       })
     }
   }
