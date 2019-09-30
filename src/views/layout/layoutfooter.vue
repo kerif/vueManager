@@ -1,6 +1,6 @@
 <template>
   <el-footer class="layout-footer">
-    <div>© (2019) NLETECH科技</div>
+    <div>© (2019) NLETECH</div>
   </el-footer>
 </template>
 <style lang="scss">

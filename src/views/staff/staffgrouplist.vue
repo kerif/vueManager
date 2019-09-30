@@ -124,7 +124,6 @@ export default {
     },
     // 成员
     member (id) {
-      console.log('id', id)
       dialog({ type: 'staffGroup', id: id })
     },
     // 修改权限

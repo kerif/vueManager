@@ -8,34 +8,34 @@
       </el-table-column>
       <!-- 用户名 -->
       <el-table-column
-        prop="real_name"
+        prop="username"
         label="用户名">
       </el-table-column>
       <!-- 姓名 -->
       <el-table-column
-        prop="phone_number"
+        prop="name"
         label="姓名">
       </el-table-column>
       <!-- 邮箱 -->
         <el-table-column
-        prop="phone_number"
+        prop="email"
         label="邮箱">
       </el-table-column>
       <!-- 电话 -->
         <el-table-column
-        prop="phone_number"
+        prop="tel"
         label="电话">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
-        prop="phone_number"
+        prop="last_login_at"
         label="最后登录时间">
       </el-table-column>
     </el-table>
-    <div slot="footer">
+    <!-- <div slot="footer">
       <el-button @click="show = false">取消</el-button>
       <el-button type="primary" @click="confirm(ruleForm)">确定</el-button>
-    </div>
+    </div> -->
   </el-dialog>
 </template>
 <script>
