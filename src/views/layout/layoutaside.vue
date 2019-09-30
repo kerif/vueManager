@@ -1,7 +1,7 @@
 <template>
   <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']" style="width:240px;">
     <div class="aside-top">
-      <span class="app-name">TKK</span>
+      <span class="app-name">集运</span>
       <span>管理系统</span>
     </div>
     <el-menu
