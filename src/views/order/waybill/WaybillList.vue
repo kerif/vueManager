@@ -129,6 +129,7 @@ export default {
           // 待发货列表的物流单号添加
           res.data.forEach(item => {
             item.disabled = true
+            item.copySN = item.logistics_sn
           })
           this.oderData = res.data
           this.page_params.page = res.meta.current_page
@@ -181,6 +182,7 @@ export default {
     },
     // 取消
     cancel (row) {
+      row.logistics_sn = row.copySN
       row.disabled = true
     },
     // 保存添加物流单号
