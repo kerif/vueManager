@@ -121,5 +121,11 @@ export default {
   .tabLength {
     width: 200px !important;
   }
+ .img_box{
+    text-align: center;
+    .imgDialog{
+      width: 50%;
+    }
+  }
 }
 </style>

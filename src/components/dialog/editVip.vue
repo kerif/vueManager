@@ -5,18 +5,18 @@
         <!-- 员工组中文名 -->
         <el-form-item label="客户组中文名" prop="name_cn">
           <el-input v-model="ruleForm.name_cn"
-          placeholder="请输入员工组中文名"></el-input>
+          placeholder="请输入客户组中文名"></el-input>
           </el-form-item>
         <!-- 员工组英文名 -->
           <el-form-item label="客户组英文名" prop="name_en">
           <el-input v-model="ruleForm.name_en"
-          placeholder="请输入员工组英文名"></el-input>
+          placeholder="请输入客户组英文名"></el-input>
           </el-form-item>
         <!-- 用户组描述 -->
-          <el-form-item label="用户组描述">
+          <el-form-item label="客户组描述">
           <el-input type="textarea" v-model="ruleForm.description"
           :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入用户组描述"></el-input>
+          placeholder="请输入客户组描述"></el-input>
           </el-form-item>
     </el-form>
     <div slot="footer">
@@ -37,10 +37,10 @@ export default {
       state: '',
       rules: {
         name_cn: [
-          { required: true, message: '请输入员工组中文名', trigger: 'blur' }
+          { required: true, message: '请输入客户组中文名', trigger: 'blur' }
         ],
         name_en: [
-          { required: true, message: '请输入员工组英文名', trigger: 'blur' }
+          { required: true, message: '请输入客户组英文名', trigger: 'blur' }
         ]
       }
     }

@@ -7,6 +7,13 @@
       <el-table-column label="内容" prop="content">
       </el-table-column>
       <el-table-column label="图片" prop="images">
+          <template slot-scope="scope">
+          <span v-for="item in scope.row.images"
+          :key="item.id" style="cursor:pointer;"
+            @click.stop="imgSrc=item.url, imgVisible=true">
+              <img :src="item.url" style="width: 40px; margin-right: 5px;">
+          </span>
+        </template>
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
@@ -25,6 +32,11 @@
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
+      <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog">
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -35,7 +47,9 @@ export default {
   data () {
     return {
       suggestList: [], // 表格数据
-      tableLoading: false
+      tableLoading: false,
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   mixins: [pagination],
@@ -77,3 +91,11 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.img_box{
+  text-align: center;
+  .imgDialog{
+    width: 50%;
+  }
+}
+</style>
