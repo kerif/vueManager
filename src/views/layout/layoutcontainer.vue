@@ -33,7 +33,6 @@ export default {
   },
   computed: {
     pagePath () {
-      console.log(this.$store.state.pagePath)
       return this.$store.state.pagePath
     },
     isCollapse () {

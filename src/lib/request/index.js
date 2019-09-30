@@ -237,4 +237,7 @@ exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids 
 exports.getIndexNumber = () => $form.get('statistics/index-data')
 // 获取首页图表数据
 exports.getIndexData = (params) => $form.get('statistics/index-log', { params })
+
+// 获取运单下的所有订单
+exports.getOrdersByShipment = (id) => $form.get(`shipments/${id}/orders`)
 export default exports

@@ -11,11 +11,26 @@
     </div>
     <el-table :data="tableShip" stripe
     border class="data-list"
+    @expand-change="onExpand"
     v-loading="tableLoading">
     <el-table-column type="expand">
-      <!-- <template slot-scope="props">
-        <el-table :data="props.row."
-      </template> -->
+      <template slot-scope="props">
+        <el-table :data="props.row.orders">
+          <el-table-column label="客户ID" prop="user_id"></el-table-column>
+          <el-table-column label="转运单号" prop="order_sn"></el-table-column>
+          <el-table-column label="物流单号" prop="logistics_sn"></el-table-column>
+          <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
+          <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
+          <el-table-column label="收货国家" prop="address.country_name"></el-table-column>
+          <el-table-column label="包裹数" prop="package_count"></el-table-column>
+          <el-table-column label="实际重量kg" prop="actual_weight"></el-table-column>
+          <el-table-column label="实际费用￥" prop="actual_payment_fee"></el-table-column>
+          <el-table-column label="申报价值￥" prop="declare_value"></el-table-column>
+          <el-table-column label="备注" prop="remark"></el-table-column>
+          <el-table-column label="提交时间" prop="packed_at"></el-table-column>
+          <el-table-column label="拣货时间" prop="updated_at"></el-table-column>
+        </el-table>
+      </template>
     </el-table-column>
       <!-- 发货单号 -->
       <el-table-column label="发货单号" prop="sn"></el-table-column>
@@ -99,7 +114,12 @@ export default {
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.tableShip = res.data
+          this.tableShip = res.data.map(item => {
+            return {
+              ...item,
+              orders: []
+            }
+          })
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
@@ -138,6 +158,17 @@ export default {
             })
           }
         })
+      })
+    },
+    // 点开当前行，获取二级菜单数据
+    onExpand (row) {
+      // 如果当前货单已经获取了二级菜单数据，就不在获取
+      if (row.orders.length) return
+      let id = row.id
+      this.$request.getOrdersByShipment(id).then(res => {
+        if (res.ret) {
+          row.orders = res.data
+        }
       })
     }
   }
