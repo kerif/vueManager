@@ -4,7 +4,7 @@
      <el-col :span="18">
        <el-row>
          <el-col :span="7">
-          <div class="addCustomer">
+          <div class="addCustomer" @click="$router.push({ name: 'viplist' })">
             <div class="box-header">
               <div>当月新增客户</div>
               <div class="bold-box">{{ user.current_month }}</div>
@@ -16,7 +16,7 @@
           </div>
          </el-col>
          <el-col :span="8" :offset="1">
-          <div class="addCustomer">
+          <div class="addCustomer" @click="$router.push({ name: 'orderlist' })">
             <div class="box-header">
               <div>当月新增订单</div>
               <div class="bold-box">{{ shipment.current_month }}</div>
@@ -28,7 +28,7 @@
           </div>
          </el-col>
          <el-col :span="7" :offset="1">
-          <div class="addCustomer">
+          <div class="addCustomer" @click="$router.push({ name: 'shipContainer' })">
             <div class="box-header">
               <div>当月新增发货单</div>
               <div class="bold-box">{{ order.current_month }}</div>
