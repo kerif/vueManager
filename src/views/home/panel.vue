@@ -248,6 +248,7 @@ export default {
   .addCustomer {
     background: #E5E7FB;
     border-radius: 4px;
+    cursor: pointer;
   }
   .panel-right {
     box-sizing: border-box;
