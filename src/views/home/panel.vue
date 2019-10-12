@@ -42,7 +42,7 @@
        </el-row>
        <el-row class="main">
         <el-col :span="7">
-          <div class="main-box" @click="$router.push({ name: 'orderlist' })">
+          <div class="main-box" @click="$router.push({ name: 'storageContainer' })">
             <img src="../../assets/storage.png" class="tip-img">
             <span>包裹入库</span>
           </div>
@@ -66,15 +66,15 @@
      <el-col :span="6" class="panel-right">
        <div class="waitMsg">待处理消息</div>
        <ul>
-         <li>
+         <li @click="$router.push({ name: 'orderlist' })">
            未入库包裹
            <div class="msg-right">{{ waitInStorage }}</div>
            </li>
-         <li>
+         <li @click="$router.push({ name: 'wayBillList' })">
            待拣货包裹
            <div class="msg-right">{{ waitPack }}</div>
            </li>
-         <li>
+         <li @click="$router.push({ name: 'wayBillList', query: {activeName: '2'} })">
            未支付包裹
            <div class="msg-right">{{ upaid }}</div>
            </li>
@@ -347,6 +347,9 @@ export default {
       background-color: #3540A5;
       color: #fff;
     }
+  }
+  li {
+    cursor: pointer;
   }
 }
 </style>

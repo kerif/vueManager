@@ -114,6 +114,9 @@ export default {
   },
   created () {
     this.getList()
+    if (this.$route.query.activeName) {
+      this.activeName = this.$route.query.activeName
+    }
   },
   methods: {
     getList () {
