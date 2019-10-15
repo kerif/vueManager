@@ -38,7 +38,7 @@ function interceptorsResponseError (error) {
   store.commit('switchBtnLoading', { status: false })
   if (error.response && error.response.status === 401) {
     store.commit('removeToken')
-    if (error.reponse && error.response.config.url.indexOf('/login') === -1) {
+    if (error.response && error.response.config.url.indexOf('/login') === -1) {
       router.push('/login')
     }
   } else {
