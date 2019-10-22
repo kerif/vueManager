@@ -3,14 +3,13 @@
       <el-row>
         <el-col :span="12">
           <el-tree
-            :data="data"
+            :data="permissionMenu"
             show-checkbox
             default-expand-all
             node-key="id"
             class="tree"
             ref="tree"
-            :filter-node-method="filterNode"
-            :default-checked-keys="permisssion_checked"
+            :default-checked-keys="defaultChecked"
             :props="defaultProps">
           </el-tree>
           <el-button class="save-btn" @click="confirmSubmit" type="primary">保存</el-button>
@@ -20,85 +19,56 @@
 </template>
 
 <script>
+import { getCheckedChild } from '@/utils'
 export default {
   name: 'modifyPermissions',
   data () {
     return {
       filterText: '',
-      permisssion_menu: [],
-      permisssion_checked: [],
-      data: [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        }, {
-          id: 8,
-          label: '二级 3-2'
-        }]
-      }],
+      permissionMenu: [],
+      data: [],
       defaultProps: {
-        children: 'children',
-        label: 'label'
+        children: 'child',
+        label: 'name'
       }
     }
   },
+  created () {
+    if (this.$route.params.id) {
+      this.getList()
+    }
+  },
   methods: {
-    filterNode (value, data) {
-    //   if (!value) return true
-    //   return data.label.indexOf(value) !== -1
+    getList () {
+      this.$request.getPermissions(this.$route.params.id).then(res => {
+        this.permissionMenu = res.data
+      })
     },
     confirmSubmit () {
-    // this.$confirm(this.$t('confirmSubmit'), this.$t('point'), {
-    //   confirmButtonText: this.$t('confirm'),
-    //   cancelButtonText: this.$t('cancel'),
-    //   type: 'warning'
-    // }).then(() => {
-    //   this.submit()
-    // })
-    },
-    submit () {
-      this.$http.post(`u2/menu/set_priv/${this.$route.params.id}`, {
-        ids: this.$refs.tree.getCheckedKeys(true).toString()
-      }).then(res => {
-        this.$notify({
-          type: 'success',
-          title: this.$t('success'),
-          message: res.tips
-        })
-        if (this.$route.params.id === this.$store.state.vipInfo.role_id) this.$store.commit('switchPermissionMapFilterStatus', { status: false }) // 重新筛选路由
-        this.$router.push({ name: 'staffgrouplist' })
+      let permissions = this.$refs.tree.getCheckedKeys(true)
+      this.$request.updatePermissions(this.$route.params.id, { permissions }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.$router.push({ name: 'staffgrouplist' })
+        } else {
+          this.$message.error(res.msg)
+        }
       })
     }
   },
   watch: {
     filterText (val) {
       this.$refs.tree.filter(val)
+    }
+  },
+  computed: {
+    defaultChecked () {
+      console.log(getCheckedChild(this.permissionMenu))
+      return getCheckedChild(this.permissionMenu)
     }
   }
 }

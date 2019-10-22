@@ -7,7 +7,7 @@
         <search-select placeholder="请选择员工组" :selectArr="clientGroupList"
         v-model="page_params.group" @search="getList">
       </search-select>
-        <add-btn router="staffadd">添加员工组</add-btn>
+        <add-btn router="staffadd">添加员工</add-btn>
       </div>
       <el-table
         class="data-list"

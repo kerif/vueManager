@@ -94,7 +94,10 @@ export default {
     },
     // 成员
     member (id) {
-      dialog({ type: 'vipList', id: id })
+      console.log(id, 'id')
+      dialog({ type: 'vipList', id: id }, () => {
+        this.getList()
+      })
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))

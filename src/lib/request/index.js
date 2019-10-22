@@ -72,6 +72,10 @@ exports.saveNotice = (params) => {
 exports.userGroupDelete = (ids) => {
   return $form.put('user-groups/batch-delete', ids)
 }
+// 客户组成员
+exports.getUserMembers = (id) => {
+  return $form.get(`user-groups/${id}/members`)
+}
 // 员工列表禁止登录
 exports.forbidUser = (ids) => {
   return $form.put('admins/forbid-login', ids)
@@ -199,6 +203,14 @@ exports.deleteNotice = (params) => {
 // 新建客户组资料
 exports.addUserGroup = (params) => {
   return $form.post('user-groups', params)
+}
+// 获取管理员组权限设置
+exports.getPermissions = (id) => {
+  return $form.get(`admin-groups/${id}/permissions`)
+}
+// 修改员工组权限
+exports.updatePermissions = (id, params) => {
+  return $form.put(`admin-groups/${id}/permissions`, params)
 }
 // 获得发货单
 exports.getInvoice = () => {

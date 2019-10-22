@@ -34,3 +34,20 @@ export const formatMonth = (value) => {
   let month = value.split('-')[1]
   return `${month.replace(/^0/, '')}月`
 }
+
+export const getCheckedChild = (arr) => {
+  let ret = []
+  recArr(arr, ret)
+  return ret
+}
+
+function recArr (arr, ret) {
+  for (let i = 0; i < arr.length; i++) {
+    const element = arr[i]
+    if (element.child) {
+      recArr(element.child, ret)
+    } else if (element.enabled) {
+      ret.push(element.id)
+    }
+  }
+}

@@ -127,7 +127,7 @@ export default [
         }
       },
       {
-        path: '/staff/modify_permissions',
+        path: '/staff/modify_permissions/:id',
         name: 'modifyPermissions',
         component: modifyPre,
         meta: {

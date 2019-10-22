@@ -127,8 +127,12 @@ export default {
       dialog({ type: 'staffGroup', id: id })
     },
     // 修改权限
-    changePre () {
-      this.$router.push({ name: 'modifyPermissions' })
+    changePre (id) {
+      console.log(id, 'id')
+      this.$router.push({ name: 'modifyPermissions',
+        params: {
+          id: id
+        } })
     },
     // 删除
     deleteData () {
