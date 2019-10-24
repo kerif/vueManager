@@ -40,17 +40,17 @@
           <span :class="{ 'select': forgetStep === 3 }">完成</span>
         </div>
         <!-- 忘记密码第一步：验证身份 -->
-        <el-form v-show="forgetStep === 1">
+        <el-form v-show="forgetStep === 1" :model="forget" :rules="rules" ref="forgetForm">
           <el-form-item prop="email">
-            <el-input prefix-icon="el-icon-user" placeholder="请输入您的邮箱" v-model="userInfo.email">
+            <el-input prefix-icon="el-icon-user" placeholder="请输入您的邮箱" v-model="forget.email">
             <template slot="append">获取验证码</template>
             </el-input>
           </el-form-item>
-          <el-form-item>
-            <el-input type="password" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="userInfo.password" @keyup.native.enter="onLogin"></el-input>
+          <el-form-item prop="code">
+            <el-input type="password" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="forget.code"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="onForgetStep" :loading="$store.state.btnLoading">下一步</el-button>
+            <el-button class="login-btn" @click="onForgetStep('forgetForm')" :loading="$store.state.btnLoading">下一步</el-button>
           </el-form-item>
           <div class="register">
             <p @click="changeWelcome(1)">返回登录</p>
@@ -88,10 +88,10 @@
           <el-form-item>
             <el-input prefix-icon="el-icon-user" placeholder="请输入邮箱" v-model="userInfo.username"></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item prop="new_password">
             <el-input type="password" placeholder="请输入6-16位密码，区分大小写" prefix-icon="el-icon-unlock" v-model="userInfo.new_password"></el-input>
           </el-form-item>
-            <el-form-item>
+            <el-form-item prop="new_confirm_password">
             <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" v-model="userInfo.new_confirm_password"></el-input>
           </el-form-item>
           <el-form-item prop="phone">
@@ -185,9 +185,20 @@ export default {
         new_password: '',
         new_confirm_password: ''
       },
+      forget: {
+        email: '',
+        code: ''
+      },
       welcome: 1,
       forgetStep: 1,
       rules: {
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'change' }
+        ],
         phone: [
           { validator: checkPhone, trigger: 'blur' }
         ],
