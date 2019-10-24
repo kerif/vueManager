@@ -139,6 +139,7 @@
       title="身份验证"
       :visible.sync="centerDialogVisible"
       width="35%"
+      @close="clear"
       center>
       <div class="id-img">
         <img src="../assets/happy.png">
@@ -232,7 +233,7 @@ export default {
           { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
         ],
         first_password: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
         ],
         new_first_password: [
@@ -357,6 +358,9 @@ export default {
           return false
         }
       })
+    },
+    clear () {
+      this.Authentication.code = ''
     }
   }
 }
