@@ -34,8 +34,13 @@
     <!-- 忘记密码 -->
     <div class="login-main" v-show="welcome == 2">
       <div class="info-box">
-        <p class="info-title">验证身份</p>
-        <el-form>
+        <div class="step-box">
+          <span :class="['step-item', { 'select': forgetStep <= 3 }]">验证身份</span>
+          <span :class="['step-item', { 'select': forgetStep >= 2 }]">重置登录密码</span>
+          <span :class="{ 'select': forgetStep === 3 }">完成</span>
+        </div>
+        <!-- 忘记密码第一步：验证身份 -->
+        <el-form v-show="forgetStep === 1">
           <el-form-item prop="email">
             <el-input prefix-icon="el-icon-user" placeholder="请输入您的邮箱" v-model="userInfo.email">
             <template slot="append">获取验证码</template>
@@ -45,24 +50,34 @@
             <el-input type="password" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="userInfo.password" @keyup.native.enter="onLogin"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="changeWelcome(5)" :loading="$store.state.btnLoading">下一步</el-button>
+            <el-button class="login-btn" @click="onForgetStep" :loading="$store.state.btnLoading">下一步</el-button>
           </el-form-item>
           <div class="register">
             <p @click="changeWelcome(1)">返回登录</p>
           </div>
         </el-form>
-      </div>
-    </div>
-    <!-- 修改密码成功 -->
-    <div class="login-main" v-show="welcome == 5">
-      <div class="register-email">
-        <div class="happy-img">
-          <img src="../assets/happy.png">
-        </div>
-          <p class="account-btn">修改密码成功！</p>
-          <div class="register">
-            <p @click="changeWelcome(1)">去登录</p>
+        <!-- 忘记密码第二步：重置登录密码 -->
+        <el-form v-show="forgetStep === 2">
+          <el-form-item>
+            <el-input placeholder="请输入新密码"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input placeholder="请确认您的密码"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button class="login-btn" @click="onForgetStep" :loading="$store.state.btnLoading">下一步</el-button>
+          </el-form-item>
+        </el-form>
+        <!-- 忘记密码第三步：重置登录密码完成 -->
+        <div class="register-email" v-show="forgetStep === 3">
+          <div class="happy-img">
+            <img src="../assets/happy.png">
           </div>
+            <p class="account-btn">修改密码成功！</p>
+            <div class="register">
+              <p @click="changeWelcome(1)">去登录</p>
+            </div>
+        </div>
       </div>
     </div>
     <!-- 注册账号 -->
@@ -171,6 +186,7 @@ export default {
         new_confirm_password: ''
       },
       welcome: 1,
+      forgetStep: 1,
       rules: {
         phone: [
           { validator: checkPhone, trigger: 'blur' }
@@ -223,6 +239,7 @@ export default {
       // })
     },
     changeWelcome (val) {
+      if (val === 2) this.forgetStep = 1
       this.welcome = val
     },
     registerAccount (formName) {
@@ -246,6 +263,9 @@ export default {
           return false
         }
       })
+    },
+    onForgetStep () {
+      this.forgetStep++
     }
   }
 }
@@ -309,7 +329,6 @@ export default {
     background-color: #35B85A;
   }
   .forget {
-    display: inline-block;
     float: right;
     cursor: pointer;
     color: #3540A5;
@@ -363,6 +382,27 @@ export default {
     .el-input {
       width: 30%;
     }
+  }
+  .step-box {
+    color: #A2A2A2;
+    font-size: 18px;
+    margin-bottom: 30px;
+    .select {
+      color: #35B85A;
+      &::after {
+        background-color: #35B85A;
+      }
+    }
+  }
+  .step-item::after {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    margin: 0 5px;
+    height: 2px;
+    background-color: #A2A2A2;
+    position: relative;
+    bottom: 4px;
   }
 }
 </style>
