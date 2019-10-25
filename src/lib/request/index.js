@@ -252,4 +252,19 @@ exports.getIndexData = (params) => $form.get('statistics/index-log', { params })
 
 // 获取运单下的所有订单
 exports.getOrdersByShipment = (id) => $form.get(`shipments/${id}/orders`)
+
+// 注册验证码
+exports.getRegisterCode = (phone) => $form.post('register/apply', { phone })
+
+// 注册
+exports.register = (params) => $json.post('register', params)
+
+// 获取图片验证码
+exports.getCaptcha = () => $form.get('captcha')
+
+// 重置密码验证码
+exports.getResetCode = (phone) => $form.post('reset-password/apply', { phone })
+
+// 重置密码
+exports.resetPassword = (params) => $json.put('reset-password', params)
 export default exports

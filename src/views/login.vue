@@ -41,9 +41,9 @@
         </div>
         <!-- 忘记密码第一步：验证身份 -->
         <el-form v-show="forgetStep === 1" :model="forget" :rules="rules" ref="forgetForm">
-          <el-form-item prop="email">
-            <el-input prefix-icon="el-icon-user" placeholder="请输入您的邮箱" v-model="forget.email">
-            <template slot="append">获取验证码</template>
+          <el-form-item>
+            <el-input prefix-icon="el-icon-user" placeholder="请输入您的手机号" v-model="forget.phone">
+            <span slot="append" @click="onResetCode">获取验证码</span>
             </el-input>
           </el-form-item>
           <el-form-item prop="code">
@@ -57,14 +57,14 @@
           </div>
         </el-form>
         <!-- 忘记密码第二步：重置登录密码 -->
-        <el-form v-show="forgetStep === 2" :model="resetPsd" :rules="rules"
+        <el-form v-show="forgetStep === 2" :model="forget" :rules="rules"
         ref="resetForm">
-          <el-form-item prop="new_password">
-            <el-input placeholder="请输入新密码" v-model="resetPsd.new_password"
+          <el-form-item>
+            <el-input placeholder="请输入新密码" v-model="forget.password"
             type="password"></el-input>
           </el-form-item>
-          <el-form-item prop="new_confirm_password">
-            <el-input placeholder="请确认您的密码" type="password" v-model="resetPsd.new_confirm_password"></el-input>
+          <el-form-item>
+            <el-input placeholder="请确认您的密码" type="password" v-model="forget.confirm_password"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button class="login-btn" @click="onResetStep('resetForm')" :loading="$store.state.btnLoading">下一步</el-button>
@@ -90,11 +90,11 @@
           <el-form-item prop="email">
             <el-input prefix-icon="el-icon-user" placeholder="请输入邮箱" v-model="reAccount.email"></el-input>
           </el-form-item>
-          <el-form-item prop="first_password">
-            <el-input type="password" placeholder="请输入6-16位密码，区分大小写" prefix-icon="el-icon-unlock" v-model="reAccount.first_password"></el-input>
+          <el-form-item prop="password">
+            <el-input type="password" placeholder="请输入8-20位密码，区分大小写" prefix-icon="el-icon-unlock" v-model="reAccount.password"></el-input>
           </el-form-item>
-            <el-form-item prop="new_first_password">
-            <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" v-model="reAccount.new_first_password"></el-input>
+            <el-form-item prop="confirm_password">
+            <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" v-model="reAccount.confirm_password"></el-input>
           </el-form-item>
           <el-form-item prop="phone">
             <el-input placeholder="请输入11位手机号码" v-model="reAccount.phone">
@@ -103,7 +103,7 @@
           </el-form-item>
           <el-form-item prop="code">
             <el-input placeholder="请输入验证码" v-model="reAccount.code">
-              <template slot="append">获取验证码</template>
+              <span slot="append" @click="onRegisterCode">获取验证码</span>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -121,13 +121,13 @@
         <div class="happy-img">
           <img src="../assets/happy.png">
         </div>
-          <p class="account-btn">您的账户：<span>1234@qq.com</span>注册成功</p>
+          <p class="account-btn">您的账户：<span>{{ reAccount.email }}</span>注册成功</p>
           <p class="account-btn">激活邮件已发送到您到邮件中，邮件有效期为24小时，请及时登录邮箱，点击邮件中的链接激活账户。</p>
-          <div class="checkEmail">
+          <!-- <div class="checkEmail">
             <el-button class="login-btn register-btn" :loading="$store.state.btnLoading">
               查看邮箱
             </el-button>
-          </div>
+          </div> -->
           <div class="register">
             <p @click="changeWelcome(1)">返回登录</p>
           </div>
@@ -139,13 +139,12 @@
       title="身份验证"
       :visible.sync="centerDialogVisible"
       width="35%"
-      @close="clear"
       center>
       <div class="id-img">
-        <img src="../assets/happy.png">
-        <i class="el-icon-refresh id-icon"></i>
+        <img :src="captha">
+        <i class="el-icon-refresh id-icon" @click="getCaptcha"></i>
       </div>
-      <el-input v-model="Authentication.code" placeholder="请输入验证码"></el-input>
+      <el-input v-model="userInfo.captcha" placeholder="请输入验证码"></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submit">确 定</el-button>
       </span>
@@ -167,7 +166,7 @@ export default {
     var validateRegister = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.reAccount.first_password) {
+      } else if (value !== this.reAccount.confirm_password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
@@ -189,22 +188,23 @@ export default {
     return {
       keep: false,
       centerDialogVisible: false,
+      captha: '',
       userInfo: {
         username: '',
-        password: ''
+        password: '',
+        key: '',
+        captcha: ''
       },
       forget: {
-        email: '',
-        code: ''
-      },
-      resetPsd: {
-        new_password: '',
-        new_confirm_password: ''
+        phone: '',
+        code: '',
+        password: '',
+        confirm_password: ''
       },
       reAccount: {
         email: '',
-        new_password: '',
-        new_confirm_password: '',
+        password: '',
+        confirm_password: '',
         phone: '',
         code: ''
       },
@@ -233,7 +233,7 @@ export default {
           { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
         ],
         first_password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
+          { required: true, message: '请输入新密码', trigger: 'blur' },
           { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
         ],
         new_first_password: [
@@ -263,10 +263,22 @@ export default {
         localStorage.removeItem('USERNAME')
         localStorage.removeItem('PASSWORD')
       }
-      this.centerDialogVisible = true
+      this.getCaptcha()
+    },
+    // 获取图片验证码
+    getCaptcha () {
+      this.$request.getCaptcha().then(res => {
+        if (res.ret) {
+          this.userInfo.key = res.data.captcha.key
+          this.captha = res.data.captcha.img
+          if (!this.centerDialogVisible) this.centerDialogVisible = true
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     },
     submit () {
-      if (this.Authentication.code === '') {
+      if (this.userInfo.code === '') {
         this.$message.error('请输入验证码')
       } else {
         this.$request.login(this.userInfo).then(res => {
@@ -278,9 +290,11 @@ export default {
             })
             this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
             this.$store.commit('saveName', res.data.username)
+            this.centerDialogVisible = false
             this.$router.push('/')
+          } else {
+            this.$message.error(res.msg)
           }
-          this.centerDialogVisible = false
         }).catch((err) => {
           this.$message.error(err.msg)
         })
@@ -290,17 +304,18 @@ export default {
       if (val === 2) this.forgetStep = 1
       this.welcome = val
     },
+    // 注册账号
     registerAccount (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.welcome = 4
-          this.$request.changePassword(this.params).then(res => {
+          this.$request.register(this.reAccount).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
                 title: '成功',
                 message: res.msg
               })
+              this.welcome = 4
             } else {
               this.$message({
                 message: res.msg,
@@ -316,14 +331,14 @@ export default {
     onResetStep (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.forgetStep++
-          this.$request.changePassword(this.params).then(res => {
+          this.$request.resetPassword(this.forget).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
                 title: '成功',
                 message: res.msg
               })
+              this.forgetStep++
             } else {
               this.$message({
                 message: res.msg,
@@ -331,8 +346,6 @@ export default {
               })
             }
           })
-        } else {
-          return false
         }
       })
     },
@@ -340,27 +353,34 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.forgetStep++
-          this.$request.changePassword(this.params).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '成功',
-                message: res.msg
-              })
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
-        } else {
-          return false
         }
       })
     },
-    clear () {
-      this.Authentication.code = ''
+    // 获取注册验证码
+    onRegisterCode () {
+      if (!this.reAccount.phone) {
+        return this.$message.error('请先输入手机号')
+      }
+      this.$request.getRegisterCode(this.reAccount.phone).then(res => {
+        if (res.ret) {
+          this.$message.success(res.msg)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    // 获取重置密码验证码
+    onResetCode () {
+      if (!this.forget.phone) {
+        return this.$message.error('请先输入手机号')
+      }
+      this.$request.getResetCode(this.forget.phone).then(res => {
+        if (res.ret) {
+          this.$message.success(res.msg)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     }
   }
 }
@@ -465,17 +485,16 @@ export default {
       width: 100px;
     }
     .id-icon {
-      position: relative;
-      bottom: 20px;
       cursor: pointer;
       font-size: 40px;
-      left: 10px;
+      margin-left: 10px;
     }
   }
   .el-dialog--center .el-dialog__body {
     text-align: center;
     .el-input {
-      width: 30%;
+      width: 40%;
+      margin-top: 10px;
     }
   }
   .step-box {
