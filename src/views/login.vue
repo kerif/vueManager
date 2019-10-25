@@ -59,12 +59,12 @@
         <!-- 忘记密码第二步：重置登录密码 -->
         <el-form v-show="forgetStep === 2" :model="forget" :rules="rules"
         ref="resetForm">
-          <el-form-item prop="password">
-            <el-input placeholder="请输入新密码" v-model="forget.password"
+          <el-form-item prop="new_password">
+            <el-input placeholder="请输入新密码" v-model="forget.new_password"
             type="password"></el-input>
           </el-form-item>
-          <el-form-item prop="confirm_password">
-            <el-input placeholder="请确认您的密码" type="password" v-model="forget.confirm_password"></el-input>
+          <el-form-item prop="confirm_new_password">
+            <el-input placeholder="请确认您的密码" type="password" v-model="forget.confirm_new_password"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button class="login-btn" @click="onResetStep('resetForm')" :loading="$store.state.btnLoading">下一步</el-button>
@@ -90,11 +90,11 @@
           <el-form-item prop="email">
             <el-input prefix-icon="el-icon-user" placeholder="请输入邮箱" v-model="reAccount.email"></el-input>
           </el-form-item>
-          <el-form-item prop="new_password">
-            <el-input type="password" placeholder="请输入8-20位密码，区分大小写" prefix-icon="el-icon-unlock" v-model="reAccount.new_password"></el-input>
+          <el-form-item prop="password">
+            <el-input type="password" placeholder="请输入8-20位密码，区分大小写" prefix-icon="el-icon-unlock" v-model="reAccount.password"></el-input>
           </el-form-item>
-            <el-form-item prop="confirm_new_password">
-            <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" v-model="reAccount.confirm_new_password"></el-input>
+            <el-form-item prop="confirm_password">
+            <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" v-model="reAccount.confirm_password"></el-input>
           </el-form-item>
           <el-form-item prop="phone">
             <el-input placeholder="请输入11位手机号码" v-model="reAccount.phone">
@@ -154,19 +154,21 @@
 <script>
 export default {
   data () {
-    var validatePass2 = (rule, value, callback) => {
+    // 注册
+    var validateRegister = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.forget.password) {
+      } else if (value !== this.reAccount.password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
       }
     }
-    var validateRegister = (rule, value, callback) => {
+    // 重置
+    var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.reAccount.new_password) {
+      } else if (value !== this.forget.new_password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
@@ -198,8 +200,8 @@ export default {
       forget: {
         phone: '',
         code: '',
-        password: '',
-        confirm_password: ''
+        new_password: '',
+        confirm_new_password: ''
       },
       reAccount: {
         email: '',
@@ -229,16 +231,16 @@ export default {
           { min: 8, max: 20, message: '长度在8到20个字符', trigger: 'change' }
         ],
         confirm_password: [
-          { required: true, validator: validatePass2, trigger: 'blur' },
+          { required: true, validator: validateRegister, trigger: 'blur' },
           { min: 8, max: 20, message: '长度在8到20个字符', trigger: 'change' }
         ],
         new_password: [
           { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
+          { min: 8, max: 20, message: '长度在8到20个字符', trigger: 'change' }
         ],
         confirm_new_password: [
-          { required: true, validator: validateRegister, trigger: 'blur' },
-          { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
+          { required: true, validator: validatePass2, trigger: 'blur' },
+          { min: 8, max: 20, message: '长度在8到20个字符', trigger: 'change' }
         ]
       }
     }
