@@ -121,8 +121,8 @@
         <div class="happy-img">
           <img src="../assets/happy.png">
         </div>
-          <p class="account-btn">您的账户：<span>{{ reAccount.email }}</span>注册成功</p>
-          <p class="account-btn">激活邮件已发送到您到邮件中，邮件有效期为24小时，请及时登录邮箱，点击邮件中的链接激活账户。</p>
+          <!-- <p class="account-btn">您的账户：<span>{{ reAccount.email }}</span>注册成功</p>
+          <p class="account-btn">激活邮件已发送到您到邮件中，邮件有效期为24小时，请及时登录邮箱，点击邮件中的链接激活账户。</p> -->
           <!-- <div class="checkEmail">
             <el-button class="login-btn register-btn" :loading="$store.state.btnLoading">
               查看邮箱
