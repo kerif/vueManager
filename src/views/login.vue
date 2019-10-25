@@ -41,7 +41,7 @@
         </div>
         <!-- 忘记密码第一步：验证身份 -->
         <el-form v-show="forgetStep === 1" :model="forget" :rules="rules" ref="forgetForm">
-          <el-form-item>
+          <el-form-item prop="phone">
             <el-input prefix-icon="el-icon-user" placeholder="请输入您的手机号" v-model="forget.phone">
             <span slot="append" @click="onResetCode">获取验证码</span>
             </el-input>
@@ -157,21 +157,21 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.userInfo.new_password) {
+      } else if (value !== this.userInfo.password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
       }
     }
-    var validateRegister = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.reAccount.confirm_password) {
-        callback(new Error('两次输入密码不一致!'))
-      } else {
-        callback()
-      }
-    }
+    // var validateRegister = (rule, value, callback) => {
+    //   if (value === '') {
+    //     callback(new Error('请再次输入密码'))
+    //   } else if (value !== this.reAccount.password) {
+    //     callback(new Error('两次输入密码不一致!'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     var checkPhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('手机号不能为空'))
@@ -224,22 +224,22 @@ export default {
         phone: [
           { validator: checkPhone, trigger: 'blur' }
         ],
-        new_password: [
+        password: [
           { required: true, message: '请输入新密码', trigger: 'blur' },
           { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
         ],
-        new_confirm_password: [
+        confirm_password: [
           { required: true, validator: validatePass2, trigger: 'blur' },
           { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
-        ],
-        first_password: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
-        ],
-        new_first_password: [
-          { required: true, validator: validateRegister, trigger: 'blur' },
-          { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
         ]
+        // password: [
+        //   { required: true, message: '请输入新密码', trigger: 'blur' },
+        //   { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
+        // ],
+        // confirm_password: [
+        //   { required: true, validator: validateRegister, trigger: 'blur' },
+        //   { min: 6, max: 32, message: '长度在6到32个字符', trigger: 'change' }
+        // ]
       }
     }
   },
