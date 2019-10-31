@@ -139,6 +139,7 @@
       title="身份验证"
       :visible.sync="centerDialogVisible"
       width="35%"
+      @close="dialogClear"
       center>
       <div class="id-img">
         <img :src="captha">
@@ -370,6 +371,10 @@ export default {
           this.$message.error(res.msg)
         }
       })
+    },
+    // 清除身份验证弹窗
+    dialogClear () {
+      this.userInfo.captcha = ''
     },
     // 获取重置密码验证码
     onResetCode () {

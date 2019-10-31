@@ -34,6 +34,18 @@ const NoticeList = loadonDemand('config/notice/NoticeList')
 const NoticeAddEdit = loadonDemand('config/notice/NoticeAddEdit')
 // 配置 投诉建议列表
 const SuggestList = loadonDemand('config/suggest/Suggest')
+// 配置 代理管理
+const agentManagement = loadonDemand('config/agent/Agent')
+// 修改、添加代理
+const AddEditAgent = loadonDemand('config/agent/AddEditAgent')
+// 成交记录
+const transactionRecord = loadonDemand('config/agent/record')
+// 配置 小程序配置
+const AppletConfiguration = loadonDemand('config/Applet/applet')
+// 配置 支付配置
+const PaymentManagement = loadonDemand('config/Payment/payment')
+// 配置 物流跟踪配置
+const logisticsManagement = loadonDemand('config/Logistics/logistics')
 // 入库
 const Storage = loadonDemand('station/storage')
 // 发货
@@ -48,7 +60,14 @@ const WaybillList = loadonDemand('order/waybill/WaybillList')
 const Billdetails = loadonDemand('order/waybill/billDetails')
 // 订单 运单打包
 const Billpacked = loadonDemand('order/waybill/billPacked')
-
+// 营销管理 新用户福利
+const Newuser = loadonDemand('marketing/new/new-user')
+// 营销管理 抵用券管理
+const Voucher = loadonDemand('marketing/Voucher/voucher')
+// 营销管理 记录
+const Notes = loadonDemand('marketing/Voucher/notes')
+// 营销管理 添加
+const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
 export default [
   {
     path: 'home',
@@ -361,6 +380,79 @@ export default [
           group: '配置',
           name: '投诉建议'
         }
+      },
+      {
+        path: '/config/agent',
+        name: 'agent',
+        component: agentManagement,
+        meta: {
+          level: 2,
+          group: '配置',
+          name: '代理管理'
+        }
+      },
+      {
+        path: '/config/add/agent',
+        name: 'addAgent',
+        component: AddEditAgent,
+        meta: {
+          level: 3,
+          group: '配置',
+          name: '添加代理',
+          parent: '/config/agent'
+        }
+      },
+      {
+        path: '/config/edit/agent',
+        name: 'editAgent',
+        component: AddEditAgent,
+        meta: {
+          level: 3,
+          group: '配置',
+          name: '修改代理',
+          parent: '/config/agent'
+        }
+      },
+      {
+        path: '/config/agent/record',
+        name: 'record',
+        component: transactionRecord,
+        meta: {
+          level: 3,
+          group: '配置',
+          name: '成交记录',
+          parent: '/config/agent'
+        }
+      },
+      {
+        path: '/config/applet',
+        name: 'appletManagement',
+        component: AppletConfiguration,
+        meta: {
+          level: 2,
+          group: '配置',
+          name: '小程序配置'
+        }
+      },
+      {
+        path: '/config/payment',
+        name: 'payment',
+        component: PaymentManagement,
+        meta: {
+          level: 2,
+          group: '配置',
+          name: '支付配置'
+        }
+      },
+      {
+        path: '/config/logistics',
+        name: 'logistics',
+        component: logisticsManagement,
+        meta: {
+          level: 2,
+          group: '配置',
+          name: '物流跟踪配置'
+        }
       }
     ]
   },
@@ -376,6 +468,55 @@ export default [
           group: '财务',
           level: 2,
           name: '流水记录'
+        }
+      }
+    ]
+  },
+  {
+    path: 'marketing',
+    component: LayoutContainer,
+    icon: 'icon-ico_yuce',
+    children: [
+      {
+        path: '/marketing/new',
+        name: 'newUser',
+        component: Newuser,
+        meta: {
+          level: 2,
+          group: '营销管理',
+          name: '新用户福利'
+        }
+      },
+      {
+        path: '/marketing/voucher',
+        name: 'voucher',
+        component: Voucher,
+        meta: {
+          level: 2,
+          group: '营销管理',
+          name: '抵用券管理'
+        }
+      },
+      {
+        path: '/marketing/voucher/notes',
+        name: 'notes',
+        component: Notes,
+        meta: {
+          level: 3,
+          group: '营销管理',
+          name: '投放记录',
+          parent: '/marketing/voucher'
+        }
+      },
+      {
+        path: '/marketing/voucher/add/voucher',
+        name: 'addVoucher',
+        component: addVoucher,
+        meta: {
+          level: 3,
+          group: '营销管理',
+          name: '添加抵用券',
+          parent: '/marketing/voucher'
         }
       }
     ]

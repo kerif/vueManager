@@ -1,0 +1,268 @@
+<template>
+  <div class="voucher-container">
+    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
+    <add-btn router="addVoucher">添加</add-btn>
+      <el-tabs v-model="activeName" class="tabLength">
+        <!-- 全部 -->
+        <el-tab-pane label="全部" name="1"></el-tab-pane>
+        <!-- 未开始 -->
+        <el-tab-pane label="未开始" name="2"></el-tab-pane>
+        <!-- 进行中 -->
+        <el-tab-pane label="进行中" name="3"></el-tab-pane>
+        <!-- 已结束 -->
+        <el-tab-pane label="已结束" name="4"></el-tab-pane>
+        <!-- 已失效 -->
+        <el-tab-pane label="已失效" name="5"></el-tab-pane>
+      <!-- v-if="oderData.length" -->
+    </el-tabs>
+      <el-table class="data-list" border stripe
+      v-loading="tableLoading"
+      :data="voucherData" @selection-change="onSelectChange">
+      <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
+      <!-- 优惠券名称 -->
+      <el-table-column label="优惠券名称" prop="name"></el-table-column>
+      <!-- 类型 -->
+      <el-table-column label="类型" prop="type"></el-table-column>
+      <!-- 金额 -->
+      <el-table-column label="金额" prop="money">
+      </el-table-column>
+      <!-- 状态 -->
+      <el-table-column label="状态" prop="status"></el-table-column>
+      <!-- 失效时间 -->
+      <el-table-column label="失效时间" prop="time"></el-table-column>
+      <!-- 投放数量 -->
+      <el-table-column label="投放数量" prop="count"></el-table-column>
+      <!-- 使用数量 -->
+      <el-table-column label="使用数量" prop="number"></el-table-column>
+      <!-- 操作 -->
+      <el-table-column label="操作" width="200px">
+        <template slot-scope="scope">
+          <!-- 投放 -->
+          <el-button class="btn-purple detailsBtn" @click="serving(scope.row.id)">投放</el-button>
+          <!-- 作废 -->
+          <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '2' || activeName === '3'"
+          @click="obsolete(scope.row.id)">作废</el-button>
+          <!-- 记录 -->
+          <el-button size="small" class="btn-dark-green detailsBtn"
+           @click="recoding(scope.row.id)">记录</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- <div class="noDate" v-else>暂无数据</div> -->
+    <nle-pagination :pageParams="page_params"></nle-pagination>
+  </div>
+</template>
+
+<script>
+import AddBtn from '@/components/addBtn'
+import { SearchGroup } from '@/components/searchs'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
+export default {
+  components: {
+    SearchGroup,
+    NlePagination,
+    AddBtn
+  },
+  mixins: [pagination],
+  data () {
+    return {
+      activeName: '1',
+      voucherData: [{
+        name: '张文婷',
+        type: '现金抵用券',
+        money: '22',
+        status: '进行中',
+        time: '11-11',
+        count: '00',
+        number: '11'
+      }],
+      status: 1,
+      selectIDs: [],
+      tableLoading: false
+    }
+  },
+  created () {
+    this.getList()
+    if (this.$route.query.activeName) {
+      this.activeName = this.$route.query.activeName
+    }
+  },
+  methods: {
+    getList () {
+      // this.tableLoading = true
+      // this.voucherData = []
+      // this.$request.getOrder({
+      //   status: this.status,
+      //   keyword: this.page_params.keyword,
+      //   page: this.page_params.page,
+      //   size: this.page_params.size
+      // }).then(res => {
+      //   this.tableLoading = false
+      //   if (res.ret) {
+      //     // 待发货列表的物流单号添加
+      //     res.data.forEach(item => {
+      //       item.disabled = true
+      //       item.copySN = item.logistics_sn
+      //     })
+      //     this.voucherData = res.data
+      //     this.page_params.page = res.meta.current_page
+      //     this.page_params.total = res.meta.total
+      //   } else {
+      //     this.$notify({
+      //       title: '操作失败',
+      //       message: res.msg,
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
+    },
+    // 记录
+    recoding (id) {
+      this.$router.push({ name: 'notes', query: { id: id } })
+    },
+    // 作废
+    obsolete (id) {
+      this.$confirm('确定要作废优惠券吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // this.$request.getShipments(id).then(res => {
+        //   if (res.ret) {
+        //     this.$notify({
+        //       title: '操作成功',
+        //       message: res.msg,
+        //       type: 'success'
+        //     })
+        //     this.getList()
+        //   } else {
+        //     this.$notify({
+        //       title: '操作失败',
+        //       message: res.msg,
+        //       type: 'warning'
+        //     })
+        //   }
+        // })
+      })
+    },
+    // 打包
+    packed (id, orderSN) {
+      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN } })
+    },
+    // 详情
+    details (id) {
+      this.$router.push({ name: 'billDetails', params: { id: id } })
+    },
+    // 投放第一步
+    serving (id) {
+      dialog({ type: 'chooseVoucher', id: id }, () => {
+        this.getList()
+      })
+    },
+    onSelectChange (selection) {
+      this.selectIDs = selection.map(item => item.id)
+    },
+    // 加入发货单
+    addInvoice (ids) {
+      if (!ids.length) {
+        return this.$message.info('请选择商品')
+      }
+      dialog({ type: 'addInvoice' }, (data) => {
+        this.$request.updateShipment(ids, data).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '操作成功',
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
+    // 添加物流单号
+    edit (row) {
+      row.disabled = !row.disabled
+    },
+    // 取消
+    cancel (row) {
+      row.logistics_sn = row.copySN
+      row.disabled = true
+    },
+    // 保存添加物流单号
+    saveLogistics (row) {
+      if (!row.logistics_sn) {
+        return this.$message.info('请输入物流单号')
+      }
+      this.$request.updateLogistics([{
+        id: row.id,
+        sn: row.logistics_sn
+      }]).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '保存成功',
+            message: res.msg,
+            type: 'success'
+          })
+          row.disabled = true
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    }
+  },
+  watch: {
+    // 监听tab组件参数
+    activeName (newValue) {
+      switch (newValue) {
+        case '1': // 待处理
+          this.status = 1
+          break
+        case '2': // 待支付
+          this.page_params.page = 1
+          this.status = 2
+          break
+        case '3': // 待发货
+          this.page_params.page = 1
+          this.status = 3
+          break
+        case '4': // 已发货
+          this.page_params.page = 1
+          this.status = 4
+          break
+        case '5': // 已签收
+          this.page_params.page = 1
+          this.status = 5
+          break
+      }
+      this.getList()
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.voucher-container {
+  .tabLength {
+    width: 400px !important;
+  }
+  .detailsBtn {
+    margin: 3px 2px !important;
+  }
+  .noDate {
+    text-align: center;
+    color: #ccc;
+  }
+}
+</style>

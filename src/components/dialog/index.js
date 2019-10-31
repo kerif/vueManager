@@ -10,6 +10,10 @@ import AddCountry from './addCountry.vue'
 import editPsd from './editPassword.vue'
 import PreviewImage from './PreviewImage.vue'
 import addInvoice from './addInvoice.vue'
+import chooseUser from './chooseUser.vue'
+import configuration from './configuration.vue'
+import chooseVoucher from './chooseVoucher.vue'
+import selectCus from './selectCustomer.vue'
 
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
@@ -22,6 +26,10 @@ const AddCountryController = Vue.extend(AddCountry)
 const EditPasswordController = Vue.extend(editPsd)
 const PreviewImageController = Vue.extend(PreviewImage)
 const AddInvoiceController = Vue.extend(addInvoice)
+const ChooseUserController = Vue.extend(chooseUser)
+const ConfigurationController = Vue.extend(configuration)
+const VoucherController = Vue.extend(chooseVoucher)
+const SelectCusController = Vue.extend(selectCus)
 
 const mixin = {
   data () {
@@ -105,6 +113,34 @@ function initInstance (type) {
     // 加入发货单
     case 'addInvoice':
       instance = new AddInvoiceController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 选择客户
+    case 'chooseUser':
+      instance = new ChooseUserController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 支付配置
+    case 'configuration':
+      instance = new ConfigurationController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 投放第一个弹窗
+    case 'chooseVoucher':
+      instance = new VoucherController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 抵用券管理选择客户或客户组
+    case 'selectCus':
+      instance = new SelectCusController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
