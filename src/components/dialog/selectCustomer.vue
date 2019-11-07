@@ -1,16 +1,22 @@
 <template>
-  <el-dialog :visible.sync="show" :title="id === 1 ? '选择客户组' : '选择客户'" class="dialog-container">
+  <el-dialog :visible.sync="show" title="选择客户" class="dialog-container" @close="clear">
     <div class="searchUser">
       <el-input placeholder="请输入关键字" v-model="keyword" @keyup.enter.native="getList">
-        <template slot="append">搜索</template>
+        <template slot="append">
+          <span @click="getList" class="search-btn">搜索</span>
+        </template>
       </el-input>
     </div>
     <el-table
       :data="tableData"
       border
+      @row-click="onRowChange"
       style="width: 100%">
-      <el-table-column type="selection">
-      </el-table-column>
+      <el-table-column>
+        <template slot-scope="scope">
+          <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
+        </template>
+       </el-table-column>
       <!-- 客户组名 -->
       <el-table-column
         prop="id"
@@ -39,17 +45,40 @@ export default {
     return {
       tableData: [],
       keyword: '',
-      id: ''
+      chooseId: 0,
+      user: {}
     }
   },
   methods: {
     getList () {
-      // this.$request.getUserMembers(this.id).then(res => {
-      //   if (res.ret) {
-      //     this.tableData = res.data
-      //     console.log(this.tableData, 'tableData')
-      //   }
-      // })
+      this.$request.getUsers({
+        keyword: this.keyword
+      }).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    confirm () {
+      if (!this.chooseId) {
+        return this.$message.error('请选择客户')
+      }
+      this.success(this.user)
+      this.show = false
+    },
+    onRowChange (row) {
+      this.chooseId = row.id
+      this.user = row
+    },
+    clear () {
+      this.keyword = ''
+      this.chooseId = ''
     },
     init () {
       this.getList()

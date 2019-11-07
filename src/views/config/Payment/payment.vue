@@ -18,16 +18,26 @@ import dialog from '@/components/dialog'
 export default {
   data () {
     return {
-      paymentData: [
-        {
-          type: 'wechat'
-        }
-      ],
+      paymentData: [],
       tableLoading: false
     }
   },
   methods: {
-    getList () {},
+    getList () {
+      this.tableLoading = true
+      this.$request.getWechat().then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.appletForm = res.data
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     configuration (id) {
       dialog({ type: 'configuration', id: id
       }, () => {

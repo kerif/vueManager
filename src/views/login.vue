@@ -43,7 +43,8 @@
         <el-form v-show="forgetStep === 1" :model="forget" :rules="rules" ref="forgetForm">
           <el-form-item prop="phone">
             <el-input prefix-icon="el-icon-user" placeholder="请输入您的手机号" v-model="forget.phone">
-            <span slot="append" @click="onResetCode">获取验证码</span>
+            <span v-show="showPsd" slot="append" @click="onResetCode">获取验证码</span>
+            <span v-show="!showPsd" slot="append">倒计时{{count}}秒</span>
             </el-input>
           </el-form-item>
           <el-form-item prop="code">
@@ -103,7 +104,8 @@
           </el-form-item>
           <el-form-item prop="code">
             <el-input placeholder="请输入验证码" v-model="reAccount.code">
-              <span slot="append" @click="onRegisterCode">获取验证码</span>
+              <span v-show="show" slot="append" @click="onRegisterCode">获取验证码</span>
+              <span v-show="!show" slot="append">倒计时{{count}}秒</span>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -189,6 +191,10 @@ export default {
       }
     }
     return {
+      showPsd: true,
+      show: true,
+      count: '',
+      timer: null,
       keep: false,
       centerDialogVisible: false,
       captha: '',
@@ -367,6 +373,7 @@ export default {
       this.$request.getRegisterCode(this.reAccount.phone).then(res => {
         if (res.ret) {
           this.$message.success(res.msg)
+          this.getCount()
         } else {
           this.$message.error(res.msg)
         }
@@ -384,10 +391,27 @@ export default {
       this.$request.getResetCode(this.forget.phone).then(res => {
         if (res.ret) {
           this.$message.success(res.msg)
+          this.getCount()
         } else {
           this.$message.error(res.msg)
         }
       })
+    },
+    getCount () {
+      const TIME_COUNT = 60
+      if (!this.timer) {
+        this.count = TIME_COUNT
+        this.show = false
+        this.timer = setInterval(() => {
+          if (this.count > 0 && this.count <= TIME_COUNT) {
+            this.count--
+          } else {
+            this.show = true
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
+      }
     }
   }
 }
@@ -463,8 +487,8 @@ export default {
   }
   .el-input-group__append {
     cursor: pointer;
-    border-color: #3540A5 !important;
-    color: #3540A5 !important;
+    // border-color: #3540A5 !important;
+    // color: #3540A5 !important;
   }
   .happy-img {
     margin: 40px 0;
@@ -484,7 +508,7 @@ export default {
     text-align: center;
   }
   .el-input-group--append .el-input__inner {
-    border-right: 1px solid #3540A5 !important;
+    // border-right: 1px solid #3540A5 !important;
   }
   .id-img {
     text-align: center;

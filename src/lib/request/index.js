@@ -88,6 +88,14 @@ exports.customerForbid = (ids) => {
 exports.customerLogin = (ids) => {
   return $form.put('users/allow-login', ids)
 }
+// 客户 邀请记录
+exports.invitations = (id, params) => {
+  return $form.get(`users/${id}/invitations`, { params })
+}
+// 客户 券包
+exports.voucherUser = (id, params) => {
+  return $form.get(`users/${id}/coupons`, { params })
+}
 // 员工列表允许登录
 exports.allowUser = (ids) => {
   return $form.put('admins/allow-login', ids)
@@ -220,6 +228,10 @@ exports.getInvoice = () => {
 exports.deletePackages = (ids) => {
   return $form.put('packages/batch-delete', ids)
 }
+// 获取国内订单筛选数据
+exports.getAgent = () => {
+  return $form.get('agents/simple-list')
+}
 // 加入发货单
 exports.updateShipment = (ids, shipment) => {
   return $form.put(`orders/add-to-shipment`, {
@@ -234,6 +246,66 @@ exports.changeUserList = (id, groupId) => {
 // 修改密码
 exports.changePassword = (params) => {
   return $form.put('modify-password', params)
+}
+// 获取配置下的代理列表
+exports.getAgents = (params) => {
+  return $form.get('agents', { params })
+}
+// 获取代理列表的成交记录
+exports.getAgentOrders = (id) => {
+  return $form.get(`agents/${id}/deal-orders`)
+}
+// 代理管理的添加代理
+exports.addAgents = (params) => {
+  return $form.post('agents', params)
+}
+// 小程序配置
+exports.getMini = () => {
+  return $form.get('mini-program/settings')
+}
+// 编辑保存小程序配置
+exports.updateMini = (params) => {
+  return $form.put('mini-program/settings', params)
+}
+// 获取消息模版
+exports.getTemplate = () => {
+  return $form.get('mini-program/templates')
+}
+// 获取微信支付
+exports.getWechat = () => {
+  return $form.get('payments/wechat')
+}
+// 营销管理 新用户福利
+exports.getCoupons = () => {
+  return $form.get('new-user-coupons')
+}
+// 营销管理 修改新用户福利
+exports.editCoupons = (params) => {
+  return $form.put('new-user-coupons', params)
+}
+// 营销管理 抵用券管理
+exports.getCouponList = (params) => {
+  return $form.get('coupons', { params })
+}
+// 添加抵用券
+exports.addCoupons = (params) => {
+  return $form.post('coupons', params)
+}
+// 用户分发优惠券
+exports.addLaunch = (id, ids) => {
+  return $form.put(`coupons/${id}/launch/user`, ids)
+}
+// 用户组分发优惠券
+exports.addLaunchGroup = (id, ids) => {
+  return $form.put(`coupons/${id}/launch/group`, ids)
+}
+// 记录
+exports.userCoupons = (id) => {
+  return $form.get(`coupons/${id}/user-coupons`)
+}
+// 作废
+exports.disableCoupons = (id) => {
+  return $form.patch(`coupons/${id}/disable`)
 }
 
 /**

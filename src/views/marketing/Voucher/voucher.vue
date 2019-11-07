@@ -9,10 +9,8 @@
         <el-tab-pane label="未开始" name="2"></el-tab-pane>
         <!-- 进行中 -->
         <el-tab-pane label="进行中" name="3"></el-tab-pane>
-        <!-- 已结束 -->
-        <el-tab-pane label="已结束" name="4"></el-tab-pane>
         <!-- 已失效 -->
-        <el-tab-pane label="已失效" name="5"></el-tab-pane>
+        <el-tab-pane label="已失效" name="4"></el-tab-pane>
       <!-- v-if="oderData.length" -->
     </el-tabs>
       <el-table class="data-list" border stripe
@@ -24,16 +22,22 @@
       <!-- 类型 -->
       <el-table-column label="类型" prop="type"></el-table-column>
       <!-- 金额 -->
-      <el-table-column label="金额" prop="money">
+      <el-table-column label="金额" prop="amount">
       </el-table-column>
       <!-- 状态 -->
-      <el-table-column label="状态" prop="status"></el-table-column>
+      <el-table-column label="状态" prop="status">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === 1">未开始</span>
+          <span v-if="scope.row.status === 2">进行中</span>
+          <span v-if="scope.row.status === 3">已失效</span>
+        </template>
+      </el-table-column>
       <!-- 失效时间 -->
-      <el-table-column label="失效时间" prop="time"></el-table-column>
+      <el-table-column label="失效时间" prop="expired_at"></el-table-column>
       <!-- 投放数量 -->
-      <el-table-column label="投放数量" prop="count"></el-table-column>
+      <el-table-column label="投放数量" prop="total_count"></el-table-column>
       <!-- 使用数量 -->
-      <el-table-column label="使用数量" prop="number"></el-table-column>
+      <el-table-column label="使用数量" prop="used_count"></el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作" width="200px">
         <template slot-scope="scope">
@@ -50,6 +54,18 @@
     </el-table>
     <!-- <div class="noDate" v-else>暂无数据</div> -->
     <nle-pagination :pageParams="page_params"></nle-pagination>
+    <el-dialog :visible.sync="show" title="请选择" class="change-status-dialog dialog-container" width="35%" @close="clear">
+        <div class="status-box">
+            <el-radio-group v-model="ruleForm.status">
+                <el-radio :label="1">客户组投放</el-radio>
+                <el-radio :label="2">单个客户投放</el-radio>
+            </el-radio-group>
+        </div>
+        <div slot="footer">
+          <el-button @click="show = false">取消</el-button>
+          <el-button type="primary" @click="confirm">确定</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
@@ -69,18 +85,15 @@ export default {
   data () {
     return {
       activeName: '1',
-      voucherData: [{
-        name: '张文婷',
-        type: '现金抵用券',
-        money: '22',
-        status: '进行中',
-        time: '11-11',
-        count: '00',
-        number: '11'
-      }],
-      status: 1,
+      voucherData: [],
+      status: '',
+      show: false,
       selectIDs: [],
-      tableLoading: false
+      servingId: '',
+      tableLoading: false,
+      ruleForm: {
+        status: []
+      }
     }
   },
   created () {
@@ -91,32 +104,32 @@ export default {
   },
   methods: {
     getList () {
-      // this.tableLoading = true
-      // this.voucherData = []
-      // this.$request.getOrder({
-      //   status: this.status,
-      //   keyword: this.page_params.keyword,
-      //   page: this.page_params.page,
-      //   size: this.page_params.size
-      // }).then(res => {
-      //   this.tableLoading = false
-      //   if (res.ret) {
-      //     // 待发货列表的物流单号添加
-      //     res.data.forEach(item => {
-      //       item.disabled = true
-      //       item.copySN = item.logistics_sn
-      //     })
-      //     this.voucherData = res.data
-      //     this.page_params.page = res.meta.current_page
-      //     this.page_params.total = res.meta.total
-      //   } else {
-      //     this.$notify({
-      //       title: '操作失败',
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      this.tableLoading = true
+      this.voucherData = []
+      this.$request.getCouponList({
+        status: this.status,
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          // 待发货列表的物流单号添加
+          // res.data.forEach(item => {
+          //   item.disabled = true
+          //   item.copySN = item.logistics_sn
+          // })
+          this.voucherData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 记录
     recoding (id) {
@@ -129,63 +142,83 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // this.$request.getShipments(id).then(res => {
-        //   if (res.ret) {
-        //     this.$notify({
-        //       title: '操作成功',
-        //       message: res.msg,
-        //       type: 'success'
-        //     })
-        //     this.getList()
-        //   } else {
-        //     this.$notify({
-        //       title: '操作失败',
-        //       message: res.msg,
-        //       type: 'warning'
-        //     })
-        //   }
-        // })
-      })
-    },
-    // 打包
-    packed (id, orderSN) {
-      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN } })
-    },
-    // 详情
-    details (id) {
-      this.$router.push({ name: 'billDetails', params: { id: id } })
-    },
-    // 投放第一步
-    serving (id) {
-      dialog({ type: 'chooseVoucher', id: id }, () => {
-        this.getList()
-      })
-    },
-    onSelectChange (selection) {
-      this.selectIDs = selection.map(item => item.id)
-    },
-    // 加入发货单
-    addInvoice (ids) {
-      if (!ids.length) {
-        return this.$message.info('请选择商品')
-      }
-      dialog({ type: 'addInvoice' }, (data) => {
-        this.$request.updateShipment(ids, data).then(res => {
+        this.$request.disableCoupons(id).then(res => {
           if (res.ret) {
             this.$notify({
-              type: 'success',
               title: '操作成功',
-              message: res.msg
+              message: res.msg,
+              type: 'success'
             })
             this.getList()
           } else {
-            this.$message({
+            this.$notify({
+              title: '操作失败',
               message: res.msg,
-              type: 'error'
+              type: 'warning'
             })
           }
         })
       })
+    },
+    confirm () {
+      console.log(this.ruleForm.status)
+      if (!this.ruleForm.status) {
+        return this.$message.info('请选择客户或客户组')
+      }
+      this.show = false
+      if (this.ruleForm.status === 2) {
+        dialog({ type: 'selectCus' }, (data) => {
+          console.log(data, '我是客户data')
+          this.$request.addLaunch(this.servingId, {
+            user_id: [data.id]
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '操作成功',
+                message: res.msg
+              })
+            } else {
+              this.$notify({
+                type: 'error',
+                message: res.msg
+              })
+            }
+          })
+        })
+      } else {
+        dialog({ type: 'selectGroup' }, (data) => {
+          console.log(data, '我是客户组data')
+          this.$request.addLaunchGroup(this.servingId, {
+            group_id: [data.id]
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '操作成功',
+                message: res.msg
+              })
+            } else {
+              this.$notify({
+                type: 'error',
+                message: res.msg
+              })
+            }
+          })
+        })
+      }
+    },
+    clear () {
+      this.ruleForm.status = []
+    },
+    // 投放第一步
+    serving (id) {
+      this.show = true
+      this.servingId = id
+      console.log(this.servingId, 'servingId')
+    },
+    onSelectChange (selection) {
+      this.selectIDs = selection.map(item => item.id)
     },
     // 添加物流单号
     edit (row) {
@@ -226,24 +259,20 @@ export default {
     // 监听tab组件参数
     activeName (newValue) {
       switch (newValue) {
-        case '1': // 待处理
+        case '1': // 全部
+          this.status = ''
+          break
+        case '2': // 未开始
+          this.page_params.page = 1
           this.status = 1
           break
-        case '2': // 待支付
+        case '3': // 进行中
           this.page_params.page = 1
           this.status = 2
           break
-        case '3': // 待发货
+        case '4': // 已失效
           this.page_params.page = 1
           this.status = 3
-          break
-        case '4': // 已发货
-          this.page_params.page = 1
-          this.status = 4
-          break
-        case '5': // 已签收
-          this.page_params.page = 1
-          this.status = 5
           break
       }
       this.getList()
@@ -255,7 +284,7 @@ export default {
 <style lang="scss">
 .voucher-container {
   .tabLength {
-    width: 400px !important;
+    width: 350px !important;
   }
   .detailsBtn {
     margin: 3px 2px !important;

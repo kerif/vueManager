@@ -7,8 +7,8 @@
           <!-- 用户名 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="代理用户" prop="username">
-                <el-input v-model="user.username" placeholder="请输入代理用户"></el-input>
+              <el-form-item label="代理用户" prop="user_id">
+                <el-input v-model="user.user_id" placeholder="请输入代理用户"></el-input>
               </el-form-item>
             </el-col>
               <el-button class="choose" @click="chooseUser">选择</el-button>
@@ -16,28 +16,28 @@
           <!-- 密码 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="联系人" prop="password">
-                <el-input v-model="user.password"  type="password" placeholder="请输入联系人"></el-input>
+              <el-form-item label="联系人" prop="contact_name">
+                <el-input v-model="user.contact_name" placeholder="请输入联系人"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 邮箱 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="邮箱" prop="email">
-                <el-input v-model="user.email" placeholder="请输入邮箱"></el-input>
+              <el-form-item label="邮箱" prop="contact_email">
+                <el-input v-model="user.contact_email" placeholder="请输入邮箱"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 员工组 -->
            <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="备注" prop="group_id" class="employ">
+              <el-form-item label="备注" prop="remark" class="employ">
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 2, maxRows: 4}"
                   placeholder="请输入内容"
-                  v-model="user.group_id">
+                  v-model="user.remark">
               </el-input>
               </el-form-item>
             </el-col>
@@ -47,25 +47,25 @@
           <!-- 姓名 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="代理名称" prop="name">
-                <el-input v-model="user.name" placeholder="请输入代理名称"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 确认密码 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="联系电话" prop="tel"
-               v-if="!this.$route.params.id">
-                <el-input v-model="user.tel" type="password" placeholder="请输入联系电话"></el-input>
+              <el-form-item label="代理名称" prop="agent_name">
+                <el-input v-model="user.agent_name" placeholder="请输入代理名称"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 联系电话 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="佣金分成">
-                <el-input v-model="user.tel" placeholder="请输入佣金分成">
+              <el-form-item label="联系电话" prop="contact_phone"
+               v-if="!this.$route.params.id">
+                <el-input v-model="user.contact_phone" placeholder="请输入联系电话"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <!-- 佣金分成 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="佣金分成" prop="commission">
+                <el-input v-model="user.commission" placeholder="请输入佣金分成">
                   <template slot="append">%</template>
                 </el-input>
               </el-form-item>
@@ -87,72 +87,62 @@ export default {
   data () {
     return {
       btn_loading: false,
-      employeeGroup: [],
       rules: { // 必填项校验
-        username: [
+        user_id: [
           { required: true, message: '请输入代理用户', trigger: 'change' }
         ],
-        name: [
+        agent_name: [
           { required: true, message: '请输入代理名称', trigger: 'change' }
         ],
-        email: [
+        contact_name: [
+          { required: true, message: '请输入联系人', trigger: 'change' }
+        ],
+        contact_email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '', trigger: ['blur', 'change'] }
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 8, max: 32, message: '长度在 8 到 20 个字符', trigger: 'change' }
-        ],
-        tel: [
+        contact_phone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }
         ],
-        group: [
-          { required: true, message: '请输入员工组', trigger: 'change' }
+        commission: [
+          { required: true, message: '请输入佣金分成', trigger: 'change' }
         ]
       },
       user: {
-        username: '',
-        name: '',
-        email: '',
-        tel: '',
+        user_id: '',
+        agent_name: '',
+        contact_name: '',
+        contact_phone: '',
+        contact_email: '',
         group_id: '',
-        password: '',
-        confirm_password: ''
+        commission: '',
+        remark: ''
       }
     }
   },
   created () {
-    if (this.$route.params.id) {
+    if (this.$route.query.id) {
       // 编辑用户
       this.getInfo()
-      this.getVipGroup() // 员工组列表
-    } else {
-      this.getVipGroup() // 员工组列表
     }
   },
-  watch: {
-  },
-  name: 'staffAddContainer',
+  name: 'AgentAddContainer',
   methods: {
     // 获取数据
     getInfo () {
-      // this.$request.EditVip(this.$route.params.id).then(res => {
+      // this.$request.EditVip(this.$route.query.id).then(res => {
       //   if (res.ret) {
       //     this.user = res.data
-      //     console.log(res.data)
-      //     this.user.group_id = res.data.admin_group.id
       //   }
       // })
     },
-    // 获取员工组数据
-    getVipGroup () {
-      this.$request.getVips().then(res => {
-        this.employeeGroup = res.data
-      })
-    },
     // 选择
     chooseUser () {
-      dialog({ type: 'chooseUser' })
+      dialog({ type: 'chooseUser' }, (data) => {
+        console.log('data', data)
+        this.user.user_id = data.id
+        this.user.agent_name = data.name
+      })
     },
     // 保存
     update (formName) {
@@ -167,7 +157,7 @@ export default {
                   type: 'success'
                 })
               }
-              this.$router.push({ name: 'stafflist' })
+              this.$router.push({ name: 'agent' })
             })
           } else {
             return false
@@ -176,14 +166,14 @@ export default {
       } else { // 添加员工
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$request.saveVip(this.user).then((res) => {
+            this.$request.addAgents(this.user).then((res) => {
               if (res.ret) {
                 this.$notify({
                   title: '操作成功',
                   message: res.tips,
                   type: 'success'
                 })
-                this.$router.push({ name: 'stafflist' })
+                this.$router.push({ name: 'agent' })
               } else {
                 this.$notify({
                   title: '操作失败',

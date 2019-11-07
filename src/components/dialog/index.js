@@ -12,9 +12,11 @@ import PreviewImage from './PreviewImage.vue'
 import addInvoice from './addInvoice.vue'
 import chooseUser from './chooseUser.vue'
 import configuration from './configuration.vue'
-import chooseVoucher from './chooseVoucher.vue'
 import selectCus from './selectCustomer.vue'
+import selectGroup from './selectGroup.vue'
+import inviteList from './inviteList.vue'
 
+const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
 const AddStaffController = Vue.extend(addStaff)
 const StaffGroupController = Vue.extend(staffGroup)
@@ -28,8 +30,8 @@ const PreviewImageController = Vue.extend(PreviewImage)
 const AddInvoiceController = Vue.extend(addInvoice)
 const ChooseUserController = Vue.extend(chooseUser)
 const ConfigurationController = Vue.extend(configuration)
-const VoucherController = Vue.extend(chooseVoucher)
 const SelectCusController = Vue.extend(selectCus)
+const SelectGroupController = Vue.extend(selectGroup)
 
 const mixin = {
   data () {
@@ -45,6 +47,12 @@ function initInstance (type) {
   switch (type) {
     case 'vipgroup':
       instance = new VipGroupController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'inviteList':
+      instance = new InviteController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
@@ -131,16 +139,16 @@ function initInstance (type) {
         mixins: [mixin]
       })
       break
-    // 投放第一个弹窗
-    case 'chooseVoucher':
-      instance = new VoucherController({
+    // 抵用券管理 选择客户
+    case 'selectCus':
+      instance = new SelectCusController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
       break
-    // 抵用券管理选择客户或客户组
-    case 'selectCus':
-      instance = new SelectCusController({
+    // 抵用券管理 选择客户组
+    case 'selectGroup':
+      instance = new SelectGroupController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

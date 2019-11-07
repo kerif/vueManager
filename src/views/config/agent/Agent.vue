@@ -9,22 +9,24 @@
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="代理名称" prop="title">
+      <el-table-column label="代理名称" prop="agent_name">
       </el-table-column>
-      <el-table-column label="佣金分成" prop="content">
+      <el-table-column label="佣金分成" prop="commission">
       </el-table-column>
-      <el-table-column label="代理二维码" prop="images">
-          <!-- <template slot-scope="scope">
-          <span v-for="item in scope.row.images"
-          :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc=item.url, imgVisible=true">
-              <img :src="item.url" style="width: 40px; margin-right: 5px;">
+      <el-table-column label="代理二维码" align="center">
+        <template slot-scope="scope">
+          <span style="cursor:pointer;"
+            @click.stop="imgSrc=scope.row.qr_code, imgVisible=true">
+              <img :src="scope.row.qr_code" style="width: 100px;">
           </span>
-        </template> -->
+        </template>
       </el-table-column>
       <el-table-column label="创建时间" prop="created_at">
       </el-table-column>
-      <el-table-column label="下单/成交数" prop="user_id">
+      <el-table-column label="下单/成交数">
+      <template slot-scope="scope">
+        <span>{{scope.row.total_order}}/{{scope.row.deal_order}}</span>
+      </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -32,12 +34,6 @@
           <el-button class="btn-blue" @click="record(scope.row.id)">成交记录</el-button>
         </template>
       </el-table-column>
-      <template slot="append">
-        <div class="append-box">
-          <!-- 删除 -->
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
-        </div>
-      </template>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
       <el-dialog :visible.sync="imgVisible" size="small">
@@ -56,13 +52,7 @@ import dialog from '@/components/dialog'
 export default {
   data () {
     return {
-      suggestList: [{
-        title: '张文婷',
-        content: '1%',
-        images: '',
-        created_at: '2019-11-11',
-        user_id: '2/3'
-      }], // 表格数据
+      suggestList: [], // 表格数据
       tableLoading: false,
       imgVisible: false,
       imgSrc: '',
@@ -80,27 +70,30 @@ export default {
   },
   methods: {
     getList () {
-      // this.tableLoading = true
-      // this.$request.getSuggest({
-      //   page: this.page_params.page,
-      //   size: this.page_params.size
-      // }).then(res => {
-      //   this.tableLoading = false
-      //   if (res.ret) {
-      //     this.suggestList = res.data
-      //     this.page_params.page = res.meta.current_page
-      //     this.page_params.total = res.meta.total
-      //   } else {
-      //     this.$notify({
-      //       title: '操作失败',
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      console.log(this.page_params.keyword)
+      this.tableLoading = true
+      this.$request.getAgents({
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.suggestList = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 修改代理
     editAgent (id) {
+      console.log(id, 'id')
       this.$router.push({
         name: 'editAgent',
         query: {

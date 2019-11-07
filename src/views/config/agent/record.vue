@@ -3,22 +3,22 @@
     <el-table class="data-list" border stripe :data="suggestList"
     v-loading="tableLoading">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="下单人id" prop="title">
+      <el-table-column label="下单人id" prop="user_id">
       </el-table-column>
-      <el-table-column label="姓名" prop="title">
+      <el-table-column label="姓名" prop="user_name">
       </el-table-column>
-      <el-table-column label="转运单号" prop="title">
+      <el-table-column label="转运单号" prop="order_number">
       </el-table-column>
-      <el-table-column label="订单金额" prop="title">
+      <el-table-column label="订单金额" prop="order_amount">
       </el-table-column>
-      <el-table-column label="佣金比例" prop="content">
+      <el-table-column label="佣金比例" prop="proportion">
       </el-table-column>
-      <el-table-column label="佣金" prop="title">
+      <el-table-column label="佣金" prop=" commission_amount">
       </el-table-column>
       <el-table-column label="成交时间" prop="created_at">
       </el-table-column>
       <el-table-column label="是否结算">
-        <template slot-scope="scope">
+        <template slot-scope="scope">s
           <el-button class="btn-dark-green" @click="settlement(scope.row.id)">结算</el-button>
         </template>
       </el-table-column>
@@ -44,13 +44,7 @@ import dialog from '@/components/dialog'
 export default {
   data () {
     return {
-      suggestList: [{
-        title: '张文婷',
-        content: '1%',
-        images: '',
-        created_at: '2019-11-11',
-        user_id: '2/3'
-      }], // 表格数据
+      suggestList: [],
       tableLoading: false,
       imgVisible: false,
       imgSrc: ''
@@ -62,27 +56,28 @@ export default {
   },
   created () {
     this.getList()
+    console.log(this.$route.query.id, '我是id')
   },
   methods: {
     getList () {
-      // this.tableLoading = true
-      // this.$request.getSuggest({
-      //   page: this.page_params.page,
-      //   size: this.page_params.size
-      // }).then(res => {
-      //   this.tableLoading = false
-      //   if (res.ret) {
-      //     this.suggestList = res.data
-      //     this.page_params.page = res.meta.current_page
-      //     this.page_params.total = res.meta.total
-      //   } else {
-      //     this.$notify({
-      //       title: '操作失败',
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      this.tableLoading = true
+      this.$request.getAgentOrders(this.$route.query.id, {
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.suggestList = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 修改代理
     editAgent (id) {

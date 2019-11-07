@@ -1,8 +1,7 @@
 <template>
-  <el-dialog :visible.sync="show" title="选择客户" class="dialog-container" @close="clear">
+  <el-dialog :visible.sync="show" title="选择客户组" class="dialog-container" @close="clear">
     <div class="searchUser">
-      <el-input placeholder="请输入内容" v-model="keyword"
-      @keyup.enter.native="getList">
+      <el-input placeholder="请输入关键字" v-model="keyword" @keyup.enter.native="getList">
         <template slot="append">
           <span @click="getList" class="search-btn">搜索</span>
         </template>
@@ -18,20 +17,20 @@
           <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
         </template>
        </el-table-column>
-      <!-- 客户ID -->
+      <!-- 客户组名 -->
       <el-table-column
-        prop="id"
-        label="客户ID">
+        prop="name_cn"
+        label="客户组名">
       </el-table-column>
-      <!-- 客户昵称 -->
+      <!-- 人数 -->
         <el-table-column
-        prop="name"
-        label="客户昵称">
+        prop="user_count"
+        label="人数">
       </el-table-column>
-      <!-- 最后登录时间 -->
+      <!-- 创建时间 -->
         <el-table-column
-        prop="last_login_at"
-        label="最后登录时间">
+        prop="created_at"
+        label="创建时间">
       </el-table-column>
     </el-table>
     <div slot="footer">
@@ -47,23 +46,16 @@ export default {
       tableData: [],
       keyword: '',
       chooseId: 0,
-      user: {}
+      group: {}
     }
   },
   methods: {
     getList () {
-      this.tableLoading = true
-      this.$request.getUsers({
+      this.$request.getUserGroup({
         keyword: this.keyword
-        // page: this.page_params.page,
-        // size: this.page_params.size
-        // status: this.page_params.group
       }).then(res => {
-        this.tableLoading = false
         if (res.ret) {
           this.tableData = res.data
-          // this.page_params.page = res.meta.current_page
-          // this.page_params.total = res.meta.total
         } else {
           this.$notify({
             title: '操作失败',
@@ -75,14 +67,14 @@ export default {
     },
     confirm () {
       if (!this.chooseId) {
-        return this.$message.error('请选择客户')
+        return this.$message.error('请选择客户组')
       }
-      this.success(this.user)
+      this.success(this.group)
       this.show = false
     },
     onRowChange (row) {
       this.chooseId = row.id
-      this.user = row
+      this.group = row
     },
     clear () {
       this.keyword = ''
@@ -99,8 +91,5 @@ export default {
   width: 40%;
   float: right;
   margin: 10px 0;
-}
-.search-btn {
-  cursor: pointer;
 }
 </style>

@@ -105,7 +105,6 @@ export default {
     },
     // 删除
     deleteData () {
-      console.log(this.deleteNum, '2222')
       this.$request.userGroupDelete({
         DELETE: this.deleteNum
       }).then(res => {

@@ -33,6 +33,14 @@
           </el-row>
       </el-col>
       <el-col :lg="12">
+          <!-- 货位 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="*货位">
+                <el-input v-model="user.location" placeholder="请输入货位"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 备注 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -123,7 +131,8 @@ export default {
         length: '',
         width: '',
         height: '',
-        remark: ''
+        remark: '',
+        location: ''
       },
       updateProp: [], // checkbox数据
       tableData: [], // 表格数据
@@ -206,6 +215,8 @@ export default {
         this.$message.error('请输入高度')
       } else if (!this.user.props.length) {
         this.$message.error('请选择属性')
+      } else if (!this.user.location) {
+        this.$message.error('请输入货位')
       } else {
         if (this.$route.params.id) { // 如果是从订单跳转过来
           this.tableLoading = true
@@ -221,6 +232,7 @@ export default {
               this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
               this.user.express_num = this.user.remark = ''
               this.user.props = []
+              this.user.location = ''
             } else {
               this.$message({
                 title: '操作失败',

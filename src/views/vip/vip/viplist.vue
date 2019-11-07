@@ -22,10 +22,14 @@
       </el-table-column>
       <el-table-column label="客户昵称" prop="name"></el-table-column>
       <el-table-column label="客户组" prop="user_group.name_cn"></el-table-column>
+      <el-table-column label="注册时间" prop="created_at"></el-table-column>
       <el-table-column label="最后登录时间" prop="last_login_at"></el-table-column>
+      <el-table-column label="邀请人 " prop="invitor"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-main" @click="onUpdateGroup(scope.row.id)">修改客户组</el-button>
+          <el-button class="btn-main optionBtn" @click="onUpdateGroup(scope.row.id)">修改客户组</el-button>
+          <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">邀请记录</el-button>
+          <el-button class="btn-light-red optionBtn" @click="voucher(scope.row.id)">券包</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -100,6 +104,24 @@ export default {
         this.getList()
       })
     },
+    invite (id) {
+      dialog({ type: 'inviteList',
+        state: 'invite',
+        query: {
+          id: id
+        } }, () => {
+        this.getList()
+      })
+    },
+    voucher (id) {
+      dialog({ type: 'inviteList',
+        state: 'voucher',
+        query: {
+          id: id
+        } }, () => {
+        this.getList()
+      })
+    },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
@@ -163,6 +185,9 @@ export default {
   }
   .el-icon-lock {
     color: red;
+  }
+  .optionBtn {
+    margin: 3px;
   }
 }
 </style>

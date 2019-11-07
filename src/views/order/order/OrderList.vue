@@ -7,6 +7,16 @@
         <!-- 已入库 -->
         <el-tab-pane label="已入库" name="2"></el-tab-pane>
     </el-tabs>
+    <div class="agentRight">
+    <el-select v-model="agent_name">
+      <el-option
+      v-for="item in agentData"
+      :key="item.id"
+      :value="item.user_id"
+      :label="item.agent_name">
+      </el-option>
+    </el-select>
+    </div>
       <el-table v-if="oderData.length" class="data-list" border stripe
       :data="oderData"
       @selection-change="selectionChange"
@@ -28,6 +38,8 @@
           </span>
         </template>
       </el-table-column>
+      <!-- 货位 -->
+      <el-table-column label="货位" prop="location"></el-table-column>
       <!-- 规格 -->
       <el-table-column label="规格(长宽高cm)" prop="dimension"
       v-if="activeName === '2'" width="120px"></el-table-column>
@@ -69,7 +81,9 @@ export default {
       activeName: '1',
       oderData: [],
       status: 1,
-      tableLoading: false
+      tableLoading: false,
+      agent_name: '',
+      agentData: []
     }
   },
   methods: {
@@ -123,10 +137,17 @@ export default {
           })
         }
       })
+    },
+    // 获取代理列表
+    getAgentData () {
+      this.$request.getAgent().then(res => {
+        this.agentData = res.data
+      })
     }
   },
   created () {
     this.getList()
+    // this.getAgentData()
   },
   watch: {
     // 监听tab组件参数
@@ -150,10 +171,15 @@ export default {
 .order-list-container {
   .tabLength {
     width: 200px !important;
+    display: inline-block;
   }
   .noDate {
     text-align: center;
     color: #ccc;
+  }
+  .agentRight {
+    display: inline-block;
+    float: right;
   }
 }
 </style>
