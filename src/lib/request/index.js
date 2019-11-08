@@ -271,9 +271,30 @@ exports.updateMini = (params) => {
 exports.getTemplate = () => {
   return $form.get('mini-program/templates')
 }
+// 更新 消息模版
+exports.updateTemplate = (params) => {
+  return $form.put('mini-program/templates', params)
+}
+// 文件上传
+exports.uploadFiles = (params) => {
+  return $file.post('upload/files', params)
+}
 // 获取微信支付
 exports.getWechat = () => {
   return $form.get('payments/wechat')
+}
+// 更改 微信支付
+exports.updateWechat = (params) => {
+  return $form.put('payments/wechat', params)
+}
+
+// 获取 物流跟踪配置
+exports.getLogistics = () => {
+  return $form.get('logistics')
+}
+// 更改 物流跟踪配置
+exports.editLogistics = (params) => {
+  return $form.put('logistics', params)
 }
 // 营销管理 新用户福利
 exports.getCoupons = () => {
@@ -324,6 +345,11 @@ exports.getIndexData = (params) => $form.get('statistics/index-log', { params })
 
 // 获取运单下的所有订单
 exports.getOrdersByShipment = (id) => $form.get(`shipments/${id}/orders`)
+
+// 完成支付
+exports.finishOrder = (id) => {
+  return $form.put(`orders/${id}/paid`)
+}
 
 // 注册验证码
 exports.getRegisterCode = (phone) => $form.post('register/apply', { phone })

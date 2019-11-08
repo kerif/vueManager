@@ -13,6 +13,16 @@
         <!-- 已签收 -->
         <el-tab-pane label="已签收" name="5"></el-tab-pane>
     </el-tabs>
+    <div class="chooseStatus">
+      <el-select v-model="agent_name" @change="getList" clearable>
+        <el-option
+          v-for="item in agentData"
+          :key="item.id"
+          :value="item.user_id"
+          :label="item.agent_name">
+        </el-option>
+       </el-select>
+    </div>
       <el-table class="data-list" border stripe
       v-if="oderData.length"
       v-loading="tableLoading"
@@ -64,6 +74,8 @@
         <template slot-scope="scope">
           <!-- 详情 -->
           <el-button class="btn-purple detailsBtn" @click="details(scope.row.id)">详情</el-button>
+          <!-- 完成支付 -->
+          <el-button v-show="activeName === '2'" class="btn-orangey-red" @click="finishPay(scope.row.id)">完成支付</el-button>
           <!-- 打包 -->
           <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">打包</el-button>
           <!-- 加入发货单 -->
@@ -109,20 +121,25 @@ export default {
       oderData: [],
       status: 1,
       selectIDs: [],
+      agent_name: '',
+      agentData: [],
       tableLoading: false
     }
   },
   created () {
     this.getList()
+    this.getAgentData()
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
     }
   },
   methods: {
     getList () {
+      console.log(this.agent_name, 'agent_name')
       this.tableLoading = true
       this.oderData = []
       this.$request.getOrder({
+        agent: this.agent_name,
         status: this.status,
         keyword: this.page_params.keyword,
         page: this.page_params.page,
@@ -147,6 +164,12 @@ export default {
         }
       })
     },
+    // 获得下拉列表
+    getAgentData () {
+      this.$request.getAgent().then(res => {
+        this.agentData = res.data
+      })
+    },
     // 打包
     packed (id, orderSN) {
       this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN } })
@@ -157,6 +180,24 @@ export default {
     },
     onSelectChange (selection) {
       this.selectIDs = selection.map(item => item.id)
+    },
+    // 完成支付
+    finishPay (id) {
+      this.$request.finishOrder(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 加入发货单
     addInvoice (ids) {
@@ -250,6 +291,7 @@ export default {
 .way-list-container {
   .tabLength {
     width: 400px !important;
+    display: inline-block;
   }
   .detailsBtn {
     margin: 3px 2px !important;
@@ -257,6 +299,9 @@ export default {
   .noDate {
     text-align: center;
     color: #ccc;
+  }
+  .chooseStatus {
+    float: right;
   }
 }
 </style>

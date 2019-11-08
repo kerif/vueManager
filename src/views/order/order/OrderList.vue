@@ -8,7 +8,7 @@
         <el-tab-pane label="已入库" name="2"></el-tab-pane>
     </el-tabs>
     <div class="agentRight">
-    <el-select v-model="agent_name">
+    <el-select v-model="agent_name" @change="getList" clearable>
       <el-option
       v-for="item in agentData"
       :key="item.id"
@@ -91,6 +91,7 @@ export default {
       this.tableLoading = true
       this.oderData = []
       this.$request.getWarehouse({
+        agent: this.agent_name,
         status: this.status,
         keyword: this.page_params.keyword,
         page: this.page_params.page,
@@ -147,7 +148,7 @@ export default {
   },
   created () {
     this.getList()
-    // this.getAgentData()
+    this.getAgentData()
   },
   watch: {
     // 监听tab组件参数

@@ -77,6 +77,14 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 货位 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="货位">
+                <el-input v-model="user.location" placeholder="请输入货位"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 物品照片 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -127,6 +135,7 @@ export default {
         length: '',
         height: '',
         remark: '',
+        location: '',
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片
         pack_pictures: [] // 打包照片

@@ -19,11 +19,11 @@
           <div class="addCustomer" @click="$router.push({ name: 'orderlist' })">
             <div class="box-header">
               <div>当月新增订单</div>
-              <div class="bold-box">{{ shipment.current_month }}</div>
+              <div class="bold-box">{{ order.current_month }}</div>
             </div>
             <div class="box-footer">
               <span>总运单</span>
-              <span class="count">{{ shipment.total }}</span>
+              <span class="count">{{ order.total }}</span>
             </div>
           </div>
          </el-col>
@@ -31,11 +31,11 @@
           <div class="addCustomer" @click="$router.push({ name: 'shipContainer' })">
             <div class="box-header">
               <div>当月新增发货单</div>
-              <div class="bold-box">{{ order.current_month }}</div>
+              <div class="bold-box">{{ shipment.current_month }}</div>
             </div>
             <div class="box-footer">
               <span>总发货单</span>
-              <span class="count">{{ order.total }}</span>
+              <span class="count">{{ shipment.total }}</span>
             </div>
           </div>
          </el-col>

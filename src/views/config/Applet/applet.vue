@@ -48,12 +48,24 @@
     </el-row>
     <div v-else>
       <el-table :data="messageData" v-loading="tableLoading" class="data-list" border stripe>
-        <el-table-column label="id" prop="id"></el-table-column>
-        <el-table-column label="模版类型" prop="type"></el-table-column>
-        <el-table-column label="模版标示" prop="template_id"></el-table-column>
+        <el-table-column label="id" prop="type"></el-table-column>
+        <el-table-column label="模版类型" prop="type_name">
+        </el-table-column>
+        <el-table-column label="模版标示">
+          <template slot-scope="scope">
+          <template>
+          <el-input v-model="scope.row.template_id" :disabled="scope.row.disabled"></el-input>
+          </template>
+        </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button class="btn-blue" @click="edit(scope.row.id)">编辑</el-button>
+            <el-button class="btn-blue" @click="edit(scope.row)" v-if="scope.row.disabled">编辑</el-button>
+          <el-button size="small" class="btn-light-red detailsBtn"
+           v-show="!scope.row.disabled"
+           @click="saveLogistics(scope.row)">保存</el-button>
+          <el-button size="small" class="btn-dark-green detailsBtn"
+          v-show="!scope.row.disabled" @click="cancel(scope.row)">取消</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -113,6 +125,11 @@ export default {
       this.$request.getTemplate().then(res => {
         this.tableLoading = false
         if (res.ret) {
+          console.log('data', res.data)
+          res.data.forEach(item => {
+            item.disabled = true
+            item.copySN = item.template_id
+          })
           this.messageData = res.data
         } else {
           this.$notify({
@@ -143,6 +160,41 @@ export default {
           })
         } else {
           return false
+        }
+      })
+    },
+    // 添加物流单号
+    edit (row) {
+      row.disabled = !row.disabled
+    },
+    // 取消
+    cancel (row) {
+      row.template_id = row.copySN
+      row.disabled = true
+    },
+    // 保存添加物流单号
+    saveLogistics (row) {
+      console.log(row, 'row')
+      if (!row.template_id) {
+        return this.$message.error('请输入模版标示')
+      }
+      this.$request.updateTemplate({
+        type: row.type,
+        template_id: row.template_id
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '保存成功',
+            message: res.msg,
+            type: 'success'
+          })
+          row.disabled = true
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },

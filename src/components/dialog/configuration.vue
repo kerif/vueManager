@@ -4,39 +4,40 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 员工组中文名 -->
-        <el-form-item label="小程序ID" prop="country_id">
-            <el-input placeholder="请输入小程序ID"></el-input>
+        <el-form-item label="小程序ID" prop="app_id">
+            <el-input placeholder="请输入小程序ID" v-model="ruleForm.app_id"></el-input>
         </el-form-item>
         <el-form-item label="商户号ID">
-            <el-input placeholder="请输入商户号ID"></el-input>
+            <el-input placeholder="请输入商户号ID" v-model="ruleForm.mach_id"></el-input>
         </el-form-item>
         <el-form-item label="商户KEY">
-            <el-input placeholder="请输入商户KEY">
+            <el-input placeholder="请输入商户KEY" v-model="ruleForm.key">
             </el-input>
             <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action=""
                 :on-preview="handlePreview"
-                :file-list="fileList">
+                :http-request="uploadKeyFile">
                 <el-button size="small" class="btn-main chooseBtn">选择</el-button>
             </el-upload>
-            <!-- <el-button class="btn-main chooseBtn">选择</el-button> -->
+            <!--  <el-button class="btn-main chooseBtn">选择</el-button> -->
         </el-form-item>
         <el-form-item label="通信安全公钥证书">
-            <el-input placeholder="请输入通信安全公钥证书"></el-input>
+            <el-input placeholder="请输入通信安全公钥证书" v-model="ruleForm.cert_path"></el-input>
             <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action=""
                 :on-preview="handlePreview"
-                :file-list="fileList">
+                :http-request="uploadRsaFile"
+                >
                 <el-button size="small" class="btn-main chooseBtn">选择</el-button>
             </el-upload>
         </el-form-item>
         <el-form-item label="通信安全私钥证书">
-            <el-input placeholder="请输入通信安全私钥证书"></el-input>
+            <el-input placeholder="请输入通信安全私钥证书" v-model="ruleForm.key_path"></el-input>
         </el-form-item>
     </el-form>
-    <p>支付通知地址: https://www.nle@bv.cn</p>
+    <p class="noticeAddress">支付通知地址:  {{ruleForm.notify_url}}</p>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>
       <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
@@ -49,8 +50,12 @@ export default {
     return {
       fileList: [],
       ruleForm: {
-        country_id: '',
-        remark: ''
+        app_id: '',
+        mach_id: '',
+        key: '',
+        cert_path: '',
+        key_path: '',
+        notify_url: ''
       },
       country: [],
       rules: {
@@ -61,18 +66,20 @@ export default {
     }
   },
   created () {
-    this.getCountry()
+    this.getList()
   },
   methods: {
-    getCountry () {
-      this.$request.getCountry().then(res => {
-        this.country = res.data
+    getList () {
+      this.$request.getWechat().then(res => {
+        if (res.ret) {
+          this.ruleForm = res.data
+        }
       })
     },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.saveShip(this.ruleForm).then(res => {
+          this.$request.updateWechat(this.ruleForm).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -100,6 +107,27 @@ export default {
     clear () {
       this.ruleForm.country_id = ''
       this.ruleForm.remark = ''
+    },
+    // 上传商户 KEY 文件
+    uploadKeyFile (file) {
+      this.onUpload(file.file).then(res => {
+        if (res.ret) {
+          this.ruleForm.key = res.data[0].path
+        }
+      })
+    },
+    // 上传安全公钥文件
+    uploadRsaFile (file) {
+      this.onUpload(file.file).then(res => {
+        if (res.ret) {
+          this.ruleForm.cert_path = res.data[0].path
+        }
+      })
+    },
+    onUpload (file) {
+      let params = new FormData()
+      params.append(`files[${0}][file]`, file)
+      return this.$request.uploadFiles(params)
     }
   }
 }
@@ -113,11 +141,17 @@ export default {
     width: 150px;
   }
   .el-input {
-    width: 60%;
+    width: 70%;
+  }
+  .el-textarea__inner {
+    width: 70%;
+  }
+  .noticeAddress {
+    width: 70%;
   }
   .chooseBtn {
     position: absolute;
-    left: calc(60% - 60px);
+    left: calc(70% - 60px);
     // right: 238px;
     top: 5px;
   }
