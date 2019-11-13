@@ -84,6 +84,7 @@ export default {
                 message: res.msg
               })
               this.getList()
+              this.$router.push({ name: 'voucher' })
             } else {
               this.$message({
                 message: res.msg,

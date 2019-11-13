@@ -41,7 +41,16 @@ export default {
   methods: {
     getList () {
       this.$request.getPermissions(this.$route.params.id).then(res => {
-        this.permissionMenu = res.data
+        // this.permissionMenu = res.data
+        if (res.ret) {
+          this.permissionMenu = res.data.map(item => {
+            return {
+              ...item,
+              id: `${item.id}-1`
+            }
+          })
+          console.log(this.permissionMenu)
+        }
       })
     },
     confirmSubmit () {

@@ -3,6 +3,14 @@
       <el-row>
       <el-form ref="user" :model="user" label-width="140px" label-position="left">
          <el-col :lg="12">
+           <!-- 客户id -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="客户ID">
+                <el-input v-model="user.user_id" placeholder="请输入客户ID"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 快递单号 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -36,7 +44,7 @@
           <!-- 货位 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="*货位">
+              <el-form-item label="货位">
                 <el-input v-model="user.location" placeholder="请输入货位"></el-input>
               </el-form-item>
             </el-col>
@@ -126,6 +134,7 @@ export default {
     return {
       user: {
         express_num: '',
+        user_id: '',
         package_weight: '',
         props: [],
         length: '',
@@ -144,6 +153,7 @@ export default {
     if (this.$route.params.id) {
       this.getWarehouseInfo() // 从订单跳转过来时加载的表格数据
       this.user.express_num = this.$route.params.express_num
+      this.user.user_id = this.$route.params.user_id
     } else {
       this.getList() // 直接添加时加载的表格数据
     }
@@ -215,8 +225,6 @@ export default {
         this.$message.error('请输入高度')
       } else if (!this.user.props.length) {
         this.$message.error('请选择属性')
-      } else if (!this.user.location) {
-        this.$message.error('请输入货位')
       } else {
         if (this.$route.params.id) { // 如果是从订单跳转过来
           this.tableLoading = true
@@ -230,6 +238,7 @@ export default {
               })
               this.getWarehouseInfo()
               this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
+              this.user.user_id = ''
               this.user.express_num = this.user.remark = ''
               this.user.props = []
               this.user.location = ''
@@ -245,13 +254,47 @@ export default {
           this.tableLoading = true
           this.$request.getExpress(this.user).then(res => {
             this.tableLoading = false
-            if (res.ret) {
+            if (res.ret === 1) {
               this.$notify({
                 type: 'success',
                 title: '操作成功',
                 message: res.msg
               })
               this.getList()
+              this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
+              this.user.user_id = ''
+              this.user.express_num = this.user.remark = ''
+              this.user.props = []
+              this.user.location = ''
+            } else if (res.ret === 2) {
+              console.log('222')
+              this.$confirm('快递单号不存在或客户未预报，请确认是否入库', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.$request.addShipment(this.user).then(res => {
+                  if (res.ret) {
+                    this.$notify({
+                      title: '操作成功',
+                      message: res.msg,
+                      type: 'success'
+                    })
+                    this.getList()
+                    this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
+                    this.user.user_id = ''
+                    this.user.express_num = this.user.remark = ''
+                    this.user.props = []
+                    this.user.location = ''
+                  } else {
+                    this.$notify({
+                      title: '操作失败',
+                      message: res.msg,
+                      type: 'warning'
+                    })
+                  }
+                })
+              })
             } else {
               this.$notify({
                 title: '操作失败',

@@ -166,6 +166,10 @@ exports.updateLogistics = (params) => {
 exports.getExpress = (params) => {
   return $form.post(`shipments/in-storage`, params)
 }
+// 入库 添加新包裹
+exports.addShipment = (params) => {
+  return $form.post('shipments/in-storage/add', params)
+}
 exports.getExpressLine = (id) => {
   return $form.get(`express-lines/${id}`)
 }
@@ -231,6 +235,10 @@ exports.deletePackages = (ids) => {
 // 获取国内订单筛选数据
 exports.getAgent = () => {
   return $form.get('agents/simple-list')
+}
+// 代理管理 获取单条详细
+exports.getEditAgent = (id) => {
+  return $form.get(`agents/${id}`)
 }
 // 加入发货单
 exports.updateShipment = (ids, shipment) => {

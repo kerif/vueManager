@@ -20,12 +20,12 @@
       <!-- 客户组名 -->
       <el-table-column
         prop="id"
-        label="客户组名">
+        label="客户ID">
       </el-table-column>
       <!-- 人数 -->
         <el-table-column
         prop="name"
-        label="人数">
+        label="客户昵称">
       </el-table-column>
       <!-- 创建时间 -->
         <el-table-column

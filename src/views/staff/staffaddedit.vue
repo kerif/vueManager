@@ -66,8 +66,8 @@
           <!-- 联系电话 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="联系电话" prop="tel">
-                <el-input v-model="user.tel" placeholder="请输入联系电话"></el-input>
+              <el-form-item label="联系电话" prop="phone">
+                <el-input v-model="user.phone" placeholder="请输入联系电话"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -107,7 +107,7 @@ export default {
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           { type: 'email', message: '', trigger: ['blur', 'change'] }
         ],
-        tel: [
+        phone: [
           { required: true, message: '请输入电话号码', trigger: 'change' }
         ],
         password: [
@@ -126,7 +126,7 @@ export default {
         username: '',
         name: '',
         email: '',
-        tel: '',
+        phone: '',
         group_id: '',
         password: '',
         confirm_password: ''

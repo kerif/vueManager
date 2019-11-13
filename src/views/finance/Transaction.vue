@@ -25,10 +25,16 @@
           <span v-if="scope.row.type === 1">消费</span>
         </template>
       </el-table-column>
+      <!-- 总金额¥ -->
+      <el-table-column label="总金额¥" prop="order_amount"></el-table-column>
       <!-- 支付金额¥ -->
       <el-table-column label="支付金额¥" prop="amount"></el-table-column>
+      <!-- 抵用券金额¥ -->
+      <el-table-column label="抵用券金额¥" prop="coupon_amount"></el-table-column>
       <!-- 相关订单 -->
       <el-table-column label="相关订单" prop="order_sn"></el-table-column>
+      <!-- 第三方流水号 -->
+      <el-table-column label="第三方流水号" prop="outer_sn"></el-table-column>
       <!-- 支付时间 -->
       <el-table-column label="支付时间" prop="created_at"></el-table-column>
     </el-table>
@@ -83,8 +89,8 @@ export default {
       })
     },
     onTime (val) {
-      this.begin_date = val[0]
-      this.end_date = val[1]
+      this.begin_date = val ? val[0] : ''
+      this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.getList()
     }

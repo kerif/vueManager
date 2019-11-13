@@ -373,7 +373,20 @@ export default {
       this.$request.getRegisterCode(this.reAccount.phone).then(res => {
         if (res.ret) {
           this.$message.success(res.msg)
-          this.getCount()
+          const TIME_COUNT = 60
+          if (!this.timer) {
+            this.count = TIME_COUNT
+            this.show = false
+            this.timer = setInterval(() => {
+              if (this.count > 0 && this.count <= TIME_COUNT) {
+                this.count--
+              } else {
+                this.show = true
+                clearInterval(this.timer)
+                this.timer = null
+              }
+            }, 1000)
+          }
         } else {
           this.$message.error(res.msg)
         }
@@ -391,28 +404,41 @@ export default {
       this.$request.getResetCode(this.forget.phone).then(res => {
         if (res.ret) {
           this.$message.success(res.msg)
-          this.getCount()
+          const TIME_COUNT = 60
+          if (!this.timer) {
+            this.count = TIME_COUNT
+            this.showPsd = false
+            this.timer = setInterval(() => {
+              if (this.count > 0 && this.count <= TIME_COUNT) {
+                this.count--
+              } else {
+                this.showPsd = true
+                clearInterval(this.timer)
+                this.timer = null
+              }
+            }, 1000)
+          }
         } else {
           this.$message.error(res.msg)
         }
       })
-    },
-    getCount () {
-      const TIME_COUNT = 60
-      if (!this.timer) {
-        this.count = TIME_COUNT
-        this.show = false
-        this.timer = setInterval(() => {
-          if (this.count > 0 && this.count <= TIME_COUNT) {
-            this.count--
-          } else {
-            this.show = true
-            clearInterval(this.timer)
-            this.timer = null
-          }
-        }, 1000)
-      }
     }
+    // getCount () {
+    //   const TIME_COUNT = 60
+    //   if (!this.timer) {
+    //     this.count = TIME_COUNT
+    //     this.show = false
+    //     this.timer = setInterval(() => {
+    //       if (this.count > 0 && this.count <= TIME_COUNT) {
+    //         this.count--
+    //       } else {
+    //         this.show = true
+    //         clearInterval(this.timer)
+    //         this.timer = null
+    //       }
+    //     }, 1000)
+    //   }
+    // }
   }
 }
 </script>

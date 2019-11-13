@@ -215,7 +215,6 @@ export default {
     serving (id) {
       this.show = true
       this.servingId = id
-      console.log(this.servingId, 'servingId')
     },
     onSelectChange (selection) {
       this.selectIDs = selection.map(item => item.id)

@@ -12,7 +12,7 @@
       <el-table-column label="金额" prop="amount">
       </el-table-column>
       <!-- 投放对象 -->
-      <el-table-column label="投放对象" prop="100020"></el-table-column>
+      <el-table-column label="投放对象" prop="user_id"></el-table-column>
       <!-- 使用时间 -->
       <el-table-column label="使用时间" prop="used_at"></el-table-column>
       <!-- 订单编码 -->

@@ -130,11 +130,11 @@ export default {
   methods: {
     // 获取数据
     getInfo () {
-      // this.$request.EditVip(this.$route.query.id).then(res => {
-      //   if (res.ret) {
-      //     this.user = res.data
-      //   }
-      // })
+      this.$request.getEditAgent(this.$route.query.id).then(res => {
+        if (res.ret) {
+          this.user = res.data
+        }
+      })
     },
     // 选择
     chooseUser () {

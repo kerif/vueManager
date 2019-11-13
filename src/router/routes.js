@@ -44,8 +44,6 @@ const transactionRecord = loadonDemand('config/agent/record')
 const AppletConfiguration = loadonDemand('config/Applet/applet')
 // 配置 支付配置
 const PaymentManagement = loadonDemand('config/Payment/payment')
-// 配置 物流跟踪配置
-const logisticsManagement = loadonDemand('config/Logistics/logistics')
 // 入库
 const Storage = loadonDemand('station/storage')
 // 发货
@@ -441,17 +439,7 @@ export default [
         meta: {
           level: 2,
           group: '配置',
-          name: '支付配置'
-        }
-      },
-      {
-        path: '/config/logistics',
-        name: 'logistics',
-        component: logisticsManagement,
-        meta: {
-          level: 2,
-          group: '配置',
-          name: '物流跟踪配置'
+          name: '更多配置'
         }
       }
     ]
