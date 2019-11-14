@@ -39,7 +39,7 @@
       <div v-if="activeName === '3'" class="logistics-container">
         <el-form>
           <el-form-item label="重量单位：">
-              <el-select v-model="weightSetting.id1">
+              <el-select v-model="weightName">
                 <el-option
                 v-for="item in weightList"
                 :key="item.id"
@@ -49,9 +49,9 @@
               </el-select>
           </el-form-item>
           <el-form-item label="货币单位：">
-              <el-select v-model="weightSetting.id2">
+              <el-select v-model="currencyName">
                 <el-option
-                v-for="item in currency"
+                v-for="item in currencyList"
                 :key="item.id"
                 :value="item.name"
                 :label="item.name">
@@ -82,12 +82,10 @@ export default {
         app_key: '',
         app_secret: ''
       },
-      weightSetting: {
-        id1: '',
-        id2: ''
-      },
+      weightName: '',
+      currencyName: '',
       weightList: [],
-      currency: [],
+      currencyList: [],
       rules: {
         app_key: [
           { required: true, message: '请输入Appkey', trigger: 'change' }
@@ -147,20 +145,27 @@ export default {
     confirmSetting () {
       this.$request.getLocalization().then(res => {
         this.weightList = res.data.weight
-        this.currency = res.data.currency
-        console.log(this.weightList)
+        this.currencyList = res.data.currency
       })
     },
     // 获取当前选择的重量及货币配置
     getSetting () {
       this.$request.chooseLocalization().then(res => {
         if (res.ret) {
+          this.currencyName = res.data.currency_name
+          this.weightName = res.data.weight_name
         }
       })
     },
     // 保存当前选择的重量及货币配置
-    saveSettings () {
+    saveSetting () {
+      let weight = this.weightList.filter(item => item.name === this.weightName)
+      let currency = this.currencyList.filter(item => item.name === this.currencyName)
       this.$request.confirmLocalization({
+        weight_name: weight[0].name,
+        weight_symbol: weight[0].symbol,
+        currency_name: currency[0].name,
+        currency_symbol: currency[0].symbol
       }).then(res => {
         if (res.ret) {
           this.$notify({
