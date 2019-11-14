@@ -5,12 +5,12 @@
       <span>管理员</span>
     </div>
     <!-- 登陆页面 -->
-    <div class="login-main" v-show="welcome == 1">
+    <div class="login-main" v-show="welcome === 1">
       <div class="info-box">
         <p class="info-title">欢迎登录</p>
         <el-form>
           <el-form-item>
-            <el-input prefix-icon="el-icon-user" placeholder="请输入账户" v-model="userInfo.username"></el-input>
+            <el-input prefix-icon="el-icon-user" placeholder="请输入邮箱或手机号" v-model="userInfo.username"></el-input>
           </el-form-item>
           <el-form-item>
             <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="userInfo.password" @keyup.native.enter="onLogin"></el-input>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <!-- 忘记密码 -->
-    <div class="login-main" v-show="welcome == 2">
+    <div class="login-main" v-show="welcome === 2">
       <div class="info-box">
         <div class="step-box">
           <span :class="['step-item', { 'select': forgetStep <= 3 }]">验证身份</span>
@@ -84,7 +84,7 @@
       </div>
     </div>
     <!-- 注册账号 -->
-    <div class="login-main" v-show="welcome == 3">
+    <div class="login-main" v-show="welcome === 3">
       <div class="info-box">
         <p class="info-title">注册</p>
         <el-form :model="reAccount" :rules="rules" ref="registerForm">
@@ -231,7 +231,7 @@ export default {
           { required: true, message: '请输入验证码', trigger: 'change' }
         ],
         phone: [
-          { validator: checkPhone, trigger: 'blur' }
+          { validator: checkPhone, trigger: 'change' }
         ],
         password: [
           { required: true, message: '请输入新密码', trigger: 'blur' },
@@ -261,7 +261,7 @@ export default {
     // 登录
     onLogin () {
       if (!this.userInfo.username.trim()) {
-        return this.$message.info('请输入用户名')
+        return this.$message.info('请输入邮箱或手机号')
       } else if (!this.userInfo.password.trim()) {
         return this.$message.info('请输入密码')
       }
@@ -312,6 +312,25 @@ export default {
     changeWelcome (val) {
       if (val === 2) this.forgetStep = 1
       this.welcome = val
+      this.$refs['forgetForm'].resetFields()
+      this.$refs['forgetForm'].clearValidate()
+      this.$refs['registerForm'].resetFields()
+      this.$refs['registerForm'].clearValidate()
+      // if (this.welcome === 1 || this.welcome === 3) {
+      //   this.forget.phone = ''
+      //   this.forget.code = ''
+      //   this.reAccount.email = ''
+      //   this.reAccount.password = ''
+      //   this.reAccount.confirm_password = ''
+      //   this.reAccount.phone = ''
+      //   this.reAccount.code = ''
+      // } else if (this.welcome === 2) {
+      //   this.reAccount.email = ''
+      //   this.reAccount.password = ''
+      //   this.reAccount.confirm_password = ''
+      //   this.reAccount.phone = ''
+      //   this.reAccount.code = ''
+      // }
     },
     // 注册账号
     registerAccount (formName) {

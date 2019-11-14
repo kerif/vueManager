@@ -60,7 +60,7 @@
           </el-form-item>
         </el-form>
         <div>
-          <el-button class="save-btn" @click="confirmSetting">保存</el-button>
+          <el-button class="save-btn" @click="saveSetting">保存</el-button>
         </div>
       </div>
     </div>
@@ -143,7 +143,7 @@ export default {
         }
       })
     },
-    // 重量及货币配置
+    // 获取全部重量及货币配置
     confirmSetting () {
       this.$request.getLocalization().then(res => {
         this.weightList = res.data.weight
@@ -151,11 +151,38 @@ export default {
         console.log(this.weightList)
       })
     },
+    // 获取当前选择的重量及货币配置
+    getSetting () {
+      this.$request.chooseLocalization().then(res => {
+        if (res.ret) {
+        }
+      })
+    },
+    // 保存当前选择的重量及货币配置
+    saveSettings () {
+      this.$request.confirmLocalization({
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '成功',
+            message: res.msg
+          })
+          this.activeName = '1'
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     handleClick () {
       if (this.activeName === '2') {
         this.getLogisticsData()
       } else if (this.activeName === '3') {
         this.confirmSetting()
+        this.getSetting()
       }
     }
   }

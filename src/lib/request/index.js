@@ -295,9 +295,17 @@ exports.getWechat = () => {
 exports.updateWechat = (params) => {
   return $form.put('payments/wechat', params)
 }
-// 获取重量及货币配置
+// 获取全部重量及货币配置
 exports.getLocalization = () => {
   return $form.get('localization/configs')
+}
+// 获取当前选择的重量及货币配置
+exports.chooseLocalization = () => {
+  return $form.get('localization')
+}
+// 更改当前的重量及货币配置
+exports.confirmLocalization = (params) => {
+  return $form.put('localization', params)
 }
 // 获取 物流跟踪配置
 exports.getLogistics = () => {

@@ -105,7 +105,7 @@ export default {
         ],
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '', trigger: ['blur', 'change'] }
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
         phone: [
           { required: true, message: '请输入电话号码', trigger: 'change' }
