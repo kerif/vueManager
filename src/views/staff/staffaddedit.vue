@@ -150,8 +150,10 @@ export default {
         if (res.ret) {
           this.user = res.data
           console.log(res.data)
-          this.user.group_id = res.data.admin_group.id
+          // this.user.group_id = res.data.admin_group.id
+          this.$set(this.user, 'group_id', res.data.admin_group.id)
           console.log(this.user.group_id, ' this.user.group_id')
+          console.log(this.user, 'this.user')
         }
       })
     },
@@ -167,15 +169,21 @@ export default {
       if (this.$route.params.id) { // 如果是编辑状态
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$request.updateVip(this.$route.params.id, this.user).then((res) => {
+            this.$request.editAdmins(this.$route.params.id, this.user).then((res) => {
               if (res.ret) {
                 this.$notify({
                   title: '成功操作',
                   message: res.msg,
                   type: 'success'
                 })
+                this.$router.push({ name: 'stafflist' })
+              } else {
+                this.$notify({
+                  title: '操作失败',
+                  message: res.msg,
+                  type: 'warning'
+                })
               }
-              this.$router.push({ name: 'stafflist' })
             })
           } else {
             return false

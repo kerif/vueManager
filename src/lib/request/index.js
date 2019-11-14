@@ -100,6 +100,10 @@ exports.voucherUser = (id, params) => {
 exports.allowUser = (ids) => {
   return $form.put('admins/allow-login', ids)
 }
+// 编辑员工
+exports.editAdmins = (id, params) => {
+  return $form.put(`admins/${id}`, params)
+}
 // 员工组删除组
 exports.deleteGroup = (ids) => {
   return $form.put('admin-groups/batch-delete', ids)
