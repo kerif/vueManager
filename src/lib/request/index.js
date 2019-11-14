@@ -30,7 +30,7 @@ exports.getVipDetails = (id) => {
   return $form.get(`admins/${id}`)
 }
 exports.updateVip = (id, params) => {
-  return $form.put(`admins/${id}`, params)
+  return $form.put(`agents/${id}`, params)
 }
 exports.saveVip = (params) => {
   return $json.post('admins', params)

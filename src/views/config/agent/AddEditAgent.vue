@@ -56,7 +56,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="联系电话" prop="contact_phone"
-               v-if="!this.$route.params.id">
+               v-if="!this.$route.query.id">
                 <el-input v-model="user.contact_phone" placeholder="请输入联系电话"></el-input>
               </el-form-item>
             </el-col>
@@ -146,18 +146,25 @@ export default {
     },
     // 保存
     update (formName) {
-      if (this.$route.params.id) { // 如果是编辑状态
+      if (this.$route.query.id) { // 如果是编辑状态
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$request.updateVip(this.$route.params.id, this.user).then((res) => {
+            console.log('我是编辑保存')
+            this.$request.updateVip(this.$route.query.id, this.user).then((res) => {
               if (res.ret) {
                 this.$notify({
                   title: '成功操作',
                   message: res.msg,
                   type: 'success'
                 })
+                this.$router.push({ name: 'agent' })
+              } else {
+                this.$notify({
+                  title: '操作失败',
+                  message: res.msg,
+                  type: 'warning'
+                })
               }
-              this.$router.push({ name: 'agent' })
             })
           } else {
             return false
@@ -165,6 +172,7 @@ export default {
         })
       } else { // 添加员工
         this.$refs[formName].validate((valid) => {
+          console.log('我是添加新代理')
           if (valid) {
             this.$request.addAgents(this.user).then((res) => {
               if (res.ret) {

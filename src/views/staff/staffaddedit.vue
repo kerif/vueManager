@@ -142,8 +142,6 @@ export default {
       this.getVipGroup() // 员工组列表
     }
   },
-  watch: {
-  },
   name: 'staffAddContainer',
   methods: {
     // 获取数据
@@ -153,6 +151,7 @@ export default {
           this.user = res.data
           console.log(res.data)
           this.user.group_id = res.data.admin_group.id
+          console.log(this.user.group_id, ' this.user.group_id')
         }
       })
     },
@@ -160,6 +159,7 @@ export default {
     getVipGroup () {
       this.$request.getVips().then(res => {
         this.employeeGroup = res.data
+        console.log(this.employeeGroup, 'this.employeeGroup')
       })
     },
     // 保存

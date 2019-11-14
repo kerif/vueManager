@@ -20,7 +20,7 @@ switch (hostName) {
   default:
     baseUrl = {
       BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
-      IMAGE_URL: 'https://api-jiyun.haiouoms.com'
+      IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     break

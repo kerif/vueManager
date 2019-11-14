@@ -136,7 +136,6 @@ export default {
     getList () {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         this.form = res.data
-        this.localization = res.localization
         this.form.types = res.data.types.map(item => item.id)
         this.form.countries = res.data.countries.map(item => item.id)
       })
@@ -153,6 +152,7 @@ export default {
     getProp () {
       this.$request.getProps().then(res => {
         this.typeList = res.data
+        this.localization = res.localization
         console.log(this.typeList)
       })
     },

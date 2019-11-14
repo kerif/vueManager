@@ -28,7 +28,7 @@
       <!-- 总金额¥ -->
       <el-table-column :label="'总金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
       <!-- 支付金额¥ -->
-      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="amount"></el-table-column>
+      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
       <!-- 抵用券金额¥ -->
       <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
       <!-- 相关订单 -->
