@@ -13,13 +13,6 @@
         <el-form-item label="商户KEY">
             <el-input placeholder="请输入商户KEY" v-model="ruleForm.key">
             </el-input>
-            <el-upload
-                class="upload-demo"
-                action=""
-                :on-preview="handlePreview"
-                :http-request="uploadKeyFile">
-                <el-button size="small" class="btn-main chooseBtn">选择</el-button>
-            </el-upload>
             <!--  <el-button class="btn-main chooseBtn">选择</el-button> -->
         </el-form-item>
         <el-form-item label="通信安全公钥证书">
@@ -35,6 +28,13 @@
         </el-form-item>
         <el-form-item label="通信安全私钥证书">
             <el-input placeholder="请输入通信安全私钥证书" v-model="ruleForm.key_path"></el-input>
+            <el-upload
+                class="upload-demo"
+                action=""
+                :on-preview="handlePreview"
+                :http-request="uploadKeyFile">
+                <el-button size="small" class="btn-main chooseBtn">选择</el-button>
+            </el-upload>
         </el-form-item>
     </el-form>
     <p class="noticeAddress">支付通知地址:  {{ruleForm.notify_url}}</p>
@@ -108,11 +108,11 @@ export default {
       this.ruleForm.country_id = ''
       this.ruleForm.remark = ''
     },
-    // 上传商户 KEY 文件
+    // 上传商户 key_path 文件
     uploadKeyFile (file) {
       this.onUpload(file.file).then(res => {
         if (res.ret) {
-          this.ruleForm.key = res.data[0].path
+          this.ruleForm.key_path = res.data[0].path
         }
       })
     },
