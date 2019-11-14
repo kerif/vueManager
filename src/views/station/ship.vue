@@ -17,7 +17,11 @@
       <template slot-scope="props">
         <el-table :data="props.row.orders">
           <el-table-column label="客户ID" prop="user_id"></el-table-column>
-          <el-table-column label="转运单号" prop="order_sn"></el-table-column>
+          <el-table-column label="转运单号">
+            <template slot-scope="scope">
+              <span @click="goOrder(scope.row.order_sn, props.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="物流单号" prop="logistics_sn"></el-table-column>
           <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
           <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
@@ -103,6 +107,11 @@ export default {
   },
   created () {
     this.getList()
+    console.log(this.$route.query.shipment_sn, 'this.$route.query.shipment_sn')
+    if (this.$route.query.shipment_sn) {
+      this.page_params.keyword = this.$route.query.shipment_sn
+      this.goSearch()
+    }
   },
   methods: {
     getList () {
@@ -132,6 +141,11 @@ export default {
           })
         }
       })
+    },
+    // 跳转至订单 运单
+    goOrder (orderSn, status) {
+      // console.log(status, 'this.tableShip.status')
+      this.$router.push({ name: 'wayBillList', query: { order_sn: orderSn, status: status } })
     },
     updateInvoice () {
       dialog({ type: 'invoice' }, () => {
@@ -180,6 +194,9 @@ export default {
 .ship-container {
   .select-box {
     overflow: hidden;
+  }
+  .chooseOrder {
+    cursor: pointer;
   }
 }
 </style>

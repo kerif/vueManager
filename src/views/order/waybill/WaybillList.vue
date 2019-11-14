@@ -44,7 +44,8 @@
         </template>
       </el-table-column>
       <!-- 所属发货单 -->
-      <el-table-column label="所属发货单" v-if="activeName === '3' || activeName === '5'" prop="shipment_sn"></el-table-column>
+      <el-table-column label="所属发货单" prop="shipment_sn" v-if="activeName === '3' || activeName === '5'">
+      </el-table-column>
       <!-- 线路名称 -->
       <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
       <!-- 收货人 -->
@@ -58,6 +59,8 @@
       <!-- 详见产品图 -->
       <el-table-column :label="activeName === '1' ? '预计费用' + this.localization.currency_unit : '实际费用' + this.localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
       <el-table-column :label="'申报价值' + this.localization.currency_unit" prop="declare_value"></el-table-column>
+      <!-- 所属代理 -->
+      <el-table-column label="所属代理" prop="agent"></el-table-column>
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column label="提交时间" prop="updated_at" v-if="activeName === '1' || activeName === '2' || activeName === '3'"></el-table-column>
@@ -67,7 +70,10 @@
       <el-table-column label="签收时间" prop="updated_at" v-if="activeName === '5'">
       </el-table-column>
       <!-- 所属发货单 -->
-      <el-table-column label="所属发货单" prop="shipment_sn" v-if="activeName === '4'">
+      <el-table-column label="所属发货单" v-if="activeName === '4'">
+        <template slot-scope="scope">
+          <span @click="goShip(scope.row.shipment_sn)" class="chooseOrder">{{scope.row.shipment_sn}}</span>
+        </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作" width="200px">
@@ -133,6 +139,11 @@ export default {
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
     }
+    if (this.$route.query.order_sn) {
+      this.page_params.keyword = this.$route.query.order_sn
+      this.activeName = this.$route.query.status ? '4' : '3'
+      this.goSearch()
+    }
   },
   methods: {
     getList () {
@@ -171,6 +182,11 @@ export default {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
       })
+    },
+    // 跳转到发货
+    goShip (shipmentSn) {
+      console.log(shipmentSn, 'shipmentSn')
+      this.$router.push({ name: 'shipContainer', query: { shipment_sn: shipmentSn } })
     },
     // 打包
     packed (id, orderSN) {
@@ -305,6 +321,9 @@ export default {
   }
   .chooseStatus {
     float: right;
+  }
+  .chooseOrder {
+    cursor: pointer;
   }
 }
 </style>

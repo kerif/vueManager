@@ -58,6 +58,7 @@
     </el-row>
     </div>
       <!-- 打包清单 -->
+      <h4>包裹清单</h4>
       <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column label="快递单号" prop="express_num"></el-table-column>

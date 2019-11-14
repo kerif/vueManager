@@ -97,6 +97,7 @@
       <el-table-column label="备注" prop="remark"></el-table-column>
     </el-table>
     <!-- 打包清单 -->
+      <h4>包裹清单</h4>
       <el-table :data="PackageData" class="data-list" border stripe>
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column label="快递单号" prop="express_num"></el-table-column>

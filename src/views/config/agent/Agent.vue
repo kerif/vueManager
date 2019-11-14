@@ -11,7 +11,7 @@
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column label="代理名称" prop="agent_name">
       </el-table-column>
-      <el-table-column label="佣金分成" prop="commission">
+      <el-table-column label="佣金分成%" prop="commission">
       </el-table-column>
       <el-table-column label="代理二维码" align="center">
         <template slot-scope="scope">
