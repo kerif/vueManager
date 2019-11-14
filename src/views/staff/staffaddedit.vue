@@ -33,12 +33,12 @@
             <el-col :span="18">
               <el-form-item label="员工组" prop="group_id" class="employ">
                 <el-select v-model="user.group_id" placeholder="请选择员工组" clearable>
-                <el-option
-                  v-for="item in employeeGroup"
-                  :key="item.id"
-                  :label="item.name_cn"
-                  :value="item.id">
-                </el-option>
+                  <el-option
+                    v-for="item in employeeGroup"
+                    :key="item.id"
+                    :label="item.name_cn"
+                    :value="item.id">
+                  </el-option>
                 </el-select>
               <!-- </template> -->
               </el-form-item>
