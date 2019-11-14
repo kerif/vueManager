@@ -29,7 +29,7 @@
       <!-- 物品名称 -->
       <el-table-column label="物品名称" prop="package_name"></el-table-column>
       <!-- 物品价值 -->
-      <el-table-column label="物品价值" prop="package_value"></el-table-column>
+      <el-table-column :label="'物品价值' + this.localization.currency_unit" prop="package_value"></el-table-column>
       <!-- 物品属性 -->
       <el-table-column label="物品属性">
         <template slot-scope="scope">
@@ -83,7 +83,8 @@ export default {
       status: 1,
       tableLoading: false,
       agent_name: '',
-      agentData: []
+      agentData: [],
+      localization: {}
     }
   },
   methods: {
@@ -100,6 +101,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.oderData = res.data
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {

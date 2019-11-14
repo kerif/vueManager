@@ -26,11 +26,11 @@
         </template>
       </el-table-column>
       <!-- 总金额¥ -->
-      <el-table-column label="总金额¥" prop="order_amount"></el-table-column>
+      <el-table-column :label="'总金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
       <!-- 支付金额¥ -->
-      <el-table-column label="支付金额¥" prop="amount"></el-table-column>
+      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="amount"></el-table-column>
       <!-- 抵用券金额¥ -->
-      <el-table-column label="抵用券金额¥" prop="coupon_amount"></el-table-column>
+      <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
       <!-- 相关订单 -->
       <el-table-column label="相关订单" prop="order_sn"></el-table-column>
       <!-- 第三方流水号 -->
@@ -49,6 +49,7 @@ export default {
   data () {
     return {
       transactionList: [],
+      localization: {},
       tableLoading: false,
       timeList: [],
       begin_date: '',
@@ -77,6 +78,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.transactionList = res.data
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {

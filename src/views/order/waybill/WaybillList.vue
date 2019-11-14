@@ -23,7 +23,7 @@
         </el-option>
        </el-select>
     </div>
-      <el-table class="data-list" border stripe
+    <el-table class="data-list" border stripe
       v-if="oderData.length"
       v-loading="tableLoading"
       :data="oderData" @selection-change="onSelectChange">
@@ -54,10 +54,10 @@
       <!-- 包裹数 -->
       <el-table-column label="包裹数" prop="package_count"></el-table-column>
       <!-- 预计重量KG -->
-      <el-table-column :label="activeName === '1' ? '预计重量kg' : '实际重量kg'" :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"></el-table-column>
+      <el-table-column :label="activeName === '1' ? '预计重量' + this.localization.weight_unit : '实际重量' + this.localization.weight_unit" :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"></el-table-column>
       <!-- 详见产品图 -->
-      <el-table-column :label="activeName === '1' ? '预计费用¥' : '实际费用¥'" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
-      <el-table-column label="申报价值￥" prop="declare_value"></el-table-column>
+      <el-table-column :label="activeName === '1' ? '预计费用' + this.localization.currency_unit : '实际费用' + this.localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
+      <el-table-column :label="'申报价值' + this.localization.currency_unit" prop="declare_value"></el-table-column>
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column label="提交时间" prop="updated_at" v-if="activeName === '1' || activeName === '2' || activeName === '3'"></el-table-column>
@@ -119,6 +119,7 @@ export default {
     return {
       activeName: '1',
       oderData: [],
+      localization: {},
       status: 1,
       selectIDs: [],
       agent_name: '',
@@ -153,6 +154,7 @@ export default {
             item.copySN = item.logistics_sn
           })
           this.oderData = res.data
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
@@ -246,6 +248,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          row.copySN = row.logistics_sn
           row.disabled = true
         } else {
           this.$notify({

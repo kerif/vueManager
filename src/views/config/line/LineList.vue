@@ -2,7 +2,7 @@
   <div class="line-list-container">
     <div class="add-btn-box"><add-btn router="lineadd">添加路线</add-btn></div>
     <el-table stripe border class="data-list" :data="lineList"
-    v-loading="tableLoading">
+      v-loading="tableLoading">
       <el-table-column type="expand">
         <template slot-scope="scope">
           {{scope.row.remark || "无" }}
@@ -17,12 +17,12 @@
         </template>
       </el-table-column>
       <el-table-column label="参考时效" prop="reference_time"></el-table-column>
-      <el-table-column label="首重KG" prop="first_weight"></el-table-column>
-      <el-table-column label="首费¥" prop="first_money"></el-table-column>
-      <el-table-column label="续重KG" prop="next_weight"></el-table-column>
-      <el-table-column label="续费¥" prop="next_money"></el-table-column>
-      <el-table-column label="最大重量KG" prop="max_weight"></el-table-column>
-      <el-table-column label="最小重量KG" prop="min_weight"></el-table-column>
+      <el-table-column :label="'首重' + this.localization.weight_unit" prop="first_weight"></el-table-column>
+      <el-table-column :label="'首费' + this.localization.currency_unit" prop="first_money"></el-table-column>
+      <el-table-column :label="'续重' + this.localization.weight_unit" prop="next_weight"></el-table-column>
+      <el-table-column :label="'续费' + this.localization.currency_unit" prop="next_money"></el-table-column>
+      <el-table-column :label="'最大重量' + this.localization.weight_unit" prop="max_weight"></el-table-column>
+      <el-table-column :label="'最小重量' + this.localization.weight_unit" prop="min_weight"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editLine(scope.row.id)">修改</el-button>
@@ -37,6 +37,7 @@ export default {
   data () {
     return {
       lineList: [],
+      localization: {},
       tableLoading: false
     }
   },
@@ -50,6 +51,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.lineList = res.data
+          this.localization = res.localization
         } else {
           this.$notify({
             title: '操作失败',

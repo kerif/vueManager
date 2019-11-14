@@ -22,7 +22,7 @@
       <!-- 类型 -->
       <el-table-column label="类型" prop="type"></el-table-column>
       <!-- 金额 -->
-      <el-table-column label="金额" prop="amount">
+      <el-table-column :label="'金额' + this.localization.currency_unit" prop="amount">
       </el-table-column>
       <!-- 状态 -->
       <el-table-column label="状态" prop="status">
@@ -90,6 +90,7 @@ export default {
       show: false,
       selectIDs: [],
       servingId: '',
+      localization: {},
       tableLoading: false,
       ruleForm: {
         status: []
@@ -120,6 +121,7 @@ export default {
           //   item.copySN = item.logistics_sn
           // })
           this.voucherData = res.data
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {

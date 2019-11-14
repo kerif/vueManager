@@ -23,9 +23,9 @@
           <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
           <el-table-column label="收货国家" prop="address.country_name"></el-table-column>
           <el-table-column label="包裹数" prop="package_count"></el-table-column>
-          <el-table-column label="实际重量kg" prop="actual_weight"></el-table-column>
-          <el-table-column label="实际费用￥" prop="actual_payment_fee"></el-table-column>
-          <el-table-column label="申报价值￥" prop="declare_value"></el-table-column>
+          <el-table-column :label="'实际重量' + localization.weight_unit" prop="actual_weight"></el-table-column>
+          <el-table-column :label="'实际费用' + localization.currency_unit" prop="actual_payment_fee"></el-table-column>
+          <el-table-column :label="'申报价值' + localization.currency_unit" prop="declare_value"></el-table-column>
           <el-table-column label="备注" prop="remark"></el-table-column>
           <el-table-column label="提交时间" prop="packed_at"></el-table-column>
           <el-table-column label="拣货时间" prop="updated_at"></el-table-column>
@@ -50,9 +50,9 @@
       <!-- 箱数 -->
       <el-table-column label="箱数" prop="box_count"></el-table-column>
       <!-- 重量 -->
-      <el-table-column label="重量kg" prop="weight"></el-table-column>
+      <el-table-column :label="'重量' + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 价值 -->
-      <el-table-column label="价值¥" prop="value"></el-table-column>
+      <el-table-column :label="'价值' + this.localization.currency_unit" prop="value"></el-table-column>
       <!-- 物品属性 -->
       <el-table-column label="物品属性" prop="props"></el-table-column>
       <!-- 备注 -->
@@ -84,6 +84,7 @@ export default {
   data () {
     return {
       tableShip: [], // 表格数据
+      localization: {},
       tableLoading: false,
       page_params: {
         status: ''
@@ -120,6 +121,7 @@ export default {
               orders: []
             }
           })
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {

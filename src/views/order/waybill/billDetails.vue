@@ -69,23 +69,23 @@
     </div>
    <el-table class="data-list" border stripe :data="oderData">
       <!-- 预计重量kg -->
-      <el-table-column label="预计重量kg" prop="except_weight"></el-table-column>
+      <el-table-column :label="'预计重量' + this.localization.weight_unit" prop="except_weight"></el-table-column>
       <!-- 称重重量kg -->
-      <el-table-column label="称重重量kg" prop="actual_weight"></el-table-column>
+      <el-table-column :label="'称重重量' + this.localization.weight_unit" prop="actual_weight"></el-table-column>
       <!-- 尺寸（长宽高cm） -->
       <el-table-column label="尺寸（长宽高cm）">
         <template slot-scope="scope">
+          <span>{{scope.row.length}}*</span>
           <span>{{scope.row.width}}*</span>
-          <span>{{scope.row.height}}*</span>
-          <span>{{scope.row.length}}</span>
+          <span>{{scope.row.height}}</span>
         </template>
       </el-table-column>
       <!-- 预计费用¥ -->
-      <el-table-column label="预计费用¥" prop="payment_fee"></el-table-column>
+      <el-table-column :label="'预计费用' + this.localization.currency_unit" prop="payment_fee"></el-table-column>
       <!-- 实际费用¥ -->
-      <el-table-column label="实际费用¥" prop="actual_payment_fee"></el-table-column>
+      <el-table-column :label="'实际费用' + this.localization.currency_unit" prop="actual_payment_fee"></el-table-column>
       <!-- 包裹价值 -->
-      <el-table-column label="包裹价值¥" prop="value"></el-table-column>
+      <el-table-column :label="'包裹价值' + this.localization.currency_unit" prop="value"></el-table-column>
       <!-- 包含的包裹 -->
       <el-table-column label="包含的包裹" width="240px">
         <template slot-scope="scope">
@@ -96,6 +96,22 @@
       <!-- 备注 -->
       <el-table-column label="备注" prop="remark"></el-table-column>
     </el-table>
+    <!-- 打包清单 -->
+      <el-table :data="PackageData" class="data-list" border stripe>
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column label="快递单号" prop="express_num"></el-table-column>
+        <el-table-column label="物品名称" prop="package_name"></el-table-column>
+        <el-table-column :label="'物品价值' + this.localization.currency_unit" prop="package_value"></el-table-column>
+        <el-table-column label="物品属性">
+          <template slot-scope="scope">
+          <span v-for="item in scope.row.props" :key="item.id">
+            {{item.cn_name}}
+          </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="代理" prop="agent"></el-table-column>
+        <el-table-column label="货位" prop="location"></el-table-column>
+      </el-table>
     <div class="bale">
       <div class="bale-left">
         <span>打包照片</span>
@@ -125,7 +141,9 @@ export default {
   data () {
     return {
       form: {},
-      oderData: []
+      oderData: [],
+      PackageData: [],
+      localization: {}
     }
   },
   created () {
@@ -138,6 +156,8 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.oderData = [res.data.details]
+        this.PackageData = res.data.packages
+        this.localization = res.localization
       })
     },
     copyUrl () {

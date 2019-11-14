@@ -188,6 +188,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          row.copySN = row.template_id
           row.disabled = true
         } else {
           this.$notify({

@@ -20,7 +20,7 @@
       <!-- 转运单号 -->
       <el-table-column label="转运单号" v-if="activeName === '2'" prop="order_sn"></el-table-column>
       <!-- 重量kg -->
-      <el-table-column label="重量kg" prop="weight"></el-table-column>
+      <el-table-column :label="'重量' + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 长宽高cm -->
       <el-table-column label="长宽高cm" prop="dimension"></el-table-column>
       <!-- 备注 -->
@@ -69,7 +69,8 @@ export default {
       oderData: [],
       imgVisible: false,
       imgSrc: '',
-      tableLoading: false
+      tableLoading: false,
+      localization: {}
     }
   },
   methods: {
@@ -92,6 +93,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.oderData = res.data
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {

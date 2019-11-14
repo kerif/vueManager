@@ -8,6 +8,7 @@
         <!-- 重量及货币配置 -->
         <el-tab-pane label="重量及货币配置" name="3"></el-tab-pane>
       </el-tabs>
+      <!-- 支付配置 -->
       <div v-if="activeName === '1'">
         <el-table  :data="paymentData" v-loading="tableLoading" class="data-list"
         border stripe>
@@ -20,6 +21,7 @@
           </el-table-column>
         </el-table>
       </div>
+      <!-- 物流跟踪配置 -->
       <div v-if="activeName === '2'" class="logistics-container">
         <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm" label-position="top">
           <el-form-item label="Appkey" prop="app_key">
@@ -33,23 +35,32 @@
           <el-button class="save-btn" @click="confirmLogistic('ruleForm')">保存</el-button>
          </div>
       </div>
+      <!-- 重量及货币配置 -->
       <div v-if="activeName === '3'" class="logistics-container">
         <el-form>
           <el-form-item label="重量单位：">
-            <el-radio-group v-model="type_id">
-              <el-radio :label="1">KG/千克</el-radio>
-              <el-radio :label="2">IB/磅</el-radio>
-            </el-radio-group>
+              <el-select v-model="weightSetting.id1">
+                <el-option
+                v-for="item in weightList"
+                :key="item.id"
+                :value="item.name"
+                :label="item.name">
+                </el-option>
+              </el-select>
           </el-form-item>
           <el-form-item label="货币单位：">
-            <el-radio-group v-model="type_id">
-              <el-radio :label="1">¥(人民币)</el-radio>
-              <el-radio :label="2">$(加元/美金)</el-radio>
-            </el-radio-group>
+              <el-select v-model="weightSetting.id2">
+                <el-option
+                v-for="item in currency"
+                :key="item.id"
+                :value="item.name"
+                :label="item.name">
+                </el-option>
+              </el-select>
           </el-form-item>
         </el-form>
         <div>
-          <el-button class="save-btn" @click="confirmLogistic('ruleForm')">保存</el-button>
+          <el-button class="save-btn" @click="confirmSetting">保存</el-button>
         </div>
       </div>
     </div>
@@ -71,7 +82,12 @@ export default {
         app_key: '',
         app_secret: ''
       },
-      type_id: '',
+      weightSetting: {
+        id1: '',
+        id2: ''
+      },
+      weightList: [],
+      currency: [],
       rules: {
         app_key: [
           { required: true, message: '请输入Appkey', trigger: 'change' }
@@ -86,12 +102,14 @@ export default {
     this.activeName = '1'
   },
   methods: {
+    // 支付配置
     configuration (id) {
       dialog({ type: 'configuration', id: id
       }, () => {
         this.getList()
       })
     },
+    // 获取物流跟踪配置
     getLogisticsData () {
       this.$request.getLogistics().then(res => {
         if (res.ret && res.data) {
@@ -101,6 +119,7 @@ export default {
         }
       })
     },
+    // 物流跟踪配置确认
     confirmLogistic (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -124,11 +143,19 @@ export default {
         }
       })
     },
+    // 重量及货币配置
+    confirmSetting () {
+      this.$request.getLocalization().then(res => {
+        this.weightList = res.data.weight
+        this.currency = res.data.currency
+        console.log(this.weightList)
+      })
+    },
     handleClick () {
       if (this.activeName === '2') {
         this.getLogisticsData()
       } else if (this.activeName === '3') {
-        // this.getPick()
+        this.confirmSetting()
       }
     }
   }

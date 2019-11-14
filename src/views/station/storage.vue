@@ -24,7 +24,7 @@
             <el-col :span="18">
               <el-form-item label="*重量">
                 <el-input v-model="user.package_weight" placeholder="请输入重量">
-                <template slot="append">KG</template>
+                <template slot="append">{{this.localization.weight_unit}}</template>
                 </el-input>
               </el-form-item>
             </el-col>
@@ -100,22 +100,22 @@
         <!-- 重量 -->
         <el-table-column
         prop="package_weight"
-        label="重量kg">
+        :label="'重量' + this.localization.weight_unit">
         </el-table-column>
         <!-- 长 -->
         <el-table-column
-        label="长cm"
+        label="长CM"
         prop="length">
         </el-table-column>
         <!-- 宽 -->
         <el-table-column
         prop="width"
-        label="宽cm">
+        label="宽CM">
         </el-table-column>
         <!-- 高 -->
         <el-table-column
         prop="height"
-        label="高cm">
+        label="高CM">
         </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
@@ -145,7 +145,8 @@ export default {
       },
       updateProp: [], // checkbox数据
       tableData: [], // 表格数据
-      tableLoading: false
+      tableLoading: false,
+      localization: {}
     }
   },
   created () {
@@ -163,6 +164,7 @@ export default {
     getProp () {
       this.$request.getProps().then(res => {
         this.updateProp = res.data
+        this.localization = res.localization
       })
     },
     // 从订单跳转到入库时加载的表格数据

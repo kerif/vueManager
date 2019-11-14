@@ -42,11 +42,11 @@
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
-            <div>首重kg</div>
+            <div>{{'首重' + this.localization.weight_unit}}</div>
             <el-input v-model="form.first_weight" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="10">
-            <div>首费¥</div>
+            <div>{{'首费' + this.localization.currency_unit}}</div>
             <el-input v-model="form.first_money" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
@@ -54,11 +54,11 @@
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
-            <div>续重kg</div>
+            <div>{{'续重' + this.localization.weight_unit}}</div>
             <el-input v-model="form.next_weight" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="10">
-            <div>续费¥</div>
+            <div>{{'续费' + this.localization.currency_unit}}</div>
             <el-input v-model="form.next_money" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
@@ -66,11 +66,11 @@
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
-            <div>最小重量kg</div>
+            <div>{{'最小重量' + this.localization.weight_unit}}</div>
             <el-input v-model="form.min_weight" placeholder="请输入内容"></el-input>
           </el-col>
            <el-col :span="10">
-             <div>最大重量kg</div>
+             <div>{{'最大重量' + this.localization.weight_unit}}</div>
             <el-input v-model="form.max_weight" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
@@ -120,7 +120,8 @@ export default {
       },
       value: [],
       options: [],
-      typeList: []
+      typeList: [],
+      localization: {}
     }
   },
   created () {
@@ -135,6 +136,7 @@ export default {
     getList () {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         this.form = res.data
+        this.localization = res.localization
         this.form.types = res.data.types.map(item => item.id)
         this.form.countries = res.data.countries.map(item => item.id)
       })

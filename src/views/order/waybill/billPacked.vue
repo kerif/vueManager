@@ -1,5 +1,78 @@
 <template>
     <div class="packed-container">
+    <div class="receiverMSg">
+    <h4>收货人信息</h4>
+    <el-row class="container-center" :gutter="20">
+      <!-- 姓名 -->
+      <el-col :span="7">
+        <span class="leftWidth">姓名</span>
+        <span>{{form.address && form.address.receiver_name}}</span>
+      </el-col>
+      <!-- 手机/联系电话 -->
+        <el-col :span="7" :offset="1">
+         <span class="leftWidth">手机/联系电话</span>
+         <span>{{form.address &&form.address.phone}}</span>
+      </el-col>
+      <!-- 国家 -->
+        <el-col :span="7" :offset="1">
+         <span class="leftWidth">国家</span>
+         <span>{{form.address && form.address.country.cn_name}}</span>
+      </el-col>
+    </el-row>
+    <el-row class="container-center" :gutter="20">
+     <!-- 城市 -->
+      <el-col :span="7">
+        <span class="leftWidth">城市</span>
+        <span>{{form.address && form.address.city}}</span>
+      </el-col>
+      <!-- 街道/门牌号 -->
+        <el-col :span="7" :offset="1">
+         <span class="leftWidth">街道门牌号</span>
+         <span>{{form.address && form.address.street}}{{form.address && form.address.door_no}}</span>
+      </el-col>
+      <!-- 邮编 -->
+        <el-col :span="7" :offset="1">
+         <span class="leftWidth">邮编</span>
+         <span>{{form.address && form.address.postcode}}</span>
+      </el-col>
+    </el-row>
+    </div>
+    <div class="receiverMSg">
+    <h4>打包详情</h4>
+    <el-row class="container-center"  :gutter="20">
+      <!-- 转运单号 -->
+      <el-col :span="7">
+        <span class="leftWidth">转运单号</span>
+        <span>{{form.order_sn}}</span>
+      </el-col>
+      <!-- 线路名称 -->
+        <el-col :span="7" :offset="1">
+         <span class="leftWidth">线路名称</span>
+         <span>{{form.express_line && form.express_line.cn_name}}</span>
+      </el-col>
+      <!-- 客户ID -->
+        <el-col :span="7" :offset="1">
+         <span class="leftWidth">客户ID</span>
+         <span>{{form.created_at}}</span>
+      </el-col>
+    </el-row>
+    </div>
+      <!-- 打包清单 -->
+      <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column label="快递单号" prop="express_num"></el-table-column>
+        <el-table-column label="物品名称" prop="package_name"></el-table-column>
+        <el-table-column label="物品价值¥" prop="package_value"></el-table-column>
+        <el-table-column label="物品属性">
+          <template slot-scope="scope">
+          <span v-for="item in scope.row.props" :key="item.id">
+            {{item.cn_name}}
+          </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="代理" prop="agent"></el-table-column>
+        <el-table-column label="货位" prop="location"></el-table-column>
+      </el-table>
       <el-form ref="params" :model="user" class="package-form" label-width="140px" label-position="left">
         <el-col :lg="12">
           <!-- 转运单号 -->
@@ -13,7 +86,7 @@
           <!-- 重量 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="重量" prop="weight">
+              <el-form-item label="*重量" prop="weight">
                 <el-input v-model="user.weight" placeholder="请输入重量">
                 <template slot="append">KG</template>
                 </el-input>
@@ -23,7 +96,7 @@
           <!-- 尺寸 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="尺寸">
+              <el-form-item label="*尺寸">
                 <el-input v-model="user.length"  class="sizeLength" placeholder="长 cm"></el-input>
                 <el-input v-model="user.width" class="sizeLength" placeholder="宽 cm"></el-input>
                 <el-input v-model="user.height"  class="sizeLength" placeholder="高 cm"></el-input>
@@ -43,7 +116,7 @@
           <!-- 上传打包照片 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="上传打包照片" class="updateChe">
+              <el-form-item label="*上传打包照片" class="updateChe">
                   <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
                     <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                     <span class="model-box"></span>
@@ -129,6 +202,7 @@ export default {
   data () {
     return {
       checked: false,
+      form: {},
       user: {
         weight: '',
         width: '',
@@ -140,11 +214,22 @@ export default {
         in_warehouse_pictures: [], // 留仓物品照片
         pack_pictures: [] // 打包照片
       },
+      tableLoading: false,
       baleImgList: [],
-      goodsImgList: []
+      goodsImgList: [],
+      PackageData: []
     }
   },
+  created () {
+    this.getPackage()
+  },
   methods: {
+    getList () {
+      // this.$request.getOrderDetails(this.$route.params.id).then(res => {
+      //   this.form = res.data
+      //   this.oderData = [res.data.details]
+      // })
+    },
     savePacked () {
       console.log(this.user)
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
@@ -171,6 +256,12 @@ export default {
             type: 'error'
           })
         }
+      })
+    },
+    getPackage () {
+      this.$request.getOrderDetails(this.$route.params.id).then(res => {
+        this.form = res.data
+        this.PackageData = res.data.packages
       })
     },
     // 预览图片
@@ -322,6 +413,16 @@ export default {
   .avatar-uploader {
     display: inline-block;
     vertical-align: top;
+  }
+  .container-center {
+    margin-bottom: 20px;
+  }
+  .receiverMSg {
+    border-bottom: 1px #ccc solid;
+  }
+ .leftWidth {
+    display: inline-block;
+    width: 120px;
   }
 }
 </style>
