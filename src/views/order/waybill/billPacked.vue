@@ -98,9 +98,9 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="*尺寸">
-                <el-input v-model="user.length"  class="sizeLength" placeholder="长 cm"></el-input>
-                <el-input v-model="user.width" class="sizeLength" placeholder="宽 cm"></el-input>
-                <el-input v-model="user.height"  class="sizeLength" placeholder="高 cm"></el-input>
+                <el-input v-model="user.length"  class="sizeLength" :placeholder="'长' + this.localization.weight_unit"></el-input>
+                <el-input v-model="user.width" class="sizeLength" :placeholder="'宽' + this.localization.weight_unit"></el-input>
+                <el-input v-model="user.height"  class="sizeLength" :placeholder="'高' + this.localization.weight_unit"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
