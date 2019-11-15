@@ -32,6 +32,7 @@
 </template>
 <script>
 import Wangeditor from 'wangeditor'
+import baseApi from '@/lib/axios/baseApi'
 export default {
   data () {
     return {
@@ -49,17 +50,18 @@ export default {
     this.editor.customConfig.onchange = (html) => {
       this.params.content = html
     }
-    this.editor.customConfig.uploadImgServer = ``
+    this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
     this.editor.customConfig.uploadImgParams = {}
     this.editor.customConfig.uploadImgHeaders = {
-      'Authorization': this.$store.state.token.token
+      'Authorization': this.$store.state.token
     }
-    this.editor.customConfig.uploadFileName = 'image'
+    this.editor.customConfig.uploadFileName = `images[${0}][file]`
     this.editor.customConfig.uploadImgHooks = {
       customInsert: (insertImg, result, editor) => {
+        console.log(result)
         if (result.ret === 1) {
           this.$message.success('上传成功')
-          let url = result.data
+          let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
           insertImg(url)
         }
       }
