@@ -31,17 +31,17 @@
          <div class="right-server">
            <h4>服务器域名</h4>
             <el-table class="data-list" border stripe
-               :data="severData"
+              :data="severData"
               v-loading="tableLoading">
-              <el-table-column label="服务器配置"></el-table-column>
-              <el-table-column label="域名"></el-table-column>
+              <el-table-column label="服务器配置">request合法域名</el-table-column>
+              <el-table-column label="域名" prop="server_url"></el-table-column>
             </el-table>
             <h4>业务域名</h4>
             <el-table class="data-list" border stripe
-               :data="businessData"
+              :data="severData"
               v-loading="tableLoading">
-              <el-table-column label="配置信息"></el-table-column>
-              <el-table-column label="信息"></el-table-column>
+              <el-table-column label="配置信息">request合法域名</el-table-column>
+              <el-table-column label="信息" prop="server_url"></el-table-column>
             </el-table>
          </div>
        </el-col>
@@ -109,6 +109,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.appletForm = res.data
+          this.severData = [res.data]
           // this.page_params.page = res.meta.current_page
           // this.page_params.total = res.meta.total
         } else {

@@ -240,6 +240,11 @@ exports.deletePackages = (ids) => {
 exports.getAgent = () => {
   return $form.get('agents/simple-list')
 }
+// 获取国内订单 无人认领包裹
+exports.getNoOwner = () => {
+  return $form.get('packages/no-owner')
+}
+
 // 代理管理 获取单条详细
 exports.getEditAgent = (id) => {
   return $form.get(`agents/${id}`)

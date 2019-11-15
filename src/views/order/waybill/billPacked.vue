@@ -50,9 +50,9 @@
          <span class="leftWidth">线路名称</span>
          <span>{{form.express_line && form.express_line.cn_name}}</span>
       </el-col>
-      <!-- 客户ID -->
+      <!-- 提交时间 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">客户ID</span>
+         <span class="leftWidth">提交时间</span>
          <span>{{form.created_at}}</span>
       </el-col>
     </el-row>

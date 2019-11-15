@@ -7,7 +7,8 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="客户ID">
-                <el-input v-model="user.user_id" placeholder="请输入客户ID"></el-input>
+                <el-input v-model="user.user_id" placeholder="请输入客户ID" v-if="this.$route.params.id" disabled></el-input>
+                <el-input v-else v-model="user.user_id" placeholder="请输入客户ID"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -15,7 +16,8 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="*快递单号">
-                <el-input v-model="user.express_num" placeholder="请输入快递单号"></el-input>
+                <el-input v-model="user.express_num" placeholder="请输入快递单号" v-if="this.$route.params.id" disabled></el-input>
+                <el-input v-else v-model="user.express_num" placeholder="请输入快递单号"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -152,9 +154,12 @@ export default {
   created () {
     this.getProp() // 获取多选框数据
     if (this.$route.params.id) {
+      console.log(this.$route.params.props, 'this.$route.params.props')
       this.getWarehouseInfo() // 从订单跳转过来时加载的表格数据
       this.user.express_num = this.$route.params.express_num
       this.user.user_id = this.$route.params.user_id
+      this.user.props = this.$route.params.props.map(item => item.id)
+      console.log(this.user.props)
     } else {
       this.getList() // 直接添加时加载的表格数据
     }
@@ -269,7 +274,6 @@ export default {
               this.user.props = []
               this.user.location = ''
             } else if (res.ret === 2) {
-              console.log('222')
               this.$confirm('快递单号不存在或客户未预报，请确认是否入库', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',

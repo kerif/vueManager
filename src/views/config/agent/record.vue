@@ -9,24 +9,25 @@
       </el-table-column>
       <el-table-column label="转运单号" prop="order_number">
       </el-table-column>
-      <el-table-column label="订单金额" prop="order_amount">
+      <el-table-column :label="'订单金额' + this.localization.currency_unit" prop="order_amount">
       </el-table-column>
-      <el-table-column label="佣金比例" prop="proportion">
+      <el-table-column label="佣金比例%" prop="proportion">
       </el-table-column>
-      <el-table-column label="佣金" prop=" commission_amount">
+      <el-table-column :label="'佣金' + this.localization.currency_unit" prop="commission_amount">
       </el-table-column>
       <el-table-column label="成交时间" prop="created_at">
       </el-table-column>
       <el-table-column label="是否结算">
-        <template slot-scope="scope">s
+        <template slot-scope="scope">
           <el-button class="btn-dark-green" @click="settlement(scope.row.id)">结算</el-button>
         </template>
       </el-table-column>
       <el-table-column label="状态">
-        <template slot-scope="scope">
+        未结算
+        <!-- <template slot-scope="scope">
           <span v-if="scope.row.id === 0">未结算</span>
           <span v-if="scope.row.id === 1">已结算</span>
-        </template>
+        </template> -->
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
@@ -47,7 +48,8 @@ export default {
       suggestList: [],
       tableLoading: false,
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      localization: {}
     }
   },
   mixins: [pagination],
@@ -68,6 +70,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.suggestList = res.data
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {

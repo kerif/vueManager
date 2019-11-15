@@ -6,7 +6,7 @@
         <!-- 物流跟踪配置 -->
         <el-tab-pane label="物流跟踪配置" name="2"></el-tab-pane>
         <!-- 重量及货币配置 -->
-        <el-tab-pane label="重量及货币配置" name="3"></el-tab-pane>
+        <el-tab-pane label="基础配置" name="3"></el-tab-pane>
       </el-tabs>
       <!-- 支付配置 -->
       <div v-if="activeName === '1'">
@@ -36,7 +36,7 @@
          </div>
       </div>
       <!-- 重量及货币配置 -->
-      <div v-if="activeName === '3'" class="logistics-container">
+      <div v-if="activeName === '3'" class="settings-container">
         <el-form>
           <!-- 重量单位： -->
           <el-form-item label="重量单位：">
@@ -71,12 +71,33 @@
                 </el-option>
               </el-select>
           </el-form-item>
+          <el-form-item label="物品属性：">
+            <el-tag
+              :key="tag"
+              v-for="tag in dynamicTags"
+              closable
+              :disable-transitions="false"
+              @close="handleClose(tag)">
+              {{tag}}
+            </el-tag>
+            <el-input
+              class="input-new-tag"
+              v-if="inputVisible"
+              v-model="inputValue"
+              ref="saveTagInput"
+              size="small"
+              @keyup.enter.native="handleInputConfirm"
+              @blur="handleInputConfirm"
+            >
+            </el-input>
+            <el-button v-else class="button-new-tag" size="small" @click="showInput">
+              + New Tag</el-button>
+        <el-button class="btn-light-red">添加属性</el-button>
+        </el-form-item>
         </el-form>
-        <div>
           <el-button class="save-btn" @click="saveSetting">保存</el-button>
         </div>
       </div>
-    </div>
 </template>
 
 <script>
@@ -95,6 +116,9 @@ export default {
         app_key: '',
         app_secret: ''
       },
+      dynamicTags: ['标签一', '标签二', '标签三'],
+      inputVisible: false,
+      inputValue: '',
       weightName: '',
       lengthName: '',
       currencyName: '',
@@ -115,6 +139,23 @@ export default {
     this.activeName = '1'
   },
   methods: {
+    handleClose (tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+    },
+    showInput () {
+      this.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    handleInputConfirm () {
+      let inputValue = this.inputValue
+      if (inputValue) {
+        this.dynamicTags.push(inputValue)
+      }
+      this.inputVisible = false
+      this.inputValue = ''
+    },
     // 支付配置
     configuration (id) {
       dialog({ type: 'configuration', id: id
@@ -220,9 +261,15 @@ export default {
 }
 .logistics-container {
   width: 30%;
-  .save-btn {
-    color: #fff;
-    background-color: #3540A5;
-  }
+}
+.save-btn {
+  color: #fff;
+  background-color: #3540A5;
+}
+.settings-container {
+  // width: 60%;
+.el-tag {
+  margin-right: 8px;
+}
 }
 </style>
