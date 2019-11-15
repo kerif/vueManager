@@ -7,7 +7,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="客户ID">
-                <el-input v-model="user.user_id" placeholder="请输入客户ID" :disabled="!!this.$route.params.id"></el-input>
+                <el-input v-model="user.user_id" placeholder="请输入客户ID" :disabled="!!this.$route.params.id && !hasStore"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -15,7 +15,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="*快递单号">
-                <el-input v-model="user.express_num" placeholder="请输入快递单号" :disabled="!!this.$route.params.id"></el-input>
+                <el-input v-model="user.express_num" placeholder="请输入快递单号" :disabled="!!this.$route.params.id && !hasStore"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -146,7 +146,8 @@ export default {
       updateProp: [], // checkbox数据
       tableData: [], // 表格数据
       tableLoading: false,
-      localization: {}
+      localization: {},
+      hasStore: false
     }
   },
   created () {
@@ -247,6 +248,7 @@ export default {
               this.user.express_num = this.user.remark = ''
               this.user.props = []
               this.user.location = ''
+              this.hasStore = true
             } else {
               this.$message({
                 title: '操作失败',
