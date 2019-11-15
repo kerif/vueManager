@@ -20,7 +20,7 @@ switch (hostName) {
   // 测试服
   case 'jiyun-test-admin-v2.nle-tech.com':
     baseUrl = {
-      BASE_API_URL: 'https://jiyun-test-api-v2.nle-tech.com/jiyun-api/admin',
+      BASE_API_URL: 'https://jiyun-test-api-v2.nle-tech.com/api/admin',
       IMAGE_URL: 'https://jiyun-test-api-v2.nle-tech.com'
     }
     break
