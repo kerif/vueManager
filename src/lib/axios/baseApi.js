@@ -17,6 +17,13 @@ switch (hostName) {
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     break
+  // 测试服
+  case 'jiyun-test-admin-v2.nle-tech.com':
+    baseUrl = {
+      BASE_API_URL: 'https://jiyun-test-api-v2.nle-tech.com/jiyun-api/admin',
+      IMAGE_URL: 'https://jiyun-test-api-v2.nle-tech.com'
+    }
+    break
   default:
     baseUrl = {
       BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
