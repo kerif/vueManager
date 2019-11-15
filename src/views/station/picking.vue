@@ -22,7 +22,7 @@
       <!-- 重量kg -->
       <el-table-column :label="'重量' + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 长宽高cm -->
-      <el-table-column label="长宽高cm" prop="dimension"></el-table-column>
+      <el-table-column :label="'长宽高' + this.localization.length_unit" prop="dimension"></el-table-column>
       <!-- 备注 -->
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 物品属性 -->

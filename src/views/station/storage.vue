@@ -33,9 +33,9 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="*尺寸">
-                <el-input v-model="user.length"  class="sizeLength" placeholder="长 cm"></el-input>
-                <el-input v-model="user.width" class="sizeLength" placeholder="宽 cm"></el-input>
-                <el-input v-model="user.height"  class="sizeLength" placeholder="高 cm"></el-input>
+                <el-input v-model="user.length"  class="sizeLength" :placeholder="'长' + this.localization.length_unit"></el-input>
+                <el-input v-model="user.width" class="sizeLength" :placeholder="'宽' + this.localization.length_unit"></el-input>
+                <el-input v-model="user.height"  class="sizeLength" :placeholder="'高' + this.localization.length_unit"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -104,18 +104,18 @@
         </el-table-column>
         <!-- 长 -->
         <el-table-column
-        label="长CM"
+        :label="'长' + this.localization.length_unit"
         prop="length">
         </el-table-column>
         <!-- 宽 -->
         <el-table-column
         prop="width"
-        label="宽CM">
+        :label="'宽' + this.localization.length_unit">
         </el-table-column>
         <!-- 高 -->
         <el-table-column
         prop="height"
-        label="高CM">
+        :label="'高' + this.localization.length_unit">
         </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>

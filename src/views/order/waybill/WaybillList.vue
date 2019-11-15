@@ -43,9 +43,6 @@
           </template>
         </template>
       </el-table-column>
-      <!-- 所属发货单 -->
-      <el-table-column label="所属发货单" prop="shipment_sn" v-if="activeName === '3' || activeName === '5'">
-      </el-table-column>
       <!-- 线路名称 -->
       <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
       <!-- 收货人 -->
@@ -70,7 +67,7 @@
       <el-table-column label="签收时间" prop="updated_at" v-if="activeName === '5'">
       </el-table-column>
       <!-- 所属发货单 -->
-      <el-table-column label="所属发货单" v-if="activeName === '4'">
+      <el-table-column label="所属发货单" v-if="activeName === '4' || activeName === '3' || activeName === '5'">
         <template slot-scope="scope">
           <span @click="goShip(scope.row.shipment_sn)" class="chooseOrder">{{scope.row.shipment_sn}}</span>
         </template>
@@ -89,6 +86,9 @@
           @click="addInvoice([scope.row.id])">加入发货单</el-button>
           <!-- 添加物流单号 -->
           <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加物流单号</el-button>
+          <!-- 移除发货单 -->
+          <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
+          </el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
            v-show="activeName === '3' && !scope.row.disabled"
            @click="saveLogistics(scope.row)">保存</el-button>
@@ -188,6 +188,8 @@ export default {
       console.log(shipmentSn, 'shipmentSn')
       this.$router.push({ name: 'shipContainer', query: { shipment_sn: shipmentSn } })
     },
+    // 移除发货单
+    removeShip (id) {},
     // 打包
     packed (id, orderSN) {
       this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN } })

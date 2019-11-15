@@ -38,6 +38,7 @@
       <!-- 重量及货币配置 -->
       <div v-if="activeName === '3'" class="logistics-container">
         <el-form>
+          <!-- 重量单位： -->
           <el-form-item label="重量单位：">
               <el-select v-model="weightName">
                 <el-option
@@ -48,11 +49,23 @@
                 </el-option>
               </el-select>
           </el-form-item>
+          <!-- 货币单位： -->
           <el-form-item label="货币单位：">
               <el-select v-model="currencyName">
                 <el-option
                 v-for="item in currencyList"
                 :key="item.id"
+                :value="item.name"
+                :label="item.name">
+                </el-option>
+              </el-select>
+          </el-form-item>
+          <!-- 长度单位 -->
+          <el-form-item label="长度单位">
+              <el-select v-model="lengthName">
+                <el-option
+                v-for="(item, index) in lengthList"
+                :key="index"
                 :value="item.name"
                 :label="item.name">
                 </el-option>
@@ -83,9 +96,11 @@ export default {
         app_secret: ''
       },
       weightName: '',
+      lengthName: '',
       currencyName: '',
       weightList: [],
       currencyList: [],
+      lengthList: [],
       rules: {
         app_key: [
           { required: true, message: '请输入Appkey', trigger: 'change' }
@@ -146,6 +161,7 @@ export default {
       this.$request.getLocalization().then(res => {
         this.weightList = res.data.weight
         this.currencyList = res.data.currency
+        this.lengthList = res.data.length
       })
     },
     // 获取当前选择的重量及货币配置
@@ -154,6 +170,7 @@ export default {
         if (res.ret) {
           this.currencyName = res.data.currency_name
           this.weightName = res.data.weight_name
+          this.lengthName = res.data.length_name
         }
       })
     },
@@ -161,11 +178,14 @@ export default {
     saveSetting () {
       let weight = this.weightList.filter(item => item.name === this.weightName)
       let currency = this.currencyList.filter(item => item.name === this.currencyName)
+      let length = this.lengthList.filter(item => item.name === this.lengthName)
       this.$request.confirmLocalization({
         weight_name: weight[0].name,
         weight_symbol: weight[0].symbol,
         currency_name: currency[0].name,
-        currency_symbol: currency[0].symbol
+        currency_symbol: currency[0].symbol,
+        length_name: length[0].name,
+        length_symbol: length[0].symbol
       }).then(res => {
         if (res.ret) {
           this.$notify({
