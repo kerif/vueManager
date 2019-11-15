@@ -2,7 +2,7 @@
   <el-dialog :visible.sync="show" title="添加物品属性" class="change-status-dialog dialog-container" width="35%" @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
       <el-form-item label="属性名称: ">
-        <el-input v-model="ruleForm.cn_name"></el-input>
+        <el-input v-model="ruleForm.cn_name" @keyup.enter.native="confirm"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -16,8 +16,7 @@ export default {
   data () {
     return {
       ruleForm: {
-        cn_name: '',
-        en_name: 'bbb'
+        cn_name: ''
       }
     }
   },
@@ -29,8 +28,7 @@ export default {
       if (!this.ruleForm.cn_name) return this.$message.error('请输入属性名称')
       console.log(this.ruleForm.cn_name, 'this.ruleForm.cn_name')
       this.$request.addPackage({
-        cn_name: this.ruleForm.cn_name,
-        en_name: this.ruleForm.en_name
+        cn_name: this.ruleForm.cn_name
       }).then(res => {
         if (res.ret) {
           this.$notify({

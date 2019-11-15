@@ -127,8 +127,26 @@ export default {
     this.activeName = '1'
   },
   methods: {
-    handleClose (tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+    handleClose (id) {
+      console.log(id, 'id')
+      this.dynamicTags.splice(this.dynamicTags.indexOf(id), 1)
+      this.$request.deleteProps({
+        DELETE: [id]
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '成功',
+            message: res.msg
+          })
+          this.getProps()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     showInput () {
       this.inputVisible = true

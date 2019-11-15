@@ -324,6 +324,10 @@ exports.getPackage = () => {
 exports.addPackage = (params) => {
   return $form.post('package-props', params)
 }
+// 删除物品属性
+exports.deleteProps = (ids) => {
+  return $form.put('package-props/batch-delete', ids)
+}
 // 获取 物流跟踪配置
 exports.getLogistics = () => {
   return $form.get('logistics')
