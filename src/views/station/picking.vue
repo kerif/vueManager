@@ -83,6 +83,14 @@ export default {
     },
     // 入库日志
     getList () {
+      if (this.activeName === '1') {
+        this.getOrder()
+      } else {
+        this.getPick()
+      }
+    },
+    // 入库日志
+    getOrder () {
       this.tableLoading = true
       this.oderData = []
       this.$request.getStorage({
@@ -107,8 +115,26 @@ export default {
     },
     // 拣货日志
     getPick () {
-      this.$request.getPick().then(res => {
-        this.oderData = res.data
+      this.tableLoading = true
+      this.oderData = []
+      this.$request.getPick({
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.oderData = res.data
+          this.localization = res.localization
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     }
   },

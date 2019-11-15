@@ -316,6 +316,14 @@ exports.chooseLocalization = () => {
 exports.confirmLocalization = (params) => {
   return $form.put('localization', params)
 }
+// 获取物品属性
+exports.getPackage = () => {
+  return $form.get('package-props')
+}
+// 添加新属性
+exports.addPackage = (params) => {
+  return $form.post('package-props', params)
+}
 // 获取 物流跟踪配置
 exports.getLogistics = () => {
   return $form.get('logistics')

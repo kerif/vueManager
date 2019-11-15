@@ -73,26 +73,14 @@
           </el-form-item>
           <el-form-item label="物品属性：">
             <el-tag
-              :key="tag"
-              v-for="tag in dynamicTags"
+              :key="item.id"
+              v-for="item in dynamicTags"
               closable
               :disable-transitions="false"
-              @close="handleClose(tag)">
-              {{tag}}
+              @close="handleClose(item.id)">
+              {{item.cn_name}}
             </el-tag>
-            <el-input
-              class="input-new-tag"
-              v-if="inputVisible"
-              v-model="inputValue"
-              ref="saveTagInput"
-              size="small"
-              @keyup.enter.native="handleInputConfirm"
-              @blur="handleInputConfirm"
-            >
-            </el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput">
-              + New Tag</el-button>
-        <el-button class="btn-light-red">添加属性</el-button>
+        <el-button class="btn-light-red" @click="addProps">添加属性</el-button>
         </el-form-item>
         </el-form>
           <el-button class="save-btn" @click="saveSetting">保存</el-button>
@@ -116,7 +104,7 @@ export default {
         app_key: '',
         app_secret: ''
       },
-      dynamicTags: ['标签一', '标签二', '标签三'],
+      dynamicTags: [],
       inputVisible: false,
       inputValue: '',
       weightName: '',
@@ -243,12 +231,32 @@ export default {
         }
       })
     },
+    // 获取物品属性
+    getProps () {
+      this.$request.getPackage().then(res => {
+        if (res.ret) {
+          this.dynamicTags = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 添加属性
+    addProps () {
+      dialog({ type: 'addPackage' }, () => {
+        this.getProps()
+      })
+    },
     handleClick () {
       if (this.activeName === '2') {
         this.getLogisticsData()
       } else if (this.activeName === '3') {
         this.confirmSetting()
         this.getSetting()
+        this.getProps()
       }
     }
   }

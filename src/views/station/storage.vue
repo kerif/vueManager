@@ -7,8 +7,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="客户ID">
-                <el-input v-model="user.user_id" placeholder="请输入客户ID" v-if="this.$route.params.id" disabled></el-input>
-                <el-input v-else v-model="user.user_id" placeholder="请输入客户ID"></el-input>
+                <el-input v-model="user.user_id" placeholder="请输入客户ID" :disabled="!!this.$route.params.id"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -16,8 +15,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="*快递单号">
-                <el-input v-model="user.express_num" placeholder="请输入快递单号" v-if="this.$route.params.id" disabled></el-input>
-                <el-input v-else v-model="user.express_num" placeholder="请输入快递单号"></el-input>
+                <el-input v-model="user.express_num" placeholder="请输入快递单号" :disabled="!!this.$route.params.id"></el-input>
               </el-form-item>
             </el-col>
           </el-row>

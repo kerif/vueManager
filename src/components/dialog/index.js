@@ -14,6 +14,7 @@ import chooseUser from './chooseUser.vue'
 import configuration from './configuration.vue'
 import selectCus from './selectCustomer.vue'
 import selectGroup from './selectGroup.vue'
+import addPackage from './addprops.vue'
 import inviteList from './inviteList.vue'
 
 const InviteController = Vue.extend(inviteList)
@@ -32,6 +33,7 @@ const ChooseUserController = Vue.extend(chooseUser)
 const ConfigurationController = Vue.extend(configuration)
 const SelectCusController = Vue.extend(selectCus)
 const SelectGroupController = Vue.extend(selectGroup)
+const AddPackageController = Vue.extend(addPackage)
 
 const mixin = {
   data () {
@@ -153,6 +155,12 @@ function initInstance (type) {
         mixins: [mixin]
       })
       break
+    // 添加物品属性
+    case 'addPackage':
+      instance = new AddPackageController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
   }
   instance.constrctType = type
 }
