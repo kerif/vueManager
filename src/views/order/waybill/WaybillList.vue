@@ -57,7 +57,13 @@
       <el-table-column :label="activeName === '1' ? '预计费用' + this.localization.currency_unit : '实际费用' + this.localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
       <el-table-column :label="'申报价值' + this.localization.currency_unit" prop="declare_value"></el-table-column>
       <!-- 所属代理 -->
-      <el-table-column label="所属代理" prop="agent"></el-table-column>
+      <el-table-column label="所属代理" prop="agent + agent_commission" width="100px">
+        <template slot-scope="scope">
+          <span>{{scope.row.agent}}</span>
+          <span>({{scope.row.agent_commission}}%)</span>
+        </template>
+      </el-table-column>
+      <!-- 备注 -->
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column label="提交时间" prop="updated_at" v-if="activeName === '1' || activeName === '2' || activeName === '3'"></el-table-column>
@@ -189,7 +195,25 @@ export default {
       this.$router.push({ name: 'shipContainer', query: { shipment_sn: shipmentSn } })
     },
     // 移除发货单
-    removeShip (id) {},
+    removeShip (id) {
+      this.$request.removeOrders({
+        id: [id]
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 打包
     packed (id, orderSN) {
       this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN } })

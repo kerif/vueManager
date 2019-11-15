@@ -61,7 +61,7 @@
               </el-select>
           </el-form-item>
           <!-- 长度单位 -->
-          <el-form-item label="长度单位">
+          <el-form-item label="长度单位：">
               <el-select v-model="lengthName">
                 <el-option
                 v-for="(item, index) in lengthList"
