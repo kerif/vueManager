@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" title="新增国家" class="dialog-container" @close="clear">
     <el-form label-width="80" :model="ruleForm">
-      <el-form-item label="中文：">
+      <el-form-item label="国家：">
         <el-autocomplete
           :fetch-suggestions="queryCNSearch"
           @select="handleSelect"
@@ -9,13 +9,13 @@
           v-model="ruleForm.cn_name">
         </el-autocomplete>
       </el-form-item>
-      <el-form-item label="英文：">
+      <!-- <el-form-item label="英文：">
         <el-autocomplete
           :fetch-suggestions="queryENSearch"
           placeholder="请输入国家英文名"
           v-model="ruleForm.en_name">
         </el-autocomplete>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>
@@ -51,9 +51,11 @@ export default {
       }
     },
     handleSelect (item) {
+      // this.ruleForm.en_name = item.name
       console.log(item)
     },
     submit () {
+      this.ruleForm.en_name = this.ruleForm.cn_name
       this.$request.saveCountries(this.ruleForm).then(res => {
         if (res.ret) {
           this.$notify({

@@ -274,7 +274,7 @@ exports.getAgentOrders = (id) => {
 }
 // 完成成交记录
 exports.finishOrders = (id) => {
-  return $form.get(`agents/${id}/deal-orders`)
+  return $form.put(`agents/commission/${id}`)
 }
 // 代理管理的添加代理
 exports.addAgents = (params) => {

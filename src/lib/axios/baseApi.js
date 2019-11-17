@@ -2,10 +2,10 @@ const hostName = location.hostname
 let baseUrl
 switch (hostName) {
   // 开发服
-  case 'dev-jiyun-admin.nle-tech.com':
+  case 'dev-jiyun-admin-v2.nle-tech.com':
     baseUrl = {
-      BASE_API_URL: 'https://dev-jiyun.nle-tech.com/jiyun-api/admin',
-      IMAGE_URL: 'https://dev-jiyun.nle-tech.com'
+      BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
+      IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     break
@@ -28,7 +28,6 @@ switch (hostName) {
     baseUrl = {
       BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
       IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
-      // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     break
 }

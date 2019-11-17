@@ -17,17 +17,16 @@
       </el-table-column>
       <el-table-column label="成交时间" prop="created_at">
       </el-table-column>
-      <el-table-column label="是否结算">
+      <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-button class="btn-dark-green" @click="settlement(scope.row.id)">结算</el-button>
+          <span v-if="scope.row.settled === 0">未结算</span>
+          <span v-if="scope.row.settled === 1">已结算</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
-        未结算
-        <!-- <template slot-scope="scope">
-          <span v-if="scope.row.id === 0">未结算</span>
-          <span v-if="scope.row.id === 1">已结算</span>
-        </template> -->
+      <el-table-column label="是否结算">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.settled === 0" class="btn-dark-green" @click="settlement(scope.row.id)">结算</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
@@ -109,6 +108,7 @@ export default {
             type: 'success',
             title: '操作成功'
           })
+          this.getList()
         } else {
           this.$notify({
             title: '操作失败',
