@@ -98,6 +98,25 @@ export default {
         this.getList()
       }
       )
+    },
+    // 成交记录
+    settlement (id) {
+      console.log(id, 'id')
+      this.$request.finishOrders(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            message: res.msg,
+            type: 'success',
+            title: '操作成功'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }
