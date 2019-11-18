@@ -174,6 +174,10 @@ exports.getExpress = (params) => {
 exports.addShipment = (params) => {
   return $form.post('shipments/in-storage/add', params)
 }
+// 入库 自动匹配客户ID
+exports.Automatic = (params) => {
+  return $form.get('shipments/in-storage/user-search', { params })
+}
 exports.getExpressLine = (id) => {
   return $form.get(`express-lines/${id}`)
 }
@@ -392,6 +396,18 @@ exports.getOrdersByShipment = (id) => $form.get(`shipments/${id}/orders`)
 // 移除发货单
 exports.removeOrders = (id) => {
   return $form.put('orders/remove-from-shipment', id)
+}
+// 运单 获取审核
+exports.getTransfer = (id) => {
+  return $form.get(`orders/${id}/transfer-pay-info`)
+}
+// 审核通过
+exports.acceptPayment = (id, params) => {
+  return $form.put(`orders/${id}/payment/accept`, params)
+}
+//  审核拒绝
+exports.acceptReject = (id, params) => {
+  return $form.put(`orders/${id}/payment/refuse`, params)
 }
 // 完成支付
 exports.finishOrder = (id) => {

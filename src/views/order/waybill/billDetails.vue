@@ -96,6 +96,25 @@
       <!-- 备注 -->
       <el-table-column label="备注" prop="remark"></el-table-column>
     </el-table>
+    <!-- 费用详情 -->
+      <div v-if="this.$route.params.activeName === '2' || this.$route.params.activeName === '3' || this.$route.params.activeName === '4' || this.$route.params.activeName === '5'">
+        <h4>费用详情</h4>
+          <el-table :data="PackageData" class="data-list" border stripe>
+          <el-table-column type="index" width="50"></el-table-column>
+          <el-table-column label="快递单号" prop="express_num"></el-table-column>
+          <el-table-column label="物品名称" prop="package_name"></el-table-column>
+          <el-table-column :label="'物品价值' + this.localization.currency_unit" prop="package_value"></el-table-column>
+          <el-table-column label="物品属性">
+            <template slot-scope="scope">
+            <span v-for="item in scope.row.props" :key="item.id">
+              {{item.cn_name}}
+            </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="代理" prop="agent"></el-table-column>
+          <el-table-column label="货位" prop="location"></el-table-column>
+        </el-table>
+    </div>
     <!-- 打包清单 -->
       <h4>包裹清单</h4>
       <el-table :data="PackageData" class="data-list" border stripe>

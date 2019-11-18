@@ -7,7 +7,14 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="客户ID">
-                <el-input v-model="user.user_id" placeholder="请输入客户ID" :disabled="!!this.$route.params.id && !hasStore"></el-input>
+                <!-- <el-input v-model="user.user_id" placeholder="请输入客户ID" :disabled="!!this.$route.params.id && !hasStore"></el-input> -->
+                  <el-autocomplete
+                  :fetch-suggestions="queryCNSearch"
+                  @select="handleSelect"
+                  placeholder="请输入客户ID"
+                  v-model="user.user_id"
+                  :disabled="!!this.$route.params.id && !hasStore">
+                </el-autocomplete>
               </el-form-item>
             </el-col>
           </el-row>
@@ -191,6 +198,26 @@ export default {
           })
         }
       })
+    },
+    queryCNSearch (queryString, callback) {
+      console.log(this.user.user_id)
+      var list = [{}]
+      this.$request.Automatic({
+        keyword: this.user.user_id.toString()
+      }).then(res => {
+        for (let i of res.data) {
+          i.value = i.id
+          // i.value = i.id + '---' + i.name
+        }
+        list = res.data
+        callback(list)
+      })
+    },
+    handleSelect (item) {
+      // this.ruleForm.en_name = item.name
+      console.log(item)
+      this.supplierId = item.id
+      this.supplierName = item.name
     },
     // 直接添加时加载的表格数据
     getList () {

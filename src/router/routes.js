@@ -57,6 +57,8 @@ const WaybillList = loadonDemand('order/waybill/WaybillList')
 // 订单 运单详情
 const Billdetails = loadonDemand('order/waybill/billDetails')
 // 订单 运单打包
+// 订单 运单审核
+const reviewDetails = loadonDemand('order/waybill/review')
 const Billpacked = loadonDemand('order/waybill/billPacked')
 // 营销管理 新用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
@@ -226,6 +228,17 @@ export default [
           level: 3,
           group: '订单',
           name: '详情',
+          parent: '/order/waybill_list'
+        }
+      },
+      {
+        path: '/order/review',
+        name: 'review',
+        component: reviewDetails,
+        meta: {
+          level: 3,
+          group: '订单',
+          name: '审核',
           parent: '/order/waybill_list'
         }
       },
