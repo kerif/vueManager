@@ -35,7 +35,7 @@
           <span>{{form.pay_type}}</span><br/>
           <p class="transfer-right">转账支付账户</p>
           <span>{{form.transfer_account}}</span><br/>
-          <p class="transfer-right">支付金额$</p>
+          <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
           <span>{{form.tran_amount}}</span><br/>
           <p class="transfer-right">关联单号</p>
           <span>{{form.order_number}}</span><br/>
@@ -94,9 +94,10 @@ export default {
       })
     },
     // 审核通过
-    reviewPass (id) {
+    reviewPass (id, tranAmount) {
+      console.log(this.form.tran_amount, 'this.form.tran_amount')
       console.log(this.$route.query.id, 'this.$route.query.id')
-      dialog({ type: 'reviewMsg', id: this.$route.query.id, state: 'pass' }, () => {
+      dialog({ type: 'reviewMsg', id: this.$route.query.id, state: 'pass', tranAmount: this.form.tran_amount }, () => {
         this.getList()
         this.$router.push({ name: 'wayBillList' })
       })

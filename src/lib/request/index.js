@@ -53,8 +53,8 @@ exports.addGroup = (params) => {
 exports.editGroup = (id, params) => {
   return $form.put(`admin-groups/${id}`, params)
 }
-exports.getVipMember = (id) => {
-  return $form.get(`admin-groups/${id}/members`)
+exports.getVipMember = (id, params) => {
+  return $form.get(`admin-groups/${id}/members`, { params })
 }
 exports.getBill = () => {
   return $form.get('warehouse-address')
@@ -73,8 +73,8 @@ exports.userGroupDelete = (ids) => {
   return $form.put('user-groups/batch-delete', ids)
 }
 // 客户组成员
-exports.getUserMembers = (id) => {
-  return $form.get(`user-groups/${id}/members`)
+exports.getUserMembers = (id, params) => {
+  return $form.get(`user-groups/${id}/members`, { params })
 }
 // 员工列表禁止登录
 exports.forbidUser = (ids) => {

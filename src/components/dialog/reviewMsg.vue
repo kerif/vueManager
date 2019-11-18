@@ -57,6 +57,7 @@ export default {
         customer_images: []
       },
       state: '',
+      tranAmount: '',
       baleImgList: [],
       rules: {
         pay_amount: [
@@ -156,6 +157,12 @@ export default {
       this.ruleForm.customer_remark = ''
       this.baleImgList = []
       this.ruleForm.customer_images = []
+    },
+    init () {
+      console.log(this.tranAmount, 'this.tranAmount')
+      if (this.state === 'pass') {
+        this.ruleForm.pay_amount = this.tranAmount
+      }
     }
   }
 }
@@ -178,6 +185,34 @@ export default {
     .el-form-item__label {
       width: 500px !important;
     }
+  }
+  .avatar-uploader {
+    display: inline-block;
+    vertical-align: top;
+  }
+  .img-item {
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    width: 148px;
+    height: 148px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box, .operat-box {
+        opacity: 1;
+        transition: all .5s ease-in;
+      }
+    }
+  }
+  .goods-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
   }
 }
 </style>

@@ -36,9 +36,14 @@
       <el-button @click="show = false">取消</el-button>
       <el-button type="primary" @click="confirm(ruleForm)">确定</el-button>
     </div> -->
+    <div class="pagination-box">
+      <nle-pagination :pageParams="page_params"></nle-pagination>
+    </div>
   </el-dialog>
 </template>
 <script>
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data () {
     return {
@@ -53,10 +58,19 @@ export default {
       }
     }
   },
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   methods: {
     getList () {
-      this.$request.getVipMember(this.id).then(res => {
+      this.$request.getVipMember(this.id, {
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
         this.tableData = res.data
+        this.page_params.page = res.meta.current_page
+        this.page_params.total = res.meta.total
       })
     },
     init () {
@@ -66,4 +80,7 @@ export default {
 }
 </script>
 <style lang="scss">
+.pagination-box {
+  margin-top: 10px;
+}
 </style>
