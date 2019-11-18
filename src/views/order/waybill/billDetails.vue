@@ -173,7 +173,7 @@ export default {
         this.oderData = [res.data.details]
         this.PackageData = res.data.packages
         this.localization = res.localization
-        this.paymentData = res.payment
+        this.paymentData = [res.data.payment]
       })
     },
     copyUrl () {

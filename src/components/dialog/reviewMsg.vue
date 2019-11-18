@@ -21,12 +21,12 @@
             placeholder="请输入备注"></el-input>
         </el-form-item>
         <el-form-item label="上传照片" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+            <span class="img-item" v-for="(item) in baleImgList" :key="item.name">
             <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i>
+                <!-- <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i> -->
             </span>
             </span>
             <el-upload
