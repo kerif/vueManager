@@ -99,20 +99,14 @@
     <!-- 费用详情 -->
       <div v-if="this.$route.params.activeName === '2' || this.$route.params.activeName === '3' || this.$route.params.activeName === '4' || this.$route.params.activeName === '5'">
         <h4>费用详情</h4>
-          <el-table :data="PackageData" class="data-list" border stripe>
+          <el-table :data="paymentData" class="data-list" border stripe>
           <el-table-column type="index" width="50"></el-table-column>
-          <el-table-column label="快递单号" prop="express_num"></el-table-column>
-          <el-table-column label="物品名称" prop="package_name"></el-table-column>
-          <el-table-column :label="'物品价值' + this.localization.currency_unit" prop="package_value"></el-table-column>
-          <el-table-column label="物品属性">
-            <template slot-scope="scope">
-            <span v-for="item in scope.row.props" :key="item.id">
-              {{item.cn_name}}
-            </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="代理" prop="agent"></el-table-column>
-          <el-table-column label="货位" prop="location"></el-table-column>
+          <el-table-column :label="'总金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
+          <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
+          <el-table-column :label="'实际支付' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
+          <!-- 支付流水号 -->
+          <el-table-column label="支付流水号" prop="serial_number"></el-table-column>
+          <el-table-column label="支付时间" prop="paid_at"></el-table-column>
         </el-table>
     </div>
     <!-- 打包清单 -->
@@ -163,7 +157,8 @@ export default {
       form: {},
       oderData: [],
       PackageData: [],
-      localization: {}
+      localization: {},
+      paymentData: []
     }
   },
   created () {
@@ -178,6 +173,7 @@ export default {
         this.oderData = [res.data.details]
         this.PackageData = res.data.packages
         this.localization = res.localization
+        this.paymentData = res.payment
       })
     },
     copyUrl () {

@@ -20,7 +20,7 @@
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="请输入备注"></el-input>
         </el-form-item>
-        <el-form-item label="上传打包照片" class="updateChe">
+        <el-form-item label="上传照片" class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
             <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
             <span class="model-box"></span>
@@ -170,6 +170,14 @@ export default {
   }
   .el-textarea__inner {
     width: 70%;
+  }
+  .updateChe {
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
+    .el-form-item__label {
+      width: 500px !important;
+    }
   }
 }
 </style>

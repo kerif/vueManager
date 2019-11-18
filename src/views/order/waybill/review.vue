@@ -38,7 +38,7 @@
           <p class="transfer-right">支付金额$</p>
           <span>{{form.tran_amount}}</span><br/>
           <p class="transfer-right">关联单号</p>
-          <span>{{form.order_number}}</span><b/>
+          <span>{{form.order_number}}</span><br/>
           <p class="transfer-right">备注</p>
           <span>{{form.remark}}</span><br/>
           <p class="transfer-right">创建时间</p>
@@ -49,7 +49,7 @@
           <span v-for="item in form.images"
           :key="item.id" style="cursor:pointer;"
             @click.stop="imgSrc=item, imgVisible=true">
-              <img :src="item" style="width: 150px; margin-right: 5px;">
+              <img :src="item" style="width: 150px; margin-right: 30px;">
           </span>
         </el-col>
       </el-row>
