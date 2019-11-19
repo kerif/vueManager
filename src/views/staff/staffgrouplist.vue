@@ -39,7 +39,7 @@
           <!-- 编辑 -->
         <el-button
           class="btn-blue"
-          @click.stop="editStaff(scope.row.id, scope.row.name_cn, scope.row.name_en)">编辑</el-button>
+          @click.stop="editStaff(scope.row.id)">编辑</el-button>
           <!-- 修改权限 -->
         <el-button
           class="btn-purple"
@@ -83,7 +83,6 @@ export default {
     }
   },
   created () {
-    // this.getShopAgent()
     this.getList()
   },
   methods: {
@@ -118,8 +117,8 @@ export default {
       })
     },
     // 编辑
-    editStaff (id, nameCn, nameEn) {
-      dialog({ type: 'addStaff', id: id, name_cn: nameCn, name_en: nameEn, staff: 'edit' }, () => {
+    editStaff (id) {
+      dialog({ type: 'addStaff', id: id, staff: 'edit' }, () => {
         this.getList()
       })
     },

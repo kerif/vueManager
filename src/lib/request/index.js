@@ -53,6 +53,10 @@ exports.addGroup = (params) => {
 exports.editGroup = (id, params) => {
   return $form.put(`admin-groups/${id}`, params)
 }
+// 获取员工组信息
+exports.getGroup = (id) => {
+  return $form.get(`admin-groups/${id}`)
+}
 exports.getVipMember = (id, params) => {
   return $form.get(`admin-groups/${id}/members`, { params })
 }

@@ -39,7 +39,7 @@
       <el-table-column label="支付时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-deep-purple" @click="details(scope.row.id)">详情</el-button>
+          <el-button class="btn-deep-purple" @click="details(scope.row.order_id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -67,12 +67,14 @@ export default {
     SearchGroup,
     NlePagination
   },
-  created () {
-    this.getList()
+  activated () {
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
       this.goSearch()
     }
+  },
+  created () {
+    this.getList()
   },
   methods: {
     getList () {
@@ -108,7 +110,7 @@ export default {
     },
     // 跳转到审核
     details (id) {
-      this.$router.push({ name: 'review', query: { id: id } })
+      this.$router.push({ name: 'review', query: { id: id, state: 'transaction' } })
     }
   }
 }

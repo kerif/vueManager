@@ -35,6 +35,7 @@ export default {
         description: ''
       },
       staff: '',
+      id: '',
       rules: {
         name_cn: [
           { required: true, message: '请输入员工组中文名', trigger: 'blur' }
@@ -46,6 +47,20 @@ export default {
     }
   },
   methods: {
+    getList () {
+      console.log(this.id, 'id')
+      this.$request.getGroup(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm = res.data
+        } else {
+          this.$notify({
+            message: res.msg,
+            type: 'error',
+            title: '操作失败'
+          })
+        }
+      })
+    },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -95,8 +110,6 @@ export default {
       this.ruleForm.name_cn = ''
       this.ruleForm.name_en = ''
       this.ruleForm.description = ''
-      this.name_cn = ''
-      this.name_en = ''
     },
     cancelDialog (ruleForm) {
       this.$refs[ruleForm].resetFields()
@@ -104,8 +117,7 @@ export default {
     },
     init () {
       if (this.id) {
-        this.ruleForm.name_cn = this.name_cn
-        this.ruleForm.name_en = this.name_en
+        this.getList()
       }
     }
   }
