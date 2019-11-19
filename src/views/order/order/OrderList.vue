@@ -100,7 +100,7 @@
       </template> -->
     </el-table>
     </div>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
@@ -218,9 +218,6 @@ export default {
   },
   created () {
     this.getAgentData()
-  },
-  activated () {
-    console.log(111)
     this.getList()
   },
   watch: {

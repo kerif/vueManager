@@ -15,9 +15,7 @@
         </el-breadcrumb>
       </div>
       <el-main>
-        <keep-alive :include="/List/">
-          <router-view></router-view>
-        </keep-alive>
+        <router-view></router-view>
       </el-main>
       <layout-footer></layout-footer>
     </el-container>
