@@ -428,4 +428,7 @@ exports.getResetCode = (phone) => $form.post('reset-password/apply', { phone })
 
 // 重置密码
 exports.resetPassword = (params) => $json.put('reset-password', params)
+
+// 获取权限
+exports.getCurrentUserPermissions = () => $form.get('menu-tree')
 export default exports

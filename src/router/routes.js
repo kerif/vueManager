@@ -1,7 +1,7 @@
-const loadonDemand = (path) => {
+const loadonDemand = path => {
   return () => import(/* webpackChunkName: "chunk" */ `@/views/${path}`)
 }
-
+const Layout = loadonDemand('layout/layouttop')
 const LayoutContainer = loadonDemand('layout/layoutcontainer')
 const Panel = loadonDemand('home/panel')
 // 修改密码
@@ -70,455 +70,489 @@ const Notes = loadonDemand('marketing/Voucher/notes')
 const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
 export default [
   {
-    path: 'home',
-    redirect: 'home/panel',
-    component: LayoutContainer,
-    icon: 'icon-ico_home',
+    path: '/',
+    component: Layout,
+    redirect: '/home',
     children: [
       {
-        path: '/home/panel',
-        name: 'panel',
-        icon: '',
-        component: Panel,
-        meta: {
-          level: 2,
-          group: '首页',
-          name: '控制面板'
-        }
+        path: 'home',
+        redirect: 'home/panel',
+        component: LayoutContainer,
+        icon: 'icon-ico_home',
+        id: 100,
+        children: [
+          {
+            path: '/home/panel',
+            name: 'panel',
+            icon: '',
+            component: Panel,
+            id: 101,
+            meta: {
+              level: 2,
+              group: '首页',
+              name: '控制面板'
+            }
+          },
+          {
+            path: '/home/reset-password',
+            name: 'reset-password',
+            component: ResetPassword,
+            id: 102,
+            meta: {
+              level: 2,
+              group: '首页',
+              name: '修改密码'
+            }
+          }
+        ]
       },
       {
-        path: '/home/reset-password',
-        name: 'reset-password',
-        component: ResetPassword,
-        meta: {
-          level: 2,
-          group: '首页',
-          name: '修改密码'
-        }
-      }
-    ]
-  },
-  {
-    path: 'staff',
-    component: LayoutContainer,
-    icon: 'icon-ico_rencai',
-    children: [
-      {
-        path: '/staff/stafflist',
-        name: 'stafflist',
-        component: StaffList,
-        meta: {
-          level: 2,
-          group: '员工',
-          name: '员工列表'
-        }
+        path: 'staff',
+        component: LayoutContainer,
+        icon: 'icon-ico_rencai',
+        id: 200,
+        children: [
+          {
+            path: '/staff/stafflist',
+            name: 'stafflist',
+            component: StaffList,
+            id: 201,
+            meta: {
+              level: 2,
+              group: '员工',
+              name: '员工列表'
+            }
+          },
+          {
+            path: '/staff/staffadd',
+            name: 'staffadd',
+            component: StaffEdit,
+            id: 201,
+            meta: {
+              level: 3,
+              group: '员工',
+              name: '添加员工',
+              parent: '/staff/stafflist'
+            }
+          },
+          {
+            path: '/staff/staffEdit/:state/:id',
+            name: 'staffEdit',
+            component: StaffEdit,
+            id: 201,
+            meta: {
+              level: 3,
+              group: '员工',
+              name: '修改资料',
+              parent: '/staff/stafflist'
+            }
+          },
+          {
+            path: '/staff/staffgrouplist',
+            name: 'staffgrouplist',
+            component: StaffGroupList,
+            id: 202,
+            meta: {
+              level: 2,
+              group: '员工',
+              name: '员工组列表'
+            }
+          },
+          {
+            path: '/staff/modify_permissions/:id',
+            name: 'modifyPermissions',
+            component: modifyPre,
+            id: 202,
+            meta: {
+              level: 3,
+              group: '员工',
+              name: '修改权限',
+              parent: '/staff/stafflist'
+            }
+          }
+        ]
       },
       {
-        path: '/staff/staffadd',
-        name: 'staffadd',
-        component: StaffEdit,
-        meta: {
-          level: 3,
-          group: '员工',
-          name: '添加员工',
-          parent: '/staff/stafflist'
-        }
+        path: 'vip',
+        component: LayoutContainer,
+        icon: 'icon-gaiicon-',
+        id: 300,
+        children: [
+          {
+            path: '/vip/viplist',
+            name: 'viplist',
+            component: VipList,
+            id: 301,
+            meta: {
+              group: '客户',
+              level: 2,
+              name: '客户'
+            }
+          },
+          {
+            path: '/vip/vipgrouplist',
+            name: 'vipgrouplist',
+            component: VipGroupList,
+            id: 302,
+            meta: {
+              level: 2,
+              group: '客户',
+              name: '客户组'
+            }
+          },
+          {
+            path: '/vip/vipaddress',
+            name: 'vipaddress',
+            component: VipAddressList,
+            id: 303,
+            meta: {
+              level: 2,
+              group: '客户',
+              name: '客户地址'
+            }
+          }
+        ]
       },
       {
-        path: '/staff/staffEdit/:state/:id',
-        name: 'staffEdit',
-        component: StaffEdit,
-        meta: {
-          level: 3,
-          group: '员工',
-          name: '修改资料',
-          parent: '/staff/stafflist'
-        }
+        path: 'order',
+        component: LayoutContainer,
+        icon: 'icon-ico_yuebao',
+        id: 400,
+        children: [
+          {
+            path: '/order/orderlist',
+            component: OrderList,
+            name: 'orderlist',
+            id: 401,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '国内订单'
+            }
+          },
+          {
+            path: '/order/waybill_list',
+            component: WaybillList,
+            name: 'wayBillList',
+            id: 402,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '运单'
+            }
+          },
+          {
+            path: '/order/billDetails/:id',
+            name: 'billDetails',
+            component: Billdetails,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '详情',
+              parent: '/order/waybill_list'
+            }
+          },
+          {
+            path: '/order/review',
+            name: 'review',
+            component: reviewDetails,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '审核',
+              parent: '/order/waybill_list'
+            }
+          },
+          {
+            path: '/order/billPacked/:id/:order_sn',
+            name: 'billPacked',
+            component: Billpacked,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '打包处理',
+              parent: '/order/waybill_list'
+            }
+          }
+        ]
       },
       {
-        path: '/staff/staffgrouplist',
-        name: 'staffgrouplist',
-        component: StaffGroupList,
-        meta: {
-          level: 2,
-          group: '员工',
-          name: '员工组列表'
-        }
+        path: 'station',
+        component: LayoutContainer,
+        icon: 'icon-gongbao',
+        id: 500,
+        children: [
+          {
+            path: '/station/storage',
+            name: 'storageContainer',
+            component: Storage,
+            id: 501,
+            meta: {
+              level: 2,
+              group: '货站',
+              name: '入库'
+            }
+          },
+          {
+            path: '/station/storage/:id/:express_num',
+            name: 'editStorage',
+            component: Storage,
+            meta: {
+              level: 3,
+              group: '货站',
+              name: '入库',
+              parent: '/station/storage'
+            }
+          },
+          {
+            path: '/station/ship',
+            name: 'shipContainer',
+            component: Ship,
+            id: 502,
+            meta: {
+              level: 2,
+              group: '货站',
+              name: '发货'
+            }
+          },
+          {
+            path: '/station/picking',
+            name: 'pickingContainer',
+            component: Picking,
+            id: 503,
+            meta: {
+              level: 2,
+              group: '货站',
+              name: '拣货日志'
+            }
+          }
+        ]
       },
       {
-        path: '/staff/modify_permissions/:id',
-        name: 'modifyPermissions',
-        component: modifyPre,
-        meta: {
-          level: 3,
-          group: '员工',
-          name: '修改权限',
-          parent: '/staff/stafflist'
-        }
-      }
-    ]
-  },
-  {
-    path: 'vip',
-    component: LayoutContainer,
-    icon: 'icon-gaiicon-',
-    children: [
-      {
-        path: '/vip/viplist',
-        name: 'viplist',
-        component: VipList,
-        meta: {
-          group: '客户',
-          level: 2,
-          name: '客户'
-        }
+        path: 'config',
+        component: LayoutContainer,
+        icon: 'icon-ico_zhuizon',
+        id: 600,
+        children: [
+          {
+            path: '/config/line/linelist',
+            name: 'linelist',
+            component: LineList,
+            id: 603,
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '路线'
+            }
+          },
+          {
+            path: '/config/line/lineadd',
+            component: LineAddEdit,
+            name: 'lineadd',
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '添加路线',
+              parent: '/config/line/linelist'
+            }
+          },
+          {
+            path: '/config/line/lineedit/:state/:id',
+            component: LineAddEdit,
+            name: 'lineedit',
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '修改路线',
+              parent: '/config/line/linelist'
+            }
+          },
+          {
+            path: '/config/warehouse',
+            component: WareHouse,
+            name: 'warehouse',
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '仓库地址配置'
+            }
+          },
+          {
+            path: '/config/notice',
+            component: NoticeList,
+            name: 'noticelist',
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '下单须知'
+            }
+          },
+          {
+            path: '/config/notice/add',
+            component: NoticeAddEdit,
+            name: 'noticeadd',
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '新增下单须知',
+              parent: '/config/notice'
+            }
+          },
+          {
+            path: '/config/notice/edit/:id',
+            component: NoticeAddEdit,
+            name: 'noticeEdit',
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '修改下单须知',
+              parent: '/config/notice'
+            }
+          },
+          {
+            path: '/config/suggest',
+            name: 'suggestlist',
+            component: SuggestList,
+            meta: {
+              level: 2,
+              group: '配置',
+              name: '投诉建议'
+            }
+          },
+          {
+            path: '/config/agent',
+            name: 'agent',
+            component: agentManagement,
+            meta: {
+              level: 2,
+              group: '配置',
+              name: '代理管理'
+            }
+          },
+          {
+            path: '/config/add/agent',
+            name: 'addAgent',
+            component: AddEditAgent,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '添加代理',
+              parent: '/config/agent'
+            }
+          },
+          {
+            path: '/config/edit/agent',
+            name: 'editAgent',
+            component: AddEditAgent,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '修改代理',
+              parent: '/config/agent'
+            }
+          },
+          {
+            path: '/config/agent/record',
+            name: 'record',
+            component: transactionRecord,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '成交记录',
+              parent: '/config/agent'
+            }
+          },
+          {
+            path: '/config/applet',
+            name: 'appletManagement',
+            component: AppletConfiguration,
+            meta: {
+              level: 2,
+              group: '配置',
+              name: '小程序配置'
+            }
+          },
+          {
+            path: '/config/payment',
+            name: 'payment',
+            component: PaymentManagement,
+            meta: {
+              level: 2,
+              group: '配置',
+              name: '更多配置'
+            }
+          }
+        ]
       },
       {
-        path: '/vip/vipgrouplist',
-        name: 'vipgrouplist',
-        component: VipGroupList,
-        meta: {
-          level: 2,
-          group: '客户',
-          name: '客户组'
-        }
+        path: 'finance',
+        component: LayoutContainer,
+        icon: 'icon-feiyongduoweifenxi',
+        id: 700,
+        children: [
+          {
+            path: '/finance/transaction',
+            component: Transaction,
+            id: 701,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '流水记录'
+            }
+          }
+        ]
       },
       {
-        path: '/vip/vipaddress',
-        name: 'vipaddress',
-        component: VipAddressList,
-        meta: {
-          level: 2,
-          group: '客户',
-          name: '客户地址'
-        }
-      }
-    ]
-  },
-  {
-    path: 'order',
-    component: LayoutContainer,
-    icon: 'icon-ico_yuebao',
-    children: [
-      {
-        path: '/order/orderlist',
-        component: OrderList,
-        name: 'orderlist',
-        meta: {
-          level: 2,
-          group: '订单',
-          name: '国内订单'
-        }
-      },
-      {
-        path: '/order/waybill_list',
-        component: WaybillList,
-        name: 'wayBillList',
-        meta: {
-          level: 2,
-          group: '订单',
-          name: '运单'
-        }
-      },
-      {
-        path: '/order/billDetails/:id',
-        name: 'billDetails',
-        component: Billdetails,
-        meta: {
-          level: 3,
-          group: '订单',
-          name: '详情',
-          parent: '/order/waybill_list'
-        }
-      },
-      {
-        path: '/order/review',
-        name: 'review',
-        component: reviewDetails,
-        meta: {
-          level: 3,
-          group: '订单',
-          name: '审核',
-          parent: '/order/waybill_list'
-        }
-      },
-      {
-        path: '/order/billPacked/:id/:order_sn',
-        name: 'billPacked',
-        component: Billpacked,
-        meta: {
-          level: 3,
-          group: '订单',
-          name: '打包处理',
-          parent: '/order/waybill_list'
-        }
-      }
-    ]
-  },
-  {
-    path: 'station',
-    component: LayoutContainer,
-    icon: 'icon-gongbao',
-    children: [
-      {
-        path: '/station/storage',
-        name: 'storageContainer',
-        component: Storage,
-        meta: {
-          level: 2,
-          group: '货站',
-          name: '入库'
-        }
-      },
-      {
-        path: '/station/storage/:id/:express_num',
-        name: 'editStorage',
-        component: Storage,
-        meta: {
-          level: 3,
-          group: '货站',
-          name: '入库',
-          parent: '/station/storage'
-        }
-      },
-      {
-        path: '/station/ship',
-        name: 'shipContainer',
-        component: Ship,
-        meta: {
-          level: 2,
-          group: '货站',
-          name: '发货'
-        }
-      },
-      {
-        path: '/station/picking',
-        name: 'pickingContainer',
-        component: Picking,
-        meta: {
-          level: 2,
-          group: '货站',
-          name: '拣货日志'
-        }
-      }
-    ]
-  },
-  {
-    path: 'config',
-    component: LayoutContainer,
-    icon: 'icon-ico_zhuizon',
-    children: [
-      {
-        path: '/config/line/linelist',
-        name: 'linelist',
-        component: LineList,
-        meta: {
-          group: '配置',
-          level: 2,
-          name: '路线'
-        }
-      },
-      {
-        path: '/config/line/lineadd',
-        component: LineAddEdit,
-        name: 'lineadd',
-        meta: {
-          group: '配置',
-          level: 3,
-          name: '添加路线',
-          parent: '/config/line/linelist'
-        }
-      },
-      {
-        path: '/config/line/lineedit/:state/:id',
-        component: LineAddEdit,
-        name: 'lineedit',
-        meta: {
-          group: '配置',
-          level: 3,
-          name: '修改路线',
-          parent: '/config/line/linelist'
-        }
-      },
-      {
-        path: '/config/warehouse',
-        component: WareHouse,
-        name: 'warehouse',
-        meta: {
-          group: '配置',
-          level: 2,
-          name: '仓库地址配置'
-        }
-      },
-      {
-        path: '/config/notice',
-        component: NoticeList,
-        name: 'noticelist',
-        meta: {
-          group: '配置',
-          level: 2,
-          name: '下单须知'
-        }
-      },
-      {
-        path: '/config/notice/add',
-        component: NoticeAddEdit,
-        name: 'noticeadd',
-        meta: {
-          group: '配置',
-          level: 3,
-          name: '新增下单须知',
-          parent: '/config/notice'
-        }
-      },
-      {
-        path: '/config/notice/edit/:id',
-        component: NoticeAddEdit,
-        name: 'noticeEdit',
-        meta: {
-          group: '配置',
-          level: 3,
-          name: '修改下单须知',
-          parent: '/config/notice'
-        }
-      },
-      {
-        path: '/config/suggest',
-        name: 'suggestlist',
-        component: SuggestList,
-        meta: {
-          level: 2,
-          group: '配置',
-          name: '投诉建议'
-        }
-      },
-      {
-        path: '/config/agent',
-        name: 'agent',
-        component: agentManagement,
-        meta: {
-          level: 2,
-          group: '配置',
-          name: '代理管理'
-        }
-      },
-      {
-        path: '/config/add/agent',
-        name: 'addAgent',
-        component: AddEditAgent,
-        meta: {
-          level: 3,
-          group: '配置',
-          name: '添加代理',
-          parent: '/config/agent'
-        }
-      },
-      {
-        path: '/config/edit/agent',
-        name: 'editAgent',
-        component: AddEditAgent,
-        meta: {
-          level: 3,
-          group: '配置',
-          name: '修改代理',
-          parent: '/config/agent'
-        }
-      },
-      {
-        path: '/config/agent/record',
-        name: 'record',
-        component: transactionRecord,
-        meta: {
-          level: 3,
-          group: '配置',
-          name: '成交记录',
-          parent: '/config/agent'
-        }
-      },
-      {
-        path: '/config/applet',
-        name: 'appletManagement',
-        component: AppletConfiguration,
-        meta: {
-          level: 2,
-          group: '配置',
-          name: '小程序配置'
-        }
-      },
-      {
-        path: '/config/payment',
-        name: 'payment',
-        component: PaymentManagement,
-        meta: {
-          level: 2,
-          group: '配置',
-          name: '更多配置'
-        }
-      }
-    ]
-  },
-  {
-    path: 'finance',
-    component: LayoutContainer,
-    icon: 'icon-feiyongduoweifenxi',
-    children: [
-      {
-        path: '/finance/transaction',
-        component: Transaction,
-        meta: {
-          group: '财务',
-          level: 2,
-          name: '流水记录'
-        }
-      }
-    ]
-  },
-  {
-    path: 'marketing',
-    component: LayoutContainer,
-    icon: 'icon-ico_yuce',
-    children: [
-      {
-        path: '/marketing/new',
-        name: 'newUser',
-        component: Newuser,
-        meta: {
-          level: 2,
-          group: '营销管理',
-          name: '新用户福利'
-        }
-      },
-      {
-        path: '/marketing/voucher',
-        name: 'voucher',
-        component: Voucher,
-        meta: {
-          level: 2,
-          group: '营销管理',
-          name: '抵用券管理'
-        }
-      },
-      {
-        path: '/marketing/voucher/notes',
-        name: 'notes',
-        component: Notes,
-        meta: {
-          level: 3,
-          group: '营销管理',
-          name: '投放记录',
-          parent: '/marketing/voucher'
-        }
-      },
-      {
-        path: '/marketing/voucher/add/voucher',
-        name: 'addVoucher',
-        component: addVoucher,
-        meta: {
-          level: 3,
-          group: '营销管理',
-          name: '添加抵用券',
-          parent: '/marketing/voucher'
-        }
+        path: 'marketing',
+        component: LayoutContainer,
+        icon: 'icon-ico_yuce',
+        id: 800,
+        children: [
+          {
+            path: '/marketing/new',
+            name: 'newUser',
+            component: Newuser,
+            id: 801,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '新用户福利'
+            }
+          },
+          {
+            path: '/marketing/voucher',
+            name: 'voucher',
+            component: Voucher,
+            id: 802,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '抵用券管理'
+            }
+          },
+          {
+            path: '/marketing/voucher/notes',
+            name: 'notes',
+            component: Notes,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '投放记录',
+              parent: '/marketing/voucher'
+            }
+          },
+          {
+            path: '/marketing/voucher/add/voucher',
+            name: 'addVoucher',
+            component: addVoucher,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '添加抵用券',
+              parent: '/marketing/voucher'
+            }
+          }
+        ]
       }
     ]
   }

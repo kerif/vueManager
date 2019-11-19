@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isPermissionFilter: false,
+    fileterAfterRouterMap: {},
     token: '',
     userName: '', // 用户名
     btnLoading: false,
@@ -36,6 +38,12 @@ export default new Vuex.Store({
     saveName (state, data) {
       state.userName = data
       localStorage.setItem('NAME', data)
+    },
+    savePermissionStatus (state, data) {
+      state.isPermissionFilter = data
+    },
+    saveFileterAfterRouterMap (state, data) {
+      state.fileterAfterRouterMap = data
     }
   },
   actions: {

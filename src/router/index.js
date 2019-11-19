@@ -1,47 +1,34 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Route from './routes'
-import store from '@/store'
+import interception from './interception'
 
 const loadonDemand = (path) => {
   return () => import(/* webpackChunkName: "chunk" */ `@/views/${path}`)
 }
 
-const Layout = loadonDemand('layout')
 // 登录
 const Login = loadonDemand('login')
+const NotFound = loadonDemand('404')
 
 Vue.use(Router)
 
-const routes = [
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/home',
-    children: [].concat(Route)
-  },
+const constantRouterMap = [
   {
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: NotFound
   }
 ]
 
 const router = new Router({
-  routes
+  routes: constantRouterMap
 })
 
-router.beforeEach((to, from, next) => {
-  // to and from are Route Object,next() must be called to resolve the hook}
-  if (to.name !== 'login') {
-    if (store.state.token) {
-      let pagePath = `${to.meta.group},${to.meta.name}`
-      store.commit('savePagePath', pagePath)
-    } else {
-      next('/login')
-    }
-  }
-  next()
-})
+router.beforeEach(interception(router))
 
-export { router, routes }
+export default router
