@@ -129,6 +129,7 @@ export default {
   },
   methods: {
     getList () {
+      console.log(444)
       this.tableLoading = true
       this.oderData = []
       this.$request.getWarehouse({
@@ -216,8 +217,11 @@ export default {
     }
   },
   created () {
-    this.getList()
     this.getAgentData()
+  },
+  activated () {
+    console.log(111)
+    this.getList()
   },
   watch: {
     // 监听tab组件参数
