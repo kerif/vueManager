@@ -26,8 +26,10 @@ switch (hostName) {
     break
   default:
     baseUrl = {
-      BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
-      IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
+      // BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
+      // IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
+      BASE_API_URL: 'https://jiyun-test-api-v2.nle-tech.com/api/admin',
+      IMAGE_URL: 'https://jiyun-test-api-v2.nle-tech.com'
     }
     break
 }

@@ -37,6 +37,11 @@
       <el-table-column label="第三方流水号" prop="outer_sn"></el-table-column>
       <!-- 支付时间 -->
       <el-table-column label="支付时间" prop="created_at"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button class="btn-deep-purple" @click="details(scope.row.id)">详情</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>

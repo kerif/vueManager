@@ -27,7 +27,7 @@
       </el-col>
     </el-row>
     </div>
-    <div class="pay-message">
+    <div class="pay-message receiverMSg">
       <h4>支付信息</h4>
       <el-row :gutter="20">
         <el-col :span="9">
@@ -35,6 +35,10 @@
           <span>{{form.pay_type}}</span><br/>
           <p class="transfer-right">转账支付账户</p>
           <span>{{form.transfer_account}}</span><br/>
+          <p class="transfer-right">抵用券金额</p>
+          <span>{{form.coupon_amount}}</span><br/>
+          <p class="transfer-right">总金额</p>
+          <span>{{form.order_amount}}</span><br/>
           <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
           <span>{{form.tran_amount}}</span><br/>
           <p class="transfer-right">关联单号</p>
@@ -54,9 +58,9 @@
         </el-col>
       </el-row>
     </div>
-    <div class="footer-btn">
-      <el-button class="btn-main" @click="reviewPass">审核通过</el-button>
-      <el-button class="btn-light-red" @click="reviewReject">审核拒绝</el-button>
+    <div class="footer-btn" v-if="this.$route.query.state === 'review'">
+      <el-button type="danger" @click="reviewReject">审核拒绝</el-button>
+      <el-button type="primary" @click="reviewPass">审核通过</el-button>
     </div>
       <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -99,7 +103,7 @@ export default {
       console.log(this.$route.query.id, 'this.$route.query.id')
       dialog({ type: 'reviewMsg', id: this.$route.query.id, state: 'pass', tranAmount: this.form.tran_amount }, () => {
         this.getList()
-        this.$router.push({ name: 'wayBillList' })
+        this.$router.push({ name: 'wayBillList', query: { activeName: '2' } })
       })
     },
     // 审核拒绝
@@ -119,7 +123,7 @@ export default {
     margin-bottom: 20px;
   }
   .receiverMSg {
-    // border-bottom: 1px #ccc solid;
+    border-bottom: 1px #ccc solid;
   }
   .leftWidth {
     display: inline-block;
