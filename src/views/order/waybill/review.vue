@@ -62,6 +62,36 @@
       <el-button type="danger" @click="reviewReject">审核拒绝</el-button>
       <el-button type="primary" @click="reviewPass">审核通过</el-button>
     </div>
+    <div class="pay-message receiverMSg" v-if="form.status === 1">
+      <h4>确认支付信息</h4>
+      <el-row :gutter="20">
+        <el-col :span="9">
+          <p class="transfer-right">支付金额</p>
+          <span>{{form.confirm_amount}}</span><br/>
+          <p class="transfer-right">备注</p>
+          <span>{{form.customer_remark}}</span><br/>
+          <p class="transfer-right">上传图片</p>
+          <div class="left-img">
+            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index">
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- 审核拒绝信息 -->
+    <div class="pay-message receiverMSg" v-if="form.status === 2">
+      <h4>审核拒绝信息</h4>
+      <el-row :gutter="20">
+        <el-col :span="9">
+          <p class="transfer-right">备注</p>
+          <span>{{form.customer_remark}}</span><br/>
+          <p class="transfer-right">上传照片</p>
+         <div class="left-img">
+           <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index">
+         </div>
+          <!-- <span>{{form.customer_images}}</span><br/> -->
+        </el-col>
+      </el-row>
+    </div>
       <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
@@ -91,10 +121,18 @@ export default {
   methods: {
     getList () {
       this.$request.getTransfer(this.$route.query.id).then(res => {
-        this.form = res.data
-        this.oderData = [res.data.details]
-        this.PackageData = res.data.packages
-        this.localization = res.localization
+        if (res.ret) {
+          this.form = res.data
+          this.oderData = [res.data.details]
+          this.PackageData = res.data.packages
+          this.localization = res.localization
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 审核通过
@@ -172,5 +210,15 @@ export default {
     width: 50%;
    }
   }
+ .left-img {
+    padding: 10px;
+ }
+ .productImg {
+    border: 1px dashed #ccc;
+    display: inline-block;
+    margin-right: 15px;
+    width: 110px;
+    height: 100px;
+ }
 }
 </style>

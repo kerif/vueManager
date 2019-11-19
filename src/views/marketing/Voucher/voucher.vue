@@ -13,6 +13,16 @@
         <el-tab-pane label="已失效" name="4"></el-tab-pane>
       <!-- v-if="oderData.length" -->
     </el-tabs>
+    <div class="changeVou">
+      <el-select v-model="type" @change="getList" clearable>
+        <el-option
+          v-for="item in voucherChange"
+          :key="item.id"
+          :value="item.id"
+          :label="item.name">
+        </el-option>
+       </el-select>
+    </div>
       <el-table class="data-list" border stripe
       v-loading="tableLoading"
       :data="voucherData" @selection-change="onSelectChange">
@@ -44,7 +54,7 @@
           <!-- 投放 -->
           <el-button class="btn-purple detailsBtn" v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2" @click="serving(scope.row.id)">投放</el-button>
           <!-- 作废 -->
-          <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '2' || activeName === '3'"
+          <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '1' ||activeName === '2' || activeName === '3'"
           @click="obsolete(scope.row.id)">作废</el-button>
           <!-- 记录 -->
           <el-button size="small" class="btn-dark-green detailsBtn"
@@ -88,6 +98,17 @@ export default {
       activeName: '1',
       voucherData: [],
       status: '',
+      type: '1',
+      voucherChange: [{
+        id: '2',
+        name: '新用户福利券'
+      }, {
+        id: '1',
+        name: '抵用券'
+      }, {
+        id: '',
+        name: '全部'
+      }],
       show: false,
       selectIDs: [],
       servingId: '',
@@ -112,7 +133,8 @@ export default {
         status: this.status,
         keyword: this.page_params.keyword,
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.page_params.size,
+        type: this.type
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
@@ -295,6 +317,10 @@ export default {
   .noDate {
     text-align: center;
     color: #ccc;
+  }
+  .changeVou {
+    float: right;
+    margin-bottom: 20px;
   }
 }
 </style>

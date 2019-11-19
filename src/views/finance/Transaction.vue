@@ -105,6 +105,10 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.getList()
+    },
+    // 跳转到审核
+    details (id) {
+      this.$router.push({ name: 'review', query: { id: id } })
     }
   }
 }
