@@ -264,7 +264,7 @@ export default [
         }
       },
       {
-        path: '/order/billDetails/:id',
+        path: '/order/billDetails/:id/:activeName',
         name: 'billDetails',
         component: Billdetails,
         meta: {
