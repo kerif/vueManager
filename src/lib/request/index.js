@@ -373,8 +373,8 @@ exports.addLaunchGroup = (id, ids) => {
   return $form.put(`coupons/${id}/launch/group`, ids)
 }
 // 记录
-exports.userCoupons = (id) => {
-  return $form.get(`coupons/${id}/user-coupons`)
+exports.userCoupons = (id, params) => {
+  return $form.get(`coupons/${id}/user-coupons`, { params })
 }
 // 作废
 exports.disableCoupons = (id) => {
