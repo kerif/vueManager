@@ -465,6 +465,7 @@ export default [
       {
         path: '/finance/transaction',
         component: Transaction,
+        name: 'transaction',
         meta: {
           group: '财务',
           level: 2,

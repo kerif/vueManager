@@ -27,10 +27,10 @@
       </el-table-column>
       <!-- 总金额¥ -->
       <el-table-column :label="'总金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
-      <!-- 支付金额¥ -->
-      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
       <!-- 抵用券金额¥ -->
       <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
+      <!-- 支付金额¥ -->
+      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
       <!-- 相关订单 -->
       <el-table-column label="相关订单" prop="order_sn"></el-table-column>
       <!-- 第三方流水号 -->
@@ -68,6 +68,10 @@ export default {
   },
   created () {
     this.getList()
+    if (this.$route.query.serial_number) {
+      this.page_params.keyword = this.$route.query.serial_number
+      this.goSearch()
+    }
   },
   methods: {
     getList () {

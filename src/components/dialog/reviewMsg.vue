@@ -5,7 +5,7 @@
     label-position="top">
         <!-- 支付金额 -->
         <el-form-item label="*支付金额" v-if="state === 'pass'">
-          <el-input v-model="ruleForm.pay_amount">
+          <el-input v-model="ruleForm.pay_amount" disabled>
             <template slot="append">$</template>
           </el-input>
         </el-form-item>
@@ -180,6 +180,7 @@ export default {
   .avatar-uploader {
     display: inline-block;
     vertical-align: top;
+    margin-left: 50px;
   }
   .img-item {
     display: inline-block;

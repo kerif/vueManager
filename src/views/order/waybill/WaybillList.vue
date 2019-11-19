@@ -31,20 +31,17 @@
       <!-- 客户ID -->
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
       <!-- 转运单号 -->
-      <el-table-column label="转运单号">
-        <template slot-scope="scope">
-          <router-link v-if="scope.row.status === 12"
-          :to="`/order/review/?id=${scope.row.id}`">
-            {{scope.row.order_sn}}
-          </router-link>
-          <span v-else>{{scope.row.order_sn}}</span>
-        </template>
+      <el-table-column label="转运单号" prop="order_sn">
       </el-table-column>
       <!-- 审核状态 -->
       <el-table-column label="审核状态" v-if="activeName === '2'">
         <template slot-scope="scope">
           <!-- <span v-if="scope.row.status === 11">待审核</span> -->
-          <span v-if="scope.row.status === 12">审核拒绝</span>
+          <router-link v-if="scope.row.status === 12"
+          class="chooseOrder"
+          :to="`/order/review/?id=${scope.row.id}`">
+            审核拒绝
+          </router-link>
         </template>
       </el-table-column>
       <!-- 物流单号 -->
@@ -377,8 +374,8 @@ export default {
     text-decoration: underline;
   }
   a {
-    text-decoration:none;
-    color:#333;
+    // text-decoration:none;
+    // color:#333;
   }
 }
 </style>

@@ -104,6 +104,7 @@ export default {
       dialog({ type: 'reviewMsg', id: this.$route.query.id, state: 'pass', tranAmount: this.form.tran_amount }, () => {
         this.getList()
         this.$router.push({ name: 'wayBillList', query: { activeName: '2' } })
+        console.log(this.activeName, 'activeName')
       })
     },
     // 审核拒绝

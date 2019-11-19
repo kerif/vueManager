@@ -141,8 +141,8 @@ exports.getShipments = (id) => {
 exports.getStorage = (params) => {
   return $form.get('shipment-logs/in-storage', { params })
 }
-exports.getPick = () => {
-  return $form.get('shipment-logs/picking')
+exports.getPick = (params) => {
+  return $form.get('shipment-logs/picking', { params })
 }
 exports.getProps = () => {
   return $form.get('package-props')

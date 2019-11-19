@@ -196,6 +196,8 @@ export default {
   }
   .chooseOrder {
     cursor: pointer;
+    color:blue;
+    text-decoration: underline;
   }
 }
 </style>
