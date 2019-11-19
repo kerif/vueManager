@@ -405,6 +405,10 @@ exports.removeOrders = (id) => {
 exports.getTransfer = (id) => {
   return $form.get(`orders/${id}/transfer-pay-info`)
 }
+// 运单 从流水记录跳转过来
+exports.getReview = (id) => {
+  return $form.get(`transaction-records/order/${id}/transfer-pay-info`)
+}
 // 审核通过
 exports.acceptPayment = (id, params) => {
   return $form.put(`orders/${id}/payment/accept`, params)

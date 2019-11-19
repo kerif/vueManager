@@ -23,7 +23,7 @@
       </el-table-column>
       <!-- 电话 -->
         <el-table-column
-        prop="tel"
+        prop="phone"
         label="电话">
       </el-table-column>
       <!-- 最后登录时间 -->

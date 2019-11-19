@@ -115,17 +115,36 @@ export default {
     }
   },
   created () {
-    if (this.$route.query.id) {
-      this.getList()
+    // if (this.$route.query.id) {
+    //   this.getList()
+    // }
+    if (this.$route.query.state === 'transaction') {
+      console.log('啦啦阿拉', this.$route.query.state)
+      this.getTransaction()
     } else {
-      if (this.$route.query.state === 'transaction') {
-        this.getTransaction()
-      }
+      this.getList()
     }
   },
   methods: {
     getList () {
       this.$request.getTransfer(this.$route.query.id).then(res => {
+        if (res.ret) {
+          this.form = res.data
+          this.oderData = [res.data.details]
+          this.PackageData = res.data.packages
+          this.localization = res.localization
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 从流水记录跳转过来
+    getTransaction () {
+      this.$request.getReview(this.$route.query.id).then(res => {
         if (res.ret) {
           this.form = res.data
           this.oderData = [res.data.details]
