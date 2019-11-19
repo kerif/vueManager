@@ -262,6 +262,7 @@ export default {
     activeName (newValue) {
       switch (newValue) {
         case '1': // 全部
+          this.page_params.page = 1
           this.status = ''
           break
         case '2': // 未开始
