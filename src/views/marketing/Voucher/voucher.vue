@@ -42,7 +42,7 @@
       <el-table-column label="操作" width="200px">
         <template slot-scope="scope">
           <!-- 投放 -->
-          <el-button class="btn-purple detailsBtn" @click="serving(scope.row.id)">投放</el-button>
+          <el-button class="btn-purple detailsBtn" v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2" @click="serving(scope.row.id)">投放</el-button>
           <!-- 作废 -->
           <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '2' || activeName === '3'"
           @click="obsolete(scope.row.id)">作废</el-button>
@@ -82,6 +82,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
+  name: 'voucherList',
   data () {
     return {
       activeName: '1',
@@ -261,6 +262,7 @@ export default {
     activeName (newValue) {
       switch (newValue) {
         case '1': // 全部
+          this.page_params.page = 1
           this.status = ''
           break
         case '2': // 未开始

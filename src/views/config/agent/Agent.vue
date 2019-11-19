@@ -59,6 +59,7 @@ export default {
       deleteNum: []
     }
   },
+  name: 'agentList',
   mixins: [pagination],
   components: {
     NlePagination,

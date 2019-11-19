@@ -33,7 +33,7 @@
 export default {
   computed: {
     formatRouterMap () {
-      const mapChildren = this.$store.state.fileterAfterRouterMap[0].children
+      const mapChildren = this.$store.state.fileterAfterRouterMap[0] ? this.$store.state.fileterAfterRouterMap[0].children : []
       let formatRouterMap = {}
       mapChildren && mapChildren.forEach((item, index) => {
         item.children.forEach(ele => {

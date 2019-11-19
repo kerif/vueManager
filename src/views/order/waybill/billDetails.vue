@@ -105,11 +105,15 @@
           <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
           <el-table-column :label="'实际支付' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
           <!-- 支付流水号 -->
-          <el-table-column label="支付流水号" prop="serial_number"></el-table-column>
+          <el-table-column label="支付流水号">
+            <template slot-scope="scope">
+              <span @click="goSerial(scope.row.serial_number)" class="chooseOrder">{{scope.row.serial_number}}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="支付时间" prop="paid_at"></el-table-column>
         </el-table>
     </div>
-    <!-- 打包清单 -->
+    <!-- 包裹清单 -->
       <h4>包裹清单</h4>
       <el-table :data="PackageData" class="data-list" border stripe>
         <el-table-column type="index" width="50"></el-table-column>
@@ -186,6 +190,10 @@ export default {
         this.$message.success('复制成功')
       }
       document.body.removeChild(input)
+    },
+    // 跳转到财务 流水记录
+    goSerial (serialNumber) {
+      this.$router.push({ name: 'transaction', query: { serial_number: serialNumber } })
     }
   }
 }
@@ -231,6 +239,11 @@ export default {
   .el-button--small {
     padding: 8px;
     margin-left: 5px;
+  }
+  .chooseOrder {
+    cursor: pointer;
+    color:blue;
+    text-decoration: underline;
   }
 }
 </style>

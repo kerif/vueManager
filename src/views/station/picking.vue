@@ -63,6 +63,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
+  name: 'pickList',
   data () {
     return {
       activeName: '',
@@ -76,8 +77,10 @@ export default {
   methods: {
     handleClick () {
       if (this.activeName === '1') {
+        this.page_params.page = 1
         this.getList()
       } else if (this.activeName === '2') {
+        this.page_params.page = 1
         this.getPick()
       }
     },

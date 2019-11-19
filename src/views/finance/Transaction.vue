@@ -27,16 +27,21 @@
       </el-table-column>
       <!-- 总金额¥ -->
       <el-table-column :label="'总金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
-      <!-- 支付金额¥ -->
-      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
       <!-- 抵用券金额¥ -->
       <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
+      <!-- 支付金额¥ -->
+      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
       <!-- 相关订单 -->
       <el-table-column label="相关订单" prop="order_sn"></el-table-column>
       <!-- 第三方流水号 -->
       <el-table-column label="第三方流水号" prop="outer_sn"></el-table-column>
       <!-- 支付时间 -->
       <el-table-column label="支付时间" prop="created_at"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button class="btn-deep-purple" @click="details(scope.row.id)">详情</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>
@@ -57,12 +62,17 @@ export default {
     }
   },
   mixins: [pagination],
+  name: 'transactionList',
   components: {
     SearchGroup,
     NlePagination
   },
   created () {
     this.getList()
+    if (this.$route.query.serial_number) {
+      this.page_params.keyword = this.$route.query.serial_number
+      this.goSearch()
+    }
   },
   methods: {
     getList () {

@@ -56,7 +56,7 @@ export default {
     margin: 20 0;
   }
   .el-input {
-    width: 70% !important;
+    width: 100% !important;
   }
 }
 </style>
