@@ -11,7 +11,7 @@ export default {
       }
     }
   },
-  activated () {
+  created () {
     if (this.$store.state.search_flag) {
       this.page_params.keyword && (this.page_params.keyword = '')
     }

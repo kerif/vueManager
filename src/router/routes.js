@@ -289,7 +289,7 @@ export default [
             }
           },
           {
-            path: '/order/billDetails/:id',
+            path: '/order/billDetails/:id/:activeName',
             name: 'billDetails',
             component: Billdetails,
             id: 402,
@@ -509,6 +509,7 @@ export default [
         children: [
           {
             path: '/finance/transaction',
+            name: 'transaction',
             component: Transaction,
             id: 701,
             meta: {

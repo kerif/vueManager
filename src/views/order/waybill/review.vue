@@ -35,9 +35,10 @@
           <span>{{form.pay_type}}</span><br/>
           <p class="transfer-right">转账支付账户</p>
           <span>{{form.transfer_account}}</span><br/>
-          <p class="transfer-right">抵用券金额</p>
+          <p class="transfer-right">
+              {{'抵用券金额' + this.localization.currency_unit}}</p>
           <span>{{form.coupon_amount}}</span><br/>
-          <p class="transfer-right">总金额</p>
+          <p class="transfer-right">{{'总金额' + this.localization.currency_unit}}</p>
           <span>{{form.order_amount}}</span><br/>
           <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
           <span>{{form.tran_amount}}</span><br/>
@@ -137,12 +138,10 @@ export default {
     },
     // 审核通过
     reviewPass (id, tranAmount) {
-      console.log(this.form.tran_amount, 'this.form.tran_amount')
-      console.log(this.$route.query.id, 'this.$route.query.id')
+      console.log(typeof this.form.tran_amount, 'tranAmount')
       dialog({ type: 'reviewMsg', id: this.$route.query.id, state: 'pass', tranAmount: this.form.tran_amount }, () => {
         this.getList()
         this.$router.push({ name: 'wayBillList', query: { activeName: '2' } })
-        console.log(this.activeName, 'activeName')
       })
     },
     // 审核拒绝

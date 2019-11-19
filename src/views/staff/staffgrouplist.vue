@@ -83,7 +83,6 @@ export default {
     }
   },
   created () {
-    // this.getShopAgent()
     this.getList()
   },
   methods: {

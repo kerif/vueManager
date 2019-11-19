@@ -39,7 +39,7 @@
       <el-table-column label="支付时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-deep-purple" @click="details(scope.row.id)">详情</el-button>
+          <el-button class="btn-deep-purple" @click="details(scope.row.order_id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -68,10 +68,13 @@ export default {
     NlePagination
   },
   created () {
-    this.getList()
     if (this.$route.query.serial_number) {
+      console.log('1111')
       this.page_params.keyword = this.$route.query.serial_number
       this.goSearch()
+    } else {
+      this.getList()
+      console.log('222')
     }
   },
   methods: {

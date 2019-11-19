@@ -78,7 +78,7 @@ export default {
           url: item.url
         }
       })
-      if (this.state === 'pass' && !this.ruleForm.pay_amount) {
+      if (this.state === 'pass' && !this.ruleForm.pay_amount && this.ruleForm.pay_amount !== 0) {
         return this.$message.error('请输入金额')
       } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
         return this.$message.error('请输入备注')

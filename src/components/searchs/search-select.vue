@@ -44,7 +44,7 @@ export default {
       }
     }
   },
-  activated () {
+  created () {
     if (this.$store.state.search_flag) {
       this.select_value = ''
     }
