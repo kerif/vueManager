@@ -31,7 +31,15 @@
       <!-- 客户ID -->
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
       <!-- 转运单号 -->
-      <el-table-column label="转运单号" prop="order_sn"></el-table-column>
+      <el-table-column label="转运单号">
+        <template slot-scope="scope">
+          <router-link v-if="scope.row.status === 12"
+          :to="`/order/review/?id=${scope.row.id}`">
+            {{scope.row.order_sn}}
+          </router-link>
+          <span v-else>{{scope.row.order_sn}}</span>
+        </template>
+      </el-table-column>
       <!-- 审核状态 -->
       <el-table-column label="审核状态" v-if="activeName === '2'">
         <template slot-scope="scope">
@@ -201,7 +209,7 @@ export default {
     },
     // 跳转到审核
     reviewPackage (id) {
-      this.$router.push({ name: 'review', query: { id: id } })
+      this.$router.push({ name: 'review', query: { id: id, state: 'review' } })
     },
     // 跳转到发货
     goShip (shipmentSn) {
@@ -365,6 +373,12 @@ export default {
   }
   .chooseOrder {
     cursor: pointer;
+    color:blue;
+    text-decoration: underline;
+  }
+  a {
+    text-decoration:none;
+    color:#333;
   }
 }
 </style>

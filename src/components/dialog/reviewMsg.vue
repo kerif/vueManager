@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" title="审核" class="dialog-invoice" width="35%"
   @close="clear">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
+    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 支付金额 -->
         <el-form-item label="*支付金额" v-if="state === 'pass'">
@@ -43,7 +43,7 @@
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button type="primary" @click="confirm">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -58,15 +58,7 @@ export default {
       },
       state: '',
       tranAmount: '',
-      baleImgList: [],
-      rules: {
-        pay_amount: [
-          { required: true, message: '请输入支付金额', trigger: 'blur' }
-        ],
-        customer_remark: [
-          { required: true, message: '请输入备注', trigger: 'blur' }
-        ]
-      }
+      baleImgList: []
     }
   },
   created () {
@@ -79,56 +71,55 @@ export default {
         this.country = res.data
       })
     },
-    confirm (formName) {
+    confirm () {
       console.log(this.state, 'this.state')
       this.ruleForm.customer_images = this.baleImgList.map(item => {
         return {
           url: item.url
         }
       })
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if (this.state === 'pass') {
-            this.$request.acceptPayment(this.id, this.ruleForm).then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: '成功',
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
+      if (this.state === 'pass' && !this.ruleForm.pay_amount) {
+        return this.$message.error('请输入金额')
+      } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
+        return this.$message.error('请输入备注')
+      }
+      if (this.state === 'pass') {
+        this.$request.acceptPayment(this.id, this.ruleForm).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '成功',
+              message: res.msg
             })
+            this.show = false
+            this.success()
           } else {
-            this.$request.acceptReject(this.id, this.ruleForm).then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: '成功',
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
+            this.$message({
+              message: res.msg,
+              type: 'error'
             })
           }
-        } else {
-          return false
-        }
-      })
+          this.show = false
+        })
+      } else {
+        this.$request.acceptReject(this.id, this.ruleForm).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '成功',
+              message: res.msg
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+          this.show = false
+        })
+      }
     },
     // 上传打包照片
     uploadBaleImg (item) {

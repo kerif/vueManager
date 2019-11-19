@@ -192,6 +192,49 @@ export default [
           group: '客户',
           name: '客户地址'
         }
+      },
+      {
+        path: '/vip/agent',
+        name: 'agent',
+        component: agentManagement,
+        meta: {
+          level: 2,
+          group: '客户',
+          name: '代理管理'
+        }
+      },
+      {
+        path: '/vip/add/agent',
+        name: 'addAgent',
+        component: AddEditAgent,
+        meta: {
+          level: 3,
+          group: '客户',
+          name: '添加代理',
+          parent: '/vip/viplist'
+        }
+      },
+      {
+        path: '/vip/edit/agent',
+        name: 'editAgent',
+        component: AddEditAgent,
+        meta: {
+          level: 3,
+          group: '客户',
+          name: '修改代理',
+          parent: '/vip/viplist'
+        }
+      },
+      {
+        path: '/vip/agent/record',
+        name: 'record',
+        component: transactionRecord,
+        meta: {
+          level: 3,
+          group: '客户',
+          name: '成交记录',
+          parent: '/vip/viplist'
+        }
       }
     ]
   },
@@ -390,49 +433,6 @@ export default [
           level: 2,
           group: '配置',
           name: '投诉建议'
-        }
-      },
-      {
-        path: '/config/agent',
-        name: 'agent',
-        component: agentManagement,
-        meta: {
-          level: 2,
-          group: '配置',
-          name: '代理管理'
-        }
-      },
-      {
-        path: '/config/add/agent',
-        name: 'addAgent',
-        component: AddEditAgent,
-        meta: {
-          level: 3,
-          group: '配置',
-          name: '添加代理',
-          parent: '/config/agent'
-        }
-      },
-      {
-        path: '/config/edit/agent',
-        name: 'editAgent',
-        component: AddEditAgent,
-        meta: {
-          level: 3,
-          group: '配置',
-          name: '修改代理',
-          parent: '/config/agent'
-        }
-      },
-      {
-        path: '/config/agent/record',
-        name: 'record',
-        component: transactionRecord,
-        meta: {
-          level: 3,
-          group: '配置',
-          name: '成交记录',
-          parent: '/config/agent'
         }
       },
       {

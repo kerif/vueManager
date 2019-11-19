@@ -1,11 +1,10 @@
 <template>
   <el-dialog :visible.sync="show" title="创建发货单" class="dialog-invoice" width="35%"
   @close="clear">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
+    label-position="top">
         <!-- 员工组中文名 -->
             <el-form-item label="目的国" prop="country_id">
-            <el-row>
-            <el-col :span="8" :offset="2">
                 <el-select v-model="ruleForm.country_id" placeholder="请选择目的国">
                 <el-option
                   v-for="item in country"
@@ -14,18 +13,11 @@
                   :value="item.id">
                 </el-option>
               </el-select>
-            </el-col>
-            </el-row>
             </el-form-item>
         <!-- 用户组描述 -->
         <el-form-item label="备注">
-           <el-row>
-            <el-col :span="8" :offset="2">
-                <el-input type="textarea" v-model="ruleForm.remark"
-                :autosize="{ minRows: 2, maxRows: 4}"
-                placeholder="请输入备注"></el-input>
-            </el-col>
-          </el-row>
+          <el-input type="textarea" v-model="ruleForm.remark"
+          placeholder="请输入备注"></el-input>
         </el-form-item>
     </el-form>
     <div slot="footer">
@@ -93,8 +85,19 @@ export default {
 </script>
 <style lang="scss">
 .dialog-invoice {
+  .el-input {
+    width: 200px !important;
+    margin-left: 50px;
+  }
+  .el-textarea {
+    width: 300px !important;
+    margin-left: 50px;
+  }
   .el-form-item__label {
-    width: 150px;
+    width: 100px;
+  }
+  .el-form-item__error {
+    margin-left: 100px !important;
   }
 }
 </style>
