@@ -54,7 +54,7 @@
           <!-- 投放 -->
           <el-button class="btn-purple detailsBtn" v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2" @click="serving(scope.row.id)">投放</el-button>
           <!-- 作废 -->
-          <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '1' ||activeName === '2' || activeName === '3'"
+          <el-button class="btn-deep-blue detailsBtn" v-if="(activeName === '1' ||activeName === '2' || activeName === '3') &&scope.row.status !== 3"
           @click="obsolete(scope.row.id)">作废</el-button>
           <!-- 记录 -->
           <el-button size="small" class="btn-dark-green detailsBtn"
@@ -119,7 +119,7 @@ export default {
       }
     }
   },
-  created () {
+  activated () {
     this.getList()
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName

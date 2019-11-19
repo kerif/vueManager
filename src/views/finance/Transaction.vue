@@ -67,15 +67,14 @@ export default {
     SearchGroup,
     NlePagination
   },
-  created () {
+  activated () {
     if (this.$route.query.serial_number) {
-      console.log('1111')
       this.page_params.keyword = this.$route.query.serial_number
       this.goSearch()
-    } else {
-      this.getList()
-      console.log('222')
     }
+  },
+  created () {
+    this.getList()
   },
   methods: {
     getList () {
@@ -111,7 +110,7 @@ export default {
     },
     // 跳转到审核
     details (id) {
-      this.$router.push({ name: 'review', query: { id: id } })
+      this.$router.push({ name: 'review', query: { id: id, state: 'transaction' } })
     }
   }
 }

@@ -117,6 +117,10 @@ export default {
   created () {
     if (this.$route.query.id) {
       this.getList()
+    } else {
+      if (this.$route.query.state === 'transaction') {
+        this.getTransaction()
+      }
     }
   },
   methods: {

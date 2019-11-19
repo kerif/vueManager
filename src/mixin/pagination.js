@@ -11,12 +11,12 @@ export default {
       }
     }
   },
-  created () {
-    if (this.$store.state.search_flag) {
-      this.page_params.keyword && (this.page_params.keyword = '')
-    }
-    this.getList && this.getList()
-  },
+  // created () {
+  //   if (this.$store.state.search_flag) {
+  //     this.page_params.keyword && (this.page_params.keyword = '')
+  //   }
+  //   this.getList && this.getList()
+  // },
   methods: {
     // 分页
     handleCurrentChange (pageId) {
