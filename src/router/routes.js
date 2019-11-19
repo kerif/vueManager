@@ -210,6 +210,53 @@ export default [
               group: '客户',
               name: '客户地址'
             }
+          },
+          {
+            path: '/vip/agent',
+            name: 'agent',
+            component: agentManagement,
+            id: 304,
+            meta: {
+              level: 2,
+              group: '客户',
+              name: '代理管理'
+            }
+          },
+          {
+            path: '/vip/add/agent',
+            name: 'addAgent',
+            component: AddEditAgent,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '添加代理',
+              parent: '/config/agent'
+            }
+          },
+          {
+            path: '/vip/edit/agent',
+            name: 'editAgent',
+            component: AddEditAgent,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '修改代理',
+              parent: '/config/agent'
+            }
+          },
+          {
+            path: '/vip/agent/record',
+            name: 'record',
+            component: transactionRecord,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '成交记录',
+              parent: '/config/agent'
+            }
           }
         ]
       },
@@ -245,6 +292,7 @@ export default [
             path: '/order/billDetails/:id',
             name: 'billDetails',
             component: Billdetails,
+            id: 402,
             meta: {
               level: 3,
               group: '订单',
@@ -256,6 +304,7 @@ export default [
             path: '/order/review',
             name: 'review',
             component: reviewDetails,
+            id: 402,
             meta: {
               level: 3,
               group: '订单',
@@ -267,6 +316,7 @@ export default [
             path: '/order/billPacked/:id/:order_sn',
             name: 'billPacked',
             component: Billpacked,
+            id: 402,
             meta: {
               level: 3,
               group: '订单',
@@ -294,9 +344,10 @@ export default [
             }
           },
           {
-            path: '/station/storage/:id/:express_num',
+            path: '/station/storage/:id/:express_num/:user_id',
             name: 'editStorage',
             component: Storage,
+            id: 501,
             meta: {
               level: 3,
               group: '货站',
@@ -349,6 +400,7 @@ export default [
             path: '/config/line/lineadd',
             component: LineAddEdit,
             name: 'lineadd',
+            id: 603,
             meta: {
               group: '配置',
               level: 3,
@@ -360,6 +412,7 @@ export default [
             path: '/config/line/lineedit/:state/:id',
             component: LineAddEdit,
             name: 'lineedit',
+            id: 603,
             meta: {
               group: '配置',
               level: 3,
@@ -371,6 +424,7 @@ export default [
             path: '/config/warehouse',
             component: WareHouse,
             name: 'warehouse',
+            id: 606,
             meta: {
               group: '配置',
               level: 2,
@@ -381,6 +435,7 @@ export default [
             path: '/config/notice',
             component: NoticeList,
             name: 'noticelist',
+            id: 601,
             meta: {
               group: '配置',
               level: 2,
@@ -391,6 +446,7 @@ export default [
             path: '/config/notice/add',
             component: NoticeAddEdit,
             name: 'noticeadd',
+            id: 601,
             meta: {
               group: '配置',
               level: 3,
@@ -402,6 +458,7 @@ export default [
             path: '/config/notice/edit/:id',
             component: NoticeAddEdit,
             name: 'noticeEdit',
+            id: 601,
             meta: {
               group: '配置',
               level: 3,
@@ -413,6 +470,7 @@ export default [
             path: '/config/suggest',
             name: 'suggestlist',
             component: SuggestList,
+            id: 604,
             meta: {
               level: 2,
               group: '配置',
@@ -420,52 +478,10 @@ export default [
             }
           },
           {
-            path: '/config/agent',
-            name: 'agent',
-            component: agentManagement,
-            meta: {
-              level: 2,
-              group: '配置',
-              name: '代理管理'
-            }
-          },
-          {
-            path: '/config/add/agent',
-            name: 'addAgent',
-            component: AddEditAgent,
-            meta: {
-              level: 3,
-              group: '配置',
-              name: '添加代理',
-              parent: '/config/agent'
-            }
-          },
-          {
-            path: '/config/edit/agent',
-            name: 'editAgent',
-            component: AddEditAgent,
-            meta: {
-              level: 3,
-              group: '配置',
-              name: '修改代理',
-              parent: '/config/agent'
-            }
-          },
-          {
-            path: '/config/agent/record',
-            name: 'record',
-            component: transactionRecord,
-            meta: {
-              level: 3,
-              group: '配置',
-              name: '成交记录',
-              parent: '/config/agent'
-            }
-          },
-          {
             path: '/config/applet',
             name: 'appletManagement',
             component: AppletConfiguration,
+            id: 602,
             meta: {
               level: 2,
               group: '配置',
@@ -476,6 +492,7 @@ export default [
             path: '/config/payment',
             name: 'payment',
             component: PaymentManagement,
+            id: 605,
             meta: {
               level: 2,
               group: '配置',
@@ -534,6 +551,7 @@ export default [
             path: '/marketing/voucher/notes',
             name: 'notes',
             component: Notes,
+            id: 802,
             meta: {
               level: 3,
               group: '营销管理',
@@ -545,6 +563,7 @@ export default [
             path: '/marketing/voucher/add/voucher',
             name: 'addVoucher',
             component: addVoucher,
+            id: 802,
             meta: {
               level: 3,
               group: '营销管理',

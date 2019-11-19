@@ -155,7 +155,7 @@ export default {
     },
     storage (id, expressNum, userId, props) {
       console.log(props, 'props')
-      this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId, props: props } })
+      this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId }, query: { props: JSON.stringify(props) } })
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))

@@ -9,6 +9,7 @@ const dynamicAddRouter = (router, next, to) => {
   let isPermissionFilter = []
   let filteredRouterMap = clone['array'](dynamicRouters)
   request.getCurrentUserPermissions().then(res => {
+    console.log('res', res)
     res.data.map((item) => {
       item.child.map(childrenItem => {
         if (childrenItem.child.length >= 1 && childrenItem.child[0].enabled === true) {
@@ -16,6 +17,8 @@ const dynamicAddRouter = (router, next, to) => {
         }
       })
     })
+    console.log(isPermissionFilter)
+    console.log(filteredRouterMap)
     filteredRouterMap[0] = multiTree(filteredRouterMap[0], isPermissionFilter)
     // 筛选有权限的路由
     router.addRoutes(filteredRouterMap)
@@ -31,6 +34,7 @@ export default router => {
       if (!store.state.isPermissionFilter) {
         dynamicAddRouter(router, next, to)
       } else {
+        console.log(1)
         next()
       }
     } else {

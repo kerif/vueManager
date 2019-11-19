@@ -74,13 +74,14 @@ export default {
   data () {
     return {
       tableData: [],
-      state: ''
+      state: '',
+      id: ''
     }
   },
   methods: {
     getList () {
       let method = this.state === 'invite' ? 'invitations' : 'voucherUser'
-      this.$request[method](this.query.id, {
+      this.$request[method](this.id, {
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {

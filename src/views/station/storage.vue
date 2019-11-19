@@ -163,8 +163,11 @@ export default {
       console.log(this.$route.params.props, 'this.$route.params.props')
       this.getWarehouseInfo() // 从订单跳转过来时加载的表格数据
       this.user.express_num = this.$route.params.express_num
-      this.user.user_id = this.$route.params.user_id
-      this.user.props = this.$route.params.props.map(item => item.id)
+      this.user.user_id = this.$route.params.user_id + ''
+      if (this.$route.query.props) {
+        let props = JSON.parse(this.$route.query.props)
+        this.user.props = props.map(item => item.id)
+      }
       console.log(this.user.props)
     } else {
       this.getList() // 直接添加时加载的表格数据
