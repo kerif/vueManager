@@ -1,6 +1,6 @@
 import $form from 'axios'
 import qs from 'qs'
-import { router } from '@/router'
+import router from '@/router'
 import store from '@/store'
 import { Message } from 'element-ui'
 import nprogress from 'nprogress'

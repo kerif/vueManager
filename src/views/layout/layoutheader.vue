@@ -19,6 +19,8 @@ export default {
       }).then(() => {
         this.$request.logout().then(res => {
           if (res.ret) {
+            this.$store.commit('saveFileterAfterRouterMap', [])
+            this.$store.commit('savePermissionStatus', false)
             this.$store.commit('removeToken')
             this.$router.replace({ name: 'login' })
             this.$notify({

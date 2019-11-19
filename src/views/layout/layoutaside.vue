@@ -30,12 +30,12 @@
   </el-aside>
 </template>
 <script>
-import { routes } from '@/router'
 export default {
   computed: {
     formatRouterMap () {
+      const mapChildren = this.$store.state.fileterAfterRouterMap[0] ? this.$store.state.fileterAfterRouterMap[0].children : []
       let formatRouterMap = {}
-      routes[0].children.forEach((item, index) => {
+      mapChildren && mapChildren.forEach((item, index) => {
         item.children.forEach(ele => {
           if (formatRouterMap[ele.meta.group]) {
             formatRouterMap[ele.meta.group].children.push({ name: ele.meta.name, path: ele.path, level: ele.meta.level })
