@@ -15,12 +15,9 @@
         </el-breadcrumb>
       </div>
       <el-main>
-        <keep-alive include="shipContainer">
+        <keep-alive :include="/List/">
           <router-view></router-view>
         </keep-alive>
-        <!-- <keep-alive exclude="viplist">
-          <router-view></router-view>
-        </keep-alive> -->
       </el-main>
       <layout-footer></layout-footer>
     </el-container>

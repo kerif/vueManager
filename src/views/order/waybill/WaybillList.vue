@@ -145,6 +145,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
+  name: 'wallbillList',
   data () {
     return {
       activeName: '1',
@@ -330,6 +331,7 @@ export default {
     activeName (newValue) {
       switch (newValue) {
         case '1': // 待处理
+          this.page_params.page = 1
           this.status = 1
           break
         case '2': // 待支付

@@ -74,7 +74,7 @@ export default {
     AddBtn,
     NlePagination
   },
-  name: 'staffGroupContainer',
+  name: 'staffGroupList',
   data () {
     return {
       staff_group_list: [],

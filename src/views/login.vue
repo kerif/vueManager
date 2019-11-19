@@ -156,6 +156,7 @@
 </template>
 <script>
 export default {
+  name: 'login',
   data () {
     // 注册
     var validateRegister = (rule, value, callback) => {

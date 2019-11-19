@@ -52,6 +52,7 @@ export default {
       imgSrc: ''
     }
   },
+  name: 'suggestList',
   mixins: [pagination],
   components: {
     NlePagination

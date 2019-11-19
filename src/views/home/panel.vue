@@ -108,6 +108,7 @@
 import echarts from 'echarts'
 import { formatWeek, formatMonth } from '@/utils'
 export default {
+  name: 'panel',
   data () {
     return {
       user: {

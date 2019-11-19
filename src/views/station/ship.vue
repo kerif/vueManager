@@ -41,7 +41,7 @@
       <!-- 创建时间 -->
       <el-table-column label="创建时间" prop="created_at"></el-table-column>
       <!-- 发出站点 -->
-      <el-table-column label="发出站点" prop="source_station"></el-table-column>
+      <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
       <!-- 目的国 -->
       <el-table-column label="目的国" prop="destination_country"></el-table-column>
       <!-- 状态 -->
@@ -85,6 +85,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
+  name: 'shipList',
   data () {
     return {
       tableShip: [], // 表格数据

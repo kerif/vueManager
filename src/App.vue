@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <!-- <router-view/> -->
-   <keep-alive include="shipContainer">
-      <router-view></router-view>
-    </keep-alive>
+    <router-view/>
   </div>
 </template>
 <style lang="scss">

@@ -62,6 +62,7 @@ export default {
     }
   },
   mixins: [pagination],
+  name: 'transactionList',
   components: {
     SearchGroup,
     NlePagination

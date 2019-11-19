@@ -113,6 +113,7 @@ export default {
     SearchGroup,
     NlePagination
   },
+  name: 'orderList',
   mixins: [pagination],
   data () {
     return {
@@ -223,6 +224,7 @@ export default {
     activeName (newValue) {
       switch (newValue) {
         case '1': // 未入库
+          this.page_params.page = 1
           this.status = 1
           this.getList()
           break
