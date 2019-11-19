@@ -108,19 +108,13 @@ export default {
     invite (id) {
       dialog({ type: 'inviteList',
         state: 'invite',
-        query: {
-          id: id
-        } }, () => {
-        this.getList()
+        id
       })
     },
     voucher (id) {
       dialog({ type: 'inviteList',
         state: 'voucher',
-        query: {
-          id: id
-        } }, () => {
-        this.getList()
+        id
       })
     },
     selectionChange (selection) {

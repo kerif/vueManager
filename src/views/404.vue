@@ -15,7 +15,6 @@
         <router-link to="/" class="bullshit__return-home">返回首页</router-link>
       </div>
     </div>
-  </div>
 </template>
 
 <style lang="scss" scoped>

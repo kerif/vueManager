@@ -79,21 +79,8 @@ export default {
   },
   methods: {
     getList () {
-      console.log(this.state, 'invite')
-      this.$request.invitations(this.query.id, {
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        if (res.ret) {
-          this.tableData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        }
-      })
-    },
-    getVoucher () {
-      console.log(this.state, 'voucher')
-      this.$request.voucherUser(this.query.id, {
+      let method = this.state === 'invite' ? 'invitations' : 'voucherUser'
+      this.$request[method](this.query.id, {
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {
@@ -105,11 +92,7 @@ export default {
       })
     },
     init () {
-      if (this.state === 'invite') {
-        this.getList()
-      } else {
-        this.getVoucher()
-      }
+      this.getList()
     }
   }
 }
