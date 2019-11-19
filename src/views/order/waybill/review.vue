@@ -67,13 +67,13 @@
       <h4>确认支付信息</h4>
       <el-row :gutter="20">
         <el-col :span="9">
-          <p class="transfer-right">支付金额</p>
+          <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
           <span>{{form.confirm_amount}}</span><br/>
           <p class="transfer-right">备注</p>
           <span>{{form.customer_remark}}</span><br/>
           <p class="transfer-right">上传图片</p>
           <div class="left-img">
-            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index">
+            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true" style="cursor:pointer;">
           </div>
         </el-col>
       </el-row>
@@ -87,7 +87,8 @@
           <span>{{form.customer_remark}}</span><br/>
           <p class="transfer-right">上传照片</p>
          <div class="left-img">
-           <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index">
+           <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" style="cursor:pointer;"
+           @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
          </div>
           <!-- <span>{{form.customer_images}}</span><br/> -->
         </el-col>
@@ -119,7 +120,6 @@ export default {
     //   this.getList()
     // }
     if (this.$route.query.state === 'transaction') {
-      console.log('啦啦阿拉', this.$route.query.state)
       this.getTransaction()
     } else {
       this.getList()
@@ -161,7 +161,6 @@ export default {
     },
     // 审核通过
     reviewPass (id, tranAmount) {
-      console.log(typeof this.form.tran_amount, 'tranAmount')
       dialog({ type: 'reviewMsg', id: this.$route.query.id, state: 'pass', tranAmount: this.form.tran_amount }, () => {
         this.getList()
         this.$router.push({ name: 'wayBillList', query: { activeName: '2' } })
