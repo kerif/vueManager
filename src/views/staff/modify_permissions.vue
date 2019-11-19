@@ -50,6 +50,8 @@ export default {
             }
           })
           console.log(this.permissionMenu)
+        } else {
+          this.$message.error(res.msg)
         }
       })
     },

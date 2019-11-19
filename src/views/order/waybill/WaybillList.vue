@@ -32,6 +32,13 @@
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
       <!-- 转运单号 -->
       <el-table-column label="转运单号" prop="order_sn"></el-table-column>
+      <!-- 审核状态 -->
+      <el-table-column label="审核状态" v-if="activeName === '2'">
+        <template slot-scope="scope">
+          <!-- <span v-if="scope.row.status === 11">待审核</span> -->
+          <span v-if="scope.row.status === 12">审核拒绝</span>
+        </template>
+      </el-table-column>
       <!-- 物流单号 -->
       <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2'   || activeName === '4' || activeName === '5'" prop="logistics_sn">
       </el-table-column>
@@ -82,9 +89,12 @@
       <el-table-column label="操作" width="200px">
         <template slot-scope="scope">
           <!-- 详情 -->
-          <el-button class="btn-purple detailsBtn" @click="details(scope.row.id)">详情</el-button>
+          <el-button class="btn-purple detailsBtn" @click="details(scope.row.id, activeName)">详情</el-button>
           <!-- 完成支付 -->
-          <el-button v-show="activeName === '2'" class="btn-orangey-red" @click="finishPay(scope.row.id)">完成支付</el-button>
+          <!-- <el-button v-show="activeName === '2'" class="btn-orangey-red" @click="finishPay(scope.row.id)">完成支付</el-button> -->
+          <!-- 审核 -->
+          <el-button v-show="activeName === '2' && scope.row.status === 11" class="btn-dark-green" @click="reviewPackage(scope.row.id)">审核
+          </el-button>
           <!-- 打包 -->
           <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">打包</el-button>
           <!-- 加入发货单 -->
@@ -147,7 +157,7 @@ export default {
     }
     if (this.$route.query.order_sn) {
       this.page_params.keyword = this.$route.query.order_sn
-      this.activeName = this.$route.query.status ? '4' : '3'
+      this.activeName = this.$route.query.status.toString()
       this.goSearch()
     }
   },
@@ -189,6 +199,10 @@ export default {
         this.agentData = res.data
       })
     },
+    // 跳转到审核
+    reviewPackage (id) {
+      this.$router.push({ name: 'review', query: { id: id } })
+    },
     // 跳转到发货
     goShip (shipmentSn) {
       console.log(shipmentSn, 'shipmentSn')
@@ -219,8 +233,9 @@ export default {
       this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN } })
     },
     // 详情
-    details (id) {
-      this.$router.push({ name: 'billDetails', params: { id: id } })
+    details (id, activeName) {
+      console.log(activeName, 'activeName')
+      this.$router.push({ name: 'billDetails', params: { id: id, activeName: activeName } })
     },
     onSelectChange (selection) {
       this.selectIDs = selection.map(item => item.id)

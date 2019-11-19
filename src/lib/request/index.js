@@ -53,8 +53,8 @@ exports.addGroup = (params) => {
 exports.editGroup = (id, params) => {
   return $form.put(`admin-groups/${id}`, params)
 }
-exports.getVipMember = (id) => {
-  return $form.get(`admin-groups/${id}/members`)
+exports.getVipMember = (id, params) => {
+  return $form.get(`admin-groups/${id}/members`, { params })
 }
 exports.getBill = () => {
   return $form.get('warehouse-address')
@@ -73,8 +73,8 @@ exports.userGroupDelete = (ids) => {
   return $form.put('user-groups/batch-delete', ids)
 }
 // 客户组成员
-exports.getUserMembers = (id) => {
-  return $form.get(`user-groups/${id}/members`)
+exports.getUserMembers = (id, params) => {
+  return $form.get(`user-groups/${id}/members`, { params })
 }
 // 员工列表禁止登录
 exports.forbidUser = (ids) => {
@@ -174,6 +174,10 @@ exports.getExpress = (params) => {
 exports.addShipment = (params) => {
   return $form.post('shipments/in-storage/add', params)
 }
+// 入库 自动匹配客户ID
+exports.Automatic = (params) => {
+  return $form.get('shipments/in-storage/user-search', { params })
+}
 exports.getExpressLine = (id) => {
   return $form.get(`express-lines/${id}`)
 }
@@ -271,6 +275,10 @@ exports.getAgents = (params) => {
 // 获取代理列表的成交记录
 exports.getAgentOrders = (id) => {
   return $form.get(`agents/${id}/deal-orders`)
+}
+// 完成成交记录
+exports.finishOrders = (id) => {
+  return $form.put(`agents/commission/${id}`)
 }
 // 代理管理的添加代理
 exports.addAgents = (params) => {
@@ -388,6 +396,18 @@ exports.getOrdersByShipment = (id) => $form.get(`shipments/${id}/orders`)
 // 移除发货单
 exports.removeOrders = (id) => {
   return $form.put('orders/remove-from-shipment', id)
+}
+// 运单 获取审核
+exports.getTransfer = (id) => {
+  return $form.get(`orders/${id}/transfer-pay-info`)
+}
+// 审核通过
+exports.acceptPayment = (id, params) => {
+  return $form.put(`orders/${id}/payment/accept`, params)
+}
+//  审核拒绝
+exports.acceptReject = (id, params) => {
+  return $form.put(`orders/${id}/payment/refuse`, params)
 }
 // 完成支付
 exports.finishOrder = (id) => {

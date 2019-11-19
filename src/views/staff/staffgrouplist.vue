@@ -43,6 +43,7 @@
           <!-- 修改权限 -->
         <el-button
           class="btn-purple"
+          v-if="scope.row.permissions === 1"
           @click.stop="changePre(scope.row.id)">
           修改权限
         </el-button>

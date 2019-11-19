@@ -51,6 +51,10 @@
         prop="created_at"
         label="发放时间">
       </el-table-column>
+      <el-table-column
+        prop="used_at"
+        label="使用时间">
+      </el-table-column>
     </el-table>
     <!-- <div slot="footer">
       <el-button @click="show = false">取消</el-button>

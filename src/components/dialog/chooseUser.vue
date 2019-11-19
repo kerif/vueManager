@@ -35,8 +35,8 @@
       </el-table-column>
     </el-table>
     <div class="pagination-box">
-      <nle-pagination :pageParams="page_params"></nle-pagination>
-    </div>
+        <nle-pagination :pageParams="page_params"></nle-pagination>
+      </div>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>
       <el-button type="primary" @click="confirm">确定</el-button>
@@ -113,6 +113,6 @@ export default {
   cursor: pointer;
 }
 .pagination-box {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 </style>

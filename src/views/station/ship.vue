@@ -19,7 +19,7 @@
           <el-table-column label="客户ID" prop="user_id"></el-table-column>
           <el-table-column label="转运单号">
             <template slot-scope="scope">
-              <span @click="goOrder(scope.row.order_sn, props.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
+              <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
             </template>
           </el-table-column>
           <el-table-column label="物流单号" prop="logistics_sn"></el-table-column>
@@ -107,7 +107,6 @@ export default {
   },
   created () {
     this.getList()
-    console.log(this.$route.query.shipment_sn, 'this.$route.query.shipment_sn')
     if (this.$route.query.shipment_sn) {
       this.page_params.keyword = this.$route.query.shipment_sn
       this.goSearch()
@@ -144,7 +143,7 @@ export default {
     },
     // 跳转至订单 运单
     goOrder (orderSn, status) {
-      // console.log(status, 'this.tableShip.status')
+      console.log(status, '我是传过去的ID')
       this.$router.push({ name: 'wayBillList', query: { order_sn: orderSn, status: status } })
     },
     updateInvoice () {

@@ -10,14 +10,14 @@
         <el-tab-pane label="无人认领包裹" name="3"></el-tab-pane>
     </el-tabs>
     <div class="agentRight" v-if="activeName === '1' || activeName === '2'">
-    <el-select v-model="agent_name" @change="getList" clearable>
+    <!-- <el-select v-model="agent_name" @change="getList" clearable>
       <el-option
       v-for="item in agentData"
       :key="item.id"
       :value="item.user_id"
       :label="item.agent_name">
       </el-option>
-    </el-select>
+    </el-select> -->
     </div>
     <div v-if="activeName === '1' || activeName === '2'">
       <el-table v-if="oderData.length" class="data-list" border stripe

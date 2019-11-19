@@ -3,8 +3,8 @@
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
     <div class="status-box">
       <el-select v-model="ruleForm.status">
-        <el-option label="未处理" :value="0"></el-option>
-        <el-option label="已处理" :value="1"></el-option>
+        <el-option label="未处理" :value="1"></el-option>
+        <el-option label="已处理" :value="2"></el-option>
       </el-select>
     </div>
     </el-form>
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     clear () {
-      this.status = ''
+      this.ruleForm.status = ''
     },
     confirm () {
       this.$request.submitSuggest(this.id, this.ruleForm).then(res => {
@@ -54,6 +54,9 @@ export default {
   .status-box {
     text-align: center;
     margin: 20 0;
+  }
+  .el-input {
+    width: 70% !important;
   }
 }
 </style>
