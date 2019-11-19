@@ -82,6 +82,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
+  name: 'voucherList',
   data () {
     return {
       activeName: '1',

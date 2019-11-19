@@ -36,6 +36,7 @@ import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
+  name: 'vipGroupList',
   components: {
     SearchGroup,
     NlePagination,

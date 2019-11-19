@@ -8,7 +8,7 @@
             <el-input placeholder="请输入小程序ID" v-model="ruleForm.app_id"></el-input>
         </el-form-item>
         <el-form-item label="商户号ID">
-            <el-input placeholder="请输入商户号ID" v-model="ruleForm.mach_id"></el-input>
+            <el-input placeholder="请输入商户号ID" v-model="ruleForm.mch_id"></el-input>
         </el-form-item>
         <el-form-item label="商户KEY">
             <el-input placeholder="请输入商户KEY" v-model="ruleForm.key">
@@ -51,7 +51,7 @@ export default {
       fileList: [],
       ruleForm: {
         app_id: '',
-        mach_id: '',
+        mch_id: '',
         key: '',
         cert_path: '',
         key_path: '',
@@ -79,7 +79,13 @@ export default {
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.updateWechat(this.ruleForm).then(res => {
+          let params = { ...this.ruleForm }
+          for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+              if (!params[key]) delete params[key]
+            }
+          }
+          this.$request.updateWechat(params).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',

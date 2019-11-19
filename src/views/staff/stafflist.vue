@@ -96,7 +96,7 @@ export default {
     NlePagination,
     SearchSelect
   },
-  name: 'staffListContainer',
+  name: 'staffList',
   data () {
     return {
       staff_list: [],

@@ -24,6 +24,7 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
+  name: 'vipAddressList',
   data () {
     return {
       addressList: [],
