@@ -12,11 +12,30 @@
         </div>
         <div class="bullshit__headline">神说这个页面不存在......</div>
         <div class="bullshit__info">请检查您输入的网址是否正确，<br>点击以下按钮返回主页</div>
-        <router-link to="/" class="bullshit__return-home">返回首页</router-link>
+        <div @click="back" class="bullshit__return-home">返回首页</div>
       </div>
     </div>
 </template>
-
+<script>
+export default {
+  name: 'NotFound',
+  computed: {
+    isPermissionFilterArr () {
+      return this.$store.state.isPermissionFilterArr
+    }
+  },
+  methods: {
+    back () {
+      // 101 为首页跳转页面的权限id
+      if (!this.isPermissionFilterArr.includes(101)) {
+        this.$router.push({ name: 'reset-password' })
+      } else {
+        this.$router.push({ path: '/' })
+      }
+    }
+  }
+}
+</script>
 <style lang="scss" scoped>
 .http-404 {
   position: relative;

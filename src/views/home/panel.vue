@@ -4,7 +4,7 @@
      <el-col :span="18">
        <el-row>
          <el-col :span="7">
-          <div class="addCustomer" @click="$router.push({ name: 'viplist' })">
+          <div class="addCustomer" @click="goToOtherPage(301, 'viplist')">
             <div class="box-header">
               <div>当月新增客户</div>
               <div class="bold-box">{{ user.current_month }}</div>
@@ -16,7 +16,7 @@
           </div>
          </el-col>
          <el-col :span="8" :offset="1">
-          <div class="addCustomer" @click="$router.push({ name: 'orderlist' })">
+          <div class="addCustomer" @click="goToOtherPage(401, 'orderlist')">
             <div class="box-header">
               <div>当月新增订单</div>
               <div class="bold-box">{{ order.current_month }}</div>
@@ -28,7 +28,7 @@
           </div>
          </el-col>
          <el-col :span="7" :offset="1">
-          <div class="addCustomer" @click="$router.push({ name: 'shipContainer' })">
+          <div class="addCustomer" @click="goToOtherPage(502, 'shipContainer')">
             <div class="box-header">
               <div>当月新增发货单</div>
               <div class="bold-box">{{ shipment.current_month }}</div>
@@ -66,15 +66,15 @@
      <el-col :span="6" class="panel-right">
        <div class="waitMsg">待处理消息</div>
        <ul>
-         <li @click="$router.push({ name: 'orderlist' })">
+         <li @click="goToOtherPage(401, 'orderlist')">
            未入库包裹
            <div class="msg-right">{{ waitInStorage }}</div>
            </li>
-         <li @click="$router.push({ name: 'wayBillList' })">
+         <li @click="goToOtherPage(402, 'wayBillList')">
            待拣货包裹
            <div class="msg-right">{{ waitPack }}</div>
            </li>
-         <li @click="$router.push({ name: 'wayBillList', query: {activeName: '2'} })">
+         <li @click="goToOtherPage(402, 'wayBillList', {activeName: '2'})">
            未支付包裹
            <div class="msg-right">{{ upaid }}</div>
            </li>
@@ -175,6 +175,11 @@ export default {
       }
     }
   },
+  computed: {
+    isPermissionFilterArr () {
+      return this.$store.state.isPermissionFilterArr
+    }
+  },
   methods: {
     // 获取上面的统计数据
     getNumbers () {
@@ -240,6 +245,16 @@ export default {
           this.myChart.setOption(this.option)
         }
       })
+    },
+    goToOtherPage (permissionNumber, routerName, query = {}) {
+      if (!this.isPermissionFilterArr.includes(permissionNumber)) {
+        this.$message({
+          type: 'error',
+          message: '当前操作暂无权限！'
+        })
+      } else {
+        this.$router.push({ name: routerName, query: query })
+      }
     }
   }
 }
