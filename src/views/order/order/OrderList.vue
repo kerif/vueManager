@@ -129,7 +129,9 @@ export default {
   },
   methods: {
     getList () {
-      console.log(444)
+      if (this.activeName === '3') {
+        return this.getNO()
+      }
       this.tableLoading = true
       this.oderData = []
       this.$request.getWarehouse({
@@ -236,7 +238,7 @@ export default {
           break
         case '3':
           this.page_params.page = 1
-          this.getNO()
+          this.getList()
       }
       // this.getList()
     }
