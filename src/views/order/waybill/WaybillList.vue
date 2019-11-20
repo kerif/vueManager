@@ -14,7 +14,7 @@
         <el-tab-pane label="已签收" name="5"></el-tab-pane>
     </el-tabs>
     <div class="chooseStatus">
-      <el-select v-model="agent_name" @change="getList" clearable>
+      <el-select v-model="agent_name" @change="onAgentChange" clearable>
         <el-option
           v-for="item in agentData"
           :key="item.id"
@@ -162,7 +162,9 @@ export default {
     }
     if (this.$route.query.order_sn) {
       this.page_params.keyword = this.$route.query.order_sn
-      // this.goSearch()
+    }
+    if (this.$route.query.agent) {
+      this.agent_name = Number(this.$route.query.agent)
     }
     this.getAgentData()
   },
@@ -354,6 +356,11 @@ export default {
           page: 1
         }
       })
+      this.getList()
+    },
+    // 选择代理用户
+    onAgentChange () {
+      this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
     }
   }
