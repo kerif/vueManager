@@ -5,7 +5,7 @@
     </div>
     <div class="select-box">
      <search-select placeholder="请选择客户组" :selectArr="clientGroupList"
-        v-model="page_params.group" @search="getList">
+        v-model="page_params.group" @search="onGroupChange">
       </search-select>
     </div>
     <el-table class="data-list" border stripe
@@ -63,6 +63,9 @@ export default {
   mixins: [pagination],
   created () {
     this.getCategory()
+    if (this.$route.query.group) {
+      this.page_params.group = Number(this.$route.query.group)
+    }
   },
   mounted () {
     this.getList()
@@ -167,6 +170,11 @@ export default {
           }
         })
       }
+    },
+    // 选择客户组
+    onGroupChange () {
+      this.page_params.handleQueryChange('group', this.page_params.group)
+      this.getList()
     }
   },
   components: {

@@ -6,20 +6,20 @@ import dynamicRouters from './routes'
 const whiteList = ['login', 'NotFound'] // 不重定向白名单
 
 const dynamicAddRouter = (router, next, to) => {
-  let isPermissionFilter = []
+  let isPermissionFilterArr = [100, 102] // 102 为修改密码的页面
   let filteredRouterMap = clone['array'](dynamicRouters)
   request.getCurrentUserPermissions().then(res => {
     res.data.map((item) => {
       item.child.map(childrenItem => {
         if (childrenItem.child.length >= 1 && childrenItem.child[0].enabled === true) {
-          isPermissionFilter.push(childrenItem.tag, item.tag)
+          isPermissionFilterArr.push(childrenItem.tag, item.tag)
         }
       })
     })
-    filteredRouterMap[0] = multiTree(filteredRouterMap[0], isPermissionFilter)
     // 筛选有权限的路由
+    filteredRouterMap[0] = multiTree(filteredRouterMap[0], isPermissionFilterArr)
     router.addRoutes(filteredRouterMap)
-    store.commit('saveFileterAfterRouterMap', filteredRouterMap)
+    store.commit('saveFileterAfterRouterMap', { fileterAfterRouterMap: filteredRouterMap, isPermissionFilterArr })
     store.commit('savePermissionStatus', true) // 标记筛选完成
     next({ path: to.path, query: to.query })
   })
@@ -31,6 +31,11 @@ export default router => {
       if (!store.state.isPermissionFilter) {
         dynamicAddRouter(router, next, to)
       } else {
+        if (to.path === '/home/panel') {
+          if (!store.state.isPermissionFilterArr.includes(101)) {
+            next({ path: '/home/reset-password' })
+          }
+        }
         next()
       }
     } else {

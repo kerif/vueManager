@@ -5,7 +5,7 @@
         </search-group>
       </div>
     <div class="select-box">
-      <search-select placeholder="状态" :selectArr="statusList" @search="getList"
+      <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus"
       v-model="page_params.status"></search-select>
       <add-btn @click.native="updateInvoice">创建发货单</add-btn>
     </div>
@@ -109,7 +109,9 @@ export default {
   created () {
     if (this.$route.query.shipment_sn) {
       this.page_params.keyword = this.$route.query.shipment_sn
-      // this.goSearch()
+    }
+    if (this.$route.query.status) {
+      this.page_params.status = Number(this.$route.query.status)
     }
   },
   mounted () {
@@ -188,6 +190,11 @@ export default {
           row.orders = res.data
         }
       })
+    },
+    // 发货状态选择
+    onShipStatus () {
+      this.page_params.handleQueryChange('status', this.page_params.status)
+      this.getList()
     }
   }
 }
