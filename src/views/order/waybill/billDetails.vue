@@ -58,11 +58,21 @@
          <span>{{form.created_at}}</span>
       </el-col>
     </el-row>
-    <el-row class="container-center"  :gutter="20">
+    <el-row class="container-center" :gutter="20">
      <!-- 增值服务 -->
-      <el-col :span="6">
+      <el-col :span="7">
         <span class="leftWidth">增值服务</span>
         <span>{{form.add_service}}</span>
+      </el-col>
+      <!-- 物流单号 -->
+      <el-col :span="7" :offset="1">
+        <span class="leftWidth">物流单号</span>
+        <span>{{form.logistics_sn}}</span>
+      </el-col>
+      <!-- 物流公司 -->
+      <el-col :span="7" :offset="1">
+        <span class="leftWidth">物流公司</span>
+        <span>{{form.logistics_company}}</span>
       </el-col>
     </el-row>
     </div>
