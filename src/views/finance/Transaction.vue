@@ -70,7 +70,11 @@ export default {
   created () {
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
-      // this.goSearch()
+    }
+    if (this.$route.query.times) {
+      this.timeList = this.$route.query.times.split(' ')
+      this.begin_date = this.timeList[0]
+      this.end_date = this.timeList[1]
     }
   },
   mounted () {
@@ -106,6 +110,7 @@ export default {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
+      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
     },
     // 跳转到审核

@@ -14,7 +14,7 @@
       <!-- v-if="oderData.length" -->
     </el-tabs>
     <div class="changeVou">
-      <el-select v-model="type" @change="getList" clearable>
+      <el-select v-model="type" @change="onVocherTypeChange" clearable>
         <el-option
           v-for="item in voucherChange"
           :key="item.id"
@@ -123,6 +123,9 @@ export default {
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
       this.status = Number(this.activeName) === 0 ? '' : Number(this.activeName) - 1
+    }
+    if (this.$route.query.type) {
+      this.type = this.$route.query.type
     }
   },
   mounted () {
@@ -298,16 +301,13 @@ export default {
           break
       }
       this.page_params.page = 1
-      const { name, params, query } = this.$route
-      this.$router.replace({
-        name,
-        params,
-        query: {
-          ...query,
-          page: 1,
-          activeName: tab.name
-        }
-      })
+      this.page_params.handleQueryChange('page', 1)
+      this.page_params.handleQueryChange('activeName', tab.name)
+      this.getList()
+    },
+    // 选择不同类型优惠券
+    onVocherTypeChange () {
+      this.page_params.handleQueryChange('type', this.type)
       this.getList()
     }
   }

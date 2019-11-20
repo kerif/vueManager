@@ -346,16 +346,8 @@ export default {
       // }
       this.status = Number(tab.name)
       this.page_params.page = 1
-      const { name, params, query } = this.$route
-      this.$router.replace({
-        name,
-        params,
-        query: {
-          ...query,
-          activeName: tab.name,
-          page: 1
-        }
-      })
+      this.page_params.handleQueryChange('page', 1)
+      this.page_params.handleQueryChange('activeName', tab.name)
       this.getList()
     },
     // 选择代理用户

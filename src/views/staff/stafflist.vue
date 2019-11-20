@@ -5,7 +5,7 @@
     </div>
       <div class="select-box">
         <search-select placeholder="请选择员工组" :selectArr="clientGroupList"
-        v-model="page_params.group" @search="getList">
+        v-model="page_params.group" @search="onGroupChange">
       </search-select>
         <add-btn router="staffadd">添加员工</add-btn>
       </div>
@@ -112,6 +112,9 @@ export default {
   },
   created () {
     this.getCategory()
+    if (this.$route.query.group) {
+      this.page_params.group = Number(this.$route.query.group)
+    }
   },
   mounted () {
     this.getList()
@@ -225,6 +228,11 @@ export default {
           }
         })
       }
+    },
+    // 选择员工组
+    onGroupChange () {
+      this.page_params.handleQueryChange('group', this.page_params.group)
+      this.getList()
     }
   },
   watch: {
