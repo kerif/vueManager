@@ -33,6 +33,9 @@
         label="创建时间">
       </el-table-column>
     </el-table>
+    <div class="pagination-box">
+        <nle-pagination :pageParams="page_params"></nle-pagination>
+     </div>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>
       <el-button type="primary" @click="confirm">确定</el-button>
@@ -40,6 +43,8 @@
   </el-dialog>
 </template>
 <script>
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data () {
     return {
@@ -49,13 +54,21 @@ export default {
       group: {}
     }
   },
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   methods: {
     getList () {
       this.$request.getUserGroup({
-        keyword: this.keyword
+        keyword: this.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
       }).then(res => {
         if (res.ret) {
           this.tableData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
         } else {
           this.$notify({
             title: '操作失败',
@@ -91,5 +104,8 @@ export default {
   width: 40%;
   float: right;
   margin: 10px 0;
+}
+.pagination-box {
+  margin-top: 10px;
 }
 </style>
