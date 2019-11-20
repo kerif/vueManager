@@ -42,21 +42,21 @@
        </el-row>
        <el-row class="main">
         <el-col :span="7">
-          <div class="main-box" @click="$router.push({ name: 'storageContainer' })">
+          <div class="main-box" @click="goToOtherPage(501, 'storageContainer')">
             <img src="../../assets/storage.png" class="tip-img">
             <span>包裹入库</span>
           </div>
         </el-col>
         <!-- 拣货打包 -->
         <el-col :span="7" :offset="1">
-          <div class="main-box" @click="$router.push({ name: 'wayBillList' })">
+          <div class="main-box" @click="goToOtherPage(402, 'wayBillList')">
             <img src="../../assets/bale.png" class="tip-img">
             <span>拣货打包</span>
           </div>
         </el-col>
         <!-- 运单发货 -->
         <el-col :span="7" :offset="1">
-          <div class="main-box" @click="$router.push({ name: 'shipContainer' })">
+          <div class="main-box" @click="goToOtherPage(502, 'shipContainer')">
             <img src="../../assets/ship.png" class="tip-img">
             <span>运单发货</span>
           </div>
