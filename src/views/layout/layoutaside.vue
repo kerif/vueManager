@@ -32,10 +32,13 @@
 <script>
 export default {
   computed: {
+    fileterAfterRouterMap () {
+      return this.$store.state.fileterAfterRouterMap[0] ? this.$store.state.fileterAfterRouterMap[0].children : []
+    },
     formatRouterMap () {
-      const mapChildren = this.$store.state.fileterAfterRouterMap[0] ? this.$store.state.fileterAfterRouterMap[0].children : []
+      console.log()
       let formatRouterMap = {}
-      mapChildren && mapChildren.forEach((item, index) => {
+      this.fileterAfterRouterMap && this.fileterAfterRouterMap.forEach((item, index) => {
         item.children.forEach(ele => {
           if (formatRouterMap[ele.meta.group]) {
             formatRouterMap[ele.meta.group].children.push({ name: ele.meta.name, path: ele.path, level: ele.meta.level })
