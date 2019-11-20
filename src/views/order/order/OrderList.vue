@@ -255,7 +255,7 @@ export default {
     color: #ccc;
   }
   .agentRight {
-    display: inline-block;
+    // display: inline-block;
     float: right;
   }
 }
