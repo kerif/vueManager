@@ -35,6 +35,7 @@ export default {
       const keys = Object.keys(query)
       keys.forEach(key => {
         if (key === 'page' || key === 'size') {
+          console.log('key', key)
           this.pageParams[key] = Number(query[key])
         }
       })

@@ -152,8 +152,8 @@ export default {
           console.log(res.data)
           // this.user.group_id = res.data.admin_group.id
           this.$set(this.user, 'group_id', res.data.admin_group.id)
-          console.log(this.user.group_id, ' this.user.group_id')
-          console.log(this.user, 'this.user')
+          // console.log(this.user.group_id, ' this.user.group_id')
+          // console.log(this.user, 'this.user')
         }
       })
     },
@@ -161,7 +161,7 @@ export default {
     getVipGroup () {
       this.$request.getVips().then(res => {
         this.employeeGroup = res.data
-        console.log(this.employeeGroup, 'this.employeeGroup')
+        // console.log(this.employeeGroup, 'this.employeeGroup')
       })
     },
     // 保存
@@ -176,7 +176,8 @@ export default {
                   message: res.msg,
                   type: 'success'
                 })
-                this.$router.push({ name: 'stafflist' })
+                // this.$router.push({ name: 'stafflist' })
+                this.$router.go(-1)
               } else {
                 this.$notify({
                   title: '操作失败',

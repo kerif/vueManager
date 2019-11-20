@@ -68,7 +68,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
@@ -107,11 +107,13 @@ export default {
     }
   },
   created () {
-    this.getList()
     if (this.$route.query.shipment_sn) {
       this.page_params.keyword = this.$route.query.shipment_sn
-      this.goSearch()
+      // this.goSearch()
     }
+  },
+  mounted () {
+    this.getList()
   },
   methods: {
     getList () {
@@ -145,7 +147,7 @@ export default {
     // 跳转至订单 运单
     goOrder (orderSn, status) {
       console.log(status, '我是传过去的ID')
-      this.$router.push({ name: 'wayBillList', query: { order_sn: orderSn, status: status } })
+      this.$router.push({ name: 'wayBillList', query: { order_sn: orderSn, activeName: status.toString() } })
     },
     updateInvoice () {
       dialog({ type: 'invoice' }, () => {

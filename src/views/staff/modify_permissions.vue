@@ -64,7 +64,8 @@ export default {
             title: '操作成功',
             message: res.msg
           })
-          this.$router.push({ name: 'staffgrouplist' })
+          // this.$router.push({ name: 'staffgrouplist' })
+          this.$router.go(-1)
         } else {
           this.$message.error(res.msg)
         }

@@ -157,7 +157,8 @@ export default {
                   message: res.msg,
                   type: 'success'
                 })
-                this.$router.push({ name: 'agent' })
+                // this.$router.push({ name: 'agent' })
+                this.$router.go(-1)
               } else {
                 this.$notify({
                   title: '操作失败',

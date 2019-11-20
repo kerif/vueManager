@@ -216,7 +216,7 @@ export default {
       })
     }
   },
-  created () {
+  mounted () {
     this.getAgentData()
     this.getList()
   },

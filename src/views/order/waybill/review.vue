@@ -162,15 +162,15 @@ export default {
     // 审核通过
     reviewPass (id, tranAmount) {
       dialog({ type: 'reviewMsg', id: this.$route.query.id, state: 'pass', tranAmount: this.form.tran_amount }, () => {
-        this.getList()
-        this.$router.push({ name: 'wayBillList', query: { activeName: '2' } })
+        // this.$router.push({ name: 'wayBillList', query: { activeName: '2' } })
+        this.$router.go(-1)
       })
     },
     // 审核拒绝
     reviewReject (id) {
       dialog({ type: 'reviewMsg', id: this.$route.query.id, state: 'reject' }, () => {
-        this.getList()
-        this.$router.push({ name: 'wayBillList' })
+        // this.$router.push({ name: 'wayBillList' })
+        this.$router.go(-1)
       })
     }
   }

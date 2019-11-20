@@ -114,7 +114,8 @@ export default {
               message: res.tips,
               type: 'success'
             })
-            this.$router.push({ name: 'noticelist' })
+            // this.$router.push({ name: 'noticelist' })
+            this.$router.go(-1)
           } else {
             this.$notify({
               title: '操作失败',

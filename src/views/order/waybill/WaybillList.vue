@@ -1,7 +1,7 @@
 <template>
   <div class="way-list-container">
     <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
-      <el-tabs v-model="activeName" class="tabLength">
+      <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
         <!-- 待处理 -->
         <el-tab-pane label="待处理" name="1"></el-tab-pane>
         <!-- 待支付 -->
@@ -127,7 +127,7 @@
       </template>
     </el-table>
     <div class="noDate" v-else>暂无数据</div>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
@@ -156,20 +156,21 @@ export default {
     }
   },
   created () {
-    this.getList()
-    this.getAgentData()
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
+      this.status = Number(this.$route.query.activeName)
     }
     if (this.$route.query.order_sn) {
       this.page_params.keyword = this.$route.query.order_sn
-      this.activeName = this.$route.query.status.toString()
-      this.goSearch()
+      // this.goSearch()
     }
+    this.getAgentData()
+  },
+  mounted () {
+    this.getList()
   },
   methods: {
     getList () {
-      console.log(this.agent_name, 'agent_name')
       this.tableLoading = true
       this.oderData = []
       this.$request.getOrder({
@@ -321,33 +322,38 @@ export default {
           })
         }
       })
-    }
-  },
-  watch: {
-    // 监听tab组件参数
-    activeName (newValue) {
-      switch (newValue) {
-        case '1': // 待处理
-          this.page_params.page = 1
-          this.status = 1
-          break
-        case '2': // 待支付
-          this.page_params.page = 1
-          this.status = 2
-          break
-        case '3': // 待发货
-          this.page_params.page = 1
-          this.status = 3
-          break
-        case '4': // 已发货
-          this.page_params.page = 1
-          this.status = 4
-          break
-        case '5': // 已签收
-          this.page_params.page = 1
-          this.status = 5
-          break
-      }
+    },
+    // Tab Change
+    onTabChange (tab) {
+      // switch (tab.name) {
+      //   case '1': // 待处理
+      //     this.status = 1
+      //     break
+      //   case '2': // 待支付
+      //     this.status = 2
+      //     break
+      //   case '3': // 待发货
+      //     this.status = 3
+      //     break
+      //   case '4': // 已发货
+      //     this.status = 4
+      //     break
+      //   case '5': // 已签收
+      //     this.status = 5
+      //     break
+      // }
+      this.status = Number(tab.name)
+      this.page_params.page = 1
+      const { name, params, query } = this.$route
+      this.$router.replace({
+        name,
+        params,
+        query: {
+          ...query,
+          activeName: tab.name,
+          page: 1
+        }
+      })
       this.getList()
     }
   }

@@ -35,7 +35,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
       <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
@@ -66,7 +66,7 @@ export default {
     SearchGroup,
     AddBtn
   },
-  created () {
+  mounted () {
     this.getList()
   },
   methods: {

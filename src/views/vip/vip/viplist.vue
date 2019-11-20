@@ -39,7 +39,7 @@
         </div>
       </template>
     </el-table>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
@@ -62,11 +62,14 @@ export default {
   },
   mixins: [pagination],
   created () {
-    this.getList()
     this.getCategory()
+  },
+  mounted () {
+    this.getList()
   },
   methods: {
     getList () {
+      console.log('page', JSON.stringify(this.page_params))
       this.tableLoading = true
       this.$request.getUsers({
         keyword: this.page_params.keyword,
@@ -79,6 +82,7 @@ export default {
           this.vipList = res.data
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          console.log('back', JSON.stringify(this.page_params))
         } else {
           this.$notify({
             title: '操作失败',

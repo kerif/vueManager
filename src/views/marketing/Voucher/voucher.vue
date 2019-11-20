@@ -2,7 +2,7 @@
   <div class="voucher-container">
     <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
     <add-btn router="addVoucher">添加</add-btn>
-      <el-tabs v-model="activeName" class="tabLength">
+      <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
         <!-- 全部 -->
         <el-tab-pane label="全部" name="1"></el-tab-pane>
         <!-- 未开始 -->
@@ -63,7 +63,7 @@
       </el-table-column>
     </el-table>
     <!-- <div class="noDate" v-else>暂无数据</div> -->
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="show" title="请选择" class="change-status-dialog dialog-container" width="35%" @close="clear">
         <div class="status-box">
             <el-radio-group v-model="ruleForm.status">
@@ -119,11 +119,14 @@ export default {
       }
     }
   },
-  activated () {
-    this.getList()
+  created () {
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
+      this.status = Number(this.activeName) === 0 ? '' : Number(this.activeName) - 1
     }
+  },
+  mounted () {
+    this.getList()
   },
   methods: {
     getList () {
@@ -277,29 +280,34 @@ export default {
           })
         }
       })
-    }
-  },
-  watch: {
-    // 监听tab组件参数
-    activeName (newValue) {
-      switch (newValue) {
+    },
+    // tab change
+    onTabChange (tab) {
+      switch (tab.name) {
         case '1': // 全部
-          this.page_params.page = 1
           this.status = ''
           break
         case '2': // 未开始
-          this.page_params.page = 1
           this.status = 1
           break
         case '3': // 进行中
-          this.page_params.page = 1
           this.status = 2
           break
         case '4': // 已失效
-          this.page_params.page = 1
           this.status = 3
           break
       }
+      this.page_params.page = 1
+      const { name, params, query } = this.$route
+      this.$router.replace({
+        name,
+        params,
+        query: {
+          ...query,
+          page: 1,
+          activeName: tab.name
+        }
+      })
       this.getList()
     }
   }

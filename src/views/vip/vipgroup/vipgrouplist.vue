@@ -26,7 +26,7 @@
         </div>
       </template>
     </el-table>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
@@ -50,7 +50,7 @@ export default {
       deleteNum: []
     }
   },
-  created () {
+  mounted () {
     this.getList()
   },
   methods: {

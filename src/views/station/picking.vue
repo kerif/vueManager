@@ -44,7 +44,7 @@
       </template> -->
     </el-table>
     <div v-else class="noDate">暂无数据</div>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
@@ -76,13 +76,17 @@ export default {
   },
   methods: {
     handleClick () {
-      if (this.activeName === '1') {
-        this.page_params.page = 1
-        this.getList()
-      } else if (this.activeName === '2') {
-        this.page_params.page = 1
-        this.getPick()
-      }
+      this.page_params.page = 1
+      const { name, params, query } = this.$route
+      this.$router.replace({
+        name,
+        params,
+        query: {
+          ...query,
+          page: 1
+        }
+      })
+      this.getList()
     },
     // 入库日志
     getList () {
@@ -143,6 +147,8 @@ export default {
   },
   created () {
     this.activeName = '1'
+  },
+  mounted () {
     this.getList()
   }
 }

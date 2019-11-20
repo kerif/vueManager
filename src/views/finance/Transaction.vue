@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
@@ -67,13 +67,13 @@ export default {
     SearchGroup,
     NlePagination
   },
-  activated () {
+  created () {
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
-      this.goSearch()
+      // this.goSearch()
     }
   },
-  created () {
+  mounted () {
     this.getList()
   },
   methods: {

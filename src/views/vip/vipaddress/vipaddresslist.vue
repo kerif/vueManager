@@ -16,7 +16,7 @@
       <el-table-column label="门牌号" prop="door_no"></el-table-column>
       <el-table-column label="邮编" prop="postcode"></el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
@@ -36,7 +36,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  created () {
+  mounted () {
     this.getList()
   },
   methods: {
