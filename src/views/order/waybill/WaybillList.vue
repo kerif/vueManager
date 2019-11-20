@@ -381,9 +381,5 @@ export default {
     color:blue;
     text-decoration: underline;
   }
-  a {
-    // text-decoration:none;
-    // color:#333;
-  }
 }
 </style>

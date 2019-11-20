@@ -35,29 +35,22 @@ export default {
       const keys = Object.keys(query)
       keys.forEach(key => {
         if (key === 'page' || key === 'size') {
-          console.log('key', key)
           this.pageParams[key] = Number(query[key])
+        } else if (key === 'keyword') {
+          this.pageParams[key] = query[key]
         }
       })
     },
-    handerPageSizeChange (key, value) {
+    handlePageSizeChange (key, value) {
       if (this.notNeedInitQuery) return
-      const { name, params, query } = this.$route
-      this.$router.replace({
-        name,
-        params,
-        query: {
-          ...query,
-          [key]: value
-        }
-      })
+      this.pageParams.handlePageSizeChange(key, value)
     },
     handleSizeChange (size) {
-      this.handerPageSizeChange('size', size)
+      this.handlePageSizeChange('size', size)
       this.pageParams.handleSizeChange(size)
     },
     handleCurrentChange (page) {
-      this.handerPageSizeChange('page', page)
+      this.handlePageSizeChange('page', page)
       this.pageParams.handleCurrentChange(page)
     }
   }

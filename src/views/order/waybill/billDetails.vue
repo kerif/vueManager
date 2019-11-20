@@ -105,11 +105,11 @@
           <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
           <el-table-column :label="'实际支付' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
           <!-- 支付流水号 -->
-          <el-table-column label="支付流水号">
+          <!-- <el-table-column label="支付流水号">
             <template slot-scope="scope">
               <span @click="goSerial(scope.row.serial_number)" class="chooseOrder">{{scope.row.serial_number}}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="支付时间" prop="paid_at"></el-table-column>
         </el-table>
     </div>

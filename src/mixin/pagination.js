@@ -7,7 +7,8 @@ export default {
         total: 0,
         keyword: '',
         handleCurrentChange: this.handleCurrentChange,
-        handleSizeChange: this.handleSizeChange
+        handleSizeChange: this.handleSizeChange,
+        handlePageSizeChange: this.handlePageSizeChange
       }
     }
   },
@@ -26,6 +27,7 @@ export default {
     // 分页size
     handleSizeChange (pageSize) {
       this.page_params.page = 1
+      this.handlePageSizeChange('page', this.page_params.page)
       this.page_params.size = pageSize
       this.getList()
     },
@@ -33,7 +35,21 @@ export default {
     goSearch (is) {
       this.page_params.page = 1
       this.page_params.size = 10
+      this.handlePageSizeChange('page', this.page_params.page)
+      this.handlePageSizeChange('size', this.page_params.size)
+      this.handlePageSizeChange('keyword', this.page_params.keyword)
       this.getList(is)
+    },
+    handlePageSizeChange (key, value) {
+      const { name, params, query } = this.$route
+      this.$router.replace({
+        name,
+        params,
+        query: {
+          ...query,
+          [key]: value
+        }
+      })
     }
   }
 }
