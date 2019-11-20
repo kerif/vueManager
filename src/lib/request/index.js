@@ -373,8 +373,8 @@ exports.addLaunchGroup = (id, ids) => {
   return $form.put(`coupons/${id}/launch/group`, ids)
 }
 // 记录
-exports.userCoupons = (id) => {
-  return $form.get(`coupons/${id}/user-coupons`)
+exports.userCoupons = (id, params) => {
+  return $form.get(`coupons/${id}/user-coupons`, { params })
 }
 // 作废
 exports.disableCoupons = (id) => {
@@ -404,6 +404,10 @@ exports.removeOrders = (id) => {
 // 运单 获取审核
 exports.getTransfer = (id) => {
   return $form.get(`orders/${id}/transfer-pay-info`)
+}
+// 运单 从流水记录跳转过来
+exports.getReview = (id) => {
+  return $form.get(`transaction-records/order/${id}/transfer-pay-info`)
 }
 // 审核通过
 exports.acceptPayment = (id, params) => {
