@@ -21,12 +21,12 @@
             placeholder="请输入备注"></el-input>
         </el-form-item>
         <el-form-item label="上传照片" class="updateChe">
-            <span class="img-item" v-for="(item) in baleImgList" :key="item.name">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
             <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
-                <!-- <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i> -->
+                <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
             </span>
             <el-upload
@@ -48,6 +48,7 @@
   </el-dialog>
 </template>
 <script>
+import dialog from '@/components/dialog'
 export default {
   data () {
     return {
@@ -135,6 +136,17 @@ export default {
         }
       })
     },
+    // 预览图片
+    onPreview (image) {
+      dialog({
+        type: 'previewimage',
+        image
+      })
+    },
+    // 删除图片
+    onDeleteImg (index) {
+      this.baleImgList.splice(index, 1)
+    },
     // 上传图片
     onUpload (file) {
       let params = new FormData()
@@ -199,6 +211,26 @@ export default {
         opacity: 1;
         transition: all .5s ease-in;
       }
+    }
+  }
+  .model-box {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, .3);
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    i {
+      font-size: 20px;
+      color: #fff;
+      margin-right: 10px;
     }
   }
   .goods-img {
