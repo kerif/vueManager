@@ -22,6 +22,8 @@ const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
 const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 // 财务 流水记录
 const Transaction = loadonDemand('finance/Transaction')
+// 财务 流水记录详情
+const TransactionDetails = loadonDemand('finance/financeDetails')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
@@ -516,6 +518,18 @@ export default [
               group: '财务',
               level: 2,
               name: '流水记录'
+            }
+          },
+          {
+            path: '/finance/details',
+            name: 'TransactionDetails',
+            component: TransactionDetails,
+            id: 701,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '详情',
+              parent: '/finance/transaction'
             }
           }
         ]

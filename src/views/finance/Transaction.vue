@@ -115,7 +115,7 @@ export default {
     },
     // 跳转到审核
     details (id) {
-      this.$router.push({ name: 'review', query: { id: id, state: 'transaction' } })
+      this.$router.push({ name: 'TransactionDetails', query: { id: id, state: 'transaction' } })
     }
   }
 }

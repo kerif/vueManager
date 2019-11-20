@@ -47,6 +47,8 @@
       <!-- 物流单号 -->
       <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2'   || activeName === '4' || activeName === '5'" prop="logistics_sn">
       </el-table-column>
+        <!-- 物流公司 -->
+        <el-table-column label="物流公司" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="logistics_company"></el-table-column>
       <!-- 状态为待发货才会出现输入框 -->
       <el-table-column label="物流单号" v-if="activeName === '3'" width="140px">
         <template slot-scope="scope">
@@ -107,6 +109,8 @@
           @click="addInvoice([scope.row.id])">加入发货单</el-button>
           <!-- 添加物流单号 -->
           <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加物流单号</el-button>
+          <!-- 添加物流公司 -->
+          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn)" v-if="activeName === '3'" class="btn-green detailsBtn">添加物流公司</el-button>
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
           </el-button>
@@ -288,6 +292,14 @@ export default {
             })
           }
         })
+      })
+    },
+    // 添加物流公司
+    addCompany (id, logisticsSn) {
+      console.log(id, 'id')
+      console.log(logisticsSn, 'logisticsSn')
+      dialog({ type: 'addCompany', id: id, logistics_sn: logisticsSn }, () => {
+        this.getList()
       })
     },
     // 添加物流单号

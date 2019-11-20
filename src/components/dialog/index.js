@@ -17,6 +17,7 @@ import selectGroup from './selectGroup.vue'
 import addPackage from './addprops.vue'
 import inviteList from './inviteList.vue'
 import reviewMsg from './reviewMsg.vue'
+import addCompany from './addCompany.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -36,6 +37,7 @@ const SelectCusController = Vue.extend(selectCus)
 const SelectGroupController = Vue.extend(selectGroup)
 const AddPackageController = Vue.extend(addPackage)
 const ReviewMsgController = Vue.extend(reviewMsg)
+const AddCompanyController = Vue.extend(addCompany)
 
 const mixin = {
   data () {
@@ -166,6 +168,13 @@ function initInstance (type) {
       break
     case 'reviewMsg':
       instance = new ReviewMsgController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 添加物流公司
+    case 'addCompany':
+      instance = new AddCompanyController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
