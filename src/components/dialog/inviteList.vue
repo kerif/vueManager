@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'invite' ? '邀请记录' : '卡券包'" class="dialog-container">
+  <el-dialog :visible.sync="show" :title="state === 'invite' ? '邀请记录' : '卡券包'" class="dialog-invite">
     <el-table v-if="state === 'invite'"
       class="data-list"
       :data="tableData"
@@ -55,6 +55,12 @@
         prop="used_at"
         label="使用时间">
       </el-table-column>
+      <el-table-column label="操作">
+      <template slot-scope="scope">
+        <!-- 作废 -->
+        <el-button class="btn-light-red" @click="failCoupon(scope.row.id)">作废</el-button>
+      </template>
+      </el-table-column>
     </el-table>
     <!-- <div slot="footer">
       <el-button @click="show = false">取消</el-button>
@@ -92,6 +98,32 @@ export default {
         }
       })
     },
+    // 作废优惠券
+    failCoupon (id) {
+      this.show = false
+      this.$confirm('确定要作废优惠券吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteCoupons(this.id, id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.success()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
     init () {
       this.getList()
     }
@@ -99,4 +131,6 @@ export default {
 }
 </script>
 <style lang="scss">
+.dialog-invite{
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="添加物品属性" class="change-status-dialog dialog-container" width="35%" @close="clear">
+  <el-dialog :visible.sync="show" title="添加物品属性" class="props-dialog" width="35%" @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
       <el-form-item label="属性名称: ">
         <el-input v-model="ruleForm.cn_name" @keyup.enter.native="confirm"></el-input>
@@ -51,7 +51,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.change-status-dialog {
+.props-dialog {
   .el-input {
     width: 40%;
   }

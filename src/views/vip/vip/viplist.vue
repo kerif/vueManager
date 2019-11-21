@@ -122,6 +122,8 @@ export default {
       dialog({ type: 'inviteList',
         state: 'voucher',
         id
+      }, () => {
+        this.getList()
       })
     },
     selectionChange (selection) {

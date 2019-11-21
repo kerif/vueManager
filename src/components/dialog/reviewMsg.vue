@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="审核" class="dialog-invoice" width="35%"
+  <el-dialog :visible.sync="show" title="审核" class="dialog-review" width="35%"
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
@@ -171,7 +171,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.dialog-invoice {
+.dialog-review {
   .el-dialog__body {
     margin-left: 20px !important;
   }

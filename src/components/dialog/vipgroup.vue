@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="修改客户组" class="dialog-container" @close="clear">
+  <el-dialog :visible.sync="show" title="修改客户组" class="dialog-vip-group" @close="clear">
     <div>客户组中文名*</div>
     <el-select v-model="user.name_cn">
       <el-option
@@ -61,4 +61,6 @@ export default {
 }
 </script>
 <style lang="scss">
+.dialog-vip-group {
+}
 </style>

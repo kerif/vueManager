@@ -61,7 +61,9 @@ export default {
 }
 </script>
 <style lang="scss">
-.el-input {
-  width: 60%;
+.dialog-container {
+  .el-input {
+   width: 60%;
+ }
 }
 </style>

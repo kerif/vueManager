@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="员工组成员" class="dialog-container">
+  <el-dialog :visible.sync="show" title="员工组成员" class="dialog-staff-group">
     <el-table
       :data="tableData"
       border
@@ -80,7 +80,9 @@ export default {
 }
 </script>
 <style lang="scss">
-.pagination-box {
-  margin-top: 10px;
+.dialog-staff-group {
+  .pagination-box {
+    margin-top: 10px;
+  }
 }
 </style>

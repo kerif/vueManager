@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="客户组成员" class="dialog-container">
+  <el-dialog :visible.sync="show" title="客户组成员" class="dialog-vip-list">
     <el-table
       :data="tableData"
       border
@@ -65,7 +65,9 @@ export default {
 }
 </script>
 <style lang="scss">
-.pagination-box {
-  margin-top: 10px;
+.dialog-vip-list {
+  .pagination-box {
+    margin-top: 10px;
+  }
 }
 </style>

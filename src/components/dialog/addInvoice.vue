@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="加入发货单" class="dialog-container" @close="clear">
+  <el-dialog :visible.sync="show" title="加入发货单" class="invoice-container" @close="clear">
     <el-select v-model="invoice.sn">
       <el-option
       v-for="item in invoiceList"
@@ -62,4 +62,6 @@ export default {
 }
 </script>
 <style lang="scss">
+.invoice-container{
+}
 </style>

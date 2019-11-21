@@ -2,6 +2,16 @@
   <div class="voucher-container">
     <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
     <add-btn router="addVoucher">添加</add-btn>
+      <div class="changeVou">
+      <el-select v-model="type" @change="onVocherTypeChange" clearable>
+        <el-option
+          v-for="item in voucherChange"
+          :key="item.id"
+          :value="item.id"
+          :label="item.name">
+        </el-option>
+       </el-select>
+      </div>
       <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
         <!-- 全部 -->
         <el-tab-pane label="全部" name="1"></el-tab-pane>
@@ -13,16 +23,6 @@
         <el-tab-pane label="已失效" name="4"></el-tab-pane>
       <!-- v-if="oderData.length" -->
     </el-tabs>
-    <div class="changeVou">
-      <el-select v-model="type" @change="onVocherTypeChange" clearable>
-        <el-option
-          v-for="item in voucherChange"
-          :key="item.id"
-          :value="item.id"
-          :label="item.name">
-        </el-option>
-       </el-select>
-    </div>
       <el-table class="data-list" border stripe
       v-loading="tableLoading"
       :data="voucherData" @selection-change="onSelectChange">
@@ -328,7 +328,10 @@ export default {
   }
   .changeVou {
     float: right;
-    margin-bottom: 20px;
+    margin-right: 10px;
+    .el-input {
+      width: 98%;
+    }
   }
 }
 </style>

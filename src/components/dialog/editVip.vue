@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'edit' ? '修改客户组' : '添加客户组'" class="dialog-addStaff"
+  <el-dialog :visible.sync="show" :title="state === 'edit' ? '修改客户组' : '添加客户组'" class="dialog-vip"
   size="small" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 员工组中文名 -->
@@ -112,7 +112,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.dialog-addStaff {
+.dialog-vip {
   .el-input {
     width: 40%;
     margin-left: 50px;

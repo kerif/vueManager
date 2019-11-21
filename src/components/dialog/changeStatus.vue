@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="修改状态" class="change-status-dialog dialog-container" width="35%" @close="clear">
+  <el-dialog :visible.sync="show" title="修改状态" class="change-status-dialog" width="35%" @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
     <div class="status-box">
       <el-select v-model="ruleForm.status">

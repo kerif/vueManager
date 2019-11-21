@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="选择客户组" class="dialog-container" @close="clear">
+  <el-dialog :visible.sync="show" title="选择客户组" class="dialog-selectGroup" @close="clear">
     <div class="searchUser">
       <el-input placeholder="请输入关键字" v-model="keyword" @keyup.enter.native="getList">
         <template slot="append">
@@ -100,12 +100,14 @@ export default {
 }
 </script>
 <style lang="scss">
-.searchUser {
-  width: 40%;
-  float: right;
-  margin: 10px 0;
-}
-.pagination-box {
-  margin-top: 10px;
+.dialog-selectGroup {
+  .searchUser {
+    width: 40%;
+    float: right;
+    margin: 10px 0;
+  }
+  .pagination-box {
+    margin-top: 10px;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="新增国家" class="dialog-container" @close="clear">
+  <el-dialog :visible.sync="show" title="新增国家" class="country-container" @close="clear">
     <el-form label-width="80" :model="ruleForm">
       <el-form-item label="国家：">
         <el-autocomplete
@@ -94,7 +94,9 @@ export default {
 }
 </script>
 <style lang="scss">
-.el-autocomplete-suggestion {
-  z-index: 4000 !important;
+.country-container {
+  .el-autocomplete-suggestion {
+    z-index: 4000 !important;
+  }
 }
 </style>

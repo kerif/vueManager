@@ -100,6 +100,10 @@ exports.invitations = (id, params) => {
 exports.voucherUser = (id, params) => {
   return $form.get(`users/${id}/coupons`, { params })
 }
+// 客户 券包 删除优惠券
+exports.deleteCoupons = (id, ids) => {
+  return $form.put(`users/${id}/coupons/${ids}/disabled`)
+}
 // 员工列表允许登录
 exports.allowUser = (ids) => {
   return $form.put('admins/allow-login', ids)

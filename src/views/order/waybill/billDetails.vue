@@ -103,6 +103,8 @@
            <!-- <span v-for="item in scope.row.packages" :key="item.id">{{item.express_num}}</span> -->
         </template>
       </el-table-column>
+      <!-- 货位 -->
+      <el-table-column label="货位" prop="location"></el-table-column>
       <!-- 备注 -->
       <el-table-column label="备注" prop="remark"></el-table-column>
     </el-table>
