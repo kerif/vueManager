@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="加入发货单" class="dialog-container"
+  <el-dialog :visible.sync="show" title="添加物流信息" class="add-company"
   width="35%" @close="clear">
     <el-form ref="form" :model="company" label-width="100px">
         <el-form-item label="物流单号：">
@@ -61,9 +61,20 @@ export default {
 }
 </script>
 <style lang="scss">
-.dialog-container {
+.add-company {
   .el-input {
    width: 60%;
  }
+  .el-dialog__header {
+    background-color: #0E102A;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #FFF;
+  }
+
+  .el-dialog__close {
+    color: #FFF;
+  }
 }
 </style>

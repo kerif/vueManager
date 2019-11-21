@@ -139,5 +139,16 @@ export default {
   .el-form-item__error {
     margin-left: 300px !important;
   }
+  .el-dialog__header {
+    background-color: #0E102A;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #FFF;
+  }
+
+  .el-dialog__close {
+    color: #FFF;
+  }
 }
 </style>

@@ -58,7 +58,7 @@
       <el-table-column label="操作">
       <template slot-scope="scope">
         <!-- 作废 -->
-        <el-button class="btn-light-red" @click="failCoupon(scope.row.id)">作废</el-button>
+        <el-button class="btn-light-red" v-if="scope.row.status === '进行中'" @click="failCoupon(scope.row.id)">作废</el-button>
       </template>
       </el-table-column>
     </el-table>
@@ -132,5 +132,16 @@ export default {
 </script>
 <style lang="scss">
 .dialog-invite{
+  .el-dialog__header {
+    background-color: #0E102A;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #FFF;
+  }
+
+  .el-dialog__close {
+    color: #FFF;
+  }
 }
 </style>

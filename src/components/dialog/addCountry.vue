@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="新增国家" class="country-container" @close="clear">
+  <el-dialog :visible.sync="show" title="新增国家" class="add-country-dialog" @close="clear">
     <el-form label-width="80" :model="ruleForm">
       <el-form-item label="国家：">
         <el-autocomplete
@@ -94,9 +94,20 @@ export default {
 }
 </script>
 <style lang="scss">
-.country-container {
-  .el-autocomplete-suggestion {
-    z-index: 4000 !important;
+.el-autocomplete-suggestion {
+  z-index: 4000 !important;
+}
+.add-country-dialog {
+  .el-dialog__header {
+    background-color: #0E102A;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #FFF;
+  }
+
+  .el-dialog__close {
+    color: #FFF;
   }
 }
 </style>

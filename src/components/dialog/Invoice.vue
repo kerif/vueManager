@@ -86,7 +86,7 @@ export default {
 <style lang="scss">
 .dialog-invoice {
   .el-input {
-    width: 200px !important;
+    width: 300px !important;
     margin-left: 50px;
   }
   .el-textarea {
@@ -98,6 +98,16 @@ export default {
   }
   .el-form-item__error {
     margin-left: 100px !important;
+  }
+  .el-dialog__header {
+    background-color: #0E102A;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #FFF;
+  }
+  .el-dialog__close {
+    color: #FFF;
   }
 }
 </style>
