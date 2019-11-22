@@ -118,6 +118,7 @@ export default {
         id
       })
     },
+    // 券包
     voucher (id) {
       dialog({ type: 'inviteList',
         state: 'voucher',

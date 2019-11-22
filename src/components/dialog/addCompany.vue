@@ -53,6 +53,7 @@ export default {
     },
     clear () {
       this.company.sn = ''
+      this.company.company = ''
     },
     init () {
       this.company.sn = this.logistics_sn
