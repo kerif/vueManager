@@ -48,7 +48,8 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="代理名称" prop="agent_name">
-                <el-input v-model="user.agent_name" placeholder="请输入代理名称"></el-input>
+                <el-input v-model="user.agent_name" placeholder="请输入代理名称" v-if="this.$route.query.id" disabled></el-input>
+                <el-input v-else v-model="user.agent_name" placeholder="请输入代理名称"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
