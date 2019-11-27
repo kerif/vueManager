@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'invite' ? '邀请记录' : '卡券包'" class="dialog-invite">
+  <el-dialog :visible.sync="show" :title="state === 'invite' ? '邀请记录' : '卡券包'" class="dialog-invite" width="70%">
     <el-table v-if="state === 'invite'"
       class="data-list"
       :data="tableData"
