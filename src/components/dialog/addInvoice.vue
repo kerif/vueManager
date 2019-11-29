@@ -5,7 +5,7 @@
       v-for="item in invoiceList"
       :key="item.id"
       :value="item.id"
-      :label="item.sn">
+      :label="`${item.sn} ${item.destination_country}`">
       </el-option>
     </el-select>
     <div slot="footer">

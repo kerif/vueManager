@@ -17,8 +17,8 @@
       <el-table-column label="操作时间" prop="created_at"></el-table-column>
       <!-- 快递单号 -->
       <el-table-column label="快递单号" prop="express_num" v-if="activeName === '1'"></el-table-column>
-      <!-- 转运单号 -->
-      <el-table-column label="转运单号" v-if="activeName === '2'" prop="order_sn"></el-table-column>
+      <!-- 订单号 -->
+      <el-table-column label="订单号" v-if="activeName === '2'" prop="order_sn"></el-table-column>
       <!-- 重量kg -->
       <el-table-column :label="'重量' + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 长宽高cm -->

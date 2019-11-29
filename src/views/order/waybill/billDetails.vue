@@ -41,9 +41,9 @@
     <div class="receiverMSg">
     <h4>运单详情</h4>
     <el-row class="container-center"  :gutter="20">
-      <!-- 转运单号 -->
+      <!-- 订单号 -->
       <el-col :span="7">
-        <span class="leftWidth">转运单号</span>
+        <span class="leftWidth">订单号</span>
         <span>{{form.order_sn}}</span>
         <el-button size="small" v-if="form.order_sn" @click="copyUrl">复制</el-button>
       </el-col>
@@ -64,14 +64,14 @@
         <span class="leftWidth">增值服务</span>
         <span>{{form.add_service}}</span>
       </el-col>
-      <!-- 物流单号 -->
+      <!-- 转运快递单号 -->
       <el-col :span="7" :offset="1">
-        <span class="leftWidth">物流单号</span>
+        <span class="leftWidth">转运快递单号</span>
         <span>{{form.logistics_sn}}</span>
       </el-col>
-      <!-- 物流公司 -->
+      <!-- 转运快递公司 -->
       <el-col :span="7" :offset="1">
-        <span class="leftWidth">物流公司</span>
+        <span class="leftWidth">转运快递公司</span>
         <span>{{form.logistics_company}}</span>
       </el-col>
     </el-row>

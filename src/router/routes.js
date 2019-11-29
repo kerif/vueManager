@@ -46,10 +46,12 @@ const transactionRecord = loadonDemand('config/agent/record')
 const AppletConfiguration = loadonDemand('config/Applet/applet')
 // 配置 支付配置
 const PaymentManagement = loadonDemand('config/Payment/payment')
-// 入库
+// 包裹快速入库
 const Storage = loadonDemand('station/storage')
-// 发货
+// 发货单
 const Ship = loadonDemand('station/ship')
+// 发货单 详情
+const ShipDetails = loadonDemand('station/shipDetails')
 // 拣货日志
 const Picking = loadonDemand('station/picking')
 // 订单 订单列表
@@ -276,7 +278,7 @@ export default [
             meta: {
               level: 2,
               group: '订单',
-              name: '国内订单'
+              name: '预报包裹列表'
             }
           },
           {
@@ -287,7 +289,7 @@ export default [
             meta: {
               level: 2,
               group: '订单',
-              name: '运单'
+              name: '订单列表'
             }
           },
           {
@@ -342,7 +344,7 @@ export default [
             meta: {
               level: 2,
               group: '货站',
-              name: '入库'
+              name: '包裹快速入库'
             }
           },
           {
@@ -353,7 +355,7 @@ export default [
             meta: {
               level: 3,
               group: '货站',
-              name: '入库',
+              name: '包裹快速入库',
               parent: '/station/storage'
             }
           },
@@ -365,7 +367,19 @@ export default [
             meta: {
               level: 2,
               group: '货站',
-              name: '发货'
+              name: '发货单'
+            }
+          },
+          {
+            path: '/station/ship/details',
+            name: 'shipDetails',
+            component: ShipDetails,
+            id: 502,
+            meta: {
+              level: 3,
+              group: '货站',
+              name: '详情',
+              parent: '/station/ship'
             }
           },
           {

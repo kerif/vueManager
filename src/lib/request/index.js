@@ -171,7 +171,7 @@ exports.getStorageList = (params) => {
 exports.getPay = (id) => {
   return $form.put(`orders/${id}/paid`)
 }
-// 添加物流单号
+// 添加转运快递单号
 exports.updateLogistics = (params) => {
   return $form.put('orders/update-logistics', params)
 }
@@ -244,15 +244,15 @@ exports.updatePermissions = (id, params) => {
 exports.getInvoice = () => {
   return $form.get('orders/shipments')
 }
-// 删除国内订单
+// 删除预报包裹列表
 exports.deletePackages = (ids) => {
   return $form.put('packages/batch-delete', ids)
 }
-// 获取国内订单筛选数据
+// 获取预报包裹列表筛选数据
 exports.getAgent = () => {
   return $form.get('agents/simple-list')
 }
-// 获取国内订单 无人认领包裹
+// 获取预报包裹列表 无人认领包裹
 exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
 }
@@ -404,6 +404,14 @@ exports.getOrdersByShipment = (id) => $form.get(`shipments/${id}/orders`)
 // 移除发货单
 exports.removeOrders = (id) => {
   return $form.put('orders/remove-from-shipment', id)
+}
+// 删除发货单
+exports.deleteShip = (id) => {
+  return $form.delete(`shipments/${id}`)
+}
+// 发货单 导出清单
+exports.uploadExcel = (id) => {
+  return $form.get(`shipments/${id}/order-export`)
 }
 // 运单 获取审核
 exports.getTransfer = (id) => {

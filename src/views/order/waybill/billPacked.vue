@@ -40,9 +40,9 @@
     <div class="receiverMSg">
     <h4>打包详情</h4>
     <el-row class="container-center"  :gutter="20">
-      <!-- 转运单号 -->
+      <!-- 订单号 -->
       <el-col :span="7">
-        <span class="leftWidth">转运单号</span>
+        <span class="leftWidth">订单号</span>
         <span>{{form.order_sn}}</span>
       </el-col>
       <!-- 线路名称 -->
@@ -76,10 +76,10 @@
       </el-table>
       <el-form ref="params" :model="user" class="package-form" label-width="140px" label-position="left">
         <el-col :lg="12">
-          <!-- 转运单号 -->
+          <!-- 订单号 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="转运单号" prop="name">
+              <el-form-item label="订单号" prop="name">
                 <el-input v-model="this.$route.params.order_sn" :disabled="true"></el-input>
               </el-form-item>
             </el-col>

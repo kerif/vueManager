@@ -78,6 +78,14 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
+            <div>体积系数</div>
+            <el-input v-model="form.factor" placeholder="请输入内容"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
+        <el-row>
+          <el-col :span="10">
             <div>线路类型</div>
             <el-checkbox-group v-model="form.types">
               <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
@@ -113,6 +121,7 @@ export default {
         next_weight: '',
         next_money: '',
         max_weight: '',
+        factor: '',
         min_weight: '',
         reference_time: '',
         types: [],

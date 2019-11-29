@@ -2,10 +2,10 @@
   <el-dialog :visible.sync="show" title="添加物流信息" class="add-company"
   width="35%" @close="clear">
     <el-form ref="form" :model="company" label-width="100px">
-        <el-form-item label="物流单号：">
+        <el-form-item label="转运快递单号：">
             <el-input v-model="company.sn"></el-input>
         </el-form-item>
-        <el-form-item label="物流公司：">
+        <el-form-item label="转运快递公司：">
             <el-input v-model="company.company"></el-input>
         </el-form-item>
     </el-form>

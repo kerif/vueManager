@@ -9,7 +9,7 @@
         <!-- 无人认领包裹 -->
         <el-tab-pane label="无人认领包裹" name="3"></el-tab-pane>
     </el-tabs>
-    <div class="agentRight" v-if="activeName === '1' || activeName === '2'">
+    <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
     <!-- <el-select v-model="agent_name" @change="getList" clearable>
       <el-option
       v-for="item in agentData"
@@ -18,6 +18,33 @@
       :label="item.agent_name">
       </el-option>
     </el-select> -->
+    <!-- </div> -->
+      <div class="changeTime">
+      <!-- 提交时间 -->
+        <el-date-picker
+        class="timeStyle"
+        v-model="timeList"
+        type="daterange"
+        @change="onTime"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        range-separator="至"
+        start-placeholder="提交开始日期"
+        end-placeholder="提交结束日期">
+      </el-date-picker>
+      <!-- 称重时间 -->
+        <el-date-picker
+        v-if="activeName === '2'"
+        class="timeStyle"
+        v-model="storageList"
+        type="daterange"
+        @change="onStorage"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        range-separator="至"
+        start-placeholder="称重开始日期"
+        end-placeholder="称重结束日期">
+      </el-date-picker>
     </div>
     <div v-if="activeName === '1' || activeName === '2'">
       <el-table v-if="oderData.length" class="data-list" border stripe
@@ -124,7 +151,13 @@ export default {
       agent_name: '',
       agentData: [],
       localization: {},
-      ownerData: []
+      ownerData: [],
+      storageList: [],
+      timeList: [],
+      in_storage_end_date: '',
+      in_storage_begin_date: '',
+      begin_date: '',
+      end_date: ''
     }
   },
   methods: {
@@ -134,13 +167,25 @@ export default {
       }
       this.tableLoading = true
       this.oderData = []
-      this.$request.getWarehouse({
-        agent: this.agent_name,
-        status: this.status,
-        keyword: this.page_params.keyword,
+      let params = {
         page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
+        size: this.page_params.size,
+        agent: this.agent_name,
+        status: this.status
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      if (this.activeName === '2') {
+        // 提交时间
+        this.begin_date && (params.begin_date = this.begin_date)
+        this.end_date && (params.end_date = this.end_date)
+        // 称重时间
+        this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
+        this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
+      } else {
+        this.begin_date && (params.begin_date = this.begin_date)
+        this.end_date && (params.end_date = this.end_date)
+      }
+      this.$request.getWarehouse(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.oderData = res.data
@@ -189,13 +234,17 @@ export default {
     getNO () {
       this.tableLoading = true
       this.ownerData = []
-      this.$request.getNoOwner({
-        agent: this.agent_name,
-        status: this.status,
-        keyword: this.page_params.keyword,
+      let params = {
         page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
+        size: this.page_params.size,
+        agent: this.agent_name,
+        status: this.status
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // 提交时间
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.getNoOwner(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.ownerData = res.data
@@ -216,6 +265,26 @@ export default {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
       })
+    },
+    // 提交时间
+    onTime (val) {
+      this.begin_date = val ? val[0] : ''
+      this.end_date = val ? val[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
+      if (this.activeName === '3') {
+        this.getNO()
+      } else {
+        this.getList()
+      }
+    },
+    // 称重时间
+    onStorage (val) {
+      this.in_storage_begin_date = val ? val[0] : ''
+      this.in_storage_end_date = val ? val[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('times', `${this.in_storage_begin_date} ${this.in_storage_end_date}`)
+      this.getList()
     }
   },
   mounted () {
@@ -229,15 +298,33 @@ export default {
         case '1': // 未入库
           this.page_params.page = 1
           this.status = 1
+          this.timeList = []
+          this.begin_date = ''
+          this.end_date = ''
+          this.in_storage_end_date = ''
+          this.in_storage_end_date = ''
+          this.storageList = []
           this.getList()
           break
         case '2': // 已入库
           this.page_params.page = 1
           this.status = 2
+          this.timeList = []
+          this.storageList = []
+          this.begin_date = ''
+          this.end_date = ''
+          this.in_storage_end_date = ''
+          this.in_storage_end_date = ''
           this.getList()
           break
         case '3':
           this.page_params.page = 1
+          this.timeList = []
+          this.storageList = []
+          this.begin_date = ''
+          this.end_date = ''
+          this.in_storage_end_date = ''
+          this.in_storage_end_date = ''
           this.getList()
       }
       // this.getList()
@@ -259,6 +346,11 @@ export default {
   .agentRight {
     // display: inline-block;
     float: right;
+  }
+  .changeTime {
+    .timeStyle {
+      margin-right: 20px;
+    }
   }
 }
 </style>

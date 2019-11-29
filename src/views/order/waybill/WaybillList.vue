@@ -13,6 +13,47 @@
         <!-- 已签收 -->
         <el-tab-pane label="已签收" name="5"></el-tab-pane>
     </el-tabs>
+    <div class="changeTime">
+      <!-- 创建 -->
+        <el-date-picker
+        v-if="activeName === '1' || activeName === '2'|| activeName === '3'
+        || activeName === '4'"
+        class="timeStyle"
+        v-model="timeList"
+        type="daterange"
+        @change="onTime"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        range-separator="至"
+        start-placeholder="提交开始日期"
+        end-placeholder="提交结束日期">
+      </el-date-picker>
+      <!-- 拣货 -->
+        <el-date-picker
+        v-if="activeName === '2' || activeName === '3'"
+        class="timeStyle"
+        v-model="pickingList"
+        type="daterange"
+        @change="onPick"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        range-separator="至"
+        start-placeholder="拣货开始日期"
+        end-placeholder="拣货结束日期">
+      </el-date-picker>
+      <!-- 签收 -->
+        <el-date-picker
+        v-if="activeName === '5'"
+        v-model="signList"
+        type="daterange"
+        @change="onSign"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        range-separator="至"
+        start-placeholder="签收开始日期"
+        end-placeholder="签收结束日期">
+      </el-date-picker>
+    </div>
     <div class="chooseStatus">
       <el-select v-model="agent_name" @change="onAgentChange" clearable>
         <el-option
@@ -27,11 +68,12 @@
       v-if="oderData.length"
       v-loading="tableLoading"
       :data="oderData" @selection-change="onSelectChange">
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
+      <el-table-column type="selection" width="55" align="center"
+      v-if="activeName === '2' || activeName === '3'"></el-table-column>
       <!-- 客户ID -->
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
-      <!-- 转运单号 -->
-      <el-table-column label="转运单号" prop="order_sn">
+      <!-- 订单号 -->
+      <el-table-column label="订单号" prop="order_sn">
       </el-table-column>
       <!-- 审核状态 -->
       <el-table-column label="审核状态" v-if="activeName === '2'">
@@ -44,15 +86,13 @@
           </router-link>
         </template>
       </el-table-column>
-      <!-- 物流单号 -->
-      <!-- <el-table-column label="物流单号" v-if="activeName === '1' || activeName === '2'   || activeName === '4' || activeName === '5'" prop="logistics_sn"> -->
-        <!-- 物流单号 -->
-        <el-table-column label="物流单号" prop="logistics_sn">
+      <!-- 转运快递单号 -->
+      <el-table-column label="转运快递单号" v-if="activeName === '2'|| activeName === '3' ||activeName === '4' || activeName === '5'" prop="logistics_sn">
       </el-table-column>
-        <!-- 物流公司 -->
-        <el-table-column label="物流公司" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="logistics_company"></el-table-column>
+        <!-- 转运快递公司 -->
+        <el-table-column label="转运快递公司" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="logistics_company"></el-table-column>
       <!-- 状态为待发货才会出现输入框 -->
-      <!-- <el-table-column label="物流单号" v-if="activeName === '3'" width="140px">
+      <!-- <el-table-column label="转运快递单号" v-if="activeName === '3'" width="140px">
         <template slot-scope="scope">
           <template v-if="activeName === '3'">
           <el-input v-model="scope.row.logistics_sn" :disabled="scope.row.disabled"></el-input>
@@ -82,7 +122,7 @@
       <!-- 备注 -->
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 提交时间 -->
-      <el-table-column label="提交时间" prop="updated_at" v-if="activeName === '1' || activeName === '2' || activeName === '3'"></el-table-column>
+      <el-table-column label="提交时间" prop="updated_at" v-if="activeName === '1' || activeName === '2' || activeName === '3' || activeName === '4'"></el-table-column>
       <!-- 拣货时间 -->
       <el-table-column label="拣货时间" prop="packed_at" v-if="activeName === '2' || activeName === '3'"></el-table-column>
       <!-- 签收时间 -->
@@ -109,9 +149,9 @@
           <!-- 加入发货单 -->
           <el-button v-show="activeName === '3'" class="btn-deep-blue detailsBtn"
           @click="addInvoice([scope.row.id])">加入发货单</el-button>
-          <!-- 添加物流单号 -->
-          <!-- <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加物流单号</el-button> -->
-          <!-- 添加物流公司 -->
+          <!-- 添加转运快递单号 -->
+          <!-- <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加转运快递单号</el-button> -->
+          <!-- 添加转运快递公司 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn)" v-if="activeName === '3'" class="btn-green detailsBtn">添加物流信息</el-button>
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
@@ -151,6 +191,15 @@ export default {
   name: 'wallbillList',
   data () {
     return {
+      timeList: [],
+      pickingList: [],
+      signList: [],
+      begin_date: '',
+      end_date: '',
+      packed_begin_date: '',
+      packed_end_date: '',
+      updated_begin_date: '',
+      updated_end_date: '',
       activeName: '1',
       oderData: [],
       localization: {},
@@ -181,16 +230,26 @@ export default {
     getList () {
       this.tableLoading = true
       this.oderData = []
-      this.$request.getOrder({
-        agent: this.agent_name,
-        status: this.status,
-        keyword: this.page_params.keyword,
+      let params = {
         page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
+        size: this.page_params.size,
+        agent: this.agent_name,
+        status: this.status
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // 提交时间
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      // 拣货时间
+      this.packed_begin_date && (params.packed_begin_date = this.packed_begin_date)
+      this.packed_end_date && (params.packed_end_date = this.packed_end_date)
+      // 签收时间
+      this.updated_begin_date && (params.updated_begin_date = this.updated_begin_date)
+      this.updated_end_date && (params.updated_end_date = this.updated_end_date)
+      this.$request.getOrder(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          // 待发货列表的物流单号添加
+          // 待发货列表的转运快递单号添加
           res.data.forEach(item => {
             item.disabled = true
             item.copySN = item.logistics_sn
@@ -242,6 +301,30 @@ export default {
           })
         }
       })
+    },
+    // 创建时间
+    onTime (val) {
+      this.begin_date = val ? val[0] : ''
+      this.end_date = val ? val[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
+      this.getList()
+    },
+    // 拣货时间
+    onPick (val) {
+      this.packed_begin_date = val ? val[0] : ''
+      this.packed_end_date = val ? val[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('times', `${this.packed_begin_date} ${this.packed_end_date}`)
+      this.getList()
+    },
+    // 签收时间
+    onSign (val) {
+      this.updated_begin_date = val ? val[0] : ''
+      this.updated_end_date = val ? val[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('times', `${this.updated_begin_date} ${this.updated_end_date}`)
+      this.getList()
     },
     // 打包
     packed (id, orderSN) {
@@ -296,7 +379,7 @@ export default {
         })
       })
     },
-    // 添加物流公司
+    // 添加转运快递公司
     addCompany (id, logisticsSn) {
       console.log(id, 'id')
       console.log(logisticsSn, 'logisticsSn')
@@ -304,7 +387,7 @@ export default {
         this.getList()
       })
     },
-    // 添加物流单号
+    // 添加转运快递单号
     edit (row) {
       row.disabled = !row.disabled
     },
@@ -313,10 +396,10 @@ export default {
       row.logistics_sn = row.copySN
       row.disabled = true
     },
-    // 保存添加物流单号
+    // 保存添加转运快递单号
     saveLogistics (row) {
       if (!row.logistics_sn) {
-        return this.$message.info('请输入物流单号')
+        return this.$message.info('请输入转运快递单号')
       }
       this.$request.updateLogistics([{
         id: row.id,
@@ -362,6 +445,15 @@ export default {
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)
       this.page_params.handleQueryChange('activeName', tab.name)
+      this.timeList = []
+      this.pickingList = []
+      this.signList = []
+      this.begin_date = ''
+      this.end_date = ''
+      this.packed_begin_date = ''
+      this.packed_end_date = ''
+      this.updated_begin_date = ''
+      this.updated_end_date = ''
       this.getList()
     },
     // 选择代理用户
@@ -387,12 +479,20 @@ export default {
     color: #ccc;
   }
   .chooseStatus {
+    display: inline-block;
     float: right;
   }
   .chooseOrder {
     cursor: pointer;
     color:blue;
     text-decoration: underline;
+  }
+  .changeTime {
+    display: inline-block;
+    width: 70%;
+    .timeStyle {
+      margin-right: 20px;
+    }
   }
 }
 </style>

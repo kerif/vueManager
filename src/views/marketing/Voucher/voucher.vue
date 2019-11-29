@@ -144,7 +144,7 @@ export default {
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          // 待发货列表的物流单号添加
+          // 待发货列表的转运快递单号添加
           // res.data.forEach(item => {
           //   item.disabled = true
           //   item.copySN = item.logistics_sn
@@ -250,7 +250,7 @@ export default {
     onSelectChange (selection) {
       this.selectIDs = selection.map(item => item.id)
     },
-    // 添加物流单号
+    // 添加转运快递单号
     edit (row) {
       row.disabled = !row.disabled
     },
@@ -259,10 +259,10 @@ export default {
       row.logistics_sn = row.copySN
       row.disabled = true
     },
-    // 保存添加物流单号
+    // 保存添加转运快递单号
     saveLogistics (row) {
       if (!row.logistics_sn) {
-        return this.$message.info('请输入物流单号')
+        return this.$message.info('请输入转运快递单号')
       }
       this.$request.updateLogistics([{
         id: row.id,

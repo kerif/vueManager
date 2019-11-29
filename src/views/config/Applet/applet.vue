@@ -164,7 +164,7 @@ export default {
         }
       })
     },
-    // 添加物流单号
+    // 添加转运快递单号
     edit (row) {
       row.disabled = !row.disabled
     },
@@ -173,7 +173,7 @@ export default {
       row.template_id = row.copySN
       row.disabled = true
     },
-    // 保存添加物流单号
+    // 保存添加转运快递单号
     saveLogistics (row) {
       console.log(row, 'row')
       if (!row.template_id) {

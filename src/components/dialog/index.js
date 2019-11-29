@@ -172,7 +172,7 @@ function initInstance (type) {
         mixins: [mixin]
       })
       break
-    // 添加物流公司
+    // 添加转运快递公司
     case 'addCompany':
       instance = new AddCompanyController({
         el: document.createElement('div'),

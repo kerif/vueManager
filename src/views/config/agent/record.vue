@@ -7,7 +7,7 @@
       </el-table-column>
       <el-table-column label="姓名" prop="user_name">
       </el-table-column>
-      <el-table-column label="转运单号" prop="order_number">
+      <el-table-column label="订单号" prop="order_number">
       </el-table-column>
       <el-table-column :label="'订单金额' + this.localization.currency_unit" prop="order_amount">
       </el-table-column>
