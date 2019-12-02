@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" title="添加物流信息" class="add-company"
   width="35%" @close="clear">
-    <el-form ref="form" :model="company" label-width="100px">
+    <el-form ref="form" :model="company" label-width="140px">
         <el-form-item label="转运快递单号：">
             <el-input v-model="company.sn"></el-input>
         </el-form-item>
@@ -57,6 +57,7 @@ export default {
     },
     init () {
       this.company.sn = this.logistics_sn
+      this.company.company = this.logistics_company
     }
   }
 }

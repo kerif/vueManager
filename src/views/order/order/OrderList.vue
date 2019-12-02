@@ -53,7 +53,11 @@
       v-loading="tableLoading">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column label="客户ID" prop="user_id"></el-table-column>
+      <el-table-column label="客户ID">
+        <template slot-scope="scope">
+          <span>{{scope.row.user_id}}---{{scope.row.user_name}}</span>
+        </template>
+      </el-table-column>
       <!-- 快递单号 -->
       <el-table-column label="快递单号" prop="express_num"></el-table-column>
       <!-- 物品名称 -->

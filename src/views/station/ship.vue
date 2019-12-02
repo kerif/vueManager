@@ -5,36 +5,40 @@
         </search-group>
       </div>
     <div class="select-box">
-      <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus"
-      v-model="page_params.status"></search-select>
       <add-btn @click.native="updateInvoice">创建发货单</add-btn>
     </div>
-    <div class="changeTime">
-      <!-- 提交 -->
-        <el-date-picker
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="提交开始日期"
-        end-placeholder="提交结束日期">
-      </el-date-picker>
-      <!-- 发货 -->
-        <el-date-picker
-        class="timeStyle"
-        v-model="shipmentList"
-        type="daterange"
-        @change="onShipment"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="发货开始日期"
-        end-placeholder="发货结束日期">
-      </el-date-picker>
-    </div>
+    <el-row :gutter="20">
+      <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus"
+      v-model="page_params.status"></search-select>
+      <el-col :span="18">
+        <div class="changeTime">
+          <!-- 提交 -->
+            <el-date-picker
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            @change="onTime"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="提交开始日期"
+            end-placeholder="提交结束日期">
+          </el-date-picker>
+          <!-- 发货 -->
+            <el-date-picker
+            class="timeStyle"
+            v-model="shipmentList"
+            type="daterange"
+            @change="onShipment"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="发货开始日期"
+            end-placeholder="发货结束日期">
+          </el-date-picker>
+        </div>
+      </el-col>
+    </el-row>
   <el-table :data="tableShip" stripe
     border class="data-list"
     @expand-change="onExpand"
@@ -97,13 +101,13 @@
       <!-- 操作 -->
       <el-table-column label="操作" width="160">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">发货</el-button>
-          <!-- 详情 -->
-          <el-button class="btn-deep-purple" @click="goDetails(scope.row.id)">详情</el-button>
+          <el-button class="btn-green btn-margin" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">发货</el-button>
           <!-- 导出清单 -->
-          <el-button class="btn-main" @click="unloadShip(scope.row.id)">导出清单</el-button>
+          <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button>
+          <!-- 详情 -->
+          <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id)">详情</el-button>
           <!-- 删除 -->
-          <el-button class="btn-light-red" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">删除</el-button>
+          <el-button class="btn-light-red btn-margin" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -170,7 +174,7 @@ export default {
         page: this.page_params.page,
         size: this.page_params.size,
         agent: this.agent_name,
-        status: this.status
+        status: this.page_params.status
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 提交时间
@@ -324,13 +328,18 @@ export default {
   .select-box {
     overflow: hidden;
   }
-  .el-button {
+  .btn-margin {
     margin-bottom: 5px;
   }
   .changeTime {
-     margin-top: 15px;
+    //  margin-top: 15px;
     .timeStyle {
       margin-right: 20px;
+    }
+  }
+  .status-style {
+    .el-search {
+      width: 100% !important;
     }
   }
 }

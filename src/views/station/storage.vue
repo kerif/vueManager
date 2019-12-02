@@ -6,7 +6,7 @@
            <!-- 客户id -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="客户ID">
+              <el-form-item label="客户ID" class="changeQuery">
                 <!-- <el-input v-model="user.user_id" placeholder="请输入客户ID" :disabled="!!this.$route.params.id && !hasStore"></el-input> -->
                   <el-autocomplete
                   :fetch-suggestions="queryCNSearch"
@@ -209,8 +209,8 @@ export default {
         keyword: this.user.user_id.toString()
       }).then(res => {
         for (let i of res.data) {
-          i.value = i.id
-          // i.value = i.id + '---' + i.name
+          // i.value = i.id
+          i.value = i.id + '---' + i.name
         }
         list = res.data
         callback(list)
@@ -361,6 +361,11 @@ export default {
       background-color: #3540A5;
       color: #fff;
       padding: 15px 35px;
+    }
+  }
+  .changeQuery {
+    .el-autocomplete {
+      width: 100%;
     }
   }
 }

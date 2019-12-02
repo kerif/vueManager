@@ -13,57 +13,63 @@
         <!-- 已签收 -->
         <el-tab-pane label="已签收" name="5"></el-tab-pane>
     </el-tabs>
-    <div class="changeTime">
-      <!-- 创建 -->
-        <el-date-picker
-        v-if="activeName === '1' || activeName === '2'|| activeName === '3'
-        || activeName === '4'"
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="提交开始日期"
-        end-placeholder="提交结束日期">
-      </el-date-picker>
-      <!-- 拣货 -->
-        <el-date-picker
-        v-if="activeName === '2' || activeName === '3'"
-        class="timeStyle"
-        v-model="pickingList"
-        type="daterange"
-        @change="onPick"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="拣货开始日期"
-        end-placeholder="拣货结束日期">
-      </el-date-picker>
-      <!-- 签收 -->
-        <el-date-picker
-        v-if="activeName === '5'"
-        v-model="signList"
-        type="daterange"
-        @change="onSign"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="签收开始日期"
-        end-placeholder="签收结束日期">
-      </el-date-picker>
-    </div>
-    <div class="chooseStatus">
-      <el-select v-model="agent_name" @change="onAgentChange" clearable>
-        <el-option
-          v-for="item in agentData"
-          :key="item.id"
-          :value="item.user_id"
-          :label="item.agent_name">
-        </el-option>
-       </el-select>
-    </div>
+    <el-row :gutter="20">
+      <el-col :span="18">
+        <div class="changeTime">
+          <!-- 创建 -->
+            <el-date-picker
+            v-if="activeName === '1' || activeName === '2'|| activeName === '3'
+            || activeName === '4'"
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            @change="onTime"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="提交开始日期"
+            end-placeholder="提交结束日期">
+          </el-date-picker>
+          <!-- 拣货 -->
+            <el-date-picker
+            v-if="activeName === '2' || activeName === '3'"
+            class="timeStyle"
+            v-model="pickingList"
+            type="daterange"
+            @change="onPick"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="拣货开始日期"
+            end-placeholder="拣货结束日期">
+          </el-date-picker>
+          <!-- 签收 -->
+            <el-date-picker
+            v-if="activeName === '5'"
+            v-model="signList"
+            type="daterange"
+            @change="onSign"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="签收开始日期"
+            end-placeholder="签收结束日期">
+          </el-date-picker>
+        </div>
+      </el-col>
+      <el-col :span="4" :offset="2">
+        <div class="chooseStatus">
+          <el-select v-model="agent_name" @change="onAgentChange" clearable>
+            <el-option
+              v-for="item in agentData"
+              :key="item.id"
+              :value="item.user_id"
+              :label="item.agent_name">
+            </el-option>
+          </el-select>
+        </div>
+      </el-col>
+    </el-row>
     <el-table class="data-list" border stripe
       v-if="oderData.length"
       v-loading="tableLoading"
@@ -152,7 +158,7 @@
           <!-- 添加转运快递单号 -->
           <!-- <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加转运快递单号</el-button> -->
           <!-- 添加转运快递公司 -->
-          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn)" v-if="activeName === '3'" class="btn-green detailsBtn">添加物流信息</el-button>
+          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '3'" class="btn-green detailsBtn">添加物流信息</el-button>
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
           </el-button>
@@ -380,10 +386,10 @@ export default {
       })
     },
     // 添加转运快递公司
-    addCompany (id, logisticsSn) {
+    addCompany (id, logisticsSn, logisticsCompany) {
       console.log(id, 'id')
       console.log(logisticsSn, 'logisticsSn')
-      dialog({ type: 'addCompany', id: id, logistics_sn: logisticsSn }, () => {
+      dialog({ type: 'addCompany', id: id, logistics_sn: logisticsSn, logistics_company: logisticsCompany }, () => {
         this.getList()
       })
     },
@@ -479,8 +485,9 @@ export default {
     color: #ccc;
   }
   .chooseStatus {
-    display: inline-block;
-    float: right;
+    .el-select {
+      // width: 100%;
+    }
   }
   .chooseOrder {
     cursor: pointer;
@@ -488,8 +495,8 @@ export default {
     text-decoration: underline;
   }
   .changeTime {
-    display: inline-block;
-    width: 70%;
+    // display: inline-block;
+    // width: 70%;
     .timeStyle {
       margin-right: 20px;
     }
