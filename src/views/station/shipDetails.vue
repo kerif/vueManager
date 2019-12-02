@@ -8,6 +8,7 @@
         </template>
         </el-table-column>
         <el-table-column label="转运快递单号" prop="logistics_sn"></el-table-column>
+        <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column>
         <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
         <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
         <el-table-column label="收货国家" prop="address.country_name"></el-table-column>
@@ -20,7 +21,7 @@
         <el-table-column label="拣货时间" prop="updated_at"></el-table-column>
         <el-table-column label="操作">
             <template slot-scope="scope">
-                <el-button @click="removeShip(scope.row.id)" class="btn-light-red">移除发货单</el-button>
+                <el-button @click="removeShip(scope.row.id)" v-if="$route.query.status === 0" class="btn-light-red">移除发货单</el-button>
             </template>
         </el-table-column>
     </el-table>

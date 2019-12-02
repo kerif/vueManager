@@ -105,7 +105,7 @@
           <!-- 导出清单 -->
           <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button>
           <!-- 详情 -->
-          <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id)">详情</el-button>
+          <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id, scope.row.status)">详情</el-button>
           <!-- 删除 -->
           <el-button class="btn-light-red btn-margin" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">删除</el-button>
         </template>
@@ -205,8 +205,8 @@ export default {
       })
     },
     // 跳转至详情
-    goDetails (id) {
-      this.$router.push({ name: 'shipDetails', query: { id: id } })
+    goDetails (id, status) {
+      this.$router.push({ name: 'shipDetails', query: { id: id, status: status } })
     },
     // 导出清单
     unloadShip (id) {
