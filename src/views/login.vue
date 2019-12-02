@@ -26,7 +26,7 @@
             <el-button class="login-btn" @click="onLogin" :loading="$store.state.btnLoading">登录</el-button>
           </el-form-item>
           <div class="register">
-            <!-- <p @click="changeWelcome(3)">注册账户</p> -->
+            <p @click="changeWelcome(3)">注册账户</p>
           </div>
         </el-form>
       </div>
