@@ -32,7 +32,7 @@
       <el-row :gutter="20">
         <el-col :span="9">
           <p class="transfer-right">支付方式</p>
-          <span v-if="form.payment_type === 2">在线支付</span>
+          <span v-if="form.payment_type === 2">在线支付</span><br/>
           <!-- <span>{{form.payment_type}}</span><br/> -->
           <!-- 在线支付 -->
           <p class="transfer-right">
