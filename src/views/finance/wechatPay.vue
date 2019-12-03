@@ -1,27 +1,27 @@
 <template>
-  <div class="review-container">
+  <div class="wechat-container">
     <div class="receiverMSg">
     <h4>客户信息</h4>
     <el-row class="container-center" :gutter="20">
       <!-- 客户ID -->
-      <el-col :span="9">
+      <el-col :span="11">
         <span class="leftWidth">客户ID</span>
         <span>{{form.user_id}}</span>
       </el-col>
       <!-- 客户昵称 -->
-        <el-col :span="9" :offset="1">
+        <el-col :span="8" :offset="1">
          <span class="leftWidth">客户昵称</span>
          <span>{{form.user_name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
      <!-- 流水号 -->
-      <el-col :span="9">
+      <el-col :span="11">
         <span class="leftWidth">流水号</span>
         <span>{{form.serial_no}}</span>
       </el-col>
       <!-- 提交时间 -->
-        <el-col :span="9" :offset="1">
+        <el-col :span="8" :offset="1">
          <span class="leftWidth">提交时间</span>
          <span>{{form.created_at}}</span>
       </el-col>
@@ -32,53 +32,30 @@
       <el-row :gutter="20">
         <el-col :span="9">
           <p class="transfer-right">支付方式</p>
-          <span>{{form.pay_type}}</span><br/>
-          <p class="transfer-right">转账支付账户</p>
-          <span>{{form.transfer_account}}</span><br/>
+          <span v-if="form.payment_type === 2">在线支付</span>
+          <!-- <span>{{form.payment_type}}</span><br/> -->
+          <!-- 在线支付 -->
           <p class="transfer-right">
               {{'抵用券金额' + this.localization.currency_unit}}</p>
           <span>{{form.coupon_amount}}</span><br/>
           <p class="transfer-right">{{'总金额' + this.localization.currency_unit}}</p>
           <span>{{form.order_amount}}</span><br/>
           <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
-          <span>{{form.tran_amount}}</span><br/>
+          <span>{{form.pay_amount}}</span><br/>
           <p class="transfer-right">关联单号</p>
-          <span>{{form.order_number}}</span><br/>
-          <p class="transfer-right">备注</p>
-          <span>{{form.remark}}</span><br/>
-          <p class="transfer-right">创建时间</p>
-          <span>{{form.created_at}}</span>
-        </el-col>
-        <el-col :span="9" :offset="1">
-          <p>客户截图</p>
-          <span v-for="item in form.images"
-          :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc=item, imgVisible=true">
-              <img :src="item" style="width: 150px; margin-right: 30px;">
-          </span>
+          <span>{{form.order_sn}}</span><br/>
+          <!-- <p class="transfer-right">备注</p>
+          <span>{{form.remark}}</span><br/> -->
+          <!-- <p class="transfer-right">创建时间</p>
+          <span>{{form.created_at}}</span> -->
         </el-col>
       </el-row>
     </div>
-    <div class="pay-message receiverMSg" v-if="form.status === 1">
-      <h4>确认支付信息</h4>
-      <el-row :gutter="20">
-        <el-col :span="9">
-          <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
-          <span>{{form.confirm_amount}}</span><br/>
-          <p class="transfer-right">备注</p>
-          <span>{{form.customer_remark}}</span><br/>
-          <p class="transfer-right">上传图片</p>
-          <div class="left-img">
-            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true" style="cursor:pointer;">
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-      <el-dialog :visible.sync="imgVisible" size="small">
+      <!-- <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -98,9 +75,8 @@ export default {
     this.getList()
   },
   methods: {
-    // 转账支付跳转过来
     getList () {
-      this.$request.getReview(this.$route.query.order_id).then(res => {
+      this.$request.getRecords(this.$route.query.id).then(res => {
         if (res.ret) {
           this.form = res.data
           this.oderData = [res.data.details]
@@ -120,7 +96,7 @@ export default {
 </script>
 
 <style lang="scss">
-.review-container {
+.wechat-container {
   .container-center {
     margin-bottom: 20px;
   }

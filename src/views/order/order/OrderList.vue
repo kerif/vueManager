@@ -86,7 +86,7 @@
       <el-table-column label="操作" v-if="activeName === '1'">
         <template slot-scope="scope" >
           <!-- 入库 -->
-            <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.props)">入库</el-button>
+            <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.user_name, scope.row.props)">入库</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -205,9 +205,10 @@ export default {
         }
       })
     },
-    storage (id, expressNum, userId, props) {
+    storage (id, expressNum, userId, userName, props) {
+      console.log(userName, 'userName')
       console.log(props, 'props')
-      this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId }, query: { props: JSON.stringify(props) } })
+      this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId, user_name: userName }, query: { props: JSON.stringify(props) } })
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))

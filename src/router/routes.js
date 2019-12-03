@@ -22,8 +22,10 @@ const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
 const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 // 财务 流水记录
 const Transaction = loadonDemand('finance/Transaction')
-// 财务 流水记录详情
+// 财务 转账支付流水详情
 const TransactionDetails = loadonDemand('finance/financeDetails')
+// 财务 微信支付流水详情
+const TransactionWechat = loadonDemand('finance/wechatPay')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
@@ -542,7 +544,19 @@ export default [
             meta: {
               group: '财务',
               level: 3,
-              name: '详情',
+              name: '转账支付详情',
+              parent: '/finance/transaction'
+            }
+          },
+          {
+            path: '/finance/wechatPay',
+            name: 'wechatPay',
+            component: TransactionWechat,
+            id: 701,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '在线支付详情',
               parent: '/finance/transaction'
             }
           }

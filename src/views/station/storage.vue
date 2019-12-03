@@ -160,10 +160,10 @@ export default {
   created () {
     this.getProp() // 获取多选框数据
     if (this.$route.params.id) {
-      console.log(this.$route.params.props, 'this.$route.params.props')
+      console.log(this.$route.params.user_name, 'user_name')
       this.getWarehouseInfo() // 从订单跳转过来时加载的表格数据
       this.user.express_num = this.$route.params.express_num
-      this.user.user_id = this.$route.params.user_id + ''
+      this.user.user_id = this.$route.params.user_id + '---' + this.$route.params.user_name
       if (this.$route.query.props) {
         let props = JSON.parse(this.$route.query.props)
         this.user.props = props.map(item => item.id)
@@ -264,6 +264,7 @@ export default {
       } else {
         if (this.$route.params.id) { // 如果是从订单跳转过来
           this.tableLoading = true
+          this.user.user_id = this.user.user_id.split('---')[0]
           this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
             this.tableLoading = false
             if (res.ret) {
@@ -289,6 +290,8 @@ export default {
           })
         } else { // 如果是添加
           this.tableLoading = true
+          this.user.user_id = this.user.user_id.split('---')[0]
+          console.log(this.user.user_id, 'this.user.user_id')
           this.$request.getExpress(this.user).then(res => {
             this.tableLoading = false
             if (res.ret === 1) {

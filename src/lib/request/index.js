@@ -421,6 +421,10 @@ exports.getTransfer = (id) => {
 exports.getReview = (id) => {
   return $form.get(`transaction-records/order/${id}/transfer-pay-info`)
 }
+// 当支付方式为微信的时候，跳至财务流水详情
+exports.getRecords = (id) => {
+  return $form.get(`transaction-records/${id}`)
+}
 // 审核通过
 exports.acceptPayment = (id, params) => {
   return $form.put(`orders/${id}/payment/accept`, params)
