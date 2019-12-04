@@ -102,9 +102,9 @@
       <!-- 操作 -->
       <el-table-column label="操作" width="160">
         <template slot-scope="scope">
-          <el-button class="btn-green btn-margin" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">发货</el-button>
           <!-- 导出清单 -->
           <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button>
+          <el-button class="btn-green btn-margin" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">发货</el-button>
           <!-- 详情 -->
           <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id, scope.row.status)">详情</el-button>
           <!-- 删除 -->
