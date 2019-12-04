@@ -27,6 +27,7 @@
       v-loading="tableLoading"
       :data="voucherData" @selection-change="onSelectChange">
       <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
+      <el-table-column type="index" width="50"></el-table-column>
       <!-- 优惠券名称 -->
       <el-table-column label="优惠券名称" prop="name"></el-table-column>
       <!-- 类型 -->

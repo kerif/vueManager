@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import router from '@/router'
 import VipGroup from './vipgroup.vue'
 import addStaff from './addStaff.vue'
 import staffGroup from './staffGroup.vue'
@@ -18,6 +19,7 @@ import addPackage from './addprops.vue'
 import inviteList from './inviteList.vue'
 import reviewMsg from './reviewMsg.vue'
 import addCompany from './addCompany.vue'
+import shipDetails from './shipDetails.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -38,13 +40,15 @@ const SelectGroupController = Vue.extend(selectGroup)
 const AddPackageController = Vue.extend(addPackage)
 const ReviewMsgController = Vue.extend(reviewMsg)
 const AddCompanyController = Vue.extend(addCompany)
+const ShipDetaislController = Vue.extend(shipDetails)
 
 const mixin = {
   data () {
     return {
       show: false
     }
-  }
+  },
+  router
 }
 
 let instance
@@ -172,9 +176,16 @@ function initInstance (type) {
         mixins: [mixin]
       })
       break
-    // 添加转运快递公司
+    // 添加物流公司
     case 'addCompany':
       instance = new AddCompanyController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 发货单 详情
+    case 'shipDetails':
+      instance = new ShipDetaislController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

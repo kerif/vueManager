@@ -94,6 +94,7 @@
         v-loading="tableLoading"
         class="data-list"
         style="width: 100%">
+        <el-table-column type="index" width="50"></el-table-column>
         <!-- 时间 -->
         <el-table-column
         prop="created_at"

@@ -400,7 +400,7 @@ exports.getIndexNumber = () => $form.get('statistics/index-data')
 exports.getIndexData = (params) => $form.get('statistics/index-log', { params })
 
 // 获取运单下的所有订单
-exports.getOrdersByShipment = (id) => $form.get(`shipments/${id}/orders`)
+exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`, { params })
 // 移除发货单
 exports.removeOrders = (id) => {
   return $form.put('orders/remove-from-shipment', id)

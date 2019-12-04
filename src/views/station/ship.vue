@@ -71,6 +71,7 @@
         </el-table>
       </template>
     </el-table-column> -->
+      <el-table-column type="index" width="50"></el-table-column>
       <!-- 发货单号 -->
       <el-table-column label="发货单号" prop="sn"></el-table-column>
       <!-- 创建时间 -->
@@ -205,8 +206,15 @@ export default {
       })
     },
     // 跳转至详情
+    // goDetails (id, status) {
+    //   this.$router.push({ name: 'shipDetails', query: { id: id, status: status } })
+    // },
     goDetails (id, status) {
-      this.$router.push({ name: 'shipDetails', query: { id: id, status: status } })
+      console.log(id, '我是传过去id')
+      console.log(status, '我是传过去的status')
+      dialog({ type: 'shipDetails', id: id, status: status }, () => {
+        this.getList()
+      })
     },
     // 导出清单
     unloadShip (id) {

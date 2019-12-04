@@ -45,6 +45,10 @@
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   data () {
     return {
       tableData: [],
@@ -58,10 +62,6 @@ export default {
       }
     }
   },
-  components: {
-    NlePagination
-  },
-  mixins: [pagination],
   methods: {
     getList () {
       this.$request.getVipMember(this.id, {

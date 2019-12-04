@@ -103,7 +103,7 @@
       :data="ownerData"
       @selection-change="selectionChange"
       v-loading="tableLoading">
-      <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
+      <el-table-column type="index" width="50"></el-table-column>
       <!-- 快递单号 -->
       <el-table-column label="快递单号" prop="express_num"></el-table-column>
       <!-- 物品价值 -->

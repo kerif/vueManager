@@ -75,7 +75,8 @@
       v-loading="tableLoading"
       :data="oderData" @selection-change="onSelectChange">
       <el-table-column type="selection" width="55" align="center"
-      v-if="activeName === '2' || activeName === '3'"></el-table-column>
+      v-if="activeName === '3'"></el-table-column>
+      <el-table-column v-else type="index" width="50"></el-table-column>
       <!-- 客户ID -->
       <el-table-column label="客户ID" prop="user_id"></el-table-column>
       <!-- 订单号 -->

@@ -12,6 +12,7 @@
     v-loading="tableLoading"
       :data="oderData">
       <!-- 操作人 -->
+     <el-table-column type="index" width="50"></el-table-column>
       <el-table-column label="操作人" prop="operator"></el-table-column>
       <!-- 操作时间 -->
       <el-table-column label="操作时间" prop="created_at"></el-table-column>

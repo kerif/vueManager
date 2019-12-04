@@ -2,6 +2,7 @@
   <div class="suggest-list-container">
     <el-table class="data-list" border stripe :data="suggestList"
     v-loading="tableLoading">
+    <el-table-column type="index" width="50"></el-table-column>
       <el-table-column label="标题" prop="title">
       </el-table-column>
       <el-table-column label="内容" prop="content">
