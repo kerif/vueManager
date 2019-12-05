@@ -1,5 +1,6 @@
 <template>
-  <el-dialog :visible.sync="show" title="客户组成员" class="dialog-vip-list">
+  <el-dialog :visible.sync="show" title="客户组成员" class="dialog-vip-list"
+  @close="clear">
     <el-table
       :data="tableData"
       border
@@ -60,6 +61,9 @@ export default {
     },
     init () {
       this.getList()
+    },
+    clear () {
+      this.page_params.page = 1
     }
   }
 }

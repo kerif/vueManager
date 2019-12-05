@@ -1,5 +1,5 @@
 <template>
-<el-dialog  :visible.sync="show" title="发货单详情" width="70%"                            class="ship-details-container">
+<el-dialog  :visible.sync="show" title="发货单详情" width="70%"                            class="ship-details-container" @close="clear">
     <el-table :data="shipData">
         <el-table-column label="客户ID" prop="user_id"></el-table-column>
         <el-table-column label="订单号">
@@ -110,6 +110,9 @@ export default {
       if (this.id) {
         this.getList()
       }
+    },
+    clear () {
+      this.page_params.page = 1
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'invite' ? '邀请记录' : '卡券包'" class="dialog-invite" width="70%">
+  <el-dialog :visible.sync="show" :title="state === 'invite' ? '邀请记录' : '卡券包'" class="dialog-invite" width="70%" @close="clear">
     <el-table v-if="state === 'invite'"
       class="data-list"
       :data="tableData"
@@ -126,6 +126,9 @@ export default {
     },
     init () {
       this.getList()
+    },
+    clear () {
+      this.page_params.page = 1
     }
   }
 }

@@ -1,5 +1,6 @@
 <template>
-  <el-dialog :visible.sync="show" title="员工组成员" class="dialog-staff-group">
+  <el-dialog :visible.sync="show" title="员工组成员" class="dialog-staff-group"
+  @close="clear">
     <el-table
       :data="tableData"
       border
@@ -75,6 +76,9 @@ export default {
     },
     init () {
       this.getList()
+    },
+    clear () {
+      this.page_params.page = 1
     }
   }
 }
