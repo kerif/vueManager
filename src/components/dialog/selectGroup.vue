@@ -92,6 +92,7 @@ export default {
     clear () {
       this.keyword = ''
       this.chooseId = ''
+      this.page_params.page = 1
     },
     init () {
       this.getList()

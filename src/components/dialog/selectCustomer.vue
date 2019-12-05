@@ -90,6 +90,7 @@ export default {
       this.user = row
     },
     clear () {
+      this.page_params.page = 1
       this.keyword = ''
       this.chooseId = ''
     },
