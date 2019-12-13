@@ -20,6 +20,8 @@ import inviteList from './inviteList.vue'
 import reviewMsg from './reviewMsg.vue'
 import addCompany from './addCompany.vue'
 import shipDetails from './shipDetails.vue'
+import addTransfer from './addSetting.vue'
+import addService from './addEditService.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -41,6 +43,8 @@ const AddPackageController = Vue.extend(addPackage)
 const ReviewMsgController = Vue.extend(reviewMsg)
 const AddCompanyController = Vue.extend(addCompany)
 const ShipDetaislController = Vue.extend(shipDetails)
+const AddTransferController = Vue.extend(addTransfer)
+const AddEdtiServiceController = Vue.extend(addService)
 
 const mixin = {
   data () {
@@ -186,6 +190,20 @@ function initInstance (type) {
     // 发货单 详情
     case 'shipDetails':
       instance = new ShipDetaislController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 新增或修改支付配置
+    case 'addTransfer':
+      instance = new AddTransferController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 新增或修改增值服务
+    case 'addService':
+      instance = new AddEdtiServiceController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

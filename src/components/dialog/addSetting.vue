@@ -1,26 +1,20 @@
 <template>
-  <el-dialog :visible.sync="show" title="审核" class="dialog-review" width="35%"
+  <el-dialog :visible.sync="show" :title="state === 'add' ? '新增' : '修改'" class="dialog-add-setting" width="35%"
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
-        <!-- 支付金额 -->
-        <el-form-item label="*支付金额" v-if="state === 'pass'">
-          <el-input v-model="ruleForm.pay_amount" disabled>
-            <template slot="append">$</template>
+        <!-- 支付类型名称 -->
+        <el-form-item label="*支付类型名称">
+          <el-input v-model="ruleForm.name">
           </el-input>
         </el-form-item>
         <!-- 备注 -->
-        <el-form-item label="备注" v-if="state === 'pass'">
-            <el-input type="textarea" v-model="ruleForm.customer_remark"
+        <el-form-item label="备注">
+            <el-input type="textarea" v-model="ruleForm.remark"
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="请输入备注"></el-input>
         </el-form-item>
-        <el-form-item label="*备注" v-if="state === 'reject'">
-            <el-input type="textarea" v-model="ruleForm.customer_remark"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
-        </el-form-item>
-        <el-form-item label="上传照片" class="updateChe">
+        <el-form-item label="上传收款二维码" class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
             <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
             <span class="model-box"></span>
@@ -30,7 +24,7 @@
             </span>
             </span>
           <el-upload
-            v-show="baleImgList.length < 3"
+            v-show="baleImgList.length < 1"
             class="avatar-uploader"
             action=""
             list-type="picture-card"
@@ -53,39 +47,36 @@ export default {
   data () {
     return {
       ruleForm: {
-        pay_amount: '',
-        customer_remark: '',
-        customer_images: []
+        name: '',
+        remark: '',
+        qr_code: []
       },
       state: '',
       tranAmount: '',
       baleImgList: []
     }
   },
-  created () {
-    this.getCountry()
-    console.log(this.state, 'state')
-  },
   methods: {
-    getCountry () {
-      this.$request.getCountry().then(res => {
-        this.country = res.data
+    getList () {
+      this.$request.editPayments(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm = res.data
+          this.baleImgList[0] = { url: res.data.qr_code }
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     confirm () {
-      console.log(this.state, 'this.state')
-      this.ruleForm.customer_images = this.baleImgList.map(item => {
-        return {
-          url: item.url
-        }
-      })
-      if (this.state === 'pass' && !this.ruleForm.pay_amount && this.ruleForm.pay_amount !== 0) {
-        return this.$message.error('请输入金额')
-      } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
-        return this.$message.error('请输入备注')
+      this.ruleForm.qr_code = this.baleImgList[0].url
+      if (!this.ruleForm.name) {
+        return this.$message.error('请输入支付类型名称')
       }
-      if (this.state === 'pass') {
-        this.$request.acceptPayment(this.id, this.ruleForm).then(res => {
+      if (this.state === 'add') {
+        this.$request.addPayments(this.ruleForm).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -103,7 +94,7 @@ export default {
           this.show = false
         })
       } else {
-        this.$request.acceptReject(this.id, this.ruleForm).then(res => {
+        this.$request.updatePayments(this.id, this.ruleForm).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -154,24 +145,22 @@ export default {
       return this.$request.uploadImg(params)
     },
     clear () {
-      this.$refs['ruleForm'].resetFields()
-      this.$refs['ruleForm'].clearValidate()
-      this.ruleForm.pay_amount = ''
-      this.ruleForm.customer_remark = ''
+      this.ruleForm.name = ''
+      this.ruleForm.remark = ''
       this.baleImgList = []
-      this.ruleForm.customer_images = []
+      this.ruleForm.qr_code = []
     },
     init () {
-      console.log(this.tranAmount, 'this.tranAmount')
-      if (this.state === 'pass') {
-        this.ruleForm.pay_amount = this.tranAmount
+      console.log(this.id, '我是接受id')
+      if (this.state === 'edit') {
+        this.getList()
       }
     }
   }
 }
 </script>
 <style lang="scss">
-.dialog-review {
+.dialog-add-setting {
   .el-dialog__body {
     margin-left: 20px !important;
   }

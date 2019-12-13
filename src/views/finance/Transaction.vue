@@ -3,15 +3,23 @@
     <div>
       <search-group v-model="page_params.keyword" @search="goSearch">
         <el-date-picker
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期">
-      </el-date-picker>
+          v-model="timeList"
+          type="daterange"
+          @change="onTime"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+       </el-date-picker>
+      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou">
+        <el-option
+          v-for="item in voucherChange"
+          :key="item.id"
+          :value="item.id"
+          :label="item.name">
+        </el-option>
+       </el-select>
       </search-group>
     </div>
     <el-table :data="transactionList" stripe border class="data-list"
@@ -61,7 +69,9 @@ export default {
       tableLoading: false,
       timeList: [],
       begin_date: '',
-      end_date: ''
+      end_date: '',
+      type: '',
+      voucherChange: []
     }
   },
   mixins: [pagination],
@@ -82,13 +92,15 @@ export default {
   },
   mounted () {
     this.getList()
+    this.getTypes()
   },
   methods: {
     getList () {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.page_params.size,
+        type: this.type
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)
@@ -127,7 +139,33 @@ export default {
         console.log('我是微信')
         this.$router.push({ name: 'wechatPay', query: { id: id } })
       }
+    },
+    // 选择不同类型优惠券
+    onVocherTypeChange () {
+      this.page_params.handleQueryChange('type', this.type)
+      this.getList()
+    },
+    // 获取下拉框
+    getTypes () {
+      this.$request.getPaymentType().then(res => {
+        if (res.ret) {
+          this.voucherChange = res.data
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }
 </script>
+<style lang="scss">
+.transaction-list-container {
+  .changeVou {
+    margin-left: 20px;
+  }
+}
+</style>

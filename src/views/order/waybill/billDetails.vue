@@ -62,7 +62,7 @@
      <!-- 增值服务 -->
       <el-col :span="7">
         <span class="leftWidth">增值服务</span>
-        <span>{{form.add_service}}</span>
+        <span v-for="item in services" :key="item.id">{{item.name}}/{{item.price}}&nbsp;&nbsp;</span>
       </el-col>
       <!-- 转运快递单号 -->
       <el-col :span="7" :offset="1">
@@ -115,6 +115,7 @@
           <el-table-column type="index" width="50"></el-table-column>
           <el-table-column :label="'总金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
           <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
+          <el-table-column :label="'增值服务费' + this.localization.currency_unit" prop="value_added_amount"></el-table-column>
           <el-table-column :label="'实际支付' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
           <!-- 支付流水号 -->
           <!-- <el-table-column label="支付流水号">
@@ -173,6 +174,7 @@ export default {
       form: {},
       oderData: [],
       PackageData: [],
+      services: [],
       localization: {},
       paymentData: []
     }
@@ -188,6 +190,7 @@ export default {
         this.form = res.data
         this.oderData = [res.data.details]
         this.PackageData = res.data.packages
+        this.services = res.data.services
         this.localization = res.localization
         this.paymentData = [res.data.payment]
       })

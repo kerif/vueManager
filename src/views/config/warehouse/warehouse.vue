@@ -29,6 +29,13 @@
           </el-col>
       </el-row>
     </el-form-item>
+    <el-form-item label="温馨提示" prop="tips">
+      <el-row>
+        <el-col :span="10">
+          <el-input placeholder="请输入温馨提示" v-model="ruleForm.tips"></el-input>
+          </el-col>
+      </el-row>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" class="save-btn" @click="submit('ruleForm')"
       :loading="$store.state.btnLoading">保存</el-button>
@@ -45,7 +52,8 @@ export default {
         receiver_name: '',
         phone: '',
         postcode: '',
-        address: ''
+        address: '',
+        tips: ''
       },
       rules: {
         receiver_name: [
@@ -59,6 +67,9 @@ export default {
         ],
         address: [
           { required: true, message: '请输入地址', trigger: 'blur' }
+        ],
+        tips: [
+          { required: true, message: '请输入温馨提示', trigger: 'blur' }
         ]
       }
     }

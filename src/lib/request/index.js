@@ -137,8 +137,13 @@ exports.getCountry = () => {
 exports.saveCountries = (params) => {
   return $form.post('countries', params)
 }
+// 财务 流水记录
 exports.getTransaction = (params) => {
   return $form.get('transaction-records', { params })
+}
+// 流水记录 获取下拉框
+exports.getPaymentType = () => {
+  return $form.get('transaction-records/payment-types')
 }
 exports.saveShip = (params) => {
   return $form.post(`shipments`, params)
@@ -332,6 +337,38 @@ exports.chooseLocalization = () => {
 exports.confirmLocalization = (params) => {
   return $form.put('localization', params)
 }
+// 更多配置 获取微信配置是否启用
+exports.getPaymentOnline = () => {
+  return $form.get(`payments/wechat/status`)
+}
+// 更多配置 开启或关闭微信配置
+exports.changePayment = (status) => {
+  return $form.put(`payments/wechat/status/${status}`)
+}
+// 更多配置 获取转账支付
+exports.getPayments = () => {
+  return $form.get('payments')
+}
+// 添加转账支付方式
+exports.addPayments = (params) => {
+  return $form.post('payments', params)
+}
+// 更多配置 删除单条转账支付
+exports.deleteTransfer = (id) => {
+  return $form.delete(`payments/${id}`)
+}
+// 获取转账支付详情
+exports.editPayments = (id) => {
+  return $form.get(`payments/${id}`)
+}
+// 修改转账支付详情
+exports.updatePayments = (id, params) => {
+  return $form.put(`payments/${id}`, params)
+}
+// 修改转账支付的开关启用
+exports.closePayments = (id, status) => {
+  return $form.put(`payments/${id}/status/${status}`)
+}
 // 获取物品属性
 exports.getPackage = () => {
   return $form.get('package-props')
@@ -351,6 +388,38 @@ exports.getLogistics = () => {
 // 更改 物流跟踪配置
 exports.editLogistics = (params) => {
   return $form.put('logistics', params)
+}
+// 更多配置 获取增值服务
+exports.getValue = (params) => {
+  return $form.get('value-added-services', { params })
+}
+// 更多配置 添加增值服务
+exports.addValue = (params) => {
+  return $form.post(`value-added-services`, params)
+}
+// 更多配置 获取单条增值服务
+exports.getService = (id) => {
+  return $form.get(`value-added-services/${id}`)
+}
+// 更多配置 修改单条增值服务
+exports.updateService = (id, params) => {
+  return $form.put(`value-added-services/${id}`, params)
+}
+// 更多配置 删除单条增值服务
+exports.deleteVaule = (id) => {
+  return $form.delete(`value-added-services/${id}`)
+}
+// 更多配置 增值服务 开关启用状态
+exports.closeValue = (id, status) => {
+  return $form.put(`value-added-services/${id}/status/${status}`)
+}
+// 更多配置 其余配置 获取
+exports.getWebsite = () => {
+  return $form.get('website-settings')
+}
+// 更多配资 其余配置 修改
+exports.editWebsite = (params) => {
+  return $form.put('website-settings', params)
 }
 // 营销管理 新用户福利
 exports.getCoupons = () => {
@@ -399,8 +468,12 @@ exports.getIndexNumber = () => $form.get('statistics/index-data')
 // 获取首页图表数据
 exports.getIndexData = (params) => $form.get('statistics/index-log', { params })
 
-// 获取运单下的所有订单
+// 获取订单下的所有订单
 exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`, { params })
+// 订单列表 获取增值服务
+exports.getAdded = () => {
+  return $form.get('orders/value-added-services')
+}
 // 移除发货单
 exports.removeOrders = (id) => {
   return $form.put('orders/remove-from-shipment', id)

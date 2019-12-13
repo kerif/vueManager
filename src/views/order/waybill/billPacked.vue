@@ -141,6 +141,18 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 增值服务 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="增值服务" class="customer">
+                <el-checkbox v-for="item in updateProp" :key="item.id" v-model="item.checked">{{item.name}}
+                <el-input v-model="item.price"></el-input>
+                </el-checkbox>
+                <!-- <el-checkbox-group v-model="user.services">
+                </el-checkbox-group> -->
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-col>
         <el-col :lg="12">
           <!-- 留仓物品 -->
@@ -211,6 +223,7 @@ export default {
         height: '',
         remark: '',
         location: '',
+        services: [],
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片
         pack_pictures: [] // 打包照片
@@ -219,11 +232,14 @@ export default {
       baleImgList: [],
       goodsImgList: [],
       PackageData: [],
+      services: [],
+      updateProp: [],
       localization: {}
     }
   },
   created () {
     this.getPackage()
+    // this.getProp() // 获取多选框数据
   },
   methods: {
     getList () {
@@ -232,8 +248,42 @@ export default {
       //   this.oderData = [res.data.details]
       // })
     },
+    // 获取多选框
+    getProp (arr) {
+      this.$request.getAdded().then(res => {
+        if (res.ret) {
+          let ids = res.data.map(item => item.id)
+          this.updateProp = res.data.map(item => {
+            return {
+              ...item,
+              checked: false
+            }
+          })
+          arr.forEach(item => {
+            let index = ids.indexOf(item.service_id)
+            if (index !== -1) {
+              this.updateProp[index].checked = true
+            }
+          })
+        }
+      })
+    },
     savePacked () {
       console.log(this.user)
+      console.log('pr', this.updateProp)
+      // console.log(this.user.services = this.user.services.map(item => {
+      //   return {
+      //     price: item.price,
+      //     id: item.id
+      //   }
+      // }), 'user.services')
+      this.user.services = this.updateProp.filter(item => item.checked).map(item => {
+        return {
+          id: item.id,
+          price: item.price
+        }
+      })
+      console.log('ser', this.user.services)
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
         return {
           url: item.url
@@ -265,6 +315,8 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
+        this.services = res.data.services
+        this.getProp(res.data.services)
         this.localization = res.localization
       })
     },
@@ -326,6 +378,21 @@ export default {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
+    }
+  },
+  computed: {
+    addServices () {
+      if (!this.updateProp.length || !this.services.length) return []
+      let arr = JSON.parse(JSON.stringify(this.updateProp))
+      let ids = arr.map(item => item.id)
+      this.services.forEach(item => {
+        let index = ids.indexOf(item.id)
+        if (index !== -1) {
+          arr[index].checked = true
+        }
+      })
+      console.log('dcd', this.arr)
+      return arr
     }
   }
 }
