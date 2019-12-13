@@ -142,7 +142,7 @@
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="200px">
+      <el-table-column label="操作" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 详情 -->
           <el-button class="btn-purple detailsBtn" @click="details(scope.row.id, activeName)">详情</el-button>

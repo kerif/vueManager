@@ -40,9 +40,14 @@
     </div>
     <div class="receiverMSg">
     <h4>运单详情</h4>
-    <el-row class="container-center"  :gutter="20">
-      <!-- 订单号 -->
+    <el-row class="container-center" :gutter="20">
+      <!-- 客户id -->
       <el-col :span="7">
+        <span class="leftWidth">客户ID</span>
+        <span>{{form.user_id}}---{{form.user_name}}</span>
+      </el-col>
+      <!-- 订单号 -->
+      <el-col :span="7" :offset="1">
         <span class="leftWidth">订单号</span>
         <span>{{form.order_sn}}</span>
         <el-button size="small" v-if="form.order_sn" @click="copyUrl">复制</el-button>
@@ -52,17 +57,12 @@
          <span class="leftWidth">线路名称</span>
          <span>{{form.express_line && form.express_line.cn_name}}</span>
       </el-col>
-      <!-- 提交时间 -->
-        <el-col :span="7" :offset="1">
-         <span class="leftWidth">提交时间</span>
-         <span>{{form.created_at}}</span>
-      </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
-     <!-- 增值服务 -->
-      <el-col :span="7">
-        <span class="leftWidth">增值服务</span>
-        <span v-for="item in services" :key="item.id">{{item.name}}/{{item.price}}&nbsp;&nbsp;</span>
+      <!-- 提交时间 -->
+        <el-col :span="7">
+         <span class="leftWidth">提交时间</span>
+         <span>{{form.created_at}}</span>
       </el-col>
       <!-- 转运快递单号 -->
       <el-col :span="7" :offset="1">
@@ -73,6 +73,13 @@
       <el-col :span="7" :offset="1">
         <span class="leftWidth">转运快递公司</span>
         <span>{{form.logistics_company}}</span>
+      </el-col>
+    </el-row>
+    <el-row class="container-center" :gutter="20">
+      <!-- 增值服务 -->
+      <el-col>
+        <span class="leftWidth">增值服务</span>
+        <span v-for="item in services" :key="item.id">{{item.name}}{{localization.currency_unit}}{{item.price}}&nbsp;&nbsp;&nbsp;</span>
       </el-col>
     </el-row>
     </div>
@@ -146,14 +153,18 @@
     <div class="bale">
       <div class="bale-left">
         <span>打包照片</span>
-        <div class="left-img">
-          <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="item in form.pack_pictures" :key="item.id">
+        <div class="left-img" v-for="item in form.pack_pictures" :key="item.id">
+          <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
+            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" >
+          </span>
         </div>
       </div>
       <div class="bale-left">
         <span>物品照片</span>
-        <div class="left-img">
-          <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="item in form.in_warehouse_pictures" :key="item.id">
+        <div class="left-img" v-for="item in form.in_warehouse_pictures" :key="item.id">
+          <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
+            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" >
+          </span>
         </div>
       </div>
     </div>
@@ -164,6 +175,11 @@
         </span>
       <span v-else class="nullProduct">无</span>
     </div>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -176,7 +192,9 @@ export default {
       PackageData: [],
       services: [],
       localization: {},
-      paymentData: []
+      paymentData: [],
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   created () {
@@ -259,6 +277,12 @@ export default {
     cursor: pointer;
     color:blue;
     text-decoration: underline;
+  }
+  .img_box{
+    text-align: center;
+    .imgDialog{
+      width: 50%;
+    }
   }
 }
 </style>

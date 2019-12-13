@@ -71,9 +71,16 @@ export default {
       })
     },
     confirm () {
-      this.ruleForm.qr_code = this.baleImgList[0].url
+      if (this.baleImgList[0]) {
+        this.ruleForm.qr_code = this.baleImgList[0].url
+      } else {
+        this.ruleForm.qr_code = []
+      }
       if (!this.ruleForm.name) {
         return this.$message.error('请输入支付类型名称')
+      } else if (!this.ruleForm.remark && !this.ruleForm.qr_code[0]) {
+        console.log('111')
+        return this.$message.error('请输入备注')
       }
       if (this.state === 'add') {
         this.$request.addPayments(this.ruleForm).then(res => {
@@ -142,7 +149,20 @@ export default {
     onUpload (file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
-      return this.$request.uploadImg(params)
+      return this.$request.uploadImg(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     clear () {
       this.ruleForm.name = ''

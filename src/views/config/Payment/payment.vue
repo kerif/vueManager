@@ -163,12 +163,12 @@
       <div class="setOthers">
       <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
       label-position="top">
-          <!-- 支付类型名称 -->
-          <el-form-item label="*支付类型名称">
+          <!-- 网站名称 -->
+          <el-form-item label="*网站名称">
             <el-input v-model="setForm.website_name">
             </el-input>
           </el-form-item>
-          <el-form-item label="上传收款二维码" class="updateChe">
+          <el-form-item label="小程序码" class="updateChe">
               <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
               <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
               <span class="model-box"></span>

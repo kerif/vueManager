@@ -15,6 +15,7 @@
            value-format="yyyy-MM-dd"
             v-model="ruleForm.effected_at"
             type="date"
+            :picker-options="pickerOptions"
             placeholder="请输入生效时间">
             </el-date-picker>
     </el-form-item>
@@ -61,6 +62,11 @@ export default {
         effected_at: [
           { required: true, message: '请输入生效时间', trigger: 'blur' }
         ]
+      },
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
       }
     }
   },

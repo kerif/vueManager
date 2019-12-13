@@ -39,7 +39,7 @@
     </div>
     <div class="receiverMSg">
     <h4>打包详情</h4>
-    <el-row class="container-center"  :gutter="20">
+    <el-row class="container-center" :gutter="20">
       <!-- 订单号 -->
       <el-col :span="7">
         <span class="leftWidth">订单号</span>
@@ -54,6 +54,13 @@
         <el-col :span="7" :offset="1">
          <span class="leftWidth">提交时间</span>
          <span>{{form.created_at}}</span>
+      </el-col>
+    </el-row>
+    <!-- 客户ID -->
+    <el-row class="container-center" :gutter="20">
+      <el-col :span="7">
+         <span class="leftWidth">客户ID</span>
+         <span>{{form.user_id}}---{{form.user_name}}</span>
       </el-col>
     </el-row>
     </div>
@@ -143,13 +150,19 @@
           </el-row>
           <!-- 增值服务 -->
           <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="增值服务" class="customer">
-                <el-checkbox v-for="item in updateProp" :key="item.id" v-model="item.checked">{{item.name}}
+            <el-col>
+              <el-form-item label="增值服务">
+                <div v-for="item in updateProp" :key="item.id" class="service">
+                  <div class="serviceLeft">
+                  <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
+                  </div>
+                  <div class="serviceRight">
+                  <el-input v-model="item.price"></el-input>
+                  </div>
+                </div>
+                <!-- <el-checkbox v-for="item in updateProp" :key="item.id" v-model="item.checked">{{item.name}}
                 <el-input v-model="item.price"></el-input>
-                </el-checkbox>
-                <!-- <el-checkbox-group v-model="user.services">
-                </el-checkbox-group> -->
+                </el-checkbox> -->
               </el-form-item>
             </el-col>
           </el-row>
@@ -421,6 +434,23 @@ export default {
   .customer {
     .el-textarea {
       width: 100%;
+    }
+  }
+  .service {
+    overflow: hidden;
+    .el-input__inner {
+      // width: 200px;
+      // margin-left: 60px;
+      line-height: 40px !important;
+      margin-bottom: 10px;
+    }
+    .serviceLeft {
+      display: inline-block;
+      float: left;
+    }
+    .serviceRight {
+      display: inline-block;
+      float: right;
     }
   }
   .saveBtn {
