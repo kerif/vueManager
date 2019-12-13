@@ -21,10 +21,11 @@
     </el-form-item>
     <el-form-item label="失效时间" prop="expired_at">
         <el-date-picker
-        value-format="yyyy-MM-dd"
-        v-model="ruleForm.expired_at"
-        type="date"
-        placeholder="请输入失效时间">
+          :picker-options="pickerOptions"
+          value-format="yyyy-MM-dd"
+          v-model="ruleForm.expired_at"
+          type="date"
+          placeholder="请输入失效时间">
         </el-date-picker>
     </el-form-item>
     <el-form-item>
