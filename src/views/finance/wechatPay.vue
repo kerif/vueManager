@@ -32,8 +32,8 @@
       <el-row :gutter="20">
         <el-col :span="9">
           <p class="transfer-right">支付方式</p>
-          <span v-if="form.payment_type === 2">在线支付</span><br/>
-          <!-- <span>{{form.payment_type}}</span><br/> -->
+          <!-- <span v-if="form.payment_type === 2">在线支付</span><br/> -->
+          <span>{{form.payment_type_name}}</span><br/>
           <!-- 在线支付 -->
           <p class="transfer-right">
               {{'抵用券金额' + this.localization.currency_unit}}</p>

@@ -100,7 +100,7 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        type: this.type
+        payment_type: this.type
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)

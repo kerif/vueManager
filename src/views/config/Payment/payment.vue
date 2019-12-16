@@ -306,7 +306,7 @@ export default {
     },
     // 删除单条转账支付
     deleteTransfer (id) {
-      this.$confirm(`您真的要删除发货单吗？`, '提示', {
+      this.$confirm(`您真的要删除转账支付吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -358,7 +358,7 @@ export default {
     },
     // 删除增值服务
     deleteService (id) {
-      this.$confirm(`您真的要删除转账支付吗？`, '提示', {
+      this.$confirm(`您真的要删除增值服务吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

@@ -32,7 +32,7 @@
       <el-row :gutter="20">
         <el-col :span="9">
           <p class="transfer-right">支付方式</p>
-          <span>{{form.pay_type}}</span><br/>
+          <span>{{form.payment_type_name}}</span><br/>
           <p class="transfer-right">转账支付账户</p>
           <span>{{form.transfer_account}}</span><br/>
           <p class="transfer-right">
