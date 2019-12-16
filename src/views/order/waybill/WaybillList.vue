@@ -3,15 +3,19 @@
     <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
       <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
         <!-- 待处理 -->
-        <el-tab-pane label="待处理" name="1"></el-tab-pane>
+        <el-tab-pane :label="'待处理' + '(' + 0 + ')'" name="1" v-if="!this.countData.pending"></el-tab-pane>
+        <el-tab-pane v-else :label="'待处理' + '(' + this.countData.pending + ')'" name="1"></el-tab-pane>
         <!-- 待支付 -->
-        <el-tab-pane label="待支付" name="2"></el-tab-pane>
+        <el-tab-pane :label="'待支付' + '(' + this.countData.paid + ')'" name="2"></el-tab-pane>
         <!-- 待发货 -->
-        <el-tab-pane label="待发货" name="3"></el-tab-pane>
+        <el-tab-pane :label="'待发货' + '(' + this.countData.delivered
+ + ')'" name="3"></el-tab-pane>
         <!-- 已发货 -->
-        <el-tab-pane label="已发货" name="4"></el-tab-pane>
+        <el-tab-pane :label="'已发货' + '(' + this.countData.shipped
+ + ')'" name="4"></el-tab-pane>
         <!-- 已签收 -->
-        <el-tab-pane label="已签收" name="5"></el-tab-pane>
+        <el-tab-pane :label="'已签收' + '(' + this.countData.received
+ + ')'" name="5"></el-tab-pane>
     </el-tabs>
     <el-row :gutter="20">
       <el-col :span="18">
@@ -215,7 +219,7 @@ export default {
       agent_name: '',
       agentData: [],
       tableLoading: false,
-      countData: []
+      countData: {}
     }
   },
   created () {
@@ -490,8 +494,7 @@ export default {
 <style lang="scss">
 .way-list-container {
   .tabLength {
-    width: 400px !important;
-    display: inline-block;
+    width: 550px !important;
   }
   .detailsBtn {
     margin: 3px 2px !important;
