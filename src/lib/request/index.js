@@ -474,6 +474,10 @@ exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`
 exports.getAdded = () => {
   return $form.get('orders/value-added-services')
 }
+// 订单列表 获取订单统计数据
+exports.getCounts = () => {
+  return $form.get('orders/order-counts')
+}
 // 移除发货单
 exports.removeOrders = (id) => {
   return $form.put('orders/remove-from-shipment', id)

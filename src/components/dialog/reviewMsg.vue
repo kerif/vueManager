@@ -6,7 +6,7 @@
         <!-- 支付金额 -->
         <el-form-item label="*支付金额" v-if="state === 'pass'">
           <el-input v-model="ruleForm.pay_amount" disabled>
-            <template slot="append">$</template>
+            <template slot="append">{{this.localization.currency_unit}}</template>
           </el-input>
         </el-form-item>
         <!-- 备注 -->
@@ -59,17 +59,15 @@ export default {
       },
       state: '',
       tranAmount: '',
-      baleImgList: []
+      baleImgList: [],
+      localization: {}
     }
-  },
-  created () {
-    this.getCountry()
-    console.log(this.state, 'state')
   },
   methods: {
     getCountry () {
       this.$request.getCountry().then(res => {
         this.country = res.data
+        this.localization = res.localization
       })
     },
     confirm () {
@@ -166,6 +164,7 @@ export default {
       if (this.state === 'pass') {
         this.ruleForm.pay_amount = this.tranAmount
       }
+      this.getCountry()
     }
   }
 }

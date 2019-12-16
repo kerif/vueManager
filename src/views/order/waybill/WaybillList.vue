@@ -214,10 +214,12 @@ export default {
       selectIDs: [],
       agent_name: '',
       agentData: [],
-      tableLoading: false
+      tableLoading: false,
+      countData: []
     }
   },
   created () {
+    this.getCounts()
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
       this.status = Number(this.$route.query.activeName)
@@ -270,6 +272,19 @@ export default {
             title: '操作失败',
             message: res.msg,
             type: 'warning'
+          })
+        }
+      })
+    },
+    // 获取订单统计数据
+    getCounts () {
+      this.$request.getCounts().then(res => {
+        if (res.ret) {
+          this.countData = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
           })
         }
       })
