@@ -72,6 +72,8 @@ export default {
   background-color: #171B42;
   transition: width .3s ease-in-out;
   .aside-top {
+    position: fixed;
+    width: 230px;
     height: 60px;
     line-height: 60px;
     background-color: #3540A5;
@@ -85,6 +87,8 @@ export default {
     margin-right: 5px;
   }
   .route-menu {
+    position: fixed;
+    width: 230px;
     border: none;
     margin-top: 50px;
   }

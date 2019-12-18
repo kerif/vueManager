@@ -12,9 +12,13 @@ exports.login = (params) => {
 }
 // 退出登录
 exports.logout = () => $form.post('logout')
-
+// 配置 路线
 exports.getLines = () => {
   return $form.get('express-lines')
+}
+// 配置 路线修改开启或关闭
+exports.resetLines = (id, status) => {
+  return $form.put(`express-lines/${id}/status/${status}`)
 }
 
 exports.getStaff = (params) => {
@@ -477,6 +481,10 @@ exports.getAdded = () => {
 // 订单列表 获取订单统计数据
 exports.getCounts = () => {
   return $form.get('orders/order-counts')
+}
+// 订单 打包 获取线路详情
+exports.getUsable = (id) => {
+  return $form.get(`orders/${id}/usable-express-lines`)
 }
 // 移除发货单
 exports.removeOrders = (id) => {

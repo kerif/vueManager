@@ -33,6 +33,8 @@
           <span v-if="scope.row.type === 1">消费</span>
         </template>
       </el-table-column>
+      <!-- 支付类型 -->
+      <el-table-column label="支付类型" prop="payment_type_name"> </el-table-column>
       <!-- 支付方式 -->
       <!-- <el-table-column label="支付方式">
       </el-table-column> -->
@@ -132,12 +134,12 @@ export default {
     details (id, orderId, paymentType) {
       console.log(paymentType, 'paymentType')
       console.log(orderId, 'orderId')
-      if (paymentType === 1) {
-        console.log('我是转账')
-        this.$router.push({ name: 'TransactionDetails', query: { order_id: orderId } })
-      } else {
+      if (paymentType === 0) {
         console.log('我是微信')
         this.$router.push({ name: 'wechatPay', query: { id: id } })
+      } else {
+        console.log('我是转账')
+        this.$router.push({ name: 'TransactionDetails', query: { order_id: orderId } })
       }
     },
     // 选择不同类型优惠券

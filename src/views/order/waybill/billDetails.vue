@@ -148,6 +148,16 @@
           </template>
         </el-table-column>
         <el-table-column label="代理" prop="agent"></el-table-column>
+        <!-- 商品清单 -->
+        <el-table-column label="商品清单" prop="item_pictures" width="130">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.item_pictures"
+            :key="item.id" style="cursor:pointer;"
+            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item.path, imgVisible=true">
+            <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px;">
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="货位" prop="location"></el-table-column>
       </el-table>
     <div class="bale">

@@ -23,6 +23,18 @@
       <el-table-column :label="'续费' + this.localization.currency_unit" prop="next_money"></el-table-column>
       <el-table-column :label="'最大重量' + this.localization.weight_unit" prop="max_weight"></el-table-column>
       <el-table-column :label="'最小重量' + this.localization.weight_unit" prop="min_weight"></el-table-column>
+      <el-table-column label="是否启用">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.enabled"
+            @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+            active-text="开"
+            inactive-text="关"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editLine(scope.row.id)">修改</el-button>
@@ -36,7 +48,11 @@ import AddBtn from '@/components/addBtn'
 export default {
   data () {
     return {
-      lineList: [],
+      lineList: [
+        {
+          enabled: true
+        }
+      ],
       localization: {},
       tableLoading: false
     }
@@ -50,7 +66,7 @@ export default {
       this.$request.getLines().then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.lineList = res.data
+          this.lineList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
           this.localization = res.localization
         } else {
           this.$notify({
@@ -69,6 +85,26 @@ export default {
           id: id
         } }
       )
+    },
+    // 修改转账支付的开关
+    changeTransfer (event, enabled, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.resetLines(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   },
   components: {

@@ -59,7 +59,11 @@
         </template>
       </el-table-column>
       <!-- 快递单号 -->
-      <el-table-column label="快递单号" prop="express_num"></el-table-column>
+      <el-table-column label="快递单号">
+        <template slot-scope="scope">
+          <span @click="goExpress(scope.row.express_num)">{{scope.row.express_num}}</span>
+        </template>
+      </el-table-column>
       <!-- 物品名称 -->
       <el-table-column label="物品名称" prop="package_name"></el-table-column>
       <!-- 物品价值 -->
@@ -69,6 +73,16 @@
         <template slot-scope="scope">
           <span v-for="item in scope.row.props" :key="item.id">
             {{item.cn_name}}
+          </span>
+        </template>
+      </el-table-column>
+      <!-- 商品清单 -->
+      <el-table-column label="商品清单" prop="item_pictures" width="130">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.item_pictures"
+          :key="item.id" style="cursor:pointer;"
+          @click.stop="imgSrc=$baseUrl.IMAGE_URL + item.path, imgVisible=true">
+           <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px;">
           </span>
         </template>
       </el-table-column>
@@ -132,6 +146,11 @@
     </el-table>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -161,7 +180,9 @@ export default {
       in_storage_end_date: '',
       in_storage_begin_date: '',
       begin_date: '',
-      end_date: ''
+      end_date: '',
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   methods: {
@@ -213,6 +234,10 @@ export default {
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
+    },
+    goExpress (expressNum) {
+      console.log(expressNum)
+      window.location.href('https://m.kuaidi100.com/app/query/?coname=uc&nu=expressNum')
     },
     // 删除
     deleteData () {
@@ -355,6 +380,12 @@ export default {
   .changeTime {
     .timeStyle {
       margin-right: 20px;
+    }
+  }
+ .img_box{
+    text-align: center;
+    .imgDialog{
+      width: 50%;
     }
   }
 }

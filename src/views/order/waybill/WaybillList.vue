@@ -6,15 +6,19 @@
         <el-tab-pane :label="'待处理' + '(' + 0 + ')'" name="1" v-if="!this.countData.pending"></el-tab-pane>
         <el-tab-pane v-else :label="'待处理' + '(' + this.countData.pending + ')'" name="1"></el-tab-pane>
         <!-- 待支付 -->
-        <el-tab-pane :label="'待支付' + '(' + this.countData.paid + ')'" name="2"></el-tab-pane>
+        <el-tab-pane :label="'待支付' + '(' + 0 + ')'" name="2" v-if="!this.countData.paid"></el-tab-pane>
+        <el-tab-pane v-else :label="'待支付' + '(' + this.countData.paid + ')'" name="2"></el-tab-pane>
         <!-- 待发货 -->
-        <el-tab-pane :label="'待发货' + '(' + this.countData.delivered
+        <el-tab-pane :label="'待发货' + '(' + 0 + ')'" name="3" v-if="!this.countData.delivered"></el-tab-pane>
+        <el-tab-pane v-else :label="'待发货' + '(' + this.countData.delivered
  + ')'" name="3"></el-tab-pane>
         <!-- 已发货 -->
-        <el-tab-pane :label="'已发货' + '(' + this.countData.shipped
+        <el-tab-pane :label="'已发货' + '(' + 0 + ')'" name="4" v-if="!this.countData.shipped"></el-tab-pane>
+        <el-tab-pane v-else :label="'已发货' + '(' + this.countData.shipped
  + ')'" name="4"></el-tab-pane>
         <!-- 已签收 -->
-        <el-tab-pane :label="'已签收' + '(' + this.countData.received
+        <el-tab-pane :label="'已签收' + '(' + 0 + ')'" name="5" v-if="!this.countData.received"></el-tab-pane>
+        <el-tab-pane v-else :label="'已签收' + '(' + this.countData.received
  + ')'" name="5"></el-tab-pane>
     </el-tabs>
     <el-row :gutter="20">

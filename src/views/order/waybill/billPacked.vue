@@ -79,6 +79,16 @@
           </template>
         </el-table-column>
         <el-table-column label="代理" prop="agent"></el-table-column>
+        <!-- 商品清单 -->
+        <el-table-column label="商品清单" prop="item_pictures" width="130">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.item_pictures"
+            :key="item.id" style="cursor:pointer;"
+            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item.path, imgVisible=true">
+            <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px;">
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="货位" prop="location"></el-table-column>
       </el-table>
       <el-form ref="params" :model="user" class="package-form" label-width="140px" label-position="left">
@@ -184,6 +194,21 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 线路配置 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="线路配置">
+                  <el-select v-model="weightName">
+                    <el-option
+                    v-for="item in expressData"
+                    :key="item.id"
+                    :value="item.cn_name"
+                    :label="item.cn_name">
+                    </el-option>
+                  </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 物品照片 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -220,6 +245,11 @@
       <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">保存</el-button>
     </el-col>
     </el-row>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog">
+      </div>
+    </el-dialog>
     </div>
 </template>
 <script>
@@ -247,11 +277,16 @@ export default {
       PackageData: [],
       services: [],
       updateProp: [],
-      localization: {}
+      localization: {},
+      imgVisible: false,
+      imgSrc: '',
+      expressData: [],
+      weightName: ''
     }
   },
   created () {
     this.getPackage()
+    this.getExpress()
     // this.getProp() // 获取多选框数据
   },
   methods: {
@@ -282,14 +317,6 @@ export default {
       })
     },
     savePacked () {
-      console.log(this.user)
-      console.log('pr', this.updateProp)
-      // console.log(this.user.services = this.user.services.map(item => {
-      //   return {
-      //     price: item.price,
-      //     id: item.id
-      //   }
-      // }), 'user.services')
       this.user.services = this.updateProp.filter(item => item.checked).map(item => {
         return {
           id: item.id,
@@ -331,6 +358,14 @@ export default {
         this.services = res.data.services
         this.getProp(res.data.services)
         this.localization = res.localization
+      })
+    },
+    // 获取线路详情
+    getExpress () {
+      this.$request.getUsable(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.expressData = res.data
+        }
       })
     },
     // 预览图片
@@ -437,6 +472,7 @@ export default {
     }
   }
   .service {
+    width: 350px;
     overflow: hidden;
     .el-input__inner {
       // width: 200px;

@@ -3,9 +3,9 @@
     <el-table :data="shipData">
         <el-table-column label="客户ID" prop="user_id"></el-table-column>
         <el-table-column label="订单号">
-        <template slot-scope="scope">
-            <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
-        </template>
+            <template slot-scope="scope">
+                <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
+            </template>
         </el-table-column>
         <el-table-column label="转运快递单号" prop="logistics_sn"></el-table-column>
         <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column>
