@@ -194,16 +194,16 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- 线路配置 -->
+          <!-- 更改线路 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="线路配置">
-                  <el-select v-model="weightName">
+              <el-form-item label="更改线路" class="express">
+                  <el-select v-model="form.express_line.id">
                     <el-option
                     v-for="item in expressData"
                     :key="item.id"
-                    :value="item.cn_name"
-                    :label="item.cn_name">
+                    :value="item.id"
+                    :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
                     </el-option>
                   </el-select>
               </el-form-item>
@@ -258,7 +258,11 @@ export default {
   data () {
     return {
       checked: false,
-      form: {},
+      form: {
+        express_line: {
+          id: ''
+        }
+      },
       user: {
         weight: '',
         width: '',
@@ -266,6 +270,7 @@ export default {
         height: '',
         remark: '',
         location: '',
+        express_line_id: '',
         services: [],
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片
@@ -317,6 +322,8 @@ export default {
       })
     },
     savePacked () {
+      this.user.express_line_id = this.form.express_line.id
+      console.log(this.user.express_line_id, 'this.user.express_line.id')
       this.user.services = this.updateProp.filter(item => item.checked).map(item => {
         return {
           id: item.id,
@@ -360,7 +367,7 @@ export default {
         this.localization = res.localization
       })
     },
-    // 获取线路详情
+    // 获取全部线路详情
     getExpress () {
       this.$request.getUsable(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -560,6 +567,11 @@ export default {
  .leftWidth {
     display: inline-block;
     width: 120px;
+  }
+  .express {
+    .el-select {
+      width: 100%;
+    }
   }
 }
 </style>

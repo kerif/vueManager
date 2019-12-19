@@ -61,7 +61,7 @@
       <!-- 快递单号 -->
       <el-table-column label="快递单号">
         <template slot-scope="scope">
-          <span @click="goExpress(scope.row.express_num)">{{scope.row.express_num}}</span>
+          <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
         </template>
       </el-table-column>
       <!-- 物品名称 -->
@@ -119,7 +119,11 @@
       v-loading="tableLoading">
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 快递单号 -->
-      <el-table-column label="快递单号" prop="express_num"></el-table-column>
+      <el-table-column label="快递单号">
+        <template slot-scope="scope">
+          <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
+        </template>
+      </el-table-column>
       <!-- 物品价值 -->
       <el-table-column :label="'包裹重量' + this.localization.weight_unit" prop="package_weight"></el-table-column>
       <!-- 物品属性 -->
@@ -237,7 +241,7 @@ export default {
     },
     goExpress (expressNum) {
       console.log(expressNum)
-      window.location.href('https://m.kuaidi100.com/app/query/?coname=uc&nu=expressNum')
+      window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
     },
     // 删除
     deleteData () {
@@ -387,6 +391,11 @@ export default {
     .imgDialog{
       width: 50%;
     }
+  }
+  .chooseOrder {
+    cursor: pointer;
+    color:blue;
+    text-decoration: underline;
   }
 }
 </style>
