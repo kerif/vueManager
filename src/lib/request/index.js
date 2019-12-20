@@ -486,6 +486,10 @@ exports.getCounts = () => {
 exports.getUsable = (id) => {
   return $form.get(`orders/${id}/usable-express-lines`)
 }
+// 订单 打印标签
+exports.updateLabel = (id) => {
+  return $form.get(`orders/${id}/label`)
+}
 // 移除发货单
 exports.removeOrders = (id) => {
   return $form.put('orders/remove-from-shipment', id)

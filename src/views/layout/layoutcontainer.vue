@@ -3,7 +3,7 @@
     <layout-aside></layout-aside>
     <el-container direction="vertical" :class="['layout', isCollapse ? 'is-collapse' : '']">
       <layout-header></layout-header>
-      <div class="layout-nav">
+      <div  :class="[isCollapse && 'isCollapses']" class="layout-nav">
         <div class="back-box" @click="$router.go(-1)">
           <span class="el-icon-back back-icon"></span>
           <span class="back-text">返回</span>
@@ -14,7 +14,7 @@
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <el-main>
+      <el-main :class="[isCollapse && 'isCollapses']">
         <router-view></router-view>
       </el-main>
       <layout-footer></layout-footer>
@@ -43,9 +43,26 @@ export default {
 </script>
 <style lang="scss">
 .layout-contaniner {
+  .el-main {
+    left: 230px;
+    width: calc(100vw - 230px);
+    transition: all .3s ease-in;
+    position: relative;
+    top: 60px;
+  }
+  .isCollapses {
+    left: 0  !important;
+    width: 100vw  !important;
+  }
   .layout-nav {
-    height: 40px;
+    height: 60px;
     padding: 0 20px;
+    width: calc(100vw - 230px);
+    box-sizing: border-box;
+    position: relative;
+    top: 60px;
+    left: 230px;
+    transition: all .3s ease-in;
     border: {
       top: 1px solid #E8E9EB;
       bottom: 1px solid #E8E9EB;

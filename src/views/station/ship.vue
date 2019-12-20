@@ -221,7 +221,8 @@ export default {
       this.$request.uploadExcel(id).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
-          window.location.href = this.urlExcel
+          // window.location.href = this.urlExcel
+          window.open(this.urlExcel)
           this.$notify({
             title: '操作成功',
             message: res.msg,

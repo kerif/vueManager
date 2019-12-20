@@ -23,7 +23,7 @@
       <el-table-column :label="'续费' + this.localization.currency_unit" prop="next_money"></el-table-column>
       <el-table-column :label="'最大重量' + this.localization.weight_unit" prop="max_weight"></el-table-column>
       <el-table-column :label="'最小重量' + this.localization.weight_unit" prop="min_weight"></el-table-column>
-      <el-table-column label="是否启用">
+      <el-table-column label="是否启用" width="120">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enabled"

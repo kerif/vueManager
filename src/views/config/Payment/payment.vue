@@ -188,6 +188,27 @@
               </i>
           </el-upload>
           </el-form-item>
+          <!-- pc端客服二维码 -->
+          <el-form-item label="*pc端客服二维码" class="updateChe">
+              <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
+              <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+              <span class="model-box"></span>
+              <span class="operat-box">
+                  <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                  <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+              </span>
+              </span>
+            <el-upload
+              v-show="customerList.length < 1"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :http-request="customerImg"
+              :show-file-list="false">
+              <i class="el-icon-plus">
+              </i>
+          </el-upload>
+          </el-form-item>
           </el-form>
           <el-button class="save-btn" @click="editOthers">保存</el-button>
         </div>
@@ -242,10 +263,12 @@ export default {
       lengthList: [],
       setForm: {
         website_name: '',
-        default_img: []
+        default_img: [],
+        customer_qr_code: []
       },
       tranAmount: '',
       baleImgList: [],
+      customerList: [],
       rules: {
         app_key: [
           { required: true, message: '请输入Appkey', trigger: 'change' }
@@ -458,13 +481,15 @@ export default {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
         this.baleImgList[0] = { url: res.data.default_img }
+        this.customerList[0] = { url: res.data.customer_qr_code }
       })
     },
     // 修改其余配置
     editOthers () {
       this.setForm.default_img = this.baleImgList[0].url
+      this.setForm.customer_qr_code = this.customerList[0].url
       if (!this.setForm.website_name) {
-        return this.$message.error('请输入支付类型名称')
+        return this.$message.error('请输入网站名称')
       }
       this.$request.editWebsite(this.setForm).then(res => {
         if (res.ret) {
@@ -647,6 +672,20 @@ export default {
         }
       })
     },
+    // pc端客服二维码
+    customerImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.customerList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
     // 预览图片
     onPreview (image) {
       dialog({
@@ -654,9 +693,13 @@ export default {
         image
       })
     },
-    // 删除图片
+    // 删除小程序码
     onDeleteImg (index) {
       this.baleImgList.splice(index, 1)
+    },
+    // 删除pc端二维码
+    onDeleteCus (index) {
+      this.customerList.splice(index, 1)
     },
     // 上传图片
     onUpload (file) {

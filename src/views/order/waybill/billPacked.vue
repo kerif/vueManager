@@ -48,7 +48,7 @@
       <!-- 线路名称 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">线路名称</span>
-         <span>{{form.express_line && form.express_line.cn_name}}</span>
+         <span>{{form.express_line && form.express_line.cn_name}}---限重{{form.express_line && form.express_line.max_weight}}KG</span>
       </el-col>
       <!-- 提交时间 -->
         <el-col :span="7" :offset="1">
@@ -197,8 +197,18 @@
           <!-- 更改线路 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="更改线路" class="express">
+              <!-- <el-form-item label="更改线路" class="express">
                   <el-select v-model="form.express_line.id">
+                    <el-option
+                    v-for="item in expressData"
+                    :key="item.id"
+                    :value="item.id"
+                    :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
+                    </el-option>
+                  </el-select>
+              </el-form-item> -->
+              <el-form-item label="更改线路" class="express">
+                  <el-select v-model="user.express_line_id" clearable>
                     <el-option
                     v-for="item in expressData"
                     :key="item.id"
@@ -322,8 +332,8 @@ export default {
       })
     },
     savePacked () {
-      this.user.express_line_id = this.form.express_line.id
-      console.log(this.user.express_line_id, 'this.user.express_line.id')
+      // this.user.express_line_id = this.form.express_line.id
+      // console.log(this.user.express_line_id, 'this.user.express_line.id')
       this.user.services = this.updateProp.filter(item => item.checked).map(item => {
         return {
           id: item.id,

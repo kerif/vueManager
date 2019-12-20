@@ -1,5 +1,5 @@
 <template>
-  <el-header class="layout-header">
+  <el-header :class="[isCollapse && 'isCollapses']" class="layout-header">
    <div @click="switchLeft" class="TransferLeft">
      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
        style="font-size:24px;"></i>
@@ -50,7 +50,18 @@ export default {
 }
 </script>
 <style lang="scss">
+.isCollapses {
+  width: 100vw !important;
+  left: 0px;
+}
 .layout-header {
+  width: calc(100vw - 230px);
+  position: fixed;
+  top: 0;
+  left: 230px;
+  background-color: #fff;
+  z-index: 99;
+  transition: all .3s ease-in;
   @keyframes move {
     0% {
       transform: translateY(0);

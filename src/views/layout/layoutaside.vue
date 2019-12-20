@@ -1,5 +1,5 @@
 <template>
-  <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']" style="width:240px;">
+  <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']">
     <div class="aside-top">
       <span class="app-name">集运</span>
       <span>管理系统</span>
@@ -69,10 +69,12 @@ export default {
 .layout-aside {
   width: 230px !important;
   min-height: 100vh;
+  position: fixed;
+  top: 0;
+  z-index: 99;
   background-color: #171B42;
   transition: width .3s ease-in-out;
   .aside-top {
-    position: fixed;
     width: 230px;
     height: 60px;
     line-height: 60px;
@@ -87,7 +89,6 @@ export default {
     margin-right: 5px;
   }
   .route-menu {
-    position: fixed;
     width: 230px;
     border: none;
     margin-top: 50px;

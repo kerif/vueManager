@@ -168,6 +168,8 @@
           <!-- <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加转运快递单号</el-button> -->
           <!-- 添加转运快递公司 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '3'" class="btn-green detailsBtn">添加物流信息</el-button>
+          <!-- 打印标签 -->
+          <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'" class="btn-light-red">打印标签</el-button>
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
           </el-button>
@@ -223,7 +225,8 @@ export default {
       agent_name: '',
       agentData: [],
       tableLoading: false,
-      countData: {}
+      countData: {},
+      urlExcel: ''
     }
   },
   created () {
@@ -301,6 +304,26 @@ export default {
     getAgentData () {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
+      })
+    },
+    // 打印标签
+    getLabel (id) {
+      this.$request.updateLabel(id).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          window.location.href = this.urlExcel
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 跳转到审核
