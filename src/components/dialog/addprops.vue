@@ -2,7 +2,7 @@
   <el-dialog :visible.sync="show" title="添加物品属性" class="props-dialog" width="35%" @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
       <el-form-item label="属性名称: ">
-        <el-input v-model="ruleForm.cn_name" @keyup.enter.native="confirm"></el-input>
+        <el-input v-model="ruleForm.cn_name" @keyup.native.enter="confirm"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
