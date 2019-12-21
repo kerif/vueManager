@@ -5,10 +5,10 @@
           <el-tree
             :data="permissionMenu"
             show-checkbox
-            default-expand-all
             node-key="id"
             class="tree"
             ref="tree"
+            :default-expanded-keys="defaultShowNodes"
             :default-checked-keys="defaultChecked"
             :props="defaultProps">
           </el-tree>
@@ -27,6 +27,7 @@ export default {
       filterText: '',
       permissionMenu: [],
       data: [],
+      defaultShowNodes: [],
       defaultProps: {
         children: 'child',
         label: 'name'
@@ -74,7 +75,16 @@ export default {
   },
   watch: {
     filterText (val) {
+      console.log(val, 'val')
       this.$refs.tree.filter(val)
+    },
+    permissionMenu: {
+      handler () {
+        this.permissionMenu.forEach(item => {
+          this.defaultShowNodes.push(item.id)
+          console.log(this.defaultShowNodes, 'this.defaultShowNodes')
+        })
+      }
     }
   },
   computed: {
