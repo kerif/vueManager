@@ -270,6 +270,10 @@ exports.getNoOwner = (params) => {
 exports.getEditAgent = (id) => {
   return $form.get(`agents/${id}`)
 }
+// 代理管理 开关代理是否启用
+exports.resetAgents = (id, status) => {
+  return $form.put(`agents/${id}/status/${status}`)
+}
 // 加入发货单
 exports.updateShipment = (ids, shipment) => {
   return $form.put(`orders/add-to-shipment`, {

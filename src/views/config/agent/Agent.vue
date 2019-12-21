@@ -28,6 +28,18 @@
         <span>{{scope.row.total_order}}/{{scope.row.deal_order}}</span>
       </template>
       </el-table-column>
+      <el-table-column label="是否启用" width="120">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.enabled"
+            @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+            active-text="开"
+            inactive-text="关"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editAgent(scope.row.id)">修改</el-button>
@@ -52,7 +64,11 @@ import dialog from '@/components/dialog'
 export default {
   data () {
     return {
-      suggestList: [], // 表格数据
+      suggestList: [
+        {
+          enabled: true
+        }
+      ], // 表格数据
       tableLoading: false,
       imgVisible: false,
       imgSrc: '',
@@ -80,7 +96,8 @@ export default {
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.suggestList = res.data
+          this.suggestList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+          // this.suggestList = res.data
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
@@ -99,6 +116,26 @@ export default {
         name: 'editAgent',
         query: {
           id: id
+        }
+      })
+    },
+    // 修改代理管理的开关
+    changeTransfer (event, enabled, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.resetAgents(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
