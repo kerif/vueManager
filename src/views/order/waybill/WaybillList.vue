@@ -190,6 +190,7 @@
       </template>
     </el-table>
     <div class="noDate" v-else>暂无数据</div>
+    <iframe class="iframe" :src="urlHtml"></iframe>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -226,7 +227,8 @@ export default {
       agentData: [],
       tableLoading: false,
       countData: {},
-      urlExcel: ''
+      urlExcel: '',
+      urlHtml: ''
     }
   },
   created () {
@@ -310,8 +312,9 @@ export default {
     getLabel (id) {
       this.$request.updateLabel(id).then(res => {
         if (res.ret) {
-          this.urlExcel = res.data.url
-          window.location.href = this.urlExcel
+          // this.urlExcel = res.data.url
+          this.urlHtml = res.data.html
+          // window.location.href = this.urlExcel
           this.$notify({
             title: '操作成功',
             message: res.msg,
@@ -529,6 +532,11 @@ export default {
   .noDate {
     text-align: center;
     color: #ccc;
+  }
+  .iframe {
+    width: 100%;
+    height: 100%;
+    border-width: 0;
   }
   .chooseStatus {
     .el-select {
