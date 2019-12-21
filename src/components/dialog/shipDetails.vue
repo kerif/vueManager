@@ -77,7 +77,7 @@ export default {
     },
     // 移除发货单
     removeShip (id) {
-      this.$confirm(`您真的要移除发货单吗？`, '提示', {
+      this.$confirm(`您真的要删除发货单吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

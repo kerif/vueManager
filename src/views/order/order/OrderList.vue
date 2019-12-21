@@ -245,7 +245,7 @@ export default {
     },
     // 删除
     deleteData () {
-      this.$confirm(`您真的要移除发货单吗？`, '提示', {
+      this.$confirm(`您真的要删除这个包裹吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
