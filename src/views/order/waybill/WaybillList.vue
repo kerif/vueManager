@@ -190,7 +190,15 @@
       </template>
     </el-table>
     <div class="noDate" v-else>暂无数据</div>
-    <iframe class="iframe" :src="urlHtml"></iframe>
+      <el-dialog :visible.sync="show" title="预览打印标签" class="props-dialog" width="45%">
+        <div class="dialogSty">
+          <iframe class="iframe" :src="urlHtml"></iframe>
+        </div>
+      <div slot="footer">
+        <el-button @click="show = false">取消</el-button>
+        <el-button type="primary" @click="updateLabel">确定</el-button>
+      </div>
+    </el-dialog>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -228,7 +236,9 @@ export default {
       tableLoading: false,
       countData: {},
       urlExcel: '',
-      urlHtml: ''
+      urlHtml: '',
+      show: false,
+      labelId: ''
     }
   },
   created () {
@@ -310,11 +320,33 @@ export default {
     },
     // 打印标签
     getLabel (id) {
+      this.labelId = id
+      this.show = true
       this.$request.updateLabel(id).then(res => {
         if (res.ret) {
           // this.urlExcel = res.data.url
           this.urlHtml = res.data.html
           // window.location.href = this.urlExcel
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    updateLabel () {
+      this.show = false
+      console.log(this.labelId, 'this.labelId')
+      this.$request.updateLabel(this.labelId).then(res => {
+        if (res.ret) {
+          window.open(res.data.url)
           this.$notify({
             title: '操作成功',
             message: res.msg,
@@ -533,9 +565,12 @@ export default {
     text-align: center;
     color: #ccc;
   }
+  .dialogSty {
+    margin-left: 30px;
+  }
   .iframe {
     width: 100%;
-    height: 100%;
+    min-height: 300px;
     border-width: 0;
   }
   .chooseStatus {

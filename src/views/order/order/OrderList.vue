@@ -245,23 +245,29 @@ export default {
     },
     // 删除
     deleteData () {
-      console.log(this.deleteNum, '2222')
-      this.$request.deletePackages({
-        DELETE: this.deleteNum
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: '操作成功',
-            message: res.msg,
-            type: 'success'
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
+      this.$confirm(`您真的要移除发货单吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(this.deleteNum, '2222')
+        this.$request.deletePackages({
+          DELETE: this.deleteNum
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     // 获取无人认领列表
