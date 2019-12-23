@@ -169,7 +169,7 @@
           <!-- 添加转运快递公司 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '3'" class="btn-green detailsBtn">添加物流信息</el-button>
           <!-- 打印标签 -->
-          <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'" class="btn-light-red">打印标签</el-button>
+          <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'" class="btn-pink detailsBtn">打印标签</el-button>
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
           </el-button>
@@ -196,7 +196,7 @@
         </div>
       <div slot="footer">
         <el-button @click="show = false">取消</el-button>
-        <el-button type="primary" @click="updateLabel">确定</el-button>
+        <el-button type="primary" @click="updateLabel">下载</el-button>
       </div>
     </el-dialog>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
