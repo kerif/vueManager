@@ -150,7 +150,7 @@
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="200px" fixed="right">
+      <el-table-column label="操作" :width="activeName === '3' ? '250px' : '170px'" fixed="right">
         <template slot-scope="scope">
           <!-- 详情 -->
           <el-button class="btn-purple detailsBtn" @click="details(scope.row.id, activeName)">详情</el-button>
@@ -166,12 +166,14 @@
           @click="addInvoice([scope.row.id])">加入发货单</el-button>
           <!-- 添加转运快递单号 -->
           <!-- <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加转运快递单号</el-button> -->
-          <!-- 添加转运快递公司 -->
-          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '3'" class="btn-green detailsBtn">添加物流信息</el-button>
           <!-- 打印标签 -->
           <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'" class="btn-pink detailsBtn">打印标签</el-button>
+          <!-- 添加转运快递公司 -->
+          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '3'" class="btn-green detailsBtn">添加物流信息</el-button>
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
+          </el-button>
+          <el-button size="small" class="btn-blue" v-if="activeName !== '1'" @click="onLogs(scope.row.order_sn)">拣货日志
           </el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
            v-show="activeName === '3' && !scope.row.disabled"
@@ -548,6 +550,10 @@ export default {
     onAgentChange () {
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
+    },
+    // 拣货日志
+    onLogs (orderSN) {
+      this.$router.push({ name: 'pickingContainer', query: { active: '2', keyword: orderSN } })
     }
   }
 }

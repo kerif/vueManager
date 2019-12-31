@@ -147,7 +147,7 @@
         <img :src="captha">
         <i class="el-icon-refresh id-icon" @click="getCaptcha"></i>
       </div>
-      <el-input v-model="userInfo.captcha" placeholder="请输入验证码"></el-input>
+      <el-input v-model="userInfo.captcha" @keyup.native.enter="submit" placeholder="请输入验证码"></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submit">确 定</el-button>
       </span>

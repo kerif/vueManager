@@ -167,7 +167,8 @@
                   <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
                   </div>
                   <div class="serviceRight">
-                  <el-input v-model="item.price"></el-input>
+                  <span>{{localization.currency_unit}}</span>
+                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
                   </div>
                 </div>
                 <!-- <el-checkbox v-for="item in updateProp" :key="item.id" v-model="item.checked">{{item.name}}
@@ -582,6 +583,10 @@ export default {
     .el-select {
       width: 100%;
     }
+  }
+  .add-value-ipt {
+    width: calc(100% - 20px);
+    margin-left: 5px;
   }
 }
 </style>

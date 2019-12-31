@@ -59,10 +59,10 @@
         </template>
       </el-table-column>
       <!-- 快递单号 -->
-      <el-table-column label="快递单号">
-        <template slot-scope="scope">
+      <el-table-column label="快递单号" prop="express_num">
+        <!-- <template slot-scope="scope">
           <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <!-- 物品名称 -->
       <el-table-column label="物品名称" prop="package_name"></el-table-column>
@@ -76,6 +76,12 @@
           </span>
         </template>
       </el-table-column>
+      <!-- 商品重量 -->
+       <el-table-column label="物品重量" v-if="activeName === '2'">
+        <template slot-scope="scope">
+          <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>
+        </template>
+       </el-table-column>
       <!-- 商品清单 -->
       <el-table-column label="商品清单" prop="item_pictures" width="130">
         <template slot-scope="scope">
@@ -88,19 +94,23 @@
       </el-table-column>
       <!-- 货位 -->
       <el-table-column label="货位" prop="location"></el-table-column>
+      <!-- 备注 -->
+      <el-table-column label="备注" prop="remark" v-if="activeName === '2'"></el-table-column>
       <!-- 规格 -->
       <el-table-column label="规格(长宽高cm)" prop="dimension"
       v-if="activeName === '2'" width="120px"></el-table-column>
       <!-- 称重时间 -->
-      <el-table-column label="称重时间" v-if="activeName === '2'" prop="in_storage_at"></el-table-column>
+      <el-table-column label="入库时间" v-if="activeName === '2'" prop="in_storage_at"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column label="提交时间" prop="created_at">
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" v-if="activeName === '1'">
-        <template slot-scope="scope" >
+      <el-table-column label="操作" width="200px">
+        <template slot-scope="scope">
           <!-- 入库 -->
-            <el-button class="btn-green" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.user_name, scope.row.props)">入库</el-button>
+          <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.user_name, scope.row.props)">入库</el-button>
+          <el-button class="btn-green" @click="goExpress(scope.row.express_num)">单号追踪</el-button>
+          <el-button class="btn-blue" v-if="activeName === '2'" @click="onLogs(scope.row.express_num)">入库日志</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -325,6 +335,10 @@ export default {
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.in_storage_begin_date} ${this.in_storage_end_date}`)
       this.getList()
+    },
+    // 入库日志
+    onLogs (expressNum) {
+      this.$router.push({ name: 'pickingContainer', query: { keyword: expressNum } })
     }
   },
   mounted () {

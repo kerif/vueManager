@@ -32,11 +32,23 @@
         </el-row>
       </el-form-item>
       <el-form-item>
+        <div>参考时效</div>
         <el-row>
           <el-col :span="10">
-            <div>参考时效</div>
-            <el-input v-model="form.reference_time" placeholder="请输入内容"></el-input>
+            <el-input v-model="form.reference_time" placeholder="例：5-12工作日/日"></el-input>
           </el-col>
+          <!-- <el-col :span="4">
+            <el-input v-model="referenceTime.minTime" placeholder="最小天数"></el-input>
+          </el-col>
+          <el-col :span="4">
+            <el-input v-model="referenceTime.maxTime" placeholder="最大天数" class="max-time"></el-input>
+          </el-col>
+          <el-col :span="4">
+            <el-select class="select-box" v-model="referenceTime.symbol">
+              <el-option label="工作日" value="工作日"></el-option>
+              <el-option label="日" value="日"></el-option>
+            </el-select>
+          </el-col> -->
         </el-row>
       </el-form-item>
       <el-form-item>
@@ -78,7 +90,12 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>体积系数</div>
+            <div>
+              <span>体积系数</span>
+              <el-tooltip class="item" effect="dark" content="主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
             <el-input v-model="form.factor" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
@@ -98,7 +115,7 @@
         <el-row>
           <el-col :span="10">
             <div>备注</div>
-            <el-input v-model="form.remark" placeholder="请输入内容"  :rows="2" type="textarea"></el-input>
+            <el-input v-model="form.remark" placeholder="请输入内容" :rows="4" type="textarea"></el-input>
           </el-col>
         </el-row>
       </el-form-item>
@@ -126,6 +143,11 @@ export default {
         reference_time: '',
         types: [],
         remark: ''
+      },
+      referenceTime: {
+        minTime: '',
+        maxTime: '',
+        symbol: '工作日'
       },
       value: [],
       options: [],
@@ -217,6 +239,25 @@ export default {
   }
   .sava-btn {
     min-width: 100px;
+  }
+  .icon-info {
+    color: #74B34F;
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+    cursor: pointer;
+  }
+  .max-time {
+    position: relative;
+    &::before {
+      content: '—';
+      position: absolute;
+      left: -22px;
+    }
+  }
+  .select-box {
+    width: 100%;
   }
 }
 </style>

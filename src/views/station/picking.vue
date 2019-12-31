@@ -67,7 +67,7 @@ export default {
   name: 'pickList',
   data () {
     return {
-      activeName: '',
+      activeName: '1',
       oderData: [],
       imgVisible: false,
       imgSrc: '',
@@ -147,7 +147,12 @@ export default {
     }
   },
   created () {
-    this.activeName = '1'
+    if (this.$route.query.active) {
+      this.activeName = this.$route.query.active
+    }
+    if (this.$route.query.keyword) {
+      this.page_params.keyword = this.$route.query.keyword
+    }
   },
   mounted () {
     this.getList()

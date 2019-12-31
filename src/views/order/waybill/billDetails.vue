@@ -50,7 +50,7 @@
       <el-col :span="7" :offset="1">
         <span class="leftWidth">订单号</span>
         <span>{{form.order_sn}}</span>
-        <el-button size="small" v-if="form.order_sn" @click="copyUrl">复制</el-button>
+        <!-- <el-button size="small" v-if="form.order_sn" @click="copyUrl">复制</el-button> -->
       </el-col>
       <!-- 线路名称 -->
         <el-col :span="7" :offset="1">
@@ -72,6 +72,23 @@
       <!-- 转运快递公司 -->
       <el-col :span="7" :offset="1">
         <span class="leftWidth">转运快递公司</span>
+        <span>{{form.logistics_company}}</span>
+      </el-col>
+    </el-row>
+    <el-row class="container-center" :gutter="20">
+      <!-- 称重时间 -->
+        <el-col :span="7">
+         <span class="leftWidth">称重时间</span>
+         <span>{{form.created_at}}</span>
+      </el-col>
+      <!-- 发货时间 -->
+      <el-col :span="7" :offset="1">
+        <span class="leftWidth">发货时间</span>
+        <span>{{form.logistics_sn}}</span>
+      </el-col>
+      <!-- 签收时间 -->
+      <el-col :span="7" :offset="1">
+        <span class="leftWidth">签收时间</span>
         <span>{{form.logistics_company}}</span>
       </el-col>
     </el-row>

@@ -1,14 +1,14 @@
 <template>
 <el-dialog  :visible.sync="show" title="发货单详情" width="70%"                            class="ship-details-container" @close="clear">
-    <el-table :data="shipData">
-        <el-table-column label="客户ID" prop="user_id"></el-table-column>
+    <el-table :data="shipData" border>
+        <!-- <el-table-column label="客户ID" prop="user_id"></el-table-column> -->
         <el-table-column label="订单号">
             <template slot-scope="scope">
                 <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
             </template>
         </el-table-column>
         <el-table-column label="转运快递单号" prop="logistics_sn"></el-table-column>
-        <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column>
+        <!-- <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column> -->
         <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
         <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
         <el-table-column label="收货国家" prop="address.country_name"></el-table-column>
@@ -16,26 +16,26 @@
         <el-table-column :label="'实际重量' + localization.weight_unit" prop="actual_weight"></el-table-column>
         <el-table-column :label="'实际费用' + localization.currency_unit" prop="actual_payment_fee"></el-table-column>
         <el-table-column :label="'申报价值' + localization.currency_unit" prop="declare_value"></el-table-column>
-        <el-table-column label="备注" prop="remark"></el-table-column>
+        <!-- <el-table-column label="备注" prop="remark"></el-table-column>
         <el-table-column label="提交时间" prop="packed_at"></el-table-column>
-        <el-table-column label="拣货时间" prop="updated_at"></el-table-column>
-        <el-table-column label="操作" width="130">
+        <el-table-column label="拣货时间" prop="updated_at"></el-table-column> -->
+        <el-table-column label="操作" width="130" v-if="status === 0" >
             <template slot-scope="scope">
-                <el-button @click="removeShip(scope.row.id)" v-if="status === 0" class="btn-light-red">移除发货单</el-button>
+                <el-button @click="removeShip(scope.row.id)" class="btn-light-red">移除发货单</el-button>
             </template>
         </el-table-column>
     </el-table>
-    <div class="pagination-box">
+    <!-- <div class="pagination-box">
     <nle-pagination :pageParams="page_params"></nle-pagination>
-     </div>
+     </div> -->
   </el-dialog>
 </template>
 <script>
-import NlePagination from '@/components/pagination'
+// import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   components: {
-    NlePagination
+    // NlePagination
   },
   mixins: [pagination],
   data () {
@@ -51,8 +51,7 @@ export default {
   methods: {
     getList () {
       this.$request.getOrdersByShipment(this.id, {
-        page: this.page_params.page,
-        size: this.page_params.size
+        size: 1000
       }).then(res => {
         if (res.ret) {
           this.shipData = res.data
