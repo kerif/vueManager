@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     pagePath () {
-      return this.$store.state.pagePath
+      return `${this.$route.meta.group}/${this.$route.meta.name}`
     },
     isCollapse () {
       return this.$store.state.isCollapse
@@ -46,13 +46,14 @@ export default {
   .el-main {
     left: 230px;
     width: calc(100vw - 230px);
-    transition: all .3s ease-in;
+    transition: all 0.3s ease-in;
     position: relative;
     top: 60px;
+    padding-bottom: 60px;
   }
   .isCollapses {
-    left: 0  !important;
-    width: 100vw  !important;
+    left: 0 !important;
+    width: 100vw !important;
   }
   .layout-nav {
     height: 60px;
@@ -62,19 +63,19 @@ export default {
     position: relative;
     top: 60px;
     left: 230px;
-    transition: all .3s ease-in;
+    transition: all 0.3s ease-in;
     border: {
-      top: 1px solid #E8E9EB;
-      bottom: 1px solid #E8E9EB;
+      top: 1px solid #e8e9eb;
+      bottom: 1px solid #e8e9eb;
     }
     .breadcrumb {
-      line-height: 40px;
+      line-height: 60px;
     }
     .back-box {
       float: right;
-      color: #3540A5;
+      color: #3540a5;
       font-size: 14px;
-      line-height: 40px;
+      line-height: 60px;
       cursor: pointer;
       // &:hover {
       //   .back-text {
@@ -85,7 +86,7 @@ export default {
     }
     .back-icon {
       font-size: 18px;
-      border: 1px solid #ECEDF0;
+      border: 1px solid #ecedf0;
       border-radius: 50%;
       display: inline-block;
       padding: 5px;

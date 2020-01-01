@@ -68,7 +68,8 @@ export default {
 <style lang="scss">
 .layout-aside {
   width: 230px !important;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: scroll;
   position: fixed;
   top: 0;
   z-index: 99;
