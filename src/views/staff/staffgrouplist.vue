@@ -136,6 +136,10 @@ export default {
     },
     // 删除
     deleteData () {
+      console.log(this.deleteNum, 'this.deleteNum')
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error('请选择员工组')
+      }
       this.$confirm(`是否确认删除？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

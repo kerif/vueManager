@@ -101,7 +101,9 @@ export default {
     margin-bottom: 20px;
   }
   .receiverMSg {
-    border-bottom: 1px #ccc solid;
+     padding: 10px;
+     background-color: #fff !important;
+     margin-bottom: 20px;
   }
   .leftWidth {
     display: inline-block;

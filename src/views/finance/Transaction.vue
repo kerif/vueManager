@@ -3,6 +3,7 @@
     <div>
       <search-group v-model="page_params.keyword" @search="goSearch">
         <el-date-picker
+          class="timeStyle"
           v-model="timeList"
           type="daterange"
           @change="onTime"
@@ -168,6 +169,10 @@ export default {
 .transaction-list-container {
   .changeVou {
     margin-left: 20px;
+  }
+  .timeStyle {
+    margin-right: 10px;
+    width: 276px !important;
   }
 }
 </style>

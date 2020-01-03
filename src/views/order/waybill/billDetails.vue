@@ -1,7 +1,7 @@
 <template>
   <div class="bill-details-container">
     <div>
-    <div class="receiverMSg">
+    <div class="receiverMSg msg-top">
     <h4>收货人信息</h4>
     <el-row class="container-center" :gutter="20">
       <!-- 姓名 -->
@@ -265,7 +265,11 @@ export default {
     margin-bottom: 20px;
   }
   .receiverMSg {
-    border-bottom: 1px #ccc solid;
+    padding: 10px;
+    background-color: #fff !important;
+  }
+  .msg-top {
+    margin-bottom: 20px;
   }
   .leftWidth {
     display: inline-block;

@@ -1,13 +1,14 @@
 <template>
   <div class="vip-list-container">
     <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+      <search-group v-model="page_params.keyword" @search="goSearch">
+      <search-select placeholder="请选择客户组" :selectArr="clientGroupList"
+          v-model="page_params.group" @search="onGroupChange">
+        </search-select>
+      </search-group>
     </div>
-    <div class="select-box">
-     <search-select placeholder="请选择客户组" :selectArr="clientGroupList"
-        v-model="page_params.group" @search="onGroupChange">
-      </search-select>
-    </div>
+    <!-- <div class="select-box">
+    </div> -->
     <el-table class="data-list" border stripe
       v-loading="tableLoading"
       :data="vipList"

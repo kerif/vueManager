@@ -11,8 +11,8 @@
         <el-input type="password" v-model="params.new_confirm_password" auto-complete="off" placeholder="请再次输入新密码"></el-input>
       </el-form-item>
       <el-form-item class="submit" label-width="100px">
-        <el-button type="primary" @click="submit('passwordForm')" :loading="$store.state.btnLoading">确定</el-button>
         <el-button @click="clear" :disabled="$store.state.btnLoading">重置</el-button>
+        <el-button type="primary" @click="submit('passwordForm')" :loading="$store.state.btnLoading">确定</el-button>
       </el-form-item>
     </el-form>
   </div>

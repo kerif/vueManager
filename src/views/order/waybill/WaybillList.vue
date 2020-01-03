@@ -1,28 +1,27 @@
 <template>
   <div class="way-list-container">
-    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
-      <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
-        <!-- 待处理 -->
-        <el-tab-pane :label="'待处理' + '(' + 0 + ')'" name="1" v-if="!this.countData.pending"></el-tab-pane>
-        <el-tab-pane v-else :label="'待处理' + '(' + this.countData.pending + ')'" name="1"></el-tab-pane>
-        <!-- 待支付 -->
-        <el-tab-pane :label="'待支付' + '(' + 0 + ')'" name="2" v-if="!this.countData.paid"></el-tab-pane>
-        <el-tab-pane v-else :label="'待支付' + '(' + this.countData.paid + ')'" name="2"></el-tab-pane>
-        <!-- 待发货 -->
-        <el-tab-pane :label="'待发货' + '(' + 0 + ')'" name="3" v-if="!this.countData.delivered"></el-tab-pane>
-        <el-tab-pane v-else :label="'待发货' + '(' + this.countData.delivered
- + ')'" name="3"></el-tab-pane>
-        <!-- 已发货 -->
-        <el-tab-pane :label="'已发货' + '(' + 0 + ')'" name="4" v-if="!this.countData.shipped"></el-tab-pane>
-        <el-tab-pane v-else :label="'已发货' + '(' + this.countData.shipped
- + ')'" name="4"></el-tab-pane>
-        <!-- 已签收 -->
-        <el-tab-pane :label="'已签收' + '(' + 0 + ')'" name="5" v-if="!this.countData.received"></el-tab-pane>
-        <el-tab-pane v-else :label="'已签收' + '(' + this.countData.received
- + ')'" name="5"></el-tab-pane>
-    </el-tabs>
-    <el-row :gutter="20">
-      <el-col :span="18">
+    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
+      <!-- 待处理 -->
+      <el-tab-pane :label="'待处理' + '(' + 0 + ')'" name="1" v-if="!this.countData.pending"></el-tab-pane>
+      <el-tab-pane v-else :label="'待处理' + '(' + this.countData.pending + ')'" name="1"></el-tab-pane>
+      <!-- 待支付 -->
+      <el-tab-pane :label="'待支付' + '(' + 0 + ')'" name="2" v-if="!this.countData.paid"></el-tab-pane>
+      <el-tab-pane v-else :label="'待支付' + '(' + this.countData.paid + ')'" name="2"></el-tab-pane>
+      <!-- 待发货 -->
+      <el-tab-pane :label="'待发货' + '(' + 0 + ')'" name="3" v-if="!this.countData.delivered"></el-tab-pane>
+      <el-tab-pane v-else :label="'待发货' + '(' + this.countData.delivered
++ ')'" name="3"></el-tab-pane>
+      <!-- 已发货 -->
+      <el-tab-pane :label="'已发货' + '(' + 0 + ')'" name="4" v-if="!this.countData.shipped"></el-tab-pane>
+      <el-tab-pane v-else :label="'已发货' + '(' + this.countData.shipped
++ ')'" name="4"></el-tab-pane>
+      <!-- 已签收 -->
+      <el-tab-pane :label="'已签收' + '(' + 0 + ')'" name="5" v-if="!this.countData.received"></el-tab-pane>
+      <el-tab-pane v-else :label="'已签收' + '(' + this.countData.received
++ ')'" name="5"></el-tab-pane>
+  </el-tabs>
+  <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
+      <!-- <el-col :span="13"> -->
         <div class="changeTime">
           <!-- 创建 -->
             <el-date-picker
@@ -64,8 +63,8 @@
             end-placeholder="签收结束日期">
           </el-date-picker>
         </div>
-      </el-col>
-      <el-col :span="4" :offset="2">
+      <!-- </el-col> -->
+      <!-- <el-col :span="4"> -->
         <div class="chooseStatus">
           <el-select v-model="agent_name" @change="onAgentChange" clearable>
             <el-option
@@ -76,8 +75,8 @@
             </el-option>
           </el-select>
         </div>
-      </el-col>
-    </el-row>
+      <!-- </el-col> -->
+    </search-group>
     <el-table class="data-list" border stripe
       v-if="oderData.length"
       v-loading="tableLoading"
@@ -576,6 +575,8 @@ export default {
     border-width: 0;
   }
   .chooseStatus {
+    width: 150px;
+    display: inline-block;
     .el-select {
       // width: 100%;
     }
@@ -586,10 +587,12 @@ export default {
     text-decoration: underline;
   }
   .changeTime {
-    // display: inline-block;
+    display: inline-block;
     // width: 70%;
     .timeStyle {
-      margin-right: 20px;
+      margin-right: 10px;
+      width: 276px !important;
+
     }
   }
 }

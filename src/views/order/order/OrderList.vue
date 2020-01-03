@@ -1,7 +1,6 @@
 <template>
   <div class="order-list-container">
-    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
-      <el-tabs v-model="activeName" class="tabLength">
+    <el-tabs v-model="activeName" class="tabLength">
         <!-- 未入库 -->
         <el-tab-pane label="未入库" name="1"></el-tab-pane>
         <!-- 已入库 -->
@@ -9,16 +8,7 @@
         <!-- 无人认领包裹 -->
         <el-tab-pane label="无人认领包裹" name="3"></el-tab-pane>
     </el-tabs>
-    <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
-    <!-- <el-select v-model="agent_name" @change="getList" clearable>
-      <el-option
-      v-for="item in agentData"
-      :key="item.id"
-      :value="item.user_id"
-      :label="item.agent_name">
-      </el-option>
-    </el-select> -->
-    <!-- </div> -->
+    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
       <div class="changeTime">
       <!-- 提交时间 -->
         <el-date-picker
@@ -46,6 +36,17 @@
         end-placeholder="称重结束日期">
       </el-date-picker>
     </div>
+    </search-group>
+    <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
+    <!-- <el-select v-model="agent_name" @change="getList" clearable>
+      <el-option
+      v-for="item in agentData"
+      :key="item.id"
+      :value="item.user_id"
+      :label="item.agent_name">
+      </el-option>
+    </el-select> -->
+    <!-- </div> -->
     <div v-if="activeName === '1' || activeName === '2'">
       <el-table v-if="oderData.length" class="data-list" border stripe
       :data="oderData"
@@ -256,6 +257,10 @@ export default {
     },
     // 删除
     deleteData () {
+      console.log(this.deleteNum, 'this.deleteNum')
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error('请选择包裹')
+      }
       this.$confirm(`您真的要删除这个包裹吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -399,8 +404,10 @@ export default {
     float: right;
   }
   .changeTime {
+    display: inline-block;
     .timeStyle {
-      margin-right: 20px;
+      margin-right: 10px;
+      width: 276px !important;
     }
   }
  .img_box{
