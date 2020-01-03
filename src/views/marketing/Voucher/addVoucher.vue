@@ -109,8 +109,10 @@ export default {
 </script>
 <style lang="scss">
 .add-voucher-container {
+  background-color: #fff !important;
+  padding: 20px;
   .voucher-form {
-    padding-left: 50px;
+    // padding-left: 50px;
   }
   .save-btn {
     min-width: 100px;

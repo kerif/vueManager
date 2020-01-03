@@ -206,9 +206,6 @@ export default {
       })
     },
     // 跳转至详情
-    // goDetails (id, status) {
-    //   this.$router.push({ name: 'shipDetails', query: { id: id, status: status } })
-    // },
     goDetails (id, status) {
       console.log(id, '我是传过去id')
       console.log(status, '我是传过去的status')

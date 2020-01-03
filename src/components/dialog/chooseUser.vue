@@ -3,9 +3,10 @@
     <div class="searchUser">
       <el-input placeholder="请输入内容" v-model="keyword"
       @keyup.enter.native="getList">
-        <template slot="append">
+        <!-- <template slot="append">
           <span @click="getList" class="search-btn">搜索</span>
-        </template>
+        </template> -->
+        <el-button class="search-btn" slot="append" @click="getList" icon="el-icon-search"></el-button>
       </el-input>
     </div>
     <el-table
@@ -110,6 +111,24 @@ export default {
     width: 40%;
     float: right;
     margin: 10px 0;
+    .el-input-group__append, .el-input-group__prepend {
+      background-color: #fff;
+      border-color: #E8E9EB;
+    }
+    .search-group .search-btn {
+      color: #3540A5 !important;
+      border: none !important;
+      background-color: #fff !important;
+    }
+    .el-input-group--append .el-input__inner {
+      border-right: none !important;
+      border-color: #E8E9EB;
+    }
+    .el-button {
+      color: #3540A5 !important;
+      background-color: #fff;
+      border: none;
+    }
   }
   .search-btn {
     cursor: pointer;

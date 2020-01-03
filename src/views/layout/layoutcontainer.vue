@@ -45,11 +45,18 @@ export default {
 .layout-contaniner {
   .el-main {
     left: 230px;
+    padding: 0;
     width: calc(100vw - 230px);
+    height: calc(100vh - 170px);
     transition: all 0.3s ease-in;
     position: relative;
     top: 60px;
-    padding-bottom: 60px;
+    // padding-bottom: 60px;
+  }
+  .el-main > div {
+    background-color: #F5F5F5;
+    padding: 20px;
+    min-height: calc(100vh - 170px);
   }
   .isCollapses {
     left: 0 !important;

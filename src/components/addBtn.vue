@@ -23,9 +23,9 @@ export default {
 <style lang="scss">
 @import '@/styles/communalVariate.scss';
 .add-btn-container {
-  background-color: $bg-btn;
+  background-color: #3540A5;
   border-radius: 6px;
-  color: $main-color;
+  color: #fff;
   line-height: 40px;
   padding: 0 10px;
   float: right;

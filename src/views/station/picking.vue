@@ -171,9 +171,5 @@ export default {
       width: 50%;
     }
   }
-  .noDate {
-    text-align: center;
-    color: #ccc;
-  }
 }
 </style>

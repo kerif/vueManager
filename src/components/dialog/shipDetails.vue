@@ -1,5 +1,8 @@
 <template>
 <el-dialog  :visible.sync="show" title="发货单详情" width="70%"                            class="ship-details-container" @close="clear">
+  <div class="import-list">
+    <el-button class="btn-deep-purple" @click="uploadList">导出清单</el-button>
+  </div>
     <el-table :data="shipData" border>
         <!-- <el-table-column label="客户ID" prop="user_id"></el-table-column> -->
         <el-table-column label="订单号">
@@ -103,6 +106,27 @@ export default {
         })
       })
     },
+    // 导出清单
+    uploadList () {
+      this.$request.uploadExcel(this.id).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          // window.location.href = this.urlExcel
+          window.open(this.urlExcel)
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     init () {
       console.log(this.id, '我是接收的id')
       console.log(this.status, '我是接收的status')
@@ -126,6 +150,10 @@ export default {
   }
   .pagination-box {
     margin-top: 10px;
+  }
+  .import-list {
+    margin-bottom: 10px;
+    text-align: right;
   }
 }
 </style>

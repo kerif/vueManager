@@ -323,10 +323,6 @@ export default {
   .detailsBtn {
     margin: 3px 2px !important;
   }
-  .noDate {
-    text-align: center;
-    color: #ccc;
-  }
   .changeVou {
     float: right;
     margin-right: 10px;

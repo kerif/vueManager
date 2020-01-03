@@ -115,11 +115,12 @@ export default {
 </script>
 <style lang="scss">
 .warehouse-container {
+  background-color: #fff !important;
   .tips-box {
     padding: 20px;
     line-height: 30px;
     background-color: #f0f0f0;
-    margin: 20px 50px;
+    margin: 20px 20px 50px 0;
     display: inline-block;
     border-radius: 5px;
   }
@@ -130,10 +131,16 @@ export default {
     font-size: 14px;
   }
   .warehouse-form {
-    padding-left: 50px;
+    // padding-left: 50px;
   }
   .save-btn {
     min-width: 100px;
+  }
+  .el-input__inner{
+    background-color: #F5F5F5;
+  }
+  .el-textarea__inner {
+    background-color: #F5F5F5;
   }
 }
 </style>

@@ -567,10 +567,6 @@ export default {
   .detailsBtn {
     margin: 3px 2px !important;
   }
-  .noDate {
-    text-align: center;
-    color: #ccc;
-  }
   .dialogSty {
     margin-left: 30px;
   }

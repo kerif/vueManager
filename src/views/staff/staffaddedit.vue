@@ -222,7 +222,7 @@ export default {
 @import '../../styles/commonality.scss';
   .staff-add-container {
     min-height: 67vh;
-    background-color: $white;
+    background-color: #fff !important;
     padding: 1em 3em;
     .title_box{
       text-align: right;
@@ -262,6 +262,9 @@ export default {
       .el-select {
         width: 100% !important;
       }
+    }
+    .el-input__inner {
+      background-color: #F5F5F5;
     }
   }
 </style>

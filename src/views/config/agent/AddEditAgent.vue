@@ -35,7 +35,7 @@
               <el-form-item label="备注" prop="remark" class="employ">
                 <el-input
                   type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 4}"
+                  :autosize="{ minRows: 4, maxRows: 6}"
                   placeholder="请输入内容"
                   v-model="user.remark">
               </el-input>
@@ -205,7 +205,7 @@ export default {
 @import '../../../styles/commonality.scss';
   .agent-add-container {
     min-height: 67vh;
-    background-color: $white;
+    background-color: $white !important;
     padding: 1em 3em;
     .title_box{
       text-align: right;
@@ -251,6 +251,15 @@ export default {
       color: #fff;
       background-color: #3540A5;
       border-color: #3540A5;
+    }
+    .el-input__inner{
+      background-color: #F5F5F5;
+    }
+    .el-textarea__inner {
+      background-color: #F5F5F5;
+    }
+    .el-input-group__append {
+      background-color: #FAFAFA;
     }
   }
 </style>

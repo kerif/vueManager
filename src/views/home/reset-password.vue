@@ -1,5 +1,5 @@
 <template>
-  <div class="password">
+  <div class="password content-style">
     <el-form :model="params" :rules="rules" ref="passwordForm" label-width="100px" class="password-form">
       <el-form-item prop="origin_password" class="input teshu" label="原密码">
         <el-input type="password" v-model="params.origin_password" auto-complete="off" placeholder="请输入旧密码"></el-input>
@@ -11,7 +11,7 @@
         <el-input type="password" v-model="params.new_confirm_password" auto-complete="off" placeholder="请再次输入新密码"></el-input>
       </el-form-item>
       <el-form-item class="submit" label-width="100px">
-        <el-button type="primary" @click="submit('passwordForm')" :loading="$store.state.btnLoading">保存</el-button>
+        <el-button type="primary" @click="submit('passwordForm')" :loading="$store.state.btnLoading">确定</el-button>
         <el-button @click="clear" :disabled="$store.state.btnLoading">重置</el-button>
       </el-form-item>
     </el-form>
@@ -85,12 +85,18 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .password {
+  // padding: 0 20px;
+  background-color: #fff !important;
+  // min-height: calc(100vh - 170px);
   .password-form {
     width: 40%;
-    margin-left: 10%;
+    // margin-left: 10%;
     padding: 5% 0 12%;
+  }
+  .el-input__inner {
+    background-color: #E8E9EB !important;
   }
 }
 </style>

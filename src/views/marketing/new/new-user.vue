@@ -114,14 +114,25 @@ export default {
 </script>
 <style lang="scss">
 .new-user-container {
+  background-color: #fff !important;
+  padding: 20px;
   .voucher-form {
-    padding-left: 50px;
+    // padding-left: 50px;
   }
   .save-btn {
     min-width: 100px;
   }
   .el-input {
     width: 40%;
+  }
+  .el-input__inner {
+    background-color: #F5F5F5;
+  }
+  .el-radio__inner {
+    background-color: #F5F5F5;
+  }
+  .el-input-group__append {
+    background-color: #FAFAFA;
   }
 }
 </style>

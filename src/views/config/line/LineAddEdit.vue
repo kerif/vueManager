@@ -26,8 +26,8 @@
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="10">
-            <el-button type="primary" style="margin-top: 40px" @click="onAddCountry">新增国家</el-button>
+          <el-col :span="10" class="country-btn">
+            <el-button type="primary" @click="onAddCountry">+ 新增国家</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -234,6 +234,7 @@ export default {
 </script>
 <style lang="scss">
 .line-add-container {
+  background-color: #fff !important;
   .country-select {
     width: 100%;
   }
@@ -258,6 +259,32 @@ export default {
   }
   .select-box {
     width: 100%;
+  }
+  .country-btn {
+    margin-top: 40px;
+    .el-button--primary {
+      background-color: #EAECF5;
+      border-color: #EAECF5;
+      color: #3540A5;
+    }
+  }
+  .el-input__inner{
+    background-color: #F5F5F5;
+  }
+  .el-textarea__inner {
+    background-color: #F5F5F5;
+  }
+  .el-checkbox__inner {
+    background-color: #F5F5F5;
+  }
+  .el-tag.el-tag--info {
+    border-color: #3540A5;
+    color: #3540A5;
+    background-color: #fff;
+  }
+  .el-tag.el-tag--info .el-tag__close {
+    color: #3540A5;
+    background-color: #fff;
   }
 }
 </style>

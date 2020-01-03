@@ -7,8 +7,8 @@
       <el-tab-pane label="消息模版" name="2"></el-tab-pane>
     </el-tabs>
     <el-row v-if="activeName === '1'">
-      <el-col :span="12">
-        <div class="left-development">
+      <el-col :span="11">
+        <div class="applet-left">
         <h4>开发者id</h4>
         <el-form :model="appletForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
           <el-form-item label="AppId(小程序ID)" prop="app_id">
@@ -27,7 +27,7 @@
         <el-button class="savaBtn" @click="saveDev('ruleForm')">保存</el-button>
         </div>
       </el-col>
-       <el-col :span="12">
+       <el-col :span="12" :offset="1">
          <div class="right-server">
            <h4>服务器域名</h4>
             <el-table class="data-list" border stripe
@@ -60,11 +60,11 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button class="btn-blue" @click="edit(scope.row)" v-if="scope.row.disabled">编辑</el-button>
+            <el-button class="btn-green" @click="edit(scope.row)" v-if="scope.row.disabled">编辑</el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
            v-show="!scope.row.disabled"
            @click="saveLogistics(scope.row)">保存</el-button>
-          <el-button size="small" class="btn-dark-green detailsBtn"
+          <el-button size="small" class="btn-blue detailsBtn"
           v-show="!scope.row.disabled" @click="cancel(scope.row)">取消</el-button>
           </template>
         </el-table-column>
@@ -216,6 +216,10 @@ export default {
    .tabLength {
     width: 200px !important;
   }
+  .applet-left {
+    padding: 15px;
+    background-color: #fff !important;
+  }
   .savaBtn {
     background-color: #3540A5;
     color: #fff;
@@ -223,6 +227,7 @@ export default {
   }
   .el-input__inner {
     width: 60%;
+    background-color: #F5F5F5;
   }
 }
 </style>

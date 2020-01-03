@@ -64,5 +64,10 @@ export default {
   .btn-prev, .btn-next {
     padding: 0 10px !important;
   }
+  .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #f5f5f5;
+    color: black;
+    border: 1px solid #3540A5;
+  }
 }
 </style>

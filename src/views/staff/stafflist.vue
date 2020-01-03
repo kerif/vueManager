@@ -59,11 +59,11 @@
         <template slot-scope="scope">
           <!-- 编辑 -->
         <el-button
-          class="btn-blue"
+          class="btn-main"
           @click.stop="editInfo(scope.row.id)">编辑</el-button>
           <!-- 修改密码 -->
         <el-button
-          class="btn-purple"
+          class="btn-light-green"
           @click.stop="editPassword(scope.row.id)">
           修改密码
         </el-button>

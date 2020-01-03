@@ -237,7 +237,7 @@ export default [
               level: 3,
               group: '客户',
               name: '添加代理',
-              parent: '/config/agent'
+              parent: '/vip/agent'
             }
           },
           {
@@ -249,7 +249,7 @@ export default [
               level: 3,
               group: '客户',
               name: '修改代理',
-              parent: '/config/agent'
+              parent: '/vip/agent'
             }
           },
           {
@@ -261,7 +261,7 @@ export default [
               level: 3,
               group: '客户',
               name: '成交记录',
-              parent: '/config/agent'
+              parent: '/vip/agent'
             }
           }
         ]
@@ -407,7 +407,7 @@ export default [
             path: '/config/line/linelist',
             name: 'linelist',
             component: LineList,
-            id: 603,
+            id: 601,
             meta: {
               group: '配置',
               level: 2,
@@ -418,7 +418,7 @@ export default [
             path: '/config/line/lineadd',
             component: LineAddEdit,
             name: 'lineadd',
-            id: 603,
+            id: 601,
             meta: {
               group: '配置',
               level: 3,
@@ -430,7 +430,7 @@ export default [
             path: '/config/line/lineedit/:state/:id',
             component: LineAddEdit,
             name: 'lineedit',
-            id: 603,
+            id: 601,
             meta: {
               group: '配置',
               level: 3,
@@ -442,7 +442,7 @@ export default [
             path: '/config/warehouse',
             component: WareHouse,
             name: 'warehouse',
-            id: 606,
+            id: 602,
             meta: {
               group: '配置',
               level: 2,
@@ -453,7 +453,7 @@ export default [
             path: '/config/notice',
             component: NoticeList,
             name: 'noticelist',
-            id: 601,
+            id: 603,
             meta: {
               group: '配置',
               level: 2,
@@ -464,7 +464,7 @@ export default [
             path: '/config/notice/add',
             component: NoticeAddEdit,
             name: 'noticeadd',
-            id: 601,
+            id: 603,
             meta: {
               group: '配置',
               level: 3,
@@ -476,7 +476,7 @@ export default [
             path: '/config/notice/edit/:id',
             component: NoticeAddEdit,
             name: 'noticeEdit',
-            id: 601,
+            id: 603,
             meta: {
               group: '配置',
               level: 3,
@@ -485,21 +485,10 @@ export default [
             }
           },
           {
-            path: '/config/suggest',
-            name: 'suggestlist',
-            component: SuggestList,
-            id: 604,
-            meta: {
-              level: 2,
-              group: '配置',
-              name: '投诉建议'
-            }
-          },
-          {
             path: '/config/applet',
             name: 'appletManagement',
             component: AppletConfiguration,
-            id: 602,
+            id: 604,
             meta: {
               level: 2,
               group: '配置',
@@ -612,6 +601,17 @@ export default [
               group: '营销管理',
               name: '添加抵用券',
               parent: '/marketing/voucher'
+            }
+          },
+          {
+            path: '/marketing/suggest',
+            name: 'suggestlist',
+            component: SuggestList,
+            id: 803,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '投诉建议'
             }
           }
         ]

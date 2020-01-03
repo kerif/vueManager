@@ -79,17 +79,17 @@
       <!-- 称重时间 -->
         <el-col :span="7">
          <span class="leftWidth">称重时间</span>
-         <span>{{form.created_at}}</span>
+         <span>{{form.packed_at}}</span>
       </el-col>
       <!-- 发货时间 -->
       <el-col :span="7" :offset="1">
         <span class="leftWidth">发货时间</span>
-        <span>{{form.logistics_sn}}</span>
+        <span>{{form.shipped_at}}</span>
       </el-col>
       <!-- 签收时间 -->
       <el-col :span="7" :offset="1">
         <span class="leftWidth">签收时间</span>
-        <span>{{form.logistics_company}}</span>
+        <span>{{form.signed_at}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">

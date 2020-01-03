@@ -158,6 +158,7 @@
         </div>
       </template> -->
     </el-table>
+    <div class="noDate" v-else>暂无数据</div>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
@@ -392,10 +393,6 @@ export default {
   .tabLength {
     width: 300px !important;
     display: inline-block;
-  }
-  .noDate {
-    text-align: center;
-    color: #ccc;
   }
   .agentRight {
     // display: inline-block;

@@ -1,6 +1,6 @@
 <template>
     <div class="storage-container">
-      <el-row>
+      <el-row class="container-top">
       <el-form ref="user" :model="user" label-width="140px" label-position="left">
          <el-col :lg="12">
            <!-- 客户id -->
@@ -352,6 +352,10 @@ export default {
 
 <style lang="scss">
 .storage-container {
+  .container-top {
+    background-color: #fff !important;
+    padding: 20px;
+  }
   .sizeLength {
     width: 33% !important;
   }
@@ -371,6 +375,15 @@ export default {
     .el-autocomplete {
       width: 100%;
     }
+  }
+  .el-input__inner{
+    background-color: #F5F5F5;
+  }
+  .el-textarea__inner {
+    background-color: #F5F5F5;
+  }
+  .el-input-group__append {
+    background-color: #FAFAFA;
   }
 }
 </style>

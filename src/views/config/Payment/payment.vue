@@ -161,55 +161,55 @@
       <el-tab-pane label="其余配置" name="5">
         <!-- 其余配置 -->
       <div class="setOthers">
-      <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
-      label-position="top">
-          <!-- 网站名称 -->
-          <el-form-item label="*网站名称">
-            <el-input v-model="setForm.website_name">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="小程序码" class="updateChe">
-              <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-              <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                  <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="baleImgList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadBaleImg"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          </el-form-item>
-          <!-- pc端客服二维码 -->
-          <el-form-item label="*pc端客服二维码" class="updateChe">
-              <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
-              <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                  <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="customerList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="customerImg"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          </el-form-item>
-          </el-form>
+        <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
+        label-position="top">
+            <!-- 网站名称 -->
+            <el-form-item label="*网站名称">
+              <el-input v-model="setForm.website_name">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="*小程序码" class="updateChe">
+                <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="baleImgList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadBaleImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload>
+            </el-form-item>
+            <!-- pc端客服二维码 -->
+            <el-form-item label="*pc端客服二维码" class="updateChe">
+                <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="customerList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="customerImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload>
+            </el-form-item>
+            </el-form>
           <el-button class="save-btn" @click="editOthers">保存</el-button>
         </div>
         </el-tab-pane>
@@ -480,16 +480,32 @@ export default {
     getOthers () {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
-        this.baleImgList[0] = { url: res.data.default_img }
-        this.customerList[0] = { url: res.data.customer_qr_code }
+        res.data.default_img && (this.baleImgList[0] = { url: res.data.default_img })
+        res.data.customer_qr_code && (this.customerList[0] = { url: res.data.customer_qr_code })
+        // this.baleImgList[0] = { url: res.data.default_img }
+        // this.customerList[0] = { url: res.data.customer_qr_code }
       })
     },
     // 修改其余配置
     editOthers () {
-      this.setForm.default_img = this.baleImgList[0].url
-      this.setForm.customer_qr_code = this.customerList[0].url
+      // this.setForm.default_img = this.baleImgList[0].url
+      // this.setForm.customer_qr_code = this.customerList[0].url
+      if (this.baleImgList[0]) {
+        this.setForm.default_img = this.baleImgList[0].url
+      } else {
+        this.setForm.default_img = []
+      }
+      if (this.customerList[0]) {
+        this.setForm.customer_qr_code = this.customerList[0].url
+      } else {
+        this.setForm.customer_qr_code = []
+      }
       if (!this.setForm.website_name) {
         return this.$message.error('请输入网站名称')
+      } else if (!this.baleImgList[0]) {
+        return this.$message.error('请上传小程序码')
+      } else if (!this.customerList[0]) {
+        return this.$message.error('请上传pc端客户二维码')
       }
       this.$request.editWebsite(this.setForm).then(res => {
         if (res.ret) {
@@ -717,13 +733,20 @@ export default {
     //  width: 520px !important;
   }
   .logistics-container {
-     width: 30%;
+    background-color: #fff !important;
+    padding: 20px;
+    // width: 35%;
+    .el-input__inner {
+      width: 30%;
+    }
   }
   .save-btn {
     color: #fff;
     background-color: #3540A5;
   }
   .settings-container {
+     background-color: #fff !important;
+     padding: 20px;
     .el-tag {
       margin-right: 8px;
     }
@@ -732,11 +755,14 @@ export default {
     overflow: hidden;
   }
   .setOthers {
+    background-color: #fff !important;
+    padding: 20px;
     .el-input {
       width: 30%;
     }
     .el-textarea__inner {
-    width: 30%;
+      width: 30%;
+      background-color: #F5F5F5;
     }
     .goods-img {
       width: 100%;
@@ -795,6 +821,9 @@ export default {
         margin-right: 10px;
       }
     }
+  }
+  .el-input__inner {
+    background-color: #F5F5F5;
   }
 }
 </style>

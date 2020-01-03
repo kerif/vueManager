@@ -90,6 +90,7 @@
 .btn-blue {
     @include action-btn($blue);
 }
+
 .btn-main {
     @include action-btn($main-color);
 }
@@ -118,9 +119,14 @@
     @include action-btn($deep-purple);
 }
 
+.btn-light-green {
+    @include action-btn($light-green)
+}
+
 .btn-deep-blue {
     @include action-btn($deep-blue)
 }
+
 .btn-yellow {
     @include action-btn($yellow);
 }
