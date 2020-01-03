@@ -592,7 +592,6 @@ export default {
     .timeStyle {
       margin-right: 10px;
       width: 276px !important;
-
     }
   }
 }

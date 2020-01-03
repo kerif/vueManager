@@ -33,8 +33,8 @@
         <template slot-scope="scope">
           <span v-for="item in scope.row.pictures"
           :key="item.id" style="cursor:pointer;"
-          @click.stop="imgSrc=item.full_path, imgVisible=true">
-           <img :src="item.full_path" style="width: 40px; margin-right: 5px;">
+          @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.full_path}`, imgVisible=true">
+           <img :src="`${$baseUrl.IMAGE_URL}${item.full_path}`" style="width: 40px; margin-right: 5px;">
           </span>
         </template>
       </el-table-column>

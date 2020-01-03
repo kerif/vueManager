@@ -1,44 +1,47 @@
 <template>
   <div class="ship-container">
-    <div>
-      <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
-        </search-group>
+    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
+      <div class="changeTime">
+        <!-- 提交 -->
+          <el-date-picker
+          class="timeStyle"
+          v-model="timeList"
+          type="daterange"
+          @change="onTime"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="提交开始日期"
+          end-placeholder="提交结束日期">
+        </el-date-picker>
+        <!-- 发货 -->
+          <el-date-picker
+          class="timeStyle"
+          v-model="shipmentList"
+          type="daterange"
+          @change="onShipment"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="发货开始日期"
+          end-placeholder="发货结束日期">
+        </el-date-picker>
       </div>
-    <div class="select-box">
-      <add-btn @click.native="updateInvoice">创建发货单</add-btn>
-    </div>
-    <el-row :gutter="20">
-      <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus"
-      v-model="page_params.status"></search-select>
-      <el-col :span="18">
-        <div class="changeTime">
-          <!-- 提交 -->
-            <el-date-picker
-            class="timeStyle"
-            v-model="timeList"
-            type="daterange"
-            @change="onTime"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            range-separator="至"
-            start-placeholder="提交开始日期"
-            end-placeholder="提交结束日期">
-          </el-date-picker>
-          <!-- 发货 -->
-            <el-date-picker
-            class="timeStyle"
-            v-model="shipmentList"
-            type="daterange"
-            @change="onShipment"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            range-separator="至"
-            start-placeholder="发货开始日期"
-            end-placeholder="发货结束日期">
-          </el-date-picker>
+        <!-- <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus" v-model="page_params.status"></search-select> -->
+        <div class="chooseStatus">
+          <el-select v-model="page_params.status" @change="onShipStatus" clearable>
+            <el-option
+              v-for="item in statusList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name">
+            </el-option>
+          </el-select>
         </div>
-      </el-col>
-    </el-row>
+        <div class="select-box">
+          <add-btn @click.native="updateInvoice">创建发货单</add-btn>
+        </div>
+    </search-group>
   <el-table :data="tableShip" stripe
     border class="data-list"
     @expand-change="onExpand"
@@ -116,14 +119,13 @@
   </div>
 </template>
 <script>
-import { SearchSelect, SearchGroup } from '@/components/searchs'
+import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
-    SearchSelect,
     SearchGroup,
     NlePagination,
     AddBtn
@@ -147,12 +149,12 @@ export default {
       },
       statusList: [
         {
-          value: 0,
-          label: '未发货'
+          id: 0,
+          name: '未发货'
         },
         {
-          value: 1,
-          label: '已发货'
+          id: 1,
+          name: '已发货'
         }
       ]
     }
@@ -332,20 +334,32 @@ export default {
 <style lang="scss">
 .ship-container {
   .select-box {
+    display: inline-block;
     overflow: hidden;
+    margin-left: 10px;
+    vertical-align: top;
   }
   .btn-margin {
     margin-bottom: 5px;
   }
   .changeTime {
+    display: inline-block;
     //  margin-top: 15px;
     .timeStyle {
-      margin-right: 20px;
+      margin-right: 10px;
+      width: 276px !important;
     }
   }
   .status-style {
     .el-search {
       width: 100% !important;
+    }
+  }
+  .chooseStatus {
+    width: 150px;
+    display: inline-block;
+    .el-select {
+      // width: 100%;
     }
   }
 }

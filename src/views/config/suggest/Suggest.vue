@@ -11,8 +11,8 @@
           <template slot-scope="scope">
           <span v-for="item in scope.row.images"
           :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc=item.url, imgVisible=true">
-              <img :src="item.url" style="width: 40px; margin-right: 5px;">
+            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
+              <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
           </span>
         </template>
       </el-table-column>

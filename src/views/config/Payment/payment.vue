@@ -28,8 +28,8 @@
             </el-table-column>
           </el-table>
           <!-- 其余支付 -->
-          <h4>转账支付</h4>
           <div class="select-box">
+          <h4>转账支付</h4>
           <add-btn @click.native="addTransfer">添加支付类型</add-btn>
         </div>
           <el-table :data="transferData" v-loading="tableLoading" class="data-list"
@@ -753,6 +753,9 @@ export default {
   }
   .select-box {
     overflow: hidden;
+    h4 {
+      display: inline-block;
+    }
   }
   .setOthers {
     background-color: #fff !important;

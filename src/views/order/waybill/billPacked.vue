@@ -91,165 +91,167 @@
         </el-table-column>
         <el-table-column label="货位" prop="location"></el-table-column>
       </el-table>
-      <el-form ref="params" :model="user" class="package-form" label-width="140px" label-position="left">
-        <el-col :lg="12">
-          <!-- 订单号 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="订单号" prop="name">
-                <el-input v-model="this.$route.params.order_sn" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 重量 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="*重量" prop="weight">
-                <el-input v-model="user.weight" placeholder="请输入重量">
-                <template slot="append">{{this.localization.weight_unit}}</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 尺寸 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="*尺寸">
-                <el-input v-model="user.length"  class="sizeLength" :placeholder="'长' + this.localization.length_unit"></el-input>
-                <el-input v-model="user.width" class="sizeLength" :placeholder="'宽' + this.localization.length_unit"></el-input>
-                <el-input v-model="user.height"  class="sizeLength" :placeholder="'高' + this.localization.length_unit"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 客服备注 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="客服备注" class="customer">
-                <el-input type="textarea" placeholder="请输入备注"
-                v-model="user.remark"
-                :autosize="{ minRows: 2, maxRows: 4}"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 上传打包照片 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="*上传打包照片" class="updateChe">
-                  <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+      <div class="receiverMSg">
+        <el-form ref="params" :model="user" class="package-form" label-width="140px" label-position="left">
+          <el-col :lg="12">
+            <!-- 订单号 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item label="订单号" prop="name">
+                  <el-input v-model="this.$route.params.order_sn" :disabled="true"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 重量 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item label="*重量" prop="weight">
+                  <el-input v-model="user.weight" placeholder="请输入重量">
+                  <template slot="append">{{this.localization.weight_unit}}</template>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 尺寸 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item label="*尺寸">
+                  <el-input v-model="user.length"  class="sizeLength" :placeholder="'长' + this.localization.length_unit"></el-input>
+                  <el-input v-model="user.width" class="sizeLength" :placeholder="'宽' + this.localization.length_unit"></el-input>
+                  <el-input v-model="user.height"  class="sizeLength" :placeholder="'高' + this.localization.length_unit"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 客服备注 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item label="客服备注" class="customer">
+                  <el-input type="textarea" placeholder="请输入备注"
+                  v-model="user.remark"
+                  :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 上传打包照片 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item label="*上传打包照片" class="updateChe">
+                    <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                      <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                      <span class="model-box"></span>
+                      <span class="operat-box">
+                        <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                        <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i>
+                      </span>
+                    </span>
+                    <el-upload
+                      v-show="baleImgList.length < 3"
+                      class="avatar-uploader"
+                      action=""
+                      list-type="picture-card"
+                      :before-upload="beforeUploadImg"
+                      :http-request="uploadBaleImg"
+                      :show-file-list="false">
+                      <i class="el-icon-plus">
+                      </i>
+                  </el-upload>
+                  <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 增值服务 -->
+            <el-row :gutter="20">
+              <el-col>
+                <el-form-item label="增值服务">
+                  <div v-for="item in updateProp" :key="item.id" class="service">
+                    <div class="serviceLeft">
+                    <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
+                    </div>
+                    <div class="serviceRight">
+                    <span>{{localization.currency_unit}}</span>
+                    <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                    </div>
+                  </div>
+                  <!-- <el-checkbox v-for="item in updateProp" :key="item.id" v-model="item.checked">{{item.name}}
+                  <el-input v-model="item.price"></el-input>
+                  </el-checkbox> -->
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :lg="12">
+            <!-- 留仓物品 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item label="留仓物品">
+                  <el-input v-model="user.in_warehouse_item" placeholder="请输入留仓物品"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 货位 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item label="货位">
+                  <el-input v-model="user.location" placeholder="请输入货位"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 更改线路 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <!-- <el-form-item label="更改线路" class="express">
+                    <el-select v-model="form.express_line.id">
+                      <el-option
+                      v-for="item in expressData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
+                      </el-option>
+                    </el-select>
+                </el-form-item> -->
+                <el-form-item label="更改线路" class="express">
+                    <el-select v-model="user.express_line_id" clearable>
+                      <el-option
+                      v-for="item in expressData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
+                      </el-option>
+                    </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品照片 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
+                  <span class="img-item" v-for="(item, index) in goodsImgList" :key="item.name">
                     <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                     <span class="model-box"></span>
                     <span class="operat-box">
                       <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                      <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i>
+                      <i class="el-icon-delete" @click="onDeleteImg('goods', index)"></i>
                     </span>
                   </span>
                   <el-upload
-                    v-show="baleImgList.length < 3"
+                    v-show="goodsImgList.length < 3"
                     class="avatar-uploader"
-                    action=""
                     list-type="picture-card"
+                    action=""
                     :before-upload="beforeUploadImg"
-                    :http-request="uploadBaleImg"
-                    :show-file-list="false">
+                    :http-request="uploadGoodsImg"
+                    :show-file-list="false"
+                    >
                     <i class="el-icon-plus">
                     </i>
-                </el-upload>
-                <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 增值服务 -->
-          <el-row :gutter="20">
-            <el-col>
-              <el-form-item label="增值服务">
-                <div v-for="item in updateProp" :key="item.id" class="service">
-                  <div class="serviceLeft">
-                  <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
-                  </div>
-                  <div class="serviceRight">
-                  <span>{{localization.currency_unit}}</span>
-                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
-                  </div>
-                </div>
-                <!-- <el-checkbox v-for="item in updateProp" :key="item.id" v-model="item.checked">{{item.name}}
-                <el-input v-model="item.price"></el-input>
-                </el-checkbox> -->
-              </el-form-item>
-            </el-col>
-          </el-row>
+                  </el-upload>
+                  <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
         </el-col>
-        <el-col :lg="12">
-          <!-- 留仓物品 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="留仓物品">
-                <el-input v-model="user.in_warehouse_item" placeholder="请输入留仓物品"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 货位 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="货位">
-                <el-input v-model="user.location" placeholder="请输入货位"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 更改线路 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <!-- <el-form-item label="更改线路" class="express">
-                  <el-select v-model="form.express_line.id">
-                    <el-option
-                    v-for="item in expressData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
-                    </el-option>
-                  </el-select>
-              </el-form-item> -->
-              <el-form-item label="更改线路" class="express">
-                  <el-select v-model="user.express_line_id" clearable>
-                    <el-option
-                    v-for="item in expressData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
-                    </el-option>
-                  </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品照片 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
-                <span class="img-item" v-for="(item, index) in goodsImgList" :key="item.name">
-                  <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
-                  <span class="model-box"></span>
-                  <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg('goods', index)"></i>
-                  </span>
-                </span>
-                <el-upload
-                  v-show="goodsImgList.length < 3"
-                  class="avatar-uploader"
-                  list-type="picture-card"
-                  action=""
-                  :before-upload="beforeUploadImg"
-                  :http-request="uploadGoodsImg"
-                  :show-file-list="false"
-                  >
-                  <i class="el-icon-plus">
-                  </i>
-                </el-upload>
-                <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-       </el-col>
-     </el-form>
+      </el-form>
+      </div>
     <!-- 保存 -->
     <el-row :gutter="20">
     <el-col :span="18">
@@ -520,6 +522,12 @@ export default {
   }
   .package-form {
     overflow: hidden;
+    .el-input__inner {
+      background-color: #F5F5F5;
+    }
+    .el-input-group__append {
+      background-color:#FAFAFA;
+    }
   }
   .img-item {
     display: inline-block;

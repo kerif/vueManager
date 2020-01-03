@@ -106,7 +106,7 @@
       <el-table-column label="提交时间" prop="created_at">
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="200px">
+      <el-table-column label="操作" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 入库 -->
           <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.user_name, scope.row.props)">入库</el-button>

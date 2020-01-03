@@ -261,6 +261,7 @@ export default {
 </script>
 <style lang="scss">
 .panel-container {
+  background-color: #fff !important;
   .addCustomer {
     background: #E5E7FB;
     border-radius: 4px;

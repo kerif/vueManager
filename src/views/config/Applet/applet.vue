@@ -48,7 +48,7 @@
     </el-row>
     <div v-else>
       <el-table :data="messageData" v-loading="tableLoading" class="data-list" border stripe>
-        <el-table-column label="id" prop="type"></el-table-column>
+        <el-table-column label="id" prop="type" width="100"></el-table-column>
         <el-table-column label="模版类型" prop="type_name">
         </el-table-column>
         <el-table-column label="模版标示">
