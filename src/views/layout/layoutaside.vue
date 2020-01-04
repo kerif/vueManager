@@ -75,6 +75,7 @@ export default {
   z-index: 99;
   background-color: #171B42;
   transition: width .3s ease-in-out;
+  overflow-x: hidden;
   .aside-top {
     width: 230px;
     height: 60px;
