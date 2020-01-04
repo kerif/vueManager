@@ -522,12 +522,6 @@ export default {
   }
   .package-form {
     overflow: hidden;
-    .el-input__inner {
-      background-color: #F5F5F5;
-    }
-    .el-input-group__append {
-      background-color:#FAFAFA;
-    }
   }
   .img-item {
     display: inline-block;

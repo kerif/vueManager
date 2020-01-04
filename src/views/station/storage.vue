@@ -7,7 +7,6 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="客户ID" class="changeQuery">
-                <!-- <el-input v-model="user.user_id" placeholder="请输入客户ID" :disabled="!!this.$route.params.id && !hasStore"></el-input> -->
                   <el-autocomplete
                   :fetch-suggestions="queryCNSearch"
                   @select="handleSelect"
@@ -375,15 +374,6 @@ export default {
     .el-autocomplete {
       width: 100%;
     }
-  }
-  .el-input__inner{
-    background-color: #F5F5F5;
-  }
-  .el-textarea__inner {
-    background-color: #F5F5F5;
-  }
-  .el-input-group__append {
-    background-color: #FAFAFA;
   }
 }
 </style>

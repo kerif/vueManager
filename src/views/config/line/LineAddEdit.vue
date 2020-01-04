@@ -268,15 +268,6 @@ export default {
       color: #3540A5;
     }
   }
-  .el-input__inner{
-    background-color: #F5F5F5;
-  }
-  .el-textarea__inner {
-    background-color: #F5F5F5;
-  }
-  .el-checkbox__inner {
-    background-color: #F5F5F5;
-  }
   .el-tag.el-tag--info {
     border-color: #3540A5;
     color: #3540A5;

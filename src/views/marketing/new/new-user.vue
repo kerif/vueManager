@@ -125,14 +125,5 @@ export default {
   .el-input {
     width: 40%;
   }
-  .el-input__inner {
-    background-color: #F5F5F5;
-  }
-  .el-radio__inner {
-    background-color: #F5F5F5;
-  }
-  .el-input-group__append {
-    background-color: #FAFAFA;
-  }
 }
 </style>

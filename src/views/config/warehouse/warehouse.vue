@@ -136,11 +136,5 @@ export default {
   .save-btn {
     min-width: 100px;
   }
-  .el-input__inner{
-    background-color: #F5F5F5;
-  }
-  .el-textarea__inner {
-    background-color: #F5F5F5;
-  }
 }
 </style>

@@ -252,14 +252,5 @@ export default {
       background-color: #3540A5;
       border-color: #3540A5;
     }
-    .el-input__inner{
-      background-color: #F5F5F5;
-    }
-    .el-textarea__inner {
-      background-color: #F5F5F5;
-    }
-    .el-input-group__append {
-      background-color: #FAFAFA;
-    }
   }
 </style>

@@ -825,8 +825,5 @@ export default {
       }
     }
   }
-  .el-input__inner {
-    background-color: #F5F5F5;
-  }
 }
 </style>

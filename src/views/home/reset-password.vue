@@ -95,8 +95,5 @@ export default {
     // margin-left: 10%;
     padding: 5% 0 12%;
   }
-  .el-input__inner {
-    background-color: #E8E9EB !important;
-  }
 }
 </style>

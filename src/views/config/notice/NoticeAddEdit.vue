@@ -133,14 +133,5 @@ export default {
 <style lang="scss">
 .notice-add-container {
   background-color: #fff !important;
-  .el-input__inner{
-    background-color: #F5F5F5;
-  }
-  .el-textarea__inner {
-    background-color: #F5F5F5;
-  }
-  .el-radio__inner {
-    background-color: #F5F5F5;
-  }
 }
 </style>
