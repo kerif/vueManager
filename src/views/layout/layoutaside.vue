@@ -69,7 +69,7 @@ export default {
 .layout-aside {
   width: 230px !important;
   height: 100vh;
-  overflow: scroll;
+  overflow: auto;
   position: fixed;
   top: 0;
   z-index: 99;
