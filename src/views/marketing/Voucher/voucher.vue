@@ -210,6 +210,7 @@ export default {
                 title: '操作成功',
                 message: res.msg
               })
+              this.getList()
             } else {
               this.$notify({
                 type: 'error',
@@ -230,6 +231,7 @@ export default {
                 title: '操作成功',
                 message: res.msg
               })
+              this.getList()
             } else {
               this.$notify({
                 type: 'error',
