@@ -1,6 +1,6 @@
 <template>
   <el-footer :class="['layout-footer', isCollapse && 'layout-footers']">
-    <div>© (2019) NLETECH 湘ICP备17000173号-5</div>
+    <div class="footer-style">© (2019) NLETECH <a href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备17000173号-5</a></div>
   </el-footer>
 </template>
 <script>
@@ -29,5 +29,10 @@ export default {
 }
 .layout-footers {
   width: 100%;
+}
+.footer-style {
+  a {
+    text-decoration: none;
+  }
 }
 </style>
