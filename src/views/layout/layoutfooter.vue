@@ -1,6 +1,6 @@
 <template>
   <el-footer :class="['layout-footer', isCollapse && 'layout-footers']">
-    <div>© (2019) NLETECH</div>
+    <div>© (2019) NLETECH 湘ICP备17000173号-5</div>
   </el-footer>
 </template>
 <script>

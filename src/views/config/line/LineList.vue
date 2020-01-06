@@ -41,11 +41,19 @@
         </template>
       </el-table-column>
     </el-table>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
 import AddBtn from '@/components/addBtn'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
+  mixins: [pagination],
+  components: {
+    AddBtn,
+    NlePagination
+  },
   data () {
     return {
       lineList: [
@@ -63,11 +71,16 @@ export default {
   methods: {
     getList () {
       this.tableLoading = true
-      this.$request.getLines().then(res => {
+      this.$request.getLines({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.lineList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
           this.localization = res.localization
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
         } else {
           this.$notify({
             title: '操作失败',
@@ -106,9 +119,6 @@ export default {
         }
       })
     }
-  },
-  components: {
-    AddBtn
   }
 }
 </script>

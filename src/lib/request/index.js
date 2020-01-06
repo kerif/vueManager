@@ -13,8 +13,8 @@ exports.login = (params) => {
 // 退出登录
 exports.logout = () => $form.post('logout')
 // 配置 路线
-exports.getLines = () => {
-  return $form.get('express-lines')
+exports.getLines = (params) => {
+  return $form.get('express-lines', { params })
 }
 // 配置 路线修改开启或关闭
 exports.resetLines = (id, status) => {

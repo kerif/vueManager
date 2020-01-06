@@ -17,19 +17,19 @@
       <el-main :class="[isCollapse && 'isCollapses']">
         <router-view></router-view>
       </el-main>
-      <!-- <layout-footer></layout-footer> -->
+      <layout-footer></layout-footer>
     </el-container>
   </el-container>
 </template>
 <script>
 import LayoutAside from './layoutaside'
 import LayoutHeader from './layoutheader'
-// import LayoutFooter from './layoutfooter'
+import LayoutFooter from './layoutfooter'
 export default {
   components: {
     LayoutAside,
-    LayoutHeader
-    // LayoutFooter
+    LayoutHeader,
+    LayoutFooter
   },
   computed: {
     pagePath () {
@@ -47,8 +47,8 @@ export default {
     left: 230px;
     padding: 0;
     width: calc(100vw - 230px);
-    // height: calc(100vh - 170px);
-    height: calc(100vh - 110px);
+    height: calc(100vh - 170px);
+    // height: calc(100vh - 110px);
     transition: all 0.3s ease-in;
     position: relative;
     top: 60px;
@@ -57,8 +57,8 @@ export default {
   .el-main > div {
     background-color: #F5F5F5;
     padding: 20px;
-    // min-height: calc(100vh - 170px);
-    min-height: calc(100vh - 110px);
+    min-height: calc(100vh - 170px);
+    // min-height: calc(100vh - 110px);
   }
   .isCollapses {
     left: 0 !important;
