@@ -117,8 +117,8 @@
       <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
       <!-- 收货人 -->
       <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
-      <!-- 收货国家 -->
-      <el-table-column label="收货国家" prop="address.country_name"></el-table-column>
+      <!-- 收货国家或地区 -->
+      <el-table-column label="收货国家/地区" prop="address.country_name"></el-table-column>
       <!-- 包裹数 -->
       <el-table-column label="包裹数" prop="package_count"></el-table-column>
       <!-- 预计重量KG -->

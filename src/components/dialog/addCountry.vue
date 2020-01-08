@@ -1,12 +1,12 @@
 <template>
-  <el-dialog :visible.sync="show" title="新增国家" class="add-country-dialog" @close="clear">
+  <el-dialog :visible.sync="show" title="新增国家/地区" class="add-country-dialog" @close="clear">
     <el-form label-width="80" :model="ruleForm">
-      <el-form-item label="国家：">
+      <el-form-item label="国家/地区：">
         <el-autocomplete
           :fetch-suggestions="queryCNSearch"
           @select="handleSelect"
-          placeholder="请输入国家中文名"
-          v-model="ruleForm.cn_name">
+          placeholder="请输入国家/地区（中）"
+          v-model="ruleForm.name">
         </el-autocomplete>
       </el-form-item>
       <!-- <el-form-item label="英文：">
@@ -24,39 +24,56 @@
   </el-dialog>
 </template>
 <script>
-import countryList from '@/lib/country'
+// import countryList from '@/lib/country'
 export default {
   data () {
     return {
       ruleForm: {
-        cn_name: '',
-        en_name: ''
-      }
+        name: ''
+      },
+      supplierId: ''
     }
   },
   methods: {
-    queryCNSearch (queryString, cb) {
-      let list = this.CNList
-      let result = queryString ? list.filter(this.createFilter(queryString)) : list
-      cb(result)
+    queryCNSearch (queryString, callback) {
+      console.log(this.ruleForm.cn_name)
+      var list = [{}]
+      this.$request.AutoCountry({
+        keyword: this.ruleForm.name
+      }).then(res => {
+        for (let i of res.data) {
+          i.value = i.name
+          // i.value = i.id + '---' + i.name
+        }
+        list = res.data
+        callback(list)
+      })
     },
-    queryENSearch (queryString, cb) {
-      let list = this.ENList
-      let result = queryString ? list.filter(this.createFilter(queryString)) : list
-      cb(result)
-    },
-    createFilter (queryString) {
-      return (item) => {
-        return (item.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
-      }
-    },
+    // queryCNSearch (queryString, cb) {
+    //   let list = this.CNList
+    //   let result = queryString ? list.filter(this.createFilter(queryString)) : list
+    //   cb(result)
+    // },
+    // queryENSearch (queryString, cb) {
+    //   let list = this.ENList
+    //   let result = queryString ? list.filter(this.createFilter(queryString)) : list
+    //   cb(result)
+    // },
+    // createFilter (queryString) {
+    //   return (item) => {
+    //     return (item.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
+    //   }
+    // },
     handleSelect (item) {
       // this.ruleForm.en_name = item.name
-      console.log(item)
+      this.supplierId = item.id
+      console.log(this.supplierId, 'this.supplierId')
     },
     submit () {
-      this.ruleForm.en_name = this.ruleForm.cn_name
-      this.$request.saveCountries(this.ruleForm).then(res => {
+      console.log(this.supplierId, 'this.supplierId')
+      this.$request.saveCountries({
+        country_id: this.supplierId
+      }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -75,21 +92,20 @@ export default {
       })
     },
     clear () {
-      this.ruleForm.cn_name = ''
-      this.ruleForm.en_name = ''
+      this.ruleForm.name = ''
     }
   },
   computed: {
-    CNList () {
-      return countryList.map(item => {
-        return { value: item.cn_name }
-      })
-    },
-    ENList () {
-      return countryList.map(item => {
-        return { value: item.en_name }
-      })
-    }
+    // CNList () {
+    //   return countryList.map(item => {
+    //     return { value: item.cn_name }
+    //   })
+    // },
+    // ENList () {
+    //   return countryList.map(item => {
+    //     return { value: item.en_name }
+    //   })
+    // }
   }
 }
 </script>

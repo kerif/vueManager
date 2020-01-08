@@ -5,6 +5,8 @@
       <el-tab-pane label="开发配置" name="1"></el-tab-pane>
       <!-- 消息模版 -->
       <el-tab-pane label="消息模版" name="2"></el-tab-pane>
+      <!-- 图片配置 -->
+      <el-tab-pane label="图片配置" name="3"></el-tab-pane>
     </el-tabs>
     <el-row v-if="activeName === '1'">
       <el-col :span="11">
@@ -46,7 +48,7 @@
          </div>
        </el-col>
     </el-row>
-    <div v-else>
+    <div v-if="activeName === '2'">
       <el-table :data="messageData" v-loading="tableLoading" class="data-list" border stripe>
         <el-table-column label="id" prop="type" width="100"></el-table-column>
         <el-table-column label="模版类型" prop="type_name">
@@ -70,10 +72,111 @@
         </el-table-column>
       </el-table>
     </div>
+    <div v-if="activeName === '3'">
+      <div class="setOthers">
+        <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
+        label-position="top" :rules="rules">
+         <el-col :span="12">
+            <!-- 小程序首页视频入口图 -->
+            <el-form-item label="*小程序首页视频入口图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="baleImgList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadBaleImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload>
+            </el-form-item>
+          </el-col>
+            <!-- 小程序首页评论入口图 -->
+          <el-col :span="12">
+            <el-form-item label="*小程序首页评论入口图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="baleImgList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadBaleImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload>
+            </el-form-item>
+          </el-col>
+            <!-- 小程序预报页图 -->
+          <el-col :span="12">
+            <el-form-item label="*小程序预报页图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="customerList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="customerImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload>
+            </el-form-item>
+          </el-col>
+            <!-- 小程序运费查询页图 -->
+          <el-col :span="10">
+            <el-form-item label="*小程序运费查询页图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="customerList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="customerImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload>
+            </el-form-item>
+          </el-col>
+          </el-form>
+          <el-button class="save-btn" @click="editOthers">保存</el-button>
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data () {
     return {
@@ -87,7 +190,14 @@ export default {
       tableLoading: false,
       severData: [],
       businessData: [],
+      baleImgList: [],
+      customerList: [],
       messageData: [],
+      setForm: {
+        website_name: '',
+        default_img: [],
+        customer_qr_code: []
+      },
       rules: {
         app_id: [
           { required: true, message: '请输入AppId', trigger: 'change' }
@@ -164,9 +274,95 @@ export default {
         }
       })
     },
+    // 预览图片
+    onPreview (image) {
+      dialog({
+        type: 'previewimage',
+        image
+      })
+    },
+    // 上传打包照片
+    uploadBaleImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.baleImgList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 删除小程序码
+    onDeleteImg (index) {
+      this.baleImgList.splice(index, 1)
+    },
+    // 删除pc端二维码
+    onDeleteCus (index) {
+      this.customerList.splice(index, 1)
+    },
+    // pc端客服二维码
+    customerImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.customerList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 上传图片
+    onUpload (file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
+    },
     // 添加转运快递单号
     edit (row) {
       row.disabled = !row.disabled
+    },
+    // 修改其余配置
+    editOthers () {
+      // this.setForm.default_img = this.baleImgList[0].url
+      // this.setForm.customer_qr_code = this.customerList[0].url
+      if (this.baleImgList[0]) {
+        this.setForm.default_img = this.baleImgList[0].url
+      } else {
+        this.setForm.default_img = []
+      }
+      if (this.customerList[0]) {
+        this.setForm.customer_qr_code = this.customerList[0].url
+      } else {
+        this.setForm.customer_qr_code = []
+      }
+      if (!this.setForm.website_name) {
+        return this.$message.error('请输入网站名称')
+      } else if (!this.baleImgList[0]) {
+        return this.$message.error('请上传小程序码')
+      } else if (!this.customerList[0]) {
+        return this.$message.error('请上传pc端客户二维码')
+      }
+      this.$request.editWebsite(this.setForm).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '成功',
+            message: res.msg
+          })
+          this.getOthers()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 取消
     cancel (row) {
@@ -214,7 +410,7 @@ export default {
 <style lang="scss">
 .applet-container {
    .tabLength {
-    width: 200px !important;
+    width: 300px !important;
   }
   .applet-left {
     padding: 15px;
@@ -227,6 +423,146 @@ export default {
   }
   .el-input__inner {
     width: 60%;
+  }
+  .setOthers {
+    background-color: #fff !important;
+    padding: 20px;
+    .el-input {
+      width: 30%;
+    }
+    .el-textarea__inner {
+      width: 30%;
+      background-color: #F5F5F5;
+    }
+    .goods-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
+    .updateChe {
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
+    .el-form-item__label {
+      width: 500px !important;
+    }
+  }
+    .avatar-uploader {
+      display: inline-block;
+      vertical-align: top;
+      // margin-left: 50px;
+    }
+    .img-item {
+      display: inline-block;
+      border: 1px dashed #d9d9d9;
+      width: 148px;
+      height: 148px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      text-align: center;
+      position: relative;
+      box-sizing: border-box;
+      cursor: pointer;
+      &:hover {
+        .model-box, .operat-box {
+          opacity: 1;
+          transition: all .5s ease-in;
+        }
+      }
+    }
+    .model-box {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      opacity: 0;
+      background-color: rgba(0, 0, 0, .3);
+    }
+    .operat-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      i {
+        font-size: 20px;
+        color: #fff;
+        margin-right: 10px;
+      }
+    }
+  }
+  .setOthers {
+    background-color: #fff !important;
+    padding: 20px;
+    .el-input {
+      width: 30%;
+    }
+    .el-textarea__inner {
+      width: 30%;
+      background-color: #F5F5F5;
+    }
+    .goods-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
+    .updateChe {
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
+    .el-form-item__label {
+      width: 500px !important;
+    }
+  }
+    .avatar-uploader {
+      display: inline-block;
+      vertical-align: top;
+      // margin-left: 50px;
+    }
+    .img-item {
+      display: inline-block;
+      border: 1px dashed #d9d9d9;
+      width: 148px;
+      height: 148px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      text-align: center;
+      position: relative;
+      box-sizing: border-box;
+      cursor: pointer;
+      &:hover {
+        .model-box, .operat-box {
+          opacity: 1;
+          transition: all .5s ease-in;
+        }
+      }
+    }
+    .model-box {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      opacity: 0;
+      background-color: rgba(0, 0, 0, .3);
+    }
+    .operat-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      i {
+        font-size: 20px;
+        color: #fff;
+        margin-right: 10px;
+      }
+    }
+  }
+  .save-btn {
+    color: #fff;
+    background-color: #3540A5;
   }
 }
 </style>

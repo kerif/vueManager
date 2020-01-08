@@ -1,81 +1,61 @@
 <template>
   <div class="warehouse-container">
-    <div class="tips-box">
-      <span class="tips-title">温馨提示: </span>
-      <span class="tips-content">当前页面配置的地址为用户发往仓库的真实收件地址，请填写有效准确的信息，请不要填写座机</span>
+    <div>
+      <search-group v-model="page_params.keyword" @search="goSearch">
+      </search-group>
+      </div>
+    <div class="select-box">
+      <add-btn router="warehouseAdd">添加仓库</add-btn>
     </div>
-    <el-form label-position="top" class="warehouse-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-      <el-form-item label="收件人姓名" prop="receiver_name">
-        <el-row>
-          <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.receiver_name"></el-input>
-            </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="联系电话" prop="phone">
-        <el-row>
-          <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.phone"></el-input>
-            </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="邮编" prop="postcode">
-        <el-row>
-          <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.postcode"></el-input>
-            </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="地址" prop="address">
-        <el-row>
-          <el-col :span="10">
-            <el-input placeholder="请输入内容" type="textarea" :row="3" v-model="ruleForm.address"></el-input>
-            </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="温馨提示（主要提醒客户需要注意的事项，在客户端仓库地址页面显示）" prop="tips">
-        <el-row>
-          <el-col :span="10">
-            <el-input placeholder="请输入温馨提示" type="textarea" :row="4" v-model="ruleForm.tips"></el-input>
-            </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" class="save-btn" @click="submit('ruleForm')"
-        :loading="$store.state.btnLoading">保存</el-button>
-        </el-form-item>
-    </el-form>
+    <el-table :data="vipGroupList" stripe border class="data-list"
+    v-loading="tableLoading"
+    @selection-change="selectionChange">
+      <el-table-column type="selection" width="55" align="center"></el-table-column>
+      <el-table-column label="仓库名字" prop="warehouse_name"></el-table-column>
+      <el-table-column label="收件人姓名" prop="receiver_name"></el-table-column>
+      <el-table-column label="联系电话" prop="phone"></el-table-column>
+      <el-table-column label="邮编" prop="postcode"></el-table-column>
+      <el-table-column label="地址" prop="address"></el-table-column>
+      <el-table-column label="支持国家">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.support_countries" :key="item.id">
+            {{item.cn_name}}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="200">
+        <template slot-scope="scope">
+          <el-button class="btn-green" @click="editWarehouse(scope.row.id)">修改仓库</el-button>
+          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">删除</el-button>
+        </template>
+      </el-table-column>
+      <!-- <template slot="append">
+        <div class="append-box">
+          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
+        </div>
+      </template> -->
+    </el-table>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
-
 <script>
+import { SearchGroup } from '@/components/searchs'
+import NlePagination from '@/components/pagination'
+import AddBtn from '@/components/addBtn'
+import { pagination } from '@/mixin'
 export default {
+  name: 'vipGroupList',
+  components: {
+    SearchGroup,
+    NlePagination,
+    AddBtn
+  },
+  mixins: [pagination],
   data () {
     return {
-      ruleForm: {
-        receiver_name: '',
-        phone: '',
-        postcode: '',
-        address: '',
-        tips: ''
-      },
-      rules: {
-        receiver_name: [
-          { required: true, message: '请输入收件人姓名', trigger: 'blur' }
-        ],
-        phone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
-        ],
-        postcode: [
-          { required: true, message: '请输入邮编', trigger: 'blur' }
-        ],
-        address: [
-          { required: true, message: '请输入地址', trigger: 'blur' }
-        ],
-        tips: [
-          { required: true, message: '请输入温馨提示', trigger: 'blur' }
-        ]
-      }
+      vipGroupList: [],
+      tableLoading: false,
+      deleteNum: []
     }
   },
   created () {
@@ -83,58 +63,100 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getBill().then(res => {
-        this.ruleForm = res.data
-      })
-    },
-    submit (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$request.saveWareHouse(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '操作成功',
-                message: res.msg
-              })
-              this.getList()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
+      this.tableLoading = true
+      this.$request.getWarehouseAddress({
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.vipGroupList = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
         } else {
-          return false
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
+    },
+    // 修改仓库
+    editWarehouse (id) {
+      this.$router.push({ name: 'warehouseEdit',
+        params: {
+          id: id
+        } }
+      )
+    },
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 删除单条转账支付
+    deleteWarehouse (id) {
+      this.$confirm(`您真的要删除此仓库吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteWarehouseAddress(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     }
+    // // 删除
+    // deleteData () {
+    //   console.log(this.deleteNum, 'this.deleteNum')
+    //   if (!this.deleteNum || !this.deleteNum.length) {
+    //     return this.$message.error('请选择仓库')
+    //   }
+    //   this.$confirm(`是否确认删除？`, '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     this.$request.deleteWarehouseAddress({
+    //       DELETE: this.deleteNum
+    //     }).then(res => {
+    //       if (res.ret) {
+    //         this.$notify({
+    //           title: '操作成功',
+    //           message: res.msg,
+    //           type: 'success'
+    //         })
+    //         this.getList()
+    //       } else {
+    //         this.$message({
+    //           message: res.msg,
+    //           type: 'error'
+    //         })
+    //       }
+    //     })
+    //   })
+    // }
   }
 }
 </script>
 <style lang="scss">
 .warehouse-container {
-  background-color: #fff !important;
-  .tips-box {
-    padding: 20px;
-    line-height: 30px;
-    background-color: #f0f0f0;
-    margin: 20px 20px 50px 0;
-    display: inline-block;
-    border-radius: 5px;
-  }
-  .tips-title {
-    font-weight: bold;
-  }
-  .tips-content {
-    font-size: 14px;
-  }
-  .warehouse-form {
-    // padding-left: 50px;
-  }
-  .save-btn {
-    min-width: 100px;
+  .select-box {
+    overflow: hidden;
   }
 }
 </style>

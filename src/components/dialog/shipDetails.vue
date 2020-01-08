@@ -14,7 +14,7 @@
         <!-- <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column> -->
         <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
         <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
-        <el-table-column label="收货国家" prop="address.country_name"></el-table-column>
+        <el-table-column label="收货国家/地区" prop="address.country_name"></el-table-column>
         <el-table-column label="包裹数" prop="package_count"></el-table-column>
         <el-table-column :label="'实际重量' + localization.weight_unit" prop="actual_weight"></el-table-column>
         <el-table-column :label="'实际费用' + localization.currency_unit" prop="actual_payment_fee"></el-table-column>

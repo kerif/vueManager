@@ -4,7 +4,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>线路名称</div>
+            <div>*线路名称</div>
             <el-input placeholder="请输入内容" v-model="form.cn_name"></el-input>
           </el-col>
         </el-row>
@@ -12,12 +12,38 @@
       <el-form-item>
         <el-row :gutter="20">
           <el-col :span="10">
-            <div>支持国家</div>
+            <div>*支持仓库</div>
+            <el-select
+              v-model="form.warehouses"
+              multiple
+              filterable
+              @change="supportWarehouse"
+              class="country-select"
+              placeholder="请选择仓库">
+              <el-option
+                v-for="item in warehouseList"
+                :key="item.id"
+                :label="item.warehouse_name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-col>
+          <!-- <el-col :span="10" class="country-btn">
+            <el-button type="primary" @click="onAddCountry">+ 新增国家/地区</el-button>
+          </el-col> -->
+        </el-row>
+      </el-form-item>
+      <el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="10">
+            <div>*支持国家/地区</div>
             <el-select
               v-model="form.countries"
+              :disabled="!this.form.warehouses.length"
               multiple
+              filterable
               class="country-select"
-              placeholder="请选择国家">
+              placeholder="请选择国家/地区">
               <el-option
                 v-for="item in options"
                 :key="item.id"
@@ -26,13 +52,13 @@
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="10" class="country-btn">
-            <el-button type="primary" @click="onAddCountry">+ 新增国家</el-button>
-          </el-col>
+          <!-- <el-col :span="10" class="country-btn">
+            <el-button type="primary" @click="onAddCountry">+ 新增国家/地区</el-button>
+          </el-col> -->
         </el-row>
       </el-form-item>
       <el-form-item>
-        <div>参考时效</div>
+        <div>*参考时效</div>
         <el-row>
           <el-col :span="10">
             <el-input v-model="form.reference_time" placeholder="例：5-12工作日/日"></el-input>
@@ -54,11 +80,11 @@
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
-            <div>{{'首重' + this.localization.weight_unit}}</div>
+            <div>{{'*首重' + this.localization.weight_unit}}</div>
             <el-input v-model="form.first_weight" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="10">
-            <div>{{'首费' + this.localization.currency_unit}}</div>
+            <div>{{'*首费' + this.localization.currency_unit}}</div>
             <el-input v-model="form.first_money" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
@@ -66,11 +92,11 @@
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
-            <div>{{'续重' + this.localization.weight_unit}}</div>
+            <div>{{'*续重' + this.localization.weight_unit}}</div>
             <el-input v-model="form.next_weight" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="10">
-            <div>{{'续费' + this.localization.currency_unit}}</div>
+            <div>{{'*续费' + this.localization.currency_unit}}</div>
             <el-input v-model="form.next_money" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
@@ -78,11 +104,11 @@
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
-            <div>{{'最小重量' + this.localization.weight_unit}}</div>
+            <div>{{'*最小重量' + this.localization.weight_unit}}</div>
             <el-input v-model="form.min_weight" placeholder="请输入内容"></el-input>
           </el-col>
            <el-col :span="10">
-             <div>{{'最大重量' + this.localization.weight_unit}}</div>
+             <div>{{'*最大重量' + this.localization.weight_unit}}</div>
             <el-input v-model="form.max_weight" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
@@ -91,7 +117,7 @@
         <el-row>
           <el-col :span="10">
             <div>
-              <span>体积系数</span>
+              <span>*体积系数</span>
               <el-tooltip class="item" effect="dark" content="主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数" placement="top">
                 <span class="el-icon-question icon-info"></span>
               </el-tooltip>
@@ -103,7 +129,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>线路类型</div>
+            <div>*线路类型</div>
             <el-checkbox-group v-model="form.types">
               <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
                 {{item.cn_name}}</el-checkbox>
@@ -114,7 +140,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>备注</div>
+            <div>*备注</div>
             <el-input v-model="form.remark" placeholder="请输入内容" :rows="4" type="textarea"></el-input>
           </el-col>
         </el-row>
@@ -126,12 +152,12 @@
   </div>
 </template>
 <script>
-import dialog from '@/components/dialog'
 export default {
   data () {
     return {
       form: {
         cn_name: '',
+        warehouses: '',
         countries: '',
         first_weight: '',
         first_money: '',
@@ -151,13 +177,15 @@ export default {
       },
       value: [],
       options: [],
+      warehouseList: [], // 获取全部仓库
       typeList: [],
-      localization: {}
+      localization: {},
+      warehouseIds: [] // 保存支持仓库的id
     }
   },
   created () {
     this.getProp()
-    this.getCountry()
+    this.getWarehouse()
     if (this.$route.params.id) {
       this.getList()
     }
@@ -168,33 +196,75 @@ export default {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         this.form = res.data
         this.form.types = res.data.types.map(item => item.id)
-        this.form.countries = res.data.countries.map(item => item.id)
+        this.form.countries = res.data.countries.map(item => item.cn_name)
       })
     },
-    // 添加国家
-    onAddCountry () {
-      dialog({
-        type: 'addcountry'
-      }, () => {
-        this.getCountry()
-      })
+    supportWarehouse (item) {
+      this.warehouseIds = item
+      console.log(item, 'item')
+      console.log(this.warehouseIds, 'warehouseId')
+      if (this.warehouseIds) {
+        this.searchCountry()
+      }
     },
     // 获取多选框
     getProp () {
       this.$request.getProps().then(res => {
-        this.typeList = res.data
-        this.localization = res.localization
-        console.log(this.typeList)
+        if (res.ret) {
+          this.typeList = res.data
+          this.localization = res.localization
+          console.log(this.typeList)
+        }
       })
     },
     // 获取支持国家数据
-    getCountry () {
-      this.$request.getCountry().then(res => {
-        this.options = res.data
+    searchCountry () {
+      console.log(111)
+      this.$request.supportCountry({
+        warehouseIds: this.warehouseIds
+      }).then(res => {
+        if (res.ret) {
+          this.options = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
-    // 保存
+    // 获取全部支持仓库
+    getWarehouse () {
+      this.$request.getAllWarehouse().then(res => {
+        this.warehouseList = res.data
+      })
+    },
     saveLine () {
+      if (this.form.cn_name === '') {
+        return this.$message.error('请输入线路名称')
+      } else if (this.form.warehouses === '') {
+        return this.$message.error('请选择支持仓库')
+      } else if (this.form.countries === '') {
+        return this.$message.error('请选择支持国家或地区')
+      } else if (this.form.first_weight === '') {
+        return this.$message.error('请输入首重')
+      } else if (this.form.first_money === '') {
+        return this.$message.error('请输入首费')
+      } else if (this.form.next_weight === '') {
+        return this.$message.error('请输入续重')
+      } else if (this.form.next_money === '') {
+        return this.$message.error('请输入续费')
+      } else if (this.form.min_weight === '') {
+        return this.$message.error('请输入最小重量')
+      } else if (this.form.max_weight === '') {
+        return this.$message.error('请输入最大重量')
+      } else if (this.form.factor === '') {
+        return this.$message.error('请输入体积系数')
+      } else if (!this.form.types[0]) {
+        return this.$message.error('请选择线路类型')
+      } else if (this.form.remark === '') {
+        return this.$message.error('请输入备注')
+      }
       if (this.$route.params.id) { // 编辑状态
         this.$request.saveEditLine(this.$route.params.id, { ...this.form }).then(res => {
           if (res.ret) {
@@ -211,7 +281,7 @@ export default {
             })
           }
         })
-      } else {
+      } else { // 新建状态
         this.$request.updateLines(this.form).then(res => {
           if (res.ret) {
             this.$notify({

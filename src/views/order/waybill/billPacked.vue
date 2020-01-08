@@ -13,9 +13,9 @@
          <span class="leftWidth">手机/联系电话</span>
          <span>{{form.address &&form.address.phone}}</span>
       </el-col>
-      <!-- 国家 -->
+      <!-- 国家/地区 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">国家</span>
+         <span class="leftWidth">国家/地区</span>
          <span>{{form.address && form.address.country.cn_name}}</span>
       </el-col>
     </el-row>

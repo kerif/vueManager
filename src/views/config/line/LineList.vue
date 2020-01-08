@@ -9,7 +9,7 @@
         </template>
       </el-table-column>
       <el-table-column label="线路名称" prop="cn_name"></el-table-column>
-      <el-table-column label="支持国家">
+      <el-table-column label="支持国家/地区">
         <template slot-scope="scope">
           <span v-for="item in scope.row.countries" :key="item.id">
             {{item.cn_name}}

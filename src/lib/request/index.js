@@ -20,7 +20,14 @@ exports.getLines = (params) => {
 exports.resetLines = (id, status) => {
   return $form.put(`express-lines/${id}/status/${status}`)
 }
-
+// 配置 路线 获取全部仓库信息
+exports.getAllWarehouse = () => {
+  return $form.get('express-lines/warehouses')
+}
+// 配置 路线 获取支持国家/地区
+exports.supportCountry = (ids) => {
+  return $form.post('express-lines/warehouse-countries', ids)
+}
 exports.getStaff = (params) => {
   return $form.get('admins', { params })
 }
@@ -138,8 +145,8 @@ exports.getShip = (params) => {
 exports.getCountry = () => {
   return $form.get('countries')
 }
-exports.saveCountries = (params) => {
-  return $form.post('countries', params)
+exports.saveCountries = (id) => {
+  return $form.post('countries', id)
 }
 // 财务 流水记录
 exports.getTransaction = (params) => {
@@ -294,8 +301,8 @@ exports.getAgents = (params) => {
   return $form.get('agents', { params })
 }
 // 获取代理列表的成交记录
-exports.getAgentOrders = (id) => {
-  return $form.get(`agents/${id}/deal-orders`)
+exports.getAgentOrders = (id, params) => {
+  return $form.get(`agents/${id}/deal-orders`, { params })
 }
 // 完成成交记录
 exports.finishOrders = (id) => {
@@ -332,6 +339,30 @@ exports.getWechat = () => {
 // 更改 微信支付
 exports.updateWechat = (params) => {
   return $form.put('payments/wechat', params)
+}
+// 配置 获取仓库地址配置
+exports.getWarehouseAddress = (params) => {
+  return $form.get('warehouse-address', { params })
+}
+// 配置 新建仓库地址配置
+exports.addWarehouseAddress = (params) => {
+  return $form.post('warehouse-address', params)
+}
+// 配置 获取单条仓库地址配置
+exports.aloneWarehouseAddress = (id) => {
+  return $form.get(`warehouse-address/${id}`)
+}
+// 配置 编辑保存单条仓库地址配置
+exports.editWarehouseAddress = (id, params) => {
+  return $form.put(`warehouse-address/${id}`, params)
+}
+// 配置 删除单条仓库地址配置
+exports.deleteWarehouseAddress = (id) => {
+  return $form.delete(`warehouse-address/${id}`)
+}
+// 配置 仓库地址配置 获取数据库全部国家
+exports.AutoCountry = (params) => {
+  return $form.get('countries/search', { params })
 }
 // 获取全部重量及货币配置
 exports.getLocalization = () => {

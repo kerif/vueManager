@@ -32,6 +32,8 @@ const LineList = loadonDemand('config/line/LineList')
 const LineAddEdit = loadonDemand('config/line/LineAddEdit')
 // 配置 仓库地址
 const WareHouse = loadonDemand('config/warehouse/warehouse')
+// 配置 添加、修改仓库地址
+const WareHouseEdit = loadonDemand('config/warehouse/warehouseAddEdit')
 // 配置 下单须知列表
 const NoticeList = loadonDemand('config/notice/NoticeList')
 // 配置 添加、修改下单须知
@@ -447,6 +449,30 @@ export default [
               group: '配置',
               level: 2,
               name: '仓库地址配置'
+            }
+          },
+          {
+            path: '/config/warehouse/add',
+            component: WareHouseEdit,
+            name: 'warehouseAdd',
+            id: 602,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '添加仓库',
+              parent: '/config/warehouse'
+            }
+          },
+          {
+            path: '/config/warehouse/edit/:id',
+            component: WareHouseEdit,
+            name: 'warehouseEdit',
+            id: 602,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '修改仓库',
+              parent: '/config/warehouse'
             }
           },
           {
