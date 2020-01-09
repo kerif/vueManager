@@ -76,6 +76,7 @@
       <div class="setOthers">
         <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
         label-position="top" :rules="rules">
+        <el-row :gutter="20">
          <el-col :span="12">
             <!-- 小程序首页视频入口图 -->
             <el-form-item label="*小程序首页视频入口图" class="updateChe">
@@ -102,26 +103,28 @@
             <!-- 小程序首页评论入口图 -->
           <el-col :span="12">
             <el-form-item label="*小程序首页评论入口图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                <span class="img-item" v-for="(item, index) in evaluationImgList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                    <i class="el-icon-delete" @click="onDeleteEva(index)"></i>
                 </span>
                 </span>
               <el-upload
-                v-show="baleImgList.length < 1"
+                v-show="evaluationImgList.length < 1"
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="uploadBaleImg"
+                :http-request="uploadEvaluationImg"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
             </el-upload>
             </el-form-item>
           </el-col>
+          </el-row>
+          <el-row :gutter="20">
             <!-- 小程序预报页图 -->
           <el-col :span="12">
             <el-form-item label="*小程序预报页图" class="updateChe">
@@ -146,28 +149,29 @@
             </el-form-item>
           </el-col>
             <!-- 小程序运费查询页图 -->
-          <el-col :span="10">
+          <el-col :span="12">
             <el-form-item label="*小程序运费查询页图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
+                <span class="img-item" v-for="(item, index) in freightList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+                    <i class="el-icon-delete" @click="onDeleteFre(index)"></i>
                 </span>
                 </span>
               <el-upload
-                v-show="customerList.length < 1"
+                v-show="freightList.length < 1"
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="customerImg"
+                :http-request="freightImg"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
             </el-upload>
             </el-form-item>
           </el-col>
+          </el-row>
           </el-form>
           <el-button class="save-btn" @click="editOthers">保存</el-button>
         </div>
@@ -190,13 +194,16 @@ export default {
       tableLoading: false,
       severData: [],
       businessData: [],
-      baleImgList: [],
-      customerList: [],
+      baleImgList: [], // 小程序首页视频入口图
+      evaluationImgList: [], // 小程序首页评论入口图
+      customerList: [], // 小程序预报页图
+      freightList: [], // 小程序运费查询页面
       messageData: [],
       setForm: {
-        website_name: '',
-        default_img: [],
-        customer_qr_code: []
+        freight_image: [],
+        video_entrance_image: [],
+        comment_entrance_image: [],
+        forecast_image: []
       },
       rules: {
         app_id: [
@@ -251,6 +258,15 @@ export default {
         }
       })
     },
+    // 获取图片配置
+    getImg () {
+      this.$request.getProgramImg().then(res => {
+        res.data.video_entrance_image && (this.baleImgList[0] = { url: res.data.video_entrance_image })
+        res.data.comment_entrance_image && (this.evaluationImgList[0] = { url: res.data.comment_entrance_image })
+        res.data.forecast_image && (this.customerList[0] = { url: res.data.forecast_image })
+        res.data.freight_image && (this.freightList[0] = { url: res.data.freight_image })
+      })
+    },
     saveDev (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -281,7 +297,7 @@ export default {
         image
       })
     },
-    // 上传打包照片
+    // 上传小程序首页视频图片
     uploadBaleImg (item) {
       let file = item.file
       this.onUpload(file).then(res => {
@@ -295,15 +311,21 @@ export default {
         }
       })
     },
-    // 删除小程序码
-    onDeleteImg (index) {
-      this.baleImgList.splice(index, 1)
+    // 上传小程序首页评论入口图
+    uploadEvaluationImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.evaluationImgList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
     },
-    // 删除pc端二维码
-    onDeleteCus (index) {
-      this.customerList.splice(index, 1)
-    },
-    // pc端客服二维码
+    // 上传小程序预报页图
     customerImg (item) {
       let file = item.file
       this.onUpload(file).then(res => {
@@ -317,6 +339,36 @@ export default {
         }
       })
     },
+    // 上传小程序运费查询页图
+    freightImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.freightList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 删除小程序首页视频入口图
+    onDeleteImg (index) {
+      this.baleImgList.splice(index, 1)
+    },
+    // 删除小程序首页评论入口图
+    onDeleteEva (index) {
+      this.evaluationImgList.splice(index, 1)
+    },
+    // 删除小程序预报页图
+    onDeleteCus (index) {
+      this.customerList.splice(index, 1)
+    },
+    // 删除小程序运费查询页图
+    onDeleteFre (index) {
+      this.freightList.splice(index, 1)
+    },
     // 上传图片
     onUpload (file) {
       let params = new FormData()
@@ -329,26 +381,34 @@ export default {
     },
     // 修改其余配置
     editOthers () {
-      // this.setForm.default_img = this.baleImgList[0].url
-      // this.setForm.customer_qr_code = this.customerList[0].url
       if (this.baleImgList[0]) {
-        this.setForm.default_img = this.baleImgList[0].url
+        this.setForm.video_entrance_image = this.baleImgList[0].url
       } else {
-        this.setForm.default_img = []
+        this.setForm.video_entrance_image = []
       }
       if (this.customerList[0]) {
-        this.setForm.customer_qr_code = this.customerList[0].url
+        this.setForm.forecast_image = this.customerList[0].url
       } else {
-        this.setForm.customer_qr_code = []
+        this.setForm.forecast_image = []
       }
-      if (!this.setForm.website_name) {
-        return this.$message.error('请输入网站名称')
-      } else if (!this.baleImgList[0]) {
-        return this.$message.error('请上传小程序码')
-      } else if (!this.customerList[0]) {
-        return this.$message.error('请上传pc端客户二维码')
+      if (this.evaluationImgList[0]) {
+        this.setForm.comment_entrance_image = this.evaluationImgList[0].url
+      } else {
+        this.setForm.comment_entrance_image = []
       }
-      this.$request.editWebsite(this.setForm).then(res => {
+      if (this.freightList[0]) {
+        this.setForm.freight_image = this.freightList[0].url
+      } else {
+        this.setForm.freight_image = []
+      }
+      // if (!this.setForm.freight_image) {
+      //   return this.$message.error('请输入网站名称')
+      // } else if (!this.baleImgList[0]) {
+      //   return this.$message.error('请上传小程序码')
+      // } else if (!this.customerList[0]) {
+      //   return this.$message.error('请上传pc端客户二维码')
+      // }
+      this.$request.changeProgramImg(this.setForm).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -401,6 +461,8 @@ export default {
         this.getList()
       } else if (this.activeName === '2') {
         this.getPick()
+      } else if (this.activeName === '3') {
+        this.getImg()
       }
     }
   }

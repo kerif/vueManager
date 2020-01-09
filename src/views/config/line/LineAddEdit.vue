@@ -28,9 +28,6 @@
               </el-option>
             </el-select>
           </el-col>
-          <!-- <el-col :span="10" class="country-btn">
-            <el-button type="primary" @click="onAddCountry">+ 新增国家/地区</el-button>
-          </el-col> -->
         </el-row>
       </el-form-item>
       <el-form-item>
@@ -137,6 +134,45 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <!-- 路线icon -->
+      <el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="10">
+            <div>*路线icon</div>
+            <el-select
+              v-model="form.icon"
+              class="country-select"
+              placeholder="请选择国家/地区">
+              <el-option
+                v-for="item in iconList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="10" class="country-btn">
+            <el-button type="primary" @click="addIcon">+ 新增icon</el-button>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <!-- icon预览 -->
+      <el-form-item>
+        <el-row>
+          <el-col :span="10">
+            <div>icon预览</div>
+            <div class="icon-img" v-if="this.form.icon.icon">
+              <span style="cursor:pointer;"
+                @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${form.icon.icon}`, imgVisible=true">
+                  <img :src="`${$baseUrl.IMAGE_URL}${form.icon.icon}`" style="width: 100px;">
+              </span>
+            </div>
+            <div v-else>
+              <span>无</span>
+            </div>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item>
         <el-row>
           <el-col :span="10">
@@ -149,6 +185,11 @@
         <el-button type="primary" class="sava-btn" :loading="$store.state.btnLoading" @click="saveLine">保存</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog :visible.sync="imgVisible" size="small">
+    <div class="img_box">
+      <img :src="imgSrc" class="imgDialog">
+    </div>
+  </el-dialog>
   </div>
 </template>
 <script>
@@ -168,6 +209,7 @@ export default {
         min_weight: '',
         reference_time: '',
         types: [],
+        icon: '',
         remark: ''
       },
       referenceTime: {
@@ -177,15 +219,19 @@ export default {
       },
       value: [],
       options: [],
+      iconList: [],
       warehouseList: [], // 获取全部仓库
       typeList: [],
       localization: {},
-      warehouseIds: [] // 保存支持仓库的id
+      warehouseIds: [], // 保存支持仓库的id
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   created () {
     this.getProp()
     this.getWarehouse()
+    this.getIcon()
     if (this.$route.params.id) {
       this.getList()
     }
@@ -196,7 +242,8 @@ export default {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         this.form = res.data
         this.form.types = res.data.types.map(item => item.id)
-        this.form.countries = res.data.countries.map(item => item.cn_name)
+        this.form.countries = res.data.countries.map(item => item.id)
+        this.form.form.icon = res.data.form.icon.map(item => item.id)
       })
     },
     supportWarehouse (item) {
@@ -207,6 +254,14 @@ export default {
         this.searchCountry()
       }
     },
+    // 获取全部路线icon
+    getIcon () {
+      this.$request.getAllIcon().then(res => {
+        if (res.ret) {
+          this.iconList = res.data
+        }
+      })
+    },
     // 获取多选框
     getProp () {
       this.$request.getProps().then(res => {
@@ -216,6 +271,10 @@ export default {
           console.log(this.typeList)
         }
       })
+    },
+    // 跳转到增加icon
+    addIcon () {
+      this.$router.push({ name: 'IconAdd' })
     },
     // 获取支持国家数据
     searchCountry () {
@@ -266,7 +325,7 @@ export default {
         return this.$message.error('请输入备注')
       }
       if (this.$route.params.id) { // 编辑状态
-        this.$request.saveEditLine(this.$route.params.id, { ...this.form }).then(res => {
+        this.$request.saveEditLine(this.$route.params.id, this.form).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -346,6 +405,18 @@ export default {
   .el-tag.el-tag--info .el-tag__close {
     color: #3540A5;
     background-color: #fff;
+  }
+  .icon-img {
+    width: 100px;
+    img {
+      width: 100%;
+    }
+  }
+  .img_box{
+    text-align: center;
+    .imgDialog{
+      width: 50%;
+    }
   }
 }
 </style>

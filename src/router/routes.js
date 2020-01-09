@@ -30,6 +30,8 @@ const TransactionWechat = loadonDemand('finance/wechatPay')
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
 const LineAddEdit = loadonDemand('config/line/LineAddEdit')
+// 配置 添加、修改icon
+const IconAdd = loadonDemand('config/line/IconAdd')
 // 配置 仓库地址
 const WareHouse = loadonDemand('config/warehouse/warehouse')
 // 配置 添加、修改仓库地址
@@ -425,6 +427,18 @@ export default [
               group: '配置',
               level: 3,
               name: '添加路线',
+              parent: '/config/line/linelist'
+            }
+          },
+          {
+            path: '/config/icon/add',
+            component: IconAdd,
+            name: 'IconAdd',
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '路线icon',
               parent: '/config/line/linelist'
             }
           },

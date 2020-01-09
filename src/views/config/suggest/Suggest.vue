@@ -8,13 +8,13 @@
       <el-table-column label="内容" prop="content">
       </el-table-column>
       <el-table-column label="图片" prop="images">
-          <template slot-scope="scope">
+        <template slot-scope="scope">
           <span v-for="item in scope.row.images"
           :key="item.id" style="cursor:pointer;"
             @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
               <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
           </span>
-        </template>
+       </template>
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
@@ -37,7 +37,7 @@
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
       </div>
-    </el-dialog>
+     </el-dialog>
   </div>
 </template>
 <script>

@@ -28,6 +28,26 @@ exports.getAllWarehouse = () => {
 exports.supportCountry = (ids) => {
   return $form.post('express-lines/warehouse-countries', ids)
 }
+// 配置 路线 获取路线icon
+exports.iconLines = () => {
+  return $form.get(`express-lines/icons`)
+}
+// 配置 路线icon 设置为默认
+exports.asDefault = (id) => {
+  return $form.put(`express-lines/icons/${id}/as-default`)
+}
+// 配置 路线icon 删除
+exports.deleteIcon = (id) => {
+  return $form.delete(`express-lines/icons/${id}`)
+}
+// 配置 路线icon  新建
+exports.addIcon = (params) => {
+  return $form.post('express-lines/icons', params)
+}
+// 配置 路线 获取全部路线icon
+exports.getAllIcon = () => {
+  return $form.get('express-lines/simple-icon-list')
+}
 exports.getStaff = (params) => {
   return $form.get('admins', { params })
 }
@@ -319,6 +339,14 @@ exports.getMini = () => {
 // 编辑保存小程序配置
 exports.updateMini = (params) => {
   return $form.put('mini-program/settings', params)
+}
+// 小程序配置 获取图片配置
+exports.getProgramImg = () => {
+  return $form.get('mini-program/images')
+}
+// 小程序配置 修改图片配置
+exports.changeProgramImg = (params) => {
+  return $form.put('mini-program/images', params)
 }
 // 获取消息模版
 exports.getTemplate = () => {

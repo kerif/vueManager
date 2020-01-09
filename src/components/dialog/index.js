@@ -22,6 +22,7 @@ import addCompany from './addCompany.vue'
 import shipDetails from './shipDetails.vue'
 import addTransfer from './addSetting.vue'
 import addService from './addEditService.vue'
+import addIcon from './addIcon.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -42,9 +43,10 @@ const SelectGroupController = Vue.extend(selectGroup)
 const AddPackageController = Vue.extend(addPackage)
 const ReviewMsgController = Vue.extend(reviewMsg)
 const AddCompanyController = Vue.extend(addCompany)
-const ShipDetaislController = Vue.extend(shipDetails)
+const ShipDetailsController = Vue.extend(shipDetails)
 const AddTransferController = Vue.extend(addTransfer)
-const AddEdtiServiceController = Vue.extend(addService)
+const AddEditServiceController = Vue.extend(addService)
+const IconController = Vue.extend(addIcon)
 
 const mixin = {
   data () {
@@ -189,7 +191,7 @@ function initInstance (type) {
       break
     // 发货单 详情
     case 'shipDetails':
-      instance = new ShipDetaislController({
+      instance = new ShipDetailsController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
@@ -203,7 +205,14 @@ function initInstance (type) {
       break
     // 新增或修改增值服务
     case 'addService':
-      instance = new AddEdtiServiceController({
+      instance = new AddEditServiceController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 增加线路icon
+    case 'addIcon':
+      instance = new IconController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

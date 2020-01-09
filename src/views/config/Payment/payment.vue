@@ -126,9 +126,41 @@
           </div>
         </el-tab-pane>
         <!-- 增值服务 -->
-        <el-tab-pane label="增值服务" name="4">
+        <el-tab-pane label="订单增值服务" name="4">
           <div class="select-box">
-            <add-btn @click.native="addService">添加增值服务</add-btn>
+            <add-btn @click.native="addService">添加订单增值服务</add-btn>
+          </div>
+            <el-table :data="valueData" v-loading="tableLoading" class="data-list"
+            border stripe>
+            <el-table-column type="index"></el-table-column>
+            <el-table-column prop="name" label="增值服务名称"></el-table-column>
+            <el-table-column prop="price" label="价格"></el-table-column>
+            <el-table-column prop="remark" label="备注"></el-table-column>
+              <el-table-column label="是否启用">
+                <template slot-scope="scope">
+                  <el-switch
+                    v-model="scope.row.enabled"
+                    @change="changeService($event, scope.row.id)"
+                    active-text="开"
+                    inactive-text="关"
+                    active-color="#13ce66"
+                    inactive-color="gray">
+                  </el-switch>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button class="btn-dark-green" @click="editService(scope.row.id)">编辑</el-button>
+                  <el-button class="btn-light-red" @click="deleteService(scope.row.id)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        </el-tab-pane>
+        <!-- 包裹增值服务 -->
+        <el-tab-pane label="包裹增值服务" name="5">
+          <div class="select-box">
+            <add-btn @click.native="addService">添加包裹增值服务</add-btn>
           </div>
             <el-table :data="valueData" v-loading="tableLoading" class="data-list"
             border stripe>
@@ -158,7 +190,7 @@
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
         </el-tab-pane>
         <!-- 其余配置 -->
-      <el-tab-pane label="其余配置" name="5">
+      <el-tab-pane label="其余配置" name="6">
         <!-- 其余配置 -->
       <div class="setOthers">
         <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
@@ -177,16 +209,16 @@
                     <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
                 </span>
                 </span>
-              <el-upload
-                v-show="baleImgList.length < 1"
-                class="avatar-uploader"
-                action=""
-                list-type="picture-card"
-                :http-request="uploadBaleImg"
-                :show-file-list="false">
-                <i class="el-icon-plus">
-                </i>
-            </el-upload>
+                <el-upload
+                  v-show="baleImgList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadBaleImg"
+                  :show-file-list="false">
+                  <i class="el-icon-plus">
+                  </i>
+              </el-upload>
             </el-form-item>
             <!-- pc端客服二维码 -->
             <el-form-item label="*pc端客服二维码" class="updateChe">
@@ -670,7 +702,7 @@ export default {
       } else if (this.activeName === '4') {
         this.page_params.page = 1
         this.getList()
-      } else if (this.activeName === '5') {
+      } else if (this.activeName === '6') {
         this.getOthers()
       }
     },
