@@ -80,7 +80,7 @@
          <el-col :span="12">
             <!-- 小程序首页视频入口图 -->
             <el-form-item label="*小程序首页视频入口图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
@@ -463,6 +463,7 @@ export default {
         this.getPick()
       } else if (this.activeName === '3') {
         this.getImg()
+        console.log('111')
       }
     }
   }

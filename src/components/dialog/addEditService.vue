@@ -49,7 +49,16 @@ export default {
   methods: {
     // 获取单条的信息
     getList () {
-      console.log(this.id, 'id')
+      if (this.name === 'editService') {
+        console.log('我是获取订单')
+        this.getService()
+      } else {
+        console.log('我是获取包裹增值')
+        this.getPaVal()
+      }
+    },
+    // 订单 获取增值编辑数据
+    getService () {
       this.$request.getService(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -62,47 +71,115 @@ export default {
         }
       })
     },
+    // 包裹 获取增值编辑数据
+    getPaVal () {
+      this.$request.getPaVal(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm = res.data
+        } else {
+          this.$notify({
+            message: res.msg,
+            type: 'error',
+            title: '操作失败'
+          })
+        }
+      })
+    },
+    // 订单编辑状态下保存
+    UpdateService () {
+      console.log('我是编辑', this.id)
+      this.$request.updateService(this.id, this.ruleForm).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        this.show = false
+      })
+    },
+    // 添加订单增值服务
+    addService () {
+      console.log('我是添加', this.id)
+      this.$request.addValue(this.ruleForm).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        this.show = false
+      })
+    },
+    // 添加包裹增值服务
+    addParcel () {
+      console.log('我是添加', this.id)
+      this.$request.addParcel(this.ruleForm).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        this.show = false
+      })
+    },
+    // 包裹增值服务编辑后保存
+    UpdateParcel () {
+      console.log('我是编辑', this.id)
+      this.$request.updateParcel(this.id, this.ruleForm).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        this.show = false
+      })
+    },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.state === 'edit') { // 如果是编辑状态
-            console.log('我是编辑', this.id)
-            this.$request.updateService(this.id, this.ruleForm).then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: '操作成功',
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
-            })
-          } else { // 如果是添加状态
-            console.log('我是添加', this.id)
-            this.$request.addValue(this.ruleForm).then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: '操作成功',
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
-            })
+          if (this.name === 'addService') {
+            this.addService()
+          } else if (this.name === 'editService') {
+            this.UpdateService()
+          } else if (this.name === 'addParcel') {
+            this.addParcel()
+          } else if (this.name === 'editParcel') {
+            this.UpdateParcel()
           }
         } else {
           return false
@@ -119,6 +196,7 @@ export default {
       this.show = false
     },
     init () {
+      console.log(this.name, 'name')
       if (this.state === 'edit') {
         this.getList()
       }

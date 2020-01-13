@@ -135,7 +135,7 @@
           </div>
       </div>
     </div>
-    <div class="login-footer">© (2019) NLETECH</div>
+    <div class="login-footer">© (2019) NLETECH <a href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备17000173号-5</a></div>
     <!-- 身份验证弹窗 -->
     <el-dialog
       title="身份验证"
@@ -490,6 +490,9 @@ export default {
     width: 100%;
     font-size: 14px;
     background-color: #fff;
+    a {
+      text-decoration: none;
+    }
   }
   .login-checkbox {
     margin-right: 5px;

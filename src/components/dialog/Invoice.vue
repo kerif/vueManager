@@ -5,7 +5,8 @@
     label-position="top">
         <!-- 员工组中文名 -->
             <el-form-item label="目的国" prop="country_id">
-                <el-select v-model="ruleForm.country_id" placeholder="请选择目的国">
+                <el-select v-model="ruleForm.country_id" placeholder="请选择目的国"
+                filterable>
                 <el-option
                   v-for="item in country"
                   :key="item.id"
@@ -86,11 +87,11 @@ export default {
 <style lang="scss">
 .dialog-invoice {
   .el-input {
-    width: 300px !important;
+    // width: 300px !important;
     margin-left: 50px;
   }
   .el-textarea {
-    width: 300px !important;
+    width: 250px !important;
     margin-left: 50px;
   }
   .el-form-item__label {

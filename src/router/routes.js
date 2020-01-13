@@ -30,6 +30,8 @@ const TransactionWechat = loadonDemand('finance/wechatPay')
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
 const LineAddEdit = loadonDemand('config/line/LineAddEdit')
+// 配置 路线 其余费用
+const othersCost = loadonDemand('config/line/otherCost')
 // 配置 添加、修改icon
 const IconAdd = loadonDemand('config/line/IconAdd')
 // 配置 仓库地址
@@ -50,8 +52,10 @@ const AddEditAgent = loadonDemand('config/agent/AddEditAgent')
 const transactionRecord = loadonDemand('config/agent/record')
 // 配置 小程序配置
 const AppletConfiguration = loadonDemand('config/Applet/applet')
-// 配置 支付配置
+// 配置 更多配置
 const PaymentManagement = loadonDemand('config/Payment/payment')
+// 配置 更多配置 商品分类管理 风险提示
+const EditSick = loadonDemand('config/Payment/sickTips')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
 // 发货单
@@ -455,6 +459,18 @@ export default [
             }
           },
           {
+            path: '/config/line/otherCost/:id',
+            component: othersCost,
+            name: 'othersCost',
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '其余费用',
+              parent: '/config/line/linelist'
+            }
+          },
+          {
             path: '/config/warehouse',
             component: WareHouse,
             name: 'warehouse',
@@ -544,6 +560,18 @@ export default [
               level: 2,
               group: '配置',
               name: '更多配置'
+            }
+          },
+          {
+            path: '/config/payment/sickTips/:id',
+            name: 'sickTips',
+            component: EditSick,
+            id: 605,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '风险提示',
+              parent: '/config/payment'
             }
           }
         ]

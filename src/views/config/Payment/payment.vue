@@ -125,7 +125,7 @@
               <el-button class="save-btn" @click="saveSetting">保存</el-button>
           </div>
         </el-tab-pane>
-        <!-- 增值服务 -->
+        <!-- 订单增值服务 -->
         <el-tab-pane label="订单增值服务" name="4">
           <div class="select-box">
             <add-btn @click.native="addService">添加订单增值服务</add-btn>
@@ -134,7 +134,7 @@
             border stripe>
             <el-table-column type="index"></el-table-column>
             <el-table-column prop="name" label="增值服务名称"></el-table-column>
-            <el-table-column prop="price" label="价格"></el-table-column>
+            <el-table-column prop="price" :label="'价格' + this.localization.currency_unit"></el-table-column>
             <el-table-column prop="remark" label="备注"></el-table-column>
               <el-table-column label="是否启用">
                 <template slot-scope="scope">
@@ -160,19 +160,19 @@
         <!-- 包裹增值服务 -->
         <el-tab-pane label="包裹增值服务" name="5">
           <div class="select-box">
-            <add-btn @click.native="addService">添加包裹增值服务</add-btn>
+            <add-btn @click.native="addParcel">添加包裹增值服务</add-btn>
           </div>
-            <el-table :data="valueData" v-loading="tableLoading" class="data-list"
+            <el-table :data="parcelData" v-loading="tableLoading" class="data-list"
             border stripe>
             <el-table-column type="index"></el-table-column>
             <el-table-column prop="name" label="增值服务名称"></el-table-column>
-            <el-table-column prop="price" label="价格"></el-table-column>
+            <el-table-column prop="price" :label="'价格' + this.localization.currency_unit"></el-table-column>
             <el-table-column prop="remark" label="备注"></el-table-column>
               <el-table-column label="是否启用">
                 <template slot-scope="scope">
                   <el-switch
                     v-model="scope.row.enabled"
-                    @change="changeService($event, scope.row.id)"
+                    @change="changeParcel($event, scope.row.id)"
                     active-text="开"
                     inactive-text="关"
                     active-color="#13ce66"
@@ -182,8 +182,8 @@
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button class="btn-dark-green" @click="editService(scope.row.id)">编辑</el-button>
-                  <el-button class="btn-light-red" @click="deleteService(scope.row.id)">删除</el-button>
+                  <el-button class="btn-dark-green" @click="editParcel(scope.row.id)">编辑</el-button>
+                  <el-button class="btn-light-red" @click="deleteParcel(scope.row.id)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -245,6 +245,104 @@
           <el-button class="save-btn" @click="editOthers">保存</el-button>
         </div>
         </el-tab-pane>
+        <!-- 订单增值服务 -->
+        <el-tab-pane label="商品分类管理" name="7">
+          <div class="select-box">
+            <add-btn @click.native="addClassify">添加商品分类</add-btn>
+          </div>
+        <el-table :data="CategoriesList" stripe
+          border class="data-list"
+          @expand-change="onExpand"
+          v-loading="tableLoading">
+          <!-- 二级分类列表 -->
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-table :data="props.row.orders">
+                <!-- 二级分类名称 -->
+                <el-table-column label="二级分类名称" prop="name_cn"></el-table-column>
+                <!-- 是否显示 -->
+                <el-table-column label="是否显示">
+                  <template slot-scope="scope">
+                    <el-switch
+                      v-model="scope.row.enabled"
+                      @change="changeShow($event, scope.row.id)"
+                      active-text="开"
+                      inactive-text="关"
+                      active-color="#13ce66"
+                      inactive-color="gray">
+                    </el-switch>
+                </template>
+                </el-table-column>
+                <!-- 是否开启风险提示 -->
+                <el-table-column label="是否开启风险提示">
+                  <template slot-scope="scope">
+                    <el-switch
+                      v-model="scope.row.risk_warning_enabled"
+                      @change="changeRisk($event, scope.row.id)"
+                      active-text="开"
+                      inactive-text="关"
+                      active-color="#13ce66"
+                      inactive-color="gray">
+                    </el-switch>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width="300">
+                  <template slot-scope="scope">
+                    <!-- 编辑 -->
+                    <el-button class="btn-dark-green btn-margin" @click="editClassify(scope.row.id)">编辑</el-button>
+                    <!-- 风险提示 -->
+                    <el-button class="btn-main" @click="goSick(scope.row.id)">风险提示</el-button>
+                    <!-- 删除 -->
+                    <el-button @click="deleteCategories(scope.row.id)" class="btn-light-red">删除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </template>
+          </el-table-column>
+            <!-- 一级分类列表 -->
+            <el-table-column type="index" width="50"></el-table-column>
+            <!-- 一级分类名称 -->
+            <el-table-column label="一级分类名称" prop="name_cn"></el-table-column>
+            <!-- 是否显示 -->
+            <el-table-column label="是否显示">
+                <template slot-scope="scope">
+                  <el-switch
+                    v-model="scope.row.enabled"
+                    @change="changeShow($event, scope.row.id)"
+                    active-text="开"
+                    inactive-text="关"
+                    active-color="#13ce66"
+                    inactive-color="gray">
+                  </el-switch>
+                </template>
+            </el-table-column>
+            <!-- 是否开启风险提示 -->
+            <el-table-column label="是否开启风险提示">
+                <template slot-scope="scope">
+                  <el-switch
+                    v-model="scope.row.risk_warning_enabled"
+                    @change="changeRisk($event, scope.row.id)"
+                    active-text="开"
+                    inactive-text="关"
+                    active-color="#13ce66"
+                    inactive-color="gray">
+                  </el-switch>
+                </template>
+            </el-table-column>
+            <!-- 操作 -->
+            <el-table-column label="操作" width="300">
+              <template slot-scope="scope">
+                <!-- 编辑 -->
+                <el-button class="btn-dark-green btn-margin" @click="editClassify(scope.row.id)">编辑</el-button>
+                <!-- 风险提示 -->
+                <el-button class="btn-main" @click="goSick(scope.row.id)">风险提示</el-button>
+                <!-- 删除 -->
+                <el-button class="btn-light-red btn-margin" @click="deleteCategories(scope.row.id)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        </el-tab-pane>
       </el-tabs>
   </div>
 </template>
@@ -278,7 +376,13 @@ export default {
           enabled: true
         }
       ],
+      parcelData: [
+        {
+          enabled: true
+        }
+      ],
       tableLoading: false,
+      localization: {},
       activeName: '',
       logisticsData: {
         app_key: '',
@@ -301,6 +405,18 @@ export default {
       tranAmount: '',
       baleImgList: [],
       customerList: [],
+      CategoriesList: [
+        {
+          enabled: true,
+          risk_warning_enabled: true
+        }
+      ],
+      orders: {
+        enabled: true,
+        risk_warning_enabled: true
+      },
+      id: 0,
+      show: false,
       rules: {
         app_key: [
           { required: true, message: '请输入Appkey', trigger: 'change' }
@@ -316,6 +432,10 @@ export default {
     if (this.activeName === '1') {
       this.getWechat()
       this.getPayment()
+    }
+    if (this.$route.query.activeName === '7') {
+      this.activeName = '7'
+      this.getList()
     }
   },
   methods: {
@@ -397,28 +517,38 @@ export default {
         this.getPayment()
       })
     },
-    // 增加增值服务
+    // 订单 增加增值服务
     addService () {
-      console.log('我是传过去的增加')
-      dialog({ type: 'addService', state: 'add' }, () => {
+      dialog({ type: 'addService', state: 'add', name: 'addService' }, () => {
         this.getList()
       })
     },
-    // 编辑增值服务
+    // 订单 编辑增值服务
     editService (id) {
-      console.log('我是编辑传ID', id)
-      dialog({ type: 'addService', state: 'edit', id: id }, () => {
+      dialog({ type: 'addService', state: 'edit', id: id, name: 'editService' }, () => {
         this.getList()
       })
     },
-    // 删除增值服务
+    // 包裹 增加增值服务
+    addParcel () {
+      dialog({ type: 'addService', state: 'add', name: 'addParcel' }, () => {
+        this.getList()
+      })
+    },
+    // 包裹 编辑增值服务
+    editParcel (id) {
+      dialog({ type: 'addService', state: 'edit', id: id, name: 'editParcel' }, () => {
+        this.getList()
+      })
+    },
+    // 订单 删除增值服务
     deleteService (id) {
       this.$confirm(`您真的要删除增值服务吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$request.deleteVaule(id).then(res => {
+        this.$request.deleteValue(id).then(res => {
           if (res.ret) {
             this.$notify({
               title: '操作成功',
@@ -436,7 +566,32 @@ export default {
         })
       })
     },
-    // 增值服务 开关启用状态
+    // 包裹 删除增值服务
+    deleteParcel (id) {
+      this.$confirm(`您真的要删除增值服务吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteParcel(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    // 订单增值服务 开关启用状态
     changeService (event, id) {
       console.log(typeof (event), '我是event')
       console.log(event, 'event')
@@ -447,13 +602,58 @@ export default {
             title: '操作成功',
             message: res.msg
           })
-          this.getPayment()
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
             type: 'error'
           })
         }
+      })
+    },
+    // 包裹增值服务 开关启用状态
+    changeParcel (event, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.closeParcel(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 删除单条商品分类
+    deleteCategories (id) {
+      this.$confirm(`您真的要删除转账支付吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteCategories(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getPayment()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     handleClose (id) {
@@ -670,8 +870,76 @@ export default {
         }
       })
     },
-    // 获取增值服务
+    // 商品分类管理 开启或关闭 是否显示
+    changeShow (event, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.closeCategories(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 商品分类管理 开启或关闭 风险提示
+    changeRisk (event, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.closeRisk(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 修改风险提示
+    goSick (id) {
+      this.$router.push({ name: 'sickTips',
+        params: {
+          id: id
+        } })
+    },
+    // 添加商品分类
+    addClassify () {
+      dialog({ type: 'classifyGroup', state: 'add' }, () => {
+        this.getList()
+      })
+    },
+    // 编辑商品分类
+    editClassify (id) {
+      dialog({ type: 'classifyGroup', state: 'edit', id: id }, () => {
+        this.getList()
+      })
+    },
     getList () {
+      if (this.activeName === '4') {
+        this.getValue()
+      } else if (this.activeName === '5') {
+        this.getParcel()
+      } else if (this.activeName === '7') {
+        this.getCategories()
+      }
+    },
+    // 获取订单增值服务
+    getValue () {
       this.$request.getValue({
         page: this.page_params.page,
         size: this.page_params.size
@@ -680,7 +948,28 @@ export default {
           this.valueData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.localization = res.localization
           console.log(this.valueData, 'valueData')
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 获取包裹增值服务
+    getParcel () {
+      this.$request.getParcel({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        if (res.ret) {
+          this.parcelData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+          this.localization = res.localization
+          console.log(this.parcelData, 'parcelData')
         } else {
           this.$message({
             message: res.msg,
@@ -702,8 +991,14 @@ export default {
       } else if (this.activeName === '4') {
         this.page_params.page = 1
         this.getList()
+      } else if (this.activeName === '5') {
+        this.page_params.page = 1
+        this.getList()
       } else if (this.activeName === '6') {
         this.getOthers()
+      } else if (this.activeName === '7') {
+        this.page_params.page = 1
+        this.getList()
       }
     },
     // 上传打包照片
@@ -754,6 +1049,51 @@ export default {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
+    },
+    // 获取商品分类管理列表
+    getCategories () {
+      this.$request.getCategories({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.CategoriesList = res.data.map(item => {
+            return {
+              ...item,
+              enabled: Boolean(item.enabled),
+              risk_warning_enabled: Boolean(item.risk_warning_enabled),
+              orders: []
+            }
+          })
+          this.localization = res.localization
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 点开当前行，获取二级菜单数据
+    onExpand (row) {
+      // 如果当前货单已经获取了二级菜单数据，就不在获取
+      if (row.orders.length) return
+      let id = row.id
+      this.$request.getSecondCategories(id).then(res => {
+        if (res.ret) {
+          row.orders = res.data.map(item => {
+            return {
+              ...item,
+              enabled: Boolean(item.enabled),
+              risk_warning_enabled: Boolean(item.risk_warning_enabled)
+            }
+          })
+        }
+      })
     }
   }
 }
@@ -856,6 +1196,9 @@ export default {
         margin-right: 10px;
       }
     }
+  }
+  .btn-margin {
+    margin-bottom: 5px;
   }
 }
 </style>

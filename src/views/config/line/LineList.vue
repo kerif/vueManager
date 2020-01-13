@@ -35,9 +35,10 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editLine(scope.row.id)">修改</el-button>
+          <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">修改</el-button>
+          <el-button class="btn-deep-blue others-btn" @click="goOthers(scope.row.id)">其余费用</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -99,6 +100,14 @@ export default {
         } }
       )
     },
+    goOthers (id) {
+      this.$router.push({
+        name: 'othersCost',
+        params: {
+          id: id
+        }
+      })
+    },
     // 修改转账支付的开关
     changeTransfer (event, enabled, id) {
       console.log(typeof (event), '我是event')
@@ -126,6 +135,9 @@ export default {
 .line-list-container {
   .add-btn-box {
     overflow: hidden;
+  }
+  .others-btn {
+    margin-bottom: 5px;
   }
 }
 </style>

@@ -27,7 +27,7 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="setDefault(scope.row.id)">设为默认</el-button>
+          <el-button  v-if="scope.row.is_default === 0" class="btn-green" @click="setDefault(scope.row.id)">设为默认</el-button>
           <el-button class="btn-light-red" @click="deleteIcon(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -109,6 +109,7 @@ export default {
             type: 'success'
           })
           this.getList()
+          this.$router.go(-1)
         } else {
           this.$notify({
             title: '操作失败',

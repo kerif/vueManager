@@ -1,12 +1,12 @@
 <template>
-  <div class="notice-add-container">
+  <div class="sick-tips-container">
     <el-form label-position="top">
       <el-form-item label="标题">
         <el-row>
-          <el-col :span="10"><el-input placeholder="请输入内容" v-model="params.title"></el-input></el-col>
+          <el-col :span="10"><el-input placeholder="请输入内容" v-model="params.risk_warning_title"></el-input></el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="问题类型">
+      <!-- <el-form-item label="问题类型">
         <el-row>
           <el-col :span="10">
             <el-radio-group v-model="params.type_id">
@@ -15,11 +15,11 @@
             </el-radio-group>
           </el-col>
         </el-row>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="内容">
         <el-row>
           <el-col :span="20">
-            <div id="editor" :value="params.content" @input="changeText"></div>
+            <div id="editor" :value="params.risk_warning_content" @input="changeText"></div>
             </el-col>
         </el-row>
       </el-form-item>
@@ -37,9 +37,8 @@ export default {
   data () {
     return {
       params: {
-        title: '',
-        type_id: '',
-        content: ''
+        risk_warning_title: '',
+        risk_warning_content: ''
       },
       editor: null
     }
@@ -48,7 +47,7 @@ export default {
     this.editor = new Wangeditor('#editor')
     this.editor.customConfig.menus = ['head', 'fontSize', 'fontName', 'bold', 'italic', 'underline', 'strikeThrough', 'foreColor', 'backColor', 'link', 'list', 'justify', 'quote', 'video', 'image', 'table']
     this.editor.customConfig.onchange = (html) => {
-      this.params.content = html
+      this.params.risk_warning_content = html
     }
     this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
     this.editor.customConfig.uploadImgParams = {}
@@ -77,12 +76,11 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getNoticeDetails(this.$route.params.id).then(res => {
+      this.$request.getRiskDetails(this.$route.params.id).then(res => {
         if (res.ret) {
-          this.params.title = res.data.title
-          this.params.content = res.data.content
-          this.params.type_id = res.data.type
-          this.editor.txt.html(this.params.content)
+          this.params.risk_warning_title = res.data.risk_warning_title
+          this.params.risk_warning_content = res.data.risk_warning_content
+          this.editor.txt.html(this.params.risk_warning_content)
         }
       })
     },
@@ -108,15 +106,18 @@ export default {
           }
         })
       } else { // 如果是编辑状态
-        this.$request.saveNoticeDetails(this.$route.params.id, this.params).then(res => {
+        this.$request.updateRiskDetails(this.$route.params.id, this.params).then(res => {
           if (res.ret) {
             this.$notify({
               title: '操作成功',
               message: res.tips,
               type: 'success'
             })
-            // this.$router.push({ name: 'noticelist' })
-            this.$router.go(-1)
+            this.$router.push({ name: 'payment',
+              query: {
+                activeName: '7'
+              } })
+            // this.$router.go(-1)
           } else {
             this.$notify({
               title: '操作失败',
@@ -132,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss">
-.notice-add-container {
+.sick-tips-container {
   background-color: #fff !important;
 }
 </style>

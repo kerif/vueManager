@@ -24,6 +24,18 @@ exports.resetLines = (id, status) => {
 exports.getAllWarehouse = () => {
   return $form.get('express-lines/warehouses')
 }
+// 配置 路线 获取某条其余费用
+exports.getCosts = (id) => {
+  return $form.get(`express-lines/${id}/costs`)
+}
+// 配置 路线 修改某条其余费用
+exports.updateCosts = (id, params) => {
+  return $form.put(`express-lines/${id}/costs`, params)
+}
+// 配置 路线 增加其余费用
+exports.addLinesCost = (params) => {
+  return $form.post('express-lines/costs', params)
+}
 // 配置 路线 获取支持国家/地区
 exports.supportCountry = (ids) => {
   return $form.post('express-lines/warehouse-countries', ids)
@@ -456,37 +468,101 @@ exports.getLogistics = () => {
 exports.editLogistics = (params) => {
   return $form.put('logistics', params)
 }
-// 更多配置 获取增值服务
+// 更多配置 订单获取增值服务
 exports.getValue = (params) => {
   return $form.get('value-added-services', { params })
 }
-// 更多配置 添加增值服务
+// 更多配置 订单添加增值服务
 exports.addValue = (params) => {
   return $form.post(`value-added-services`, params)
 }
-// 更多配置 获取单条增值服务
+// 更多配置 订单获取单条增值服务
 exports.getService = (id) => {
   return $form.get(`value-added-services/${id}`)
 }
-// 更多配置 修改单条增值服务
+// 更多配置 订单修改单条增值服务
 exports.updateService = (id, params) => {
   return $form.put(`value-added-services/${id}`, params)
 }
-// 更多配置 删除单条增值服务
-exports.deleteVaule = (id) => {
+// 更多配置 订单删除单条增值服务
+exports.deleteValue = (id) => {
   return $form.delete(`value-added-services/${id}`)
 }
-// 更多配置 增值服务 开关启用状态
+// 更多配置 订单增值服务 开关启用状态
 exports.closeValue = (id, status) => {
   return $form.put(`value-added-services/${id}/status/${status}`)
+}
+// 更多配置 包裹获取增值服务
+exports.getParcel = (params) => {
+  return $form.get('package-services', { params })
+}
+// 更多配置 包裹添加增值服务
+exports.addParcel = (params) => {
+  return $form.post(`package-services`, params)
+}
+// 更多配置 包裹获取单条增值服务
+exports.getPaVal = (id) => {
+  return $form.get(`package-services/${id}`)
+}
+// 更多配置 包裹修改单条增值服务
+exports.updateParcel = (id, params) => {
+  return $form.put(`package-services/${id}`, params)
+}
+// 更多配置 包裹删除单条增值服务
+exports.deleteParcel = (id) => {
+  return $form.delete(`package-services/${id}`)
+}
+// 更多配置 包裹增值服务 开关启用状态
+exports.closeParcel = (id, status) => {
+  return $form.put(`package-services/${id}/status/${status}`)
 }
 // 更多配置 其余配置 获取
 exports.getWebsite = () => {
   return $form.get('website-settings')
 }
-// 更多配资 其余配置 修改
+// 更多配置 其余配置 修改
 exports.editWebsite = (params) => {
   return $form.put('website-settings', params)
+}
+// 更多配置 获取商品分类管理
+exports.getCategories = () => {
+  return $form.get('package-categories')
+}
+// 更多配置 商品分类管理 开启或关闭 是否显示
+exports.closeCategories = (id, status) => {
+  return $form.put(`package-categories/${id}/status/${status}`)
+}
+// 更多配置 商品分类管理 开启或关闭 风险提示
+exports.closeRisk = (id, status) => {
+  return $form.put(`package-categories/${id}/risk-warning-status/${status}`)
+}
+// 更多配置 获取商品分类管理二级菜单
+exports.getSecondCategories = (id) => {
+  return $form.get(`package-categories/${id}/children`)
+}
+// 更多配置 删除商品分类管理
+exports.deleteCategories = (id) => {
+  return $form.delete(`package-categories/${id}`)
+}
+// 更多配置 获取商品分类风险提示
+exports.getRiskDetails = (id) => {
+  return $form.get(`package-categories/${id}`)
+}
+// 更多配置 修改商品分类风险提示
+exports.updateRiskDetails = (id, params) => {
+  return $form.put(`package-categories/${id}/risk-warning`, params)
+}
+// 更多配置 获取商品分类的全部分类
+exports.getAllTree = () => {
+  return $form.get('package-categories/tree')
+}
+// 更多配置 修改商品分类
+exports.updateCategories = (id, params) => {
+  return $form.put(`package-categories/${id}`, params)
+}
+// 更多配置 新建商品分类
+exports.newCategories = (params) => {
+  return $form.post(`package-categories`, params)
 }
 // 营销管理 新用户福利
 exports.getCoupons = () => {

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import router from '@/router'
+import store from '@/store'
 import VipGroup from './vipgroup.vue'
 import addStaff from './addStaff.vue'
 import staffGroup from './staffGroup.vue'
@@ -23,6 +24,8 @@ import shipDetails from './shipDetails.vue'
 import addTransfer from './addSetting.vue'
 import addService from './addEditService.vue'
 import addIcon from './addIcon.vue'
+import classifyGroup from './classifyAddEdit.vue'
+import costAdd from './addCost.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -47,6 +50,8 @@ const ShipDetailsController = Vue.extend(shipDetails)
 const AddTransferController = Vue.extend(addTransfer)
 const AddEditServiceController = Vue.extend(addService)
 const IconController = Vue.extend(addIcon)
+const AddClassifyController = Vue.extend(classifyGroup)
+const CostAddController = Vue.extend(costAdd)
 
 const mixin = {
   data () {
@@ -54,7 +59,8 @@ const mixin = {
       show: false
     }
   },
-  router
+  router,
+  store
 }
 
 let instance
@@ -213,6 +219,20 @@ function initInstance (type) {
     // 增加线路icon
     case 'addIcon':
       instance = new IconController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 增加或修改 商品分类
+    case 'classifyGroup':
+      instance = new AddClassifyController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 路线 增加费用
+    case 'costAdd':
+      instance = new CostAddController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

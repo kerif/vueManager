@@ -142,6 +142,7 @@
             <el-select
               v-model="form.icon"
               class="country-select"
+              @change="onSelectChange"
               placeholder="请选择国家/地区">
               <el-option
                 v-for="item in iconList"
@@ -161,10 +162,11 @@
         <el-row>
           <el-col :span="10">
             <div>icon预览</div>
-            <div class="icon-img" v-if="this.form.icon.icon">
+            <!-- {{icon.icon}} -->
+            <div class="icon-img" v-if="icon.icon">
               <span style="cursor:pointer;"
-                @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${form.icon.icon}`, imgVisible=true">
-                  <img :src="`${$baseUrl.IMAGE_URL}${form.icon.icon}`" style="width: 100px;">
+                @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${icon.icon}`, imgVisible=true">
+                  <img :src="`${$baseUrl.IMAGE_URL}${icon.icon}`" style="width: 100px;">
               </span>
             </div>
             <div v-else>
@@ -225,7 +227,8 @@ export default {
       localization: {},
       warehouseIds: [], // 保存支持仓库的id
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      icon: {}
     }
   },
   created () {
@@ -240,16 +243,23 @@ export default {
     // 编辑时拉取的数据
     getList () {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
+        const warehouses = res.data.warehouses.map(item => item.id)
         this.form = res.data
+        this.icon = res.data.icon
+        this.form.icon = res.data.icon.id
         this.form.types = res.data.types.map(item => item.id)
         this.form.countries = res.data.countries.map(item => item.id)
-        this.form.form.icon = res.data.form.icon.map(item => item.id)
+        this.form.warehouses = res.data.warehouses.map(item => item.id)
+        this.supportWarehouse(warehouses)
       })
+    },
+    onSelectChange (e) {
+      console.log(e)
+      this.icon = this.iconList.find(item => item.id === e)
+      // console.log(this.form.icon)
     },
     supportWarehouse (item) {
       this.warehouseIds = item
-      console.log(item, 'item')
-      console.log(this.warehouseIds, 'warehouseId')
       if (this.warehouseIds) {
         this.searchCountry()
       }
