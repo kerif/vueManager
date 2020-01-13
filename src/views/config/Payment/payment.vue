@@ -633,7 +633,7 @@ export default {
     },
     // 删除单条商品分类
     deleteCategories (id) {
-      this.$confirm(`您真的要删除转账支付吗？`, '提示', {
+      this.$confirm(`您真的要删除吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -645,7 +645,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getPayment()
+            this.getList()
           } else {
             this.$notify({
               title: '操作失败',

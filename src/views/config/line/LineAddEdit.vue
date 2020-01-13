@@ -143,7 +143,7 @@
               v-model="form.icon"
               class="country-select"
               @change="onSelectChange"
-              placeholder="请选择国家/地区">
+              placeholder="请选择路线icon">
               <el-option
                 v-for="item in iconList"
                 :key="item.id"

@@ -525,8 +525,8 @@ exports.editWebsite = (params) => {
   return $form.put('website-settings', params)
 }
 // 更多配置 获取商品分类管理
-exports.getCategories = () => {
-  return $form.get('package-categories')
+exports.getCategories = (params) => {
+  return $form.get('package-categories', { params })
 }
 // 更多配置 商品分类管理 开启或关闭 是否显示
 exports.closeCategories = (id, status) => {

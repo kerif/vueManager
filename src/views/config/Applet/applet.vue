@@ -97,7 +97,8 @@
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
-            </el-upload>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：100px*50px</span>
             </el-form-item>
           </el-col>
             <!-- 小程序首页评论入口图 -->
@@ -120,7 +121,8 @@
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
-            </el-upload>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：100px*50px</span>
             </el-form-item>
           </el-col>
           </el-row>
@@ -145,7 +147,8 @@
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
-            </el-upload>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：100px*50px</span>
             </el-form-item>
           </el-col>
             <!-- 小程序运费查询页图 -->
@@ -168,7 +171,8 @@
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
-            </el-upload>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：100px*50px</span>
             </el-form-item>
           </el-col>
           </el-row>
@@ -261,6 +265,7 @@ export default {
     // 获取图片配置
     getImg () {
       this.$request.getProgramImg().then(res => {
+        this.setForm = res.data
         res.data.video_entrance_image && (this.baleImgList[0] = { url: res.data.video_entrance_image })
         res.data.comment_entrance_image && (this.evaluationImgList[0] = { url: res.data.comment_entrance_image })
         res.data.forecast_image && (this.customerList[0] = { url: res.data.forecast_image })
@@ -379,7 +384,7 @@ export default {
     edit (row) {
       row.disabled = !row.disabled
     },
-    // 修改其余配置
+    // 修改图片配置
     editOthers () {
       if (this.baleImgList[0]) {
         this.setForm.video_entrance_image = this.baleImgList[0].url
@@ -401,13 +406,15 @@ export default {
       } else {
         this.setForm.freight_image = []
       }
-      // if (!this.setForm.freight_image) {
-      //   return this.$message.error('请输入网站名称')
-      // } else if (!this.baleImgList[0]) {
-      //   return this.$message.error('请上传小程序码')
-      // } else if (!this.customerList[0]) {
-      //   return this.$message.error('请上传pc端客户二维码')
-      // }
+      if (!this.baleImgList[0]) {
+        return this.$message.error('请上传小程序首页视频入口图')
+      } else if (!this.customerList[0]) {
+        return this.$message.error('请上传小程序预报页图')
+      } else if (!this.evaluationImgList[0]) {
+        return this.$message.error('请上传小程序首页评论入口图')
+      } else if (!this.freightList[0]) {
+        return this.$message.error('请上传小程序运费查询页图')
+      }
       this.$request.changeProgramImg(this.setForm).then(res => {
         if (res.ret) {
           this.$notify({
@@ -415,7 +422,7 @@ export default {
             title: '成功',
             message: res.msg
           })
-          this.getOthers()
+          this.getImg()
         } else {
           this.$message({
             message: res.msg,
@@ -626,6 +633,10 @@ export default {
   .save-btn {
     color: #fff;
     background-color: #3540A5;
+  }
+  .suggest-btn {
+    color: gray;
+    font-size: 12px;
   }
 }
 </style>

@@ -95,6 +95,9 @@
       </el-table-column>
       <!-- 货位 -->
       <el-table-column label="货位" prop="location"></el-table-column>
+      <!-- 仓库 -->
+      <el-table-column label="仓库" prop="warehouse.warehouse_name">
+      </el-table-column>
       <!-- 备注 -->
       <el-table-column label="备注" prop="remark" v-if="activeName === '2'"></el-table-column>
       <!-- 规格 -->

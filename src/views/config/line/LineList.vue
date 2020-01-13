@@ -16,6 +16,13 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column label="支持仓库">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.warehouses" :key="item.id">
+            {{item.warehouse_name}}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="参考时效" prop="reference_time"></el-table-column>
       <el-table-column :label="'首重' + this.localization.weight_unit" prop="first_weight"></el-table-column>
       <el-table-column :label="'首费' + this.localization.currency_unit" prop="first_money"></el-table-column>

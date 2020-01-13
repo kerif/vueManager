@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="staff === 'add' ? '添加商品分类': '编辑商品分类'" class="dialog-addClassify"
+  <el-dialog :visible.sync="show" :title="state === 'add' ? '添加商品分类': '编辑商品分类'" class="dialog-addClassify"
   size="small" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-width="120px">
@@ -15,7 +15,7 @@
           </el-form-item>
         <!-- 用户组描述 -->
           <el-form-item label="选择分类" prop="parent_id">
-             <el-select v-model="ruleForm.parent_id" clearable>
+             <el-select v-model="ruleForm.parent_id" clearable filterable>
                 <el-option
                     v-for="item in classifyList"
                     :key="item.id"
@@ -46,7 +46,7 @@ export default {
           name_cn: '顶级分类'
         }
       ],
-      staff: '',
+      state: '',
       id: '',
       rules: {
         name_cn: [
