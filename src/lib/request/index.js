@@ -20,6 +20,10 @@ exports.getLines = (params) => {
 exports.resetLines = (id, status) => {
   return $form.put(`express-lines/${id}/status/${status}`)
 }
+// 配置 路线 导出清单
+exports.importLines = () => {
+  return $form.get(`express-lines/excel-export-all`)
+}
 // 配置 路线 获取全部仓库信息
 exports.getAllWarehouse = () => {
   return $form.get('express-lines/warehouses')
@@ -304,7 +308,14 @@ exports.getAgent = () => {
 exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
 }
-
+// 预报包裹列表 打印标签 查看
+exports.checkPackageLabel = (id) => {
+  return $form.get(`packages/${id}/label/html`)
+}
+// 预报包裹列表 打印标签 确认下载
+exports.updatePackagePdf = (id) => {
+  return $form.get(`packages/${id}/label/pdf`)
+}
 // 代理管理 获取单条详细
 exports.getEditAgent = (id) => {
   return $form.get(`agents/${id}`)
@@ -625,9 +636,13 @@ exports.getCounts = () => {
 exports.getUsable = (id) => {
   return $form.get(`orders/${id}/usable-express-lines`)
 }
-// 订单 打印标签
-exports.updateLabel = (id) => {
-  return $form.get(`orders/${id}/label`)
+// 订单 打印标签 查看
+exports.checkOrderLabel = (id) => {
+  return $form.get(`orders/${id}/label/html`)
+}
+// 订单 打印标签 确认下载
+exports.updateOrderPdf = (id) => {
+  return $form.get(`orders/${id}/label/pdf`)
 }
 // 移除发货单
 exports.removeOrders = (id) => {

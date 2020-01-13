@@ -38,14 +38,9 @@ export default {
       ruleForm: {
         name_cn: '',
         name_en: '',
-        parent_id: ''
+        parent_id: 0
       },
-      classifyList: [
-        {
-          id: 0,
-          name_cn: '顶级分类'
-        }
-      ],
+      classifyList: [],
       state: '',
       id: '',
       rules: {
@@ -63,7 +58,7 @@ export default {
   },
   methods: {
     getList () {
-      console.log(this.id, 'id')
+      console.log(this.id, 'idid')
       this.$request.getRiskDetails(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -80,11 +75,16 @@ export default {
     getTree () {
       this.$request.getAllTree().then(res => {
         if (res.ret) {
-        //   this.classifyList = res.data
           if (res.data.length) {
-            this.classifyList = res.data.map(item => ({ id: item.id, name_cn: item.name_cn }))
+            this.classifyList = [
+              {
+                id: 0,
+                name_cn: '顶级分类'
+              }
+            ]
+            this.classifyList = this.classifyList.concat(res.data.map(item => ({ id: item.id, name_cn: item.name_cn })))
           }
-          console.log(res.data)
+          console.log(this.classifyList, 'this.classifyList')
         } else {
           this.$message({
             message: res.msg,
@@ -141,7 +141,7 @@ export default {
     clear () {
       this.ruleForm.name_cn = ''
       this.ruleForm.name_en = ''
-      this.ruleForm.parent_id = ''
+      this.ruleForm.parent_id = 0
     },
     cancelDialog (ruleForm) {
       this.$refs[ruleForm].resetFields()

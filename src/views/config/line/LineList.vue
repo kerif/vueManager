@@ -1,6 +1,7 @@
 <template>
   <div class="line-list-container">
-    <div class="add-btn-box"><add-btn router="lineadd">添加路线</add-btn></div>
+    <div class="add-btn-box">
+      <add-btn router="lineadd">添加路线</add-btn></div>
     <el-table stripe border class="data-list" :data="lineList"
       v-loading="tableLoading">
       <el-table-column type="expand">
@@ -45,9 +46,15 @@
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">修改</el-button>
-          <el-button class="btn-deep-blue others-btn" @click="goOthers(scope.row.id)">其余费用</el-button>
+          <el-button class="btn-deep-purple others-btn" @click="goOthers(scope.row.id)">其余费用</el-button>
         </template>
       </el-table-column>
+      <template slot="append">
+        <div class="append-box">
+          <!-- 导出清单 -->
+          <el-button class="btn-main others-btn" @click="unloadShip">导出清单</el-button>
+        </div>
+      </template>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
@@ -106,6 +113,27 @@ export default {
           id: id
         } }
       )
+    },
+    // 导出清单
+    unloadShip (id) {
+      this.$request.importLines(id).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          // window.location.href = this.urlExcel
+          window.open(this.urlExcel)
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     goOthers (id) {
       this.$router.push({

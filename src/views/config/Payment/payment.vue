@@ -919,7 +919,8 @@ export default {
     },
     // 添加商品分类
     addClassify () {
-      dialog({ type: 'classifyGroup', state: 'add' }, () => {
+      console.log('进来了')
+      dialog({ type: 'classifyGroup', state: 'add', id: '' }, () => {
         this.getList()
       })
     },

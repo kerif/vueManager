@@ -236,7 +236,7 @@ export default {
       agentData: [],
       tableLoading: false,
       countData: {},
-      urlExcel: '',
+      urlImport: '',
       urlHtml: '',
       show: false,
       labelId: ''
@@ -323,11 +323,10 @@ export default {
     getLabel (id) {
       this.labelId = id
       this.show = true
-      this.$request.updateLabel(id).then(res => {
+      this.$request.checkOrderLabel(id).then(res => {
         if (res.ret) {
-          // this.urlExcel = res.data.url
-          this.urlHtml = res.data.html
-          // window.location.href = this.urlExcel
+          this.urlHtml = res.data.url
+          // this.urlImport = res.data.url
           this.$notify({
             title: '操作成功',
             message: res.msg,
@@ -342,10 +341,11 @@ export default {
         }
       })
     },
+    // 确认下载标签
     updateLabel () {
       this.show = false
       console.log(this.labelId, 'this.labelId')
-      this.$request.updateLabel(this.labelId).then(res => {
+      this.$request.updateOrderPdf(this.labelId).then(res => {
         if (res.ret) {
           window.open(res.data.url)
           this.$notify({

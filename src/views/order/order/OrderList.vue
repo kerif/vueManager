@@ -113,8 +113,9 @@
         <template slot-scope="scope">
           <!-- 入库 -->
           <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.user_name, scope.row.props)">入库</el-button>
-          <el-button class="btn-green" @click="goExpress(scope.row.express_num)">单号追踪</el-button>
-          <el-button class="btn-blue" v-if="activeName === '2'" @click="onLogs(scope.row.express_num)">入库日志</el-button>
+          <el-button class="btn-green operating-btn" @click="goExpress(scope.row.express_num)">单号追踪</el-button>
+          <el-button class="btn-blue operating-btn" v-if="activeName === '2'" @click="onLogs(scope.row.express_num)">入库日志</el-button>
+          <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='2'" class="btn-pink operating-btn">打印标签</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -161,6 +162,11 @@
           <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
       </template> -->
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+         <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">打印标签</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="noDate" v-else>暂无数据</div>
     </div>
@@ -168,6 +174,15 @@
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
+      </div>
+    </el-dialog>
+      <el-dialog :visible.sync="show" title="预览打印标签" class="props-dialog" width="45%">
+        <div class="dialogSty">
+          <iframe class="iframe" :src="urlHtml"></iframe>
+        </div>
+      <div slot="footer">
+        <el-button @click="show = false">取消</el-button>
+        <el-button type="primary" @click="updateLabel">下载</el-button>
       </div>
     </el-dialog>
   </div>
@@ -201,7 +216,10 @@ export default {
       begin_date: '',
       end_date: '',
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      urlHtml: '',
+      show: false,
+      labelId: ''
     }
   },
   methods: {
@@ -287,6 +305,49 @@ export default {
             })
           }
         })
+      })
+    },
+    // 打印标签
+    getLabel (id) {
+      this.labelId = id
+      this.show = true
+      this.$request.checkPackageLabel(id).then(res => {
+        if (res.ret) {
+          this.urlHtml = res.data.url
+          // this.urlImport = res.data.url
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 确认下载标签
+    updateLabel () {
+      this.show = false
+      console.log(this.labelId, 'this.labelId')
+      this.$request.updatePackagePdf(this.labelId).then(res => {
+        if (res.ret) {
+          window.open(res.data.url)
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 获取无人认领列表
@@ -423,6 +484,17 @@ export default {
     cursor: pointer;
     color:blue;
     text-decoration: underline;
+  }
+  .operating-btn {
+    margin-bottom: 5px;
+  }
+  .dialogSty {
+    margin-left: 30px;
+  }
+  .iframe {
+    width: 100%;
+    min-height: 300px;
+    border-width: 0;
   }
 }
 </style>
