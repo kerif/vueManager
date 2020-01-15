@@ -43,7 +43,7 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">修改</el-button>
           <el-button class="btn-deep-purple others-btn" @click="goOthers(scope.row.id)">其余费用</el-button>

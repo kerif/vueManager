@@ -174,6 +174,8 @@
           </el-button>
           <el-button size="small" class="btn-blue" v-if="activeName !== '1'" @click="onLogs(scope.row.order_sn)">拣货日志
           </el-button>
+          <!-- 修改物流信息 -->
+          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">修改物流信息</el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
            v-show="activeName === '3' && !scope.row.disabled"
            @click="saveLogistics(scope.row)">保存</el-button>

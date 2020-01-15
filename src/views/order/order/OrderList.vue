@@ -36,6 +36,16 @@
         end-placeholder="称重结束日期">
       </el-date-picker>
     </div>
+      <div class="chooseStatus">
+        <el-select v-model="agent_name" @change="onAgentChange" clearable>
+          <el-option
+            v-for="item in agentData"
+            :key="item.id"
+            :value="item.id"
+            :label="item.warehouse_name">
+          </el-option>
+        </el-select>
+      </div>
     </search-group>
     <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
     <!-- <el-select v-model="agent_name" @change="getList" clearable>
@@ -95,6 +105,18 @@
       </el-table-column>
       <!-- 货位 -->
       <el-table-column label="货位" prop="location"></el-table-column>
+      <!-- 商品数量 -->
+      <el-table-column label="商品数量" prop="qty"></el-table-column>
+      <!-- 商品分类 -->
+      <el-table-column label="商品分类" prop="categories">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.categories" :key="item.id">
+            {{item.name_cn}}
+          </span>
+        </template>
+      </el-table-column>
+      <!-- 寄往国家 -->
+       <el-table-column label="寄往国家" prop="destination_country.cn_name"></el-table-column>
       <!-- 仓库 -->
       <el-table-column label="仓库" prop="warehouse.warehouse_name">
       </el-table-column>
@@ -112,7 +134,7 @@
       <el-table-column label="操作" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 入库 -->
-          <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.user_name, scope.row.props)">入库</el-button>
+          <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.user_name, scope.row.props, scope.row.warehouse.id)">入库</el-button>
           <el-button class="btn-green operating-btn" @click="goExpress(scope.row.express_num)">单号追踪</el-button>
           <el-button class="btn-blue operating-btn" v-if="activeName === '2'" @click="onLogs(scope.row.express_num)">入库日志</el-button>
           <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='2'" class="btn-pink operating-btn">打印标签</el-button>
@@ -156,6 +178,9 @@
       width="120px"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column label="提交时间" prop="created_at">
+      </el-table-column>
+      <!-- 仓库 -->
+      <el-table-column label="仓库" prop="warehouse.warehouse_name">
       </el-table-column>
       <!-- <template slot="append">
         <div class="append-box">
@@ -232,7 +257,7 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        agent: this.agent_name,
+        warehouse: this.agent_name,
         status: this.status
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
@@ -263,10 +288,9 @@ export default {
         }
       })
     },
-    storage (id, expressNum, userId, userName, props) {
-      console.log(userName, 'userName')
-      console.log(props, 'props')
-      this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId, user_name: userName }, query: { props: JSON.stringify(props) } })
+    storage (id, expressNum, userId, userName, props, warehouseName) {
+      console.log(warehouseName, 'warehouseName')
+      this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId, user_name: userName, warehouse_id: warehouseName }, query: { props: JSON.stringify(props) } })
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
@@ -306,6 +330,14 @@ export default {
           }
         })
       })
+    },
+    onAgentChange () {
+      this.page_params.handleQueryChange('agent', this.agent_name)
+      if (this.activeName === '3') {
+        this.getNO()
+      } else {
+        this.getList()
+      }
     },
     // 打印标签
     getLabel (id) {
@@ -357,7 +389,7 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        agent: this.agent_name,
+        warehouse: this.agent_name,
         status: this.status
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
@@ -382,7 +414,7 @@ export default {
     },
     // 获取代理列表
     getAgentData () {
-      this.$request.getAgent().then(res => {
+      this.$request.getSimpleList().then(res => {
         this.agentData = res.data
       })
     },
@@ -411,7 +443,7 @@ export default {
       this.$router.push({ name: 'pickingContainer', query: { keyword: expressNum } })
     }
   },
-  mounted () {
+  created () {
     this.getAgentData()
     this.getList()
   },
@@ -495,6 +527,13 @@ export default {
     width: 100%;
     min-height: 300px;
     border-width: 0;
+  }
+  .chooseStatus {
+    width: 150px;
+    display: inline-block;
+    .el-select {
+      // width: 100%;
+    }
   }
 }
 </style>

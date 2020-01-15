@@ -47,6 +47,22 @@
           </el-row>
       </el-col>
       <el-col :lg="12">
+        <!-- 仓库名称 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="*仓库名称">
+                <el-select v-model="user.warehouse_id" clearable
+                 :disabled="!!this.$route.params.id && !hasStore">
+                  <el-option
+                    v-for="item in agentData"
+                    :key="item.id"
+                    :value="item.id"
+                    :label="item.warehouse_name">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 货位 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -142,6 +158,7 @@ export default {
       user: {
         express_num: '',
         user_id: '',
+        warehouse_id: '',
         package_weight: '',
         props: [],
         length: '',
@@ -154,14 +171,17 @@ export default {
       tableData: [], // 表格数据
       tableLoading: false,
       localization: {},
+      agentData: [],
       hasStore: false
     }
   },
   created () {
     this.getProp() // 获取多选框数据
+    this.getAgentData()
     if (this.$route.params.id) {
-      console.log(this.$route.params.user_name, 'user_name')
+      console.log(this.$route.params.warehouse_id, 'warehouse_id')
       this.getWarehouseInfo() // 从订单跳转过来时加载的表格数据
+      this.user.warehouse_id = this.$route.params.warehouse_id
       this.user.express_num = this.$route.params.express_num
       this.user.user_id = this.$route.params.user_id + '---' + this.$route.params.user_name
       if (this.$route.query.props) {
@@ -179,6 +199,12 @@ export default {
       this.$request.getProps().then(res => {
         this.updateProp = res.data
         this.localization = res.localization
+      })
+    },
+    // 获取代理列表
+    getAgentData () {
+      this.$request.getSimpleWarehouse().then(res => {
+        this.agentData = res.data
       })
     },
     // 从订单跳转到入库时加载的表格数据
@@ -261,6 +287,8 @@ export default {
         this.$message.error('请输入高度')
       } else if (!this.user.props.length) {
         this.$message.error('请选择属性')
+      } else if (this.user.warehouse_id === '') {
+        this.$message.error('请选择仓库')
       } else {
         if (this.$route.params.id) { // 如果是从订单跳转过来
           this.tableLoading = true
@@ -275,7 +303,7 @@ export default {
               })
               this.getWarehouseInfo()
               this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
-              this.user.user_id = ''
+              this.user.user_id = this.user.warehouse_id = ''
               this.user.express_num = this.user.remark = ''
               this.user.props = []
               this.user.location = ''
@@ -302,7 +330,7 @@ export default {
               })
               this.getList()
               this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
-              this.user.user_id = ''
+              this.user.user_id = this.user.warehouse_id = ''
               this.user.express_num = this.user.remark = ''
               this.user.props = []
               this.user.location = ''
@@ -321,7 +349,7 @@ export default {
                     })
                     this.getList()
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = ''
-                    this.user.user_id = ''
+                    this.user.user_id = this.user.warehouse_id = ''
                     this.user.express_num = this.user.remark = ''
                     this.user.props = []
                     this.user.location = ''

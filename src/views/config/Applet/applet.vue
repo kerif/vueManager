@@ -98,7 +98,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：100px*50px</span>
+            <span class="suggest-btn">建议尺寸：173px*60px</span>
             </el-form-item>
           </el-col>
             <!-- 小程序首页评论入口图 -->
@@ -122,7 +122,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：100px*50px</span>
+            <span class="suggest-btn">建议尺寸：173px*60px</span>
             </el-form-item>
           </el-col>
           </el-row>
@@ -148,7 +148,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：100px*50px</span>
+            <span class="suggest-btn">建议尺寸：355px*160px</span>
             </el-form-item>
           </el-col>
             <!-- 小程序运费查询页图 -->
@@ -172,7 +172,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：100px*50px</span>
+            <span class="suggest-btn">建议尺寸：355px*160px</span>
             </el-form-item>
           </el-col>
           </el-row>

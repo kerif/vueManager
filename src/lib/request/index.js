@@ -216,8 +216,13 @@ exports.submitPackage = (id, params) => {
 exports.getWarehouseList = (params) => {
   return $form.get('packages/in-warehouse-info', { params })
 }
+// 包裹快速入库
 exports.getStorageList = (params) => {
   return $form.get('shipments/in-warehouse-info', { params })
+}
+// 包裹快速入库 获取仓库列表数据
+exports.getSimpleWarehouse = () => {
+  return $form.get('shipments/warehouse-simple-list')
 }
 // 完成已支付
 exports.getPay = (id) => {
@@ -307,6 +312,10 @@ exports.getAgent = () => {
 // 获取预报包裹列表 无人认领包裹
 exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
+}
+// 预报包裹列表 获得仓库列表数据
+exports.getSimpleList = () => {
+  return $form.get('packages/warehouse-simple-list')
 }
 // 预报包裹列表 打印标签 查看
 exports.checkPackageLabel = (id) => {

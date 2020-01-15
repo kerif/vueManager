@@ -358,7 +358,7 @@ export default [
             }
           },
           {
-            path: '/station/storage/:id/:express_num/:user_id',
+            path: '/station/storage/:id/:express_num/:user_id/:user_name/:warehouse_id',
             name: 'editStorage',
             component: Storage,
             id: 501,

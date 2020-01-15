@@ -137,9 +137,41 @@
         <h4>费用详情</h4>
           <el-table :data="paymentData" class="data-list" border stripe>
           <el-table-column type="index" width="50"></el-table-column>
+          <el-table-column prop="freight_amount">
+            <template slot="header">
+              <span>运费</span>
+              <el-tooltip placement="top">
+                <span slot="content" v-for="item in paymentData" :key="item.id">
+                  <span>
+                    首费{{`${localization.currency_unit} ${item.freights.first_freight_fee}`}}</span><br/>
+                  <span>续费{{`${localization.currency_unit} ${item.freights.next_freight_fee}`}}</span><br/>
+                  <span v-if="item.express_line_costs.length">
+                  <span v-for="ele in item.express_line_costs" :key="ele.id">
+                    {{ele.name}} {{`${localization.currency_unit}${ele.price}`}}
+                  </span><br/>
+                  </span>
+                  </span>
+              <i class="el-icon-question" style="font-size: 18px; color:#35B85A;"></i>
+              </el-tooltip>
+            </template>
+          </el-table-column>
           <el-table-column :label="'总金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
           <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
-          <el-table-column :label="'增值服务费' + this.localization.currency_unit" prop="value_added_amount"></el-table-column>
+          <el-table-column :label="'增值服务费' + this.localization.currency_unit" prop="value_added_amount">
+            <template slot="header">
+              <span>运费</span>
+              <el-tooltip placement="top">
+                <span slot="content" v-for="item in paymentData" :key="item.id">
+                  <span>
+                  <span v-for="val in item.value_added_service" :key="val.id">
+                    {{val.name}} {{`${localization.currency_unit}${val.price}`}}
+                  </span><br/>
+                  </span>
+                </span>
+              <i class="el-icon-question" style="font-size: 18px; color:#35B85A;"></i>
+              </el-tooltip>
+            </template>
+          </el-table-column>
           <el-table-column :label="'实际支付' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
           <!-- 支付流水号 -->
           <!-- <el-table-column label="支付流水号">
