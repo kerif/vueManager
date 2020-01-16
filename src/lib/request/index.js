@@ -301,6 +301,10 @@ exports.updatePermissions = (id, params) => {
 exports.getInvoice = () => {
   return $form.get('orders/shipments')
 }
+// 发货单 批量加入发货单
+exports.allOrderSn = (id, params) => {
+  return $form.put('shipments/add-order-by-sn', id, params)
+}
 // 删除预报包裹列表
 exports.deletePackages = (ids) => {
   return $form.put('packages/batch-delete', ids)
@@ -652,6 +656,10 @@ exports.checkOrderLabel = (id) => {
 // 订单 打印标签 确认下载
 exports.updateOrderPdf = (id) => {
   return $form.get(`orders/${id}/label/pdf`)
+}
+// 订单 修改物流信息 获取转运快递公司
+exports.getCompanies = (params) => {
+  return $form.get(`orders/express-num/${params}/companies`)
 }
 // 移除发货单
 exports.removeOrders = (id) => {

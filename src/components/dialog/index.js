@@ -26,6 +26,7 @@ import addService from './addEditService.vue'
 import addIcon from './addIcon.vue'
 import classifyGroup from './classifyAddEdit.vue'
 import costAdd from './addCost.vue'
+import joinShip from './joinShipping.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -52,6 +53,7 @@ const AddEditServiceController = Vue.extend(addService)
 const IconController = Vue.extend(addIcon)
 const AddClassifyController = Vue.extend(classifyGroup)
 const CostAddController = Vue.extend(costAdd)
+const JoinShipController = Vue.extend(joinShip)
 
 const mixin = {
   data () {
@@ -233,6 +235,13 @@ function initInstance (type) {
     // 路线 增加费用
     case 'costAdd':
       instance = new CostAddController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量加入发货单
+    case 'joinShip':
+      instance = new JoinShipController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

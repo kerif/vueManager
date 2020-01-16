@@ -103,13 +103,15 @@
       <!-- 备注 -->
       <el-table-column label="备注" prop="remark"></el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="160">
+      <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <!-- 导出清单 -->
           <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button>
           <el-button class="btn-green btn-margin" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">发货</el-button>
           <!-- 详情 -->
           <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id, scope.row.status)">详情</el-button>
+          <!-- 加入发货单 -->
+          <el-button class="btn-blue-green btn-margin" @click="addShip(scope.row.id)">加入发货单</el-button>
           <!-- 删除 -->
           <el-button class="btn-light-red btn-margin" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">删除</el-button>
         </template>
@@ -234,6 +236,12 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    // 跳至加入发货单
+    addShip (id) {
+      dialog({ type: 'joinShip', id: id }, () => {
+        this.getList()
       })
     },
     // 创建时间

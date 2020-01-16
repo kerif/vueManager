@@ -2,11 +2,20 @@
   <el-dialog :visible.sync="show" title="添加物流信息" class="add-company"
   width="35%" @close="clear">
     <el-form ref="form" :model="company" label-width="140px">
-        <el-form-item label="转运快递单号：">
-            <el-input v-model="company.sn"></el-input>
+        <el-form-item label="*转运快递单号：">
+            <el-input v-model="company.sn" @blur="getCompany" class="input-select"></el-input>
         </el-form-item>
-        <el-form-item label="转运快递公司：">
-            <el-input v-model="company.company"></el-input>
+        <el-form-item label="*转运快递公司：">
+            <!-- <el-input v-model="company.company"></el-input> -->
+             <el-select v-model="company.company" clearable filterable
+             allow-create default-first-option>
+                <el-option
+                    v-for="(item, index) in companyList"
+                    :key="index"
+                    :value="item.name"
+                    :label="item.name">
+                </el-option>
+             </el-select>
         </el-form-item>
     </el-form>
     <div slot="footer">
@@ -23,11 +32,27 @@ export default {
       company: {
         sn: '',
         company: ''
-      }
+      },
+      companyList: []
     }
   },
   methods: {
+    // 根据转运快递单号的值拉取相对应的转运快递公司
+    getCompany () {
+      if (this.company.sn) {
+        this.$request.getCompanies(this.company.sn).then(res => {
+          if (res.ret) {
+            this.companyList = res.data
+          }
+        })
+      }
+    },
     confirm () {
+      if (this.company.sn === '') {
+        return this.$message.error('请输入转运快递单号')
+      } else if (this.company.company === '') {
+        return this.$message.error('请输入转运快递公司')
+      }
       this.$request.updateLogistics([{
         id: this.id,
         sn: this.company.sn,
@@ -64,9 +89,9 @@ export default {
 </script>
 <style lang="scss">
 .add-company {
-  .el-input {
-   width: 60%;
- }
+  .input-select {
+    width: 60%;
+  }
   .el-dialog__header {
     background-color: #0E102A;
   }
@@ -74,9 +99,11 @@ export default {
     font-size: 14px;
     color: #FFF;
   }
-
   .el-dialog__close {
     color: #FFF;
+  }
+  .el-select {
+    width: 60%;
   }
 }
 </style>

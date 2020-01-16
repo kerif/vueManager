@@ -52,7 +52,7 @@ export default {
           this.localization = res.localization
           let ids = this.updateProp.map(item => item.id)
           res.data.forEach(items => {
-            let selected = false
+            let selected = !!items.selected
             if (ids.includes(items.id)) {
               let ele = this.updateProp.filter(item => item.id === items.id)[0]
               if (ele) {
@@ -99,7 +99,7 @@ export default {
 .others-cost-container {
   background-color: #fff !important;
   .service {
-    width: 350px;
+    width: 450px;
     overflow: hidden;
     .el-input__inner {
       // width: 200px;

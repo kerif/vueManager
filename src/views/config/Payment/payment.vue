@@ -66,6 +66,9 @@
             <el-form-item label="AppSecret" prop="app_secret">
               <el-input v-model="logisticsData.app_secret" placeholder="请输入AppSecret"></el-input>
             </el-form-item>
+            <el-form-item label="Tracking more 物流 key" prop="trackingmore_key">
+              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            </el-form-item>
           </el-form>
           <div>
             <el-button class="save-btn" @click="confirmLogistic('ruleForm')">保存</el-button>
@@ -386,7 +389,8 @@ export default {
       activeName: '',
       logisticsData: {
         app_key: '',
-        app_secret: ''
+        app_secret: '',
+        trackingmore_key: ''
       },
       dynamicTags: [],
       inputVisible: false,
@@ -423,6 +427,9 @@ export default {
         ],
         app_secret: [
           { required: true, message: '请输入AppSecret', trigger: 'change' }
+        ],
+        trackingmore_key: [
+          { required: true, message: '请输入Tracking more 物流 key', trigger: 'change' }
         ]
       }
     }
