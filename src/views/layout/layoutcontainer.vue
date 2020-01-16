@@ -48,7 +48,7 @@ export default {
     padding: 0;
     width: calc(100vw - 230px);
     // height: calc(100vh - 170px);
-    height: calc(100vh - 110px);
+    height: calc(100vh - 120px);
     transition: all 0.3s ease-in;
     position: relative;
     top: 60px;
@@ -58,7 +58,7 @@ export default {
     background-color: #F5F5F5;
     padding: 20px;
     // min-height: calc(100vh - 170px);
-    min-height: calc(100vh - 110px);
+    min-height: calc(100vh - 120px);
   }
   .isCollapses {
     left: 0 !important;

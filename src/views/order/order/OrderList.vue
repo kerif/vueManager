@@ -37,7 +37,8 @@
       </el-date-picker>
     </div>
       <div class="chooseStatus">
-        <el-select v-model="agent_name" @change="onAgentChange" clearable>
+        <el-select v-model="agent_name" @change="onAgentChange" clearable
+        placeholder="请选择仓库">
           <el-option
             v-for="item in agentData"
             :key="item.id"
@@ -332,6 +333,7 @@ export default {
       })
     },
     onAgentChange () {
+      this.page_params.page = 1
       this.page_params.handleQueryChange('agent', this.agent_name)
       if (this.activeName === '3') {
         this.getNO()

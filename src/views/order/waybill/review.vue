@@ -35,7 +35,7 @@
           <span>{{form.payment_type_name}}</span><br/>
           <p class="transfer-right">转账支付账户</p>
           <span>{{form.transfer_account}}</span><br/>
-          <p class="transfer-right">{{'总金额' + this.localization.currency_unit}}</p>
+          <p class="transfer-right">{{'应付金额' + this.localization.currency_unit}}</p>
           <span>{{form.order_amount}}</span><br/>
           <p class="transfer-right">
               {{'抵用券金额' + this.localization.currency_unit}}</p>
@@ -53,7 +53,7 @@
           <p>客户截图</p>
           <span v-for="item in form.images"
           :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc==`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
+            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
               <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px;">
           </span>
         </el-col>

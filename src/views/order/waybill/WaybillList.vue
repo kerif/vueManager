@@ -183,7 +183,7 @@
           v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">取消</el-button>
         </template>
       </el-table-column>
-      <template slot="append">
+      <template slot="append" v-if="activeName === '3'">
         <div class="append-box">
           <!-- 删除 -->
           <!-- <el-button size="small">删除</el-button> -->

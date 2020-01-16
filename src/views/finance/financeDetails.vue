@@ -38,7 +38,7 @@
           <p class="transfer-right">
               {{'抵用券金额' + this.localization.currency_unit}}</p>
           <span>{{form.coupon_amount}}</span><br/>
-          <p class="transfer-right">{{'总金额' + this.localization.currency_unit}}</p>
+          <p class="transfer-right">{{'应付金额' + this.localization.currency_unit}}</p>
           <span>{{form.order_amount}}</span><br/>
           <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
           <span>{{form.tran_amount}}</span><br/>

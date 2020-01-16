@@ -101,7 +101,8 @@
     </el-row>
     </div>
     </div>
-   <el-table class="data-list" border stripe :data="oderData">
+   <el-table class="data-list" border stripe :data="oderData"
+   v-loading="tableLoading">
       <!-- 预计重量kg -->
       <el-table-column :label="'预计重量' + this.localization.weight_unit" prop="except_weight"></el-table-column>
       <!-- 称重重量kg -->
@@ -135,7 +136,8 @@
     <!-- 费用详情 -->
       <div v-if="this.$route.params.activeName === '2' || this.$route.params.activeName === '3' || this.$route.params.activeName === '4' || this.$route.params.activeName === '5'">
         <h4>费用详情</h4>
-          <el-table :data="paymentData" class="data-list" border stripe>
+          <el-table :data="paymentData" class="data-list" border stripe
+           v-loading="tableLoading">
           <el-table-column type="index" width="50"></el-table-column>
           <el-table-column prop="freight_amount">
             <template slot="header">
@@ -155,23 +157,23 @@
               </el-tooltip>
             </template>
           </el-table-column>
-          <el-table-column :label="'总金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
           <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
           <el-table-column :label="'增值服务费' + this.localization.currency_unit" prop="value_added_amount">
             <template slot="header">
-              <span>运费</span>
+              <span>增值服务</span>
               <el-tooltip placement="top">
                 <span slot="content" v-for="item in paymentData" :key="item.id">
-                  <span>
+                  <span v-if="item.value_added_service.length">
                   <span v-for="val in item.value_added_service" :key="val.id">
                     {{val.name}} {{`${localization.currency_unit}${val.price}`}}
                   </span><br/>
                   </span>
                 </span>
-              <i class="el-icon-question" style="font-size: 18px; color:#35B85A;"></i>
+                <i class="el-icon-question" style="font-size: 18px; color:#35B85A;"></i>
               </el-tooltip>
             </template>
           </el-table-column>
+          <el-table-column :label="'应付金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
           <el-table-column :label="'实际支付' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
           <!-- 支付流水号 -->
           <!-- <el-table-column label="支付流水号">
@@ -184,7 +186,8 @@
     </div>
     <!-- 包裹清单 -->
       <h4>包裹清单</h4>
-      <el-table :data="PackageData" class="data-list" border stripe>
+      <el-table :data="PackageData" class="data-list" border stripe
+       v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column label="快递单号" prop="express_num"></el-table-column>
         <el-table-column label="物品名称" prop="package_name"></el-table-column>
@@ -253,7 +256,8 @@ export default {
       localization: {},
       paymentData: [],
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      tableLoading: false
     }
   },
   created () {
@@ -263,7 +267,9 @@ export default {
   },
   methods: {
     getList () {
+      this.tableLoading = true
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
+        this.tableLoading = false
         this.form = res.data
         this.oderData = [res.data.details]
         this.PackageData = res.data.packages

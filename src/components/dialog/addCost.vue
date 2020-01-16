@@ -69,7 +69,7 @@ export default {
                 message: res.msg
               })
               this.show = false
-              this.success()
+              this.success({ name: this.ruleForm.name })
             } else {
               this.$message({
                 message: res.msg,

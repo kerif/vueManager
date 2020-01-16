@@ -49,20 +49,27 @@ export default {
     getProp (arr) {
       this.$request.getCosts(this.$route.params.id).then(res => {
         if (res.ret) {
-          // let ids = res.data.map(item => item.id)
           this.localization = res.localization
-          this.updateProp = res.data.map(item => {
-            return {
-              ...item,
-              selected: Boolean(item.selected)
+          let ids = this.updateProp.map(item => item.id)
+          res.data.forEach(items => {
+            let selected = false
+            if (ids.includes(items.id)) {
+              let ele = this.updateProp.filter(item => item.id === items.id)[0]
+              if (ele) {
+                selected = ele.selected
+                items.price = ele.price
+              }
             }
+            items.selected = selected
           })
+          this.updateProp = res.data
         }
       })
     },
     // 新增费用
     addCost () {
-      dialog({ type: 'costAdd' }, () => {
+      dialog({ type: 'costAdd' }, (data) => {
+        console.log('data', data)
         this.getProp()
       })
     },

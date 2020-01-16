@@ -846,7 +846,9 @@ export default {
     },
     // 获取在线支付
     getWechat () {
+      this.tableLoading = true
       this.$request.getPaymentOnline().then(res => {
+        this.tableLoading = false
         if (res.ret) {
           this.paymentData[0].enabled = Boolean(res.data.enabled)
         } else {
@@ -859,7 +861,9 @@ export default {
     },
     // 获取转账支付
     getPayment () {
+      this.tableLoading = true
       this.$request.getPayments().then(res => {
+        this.tableLoading = false
         if (res.ret) {
           this.transferData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
         } else {
@@ -941,10 +945,12 @@ export default {
     },
     // 获取订单增值服务
     getValue () {
+      this.tableLoading = true
       this.$request.getValue({
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {
+        this.tableLoading = false
         if (res.ret) {
           this.valueData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
           this.page_params.page = res.meta.current_page
@@ -961,10 +967,12 @@ export default {
     },
     // 获取包裹增值服务
     getParcel () {
+      this.tableLoading = true
       this.$request.getParcel({
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {
+        this.tableLoading = false
         if (res.ret) {
           this.parcelData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
           this.page_params.page = res.meta.current_page
@@ -1053,6 +1061,7 @@ export default {
     },
     // 获取商品分类管理列表
     getCategories () {
+      this.tableLoading = true
       this.$request.getCategories({
         page: this.page_params.page,
         size: this.page_params.size
