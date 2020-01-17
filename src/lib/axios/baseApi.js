@@ -12,9 +12,11 @@ switch (hostName) {
   // 正式服
   case 'jiyun.haiouoms.com':
     baseUrl = {
-      BASE_API_URL: 'https://api-jiyun.haiouoms.com/jiyun-api/admin',
-      IMAGE_URL: 'https://api-jiyun.haiouoms.com'
+      // BASE_API_URL: 'https://api-jiyun.haiouoms.com/jiyun-api/admin',
+      // IMAGE_URL: 'https://api-jiyun.haiouoms.com'
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
+      BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
+      IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com'
     }
     break
   // v2 正式服
