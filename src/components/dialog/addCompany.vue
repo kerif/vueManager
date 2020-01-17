@@ -42,7 +42,10 @@ export default {
       if (this.company.sn) {
         this.$request.getCompanies(this.company.sn).then(res => {
           if (res.ret) {
-            this.companyList = res.data
+            if (res.data.length) {
+              this.companyList = res.data
+              this.company.company = this.companyList[0].name
+            }
           }
         })
       }
@@ -90,7 +93,7 @@ export default {
 <style lang="scss">
 .add-company {
   .input-select {
-    width: 60%;
+    width: 80%;
   }
   .el-dialog__header {
     background-color: #0E102A;
@@ -103,7 +106,7 @@ export default {
     color: #FFF;
   }
   .el-select {
-    width: 60%;
+    width: 80%;
   }
 }
 </style>
