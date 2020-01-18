@@ -18,9 +18,12 @@
       <el-table-column label="地址" prop="address"></el-table-column>
       <el-table-column label="支持国家">
         <template slot-scope="scope">
-          <span v-for="item in scope.row.support_countries" :key="item.id">
+          <div class="country-box" :title="scope.row.countries">
+          <!-- <span v-for="item in scope.row.support_countries" :key="item.id">
             {{item.cn_name}}
-          </span>
+          </span> -->
+          {{scope.row.countries}}
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
@@ -71,7 +74,13 @@ export default {
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.vipGroupList = res.data
+          this.vipGroupList = res.data.map(item => {
+            let arr = item.support_countries.map(item => item.cn_name)
+            return {
+              ...item,
+              countries: arr.join(' ')
+            }
+          })
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
@@ -157,6 +166,11 @@ export default {
 .warehouse-container {
   .select-box {
     overflow: hidden;
+  }
+  .country-box {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 </style>
