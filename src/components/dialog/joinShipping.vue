@@ -6,7 +6,7 @@
       <el-form-item label="*加入发货单" prop="order_sn">
       <el-input type="textarea" v-model="ruleForm.order_sn"
       :autosize="{ minRows: 8, maxRows: 10}"
-      placeholder="请输入转运快递单号，多个转运快递单号用英文分号分割。例：9894384934;23901920192"></el-input>
+      placeholder="请输入订单号或转运快递单号，多个转运快递单号用英文分号分割。例：9894384934;23901920192"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
