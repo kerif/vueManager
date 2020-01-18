@@ -73,15 +73,15 @@ export default {
     },
     // 获取全部分类
     getTree () {
+      this.classifyList = [
+        {
+          id: 0,
+          name_cn: '顶级分类'
+        }
+      ]
       this.$request.getAllTree().then(res => {
         if (res.ret) {
           if (res.data.length) {
-            this.classifyList = [
-              {
-                id: 0,
-                name_cn: '顶级分类'
-              }
-            ]
             this.classifyList = this.classifyList.concat(res.data.map(item => ({ id: item.id, name_cn: item.name_cn })))
           }
           console.log(this.classifyList, 'this.classifyList')
