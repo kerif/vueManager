@@ -27,6 +27,7 @@ import addIcon from './addIcon.vue'
 import classifyGroup from './classifyAddEdit.vue'
 import costAdd from './addCost.vue'
 import joinShip from './joinShipping.vue'
+import lineChange from './lineChange.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -54,6 +55,7 @@ const IconController = Vue.extend(addIcon)
 const AddClassifyController = Vue.extend(classifyGroup)
 const CostAddController = Vue.extend(costAdd)
 const JoinShipController = Vue.extend(joinShip)
+const LineChangeController = Vue.extend(lineChange)
 
 const mixin = {
   data () {
@@ -242,6 +244,13 @@ function initInstance (type) {
     // 批量加入发货单
     case 'joinShip':
       instance = new JoinShipController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更改线路
+    case 'lineChange':
+      instance = new LineChangeController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -48,7 +48,7 @@
       <!-- 线路名称 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">线路名称</span>
-         <span>{{form.express_line && form.express_line.cn_name}}---限重{{form.express_line && form.express_line.max_weight}}KG</span>
+         <span>{{form.express_line && form.express_line.cn_name}}---限重{{form.express_line && form.express_line.max_weight}}{{localization.weight_unit}}</span>
       </el-col>
       <!-- 提交时间 -->
         <el-col :span="7" :offset="1">
@@ -210,14 +210,18 @@
                     </el-select>
                 </el-form-item> -->
                 <el-form-item label="更改线路" class="express">
-                    <el-select v-model="user.express_line_id" clearable>
+                <!-- <span class="leftWidth">更改线路</span> -->
+                <span class="change-line">
+                  {{express.CName}}---限重{{express.MaxWeight}}KG</span>
+                    <!-- <el-select v-model="user.express_line_id" clearable>
                       <el-option
                       v-for="item in expressData"
                       :key="item.id"
                       :value="item.id"
                       :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
                       </el-option>
-                    </el-select>
+                    </el-select> -->
+                <el-button class="btn-main change-btn" @click="changeLine">更改</el-button>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -299,7 +303,11 @@ export default {
       imgVisible: false,
       imgSrc: '',
       expressData: [],
-      weightName: ''
+      weightName: '',
+      express: {
+        MaxWeight: '',
+        cName: ''
+      }
     }
   },
   created () {
@@ -371,12 +379,23 @@ export default {
         }
       })
     },
+    // 更改线路
+    changeLine () {
+      dialog({ type: 'lineChange' }, (data) => {
+        console.log(data, 'data')
+        this.express.CName = data.cn_name
+        this.express.MaxWeight = data.max_weight
+        this.user.express_line_id = data.id
+      })
+    },
     getPackage () {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.getProp(res.data.services)
+        this.express.CName = this.form.express_line.cn_name
+        this.express.MaxWeight = this.form.express_line.max_weight
         this.localization = res.localization
       })
     },
@@ -591,6 +610,12 @@ export default {
   .add-value-ipt {
     width: calc(100% - 20px);
     margin-left: 5px;
+  }
+  .change-line {
+    color: #606266;
+  }
+  .change-btn {
+    margin-left: 10px;
   }
 }
 </style>
