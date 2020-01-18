@@ -83,8 +83,8 @@
       <el-table-column label="发货时间" prop="shipped_at"></el-table-column>
       <!-- 发出站点 -->
       <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
-      <!-- 目的国 -->
-      <el-table-column label="目的国" prop="destination_country"></el-table-column>
+      <!-- 目的地 -->
+      <el-table-column label="目的地" prop="destination_country"></el-table-column>
       <!-- 状态 -->
       <el-table-column label="状态">
         <template slot-scope="scope">

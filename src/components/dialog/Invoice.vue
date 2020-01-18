@@ -4,8 +4,8 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 员工组中文名 -->
-            <el-form-item label="目的国" prop="country_id">
-                <el-select v-model="ruleForm.country_id" placeholder="请选择目的国"
+            <el-form-item label="目的地" prop="country_id">
+                <el-select v-model="ruleForm.country_id" placeholder="请选择目的地"
                 filterable>
                 <el-option
                   v-for="item in country"
@@ -38,7 +38,7 @@ export default {
       country: [],
       rules: {
         country_id: [
-          { required: true, message: '请输入目的国', trigger: 'blur' }
+          { required: true, message: '请输入目的地', trigger: 'blur' }
         ]
       }
     }

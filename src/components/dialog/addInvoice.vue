@@ -32,6 +32,9 @@ export default {
       })
     },
     confirm () {
+      if (this.invoice.sn === '') {
+        return this.$message.error('请选择发货单')
+      }
       this.show = false
       this.success(this.invoice.sn)
       // this.$request.updateShipment(this.id, this.invoice.sn).then(res => {

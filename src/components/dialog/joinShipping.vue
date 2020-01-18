@@ -1,17 +1,17 @@
 <template>
   <el-dialog :visible.sync="show" title="加入发货单" class="dialog-join"
   size="small" @close="clear">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
       <!-- 加入发货单 -->
-      <el-form-item label="加入发货单" prop="order_sn">
+      <el-form-item label="*加入发货单" prop="order_sn">
       <el-input type="textarea" v-model="ruleForm.order_sn"
       :autosize="{ minRows: 8, maxRows: 10}"
       placeholder="请输入转运快递单号，多个转运快递单号用英文分号分割。例：9894384934;23901920192"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog">取消</el-button>
+      <el-button type="primary" @click="confirm">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -22,49 +22,41 @@ export default {
       ruleForm: {
         order_sn: ''
       },
-      orderS: [],
-      rules: {
-        order_sn: [
-          { required: true, message: '请输入转运快递单号', trigger: 'blur' }
-        ]
-      }
+      orderS: []
     }
   },
   methods: {
     confirm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.orderS = this.ruleForm.order_sn.split(';')
-          this.$request.allOrderSn({
-            order_sn: this.orderS,
-            shipment_id: this.id
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '操作成功',
-                message: res.msg
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
+      if (this.ruleForm.order_sn === '') {
+        return this.$message.error('请输入转运快递单号')
+      } else {
+        this.orderS = this.ruleForm.order_sn.split(';')
+        this.$request.allOrderSn({
+          order_sn: this.orderS,
+          shipment_id: this.id
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '操作成功',
+              message: res.msg
+            })
             this.show = false
-          })
-        } else {
-          return false
-        }
-      })
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+          this.show = false
+        })
+      }
     },
     clear () {
       this.ruleForm.order_sn = ''
     },
     cancelDialog (ruleForm) {
-      this.$refs[ruleForm].resetFields()
       this.show = false
     },
     init () {

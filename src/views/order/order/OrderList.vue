@@ -105,7 +105,7 @@
         </template>
       </el-table-column>
       <!-- 货位 -->
-      <el-table-column label="货位" prop="location"></el-table-column>
+      <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
       <!-- 商品数量 -->
       <el-table-column label="商品数量" prop="qty"></el-table-column>
       <!-- 商品分类 -->
@@ -173,7 +173,7 @@
         </template>
       </el-table-column>
       <!-- 货位 -->
-      <el-table-column label="货位" prop="location"></el-table-column>
+      <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
       <!-- 规格 -->
       <el-table-column :label="'规格'+ this.localization.length_unit" prop="dimension"
       width="120px"></el-table-column>

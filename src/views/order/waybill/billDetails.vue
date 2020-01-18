@@ -108,7 +108,7 @@
       <!-- 称重重量kg -->
       <el-table-column :label="'称重重量' + this.localization.weight_unit" prop="actual_weight"></el-table-column>
       <!-- 尺寸（长宽高cm） -->
-      <el-table-column label="尺寸（长宽高cm）">
+      <el-table-column :label="'尺寸（长宽高）' + this.localization.length_unit">
         <template slot-scope="scope">
           <span>{{scope.row.length}}*</span>
           <span>{{scope.row.width}}*</span>
@@ -157,7 +157,6 @@
               </el-tooltip>
             </template>
           </el-table-column>
-          <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
           <el-table-column :label="'增值服务费' + this.localization.currency_unit" prop="value_added_amount">
             <template slot="header">
               <span>增值服务</span>
@@ -174,6 +173,7 @@
             </template>
           </el-table-column>
           <el-table-column :label="'应付金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
+          <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
           <el-table-column :label="'实际支付' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
           <!-- 支付流水号 -->
           <!-- <el-table-column label="支付流水号">

@@ -299,7 +299,7 @@ export default {
               type: 'success'
             })
             this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
-            this.$store.commit('saveName', res.data.username)
+            this.$store.commit('saveName', res.data.email)
             this.centerDialogVisible = false
             this.$router.push('/')
           } else {

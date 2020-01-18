@@ -60,7 +60,7 @@ export default {
       country: [],
       rules: {
         // country_id: [
-        //   { required: true, message: '请输入目的国', trigger: 'blur' }
+        //   { required: true, message: '请输入目的地', trigger: 'blur' }
         // ]
       }
     }
