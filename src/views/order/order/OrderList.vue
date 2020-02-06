@@ -5,8 +5,6 @@
         <el-tab-pane label="未入库" name="1"></el-tab-pane>
         <!-- 已入库 -->
         <el-tab-pane label="已入库" name="2"></el-tab-pane>
-        <!-- 无人认领包裹 -->
-        <el-tab-pane label="无人认领包裹" name="3"></el-tab-pane>
     </el-tabs>
     <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
       <div class="changeTime">
@@ -135,7 +133,7 @@
       <el-table-column label="操作" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 入库 -->
-          <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id, scope.row.express_num, scope.row.user_id, scope.row.user_name, scope.row.props, scope.row.warehouse.id)">入库</el-button>
+          <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id)">入库</el-button>
           <el-button class="btn-green operating-btn" @click="goExpress(scope.row.express_num)">单号追踪</el-button>
           <el-button class="btn-blue operating-btn" v-if="activeName === '2'" @click="onLogs(scope.row.express_num)">入库日志</el-button>
           <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='2'" class="btn-pink operating-btn">打印标签</el-button>
@@ -146,53 +144,6 @@
           <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
       </template>
-    </el-table>
-    <div class="noDate" v-else>暂无数据</div>
-    </div>
-    <!-- 无人认领包裹 -->
-    <div v-if="activeName === '3'">
-      <el-table v-if="ownerData.length" class="data-list" border stripe
-      :data="ownerData"
-      @selection-change="selectionChange"
-      v-loading="tableLoading">
-      <el-table-column type="index" width="50"></el-table-column>
-      <!-- 快递单号 -->
-      <el-table-column label="快递单号">
-        <template slot-scope="scope">
-          <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
-        </template>
-      </el-table-column>
-      <!-- 物品价值 -->
-      <el-table-column :label="'包裹重量' + this.localization.weight_unit" prop="package_weight"></el-table-column>
-      <!-- 物品属性 -->
-      <el-table-column label="物品属性">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.props" :key="item.id">
-            {{item.cn_name}}
-          </span>
-        </template>
-      </el-table-column>
-      <!-- 货位 -->
-      <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
-      <!-- 规格 -->
-      <el-table-column :label="'规格'+ this.localization.length_unit" prop="dimension"
-      width="120px"></el-table-column>
-      <!-- 提交时间 -->
-      <el-table-column label="提交时间" prop="created_at">
-      </el-table-column>
-      <!-- 仓库 -->
-      <el-table-column label="仓库" prop="warehouse.warehouse_name">
-      </el-table-column>
-      <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
-        </div>
-      </template> -->
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-         <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">打印标签</el-button>
-        </template>
-      </el-table-column>
     </el-table>
     <div class="noDate" v-else>暂无数据</div>
     </div>
@@ -289,9 +240,8 @@ export default {
         }
       })
     },
-    storage (id, expressNum, userId, userName, props, warehouseName) {
-      console.log(warehouseName, 'warehouseName')
-      this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId, user_name: userName, warehouse_id: warehouseName }, query: { props: JSON.stringify(props) } })
+    storage (id) {
+      this.$router.push({ name: 'editStorage', params: { id: id } })
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
@@ -494,7 +444,7 @@ export default {
 <style lang="scss">
 .order-list-container {
   .tabLength {
-    width: 300px !important;
+    width: 200px !important;
     display: inline-block;
   }
   .agentRight {

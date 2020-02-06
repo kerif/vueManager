@@ -115,7 +115,7 @@
           <el-col :span="10">
             <div>
               <span>*体积系数</span>
-              <el-tooltip class="item" effect="dark" content="主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数" placement="top">
+              <el-tooltip class="item" effect="dark" content="主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数。" placement="top">
                 <span class="el-icon-question icon-info"></span>
               </el-tooltip>
             </div>
@@ -131,6 +131,23 @@
               <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
                 {{item.cn_name}}</el-checkbox>
             </el-checkbox-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <!-- 设为推荐 -->
+      <el-form-item>
+        <el-row>
+          <el-col :span="10">
+            <div>
+              <span>设为推荐</span>
+              <el-tooltip class="item" effect="dark" content="设为推荐后，该路线标为推荐路线。" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+            <el-radio-group v-model="form.is_great_value">
+              <el-radio :label="1">推荐</el-radio>
+              <el-radio :label="0">不推荐</el-radio>
+            </el-radio-group>
           </el-col>
         </el-row>
       </el-form-item>
@@ -211,6 +228,7 @@ export default {
         min_weight: '',
         reference_time: '',
         types: [],
+        is_great_value: '',
         icon: '',
         remark: ''
       },

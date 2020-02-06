@@ -9,6 +9,7 @@ const dynamicAddRouter = (router, next, to) => {
   let isPermissionFilterArr = [100, 102] // 102 为修改密码的页面
   let filteredRouterMap = clone['array'](dynamicRouters)
   request.getCurrentUserPermissions().then(res => {
+    console.log(res, 'res')
     res.data.map((item) => {
       item.child.map(childrenItem => {
         if (childrenItem.child.length >= 1 && childrenItem.child[0].enabled === true) {
@@ -18,6 +19,7 @@ const dynamicAddRouter = (router, next, to) => {
     })
     // 筛选有权限的路由
     filteredRouterMap[0] = multiTree(filteredRouterMap[0], isPermissionFilterArr)
+    // console.log(filteredRouterMap, 'filteredRouterMap')
     router.addRoutes(filteredRouterMap)
     store.commit('saveFileterAfterRouterMap', { fileterAfterRouterMap: filteredRouterMap, isPermissionFilterArr })
     store.commit('savePermissionStatus', true) // 标记筛选完成

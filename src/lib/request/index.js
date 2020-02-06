@@ -204,8 +204,13 @@ exports.getStorage = (params) => {
 exports.getPick = (params) => {
   return $form.get('shipment-logs/picking', { params })
 }
+// 包裹快速入库 获取全部物品属性
 exports.getProps = () => {
   return $form.get('package-props')
+}
+// 包裹快速入库 获取全部服务
+exports.getAllService = () => {
+  return $form.get('packages/package-services')
 }
 exports.getWarehouse = (params) => {
   return $form.get('packages', { params })
@@ -223,6 +228,10 @@ exports.getStorageList = (params) => {
 // 包裹快速入库 获取仓库列表数据
 exports.getSimpleWarehouse = () => {
   return $form.get('shipments/warehouse-simple-list')
+}
+// 包裹快速入库 获取商品清单
+exports.getProductDetails = (id) => {
+  return $form.get(`packages/${id}`)
 }
 // 完成已支付
 exports.getPay = (id) => {
@@ -313,9 +322,13 @@ exports.deletePackages = (ids) => {
 exports.getAgent = () => {
   return $form.get('agents/simple-list')
 }
-// 获取预报包裹列表 无人认领包裹
+// 无人认领包裹
 exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
+}
+// 无人认领包裹 获取认领包裹的id
+exports.getClaimList = (params) => {
+  return $form.get('packages/user-search', { params })
 }
 // 预报包裹列表 获得仓库列表数据
 exports.getSimpleList = () => {

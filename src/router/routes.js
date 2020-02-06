@@ -64,8 +64,10 @@ const Ship = loadonDemand('station/ship')
 const ShipDetails = loadonDemand('station/shipDetails')
 // 拣货日志
 const Picking = loadonDemand('station/picking')
-// 订单 订单列表
+// 订单 预报包裹列表
 const OrderList = loadonDemand('order/order/OrderList')
+// 订单 无人认领包裹
+const noOwner = loadonDemand('order/noOwner/noOwner')
 // 订单 运单列表
 const WaybillList = loadonDemand('order/waybill/WaybillList')
 // 订单 运单详情
@@ -82,6 +84,10 @@ const Voucher = loadonDemand('marketing/Voucher/voucher')
 const Notes = loadonDemand('marketing/Voucher/notes')
 // 营销管理 添加
 const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
+// 营销管理 视频管理
+const videoManagement = loadonDemand('marketing/video/videoMana')
+// 客服中心 评价管理
+const evaluation = loadonDemand('customer/evaluation')
 export default [
   {
     path: '/',
@@ -303,6 +309,17 @@ export default [
             }
           },
           {
+            path: '/order/noOwner',
+            component: noOwner,
+            name: 'noOwner',
+            id: 403,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '无人认领包裹'
+            }
+          },
+          {
             path: '/order/billDetails/:id/:activeName',
             name: 'billDetails',
             component: Billdetails,
@@ -358,7 +375,7 @@ export default [
             }
           },
           {
-            path: '/station/storage/:id/:express_num/:user_id/:user_name/:warehouse_id',
+            path: '/station/storage/:id',
             name: 'editStorage',
             component: Storage,
             id: 501,
@@ -672,14 +689,44 @@ export default [
             }
           },
           {
-            path: '/marketing/suggest',
-            name: 'suggestlist',
-            component: SuggestList,
+            path: '/marketing/videoManagement',
+            name: 'video',
+            component: videoManagement,
             id: 803,
             meta: {
               level: 2,
               group: '营销管理',
+              name: '视频管理'
+            }
+          }
+        ]
+      },
+      {
+        path: 'customer',
+        component: LayoutContainer,
+        icon: 'icon-ico_yuce',
+        id: 900,
+        children: [
+          {
+            path: '/customer/suggest',
+            name: 'suggestlist',
+            component: SuggestList,
+            id: 901,
+            meta: {
+              level: 2,
+              group: '客服中心',
               name: '投诉建议'
+            }
+          },
+          {
+            path: '/customer/evaluation',
+            name: 'evaluation',
+            component: evaluation,
+            id: 902,
+            meta: {
+              level: 2,
+              group: '客服中心',
+              name: '评价管理'
             }
           }
         ]

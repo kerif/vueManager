@@ -28,6 +28,9 @@ import classifyGroup from './classifyAddEdit.vue'
 import costAdd from './addCost.vue'
 import joinShip from './joinShipping.vue'
 import lineChange from './lineChange.vue'
+import claim from './claim.vue'
+import productList from './productList.vue'
+import videoList from './addVideo.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -56,6 +59,9 @@ const AddClassifyController = Vue.extend(classifyGroup)
 const CostAddController = Vue.extend(costAdd)
 const JoinShipController = Vue.extend(joinShip)
 const LineChangeController = Vue.extend(lineChange)
+const ClaimController = Vue.extend(claim)
+const ProductController = Vue.extend(productList)
+const VideoController = Vue.extend(videoList)
 
 const mixin = {
   data () {
@@ -251,6 +257,27 @@ function initInstance (type) {
     // 更改线路
     case 'lineChange':
       instance = new LineChangeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 认领用户
+    case 'claim':
+      instance = new ClaimController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 商品清单
+    case 'productList':
+      instance = new ProductController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 添加视频
+    case 'videoList':
+      instance = new VideoController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
