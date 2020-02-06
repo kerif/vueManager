@@ -704,7 +704,7 @@ export default [
       {
         path: 'customer',
         component: LayoutContainer,
-        icon: 'icon-ico_yuce',
+        icon: 'icon-kefu',
         id: 900,
         children: [
           {
