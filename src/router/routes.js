@@ -42,8 +42,6 @@ const WareHouseEdit = loadonDemand('config/warehouse/warehouseAddEdit')
 const NoticeList = loadonDemand('config/notice/NoticeList')
 // 配置 添加、修改下单须知
 const NoticeAddEdit = loadonDemand('config/notice/NoticeAddEdit')
-// 配置 投诉建议列表
-const SuggestList = loadonDemand('config/suggest/Suggest')
 // 配置 代理管理
 const agentManagement = loadonDemand('config/agent/Agent')
 // 修改、添加代理
@@ -86,8 +84,10 @@ const Notes = loadonDemand('marketing/Voucher/notes')
 const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
 // 营销管理 视频管理
 const videoManagement = loadonDemand('marketing/video/videoMana')
+// 客服中心 投诉建议列表
+const SuggestList = loadonDemand('customer/suggest/Suggest')
 // 客服中心 评价管理
-const evaluation = loadonDemand('customer/evaluation')
+const Evaluation = loadonDemand('customer/evaluation')
 export default [
   {
     path: '/',
@@ -721,7 +721,7 @@ export default [
           {
             path: '/customer/evaluation',
             name: 'evaluation',
-            component: evaluation,
+            component: Evaluation,
             id: 902,
             meta: {
               level: 2,

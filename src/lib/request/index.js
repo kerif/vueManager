@@ -613,6 +613,10 @@ exports.editCoupons = (params) => {
 exports.getCouponList = (params) => {
   return $form.get('coupons', { params })
 }
+// 营销管理 获取视频列表
+exports.getVideoList = () => {
+  return $form.get('videos')
+}
 // 添加抵用券
 exports.addCoupons = (params) => {
   return $form.post('coupons', params)

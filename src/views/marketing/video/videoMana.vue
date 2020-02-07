@@ -11,7 +11,7 @@
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <el-table-column label="标题" prop="name_cn"></el-table-column>
+      <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="状态" prop="name_en"></el-table-column>
       <el-table-column label="创建时间" prop="user_count"></el-table-column>
       <el-table-column label="操作">
@@ -56,7 +56,7 @@ export default {
   methods: {
     getList () {
       this.tableLoading = true
-      this.$request.getUserGroup({
+      this.$request.getVideoList({
         keyword: this.page_params.keyword,
         page: this.page_params.page,
         size: this.page_params.size
