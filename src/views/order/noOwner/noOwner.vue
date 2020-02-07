@@ -145,7 +145,7 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
-        this.$request.deletePackages({
+        this.$request.deleteNoOwner({
           DELETE: this.deleteNum
         }).then(res => {
           if (res.ret) {
@@ -193,7 +193,7 @@ export default {
     },
     // 导出清单
     uploadList () {
-      this.$request.uploadExcel(this.id).then(res => {
+      this.$request.uploadNoOwner().then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           // window.location.href = this.urlExcel

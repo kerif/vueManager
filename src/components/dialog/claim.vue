@@ -3,7 +3,7 @@
   size="small" @close="clear">
     <el-form :model="user" :rules="rules" ref="user" class="demo-ruleForm">
         <!-- 员工组中文名 -->
-        <el-form-item label="认领用户" prop="name_cn">
+        <el-form-item label="认领用户" prop="user_id">
           <!-- <el-input v-model="ruleForm.name_cn"
           placeholder="请输入用户id"></el-input> -->
               <el-autocomplete
@@ -28,17 +28,16 @@ export default {
         user_id: ''
       },
       staff: '',
+      supplierId: '',
       id: '',
       rules: {
-        name_cn: [
+        user_id: [
           { required: true, message: '请输入认领用户', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    getList () {
-    },
     queryCNSearch (queryString, callback) {
       console.log(this.user.user_id)
       var list = [{}]
@@ -54,15 +53,16 @@ export default {
       })
     },
     handleSelect (item) {
-      // this.ruleForm.en_name = item.name
-      console.log(item)
       this.supplierId = item.id
       this.supplierName = item.name
     },
     confirm (formName) {
+      console.log('supplierId', this.supplierId)
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.editGroup(this.id, this.user).then(res => {
+          this.$request.claimPackage(this.id, {
+            user_id: this.supplierId
+          }).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -92,9 +92,6 @@ export default {
       this.show = false
     },
     init () {
-      if (this.id) {
-        this.getList()
-      }
     }
   }
 }

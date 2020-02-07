@@ -326,9 +326,21 @@ exports.getAgent = () => {
 exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
 }
+// 无人认领包裹 导出
+exports.uploadNoOwner = () => {
+  return $form.get('packages/no-owner/export')
+}
 // 无人认领包裹 获取认领包裹的id
 exports.getClaimList = (params) => {
   return $form.get('packages/user-search', { params })
+}
+// 无人认领 认领包裹
+exports.claimPackage = (id, users) => {
+  return $form.put(`packages/no-owner/${id}/owner`, users)
+}
+// 无人认领包裹 删除
+exports.deleteNoOwner = (ids) => {
+  return $form.put('packages/no-owner/batch-delete', ids)
 }
 // 预报包裹列表 获得仓库列表数据
 exports.getSimpleList = () => {

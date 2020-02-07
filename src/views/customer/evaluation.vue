@@ -27,6 +27,33 @@
         </el-select>
       </div>
     </search-group>
+    <div class="evaluation-list">
+      <ul>
+        <li>
+          <el-col :span="2">
+            <div class="list-img">
+              <img src="../../assets/tree.png">
+            </div>
+          </el-col>
+          <el-col :span="5">
+            <div class="list-font">
+              <span>JY10001</span><br/>
+              <span class="font-order">订单号：JY10001</span><br/>
+              <div class="list-evaluation">
+                第一次使用集运系统，
+                真的很快一周就收到了，
+                服务很棒，推荐大家使用
+              </div>
+              <div class="order-img">
+                <img src="../../assets/storage.png">
+                <img src="../../assets/ship.png">
+              </div>
+              <i class="el-icon-time"></i>
+            </div>
+          </el-col>
+        </li>
+      </ul>
+    </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
@@ -41,7 +68,7 @@ export default {
   components: {
     SearchGroup
   },
-  name: 'servicerList',
+  name: 'evaluationList',
   mixins: [pagination],
   data () {
     return {
@@ -91,6 +118,11 @@ export default {
         }
       })
     },
+    onAgentChange () {
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('agent', this.agent_name)
+      this.getList()
+    },
     // 获取代理列表
     getAgentData () {
       this.$request.getSimpleList().then(res => {
@@ -107,8 +139,8 @@ export default {
     }
   },
   created () {
-    this.getAgentData()
-    this.getList()
+    // this.getAgentData()
+    // this.getList()
   }
 }
 </script>
@@ -153,6 +185,39 @@ export default {
     display: inline-block;
     .el-select {
       // width: 100%;
+    }
+  }
+  ul {
+    list-style:none;
+  }
+  .evaluation-list {
+    .list-img {
+      width: 80px;
+      padding: 0 10px;
+      img {
+        height: 80px;
+        width: 80px;
+        border-radius: 50%;
+        border: 1px solid #ececec;
+      }
+    }
+    .font-order {
+      font-size: 14px;
+      color: #7f7f7f;
+    }
+    .list-font {
+      .list-evaluation {
+        margin-top: 10px;
+        font-size: 13px;
+      }
+      .order-img {
+        width: 40px;
+        img {
+          display: inline-block;
+          width: 40px;
+          height: 40px;
+        }
+      }
     }
   }
 }
