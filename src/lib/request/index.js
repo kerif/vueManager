@@ -163,11 +163,20 @@ exports.editAdmins = (id, params) => {
 exports.deleteGroup = (ids) => {
   return $form.put('admin-groups/batch-delete', ids)
 }
+// 客服中心 投诉建议
 exports.getSuggest = (params) => {
   return $form.get('suggestions', { params })
 }
 exports.submitSuggest = (id, params) => {
   return $form.put(`suggestions/${id}/status`, params)
+}
+// 客服中心 获取评价管理列表
+exports.getComments = (params) => {
+  return $form.get('order-comments', { params })
+}
+// 客服中心 取消或设置精选
+exports.updateRecommend = (id, status) => {
+  return $form.put(`order-comments/${id}/recommend/${status}`)
 }
 exports.getNoticeDetails = (id) => {
   return $form.get(`order-notices/${id}`)

@@ -22,10 +22,10 @@
               </el-form-item>
             </el-col>
           </el-row>
-        <!-- 仓库名称 -->
+        <!-- 寄往仓库 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="*仓库名称">
+              <el-form-item label="*寄往仓库">
                 <el-select v-model="user.warehouse_id" clearable
                  :disabled="!!this.$route.params.id && !hasStore">
                   <el-option
@@ -103,7 +103,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="寄往地区">
-                <el-input v-model="user.destination_country.cn_name" placeholder="请输入寄往地区"></el-input>
+                <el-input v-model="user.destination_country" placeholder="请输入寄往地区"  :disabled="!!this.$route.params.id && !hasStore"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -283,9 +283,7 @@ export default {
         package_name: '',
         props: [],
         chosen_services: [],
-        destination_country: {
-          cn_name: ''
-        },
+        destination_country: '',
         length: '',
         width: '',
         height: '',

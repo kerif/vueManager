@@ -15,7 +15,7 @@
         end-placeholder="提交结束日期">
       </el-date-picker>
     </div>
-      <div class="chooseStatus">
+      <!-- <div class="chooseStatus">
         <el-select v-model="agent_name" @change="onAgentChange" clearable
         placeholder="请选择仓库">
           <el-option
@@ -25,35 +25,62 @@
             :label="item.warehouse_name">
           </el-option>
         </el-select>
-      </div>
+      </div> -->
     </search-group>
-    <div class="evaluation-list">
+    <div>
       <ul>
-        <li>
+        <li v-for="(item, index) in evaluationData"
+        :key="index" class="evaluation-list">
+        <div class="order-num">订单号：{{item.order}}</div>
+        <el-row :gutter="20">
           <el-col :span="2">
             <div class="list-img">
               <img src="../../assets/tree.png">
             </div>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="10">
             <div class="list-font">
-              <span>JY10001</span><br/>
-              <span class="font-order">订单号：JY10001</span><br/>
+              <span>{{item.user.id}}---{{item.user.name}}</span>&nbsp;&nbsp;
+              <span class="font-order">{{item.created_at}}</span>
               <div class="list-evaluation">
-                第一次使用集运系统，
-                真的很快一周就收到了，
-                服务很棒，推荐大家使用
+                {{item.content}}
               </div>
-              <div class="order-img">
+              <!-- <div class="order-img">
                 <img src="../../assets/storage.png">
                 <img src="../../assets/ship.png">
+              </div> -->
+              <div class="left-img" v-for="(ele, index) in item.images" :key="index">
+                <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele}`, imgVisible=true">
+                  <img :src="`${$baseUrl.IMAGE_URL}${ele}`" class="productImg" >
+                </span>
               </div>
-              <i class="el-icon-time"></i>
+              <div class="location-sty">
+                <i class="el-icon-map-location"></i><span>马来西亚</span>
+              </div>
             </div>
           </el-col>
+          <el-col :span="4" :offset="8">
+            <!-- 星级 -->
+            <el-rate
+              v-model="item.score"
+              disabled>
+            </el-rate>
+            <!-- 精选 -->
+            <div class="featured" v-if="item.is_recommend === 1">
+              <span class="featured-font">
+              精选
+              </span>
+            </div>
+          </el-col>
+      </el-row>
+      <div class="bottom-btn">
+        <el-button class="btn-light-red" v-if="item.is_recommend === 1" @click="resetRecommend(item.id, 0)">取消精选</el-button>
+        <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">设为精选</el-button>
+      </div>
         </li>
       </ul>
     </div>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
@@ -64,20 +91,21 @@
 <script>
 import { SearchGroup } from '@/components/searchs'
 import { pagination } from '@/mixin'
+import NlePagination from '@/components/pagination'
 export default {
   components: {
-    SearchGroup
+    SearchGroup,
+    NlePagination
   },
   name: 'evaluationList',
   mixins: [pagination],
   data () {
     return {
-      status: 1,
       tableLoading: false,
       agent_name: '',
       agentData: [],
       localization: {},
-      ownerData: [],
+      evaluationData: [],
       timeList: [],
       begin_date: '',
       end_date: '',
@@ -85,27 +113,28 @@ export default {
       imgSrc: '',
       urlHtml: '',
       show: false,
-      labelId: ''
+      labelId: '',
+      form: {},
+      value: 2
     }
   },
   methods: {
     getList () {
       this.tableLoading = true
-      this.ownerData = []
+      this.evaluationData = []
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        warehouse: this.agent_name,
-        status: this.status
+        warehouse: this.agent_name
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 提交时间
       this.begin_date && (params.begin_date = this.begin_date)
       this.end_date && (params.end_date = this.end_date)
-      this.$request.getNoOwner(params).then(res => {
+      this.$request.getComments(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.ownerData = res.data
+          this.evaluationData = res.data
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
@@ -136,11 +165,38 @@ export default {
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
+    },
+    // 取消或设置精选
+    resetRecommend (id, status) {
+      console.log(id, 'im id')
+      console.log(status, 'im status')
+      this.$confirm(`您真的要执行此操作吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request.updateRecommend(id, status).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     }
   },
   created () {
     // this.getAgentData()
-    // this.getList()
+    this.getList()
   }
 }
 </script>
@@ -189,8 +245,20 @@ export default {
   }
   ul {
     list-style:none;
+    padding: 0;
+    margin-top: 0;
+    .el-row {
+      margin: 0 !important;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
   }
   .evaluation-list {
+    background-color: #fff !important;
+    width: 100%;
+    padding-bottom: 10px;
+    border: 1px solid #EBEEF5;
+    margin-bottom: 10px;
     .list-img {
       width: 80px;
       padding: 0 10px;
@@ -202,14 +270,22 @@ export default {
       }
     }
     .font-order {
-      font-size: 14px;
+      // font-size: 14px;
       color: #7f7f7f;
     }
     .list-font {
       .list-evaluation {
         margin-top: 10px;
         font-size: 13px;
+        // width: 200px;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
+        // white-space: nowrap;
       }
+      // .list-evaluation:hover {
+      //   // cursor: pointer;
+      //   width: auto !important;
+      // }
       .order-img {
         width: 40px;
         img {
@@ -219,6 +295,44 @@ export default {
         }
       }
     }
+  }
+  .order-num {
+    border-bottom: 1px solid #EBEEF5;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-top: 10px;
+  }
+  .left-img {
+    margin-top: 20px;
+    padding: 10px 5px;
+  }
+  .productImg {
+    border: 1px dashed #ccc;
+    display: inline-block;
+    margin-right: 15px;
+    width: 110px;
+    height: 100px;
+  }
+  .location-sty {
+    margin-top: 10px;
+  }
+  .featured {
+    text-align: center;
+    margin-top: 20px;
+    .featured-font {
+      color: #fff;
+      background-color: red;
+      line-height: 40px;
+      font-size: 23px;
+      padding: 0 5px;
+      border-radius: 5px;
+    }
+  }
+  .bottom-btn {
+    border-top: 1px solid #EBEEF5;
+    padding-top: 10px;
+    text-align: right;
+    padding-right: 20px;
   }
 }
 </style>
