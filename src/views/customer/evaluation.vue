@@ -38,7 +38,7 @@
               <img src="../../assets/tree.png">
             </div>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="17">
             <div class="list-font">
               <span>{{item.user.id}}---{{item.user.name}}</span>&nbsp;&nbsp;
               <span class="font-order">{{item.created_at}}</span>
@@ -59,7 +59,7 @@
               </div>
             </div>
           </el-col>
-          <el-col :span="4" :offset="8">
+          <el-col :span="4" :offset="1">
             <!-- 星级 -->
             <el-rate
               v-model="item.score"
@@ -305,6 +305,7 @@ export default {
   .left-img {
     margin-top: 20px;
     padding: 10px 5px;
+    display: inline-block;
   }
   .productImg {
     border: 1px dashed #ccc;
