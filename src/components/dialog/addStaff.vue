@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" :title="staff === 'add' ? '添加员工组': '编辑员工组'" class="dialog-addStaff"
-  size="small" @close="clear">
+  @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 员工组中文名 -->
         <el-form-item label="员工组中文名" prop="name_cn">

@@ -10,17 +10,17 @@
         </el-form-item>
         <!-- 货品数量 -->
         <el-form-item label="*货品数量" class="product-num">
-          <el-input-number v-model="num" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+          <el-input-number v-model="ruleForm.qty" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
         </el-form-item>
         <!-- 货品单价 -->
-        <el-form-item label="货品单价">
-          <el-input v-model="ruleForm.name">
+        <el-form-item :label="'*货品单价' + this.currencyUnit">
+          <el-input v-model="ruleForm.unit_price">
           </el-input>
         </el-form-item>
         <!-- 货品状态 -->
         <el-form-item label="*货品状态" class="service-style">
-          <el-radio-group v-model="ruleForm.props">
-            <el-radio v-for="item in updateProp" :key="item.id" :label="item.id">{{item.cn_name}}
+          <el-radio-group v-model="ruleForm.status">
+            <el-radio v-for="item in updateProp" :key="item.id" :label="item.id">{{item.name}}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -65,25 +65,42 @@ export default {
   data () {
     return {
       ruleForm: {
+        unit_price: '',
         name: '',
         remark: '',
-        props: [],
-        qr_code: []
+        status: '',
+        qty: 1,
+        images: ''
       },
       state: '',
-      num: 1,
+      currencyUnit: '',
+      id: '',
+      ele: '',
       tranAmount: '',
-      updateProp: [],
+      updateProp: [
+        {
+          id: 0,
+          name: '正常'
+        }, {
+          id: 1,
+          name: '破损'
+        }, {
+          id: 2,
+          name: '问题件'
+        }
+      ],
       baleImgList: [],
       localization: {}
     }
   },
   methods: {
     getList () {
-      this.$request.editPayments(this.id).then(res => {
+      this.$request.getSingleDetails(this.id, this.ele).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
-          res.data.qr_code && (this.baleImgList[0] = { url: res.data.qr_code })
+          this.baleImgList = res.data.images
+          console.log(this.ruleForm, 'this.ruleForm')
+          // res.data.images && (this.baleImgList = { url: res.data.images })
         } else {
           this.$message({
             message: res.msg,
@@ -92,66 +109,65 @@ export default {
         }
       })
     },
-    // 获取多选框
-    getProp () {
-      this.$request.getProps().then(res => {
-        this.updateProp = res.data
-        this.localization = res.localization
-      })
-    },
     handleChange (value) {
       console.log(value)
     },
     confirm () {
-      this.ruleForm.qr_code = this.baleImgList.map(item => {
+      console.log(this.ruleForm.status, 'ruleForm.status')
+      this.ruleForm.images = this.baleImgList.map(item => {
         return {
           url: item.url
         }
       })
       if (!this.ruleForm.name) {
-        return this.$message.error('请输入支付类型名称')
-      } else if (!this.ruleForm.remark && !this.baleImgList[0]) {
-        return this.$message.error('请输入备注')
-      }
-      if (this.state === 'add') {
-        this.$request.addPayments(this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '成功',
-              message: res.msg
-            })
-            this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+        return this.$message.error('请输入货品名称')
+      } else if (!this.ruleForm.qty) {
+        return this.$message.error('请输入货品数量')
+      } else if (this.ruleForm.status === '') {
+        return this.$message.error('请选择货品状态')
+      } else if (!this.ruleForm.unit_price) {
+        return this.$message.error('请输入货品单价')
       } else {
-        this.$request.updatePayments(this.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '成功',
-              message: res.msg
-            })
+        if (this.state === 'add') { // 新增商品清单保存
+          this.$request.updatePackagesDetails(this.id, this.ruleForm).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '成功',
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
+        } else { // 编辑商品清单保存
+          this.$request.saveSingleDetails(this.id, this.ele, this.ruleForm).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '成功',
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            this.show = false
+          })
+        }
       }
     },
-    // 上传打包照片
+    // 上传商品照片
     uploadBaleImg (item) {
       let file = item.file
       this.onUpload(file).then(res => {
@@ -189,14 +205,17 @@ export default {
       return this.$request.uploadImg(params)
     },
     clear () {
+      this.ruleForm.unit_price = ''
+      this.ruleForm.qty = ''
       this.ruleForm.name = ''
+      this.ruleForm.status = ''
       this.ruleForm.remark = ''
       this.baleImgList = []
-      this.ruleForm.qr_code = []
+      this.ruleForm.images = []
     },
     init () {
       console.log(this.id, '我是接受id')
-      this.getProp()
+      console.log(this.currencyUnit, 'currencyUnit')
       if (this.state === 'edit') {
         this.getList()
       }

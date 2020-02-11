@@ -47,7 +47,7 @@
               <div class="list-evaluation" v-if="item.content">
                 {{item.content}}
               </div>
-              <div v-else>
+              <div v-else class="noDate">
                 暂无数据
               </div>
               <div class="left-img" v-for="(ele, index) in item.images" :key="index">

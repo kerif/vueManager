@@ -1,6 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="新增费用" class="dialog-addCost"
-  size="small" @close="clear">
+  <el-dialog :visible.sync="show" title="新增费用" class="dialog-addCost"  @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 费用名称 -->
         <el-form-item label="费用名称" prop="name">

@@ -63,7 +63,7 @@
         <!-- 物品总价值 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="物品总价值">
+              <el-form-item :label="'物品总价值' + this.localization.currency_unit">
                 <el-input v-model="user.package_value" placeholder="请输入物品总价值"></el-input>
               </el-form-item>
             </el-col>
@@ -194,17 +194,18 @@
     <el-row :gutter="20" class="id-style">
       <el-col :span="6">
         <p class="upload-top">原始上传清单：</p>
-        <div v-if="user.pack_pictures">
-          <div class="left-img" v-for="item in user.pack_pictures" :key="item.id">
-            <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
-              <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" >
+        <div v-if="user.item_pictures">
+          <div class="left-img" v-for="(item, index) in user.item_pictures" :key="index">
+            <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.path}`, imgVisible=true">
+              <img :src="`${$baseUrl.IMAGE_URL}${item.path}`" class="itemImg" >
             </span>
           </div>
         </div>
         <div v-else class="nullProduct">无</div>
         <p>原始商品数量：<span>{{user.qty}}</span></p>
         <p>原始商品备注：</p>
-        <p>{{user.remark}}</p>
+        <p v-if="user.remark">{{user.remark}}</p>
+        <p v-else class="noDate">暂无数据</p>
       </el-col>
       <el-col :span="18">
         <el-table
@@ -216,7 +217,7 @@
           <el-table-column type="index" width="50"></el-table-column>
           <!-- 货品名称 -->
           <el-table-column
-          prop="package_name"
+          prop="name"
           label="货品名称">
           </el-table-column>
           <!-- 数量 -->
@@ -226,30 +227,30 @@
           </el-table-column>
           <!-- 单价 -->
           <el-table-column
-          prop="package_value"
-          label="单价">
+          prop="unit_price"
+          :label="'单价' + this.localization.currency_unit">
           </el-table-column>
           <!-- 状态 -->
           <el-table-column
           label="状态">
           <template slot-scope="scope">
-            <span v-if="scope.row.status === 1">正常</span>
-            <span v-if="scope.row.status === 2">破损</span>
-            <span v-if="scope.row.status === 3">问题件</span>
+            <span v-if="scope.row.status === 0">正常</span>
+            <span v-if="scope.row.status === 1">破损</span>
+            <span v-if="scope.row.status === 2">问题件</span>
           </template>
           </el-table-column>
           <!-- 图片 -->
-          <el-table-column label="图片" prop="item_pictures">
+          <el-table-column label="图片" prop="images" width="170">
             <template slot-scope="scope">
-              <span v-for="item in scope.row.item_pictures"
-              :key="item.id" style="cursor:pointer;"
-                @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
-                  <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
-              </span>
+              <span v-for="(ele, index) in scope.row.images"
+              :key="index" style="cursor:pointer;"
+                @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele.url}`, imgVisible=true">
+                  <img :src="`${$baseUrl.IMAGE_URL}${ele.url}`" style="width: 40px; margin-right: 5px;">
+                </span>
           </template>
           </el-table-column>
           <!-- 操作 -->
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="130">
             <template slot-scope="scope">
                 <el-button class="btn-dark-green" @click="editProduct(scope.row.id)">编辑</el-button>
                 <el-button class="btn-light-red" @click="deleteProduct(scope.row.id)">删除</el-button>
@@ -309,6 +310,7 @@ export default {
       hasStore: false,
       imgVisible: false,
       imgSrc: '',
+      currencyUnit: '',
       form: {}
     }
   },
@@ -318,8 +320,8 @@ export default {
     this.getAgentData()
     this.getExpressData() // 获取全部快递公司
     if (this.$route.params.id) {
-      console.log(this.$route.params.warehouse_id, 'warehouse_id')
       this.getList() // 获取商品详细
+      this.getPackageList() // 获取表格数据
       // this.user.warehouse_id = this.$route.params.warehouse_id
       // this.user.express_num = this.$route.params.express_num
       // this.user.user_id = this.$route.params.user_id + '---' + this.$route.params.user_name
@@ -343,7 +345,7 @@ export default {
         this.updateService = res.data
       })
     },
-    // 获取商品清单
+    // 获取整页数据
     getList () {
       this.$request.getProductDetails(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -357,9 +359,14 @@ export default {
           // if (res.data.props) {
           //   let props = JSON.parse(res.data.props)
           // }
-          this.tableData = [res.data]
-          console.log(this.form, 'form')
+          this.currencyUnit = res.localization.currency_unit
         }
+      })
+    },
+    // 获取商品列表数据
+    getPackageList () {
+      this.$request.getPackageList(this.$route.params.id).then(res => {
+        this.tableData = res.data
       })
     },
     // 获取代理列表
@@ -374,34 +381,41 @@ export default {
         this.expressData = res.data
       })
     },
-    // 增加转账支付配置
+    // 添加商品清单
     addProduct () {
-      dialog({ type: 'productList', state: 'add' }, () => {
-        this.getList()
+      dialog({ type: 'productList',
+        state: 'add',
+        id: this.$route.params.id,
+        currencyUnit: this.currencyUnit }, () => {
+        this.getPackageList()
       })
     },
     // 编辑商品清单
-    editProduct (id) {
-      console.log(id, 'id')
-      dialog({ type: 'productList', state: 'edit', id: id }, () => {
-        this.getList()
+    editProduct (ele) {
+      dialog({ type: 'productList',
+        state: 'edit',
+        id: this.$route.params.id,
+        ele: ele,
+        currencyUnit: this.currencyUnit
+      }, () => {
+        this.getPackageList()
       })
     },
     // 删除商品清单
-    deleteProduct (id) {
-      this.$confirm(`您真的要删除转账支付吗？`, '提示', {
+    deleteProduct (ele) {
+      this.$confirm(`您真的要删除吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$request.deleteTransfer(id).then(res => {
+        this.$request.deleteSingleDetails(this.$route.params.id, ele).then(res => {
           if (res.ret) {
             this.$notify({
               title: '操作成功',
               message: res.msg,
               type: 'success'
             })
-            this.getPayment()
+            this.getPackageList()
           } else {
             this.$notify({
               title: '操作失败',
@@ -481,19 +495,21 @@ export default {
         }
       })
       if (this.user.express_num === '') {
-        this.$message.error('请输入快递单号')
+        return this.$message.error('请输入快递单号')
       } else if (this.user.package_weight === '') {
-        this.$message.error('请输入重量')
+        return this.$message.error('请输入重量')
       } else if (this.user.length === '') {
-        this.$message.error('请输入长度')
+        return this.$message.error('请输入长度')
       } else if (this.user.width === '') {
-        this.$message.error('请输入长度')
+        return this.$message.error('请输入长度')
       } else if (this.user.height === '') {
-        this.$message.error('请输入高度')
+        return this.$message.error('请输入高度')
       } else if (!this.user.props.length) {
-        this.$message.error('请选择属性')
+        return this.$message.error('请选择属性')
+      } else if (this.user.express_company_id) {
+        return this.$message.error('请选择快递公司')
       } else if (this.user.warehouse_id === '') {
-        this.$message.error('请选择仓库')
+        return this.$message.error('请选择仓库')
       } else {
         if (this.$route.params.id) { // 如果是从订单跳转过来
           this.tableLoading = true
@@ -506,7 +522,6 @@ export default {
                 title: '操作成功',
                 message: res.msg
               })
-              console.log('我执行完了')
               this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
               this.user.user_id = this.user.warehouse_id = this.user.package_name = ''
               this.user.express_num = this.user.remark = this.user.express_company_id = ''
@@ -706,15 +721,16 @@ export default {
     }
   }
   .left-img {
-    margin-top: 20px;
-    padding: 10px 5px;
+    display: inline-block;
+    // margin-top: 20px;
+    // padding: 10px 5px;
   }
-  .productImg {
+  .itemImg {
     border: 1px dashed #ccc;
     display: inline-block;
     margin-right: 15px;
-    width: 110px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
   }
   .nullProduct {
     padding-left: 70px;

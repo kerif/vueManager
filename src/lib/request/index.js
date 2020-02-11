@@ -225,6 +225,26 @@ exports.getAllService = () => {
 exports.getExpressData = () => {
   return $form.get('express-companies')
 }
+// 包裹快速入库 新增商品清单
+exports.updatePackagesDetails = (id, params) => {
+  return $form.post(`packages/${id}/details`, params)
+}
+// 包裹快速入库 获取商品清单列表
+exports.getPackageList = (id) => {
+  return $form.get(`packages/${id}/details`)
+}
+// 包裹快速入库 获取单条商品清单数据
+exports.getSingleDetails = (id, ele) => {
+  return $form.get(`packages/${id}/details/${ele}`)
+}
+// 包裹快速入库 编辑保存单条商品清单数据
+exports.saveSingleDetails = (id, ele, params) => {
+  return $form.put(`packages/${id}/details/${ele}`, params)
+}
+// 包裹快速入库 删除单条商品清单数据
+exports.deleteSingleDetails = (id, ele) => {
+  return $form.delete(`packages/${id}/details/${ele}`)
+}
 exports.getWarehouse = (params) => {
   return $form.get('packages', { params })
 }

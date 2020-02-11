@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" :title="state === 'add' ? '新增': '编辑'" class="dialog-addStaff"
-  size="small" @close="clear">
+   @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 增值服务名称 -->
         <el-form-item label="增值服务名称" prop="name">
