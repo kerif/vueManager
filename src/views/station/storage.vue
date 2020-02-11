@@ -95,7 +95,14 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="*快递公司">
-                <el-input v-model="user.express_company" placeholder="请输入快递公司"></el-input>
+                <el-select v-model="user.express_company_id" clearable>
+                  <el-option
+                    v-for="item in expressData"
+                    :key="item.id"
+                    :value="item.id"
+                    :label="item.name">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -275,7 +282,7 @@ export default {
     return {
       user: {
         express_num: '',
-        express_company: '',
+        express_company_id: '',
         user_id: '',
         warehouse_id: '',
         package_weight: '',
@@ -297,6 +304,7 @@ export default {
       tableLoading: false,
       localization: {},
       agentData: [],
+      expressData: [],
       goodsImgList: [],
       hasStore: false,
       imgVisible: false,
@@ -308,9 +316,9 @@ export default {
     this.getProp() // 获取物品属性
     this.getService() // 获取全部服务
     this.getAgentData()
+    this.getExpressData() // 获取全部快递公司
     if (this.$route.params.id) {
       console.log(this.$route.params.warehouse_id, 'warehouse_id')
-      // this.getWarehouseInfo() // 从订单跳转过来时加载的表格数据
       this.getList() // 获取商品详细
       // this.user.warehouse_id = this.$route.params.warehouse_id
       // this.user.express_num = this.$route.params.express_num
@@ -345,6 +353,7 @@ export default {
           this.user.props = res.data.props.map(item => item.id)
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
           this.user.warehouse_id = res.data.warehouse.id
+          this.user.express_company_id = res.data.express_company.id
           // if (res.data.props) {
           //   let props = JSON.parse(res.data.props)
           // }
@@ -357,6 +366,12 @@ export default {
     getAgentData () {
       this.$request.getSimpleWarehouse().then(res => {
         this.agentData = res.data
+      })
+    },
+    // 获取快递公司数据
+    getExpressData () {
+      this.$request.getExpressData().then(res => {
+        this.expressData = res.data
       })
     },
     // 增加转账支付配置
@@ -397,27 +412,6 @@ export default {
         })
       })
     },
-    // 从订单跳转到入库时加载的表格数据
-    // getWarehouseInfo () {
-    //   this.tableLoading = true
-    //   this.$request.getWarehouseList({
-    //     page: this.page_params.page,
-    //     size: this.page_params.size
-    //   }).then(res => {
-    //     this.tableLoading = false
-    //     if (res.ret) {
-    //       this.tableData = res.data
-    //       this.page_params.page = res.meta.current_page
-    //       this.page_params.total = res.meta.total
-    //     } else {
-    //       this.$notify({
-    //         title: '操作失败',
-    //         message: res.msg,
-    //         type: 'warning'
-    //       })
-    //     }
-    //   })
-    // },
     // 上传物品照片
     uploadGoodsImg (item) {
       let file = item.file
@@ -479,31 +473,6 @@ export default {
       this.supplierId = item.id
       this.supplierName = item.name
     },
-    // 直接添加时加载的表格数据
-    // getList () {
-    //   this.tableLoading = true
-    //   if (this.$route.params.id) {
-    //     this.getWarehouseInfo()
-    //   } else {
-    //     this.$request.getStorageList({
-    //       page: this.page_params.page,
-    //       size: this.page_params.size
-    //     }).then(res => {
-    //       this.tableLoading = false
-    //       if (res.ret) {
-    //         this.tableData = res.data
-    //         this.page_params.page = res.meta.current_page
-    //         this.page_params.total = res.meta.total
-    //       } else {
-    //         this.$notify({
-    //           title: '操作失败',
-    //           message: res.msg,
-    //           type: 'warning'
-    //         })
-    //       }
-    //     })
-    //   }
-    // },
     // 保存
     submitStorage () {
       this.user.package_pictures = this.goodsImgList.map(item => {
@@ -537,13 +506,14 @@ export default {
                 title: '操作成功',
                 message: res.msg
               })
-              this.getWarehouseInfo()
+              console.log('我执行完了')
               this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
               this.user.user_id = this.user.warehouse_id = this.user.package_name = ''
-              this.user.express_num = this.user.remark = this.user.express_company = ''
+              this.user.express_num = this.user.remark = this.user.express_company_id = ''
+              this.goodsImgList = []
               this.user.props = []
               this.user.chosen_services = []
-              this.user.location = ''
+              this.user.location = this.user.destination_country = ''
               this.hasStore = true
             } else {
               this.$message({
@@ -568,10 +538,11 @@ export default {
               this.getList()
               this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = ''
               this.user.user_id = this.user.warehouse_id = this.user.package_value = ''
-              this.user.express_num = this.user.remark = this.user.express_company = ''
+              this.user.express_num = this.user.remark = this.user.express_company_id = ''
+              this.goodsImgList = []
               this.user.props = []
               this.user.chosen_services = []
-              this.user.location = ''
+              this.user.location = this.user.destination_country = ''
             } else if (res.ret === 2) {
               this.$confirm('快递单号不存在或客户未预报，请确认是否入库', '提示', {
                 confirmButtonText: '确定',
@@ -588,8 +559,9 @@ export default {
                     this.getList()
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = ''
                     this.user.user_id = this.user.warehouse_id = ''
-                    this.user.express_num = this.user.express_company = this.user.remark = ''
+                    this.user.express_num = this.user.express_company_id = this.user.remark = this.user.destination_country = ''
                     this.user.props = []
+                    this.goodsImgList = []
                     this.user.chosen_services = []
                     this.user.location = ''
                   } else {

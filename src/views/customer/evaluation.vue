@@ -33,29 +33,30 @@
         :key="index" class="evaluation-list">
         <div class="order-num">订单号：{{item.order}}</div>
         <el-row :gutter="20">
+          <!-- 头像 -->
           <el-col :span="2">
             <div class="list-img">
-              <img src="../../assets/tree.png">
+              <img :src="item.user.avatar">
             </div>
           </el-col>
           <el-col :span="17">
             <div class="list-font">
               <span>{{item.user.id}}---{{item.user.name}}</span>&nbsp;&nbsp;
               <span class="font-order">{{item.created_at}}</span>
-              <div class="list-evaluation">
+              <!-- 评价 -->
+              <div class="list-evaluation" v-if="item.content">
                 {{item.content}}
               </div>
-              <!-- <div class="order-img">
-                <img src="../../assets/storage.png">
-                <img src="../../assets/ship.png">
-              </div> -->
+              <div v-else>
+                暂无数据
+              </div>
               <div class="left-img" v-for="(ele, index) in item.images" :key="index">
                 <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele}`, imgVisible=true">
                   <img :src="`${$baseUrl.IMAGE_URL}${ele}`" class="productImg" >
                 </span>
               </div>
               <div class="location-sty">
-                <i class="el-icon-map-location"></i><span>马来西亚</span>
+                <i class="el-icon-map-location"></i><span>{{item.country}}</span>
               </div>
             </div>
           </el-col>

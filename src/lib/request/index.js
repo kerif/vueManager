@@ -221,6 +221,10 @@ exports.getProps = () => {
 exports.getAllService = () => {
   return $form.get('packages/package-services')
 }
+// 包裹快速入库 获取全部快递公司
+exports.getExpressData = () => {
+  return $form.get('express-companies')
+}
 exports.getWarehouse = (params) => {
   return $form.get('packages', { params })
 }
