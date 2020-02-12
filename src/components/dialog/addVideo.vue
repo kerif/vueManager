@@ -37,7 +37,7 @@
          <div class="updateImg">仅支持jpg, 宽度 300px、高度 225px</div>
     </el-form-item>
     <!-- 视频 -->
-    <el-form-item class="updateChe" label="物品照片">
+    <el-form-item class="updateChe" label="视频">
       <span class="img-item" v-for="(item, index) in goodsImgList" :key="item.name">
         <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
         <span class="model-box"></span>
@@ -47,7 +47,7 @@
         </span>
       </span>
       <el-upload
-        v-show="goodsImgList.length < 3"
+        v-show="goodsImgList.length < 1"
         class="avatar-uploader"
         list-type="picture-card"
         action=""

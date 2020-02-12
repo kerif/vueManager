@@ -77,7 +77,7 @@
         <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
         label-position="top" :rules="rules">
         <el-row :gutter="20">
-         <el-col :span="12">
+         <el-col :span="6">
             <!-- 小程序首页视频入口图 -->
             <el-form-item label="*小程序首页视频入口图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="item.name">
@@ -102,7 +102,7 @@
             </el-form-item>
           </el-col>
             <!-- 小程序首页评论入口图 -->
-          <el-col :span="12">
+          <el-col :span="6">
             <el-form-item label="*小程序首页评论入口图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in evaluationImgList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
@@ -125,10 +125,8 @@
             <span class="suggest-btn">建议尺寸：173px*60px</span>
             </el-form-item>
           </el-col>
-          </el-row>
-          <el-row :gutter="20">
             <!-- 小程序预报页图 -->
-          <el-col :span="12">
+          <el-col :span="6">
             <el-form-item label="*小程序预报页图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
@@ -152,7 +150,7 @@
             </el-form-item>
           </el-col>
             <!-- 小程序运费查询页图 -->
-          <el-col :span="12">
+          <el-col :span="6">
             <el-form-item label="*小程序运费查询页图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in freightList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
@@ -173,6 +171,154 @@
                 </i>
             </el-upload><br/>
             <span class="suggest-btn">建议尺寸：355px*160px</span>
+            </el-form-item>
+          </el-col>
+          </el-row>
+        <el-row :gutter="20">
+         <el-col :span="6">
+            <!-- 物流查询页图” -->
+            <el-form-item label="*物流查询页图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="baleImgList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadBaleImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：173px*60px</span>
+            </el-form-item>
+          </el-col>
+            <!-- 支持与帮助中心 -->
+          <el-col :span="6">
+            <el-form-item label="*支持与帮助中心" class="updateChe">
+                <span class="img-item" v-for="(item, index) in evaluationImgList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteEva(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="evaluationImgList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadEvaluationImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：173px*60px</span>
+            </el-form-item>
+          </el-col>
+          <!-- 分享页 -->
+          <el-col :span="6">
+            <el-form-item label="*分享页" class="updateChe">
+                <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="customerList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="customerImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：355px*160px</span>
+            </el-form-item>
+          </el-col>
+          <!-- 首页 -->
+          <el-col :span="6">
+            <el-form-item label="*首页" class="updateChe">
+                <span class="img-item" v-for="(item, index) in freightList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteFre(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="freightList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="freightImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：355px*160px</span>
+            </el-form-item>
+          </el-col>
+          </el-row>
+        <el-row :gutter="20">
+         <el-col :span="6">
+          <!-- 视频区 -->
+            <el-form-item label="*视频区" class="updateChe">
+                <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="baleImgList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadBaleImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：173px*60px</span>
+            </el-form-item>
+          </el-col>
+          <!-- 评论区 -->
+          <el-col :span="6">
+            <el-form-item label="*评论区" class="updateChe">
+                <span class="img-item" v-for="(item, index) in evaluationImgList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteEva(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="evaluationImgList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadEvaluationImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：173px*60px</span>
             </el-form-item>
           </el-col>
           </el-row>

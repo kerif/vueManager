@@ -27,6 +27,7 @@
             <el-col :span="18">
               <el-form-item label="*寄往仓库">
                 <el-select v-model="user.warehouse_id" clearable
+                @change="getAreaData"
                  :disabled="!!this.$route.params.id && !hasStore">
                   <el-option
                     v-for="item in agentData"
@@ -52,11 +53,11 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- 物品类型 -->
+          <!-- 物品名称 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="物品类型">
-                <el-input v-model="user.package_name" placeholder="请输入物品类型"></el-input>
+              <el-form-item label="物品名称">
+                <el-input v-model="user.package_name" placeholder="请输入物品名称"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -72,7 +73,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="备注">
-                <el-input v-model="user.remark" placeholder="请输入备注"
+                <el-input v-model="user.in_storage_remark" placeholder="请输入备注"
                 type="textarea"  :autosize="{ minRows: 2, maxRows: 4}"></el-input>
               </el-form-item>
             </el-col>
@@ -110,7 +111,15 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="寄往地区">
-                <el-input v-model="user.destination_country" placeholder="请输入寄往地区"  :disabled="!!this.$route.params.id && !hasStore"></el-input>
+                  <el-select v-model="user.country_id"
+                   :disabled="(!!this.$route.params.id && !hasStore) || this.user.warehouse_id === ''" clearable>
+                  <el-option
+                    v-for="item in shipData"
+                    :key="item.id"
+                    :value="item.id"
+                    :label="item.cn_name">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -189,7 +198,7 @@
   </el-row>
   <div class="select-box">
       <h4>商品清单</h4>
-      <add-btn @click.native="addProduct" v-if="this.$route.params.id">添加商品清单</add-btn>
+      <add-btn @click.native="addProduct">添加商品清单</add-btn>
     </div>
     <el-row :gutter="20" class="id-style">
       <el-col :span="6">
@@ -202,10 +211,10 @@
           </div>
         </div>
         <div v-else class="nullProduct">无</div>
-        <p>原始商品数量：<span>{{user.qty}}</span></p>
+        <p>原始商品数量：<span class="remark-font">{{user.qty}}</span></p>
         <p>原始商品备注：</p>
-        <p v-if="user.remark">{{user.remark}}</p>
-        <p v-else class="noDate">暂无数据</p>
+        <span v-if="user.remark" class="remark-font">{{user.remark}}</span>
+        <span v-else class="noDate">暂无数据</span>
       </el-col>
       <el-col :span="18">
         <el-table
@@ -291,11 +300,11 @@ export default {
         package_name: '',
         props: [],
         chosen_services: [],
-        destination_country: '',
+        country_id: '',
         length: '',
         width: '',
         height: '',
-        remark: '',
+        in_storage_remark: '',
         location: '',
         package_pictures: ''
       },
@@ -306,11 +315,13 @@ export default {
       localization: {},
       agentData: [],
       expressData: [],
+      shipData: [],
       goodsImgList: [],
       hasStore: false,
       imgVisible: false,
       imgSrc: '',
       currencyUnit: '',
+      areaId: '',
       form: {}
     }
   },
@@ -329,6 +340,9 @@ export default {
       //   let props = JSON.parse(this.$route.query.props)
       //   this.user.props = props.map(item => item.id)
       // }
+      if (this.user.warehouse_id) {
+        console.log(this.user.warehouse_id, 'user.warehouse_id')
+      }
     }
   },
   methods: {
@@ -356,6 +370,9 @@ export default {
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
           this.user.warehouse_id = res.data.warehouse.id
           this.user.express_company_id = res.data.express_company.id
+          this.user.country_id = res.data.country.id
+          this.areaId = this.user.warehouse_id
+          this.updateAreaData()
           // if (res.data.props) {
           //   let props = JSON.parse(res.data.props)
           // }
@@ -379,6 +396,17 @@ export default {
     getExpressData () {
       this.$request.getExpressData().then(res => {
         this.expressData = res.data
+      })
+    },
+    // 获取寄往地区数据
+    getAreaData (id) {
+      this.$request.getArea(id).then(res => {
+        this.shipData = res.data
+      })
+    },
+    updateAreaData () {
+      this.$request.getArea(this.areaId).then(res => {
+        this.shipData = res.data
       })
     },
     // 添加商品清单
@@ -528,7 +556,7 @@ export default {
               this.goodsImgList = []
               this.user.props = []
               this.user.chosen_services = []
-              this.user.location = this.user.destination_country = ''
+              this.user.location = this.user.country_id = ''
               this.hasStore = true
             } else {
               this.$message({
@@ -557,7 +585,7 @@ export default {
               this.goodsImgList = []
               this.user.props = []
               this.user.chosen_services = []
-              this.user.location = this.user.destination_country = ''
+              this.user.location = this.user.country_id = ''
             } else if (res.ret === 2) {
               this.$confirm('快递单号不存在或客户未预报，请确认是否入库', '提示', {
                 confirmButtonText: '确定',
@@ -574,7 +602,7 @@ export default {
                     this.getList()
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = ''
                     this.user.user_id = this.user.warehouse_id = ''
-                    this.user.express_num = this.user.express_company_id = this.user.remark = this.user.destination_country = ''
+                    this.user.express_num = this.user.express_company_id = this.user.remark = this.user.country_id = ''
                     this.user.props = []
                     this.goodsImgList = []
                     this.user.chosen_services = []
@@ -635,6 +663,8 @@ export default {
     }
     .el-input-group--append .el-input__inner {
       height: 80px !important;
+      font-weight: bolder;
+      font-size: 30px;
     }
   }
   .service-style {
@@ -647,52 +677,52 @@ export default {
     margin-bottom: 20px;
   }
   .img-item {
-    // display: inline-block;
-    // border: 1px dashed #d9d9d9;
-    // width: 148px;
-    // height: 148px;
-    // margin-right: 10px;
-    // margin-bottom: 10px;
-    // border-radius: 6px;
-    // text-align: center;
-    // position: relative;
-    // box-sizing: border-box;
-    // cursor: pointer;
-    // &:hover {
-    //   .model-box, .operat-box {
-    //     opacity: 1;
-    //     transition: all .5s ease-in;
-    //   }
-    // }
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box, .operat-box {
+        opacity: 1;
+        transition: all .5s ease-in;
+      }
+    }
   }
   .operat-box {
-    // position: absolute;
-    // top: 50%;
-    // left: 50%;
-    // transform: translate(-50%, -50%);
-    // opacity: 0;
-    // i {
-    //   font-size: 20px;
-    //   color: #fff;
-    //   margin-right: 10px;
-    // }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    i {
+      font-size: 20px;
+      color: #fff;
+      margin-right: 10px;
+    }
   }
   .model-box {
-    // width: 100%;
-    // height: 100%;
-    // position: absolute;
-    // left: 0;
-    // opacity: 0;
-    // background-color: rgba(0, 0, 0, .3);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, .3);
   }
   .updateImg {
-    // margin-top: 10px;
-    // color: #ccc;
+    margin-top: 10px;
+    color: #ccc;
   }
   .goods-img {
-    // width: 100%;
-    // height: 100%;
-    // border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
   }
   .avatar-uploader {
     display: inline-block;
@@ -735,6 +765,9 @@ export default {
   .nullProduct {
     padding-left: 70px;
     color: #ccc;
+  }
+  .remark-font {
+    color: #ff9a20;
   }
 }
 </style>

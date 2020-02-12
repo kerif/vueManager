@@ -39,7 +39,7 @@
               <img :src="item.user.avatar">
             </div>
           </el-col>
-          <el-col :span="17">
+          <el-col :span="16" :offset="1">
             <div class="list-font">
               <span>{{item.user.id}}---{{item.user.name}}</span>&nbsp;&nbsp;
               <span class="font-order">{{item.created_at}}</span>

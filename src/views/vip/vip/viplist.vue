@@ -21,6 +21,7 @@
         <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
       </el-table-column>
+      <el-table-column label="邮箱" prop="email"></el-table-column>
       <el-table-column label="手机号码" prop="phone"></el-table-column>
       <el-table-column label="客户昵称" prop="name"></el-table-column>
       <el-table-column label="客户组" prop="user_group.name_cn"></el-table-column>

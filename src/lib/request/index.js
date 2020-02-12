@@ -225,6 +225,10 @@ exports.getAllService = () => {
 exports.getExpressData = () => {
   return $form.get('express-companies')
 }
+// 包裹快速入库 获取全部寄往地区
+exports.getArea = (id) => {
+  return $form.get(`shipments/warehouse/${id}/countries`)
+}
 // 包裹快速入库 新增商品清单
 exports.updatePackagesDetails = (id, params) => {
   return $form.post(`packages/${id}/details`, params)
