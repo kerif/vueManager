@@ -199,7 +199,7 @@
   </el-row>
   <div class="select-box">
       <h4>商品清单</h4>
-      <add-btn @click.native="addProduct" v-if="this.shipNum">添加商品清单</add-btn>
+      <add-btn @click.native="addProduct" v-if="this.shipNum || this.$route.params.id">添加商品清单</add-btn>
     </div>
     <el-row :gutter="20" class="id-style">
       <el-col :span="6">
