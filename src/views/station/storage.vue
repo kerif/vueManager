@@ -145,7 +145,7 @@
           <!-- 物品属性 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="物品属性" class="service-style">
+              <el-form-item label="*物品属性" class="service-style">
                 <el-checkbox-group v-model="user.props">
                   <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id">{{item.cn_name}}
                   </el-checkbox>
