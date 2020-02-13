@@ -197,6 +197,7 @@
     </div> -->
     </el-form>
   </el-row>
+  <div class="noExpress" v-if="this.shipNum || this.$route.params.id">
   <div class="select-box">
       <h4>商品清单</h4>
       <add-btn @click.native="addProduct" v-if="this.shipNum || this.$route.params.id">添加商品清单</add-btn>
@@ -269,6 +270,7 @@
       </el-table>
       </el-col>
     </el-row>
+    </div>
     <!-- <nle-pagination :pageParams="page_params"></nle-pagination> -->
       <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
