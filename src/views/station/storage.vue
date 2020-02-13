@@ -18,7 +18,8 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="*快递单号">
-                <el-input v-model="user.express_num" placeholder="请输入快递单号" :disabled="!!this.$route.params.id && !hasStore"></el-input>
+                <el-input v-model="user.express_num" placeholder="请输入快递单号"
+                @blur="getNum(user.express_num)" :disabled="!!this.$route.params.id && !hasStore"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -322,7 +323,9 @@ export default {
       imgSrc: '',
       currencyUnit: '',
       areaId: '',
-      form: {}
+      form: {},
+      shipNum: '', // 通过快递单号拉取的包裹id
+      expressNum: '' // 保存的快递单号
     }
   },
   created () {
@@ -359,7 +362,23 @@ export default {
         this.updateService = res.data
       })
     },
-    // 获取整页数据
+    getNum (num) {
+      console.log('num', num)
+      this.expressNum = num
+    },
+    getShipmentNum () {
+      this.$request.getShipmentNum(this.expressNum).then(res => {
+        if (res.ret) {
+          this.shipNum = res.data.id
+        } else {
+          this.$notify({
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 从包裹快速入库时获取整页数据
     getList () {
       this.$request.getProductDetails(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -534,7 +553,7 @@ export default {
         return this.$message.error('请输入高度')
       } else if (!this.user.props.length) {
         return this.$message.error('请选择属性')
-      } else if (this.user.express_company_id) {
+      } else if (this.user.express_company_id === '') {
         return this.$message.error('请选择快递公司')
       } else if (this.user.warehouse_id === '') {
         return this.$message.error('请选择仓库')
@@ -558,6 +577,7 @@ export default {
               this.user.chosen_services = []
               this.user.location = this.user.country_id = ''
               this.hasStore = true
+              this.$router.replace('/station/storage')
             } else {
               this.$message({
                 title: '操作失败',

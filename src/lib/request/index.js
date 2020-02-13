@@ -245,6 +245,10 @@ exports.getSingleDetails = (id, ele) => {
 exports.saveSingleDetails = (id, ele, params) => {
   return $form.put(`packages/${id}/details/${ele}`, params)
 }
+// 包裹快速入库 通过快递单号拉取详情接口
+exports.getShipmentNum = (id) => {
+  return $form.get(`shipments/package-num/${id}/id`)
+}
 // 包裹快速入库 删除单条商品清单数据
 exports.deleteSingleDetails = (id, ele) => {
   return $form.delete(`packages/${id}/details/${ele}`)
