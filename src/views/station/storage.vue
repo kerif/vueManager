@@ -47,7 +47,7 @@
                   <el-autocomplete
                   :fetch-suggestions="queryCNSearch"
                   @select="handleSelect"
-                  placeholder="请输入客户ID"
+                  placeholder="请输入客户ID，不填则默认无人认领包裹"
                   v-model="user.user_id"
                   :disabled="!!this.$route.params.id && !hasStore">
                 </el-autocomplete>

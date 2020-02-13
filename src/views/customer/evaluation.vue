@@ -15,17 +15,17 @@
         end-placeholder="提交结束日期">
       </el-date-picker>
     </div>
-      <!-- <div class="chooseStatus">
-        <el-select v-model="agent_name" @change="onAgentChange" clearable
-        placeholder="请选择仓库">
-          <el-option
-            v-for="item in agentData"
-            :key="item.id"
-            :value="item.id"
-            :label="item.warehouse_name">
-          </el-option>
-        </el-select>
-      </div> -->
+    <!-- 是否精选 -->
+    <div class="chooseStatus">
+      <el-select v-model="is_recommend" @change="onShipStatus" clearable>
+        <el-option
+          v-for="item in statusList"
+          :key="item.id"
+          :value="item.id"
+          :label="item.name">
+        </el-option>
+      </el-select>
+    </div>
     </search-group>
     <div>
       <ul>
@@ -103,7 +103,7 @@ export default {
   data () {
     return {
       tableLoading: false,
-      agent_name: '',
+      is_recommend: '', // 是否精选
       agentData: [],
       localization: {},
       evaluationData: [],
@@ -116,7 +116,17 @@ export default {
       show: false,
       labelId: '',
       form: {},
-      value: 2
+      value: 2,
+      statusList: [
+        {
+          id: 0,
+          name: '非精选'
+        },
+        {
+          id: 1,
+          name: '精选'
+        }
+      ]
     }
   },
   methods: {
@@ -126,7 +136,7 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        warehouse: this.agent_name
+        is_recommend: this.is_recommend
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 提交时间
@@ -148,9 +158,9 @@ export default {
         }
       })
     },
-    onAgentChange () {
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('agent', this.agent_name)
+    // 精选状态选择
+    onShipStatus () {
+      this.page_params.handleQueryChange('status', this.is_recommend)
       this.getList()
     },
     // 获取代理列表
@@ -240,9 +250,6 @@ export default {
   .chooseStatus {
     width: 150px;
     display: inline-block;
-    .el-select {
-      // width: 100%;
-    }
   }
   ul {
     list-style:none;

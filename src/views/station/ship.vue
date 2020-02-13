@@ -366,9 +366,6 @@ export default {
   .chooseStatus {
     width: 150px;
     display: inline-block;
-    .el-select {
-      // width: 100%;
-    }
   }
 }
 </style>
