@@ -285,7 +285,7 @@ exports.updateLogistics = (params) => {
 exports.getExpress = (params) => {
   return $form.post(`shipments/in-storage`, params)
 }
-// 入库 添加新包裹
+// 入库 添加未预报的新包裹
 exports.addShipment = (params) => {
   return $form.post('shipments/in-storage/add', params)
 }

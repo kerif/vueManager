@@ -656,7 +656,7 @@ export default {
                       message: res.msg,
                       type: 'success'
                     })
-                    this.getList()
+                    // this.getList()
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = ''
                     this.user.user_id = this.user.warehouse_id = ''
                     this.user.express_num = this.user.express_company_id = this.user.remark = this.user.country_id = ''
