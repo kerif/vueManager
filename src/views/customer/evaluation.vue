@@ -27,7 +27,7 @@
       </el-select>
     </div>
     </search-group>
-    <div>
+    <div v-if="evaluationData.length">
       <ul>
         <li v-for="(item, index) in evaluationData"
         :key="index" class="evaluation-list">
@@ -80,6 +80,9 @@
       </div>
         </li>
       </ul>
+    </div>
+    <div v-else class="noDate">
+       暂无数据
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">

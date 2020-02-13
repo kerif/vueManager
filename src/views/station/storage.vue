@@ -19,7 +19,7 @@
             <el-col :span="18">
               <el-form-item label="*快递单号">
                 <el-input v-model="user.express_num" placeholder="请输入快递单号"
-                @blur="getNum(user.express_num)" :disabled="!!this.$route.params.id && !hasStore"></el-input>
+                @blur="getNum(user.express_num)" :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -29,7 +29,7 @@
               <el-form-item label="*寄往仓库">
                 <el-select v-model="user.warehouse_id" clearable
                 @change="getAreaData"
-                 :disabled="!!this.$route.params.id && !hasStore">
+                 :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''">
                   <el-option
                     v-for="item in agentData"
                     :key="item.id"
@@ -49,7 +49,7 @@
                   @select="handleSelect"
                   placeholder="请输入客户ID，不填则默认无人认领包裹"
                   v-model="user.user_id"
-                  :disabled="!!this.$route.params.id && !hasStore">
+                  :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''">
                 </el-autocomplete>
               </el-form-item>
             </el-col>
@@ -113,7 +113,7 @@
             <el-col :span="18">
               <el-form-item label="寄往地区">
                   <el-select v-model="user.country_id"
-                   :disabled="(!!this.$route.params.id && !hasStore) || this.user.warehouse_id === ''" clearable>
+                   :disabled="(!!this.$route.params.id && !hasStore) || this.user.warehouse_id === '' || this.shipNum != ''" clearable>
                   <el-option
                     v-for="item in shipData"
                     :key="item.id"
@@ -215,8 +215,8 @@
         <div v-else class="nullProduct">无</div>
         <p>原始商品数量：<span class="remark-font">{{user.qty}}</span></p>
         <p>原始商品备注：</p>
-        <span v-if="user.remark" class="remark-font">{{user.remark}}</span>
-        <span v-else class="noDate">暂无数据</span>
+        <p v-if="user.remark" class="remark-font">{{user.remark}}</p>
+        <p v-else class="noDate">暂无数据</p>
       </el-col>
       <el-col :span="18">
         <el-table
@@ -635,7 +635,6 @@ export default {
                 title: '操作成功',
                 message: res.msg
               })
-              this.getList()
               this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = ''
               this.user.user_id = this.user.warehouse_id = this.user.package_value = ''
               this.user.express_num = this.user.remark = this.user.express_company_id = ''
@@ -643,6 +642,9 @@ export default {
               this.user.props = []
               this.user.chosen_services = []
               this.user.location = this.user.country_id = ''
+              this.hasStore = true
+              this.shipNum = ''
+              console.log(this.hasStore, 'this.hasStore')
             } else if (res.ret === 2) {
               this.$confirm('快递单号不存在或客户未预报，请确认是否入库', '提示', {
                 confirmButtonText: '确定',
@@ -656,7 +658,6 @@ export default {
                       message: res.msg,
                       type: 'success'
                     })
-                    // this.getList()
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = ''
                     this.user.user_id = this.user.warehouse_id = ''
                     this.user.express_num = this.user.express_company_id = this.user.remark = this.user.country_id = ''
