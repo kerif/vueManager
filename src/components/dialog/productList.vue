@@ -215,7 +215,6 @@ export default {
     },
     init () {
       console.log(this.id, '我是接受id')
-      console.log(this.currencyUnit, 'currencyUnit')
       if (this.state === 'edit') {
         this.getList()
       }

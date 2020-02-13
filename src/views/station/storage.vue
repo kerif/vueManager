@@ -199,7 +199,7 @@
   </el-row>
   <div class="select-box">
       <h4>商品清单</h4>
-      <add-btn @click.native="addProduct">添加商品清单</add-btn>
+      <add-btn @click.native="addProduct" v-if="this.shipNum">添加商品清单</add-btn>
     </div>
     <el-row :gutter="20" class="id-style">
       <el-col :span="6">
@@ -363,15 +363,25 @@ export default {
       })
     },
     getNum (num) {
-      console.log('num', num)
-      this.expressNum = num
+      if (num) {
+        console.log('num', num)
+        this.expressNum = num
+        this.getShipmentNum()
+      } else {
+        return this.$message.error('请输入快递单号')
+      }
     },
+    // 通过快递单号获取id
     getShipmentNum () {
       this.$request.getShipmentNum(this.expressNum).then(res => {
         if (res.ret) {
           this.shipNum = res.data.id
+          console.log(this.shipNum, 'shipNum')
+          this.getList()
+          this.getPackageList()
         } else {
           this.$notify({
+            title: '操作失败',
             message: res.msg,
             type: 'warning'
           })
@@ -380,7 +390,13 @@ export default {
     },
     // 从包裹快速入库时获取整页数据
     getList () {
-      this.$request.getProductDetails(this.$route.params.id).then(res => {
+      let id
+      if (this.$route.params.id) {
+        id = this.$route.params.id
+      } else {
+        id = this.shipNum
+      }
+      this.$request.getProductDetails(id).then(res => {
         if (res.ret) {
           this.user = res.data
           // this.user.express_num = this.$route.params.express_num
@@ -401,7 +417,13 @@ export default {
     },
     // 获取商品列表数据
     getPackageList () {
-      this.$request.getPackageList(this.$route.params.id).then(res => {
+      let packageId
+      if (this.$route.params.id) {
+        packageId = this.$route.params.id
+      } else {
+        packageId = this.shipNum
+      }
+      this.$request.getPackageList(packageId).then(res => {
         this.tableData = res.data
       })
     },
@@ -423,6 +445,7 @@ export default {
         this.shipData = res.data
       })
     },
+    // 通过仓库id拉取相对应的地区
     updateAreaData () {
       this.$request.getArea(this.areaId).then(res => {
         this.shipData = res.data
@@ -430,18 +453,30 @@ export default {
     },
     // 添加商品清单
     addProduct () {
+      let ProductId
+      if (this.$route.params.id) {
+        ProductId = this.$route.params.id
+      } else {
+        ProductId = this.shipNum
+      }
       dialog({ type: 'productList',
         state: 'add',
-        id: this.$route.params.id,
+        id: ProductId,
         currencyUnit: this.currencyUnit }, () => {
         this.getPackageList()
       })
     },
     // 编辑商品清单
     editProduct (ele) {
+      let ProductId
+      if (this.$route.params.id) {
+        ProductId = this.$route.params.id
+      } else {
+        ProductId = this.shipNum
+      }
       dialog({ type: 'productList',
         state: 'edit',
-        id: this.$route.params.id,
+        id: ProductId,
         ele: ele,
         currencyUnit: this.currencyUnit
       }, () => {
