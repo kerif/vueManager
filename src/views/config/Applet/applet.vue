@@ -141,7 +141,7 @@
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="customerImg"
+                :http-request="uploadCustomer"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -165,7 +165,7 @@
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="freightImg"
+                :http-request="uploadFreight"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -178,20 +178,20 @@
          <el-col :span="6">
             <!-- 物流查询页图” -->
             <el-form-item label="*物流查询页图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="item.name">
+                <span class="img-item" v-for="(item, index) in logisticsList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                    <i class="el-icon-delete" @click="onDeleteTrack(index)"></i>
                 </span>
                 </span>
               <el-upload
-                v-show="baleImgList.length < 1"
+                v-show="logisticsList.length < 1"
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="uploadBaleImg"
+                :http-request="uploadTrack"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -202,20 +202,20 @@
             <!-- 支持与帮助中心 -->
           <el-col :span="6">
             <el-form-item label="*支持与帮助中心" class="updateChe">
-                <span class="img-item" v-for="(item, index) in evaluationImgList" :key="item.name">
+                <span class="img-item" v-for="(item, index) in supportList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteEva(index)"></i>
+                    <i class="el-icon-delete" @click="onDeleteSupport(index)"></i>
                 </span>
                 </span>
               <el-upload
-                v-show="evaluationImgList.length < 1"
+                v-show="supportList.length < 1"
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="uploadEvaluationImg"
+                :http-request="uploadSupport"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -226,20 +226,20 @@
           <!-- 分享页 -->
           <el-col :span="6">
             <el-form-item label="*分享页" class="updateChe">
-                <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
+                <span class="img-item" v-for="(item, index) in shareList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+                    <i class="el-icon-delete" @click="onDeleteShare(index)"></i>
                 </span>
                 </span>
               <el-upload
-                v-show="customerList.length < 1"
+                v-show="shareList.length < 1"
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="customerImg"
+                :http-request="uploadShare"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -250,20 +250,20 @@
           <!-- 首页 -->
           <el-col :span="6">
             <el-form-item label="*首页" class="updateChe">
-                <span class="img-item" v-for="(item, index) in freightList" :key="item.name">
+                <span class="img-item" v-for="(item, index) in indexList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteFre(index)"></i>
+                    <i class="el-icon-delete" @click="onDeleteIndex(index)"></i>
                 </span>
                 </span>
               <el-upload
-                v-show="freightList.length < 1"
+                v-show="indexList.length < 1"
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="freightImg"
+                :http-request="uploadIndex"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -276,20 +276,20 @@
          <el-col :span="6">
           <!-- 视频区 -->
             <el-form-item label="*视频区" class="updateChe">
-                <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="item.name">
+                <span class="img-item" v-for="(item, index) in videoList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                    <i class="el-icon-delete" @click="onDeleteVideo(index)"></i>
                 </span>
                 </span>
               <el-upload
-                v-show="baleImgList.length < 1"
+                v-show="videoList.length < 1"
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="uploadBaleImg"
+                :http-request="uploadVideo"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -300,20 +300,20 @@
           <!-- 评论区 -->
           <el-col :span="6">
             <el-form-item label="*评论区" class="updateChe">
-                <span class="img-item" v-for="(item, index) in evaluationImgList" :key="item.name">
+                <span class="img-item" v-for="(item, index) in commentList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                    <i class="el-icon-delete" @click="onDeleteEva(index)"></i>
+                    <i class="el-icon-delete" @click="onDeleteComment(index)"></i>
                 </span>
                 </span>
               <el-upload
-                v-show="evaluationImgList.length < 1"
+                v-show="commentList.length < 1"
                 class="avatar-uploader"
                 action=""
                 list-type="picture-card"
-                :http-request="uploadEvaluationImg"
+                :http-request="uploadComment"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -348,6 +348,12 @@ export default {
       evaluationImgList: [], // 小程序首页评论入口图
       customerList: [], // 小程序预报页图
       freightList: [], // 小程序运费查询页面
+      logisticsList: [], // 物流查询页面
+      supportList: [], // 支持与帮助中心图
+      shareList: [], // 分享图
+      indexList: [], // 首页
+      videoList: [], // 视频区
+      commentList: [], // 评论区
       messageData: [],
       setForm: {
         freight_image: [],
@@ -416,6 +422,18 @@ export default {
         res.data.comment_entrance_image && (this.evaluationImgList[0] = { url: res.data.comment_entrance_image })
         res.data.forecast_image && (this.customerList[0] = { url: res.data.forecast_image })
         res.data.freight_image && (this.freightList[0] = { url: res.data.freight_image })
+        res.data.track_image && (this.logisticsList[0] = { url:
+        res.data.track_image })
+        res.data.support_image && (this.supportList[0] = { url:
+        res.data.support_image })
+        res.data.share_image && (this.shareList[0] = { url:
+        res.data.share_image })
+        res.data.index_image && (this.indexList[0] = { url:
+        res.data.index_image })
+        res.data.video_image && (this.videoList[0] = { url:
+        res.data.video_image })
+        res.data.comment_image && (this.commentList[0] = { url:
+        res.data.comment_image })
       })
     },
     saveDev (formName) {
@@ -476,8 +494,92 @@ export default {
         }
       })
     },
+    // 上传物流查询页面图
+    uploadTrack (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.logisticsList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 上传支持与帮助中心图
+    uploadSupport (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.supportList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 上传分享图
+    uploadShare (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.shareList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 上传首页
+    uploadIndex (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.indexList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 上传视频区
+    uploadVideo (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.videoList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+    // 上传评论区
+    uploadComment (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.commentList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
     // 上传小程序预报页图
-    customerImg (item) {
+    uploadCustomer (item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -491,7 +593,7 @@ export default {
       })
     },
     // 上传小程序运费查询页图
-    freightImg (item) {
+    uploadFreight (item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -511,6 +613,29 @@ export default {
     // 删除小程序首页评论入口图
     onDeleteEva (index) {
       this.evaluationImgList.splice(index, 1)
+    },
+    // 删除物流查询页面
+    onDeleteTrack (index) {
+      this.logisticsList.splice(index, 1)
+    },
+    // 删除支持与帮助中心图
+    onDeleteSupport (index) {
+      this.supportList.splice(index, 1)
+    },
+    // 分享图
+    onDeleteShare (index) {
+      this.shareList.splice(index, 1)
+    },
+    // 首页图
+    onDeleteIndex (index) {
+      this.indexList.splice(index, 1)
+    },
+    // 视频图
+    onDeleteVideo (index) {
+      this.videoList.splice(index, 1)
+    },
+    onDeleteComment (index) {
+      this.commentList.splice(index, 1)
     },
     // 删除小程序预报页图
     onDeleteCus (index) {
@@ -547,6 +672,36 @@ export default {
       } else {
         this.setForm.comment_entrance_image = []
       }
+      if (this.logisticsList[0]) {
+        this.setForm.track_image = this.logisticsList[0].url
+      } else {
+        this.setForm.track_entrance_image = []
+      }
+      if (this.supportList[0]) {
+        this.setForm.support_image = this.supportList[0].url
+      } else {
+        this.setForm.support_image = []
+      }
+      if (this.shareList[0]) {
+        this.setForm.share_image = this.shareList[0].url
+      } else {
+        this.setForm.share_image = []
+      }
+      if (this.indexList[0]) {
+        this.setForm.index_image = this.indexList[0].url
+      } else {
+        this.setForm.index_image = []
+      }
+      if (this.videoList[0]) {
+        this.setForm.video_image = this.videoList[0].url
+      } else {
+        this.setForm.video_image = []
+      }
+      if (this.commentList[0]) {
+        this.setForm.comment_image = this.commentList[0].url
+      } else {
+        this.setForm.comment_image = []
+      }
       if (this.freightList[0]) {
         this.setForm.freight_image = this.freightList[0].url
       } else {
@@ -560,6 +715,18 @@ export default {
         return this.$message.error('请上传小程序首页评论入口图')
       } else if (!this.freightList[0]) {
         return this.$message.error('请上传小程序运费查询页图')
+      } else if (!this.logisticsList[0]) {
+        return this.$message.error('请上传物流查询页面')
+      } else if (!this.supportList[0]) {
+        return this.$message.error('请上传支持与帮助中心图')
+      } else if (!this.shareList[0]) {
+        return this.$message.error('请上传分享图')
+      } else if (!this.indexList[0]) {
+        return this.$message.error('请上传首页图')
+      } else if (!this.videoList[0]) {
+        return this.$message.error('请上传视频区图')
+      } else if (!this.commentList[0]) {
+        return this.$message.error('请上传评论区图')
       }
       this.$request.changeProgramImg(this.setForm).then(res => {
         if (res.ret) {
