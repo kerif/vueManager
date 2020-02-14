@@ -323,6 +323,18 @@ exports.getUsers = (params) => {
 exports.agentsWithdraws = (id, params) => {
   return $form.get(`agents/${id}/withdraws`, { params })
 }
+// 代理管理 佣金详情
+exports.withdrawsIds = (paramsId, id) => {
+  return $form.get(`agents/${paramsId}/withdraws/${id}`)
+}
+// 代理管理 审核通过
+exports.agentPassed = (userId, id, params) => {
+  return $form.put(`agents/${userId}/withdraws/${id}/approved`, params)
+}
+// 代理管理 审核拒绝
+exports.agentReject = (userId, id, params) => {
+  return $form.put(`agents/${userId}/withdraws/${id}/refused`, params)
+}
 // 获取客户组列表
 exports.getUserGroup = (params) => {
   return $form.get('user-groups', { params })

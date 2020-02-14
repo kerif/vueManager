@@ -5,7 +5,7 @@
     label-position="top">
         <!-- 支付金额 -->
         <el-form-item label="*支付金额" v-if="state === 'pass'">
-          <el-input v-model="ruleForm.pay_amount" disabled>
+          <el-input v-model="ruleForm.pay_amount" :disabled="!!this.$route.query.id">
             <template slot="append">{{this.localization.currency_unit}}</template>
           </el-input>
         </el-form-item>
@@ -58,6 +58,8 @@ export default {
         customer_images: []
       },
       state: '',
+      id: '',
+      userId: '',
       tranAmount: '',
       baleImgList: [],
       localization: {}
@@ -82,42 +84,89 @@ export default {
       } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
         return this.$message.error('请输入备注')
       }
-      if (this.state === 'pass') {
-        this.$request.acceptPayment(this.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '成功',
-              message: res.msg
-            })
+      // 订单列表审核
+      if (this.$route.query.id) {
+        if (this.state === 'pass') {
+          this.$request.acceptPayment(this.id, this.ruleForm).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '成功',
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
-      } else {
-        this.$request.acceptReject(this.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '成功',
-              message: res.msg
-            })
+          })
+        } else {
+          this.$request.acceptReject(this.id, this.ruleForm).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '成功',
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
+        }
+      } else { // 代理管理审核
+        if (this.state === 'pass') {
+          this.$request.agentPassed(this.userId, this.id, {
+            confirm_amount: this.ruleForm.pay_amount,
+            ...this.ruleForm
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '成功',
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            this.show = false
+          })
+        } else {
+          this.$request.agentReject(this.userId, this.id, {
+            confirm_amount: this.ruleForm.pay_amount,
+            ...this.ruleForm
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: '成功',
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            this.show = false
+          })
+        }
       }
     },
     // 上传打包照片
@@ -161,7 +210,10 @@ export default {
     },
     init () {
       console.log(this.tranAmount, 'this.tranAmount')
-      if (this.state === 'pass') {
+      console.log(this.userId, 'userId')
+      if (this.state === 'pass' && this.$route.query.id) {
+        this.ruleForm.pay_amount = this.tranAmount
+      } else if (this.state === 'pass' && this.$route.params.id) {
         this.ruleForm.pay_amount = this.tranAmount
       }
       this.getCountry()

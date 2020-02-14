@@ -285,14 +285,26 @@ export default [
             }
           },
           {
-            path: '/vip/WithdrawalDetail/:id',
-            name: wdDetail,
+            path: '/vip/WithdrawalDetail/:userId/:id/:status',
+            name: 'wdDetail',
             component: wdDetail,
             id: 304,
             meta: {
               level: 3,
               group: '客户',
               name: '佣金提现详情',
+              parent: '/vip/agent'
+            }
+          },
+          {
+            path: '/vip/reviewWithdrawal/:userId/:id/:state',
+            name: 'wdReviewDetail',
+            component: wdDetail,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '佣金提现审核',
               parent: '/vip/agent'
             }
           },

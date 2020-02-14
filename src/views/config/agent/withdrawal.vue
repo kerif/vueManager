@@ -40,8 +40,8 @@
       <el-table-column label="申请时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.id)">详情</el-button>
-          <el-button v-if="scope.row.status === '待审核'" class="btn-main optionBtn" @click="invite(scope.row.id)">审核</el-button>
+          <el-button v-if="scope.row.status === '待审核'" class="btn-main optionBtn" @click="inviteWithdrawal(scope.row.user.id,scope.row.id)">审核</el-button>
+          <el-button v-else class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.user.id,scope.row.id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,7 +52,6 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
-import dialog from '@/components/dialog'
 export default {
   name: 'withdrawalList',
   data () {
@@ -118,10 +117,22 @@ export default {
         }
       })
     },
-    withdrawalDetail (id) {
+    // 详情
+    withdrawalDetail (userId, id) {
       this.$router.push({ name: 'wdDetail',
         params: {
-          id: id
+          userId: userId,
+          id: id,
+          status: 'detail'
+        } })
+    },
+    // 审核
+    inviteWithdrawal (userId, id) {
+      this.$router.push({ name: 'wdReviewDetail',
+        params: {
+          userId: userId,
+          id: id,
+          state: 'review'
         } })
     },
     // 状态筛选
@@ -129,35 +140,9 @@ export default {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
     },
-    // 修改客户组
-    onUpdateGroup (id) {
-      dialog({ type: 'vipgroup', id: id }, () => {
-        this.getList()
-      })
-    },
-    invite (id) {
-      dialog({ type: 'inviteList',
-        state: 'invite',
-        id
-      })
-    },
-    // 券包
-    voucher (id) {
-      dialog({ type: 'inviteList',
-        state: 'voucher',
-        id
-      }, () => {
-        this.getList()
-      })
-    },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
-    },
-    // 选择客户组
-    onGroupChange () {
-      this.page_params.handleQueryChange('group', this.page_params.group)
-      this.getList()
     }
   }
 }
