@@ -1,6 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'edit' ? '修改客户组' : '添加客户组'" class="dialog-vip"
-  size="small" @close="clear">
+  <el-dialog :visible.sync="show" :title="state === 'edit' ? '修改客户组' : '添加客户组'" class="dialog-vip" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 员工组中文名 -->
         <el-form-item label="客户组中文名" prop="name_cn">
