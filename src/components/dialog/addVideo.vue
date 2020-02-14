@@ -5,27 +5,27 @@
     label-position="top">
         <!-- 标题 -->
         <el-form-item label="标题">
-          <el-input v-model="ruleForm.name">
+          <el-input v-model="video.title">
           </el-input>
         </el-form-item>
         <!-- 介绍 -->
         <el-form-item label="介绍">
-            <el-input type="textarea" v-model="ruleForm.remark"
+            <el-input type="textarea" v-model="video.content"
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="请输入备注"></el-input>
         </el-form-item>
         <!-- 封面 -->
         <el-form-item label="封面" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-            <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+            <span class="img-item" v-if="video.cover">
+            <img :src="$baseUrl.IMAGE_URL + video.cover" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(video.cover)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg"></i>
             </span>
             </span>
           <el-upload
-            v-show="baleImgList.length < 1"
+            v-show="!video.cover"
             class="avatar-uploader"
             action=""
             list-type="picture-card"
@@ -38,21 +38,15 @@
     </el-form-item>
     <!-- 视频 -->
     <el-form-item class="updateChe" label="视频">
-      <span class="img-item" v-for="(item, index) in goodsImgList" :key="item.name">
-        <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
-        <span class="model-box"></span>
-        <span class="operat-box">
-          <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-          <i class="el-icon-delete" @click="onDeleteImg('goods', index)"></i>
-        </span>
-      </span>
+      <!-- <div v-if="video.video">
+        <video :src=""></video>
+      </div> -->
       <el-upload
-        v-show="goodsImgList.length < 1"
         class="avatar-uploader"
         list-type="picture-card"
         action=""
-        :before-upload="beforeUploadImg"
-        :http-request="uploadGoodsImg"
+        :before-upload="beforeUploadVideo"
+        :http-request="uploadVideo"
         :show-file-list="false"
         >
         <i class="el-icon-plus">
@@ -63,8 +57,7 @@
     <!-- 是否显示 -->
     <el-form-item label="是否显示">
         <el-switch
-          v-model="ruleForm.enabled"
-          @change="changeShow($event)"
+          v-model="video.enabled"
           active-text="开"
           inactive-text="关"
           active-color="#13ce66"
@@ -80,6 +73,7 @@
 </template>
 <script>
 import dialog from '@/components/dialog'
+import * as qiniu from 'qiniu-js'
 export default {
   data () {
     return {
@@ -89,6 +83,18 @@ export default {
         remark: '',
         qr_code: [],
         qr_video: []
+      },
+      uploadToken: '',
+      qnConfig: {
+        region: qiniu.region.z2,
+        retryCount: 5
+      },
+      video: {
+        title: '', // 标题
+        content: '', // 内容
+        cover: '', // 封面
+        video: '', // 视频
+        enabled: false // 是否可用
       },
       state: '',
       tranAmount: '',
@@ -142,63 +148,22 @@ export default {
       return true
     },
     confirm () {
-      if (this.baleImgList[0]) {
-        this.ruleForm.qr_code = this.baleImgList[0].url
-      } else {
-        this.ruleForm.qr_code = []
-      }
-      if (this.goodsImgList[0]) {
-        this.ruleForm.qr_video = this.goodsImgList[0].url
-      } else {
-        this.ruleForm.qr_video = []
-      }
-      // this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
-      //   return {
-      //     url: item.url
-      //   }
-      // })
-      if (!this.ruleForm.name) {
-        return this.$message.error('请输入支付类型名称')
-      } else if (!this.ruleForm.remark && !this.baleImgList[0]) {
-        return this.$message.error('请输入备注')
-      }
-      if (this.state === 'add') {
-        this.$request.addPayments(this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '成功',
-              message: res.msg
-            })
-            this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
+      this.$request.addVideo({
+        ...this.video,
+        enabled: ~~this.video
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
           this.show = false
-        })
-      } else {
-        this.$request.updatePayments(this.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '成功',
-              message: res.msg
-            })
-            this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
-      }
+          this.success()
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     },
     // 上传打包照片
     uploadBaleImg (item) {
@@ -206,12 +171,13 @@ export default {
       this.onUpload(file).then(res => {
         console.log(res)
         if (res.ret) {
-          res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
-          })
+          // res.data.forEach(item => {
+          //   this.baleImgList.push({
+          //     name: item.name,
+          //     url: item.path
+          //   })
+          // })
+          this.video.cover = res.data[0].path
         } else {
           this.$message({
             message: res.msg,
@@ -229,11 +195,12 @@ export default {
     },
     // 删除图片
     onDeleteImg (type, index) {
-      if (type === 'bale') {
-        this.baleImgList.splice(index, 1)
-      } else if (type === 'goods') {
-        this.goodsImgList.splice(index, 1)
-      }
+      // if (type === 'bale') {
+      //   this.baleImgList.splice(index, 1)
+      // } else if (type === 'goods') {
+      //   this.goodsImgList.splice(index, 1)
+      // }
+      this.video.cover = ''
     },
     // 上传封面
     onUpload (file) {
@@ -265,6 +232,65 @@ export default {
       console.log(this.id, '我是接受id')
       if (this.state === 'edit') {
         this.getList()
+      }
+      this.getUploadToken()
+    },
+    // 获取视频上传临时 token
+    getUploadToken () {
+      this.$request.getVideoUploadToken().then(res => {
+        if (res.ret) {
+          this.uploadToken = res.data
+        }
+      })
+    },
+    // 上传视频之前判断视频格式
+    beforeUploadVideo (item) {
+      console.log('item', item)
+      if (!(/video\/mp4/.test(item.type))) {
+        this.$message.error('请上传 mp4 格式的视频')
+        return false
+      }
+      return true
+    },
+    // 上传视频
+    uploadVideo (video) {
+      const self = this
+      let file = video.file
+      let fileName = this.getVideoName() + file.name
+      const observable = qiniu.upload(
+        file,
+        fileName,
+        self.uploadToken,
+        {
+          fname: file.name,
+          params: {},
+          mimeType: null
+        },
+        self.qnConfig
+      )
+      // 开始上传
+      observable.subscribe({
+        next (res) {
+          console.log('next', res.total)
+        },
+        error (error) {
+          console.log('error', error)
+        },
+        complete (res) {
+          console.log('上传完成', res)
+          if (res.status) {
+            self.video.video = res.data.url
+          }
+        }
+      })
+    },
+    // 根据当前时间戳进行 base64 编码再与原文件名拼接生成文件资源名
+    getVideoName () {
+      let time = new Date().getTime()
+      if (window.btoa) {
+        return window.btoa(time.toString())
+      } else {
+        return time
       }
     }
   }
