@@ -16,7 +16,7 @@
         <!-- 佣金比例 -->
         <el-form-item label="佣金比例%" prop="commission">
           <el-input v-model="ruleForm.commission"
-          placeholder="请输入客户组中文名"></el-input>
+          placeholder="请输入佣金比例"></el-input>
           </el-form-item>
         <!-- 用户组描述 -->
           <el-form-item label="备注">

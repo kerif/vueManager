@@ -8,7 +8,8 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="代理用户" prop="user_id">
-                <el-input v-model="user.user_id" placeholder="请输入代理用户"></el-input>
+                 <el-input v-model="user.user_id" placeholder="请输入代理用户" v-if="this.$route.query.id" disabled></el-input>
+                <el-input v-else v-model="user.user_id" placeholder="请输入代理用户"></el-input>
               </el-form-item>
             </el-col>
               <el-button class="choose" @click="chooseUser">选择</el-button>
