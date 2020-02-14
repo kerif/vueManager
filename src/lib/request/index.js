@@ -339,6 +339,22 @@ exports.deleteNotice = (params) => {
 exports.addUserGroup = (params) => {
   return $form.post('user-groups', params)
 }
+// 客户 代理申请列表
+exports.getApplication = (params) => {
+  return $form.get(`agent-applications`, { params })
+}
+// 客户 代理申请列表 审核通过
+exports.agentApproved = (id, params) => {
+  return $form.put(`agent-applications/${id}/approved`, params)
+}
+// 客户 代理申请列表 审核拒绝
+exports.refusedApproved = (id) => {
+  return $form.put(`agent-applications/${id}/refused`)
+}
+// 代理申请列表 删除
+exports.deleteApproved = (id) => {
+  return $form.delete(`agent-applications/${id}`)
+}
 // 获取管理员组权限设置
 exports.getPermissions = (id) => {
   return $form.get(`admin-groups/${id}/permissions`)

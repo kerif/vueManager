@@ -18,6 +18,8 @@ const modifyPre = loadonDemand('staff/modify_permissions')
 const VipList = loadonDemand('vip/vip/viplist')
 // 客户组列表
 const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
+// 配置 代理申请管理
+const application = loadonDemand('vip/application')
 // 客户地址
 const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 // 财务 流水记录
@@ -276,6 +278,17 @@ export default [
               group: '客户',
               name: '成交记录',
               parent: '/vip/agent'
+            }
+          },
+          {
+            path: '/vip/application',
+            name: 'application',
+            component: application,
+            id: 305,
+            meta: {
+              level: 2,
+              group: '客户',
+              name: '代理申请管理'
             }
           }
         ]

@@ -31,6 +31,7 @@ import lineChange from './lineChange.vue'
 import claim from './claim.vue'
 import productList from './productList.vue'
 import videoList from './addVideo.vue'
+import passedList from './passedProxy.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -62,6 +63,7 @@ const LineChangeController = Vue.extend(lineChange)
 const ClaimController = Vue.extend(claim)
 const ProductController = Vue.extend(productList)
 const VideoController = Vue.extend(videoList)
+const PassedController = Vue.extend(passedList)
 
 const mixin = {
   data () {
@@ -278,6 +280,13 @@ function initInstance (type) {
     // 添加视频
     case 'videoList':
       instance = new VideoController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 审核通过
+    case 'passedList':
+      instance = new PassedController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
