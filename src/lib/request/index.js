@@ -319,6 +319,10 @@ exports.getUserAddress = (params) => {
 exports.getUsers = (params) => {
   return $form.get('users', { params })
 }
+// 客户 代理管理 单条提现申请
+exports.agentsWithdraws = (id, params) => {
+  return $form.get(`agents/${id}/withdraws`, { params })
+}
 // 获取客户组列表
 exports.getUserGroup = (params) => {
   return $form.get('user-groups', { params })

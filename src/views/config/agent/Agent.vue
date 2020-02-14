@@ -47,7 +47,7 @@
           <!-- 成交记录 -->
           <el-button class="btn-blue" @click="record(scope.row.id)">成交记录</el-button>
           <!-- 提现申请 -->
-          <el-button class="btn-deep-blue">提现申请</el-button>
+          <el-button class="btn-deep-blue" @click="withdrawal(scope.row.id)">提现申请</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -122,6 +122,13 @@ export default {
           id: id
         }
       })
+    },
+    // 提现申请
+    withdrawal (id) {
+      this.$router.push({ name: 'Withdrawal',
+        params: {
+          id: id
+        } })
     },
     // 修改代理管理的开关
     changeTransfer (event, enabled, id) {

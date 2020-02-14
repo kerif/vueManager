@@ -46,6 +46,10 @@ const NoticeList = loadonDemand('config/notice/NoticeList')
 const NoticeAddEdit = loadonDemand('config/notice/NoticeAddEdit')
 // 配置 代理管理
 const agentManagement = loadonDemand('config/agent/Agent')
+// 配置 代理管理 提现申请
+const Withdrawal = loadonDemand('config/agent/withdrawal')
+// 配置 代理管理 提现申请 详情
+const wdDetail = loadonDemand('config/agent/withdrawalDetail')
 // 修改、添加代理
 const AddEditAgent = loadonDemand('config/agent/AddEditAgent')
 // 成交记录
@@ -265,6 +269,30 @@ export default [
               level: 3,
               group: '客户',
               name: '修改代理',
+              parent: '/vip/agent'
+            }
+          },
+          {
+            path: '/vip/withdrawal/:id',
+            name: 'Withdrawal',
+            component: Withdrawal,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '佣金提现管理',
+              parent: '/vip/agent'
+            }
+          },
+          {
+            path: '/vip/WithdrawalDetail/:id',
+            name: wdDetail,
+            component: wdDetail,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '佣金提现详情',
               parent: '/vip/agent'
             }
           },
