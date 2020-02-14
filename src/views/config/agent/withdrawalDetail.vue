@@ -6,12 +6,12 @@
       <!-- 客户ID -->
       <el-col :span="9">
         <span class="leftWidth">客户ID</span>
-        <span>{{form.user.id}}</span>
+        <span>{{form.user && form.user.id}}</span>
       </el-col>
       <!-- 客户昵称 -->
         <el-col :span="9" :offset="1">
          <span class="leftWidth">客户昵称</span>
-         <span>{{form.user.name}}</span>
+         <span>{{form.user && form.user.name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
@@ -133,12 +133,12 @@ export default {
       amount: '',
       imgVisible: false,
       imgSrc: '',
-      id: '',
       tableLoading: false
     }
   },
   created () {
     this.getList()
+    console.log(this.$route.params.userId, 'this.$route.params.userId')
   },
   methods: {
     getList () {
