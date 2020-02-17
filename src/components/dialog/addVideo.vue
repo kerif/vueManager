@@ -64,6 +64,8 @@
         <el-switch
           v-model="video.enabled"
           active-text="开"
+          :active-value="1"
+          :inactive-value="0"
           inactive-text="关"
           active-color="#13ce66"
           inactive-color="gray">
@@ -95,7 +97,7 @@ export default {
         content: '', // 内容
         cover: '', // 封面
         video: '', // 视频
-        enabled: false // 是否可用
+        enabled: 0 // 是否可用
       },
       state: '',
       rules: {
@@ -159,6 +161,7 @@ export default {
       // })
       this.$request.getSingleVideo(this.id).then(res => {
         this.video = res.data
+        this.playerOptions.sources = [{ src: videoUrl + res.data.video }]
       })
     },
     beforeUploadImg (file) {
@@ -178,7 +181,7 @@ export default {
           if (this.id) { // 编辑视频
             this.$request.editVideo(this.id, {
               ...this.video,
-              enabled: ~~this.video
+              enabled: this.video.enabled
             }).then(res => {
               if (res.ret) {
                 this.$notify({
@@ -195,7 +198,7 @@ export default {
           } else { // 新增视频
             this.$request.addVideo({
               ...this.video,
-              enabled: ~~this.video
+              enabled: this.video.enabled
             }).then(res => {
               if (res.ret) {
                 this.$notify({

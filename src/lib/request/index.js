@@ -714,6 +714,14 @@ exports.getVideoList = () => {
 exports.getSingleVideo = (id) => {
   return $form.get(`videos/${id}`)
 }
+// 删除视频
+exports.videoDelete = (ids) => {
+  return $form.put('videos/batch-delete', ids)
+}
+// 视频开启或显示
+exports.closeVideo = (id, status) => {
+  return $form.put(`videos/${id}/status/${status}`)
+}
 // 添加抵用券
 exports.addCoupons = (params) => {
   return $form.post('coupons', params)
@@ -836,5 +844,5 @@ exports.getVideoUploadToken = () => $form.get('videos/upload-token')
 // 新建视频
 exports.addVideo = (params) => $json.post('videos', params)
 // 修改视频
-exports.editVideo = (id, params) => $json.put(`videos/{id}`, params)
+exports.editVideo = (id, params) => $json.put(`videos/${id}`, params)
 export default exports
