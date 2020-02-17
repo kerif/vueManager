@@ -835,4 +835,6 @@ exports.getVideoUploadToken = () => $form.get('videos/upload-token')
 
 // 新建视频
 exports.addVideo = (params) => $json.post('videos', params)
+// 修改视频
+exports.editVideo = (id, params) => $json.put(`videos/{id}`, params)
 export default exports

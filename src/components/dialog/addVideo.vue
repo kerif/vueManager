@@ -159,27 +159,6 @@ export default {
       // })
       this.$request.getSingleVideo(this.id).then(res => {
         this.video = res.data
-        this.video.cover = res.data.cover
-      })
-    },
-    // 是否显示
-    changeShow (event) {
-      console.log(typeof (event), '我是event')
-      console.log(event, 'event')
-      this.$request.closeCategories(this.$route.params.id, Number(event)).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: '操作成功',
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
       })
     },
     beforeUploadImg (file) {
@@ -196,22 +175,41 @@ export default {
       console.log(Number(this.video.enabled), 'enabled')
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.addVideo({
-            ...this.video,
-            enabled: ~~this.video
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '操作成功',
-                message: res.msg
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message.error(res.msg)
-            }
-          })
+          if (this.id) { // 编辑视频
+            this.$request.editVideo(this.id, {
+              ...this.video,
+              enabled: ~~this.video
+            }).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+          } else { // 新增视频
+            this.$request.addVideo({
+              ...this.video,
+              enabled: ~~this.video
+            }).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+          }
         } else {
           return false
         }
