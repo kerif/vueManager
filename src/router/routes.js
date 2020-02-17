@@ -40,6 +40,8 @@ const IconAdd = loadonDemand('config/line/IconAdd')
 const WareHouse = loadonDemand('config/warehouse/warehouse')
 // 配置 添加、修改仓库地址
 const WareHouseEdit = loadonDemand('config/warehouse/warehouseAddEdit')
+// 配置 仓库地址 仓位管理
+const positionWarehouse = loadonDemand('config/warehouse/Position')
 // 配置 下单须知列表
 const NoticeList = loadonDemand('config/notice/NoticeList')
 // 配置 添加、修改下单须知
@@ -560,6 +562,18 @@ export default [
               group: '配置',
               level: 3,
               name: '添加仓库',
+              parent: '/config/warehouse'
+            }
+          },
+          {
+            path: '/config/warehouse/position/:id',
+            component: positionWarehouse,
+            name: 'position',
+            id: 602,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '货位管理',
               parent: '/config/warehouse'
             }
           },

@@ -13,7 +13,7 @@
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="状态" prop="name_en"></el-table-column>
-      <el-table-column label="创建时间" prop="user_count"></el-table-column>
+      <el-table-column label="创建时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editVip(scope.row.id)">修改</el-button>

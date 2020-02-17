@@ -293,6 +293,10 @@ exports.addShipment = (params) => {
 exports.Automatic = (params) => {
   return $form.get('shipments/in-storage/user-search', { params })
 }
+// 入库 货位匹配
+exports.AutoLocation = (id, params) => {
+  return $form.get(`shipments/warehouse/${id}/goods-allocation-like`, { params })
+}
 exports.getExpressLine = (id) => {
   return $form.get(`express-lines/${id}`)
 }
@@ -526,6 +530,10 @@ exports.deleteWarehouseAddress = (id) => {
 exports.AutoCountry = (params) => {
   return $form.get('countries/search', { params })
 }
+// 仓库地址 获取单条仓库管理
+exports.locationArea = (id, params) => {
+  return $form.get(`warehouse-address/${id}/goods-allocation-areas`, { params })
+}
 // 获取全部重量及货币配置
 exports.getLocalization = () => {
   return $form.get('localization/configs')
@@ -701,6 +709,10 @@ exports.getCouponList = (params) => {
 // 营销管理 获取视频列表
 exports.getVideoList = () => {
   return $form.get('videos')
+}
+// 获取单条视频详细
+exports.getSingleVideo = (id) => {
+  return $form.get(`videos/${id}`)
 }
 // 添加抵用券
 exports.addCoupons = (params) => {

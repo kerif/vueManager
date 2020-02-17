@@ -32,6 +32,7 @@ import claim from './claim.vue'
 import productList from './productList.vue'
 import videoList from './addVideo.vue'
 import passedList from './passedProxy.vue'
+import locationList from './addEditLocation.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -64,6 +65,7 @@ const ClaimController = Vue.extend(claim)
 const ProductController = Vue.extend(productList)
 const VideoController = Vue.extend(videoList)
 const PassedController = Vue.extend(passedList)
+const LocationListController = Vue.extend(locationList)
 
 const mixin = {
   data () {
@@ -287,6 +289,13 @@ function initInstance (type) {
     // 审核通过
     case 'passedList':
       instance = new PassedController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 新增或编辑货位
+    case 'locationList':
+      instance = new LocationListController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
