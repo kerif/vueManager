@@ -16,8 +16,8 @@
       <el-table-column label="创建时间" prop="user_count"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.name_cn,scope.row.name_en)">修改</el-button>
-          <el-button class="btn-main" @click="member(scope.row.id)">预览</el-button>
+          <el-button class="btn-green" @click="editVip(scope.row.id)">修改</el-button>
+          <el-button class="btn-main" @click="Preview(scope.row.id)">预览</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -81,24 +81,20 @@ export default {
       this.page_params.name_cn = val
       this.getList()
     },
-    // 添加客户组
+    // 添加视频
     addVip () {
       dialog({ type: 'videoList', state: 'add' }, () => {
         this.getList()
       })
     },
     // 修改资料
-    editVip (id, nameCn, nameEn) {
-      dialog({ type: 'editVip', id: id, name_cn: nameCn, name_en: nameEn, state: 'edit' }, () => {
+    editVip (id) {
+      dialog({ type: 'videoList', id: id, state: 'edit' }, () => {
         this.getList()
       })
     },
-    // 成员
-    member (id) {
-      console.log(id, 'id')
-      dialog({ type: 'vipList', id: id }, () => {
-        this.getList()
-      })
+    // 预览
+    Preview (id) {
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))

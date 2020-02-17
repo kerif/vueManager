@@ -165,7 +165,7 @@ export default {
         }
       })
     },
-    // 上传打包照片
+    // 上传视频
     uploadBaleImg (item) {
       let file = item.file
       this.onUpload(file).then(res => {
