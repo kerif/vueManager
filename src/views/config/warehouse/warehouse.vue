@@ -29,7 +29,7 @@
       <el-table-column label="操作" width="260">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editWarehouse(scope.row.id)">修改仓库</el-button>
-          <el-button class="btn-deep-purple" @click="positionAdd(scope.row.id)">仓位管理</el-button>
+          <el-button class="btn-deep-purple" @click="positionAdd(scope.row.id, scope.row.warehouse_name)">仓位管理</el-button>
           <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -102,10 +102,11 @@ export default {
       )
     },
     // 仓位管理
-    positionAdd (id) {
+    positionAdd (id, warehouseName) {
       this.$router.push({ name: 'position',
         params: {
-          id: id
+          id: id,
+          warehouseName: warehouseName
         } }
       )
     },

@@ -12,6 +12,7 @@
     @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="标题" prop="title"></el-table-column>
+      <el-table-column label="内容介绍" prop="content"></el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
           <el-switch

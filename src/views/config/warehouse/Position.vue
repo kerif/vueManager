@@ -10,7 +10,7 @@
     <el-table :data="positionList" stripe border class="data-list"
     v-loading="tableLoading"
     @selection-change="selectionChange">
-      <el-table-column type="index" width="55" align="center"></el-table-column>
+       <el-table-column label="区域编号" prop="number"></el-table-column>
       <el-table-column label="列数" prop="column"></el-table-column>
       <el-table-column label="层数" prop="row"></el-table-column>
       <el-table-column label="货位数量" prop="counts"></el-table-column>
@@ -92,13 +92,20 @@ export default {
     },
     // 新增货位
     addLocation () {
-      dialog({ type: 'locationList', state: 'add' }, () => {
+      dialog({ type: 'locationList',
+        state: 'add',
+        id: this.$route.params.id,
+        warehouseName: this.$route.params.warehouseName }, () => {
         this.getList()
       })
     },
     // 编辑货位
-    editLocation (id) {
-      dialog({ type: 'locationList', state: 'edit', id: id }, () => {
+    editLocation (areaId) {
+      dialog({ type: 'locationList',
+        state: 'edit',
+        id: this.$route.params.id,
+        areaId: areaId,
+        warehouseName: this.$route.params.warehouseName }, () => {
         this.getList()
       })
     },
@@ -107,13 +114,13 @@ export default {
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除单条转账支付
-    deleteWarehouse (id) {
-      this.$confirm(`您真的要删除此仓库吗？`, '提示', {
+    deleteWarehouse (areaId) {
+      this.$confirm(`您真的要删除此货位吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$request.deleteWarehouseAddress(id).then(res => {
+        this.$request.deleteLocation(this.$route.params.id, areaId).then(res => {
           if (res.ret) {
             this.$notify({
               title: '操作成功',

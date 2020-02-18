@@ -297,6 +297,26 @@ exports.Automatic = (params) => {
 exports.AutoLocation = (id, params) => {
   return $form.get(`shipments/warehouse/${id}/goods-allocation-like`, { params })
 }
+// 新增货位
+exports.addLocation = (id, params) => {
+  return $form.post(`warehouse-address/${id}/goods-allocation-areas`, params)
+}
+// 获取单条货位详情
+exports.getAllLocation = (id, areaId) => {
+  return $form.get(`warehouse-address/${id}/goods-allocation-areas/${areaId}`)
+}
+// 删除货位
+exports.deleteLocation = (id, areaId) => {
+  return $form.delete(`warehouse-address/${id}/goods-allocation-areas/${areaId}`)
+}
+// 编辑保存单条货位详情
+exports.updateAllLocation = (id, areaId, params) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/${areaId}`, params)
+}
+// 获取单条货位列表
+exports.getLocationList = (id, areaId) => {
+  return $form.get(`warehouse-address/${id}/goods-allocation-areas/${areaId}/details`)
+}
 exports.getExpressLine = (id) => {
   return $form.get(`express-lines/${id}`)
 }

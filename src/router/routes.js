@@ -566,7 +566,7 @@ export default [
             }
           },
           {
-            path: '/config/warehouse/position/:id',
+            path: '/config/warehouse/position/:id/:warehouseName',
             component: positionWarehouse,
             name: 'position',
             id: 602,
