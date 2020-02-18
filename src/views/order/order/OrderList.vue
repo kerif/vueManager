@@ -75,7 +75,7 @@
         </template> -->
       </el-table-column>
       <!-- 物品名称 -->
-      <el-table-column label="物品名称" prop="package_name"></el-table-column>
+      <el-table-column label="物品名称" prop="package_name" width="200" :show-overflow-tooltip="true"></el-table-column>
       <!-- 物品价值 -->
       <el-table-column :label="'物品价值' + this.localization.currency_unit" prop="package_value"></el-table-column>
       <!-- 物品属性 -->
