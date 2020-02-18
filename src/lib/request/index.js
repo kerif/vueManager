@@ -197,9 +197,29 @@ exports.saveCountries = (id) => {
 exports.getTransaction = (params) => {
   return $form.get('transaction-records', { params })
 }
-// 流水记录 获取下拉框
+// 流水记录 获取充值方式下拉框
 exports.getPaymentType = () => {
   return $form.get('transaction-records/payment-types')
+}
+// 财务 充值记录
+exports.getRecharge = (params) => {
+  return $form.get('recharge-records', { params })
+}
+// 充值记录 详细
+exports.getRechargeDetails = (id) => {
+  return $form.get(`recharge-records/${id}`)
+}
+// 充值记录 获取充值方式下拉框
+exports.getRechargeType = () => {
+  return $form.get('recharge-records/payment-types')
+}
+// 充值记录 审核通过
+exports.rechargePassed = (id, params) => {
+  return $form.put(`recharge-records/${id}/approved`, params)
+}
+// 代理管理 审核拒绝
+exports.rechargeReject = (id, params) => {
+  return $form.put(`recharge-records/${id}/refused`, params)
 }
 exports.saveShip = (params) => {
   return $form.post(`shipments`, params)

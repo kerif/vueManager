@@ -33,6 +33,7 @@ import productList from './productList.vue'
 import videoList from './addVideo.vue'
 import passedList from './passedProxy.vue'
 import locationList from './addEditLocation.vue'
+import rechargeMsg from './rechargeMsg.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -66,6 +67,7 @@ const ProductController = Vue.extend(productList)
 const VideoController = Vue.extend(videoList)
 const PassedController = Vue.extend(passedList)
 const LocationListController = Vue.extend(locationList)
+const RechargeMsgController = Vue.extend(rechargeMsg)
 
 const mixin = {
   data () {
@@ -296,6 +298,13 @@ function initInstance (type) {
     // 新增或编辑货位
     case 'locationList':
       instance = new LocationListController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 流水记录审核
+    case 'rechargeMsg':
+      instance = new RechargeMsgController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

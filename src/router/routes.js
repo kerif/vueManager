@@ -28,6 +28,10 @@ const Transaction = loadonDemand('finance/Transaction')
 const TransactionDetails = loadonDemand('finance/financeDetails')
 // 财务 微信支付流水详情
 const TransactionWechat = loadonDemand('finance/wechatPay')
+// 财务 充值记录
+const Recharge = loadonDemand('finance/recharge')
+// 财务 审核跟详情页面
+const RechargeDetails = loadonDemand('finance/rechargeDetails')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
@@ -699,6 +703,41 @@ export default [
               level: 3,
               name: '在线支付详情',
               parent: '/finance/transaction'
+            }
+          },
+          {
+            path: '/finance/recharge',
+            name: 'recharge',
+            component: Recharge,
+            id: 702,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '充值记录'
+            }
+          },
+          {
+            path: '/finance/rechargeDetails/:id',
+            name: 'rechargeDetails',
+            component: RechargeDetails,
+            id: 702,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '审核详情',
+              parent: '/finance/recharge'
+            }
+          },
+          {
+            path: '/finance/rechargeReview/:id/:state',
+            name: 'rechargeReview',
+            component: RechargeDetails,
+            id: 702,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '充值审核',
+              parent: '/finance/recharge'
             }
           }
         ]

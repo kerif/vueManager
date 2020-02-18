@@ -47,7 +47,7 @@
           <!-- 成交记录 -->
           <el-button class="btn-blue" @click="record(scope.row.id)">成交记录</el-button>
           <!-- 提现申请 -->
-          <el-badge :value="scope.row.apply_counts" class="item">
+          <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
             <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">提现申请</el-button>
           </el-badge>
         </template>

@@ -23,6 +23,7 @@
       </el-table-column>
       <el-table-column label="邮箱" prop="email"></el-table-column>
       <el-table-column label="手机号码" prop="phone"></el-table-column>
+      <el-table-column prop="balance" :label="'余额' + this.localization.currency_unit"></el-table-column>
       <el-table-column label="客户昵称" prop="name"></el-table-column>
       <el-table-column label="客户组" prop="user_group.name_cn"></el-table-column>
       <el-table-column label="注册时间" prop="created_at"></el-table-column>
@@ -57,6 +58,7 @@ export default {
       vipList: [],
       deleteNum: [],
       tableLoading: false,
+      localization: {},
       clientGroupList: [],
       page_params: {
         group: ''
@@ -86,6 +88,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.vipList = res.data
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
           console.log('back', JSON.stringify(this.page_params))
