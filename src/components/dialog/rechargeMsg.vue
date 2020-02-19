@@ -1,12 +1,12 @@
 <template>
-  <el-dialog :visible.sync="show" title="审核" class="dialog-review" width="35%"
+  <el-dialog :visible.sync="show" title="审核" class="dialog-recharge" width="35%"
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 支付金额 -->
         <el-form-item label="*支付金额" v-if="state === 'pass'">
-          <el-input v-model="ruleForm.pay_amount" :disabled="!!this.$route.query.id">
-            <template slot="append">{{this.localization.currency_unit}}</template>
+          <el-input v-model="ruleForm.pay_amount">
+            <template slot="append">{{this.currencyUnit}}</template>
           </el-input>
         </el-form-item>
         <!-- 备注 -->
@@ -62,18 +62,11 @@ export default {
       userId: '',
       tranAmount: '',
       baleImgList: [],
-      localization: {}
+      currencyUnit: ''
     }
   },
   methods: {
-    getCountry () {
-      this.$request.getCountry().then(res => {
-        this.country = res.data
-        this.localization = res.localization
-      })
-    },
     confirm () {
-      console.log(this.state, 'this.state')
       this.ruleForm.customer_images = this.baleImgList.map(item => {
         return {
           url: item.url
@@ -84,89 +77,49 @@ export default {
       } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
         return this.$message.error('请输入备注')
       }
-      // 订单列表审核
-      if (this.$route.query.id) {
-        if (this.state === 'pass') {
-          this.$request.acceptPayment(this.id, this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '成功',
-                message: res.msg
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
+      // 审核通过
+      if (this.state === 'pass') {
+        this.$request.rechargePassed(this.id, {
+          confirm_amount: this.ruleForm.pay_amount,
+          ...this.ruleForm
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '成功',
+              message: res.msg
+            })
             this.show = false
-          })
-        } else {
-          this.$request.acceptReject(this.id, this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '成功',
-                message: res.msg
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+          this.show = false
+        })
+      } else { // 审核拒绝
+        this.$request.rechargeReject(this.id, {
+          confirm_amount: this.ruleForm.pay_amount,
+          ...this.ruleForm
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '成功',
+              message: res.msg
+            })
             this.show = false
-          })
-        }
-      } else { // 代理管理审核
-        if (this.state === 'pass') {
-          this.$request.agentPassed(this.userId, this.id, {
-            confirm_amount: this.ruleForm.pay_amount,
-            ...this.ruleForm
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '成功',
-                message: res.msg
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
-        } else {
-          this.$request.agentReject(this.userId, this.id, {
-            confirm_amount: this.ruleForm.pay_amount,
-            ...this.ruleForm
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '成功',
-                message: res.msg
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
-        }
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+          this.show = false
+        })
       }
     },
     // 上传打包照片
@@ -201,28 +154,24 @@ export default {
       return this.$request.uploadImg(params)
     },
     clear () {
-      this.$refs['ruleForm'].resetFields()
-      this.$refs['ruleForm'].clearValidate()
+      // this.$refs['ruleForm'].resetFields()
+      // this.$refs['ruleForm'].clearValidate()
       this.ruleForm.pay_amount = ''
       this.ruleForm.customer_remark = ''
       this.baleImgList = []
       this.ruleForm.customer_images = []
     },
     init () {
-      console.log(this.tranAmount, 'this.tranAmount')
-      console.log(this.userId, 'userId')
-      if (this.state === 'pass' && this.$route.query.id) {
-        this.ruleForm.pay_amount = this.tranAmount
-      } else if (this.state === 'pass' && this.$route.params.id) {
-        this.ruleForm.pay_amount = this.tranAmount
-      }
-      this.getCountry()
+      console.log(this.tranAmount, 'tranAmount')
+      console.log(this.state, 'state')
+      this.ruleForm.pay_amount = this.tranAmount
+      this.currencyUnit = this.currencyUnit
     }
   }
 }
 </script>
 <style lang="scss">
-.dialog-review {
+.dialog-recharge {
   .el-dialog__body {
     margin-left: 20px !important;
   }

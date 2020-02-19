@@ -1,21 +1,21 @@
 <template>
   <el-dialog :visible.sync="show" :title="state === 'add' ? '新增' : '修改'" class="dialog-add-setting" width="35%"
   @close="clear">
-    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
-    label-position="top">
+    <el-form :model="video" ref="ruleForm" class="demo-ruleForm"
+    label-position="top" :rules="rules">
         <!-- 标题 -->
-        <el-form-item label="标题">
+        <el-form-item label="标题" prop="title">
           <el-input v-model="video.title">
           </el-input>
         </el-form-item>
         <!-- 介绍 -->
-        <el-form-item label="介绍">
+        <el-form-item label="介绍" prop="content">
             <el-input type="textarea" v-model="video.content"
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="请输入备注"></el-input>
         </el-form-item>
         <!-- 封面 -->
-        <el-form-item label="封面" class="updateChe">
+        <el-form-item label="封面" class="updateChe" prop="cover">
             <span class="img-item" v-if="video.cover">
             <img :src="$baseUrl.IMAGE_URL + video.cover" alt="" class="goods-img">
             <span class="model-box"></span>
@@ -37,11 +37,16 @@
          <div class="updateImg">仅支持jpg, 宽度 300px、高度 225px</div>
     </el-form-item>
     <!-- 视频 -->
-    <el-form-item class="updateChe" label="视频">
-      <!-- <div v-if="video.video">
-        <video :src=""></video>
-      </div> -->
+    <el-form-item class="updateChe" label="视频" prop="video">
+      <img src="../../assets/gb.png" @click="video.video = ''" v-if="video.video" class="closed" />
+      <video-player
+        class='video-player vjs-custom-skin'
+        ref="videoPlayer" v-if="video.video"
+        :playsinline="true"
+        :options="playerOptions"
+      />
       <el-upload
+        v-else
         class="avatar-uploader"
         list-type="picture-card"
         action=""
@@ -55,10 +60,12 @@
       <div class="updateImg">仅支持mp4, 视频最佳比例为：3：2 比例， 大小不超过30M</div>
     </el-form-item>
     <!-- 是否显示 -->
-    <el-form-item label="是否显示">
+    <el-form-item label="是否显示" prop="enabled">
         <el-switch
           v-model="video.enabled"
           active-text="开"
+          :active-value="1"
+          :inactive-value="0"
           inactive-text="关"
           active-color="#13ce66"
           inactive-color="gray">
@@ -67,23 +74,19 @@
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import dialog from '@/components/dialog'
 import * as qiniu from 'qiniu-js'
+import { videoPlayer as VideoPlayer } from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+const videoUrl = 'http://q55zf5gh1.bkt.clouddn.com/'
 export default {
   data () {
     return {
-      ruleForm: {
-        name: '',
-        enabled: true,
-        remark: '',
-        qr_code: [],
-        qr_video: []
-      },
       uploadToken: '',
       qnConfig: {
         region: qiniu.region.z2,
@@ -94,47 +97,71 @@ export default {
         content: '', // 内容
         cover: '', // 封面
         video: '', // 视频
-        enabled: false // 是否可用
+        enabled: 0 // 是否可用
       },
       state: '',
+      rules: {
+        title: [
+          { required: true, message: '请输入标题', trigger: 'blur' }
+        ],
+        content: [
+          { required: true, message: '请输入内容', trigger: 'blur' }
+        ],
+        cover: [
+          { required: true, message: '请输入封面', trigger: 'blur' }
+        ],
+        video: [
+          { required: true, message: '请上传视频', trigger: 'blur' }
+        ],
+        enabled: [
+          { required: true, message: '请选择是否显示', trigger: 'blur' }
+        ]
+      },
       tranAmount: '',
+      playerOptions: {
+        playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
+        autoplay: false, // 如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: 'zh-CN',
+        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [],
+        poster: '../../static/images/test.jpg', // 你的封面地址
+        // width: document.documentElement.clientWidth,
+        notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: true // 全屏按钮
+        }
+      },
       baleImgList: [], // 封面
       goodsImgList: [] // 视频
     }
   },
+  components: {
+    VideoPlayer
+  },
   methods: {
     getList () {
-      this.$request.editPayments(this.id).then(res => {
-        if (res.ret) {
-          this.ruleForm = res.data
-          res.data.qr_code && (this.baleImgList[0] = { url: res.data.qr_code })
-          res.data.qr_video && (this.goodsImgList[0] = { url: res.data.qr_video })
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
-    // 是否显示
-    changeShow (event) {
-      console.log(typeof (event), '我是event')
-      console.log(event, 'event')
-      this.$request.closeCategories(this.$route.params.id, Number(event)).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: '操作成功',
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
+      // this.$request.editPayments(this.id).then(res => {
+      //   if (res.ret) {
+      //     this.ruleForm = res.data
+      //     res.data.qr_code && (this.baleImgList[0] = { url: res.data.qr_code })
+      //     res.data.qr_video && (this.goodsImgList[0] = { url: res.data.qr_video })
+      //   } else {
+      //     this.$message({
+      //       message: res.msg,
+      //       type: 'error'
+      //     })
+      //   }
+      // })
+      this.$request.getSingleVideo(this.id).then(res => {
+        this.video = res.data
+        this.playerOptions.sources = [{ src: videoUrl + res.data.video }]
       })
     },
     beforeUploadImg (file) {
@@ -147,25 +174,55 @@ export default {
       }
       return true
     },
-    confirm () {
-      this.$request.addVideo({
-        ...this.video,
-        enabled: ~~this.video
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: '操作成功',
-            message: res.msg
-          })
-          this.show = false
-          this.success()
+    confirm (formName) {
+      console.log(Number(this.video.enabled), 'enabled')
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.id) { // 编辑视频
+            this.$request.editVideo(this.id, {
+              ...this.video,
+              enabled: this.video.enabled
+            }).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+          } else { // 新增视频
+            this.$request.addVideo({
+              ...this.video,
+              enabled: this.video.enabled
+            }).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+          }
         } else {
-          this.$message.error(res.msg)
+          return false
         }
       })
     },
-    // 上传打包照片
+    clear () {
+      this.$refs['ruleForm'].resetFields()
+      this.$refs['ruleForm'].clearValidate()
+    },
+    // 上传视频
     uploadBaleImg (item) {
       let file = item.file
       this.onUpload(file).then(res => {
@@ -208,26 +265,6 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    // 上传视频
-    uploadGoodsImg (item) {
-      let file = item.file
-      this.onUpload(file).then(res => {
-        if (res.ret) {
-          res.data.forEach(item => {
-            this.goodsImgList.push({
-              name: item.name,
-              url: item.path
-            })
-          })
-        }
-      })
-    },
-    clear () {
-      this.ruleForm.name = ''
-      this.ruleForm.remark = ''
-      this.baleImgList = []
-      this.ruleForm.qr_code = []
-    },
     init () {
       console.log(this.id, '我是接受id')
       if (this.state === 'edit') {
@@ -245,12 +282,20 @@ export default {
     },
     // 上传视频之前判断视频格式
     beforeUploadVideo (item) {
-      console.log('item', item)
+      console.log(this.conver(item.size))
       if (!(/video\/mp4/.test(item.type))) {
         this.$message.error('请上传 mp4 格式的视频')
         return false
+      } else if (!this.conver(item.size)) {
+        this.$message.error('请上传 视频 不能超过30M')
+        return false
       }
       return true
+    },
+    conver (limit) {
+      const size = (limit / (1024 * 1024)).toFixed(2)
+      console.log(size, 'size')
+      return size <= 30
     },
     // 上传视频
     uploadVideo (video) {
@@ -277,8 +322,8 @@ export default {
           console.log('error', error)
         },
         complete (res) {
-          console.log('上传完成', res)
           if (res.status) {
+            self.playerOptions.sources = [{ src: videoUrl + res.data.url, type: video.type }]
             self.video.video = res.data.url
           }
         }
@@ -298,6 +343,19 @@ export default {
 </script>
 <style lang="scss">
 .dialog-add-setting {
+  .video-js .vjs-big-play-button {
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  .closed {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    right: 0;
+  }
   .el-dialog__body {
     margin-left: 20px !important;
   }

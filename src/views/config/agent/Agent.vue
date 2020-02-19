@@ -47,7 +47,9 @@
           <!-- 成交记录 -->
           <el-button class="btn-blue" @click="record(scope.row.id)">成交记录</el-button>
           <!-- 提现申请 -->
-          <el-button class="btn-deep-blue" @click="withdrawal(scope.row.id)">提现申请</el-button>
+          <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
+            <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">提现申请</el-button>
+          </el-badge>
         </template>
       </el-table-column>
     </el-table>
@@ -91,7 +93,6 @@ export default {
   },
   methods: {
     getList () {
-      console.log(this.page_params.keyword)
       this.tableLoading = true
       this.$request.getAgents({
         keyword: this.page_params.keyword,

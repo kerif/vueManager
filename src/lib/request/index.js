@@ -197,9 +197,29 @@ exports.saveCountries = (id) => {
 exports.getTransaction = (params) => {
   return $form.get('transaction-records', { params })
 }
-// 流水记录 获取下拉框
+// 流水记录 获取充值方式下拉框
 exports.getPaymentType = () => {
   return $form.get('transaction-records/payment-types')
+}
+// 财务 充值记录
+exports.getRecharge = (params) => {
+  return $form.get('recharge-records', { params })
+}
+// 充值记录 详细
+exports.getRechargeDetails = (id) => {
+  return $form.get(`recharge-records/${id}`)
+}
+// 充值记录 获取充值方式下拉框
+exports.getRechargeType = () => {
+  return $form.get('recharge-records/payment-types')
+}
+// 充值记录 审核通过
+exports.rechargePassed = (id, params) => {
+  return $form.put(`recharge-records/${id}/approved`, params)
+}
+// 代理管理 审核拒绝
+exports.rechargeReject = (id, params) => {
+  return $form.put(`recharge-records/${id}/refused`, params)
 }
 exports.saveShip = (params) => {
   return $form.post(`shipments`, params)
@@ -293,6 +313,30 @@ exports.addShipment = (params) => {
 exports.Automatic = (params) => {
   return $form.get('shipments/in-storage/user-search', { params })
 }
+// 入库 货位匹配
+exports.AutoLocation = (id, params) => {
+  return $form.get(`shipments/warehouse/${id}/goods-allocation-like`, { params })
+}
+// 新增货位
+exports.addLocation = (id, params) => {
+  return $form.post(`warehouse-address/${id}/goods-allocation-areas`, params)
+}
+// 获取单条货位详情
+exports.getAllLocation = (id, areaId) => {
+  return $form.get(`warehouse-address/${id}/goods-allocation-areas/${areaId}`)
+}
+// 删除货位
+exports.deleteLocation = (id, areaId) => {
+  return $form.delete(`warehouse-address/${id}/goods-allocation-areas/${areaId}`)
+}
+// 编辑保存单条货位详情
+exports.updateAllLocation = (id, areaId, params) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/${areaId}`, params)
+}
+// 获取单条货位列表
+exports.getLocationList = (id, areaId) => {
+  return $form.get(`warehouse-address/${id}/goods-allocation-areas/${areaId}/details`)
+}
 exports.getExpressLine = (id) => {
   return $form.get(`express-lines/${id}`)
 }
@@ -322,6 +366,18 @@ exports.getUsers = (params) => {
 // 客户 代理管理 单条提现申请
 exports.agentsWithdraws = (id, params) => {
   return $form.get(`agents/${id}/withdraws`, { params })
+}
+// 代理管理 佣金详情
+exports.withdrawsIds = (paramsId, id) => {
+  return $form.get(`agents/${paramsId}/withdraws/${id}`)
+}
+// 代理管理 审核通过
+exports.agentPassed = (userId, id, params) => {
+  return $form.put(`agents/${userId}/withdraws/${id}/approved`, params)
+}
+// 代理管理 审核拒绝
+exports.agentReject = (userId, id, params) => {
+  return $form.put(`agents/${userId}/withdraws/${id}/refused`, params)
 }
 // 获取客户组列表
 exports.getUserGroup = (params) => {
@@ -514,6 +570,10 @@ exports.deleteWarehouseAddress = (id) => {
 exports.AutoCountry = (params) => {
   return $form.get('countries/search', { params })
 }
+// 仓库地址 获取单条仓库管理
+exports.locationArea = (id, params) => {
+  return $form.get(`warehouse-address/${id}/goods-allocation-areas`, { params })
+}
 // 获取全部重量及货币配置
 exports.getLocalization = () => {
   return $form.get('localization/configs')
@@ -690,6 +750,18 @@ exports.getCouponList = (params) => {
 exports.getVideoList = () => {
   return $form.get('videos')
 }
+// 获取单条视频详细
+exports.getSingleVideo = (id) => {
+  return $form.get(`videos/${id}`)
+}
+// 删除视频
+exports.videoDelete = (ids) => {
+  return $form.put('videos/batch-delete', ids)
+}
+// 视频开启或显示
+exports.closeVideo = (id, status) => {
+  return $form.put(`videos/${id}/status/${status}`)
+}
 // 添加抵用券
 exports.addCoupons = (params) => {
   return $form.post('coupons', params)
@@ -811,4 +883,6 @@ exports.getVideoUploadToken = () => $form.get('videos/upload-token')
 
 // 新建视频
 exports.addVideo = (params) => $json.post('videos', params)
+// 修改视频
+exports.editVideo = (id, params) => $json.put(`videos/${id}`, params)
 export default exports

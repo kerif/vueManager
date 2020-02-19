@@ -12,12 +12,24 @@
     @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="标题" prop="title"></el-table-column>
-      <el-table-column label="状态" prop="name_en"></el-table-column>
-      <el-table-column label="创建时间" prop="user_count"></el-table-column>
+      <el-table-column label="内容介绍" prop="content"></el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.enabled"
+            @change="changeShow($event, scope.row.id)"
+            active-text="开"
+            inactive-text="关"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.name_cn,scope.row.name_en)">修改</el-button>
-          <el-button class="btn-main" @click="member(scope.row.id)">预览</el-button>
+          <el-button class="btn-green" @click="editVip(scope.row.id)">修改</el-button>
+          <el-button class="btn-main" @click="Preview(scope.row.video)">预览</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -27,6 +39,19 @@
       </template>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog
+      title="预览"
+      :visible.sync="videoVisible"
+      :before-close="close"
+      width="60%">
+      <video-player
+        v-if="playerOptions.sources.length"
+        class='video-player vjs-custom-skin'
+        ref="videoPlayer"
+        :playsinline="true"
+        :options="playerOptions"
+      />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -35,19 +60,48 @@ import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
+import { videoPlayer as VideoPlayer } from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+const videoUrl = 'http://q55zf5gh1.bkt.clouddn.com/'
 export default {
   name: 'videoList',
   components: {
     SearchGroup,
     NlePagination,
-    AddBtn
+    AddBtn,
+    VideoPlayer
   },
   mixins: [pagination],
   data () {
     return {
-      videoList: [],
+      videoList: [
+        {
+          enabled: true
+        }
+      ],
       tableLoading: false,
-      deleteNum: []
+      deleteNum: [],
+      playerOptions: {
+        playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
+        autoplay: false, // 如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: 'zh-CN',
+        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [],
+        poster: '../../static/images/test.jpg', // 你的封面地址
+        // width: document.documentElement.clientWidth,
+        notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: true // 全屏按钮
+        }
+      },
+      videoVisible: false
     }
   },
   mounted () {
@@ -63,7 +117,8 @@ export default {
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.videoList = res.data
+          this.videoList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+          // this.videoList = res.data
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
@@ -75,47 +130,68 @@ export default {
         }
       })
     },
+    changeShow (event, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.closeVideo(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    close () {
+      this.playerOptions.sources = []
+      this.videoVisible = false
+    },
     // 用户组分类选择值加载
     goSearchType (val) {
       this.page_params.page = 1
       this.page_params.name_cn = val
       this.getList()
     },
-    // 添加客户组
+    // 添加视频
     addVip () {
       dialog({ type: 'videoList', state: 'add' }, () => {
         this.getList()
       })
     },
     // 修改资料
-    editVip (id, nameCn, nameEn) {
-      dialog({ type: 'editVip', id: id, name_cn: nameCn, name_en: nameEn, state: 'edit' }, () => {
+    editVip (id) {
+      console.log(id, 'id')
+      dialog({ type: 'videoList', id: id, state: 'edit' }, () => {
         this.getList()
       })
     },
-    // 成员
-    member (id) {
-      console.log(id, 'id')
-      dialog({ type: 'vipList', id: id }, () => {
-        this.getList()
-      })
+    // 预览
+    Preview (video) {
+      this.videoVisible = true
+      this.playerOptions.sources = [{ src: videoUrl + video }]
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
-      console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除
     deleteData () {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
-        return this.$message.error('请选择客户组')
+        return this.$message.error('请选择')
       }
       this.$confirm(`是否确认删除？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$request.userGroupDelete({
+        this.$request.videoDelete({
           DELETE: this.deleteNum
         }).then(res => {
           if (res.ret) {
@@ -141,6 +217,11 @@ export default {
 .video-list-container {
   .select-box {
     overflow: hidden;
+  }
+  .video-js .vjs-big-play-button {
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
 }
 </style>

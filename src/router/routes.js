@@ -28,6 +28,10 @@ const Transaction = loadonDemand('finance/Transaction')
 const TransactionDetails = loadonDemand('finance/financeDetails')
 // 财务 微信支付流水详情
 const TransactionWechat = loadonDemand('finance/wechatPay')
+// 财务 充值记录
+const Recharge = loadonDemand('finance/recharge')
+// 财务 审核跟详情页面
+const RechargeDetails = loadonDemand('finance/rechargeDetails')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
@@ -40,6 +44,8 @@ const IconAdd = loadonDemand('config/line/IconAdd')
 const WareHouse = loadonDemand('config/warehouse/warehouse')
 // 配置 添加、修改仓库地址
 const WareHouseEdit = loadonDemand('config/warehouse/warehouseAddEdit')
+// 配置 仓库地址 仓位管理
+const positionWarehouse = loadonDemand('config/warehouse/Position')
 // 配置 下单须知列表
 const NoticeList = loadonDemand('config/notice/NoticeList')
 // 配置 添加、修改下单须知
@@ -285,14 +291,26 @@ export default [
             }
           },
           {
-            path: '/vip/WithdrawalDetail/:id',
-            name: wdDetail,
+            path: '/vip/WithdrawalDetail/:userId/:id/:status',
+            name: 'wdDetail',
             component: wdDetail,
             id: 304,
             meta: {
               level: 3,
               group: '客户',
               name: '佣金提现详情',
+              parent: '/vip/agent'
+            }
+          },
+          {
+            path: '/vip/reviewWithdrawal/:userId/:id/:state',
+            name: 'wdReviewDetail',
+            component: wdDetail,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '佣金提现审核',
               parent: '/vip/agent'
             }
           },
@@ -552,6 +570,18 @@ export default [
             }
           },
           {
+            path: '/config/warehouse/position/:id/:warehouseName',
+            component: positionWarehouse,
+            name: 'position',
+            id: 602,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '货位管理',
+              parent: '/config/warehouse'
+            }
+          },
+          {
             path: '/config/warehouse/edit/:id',
             component: WareHouseEdit,
             name: 'warehouseEdit',
@@ -673,6 +703,41 @@ export default [
               level: 3,
               name: '在线支付详情',
               parent: '/finance/transaction'
+            }
+          },
+          {
+            path: '/finance/recharge',
+            name: 'recharge',
+            component: Recharge,
+            id: 702,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '充值记录'
+            }
+          },
+          {
+            path: '/finance/rechargeDetails/:id',
+            name: 'rechargeDetails',
+            component: RechargeDetails,
+            id: 702,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '审核详情',
+              parent: '/finance/recharge'
+            }
+          },
+          {
+            path: '/finance/rechargeReview/:id/:state',
+            name: 'rechargeReview',
+            component: RechargeDetails,
+            id: 702,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '充值审核',
+              parent: '/finance/recharge'
             }
           }
         ]

@@ -138,7 +138,14 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="存放货位">
-                <el-input v-model="user.location" placeholder="请输入存放货位"></el-input>
+                <!-- <el-input v-model="user.location" placeholder="请输入存放货位"></!-->
+                <el-autocomplete
+                  :disabled="this.user.warehouse_id === ''"
+                  :fetch-suggestions="locationCNSearch"
+                  @select="locationSelect"
+                  placeholder="请输入存放货位"
+                  v-model="user.location">
+                </el-autocomplete>
               </el-form-item>
             </el-col>
           </el-row>
@@ -325,6 +332,7 @@ export default {
       imgSrc: '',
       currencyUnit: '',
       areaId: '',
+      locationId: '',
       form: {},
       shipNum: '', // 通过快递单号拉取的包裹id
       expressNum: '' // 保存的快递单号
@@ -345,9 +353,6 @@ export default {
       //   let props = JSON.parse(this.$route.query.props)
       //   this.user.props = props.map(item => item.id)
       // }
-      if (this.user.warehouse_id) {
-        console.log(this.user.warehouse_id, 'user.warehouse_id')
-      }
     }
   },
   methods: {
@@ -409,6 +414,8 @@ export default {
           this.user.express_company_id = res.data.express_company.id
           this.user.country_id = res.data.country.id
           this.areaId = this.user.warehouse_id
+          this.locationId = this.areaId
+          console.log(this.locationId, 'locationId')
           this.updateAreaData()
           // if (res.data.props) {
           //   let props = JSON.parse(res.data.props)
@@ -443,6 +450,8 @@ export default {
     },
     // 获取寄往地区数据
     getAreaData (id) {
+      this.locationId = id
+      console.log(this.locationId, '我是改变的locationId')
       this.$request.getArea(id).then(res => {
         this.shipData = res.data
       })
@@ -551,6 +560,7 @@ export default {
       }
       return true
     },
+    // 客户id
     queryCNSearch (queryString, callback) {
       console.log(this.user.user_id)
       var list = [{}]
@@ -565,14 +575,38 @@ export default {
         callback(list)
       })
     },
+    // 货位搜索
+    locationCNSearch (queryString, callback) {
+      console.log(this.user.location, 'location')
+      var list = [{}]
+      this.$request.AutoLocation(this.locationId, {
+        keyword: this.user.location
+      }).then(res => {
+        for (let i of res.data) {
+          i.value = i.code
+          // i.value = i.id + '---' + i.name
+        }
+        list = res.data
+        callback(list)
+      })
+    },
+    // 客户id
     handleSelect (item) {
       // this.ruleForm.en_name = item.name
       console.log(item)
       this.supplierId = item.id
       this.supplierName = item.name
     },
+    // 货位
+    locationSelect (item) {
+      // this.ruleForm.en_name = item.name
+      console.log(item)
+      // this.supplierId = item.id
+      // this.supplierName = item.name
+    },
     // 保存
     submitStorage () {
+      console.log(this.user.location, 'user.location')
       this.user.package_pictures = this.goodsImgList.map(item => {
         return {
           url: item.url
