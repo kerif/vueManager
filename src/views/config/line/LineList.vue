@@ -1,7 +1,72 @@
 <template>
   <div class="line-list-container">
     <div class="add-btn-box">
-      <add-btn router="lineadd">添加路线</add-btn></div>
+      <el-row :gutter="10">
+        <el-col :span="5">
+          <el-select placeholder="线路名称" multiple filterable
+            collapse-tags v-model="query.lineName">
+            <el-option v-for="(item, index) in lineNameColumn" :key="index"
+              :label="item" :value="item"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="5">
+          <el-select placeholder="支持仓库" v-model="query.warehouses" multiple
+            collapse-tags filterable>
+            <el-option v-for="(item, index) in warehousesColumn" :key="index"
+              :label="item" :value="item"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3">
+          <el-select placeholder="是否启用" v-model="query.enabled">
+            <el-option v-for="item in enableList" :key="item.value"
+              :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="11">
+          <el-button type="success" @click="onHighSearch">{{ highSearch ? '取消高级搜索' : '高级搜索' }}</el-button>
+          <el-button type="primary" @click="onSearch">搜索</el-button>
+          <el-button type="primary" plain @click="onReset">重置</el-button>
+          <add-btn router="lineadd">添加路线</add-btn>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10" style="margin-top:15px" v-show="highSearch">
+        <el-col :span="4">
+          <el-select placeholder="支持国家/地区" v-model="query.countries" multiple
+            collapse-tags filterable>
+            <el-option v-for="(item, index) in countriesColumn" :key="index"
+              :label="item" :value="item"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-select placeholder="参考时效" v-model="query.referenceTime" multiple
+            collapse-tags filterable>
+            <el-option v-for="(item, index) in referenceTimeColumn" :key="index"
+              :label="item" :value="item"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-select placeholder="首重" v-model="query.firstWeight" multiple
+            collapse-tags filterable>
+            <el-option v-for="(item, index) in firstWeightColumn" :key="index"
+              :label="item" :value="item"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-select placeholder="首费" v-model="query.firstMoney" multiple
+            collapse-tags filterable>
+            <el-option v-for="(item, index) in firstMoneyColumn" :key="index"
+              :label="item" :value="item"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-select placeholder="续费" v-model="query.nextWeight" multiple
+            collapse-tags filterable>
+            <el-option v-for="(item, index) in nextWeightColumn" :key="index"
+              :label="item" :value="item"></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+    </div>
     <el-table stripe border class="data-list" :data="lineList"
       v-loading="tableLoading">
       <el-table-column type="expand">
@@ -77,19 +142,62 @@ export default {
         }
       ],
       localization: {},
-      tableLoading: false
+      tableLoading: false,
+      lineNameColumn: [], // 线路名称列表
+      warehousesColumn: [], // 支持仓库列表
+      referenceTimeColumn: [], // 参考时效列表
+      countriesColumn: [], // 支持国家列表
+      firstWeightColumn: [], // 首重列表
+      firstMoneyColumn: [], // 首费列表
+      nextWeightColumn: [], // 续重列表
+      highSearch: false,
+      query: {
+        enabled: '', // 是否启用
+        lineName: [], // 线路名称
+        referenceTime: [], // 参考时效
+        countries: [], // 支持国家
+        warehouses: [], // 支持仓库
+        firstWeight: [], // 首重
+        firstMoney: [], // 首费
+        nextWeight: [] // 续重
+      },
+      enableList: [
+        { label: '是', value: 1 },
+        { label: '否', value: 0 }
+      ]
     }
   },
   created () {
     this.getList()
+    // 获取线路名称筛选列表
+    this.getColumnList('cn_name', 'lineNameColumn')
+    // 获取支持仓库筛选列表
+    this.getColumnList('warehouses.warehouse_name', 'warehousesColumn')
+    // 获取参考时效筛选列表
+    this.getColumnList('reference_time', 'referenceTimeColumn')
+    // 获取支持国家筛选列表
+    this.getColumnList('countries.cn_name', 'countriesColumn')
+    // 获取首重筛选列表
+    this.getColumnList('first_weight', 'firstWeightColumn')
+    // 获取首费筛选列表
+    this.getColumnList('first_money', 'firstMoneyColumn')
+    // 获取续重筛选列表
+    this.getColumnList('next_weight', 'nextWeightColumn')
   },
   methods: {
-    getList () {
+    getList (query = '') {
       this.tableLoading = true
-      this.$request.getLines({
+      let params = {
         page: this.page_params.page,
         size: this.page_params.size
-      }).then(res => {
+      }
+      if (typeof this.query.enabled === 'number') {
+        params.enabled = this.query.enabled
+      }
+      if (query) {
+        params.queries = query
+      }
+      this.$request.getLines(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.lineList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
@@ -162,6 +270,79 @@ export default {
           })
         }
       })
+    },
+    // 获取筛选条件某一列得列表
+    getColumnList (column = '', param) {
+      let arr = column.split('.')
+      this.$request.getLineColumnList(column).then(res => {
+        if (res.ret) {
+          this[param] = res.data.map(item => item[arr[arr.length - 1]])
+        }
+      })
+    },
+    // 高级搜索
+    onHighSearch () {
+      if (this.highSearch) {
+        // 取消高级搜索
+        this.query.countries = []
+        this.query.firstWeight = []
+        this.query.firstMoney = []
+        this.query.nextWeight = []
+        this.query.warehouses = []
+      }
+      this.highSearch = !this.highSearch
+    },
+    // 重置筛选条件
+    onReset () {
+      for (const key in this.query) {
+        if (this.query.hasOwnProperty(key)) {
+          if (key === 'enabled') {
+            this.query[key] = ''
+          } else {
+            this.query[key] = []
+          }
+        }
+      }
+    },
+    // 搜搜
+    onSearch () {
+      this.page_params.page = 1
+      let arr = []
+      for (const key in this.query) {
+        let value = this.query[key]
+        if (this.query.hasOwnProperty(key) && key !== 'enabled' && value.length) {
+          let param = ''
+          switch (key) {
+            case 'lineName':
+              param = 'cn_name'
+              break
+            case 'warehouses':
+              param = 'warehouses.warehouse_name'
+              break
+            case 'referenceTime':
+              param = 'reference_time'
+              break
+            case 'countries':
+              param = 'countries.cn_name'
+              break
+            case 'firstWeight':
+              param = 'first_weight'
+              break
+            case 'firstMoney':
+              param = 'first_money'
+              break
+            case 'nextWeight':
+              param = 'next_weight'
+              break
+          }
+          arr.push(this.getSearchValue(param, value))
+        }
+      }
+      console.log(arr.join('|'))
+      this.getList(arr.join('|'))
+    },
+    getSearchValue (key, value) {
+      return `${key}:${value.join(',')};asc`
     }
   }
 }

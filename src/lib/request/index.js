@@ -885,4 +885,7 @@ exports.getVideoUploadToken = () => $form.get('videos/upload-token')
 exports.addVideo = (params) => $json.post('videos', params)
 // 修改视频
 exports.editVideo = (id, params) => $json.put(`videos/${id}`, params)
+
+// 获取线路筛选条件某一列列表
+exports.getLineColumnList = (column) => $form.get(`express-lines/column/${column}/data`)
 export default exports
