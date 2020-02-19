@@ -34,6 +34,7 @@ import videoList from './addVideo.vue'
 import passedList from './passedProxy.vue'
 import locationList from './addEditLocation.vue'
 import rechargeMsg from './rechargeMsg.vue'
+import lineChoose from './lineChoose.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -68,6 +69,7 @@ const VideoController = Vue.extend(videoList)
 const PassedController = Vue.extend(passedList)
 const LocationListController = Vue.extend(locationList)
 const RechargeMsgController = Vue.extend(rechargeMsg)
+const LineChooseController = Vue.extend(lineChoose)
 
 const mixin = {
   data () {
@@ -305,6 +307,12 @@ function initInstance (type) {
     // 流水记录审核
     case 'rechargeMsg':
       instance = new RechargeMsgController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'lineChoose':
+      instance = new LineChooseController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

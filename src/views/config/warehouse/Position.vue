@@ -16,7 +16,7 @@
       <el-table-column label="货位数量" prop="counts"></el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editLocation(scope.row.id)">修改仓库</el-button>
+          <el-button class="btn-green" @click="editLocation(scope.row.id)">修改货位</el-button>
           <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>

@@ -162,10 +162,10 @@ export default {
               message: res.msg
             })
             this.getList()
-            this.location.column = ''
-            this.location.row = ''
-            this.qty = ''
-            this.location.number = ''
+            // this.location.column = ''
+            // this.location.row = ''
+            // this.qty = ''
+            // this.location.number = ''
             // this.show = false
             this.success()
           } else {

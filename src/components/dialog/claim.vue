@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" title="认领用户" class="dialog-claim"
-  size="small" @close="clear">
+  @close="clear">
     <el-form :model="user" :rules="rules" ref="user" class="demo-ruleForm">
         <!-- 员工组中文名 -->
         <el-form-item label="认领用户" prop="user_id">
@@ -32,7 +32,7 @@ export default {
       id: '',
       rules: {
         user_id: [
-          { required: true, message: '请输入认领用户', trigger: 'blur' }
+          { required: true, message: '请输入认领用户', trigger: 'change' }
         ]
       }
     }
@@ -85,7 +85,7 @@ export default {
       })
     },
     clear () {
-      this.user.name_cn = ''
+      this.user.user_id = ''
     },
     cancelDialog (user) {
       this.$refs[user].resetFields()

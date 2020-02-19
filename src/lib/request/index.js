@@ -334,8 +334,8 @@ exports.updateAllLocation = (id, areaId, params) => {
   return $form.put(`warehouse-address/${id}/goods-allocation-areas/${areaId}`, params)
 }
 // 获取单条货位列表
-exports.getLocationList = (id, areaId) => {
-  return $form.get(`warehouse-address/${id}/goods-allocation-areas/${areaId}/details`)
+exports.getLocationList = (id, areaId, params) => {
+  return $form.get(`warehouse-address/${id}/goods-allocation-areas/${areaId}/details`, { params })
 }
 exports.getExpressLine = (id) => {
   return $form.get(`express-lines/${id}`)
@@ -745,6 +745,10 @@ exports.editCoupons = (params) => {
 // 营销管理 抵用券管理
 exports.getCouponList = (params) => {
   return $form.get('coupons', { params })
+}
+// 抵用券管理 路线列表
+exports.getLineList = (params) => {
+  return $form.get('coupons/express-line-list', { params })
 }
 // 营销管理 获取视频列表
 exports.getVideoList = () => {

@@ -39,7 +39,11 @@
     v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column label="客户ID" prop="user_id"></el-table-column>
+      <el-table-column label="客户ID">
+        <template slot-scope="scope">
+          {{scope.row.user.id}}
+        </template>
+      </el-table-column>
       <!-- 状态 -->
       <el-table-column label="状态">
         <template slot-scope="scope">
