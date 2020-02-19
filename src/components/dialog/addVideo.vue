@@ -34,7 +34,7 @@
             <i class="el-icon-plus">
             </i>
         </el-upload>
-         <div class="updateImg">仅支持jpg, 宽度 300px、高度 225px</div>
+        <div class="updateImg">仅支持jpg, 宽度 300px、高度 225px</div>
     </el-form-item>
     <!-- 视频 -->
     <el-form-item class="updateChe" label="视频" prop="video">
@@ -58,6 +58,7 @@
         </i>
       </el-upload>
       <div class="updateImg">仅支持mp4, 视频最佳比例为：3：2 比例， 大小不超过30M</div>
+      <el-progress :percentage="videoPrecentage" v-show="videoShow"></el-progress>
     </el-form-item>
     <!-- 是否显示 -->
     <el-form-item label="是否显示" prop="enabled">
@@ -138,8 +139,8 @@ export default {
           fullscreenToggle: true // 全屏按钮
         }
       },
-      baleImgList: [], // 封面
-      goodsImgList: [] // 视频
+      videoShow: false,
+      videoPrecentage: 0
     }
   },
   components: {
@@ -147,18 +148,6 @@ export default {
   },
   methods: {
     getList () {
-      // this.$request.editPayments(this.id).then(res => {
-      //   if (res.ret) {
-      //     this.ruleForm = res.data
-      //     res.data.qr_code && (this.baleImgList[0] = { url: res.data.qr_code })
-      //     res.data.qr_video && (this.goodsImgList[0] = { url: res.data.qr_video })
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
       this.$request.getSingleVideo(this.id).then(res => {
         this.video = res.data
         this.playerOptions.sources = [{ src: videoUrl + res.data.video }]
@@ -226,15 +215,9 @@ export default {
     uploadBaleImg (item) {
       let file = item.file
       this.onUpload(file).then(res => {
-        console.log(res)
         if (res.ret) {
-          // res.data.forEach(item => {
-          //   this.baleImgList.push({
-          //     name: item.name,
-          //     url: item.path
-          //   })
-          // })
           this.video.cover = res.data[0].path
+          this.$message.success('上传成功')
         } else {
           this.$message({
             message: res.msg,
@@ -252,11 +235,6 @@ export default {
     },
     // 删除图片
     onDeleteImg (type, index) {
-      // if (type === 'bale') {
-      //   this.baleImgList.splice(index, 1)
-      // } else if (type === 'goods') {
-      //   this.goodsImgList.splice(index, 1)
-      // }
       this.video.cover = ''
     },
     // 上传封面
@@ -314,14 +292,20 @@ export default {
         self.qnConfig
       )
       // 开始上传
+      this.videoShow = true
       observable.subscribe({
         next (res) {
-          console.log('next', res.total)
+          let precentage = Number.parseInt(res.total.percent)
+          self.videoPrecentage = precentage
         },
-        error (error) {
-          console.log('error', error)
+        error () {
+          self.$message.error('上传失败')
+          self.videoShow = false
+          self.videoPrecentage = 0
         },
         complete (res) {
+          self.videoShow = false
+          self.videoPrecentage = 0
           if (res.status) {
             self.playerOptions.sources = [{ src: videoUrl + res.data.url, type: video.type }]
             self.video.video = res.data.url
