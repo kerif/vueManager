@@ -111,7 +111,7 @@
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-row>
+        <el-row :gutter="10">
           <el-col :span="10">
             <div>
               <span>*体积系数</span>
@@ -120,6 +120,11 @@
               </el-tooltip>
             </div>
             <el-input v-model="form.factor" placeholder="请输入内容"></el-input>
+          </el-col>
+          <!-- 计重模式 -->
+          <el-col :span="10">
+            <div>计重模式</div>
+              <el-checkbox v-model="form.has_factor">考虑体积重</el-checkbox>
           </el-col>
         </el-row>
       </el-form-item>
@@ -225,6 +230,7 @@ export default {
         next_money: '',
         max_weight: '',
         factor: '',
+        has_factor: '',
         min_weight: '',
         reference_time: '',
         types: [],
@@ -327,6 +333,7 @@ export default {
       })
     },
     saveLine () {
+      console.log(Number(this.form.has_factor), 'has_factor')
       if (this.form.cn_name === '') {
         return this.$message.error('请输入线路名称')
       } else if (this.form.warehouses === '') {
@@ -353,7 +360,10 @@ export default {
         return this.$message.error('请输入备注')
       }
       if (this.$route.params.id) { // 编辑状态
-        this.$request.saveEditLine(this.$route.params.id, this.form).then(res => {
+        this.$request.saveEditLine(this.$route.params.id, {
+          ...this.form,
+          has_factor: Number(this.form.has_factor)
+        }).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -369,7 +379,9 @@ export default {
           }
         })
       } else { // 新建状态
-        this.$request.updateLines(this.form).then(res => {
+        this.$request.updateLines({
+          ...this.form,
+          has_factor: Number(this.form.has_factor) }).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
