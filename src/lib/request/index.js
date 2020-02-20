@@ -632,11 +632,11 @@ exports.deleteProps = (ids) => {
 }
 // 获取 物流跟踪配置
 exports.getLogistics = () => {
-  return $form.get('logistics')
+  return $form.get('configs')
 }
 // 更改 物流跟踪配置
 exports.editLogistics = (params) => {
-  return $form.put('logistics', params)
+  return $form.put('configs', params)
 }
 // 更多配置 订单获取增值服务
 exports.getValue = (params) => {

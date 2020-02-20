@@ -274,6 +274,7 @@ export default {
         this.form.types = res.data.types.map(item => item.id)
         this.form.countries = res.data.countries.map(item => item.id)
         this.form.warehouses = res.data.warehouses.map(item => item.id)
+        this.form.has_factor = Boolean(res.data.has_factor)
         this.supportWarehouse(warehouses)
       })
     },
