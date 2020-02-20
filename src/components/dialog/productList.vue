@@ -26,8 +26,8 @@
         </el-form-item>
         <!-- 照片 -->
         <el-form-item label="照片" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-            <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
                 <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
@@ -114,11 +114,7 @@ export default {
     },
     confirm () {
       console.log(this.ruleForm.status, 'ruleForm.status')
-      this.ruleForm.images = this.baleImgList.map(item => {
-        return {
-          url: item.url
-        }
-      })
+      this.ruleForm.images = this.baleImgList
       if (!this.ruleForm.name) {
         return this.$message.error('请输入货品名称')
       } else if (!this.ruleForm.qty) {
@@ -174,10 +170,7 @@ export default {
         console.log(res)
         if (res.ret) {
           res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.baleImgList.push(item.path)
           })
         } else {
           this.$message({

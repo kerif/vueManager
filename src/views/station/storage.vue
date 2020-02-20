@@ -164,8 +164,8 @@
             <el-row :gutter="20">
               <el-col :span="18">
                 <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
-                  <span class="img-item" v-for="(item, index) in goodsImgList" :key="item.name">
-                    <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                  <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
+                    <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                     <span class="model-box"></span>
                     <span class="operat-box">
                       <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
@@ -262,8 +262,8 @@
             <template slot-scope="scope">
               <span v-for="(ele, index) in scope.row.images"
               :key="index" style="cursor:pointer;"
-                @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele.url}`, imgVisible=true">
-                  <img :src="`${$baseUrl.IMAGE_URL}${ele.url}`" style="width: 40px; margin-right: 5px;">
+                @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele}`, imgVisible=true">
+                  <img :src="`${$baseUrl.IMAGE_URL}${ele}`" style="width: 40px; margin-right: 5px;">
                 </span>
           </template>
           </el-table-column>
@@ -525,10 +525,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.goodsImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.goodsImgList.push(item.path)
           })
         }
       })
@@ -607,11 +604,7 @@ export default {
     // 保存
     submitStorage () {
       console.log(this.user.location, 'user.location')
-      this.user.package_pictures = this.goodsImgList.map(item => {
-        return {
-          url: item.url
-        }
-      })
+      this.user.package_pictures = this.goodsImgList
       if (this.user.express_num === '') {
         return this.$message.error('请输入快递单号')
       } else if (this.user.package_weight === '') {
