@@ -820,18 +820,13 @@ export default {
         }
       })
     },
-    // 获取其余配置
+    // 获取pc端配置
     getOthers () {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
-<<<<<<< HEAD
         this.setForm.pc_website_url = res.data.pc_website_url.map(item => item.url).toString()
         res.data.default_img && (this.baleImgList[0] = { url: res.data.default_img })
         res.data.customer_qr_code && (this.customerList[0] = { url: res.data.customer_qr_code })
-=======
-        res.data.default_img && (this.baleImgList[0] = res.data.default_img)
-        res.data.customer_qr_code && (this.customerList[0] = res.data.customer_qr_code)
->>>>>>> b0fb5dc17d640d07d77fb875994847fa00e1e451
         // this.baleImgList[0] = { url: res.data.default_img }
         // this.customerList[0] = { url: res.data.customer_qr_code }
       })
