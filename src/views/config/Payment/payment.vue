@@ -57,16 +57,48 @@
           </el-table>
         </el-tab-pane>
         <!-- 物流跟踪配置 -->
-      <el-tab-pane label="物流跟踪配置" name="2">
+      <el-tab-pane label="服务配置" name="2">
         <div class="logistics-container">
-          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm" label-position="top">
+          <div class="form-title">快递100配置</div>
+          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
+            label-position="left" label-width="150px">
             <el-form-item label="Appkey" prop="app_key">
               <el-input v-model="logisticsData.app_key" placeholder="请输入Appkey"></el-input>
             </el-form-item>
             <el-form-item label="AppSecret" prop="app_secret">
               <el-input v-model="logisticsData.app_secret" placeholder="请输入AppSecret"></el-input>
             </el-form-item>
-            <el-form-item label="Tracking more 物流 key" prop="trackingmore_key">
+          </el-form>
+          <div class="form-title">Tracking more配置</div>
+          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
+            label-position="left" label-width="150px">
+            <el-form-item label="Appkey" prop="trackingmore_key">
+              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            </el-form-item>
+          </el-form>
+          <div class="form-title">邮箱发件信息配置</div>
+          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
+          label-position="left" label-width="150px">
+            <el-form-item label="发件人邮件" prop="trackingmore_key">
+              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            </el-form-item>
+            <el-form-item label="发件人名称" prop="trackingmore_key">
+              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            </el-form-item>
+            <el-form-item label="发件人SMTP" prop="trackingmore_key">
+              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            </el-form-item>
+            <el-form-item label="SMTP端口" prop="trackingmore_key">
+              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            </el-form-item>
+          </el-form>
+          <div class="form-title">短信配置——聚合</div>
+          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
+           label-position="left" label-width="150px">
+            <el-form-item label="Appkey" prop="trackingmore_key">
+              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            </el-form-item>
+            <el-form-item label="发送验证码模板ID" prop="trackingmore_key">
               <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
             </el-form-item>
           </el-form>
@@ -193,13 +225,23 @@
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
         </el-tab-pane>
         <!-- 其余配置 -->
-      <el-tab-pane label="其余配置" name="6">
+      <el-tab-pane label="PC端配置" name="6">
         <!-- 其余配置 -->
       <div class="setOthers">
         <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
-        label-position="top">
+        label-width="150px" label-position="left">
             <!-- 网站名称 -->
             <el-form-item label="*网站名称">
+              <el-input v-model="setForm.website_name">
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <div slot="label">
+                <span>*网站链接</span>
+                <el-tooltip effect="dark" content="主要用于集运插件识别（非常重要）" placement="top">
+                  <span class="el-icon-question icon-question"></span>
+                </el-tooltip>
+              </div>
               <el-input v-model="setForm.website_name">
               </el-input>
             </el-form-item>
@@ -1150,7 +1192,7 @@ export default {
     background-color: #fff !important;
     padding: 20px;
     .el-input {
-      width: 30%;
+      width: 50%;
     }
     .el-textarea__inner {
       width: 30%;
@@ -1165,9 +1207,9 @@ export default {
     .el-form-item__content {
       margin-left: 0 !important;
     }
-    .el-form-item__label {
-      width: 500px !important;
-    }
+    // .el-form-item__label {
+    //   width: 500px !important;
+    // }
   }
     .avatar-uploader {
       display: inline-block;
@@ -1216,6 +1258,17 @@ export default {
   }
   .btn-margin {
     margin-bottom: 5px;
+  }
+  .icon-question {
+    margin-left: 5px;
+    font-size: 18px;
+    color: #67C23A;
+    position: relative;
+    top: 3px;
+  }
+  .form-title {
+    font-weight: bold;
+    margin-bottom: 15px;
   }
 }
 </style>
