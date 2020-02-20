@@ -303,6 +303,7 @@ export default {
           }
         }
       }
+      this.getList()
     },
     // 搜搜
     onSearch () {
