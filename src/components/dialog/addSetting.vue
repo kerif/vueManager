@@ -15,11 +15,11 @@
             placeholder="请输入备注"></el-input>
         </el-form-item>
         <el-form-item label="上传收款二维码" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-            <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                 <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
             </span>
@@ -61,7 +61,7 @@ export default {
       this.$request.editPayments(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
-          res.data.qr_code && (this.baleImgList[0] = { url: res.data.qr_code })
+          res.data.qr_code && (this.baleImgList[0] = res.data.qr_code)
         } else {
           this.$message({
             message: res.msg,
@@ -72,7 +72,7 @@ export default {
     },
     confirm () {
       if (this.baleImgList[0]) {
-        this.ruleForm.qr_code = this.baleImgList[0].url
+        this.ruleForm.qr_code = this.baleImgList[0]
       } else {
         this.ruleForm.qr_code = []
       }
@@ -126,10 +126,7 @@ export default {
         console.log(res)
         if (res.ret) {
           res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.baleImgList.push(item.path)
           })
         } else {
           this.$message({

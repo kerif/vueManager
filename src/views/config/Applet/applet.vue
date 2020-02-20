@@ -80,11 +80,11 @@
          <el-col :span="6">
             <!-- 小程序首页视频入口图 -->
             <el-form-item label="*小程序首页视频入口图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
                 </span>
                 </span>
@@ -104,11 +104,11 @@
             <!-- 小程序首页评论入口图 -->
           <el-col :span="6">
             <el-form-item label="*小程序首页评论入口图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in evaluationImgList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in evaluationImgList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteEva(index)"></i>
                 </span>
                 </span>
@@ -128,11 +128,11 @@
             <!-- 小程序预报页图 -->
           <el-col :span="6">
             <el-form-item label="*小程序预报页图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in customerList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
                 </span>
                 </span>
@@ -152,11 +152,11 @@
             <!-- 小程序运费查询页图 -->
           <el-col :span="6">
             <el-form-item label="*小程序运费查询页图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in freightList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in freightList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteFre(index)"></i>
                 </span>
                 </span>
@@ -178,11 +178,11 @@
          <el-col :span="6">
             <!-- 物流查询页图” -->
             <el-form-item label="*物流查询页图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in logisticsList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in logisticsList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteTrack(index)"></i>
                 </span>
                 </span>
@@ -202,11 +202,11 @@
             <!-- 支持与帮助中心 -->
           <el-col :span="6">
             <el-form-item label="*支持与帮助中心" class="updateChe">
-                <span class="img-item" v-for="(item, index) in supportList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in supportList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteSupport(index)"></i>
                 </span>
                 </span>
@@ -226,11 +226,11 @@
           <!-- 分享页 -->
           <el-col :span="6">
             <el-form-item label="*分享页" class="updateChe">
-                <span class="img-item" v-for="(item, index) in shareList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in shareList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteShare(index)"></i>
                 </span>
                 </span>
@@ -250,11 +250,11 @@
           <!-- 首页 -->
           <el-col :span="6">
             <el-form-item label="*首页" class="updateChe">
-                <span class="img-item" v-for="(item, index) in indexList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in indexList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteIndex(index)"></i>
                 </span>
                 </span>
@@ -276,11 +276,11 @@
          <el-col :span="6">
           <!-- 视频区 -->
             <el-form-item label="*视频区" class="updateChe">
-                <span class="img-item" v-for="(item, index) in videoList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in videoList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteVideo(index)"></i>
                 </span>
                 </span>
@@ -300,11 +300,11 @@
           <!-- 评论区 -->
           <el-col :span="6">
             <el-form-item label="*评论区" class="updateChe">
-                <span class="img-item" v-for="(item, index) in commentList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in commentList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteComment(index)"></i>
                 </span>
                 </span>
@@ -418,22 +418,16 @@ export default {
     getImg () {
       this.$request.getProgramImg().then(res => {
         this.setForm = res.data
-        res.data.video_entrance_image && (this.baleImgList[0] = { url: res.data.video_entrance_image })
-        res.data.comment_entrance_image && (this.evaluationImgList[0] = { url: res.data.comment_entrance_image })
-        res.data.forecast_image && (this.customerList[0] = { url: res.data.forecast_image })
-        res.data.freight_image && (this.freightList[0] = { url: res.data.freight_image })
-        res.data.track_image && (this.logisticsList[0] = { url:
-        res.data.track_image })
-        res.data.support_image && (this.supportList[0] = { url:
-        res.data.support_image })
-        res.data.share_image && (this.shareList[0] = { url:
-        res.data.share_image })
-        res.data.index_image && (this.indexList[0] = { url:
-        res.data.index_image })
-        res.data.video_image && (this.videoList[0] = { url:
-        res.data.video_image })
-        res.data.comment_image && (this.commentList[0] = { url:
-        res.data.comment_image })
+        res.data.video_entrance_image && (this.baleImgList[0] = res.data.video_entrance_image)
+        res.data.comment_entrance_image && (this.evaluationImgList[0] = res.data.comment_entrance_image)
+        res.data.forecast_image && (this.customerList[0] = res.data.forecast_image)
+        res.data.freight_image && (this.freightList[0] = res.data.freight_image)
+        res.data.track_image && (this.logisticsList[0] = res.data.track_image)
+        res.data.support_image && (this.supportList[0] = res.data.support_image)
+        res.data.share_image && (this.shareList[0] = res.data.share_image)
+        res.data.index_image && (this.indexList[0] = res.data.index_image)
+        res.data.video_image && (this.videoList[0] = res.data.video_image)
+        res.data.comment_image && (this.commentList[0] = res.data.comment_image)
       })
     },
     saveDev (formName) {
@@ -472,10 +466,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.baleImgList.push(item.path)
           })
         }
       })
@@ -486,10 +477,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.evaluationImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.evaluationImgList.push(item.path)
           })
         }
       })
@@ -500,10 +488,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.logisticsList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.logisticsList.push(item.path)
           })
         }
       })
@@ -514,10 +499,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.supportList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.supportList.push(item.path)
           })
         }
       })
@@ -528,10 +510,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.shareList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.shareList.push(item.path)
           })
         }
       })
@@ -542,10 +521,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.indexList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.indexList.push(item.path)
           })
         }
       })
@@ -556,10 +532,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.videoList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.videoList.push(item.path)
           })
         }
       })
@@ -570,10 +543,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.commentList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.commentList.push(item)
           })
         }
       })
@@ -584,10 +554,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.customerList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.customerList.push(item.path)
           })
         }
       })
@@ -598,10 +565,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.freightList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.freightList.push(item.path)
           })
         }
       })
@@ -658,52 +622,52 @@ export default {
     // 修改图片配置
     editOthers () {
       if (this.baleImgList[0]) {
-        this.setForm.video_entrance_image = this.baleImgList[0].url
+        this.setForm.video_entrance_image = this.baleImgList[0]
       } else {
         this.setForm.video_entrance_image = []
       }
       if (this.customerList[0]) {
-        this.setForm.forecast_image = this.customerList[0].url
+        this.setForm.forecast_image = this.customerList[0]
       } else {
         this.setForm.forecast_image = []
       }
       if (this.evaluationImgList[0]) {
-        this.setForm.comment_entrance_image = this.evaluationImgList[0].url
+        this.setForm.comment_entrance_image = this.evaluationImgList[0]
       } else {
         this.setForm.comment_entrance_image = []
       }
       if (this.logisticsList[0]) {
-        this.setForm.track_image = this.logisticsList[0].url
+        this.setForm.track_image = this.logisticsList[0]
       } else {
         this.setForm.track_entrance_image = []
       }
       if (this.supportList[0]) {
-        this.setForm.support_image = this.supportList[0].url
+        this.setForm.support_image = this.supportList[0]
       } else {
         this.setForm.support_image = []
       }
       if (this.shareList[0]) {
-        this.setForm.share_image = this.shareList[0].url
+        this.setForm.share_image = this.shareList[0]
       } else {
         this.setForm.share_image = []
       }
       if (this.indexList[0]) {
-        this.setForm.index_image = this.indexList[0].url
+        this.setForm.index_image = this.indexList[0]
       } else {
         this.setForm.index_image = []
       }
       if (this.videoList[0]) {
-        this.setForm.video_image = this.videoList[0].url
+        this.setForm.video_image = this.videoList[0]
       } else {
         this.setForm.video_image = []
       }
       if (this.commentList[0]) {
-        this.setForm.comment_image = this.commentList[0].url
+        this.setForm.comment_image = this.commentList[0]
       } else {
         this.setForm.comment_image = []
       }
       if (this.freightList[0]) {
-        this.setForm.freight_image = this.freightList[0].url
+        this.setForm.freight_image = this.freightList[0]
       } else {
         this.setForm.freight_image = []
       }

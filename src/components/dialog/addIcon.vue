@@ -15,11 +15,11 @@
             placeholder="请输入备注"></el-input>
         </el-form-item> -->
         <el-form-item label="icon预览" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-            <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                 <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
             </span>
@@ -76,7 +76,7 @@ export default {
         return this.$message.error('请输入icon名称')
       }
       if (this.baleImgList[0]) {
-        this.ruleForm.icon = this.baleImgList[0].url
+        this.ruleForm.icon = this.baleImgList[0]
       } else {
         this.ruleForm.icon = []
       }
@@ -125,10 +125,7 @@ export default {
         console.log(res)
         if (res.ret) {
           res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.baleImgList.push(item.path)
           })
         } else {
           this.$message({

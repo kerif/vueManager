@@ -21,11 +21,11 @@
             placeholder="请输入备注"></el-input>
         </el-form-item>
         <el-form-item label="上传照片" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-            <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                 <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
             </span>
@@ -67,11 +67,7 @@ export default {
   },
   methods: {
     confirm () {
-      this.ruleForm.customer_images = this.baleImgList.map(item => {
-        return {
-          url: item.url
-        }
-      })
+      this.ruleForm.customer_images = this.baleImgList
       if (this.state === 'pass' && !this.ruleForm.pay_amount && this.ruleForm.pay_amount !== 0) {
         return this.$message.error('请输入金额')
       } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
@@ -128,10 +124,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.baleImgList.push(item.path)
           })
         }
       })

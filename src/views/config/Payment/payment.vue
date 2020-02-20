@@ -246,11 +246,11 @@
               </el-input>
             </el-form-item>
             <el-form-item label="*小程序码" class="updateChe">
-                <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
                 </span>
                 </span>
@@ -267,11 +267,11 @@
             </el-form-item>
             <!-- pc端客服二维码 -->
             <el-form-item label="*pc端客服二维码" class="updateChe">
-                <span class="img-item" v-for="(item, index) in customerList" :key="item.name">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="img-item" v-for="(item, index) in customerList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                     <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
                 </span>
                 </span>
@@ -761,8 +761,8 @@ export default {
     getOthers () {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
-        res.data.default_img && (this.baleImgList[0] = { url: res.data.default_img })
-        res.data.customer_qr_code && (this.customerList[0] = { url: res.data.customer_qr_code })
+        res.data.default_img && (this.baleImgList[0] = res.data.default_img)
+        res.data.customer_qr_code && (this.customerList[0] = res.data.customer_qr_code)
         // this.baleImgList[0] = { url: res.data.default_img }
         // this.customerList[0] = { url: res.data.customer_qr_code }
       })
@@ -772,12 +772,12 @@ export default {
       // this.setForm.default_img = this.baleImgList[0].url
       // this.setForm.customer_qr_code = this.customerList[0].url
       if (this.baleImgList[0]) {
-        this.setForm.default_img = this.baleImgList[0].url
+        this.setForm.default_img = this.baleImgList[0]
       } else {
         this.setForm.default_img = []
       }
       if (this.customerList[0]) {
-        this.setForm.customer_qr_code = this.customerList[0].url
+        this.setForm.customer_qr_code = this.customerList[0]
       } else {
         this.setForm.customer_qr_code = []
       }
@@ -1065,10 +1065,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.baleImgList.push(item.path)
           })
         }
       })
@@ -1079,10 +1076,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.customerList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.customerList.push(item.path)
           })
         }
       })
