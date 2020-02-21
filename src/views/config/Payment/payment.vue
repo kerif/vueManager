@@ -825,8 +825,10 @@ export default {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
         this.setForm.pc_website_url = res.data.pc_website_url.map(item => item.url).toString()
-        res.data.default_img && (this.baleImgList[0] = { url: res.data.default_img })
-        res.data.customer_qr_code && (this.customerList[0] = { url: res.data.customer_qr_code })
+        // res.data.default_img && (this.baleImgList[0] = { url: res.data.default_img })
+        // res.data.customer_qr_code && (this.customerList[0] = { url: res.data.customer_qr_code })
+        res.data.default_img && (this.baleImgList[0] = res.data.default_img)
+        res.data.customer_qr_code && (this.customerList[0] = res.data.customer_qr_code)
         // this.baleImgList[0] = { url: res.data.default_img }
         // this.customerList[0] = { url: res.data.customer_qr_code }
       })
