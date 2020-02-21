@@ -40,7 +40,7 @@
       <el-table-column label="申请时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status === '待审核'" class="btn-main optionBtn" @click="inviteWithdrawal(scope.row.user.id,scope.row.id)">审核</el-button>
+          <el-button v-if="scope.row.status === '待审核'" class="btn-green optionBtn" @click="inviteWithdrawal(scope.row.user.id,scope.row.id)">审核</el-button>
           <el-button v-else class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.user.id,scope.row.id)">详情</el-button>
         </template>
       </el-table-column>

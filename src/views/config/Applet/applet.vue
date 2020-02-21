@@ -543,7 +543,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.commentList.push(item)
+            this.commentList.push(item.path)
           })
         }
       })

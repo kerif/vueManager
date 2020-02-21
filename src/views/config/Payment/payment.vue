@@ -831,7 +831,7 @@ export default {
         // this.customerList[0] = { url: res.data.customer_qr_code }
       })
     },
-    // 修改其余配置
+    // 修改pc端配置
     editOthers () {
       // this.setForm.default_img = this.baleImgList[0].url
       // this.setForm.customer_qr_code = this.customerList[0].url
