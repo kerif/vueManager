@@ -168,7 +168,7 @@
                     <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                     <span class="model-box"></span>
                     <span class="operat-box">
-                      <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                      <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                       <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
                     </span>
                   </span>
