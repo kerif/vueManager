@@ -32,6 +32,9 @@
       <el-table-column label="类型">
         <template slot-scope="scope">
           <span v-if="scope.row.type === 1">消费</span>
+          <span v-if="scope.row.type === 2">充值</span>
+          <span v-if="scope.row.type === 3">退款</span>
+          <span v-if="scope.row.type === 4">提现</span>
         </template>
       </el-table-column>
       <!-- 支付类型 -->
@@ -53,7 +56,7 @@
       <el-table-column label="支付时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button class="btn-deep-purple" @click="details(scope.row.id,scope.row.order_id, scope.row.payment_type)">详情</el-button>
+          <el-button class="btn-deep-purple" @click="details(scope.row.type, scope.row.id,scope.row.order_id, scope.row.payment_type)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -132,15 +135,19 @@ export default {
       this.getList()
     },
     // 跳转到审核
-    details (id, orderId, paymentType) {
-      console.log(paymentType, 'paymentType')
-      console.log(orderId, 'orderId')
-      if (paymentType === 0) {
-        console.log('我是微信')
-        this.$router.push({ name: 'wechatPay', query: { id: id } })
+    details (type, id, orderId, paymentType) {
+      console.log(type, 'paymentType')
+      // type等于消费的时候 就要判断消费类型
+      if (type === 1) {
+        if (paymentType === 0) {
+          console.log('我是微信')
+          this.$router.push({ name: 'wechatPay', query: { id: id } })
+        } else {
+          console.log('我是转账')
+          this.$router.push({ name: 'TransactionDetails', query: { order_id: orderId } })
+        }
       } else {
-        console.log('我是转账')
-        this.$router.push({ name: 'TransactionDetails', query: { order_id: orderId } })
+        this.$router.push({ name: 'wechatPay', query: { id: id } })
       }
     },
     // 选择不同类型优惠券

@@ -12,6 +12,12 @@
     @selection-change="selectionChange">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <el-table-column label="仓库名字" prop="warehouse_name"></el-table-column>
+      <el-table-column label="自动货位功能">
+        <template slot-scope="scope">
+          <span v-if="scope.row.auto_location === 0">关闭</span>
+          <span v-if="scope.row.auto_location === 1">开启</span>
+        </template>
+      </el-table-column>
       <el-table-column label="收件人姓名" prop="receiver_name"></el-table-column>
       <el-table-column label="联系电话" prop="phone"></el-table-column>
       <el-table-column label="邮编" prop="postcode"></el-table-column>

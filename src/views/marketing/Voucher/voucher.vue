@@ -43,6 +43,16 @@
           <span v-if="scope.row.status === 3">已失效</span>
         </template>
       </el-table-column>
+      <!-- 使用范围 -->
+      <el-table-column label="使用范围">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.usable_lines" :key="item.id">
+            {{item.name}}&nbsp;
+          </span>
+        </template>
+      </el-table-column>
+      <!-- 最低消费金额 -->
+      <el-table-column label="最低消费金额" prop="threshold"></el-table-column>
       <!-- 失效时间 -->
       <el-table-column label="失效时间" prop="expired_at"></el-table-column>
       <!-- 投放数量 -->
@@ -50,7 +60,7 @@
       <!-- 使用数量 -->
       <el-table-column label="使用数量" prop="used_count"></el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="200px">
+      <el-table-column label="操作" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 投放 -->
           <el-button class="btn-purple detailsBtn" v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2" @click="serving(scope.row.id)">投放</el-button>
