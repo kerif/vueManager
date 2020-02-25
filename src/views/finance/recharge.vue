@@ -65,6 +65,8 @@
       <el-table-column label="流水号" prop="serial_no"></el-table-column>
       <!-- 支付时间 -->
       <el-table-column label="支付时间" prop="created_at"></el-table-column>
+      <!-- 审核时间 -->
+      <el-table-column label="审核时间" prop="updated_at"></el-table-column>
       <!-- 处理人 -->
       <el-table-column label="处理人" prop="operator"></el-table-column>
       <el-table-column label="操作">

@@ -175,6 +175,10 @@ exports.deleteGroup = (ids) => {
 exports.getSuggest = (params) => {
   return $form.get('suggestions', { params })
 }
+// 投诉建议 获取单条详细
+exports.getSuggests = (id) => {
+  return $form.get(`suggestions/${id}`)
+}
 exports.submitSuggest = (id, params) => {
   return $form.put(`suggestions/${id}/status`, params)
 }
