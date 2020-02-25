@@ -24,6 +24,14 @@ exports.resetLines = (id, status) => {
 exports.importLines = () => {
   return $form.get(`express-lines/excel-export-all`)
 }
+// 路线 获取额外收录信息
+exports.getFee = (id) => {
+  return $form.get(`express-lines/${id}/extra-remark`)
+}
+// 更改额外收录信息
+exports.updateFee = (id, params) => {
+  return $form.put(`express-lines/${id}/extra-remark`, params)
+}
 // 配置 路线 获取全部仓库信息
 exports.getAllWarehouse = () => {
   return $form.get('express-lines/warehouses')
@@ -826,6 +834,10 @@ exports.updateOrderPdf = (id) => {
 // 订单 修改物流信息 获取转运快递公司
 exports.getCompanies = (params) => {
   return $form.get(`orders/express-num/${params}/companies`)
+}
+// 订单 获取单条拣货日志
+exports.getOperate = (id) => {
+  return $form.get(`orders/${id}/operate-logs`)
 }
 // 移除发货单
 exports.removeOrders = (id) => {

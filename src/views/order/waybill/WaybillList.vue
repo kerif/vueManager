@@ -172,7 +172,7 @@
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
           </el-button>
-          <el-button size="small" class="btn-blue" v-if="activeName !== '1'" @click="onLogs(scope.row.order_sn)">拣货日志
+          <el-button size="small" class="btn-blue" v-if="activeName !== '1'" @click="onLogs(scope.row.id)">拣货日志
           </el-button>
           <!-- 修改物流信息 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">修改物流信息</el-button>
@@ -553,8 +553,11 @@ export default {
       this.getList()
     },
     // 拣货日志
-    onLogs (orderSN) {
-      this.$router.push({ name: 'pickingContainer', query: { active: '2', keyword: orderSN } })
+    onLogs (id) {
+      dialog({ type: 'pickingLog', id: id }, () => {
+        this.getList()
+      })
+      // this.$router.push({ name: 'pickingContainer', query: { active: '2', keyword: orderSN } })
     }
   }
 }

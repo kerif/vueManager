@@ -196,7 +196,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：173px*60px</span>
+            <span class="suggest-btn">建议尺寸：355px*160px</span>
             </el-form-item>
           </el-col>
             <!-- 支持与帮助中心 -->
@@ -220,7 +220,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：173px*60px</span>
+            <span class="suggest-btn">建议尺寸：355px*160px</span>
             </el-form-item>
           </el-col>
           <!-- 分享页 -->
@@ -244,7 +244,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：355px*160px</span>
+            <span class="suggest-btn">建议尺寸：750px*1204px</span>
             </el-form-item>
           </el-col>
           <!-- 首页 -->
@@ -294,7 +294,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：173px*60px</span>
+            <span class="suggest-btn">建议尺寸：355px*160px</span>
             </el-form-item>
           </el-col>
           <!-- 评论区 -->
@@ -318,7 +318,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：173px*60px</span>
+            <span class="suggest-btn">建议尺寸：355px*160px</span>
             </el-form-item>
           </el-col>
           </el-row>

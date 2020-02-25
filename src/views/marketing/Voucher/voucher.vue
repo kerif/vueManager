@@ -44,7 +44,7 @@
         </template>
       </el-table-column>
       <!-- 使用范围 -->
-      <el-table-column label="使用范围">
+      <el-table-column label="使用范围" width="150" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span v-for="item in scope.row.usable_lines" :key="item.id">
             {{item.name}}&nbsp;

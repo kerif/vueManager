@@ -108,10 +108,11 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" fixed="right">
+      <el-table-column label="操作" width="280" fixed="right">
         <template slot-scope="scope">
           <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">修改</el-button>
-          <el-button class="btn-deep-purple others-btn" @click="goOthers(scope.row.id)">其余费用</el-button>
+          <el-button class="btn-deep-purple others-btn" @click="goOthers(scope.row.id)">附加费用</el-button>
+          <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -128,6 +129,7 @@
 import AddBtn from '@/components/addBtn'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   mixins: [pagination],
   components: {
@@ -221,6 +223,10 @@ export default {
           id: id
         } }
       )
+    },
+    // 额外收录信息
+    addFee (id) {
+      dialog({ type: 'feeList', id: id })
     },
     // 导出清单
     unloadShip (id) {

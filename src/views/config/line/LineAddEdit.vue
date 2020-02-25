@@ -115,7 +115,7 @@
           <el-col :span="10">
             <div>
               <span>*体积系数</span>
-              <el-tooltip class="item" effect="dark" content="主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数。" placement="top">
+              <el-tooltip class="item" effect="dark" content="主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数" placement="top">
                 <span class="el-icon-question icon-info"></span>
               </el-tooltip>
             </div>
@@ -123,7 +123,12 @@
           </el-col>
           <!-- 计重模式 -->
           <el-col :span="10">
-            <div>计重模式</div>
+             <div>
+              <span>计重模式</span>
+              <el-tooltip class="item" effect="dark" content="勾选表示按实际重量和体积重量两者取大计算" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
               <el-checkbox v-model="form.has_factor">考虑体积重</el-checkbox>
           </el-col>
         </el-row>

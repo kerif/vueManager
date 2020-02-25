@@ -137,11 +137,18 @@
           <!-- 存放货位 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="存放货位">
+              <el-form-item>
+              <div slot="label">
+                <span>存放货位</span>
+                <el-tooltip effect="dark" content="当您为仓库添加了货位，系统会自动分配货位，同时您也可以自定义填写货位" placement="top">
+                  <span class="el-icon-question icon-question"></span>
+                </el-tooltip>
+              </div>
                 <!-- <el-input v-model="user.location" placeholder="请输入存放货位"></!-->
                 <el-autocomplete
                   :disabled="this.user.warehouse_id === ''"
                   :fetch-suggestions="locationCNSearch"
+                  ref="autocompleteRef"
                   @select="locationSelect"
                   placeholder="请输入存放货位"
                   v-model="user.location">
@@ -417,6 +424,8 @@ export default {
           this.locationId = this.areaId
           console.log(this.locationId, 'locationId')
           this.updateAreaData()
+          this.locationCNSearch()
+          // this.user.location =
           // if (res.data.props) {
           //   let props = JSON.parse(res.data.props)
           // }
@@ -455,6 +464,7 @@ export default {
       this.$request.getArea(id).then(res => {
         this.shipData = res.data
       })
+      this.locationCNSearch()
     },
     // 通过仓库id拉取相对应的地区
     updateAreaData () {
@@ -583,8 +593,11 @@ export default {
           i.value = i.code
           // i.value = i.id + '---' + i.name
         }
+        if (!this.user.location) {
+          this.user.location = res.data[0].code
+        }
         list = res.data
-        callback(list)
+        callback && callback(list)
       })
     },
     // 客户id
@@ -853,6 +866,13 @@ export default {
   }
   .remark-font {
     color: #ff9a20;
+  }
+  .icon-question {
+    margin-left: 5px;
+    font-size: 18px;
+    color: #67C23A;
+    position: relative;
+    top: 3px;
   }
 }
 </style>
