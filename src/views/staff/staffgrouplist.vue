@@ -32,6 +32,11 @@
         prop="admin_count"
         label="成员数量">
       </el-table-column>
+      <!-- 所属仓库 -->
+      <el-table-column
+        prop="warehouse_name"
+        label="所属仓库">
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column
         label="操作" width="290">
