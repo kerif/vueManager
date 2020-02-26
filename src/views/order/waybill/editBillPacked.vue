@@ -323,6 +323,8 @@ export default {
         this.tableLoading = false
         this.form = res.data
         this.user = res.data
+        this.baleImgList = res.data.pack_pictures // 打包照片
+        this.goodsImgList = res.data.in_warehouse_pictures // 物品照片
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization

@@ -435,6 +435,18 @@ exports.getPermissions = (id) => {
 exports.updatePermissions = (id, params) => {
   return $form.put(`admin-groups/${id}/permissions`, params)
 }
+// 员工组 获取单条所属仓库
+exports.getAffiliation = (id) => {
+  return $form.get(`admin-groups/${id}/warehouse-affiliation`)
+}
+// 员工组 获取全部所属仓库
+exports.getAffiliationAll = () => {
+  return $form.get(`admin-groups/warehouse-simple-list`)
+}
+// 修改所属仓库
+exports.editAffiliation = (id, warehouseId) => {
+  return $form.put(`admin-groups/${id}/warehouse-affiliation/${warehouseId}`)
+}
 // 获得发货单
 exports.getInvoice = () => {
   return $form.get('orders/shipments')

@@ -37,6 +37,7 @@ import rechargeMsg from './rechargeMsg.vue'
 import lineChoose from './lineChoose.vue'
 import feeList from './addFee.vue'
 import pickingLog from './pickingLog.vue'
+import warehouseTo from './warehouseTo.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -74,6 +75,7 @@ const RechargeMsgController = Vue.extend(rechargeMsg)
 const LineChooseController = Vue.extend(lineChoose)
 const FeeController = Vue.extend(feeList)
 const PickingLogController = Vue.extend(pickingLog)
+const WarehouseToController = Vue.extend(warehouseTo)
 
 const mixin = {
   data () {
@@ -330,6 +332,13 @@ function initInstance (type) {
     // 订单 拣货日志
     case 'pickingLog':
       instance = new PickingLogController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 修改所属仓库
+    case 'warehouseTo':
+      instance = new WarehouseToController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

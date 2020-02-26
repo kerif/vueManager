@@ -79,6 +79,42 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 物品照片 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
+                <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="goodsImgList.length < 3"
+                  class="avatar-uploader"
+                  list-type="picture-card"
+                  action=""
+                  :before-upload="beforeUploadImg"
+                  :http-request="uploadGoodsImg"
+                  :show-file-list="false"
+                  >
+                  <i class="el-icon-plus">
+                  </i>
+                  </el-upload>
+                  <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          <!-- 保存 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item class="saveBtn">
+                <el-button @click="submitStorage" :loading="$store.state.btnLoading">保存</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
       </el-col>
       <el-col :lg="12">
         <!-- 服务 -->
@@ -164,42 +200,6 @@
                   <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id">{{item.cn_name}}
                   </el-checkbox>
                 </el-checkbox-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-            <!-- 物品照片 -->
-            <el-row :gutter="20">
-              <el-col :span="18">
-                <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
-                  <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
-                    <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-                    <span class="model-box"></span>
-                    <span class="operat-box">
-                      <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                      <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-                    </span>
-                  </span>
-                  <el-upload
-                    v-show="goodsImgList.length < 3"
-                    class="avatar-uploader"
-                    list-type="picture-card"
-                    action=""
-                    :before-upload="beforeUploadImg"
-                    :http-request="uploadGoodsImg"
-                    :show-file-list="false"
-                    >
-                    <i class="el-icon-plus">
-                    </i>
-                  </el-upload>
-                  <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          <!-- 保存 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item class="saveBtn">
-                <el-button @click="submitStorage" :loading="$store.state.btnLoading">保存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
