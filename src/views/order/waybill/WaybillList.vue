@@ -158,6 +158,8 @@
           <!-- 审核 -->
           <el-button v-show="activeName === '2' && scope.row.status === 11" class="btn-dark-green" @click="reviewPackage(scope.row.id)">审核
           </el-button>
+          <el-button v-show="activeName === '2'" class="btn-deep-blue" @click="editPacked(scope.row.id, activeName)">编辑
+          </el-button>
           <!-- 打包 -->
           <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">打包</el-button>
           <!-- 加入发货单 -->
@@ -367,6 +369,10 @@ export default {
     // 跳转到审核
     reviewPackage (id) {
       this.$router.push({ name: 'review', query: { id: id, state: 'review' } })
+    },
+    // 待支付 编辑打包数据
+    editPacked (id, activeName) {
+      this.$router.push({ name: 'editPacked', params: { id: id, activeName: activeName } })
     },
     // 跳转到发货
     goShip (shipmentSn) {

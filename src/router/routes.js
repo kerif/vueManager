@@ -85,6 +85,8 @@ const Billdetails = loadonDemand('order/waybill/billDetails')
 // 订单 运单打包
 // 订单 运单审核
 const reviewDetails = loadonDemand('order/waybill/review')
+// 订单 编辑打包数据
+const editPacked = loadonDemand('order/waybill/editBillPacked')
 const Billpacked = loadonDemand('order/waybill/billPacked')
 // 营销管理 新用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
@@ -399,6 +401,18 @@ export default [
               level: 3,
               group: '订单',
               name: '审核',
+              parent: '/order/waybill_list'
+            }
+          },
+          {
+            path: '/order/editBillPacked/:id/:activeName',
+            name: 'editPacked',
+            component: editPacked,
+            id: 402,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '编辑',
               parent: '/order/waybill_list'
             }
           },

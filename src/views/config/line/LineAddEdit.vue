@@ -161,6 +161,34 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <!-- 清关编码 -->
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+            <!-- <div>清关编码</div> -->
+            <div>
+              <span>清关编码</span>
+              <el-tooltip class="item" effect="dark" content="开启表示需要提供收件人清关编码。" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+              <el-switch
+                v-model="form.need_clearance_code"
+                active-text="开"
+                :active-value="1"
+                :inactive-value="0"
+                inactive-text="关"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+          </el-col>
+          <el-col :span="10" v-if="form.need_clearance_code === 1">
+            <div>清关备注</div>
+            <el-input v-model="form.clearance_code_remark" placeholder="请输入清关备注"
+            :rows="2" type="textarea"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 路线icon -->
       <el-form-item>
         <el-row :gutter="20">
@@ -241,7 +269,9 @@ export default {
         types: [],
         is_great_value: '',
         icon: '',
-        remark: ''
+        remark: '',
+        clearance_code_remark: '',
+        need_clearance_code: 0
       },
       referenceTime: {
         minTime: '',
