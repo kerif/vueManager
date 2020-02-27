@@ -20,7 +20,7 @@
 export default {
   data () {
     return {
-      warehouseId: '',
+      warehouseId: 0,
       userList: [],
       allHouse: [],
       id: ''
@@ -30,14 +30,25 @@ export default {
     // 获取当前所属仓库
     getList () {
       this.$request.getAffiliation(this.id).then(res => {
-        this.warehouseId = res.data.id
+        if (res.ret) {
+          this.warehouseId = res.data.id || 0
+        }
       })
     },
     // 获取全部仓库
     getAllWarehouse () {
+      this.allHouse = [
+        {
+          id: 0,
+          warehouse_name: '全部仓库'
+        }
+      ]
       this.$request.getAffiliationAll().then(res => {
         if (res.ret) {
-          this.allHouse = res.data
+          if (res.data.length) {
+            this.allHouse = this.allHouse.concat(res.data.map(item => ({ id: item.id, warehouse_name: item.warehouse_name })))
+          }
+          // this.allHouse = res.data
         }
       })
     },
