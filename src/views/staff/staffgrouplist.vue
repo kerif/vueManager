@@ -51,7 +51,7 @@
         <!-- 成员 -->
         <el-button @click.stop="member(scope.row.id)" class="btn-green">成员</el-button>
         <!-- 所属仓库 -->
-        <el-button class="btn-deep-blue" @click="warehouseChange(scope.row.id)">所属仓库</el-button>
+        <el-button class="btn-deep-blue" v-if="scope.row.permissions === 1" @click="warehouseChange(scope.row.id)">所属仓库</el-button>
       </template>
       </el-table-column>
       <template slot="append">
