@@ -91,7 +91,7 @@
               <el-input v-model="logisticsData.username" placeholder="请输入发件人用户名"></el-input>
             </el-form-item>
             <el-form-item label="发件人密码" prop="password">
-              <el-input v-model="logisticsData.password" placeholder="请输入发件人密码"></el-input>
+              <el-input type="password" v-model="logisticsData.password" placeholder="请输入发件人密码"></el-input>
             </el-form-item>
             <el-form-item label="加密方式" prop="encryption">
               <el-checkbox v-model="logisticsData.encryption">TLS加密</el-checkbox>

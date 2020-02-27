@@ -15,7 +15,8 @@
       </el-form-item>
       <!-- 附件 -->
       <el-form-item label="附件" class="updateChe">
-        <span v-for="item in ruleForm.images" :key="item.id">
+        <span v-for="item in ruleForm.images" :key="item.id" style="cursor:pointer;"
+            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
           <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
         </span>
     </el-form-item>

@@ -32,9 +32,9 @@
     <el-table-column type="index" width="50"></el-table-column>
       <el-table-column label="标题" prop="title">
       </el-table-column>
-      <el-table-column label="内容" prop="content">
-      </el-table-column>
-      <el-table-column label="图片" prop="images">
+      <!-- <el-table-column label="内容" prop="content">
+      </el-table-column> -->
+      <!-- <el-table-column label="图片" prop="images">
         <template slot-scope="scope">
           <span v-for="item in scope.row.images"
           :key="item.id" style="cursor:pointer;"
@@ -42,7 +42,7 @@
               <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
           </span>
        </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="状态">
         <template slot-scope="scope">
         <span v-if="scope.row.status == '1'">未处理</span>
@@ -60,10 +60,48 @@
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-      <el-dialog :visible.sync="imgVisible" size="small">
-      <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
-      </div>
+    <el-dialog :visible.sync="show" title="修改状态" class="change-status-dialog" @close="clear">
+      <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm" label-width="70px">
+      <!-- 标题 -->
+      <el-form-item label="标题" class="input-style">
+        <span>{{ruleForm.title}}</span>
+      </el-form-item>
+      <!-- 内容 -->
+      <el-form-item label="内容" class="input-style">
+        <span>{{ruleForm.content}}</span>
+      </el-form-item>
+      <!-- 联系方式 -->
+      <el-form-item label="联系方式" class="input-style">
+        {{ruleForm.contact}}
+      </el-form-item>
+      <!-- 附件 -->
+      <el-form-item label="附件" class="updateChe">
+        <span v-for="item in ruleForm.images" :key="item.id" style="cursor:pointer;"
+            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
+          <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
+        </span>
+        </el-form-item>
+        <!-- 创建时间 -->
+        <el-form-item label="创建时间" class="input-style">
+          <span>{{ruleForm.created_at}}</span>
+        </el-form-item>
+        <!-- 更改状态 -->
+        <el-form-item label="更改状态">
+          <el-select v-model="ruleForm.status">
+            <el-option label="未处理" :value="1"></el-option>
+            <el-option label="已处理" :value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        </el-form>
+        <el-dialog :visible.sync="imgVisible" modal-append-to-body width="30%">
+        <div class="img_box">
+          <img :src="imgSrc" class="imgDialog">
+        </div>
+        </el-dialog>
+        <div slot="footer">
+          <el-button @click="show = false">取消</el-button>
+          <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+        </div>
      </el-dialog>
   </div>
 </template>
@@ -71,7 +109,7 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
-import dialog from '@/components/dialog'
+// import dialog from '@/components/dialog'
 export default {
   data () {
     return {
@@ -83,6 +121,7 @@ export default {
       begin_date: '',
       end_date: '',
       status: '',
+      show: false,
       statusData: [
         {
           id: 0,
@@ -91,7 +130,14 @@ export default {
           id: 1,
           name: '已处理'
         }
-      ]
+      ],
+      ruleForm: {
+        status: ''
+      },
+      baleImgList: [],
+      dialogId: '',
+      outerVisible: true,
+      innerVisible: false
     }
   },
   name: 'suggestList',
@@ -130,18 +176,56 @@ export default {
         }
       })
     },
+    getDialog () {
+      this.$request.getSuggests(this.dialogId).then(res => {
+        if (res.ret) {
+          this.ruleForm = res.data
+          res.data.qr_code && (this.baleImgList[0] = res.data.qr_code)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     onChangeStatus (id) {
-      dialog({
-        type: 'changestatus', id: id
-      }, () => {
-        this.getList()
-      }
-      )
+      // dialog({
+      //   type: 'changestatus', id: id
+      // }, () => {
+      //   this.getList()
+      // }
+      // )
+      this.dialogId = id
+      this.show = true
+      this.getDialog()
     },
     onAgentChange () {
       this.page_params.page = 1
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
+    },
+    clear () {
+      this.ruleForm.status = ''
+    },
+    confirm () {
+      this.$request.submitSuggest(this.dialogId, this.ruleForm).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.show = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        this.show = false
+      })
     },
     // 提交时间
     onTime (val) {
@@ -155,11 +239,19 @@ export default {
 }
 </script>
 <style lang="scss">
+// .imgDialog {
+//     width: 50% !important;
+//   }
+  .el-dialog__wrapper {
+    background: rgba(0,0,0, 0.3);
+  }
 .suggest-list-container {
-  .img_box{
-  text-align: center;
-  .imgDialog{
-    width: 50%;
+  .el-dialog__body {
+    .img_box{
+      text-align: center;
+      img {
+        width: 300px !important;
+      }
     }
   }
   .chooseStatus {
