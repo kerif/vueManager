@@ -459,12 +459,16 @@ export default {
     },
     // 获取寄往地区数据
     getAreaData (id) {
-      this.locationId = id
-      console.log(this.locationId, '我是改变的locationId')
-      this.$request.getArea(id).then(res => {
-        this.shipData = res.data
-      })
-      this.locationCNSearch()
+      if (id) {
+        this.locationId = id
+        this.locationCNSearch()
+        console.log(this.locationId, '我是改变的locationId')
+        this.$request.getArea(id).then(res => {
+          if (res.ret) {
+            this.shipData = res.data
+          }
+        })
+      }
     },
     // 通过仓库id拉取相对应的地区
     updateAreaData () {
