@@ -94,7 +94,11 @@
               <el-input type="password" v-model="logisticsData.password" placeholder="请输入发件人密码"></el-input>
             </el-form-item>
             <el-form-item label="加密方式" prop="encryption">
-              <el-checkbox v-model="logisticsData.encryption">TLS加密</el-checkbox>
+              <el-radio-group v-model="logisticsData.encryption">
+                <el-radio :label="1">TLS加密</el-radio>
+                <el-radio :label="2">SSL加密</el-radio>
+              </el-radio-group>
+              <!-- <el-checkbox v-model="logisticsData.encryption">TLS加密</el-checkbox> -->
             </el-form-item>
           <div class="form-title">短信配置——聚合</div>
           <el-form-item label="Appkey" prop="juhe_key">
@@ -814,7 +818,7 @@ export default {
       this.$request.getLogistics().then(res => {
         if (res.ret && res.data) {
           this.logisticsData = res.data
-          this.logisticsData.encryption = Boolean(res.data.encryption)
+          // this.logisticsData.encryption = Boolean(res.data.encryption)
         } else {
           return false
         }
@@ -881,11 +885,12 @@ export default {
     },
     // 物流跟踪配置确认
     confirmLogistic (formName) {
+      console.log(this.logisticsData.encryption, 'this.logisticsData.encryption')
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$request.editLogistics({
-            ...this.logisticsData,
-            encryption: Number(this.logisticsData.encryption)
+            ...this.logisticsData
+            // encryption: Number(this.logisticsData.encryption)
           }).then(res => {
             if (res.ret) {
               this.$notify({
