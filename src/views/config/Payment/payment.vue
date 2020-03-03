@@ -93,8 +93,9 @@
             <el-form-item label="发件人密码" prop="password">
               <el-input type="password" v-model="logisticsData.password" placeholder="请输入发件人密码"></el-input>
             </el-form-item>
-            <el-form-item label="加密方式" prop="encryption">
+            <el-form-item label="加密方式">
               <el-radio-group v-model="logisticsData.encryption">
+                <el-radio :label="0">无</el-radio>
                 <el-radio :label="1">TLS加密</el-radio>
                 <el-radio :label="2">SSL加密</el-radio>
               </el-radio-group>
@@ -524,9 +525,9 @@ export default {
         port: [
           { required: true, message: '请输入SMTP端口', trigger: 'change' }
         ],
-        encryption: [
-          { required: true, message: '请选择加密方式', trigger: 'change' }
-        ],
+        // encryption: [
+        //   { required: true, message: '请选择加密方式', trigger: 'change' }
+        // ],
         username: [
           { required: true, message: '请输入发件人用户名', trigger: 'change' }
         ],
