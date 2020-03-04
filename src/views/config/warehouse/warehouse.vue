@@ -21,7 +21,7 @@
       <el-table-column label="收件人姓名" prop="receiver_name"></el-table-column>
       <el-table-column label="联系电话" prop="phone"></el-table-column>
       <el-table-column label="邮编" prop="postcode"></el-table-column>
-      <el-table-column label="地址" prop="address"></el-table-column>
+      <el-table-column label="地址" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>
       <el-table-column label="支持国家" :show-overflow-tooltip="true" width="150" prop="countries">
         <!-- <template slot-scope="scope"> -->
           <!-- <div class="country-box" :title="scope.row.countries"> -->

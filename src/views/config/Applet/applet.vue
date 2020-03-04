@@ -7,6 +7,8 @@
       <el-tab-pane label="消息模版" name="2"></el-tab-pane>
       <!-- 图片配置 -->
       <el-tab-pane label="图片配置" name="3"></el-tab-pane>
+      <!-- 海报配置 -->
+      <el-tab-pane label="海报配置" name="4"></el-tab-pane>
     </el-tabs>
     <el-row v-if="activeName === '1'">
       <el-col :span="11">
@@ -326,6 +328,96 @@
           <el-button class="save-btn" @click="editOthers">保存</el-button>
         </div>
     </div>
+    <el-row v-if="activeName === '4'">
+      <el-col :span="8">
+        <div class="poster-left">
+          <div class="left-top">
+            <img src="../../../assets/xiongda.jpeg">
+          </div>
+          <p>做最好的集运系统</p>
+          <div class="left-bottom">
+            <img src="../../../assets/tree.png">
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="15" :offset="1" class="poster-right">
+        <h4>设置面板</h4>
+        <el-form :model="backgroundList" ref="ruleForm" class="demo-ruleForm"
+        label-width="130px">
+        <!-- 开启用户头像 -->
+          <el-form-item label="开启用户头像">
+            <el-switch
+              v-model="backgroundList.display_user_avatar"
+              active-text="开"
+              :active-value="1"
+              :inactive-value="0"
+              inactive-text="关"
+              active-color="#13ce66"
+              inactive-color="gray">
+            </el-switch>
+          </el-form-item>
+          <!-- 开启显示用户名称 -->
+          <el-form-item label="开启显示用户名称">
+            <el-switch
+              v-model="backgroundList.display_user_name"
+              active-text="开"
+              :active-value="1"
+              :inactive-value="0"
+              inactive-text="关"
+              active-color="#13ce66"
+              inactive-color="gray">
+            </el-switch>
+          </el-form-item>
+          <!-- 开启显示宣传语 -->
+          <el-form-item label="开启显示宣传语">
+            <el-switch
+              v-model="backgroundList.display_share_info"
+              active-text="开"
+              :active-value="1"
+              :inactive-value="0"
+              inactive-text="关"
+              active-color="#13ce66"
+              inactive-color="gray">
+            </el-switch>
+          </el-form-item>
+            <!-- 宣传语 -->
+            <el-form-item label="宣传语">
+              <el-input v-model="backgroundList.share_info"></el-input>
+            </el-form-item>
+            <!-- 二维码头像尺寸 -->
+            <el-form-item label="二维码头像尺寸" class="slogan">
+              <el-input v-model="backgroundList.avatar_size">
+              </el-input>px
+              <p class="slogan-height">高度和宽带一致，只需要填写一个参数</p>
+            </el-form-item>
+        <!-- 背景图像 -->
+          <el-form-item label="背景图像">
+              <span class="img-item" v-for="(item, index) in backgroundImg" :key="index">
+              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+              <span class="model-box"></span>
+              <span class="operat-box">
+                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                  <i class="el-icon-delete" @click="onDeleteBg(index)"></i>
+              </span>
+              </span>
+              <el-upload
+                v-show="backgroundImg.length < 5"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadBgImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">背景图像上传最多不超过五张</span>
+          </el-form-item>
+          <div class="background-btn">
+            <el-button class="save-btn" @click="editOthers">保存</el-button>
+          </div>
+        </el-form>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -355,11 +447,20 @@ export default {
       videoList: [], // 视频区
       commentList: [], // 评论区
       messageData: [],
+      backgroundImg: [], // 海报配置背景图像
       setForm: {
         freight_image: [],
         video_entrance_image: [],
         comment_entrance_image: [],
         forecast_image: []
+      },
+      backgroundList: {
+        display_user_avatar: 0,
+        display_user_name: 0,
+        display_share_info: 0,
+        avatar_size: '',
+        background_images: [],
+        share_info: ''
       },
       rules: {
         app_id: [
@@ -430,6 +531,13 @@ export default {
         res.data.comment_image && (this.commentList[0] = res.data.comment_image)
       })
     },
+    // 获取海报配置
+    getBackground () {
+      this.$request.getProgramShare().then(res => {
+        this.backgroundList = res.data
+        res.data.background_images && (this.backgroundImg = res.data.background_images)
+      })
+    },
     saveDev (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -458,6 +566,17 @@ export default {
       dialog({
         type: 'previewimage',
         image
+      })
+    },
+    // 上传海报配置背景图像
+    uploadBgImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.backgroundImg.push(item.path)
+          })
+        }
       })
     },
     // 上传小程序首页视频图片
@@ -569,6 +688,10 @@ export default {
           })
         }
       })
+    },
+    // 删除海报配置 背景图
+    onDeleteBg (index) {
+      this.backgroundImg.splice(index, 1)
     },
     // 删除小程序首页视频入口图
     onDeleteImg (index) {
@@ -748,6 +871,8 @@ export default {
       } else if (this.activeName === '3') {
         this.getImg()
         console.log('111')
+      } else if (this.activeName === '4') {
+        this.getBackground()
       }
     }
   }
@@ -757,7 +882,7 @@ export default {
 <style lang="scss">
 .applet-container {
    .tabLength {
-    width: 300px !important;
+    width: 400px !important;
   }
   .applet-left {
     padding: 15px;
@@ -849,6 +974,7 @@ export default {
       width: 30%;
       background-color: #F5F5F5;
     }
+  }
     .goods-img {
       width: 100%;
       height: 100%;
@@ -906,14 +1032,47 @@ export default {
         margin-right: 10px;
       }
     }
-  }
   .save-btn {
     color: #fff;
     background-color: #3540A5;
   }
+  .preview-btn {
+    color: #fff;
+    background-color: #8d97fa;
+    padding: 12px 50px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
   .suggest-btn {
     color: gray;
     font-size: 12px;
+  }
+  .poster-left {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    .left-top {
+      img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+      }
+    }
+  }
+  .poster-right {
+    background-color: #fff;
+    padding:15px;
+  }
+  .background-btn {
+    margin-left: 120px;
+  }
+  .slogan {
+    .el-input {
+      width: 30% !important;
+    }
+  }
+  .slogan-height {
+    margin: 0;
   }
 }
 </style>

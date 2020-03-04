@@ -3,6 +3,7 @@
     <el-select v-model="invoice.sn">
       <el-option
       v-for="item in invoiceList"
+      :title="item.remark"
       :key="item.id"
       :value="item.id"
       :label="`${item.sn} ${item.destination_country}`">

@@ -7,7 +7,10 @@
   <el-form ref="form" :model="location" label-width="140px">
     <el-row :gutter="20">
       <el-col :span="12">
-        <el-form-item label="*区域编号">
+        <el-form-item label="*区域编号" v-if="this.state === 'edit'">
+          <el-input v-model="location.number" disabled placeholder="请输入区域编号"></el-input>
+        </el-form-item>
+         <el-form-item label="*区域编号" v-else>
           <el-input v-model="location.number" placeholder="请输入区域编号"></el-input>
         </el-form-item>
         <el-form-item label="所属仓库">

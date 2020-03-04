@@ -102,6 +102,10 @@ const videoManagement = loadonDemand('marketing/video/videoMana')
 const SuggestList = loadonDemand('customer/suggest/Suggest')
 // 客服中心 评价管理
 const Evaluation = loadonDemand('customer/evaluation')
+// 客服中心 公告管理
+const PublicList = loadonDemand('customer/public')
+// 公告新增或编辑
+const AddEditPublic = loadonDemand('customer/publicAddEdit')
 export default [
   {
     path: '/',
@@ -847,6 +851,41 @@ export default [
               level: 2,
               group: '客服中心',
               name: '评价管理'
+            }
+          },
+          {
+            path: '/customer/Public',
+            name: 'Public',
+            component: PublicList,
+            id: 903,
+            meta: {
+              level: 2,
+              group: '客服中心',
+              name: '公告管理'
+            }
+          },
+          {
+            path: '/customer/Public/Add',
+            name: 'addPublic',
+            component: AddEditPublic,
+            id: 903,
+            meta: {
+              level: 3,
+              group: '客服中心',
+              name: '新增公告',
+              parent: '/customer/Public'
+            }
+          },
+          {
+            path: '/customer/Public/Edit/:id',
+            name: 'editPublic',
+            component: AddEditPublic,
+            id: 903,
+            meta: {
+              level: 3,
+              group: '客服中心',
+              name: '编辑公告',
+              parent: '/customer/Public'
             }
           }
         ]

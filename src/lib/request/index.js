@@ -190,6 +190,26 @@ exports.getComments = (params) => {
 exports.updateRecommend = (id, status) => {
   return $form.put(`order-comments/${id}/recommend/${status}`)
 }
+// 客服中心 公告管理
+exports.getAnnouncements = (params) => {
+  return $form.get('announcements', { params })
+}
+// 获取单条公告详细
+exports.getSingleAnnouncements = (id) => {
+  return $form.get(`announcements/${id}`)
+}
+// 更新单条公告详情
+exports.updateAnnouncements = (id, params) => {
+  return $form.put(`announcements/${id}`, params)
+}
+// 删除公告
+exports.announcementsDelete = (ids) => {
+  return $form.put('announcements/batch-delete', ids)
+}
+// 新建公告
+exports.addAnnouncements = (params) => {
+  return $form.post('announcements', params)
+}
 exports.getNoticeDetails = (id) => {
   return $form.get(`order-notices/${id}`)
 }
@@ -550,6 +570,12 @@ exports.getProgramImg = () => {
 exports.changeProgramImg = (params) => {
   return $form.put('mini-program/images', params)
 }
+// 小程序配置 获取海报配置
+exports.getProgramShare = () => {
+  return $form.get('mini-program/share-page-info')
+}
+// 更新海报配置
+
 // 获取消息模版
 exports.getTemplate = () => {
   return $form.get('mini-program/templates')
@@ -816,7 +842,10 @@ exports.disableCoupons = (id) => {
  * @param {Array} images 图片对象数组
  *  iamges[*].file 文件
  */
+// 上传图片
 exports.uploadImg = (images) => $file.post('upload/images', images)
+// 上传文件
+exports.uploadFiles = (files) => $file.post('upload/files', files)
 
 exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids })
 
@@ -864,8 +893,8 @@ exports.deleteShip = (id) => {
   return $form.delete(`shipments/${id}`)
 }
 // 发货单 导出清单
-exports.uploadExcel = (id) => {
-  return $form.get(`shipments/${id}/order-export`)
+exports.uploadExcel = (ids) => {
+  return $form.post(`shipments/order-export-batch`, ids)
 }
 // 运单 获取审核
 exports.getTransfer = (id) => {
