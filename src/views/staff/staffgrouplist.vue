@@ -32,23 +32,26 @@
         prop="admin_count"
         label="成员数量">
       </el-table-column>
+      <!-- 所属仓库 -->
+      <el-table-column
+        prop="warehouse_name"
+        label="所属仓库">
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column
-        label="操作">
+        label="操作" width="290">
         <template slot-scope="scope">
           <!-- 编辑 -->
-        <el-button
-          class="btn-blue"
-          @click.stop="editStaff(scope.row.id)">编辑</el-button>
+        <el-button class="btn-blue" @click.stop="editStaff(scope.row.id)">编辑</el-button>
           <!-- 修改权限 -->
-        <el-button
-          class="btn-purple"
-          v-if="scope.row.permissions === 1"
+        <el-button class="btn-purple" v-if="scope.row.permissions === 1"
           @click.stop="changePre(scope.row.id)">
           修改权限
         </el-button>
         <!-- 成员 -->
         <el-button @click.stop="member(scope.row.id)" class="btn-green">成员</el-button>
+        <!-- 所属仓库 -->
+        <el-button class="btn-deep-blue" v-if="scope.row.permissions === 1" @click="warehouseChange(scope.row.id)">所属仓库</el-button>
       </template>
       </el-table-column>
       <template slot="append">
@@ -119,6 +122,12 @@ export default {
     // 编辑
     editStaff (id) {
       dialog({ type: 'addStaff', id: id, staff: 'edit' }, () => {
+        this.getList()
+      })
+    },
+    // 修改所属仓库
+    warehouseChange (id) {
+      dialog({ type: 'warehouseTo', id: id }, () => {
         this.getList()
       })
     },

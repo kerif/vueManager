@@ -12,19 +12,25 @@
     @selection-change="selectionChange">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <el-table-column label="仓库名字" prop="warehouse_name"></el-table-column>
+      <el-table-column label="自动货位功能">
+        <template slot-scope="scope">
+          <span v-if="scope.row.auto_location === 0">关闭</span>
+          <span v-if="scope.row.auto_location === 1">开启</span>
+        </template>
+      </el-table-column>
       <el-table-column label="收件人姓名" prop="receiver_name"></el-table-column>
       <el-table-column label="联系电话" prop="phone"></el-table-column>
       <el-table-column label="邮编" prop="postcode"></el-table-column>
-      <el-table-column label="地址" prop="address"></el-table-column>
-      <el-table-column label="支持国家">
-        <template slot-scope="scope">
-          <div class="country-box" :title="scope.row.countries">
+      <el-table-column label="地址" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>
+      <el-table-column label="支持国家" :show-overflow-tooltip="true" width="150" prop="countries">
+        <!-- <template slot-scope="scope"> -->
+          <!-- <div class="country-box" :title="scope.row.countries"> -->
           <!-- <span v-for="item in scope.row.support_countries" :key="item.id">
             {{item.cn_name}}
           </span> -->
-          {{scope.row.countries}}
-          </div>
-        </template>
+          <!-- {{scope.row.countries}} -->
+          <!-- </div> -->
+        <!-- </template> -->
       </el-table-column>
       <el-table-column label="操作" width="260">
         <template slot-scope="scope">

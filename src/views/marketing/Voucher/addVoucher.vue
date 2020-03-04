@@ -150,12 +150,16 @@ export default {
   }
   .choose-btn {
     margin-bottom: 20px;
-    margin-left: 80px;
+    // margin-left: 80px;
+    .el-button {
+      vertical-align: top;
+    }
   }
   .display-line {
+    display: inline-block;
     padding: 5px;
     width: 245px;
-    margin-top: 10px;
+    margin-left: 15px;
     // line-height: 25px;
     background-color: #ccc;
     // margin-bottom: 20px;

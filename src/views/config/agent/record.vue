@@ -21,6 +21,8 @@
         <template slot-scope="scope">
           <span v-if="scope.row.settled === 0">未结算</span>
           <span v-if="scope.row.settled === 1">已结算</span>
+          <span v-if="scope.row.settled === 2">提现申请中</span>
+          <span v-if="scope.row.settled === 3">已提现</span>
         </template>
       </el-table-column>
       <el-table-column label="是否结算">

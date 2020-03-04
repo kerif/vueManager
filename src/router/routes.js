@@ -85,6 +85,8 @@ const Billdetails = loadonDemand('order/waybill/billDetails')
 // 订单 运单打包
 // 订单 运单审核
 const reviewDetails = loadonDemand('order/waybill/review')
+// 订单 编辑打包数据
+const editPacked = loadonDemand('order/waybill/editBillPacked')
 const Billpacked = loadonDemand('order/waybill/billPacked')
 // 营销管理 新用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
@@ -100,6 +102,10 @@ const videoManagement = loadonDemand('marketing/video/videoMana')
 const SuggestList = loadonDemand('customer/suggest/Suggest')
 // 客服中心 评价管理
 const Evaluation = loadonDemand('customer/evaluation')
+// 客服中心 公告管理
+const PublicList = loadonDemand('customer/public')
+// 公告新增或编辑
+const AddEditPublic = loadonDemand('customer/publicAddEdit')
 export default [
   {
     path: '/',
@@ -399,6 +405,18 @@ export default [
               level: 3,
               group: '订单',
               name: '审核',
+              parent: '/order/waybill_list'
+            }
+          },
+          {
+            path: '/order/editBillPacked/:id/:activeName',
+            name: 'editPacked',
+            component: editPacked,
+            id: 402,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '编辑',
               parent: '/order/waybill_list'
             }
           },
@@ -833,6 +851,41 @@ export default [
               level: 2,
               group: '客服中心',
               name: '评价管理'
+            }
+          },
+          {
+            path: '/customer/Public',
+            name: 'Public',
+            component: PublicList,
+            id: 903,
+            meta: {
+              level: 2,
+              group: '客服中心',
+              name: '公告管理'
+            }
+          },
+          {
+            path: '/customer/Public/Add',
+            name: 'addPublic',
+            component: AddEditPublic,
+            id: 903,
+            meta: {
+              level: 3,
+              group: '客服中心',
+              name: '新增公告',
+              parent: '/customer/Public'
+            }
+          },
+          {
+            path: '/customer/Public/Edit/:id',
+            name: 'editPublic',
+            component: AddEditPublic,
+            id: 903,
+            meta: {
+              level: 3,
+              group: '客服中心',
+              name: '编辑公告',
+              parent: '/customer/Public'
             }
           }
         ]

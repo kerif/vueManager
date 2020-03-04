@@ -84,7 +84,7 @@ import dialog from '@/components/dialog'
 import * as qiniu from 'qiniu-js'
 import { videoPlayer as VideoPlayer } from 'vue-video-player'
 import 'video.js/dist/video-js.css'
-const videoUrl = 'http://q55zf5gh1.bkt.clouddn.com/'
+const videoUrl = 'https://storage.haiouoms.com/'
 export default {
   data () {
     return {

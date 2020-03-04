@@ -3,8 +3,13 @@
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
-        <!-- 支付金额 -->
-        <el-form-item label="*支付金额" v-if="state === 'pass'">
+        <!-- 充值金额 -->
+        <el-form-item label="充值金额" v-if="state === 'pass'">
+          <el-input v-model="rechargeFee" disabled>
+            <template slot="append">{{this.currencyUnit}}</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="*确认金额" v-if="state === 'pass'">
           <el-input v-model="ruleForm.pay_amount">
             <template slot="append">{{this.currencyUnit}}</template>
           </el-input>
@@ -57,6 +62,7 @@ export default {
         customer_remark: '',
         customer_images: []
       },
+      rechargeFee: '',
       state: '',
       id: '',
       userId: '',
@@ -158,6 +164,7 @@ export default {
       console.log(this.tranAmount, 'tranAmount')
       console.log(this.state, 'state')
       this.ruleForm.pay_amount = this.tranAmount
+      this.rechargeFee = this.tranAmount
       this.currencyUnit = this.currencyUnit
     }
   }

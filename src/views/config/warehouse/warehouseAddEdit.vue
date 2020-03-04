@@ -41,6 +41,16 @@
             </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item label="自动货位功能">
+        <el-row>
+          <el-col :span="10">
+            <el-radio-group v-model="ruleForm.auto_location">
+              <el-radio :label="1">开启</el-radio>
+              <el-radio :label="0">关闭</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item label="温馨提示（主要提醒客户需要注意的事项，在客户端仓库地址页面显示）" prop="tips">
         <el-row>
           <el-col :span="10">
@@ -88,6 +98,7 @@ export default {
         postcode: '',
         address: '',
         tips: '',
+        auto_location: 0,
         support_countries: ''
       },
       options: [],

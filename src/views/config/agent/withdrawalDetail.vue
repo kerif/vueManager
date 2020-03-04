@@ -41,14 +41,14 @@
           <p class="transfer-right">备注</p>
           <span>{{form.remark}}</span><br/>
         </el-col>
-        <!-- <el-col :span="9" :offset="1">
+        <el-col :span="9" :offset="1">
           <p>客户截图</p>
-          <span v-for="item in form.images"
+          <span v-for="item in form.customer_images"
           :key="item.id" style="cursor:pointer;"
             @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
               <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px;">
           </span>
-        </el-col> -->
+        </el-col>
       </el-row>
     </div>
     <div class="receiverMSg">

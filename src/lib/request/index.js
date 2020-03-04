@@ -24,6 +24,14 @@ exports.resetLines = (id, status) => {
 exports.importLines = () => {
   return $form.get(`express-lines/excel-export-all`)
 }
+// 路线 获取额外收录信息
+exports.getFee = (id) => {
+  return $form.get(`express-lines/${id}/extra-remark`)
+}
+// 更改额外收录信息
+exports.updateFee = (id, params) => {
+  return $form.put(`express-lines/${id}/extra-remark`, params)
+}
 // 配置 路线 获取全部仓库信息
 exports.getAllWarehouse = () => {
   return $form.get('express-lines/warehouses')
@@ -167,6 +175,10 @@ exports.deleteGroup = (ids) => {
 exports.getSuggest = (params) => {
   return $form.get('suggestions', { params })
 }
+// 投诉建议 获取单条详细
+exports.getSuggests = (id) => {
+  return $form.get(`suggestions/${id}`)
+}
 exports.submitSuggest = (id, params) => {
   return $form.put(`suggestions/${id}/status`, params)
 }
@@ -177,6 +189,26 @@ exports.getComments = (params) => {
 // 客服中心 取消或设置精选
 exports.updateRecommend = (id, status) => {
   return $form.put(`order-comments/${id}/recommend/${status}`)
+}
+// 客服中心 公告管理
+exports.getAnnouncements = (params) => {
+  return $form.get('announcements', { params })
+}
+// 获取单条公告详细
+exports.getSingleAnnouncements = (id) => {
+  return $form.get(`announcements/${id}`)
+}
+// 更新单条公告详情
+exports.updateAnnouncements = (id, params) => {
+  return $form.put(`announcements/${id}`, params)
+}
+// 删除公告
+exports.announcementsDelete = (ids) => {
+  return $form.put('announcements/batch-delete', ids)
+}
+// 新建公告
+exports.addAnnouncements = (params) => {
+  return $form.post('announcements', params)
 }
 exports.getNoticeDetails = (id) => {
   return $form.get(`order-notices/${id}`)
@@ -423,6 +455,18 @@ exports.getPermissions = (id) => {
 exports.updatePermissions = (id, params) => {
   return $form.put(`admin-groups/${id}/permissions`, params)
 }
+// 员工组 获取单条所属仓库
+exports.getAffiliation = (id) => {
+  return $form.get(`admin-groups/${id}/warehouse-affiliation`)
+}
+// 员工组 获取全部所属仓库
+exports.getAffiliationAll = () => {
+  return $form.get(`admin-groups/warehouse-simple-list`)
+}
+// 修改所属仓库
+exports.editAffiliation = (id, warehouseId) => {
+  return $form.put(`admin-groups/${id}/warehouse-affiliation/${warehouseId}`)
+}
 // 获得发货单
 exports.getInvoice = () => {
   return $form.get('orders/shipments')
@@ -526,6 +570,12 @@ exports.getProgramImg = () => {
 exports.changeProgramImg = (params) => {
   return $form.put('mini-program/images', params)
 }
+// 小程序配置 获取海报配置
+exports.getProgramShare = () => {
+  return $form.get('mini-program/share-page-info')
+}
+// 更新海报配置
+
 // 获取消息模版
 exports.getTemplate = () => {
   return $form.get('mini-program/templates')
@@ -632,11 +682,11 @@ exports.deleteProps = (ids) => {
 }
 // 获取 物流跟踪配置
 exports.getLogistics = () => {
-  return $form.get('logistics')
+  return $form.get('configs')
 }
 // 更改 物流跟踪配置
 exports.editLogistics = (params) => {
-  return $form.put('logistics', params)
+  return $form.put('configs', params)
 }
 // 更多配置 订单获取增值服务
 exports.getValue = (params) => {
@@ -792,7 +842,10 @@ exports.disableCoupons = (id) => {
  * @param {Array} images 图片对象数组
  *  iamges[*].file 文件
  */
+// 上传图片
 exports.uploadImg = (images) => $file.post('upload/images', images)
+// 上传文件
+exports.uploadFiles = (files) => $file.post('upload/files', files)
 
 exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids })
 
@@ -827,6 +880,10 @@ exports.updateOrderPdf = (id) => {
 exports.getCompanies = (params) => {
   return $form.get(`orders/express-num/${params}/companies`)
 }
+// 订单 获取单条拣货日志
+exports.getOperate = (id) => {
+  return $form.get(`orders/${id}/operate-logs`)
+}
 // 移除发货单
 exports.removeOrders = (id) => {
   return $form.put('orders/remove-from-shipment', id)
@@ -836,8 +893,8 @@ exports.deleteShip = (id) => {
   return $form.delete(`shipments/${id}`)
 }
 // 发货单 导出清单
-exports.uploadExcel = (id) => {
-  return $form.get(`shipments/${id}/order-export`)
+exports.uploadExcel = (ids) => {
+  return $form.post(`shipments/order-export-batch`, ids)
 }
 // 运单 获取审核
 exports.getTransfer = (id) => {

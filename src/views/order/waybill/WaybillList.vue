@@ -158,6 +158,8 @@
           <!-- 审核 -->
           <el-button v-show="activeName === '2' && scope.row.status === 11" class="btn-dark-green" @click="reviewPackage(scope.row.id)">审核
           </el-button>
+          <el-button v-show="activeName === '2'" class="btn-deep-blue" @click="editPacked(scope.row.id, activeName)">编辑
+          </el-button>
           <!-- 打包 -->
           <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">打包</el-button>
           <!-- 加入发货单 -->
@@ -172,7 +174,7 @@
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
           </el-button>
-          <el-button size="small" class="btn-blue" v-if="activeName !== '1'" @click="onLogs(scope.row.order_sn)">拣货日志
+          <el-button size="small" class="btn-blue" v-if="activeName !== '1'" @click="onLogs(scope.row.id)">拣货日志
           </el-button>
           <!-- 修改物流信息 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">修改物流信息</el-button>
@@ -368,6 +370,10 @@ export default {
     reviewPackage (id) {
       this.$router.push({ name: 'review', query: { id: id, state: 'review' } })
     },
+    // 待支付 编辑打包数据
+    editPacked (id, activeName) {
+      this.$router.push({ name: 'editPacked', params: { id: id, activeName: activeName } })
+    },
     // 跳转到发货
     goShip (shipmentSn) {
       console.log(shipmentSn, 'shipmentSn')
@@ -553,8 +559,11 @@ export default {
       this.getList()
     },
     // 拣货日志
-    onLogs (orderSN) {
-      this.$router.push({ name: 'pickingContainer', query: { active: '2', keyword: orderSN } })
+    onLogs (id) {
+      dialog({ type: 'pickingLog', id: id }, () => {
+        this.getList()
+      })
+      // this.$router.push({ name: 'pickingContainer', query: { active: '2', keyword: orderSN } })
     }
   }
 }

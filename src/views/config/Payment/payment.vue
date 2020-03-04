@@ -62,44 +62,51 @@
           <div class="form-title">快递100配置</div>
           <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
             label-position="left" label-width="150px">
-            <el-form-item label="Appkey" prop="app_key">
-              <el-input v-model="logisticsData.app_key" placeholder="请输入Appkey"></el-input>
+            <!-- Customer ID -->
+            <el-form-item label="Customer ID" prop="kd100_app_id">
+              <el-input v-model="logisticsData.kd100_app_id" placeholder="请输入Customer ID"></el-input>
             </el-form-item>
-            <el-form-item label="AppSecret" prop="app_secret">
-              <el-input v-model="logisticsData.app_secret" placeholder="请输入AppSecret"></el-input>
+            <!-- 授权KEY -->
+            <el-form-item label="授权KEY" prop="kd100_app_key">
+              <el-input v-model="logisticsData.kd100_app_key" placeholder="请输入授权KEY"></el-input>
             </el-form-item>
-          </el-form>
           <div class="form-title">Tracking more配置</div>
-          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
-            label-position="left" label-width="150px">
-            <el-form-item label="Appkey" prop="trackingmore_key">
-              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
-            </el-form-item>
-          </el-form>
+          <el-form-item label="Appkey" prop="trackingmore_key">
+            <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+          </el-form-item>
           <div class="form-title">邮箱发件信息配置</div>
-          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
-          label-position="left" label-width="150px">
-            <el-form-item label="发件人邮件" prop="trackingmore_key">
-              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+          <el-form-item label="发件人邮件" prop="from_address">
+            <el-input v-model="logisticsData.from_address" placeholder="请输入发件人邮件"></el-input>
+          </el-form-item>
+            <el-form-item label="发件人名称" prop="from_name">
+              <el-input v-model="logisticsData.from_name" placeholder="请输入发件人名称"></el-input>
             </el-form-item>
-            <el-form-item label="发件人名称" prop="trackingmore_key">
-              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            <el-form-item label="SMTP域名" prop="host">
+              <el-input v-model="logisticsData.host" placeholder="请输入SMTP域名"></el-input>
             </el-form-item>
-            <el-form-item label="发件人SMTP" prop="trackingmore_key">
-              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            <el-form-item label="SMTP端口" prop="port">
+              <el-input v-model="logisticsData.port" placeholder="请输入SMTP端口"></el-input>
             </el-form-item>
-            <el-form-item label="SMTP端口" prop="trackingmore_key">
-              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            <el-form-item label="发件人用户名" prop="username">
+              <el-input v-model="logisticsData.username" placeholder="请输入发件人用户名"></el-input>
             </el-form-item>
-          </el-form>
+            <el-form-item label="发件人密码" prop="password">
+              <el-input type="password" v-model="logisticsData.password" placeholder="请输入发件人密码"></el-input>
+            </el-form-item>
+            <el-form-item label="加密方式">
+              <el-radio-group v-model="logisticsData.encryption">
+                <el-radio :label="0">无</el-radio>
+                <el-radio :label="1">TLS加密</el-radio>
+                <el-radio :label="2">SSL加密</el-radio>
+              </el-radio-group>
+              <!-- <el-checkbox v-model="logisticsData.encryption">TLS加密</el-checkbox> -->
+            </el-form-item>
           <div class="form-title">短信配置——聚合</div>
-          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
-           label-position="left" label-width="150px">
-            <el-form-item label="Appkey" prop="trackingmore_key">
-              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
-            </el-form-item>
-            <el-form-item label="发送验证码模板ID" prop="trackingmore_key">
-              <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+          <el-form-item label="Appkey" prop="juhe_key">
+            <el-input v-model="logisticsData.juhe_key" placeholder="请输入Appkey"></el-input>
+          </el-form-item>
+            <el-form-item label="发送验证码模板ID" prop="juhe_tpl_id">
+              <el-input v-model="logisticsData.juhe_tpl_id" placeholder="请输入发送验证码模板ID"></el-input>
             </el-form-item>
           </el-form>
           <div>
@@ -235,14 +242,33 @@
               <el-input v-model="setForm.website_name">
               </el-input>
             </el-form-item>
-            <el-form-item>
+            <!-- 网站链接 -->
+            <el-form-item class="url-sty">
               <div slot="label">
                 <span>*网站链接</span>
-                <el-tooltip effect="dark" content="主要用于集运插件识别（非常重要）" placement="top">
+                <el-tooltip effect="dark" content="主要用于集运插件识别（非常重要,多个用英文逗号切分，例如http.www.baidu.com,http.www.google.com" placement="top">
                   <span class="el-icon-question icon-question"></span>
                 </el-tooltip>
               </div>
-              <el-input v-model="setForm.website_name">
+              <el-input v-model="setForm.pc_website_url" type="textarea" :autosize="{ minRows: 4, maxRows: 4}"
+              >
+              </el-input>
+            </el-form-item>
+            <!-- 网站ID -->
+            <el-form-item label="*网站ID">
+              <el-input v-model="setForm.app_id">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="*网站Secret">
+              <el-input v-model="setForm.secret">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="*token">
+              <el-input v-model="setForm.token">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="*aes_key">
+              <el-input v-model="setForm.aes_key">
               </el-input>
             </el-form-item>
             <el-form-item label="*小程序码" class="updateChe">
@@ -430,9 +456,18 @@ export default {
       localization: {},
       activeName: '',
       logisticsData: {
-        app_key: '',
-        app_secret: '',
-        trackingmore_key: ''
+        trackingmore_key: '',
+        kd100_app_id: '',
+        kd100_app_key: '',
+        juhe_key: '',
+        juhe_tpl_id: '',
+        host: '',
+        port: '',
+        encryption: '',
+        username: '',
+        password: '',
+        from_address: '',
+        from_name: ''
       },
       dynamicTags: [],
       inputVisible: false,
@@ -446,7 +481,12 @@ export default {
       setForm: {
         website_name: '',
         default_img: [],
-        customer_qr_code: []
+        customer_qr_code: [],
+        pc_website_url: '',
+        secret: '',
+        app_id: '',
+        token: '',
+        aes_key: ''
       },
       tranAmount: '',
       baleImgList: [],
@@ -464,14 +504,41 @@ export default {
       id: 0,
       show: false,
       rules: {
-        app_key: [
-          { required: true, message: '请输入Appkey', trigger: 'change' }
+        kd100_app_id: [
+          { required: true, message: '请输入Customer ID', trigger: 'change' }
         ],
-        app_secret: [
-          { required: true, message: '请输入AppSecret', trigger: 'change' }
+        kd100_app_key: [
+          { required: true, message: '请输入授权key', trigger: 'change' }
         ],
         trackingmore_key: [
-          { required: true, message: '请输入Tracking more 物流 key', trigger: 'change' }
+          { required: true, message: '请输入Appkey', trigger: 'change' }
+        ],
+        juhe_key: [
+          { required: true, message: '请输入Appkey', trigger: 'change' }
+        ],
+        juhe_tpl_id: [
+          { required: true, message: '请输入发送验证码模板ID', trigger: 'change' }
+        ],
+        host: [
+          { required: true, message: '请输入SMTP域名', trigger: 'change' }
+        ],
+        port: [
+          { required: true, message: '请输入SMTP端口', trigger: 'change' }
+        ],
+        // encryption: [
+        //   { required: true, message: '请选择加密方式', trigger: 'change' }
+        // ],
+        username: [
+          { required: true, message: '请输入发件人用户名', trigger: 'change' }
+        ],
+        password: [
+          { required: true, message: '请输入发件人密码', trigger: 'change' }
+        ],
+        from_address: [
+          { required: true, message: '请输入发件人邮件', trigger: 'change' }
+        ],
+        from_name: [
+          { required: true, message: '请输入发件人名称', trigger: 'change' }
         ]
       }
     }
@@ -752,22 +819,26 @@ export default {
       this.$request.getLogistics().then(res => {
         if (res.ret && res.data) {
           this.logisticsData = res.data
+          // this.logisticsData.encryption = Boolean(res.data.encryption)
         } else {
           return false
         }
       })
     },
-    // 获取其余配置
+    // 获取pc端配置
     getOthers () {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
+        this.setForm.pc_website_url = res.data.pc_website_url.map(item => item.url).toString()
+        // res.data.default_img && (this.baleImgList[0] = { url: res.data.default_img })
+        // res.data.customer_qr_code && (this.customerList[0] = { url: res.data.customer_qr_code })
         res.data.default_img && (this.baleImgList[0] = res.data.default_img)
         res.data.customer_qr_code && (this.customerList[0] = res.data.customer_qr_code)
         // this.baleImgList[0] = { url: res.data.default_img }
         // this.customerList[0] = { url: res.data.customer_qr_code }
       })
     },
-    // 修改其余配置
+    // 修改pc端配置
     editOthers () {
       // this.setForm.default_img = this.baleImgList[0].url
       // this.setForm.customer_qr_code = this.customerList[0].url
@@ -787,8 +858,17 @@ export default {
         return this.$message.error('请上传小程序码')
       } else if (!this.customerList[0]) {
         return this.$message.error('请上传pc端客户二维码')
+      } else if (!this.setForm.secret) {
+        return this.$message.error('请输入网站Secret')
+      } else if (!this.setForm.app_id) {
+        return this.$message.error('请输入网站ID')
+      } else if (!this.setForm.token) {
+        return this.$message.error('请输入token')
+      } else if (!this.setForm.aes_key) {
+        return this.$message.error('请输入aes_key')
       }
-      this.$request.editWebsite(this.setForm).then(res => {
+      console.log(this.setForm.pc_website_url.split(','))
+      this.$request.editWebsite({ ...this.setForm, pc_website_url: this.setForm.pc_website_url.split(',') }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -806,9 +886,13 @@ export default {
     },
     // 物流跟踪配置确认
     confirmLogistic (formName) {
+      console.log(this.logisticsData.encryption, 'this.logisticsData.encryption')
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.editLogistics(this.logisticsData).then(res => {
+          this.$request.editLogistics({
+            ...this.logisticsData
+            // encryption: Number(this.logisticsData.encryption)
+          }).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -1263,6 +1347,11 @@ export default {
   .form-title {
     font-weight: bold;
     margin-bottom: 15px;
+  }
+  .url-sty {
+    .el-textarea__inner {
+      width: 50%;
+    }
   }
 }
 </style>

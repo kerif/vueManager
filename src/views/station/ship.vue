@@ -45,6 +45,7 @@
   <el-table :data="tableShip" stripe
     border class="data-list"
     @expand-change="onExpand"
+    @selection-change="selectionChange"
     v-loading="tableLoading">
     <!-- <el-table-column type="expand">
       <template slot-scope="props">
@@ -74,7 +75,7 @@
         </el-table>
       </template>
     </el-table-column> -->
-      <el-table-column type="index" width="50"></el-table-column>
+      <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 发货单号 -->
       <el-table-column label="发货单号" prop="sn"></el-table-column>
       <!-- 创建时间 -->
@@ -106,16 +107,21 @@
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <!-- 导出清单 -->
-          <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button>
+          <!-- <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button> -->
           <el-button class="btn-green btn-margin" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">发货</el-button>
           <!-- 详情 -->
           <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id, scope.row.status)">详情</el-button>
-          <!-- 加入发货单 -->
-          <el-button class="btn-blue-green btn-margin" @click="addShip(scope.row.id)">加入发货单</el-button>
           <!-- 删除 -->
           <el-button class="btn-light-red btn-margin" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">删除</el-button>
+          <!-- 加入发货单 -->
+          <el-button class="btn-blue-green btn-margin" @click="addShip(scope.row.id)">加入发货单</el-button>
         </template>
       </el-table-column>
+      <template slot="append">
+        <div class="append-box">
+          <el-button size="small" class="btn-main" @click="deleteData">导出清单</el-button>
+        </div>
+      </template>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
@@ -139,6 +145,7 @@ export default {
       tableShip: [], // 表格数据
       localization: {},
       tableLoading: false,
+      deleteNum: [],
       timeList: [],
       begin_date: '',
       end_date: '',
@@ -222,7 +229,6 @@ export default {
       this.$request.uploadExcel(id).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
-          // window.location.href = this.urlExcel
           window.open(this.urlExcel)
           this.$notify({
             title: '操作成功',
@@ -236,6 +242,41 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
+    deleteData () {
+      console.log(this.deleteNum, 'this.deleteNum')
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error('请选择')
+      }
+      this.$confirm(`是否确认导出？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request.uploadExcel({
+          shipment_ids: this.deleteNum
+        }).then(res => {
+          if (res.ret) {
+            this.urlExcel = res.data.url
+            window.open(this.urlExcel)
+            this.$notify({
+              title: '操,作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     // 跳至加入发货单

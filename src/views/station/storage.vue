@@ -79,6 +79,42 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 物品照片 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
+                <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="goodsImgList.length < 3"
+                  class="avatar-uploader"
+                  list-type="picture-card"
+                  action=""
+                  :before-upload="beforeUploadImg"
+                  :http-request="uploadGoodsImg"
+                  :show-file-list="false"
+                  >
+                  <i class="el-icon-plus">
+                  </i>
+                  </el-upload>
+                  <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          <!-- 保存 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item class="saveBtn">
+                <el-button @click="submitStorage" :loading="$store.state.btnLoading">保存</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
       </el-col>
       <el-col :lg="12">
         <!-- 服务 -->
@@ -137,11 +173,18 @@
           <!-- 存放货位 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="存放货位">
+              <el-form-item>
+              <div slot="label">
+                <span>存放货位</span>
+                <el-tooltip effect="dark" content="当您为仓库添加了货位，系统会自动分配货位，同时您也可以自定义填写货位" placement="top">
+                  <span class="el-icon-question icon-question"></span>
+                </el-tooltip>
+              </div>
                 <!-- <el-input v-model="user.location" placeholder="请输入存放货位"></!-->
                 <el-autocomplete
                   :disabled="this.user.warehouse_id === ''"
                   :fetch-suggestions="locationCNSearch"
+                  ref="autocompleteRef"
                   @select="locationSelect"
                   placeholder="请输入存放货位"
                   v-model="user.location">
@@ -157,42 +200,6 @@
                   <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id">{{item.cn_name}}
                   </el-checkbox>
                 </el-checkbox-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-            <!-- 物品照片 -->
-            <el-row :gutter="20">
-              <el-col :span="18">
-                <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
-                  <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
-                    <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-                    <span class="model-box"></span>
-                    <span class="operat-box">
-                      <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                      <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-                    </span>
-                  </span>
-                  <el-upload
-                    v-show="goodsImgList.length < 3"
-                    class="avatar-uploader"
-                    list-type="picture-card"
-                    action=""
-                    :before-upload="beforeUploadImg"
-                    :http-request="uploadGoodsImg"
-                    :show-file-list="false"
-                    >
-                    <i class="el-icon-plus">
-                    </i>
-                  </el-upload>
-                  <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          <!-- 保存 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item class="saveBtn">
-                <el-button @click="submitStorage" :loading="$store.state.btnLoading">保存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -417,6 +424,8 @@ export default {
           this.locationId = this.areaId
           console.log(this.locationId, 'locationId')
           this.updateAreaData()
+          this.locationCNSearch()
+          // this.user.location =
           // if (res.data.props) {
           //   let props = JSON.parse(res.data.props)
           // }
@@ -450,11 +459,16 @@ export default {
     },
     // 获取寄往地区数据
     getAreaData (id) {
-      this.locationId = id
-      console.log(this.locationId, '我是改变的locationId')
-      this.$request.getArea(id).then(res => {
-        this.shipData = res.data
-      })
+      if (id) {
+        this.locationId = id
+        this.locationCNSearch()
+        console.log(this.locationId, '我是改变的locationId')
+        this.$request.getArea(id).then(res => {
+          if (res.ret) {
+            this.shipData = res.data
+          }
+        })
+      }
     },
     // 通过仓库id拉取相对应的地区
     updateAreaData () {
@@ -583,8 +597,11 @@ export default {
           i.value = i.code
           // i.value = i.id + '---' + i.name
         }
+        if (!this.user.location) {
+          this.user.location = res.data[0].code
+        }
         list = res.data
-        callback(list)
+        callback && callback(list)
       })
     },
     // 客户id
@@ -853,6 +870,13 @@ export default {
   }
   .remark-font {
     color: #ff9a20;
+  }
+  .icon-question {
+    margin-left: 5px;
+    font-size: 18px;
+    color: #67C23A;
+    position: relative;
+    top: 3px;
   }
 }
 </style>

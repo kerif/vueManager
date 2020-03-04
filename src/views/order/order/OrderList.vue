@@ -75,7 +75,7 @@
         </template> -->
       </el-table-column>
       <!-- 物品名称 -->
-      <el-table-column label="物品名称" prop="package_name" width="200" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column label="物品名称" prop="package_name" width="150" :show-overflow-tooltip="true"></el-table-column>
       <!-- 物品价值 -->
       <el-table-column :label="'物品价值' + this.localization.currency_unit" prop="package_value"></el-table-column>
       <!-- 物品属性 -->
@@ -123,6 +123,9 @@
       <el-table-column label="备注" prop="remark" v-if="activeName === '2'"></el-table-column>
       <!-- 规格 -->
       <el-table-column label="规格(长宽高cm)" prop="dimension"
+      v-if="activeName === '2'" width="120px"></el-table-column>
+      <!-- 存放货位 -->
+      <el-table-column label="存放货位" prop="location"
       v-if="activeName === '2'" width="120px"></el-table-column>
       <!-- 称重时间 -->
       <el-table-column label="入库时间" v-if="activeName === '2'" prop="in_storage_at"></el-table-column>
