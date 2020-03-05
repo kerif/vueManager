@@ -22,6 +22,7 @@
               class="upload-demo"
               action=""
               :limit="3"
+              :on-remove="onFileRemove"
               :file-list="fileList"
               :before-upload="beforeUploadImg"
               :http-request="uploadBaleImg">
@@ -90,7 +91,13 @@ export default {
           this.params.title = res.data.title
           this.params.content = res.data.content
           this.editor.txt.html(this.params.content)
-          this.fileList = res.data.attachments
+          this.fileList = res.data.attachments.map(item => {
+            const arr = item.split('/')
+            return {
+              name: arr[arr.length - 1],
+              url: item
+            }
+          })
         }
       })
     },
@@ -103,7 +110,10 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.fileList.push(item.path)
+            this.fileList.push({
+              name: item.name,
+              url: item.path
+            })
           })
         }
       })
@@ -115,8 +125,7 @@ export default {
     },
     beforeUploadImg (file) {
       console.log(file)
-      const mimeList = ['application/pdf', 'application/x-rar-compressed', 'application/x-zip-compressed',
-        'application/zip', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+      const mimeList = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
       if (mimeList.indexOf(file.type) === -1) {
         this.$message.info('请上传格式正确的文件')
         return false
@@ -128,7 +137,7 @@ export default {
     },
     saveNotice () {
       if (this.fileList.length) {
-        this.params.attachments = this.fileList
+        this.params.attachments = this.fileList.map(item => item.url)
       }
       if (!this.$route.params.id) { // 如果是新增状态
         this.$request.addAnnouncements(this.params).then(res => {
@@ -165,6 +174,10 @@ export default {
           }
         })
       }
+    },
+    // 文件删除
+    onFileRemove (file, fileList) {
+      this.fileList = fileList
     }
   }
 }
