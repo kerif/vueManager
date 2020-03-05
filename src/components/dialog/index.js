@@ -38,7 +38,6 @@ import lineChoose from './lineChoose.vue'
 import feeList from './addFee.vue'
 import pickingLog from './pickingLog.vue'
 import warehouseTo from './warehouseTo.vue'
-import previewBackground from './previewBg.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -77,7 +76,6 @@ const LineChooseController = Vue.extend(lineChoose)
 const FeeController = Vue.extend(feeList)
 const PickingLogController = Vue.extend(pickingLog)
 const WarehouseToController = Vue.extend(warehouseTo)
-const PreviewBackgroundController = Vue.extend(previewBackground)
 
 const mixin = {
   data () {
@@ -341,13 +339,6 @@ function initInstance (type) {
     // 修改所属仓库
     case 'warehouseTo':
       instance = new WarehouseToController({
-        el: document.createElement('div'),
-        mixins: [mixin]
-      })
-      break
-    // 小程序配置 海报配置 预览海报
-    case 'previewBackground':
-      instance = new PreviewBackgroundController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
