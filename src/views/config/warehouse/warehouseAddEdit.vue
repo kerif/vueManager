@@ -34,6 +34,16 @@
             </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item label="忽略地址精确检查">
+        <el-row>
+          <el-col :span="10">
+            <el-radio-group v-model="ruleForm.ignore_lon_lat">
+              <el-radio :label="1">开启</el-radio>
+              <el-radio :label="0">关闭</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item label="地址" prop="address">
         <el-row>
           <el-col :span="10">
@@ -99,6 +109,7 @@ export default {
         address: '',
         tips: '',
         auto_location: 0,
+        ignore_lon_lat: 0,
         support_countries: ''
       },
       options: [],

@@ -575,7 +575,9 @@ exports.getProgramShare = () => {
   return $form.get('mini-program/share-page-info')
 }
 // 更新海报配置
-
+exports.updateProgramShare = (params) => {
+  return $form.put('mini-program/share-page-info', params)
+}
 // 获取消息模版
 exports.getTemplate = () => {
   return $form.get('mini-program/templates')

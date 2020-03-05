@@ -323,24 +323,99 @@
             <span class="suggest-btn">建议尺寸：355px*160px</span>
             </el-form-item>
           </el-col>
+        <el-col :span="6">
+          <!-- 个人中心背景图片 -->
+            <el-form-item label="*个人中心背景图片" class="updateChe">
+                <span class="img-item" v-for="(item, index) in centerList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteCenter(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="centerList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadCenter"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：750px*480px</span>
+            </el-form-item>
+          </el-col>
+          <!-- 协议背景图片 -->
+          <el-col :span="6">
+            <el-form-item label="*协议背景图片" class="updateChe">
+                <span class="img-item" v-for="(item, index) in licenseList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteLicense(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="licenseList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadLicense"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：710px*120px</span>
+            </el-form-item>
+          </el-col>
           </el-row>
+       <el-row :gutter="20">
+         <el-col :span="6">
+          <!-- 增加代理成功提示图 -->
+            <el-form-item label="*增加代理成功提示图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in approveList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteApprove(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="approveList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadApprove"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：612px*542px</span>
+            </el-form-item>
+          </el-col>
+       </el-row>
           </el-form>
           <el-button class="save-btn" @click="editOthers">保存</el-button>
         </div>
     </div>
-    <el-row v-if="activeName === '4'">
-      <el-col :span="8">
-        <div class="poster-left">
-          <div class="left-top">
-            <img src="../../../assets/xiongda.jpeg">
-          </div>
-          <p>做最好的集运系统</p>
-          <div class="left-bottom">
-            <img src="../../../assets/tree.png">
-          </div>
+    <!-- 海报配置 -->
+    <div v-if="activeName === '4'">
+      <div class="poster-left">
+        <img v-show="choosePoster" :src="$baseUrl.IMAGE_URL +  choosePoster" class="img-poster">
+        <div class="left-top" v-if="this.backgroundList.display_user_avatar === 1" style="position: relative">
+          <img src="../../../assets/user.png">
         </div>
-      </el-col>
-      <el-col :span="15" :offset="1" class="poster-right">
+        <h3 v-if="this.backgroundList.display_user_name === 1" style="position: relative">张三</h3>
+        <p v-if="this.backgroundList.display_share_info === 1" style="position: relative">{{backgroundList.share_info}}</p>
+        <div class="left-bottom">
+          <img src="../../../assets/code.png" :style="{width: backgroundList.avatar_size + 'px', height: backgroundList.avatar_size + 'px'}">
+        </div>
+      </div>
+      <div class="poster-right">
         <h4>设置面板</h4>
         <el-form :model="backgroundList" ref="ruleForm" class="demo-ruleForm"
         label-width="130px">
@@ -385,18 +460,18 @@
               <el-input v-model="backgroundList.share_info"></el-input>
             </el-form-item>
             <!-- 二维码头像尺寸 -->
-            <el-form-item label="二维码头像尺寸" class="slogan">
-              <el-input v-model="backgroundList.avatar_size">
+            <el-form-item label="*二维码尺寸" class="slogan">
+              <el-input v-model="backgroundList.avatar_size" @blur="changeSize">
               </el-input>px
-              <p class="slogan-height">高度和宽带一致，只需要填写一个参数</p>
+              <p class="slogan-height">高和宽一致，只需要填写一个参数</p>
             </el-form-item>
         <!-- 背景图像 -->
-          <el-form-item label="背景图像">
+          <el-form-item label="*背景图像">
               <span class="img-item" v-for="(item, index) in backgroundImg" :key="index">
               <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
               <span class="model-box"></span>
               <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                  <i class="el-icon-zoom-in" @click="previewBackground(item)"></i>
                   <i class="el-icon-delete" @click="onDeleteBg(index)"></i>
               </span>
               </span>
@@ -413,11 +488,11 @@
             <span class="suggest-btn">背景图像上传最多不超过五张</span>
           </el-form-item>
           <div class="background-btn">
-            <el-button class="save-btn" @click="editOthers">保存</el-button>
+            <el-button class="save-btn" @click="updateBackground">保存</el-button>
           </div>
         </el-form>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -446,8 +521,12 @@ export default {
       indexList: [], // 首页
       videoList: [], // 视频区
       commentList: [], // 评论区
+      centerList: [], // 个人中心背景
+      licenseList: [], // 协议背景图
+      approveList: [], // 增加代理成功提示
       messageData: [],
       backgroundImg: [], // 海报配置背景图像
+      choosePoster: '',
       setForm: {
         freight_image: [],
         video_entrance_image: [],
@@ -515,6 +594,12 @@ export default {
         }
       })
     },
+    changeSize () {
+      if (this.backgroundList.avatar_size > 200) {
+        this.backgroundList.avatar_size = 200
+        this.$message.error('二维码尺寸最大不能超过200px')
+      }
+    },
     // 获取图片配置
     getImg () {
       this.$request.getProgramImg().then(res => {
@@ -529,6 +614,9 @@ export default {
         res.data.index_image && (this.indexList[0] = res.data.index_image)
         res.data.video_image && (this.videoList[0] = res.data.video_image)
         res.data.comment_image && (this.commentList[0] = res.data.comment_image)
+        res.data.user_center_image && (this.centerList[0] = res.data.user_center_image)
+        res.data.license_image && (this.licenseList[0] = res.data.license_image)
+        res.data.agent_approve_image && (this.approveList[0] = res.data.agent_approve_image)
       })
     },
     // 获取海报配置
@@ -536,6 +624,34 @@ export default {
       this.$request.getProgramShare().then(res => {
         this.backgroundList = res.data
         res.data.background_images && (this.backgroundImg = res.data.background_images)
+      })
+    },
+    // 修改海报配置
+    updateBackground () {
+      if (this.baleImgList) {
+        this.backgroundList.background_images = this.backgroundImg
+      } else {
+        this.backgroundList.background_images = []
+      }
+      if (!this.backgroundImg[0]) {
+        return this.$message.error('请上传背景图像')
+      } else if (this.backgroundList.avatar_size === '') {
+        return this.$message.error('二维码尺寸不能为空')
+      }
+      this.$request.updateProgramShare(this.backgroundList).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getBackground()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     saveDev (formName) {
@@ -567,6 +683,13 @@ export default {
         type: 'previewimage',
         image
       })
+    },
+    // 预览小程序海报
+    previewBackground (image) {
+      // console.log(backgroundList, 'backgroundList')
+      console.log(image, 'image')
+      this.choosePoster = image
+      // dialog({ type: 'previewBackground' })
     },
     // 上传海报配置背景图像
     uploadBgImg (item) {
@@ -656,6 +779,39 @@ export default {
         }
       })
     },
+    // 个人中心背景图片
+    uploadCenter (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.centerList.push(item.path)
+          })
+        }
+      })
+    },
+    // 协议背景图片
+    uploadLicense (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.licenseList.push(item.path)
+          })
+        }
+      })
+    },
+    // 增加代理成功提示图
+    uploadApprove (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.approveList.push(item.path)
+          })
+        }
+      })
+    },
     // 上传评论区
     uploadComment (item) {
       let file = item.file
@@ -720,6 +876,18 @@ export default {
     // 视频图
     onDeleteVideo (index) {
       this.videoList.splice(index, 1)
+    },
+    // 个人中心背景图
+    onDeleteCenter (index) {
+      this.centerList.splice(index, 1)
+    },
+    // 协议背景图片
+    onDeleteLicense (index) {
+      this.licenseList.splice(index, 1)
+    },
+    // 增加代理成功提示图
+    onDeleteApprove (index) {
+      this.approveList.splice(index, 1)
     },
     onDeleteComment (index) {
       this.commentList.splice(index, 1)
@@ -794,6 +962,21 @@ export default {
       } else {
         this.setForm.freight_image = []
       }
+      if (this.centerList[0]) {
+        this.setForm.user_center_image = this.centerList[0]
+      } else {
+        this.setForm.user_center_image = []
+      }
+      if (this.licenseList[0]) {
+        this.setForm.license_image = this.licenseList[0]
+      } else {
+        this.setForm.license_image = []
+      }
+      if (this.approveList[0]) {
+        this.setForm.agent_approve_image = this.approveList[0]
+      } else {
+        this.setForm.agent_approve_image = []
+      }
       if (!this.baleImgList[0]) {
         return this.$message.error('请上传小程序首页视频入口图')
       } else if (!this.customerList[0]) {
@@ -814,6 +997,12 @@ export default {
         return this.$message.error('请上传视频区图')
       } else if (!this.commentList[0]) {
         return this.$message.error('请上传评论区图')
+      } else if (!this.centerList[0]) {
+        return this.$message.error('请上传个人中心背景图')
+      } else if (!this.licenseList[0]) {
+        return this.$message.error('请上传协议背景图')
+      } else if (!this.approveList[0]) {
+        return this.$message.error('请上传增加代理成功提示图')
       }
       this.$request.changeProgramImg(this.setForm).then(res => {
         if (res.ret) {
@@ -1048,20 +1237,35 @@ export default {
     font-size: 12px;
   }
   .poster-left {
+    width:300px;
+    height: 580px;
+    vertical-align: top;
+    display: inline-block;
     text-align: center;
     background-color: #fff;
-    padding: 20px;
+    padding: 20px 10px;
+    position: relative;
+    margin-right:40px;
     .left-top {
       img {
         width: 80px;
         height: 80px;
+        padding: 5px;
         border-radius: 50%;
+        border: 1px solid #ccc;
       }
     }
   }
   .poster-right {
+    width: calc(100%-360px);
+    width: -moz-calc(100% - 360px);
+    width: -webkit-calc(100% - 360px);
+    vertical-align: top;
+    display: inline-block;
     background-color: #fff;
     padding:15px;
+    height: 880px;
+    box-sizing: border-box;
   }
   .background-btn {
     margin-left: 120px;
@@ -1073,6 +1277,25 @@ export default {
   }
   .slogan-height {
     margin: 0;
+  }
+  .left-bottom {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    img {
+      // width:100px;
+      // height: 100px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+  }
+  .img-poster {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 }
 </style>
