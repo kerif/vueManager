@@ -90,6 +90,7 @@ export default {
           this.params.title = res.data.title
           this.params.content = res.data.content
           this.editor.txt.html(this.params.content)
+          this.fileList = res.data.attachments
         }
       })
     },
@@ -114,8 +115,10 @@ export default {
     },
     beforeUploadImg (file) {
       console.log(file)
-      if (!(/^image/.test(file.type))) {
-        // this.$message.info('请上传文件')
+      const mimeList = ['application/pdf', 'application/x-rar-compressed', 'application/x-zip-compressed',
+        'application/zip', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+      if (mimeList.indexOf(file.type) === -1) {
+        this.$message.info('请上传格式正确的文件')
         return false
       } else if (file.size > 1024 * 1024 * 3) {
         this.$message.info('上传图片大小不能超过3MB')
@@ -124,6 +127,9 @@ export default {
       return true
     },
     saveNotice () {
+      if (this.fileList.length) {
+        this.params.attachments = this.fileList
+      }
       if (!this.$route.params.id) { // 如果是新增状态
         this.$request.addAnnouncements(this.params).then(res => {
           if (res.ret) {
