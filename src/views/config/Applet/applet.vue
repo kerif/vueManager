@@ -9,6 +9,8 @@
       <el-tab-pane label="图片配置" name="3"></el-tab-pane>
       <!-- 海报配置 -->
       <el-tab-pane label="海报配置" name="4"></el-tab-pane>
+      <!-- 功能配置 -->
+      <el-tab-pane label="功能配置" name="5"></el-tab-pane>
     </el-tabs>
     <el-row v-if="activeName === '1'">
       <el-col :span="11">
@@ -493,6 +495,23 @@
         </el-form>
       </div>
     </div>
+    <div class="Features-container" v-if="activeName === '5'">
+      <el-form>
+        <!-- 开启短信邮件验证 -->
+        <el-form-item label="开启短信邮件验证：">
+            <el-switch
+              v-model="validateList.validate_phone"
+              active-text="开"
+              :active-value="1"
+              :inactive-value="0"
+              inactive-text="关"
+              active-color="#13ce66"
+              inactive-color="gray">
+            </el-switch>
+        </el-form-item>
+      </el-form>
+      <el-button class="save-btn" @click="saveValidate">保存</el-button>
+  </div>
   </div>
 </template>
 
@@ -533,13 +552,16 @@ export default {
         comment_entrance_image: [],
         forecast_image: []
       },
-      backgroundList: {
+      backgroundList: { // 海报配置
         display_user_avatar: 0,
         display_user_name: 0,
         display_share_info: 0,
         avatar_size: '',
         background_images: [],
         share_info: ''
+      },
+      validateList: { // 功能配置
+        validate_phone: 0
       },
       rules: {
         app_id: [
@@ -646,6 +668,32 @@ export default {
             message: res.msg
           })
           this.getBackground()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 获取功能配置
+    getValidate () {
+      this.$request.getValidate().then(res => {
+        if (res.ret) {
+          this.validateList = res.data
+        }
+      })
+    },
+    // 更新功能配置
+    saveValidate () {
+      this.$request.updateValidate(this.validateList).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getValidate()
         } else {
           this.$message({
             message: res.msg,
@@ -1062,6 +1110,8 @@ export default {
         console.log('111')
       } else if (this.activeName === '4') {
         this.getBackground()
+      } else if (this.activeName === '5') {
+        this.getValidate()
       }
     }
   }
@@ -1071,7 +1121,7 @@ export default {
 <style lang="scss">
 .applet-container {
    .tabLength {
-    width: 400px !important;
+    width: 500px !important;
   }
   .applet-left {
     padding: 15px;
@@ -1296,6 +1346,10 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
+  }
+  .Features-container {
+     background-color: #fff !important;
+     padding: 20px;
   }
 }
 </style>

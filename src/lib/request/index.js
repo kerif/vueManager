@@ -578,6 +578,14 @@ exports.getProgramShare = () => {
 exports.updateProgramShare = (params) => {
   return $form.put('mini-program/share-page-info', params)
 }
+// 获取功能配置
+exports.getValidate = () => {
+  return $form.get(`mini-program/configs`)
+}
+// 更新 功能配置
+exports.updateValidate = (params) => {
+  return $form.put(`mini-program/configs`, params)
+}
 // 获取消息模版
 exports.getTemplate = () => {
   return $form.get('mini-program/templates')

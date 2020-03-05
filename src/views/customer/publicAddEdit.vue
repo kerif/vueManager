@@ -27,7 +27,7 @@
               :before-upload="beforeUploadImg"
               :http-request="uploadBaleImg">
               <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">支持格式：.rar .zip .doc .docx .pdf，单个文件不能超过3MB</div>
+              <div slot="tip" class="el-upload__tip">支持格式：.doc .docx .pdf，单个文件不能超过3MB</div>
             </el-upload>
           </el-col>
         </el-row>
@@ -98,6 +98,7 @@ export default {
               url: item
             }
           })
+          console.log(this.fileList, 'this.fileList')
         }
       })
     },
@@ -125,12 +126,12 @@ export default {
     },
     beforeUploadImg (file) {
       console.log(file)
-      const mimeList = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+      const mimeList = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/wps-writer']
       if (mimeList.indexOf(file.type) === -1) {
-        this.$message.info('请上传格式正确的文件')
+        this.$message.error('请上传格式正确的文件')
         return false
       } else if (file.size > 1024 * 1024 * 3) {
-        this.$message.info('上传图片大小不能超过3MB')
+        this.$message.error('上传图片大小不能超过3MB')
         return false
       }
       return true
@@ -147,7 +148,7 @@ export default {
               title: '操作成功',
               message: res.msg
             })
-            this.$router.go(-1)
+            this.$router.push({ name: 'Public' })
           } else {
             this.$message({
               message: res.msg,
@@ -163,8 +164,8 @@ export default {
               message: res.tips,
               type: 'success'
             })
-            // this.$router.push({ name: 'public' })
-            this.$router.go(-1)
+            this.$router.push({ name: 'Public' })
+            // this.$router.go(-1)
           } else {
             this.$notify({
               title: '操作失败',
