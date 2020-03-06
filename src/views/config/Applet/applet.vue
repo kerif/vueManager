@@ -228,7 +228,7 @@
             </el-form-item>
           </el-col>
           <!-- 分享页 -->
-          <!-- <el-col :span="6">
+          <el-col :span="6">
             <el-form-item label="*分享页" class="updateChe">
                 <span class="img-item" v-for="(item, index) in shareList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
@@ -249,30 +249,6 @@
                 </i>
             </el-upload><br/>
             <span class="suggest-btn">建议尺寸：750px*1204px</span>
-            </el-form-item>
-          </el-col> -->
-         <el-col :span="6">
-          <!-- 代理成功提示图 -->
-            <el-form-item label="*代理成功提示图" class="updateChe">
-                <span class="img-item" v-for="(item, index) in approveList" :key="index">
-                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-                <span class="model-box"></span>
-                <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteApprove(index)"></i>
-                </span>
-                </span>
-              <el-upload
-                v-show="approveList.length < 1"
-                class="avatar-uploader"
-                action=""
-                list-type="picture-card"
-                :http-request="uploadApprove"
-                :show-file-list="false">
-                <i class="el-icon-plus">
-                </i>
-            </el-upload><br/>
-            <span class="suggest-btn">建议尺寸：612px*542px</span>
             </el-form-item>
           </el-col>
           <!-- 首页 -->
@@ -398,6 +374,32 @@
             </el-form-item>
           </el-col>
           </el-row>
+       <el-row :gutter="20">
+         <el-col :span="6">
+          <!-- 代理成功提示图 -->
+            <el-form-item label="*代理成功提示图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in approveList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteApprove(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="approveList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadApprove"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：612px*542px</span>
+            </el-form-item>
+          </el-col>
+       </el-row>
           </el-form>
           <el-button class="save-btn" @click="editOthers">保存</el-button>
         </div>
@@ -732,10 +734,8 @@ export default {
     },
     // 预览小程序海报
     previewBackground (image) {
-      // console.log(backgroundList, 'backgroundList')
       console.log(image, 'image')
       this.choosePoster = image
-      // dialog({ type: 'previewBackground' })
     },
     // 上传海报配置背景图像
     uploadBgImg (item) {
