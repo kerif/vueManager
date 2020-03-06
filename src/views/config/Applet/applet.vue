@@ -497,8 +497,8 @@
     </div>
     <div class="Features-container" v-if="activeName === '5'">
       <el-form>
-        <!-- 忽略短信邮件验证 -->
-        <el-form-item label="忽略短信邮件验证：">
+        <!-- 开启短信邮件验证 -->
+        <el-form-item label="开启短信邮件验证：">
             <el-switch
               v-model="validateList.validate_phone"
               active-text="开"
