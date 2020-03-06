@@ -83,7 +83,7 @@
         <el-row :gutter="20">
          <el-col :span="6">
             <!-- 小程序首页视频入口图 -->
-            <el-form-item label="*小程序首页视频入口图" class="updateChe">
+            <el-form-item label="小程序首页视频入口图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -107,7 +107,7 @@
           </el-col>
             <!-- 小程序首页评论入口图 -->
           <el-col :span="6">
-            <el-form-item label="*小程序首页评论入口图" class="updateChe">
+            <el-form-item label="小程序首页评论入口图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in evaluationImgList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -131,7 +131,7 @@
           </el-col>
             <!-- 小程序预报页图 -->
           <el-col :span="6">
-            <el-form-item label="*小程序预报页图" class="updateChe">
+            <el-form-item label="小程序预报页图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in customerList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -155,7 +155,7 @@
           </el-col>
             <!-- 小程序运费查询页图 -->
           <el-col :span="6">
-            <el-form-item label="*小程序运费查询页图" class="updateChe">
+            <el-form-item label="小程序运费查询页图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in freightList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -181,7 +181,7 @@
         <el-row :gutter="20">
          <el-col :span="6">
             <!-- 物流查询页图” -->
-            <el-form-item label="*物流查询页图" class="updateChe">
+            <el-form-item label="物流查询页图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in logisticsList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -205,7 +205,7 @@
           </el-col>
             <!-- 支持与帮助中心 -->
           <el-col :span="6">
-            <el-form-item label="*支持与帮助中心" class="updateChe">
+            <el-form-item label="支持与帮助中心" class="updateChe">
                 <span class="img-item" v-for="(item, index) in supportList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -229,7 +229,7 @@
           </el-col>
           <!-- 分享页 -->
           <el-col :span="6">
-            <el-form-item label="*分享页" class="updateChe">
+            <el-form-item label="分享页" class="updateChe">
                 <span class="img-item" v-for="(item, index) in shareList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -253,7 +253,7 @@
           </el-col>
           <!-- 首页 -->
           <el-col :span="6">
-            <el-form-item label="*首页" class="updateChe">
+            <el-form-item label="首页" class="updateChe">
                 <span class="img-item" v-for="(item, index) in indexList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -279,7 +279,7 @@
         <el-row :gutter="20">
          <el-col :span="6">
           <!-- 视频区 -->
-            <el-form-item label="*视频区" class="updateChe">
+            <el-form-item label="视频区" class="updateChe">
                 <span class="img-item" v-for="(item, index) in videoList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -303,7 +303,7 @@
           </el-col>
           <!-- 评论区 -->
           <el-col :span="6">
-            <el-form-item label="*评论区" class="updateChe">
+            <el-form-item label="评论区" class="updateChe">
                 <span class="img-item" v-for="(item, index) in commentList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -327,7 +327,7 @@
           </el-col>
         <el-col :span="6">
           <!-- 个人中心背景图片 -->
-            <el-form-item label="*个人中心背景图片" class="updateChe">
+            <el-form-item label="个人中心背景图片" class="updateChe">
                 <span class="img-item" v-for="(item, index) in centerList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -351,7 +351,7 @@
           </el-col>
           <!-- 协议背景图片 -->
           <el-col :span="6">
-            <el-form-item label="*协议背景图片" class="updateChe">
+            <el-form-item label="协议背景图片" class="updateChe">
                 <span class="img-item" v-for="(item, index) in licenseList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -377,7 +377,7 @@
        <el-row :gutter="20">
          <el-col :span="6">
           <!-- 代理成功提示图 -->
-            <el-form-item label="*代理成功提示图" class="updateChe">
+            <el-form-item label="代理成功提示图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in approveList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -462,13 +462,13 @@
               <el-input v-model="backgroundList.share_info"></el-input>
             </el-form-item>
             <!-- 二维码头像尺寸 -->
-            <el-form-item label="*二维码尺寸" class="slogan">
+            <el-form-item label="二维码尺寸" class="slogan">
               <el-input v-model="backgroundList.avatar_size" @blur="changeSize">
               </el-input>px
               <p class="slogan-height">高和宽一致，只需要填写一个参数</p>
             </el-form-item>
         <!-- 背景图像 -->
-          <el-form-item label="*背景图像">
+          <el-form-item label="背景图像">
               <span class="img-item" v-for="(item, index) in backgroundImg" :key="index">
               <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
               <span class="model-box"></span>
@@ -1023,33 +1023,33 @@ export default {
       } else {
         this.setForm.agent_approve_image = []
       }
-      if (!this.baleImgList[0]) {
-        return this.$message.error('请上传小程序首页视频入口图')
-      } else if (!this.customerList[0]) {
-        return this.$message.error('请上传小程序预报页图')
-      } else if (!this.evaluationImgList[0]) {
-        return this.$message.error('请上传小程序首页评论入口图')
-      } else if (!this.freightList[0]) {
-        return this.$message.error('请上传小程序运费查询页图')
-      } else if (!this.logisticsList[0]) {
-        return this.$message.error('请上传物流查询页面')
-      } else if (!this.supportList[0]) {
-        return this.$message.error('请上传支持与帮助中心图')
-      } else if (!this.shareList[0]) {
-        return this.$message.error('请上传分享图')
-      } else if (!this.indexList[0]) {
-        return this.$message.error('请上传首页图')
-      } else if (!this.videoList[0]) {
-        return this.$message.error('请上传视频区图')
-      } else if (!this.commentList[0]) {
-        return this.$message.error('请上传评论区图')
-      } else if (!this.centerList[0]) {
-        return this.$message.error('请上传个人中心背景图')
-      } else if (!this.licenseList[0]) {
-        return this.$message.error('请上传协议背景图')
-      } else if (!this.approveList[0]) {
-        return this.$message.error('请上传代理成功提示图')
-      }
+      // if (!this.baleImgList[0]) {
+      //   return this.$message.error('请上传小程序首页视频入口图')
+      // } else if (!this.customerList[0]) {
+      //   return this.$message.error('请上传小程序预报页图')
+      // } else if (!this.evaluationImgList[0]) {
+      //   return this.$message.error('请上传小程序首页评论入口图')
+      // } else if (!this.freightList[0]) {
+      //   return this.$message.error('请上传小程序运费查询页图')
+      // } else if (!this.logisticsList[0]) {
+      //   return this.$message.error('请上传物流查询页面')
+      // } else if (!this.supportList[0]) {
+      //   return this.$message.error('请上传支持与帮助中心图')
+      // } else if (!this.shareList[0]) {
+      //   return this.$message.error('请上传分享图')
+      // } else if (!this.indexList[0]) {
+      //   return this.$message.error('请上传首页图')
+      // } else if (!this.videoList[0]) {
+      //   return this.$message.error('请上传视频区图')
+      // } else if (!this.commentList[0]) {
+      //   return this.$message.error('请上传评论区图')
+      // } else if (!this.centerList[0]) {
+      //   return this.$message.error('请上传个人中心背景图')
+      // } else if (!this.licenseList[0]) {
+      //   return this.$message.error('请上传协议背景图')
+      // } else if (!this.approveList[0]) {
+      //   return this.$message.error('请上传代理成功提示图')
+      // }
       this.$request.changeProgramImg(this.setForm).then(res => {
         if (res.ret) {
           this.$notify({
