@@ -487,7 +487,7 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">背景图像上传最多不超过五张</span>
+            <span class="suggest-btn">背景图像上传最多不超过五张，建议尺寸750px*1334px</span>
           </el-form-item>
           <div class="background-btn">
             <el-button class="save-btn" @click="updateBackground">保存</el-button>
