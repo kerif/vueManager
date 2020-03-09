@@ -12,7 +12,7 @@
                 <el-input v-else v-model="user.user_id" placeholder="请输入代理用户"></el-input>
               </el-form-item>
             </el-col>
-              <el-button class="choose" @click="chooseUser">选择</el-button>
+              <el-button class="choose" @click="chooseUser" v-if="!this.$route.query.id">选择</el-button>
           </el-row>
           <!-- 密码 -->
           <el-row :gutter="20">
