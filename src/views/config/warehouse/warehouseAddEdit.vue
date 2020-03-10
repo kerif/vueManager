@@ -34,9 +34,15 @@
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="忽略地址精确检查">
+      <el-form-item>
         <el-row>
           <el-col :span="10">
+            <div>
+              <span class="address-sty">忽略地址精确度检查</span>
+              <el-tooltip class="item" effect="dark" content="选择开启会忽略当次地址精确度检查。" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
             <el-radio-group v-model="ruleForm.ignore_lon_lat">
               <el-radio :label="1">开启</el-radio>
               <el-radio :label="0">关闭</el-radio>
@@ -254,6 +260,17 @@ export default {
       border-color: #EAECF5;
       color: #3540A5;
     }
+  }
+  .icon-info {
+    color: #74B34F;
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+    cursor: pointer;
+  }
+  .address-sty {
+    color:#606266;
   }
 }
 </style>

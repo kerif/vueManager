@@ -10,7 +10,7 @@
         </el-form-item>
         <!-- 货品数量 -->
         <el-form-item label="*货品数量" class="product-num">
-          <el-input-number v-model="ruleForm.qty" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+          <el-input-number v-model="ruleForm.qty" @change="handleChange" :min="1" label="描述文字"></el-input-number>
         </el-form-item>
         <!-- 货品单价 -->
         <el-form-item :label="'*货品单价' + this.currencyUnit">

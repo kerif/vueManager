@@ -1,3 +1,4 @@
+/* eslint-disable no-array-constructor */
 <template>
     <div class="storage-container">
       <el-row class="container-top">
@@ -461,6 +462,7 @@ export default {
     getAreaData (id) {
       if (id) {
         this.locationId = id
+        this.user.location = ''
         this.locationCNSearch()
         console.log(this.locationId, '我是改变的locationId')
         this.$request.getArea(id).then(res => {
@@ -593,6 +595,7 @@ export default {
       this.$request.AutoLocation(this.locationId, {
         keyword: this.user.location
       }).then(res => {
+        console.log(res.data, 'res data')
         for (let i of res.data) {
           i.value = i.code
           // i.value = i.id + '---' + i.name
@@ -602,6 +605,10 @@ export default {
         }
         list = res.data
         callback && callback(list)
+      }).catch(() => {
+        console.log(callback, 'callback')
+        // eslint-disable-next-line no-array-constructor
+        callback(new Array())
       })
     },
     // 客户id
