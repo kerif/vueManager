@@ -19,6 +19,10 @@
       <el-tab-pane :label="'已签收' + '(' + 0 + ')'" name="5" v-if="!this.countData.received"></el-tab-pane>
       <el-tab-pane v-else :label="'已签收' + '(' + this.countData.received
 + ')'" name="5"></el-tab-pane>
+      <!-- 作废订单 -->
+      <el-tab-pane :label="'作废订单' + '(' + 0 + ')'" name="19" v-if="!this.countData.invalid"></el-tab-pane>
+      <el-tab-pane v-else :label="'作废订单' + '(' + this.countData.invalid
++ ')'" name="19"></el-tab-pane>
   </el-tabs>
   <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
       <!-- <el-col :span="13"> -->
@@ -101,10 +105,10 @@
         </template>
       </el-table-column>
       <!-- 转运快递单号 -->
-      <el-table-column label="转运快递单号" v-if="activeName === '2'|| activeName === '3' ||activeName === '4' || activeName === '5'" prop="logistics_sn">
+      <el-table-column label="转运快递单号" v-if="activeName === '2'|| activeName === '3' ||activeName === '4' || activeName === '5' || activeName === '6'" prop="logistics_sn">
       </el-table-column>
         <!-- 转运快递公司 -->
-        <el-table-column label="转运快递公司" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="logistics_company"></el-table-column>
+        <el-table-column label="转运快递公司" v-if="activeName === '3'|| activeName === '4' || activeName === '5' || activeName === '6'" prop="logistics_company"></el-table-column>
       <!-- 状态为待发货才会出现输入框 -->
       <!-- <el-table-column label="转运快递单号" v-if="activeName === '3'" width="140px">
         <template slot-scope="scope">
@@ -174,7 +178,11 @@
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
           </el-button>
-          <el-button size="small" class="btn-blue" v-if="activeName !== '1'" @click="onLogs(scope.row.id)">拣货日志
+          <!-- 作废 -->
+          <el-button class="btn-light-red detailsBtn" @click="invalidOrder(scope.row.id, activeName)"
+          v-if="activeName === '1' || activeName === '2' || activeName === '3'">作废</el-button>
+          <!-- 拣货日志 -->
+          <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">拣货日志
           </el-button>
           <!-- 修改物流信息 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">修改物流信息</el-button>
@@ -484,6 +492,12 @@ export default {
         this.getList()
       })
     },
+    // 作废
+    invalidOrder (id, activeName) {
+      dialog({ type: 'voidList', id: id, activeName: activeName }, () => {
+        this.getList()
+      })
+    },
     // 添加转运快递单号
     edit (row) {
       row.disabled = !row.disabled
@@ -572,7 +586,7 @@ export default {
 <style lang="scss">
 .way-list-container {
   .tabLength {
-    width: 550px !important;
+    width: 620px !important;
   }
   .detailsBtn {
     margin: 3px 2px !important;

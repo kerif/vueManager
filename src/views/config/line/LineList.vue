@@ -311,7 +311,7 @@ export default {
       }
       this.getList()
     },
-    // 搜搜
+    // 搜索
     onSearch () {
       this.page_params.page = 1
       let arr = []

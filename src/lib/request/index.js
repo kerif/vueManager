@@ -308,8 +308,13 @@ exports.deleteSingleDetails = (id, ele) => {
 exports.getWarehouse = (params) => {
   return $form.get('packages', { params })
 }
+// 包裹快速入库 保存从未入库快速入库
 exports.submitPackage = (id, params) => {
   return $form.put(`packages/${id}`, params)
+}
+// 包裹快速入库 保存已入库的资料修改
+exports.submitEditPackage = (id, params) => {
+  return $form.put(`packages/${id}/info`, params)
 }
 exports.getWarehouseList = (params) => {
   return $form.get('packages/in-warehouse-info', { params })
@@ -479,6 +484,22 @@ exports.allOrderSn = (id, params) => {
 exports.deletePackages = (ids) => {
   return $form.put('packages/batch-delete', ids)
 }
+// 彻底删除 预报包裹
+exports.deleteDiscard = (ids) => {
+  return $form.put('packages/batch-complete-delete', ids)
+}
+// 预报包裹列表 批量恢复被弃件包裹
+exports.restoreDiscard = (ids) => {
+  return $form.put('packages/batch-restore', ids)
+}
+// 预报包裹入库 批量弃件
+exports.deleteInvalid = (ids) => {
+  return $form.put('packages/batch-invalid', ids)
+}
+// 预报包裹列表 弃件日志
+exports.getInvalidLog = (id) => {
+  return $form.get(`packages/${id}/operate-logs`)
+}
 // 获取预报包裹列表筛选数据
 exports.getAgent = () => {
   return $form.get('agents/simple-list')
@@ -645,6 +666,14 @@ exports.chooseLocalization = () => {
 // 更改当前的重量及货币配置
 exports.confirmLocalization = (params) => {
   return $form.put('localization', params)
+}
+// 小程序配置 获取如何下单
+exports.getInstructions = () => {
+  return $form.get('mini-program/instructions')
+}
+// 小程序配置 更新如何下单
+exports.updateInstructions = (params) => {
+  return $form.put('mini-program/instructions', params)
 }
 // 更多配置 获取微信配置是否启用
 exports.getPaymentOnline = () => {
@@ -893,6 +922,14 @@ exports.getCompanies = (params) => {
 // 订单 获取单条拣货日志
 exports.getOperate = (id) => {
   return $form.get(`orders/${id}/operate-logs`)
+}
+// 订单 作废 获取作废列表数据
+exports.getVoidList = (id) => {
+  return $form.get(`orders/${id}/packages`)
+}
+// 订单 作废
+exports.ordersInvalid = (id, params) => {
+  return $form.put(`orders/${id}/invalid`, params)
 }
 // 移除发货单
 exports.removeOrders = (id) => {

@@ -464,6 +464,18 @@ export default [
             }
           },
           {
+            path: '/station/edit/storage/:id/:state',
+            name: 'editWarehouse',
+            component: Storage,
+            id: 501,
+            meta: {
+              level: 3,
+              group: '货站',
+              name: '包裹快速入库',
+              parent: '/station/storage'
+            }
+          },
+          {
             path: '/station/ship',
             name: 'shipContainer',
             component: Ship,

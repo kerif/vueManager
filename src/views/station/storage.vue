@@ -134,7 +134,8 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="*快递公司">
-                <el-select v-model="user.express_company_id" clearable>
+                <el-select v-model="user.express_company_id" clearable
+                :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''">
                   <el-option
                     v-for="item in expressData"
                     :key="item.id"
@@ -423,6 +424,7 @@ export default {
           this.user.country_id = res.data.country.id
           this.areaId = this.user.warehouse_id
           this.locationId = this.areaId
+          res.data.package_pictures && (this.goodsImgList = res.data.package_pictures)
           console.log(this.locationId, 'locationId')
           this.updateAreaData()
           this.locationCNSearch()
@@ -647,33 +649,63 @@ export default {
         return this.$message.error('请选择仓库')
       } else {
         if (this.$route.params.id) { // 如果是从订单跳转过来
-          this.tableLoading = true
-          this.user.user_id = this.user.user_id.split('---')[0]
-          this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
-            this.tableLoading = false
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '操作成功',
-                message: res.msg
-              })
-              this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
-              this.user.user_id = this.user.warehouse_id = this.user.package_name = ''
-              this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
-              this.goodsImgList = []
-              this.user.props = []
-              this.user.chosen_services = []
-              this.user.location = this.user.country_id = ''
-              this.hasStore = true
-              this.$router.replace('/station/storage')
-            } else {
-              this.$message({
-                title: '操作失败',
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
+          if (this.$route.params.state === 'editWarehouse') {
+            this.tableLoading = true
+            this.user.user_id = this.user.user_id.split('---')[0]
+            this.$request.submitEditPackage(this.$route.params.id, this.user).then(res => {
+              this.tableLoading = false
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
+                this.user.user_id = this.user.warehouse_id = this.user.package_name = ''
+                this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
+                this.goodsImgList = []
+                this.user.props = []
+                this.user.chosen_services = []
+                this.user.location = this.user.country_id = ''
+                this.hasStore = true
+                this.$router.replace('/station/storage')
+              } else {
+                this.$message({
+                  title: '操作失败',
+                  message: res.msg,
+                  type: 'warning'
+                })
+              }
+            })
+          } else {
+            this.tableLoading = true
+            this.user.user_id = this.user.user_id.split('---')[0]
+            this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
+              this.tableLoading = false
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
+                this.user.user_id = this.user.warehouse_id = this.user.package_name = ''
+                this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
+                this.goodsImgList = []
+                this.user.props = []
+                this.user.chosen_services = []
+                this.user.location = this.user.country_id = ''
+                this.hasStore = true
+                this.$router.replace('/station/storage')
+              } else {
+                this.$message({
+                  title: '操作失败',
+                  message: res.msg,
+                  type: 'warning'
+                })
+              }
+            })
+          }
         } else { // 如果是添加
           this.tableLoading = true
           this.user.user_id = this.user.user_id.split('---')[0]

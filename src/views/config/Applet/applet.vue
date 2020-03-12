@@ -11,6 +11,8 @@
       <el-tab-pane label="海报配置" name="4"></el-tab-pane>
       <!-- 功能配置 -->
       <el-tab-pane label="功能配置" name="5"></el-tab-pane>
+      <!-- 如何下单 -->
+      <el-tab-pane label="如何下单" name="6"></el-tab-pane>
     </el-tabs>
     <el-row v-if="activeName === '1'">
       <el-col :span="11">
@@ -495,6 +497,7 @@
         </el-form>
       </div>
     </div>
+    <!-- 功能配置 -->
     <div class="Features-container" v-if="activeName === '5'">
       <el-form>
         <!-- 开启短信邮件验证 -->
@@ -512,11 +515,30 @@
       </el-form>
       <el-button class="save-btn" @click="saveValidate">保存</el-button>
   </div>
+  <!-- 如何下单 -->
+  <div class="Features-container" v-show="activeName === '6'">
+    <el-form label-position="top">
+      <!-- 如何下单 -->
+      <el-form-item>
+        <el-row>
+          <el-col :span="20">
+            <div id="editor" :value="params.instruction" @input="changeText"></div>
+            </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" class="save-btn" @click="saveHowOrder"
+        :loading="$store.state.btnLoading">保存</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
   </div>
 </template>
 
 <script>
 import dialog from '@/components/dialog'
+import Wangeditor from 'wangeditor'
+import baseApi from '@/lib/axios/baseApi'
 export default {
   data () {
     return {
@@ -563,6 +585,10 @@ export default {
       validateList: { // 功能配置
         validate_phone: 0
       },
+      params: {
+        instruction: ''
+      },
+      editor: null,
       rules: {
         app_id: [
           { required: true, message: '请输入AppId', trigger: 'change' }
@@ -572,6 +598,32 @@ export default {
         ]
       }
     }
+  },
+  mounted () {
+    this.editor = new Wangeditor('#editor')
+    this.editor.customConfig.menus = ['head', 'fontSize', 'fontName', 'bold', 'italic', 'underline', 'strikeThrough', 'foreColor', 'backColor', 'link', 'list', 'justify', 'quote', 'video', 'image', 'table']
+    this.editor.customConfig.onchange = (html) => {
+      this.params.instruction = html
+    }
+    this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
+    this.editor.customConfig.uploadImgParams = {}
+    this.editor.customConfig.uploadImgHeaders = {
+      'Authorization': this.$store.state.token
+    }
+    this.editor.customConfig.uploadFileName = `images[${0}][file]`
+    this.editor.customConfig.uploadImgHooks = {
+      customInsert: (insertImg, result, editor) => {
+        console.log(result)
+        if (result.ret === 1) {
+          this.$message.success('上传成功')
+          let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
+          insertImg(url)
+        }
+      }
+    }
+    this.editor.customConfig.showLinkImg = true
+    this.editor.create()
+    console.log(this.editor, 'this.editor')
   },
   created () {
     this.activeName = '1'
@@ -1098,6 +1150,39 @@ export default {
         }
       })
     },
+    // 获取如何下单
+    getHowOrder () {
+      this.$request.getInstructions().then(res => {
+        if (res.ret) {
+          // this.params.title = res.data.title
+          this.params.instruction = res.data.instruction
+          // this.params.type_id = res.data.type
+          this.editor.txt.html(this.params.instruction)
+        }
+      })
+    },
+    // 判断是新增 还是 编辑
+    changeText () {
+      this.$emit('input', this.editor.txt.html())
+    },
+    // 保存如何下单
+    saveHowOrder () {
+      this.$request.updateInstructions(this.params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getHowOrder()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     handleClick () {
       if (this.activeName === '1') {
         this.getList()
@@ -1105,11 +1190,12 @@ export default {
         this.getPick()
       } else if (this.activeName === '3') {
         this.getImg()
-        console.log('111')
       } else if (this.activeName === '4') {
         this.getBackground()
       } else if (this.activeName === '5') {
         this.getValidate()
+      } else if (this.activeName === '6') {
+        this.getHowOrder()
       }
     }
   }
@@ -1119,7 +1205,7 @@ export default {
 <style lang="scss">
 .applet-container {
    .tabLength {
-    width: 500px !important;
+    width: 560px !important;
   }
   .applet-left {
     padding: 15px;

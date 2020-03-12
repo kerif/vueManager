@@ -38,6 +38,9 @@ import lineChoose from './lineChoose.vue'
 import feeList from './addFee.vue'
 import pickingLog from './pickingLog.vue'
 import warehouseTo from './warehouseTo.vue'
+import discardList from './diascard.vue'
+import invalidLog from './invalidLog.vue'
+import voidList from './invalidOrder.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -76,6 +79,9 @@ const LineChooseController = Vue.extend(lineChoose)
 const FeeController = Vue.extend(feeList)
 const PickingLogController = Vue.extend(pickingLog)
 const WarehouseToController = Vue.extend(warehouseTo)
+const DiscardController = Vue.extend(discardList)
+const InvalidController = Vue.extend(invalidLog)
+const VoidListController = Vue.extend(voidList)
 
 const mixin = {
   data () {
@@ -339,6 +345,27 @@ function initInstance (type) {
     // 修改所属仓库
     case 'warehouseTo':
       instance = new WarehouseToController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 设为弃件
+    case 'discardList':
+      instance = new DiscardController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 预报包裹列表 弃件包裹日志
+    case 'invalidLog':
+      instance = new InvalidController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 作废订单
+    case 'voidList':
+      instance = new VoidListController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
