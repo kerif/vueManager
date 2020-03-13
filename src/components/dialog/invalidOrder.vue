@@ -26,7 +26,7 @@
         <!-- 实际支付金额 -->
         <el-form-item :label="'实际支付金额' + this.localization.currency_unit"
         v-if="activeName === '3'">
-          <el-input v-model="this.actualFee" disabled></el-input>
+          <el-input v-model="this.payAmount" disabled></el-input>
         </el-form-item>
         <!-- 退款金额 -->
         <el-form-item :label="'*退款金额' + this.localization.currency_unit">
@@ -79,7 +79,7 @@ export default {
       voidList: [],
       baleImgList: [],
       activeName: '',
-      actualFee: '',
+      payAmount: '',
       localization: {}
     }
   },
@@ -108,7 +108,7 @@ export default {
         return this.$message.error('请输入问题原因')
       } else if (this.ruleForm.refund_amount === '') {
         return this.$message.error('请输入退款金额')
-      } else if (this.ruleForm.refund_amount > this.actualFee) {
+      } else if (this.ruleForm.refund_amount > this.payAmount) {
         return this.$message.error('退款金额不能大于实际支付金额')
       }
       this.$request.ordersInvalid(this.id, this.ruleForm).then(res => {
@@ -185,7 +185,7 @@ export default {
     },
     init () {
       this.getList()
-      console.log(this.actualFee, 'actualFee')
+      console.log(this.payAmount, 'payAmount')
     }
   }
 }
