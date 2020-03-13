@@ -37,6 +37,13 @@
          <span>{{form.address && form.address.postcode}}</span>
       </el-col>
     </el-row>
+    <el-row class="container-center" :gutter="20">
+     <!-- 清关编码 -->
+      <el-col :span="7">
+        <span class="leftWidth">清关编码</span>
+        <span>{{form.clearance_code}}</span>
+      </el-col>
+    </el-row>
     </div>
     <div class="receiverMSg">
     <h4>运单详情</h4>

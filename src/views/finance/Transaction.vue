@@ -51,7 +51,7 @@
       <!-- 相关订单 -->
       <el-table-column label="相关订单" prop="order_sn"></el-table-column>
       <!-- 第三方流水号 -->
-      <el-table-column label="第三方流水号" prop="outer_sn"></el-table-column>
+      <el-table-column label="流水号" prop="serial_no"></el-table-column>
       <!-- 支付时间 -->
       <el-table-column label="支付时间" prop="created_at"></el-table-column>
       <el-table-column label="操作">

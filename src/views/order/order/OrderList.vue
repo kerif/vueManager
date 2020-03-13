@@ -68,7 +68,8 @@
       :data="oderData"
       @selection-change="selectionChange"
       v-loading="tableLoading">
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
+      <el-table-column type="selection" width="55" align="center"
+      v-if="activeName === '1' || activeName === '2' || activeName === '6'"></el-table-column>
       <!-- 客户ID -->
       <el-table-column label="客户ID">
         <template slot-scope="scope">
@@ -279,6 +280,7 @@ export default {
         status: this.status
         // warehouse: this.agent_name,
       }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.$request.getWarehouse(params).then(res => {
         this.tableLoading = false
         if (res.ret) {

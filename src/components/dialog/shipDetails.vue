@@ -1,5 +1,5 @@
 <template>
-<el-dialog  :visible.sync="show" title="发货单详情" width="70%"                            class="ship-details-container" @close="clear">
+<el-dialog  :visible.sync="show" title="发货单详情" width="70%"            class="ship-details-container" @close="clear">
   <div class="import-list">
     <el-button class="btn-deep-purple" @click="uploadList">导出清单</el-button>
   </div>
@@ -108,7 +108,7 @@ export default {
     },
     // 导出清单
     uploadList () {
-      this.$request.uploadExcel(this.id).then(res => {
+      this.$request.uploadAloneExcel(this.id).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           // window.location.href = this.urlExcel

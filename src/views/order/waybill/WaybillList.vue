@@ -179,7 +179,7 @@
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">移除发货单
           </el-button>
           <!-- 作废 -->
-          <el-button class="btn-light-red detailsBtn" @click="invalidOrder(scope.row.id, activeName)"
+          <el-button class="btn-light-red detailsBtn" @click="invalidOrder(scope.row.id, activeName, scope.row.actual_payment_fee)"
           v-if="activeName === '1' || activeName === '2' || activeName === '3'">作废</el-button>
           <!-- 拣货日志 -->
           <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">拣货日志
@@ -493,8 +493,8 @@ export default {
       })
     },
     // 作废
-    invalidOrder (id, activeName) {
-      dialog({ type: 'voidList', id: id, activeName: activeName }, () => {
+    invalidOrder (id, activeName, actualFee) {
+      dialog({ type: 'voidList', id: id, activeName: activeName, actualFee: actualFee }, () => {
         this.getList()
       })
     },
