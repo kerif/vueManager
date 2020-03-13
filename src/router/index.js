@@ -8,7 +8,7 @@ const loadonDemand = (path) => {
 
 // 登录
 const Login = loadonDemand('login')
-const NotFound = loadonDemand('404')
+// const NotFound = loadonDemand('404')
 
 Vue.use(Router)
 
@@ -21,8 +21,13 @@ const constantRouterMap = [
   {
     path: '*',
     name: 'NotFound',
-    component: NotFound
+    redirect: '/login'
   }
+  // {
+  //   path: '*',
+  //   name: 'NotFound',
+  //   component: NotFound
+  // }
 ]
 
 const router = new Router({
