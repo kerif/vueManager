@@ -277,10 +277,12 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        status: this.status
-        // warehouse: this.agent_name,
+        status: this.status,
+        warehouse: this.agent_name
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
       this.$request.getWarehouse(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
