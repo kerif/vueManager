@@ -406,7 +406,8 @@ export default {
               title: '操作成功',
               message: res.msg
             })
-            this.$router.push({ name: 'linelist' })
+            // this.$router.push({ name: 'linelist' })
+            this.$router.go(-1)
           } else {
             this.$message({
               message: res.msg,
@@ -424,7 +425,8 @@ export default {
               title: '操作成功',
               message: res.msg
             })
-            this.$router.push({ name: 'linelist' })
+            // this.$router.push({ name: 'linelist' })
+            this.$router.go(-1)
           } else {
             this.$message({
               message: res.msg,
