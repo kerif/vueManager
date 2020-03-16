@@ -170,7 +170,7 @@ export default {
     }
   },
   created () {
-    this.getList()
+    // this.getList()
     // 获取线路名称筛选列表
     this.getColumnList('cn_name', 'lineNameColumn')
     // 获取支持仓库筛选列表
@@ -185,6 +185,35 @@ export default {
     this.getColumnList('first_money', 'firstMoneyColumn')
     // 获取续重筛选列表
     this.getColumnList('next_weight', 'nextWeightColumn')
+    let routeQuery = this.$route.query
+    if (routeQuery.lineName) {
+      this.query.lineName = decodeURIComponent(routeQuery.lineName).split(',')
+    }
+    if (routeQuery.enabled) {
+      this.query.enabled = Number(routeQuery.enabled)
+    }
+    if (routeQuery.firstWeight) {
+      this.query.firstWeight = routeQuery.firstWeight.split(',').map(item => Number(item))
+    }
+    if (routeQuery.firstMoney) {
+      this.query.firstMoney = routeQuery.firstMoney.split(',').map(item => Number(item))
+    }
+    if (routeQuery.nextWeight) {
+      this.query.nextWeight = routeQuery.nextWeight.split(',').map(item => Number(item))
+    }
+    if (routeQuery.referenceTime) {
+      this.query.referenceTime = decodeURIComponent(routeQuery.referenceTime).split(',')
+    }
+    if (routeQuery.countries) {
+      this.query.countries = decodeURIComponent(routeQuery.countries).split(',')
+    }
+    if (routeQuery.warehouses) {
+      this.query.warehouses = decodeURIComponent(routeQuery.warehouses).split(',')
+    }
+    if (routeQuery.highSearch) {
+      this.highSearch = !!Number(routeQuery.highSearch)
+    }
+    this.onSearch()
   },
   methods: {
     getList (query = '') {
@@ -350,6 +379,35 @@ export default {
     },
     getSearchValue (key, value) {
       return `${key}:${value.join(',')};asc`
+    }
+  },
+  watch: {
+    'query.enabled': function (val) {
+      this.handleQueryChange('enabled', val)
+    },
+    'query.firstWeight': function (val) {
+      this.handleQueryChange('firstWeight', val.join(','))
+    },
+    'query.firstMoney': function (val) {
+      this.handleQueryChange('firstMoney', val.join(','))
+    },
+    'query.nextWeight': function (val) {
+      this.handleQueryChange('nextWeight', val.join(','))
+    },
+    'query.lineName': function (val) {
+      this.handleQueryChange('lineName', encodeURIComponent(val.join(',')))
+    },
+    'query.referenceTime': function (val) {
+      this.handleQueryChange('referenceTime', encodeURIComponent(val.join(',')))
+    },
+    'query.countries': function (val) {
+      this.handleQueryChange('countries', encodeURIComponent(val.join(',')))
+    },
+    'query.warehouses': function (val) {
+      this.handleQueryChange('warehouses', encodeURIComponent(val.join(',')))
+    },
+    highSearch (val) {
+      this.handleQueryChange('highSearch', ~~val)
     }
   }
 }
