@@ -516,7 +516,7 @@
       <el-button class="save-btn" @click="saveValidate">保存</el-button>
   </div>
   <!-- 如何下单 -->
-  <div class="Features-container" v-show="activeName === '6'">
+  <div class="how-container" v-show="activeName === '6'">
     <el-form label-position="top">
       <!-- 如何下单 -->
       <el-form-item>
@@ -1435,6 +1435,13 @@ export default {
   .Features-container {
      background-color: #fff !important;
      padding: 20px;
+  }
+  .how-container {
+     background-color: #fff !important;
+     padding: 20px;
+     .w-e-text-container {
+       height: 600px !important;
+     }
   }
 }
 </style>
