@@ -496,6 +496,7 @@ export default {
     invalidOrder (id, activeName, payAmount) {
       dialog({ type: 'voidList', id: id, activeName: activeName, payAmount: payAmount }, () => {
         this.getList()
+        this.getCounts()
       })
     },
     // 添加转运快递单号
