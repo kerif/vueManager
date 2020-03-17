@@ -943,6 +943,10 @@ exports.deleteShip = (id) => {
 exports.uploadExcel = (ids) => {
   return $form.post(`shipments/order-export-batch`, ids)
 }
+// 发货单 详情批量导出发货单
+exports.uploadShipmentLabel = (id, ids) => {
+  return $form.post(`shipments/${id}/order-shipment-label`, ids)
+}
 // 详情里的导出
 exports.uploadAloneExcel = (id) => {
   return $form.get(`shipments/${id}/order-export`)

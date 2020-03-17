@@ -3,8 +3,8 @@
   <div class="import-list">
     <el-button class="btn-deep-purple" @click="uploadList">导出清单</el-button>
   </div>
-    <el-table :data="shipData" border>
-        <!-- <el-table-column label="客户ID" prop="user_id"></el-table-column> -->
+    <el-table :data="shipData" border  @selection-change="selectionChange">
+       <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="订单号">
             <template slot-scope="scope">
                 <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
@@ -27,6 +27,11 @@
                 <el-button @click="removeShip(scope.row.id)" class="btn-light-red">移除发货单</el-button>
             </template>
         </el-table-column>
+        <template slot="append">
+        <div class="append-box">
+          <el-button size="small" class="btn-main" @click="deleteData">导出发货单</el-button>
+        </div>
+      </template>
     </el-table>
     <!-- <div class="pagination-box">
     <nle-pagination :pageParams="page_params"></nle-pagination>
@@ -45,7 +50,9 @@ export default {
     return {
       shipData: [],
       localization: {},
-      status: ''
+      status: '',
+      deleteNum: [],
+      urlExcel: ''
     }
   },
   mounted () {
@@ -69,6 +76,42 @@ export default {
           })
         }
       })
+    },
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 批量导出
+    deleteData () {
+      console.log(this.deleteNum, 'this.deleteNum')
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error('请选择')
+      }
+      this.$request.uploadShipmentLabel(this.id, {
+        order_ids: this.deleteNum
+      }).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          window.open(this.urlExcel)
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+      // this.$confirm(`是否确认导出？`, '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+      // })
     },
     // 跳转至订单 运单
     goOrder (orderSn, status) {

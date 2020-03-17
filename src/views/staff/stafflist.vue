@@ -50,7 +50,7 @@
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
-        prop="created_at"
+        prop="last_login_at"
         label="最后登录时间">
       </el-table-column>
       <!-- 操作 -->

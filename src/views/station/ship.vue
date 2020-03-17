@@ -225,29 +225,30 @@ export default {
       })
     },
     // 导出清单
-    unloadShip (id) {
-      this.$request.uploadExcel(id).then(res => {
-        if (res.ret) {
-          this.urlExcel = res.data.url
-          window.open(this.urlExcel)
-          this.$notify({
-            title: '操作成功',
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: '操作失败',
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
-    },
+    // unloadShip (id) {
+    //   this.$request.uploadExcel(id).then(res => {
+    //     if (res.ret) {
+    //       this.urlExcel = res.data.url
+    //       window.open(this.urlExcel)
+    //       this.$notify({
+    //         title: '操作成功',
+    //         message: res.msg,
+    //         type: 'success'
+    //       })
+    //     } else {
+    //       this.$notify({
+    //         title: '操作失败',
+    //         message: res.msg,
+    //         type: 'warning'
+    //       })
+    //     }
+    //   })
+    // },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
     },
+    // 导出清单
     deleteData () {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
@@ -265,7 +266,7 @@ export default {
             this.urlExcel = res.data.url
             window.open(this.urlExcel)
             this.$notify({
-              title: '操,作成功',
+              title: '操作成功',
               message: res.msg,
               type: 'success'
             })
