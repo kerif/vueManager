@@ -113,9 +113,9 @@
       <!-- 预计重量kg -->
       <el-table-column :label="'预计重量' + this.localization.weight_unit" prop="except_weight"></el-table-column>
       <!-- 称重重量kg -->
-      <el-table-column :label="'称重重量' + this.localization.weight_unit" prop="actual_weight"></el-table-column>
+      <el-table-column :label="'称重重量' + this.localization.weight_unit" prop="pack_weight"></el-table-column>
       <!-- 体积重量 -->
-       <el-table-column :label="'体积重量' + this.localization.weight_unit" prop="pack_weight"></el-table-column>
+       <el-table-column :label="'体积重量' + this.localization.weight_unit" prop="actual_weight"></el-table-column>
       <!-- 尺寸（长宽高cm） -->
       <el-table-column :label="'尺寸（长宽高）' + this.localization.length_unit">
         <template slot-scope="scope">
