@@ -182,7 +182,6 @@
                   <span class="el-icon-question icon-question"></span>
                 </el-tooltip>
               </div>
-                <!-- <el-input v-model="user.location" placeholder="请输入存放货位"></!-->
                 <el-autocomplete
                   :disabled="this.user.warehouse_id === ''"
                   :fetch-suggestions="locationCNSearch"

@@ -35,6 +35,9 @@
     </div>
       </search-group>
     </div>
+    <div class="select-box">
+      <add-btn @click.native="addVip">添加</add-btn>
+    </div>
     <el-table :data="rechargeList" stripe border class="data-list"
     v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
@@ -80,9 +83,11 @@
   </div>
 </template>
 <script>
+import dialog from '@/components/dialog'
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import AddBtn from '@/components/addBtn'
 export default {
   data () {
     return {
@@ -115,7 +120,8 @@ export default {
   name: 'rechargeList',
   components: {
     SearchGroup,
-    NlePagination
+    NlePagination,
+    AddBtn
   },
   created () {
     this.getList()
@@ -214,6 +220,11 @@ export default {
           })
         }
       })
+    },
+    addVip () {
+      dialog({ type: 'rechargeAdd' }, () => {
+        this.getList()
+      })
     }
   }
 }
@@ -231,6 +242,9 @@ export default {
     margin-left: 10px;
     width: 150px;
     display: inline-block;
+  }
+  .select-box {
+    overflow: hidden;
   }
 }
 </style>

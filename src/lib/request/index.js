@@ -249,6 +249,18 @@ exports.getRechargeType = () => {
 exports.rechargePassed = (id, params) => {
   return $form.put(`recharge-records/${id}/approved`, params)
 }
+// 充值记录 新增 获取可用充值方式
+exports.getRechargePaymentType = () => {
+  return $form.get('recharge-records/enabled-payment-types')
+}
+// 充值记录 新增 获取客户id
+exports.AutoRecords = (params) => {
+  return $form.get('recharge-records/user-search', { params })
+}
+// 充值记录 新增
+exports.addRecords = (params) => {
+  return $form.post('recharge-records', params)
+}
 // 代理管理 审核拒绝
 exports.rechargeReject = (id, params) => {
   return $form.put(`recharge-records/${id}/refused`, params)
@@ -687,6 +699,10 @@ exports.changePayment = (status) => {
 exports.getPayments = () => {
   return $form.get('payments')
 }
+// 更多配置 获取模版配置
+exports.getEmail = () => {
+  return $form.get('email-templates')
+}
 // 添加转账支付方式
 exports.addPayments = (params) => {
   return $form.post('payments', params)
@@ -726,6 +742,42 @@ exports.getLogistics = () => {
 // 更改 物流跟踪配置
 exports.editLogistics = (params) => {
   return $form.put('configs', params)
+}
+// 更多配置 服务配置 检测快递100
+exports.verifyKd100 = (params) => {
+  return $form.post(`configs/verify-kd100`, params)
+}
+// 更多配置 服务配置 检测trackingmore 配置
+exports.verifyTrackingMore = (params) => {
+  return $form.post(`configs/verify-trackingmore`, params)
+}
+// 更多配置 服务配置 检测邮件发件信息配置
+exports.verifySmtp = (params) => {
+  return $form.post(`configs/verify-smtp`, params)
+}
+// 更多配置 服务配置 检测Juhe
+exports.verifyJuhe = (params) => {
+  return $form.post(`configs/verify-juhe`, params)
+}
+// 新增 邮件模版
+exports.addEmail = (params) => {
+  return $form.post('email-templates', params)
+}
+// 邮件模版 获取单条编辑 详细
+exports.getAloneEmail = (id) => {
+  return $form.get(`email-templates/${id}`)
+}
+// 邮件模版 删除单条
+exports.deleteAloneEmail = (id) => {
+  return $form.delete(`email-templates/${id}`)
+}
+// 邮件模版 获取单条编辑 更新
+exports.updateAloneEmail = (id, params) => {
+  return $form.put(`email-templates/${id}`, params)
+}
+// 邮件模版 开发或关闭
+exports.closeEmail = (id, status) => {
+  return $form.put(`email-templates/${id}/status/${status}`)
 }
 // 更多配置 订单获取增值服务
 exports.getValue = (params) => {
@@ -858,6 +910,34 @@ exports.closeVideo = (id, status) => {
 // 添加抵用券
 exports.addCoupons = (params) => {
   return $form.post('coupons', params)
+}
+// 营销管理 渠道管理列表
+exports.getChannel = () => {
+  return $form.get('channels')
+}
+// 新增 渠道管理
+exports.addChannel = (params) => {
+  return $form.post('channels', params)
+}
+// 获取 单条渠道管理数据
+exports.getAloneChannel = (id) => {
+  return $form.get(`channels/${id}`)
+}
+// 更新 单条渠道管理
+exports.updateChannel = (id, params) => {
+  return $form.put(`channels/${id}`, params)
+}
+// 删除 单条渠道
+exports.deleteChannel = (id) => {
+  return $form.delete(`channels/${id}`)
+}
+// 获取结算方式
+exports.getSettlement = () => {
+  return $form.get('channels/settlement-methods')
+}
+// 营销管理 下单排行榜
+exports.getStatistics = (params) => {
+  return $form.get('statistics/user-invite-data', { params })
 }
 // 用户分发优惠券
 exports.addLaunch = (id, ids) => {

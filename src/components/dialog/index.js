@@ -41,6 +41,7 @@ import warehouseTo from './warehouseTo.vue'
 import discardList from './diascard.vue'
 import invalidLog from './invalidLog.vue'
 import voidList from './invalidOrder.vue'
+import rechargeAdd from './rechargeAdd.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -82,6 +83,7 @@ const WarehouseToController = Vue.extend(warehouseTo)
 const DiscardController = Vue.extend(discardList)
 const InvalidController = Vue.extend(invalidLog)
 const VoidListController = Vue.extend(voidList)
+const RechargeAddController = Vue.extend(rechargeAdd)
 
 const mixin = {
   data () {
@@ -366,6 +368,13 @@ function initInstance (type) {
     // 作废订单
     case 'voidList':
       instance = new VoidListController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 充值记录 新增
+    case 'rechargeAdd':
+      instance = new RechargeAddController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

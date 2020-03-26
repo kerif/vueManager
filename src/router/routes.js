@@ -66,6 +66,8 @@ const AppletConfiguration = loadonDemand('config/Applet/applet')
 const PaymentManagement = loadonDemand('config/Payment/payment')
 // 配置 更多配置 商品分类管理 风险提示
 const EditSick = loadonDemand('config/Payment/sickTips')
+// 更多配置 修改或新增邮件模版
+const AddEditEmail = loadonDemand('config/Payment/emailAddEdit')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
 // 发货单
@@ -98,6 +100,14 @@ const Notes = loadonDemand('marketing/Voucher/notes')
 const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
 // 营销管理 视频管理
 const videoManagement = loadonDemand('marketing/video/videoMana')
+// 营销管理 渠道管理
+const channelManagement = loadonDemand('marketing/channel/channelList')
+// 营销管理 统计报表
+const reportList = loadonDemand('marketing/report/report')
+// 营销管理 新增或编辑渠道管理
+const AddEditChannel = loadonDemand('marketing/channel/AddEditChannel')
+// 营销管理 引流列表
+const drainageList = loadonDemand('marketing/channel/drainageList')
 // 客服中心 投诉建议列表
 const SuggestList = loadonDemand('customer/suggest/Suggest')
 // 客服中心 评价管理
@@ -691,6 +701,30 @@ export default [
               name: '风险提示',
               parent: '/config/payment'
             }
+          },
+          {
+            path: '/config/payment/add',
+            component: AddEditEmail,
+            name: 'emailAdd',
+            id: 605,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '新增邮件模版',
+              parent: '/config/payment'
+            }
+          },
+          {
+            path: '/config/payment/edit/:id',
+            component: AddEditEmail,
+            name: 'emailEdit',
+            id: 605,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '修改邮件模版',
+              parent: '/config/payment'
+            }
           }
         ]
       },
@@ -833,6 +867,64 @@ export default [
               level: 2,
               group: '营销管理',
               name: '视频管理'
+            }
+          },
+          {
+            path: '/marketing/channelManagement',
+            name: 'channel',
+            component: channelManagement,
+            id: 804,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '渠道管理'
+            }
+          },
+          {
+            path: '/marketing/add/channel',
+            name: 'addChannel',
+            component: AddEditChannel,
+            id: 804,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '新增渠道管理',
+              parent: '/marketing/channelManagement'
+            }
+          },
+          {
+            path: '/marketing/edit/channel/:id',
+            name: 'editChannel',
+            component: AddEditChannel,
+            id: 804,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '修改渠道管理',
+              parent: '/marketing/channelManagement'
+            }
+          },
+          {
+            path: '/marketing/drainage/:id',
+            name: 'drainageList',
+            component: drainageList,
+            id: 804,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '引流列表',
+              parent: '/marketing/channelManagement'
+            }
+          },
+          {
+            path: '/marketing/report',
+            name: 'reportList',
+            component: reportList,
+            id: 805,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '统计报表'
             }
           }
         ]

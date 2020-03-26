@@ -1,0 +1,181 @@
+<template>
+  <div class="drainage-container">
+      <div class="poster-left">
+        <p class="left-name">渠道名称</p><span>微信公众号一期推广</span>
+        <p class="left-name">创建日期</p><span>2020-11-11 11:11:11</span>
+        <div class="code-font">专属小程序码</div>
+        <div class="left-bottom">
+          <img src="../../../assets/code.png">
+        </div>
+        <div class="upload-btn">
+          <el-button type="primary">下载</el-button>
+          <p class="share">推荐将小程序码放在公众号或广告插图进行推广</p>
+        </div>
+      </div>
+      <div class="poster-right">
+      <div>
+        <search-group v-model="page_params.keyword" @search="goSearch">
+          <el-date-picker
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            @change="onTime"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+        </el-date-picker>
+        </search-group>
+      </div>
+      <el-table :data="transactionList" stripe border class="data-list"
+      v-loading="tableLoading">
+        <el-table-column type="index" :index="1"></el-table-column>
+        <!-- 统计日期 -->
+        <el-table-column label="统计日期" prop="user_id"></el-table-column>
+        <!-- 注册用户 -->
+        <el-table-column label="注册用户" prop="payment_type_name"> </el-table-column>
+        <!-- 邮箱激活 -->
+        <el-table-column label="邮箱激活" prop="order_sn"></el-table-column>
+        <!-- 手机号激活 -->
+        <el-table-column label="手机号激活" prop="order_sn"></el-table-column>
+        <!-- 预报量 -->
+        <el-table-column label="预报量" prop="serial_no"></el-table-column>
+        <!-- 转化率 -->
+        <el-table-column label="转化率%" prop="created_at"></el-table-column>
+      </el-table>
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    </div>
+  </div>
+</template>
+
+<script>
+import { SearchGroup } from '@/components/searchs'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
+export default {
+  mixins: [pagination],
+  name: 'drainageList',
+  components: {
+    SearchGroup,
+    NlePagination
+  },
+  data () {
+    return {
+      timeList: [],
+      transactionList: [],
+      begin_date: '',
+      end_date: '',
+      tableLoading: false,
+      localization: {}
+    }
+  },
+  created () {
+  },
+  methods: {
+    getList () {
+      this.tableLoading = true
+      let params = {
+        page: this.page_params.page,
+        size: this.page_params.size,
+        payment_type: this.type
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.getTransaction(params).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.transactionList = res.data
+          this.localization = res.localization
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onTime (val) {
+      this.begin_date = val ? val[0] : ''
+      this.end_date = val ? val[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
+      this.getList()
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.drainage-container {
+  .poster-left {
+    width:330px;
+    height: 580px;
+    overflow: hidden;
+    vertical-align: top;
+    display: inline-block;
+    // text-align: center;
+    background-color: #fff;
+    padding: 20px 30px;
+    position: relative;
+    margin-right:40px;
+    .left-top {
+      img {
+        width: 80px;
+        height: 80px;
+        padding: 5px;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+      }
+    }
+  }
+  .poster-right {
+    width: calc(100%-430px);
+    width: -moz-calc(100% - 430px);
+    width: -webkit-calc(100% - 430px);
+    vertical-align: top;
+    display: inline-block;
+    // background-color: #fff;
+    padding:15px;
+    height: 616px;
+    box-sizing: border-box;
+  }
+  .left-name {
+    display: inline-block;
+    margin-right: 30px;
+  }
+  .code-font {
+    margin-top: 60px;
+  }
+  .left-bottom {
+    // position: absolute;
+    // bottom: 170px;
+    // left: 50%;
+    // transform: translateX(-50%);
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 40px;
+    img {
+      width:180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+  }
+  .upload-btn {
+    text-align: center;
+    .el-button--primary {
+      width: 50%;
+    }
+  }
+  .share {
+    font-size: 13px;
+    color: gray;
+  }
+}
+</style>

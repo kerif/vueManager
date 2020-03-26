@@ -27,7 +27,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <!-- 其余支付 -->
+          <!-- 转账支付 -->
           <div class="select-box">
           <h4>转账支付</h4>
           <add-btn @click.native="addTransfer">添加支付类型</add-btn>
@@ -64,49 +64,61 @@
             label-position="left" label-width="150px">
             <!-- Customer ID -->
             <el-form-item label="Customer ID" prop="kd100_app_id">
-              <el-input v-model="logisticsData.kd100_app_id" placeholder="请输入Customer ID"></el-input>
+              <el-input v-model="logisticsData.kd100_app_id" placeholder="请输入Customer ID" class="logistic-sty"></el-input>
             </el-form-item>
             <!-- 授权KEY -->
             <el-form-item label="授权KEY" prop="kd100_app_key">
-              <el-input v-model="logisticsData.kd100_app_key" placeholder="请输入授权KEY"></el-input>
+              <el-input v-model="logisticsData.kd100_app_key" placeholder="请输入授权KEY" class="logistic-sty"></el-input>
+              <div class="test-btn">
+                <el-button class="btn-light-red" @click="testExpress">测试</el-button>
+              </div>
             </el-form-item>
           <div class="form-title">Tracking more配置</div>
           <el-form-item label="Appkey" prop="trackingmore_key">
-            <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret"></el-input>
+            <el-input v-model="logisticsData.trackingmore_key" placeholder="请输入AppSecret" class="logistic-sty"></el-input>
+            <div class="test-btn">
+              <el-button class="btn-light-red" @click="testTracking">测试</el-button>
+            </div>
           </el-form-item>
           <div class="form-title">邮箱发件信息配置</div>
           <el-form-item label="发件人邮件" prop="from_address">
-            <el-input v-model="logisticsData.from_address" placeholder="请输入发件人邮件"></el-input>
+            <el-input v-model="logisticsData.from_address" placeholder="请输入发件人邮件" class="logistic-sty"></el-input>
           </el-form-item>
             <el-form-item label="发件人名称" prop="from_name">
-              <el-input v-model="logisticsData.from_name" placeholder="请输入发件人名称"></el-input>
+              <el-input v-model="logisticsData.from_name" placeholder="请输入发件人名称" class="logistic-sty"></el-input>
             </el-form-item>
             <el-form-item label="SMTP域名" prop="host">
-              <el-input v-model="logisticsData.host" placeholder="请输入SMTP域名"></el-input>
+              <el-input v-model="logisticsData.host" placeholder="请输入SMTP域名" class="logistic-sty"></el-input>
             </el-form-item>
             <el-form-item label="SMTP端口" prop="port">
-              <el-input v-model="logisticsData.port" placeholder="请输入SMTP端口"></el-input>
+              <el-input v-model="logisticsData.port" placeholder="请输入SMTP端口" class="logistic-sty"></el-input>
             </el-form-item>
             <el-form-item label="发件人用户名" prop="username">
-              <el-input v-model="logisticsData.username" placeholder="请输入发件人用户名"></el-input>
+              <el-input v-model="logisticsData.username" placeholder="请输入发件人用户名" class="logistic-sty"></el-input>
             </el-form-item>
             <el-form-item label="发件人密码" prop="password">
-              <el-input type="password" v-model="logisticsData.password" placeholder="请输入发件人密码"></el-input>
+              <el-input type="password" v-model="logisticsData.password" placeholder="请输入发件人密码" class="logistic-sty"></el-input>
+              <div class="test-btn">
+                <el-button class="btn-light-red" @click="testSmtp">测试</el-button>
+              </div>
             </el-form-item>
             <el-form-item label="加密方式">
-              <el-radio-group v-model="logisticsData.encryption">
+              <el-radio-group v-model="logisticsData.encryption" class="logistic-sty">
                 <el-radio :label="0">无</el-radio>
                 <el-radio :label="1">TLS加密</el-radio>
                 <el-radio :label="2">SSL加密</el-radio>
               </el-radio-group>
-              <!-- <el-checkbox v-model="logisticsData.encryption">TLS加密</el-checkbox> -->
             </el-form-item>
           <div class="form-title">短信配置——聚合</div>
           <el-form-item label="Appkey" prop="juhe_key">
-            <el-input v-model="logisticsData.juhe_key" placeholder="请输入Appkey"></el-input>
+            <el-input v-model="logisticsData.juhe_key" placeholder="请输入Appkey"
+            class="logistic-sty"></el-input>
           </el-form-item>
             <el-form-item label="发送验证码模板ID" prop="juhe_tpl_id">
-              <el-input v-model="logisticsData.juhe_tpl_id" placeholder="请输入发送验证码模板ID"></el-input>
+              <el-input v-model="logisticsData.juhe_tpl_id" placeholder="请输入发送验证码模板ID" class="logistic-sty"></el-input>
+              <div class="test-btn">
+                <el-button class="btn-light-red" @click="testJuhe">测试</el-button>
+              </div>
             </el-form-item>
           </el-form>
           <div>
@@ -414,6 +426,46 @@
           </el-table>
           <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
         </el-tab-pane>
+        <!-- 邮件模版 -->
+        <el-tab-pane label="邮件模版" name="8">
+          <div class="select-box">
+          <add-btn router="emailAdd">添加邮件模版</add-btn>
+        </div>
+          <el-table :data="emailData" v-loading="tableLoading" class="data-list"
+          border stripe>
+            <el-table-column type="index"></el-table-column>
+            <!-- 模版类型 -->
+            <el-table-column label="模版类型">
+              <template slot-scope="scope">
+                <span v-if="scope.row.type === 1">绑定邮箱</span>
+                <span v-if="scope.row.type === 2">更改邮箱</span>
+                <span v-if="scope.row.type === 3">邮箱登录</span>
+              </template>
+            </el-table-column>
+            <!-- 邮件标题 -->
+            <el-table-column label="邮件标题" prop="title"></el-table-column>
+            <el-table-column label="是否启用">
+              <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.enabled"
+                  @change="changeEmail($event, scope.row.enabled, scope.row.id)"
+                  active-text="开"
+                  inactive-text="关"
+                  active-color="#13ce66"
+                  inactive-color="gray">
+                </el-switch>
+              </template>
+            </el-table-column>
+            <!-- 创建时间 -->
+            <el-table-column label="创建时间" prop="created_at"></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button class="btn-dark-green" @click="editEmail(scope.row.id)">编辑</el-button>
+                <el-button class="btn-light-red" @click="deleteEmail(scope.row.id)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
       </el-tabs>
   </div>
 </template>
@@ -435,6 +487,11 @@ export default {
         {
           type: '微信支付',
           enabled: ''
+        }
+      ],
+      emailData: [
+        {
+          enabled: true
         }
       ],
       transferData: [
@@ -595,6 +652,26 @@ export default {
         }
       })
     },
+    // 邮件模版 开启或关闭
+    changeEmail (event, enabled, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.closeEmail(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getEmail()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 删除单条转账支付
     deleteTransfer (id) {
       this.$confirm(`您真的要删除转账支付吗？`, '提示', {
@@ -624,6 +701,40 @@ export default {
     addTransfer () {
       dialog({ type: 'addTransfer', state: 'add' }, () => {
         this.getPayment()
+      })
+    },
+    // 编辑邮件模版
+    editEmail (id) {
+      this.$router.push({
+        name: 'emailEdit',
+        params: {
+          id: id
+        }
+      })
+    },
+    // 删除单条邮件模版
+    deleteEmail (id) {
+      this.$confirm(`您真的要删除吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteAloneEmail(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: '操作成功',
+              message: res.msg,
+              type: 'success'
+            })
+            this.getEmail()
+          } else {
+            this.$notify({
+              title: '操作失败',
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 编辑转账支付配置
@@ -1007,6 +1118,21 @@ export default {
         }
       })
     },
+    // 获取邮件模版
+    getEmail () {
+      this.tableLoading = true
+      this.$request.getEmail().then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.emailData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 商品分类管理 开启或关闭 是否显示
     changeShow (event, id) {
       console.log(typeof (event), '我是event')
@@ -1141,6 +1267,8 @@ export default {
       } else if (this.activeName === '7') {
         this.page_params.page = 1
         this.getList()
+      } else if (this.activeName === '8') {
+        this.getEmail()
       }
     },
     // 上传打包照片
@@ -1231,6 +1359,120 @@ export default {
           })
         }
       })
+    },
+    // 检测快递100
+    testExpress () {
+      if (this.logisticsData.kd100_app_id === '') {
+        return this.$message.error('请输入Customer ID')
+      } else if (this.logisticsData.kd100_app_key === '') {
+        return this.$message.error('请输入授权KEY')
+      }
+      this.$request.verifyKd100({
+        kd100_app_id: this.logisticsData.kd100_app_id,
+        kd100_app_key: this.logisticsData.kd100_app_key
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 检测Tracking more
+    testTracking () {
+      if (this.logisticsData.trackingmore_key === '') {
+        return this.$message.error('请输入Customer ID')
+      }
+      this.$request.verifyTrackingMore({
+        trackingmore_key: this.logisticsData.trackingmore_key
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 检测邮件配置
+    testSmtp () {
+      if (this.logisticsData.from_address === '') {
+        return this.$message.error('请输入发件人邮件')
+      } else if (this.logisticsData.from_name === '') {
+        return this.$message.error('请输入发件人名称')
+      } else if (this.logisticsData.host === '') {
+        return this.$message.error('请输入SMTP域名')
+      } else if (this.logisticsData.port === '') {
+        return this.$message.error('请输入SMTP端口')
+      } else if (this.logisticsData.username === '') {
+        return this.$message.error('请输入发件人用户名')
+      } else if (this.logisticsData.password === '') {
+        return this.$message.error('请输入发件人密码')
+      }
+      this.$request.verifySmtp({
+        host: this.logisticsData.host,
+        port: this.logisticsData.port,
+        encryption: this.logisticsData.encryption,
+        username: this.logisticsData.username,
+        password: this.logisticsData.password,
+        from_address: this.logisticsData.from_address,
+        from_name: this.logisticsData.from_name
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 检测Juhe
+    testJuhe () {
+      if (this.logisticsData.juhe_key === '') {
+        return this.$message.error('请输入Appkey')
+      } else if (this.logisticsData.juhe_tpl_id === '') {
+        return this.$message.error('请输入发送验证码模板ID')
+      }
+      this.$request.verifyJuhe({
+        juhe_key: this.logisticsData.juhe_key,
+        juhe_tpl_id: this.logisticsData.juhe_tpl_id
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }
@@ -1246,7 +1488,7 @@ export default {
     padding: 20px;
     // width: 35%;
     .el-input__inner {
-      width: 30%;
+      // width: 30%;
     }
   }
   .save-btn {
@@ -1352,6 +1594,13 @@ export default {
     .el-textarea__inner {
       width: 50%;
     }
+  }
+  .test-btn {
+    display: inline-block;
+    margin-left: 20px;
+  }
+  .logistic-sty {
+    width: 50% !important;
   }
 }
 </style>

@@ -1,48 +1,44 @@
 <template>
-  <el-dialog :visible.sync="show" title="设为作废订单" class="dialog-invalid-order" width="55%"
+  <el-dialog :visible.sync="show" title="新增" class="dialog-add-recharge" width="35%"
   @close="clear">
-  <h4>选择弃件的包裹列表（勾选了用户不能再提交）</h4>
-  <el-table :data="voidList" class="data-list" border stripe
-  @selection-change="onSelectChange">
-    <el-table-column type="selection" width="55" align="center"></el-table-column>
-    <el-table-column label="包裹单号" prop="express_num"></el-table-column>
-    <el-table-column label="包裹名称" prop="package_name"></el-table-column>
-    <el-table-column label="物品属性">
-      <template slot-scope="scope">
-        <span v-for="item in scope.row.props" :key="item.id">
-          {{item.cn_name}}
-        </span>
-      </template>
-    </el-table-column>
-  </el-table>
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
-        <!-- 问题原因 -->
-        <el-form-item label="*问题原因">
-            <el-input type="textarea" v-model="ruleForm.invalid_reason"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入"></el-input>
+        <!-- 客户编号 -->
+        <el-form-item label="*客户编号">
+          <!-- <el-input v-model="ruleForm.user_id">
+          </el-input> -->
+          <el-autocomplete
+          :fetch-suggestions="queryCNSearch"
+          @select="handleSelect"
+          placeholder="请输入客户编号"
+          v-model="ruleForm.user_id">
+        </el-autocomplete>
         </el-form-item>
-        <!-- 实际支付金额 -->
-        <el-form-item :label="'实际支付金额' + this.localization.currency_unit"
-        v-if="activeName === '3'">
-        <span>{{this.payAmount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{'(' + this.paymentTypeName + ')'}}</span>
-          <!-- <el-input v-model="this.payAmount" disabled></el-input> -->
-        </el-form-item>
-        <!-- 退款金额 -->
-        <el-form-item :label="'*退款金额' + this.localization.currency_unit">
-          <el-input v-model="ruleForm.refund_amount" :disabled="activeName === '1' || activeName === '2'">
+        <!-- 充值金额 -->
+        <el-form-item :label="'*充值金额' + this.localization.currency_unit" class="input-style">
+          <el-input v-model="ruleForm.tran_amount">
           </el-input>
-          <div class="updateImg">退款金额不能超过下单实际支付金额，且券不能返还，代理产生的佣金将会被清掉</div>
         </el-form-item>
-        <el-form-item label="原路返回">
-          <el-radio-group v-model="ruleForm.should_return_wechat">
+        <!-- 充值方式 -->
+        <el-form-item label="*充值方式" class="input-style">
+          <el-radio-group v-model="ruleForm.payment_type_id">
             <el-radio v-for="item in updateProp" :key="item.id" :label="item.id">{{item.name}}
             </el-radio>
           </el-radio-group>
-          <div class="updateImg">选择是，如果是微信支付，直接退到微信账号上面</div>
         </el-form-item>
-        <el-form-item label="备注截图" class="updateChe">
+        <!-- 转账账户 -->
+        <el-form-item label="*转账账户" class="input-style">
+          <el-input v-model="ruleForm.transfer_account">
+          </el-input>
+        </el-form-item>
+        <!-- 转账备注 -->
+        <el-form-item label="转账备注" class="input-style">
+            <el-input type="textarea" v-model="ruleForm.remark"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            placeholder="请输入备注"></el-input>
+        </el-form-item>
+        <!-- 上传截图 -->
+        <el-form-item label="上传截图" class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
             <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
@@ -63,11 +59,23 @@
             </i>
         </el-upload>
         <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+      </el-form-item>
+    <!-- 是否审核 -->
+    <el-form-item label="是否审核">
+        <el-switch
+          v-model="ruleForm.should_audit"
+          active-text="开"
+          :active-value="1"
+          :inactive-value="0"
+          inactive-text="关"
+          active-color="#13ce66"
+          inactive-color="gray">
+        </el-switch>
     </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -77,79 +85,88 @@ export default {
   data () {
     return {
       ruleForm: {
-        refund_amount: 0,
-        invalid_reason: '',
-        images: [],
-        invalid_package_ids: [],
-        should_return_wechat: 0
+        user_id: '',
+        payment_type_id: '',
+        tran_amount: '',
+        transfer_account: '',
+        should_audit: 0,
+        remark: '',
+        images: []
       },
-      state: '',
-      tranAmount: '',
-      voidList: [],
       baleImgList: [],
-      activeName: '',
-      payAmount: '',
-      paymentTypeName: '',
       localization: {},
-      updateProp: [
-        {
-          id: 0,
-          name: '否'
-        }, {
-          id: 1,
-          name: '是'
-        }
-      ]
+      rules: {
+        user_id: [
+          { required: true, message: '请输入客户编号', trigger: 'blur' }
+        ],
+        tran_amount: [
+          { required: true, message: '请输入充值金额', trigger: 'change' }
+        ],
+        payment_type_id: [
+          { required: true, message: '请选择充值方式', trigger: 'blur' }
+        ],
+        transfer_account: [
+          { required: true, message: '请输入转账账户', trigger: 'blur' }
+        ]
+      },
+      tranAmount: '',
+      updateProp: []
     }
   },
   methods: {
-    getList () {
-      this.$request.getVoidList(this.id).then(res => {
-        if (res.ret) {
-          this.voidList = res.data
-          this.localization = res.localization
-          // res.data.qr_code && (this.baleImgList[0] = res.data.qr_code)
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
-    confirm () {
+    confirm (formName) {
       if (this.baleImgList) {
         this.ruleForm.images = this.baleImgList
       } else {
         this.ruleForm.images = []
       }
-      if (!this.ruleForm.invalid_reason) {
-        return this.$message.error('请输入问题原因')
-      } else if (this.ruleForm.refund_amount === '') {
-        return this.$message.error('请输入退款金额')
-      } else if (this.ruleForm.refund_amount > this.payAmount) {
-        return this.$message.error('退款金额不能大于实际支付金额')
+      if (this.ruleForm.user_id === '') {
+        return this.$message.error('请输入客户编号')
+      } else if (this.ruleForm.tran_amount === '') {
+        return this.$message.error('请输入充值金额')
+      } else if (this.ruleForm.transfer_account === '') {
+        return this.$message.error('请输入转账账户')
       }
-      this.$request.ordersInvalid(this.id, this.ruleForm).then(res => {
+      this.ruleForm.user_id = this.ruleForm.user_id.split('---')[0]
+      this.$request.addRecords(this.ruleForm).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '成功',
+            title: '操作成功',
             message: res.msg
           })
           this.show = false
           this.success()
         } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
+          this.$message.error(res.msg)
         }
-        this.show = false
       })
     },
-    onSelectChange (selection) {
-      this.ruleForm.invalid_package_ids = selection.map(item => item.id)
+    clear () {
+      this.$refs['ruleForm'].resetFields()
+      this.$refs['ruleForm'].clearValidate()
+      this.ruleForm.images = []
+    },
+    // 客户id
+    queryCNSearch (queryString, callback) {
+      var list = [{}]
+      this.$request.AutoRecords({
+        keyword: this.ruleForm.user_id.toString()
+      }).then(res => {
+        for (let i of res.data) {
+          // i.value = i.id
+          i.value = i.id + '---' + i.name
+        }
+        list = res.data
+        callback(list)
+      })
+    },
+    // 客户id
+    handleSelect (item) {
+      // this.ruleForm.en_name = item.name
+      console.log(item)
+      this.supplierId = item.id
+      this.supplierName = item.name
     },
     // 上传打包照片
     uploadBaleImg (item) {
@@ -195,32 +212,42 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    clear () {
-      this.ruleForm.refund_amount = 0
-      this.ruleForm.should_return_wechat = 0
-      this.ruleForm.invalid_reason = ''
-      this.baleImgList = []
-      this.ruleForm.images = []
-      this.ruleForm.invalid_package_ids = []
+    // 获取充值方式
+    getPaymentType () {
+      this.$request.getRechargePaymentType().then(res => {
+        if (res.ret) {
+          this.updateProp = res.data
+          this.ruleForm.payment_type_id = this.updateProp[0].id
+          this.localization = res.localization
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     init () {
-      this.getList()
-      this.paymentTypeName = this.paymentTypeName
-      this.payAmount = this.payAmount
-      console.log(this.payAmount, 'payAmount')
+      this.getPaymentType()
     }
   }
 }
 </script>
 <style lang="scss">
-.dialog-invalid-order {
+.dialog-add-recharge {
   .el-dialog__body {
     margin-left: 20px !important;
   }
-  .el-input {
-    width: 70%;
+  .input-style {
+    .el-input {
+      width: 70%;
+    }
+    .el-textarea {
+      width: 70%;
+    }
   }
-  .el-textarea__inner {
+  .el-autocomplete {
     width: 70%;
   }
   .updateChe {
@@ -287,13 +314,13 @@ export default {
     font-size: 14px;
     color: #FFF;
   }
+
   .el-dialog__close {
     color: #FFF;
   }
   .updateImg {
     margin-top: 10px;
     color: #ccc;
-    font-size: 13px;
   }
 }
 </style>

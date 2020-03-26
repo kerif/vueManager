@@ -101,7 +101,7 @@
         </template>
        </el-table-column>
       <!-- 商品清单 -->
-      <el-table-column label="商品清单" prop="item_pictures" width="130" v-if="activeName === '1' || activeName === '2'">
+      <!-- <el-table-column label="商品清单" prop="item_pictures" width="130" v-if="activeName === '1' || activeName === '2'">
         <template slot-scope="scope">
           <span v-for="item in scope.row.item_pictures"
           :key="item.id" style="cursor:pointer;"
@@ -109,7 +109,7 @@
            <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px;">
           </span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <!-- 货位 -->
       <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
       <!-- 商品数量 -->
