@@ -42,6 +42,7 @@ import discardList from './diascard.vue'
 import invalidLog from './invalidLog.vue'
 import voidList from './invalidOrder.vue'
 import rechargeAdd from './rechargeAdd.vue'
+import reportInvite from './reportInvite.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -84,6 +85,7 @@ const DiscardController = Vue.extend(discardList)
 const InvalidController = Vue.extend(invalidLog)
 const VoidListController = Vue.extend(voidList)
 const RechargeAddController = Vue.extend(rechargeAdd)
+const ReportInviteController = Vue.extend(reportInvite)
 
 const mixin = {
   data () {
@@ -375,6 +377,13 @@ function initInstance (type) {
     // 充值记录 新增
     case 'rechargeAdd':
       instance = new RechargeAddController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 统计报表 邀请记录
+    case 'reportInvite':
+      instance = new ReportInviteController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

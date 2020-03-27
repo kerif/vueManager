@@ -133,7 +133,7 @@ export default {
     onUpload (file) {
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
-      return this.$request.uploadFiles(params)
+      return this.$request.uploadCerts(params)
     }
   }
 }

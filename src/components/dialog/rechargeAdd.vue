@@ -15,7 +15,7 @@
         </el-autocomplete>
         </el-form-item>
         <!-- 充值金额 -->
-        <el-form-item :label="'*充值金额' + this.localization.currency_unit" class="input-style">
+        <el-form-item :label="'*充值金额' + localization.currency_unit" class="input-style">
           <el-input v-model="ruleForm.tran_amount">
           </el-input>
         </el-form-item>

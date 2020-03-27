@@ -935,9 +935,29 @@ exports.deleteChannel = (id) => {
 exports.getSettlement = () => {
   return $form.get('channels/settlement-methods')
 }
-// 营销管理 下单排行榜
+// 营销管理 统计报表 邀请排行榜
 exports.getStatistics = (params) => {
   return $form.get('statistics/user-invite-data', { params })
+}
+// 营销管理 统计报表 注册统计
+exports.getUserRegister = (params) => {
+  return $form.get('statistics/user-register-data', { params })
+}
+// 营销管理 统计报表 订单统计
+exports.getOrderData = (params) => {
+  return $form.get('statistics/order-data', { params })
+}
+// 营销管理 统计报表 财务统计
+exports.getTransactionData = (params) => {
+  return $form.get('statistics/transaction-data', { params })
+}
+// 营销管理 统计报表 下单排行榜
+exports.getUserOrder = (params) => {
+  return $form.get('statistics/user-order-data', { params })
+}
+// 统计报表 邀请记录
+exports.reportInvite = (id) => {
+  return $form.get(`statistics/user-invite-data/${id}/invitations`)
 }
 // 用户分发优惠券
 exports.addLaunch = (id, ids) => {
@@ -965,6 +985,8 @@ exports.disableCoupons = (id) => {
 exports.uploadImg = (images) => $file.post('upload/images', images)
 // 上传文件
 exports.uploadFiles = (files) => $file.post('upload/files', files)
+// 上传证书
+exports.uploadCerts = (files) => $file.post('upload/certs', files)
 
 exports.forbidLogin = (ids) => $json.put('users/forbid-login', { forbid_id: ids })
 
