@@ -12,7 +12,7 @@
       <!-- 下单排行榜 -->
       <el-tab-pane label="下单排行榜" name="5"></el-tab-pane>
   </el-tabs>
-  <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
+  <!-- <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"> -->
       <div class="changeTime">
         <!-- 创建 -->
           <el-date-picker
@@ -27,7 +27,7 @@
           end-placeholder="提交结束日期">
         </el-date-picker>
       </div>
-    </search-group>
+    <!-- </search-group> -->
     <el-table class="data-list" border stripe
       v-if="oderData.length"
       v-loading="tableLoading"
@@ -101,13 +101,13 @@
 </template>
 
 <script>
-import { SearchGroup } from '@/components/searchs'
+// import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
-    SearchGroup,
+    // SearchGroup,
     NlePagination
   },
   mixins: [pagination],
