@@ -40,7 +40,7 @@
             <el-radio v-for="item in updateProp" :key="item.id" :label="item.id">{{item.name}}
             </el-radio>
           </el-radio-group>
-          <div class="updateImg">选择是，如果是微信支付，直接退到微信账号上面</div>
+          <div class="updateImg">选择是，如果是微信支付，直接退到微信账号上面。选择否的话，就退到余额中。</div>
         </el-form-item>
         <el-form-item label="备注截图" class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="index">

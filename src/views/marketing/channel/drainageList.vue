@@ -1,14 +1,16 @@
 <template>
   <div class="drainage-container">
       <div class="poster-left">
-        <p class="left-name">渠道名称</p><span>微信公众号一期推广</span>
-        <p class="left-name">创建日期</p><span>2020-11-11 11:11:11</span>
+        <p class="left-name">渠道名称</p><span>{{ruleForm.channel_name}}</span><br/>
+        <p class="left-name">创建日期</p><span>{{ruleForm.created_at}}</span><br/>
         <div class="code-font">专属小程序码</div>
         <div class="left-bottom">
-          <img src="../../../assets/code.png">
+          <!-- <img src="../../../assets/bale.png"> -->
+          <img :src="$baseUrl.IMAGE_URL + ruleForm.app_code" alt="" class="goods-img">
         </div>
         <div class="upload-btn">
-          <el-button type="primary">下载</el-button>
+          <a :href="urlImg" download>xiazai</a>
+          <el-button type="primary" @click="uploadImg">下载</el-button>
           <p class="share">推荐将小程序码放在公众号或广告插图进行推广</p>
         </div>
       </div>
@@ -32,17 +34,17 @@
       v-loading="tableLoading">
         <el-table-column type="index" :index="1"></el-table-column>
         <!-- 统计日期 -->
-        <el-table-column label="统计日期" prop="user_id"></el-table-column>
+        <el-table-column label="统计日期" prop="days"></el-table-column>
         <!-- 注册用户 -->
-        <el-table-column label="注册用户" prop="payment_type_name"> </el-table-column>
+        <el-table-column label="注册用户" prop="count"> </el-table-column>
         <!-- 邮箱激活 -->
-        <el-table-column label="邮箱激活" prop="order_sn"></el-table-column>
+        <el-table-column label="邮箱激活" prop="email_count"></el-table-column>
         <!-- 手机号激活 -->
-        <el-table-column label="手机号激活" prop="order_sn"></el-table-column>
+        <el-table-column label="手机号激活" prop="phone_count"></el-table-column>
         <!-- 预报量 -->
-        <el-table-column label="预报量" prop="serial_no"></el-table-column>
+        <el-table-column label="预报量" prop="package_count"></el-table-column>
         <!-- 转化率 -->
-        <el-table-column label="转化率%" prop="created_at"></el-table-column>
+        <el-table-column label="转化率%" prop="conversion_ratio"></el-table-column>
       </el-table>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
@@ -67,10 +69,14 @@ export default {
       begin_date: '',
       end_date: '',
       tableLoading: false,
-      localization: {}
+      localization: {},
+      ruleForm: {},
+      urlImg: ''
     }
   },
   created () {
+    this.getList()
+    this.getDetails()
   },
   methods: {
     getList () {
@@ -83,7 +89,7 @@ export default {
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)
       this.end_date && (params.end_date = this.end_date)
-      this.$request.getTransaction(params).then(res => {
+      this.$request.getChannelsData(this.$route.params.id, params).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.transactionList = res.data
@@ -99,12 +105,29 @@ export default {
         }
       })
     },
+    // 获取左侧详情数据
+    getDetails () {
+      this.$request.getAloneChannel(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.ruleForm = res.data
+          this.urlImg = res.data.app_code_url
+        }
+      })
+    },
     onTime (val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
+    },
+    // 下载小程序码
+    uploadImg () {
+      // window.open(this.urlImg)
+      const aLink = document.createElement('a')
+      aLink.download = '1.jpg'
+      aLink.href = this.urlImg
+      aLink.dispatchEvent(new MouseEvent('click', {}))
     }
   }
 }
@@ -158,17 +181,21 @@ export default {
     // transform: translateX(-50%);
     margin-top: 20px;
     text-align: center;
-    margin-bottom: 40px;
     img {
+      // width: 100%;
+      // height: 100%;
       width:180px;
       height: 180px;
       border-radius: 50%;
-      border: 1px solid #ccc;
+      border-color:#ccc;
       padding: 5px;
     }
   }
   .upload-btn {
     text-align: center;
+    position: absolute;
+    left: 67px;
+    bottom: 50px;
     .el-button--primary {
       width: 50%;
     }

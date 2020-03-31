@@ -101,7 +101,7 @@ const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
 // 营销管理 视频管理
 const videoManagement = loadonDemand('marketing/video/videoMana')
 // 营销管理 渠道管理
-// const channelManagement = loadonDemand('marketing/channel/channelList')
+const channelManagement = loadonDemand('marketing/channel/channelList')
 // 营销管理 统计报表
 const reportList = loadonDemand('marketing/report/report')
 // 营销管理 新增或编辑渠道管理
@@ -869,17 +869,17 @@ export default [
               name: '视频管理'
             }
           },
-          // {
-          //   path: '/marketing/channelManagement',
-          //   name: 'channel',
-          //   component: channelManagement,
-          //   id: 804,
-          //   meta: {
-          //     level: 2,
-          //     group: '营销管理',
-          //     name: '渠道管理'
-          //   }
-          // },
+          {
+            path: '/marketing/channelManagement',
+            name: 'channel',
+            component: channelManagement,
+            id: 804,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '渠道管理'
+            }
+          },
           {
             path: '/marketing/add/channel',
             name: 'addChannel',

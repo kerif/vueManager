@@ -931,6 +931,10 @@ exports.updateChannel = (id, params) => {
 exports.deleteChannel = (id) => {
   return $form.delete(`channels/${id}`)
 }
+// 渠道管理 获取引流列表数据
+exports.getChannelsData = (id, params) => {
+  return $form.get(`channels/${id}/data`, { params })
+}
 // 获取结算方式
 exports.getSettlement = () => {
   return $form.get('channels/settlement-methods')
