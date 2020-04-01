@@ -9,7 +9,7 @@
           <img :src="$baseUrl.IMAGE_URL + ruleForm.app_code" alt="" class="goods-img">
         </div>
         <div class="upload-btn">
-          <a :href="urlImg" download>xiazai</a>
+          <!-- <a :href="urlImg" download>xiazai</a> -->
           <el-button type="primary" @click="uploadImg">下载</el-button>
           <p class="share">推荐将小程序码放在公众号或广告插图进行推广</p>
         </div>
@@ -110,7 +110,8 @@ export default {
       this.$request.getAloneChannel(this.$route.params.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
-          this.urlImg = res.data.app_code_url
+          this.urlImg = `${this.$baseUrl.IMAGE_URL}${res.data.app_code}`
+          console.log(this.urlImg, 'this.urlImg')
         }
       })
     },
@@ -127,7 +128,9 @@ export default {
       const aLink = document.createElement('a')
       aLink.download = '1.jpg'
       aLink.href = this.urlImg
-      aLink.dispatchEvent(new MouseEvent('click', {}))
+      console.log('aki', aLink.href, aLink.download)
+      aLink.click()
+      // aLink.dispatchEvent(new MouseEvent('click', {}))
     }
   }
 }
@@ -186,8 +189,6 @@ export default {
       // height: 100%;
       width:180px;
       height: 180px;
-      border-radius: 50%;
-      border-color:#ccc;
       padding: 5px;
     }
   }

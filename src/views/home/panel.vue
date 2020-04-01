@@ -102,6 +102,27 @@
         </div>
      </div>
    </div>
+    <el-dialog :visible.sync="showTips" title="系统配置助手" class="dialog-start-loading" width="45%">
+      <div class="loading-top">
+        <span>亲爱的用户</span><br/>
+        <span>首次系统使用需要完成以下配置才能正常上线运营</span>
+      </div>
+      <div class="loading-bottom">
+          <div v-for="item in updateProp" :key="item.type_id" class="service">
+            <div class="serviceLeft">
+            <el-checkbox v-model="item.is_finished">{{item.content}}</el-checkbox>
+            </div>
+            <div class="serviceRight" @click="goRouter(item.type_id, item.route)">
+            <!-- <span>{{item.route}}</span> -->
+            <!-- <router-link :to="`/${item.route}`" class="chooseOrder" @click="finishedGuides(item.type_id)">去配置</router-link> -->
+            去配置
+            </div>
+          </div>
+      </div>
+      <div class="not-btn">
+        <el-button @click="notMind" class="btn-light-red">不再提示</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -129,12 +150,17 @@ export default {
       scope: 1,
       myChart: '',
       status: 2,
-      option: ''
+      option: '',
+      showTips: false,
+      updateProp: [],
+      types: [],
+      moreTips: ''
     }
   },
   created () {
     this.getNumbers()
     this.getDatas()
+    this.getStatus() // 获取是否显示弹窗
   },
   mounted () {
     this.myChart = echarts.init(document.getElementById('echarts'))
@@ -255,6 +281,56 @@ export default {
       } else {
         this.$router.push({ name: routerName, query: query })
       }
+    },
+    // 获取是否显示弹窗
+    getStatus () {
+      this.$request.tipStatus().then(res => {
+        if (res.ret) {
+          this.moreTips = res.data.no_more_tips
+          console.log(this.moreTips, 'moreTips')
+          if (this.moreTips === 0) {
+            this.showTips = true
+            this.getGuides() // 获取弹窗数据
+          }
+        }
+      })
+    },
+    // 获取弹窗数据
+    getGuides () {
+      this.$request.getGuides().then(res => {
+        if (res.ret) {
+          res.data.forEach(items => {
+            items.is_finished = !!items.is_finished
+          })
+          this.updateProp = res.data
+        }
+      })
+    },
+    finishedGuides (id) {
+      console.log(id, 'type_id')
+    },
+    goRouter (id, route) {
+      this.$request.updateGuides(id)
+      this.$router.push(`/${route}`)
+    },
+    // 弹窗 不再提示
+    notMind () {
+      this.$request.noTips().then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '操作成功',
+            message: res.msg,
+            type: 'success'
+          })
+          this.showTips = false
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }
@@ -367,6 +443,57 @@ export default {
   }
   li {
     cursor: pointer;
+  }
+  .dialog-start-loading {
+    .el-input {
+      width: 40% !important;
+      margin-left: 50px;
+    }
+    .el-textarea {
+      width: 40% !important;
+      margin-left: 50px;
+    }
+    .el-form-item__label {
+      width: 200px;
+    }
+    .el-form-item__error {
+      margin-left: 250px !important;
+    }
+    .el-dialog__header {
+      background-color: #0E102A;
+    }
+    .el-dialog__title {
+      font-size: 14px;
+      color: #FFF;
+    }
+    .el-dialog__close {
+      color: #FFF;
+    }
+  }
+  .loading-top {
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+  .service {
+    overflow: hidden;
+    line-height: 40px;
+    .el-input__inner {
+      line-height: 40px !important;
+      margin-bottom: 10px;
+    }
+    .serviceLeft {
+      display: inline-block;
+      float: left;
+    }
+    .serviceRight {
+      cursor: pointer;
+      color: blue;
+      display: inline-block;
+      float: right;
+    }
+  }
+  .not-btn {
+    margin-top: 20px;
   }
 }
 </style>

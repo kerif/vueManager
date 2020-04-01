@@ -22,15 +22,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- 邮箱 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="邮箱" prop="contact_email">
-                <el-input v-model="user.contact_email" placeholder="请输入邮箱"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 员工组 -->
+          <!-- 备注 -->
            <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="备注" prop="remark" class="employ">
@@ -64,12 +56,20 @@
             </el-col>
           </el-row>
           <!-- 佣金分成 -->
-          <el-row :gutter="20">
+          <!-- <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="佣金分成" prop="commission">
                 <el-input v-model="user.commission" placeholder="请输入佣金分成">
                   <template slot="append">%</template>
                 </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <!-- 邮箱 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item label="邮箱" prop="contact_email">
+                <el-input v-model="user.contact_email" placeholder="请输入邮箱"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -237,7 +237,7 @@ export default {
         margin-left: 135px;
         width: 33%;
         padding: 1.5em 0;
-        margin-top: 1.5em;
+        // margin-top: 1.5em;
         .el-button--primary {
           width:72%;
         }

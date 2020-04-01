@@ -324,6 +324,48 @@
                 </i>
             </el-upload>
             </el-form-item>
+            <!-- LOGO -->
+            <el-form-item label="*LOGO" class="updateChe">
+                <span class="img-item" v-for="(item, index) in LogoImgList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteLogo(index)"></i>
+                </span>
+                </span>
+                <el-upload
+                  v-show="LogoImgList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadLogo"
+                  :show-file-list="false">
+                  <i class="el-icon-plus">
+                  </i>
+              </el-upload>
+            </el-form-item>
+            <!-- 登录页背景图 -->
+            <el-form-item label="*登录页背景图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in bgList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteBg(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="bgList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="bgImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload>
+            </el-form-item>
             </el-form>
           <el-button class="save-btn" @click="editOthers">保存</el-button>
         </div>
@@ -547,7 +589,9 @@ export default {
       },
       tranAmount: '',
       baleImgList: [],
+      LogoImgList: [],
       customerList: [],
+      bgList: [],
       CategoriesList: [
         {
           enabled: true,
@@ -941,18 +985,14 @@ export default {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
         this.setForm.pc_website_url = res.data.pc_website_url.map(item => item.url).toString()
-        // res.data.default_img && (this.baleImgList[0] = { url: res.data.default_img })
-        // res.data.customer_qr_code && (this.customerList[0] = { url: res.data.customer_qr_code })
         res.data.default_img && (this.baleImgList[0] = res.data.default_img)
         res.data.customer_qr_code && (this.customerList[0] = res.data.customer_qr_code)
-        // this.baleImgList[0] = { url: res.data.default_img }
-        // this.customerList[0] = { url: res.data.customer_qr_code }
+        res.data.logo_image && (this.LogoImgList[0] = res.data.logo_image)
+        res.data.background_image && (this.bgList[0] = res.data.background_image)
       })
     },
     // 修改pc端配置
     editOthers () {
-      // this.setForm.default_img = this.baleImgList[0].url
-      // this.setForm.customer_qr_code = this.customerList[0].url
       if (this.baleImgList[0]) {
         this.setForm.default_img = this.baleImgList[0]
       } else {
@@ -962,6 +1002,16 @@ export default {
         this.setForm.customer_qr_code = this.customerList[0]
       } else {
         this.setForm.customer_qr_code = []
+      }
+      if (this.LogoImgList[0]) {
+        this.setForm.logo_image = this.LogoImgList[0]
+      } else {
+        this.setForm.logo_image = []
+      }
+      if (this.bgList[0]) {
+        this.setForm.background_image = this.bgList[0]
+      } else {
+        this.setForm.background_image = []
       }
       if (!this.setForm.website_name) {
         return this.$message.error('请输入网站名称')
@@ -977,6 +1027,10 @@ export default {
         return this.$message.error('请输入token')
       } else if (!this.setForm.aes_key) {
         return this.$message.error('请输入aes_key')
+      } else if (!this.LogoImgList[0]) {
+        return this.$message.error('请上传logo图')
+      } else if (!this.bgList[0]) {
+        return this.$message.error('请上传登录页背景图')
       }
       console.log(this.setForm.pc_website_url.split(','))
       this.$request.editWebsite({ ...this.setForm, pc_website_url: this.setForm.pc_website_url.split(',') }).then(res => {
@@ -1282,6 +1336,16 @@ export default {
         }
       })
     },
+    uploadLogo (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.LogoImgList.push(item.path)
+          })
+        }
+      })
+    },
     // pc端客服二维码
     customerImg (item) {
       let file = item.file
@@ -1289,6 +1353,17 @@ export default {
         if (res.ret) {
           res.data.forEach(item => {
             this.customerList.push(item.path)
+          })
+        }
+      })
+    },
+    // 登录页背景图
+    bgImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.bgList.push(item.path)
           })
         }
       })
@@ -1304,9 +1379,17 @@ export default {
     onDeleteImg (index) {
       this.baleImgList.splice(index, 1)
     },
+    // 删除logo
+    onDeleteLogo (index) {
+      this.LogoImgList.splice(index, 1)
+    },
     // 删除pc端二维码
     onDeleteCus (index) {
       this.customerList.splice(index, 1)
+    },
+    // 删除登录页背景图
+    onDeleteBg (index) {
+      this.bgList.splice(index, 1)
     },
     // 上传图片
     onUpload (file) {

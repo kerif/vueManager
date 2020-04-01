@@ -102,8 +102,6 @@ export default {
     width: 450px;
     overflow: hidden;
     .el-input__inner {
-      // width: 200px;
-      // margin-left: 60px;
       line-height: 40px !important;
       margin-bottom: 10px;
     }

@@ -999,6 +999,22 @@ exports.getIndexNumber = () => $form.get('statistics/index-data')
 // 获取首页图表数据
 exports.getIndexData = (params) => $form.get('statistics/index-log', { params })
 
+// 首页 控制面板 弹窗数据
+exports.getGuides = () => {
+  return $form.get('user-guides')
+}
+// 控制面板 弹窗 设置成完成状态
+exports.updateGuides = (id) => {
+  return $form.put(`user-guides/${id}`)
+}
+// 控制面板 弹窗 不再提示
+exports.noTips = () => {
+  return $form.put('user-guides/no-more-tips')
+}
+// 控制面板 弹窗 判断是否显示弹窗
+exports.tipStatus = () => {
+  return $form.get('user-guides/tip-status')
+}
 // 获取订单下的所有订单
 exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`, { params })
 // 订单列表 获取增值服务
