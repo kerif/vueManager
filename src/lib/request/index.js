@@ -587,6 +587,14 @@ exports.finishOrders = (id) => {
 exports.addAgents = (params) => {
   return $form.post('agents', params)
 }
+// 代理管理 获取设置佣金
+exports.getCommissions = (id, params) => {
+  return $form.get(`agents/${id}/line-commissions`, { params })
+}
+// 代理管理 更新佣金
+exports.updateCommissions = (id, params) => {
+  return $json.put(`agents/${id}/line-commissions`, params)
+}
 // 小程序配置
 exports.getMini = () => {
   return $form.get('mini-program/settings')

@@ -52,15 +52,7 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      tableData: [],
-      rules: {
-        name: [
-          { required: true, message: '请输入员工组中文名', trigger: 'blur' }
-        ],
-        enName: [
-          { required: true, message: '请输入员工组英文名', trigger: 'blur' }
-        ]
-      }
+      tableData: []
     }
   },
   methods: {

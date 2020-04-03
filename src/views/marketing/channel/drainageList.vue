@@ -124,12 +124,12 @@ export default {
     },
     // 下载小程序码
     uploadImg () {
-      // window.open(this.urlImg)
-      const aLink = document.createElement('a')
-      aLink.download = '1.jpg'
-      aLink.href = this.urlImg
-      console.log('aki', aLink.href, aLink.download)
-      aLink.click()
+      window.open(this.urlImg, '_black')
+      // const aLink = document.createElement('a')
+      // aLink.download = '1.jpg'
+      // aLink.href = this.urlImg
+      // console.log('aki', aLink.href, aLink.download)
+      // aLink.click()
       // aLink.dispatchEvent(new MouseEvent('click', {}))
     }
   }

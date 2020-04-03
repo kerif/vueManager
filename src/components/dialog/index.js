@@ -43,6 +43,7 @@ import invalidLog from './invalidLog.vue'
 import voidList from './invalidOrder.vue'
 import rechargeAdd from './rechargeAdd.vue'
 import reportInvite from './reportInvite.vue'
+import commission from './commission.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -86,6 +87,7 @@ const InvalidController = Vue.extend(invalidLog)
 const VoidListController = Vue.extend(voidList)
 const RechargeAddController = Vue.extend(rechargeAdd)
 const ReportInviteController = Vue.extend(reportInvite)
+const CommissionController = Vue.extend(commission)
 
 const mixin = {
   data () {
@@ -384,6 +386,13 @@ function initInstance (type) {
     // 统计报表 邀请记录
     case 'reportInvite':
       instance = new ReportInviteController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 代理管理 设置佣金
+    case 'commission':
+      instance = new CommissionController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

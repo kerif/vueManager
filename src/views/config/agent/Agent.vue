@@ -47,7 +47,7 @@
           <!-- 成交记录 -->
           <el-button class="btn-blue" @click="record(scope.row.id)">成交记录</el-button>
           <!-- 设置佣金 -->
-          <el-button class="btn-deep-purple">设置佣金</el-button>
+          <el-button class="btn-deep-purple" @click="setCommission(scope.row.id, scope.row.agent_name, scope.row.commission)">设置佣金</el-button>
           <!-- 提现申请 -->
           <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
             <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">提现申请</el-button>
@@ -193,6 +193,12 @@ export default {
         this.getList()
       }
       )
+    },
+    // 设置佣金
+    setCommission (id, agentName, commission) {
+      dialog({ type: 'commission', id: id, agentName: agentName, commission: commission }, () => {
+        this.getList()
+      })
     }
   }
 }
