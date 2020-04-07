@@ -116,6 +116,8 @@ const Evaluation = loadonDemand('customer/evaluation')
 const PublicList = loadonDemand('customer/public')
 // 公告新增或编辑
 const AddEditPublic = loadonDemand('customer/publicAddEdit')
+// 语言包
+const LanguageSupport = loadonDemand('language/support')
 export default [
   {
     path: '/',
@@ -990,6 +992,25 @@ export default [
               group: '客服中心',
               name: '编辑公告',
               parent: '/customer/Public'
+            }
+          }
+        ]
+      },
+      {
+        path: 'language',
+        component: LayoutContainer,
+        icon: 'icon-kefu',
+        id: 1000,
+        children: [
+          {
+            path: '/language/support',
+            name: 'language',
+            component: LanguageSupport,
+            id: 1001,
+            meta: {
+              level: 2,
+              group: '语言包',
+              name: '支持语言'
             }
           }
         ]
