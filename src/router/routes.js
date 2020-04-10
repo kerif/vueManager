@@ -999,7 +999,7 @@ export default [
       {
         path: 'language',
         component: LayoutContainer,
-        icon: 'icon-kefu',
+        icon: 'icon-B',
         id: 1000,
         children: [
           {

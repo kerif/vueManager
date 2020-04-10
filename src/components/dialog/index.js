@@ -44,6 +44,8 @@ import voidList from './invalidOrder.vue'
 import rechargeAdd from './rechargeAdd.vue'
 import reportInvite from './reportInvite.vue'
 import commission from './commission.vue'
+import languageEdit from './languageAddEdit.vue'
+import lineLang from './lineLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -88,6 +90,8 @@ const VoidListController = Vue.extend(voidList)
 const RechargeAddController = Vue.extend(rechargeAdd)
 const ReportInviteController = Vue.extend(reportInvite)
 const CommissionController = Vue.extend(commission)
+const LanguageController = Vue.extend(languageEdit)
+const LineLangController = Vue.extend(lineLang)
 
 const mixin = {
   data () {
@@ -393,6 +397,20 @@ function initInstance (type) {
     // 代理管理 设置佣金
     case 'commission':
       instance = new CommissionController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 语言包 添加或编辑支持语言
+    case 'languageEdit':
+      instance = new LanguageController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 路线 双语弹窗
+    case 'lineLang':
+      instance = new LineLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

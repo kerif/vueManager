@@ -6,25 +6,60 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "3279361",
-      "name": "客户档案",
-      "font_class": "gaiicon-",
-      "unicode": "e6d8",
-      "unicode_decimal": 59096
+      "icon_id": "13479138",
+      "name": "语言",
+      "font_class": "B",
+      "unicode": "e6fc",
+      "unicode_decimal": 59132
     },
     {
-      "icon_id": "3303150",
-      "name": "精选",
-      "font_class": "jingxuan",
-      "unicode": "e600",
-      "unicode_decimal": 58880
+      "icon_id": "2151705",
+      "name": "付款",
+      "font_class": "fukuan3",
+      "unicode": "e636",
+      "unicode_decimal": 58934
     },
     {
-      "icon_id": "9482664",
-      "name": "人才管理",
-      "font_class": "ico_rencai",
-      "unicode": "e6db",
-      "unicode_decimal": 59099
+      "icon_id": "11893757",
+      "name": "入库",
+      "font_class": "ruku",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "3139292",
+      "name": "包裹",
+      "font_class": "baoguo",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "7212146",
+      "name": "帮助",
+      "font_class": "bangzhu",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "7276433",
+      "name": "发货",
+      "font_class": "fahuo",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "7859660",
+      "name": "小程序",
+      "font_class": "xiaochengxu",
+      "unicode": "e691",
+      "unicode_decimal": 59025
+    },
+    {
+      "icon_id": "9159705",
+      "name": "钱包",
+      "font_class": "qianbao",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
     },
     {
       "icon_id": "10059681",
@@ -34,18 +69,46 @@
       "unicode_decimal": 58889
     },
     {
-      "icon_id": "10204505",
-      "name": "共保",
-      "font_class": "gongbao",
-      "unicode": "e6f4",
-      "unicode_decimal": 59124
-    },
-    {
       "icon_id": "10229781",
       "name": "客服",
       "font_class": "kefu",
       "unicode": "e620",
       "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "3303150",
+      "name": "精选",
+      "font_class": "jingxuan",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "10267292",
+      "name": "预测",
+      "font_class": "ico_yuce",
+      "unicode": "e700",
+      "unicode_decimal": 59136
+    },
+    {
+      "icon_id": "9482664",
+      "name": "人才管理",
+      "font_class": "ico_rencai",
+      "unicode": "e6db",
+      "unicode_decimal": 59099
+    },
+    {
+      "icon_id": "3279361",
+      "name": "客户档案",
+      "font_class": "gaiicon-",
+      "unicode": "e6d8",
+      "unicode_decimal": 59096
+    },
+    {
+      "icon_id": "10204505",
+      "name": "共保",
+      "font_class": "gongbao",
+      "unicode": "e6f4",
+      "unicode_decimal": 59124
     },
     {
       "icon_id": "10266834",
@@ -67,13 +130,6 @@
       "font_class": "ico_zhuizon",
       "unicode": "e6fe",
       "unicode_decimal": 59134
-    },
-    {
-      "icon_id": "10267292",
-      "name": "预测",
-      "font_class": "ico_yuce",
-      "unicode": "e700",
-      "unicode_decimal": 59136
     },
     {
       "icon_id": "10267417",

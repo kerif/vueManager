@@ -386,8 +386,17 @@ exports.updateAllLocation = (id, areaId, params) => {
 exports.getLocationList = (id, areaId, params) => {
   return $form.get(`warehouse-address/${id}/goods-allocation-areas/${areaId}/details`, { params })
 }
+// 获取路线 详情
 exports.getExpressLine = (id) => {
   return $form.get(`express-lines/${id}`)
+}
+// 路线 获取语言详情
+exports.lineLang = (id, params) => {
+  return $form.get(`express-lines/${id}`, { params })
+}
+// 路线 更改语言详情
+exports.updateLineLang = (id, params) => {
+  return $form.put(`express-lines/${id}/translate-data`, params)
 }
 exports.saveEditLine = (id, params) => {
   return $form.put(`express-lines/${id}`, params)
@@ -786,6 +795,38 @@ exports.updateAloneEmail = (id, params) => {
 // 邮件模版 开发或关闭
 exports.closeEmail = (id, status) => {
   return $form.put(`email-templates/${id}/status/${status}`)
+}
+// 语言包 获取支持语言列表
+exports.languageList = () => {
+  return $form.get('languages')
+}
+// 语言包 删除
+exports.deleteLG = (id) => {
+  return $form.delete(`languages/${id}`)
+}
+// 语言包 设为默认
+exports.defaultLg = (id) => {
+  return $form.put(`languages/${id}/set-default`)
+}
+// 语言包 开启或关闭
+exports.changeLg = (id, status) => {
+  return $form.put(`languages/${id}/set-status/${status}`)
+}
+// 语言包 获取全部支持语言
+exports.getLanguageCan = () => {
+  return $form.get(`languages/language-can-add`)
+}
+// 语言包 新增
+exports.addLg = (params) => {
+  return $form.post('languages', params)
+}
+// 语言包 获取单条详细
+exports.singleLg = (id) => {
+  return $form.get(`languages/${id}`)
+}
+// 更新单条详细
+exports.updateLg = (id, params) => {
+  return $form.put(`languages/${id}`, params)
 }
 // 更多配置 订单获取增值服务
 exports.getValue = (params) => {

@@ -156,7 +156,7 @@
                     v-for="item in shipData"
                     :key="item.id"
                     :value="item.id"
-                    :label="item.cn_name">
+                    :label="item.name">
                   </el-option>
                 </el-select>
               </el-form-item>

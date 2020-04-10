@@ -5,7 +5,7 @@
         <el-row>
           <el-col :span="10">
             <div>*线路名称</div>
-            <el-input placeholder="请输入内容" v-model="form.cn_name"></el-input>
+            <el-input placeholder="请输入内容" v-model="form.name"></el-input>
           </el-col>
         </el-row>
       </el-form-item>
@@ -44,7 +44,7 @@
               <el-option
                 v-for="item in options"
                 :key="item.id"
-                :label="item.cn_name"
+                :label="item.name"
                 :value="item.id">
               </el-option>
             </el-select>
@@ -139,7 +139,7 @@
             <div>*线路类型</div>
             <el-checkbox-group v-model="form.types">
               <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
-                {{item.cn_name}}</el-checkbox>
+                {{item.name}}</el-checkbox>
             </el-checkbox-group>
           </el-col>
         </el-row>
@@ -276,7 +276,7 @@ export default {
   data () {
     return {
       form: {
-        cn_name: '',
+        name: '',
         warehouses: '',
         countries: '',
         first_weight: '',
@@ -393,7 +393,7 @@ export default {
     },
     saveLine () {
       console.log(Number(this.form.has_factor), 'has_factor')
-      if (this.form.cn_name === '') {
+      if (this.form.name === '') {
         return this.$message.error('请输入线路名称')
       } else if (this.form.warehouses === '') {
         return this.$message.error('请选择支持仓库')

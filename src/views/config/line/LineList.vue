@@ -74,14 +74,17 @@
           {{scope.row.remark || "无" }}
         </template>
       </el-table-column>
-      <el-table-column label="线路名称" prop="cn_name"></el-table-column>
+      <!-- 线路名称 -->
+      <el-table-column label="线路名称" prop="name"></el-table-column>
+      <!-- 支持国家/地区 -->
       <el-table-column label="支持国家/地区">
         <template slot-scope="scope">
           <span v-for="item in scope.row.countries" :key="item.id">
-            {{item.cn_name}}
+            {{item.name}}
           </span>
         </template>
       </el-table-column>
+      <!-- 支持仓库 -->
       <el-table-column label="支持仓库">
         <template slot-scope="scope">
           <span v-for="item in scope.row.warehouses" :key="item.id">
@@ -108,6 +111,27 @@
           </el-switch>
         </template>
       </el-table-column>
+      <!-- 繁体中文 -->
+      <!-- <el-table-column label="繁体中文"> -->
+        <!-- <template slot-scope="scope">
+        </template> -->
+        <!-- <span class="el-icon-plus icon-sty"></span> -->
+        <!-- <span class="el-icon-check icon-sty"></span> -->
+          <!-- <i class="el-icon-plus"></i> -->
+      <!-- </el-table-column> -->
+      <!-- English -->
+      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id">
+        <template slot-scope="scope">
+          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          <!-- <span v-if="scope.row.trans_en_US === 1" class="el-icon-plus icon-sty"></span>
+          <span v-else class="el-icon-plus icon-sty"></span> -->
+        </template>
+      </el-table-column>
+      <!-- 日本语 -->
+      <!-- <el-table-column label="日本语">
+        <span class="el-icon-plus icon-sty"></span>
+      </el-table-column> -->
       <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">修改</el-button>
@@ -166,19 +190,22 @@ export default {
       enableList: [
         { label: '是', value: 1 },
         { label: '否', value: 0 }
-      ]
+      ],
+      languageData: [],
+      transCode: ''
     }
   },
   created () {
+    this.getLanguageList() // 获取支持语言
     // this.getList()
     // 获取线路名称筛选列表
-    this.getColumnList('cn_name', 'lineNameColumn')
+    this.getColumnList('name', 'lineNameColumn')
     // 获取支持仓库筛选列表
     this.getColumnList('warehouses.warehouse_name', 'warehousesColumn')
     // 获取参考时效筛选列表
     this.getColumnList('reference_time', 'referenceTimeColumn')
     // 获取支持国家筛选列表
-    this.getColumnList('countries.cn_name', 'countriesColumn')
+    this.getColumnList('countries.name', 'countriesColumn')
     // 获取首重筛选列表
     this.getColumnList('first_weight', 'firstWeightColumn')
     // 获取首费筛选列表
@@ -315,6 +342,13 @@ export default {
         }
       })
     },
+    getLanguageList () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    },
     // 高级搜索
     onHighSearch () {
       if (this.highSearch) {
@@ -340,6 +374,15 @@ export default {
       }
       this.getList()
     },
+    // 修改语言
+    onLang (line, lang) {
+      console.log(line, lang)
+      this.transCode = line['trans_' + lang.language_code]
+      // console.log(line['trans_' + lang.language_code])
+      dialog({ type: 'lineLang', line: line, lang: lang, transCode: this.transCode }, () => {
+        this.getList()
+      })
+    },
     // 搜索
     onSearch () {
       this.page_params.page = 1
@@ -350,7 +393,7 @@ export default {
           let param = ''
           switch (key) {
             case 'lineName':
-              param = 'cn_name'
+              param = 'name'
               break
             case 'warehouses':
               param = 'warehouses.warehouse_name'
@@ -359,7 +402,7 @@ export default {
               param = 'reference_time'
               break
             case 'countries':
-              param = 'countries.cn_name'
+              param = 'countries.name'
               break
             case 'firstWeight':
               param = 'first_weight'
@@ -409,6 +452,11 @@ export default {
     highSearch (val) {
       this.handleQueryChange('highSearch', ~~val)
     }
+  },
+  computed: {
+    formatLangData () {
+      return this.languageData.filter(item => !item.is_default)
+    }
   }
 }
 </script>
@@ -419,6 +467,12 @@ export default {
   }
   .others-btn {
     margin-bottom: 5px;
+  }
+  .icon-sty {
+    cursor: pointer;
+    padding-left: 20px;
+    font-weight: 700;
+    color: black;
   }
 }
 </style>
