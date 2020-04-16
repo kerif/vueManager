@@ -37,6 +37,12 @@
       </el-table-column>
       <!-- 发布时间 -->
       <el-table-column label="发布时间" prop="created_at"> </el-table-column>
+      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+        <template slot-scope="scope">
+          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-deep-purple" @click="details(scope.row.id)">详情</el-button>
@@ -66,7 +72,9 @@ export default {
       begin_date: '',
       end_date: '',
       type: '',
-      deleteNum: []
+      deleteNum: [],
+      languageData: [],
+      transCode: ''
       // voucherChange: []
     }
   },
@@ -79,6 +87,7 @@ export default {
   },
   created () {
     this.getList()
+    this.getLanguageList()
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
     }
@@ -86,6 +95,11 @@ export default {
       this.timeList = this.$route.query.times.split(' ')
       this.begin_date = this.timeList[0]
       this.end_date = this.timeList[1]
+    }
+  },
+  computed: {
+    formatLangData () {
+      return this.languageData.filter(item => !item.is_default)
     }
   },
   methods: {
@@ -158,6 +172,24 @@ export default {
     // 跳转到详情
     details (id) {
       this.$router.push({ name: 'editPublic', params: { id: id } })
+    },
+    // 获取支持语言
+    getLanguageList () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    },
+    // 修改语言
+    onLang (line, lang) {
+      this.transCode = line['trans_' + lang.language_code]
+      this.$router.push({ name: 'publicLangAdd',
+        params: {
+          line: JSON.stringify(line),
+          lang: JSON.stringify(lang),
+          transCode: this.transCode
+        } })
     }
     // 选择不同类型优惠券
     // onVocherTypeChange () {

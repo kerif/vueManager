@@ -198,6 +198,14 @@ exports.getAnnouncements = (params) => {
 exports.getSingleAnnouncements = (id) => {
   return $form.get(`announcements/${id}`)
 }
+// 下单需知 获取语言单条详细
+exports.publicLang = (id, params) => {
+  return $form.get(`announcements/${id}`, { params })
+}
+// 下单需知 更新语言配置
+exports.updatePublicLang = (id, params) => {
+  return $form.put(`announcements/${id}/translate-data`, params)
+}
 // 更新单条公告详情
 exports.updateAnnouncements = (id, params) => {
   return $form.put(`announcements/${id}`, params)
@@ -210,8 +218,17 @@ exports.announcementsDelete = (ids) => {
 exports.addAnnouncements = (params) => {
   return $form.post('announcements', params)
 }
+// 下单须知 获取单条详情
 exports.getNoticeDetails = (id) => {
   return $form.get(`order-notices/${id}`)
+}
+// 下单需知 获取语言单条详细
+exports.noticeLang = (id, params) => {
+  return $form.get(`order-notices/${id}`, { params })
+}
+// 下单需知 更新语言配置
+exports.updateNoticeLang = (id, params) => {
+  return $form.put(`order-notices/${id}/translate-data`, params)
 }
 exports.saveNoticeDetails = (id, params) => {
   return $form.put(`order-notices/${id}`, params)
@@ -668,6 +685,14 @@ exports.addWarehouseAddress = (params) => {
 exports.aloneWarehouseAddress = (id) => {
   return $form.get(`warehouse-address/${id}`)
 }
+// 获取仓库地址配置语言
+exports.warehouseLang = (id, params) => {
+  return $form.get(`warehouse-address/${id}`, { params })
+}
+// 仓库地址配置 更改语言详情
+exports.updateWarehouseLang = (id, params) => {
+  return $form.put(`warehouse-address/${id}/translate-data`, params)
+}
 // 配置 编辑保存单条仓库地址配置
 exports.editWarehouseAddress = (id, params) => {
   return $form.put(`warehouse-address/${id}`, params)
@@ -732,6 +757,14 @@ exports.deleteTransfer = (id) => {
 exports.editPayments = (id) => {
   return $form.get(`payments/${id}`)
 }
+// 转账支付 语言详情
+exports.paymentLang = (id, params) => {
+  return $form.get(`payments/${id}`, { params })
+}
+// 转账支付 添加或修改语言
+exports.updatePaymentLang = (id, params) => {
+  return $form.put(`payments/${id}/translate-data`, params)
+}
 // 修改转账支付详情
 exports.updatePayments = (id, params) => {
   return $form.put(`payments/${id}`, params)
@@ -783,6 +816,14 @@ exports.addEmail = (params) => {
 // 邮件模版 获取单条编辑 详细
 exports.getAloneEmail = (id) => {
   return $form.get(`email-templates/${id}`)
+}
+// 下单需知 获取语言单条详细
+exports.emailLang = (id, params) => {
+  return $form.get(`email-templates/${id}`, { params })
+}
+// 下单需知 更新语言配置
+exports.updateEmailLang = (id, params) => {
+  return $form.put(`email-templates/${id}/translate-data`, params)
 }
 // 邮件模版 删除单条
 exports.deleteAloneEmail = (id) => {
@@ -840,6 +881,14 @@ exports.addValue = (params) => {
 exports.getService = (id) => {
   return $form.get(`value-added-services/${id}`)
 }
+// 订单增值服务 语言详情
+exports.serviceLang = (id, params) => {
+  return $form.get(`value-added-services/${id}`, { params })
+}
+// 订单增值服务 添加或修改语言
+exports.updateServiceLang = (id, params) => {
+  return $form.put(`value-added-services/${id}/translate-data`, params)
+}
 // 更多配置 订单修改单条增值服务
 exports.updateService = (id, params) => {
   return $form.put(`value-added-services/${id}`, params)
@@ -863,6 +912,14 @@ exports.addParcel = (params) => {
 // 更多配置 包裹获取单条增值服务
 exports.getPaVal = (id) => {
   return $form.get(`package-services/${id}`)
+}
+// 包裹增值服务 语言详情
+exports.packageLang = (id, params) => {
+  return $form.get(`package-services/${id}`, { params })
+}
+// 包裹增值服务 添加或修改语言
+exports.updatePackageLang = (id, params) => {
+  return $form.put(`package-services/${id}/translate-data`, params)
 }
 // 更多配置 包裹修改单条增值服务
 exports.updateParcel = (id, params) => {
@@ -940,21 +997,37 @@ exports.getCouponList = (params) => {
 exports.getLineList = (params) => {
   return $form.get('coupons/express-line-list', { params })
 }
+// 转账支付 语言详情
+exports.voucherLang = (id, params) => {
+  return $form.get(`coupons/${id}`, { params })
+}
+// 转账支付 添加或修改语言
+exports.updateVoucherLang = (id, params) => {
+  return $form.put(`coupons/${id}/translate-data`, params)
+}
 // 营销管理 获取视频列表
 exports.getVideoList = () => {
   return $form.get('videos')
 }
-// 获取单条视频详细
+// 视频管理 获取单条视频详细
 exports.getSingleVideo = (id) => {
   return $form.get(`videos/${id}`)
 }
-// 删除视频
+// 视频管理 删除视频
 exports.videoDelete = (ids) => {
   return $form.put('videos/batch-delete', ids)
 }
-// 视频开启或显示
+// 视频管理 视频开启或显示
 exports.closeVideo = (id, status) => {
   return $form.put(`videos/${id}/status/${status}`)
+}
+// 视频管理 语言详情
+exports.videoLang = (id, params) => {
+  return $form.get(`videos/${id}`, { params })
+}
+// 视频管理 添加或修改语言
+exports.updateVideoLang = (id, params) => {
+  return $form.put(`videos/${id}/translate-data`, params)
 }
 // 添加抵用券
 exports.addCoupons = (params) => {
@@ -1009,8 +1082,8 @@ exports.getUserOrder = (params) => {
   return $form.get('statistics/user-order-data', { params })
 }
 // 统计报表 邀请记录
-exports.reportInvite = (id) => {
-  return $form.get(`statistics/user-invite-data/${id}/invitations`)
+exports.reportInvite = (id, params) => {
+  return $form.get(`statistics/user-invite-data/${id}/invitations`, { params })
 }
 // 用户分发优惠券
 exports.addLaunch = (id, ids) => {

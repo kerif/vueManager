@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.name + '的翻译内容'" class="dialog-line-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="line.name + '的翻译内容'" class="dialog-pay-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
@@ -7,14 +7,9 @@
         </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 线路名称 -->
-        <el-form-item label="线路名称" prop="name">
+        <!-- 增值服务名称 -->
+        <el-form-item label="增值服务名称" prop="name">
           <el-input v-model="ruleForm.name"
-          placeholder="请输入"></el-input>
-          </el-form-item>
-        <!-- 参考时效 -->
-          <el-form-item label="参考时效" prop="reference_time">
-          <el-input v-model="ruleForm.reference_time"
           placeholder="请输入"></el-input>
           </el-form-item>
         <!-- 备注 -->
@@ -36,17 +31,13 @@ export default {
     return {
       ruleForm: {
         name: '',
-        reference_time: '',
         remark: '',
         language: ''
       },
       state: '',
       rules: {
         name: [
-          { required: true, message: '请输入线路名称', trigger: 'blur' }
-        ],
-        reference_time: [
-          { required: true, message: '请输入参考时效', trigger: 'blur' }
+          { required: true, message: '请输入增值服务称', trigger: 'blur' }
         ],
         remark: [
           { required: true, message: '请输入备注', trigger: 'blur' }
@@ -64,36 +55,67 @@ export default {
     }
   },
   methods: {
+    // 获取订单增值的语言
     getLang () {
-      this.$request.lineLang(this.line.id, {
+      this.$request.serviceLang(this.line.id, {
         lang: this.ruleForm.language
       }).then(res => {
         this.ruleForm.name = res.data.name
         this.ruleForm.remark = res.data.remark
-        this.ruleForm.reference_time = res.data.reference_time
+        console.log(this.ruleForm, 'this.ruleForm')
+      })
+    },
+    // 获取包裹增值服务的语言
+    getPackage () {
+      this.$request.packageLang(this.line.id, {
+        lang: this.ruleForm.language
+      }).then(res => {
+        this.ruleForm.name = res.data.name
+        this.ruleForm.remark = res.data.remark
         console.log(this.ruleForm, 'this.ruleForm')
       })
     },
     confirm (formName) {
+      console.log(this.state, 'state')
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.updateLineLang(this.line.id, this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: '操作成功',
-                message: res.msg
-              })
+          if (this.state === 'service') {
+            this.$request.updateServiceLang(this.line.id, this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+          } else if (this.state === 'package') {
+            this.$request.updatePackageLang(this.line.id, this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: '操作成功',
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+          }
         } else {
           return false
         }
@@ -101,8 +123,8 @@ export default {
     },
     clear () {
       this.ruleForm.name = ''
-      this.ruleForm.reference_time = ''
       this.ruleForm.remark = ''
+      this.state = ''
     },
     cancelDialog (ruleForm) {
       this.$refs[ruleForm].resetFields()
@@ -113,19 +135,25 @@ export default {
       this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
       this.transCode = this.transCode
+      this.state = this.state
       console.log(this.line, 'line')
       console.log(this.lang, 'lang')
       console.log(this.transCode, 'this.transCode')
       console.log(this.ruleForm.language, 'this.ruleForm.language')
+      console.log(this.state, 'state')
       if (this.transCode === 1) {
-        this.getLang()
+        if (this.state === 'service') {
+          this.getLang()
+        } else if (this.state === 'package') {
+          this.getPackage()
+        }
       }
     }
   }
 }
 </script>
 <style lang="scss">
-.dialog-line-lang {
+.dialog-pay-lang {
   .el-input {
     width: 40% !important;
     margin-left: 50px;

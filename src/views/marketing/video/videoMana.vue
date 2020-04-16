@@ -26,6 +26,12 @@
         </template>
       </el-table-column>
       <el-table-column label="创建时间" prop="created_at"></el-table-column>
+      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+        <template slot-scope="scope">
+          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editVip(scope.row.id)">修改</el-button>
@@ -101,11 +107,19 @@ export default {
           fullscreenToggle: true // 全屏按钮
         }
       },
-      videoVisible: false
+      videoVisible: false,
+      languageData: [],
+      transCode: ''
     }
   },
   mounted () {
     this.getList()
+    this.getLanguageList()
+  },
+  computed: {
+    formatLangData () {
+      return this.languageData.filter(item => !item.is_default)
+    }
   },
   methods: {
     getList () {
@@ -208,6 +222,23 @@ export default {
             })
           }
         })
+      })
+    },
+    // 获取全部语言
+    getLanguageList () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    },
+    // 转账 修改语言
+    onLang (line, lang) {
+      console.log(line, lang)
+      this.transCode = line['trans_' + lang.language_code]
+      // console.log(line['trans_' + lang.language_code])
+      dialog({ type: 'videoLang', line: line, lang: lang, transCode: this.transCode }, () => {
+        this.getList()
       })
     }
   }

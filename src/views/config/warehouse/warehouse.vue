@@ -23,14 +23,12 @@
       <el-table-column label="邮编" prop="postcode"></el-table-column>
       <el-table-column label="地址" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>
       <el-table-column label="支持国家" :show-overflow-tooltip="true" width="150" prop="countries">
-        <!-- <template slot-scope="scope"> -->
-          <!-- <div class="country-box" :title="scope.row.countries"> -->
-          <!-- <span v-for="item in scope.row.support_countries" :key="item.id">
-            {{item.cn_name}}
-          </span> -->
-          <!-- {{scope.row.countries}} -->
-          <!-- </div> -->
-        <!-- </template> -->
+      </el-table-column>
+      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+        <template slot-scope="scope">
+          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+        </template>
       </el-table-column>
       <el-table-column label="操作" width="260">
         <template slot-scope="scope">
@@ -52,6 +50,7 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
+import dialog from '@/components/dialog'
 import { pagination } from '@/mixin'
 export default {
   name: 'vipGroupList',
@@ -65,11 +64,14 @@ export default {
     return {
       vipGroupList: [],
       tableLoading: false,
-      deleteNum: []
+      deleteNum: [],
+      languageData: [],
+      transCode: ''
     }
   },
   created () {
     this.getList()
+    this.getLanguageList() // 获取支持语言
   },
   methods: {
     getList () {
@@ -82,7 +84,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.vipGroupList = res.data.map(item => {
-            let arr = item.support_countries.map(item => item.cn_name)
+            let arr = item.support_countries.map(item => item.name)
             return {
               ...item,
               countries: arr.join(' ')
@@ -106,6 +108,14 @@ export default {
           id: id
         } }
       )
+    },
+    // 获取支持语言
+    getLanguageList () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
     },
     // 仓位管理
     positionAdd (id, warehouseName) {
@@ -144,37 +154,21 @@ export default {
           }
         })
       })
+    },
+    // 修改语言
+    onLang (line, lang) {
+      console.log(line, lang)
+      this.transCode = line['trans_' + lang.language_code]
+      // console.log(line['trans_' + lang.language_code])
+      dialog({ type: 'warehouseLang', line: line, lang: lang, transCode: this.transCode }, () => {
+        this.getList()
+      })
     }
-    // // 删除
-    // deleteData () {
-    //   console.log(this.deleteNum, 'this.deleteNum')
-    //   if (!this.deleteNum || !this.deleteNum.length) {
-    //     return this.$message.error('请选择仓库')
-    //   }
-    //   this.$confirm(`是否确认删除？`, '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     this.$request.deleteWarehouseAddress({
-    //       DELETE: this.deleteNum
-    //     }).then(res => {
-    //       if (res.ret) {
-    //         this.$notify({
-    //           title: '操作成功',
-    //           message: res.msg,
-    //           type: 'success'
-    //         })
-    //         this.getList()
-    //       } else {
-    //         this.$message({
-    //           message: res.msg,
-    //           type: 'error'
-    //         })
-    //       }
-    //     })
-    //   })
-    // }
+  },
+  computed: {
+    formatLangData () {
+      return this.languageData.filter(item => !item.is_default)
+    }
   }
 }
 </script>
@@ -190,6 +184,12 @@ export default {
   }
   .add-btn-container {
     margin-left: 10px;
+  }
+  .icon-sty {
+    cursor: pointer;
+    // padding-left: 20px;
+    font-weight: 700;
+    color: black;
   }
 }
 </style>

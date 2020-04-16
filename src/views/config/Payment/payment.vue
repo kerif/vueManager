@@ -48,6 +48,12 @@
                 </el-switch>
               </template>
             </el-table-column>
+            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+              <template slot-scope="scope">
+                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+                <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button class="btn-dark-green" @click="editTransfer(scope.row.id)">编辑</el-button>
@@ -202,6 +208,12 @@
                   </el-switch>
                 </template>
               </el-table-column>
+          <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onService(scope.row, item)"></span>
+              <span v-else class="el-icon-plus icon-sty" @click="onService(scope.row, item)"></span>
+            </template>
+          </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button class="btn-dark-green" @click="editService(scope.row.id)">编辑</el-button>
@@ -232,6 +244,12 @@
                     active-color="#13ce66"
                     inactive-color="gray">
                   </el-switch>
+                </template>
+              </el-table-column>
+              <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+                <template slot-scope="scope">
+                  <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onPackage(scope.row, item)"></span>
+                  <span v-else class="el-icon-plus icon-sty" @click="onPackage(scope.row, item)"></span>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
@@ -500,6 +518,12 @@
             </el-table-column>
             <!-- 创建时间 -->
             <el-table-column label="创建时间" prop="created_at"></el-table-column>
+            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+              <template slot-scope="scope">
+                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onEmail(scope.row, item)"></span>
+                <span v-else class="el-icon-plus icon-sty" @click="onEmail(scope.row, item)"></span>
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button class="btn-dark-green" @click="editEmail(scope.row.id)">编辑</el-button>
@@ -604,6 +628,11 @@ export default {
       },
       id: 0,
       show: false,
+      languageData: [],
+      transCode: '',
+      serviceCode: '',
+      packageCode: '',
+      emailCode: '',
       rules: {
         kd100_app_id: [
           { required: true, message: '请输入Customer ID', trigger: 'change' }
@@ -649,10 +678,12 @@ export default {
     if (this.activeName === '1') {
       this.getWechat()
       this.getPayment()
+      this.getLanguageList()
     }
     if (this.$route.query.activeName === '7') {
       this.activeName = '7'
       this.getList()
+      this.getLanguageList()
     }
   },
   methods: {
@@ -695,6 +726,48 @@ export default {
           })
         }
       })
+    },
+    // 转账 修改语言
+    onLang (line, lang) {
+      console.log(line, lang)
+      this.transCode = line['trans_' + lang.language_code]
+      // console.log(line['trans_' + lang.language_code])
+      dialog({ type: 'payLang', line: line, lang: lang, transCode: this.transCode }, () => {
+        this.getPayment()
+      })
+    },
+    // 订单增值服务 修改语言
+    onService (line, lang) {
+      console.log(line, lang)
+      this.serviceCode = line['trans_' + lang.language_code]
+      // console.log(line['trans_' + lang.language_code])
+      dialog({ type: 'serviceLang', line: line, lang: lang, transCode: this.serviceCode, state: 'service' }, () => {
+        this.getValue()
+      })
+    },
+    // 包裹增值服务 修改语言
+    onPackage (line, lang) {
+      console.log(line, lang)
+      this.packageCode = line['trans_' + lang.language_code]
+      // console.log(line['trans_' + lang.language_code])
+      dialog({ type: 'serviceLang', line: line, lang: lang, transCode: this.packageCode, state: 'package' }, () => {
+        this.getValue()
+      })
+    },
+    // 邮件模版 修改语言
+    onEmail (line, lang) {
+      console.log(line, lang)
+      this.emailCode = line['trans_' + lang.language_code]
+      // console.log(line['trans_' + lang.language_code])
+      // dialog({ type: 'emailLangAdd', line: line, lang: lang, transCode: this.serviceCode, state: 'package' }, () => {
+      //   this.getEmail()
+      // })
+      this.$router.push({ name: 'emailLangAdd',
+        params: {
+          line: JSON.stringify(line),
+          lang: JSON.stringify(lang),
+          transCode: this.emailCode
+        } })
     },
     // 邮件模版 开启或关闭
     changeEmail (event, enabled, id) {
@@ -1304,6 +1377,7 @@ export default {
       if (this.activeName === '1') {
         this.getWechat()
         this.getPayment()
+        this.getLanguageList()
       } else if (this.activeName === '2') {
         this.getLogisticsData()
       } else if (this.activeName === '3') {
@@ -1556,6 +1630,19 @@ export default {
           })
         }
       })
+    },
+    // 获取全部语言
+    getLanguageList () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    }
+  },
+  computed: {
+    formatLangData () {
+      return this.languageData.filter(item => !item.is_default)
     }
   }
 }
@@ -1684,6 +1771,12 @@ export default {
   }
   .logistic-sty {
     width: 50% !important;
+  }
+  .icon-sty {
+    cursor: pointer;
+    // padding-left: 20px;
+    font-weight: 700;
+    color: black;
   }
 }
 </style>

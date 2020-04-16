@@ -13,7 +13,14 @@
         </template>
       </el-table-column>
       <el-table-column label="创建人" prop="creator"></el-table-column>
+      <!-- 创建时间 -->
       <el-table-column label="创建时间" prop="created_at"></el-table-column>
+      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+        <template slot-scope="scope">
+          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="noticeEdit(scope.row.id)">修改</el-button>
@@ -43,11 +50,14 @@ export default {
     return {
       noticeList: [],
       tableLoading: false,
-      deleteNum: []
+      deleteNum: [],
+      languageData: [],
+      transCode: ''
     }
   },
-  mounted () {
+  created () {
     this.getList()
+    this.getLanguageList() // 获取支持语言
   },
   methods: {
     getList () {
@@ -107,7 +117,41 @@ export default {
           }
         })
       })
+    },
+    // 获取支持语言
+    getLanguageList () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    },
+    // 修改语言
+    onLang (line, lang) {
+      this.transCode = line['trans_' + lang.language_code]
+      this.$router.push({ name: 'noticeLangAdd',
+        params: {
+          line: JSON.stringify(line),
+          lang: JSON.stringify(lang),
+          transCode: this.transCode
+        } })
+    }
+  },
+  computed: {
+    formatLangData () {
+      return this.languageData.filter(item => !item.is_default)
     }
   }
 }
 </script>
+
+<style lang="scss">
+.notice-list-container {
+  .icon-sty {
+    cursor: pointer;
+    // padding-left: 20px;
+    font-weight: 700;
+    color: black;
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.name + '的翻译内容'" class="dialog-line-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="line.name + '的翻译内容'" class="dialog-pay-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
@@ -7,14 +7,9 @@
         </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 线路名称 -->
-        <el-form-item label="线路名称" prop="name">
+        <!-- 支付类型名称 -->
+        <el-form-item label="支付类型名称" prop="name">
           <el-input v-model="ruleForm.name"
-          placeholder="请输入"></el-input>
-          </el-form-item>
-        <!-- 参考时效 -->
-          <el-form-item label="参考时效" prop="reference_time">
-          <el-input v-model="ruleForm.reference_time"
           placeholder="请输入"></el-input>
           </el-form-item>
         <!-- 备注 -->
@@ -36,7 +31,6 @@ export default {
     return {
       ruleForm: {
         name: '',
-        reference_time: '',
         remark: '',
         language: ''
       },
@@ -44,9 +38,6 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入线路名称', trigger: 'blur' }
-        ],
-        reference_time: [
-          { required: true, message: '请输入参考时效', trigger: 'blur' }
         ],
         remark: [
           { required: true, message: '请输入备注', trigger: 'blur' }
@@ -65,19 +56,18 @@ export default {
   },
   methods: {
     getLang () {
-      this.$request.lineLang(this.line.id, {
+      this.$request.paymentLang(this.line.id, {
         lang: this.ruleForm.language
       }).then(res => {
         this.ruleForm.name = res.data.name
         this.ruleForm.remark = res.data.remark
-        this.ruleForm.reference_time = res.data.reference_time
         console.log(this.ruleForm, 'this.ruleForm')
       })
     },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.updateLineLang(this.line.id, this.ruleForm).then(res => {
+          this.$request.updatePaymentLang(this.line.id, this.ruleForm).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -101,7 +91,6 @@ export default {
     },
     clear () {
       this.ruleForm.name = ''
-      this.ruleForm.reference_time = ''
       this.ruleForm.remark = ''
     },
     cancelDialog (ruleForm) {
@@ -125,7 +114,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.dialog-line-lang {
+.dialog-pay-lang {
   .el-input {
     width: 40% !important;
     margin-left: 50px;

@@ -50,6 +50,8 @@ const positionWarehouse = loadonDemand('config/warehouse/Position')
 const NoticeList = loadonDemand('config/notice/NoticeList')
 // 配置 添加、修改下单须知
 const NoticeAddEdit = loadonDemand('config/notice/NoticeAddEdit')
+// 配置 下单须知 语言配置
+const noticeLang = loadonDemand('config/notice/noticeLang')
 // 配置 代理管理
 const agentManagement = loadonDemand('config/agent/Agent')
 // 配置 代理管理 提现申请
@@ -68,6 +70,8 @@ const PaymentManagement = loadonDemand('config/Payment/payment')
 const EditSick = loadonDemand('config/Payment/sickTips')
 // 更多配置 修改或新增邮件模版
 const AddEditEmail = loadonDemand('config/Payment/emailAddEdit')
+// 更多配置 新增或修改语言
+const emailLang = loadonDemand('config/Payment/emailLang')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
 // 发货单
@@ -116,6 +120,8 @@ const Evaluation = loadonDemand('customer/evaluation')
 const PublicList = loadonDemand('customer/public')
 // 公告新增或编辑
 const AddEditPublic = loadonDemand('customer/publicAddEdit')
+// 公告管理 语言详情
+const publicLang = loadonDemand('customer/publicLang')
 // 语言包
 const LanguageSupport = loadonDemand('language/support')
 export default [
@@ -671,6 +677,18 @@ export default [
             }
           },
           {
+            path: '/config/notice/lang/add/:line/:lang/:transCode',
+            component: noticeLang,
+            name: 'noticeLangAdd',
+            id: 603,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '下单须知的翻译内容',
+              parent: '/config/notice'
+            }
+          },
+          {
             path: '/config/applet',
             name: 'appletManagement',
             component: AppletConfiguration,
@@ -690,6 +708,18 @@ export default [
               level: 2,
               group: '配置',
               name: '更多配置'
+            }
+          },
+          {
+            path: '/config/payment/lang/add/:line/:lang/:transCode',
+            component: emailLang,
+            name: 'emailLangAdd',
+            id: 605,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '邮件模版的翻译内容',
+              parent: '/config/payment'
             }
           },
           {
@@ -991,6 +1021,18 @@ export default [
               level: 3,
               group: '客服中心',
               name: '编辑公告',
+              parent: '/customer/Public'
+            }
+          },
+          {
+            path: '/customer/Public/lang/add/:line/:lang/:transCode',
+            component: publicLang,
+            name: 'publicLangAdd',
+            id: 903,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '公告管理的翻译内容',
               parent: '/customer/Public'
             }
           }

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.name + '的翻译内容'" class="dialog-line-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="line.name + '的翻译内容'" class="dialog-video-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
@@ -7,20 +7,14 @@
         </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 线路名称 -->
-        <el-form-item label="线路名称" prop="name">
-          <el-input v-model="ruleForm.name"
+        <!-- 标题 -->
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="ruleForm.title"
           placeholder="请输入"></el-input>
           </el-form-item>
-        <!-- 参考时效 -->
-          <el-form-item label="参考时效" prop="reference_time">
-          <el-input v-model="ruleForm.reference_time"
-          placeholder="请输入"></el-input>
-          </el-form-item>
-        <!-- 备注 -->
-          <el-form-item label="备注" prop="remark">
-          <el-input type="textarea" v-model="ruleForm.remark"
-          :autosize="{ minRows: 2, maxRows: 4}"
+          <!-- 介绍 -->
+        <el-form-item label="介绍" prop="content">
+          <el-input v-model="ruleForm.content"
           placeholder="请输入"></el-input>
           </el-form-item>
     </el-form>
@@ -35,21 +29,17 @@ export default {
   data () {
     return {
       ruleForm: {
-        name: '',
-        reference_time: '',
-        remark: '',
+        title: '',
+        content: '',
         language: ''
       },
       state: '',
       rules: {
-        name: [
-          { required: true, message: '请输入线路名称', trigger: 'blur' }
+        title: [
+          { required: true, message: '请输入标题', trigger: 'blur' }
         ],
-        reference_time: [
-          { required: true, message: '请输入参考时效', trigger: 'blur' }
-        ],
-        remark: [
-          { required: true, message: '请输入备注', trigger: 'blur' }
+        content: [
+          { required: true, message: '请输入介绍', trigger: 'blur' }
         ]
       },
       line: {
@@ -65,19 +55,18 @@ export default {
   },
   methods: {
     getLang () {
-      this.$request.lineLang(this.line.id, {
+      this.$request.videoLang(this.line.id, {
         lang: this.ruleForm.language
       }).then(res => {
-        this.ruleForm.name = res.data.name
-        this.ruleForm.remark = res.data.remark
-        this.ruleForm.reference_time = res.data.reference_time
+        this.ruleForm.title = res.data.title
+        this.ruleForm.content = res.data.content
         console.log(this.ruleForm, 'this.ruleForm')
       })
     },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.updateLineLang(this.line.id, this.ruleForm).then(res => {
+          this.$request.updateVideoLang(this.line.id, this.ruleForm).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -100,9 +89,8 @@ export default {
       })
     },
     clear () {
-      this.ruleForm.name = ''
-      this.ruleForm.reference_time = ''
-      this.ruleForm.remark = ''
+      this.ruleForm.title = ''
+      this.ruleForm.content = ''
     },
     cancelDialog (ruleForm) {
       this.$refs[ruleForm].resetFields()
@@ -125,7 +113,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.dialog-line-lang {
+.dialog-video-lang {
   .el-input {
     width: 40% !important;
     margin-left: 50px;
@@ -135,10 +123,10 @@ export default {
     margin-left: 50px;
   }
   .el-form-item__label {
-    width: 200px;
+    width: 150px;
   }
   .el-form-item__error {
-    margin-left: 250px !important;
+    margin-left: 210px !important;
   }
   .el-dialog__header {
     background-color: #0E102A;

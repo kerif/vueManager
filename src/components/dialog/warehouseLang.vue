@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.name + '的翻译内容'" class="dialog-line-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="line.warehouse_name + '的翻译内容'" class="dialog-line-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
@@ -7,20 +7,24 @@
         </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 线路名称 -->
-        <el-form-item label="线路名称" prop="name">
-          <el-input v-model="ruleForm.name"
+        <!-- 仓库名称 -->
+        <el-form-item label="仓库名称" prop="warehouse_name">
+          <el-input v-model="ruleForm.warehouse_name"
           placeholder="请输入"></el-input>
           </el-form-item>
-        <!-- 参考时效 -->
-          <el-form-item label="参考时效" prop="reference_time">
-          <el-input v-model="ruleForm.reference_time"
-          placeholder="请输入"></el-input>
+        <!-- 收件人姓名 -->
+          <el-form-item label="收件人姓名" prop="receiver_name">
+            <el-input v-model="ruleForm.receiver_name"
+            placeholder="请输入"></el-input>
           </el-form-item>
-        <!-- 备注 -->
-          <el-form-item label="备注" prop="remark">
-          <el-input type="textarea" v-model="ruleForm.remark"
-          :autosize="{ minRows: 2, maxRows: 4}"
+          <!-- 联系地址 -->
+          <el-form-item label="联系地址" prop="address">
+            <el-input v-model="ruleForm.address"
+            placeholder="请输入"></el-input>
+          </el-form-item>
+        <!-- 温馨提示 -->
+          <el-form-item label="温馨提示" prop="tips">
+          <el-input  v-model="ruleForm.tips"
           placeholder="请输入"></el-input>
           </el-form-item>
     </el-form>
@@ -35,26 +39,29 @@ export default {
   data () {
     return {
       ruleForm: {
-        name: '',
-        reference_time: '',
-        remark: '',
-        language: ''
+        warehouse_name: '',
+        receiver_name: '',
+        address: '',
+        tips: ''
       },
       state: '',
       rules: {
-        name: [
-          { required: true, message: '请输入线路名称', trigger: 'blur' }
+        warehouse_name: [
+          { required: true, message: '请输入仓库名称', trigger: 'blur' }
         ],
-        reference_time: [
-          { required: true, message: '请输入参考时效', trigger: 'blur' }
+        receiver_name: [
+          { required: true, message: '请输入收件人姓名', trigger: 'blur' }
         ],
-        remark: [
-          { required: true, message: '请输入备注', trigger: 'blur' }
+        address: [
+          { required: true, message: '请输入联系地址', trigger: 'blur' }
+        ],
+        tips: [
+          { required: true, message: '请输入温馨提示', trigger: 'blur' }
         ]
       },
       line: {
         id: '',
-        name: ''
+        warehouse_name: ''
       },
       lang: {
         name: '',
@@ -65,19 +72,20 @@ export default {
   },
   methods: {
     getLang () {
-      this.$request.lineLang(this.line.id, {
+      this.$request.warehouseLang(this.line.id, {
         lang: this.ruleForm.language
       }).then(res => {
-        this.ruleForm.name = res.data.name
-        this.ruleForm.remark = res.data.remark
-        this.ruleForm.reference_time = res.data.reference_time
+        this.ruleForm.warehouse_name = res.data.warehouse_name
+        this.ruleForm.receiver_name = res.data.receiver_name
+        this.ruleForm.address = res.data.address
+        this.ruleForm.tips = res.data.tips
         console.log(this.ruleForm, 'this.ruleForm')
       })
     },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.updateLineLang(this.line.id, this.ruleForm).then(res => {
+          this.$request.updateWarehouseLang(this.line.id, this.ruleForm).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',

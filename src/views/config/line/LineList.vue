@@ -111,27 +111,12 @@
           </el-switch>
         </template>
       </el-table-column>
-      <!-- 繁体中文 -->
-      <!-- <el-table-column label="繁体中文"> -->
-        <!-- <template slot-scope="scope">
-        </template> -->
-        <!-- <span class="el-icon-plus icon-sty"></span> -->
-        <!-- <span class="el-icon-check icon-sty"></span> -->
-          <!-- <i class="el-icon-plus"></i> -->
-      <!-- </el-table-column> -->
-      <!-- English -->
-      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id">
+      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-          <!-- <span v-if="scope.row.trans_en_US === 1" class="el-icon-plus icon-sty"></span>
-          <span v-else class="el-icon-plus icon-sty"></span> -->
         </template>
       </el-table-column>
-      <!-- 日本语 -->
-      <!-- <el-table-column label="日本语">
-        <span class="el-icon-plus icon-sty"></span>
-      </el-table-column> -->
       <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">修改</el-button>
@@ -342,6 +327,7 @@ export default {
         }
       })
     },
+    // 获取支持语言
     getLanguageList () {
       this.$request.languageList().then(res => {
         if (res.ret) {
@@ -470,7 +456,8 @@ export default {
   }
   .icon-sty {
     cursor: pointer;
-    padding-left: 20px;
+    // text-align: center;
+    // padding-left: 40px;
     font-weight: 700;
     color: black;
   }

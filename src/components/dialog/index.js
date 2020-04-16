@@ -46,6 +46,11 @@ import reportInvite from './reportInvite.vue'
 import commission from './commission.vue'
 import languageEdit from './languageAddEdit.vue'
 import lineLang from './lineLang.vue'
+import warehouseLang from './warehouseLang.vue'
+import payLang from './payLang.vue'
+import serviceLang from './serviceLang.vue'
+import voucherLang from './voucherLang.vue'
+import videoLang from './videoLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -92,6 +97,11 @@ const ReportInviteController = Vue.extend(reportInvite)
 const CommissionController = Vue.extend(commission)
 const LanguageController = Vue.extend(languageEdit)
 const LineLangController = Vue.extend(lineLang)
+const WarehouseLangController = Vue.extend(warehouseLang)
+const PayLangController = Vue.extend(payLang)
+const ServiceLangController = Vue.extend(serviceLang)
+const VoucherLangController = Vue.extend(voucherLang)
+const VideoLangController = Vue.extend(videoLang)
 
 const mixin = {
   data () {
@@ -411,6 +421,41 @@ function initInstance (type) {
     // 路线 双语弹窗
     case 'lineLang':
       instance = new LineLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 仓库地址 双语弹窗
+    case 'warehouseLang':
+      instance = new WarehouseLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 支付转账配置 双语弹窗
+    case 'payLang':
+      instance = new PayLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 订单增值服务 双语弹窗
+    case 'serviceLang':
+      instance = new ServiceLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 营销管理 抵用券管理 双语弹窗
+    case 'voucherLang':
+      instance = new VoucherLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 营销管理 视频管理 双语弹窗
+    case 'videoLang':
+      instance = new VideoLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
