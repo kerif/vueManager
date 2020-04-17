@@ -839,7 +839,7 @@ exports.closeEmail = (id, status) => {
 }
 // 语言包 获取支持语言列表
 exports.languageList = () => {
-  return $form.get('languages')
+  return $form.get('languages/enabled')
 }
 // 语言包 删除
 exports.deleteLG = (id) => {
