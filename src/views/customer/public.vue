@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     formatLangData () {
-      return this.languageData.filter(item => !item.is_default)
+      return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
   methods: {
