@@ -37,7 +37,7 @@ export default {
       state: '',
       rules: {
         name: [
-          { required: true, message: '请输入增值服务称', trigger: 'blur' }
+          { required: true, message: '请输入增值服务名称', trigger: 'blur' }
         ],
         remark: [
           { required: true, message: '请输入备注', trigger: 'blur' }

@@ -66,7 +66,7 @@ export default {
     // 获取转账支付
     getList () {
       this.tableLoading = true
-      this.$request.languageList().then(res => {
+      this.$request.getLanguageList().then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.transferData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))

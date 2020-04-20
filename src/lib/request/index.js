@@ -837,9 +837,13 @@ exports.updateAloneEmail = (id, params) => {
 exports.closeEmail = (id, status) => {
   return $form.put(`email-templates/${id}/status/${status}`)
 }
-// 语言包 获取支持语言列表
+// 获取支持语言列表
 exports.languageList = () => {
   return $form.get('languages/enabled')
+}
+// 语言包 获取列表
+exports.getLanguageList = () => {
+  return $form.get('languages')
 }
 // 语言包 删除
 exports.deleteLG = (id) => {
