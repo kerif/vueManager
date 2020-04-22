@@ -51,6 +51,8 @@ import payLang from './payLang.vue'
 import serviceLang from './serviceLang.vue'
 import voucherLang from './voucherLang.vue'
 import videoLang from './videoLang.vue'
+import pcLang from './pcLang.vue'
+import propsLang from './propsLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -102,6 +104,8 @@ const PayLangController = Vue.extend(payLang)
 const ServiceLangController = Vue.extend(serviceLang)
 const VoucherLangController = Vue.extend(voucherLang)
 const VideoLangController = Vue.extend(videoLang)
+const PcLangController = Vue.extend(pcLang)
+const PropsLangController = Vue.extend(propsLang)
 
 const mixin = {
   data () {
@@ -456,6 +460,20 @@ function initInstance (type) {
     // 营销管理 视频管理 双语弹窗
     case 'videoLang':
       instance = new VideoLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 pc端配置 双语弹窗
+    case 'pcLang':
+      instance = new PcLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 基础配置 双语弹窗
+    case 'propsLang':
+      instance = new PropsLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

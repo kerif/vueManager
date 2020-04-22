@@ -777,6 +777,14 @@ exports.closePayments = (id, status) => {
 exports.getPackage = () => {
   return $form.get('package-props')
 }
+// 物品属性 语言详情
+exports.propsLang = (params) => {
+  return $form.get(`package-props`, { params })
+}
+// 物品属性 添加或修改语言
+exports.updatePropsLang = (params) => {
+  return $form.put(`package-props/translate-data`, params)
+}
 // 添加新属性
 exports.addPackage = (params) => {
   return $form.post('package-props', params)
@@ -941,6 +949,14 @@ exports.closeParcel = (id, status) => {
 exports.getWebsite = () => {
   return $form.get('website-settings')
 }
+// 其余配置 语言详情
+exports.pcLang = (params) => {
+  return $form.get(`website-settings`, { params })
+}
+// 其余配置 添加或修改语言
+exports.updatePcLang = (params) => {
+  return $form.put(`website-settings/translate-data`, params)
+}
 // 更多配置 其余配置 修改
 exports.editWebsite = (params) => {
   return $form.put('website-settings', params)
@@ -948,6 +964,14 @@ exports.editWebsite = (params) => {
 // 更多配置 获取商品分类管理
 exports.getCategories = (params) => {
   return $form.get('package-categories', { params })
+}
+// 商品分类管理 获取语言单条详细
+exports.categoriesLang = (id, params) => {
+  return $form.get(`package-categories/${id}`, { params })
+}
+// 商品分类管理 更新语言配置
+exports.updateCategoriesLang = (id, params) => {
+  return $form.put(`package-categories/${id}/translate-data`, params)
 }
 // 更多配置 商品分类管理 开启或关闭 是否显示
 exports.closeCategories = (id, status) => {

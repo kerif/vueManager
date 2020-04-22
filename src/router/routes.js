@@ -70,8 +70,10 @@ const PaymentManagement = loadonDemand('config/Payment/payment')
 const EditSick = loadonDemand('config/Payment/sickTips')
 // 更多配置 修改或新增邮件模版
 const AddEditEmail = loadonDemand('config/Payment/emailAddEdit')
-// 更多配置 新增或修改语言
+// 更多配置 邮件模版 新增或修改语言
 const emailLang = loadonDemand('config/Payment/emailLang')
+// 更多配置 商品分类模版 新增或修改语言
+const categoriesLang = loadonDemand('config/Payment/categoriesLang')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
 // 发货单
@@ -711,7 +713,7 @@ export default [
             }
           },
           {
-            path: '/config/payment/lang/add/:line/:lang/:transCode',
+            path: '/config/payment/emailLang/add/:line/:lang/:transCode',
             component: emailLang,
             name: 'emailLangAdd',
             id: 605,
@@ -719,6 +721,18 @@ export default [
               group: '配置',
               level: 3,
               name: '邮件模版的翻译内容',
+              parent: '/config/payment'
+            }
+          },
+          {
+            path: '/config/payment/categoriesLang/add/:line/:lang/:transCode',
+            component: categoriesLang,
+            name: 'categoriesLangAdd',
+            id: 605,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '商品分类管理的翻译内容',
               parent: '/config/payment'
             }
           },

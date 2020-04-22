@@ -180,6 +180,7 @@
                   {{item.cn_name}}
                 </el-tag>
               <el-button class="btn-light-red" @click="addProps">添加属性</el-button>
+              <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onProps(item)">{{item.name}}</el-button>
               </el-form-item>
               </el-form>
               <el-button class="save-btn" @click="saveSetting">保存</el-button>
@@ -271,6 +272,7 @@
             <el-form-item label="*网站名称">
               <el-input v-model="setForm.website_name">
               </el-input>
+              <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onPc(item)">{{item.name}}</el-button>
             </el-form-item>
             <!-- 网站链接 -->
             <el-form-item class="url-sty">
@@ -402,7 +404,7 @@
             <template slot-scope="props">
               <el-table :data="props.row.orders">
                 <!-- 二级分类名称 -->
-                <el-table-column label="二级分类名称" prop="name_cn"></el-table-column>
+                <el-table-column label="二级分类名称" prop="name"></el-table-column>
                 <!-- 是否显示 -->
                 <el-table-column label="是否显示">
                   <template slot-scope="scope">
@@ -445,7 +447,7 @@
             <!-- 一级分类列表 -->
             <el-table-column type="index" width="50"></el-table-column>
             <!-- 一级分类名称 -->
-            <el-table-column label="一级分类名称" prop="name_cn"></el-table-column>
+            <el-table-column label="一级分类名称" prop="name"></el-table-column>
             <!-- 是否显示 -->
             <el-table-column label="是否显示">
                 <template slot-scope="scope">
@@ -471,6 +473,12 @@
                     inactive-color="gray">
                   </el-switch>
                 </template>
+            </el-table-column>
+            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+              <template slot-scope="scope">
+                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onCategories(scope.row, item)"></span>
+                <span v-else class="el-icon-plus icon-sty" @click="onCategories(scope.row, item)"></span>
+              </template>
             </el-table-column>
             <!-- 操作 -->
             <el-table-column label="操作" width="300">
@@ -633,6 +641,7 @@ export default {
       serviceCode: '',
       packageCode: '',
       emailCode: '',
+      categoriesCode: '',
       rules: {
         kd100_app_id: [
           { required: true, message: '请输入Customer ID', trigger: 'change' }
@@ -727,6 +736,23 @@ export default {
         }
       })
     },
+    // 基础配置 修改语言
+    onProps (item) {
+      console.log(item, 'item')
+      dialog({ type: 'propsLang', lang: item, dynamicTags: this.dynamicTags }, () => {
+        this.getProps()
+      })
+    },
+    // pc端配置 修改语言
+    onPc (item) {
+      // console.log(line, lang)
+      // this.transCode = line['trans_' + lang.language_code]
+      // line, lang: lang, transCode: this.transCode
+      console.log(item, 'item')
+      dialog({ type: 'pcLang', lang: item }, () => {
+        this.getOthers()
+      })
+    },
     // 转账 修改语言
     onLang (line, lang) {
       console.log(line, lang)
@@ -756,17 +782,22 @@ export default {
     },
     // 邮件模版 修改语言
     onEmail (line, lang) {
-      console.log(line, lang)
       this.emailCode = line['trans_' + lang.language_code]
-      // console.log(line['trans_' + lang.language_code])
-      // dialog({ type: 'emailLangAdd', line: line, lang: lang, transCode: this.serviceCode, state: 'package' }, () => {
-      //   this.getEmail()
-      // })
       this.$router.push({ name: 'emailLangAdd',
         params: {
           line: JSON.stringify(line),
           lang: JSON.stringify(lang),
           transCode: this.emailCode
+        } })
+    },
+    // 商品分类管理 修改语言
+    onCategories (line, lang) {
+      this.categoriesCode = line['trans_' + lang.language_code]
+      this.$router.push({ name: 'categoriesLangAdd',
+        params: {
+          line: JSON.stringify(line),
+          lang: JSON.stringify(lang),
+          transCode: this.categoriesCode
         } })
     },
     // 邮件模版 开启或关闭
@@ -1777,6 +1808,9 @@ export default {
     // padding-left: 20px;
     font-weight: 700;
     color: black;
+  }
+  .others-btn {
+    margin-left: 15px;
   }
 }
 </style>
