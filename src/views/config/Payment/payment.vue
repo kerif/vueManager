@@ -1,6 +1,6 @@
 <template>
     <div class="payment-container">
-      <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
+      <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
         <!-- 支付配置 -->
         <el-tab-pane label="支付配置" name="1">
           <!-- 微信支付 -->
@@ -431,6 +431,12 @@
                     </el-switch>
                   </template>
                 </el-table-column>
+                <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onCategories(scope.row, item)"></span>
+                    <span v-else class="el-icon-plus icon-sty" @click="onCategories(scope.row, item)"></span>
+                  </template>
+                </el-table-column>
                 <el-table-column label="操作" width="300">
                   <template slot-scope="scope">
                     <!-- 编辑 -->
@@ -585,7 +591,7 @@ export default {
       ],
       tableLoading: false,
       localization: {},
-      activeName: '',
+      activeName: '1',
       logisticsData: {
         trackingmore_key: '',
         kd100_app_id: '',
@@ -683,17 +689,45 @@ export default {
     }
   },
   created () {
-    this.activeName = '1'
+    // this.activeName = '1'
+    this.getLanguageList()
+    if (this.$route.query.activeName) {
+      this.activeName = this.$route.query.activeName
+    }
     if (this.activeName === '1') {
       this.getWechat()
       this.getPayment()
-      this.getLanguageList()
-    }
-    if (this.$route.query.activeName === '7') {
-      this.activeName = '7'
+      // this.getLanguageList()
+    } else if (this.activeName === '2') {
+      this.getLogisticsData()
+    } else if (this.activeName === '3') {
+      this.confirmSetting()
+      this.getSetting()
+      this.getProps()
+    } else if (this.activeName === '4') {
+      this.page_params.page = 1
       this.getList()
-      this.getLanguageList()
+    } else if (this.activeName === '5') {
+      this.page_params.page = 1
+      this.getList()
+    } else if (this.activeName === '6') {
+      this.getOthers()
+    } else if (this.activeName === '7') {
+      this.page_params.page = 1
+      this.getList()
+    } else if (this.activeName === '8') {
+      this.getEmail()
     }
+    // if (this.activeName === '1') {
+    //   this.getWechat()
+    //   this.getPayment()
+    //   this.getLanguageList()
+    // }
+    // if (this.$route.query.activeName === '7') {
+    //   this.activeName = '7'
+    //   this.getList()
+    //   this.getLanguageList()
+    // }
   },
   methods: {
     // 修改在线支付的开关
@@ -1404,7 +1438,7 @@ export default {
         }
       })
     },
-    handleClick () {
+    onTabChange () {
       if (this.activeName === '1') {
         this.getWechat()
         this.getPayment()
@@ -1429,6 +1463,7 @@ export default {
       } else if (this.activeName === '8') {
         this.getEmail()
       }
+      this.page_params.handleQueryChange('activeName', this.activeName)
     },
     // 上传打包照片
     uploadBaleImg (item) {

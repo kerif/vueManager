@@ -536,23 +536,6 @@ export default {
     },
     // Tab Change
     onTabChange (tab) {
-      // switch (tab.name) {
-      //   case '1': // 待处理
-      //     this.status = 1
-      //     break
-      //   case '2': // 待支付
-      //     this.status = 2
-      //     break
-      //   case '3': // 待发货
-      //     this.status = 3
-      //     break
-      //   case '4': // 已发货
-      //     this.status = 4
-      //     break
-      //   case '5': // 已签收
-      //     this.status = 5
-      //     break
-      // }
       this.status = Number(tab.name)
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)

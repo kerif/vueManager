@@ -4,14 +4,9 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-width="120px">
         <!-- 员工组中文名 -->
-        <el-form-item label="分类名称" prop="name_cn" class="input-style">
-          <el-input v-model="ruleForm.name_cn"
+        <el-form-item label="分类名称" prop="name" class="input-style">
+          <el-input v-model="ruleForm.name"
           placeholder="请输入分类名称"></el-input>
-          </el-form-item>
-        <!-- 员工组英文名 -->
-          <el-form-item label="分类英文名称" prop="name_en" class="input-style">
-          <el-input v-model="ruleForm.name_en"
-          placeholder="请输入分类英文名称"></el-input>
           </el-form-item>
         <!-- 用户组描述 -->
           <el-form-item label="选择分类" prop="parent_id">
@@ -20,7 +15,7 @@
                     v-for="item in classifyList"
                     :key="item.id"
                     :value="item.id"
-                    :label="item.name_cn">
+                    :label="item.name">
                 </el-option>
              </el-select>
           </el-form-item>
@@ -36,19 +31,15 @@ export default {
   data () {
     return {
       ruleForm: {
-        name_cn: '',
-        name_en: '',
+        name: '',
         parent_id: 0
       },
       classifyList: [],
       state: '',
       id: '',
       rules: {
-        name_cn: [
+        name: [
           { required: true, message: '请输入分类名称', trigger: 'blur' }
-        ],
-        name_en: [
-          { required: true, message: '请输入分类英文名称', trigger: 'blur' }
         ],
         parent_id: [
           { required: true, message: '请选择分类', trigger: 'change' }
@@ -58,7 +49,6 @@ export default {
   },
   methods: {
     getList () {
-      console.log(this.id, 'idid')
       this.$request.getRiskDetails(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -76,13 +66,13 @@ export default {
       this.classifyList = [
         {
           id: 0,
-          name_cn: '顶级分类'
+          name: '顶级分类'
         }
       ]
       this.$request.getAllTree().then(res => {
         if (res.ret) {
           if (res.data.length) {
-            this.classifyList = this.classifyList.concat(res.data.map(item => ({ id: item.id, name_cn: item.name_cn })))
+            this.classifyList = this.classifyList.concat(res.data.map(item => ({ id: item.id, name: item.name })))
           }
           console.log(this.classifyList, 'this.classifyList')
         } else {
@@ -139,8 +129,7 @@ export default {
       })
     },
     clear () {
-      this.ruleForm.name_cn = ''
-      this.ruleForm.name_en = ''
+      this.ruleForm.name = ''
       this.ruleForm.parent_id = 0
     },
     cancelDialog (ruleForm) {

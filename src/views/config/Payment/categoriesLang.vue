@@ -7,7 +7,7 @@
         </p>
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
-      <el-form-item label="*一级分类名称">
+      <el-form-item label="*分类名称">
         <el-row>
           <el-col :span="10">
             <el-input placeholder="请输入内容" v-model="params.name"></el-input></el-col>
