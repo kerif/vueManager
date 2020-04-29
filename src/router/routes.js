@@ -30,6 +30,8 @@ const TransactionDetails = loadonDemand('finance/financeDetails')
 const TransactionWechat = loadonDemand('finance/wechatPay')
 // 财务 充值记录
 const Recharge = loadonDemand('finance/recharge')
+// 财务 余额扣款
+const balance = loadonDemand('finance/balance')
 // 财务 审核跟详情页面
 const RechargeDetails = loadonDemand('finance/rechargeDetails')
 // 配置 路线列表
@@ -46,11 +48,11 @@ const WareHouse = loadonDemand('config/warehouse/warehouse')
 const WareHouseEdit = loadonDemand('config/warehouse/warehouseAddEdit')
 // 配置 仓库地址 仓位管理
 const positionWarehouse = loadonDemand('config/warehouse/Position')
-// 配置 下单须知列表
+// 配置 文章管理列表
 const NoticeList = loadonDemand('config/notice/NoticeList')
-// 配置 添加、修改下单须知
+// 配置 添加、修改文章管理
 const NoticeAddEdit = loadonDemand('config/notice/NoticeAddEdit')
-// 配置 下单须知 语言配置
+// 配置 文章管理 语言配置
 const noticeLang = loadonDemand('config/notice/noticeLang')
 // 配置 代理管理
 const agentManagement = loadonDemand('config/agent/Agent')
@@ -82,6 +84,10 @@ const Ship = loadonDemand('station/ship')
 const ShipDetails = loadonDemand('station/shipDetails')
 // 拣货日志
 const Picking = loadonDemand('station/picking')
+// 仓库自提
+const warehouseSelf = loadonDemand('station/warehouseSelf')
+// 仓库自提 订单详情
+const selfDetails = loadonDemand('station/warehouseDetails')
 // 订单 预报包裹列表
 const OrderList = loadonDemand('order/order/OrderList')
 // 订单 无人认领包裹
@@ -110,6 +116,8 @@ const videoManagement = loadonDemand('marketing/video/videoMana')
 const channelManagement = loadonDemand('marketing/channel/channelList')
 // 营销管理 统计报表
 const reportList = loadonDemand('marketing/report/report')
+// 营销管理 广告图管理
+const bannerList = loadonDemand('marketing/banner/bannerList')
 // 营销管理 新增或编辑渠道管理
 const AddEditChannel = loadonDemand('marketing/channel/AddEditChannel')
 // 营销管理 引流列表
@@ -528,6 +536,29 @@ export default [
               group: '货站',
               name: '拣货日志'
             }
+          },
+          {
+            path: '/station/warehouseSelf',
+            name: 'warehouseSelf',
+            component: warehouseSelf,
+            id: 504,
+            meta: {
+              level: 2,
+              group: '货站',
+              name: '仓库自提'
+            }
+          },
+          {
+            path: '/station/self/details/:id/:status',
+            name: 'selfDetails',
+            component: selfDetails,
+            id: 504,
+            meta: {
+              level: 3,
+              group: '货站',
+              name: '详情',
+              parent: '/station/warehouseSelf'
+            }
           }
         ]
       },
@@ -651,7 +682,7 @@ export default [
             meta: {
               group: '配置',
               level: 2,
-              name: '下单须知'
+              name: '文章管理'
             }
           },
           {
@@ -662,7 +693,7 @@ export default [
             meta: {
               group: '配置',
               level: 3,
-              name: '新增下单须知',
+              name: '新增文章管理',
               parent: '/config/notice'
             }
           },
@@ -674,7 +705,7 @@ export default [
             meta: {
               group: '配置',
               level: 3,
-              name: '修改下单须知',
+              name: '修改文章管理',
               parent: '/config/notice'
             }
           },
@@ -686,7 +717,7 @@ export default [
             meta: {
               group: '配置',
               level: 3,
-              name: '下单须知的翻译内容',
+              name: '文章管理的翻译内容',
               parent: '/config/notice'
             }
           },
@@ -849,6 +880,17 @@ export default [
               name: '充值审核',
               parent: '/finance/recharge'
             }
+          },
+          {
+            path: '/finance/balance',
+            name: 'balance',
+            component: balance,
+            id: 703,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '余额扣款处理'
+            }
           }
         ]
       },
@@ -971,6 +1013,17 @@ export default [
               level: 2,
               group: '营销管理',
               name: '统计报表'
+            }
+          },
+          {
+            path: '/marketing/banner',
+            name: 'bannerList',
+            component: bannerList,
+            id: 806,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '广告图管理'
             }
           }
         ]

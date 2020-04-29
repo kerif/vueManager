@@ -1763,9 +1763,6 @@ export default {
     .el-form-item__content {
       margin-left: 0 !important;
     }
-    // .el-form-item__label {
-    //   width: 500px !important;
-    // }
   }
     .avatar-uploader {
       display: inline-block;

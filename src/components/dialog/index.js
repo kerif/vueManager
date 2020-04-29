@@ -53,6 +53,9 @@ import voucherLang from './voucherLang.vue'
 import videoLang from './videoLang.vue'
 import pcLang from './pcLang.vue'
 import propsLang from './propsLang.vue'
+import bannerList from './bannerAddEdit.vue'
+import bannerLang from './bannerLang.vue'
+import warehouseSelf from './warehouseSelf.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -106,6 +109,9 @@ const VoucherLangController = Vue.extend(voucherLang)
 const VideoLangController = Vue.extend(videoLang)
 const PcLangController = Vue.extend(pcLang)
 const PropsLangController = Vue.extend(propsLang)
+const BannerListController = Vue.extend(bannerList)
+const BannerLangController = Vue.extend(bannerLang)
+const WarehouseSelfController = Vue.extend(warehouseSelf)
 
 const mixin = {
   data () {
@@ -474,6 +480,27 @@ function initInstance (type) {
     // 更多配置 基础配置 双语弹窗
     case 'propsLang':
       instance = new PropsLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 营销管理 广告图增加或修改
+    case 'bannerList':
+      instance = new BannerListController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 营销管理 广告图语言修改
+    case 'bannerLang':
+      instance = new BannerLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 仓库自提 设为自提
+    case 'warehouseSelf':
+      instance = new WarehouseSelfController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -614,7 +614,6 @@ export default {
     },
     // 客户id
     handleSelect (item) {
-      // this.ruleForm.en_name = item.name
       console.log(item)
       this.supplierId = item.id
       this.supplierName = item.name

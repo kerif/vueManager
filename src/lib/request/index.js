@@ -122,10 +122,10 @@ exports.saveWareHouse = (params) => {
   return $form.put('warehouse-address', params)
 }
 exports.getNotice = (params) => {
-  return $form.get('order-notices', { params })
+  return $form.get('articles', { params })
 }
 exports.saveNotice = (params) => {
-  return $form.post(`order-notices`, params)
+  return $form.post(`articles`, params)
 }
 // 客户组删除
 exports.userGroupDelete = (ids) => {
@@ -218,20 +218,24 @@ exports.announcementsDelete = (ids) => {
 exports.addAnnouncements = (params) => {
   return $form.post('announcements', params)
 }
-// 下单须知 获取单条详情
+// 文章管理 获取单条详情
 exports.getNoticeDetails = (id) => {
-  return $form.get(`order-notices/${id}`)
+  return $form.get(`articles/${id}`)
 }
-// 下单需知 获取语言单条详细
+// 文章管理 获取语言单条详细
 exports.noticeLang = (id, params) => {
-  return $form.get(`order-notices/${id}`, { params })
+  return $form.get(`articles/${id}`, { params })
 }
-// 下单需知 更新语言配置
+// 文章管理 更新语言配置
 exports.updateNoticeLang = (id, params) => {
-  return $form.put(`order-notices/${id}/translate-data`, params)
+  return $form.put(`articles/${id}/translate-data`, params)
+}
+// 文章管理 获取所有文章分类
+exports.getArticlesType = () => {
+  return $form.get(`articles/types`)
 }
 exports.saveNoticeDetails = (id, params) => {
-  return $form.put(`order-notices/${id}`, params)
+  return $form.put(`articles/${id}`, params)
 }
 exports.getShip = (params) => {
   return $form.get('shipments', { params })
@@ -277,6 +281,10 @@ exports.AutoRecords = (params) => {
 // 充值记录 新增
 exports.addRecords = (params) => {
   return $form.post('recharge-records', params)
+}
+// 余额扣款处理 自动匹配客户ID
+exports.AutoDeductions = (params) => {
+  return $form.get('money-deductions/user-search', { params })
 }
 // 代理管理 审核拒绝
 exports.rechargeReject = (id, params) => {
@@ -466,9 +474,9 @@ exports.getSimple = () => {
 exports.editUserGroup = (id, params) => {
   return $form.put(`user-groups/${id}`, params)
 }
-// 删除下单须知
+// 删除文章管理
 exports.deleteNotice = (params) => {
-  return $form.put('order-notices/batch-delete', params)
+  return $form.put('articles/batch-delete', params)
 }
 // 新建客户组资料
 exports.addUserGroup = (params) => {
@@ -1109,6 +1117,38 @@ exports.getTransactionData = (params) => {
 exports.getUserOrder = (params) => {
   return $form.get('statistics/user-order-data', { params })
 }
+// 营销管理 广告图管理 列表
+exports.getBanner = (params) => {
+  return $form.get('ads-picture', { params })
+}
+// 添加广告图 获取全部下拉框数据
+exports.getLeftData = () => {
+  return $form.get('ads-picture/selects')
+}
+// 广告图 新增
+exports.addBanner = (params) => {
+  return $form.post('ads-picture', params)
+}
+// 广告图 获取单条详情
+exports.aloneBanner = (id) => {
+  return $form.get(`ads-picture/${id}`)
+}
+// 广告图 语言详情
+exports.bannerLang = (id, params) => {
+  return $form.get(`ads-picture/${id}`, { params })
+}
+// 广告图 添加或修改语言
+exports.updateBannerLang = (id, params) => {
+  return $form.put(`ads-picture/${id}/translate-data`, params)
+}
+// 广告图 更新
+exports.updateBanner = (id, params) => {
+  return $form.put(`ads-picture/${id}`, params)
+}
+// 广告图 删除
+exports.deleteBanner = (id) => {
+  return $form.delete(`ads-picture/${id}`)
+}
 // 统计报表 邀请记录
 exports.reportInvite = (id, params) => {
   return $form.get(`statistics/user-invite-data/${id}/invitations`, { params })
@@ -1210,6 +1250,18 @@ exports.removeOrders = (id) => {
 // 删除发货单
 exports.deleteShip = (id) => {
   return $form.delete(`shipments/${id}`)
+}
+// 货站 仓库自提数据
+exports.getWarehouseSelf = (params) => {
+  return $form.get('self-pickup-orders', { params })
+}
+// 仓库自提 设为自提
+exports.setSelf = (id, params) => {
+  return $form.put(`self-pickup-orders/${id}`, params)
+}
+// 仓库自提 获取单条数据
+exports.getAloneSelf = (id) => {
+  return $form.get(`self-pickup-orders/${id}`)
 }
 // 发货单 导出清单
 exports.uploadExcel = (ids) => {

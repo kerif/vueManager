@@ -23,17 +23,17 @@
                 <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
             </span>
-          <el-upload
-            v-show="baleImgList.length < 1"
-            class="avatar-uploader"
-            action=""
-            list-type="picture-card"
-            :http-request="uploadBaleImg"
-            :show-file-list="false">
-            <i class="el-icon-plus">
-            </i>
-        </el-upload>
-    </el-form-item>
+            <el-upload
+              v-show="baleImgList.length < 1"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :http-request="uploadBaleImg"
+              :show-file-list="false">
+              <i class="el-icon-plus">
+              </i>
+          </el-upload>
+       </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">取消</el-button>

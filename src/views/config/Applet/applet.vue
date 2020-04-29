@@ -1245,7 +1245,6 @@ export default {
     .avatar-uploader {
       display: inline-block;
       vertical-align: top;
-      // margin-left: 50px;
     }
     .img-item {
       display: inline-block;
