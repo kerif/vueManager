@@ -282,6 +282,10 @@ exports.AutoRecords = (params) => {
 exports.addRecords = (params) => {
   return $form.post('recharge-records', params)
 }
+// 余额扣款处理 新建
+exports.addDeductions = (params) => {
+  return $form.post('money-deductions', params)
+}
 // 余额扣款处理 自动匹配客户ID
 exports.AutoDeductions = (params) => {
   return $form.get('money-deductions/user-search', { params })
@@ -750,8 +754,8 @@ exports.getPayments = () => {
   return $form.get('payments')
 }
 // 更多配置 获取模版配置
-exports.getEmail = () => {
-  return $form.get('email-templates')
+exports.getEmail = (params) => {
+  return $form.get('email-templates', { params })
 }
 // 添加转账支付方式
 exports.addPayments = (params) => {
@@ -832,6 +836,10 @@ exports.addEmail = (params) => {
 // 邮件模版 获取单条编辑 详细
 exports.getAloneEmail = (id) => {
   return $form.get(`email-templates/${id}`)
+}
+// 邮件模版 获取邮件模版类型列表
+exports.emailType = () => {
+  return $form.get('email-templates/type-list')
 }
 // 下单需知 获取语言单条详细
 exports.emailLang = (id, params) => {

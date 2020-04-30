@@ -12,7 +12,7 @@
       <!-- 功能配置 -->
       <el-tab-pane label="功能配置" name="5"></el-tab-pane>
       <!-- 如何下单 -->
-      <el-tab-pane label="如何下单" name="6"></el-tab-pane>
+      <!-- <el-tab-pane label="如何下单" name="6"></el-tab-pane> -->
     </el-tabs>
     <el-row v-if="activeName === '1'">
       <el-col :span="11">
@@ -1205,7 +1205,8 @@ export default {
 <style lang="scss">
 .applet-container {
    .tabLength {
-    width: 560px !important;
+    // width: 560px !important;
+    width: 500px !important;
   }
   .applet-left {
     padding: 15px;

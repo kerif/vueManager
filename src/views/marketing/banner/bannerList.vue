@@ -5,7 +5,7 @@
       </search-group>
       </div>
     <div class="select-box">
-      <add-btn @click.native="addBanner">添加仓库</add-btn>
+      <add-btn @click.native="addBanner">添加广告图</add-btn>
     </div>
     <el-table :data="vipGroupList" stripe border class="data-list"
     v-loading="tableLoading"

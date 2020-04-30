@@ -1,7 +1,7 @@
 <template>
   <div class="email-add-container">
     <el-form label-position="top">
-      <el-form-item label="*模版类型">
+      <el-form-item label="*模版类型" class="email-tmp">
         <el-row>
           <el-col :span="10">
             <el-select v-model="params.type" placeholder="请选择" clearable>
@@ -52,16 +52,7 @@ export default {
         type: '',
         content: ''
       },
-      options: [{
-        id: 1,
-        name: '绑定邮箱'
-      }, {
-        id: 2,
-        name: '更改邮箱'
-      }, {
-        id: 3,
-        name: '邮箱登录'
-      }],
+      options: [],
       editor: null
     }
   },
@@ -92,6 +83,7 @@ export default {
     console.log(this.editor, 'this.editor')
   },
   created () {
+    this.getType()
     if (this.$route.params.id) {
       this.getList()
     }
@@ -104,6 +96,14 @@ export default {
           this.params.content = res.data.content
           this.params.type = res.data.type
           this.editor.txt.html(this.params.content)
+        }
+      })
+    },
+    // 获取模版类型
+    getType () {
+      this.$request.emailType().then(res => {
+        if (res.ret) {
+          this.options = res.data
         }
       })
     },
@@ -156,7 +156,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
+.el-select-dropdown {
+  z-index: 11111 !important;
+}
 .email-add-container {
   background-color: #fff !important;
 }

@@ -503,6 +503,9 @@
         <!-- 邮件模版 -->
         <el-tab-pane label="邮件模版" name="8">
           <div class="select-box">
+            <search-select placeholder="请选择" :selectArr="emailType"
+            v-model="page_params.type" @search="onGroupChange">
+          </search-select>
           <add-btn router="emailAdd">添加邮件模版</add-btn>
         </div>
           <el-table :data="emailData" v-loading="tableLoading" class="data-list"
@@ -514,6 +517,11 @@
                 <span v-if="scope.row.type === 1">绑定邮箱</span>
                 <span v-if="scope.row.type === 2">更改邮箱</span>
                 <span v-if="scope.row.type === 3">邮箱登录</span>
+                <span v-if="scope.row.type === 4">绑定邮箱</span>
+                <span v-if="scope.row.type === 5">订单支付成功</span>
+                <span v-if="scope.row.type === 6">已发货订单</span>
+                <span v-if="scope.row.type === 7">已入库包裹</span>
+                <span v-if="scope.row.type === 7">提交订单成功</span>
               </template>
             </el-table-column>
             <!-- 邮件标题 -->
@@ -538,7 +546,7 @@
                 <span v-else class="el-icon-plus icon-sty" @click="onEmail(scope.row, item)"></span>
               </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" width="150">
               <template slot-scope="scope">
                 <el-button class="btn-dark-green" @click="editEmail(scope.row.id)">编辑</el-button>
                 <el-button class="btn-light-red" @click="deleteEmail(scope.row.id)">删除</el-button>
@@ -552,13 +560,15 @@
 
 <script>
 import NlePagination from '@/components/pagination'
+import { SearchSelect } from '@/components/searchs'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
 export default {
   components: {
     AddBtn,
-    NlePagination
+    NlePagination,
+    SearchSelect
   },
   mixins: [pagination],
   data () {
@@ -643,11 +653,15 @@ export default {
       id: 0,
       show: false,
       languageData: [],
+      emailType: [],
       transCode: '',
       serviceCode: '',
       packageCode: '',
       emailCode: '',
       categoriesCode: '',
+      page_params: {
+        type: ''
+      },
       rules: {
         kd100_app_id: [
           { required: true, message: '请输入Customer ID', trigger: 'change' }
@@ -717,6 +731,7 @@ export default {
       this.getList()
     } else if (this.activeName === '8') {
       this.getEmail()
+      this.getType()
     }
     // if (this.activeName === '1') {
     //   this.getWechat()
@@ -1313,7 +1328,9 @@ export default {
     // 获取邮件模版
     getEmail () {
       this.tableLoading = true
-      this.$request.getEmail().then(res => {
+      this.$request.getEmail({
+        type: this.page_params.type
+      }).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.emailData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
@@ -1324,6 +1341,24 @@ export default {
           })
         }
       })
+    },
+    // 获取模版类型数据
+    getType () {
+      this.$request.emailType().then(res => {
+        // if (res.ret) {
+        //   this.emailType = res.data
+        // }
+        res.data.forEach(item => {
+          this.emailType.push({
+            value: item.id,
+            label: item.name
+          })
+        })
+      })
+    },
+    onGroupChange () {
+      this.page_params.handleQueryChange('type', this.page_params.type)
+      this.getEmail()
     },
     // 商品分类管理 开启或关闭 是否显示
     changeShow (event, id) {
