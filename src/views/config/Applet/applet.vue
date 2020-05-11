@@ -377,8 +377,8 @@
           </el-col>
           </el-row>
        <el-row :gutter="20">
+        <!-- 代理成功提示图 -->
          <el-col :span="6">
-          <!-- 代理成功提示图 -->
             <el-form-item label="代理成功提示图" class="updateChe">
                 <span class="img-item" v-for="(item, index) in approveList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
@@ -394,6 +394,30 @@
                 action=""
                 list-type="picture-card"
                 :http-request="uploadApprove"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">建议尺寸：612px*542px</span>
+            </el-form-item>
+          </el-col>
+        <!-- 仓库背景图 -->
+         <el-col :span="6">
+            <el-form-item label="仓库背景图" class="updateChe">
+                <span class="img-item" v-for="(item, index) in warehouseList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteWarehouse(index)"></i>
+                </span>
+                </span>
+              <el-upload
+                v-show="warehouseList.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadWarehouse"
                 :show-file-list="false">
                 <i class="el-icon-plus">
                 </i>
@@ -565,6 +589,7 @@ export default {
       centerList: [], // 个人中心背景
       licenseList: [], // 协议背景图
       approveList: [], // 增加代理成功提示
+      warehouseList: [], // 仓库背景图
       messageData: [],
       backgroundImg: [], // 海报配置背景图像
       choosePoster: '',
@@ -691,6 +716,7 @@ export default {
         res.data.user_center_image && (this.centerList[0] = res.data.user_center_image)
         res.data.license_image && (this.licenseList[0] = res.data.license_image)
         res.data.agent_approve_image && (this.approveList[0] = res.data.agent_approve_image)
+        res.data.warehouse_image && (this.warehouseList[0] = res.data.warehouse_image)
       })
     },
     // 获取海报配置
@@ -910,6 +936,17 @@ export default {
         }
       })
     },
+    // 仓库背景图
+    uploadWarehouse (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.warehouseList.push(item.path)
+          })
+        }
+      })
+    },
     // 上传评论区
     uploadComment (item) {
       let file = item.file
@@ -986,6 +1023,10 @@ export default {
     // 代理成功提示图
     onDeleteApprove (index) {
       this.approveList.splice(index, 1)
+    },
+    // 仓库背景图
+    onDeleteWarehouse (index) {
+      this.warehouseList.splice(index, 1)
     },
     onDeleteComment (index) {
       this.commentList.splice(index, 1)
@@ -1074,6 +1115,11 @@ export default {
         this.setForm.agent_approve_image = this.approveList[0]
       } else {
         this.setForm.agent_approve_image = []
+      }
+      if (this.warehouseList[0]) {
+        this.setForm.warehouse_image = this.warehouseList[0]
+      } else {
+        this.setForm.warehouse_image = []
       }
       // if (!this.baleImgList[0]) {
       //   return this.$message.error('请上传小程序首页视频入口图')

@@ -1345,9 +1345,6 @@ export default {
     // 获取模版类型数据
     getType () {
       this.$request.emailType().then(res => {
-        // if (res.ret) {
-        //   this.emailType = res.data
-        // }
         res.data.forEach(item => {
           this.emailType.push({
             value: item.id,
@@ -1497,6 +1494,7 @@ export default {
         this.getList()
       } else if (this.activeName === '8') {
         this.getEmail()
+        this.getType()
       }
       this.page_params.handleQueryChange('activeName', this.activeName)
     },
