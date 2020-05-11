@@ -6,11 +6,11 @@
          <el-col :span="7">
           <div class="addCustomer" @click="goToOtherPage(301, 'viplist')">
             <div class="box-header">
-              <div>当月新增客户</div>
+              <div>{{$t('当月新增客户')}}</div>
               <div class="bold-box">{{ user.current_month }}</div>
             </div>
             <div class="box-footer">
-              <span>总用户</span>
+              <span>{{$t('总用户')}}</span>
               <span class="count">{{ user.total }}</span>
             </div>
           </div>
@@ -18,11 +18,11 @@
          <el-col :span="8" :offset="1">
           <div class="addCustomer" @click="goToOtherPage(401, 'orderlist')">
             <div class="box-header">
-              <div>当月新增订单</div>
+              <div>{{$t('当月新增订单')}}</div>
               <div class="bold-box">{{ order.current_month }}</div>
             </div>
             <div class="box-footer">
-              <span>总运单</span>
+              <span>{{$t('总运单')}}</span>
               <span class="count">{{ order.total }}</span>
             </div>
           </div>
@@ -30,11 +30,11 @@
          <el-col :span="7" :offset="1">
           <div class="addCustomer" @click="goToOtherPage(502, 'shipContainer')">
             <div class="box-header">
-              <div>当月新增发货单</div>
+              <div>{{$t('当月新增发货单')}}</div>
               <div class="bold-box">{{ shipment.current_month }}</div>
             </div>
             <div class="box-footer">
-              <span>总发货单</span>
+              <span>{{$t('总发货单')}}</span>
               <span class="count">{{ shipment.total }}</span>
             </div>
           </div>
@@ -44,38 +44,38 @@
         <el-col :span="7">
           <div class="main-box" @click="goToOtherPage(501, 'storageContainer')">
             <img src="../../assets/storage.png" class="tip-img">
-            <span>包裹入库</span>
+            <span>{{$t('包裹入库')}}</span>
           </div>
         </el-col>
         <!-- 拣货打包 -->
         <el-col :span="7" :offset="1">
           <div class="main-box" @click="goToOtherPage(402, 'wayBillList')">
             <img src="../../assets/bale.png" class="tip-img">
-            <span>拣货打包</span>
+            <span>{{$t('拣货打包')}}</span>
           </div>
         </el-col>
         <!-- 运单发货 -->
         <el-col :span="7" :offset="1">
           <div class="main-box" @click="goToOtherPage(502, 'shipContainer')">
             <img src="../../assets/ship.png" class="tip-img">
-            <span>运单发货</span>
+            <span>{{$t('运单发货')}}</span>
           </div>
         </el-col>
        </el-row>
      </el-col>
      <el-col :span="6" class="panel-right">
-       <div class="waitMsg">待处理消息</div>
+       <div class="waitMsg">{{$t('待处理消息')}}</div>
        <ul>
          <li @click="goToOtherPage(401, 'orderlist')">
-           未入库包裹
+           {{$t('未入库包裹')}}
            <div class="msg-right">{{ waitInStorage }}</div>
            </li>
          <li @click="goToOtherPage(402, 'wayBillList')">
-           待拣货包裹
+           {{$t('待拣货包裹')}}
            <div class="msg-right">{{ waitPack }}</div>
            </li>
          <li @click="goToOtherPage(402, 'wayBillList', {activeName: '2'})">
-           未支付包裹
+           {{$t('未支付包裹')}}
            <div class="msg-right">{{ upaid }}</div>
            </li>
        </ul>
@@ -83,29 +83,29 @@
    </el-row>
    <!-- 面板数据 -->
    <div class="panel-box">
-     <div class="waitMsg">数据统计</div>
+     <div class="waitMsg">{{$t('数据统计')}}</div>
      <div class="show-box">
         <div class="show-list">
-         <span class="package-text">{{ status === 2 ? '已入库包裹' : (status === 3 ? '已拣货包裹' : '已发货包裹') }}</span>
+         <span class="package-text">{{ status === 2 ? $t('已入库包裹') : (status === 3 ? $t('已拣货包裹') : $t('已发货包裹')) }}</span>
          <el-select v-model="scope" @change="getDatas">
-           <el-option :value="1" label="近一周"></el-option>
-           <el-option :value="2" label="近一月"></el-option>
-           <el-option :value="3" label="近半年"></el-option>
-           <el-option :value="4" label="全年"></el-option>
+           <el-option :value="1" :label="$t('近一周')"></el-option>
+           <el-option :value="2" :label="$t('近一月')"></el-option>
+           <el-option :value="3" :label="$t('近半年')"></el-option>
+           <el-option :value="4" :label="$t('全年')"></el-option>
          </el-select>
         </div>
         <div class="echarts" id="echarts"></div>
         <div class="type-list">
-          <div :class="['type-item', status === 2 ? 'select' : '']" @click="onStatus(2)">已入库包裹</div>
-          <div :class="['type-item', status === 3 ? 'select' : '']" @click="onStatus(3)">已拣货包裹</div>
-          <div :class="['type-item', status === 5 ? 'select' : '']" @click="onStatus(5)">已发货包裹</div>
+          <div :class="['type-item', status === 2 ? 'select' : '']" @click="onStatus(2)">{{$t('已入库包裹')}}</div>
+          <div :class="['type-item', status === 3 ? 'select' : '']" @click="onStatus(3)">{{$t('已拣货包裹')}}</div>
+          <div :class="['type-item', status === 5 ? 'select' : '']" @click="onStatus(5)">{{$t('已发货包裹')}}</div>
         </div>
      </div>
    </div>
-    <el-dialog :visible.sync="showTips" title="系统配置助手" class="dialog-start-loading" width="45%">
+    <el-dialog :visible.sync="showTips" :title="$t('系统配置助手')" class="dialog-start-loading" width="45%">
       <div class="loading-top">
-        <span>亲爱的用户</span><br/>
-        <span>首次系统使用需要完成以下配置才能正常上线运营</span>
+        <span>{{$t('亲爱的用户')}}</span><br/>
+        <span>{{$t('首次系统使用需要完成以下配置才能正常上线运营')}}</span>
       </div>
       <div class="loading-bottom">
           <div v-for="item in updateProp" :key="item.type_id" class="service">
@@ -115,12 +115,12 @@
             <div class="serviceRight" @click="goRouter(item.type_id, item.route)">
             <!-- <span>{{item.route}}</span> -->
             <!-- <router-link :to="`/${item.route}`" class="chooseOrder" @click="finishedGuides(item.type_id)">去配置</router-link> -->
-            去配置
+            {{$t('去配置')}}
             </div>
           </div>
       </div>
       <div class="not-btn">
-        <el-button @click="notMind" class="btn-light-red">不再提示</el-button>
+        <el-button @click="notMind" class="btn-light-red">{{$t('不再提示')}}</el-button>
       </div>
     </el-dialog>
   </div>

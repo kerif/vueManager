@@ -118,7 +118,9 @@
         </template>
       </el-table-column> -->
       <!-- 线路名称 -->
-      <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
+      <el-table-column label="线路名称">
+        <template slot-scope="scope">{{$t(scope.row.express_line.cn_name)}}</template>
+      </el-table-column>
       <!-- 收货人 -->
       <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
       <!-- 收货国家或地区 -->

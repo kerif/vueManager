@@ -12,6 +12,7 @@ export default new Vuex.Store({
     userName: '', // 用户名
     btnLoading: false,
     isCollapse: false,
+    languageCode: 'simple', // 默认简体中文
     pagePath: '' // 路径列表
   },
   mutations: {
@@ -46,6 +47,13 @@ export default new Vuex.Store({
     saveFileterAfterRouterMap (state, data) {
       state.fileterAfterRouterMap = data.fileterAfterRouterMap
       state.isPermissionFilterArr = data.isPermissionFilterArr
+    },
+    saveLanguageCode (state, data) {
+      state.languageCode = data
+      localStorage.setItem('language', data)
+    },
+    initLanguageCode (state) {
+      state.languageCode = localStorage.getItem('language') || 'simple'
     }
   },
   actions: {

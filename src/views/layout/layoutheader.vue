@@ -4,6 +4,11 @@
      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
        style="font-size:24px;"></i>
     </div>
+    <el-switch
+      v-model="isSimple"
+      active-text="简"
+      inactive-text="繁"
+      inactive-color="#13ce66" />
     <span class="user-box">{{ $store.state.userName }}</span>
     <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
   </el-header>
@@ -45,6 +50,18 @@ export default {
   computed: {
     isCollapse () {
       return this.$store.state.isCollapse
+    },
+    isSimple: {
+      get () {
+        return this.$store.state.languageCode === 'simple'
+      },
+      set (val) {
+        if (val) {
+          this.$store.commit('saveLanguageCode', 'simple')
+        } else {
+          this.$store.commit('saveLanguageCode', 'tradition')
+        }
+      }
     }
   }
 }
@@ -77,7 +94,7 @@ export default {
   line-height: 60px;
   text-align: right;
   .user-box {
-    margin-right: 30px;
+    margin: 0 30px;
   }
   .logout-icon {
     font-size: 20px;
