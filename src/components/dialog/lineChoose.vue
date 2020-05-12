@@ -1,9 +1,9 @@
 <template>
-  <el-dialog :visible.sync="show" title="选择路线" class="dialog-line-choose" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('选择路线')" class="dialog-line-choose" @close="clear">
     <div class="searchUser">
-      <el-input placeholder="请输入关键字" v-model="keyword" @keyup.enter.native="getList">
+      <el-input :placeholder="$t('请输入关键字')" v-model="keyword" @keyup.enter.native="getList">
         <template slot="append">
-          <span @click="getList" class="search-btn">搜索</span>
+          <span @click="getList" class="search-btn">{{$('搜索')}}</span>
         </template>
       </el-input>
     </div>
@@ -19,11 +19,11 @@
       <!-- 线路名称 -->
       <el-table-column
         prop="name"
-        label="线路名称">
+        :label="$t('线路名称')">
       </el-table-column>
       <!-- 支持国家 -->
         <el-table-column
-        label="支持国家">
+        :label="$t('支持国家')">
           <template slot-scope="scope">
             <span v-for="item in scope.row.countries" :key="item.id">{{item.name}}&nbsp;</span>
           </template>
@@ -33,8 +33,8 @@
         <nle-pagination :pageParams="page_params"></nle-pagination>
      </div>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -67,7 +67,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -81,7 +81,7 @@ export default {
     },
     confirm () {
       if (!this.lineNum.length) {
-        return this.$message.error('请选择路线')
+        return this.$message.error(this.$t('请选择路线'))
       }
       this.success(this.lineNum)
       this.show = false

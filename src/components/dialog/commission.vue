@@ -1,11 +1,11 @@
 <template>
-  <el-dialog :visible.sync="show" title="设置佣金" class="dialog-commission"
+  <el-dialog :visible.sync="show" :title="$t('设置佣金')" class="dialog-commission"
   @close="clear">
     <el-form ref="form" :model="ruleForm" label-width="140px">
-      <el-form-item label="代理名称">
+      <el-form-item :label="$t('代理名称')">
         <span>{{agentName}}</span>
       </el-form-item>
-      <el-form-item label="默认佣金">
+      <el-form-item :label="$t('默认佣金')">
           <el-input v-model="ruleForm.commission" class="input-select"></el-input>%
       </el-form-item>
     </el-form>
@@ -18,13 +18,13 @@
       <!-- 用户名 -->
       <el-table-column
         prop="name"
-        label="线路名称">
+        :label="$t('线路名称')">
       </el-table-column>
       <!-- 姓名 -->
       <el-table-column
-        label="分成方式">
+        :label="$t('分成方式')">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.type" placeholder="请选择">
+          <el-select v-model="scope.row.type" :placeholder="$t('请选择')">
             <el-option
               v-for="item in options"
               :key="item.id"
@@ -34,17 +34,17 @@
           </el-select>
         </template>
       </el-table-column>
-      <!-- 邮箱 -->
+      <!-- 值 -->
         <el-table-column
-        label="值">
+        :label="$t('值')">
         <template slot-scope="scope">
           <el-input v-model="scope.row.commission"></el-input>
         </template>
       </el-table-column>
     </el-table>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm(ruleForm, tableData)">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm(ruleForm, tableData)">{{$t('确定')}}</el-button>
     </div>
     <div class="pagination-box">
       <nle-pagination :pageParams="page_params"></nle-pagination>
@@ -67,10 +67,10 @@ export default {
       options: [
         {
           id: 1,
-          name: '按比例提成'
+          name: this.$t('按比例提成')
         }, {
           id: 2,
-          name: '按固定金额提成'
+          name: this.$t('按固定金额提成')
         }
       ],
       agentName: '',
@@ -108,7 +108,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false

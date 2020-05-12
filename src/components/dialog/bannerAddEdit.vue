@@ -1,16 +1,16 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'edit' ? '修改广告图' : '添加广告图'" class="dialog-banner" @close="clear" width="85%">
+  <el-dialog :visible.sync="show" :title="state === 'edit' ? $t('修改广告图') : $t('添加广告图')" class="dialog-banner" @close="clear" width="85%">
     <el-row :gutter="20">
       <el-col :span="12">
         <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
             <!-- 广告图名称 -->
-            <el-form-item label="*广告图名称">
+            <el-form-item :label="$t('*广告图名称')">
               <el-input v-model="ruleForm.picture_name"
-              placeholder="请输入广告图名称" class="banner-sty"></el-input>
+              :placeholder="$t('请输入广告图名称')" class="banner-sty"></el-input>
               </el-form-item>
             <!-- 显示位置 -->
-              <el-form-item label="*显示位置">
-                <el-select v-model="ruleForm.position" placeholder="请选择显示位置" clearable
+              <el-form-item :label="$t('*显示位置')">
+                <el-select v-model="ruleForm.position" :placeholder="$t('请选择显示位置')" clearable
                  class="banner-sty">
                   <el-option
                     v-for="item in positionData"
@@ -21,8 +21,8 @@
                 </el-select>
               </el-form-item>
               <!-- 所属应用 -->
-              <el-form-item label="*所属应用">
-                <el-select v-model="ruleForm.source" placeholder="请选择所属应用" clearable
+              <el-form-item :label="$t('*所属应用')">
+                <el-select v-model="ruleForm.source" :placeholder="$t('请选择所属应用')" clearable
                  class="banner-sty">
                   <el-option
                     v-for="item in sourceData"
@@ -33,8 +33,8 @@
                 </el-select>
               </el-form-item>
               <!-- 广告类型 -->
-              <el-form-item label="*广告类型">
-                <el-select v-model="ruleForm.type" placeholder="请选择广告类型" clearable
+              <el-form-item :label="$t('*广告类型')">
+                <el-select v-model="ruleForm.type" :placeholder="$t('请选择广告类型')" clearable
                  class="banner-sty">
                   <el-option
                     v-for="item in typeData"
@@ -45,8 +45,8 @@
                 </el-select>
               </el-form-item>
               <!-- 跳转方式 -->
-              <el-form-item label="*跳转方式">
-                <el-select v-model="ruleForm.link_type" placeholder="请选择跳转方式" clearable class="banner-sty" @change="getType">
+              <el-form-item :label="$t('*跳转方式')">
+                <el-select v-model="ruleForm.link_type" :placeholder="$t('请选择跳转方式')" clearable class="banner-sty" @change="getType">
                   <el-option
                     v-for="item in linkData"
                     :key="item.id"
@@ -56,8 +56,8 @@
                 </el-select>
               </el-form-item>
               <!-- 内部跳转 -->
-              <el-form-item label="*内部跳转" v-if="this.ruleForm.link_type === 1">
-                <el-select v-model="ruleForm.link_path" placeholder="请选择内部跳转" clearable
+              <el-form-item :label="$t('*内部跳转')" v-if="this.ruleForm.link_type === 1">
+                <el-select v-model="ruleForm.link_path" :placeholder="$t('请选择内部跳转')" clearable
                  class="banner-sty">
                   <el-option
                     v-for="item in pathData"
@@ -68,14 +68,14 @@
                 </el-select>
               </el-form-item>
             <!-- 外部url -->
-            <el-form-item label="*外部url" v-if="this.ruleForm.link_type === 2">
+            <el-form-item :label="$t('*外部url')" v-if="this.ruleForm.link_type === 2">
               <el-input v-model="ruleForm.link_path"
-                placeholder="请输入外部url" class="banner-sty"></el-input>
+                :placeholder="$t('请输入外部url')" class="banner-sty"></el-input>
               </el-form-item>
         </el-form>
       </el-col>
       <el-col :span="8">
-        <p>*上传广告图</p>
+        <p>{{$t('*上传广告图')}}</p>
           <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
           <span class="model-box"></span>
@@ -94,12 +94,12 @@
             <i class="el-icon-plus">
             </i>
         </el-upload>
-        <p class="px-sty">建议尺寸：355px * 160px</p>
+        <p class="px-sty">{{$t('建议尺寸：355px * 160px')}}</p>
       </el-col>
     </el-row>
     <div slot="footer">
-      <el-button @click="cancelDialog">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="cancelDialog">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -157,30 +157,30 @@ export default {
       if (this.baleImgList[0]) {
         this.ruleForm.picture_path = this.baleImgList[0]
       } else {
-        return this.$message.error('请上传广告图')
+        return this.$message.error(this.$t('请上传广告图'))
       }
       if (this.ruleForm.picture_name === '') {
-        return this.$message.error('请输入广告图名称')
+        return this.$message.error(this.$t('请输入广告图名称'))
       } else if (this.ruleForm.position === '') {
-        return this.$message.error('请选择显示位置')
+        return this.$message.error(this.$t('请选择显示位置'))
       } else if (this.ruleForm.source === '') {
-        return this.$message.error('请选择所属应用')
+        return this.$message.error(this.$t('请选择所属应用'))
       } else if (this.ruleForm.type === '') {
-        return this.$message.error('请选择广告类型')
+        return this.$message.error(this.$t('请选择广告类型'))
       } else if (this.ruleForm.link_type === '') {
-        return this.$message.error('请选择跳转方式')
+        return this.$message.error(this.$t('请选择跳转方式'))
       }
       if (this.ruleForm.link_type === 1 && this.ruleForm.link_path === '') {
-        return this.$message.error('请选择内部跳转')
+        return this.$message.error(this.$t('请选择内部跳转'))
       } else if (this.ruleForm.link_type === 2 && this.ruleForm.link_path === '') {
-        return this.$message.error('请输入外部url')
+        return this.$message.error(this.$t('请输入外部url'))
       }
       if (this.id) { // 如果是编辑状态
         this.$request.updateBanner(this.id, this.ruleForm).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.show = false
@@ -203,7 +203,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.show = false

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="弃件包裹日志" class="dialog-invalid-log"
+  <el-dialog :visible.sync="show" :title="$t('弃件包裹日志')" class="dialog-invalid-log"
   @close="clear">
     <el-table
       :data="tableData"
@@ -9,32 +9,32 @@
       </el-table-column>
       <!-- 原始状态 -->
       <el-table-column
-        label="原始状态">
+        :label="$t('原始状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.origin_status === 1">未入库</span>
-          <span v-if="scope.row.origin_status === 2">已入库</span>
-          <span v-if="scope.row.origin_status === 3">已集包</span>
-          <span v-if="scope.row.origin_status === 4">已发货</span>
-          <span v-if="scope.row.origin_status === 5">已收货</span>
-          <span v-if="scope.row.origin_status === 19">弃件包裹</span>
+          <span v-if="scope.row.origin_status === 1">{{$t('未入库')}}</span>
+          <span v-if="scope.row.origin_status === 2">{{$t('已入库')}}</span>
+          <span v-if="scope.row.origin_status === 3">{{$t('已集包')}}</span>
+          <span v-if="scope.row.origin_status === 4">{{$t('已发货')}}</span>
+          <span v-if="scope.row.origin_status === 5">{{$t('已收货')}}</span>
+          <span v-if="scope.row.origin_status === 19">{{$t('弃件包裹')}}</span>
         </template>
       </el-table-column>
       <!-- 更新状态 -->
       <el-table-column
-        label="更新状态">
+        :label="$t('更新状态')">
           <template slot-scope="scope">
-          <span v-if="scope.row.new_status === 1">未入库</span>
-          <span v-if="scope.row.new_status === 2">已入库</span>
-          <span v-if="scope.row.new_status === 3">已集包</span>
-          <span v-if="scope.row.new_status === 4">已发货</span>
-          <span v-if="scope.row.new_status === 5">已收货</span>
-          <span v-if="scope.row.new_status === 19">弃件包裹</span>
+          <span v-if="scope.row.new_status === 1">{{$t('未入库')}}</span>
+          <span v-if="scope.row.new_status === 2">{{$t('已入库')}}</span>
+          <span v-if="scope.row.new_status === 3">{{$t('已集包')}}</span>
+          <span v-if="scope.row.new_status === 4">{{$t('已发货')}}</span>
+          <span v-if="scope.row.new_status === 5">{{$t('已收货')}}</span>
+          <span v-if="scope.row.new_status === 19">{{$t('弃件包裹')}}</span>
         </template>
       </el-table-column>
       <!-- 操作日志 -->
         <el-table-column
         prop="remark"
-        label="操作日志">
+        :label="$t('操作日志')">
       </el-table-column>
     <!-- 最后登录时间
         <el-table-column

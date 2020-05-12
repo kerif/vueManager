@@ -1,27 +1,27 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.name + '的翻译内容'" class="dialog-pay-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="line.name + $t('的翻译内容')" class="dialog-pay-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{'请注意以下内容请输入对应的' + '【' + this.lang.name + '】' +'信息'}}
+        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息')}}
         </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 支付类型名称 -->
-        <el-form-item label="支付类型名称" prop="name">
+        <el-form-item :label="$t('支付类型名称')" prop="name">
           <el-input v-model="ruleForm.name"
           placeholder="请输入"></el-input>
           </el-form-item>
         <!-- 备注 -->
-          <el-form-item label="备注" prop="remark">
+          <el-form-item :label="$t('备注')" prop="remark">
           <el-input type="textarea" v-model="ruleForm.remark"
           :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入"></el-input>
+          :placeholder="$t('请输入')"></el-input>
           </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -37,10 +37,10 @@ export default {
       state: '',
       rules: {
         name: [
-          { required: true, message: '请输入线路名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入线路名称'), trigger: 'blur' }
         ],
         remark: [
-          { required: true, message: '请输入备注', trigger: 'blur' }
+          { required: true, message: this.$t('请输入备注'), trigger: 'blur' }
         ]
       },
       line: {
@@ -71,7 +71,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.show = false

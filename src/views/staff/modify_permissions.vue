@@ -12,7 +12,7 @@
             :default-checked-keys="defaultChecked"
             :props="defaultProps">
           </el-tree>
-          <el-button class="save-btn" @click="confirmSubmit" type="primary">保存</el-button>
+          <el-button class="save-btn" @click="confirmSubmit" type="primary">{{$t('保存')}}</el-button>
          </el-col>
       </el-row>
     </div>
@@ -62,7 +62,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           // this.$router.push({ name: 'staffgrouplist' })

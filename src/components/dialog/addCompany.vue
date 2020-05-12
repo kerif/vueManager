@@ -1,11 +1,11 @@
 <template>
-  <el-dialog :visible.sync="show" title="添加物流信息" class="add-company"
+  <el-dialog :visible.sync="show" :title="$t('添加物流信息')" class="add-company"
   width="35%" @close="clear">
     <el-form ref="form" :model="company" label-width="140px">
-        <el-form-item label="*转运快递单号：">
+        <el-form-item :label="$t('*转运快递单号：')">
             <el-input v-model="company.sn" @blur="getCompany" class="input-select"></el-input>
         </el-form-item>
-        <el-form-item label="*转运快递公司：">
+        <el-form-item :label="$t('*转运快递公司：')">
             <!-- <el-input v-model="company.company"></el-input> -->
              <el-select v-model="company.company" clearable filterable
              allow-create default-first-option>
@@ -19,8 +19,8 @@
         </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -52,9 +52,9 @@ export default {
     },
     confirm () {
       if (this.company.sn === '') {
-        return this.$message.error('请输入转运快递单号')
+        return this.$message.error(this.$t('请输入转运快递单号'))
       } else if (this.company.company === '') {
-        return this.$message.error('请输入转运快递公司')
+        return this.$message.error(this.$t('请输入转运快递公司'))
       }
       this.$request.updateLogistics([{
         id: this.id,
@@ -63,7 +63,7 @@ export default {
       }]).then(res => {
         if (res.ret) {
           this.$notify({
-            title: '保存成功',
+            title: this.$t('保存成功'),
             message: res.msg,
             type: 'success'
           })
@@ -71,7 +71,7 @@ export default {
           this.success()
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

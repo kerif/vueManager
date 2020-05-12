@@ -1,37 +1,37 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? '新增货位': '编辑货位'" class="dialog-editAdd-location"
+  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增货位'): $t('编辑货位')" class="dialog-editAdd-location"
   @close="clear" width="60%">
   <div class="tips">
-    <span>货位号生成规则：区域编号+连接符+所属列+连接符+所属层；限99列99层；货位数量=列数*层数</span>
+    <span>{{$t('货位号生成规则：区域编号+连接符+所属列+连接符+所属层；限99列99层；货位数量=列数*层数')}}</span>
   </div>
   <el-form ref="form" :model="location" label-width="140px">
     <el-row :gutter="20">
       <el-col :span="12">
         <el-form-item label="*区域编号" v-if="this.state === 'edit'">
-          <el-input v-model="location.number" disabled placeholder="请输入区域编号"></el-input>
+          <el-input v-model="location.number" disabled :placeholder="$t('请输入区域编号')"></el-input>
         </el-form-item>
-         <el-form-item label="*区域编号" v-else>
-          <el-input v-model="location.number" placeholder="请输入区域编号"></el-input>
+         <el-form-item :label="$t('*区域编号')" v-else>
+          <el-input v-model="location.number" :placeholder="$t('请输入区域编号')"></el-input>
         </el-form-item>
-        <el-form-item label="所属仓库">
+        <el-form-item :label="$t('所属仓库')">
           <el-input v-model="warehouseName" disabled></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <div class="unit">
-        <span>货架规格</span>&nbsp;&nbsp;
+        <span>{{$t('货架规格')}}</span>&nbsp;&nbsp;
               <el-input class="right-unit" v-model="location.column"
-              placeholder="请输入" @blur="changeRow"></el-input>*列 ——
+              :placeholder="$t('请输入')" @blur="changeRow"></el-input>*{{$t('列')}} ——
                 <el-input class="right-unit" v-model="location.row"
-                placeholder="请输入" @blur="changeRow"></el-input>*层
+                :placeholder="$t('请输入')" @blur="changeRow"></el-input>*{{$t('层')}}
         </div>
-        <el-form-item label="仓库数量">
+        <el-form-item :label="$('仓库数量')">
           <el-input v-model="qty" disabled></el-input>
         </el-form-item>
       </el-col>
     </el-row>
     <div class="bottom-btn">
-      <el-button type="primary" @click="confirm">生成货位</el-button>
+      <el-button type="primary" @click="confirm">{{$t('生成货位')}}</el-button>
     </div>
   </el-form>
     <el-table
@@ -44,27 +44,27 @@
       <!-- 客户ID -->
       <el-table-column
         prop="number"
-        label="区域编号">
+        :label="$t('区域编号')">
       </el-table-column>
       <!-- 客户昵称 -->
         <el-table-column
         prop="column"
-        label="列数">
+        :label="$t('列数')">
       </el-table-column>
         <el-table-column
         prop="row"
-        label="层数">
+        :label="$t('层数')">
       </el-table-column>
       <el-table-column
         prop="code"
-        label="货位编码">
+        :label="$('货位编码')">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
-        label="货位状态">
+        :label="$t('货位状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.is_used === 0">未使用</span>
-          <span v-if="scope.row.is_used === 1">已使用</span>
+          <span v-if="scope.row.is_used === 0">{{$t('未使用')}}</span>
+          <span v-if="scope.row.is_used === 1">{{$t('已使用')}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -132,18 +132,18 @@ export default {
     },
     confirm () {
       if (!this.location.number) {
-        return this.$message.error('请输入区域编号')
+        return this.$message.error(this.$t('请输入区域编号'))
       } else if (!this.location.column) {
-        return this.$message.error('请输入列数')
+        return this.$message.error(this.$t('请输入列数'))
       } else if (!this.location.row) {
-        return this.$message.error('请输入层数')
+        return this.$message.error(this.$t('请输入层数'))
       }
       if (this.state === 'add') {
         this.$request.addLocation(this.id, this.location).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '成功',
+              title: this.$t('成功'),
               message: res.msg
             })
             this.show = false
@@ -161,7 +161,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.getList()

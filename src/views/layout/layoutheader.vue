@@ -17,9 +17,9 @@
 export default {
   methods: {
     onLogout () {
-      this.$confirm('是否确认退出登录？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('是否确认退出登录？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.logout().then(res => {
@@ -29,13 +29,13 @@ export default {
             this.$store.commit('removeToken')
             this.$router.replace({ name: 'login' })
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
           } else {
             this.$notify({
-              title: '退出失败',
+              title: this.$t('退出失败'),
               message: res.msg,
               type: 'warning'
             })

@@ -1,21 +1,21 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? '新增' : '修改'" class="dialog-add-setting" width="35%"
+  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增') : $t('修改')" class="dialog-add-setting" width="35%"
   @close="clear">
     <el-form :model="video" ref="ruleForm" class="demo-ruleForm"
     label-position="top" :rules="rules">
         <!-- 标题 -->
-        <el-form-item label="标题" prop="title">
+        <el-form-item :label="$t('标题')" prop="title">
           <el-input v-model="video.title">
           </el-input>
         </el-form-item>
         <!-- 介绍 -->
-        <el-form-item label="介绍" prop="content">
+        <el-form-item :label="$t('介绍')" prop="content">
             <el-input type="textarea" v-model="video.content"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
         <!-- 封面 -->
-        <el-form-item label="封面" class="updateChe" prop="cover">
+        <el-form-item :label="$t('封面')" class="updateChe" prop="cover">
             <span class="img-item" v-if="video.cover">
             <img :src="$baseUrl.IMAGE_URL + video.cover" alt="" class="goods-img">
             <span class="model-box"></span>
@@ -34,10 +34,10 @@
             <i class="el-icon-plus">
             </i>
         </el-upload>
-        <div class="updateImg">仅支持jpg, 宽度 300px、高度 225px</div>
+        <div class="updateImg">{{$t('仅支持jpg, 宽度 300px、高度 225px')}}</div>
     </el-form-item>
     <!-- 视频 -->
-    <el-form-item class="updateChe" label="视频" prop="video">
+    <el-form-item class="updateChe" :label="$t('视频')" prop="video">
       <img src="../../assets/gb.png" @click="video.video = ''" v-if="video.video" class="closed" />
       <video-player
         class='video-player vjs-custom-skin'
@@ -57,25 +57,25 @@
         <i class="el-icon-plus">
         </i>
       </el-upload>
-      <div class="updateImg">仅支持mp4, 视频最佳比例为：3：2 比例， 大小不超过30M</div>
+      <div class="updateImg">{{$t('仅支持mp4, 视频最佳比例为：3：2 比例， 大小不超过30M')}}</div>
       <el-progress :percentage="videoPrecentage" v-show="videoShow"></el-progress>
     </el-form-item>
     <!-- 是否显示 -->
-    <el-form-item label="是否显示" prop="enabled">
+    <el-form-item :label="$t('是否显示')" prop="enabled">
         <el-switch
           v-model="video.enabled"
-          active-text="开"
+          :active-text="$t('开')"
           :active-value="1"
           :inactive-value="0"
-          inactive-text="关"
+          :inactive-text="$t('关')"
           active-color="#13ce66"
           inactive-color="gray">
         </el-switch>
     </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -103,19 +103,19 @@ export default {
       state: '',
       rules: {
         title: [
-          { required: true, message: '请输入标题', trigger: 'blur' }
+          { required: true, message: this.$t('请输入标题'), trigger: 'blur' }
         ],
         content: [
-          { required: true, message: '请输入内容', trigger: 'blur' }
+          { required: true, message: this.$t('请输入内容'), trigger: 'blur' }
         ],
         cover: [
-          { required: true, message: '请输入封面', trigger: 'blur' }
+          { required: true, message: this.$t('请输入封面'), trigger: 'blur' }
         ],
         video: [
-          { required: true, message: '请上传视频', trigger: 'blur' }
+          { required: true, message: this.$t('请上传视频'), trigger: 'blur' }
         ],
         enabled: [
-          { required: true, message: '请选择是否显示', trigger: 'blur' }
+          { required: true, message: this.$t('请选择是否显示'), trigger: 'blur' }
         ]
       },
       tranAmount: '',
@@ -131,7 +131,7 @@ export default {
         sources: [],
         poster: '../../static/images/test.jpg', // 你的封面地址
         // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        notSupportedMessage: this.$t('此视频暂无法播放，请稍后再试'), // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controlBar: {
           timeDivider: true,
           durationDisplay: true,
@@ -155,10 +155,10 @@ export default {
     },
     beforeUploadImg (file) {
       if (!(/^image/.test(file.type))) {
-        this.$message.info('请上传图片类型文件')
+        this.$message.info(this.$t('请上传图片类型文件'))
         return false
       } else if (file.size > 1024 * 1024 * 2) {
-        this.$message.info('上传图片大小不能超过2M')
+        this.$message.info(this.$t('上传图片大小不能超过2M'))
         return false
       }
       return true
@@ -175,7 +175,7 @@ export default {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.msg
                 })
                 this.show = false
@@ -192,7 +192,7 @@ export default {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.msg
                 })
                 this.show = false
@@ -217,7 +217,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           this.video.cover = res.data[0].path
-          this.$message.success('上传成功')
+          this.$message.success(this.$t('上传成功'))
         } else {
           this.$message({
             message: res.msg,
@@ -262,10 +262,10 @@ export default {
     beforeUploadVideo (item) {
       console.log(this.conver(item.size))
       if (!(/video\/mp4/.test(item.type))) {
-        this.$message.error('请上传 mp4 格式的视频')
+        this.$message.error(this.$t('请上传 mp4 格式的视频'))
         return false
       } else if (!this.conver(item.size)) {
-        this.$message.error('请上传 视频 不能超过30M')
+        this.$message.error(this.$t('请上传 视频 不能超过30M'))
         return false
       }
       return true
@@ -299,7 +299,7 @@ export default {
           self.videoPrecentage = precentage
         },
         error () {
-          self.$message.error('上传失败')
+          self.$message.error(this.$t('上传失败'))
           self.videoShow = false
           self.videoPrecentage = 0
         },

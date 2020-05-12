@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="拣货日志" class="dialog-picking-list"
+  <el-dialog :visible.sync="show" :title="$t('拣货日志')" class="dialog-picking-list"
   @close="clear">
   <h4>包裹日志</h4>
     <el-table
@@ -7,19 +7,19 @@
       border
       style="width: 100%">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="操作人" prop="operator"></el-table-column>
+      <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
       <!-- 操作时间 -->
-      <el-table-column label="操作时间" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('操作时间')" prop="created_at"></el-table-column>
       <!-- 订单号 -->
-      <el-table-column label="快递单号" prop="express_num"></el-table-column>
+      <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
       <!-- 重量kg -->
-      <el-table-column :label="'重量' + this.localization.weight_unit" prop="weight"></el-table-column>
+      <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 长宽高cm -->
-      <el-table-column :label="'长宽高' + this.localization.length_unit" prop="dimension"></el-table-column>
+      <el-table-column :label="$t('长宽高') + this.localization.length_unit" prop="dimension"></el-table-column>
       <!-- 备注 -->
-      <el-table-column label="备注" prop="remark"></el-table-column>
+      <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
       <!-- 打包图片 -->
-      <el-table-column label="物品属性" prop="props">
+      <el-table-column :label="$t('物品属性')" prop="props">
         <!-- <template slot-scope="scope">
           <span v-for="item in scope.row.pictures"
           :key="item.id" style="cursor:pointer;"
@@ -29,24 +29,24 @@
         </template> -->
       </el-table-column>
     </el-table>
-  <h4>订单日志</h4>
+  <h4>{{$t('订单日志')}}</h4>
   <el-table :data="orderData"
       border
       style="width: 100%">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="操作人" prop="operator"></el-table-column>
+      <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
       <!-- 操作时间 -->
-      <el-table-column label="操作时间" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('操作时间')" prop="created_at"></el-table-column>
       <!-- 订单号 -->
-      <el-table-column label="订单号" prop="order_sn"></el-table-column>
+      <el-table-column :label="$t('订单号')" prop="order_sn"></el-table-column>
       <!-- 重量kg -->
-      <el-table-column :label="'重量' + this.localization.weight_unit" prop="weight"></el-table-column>
+      <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 长宽高cm -->
-      <el-table-column :label="'长宽高' + this.localization.length_unit" prop="dimension"></el-table-column>
+      <el-table-column :label="$t('长宽高') + this.localization.length_unit" prop="dimension"></el-table-column>
       <!-- 备注 -->
-      <el-table-column label="备注" prop="remark"></el-table-column>
+      <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
       <!-- 打包图片 -->
-      <el-table-column label="打包图片" prop="pictures">
+      <el-table-column :label="$t('打包图片')" prop="pictures">
         <template slot-scope="scope">
           <span v-for="item in scope.row.pictures"
           :key="item.id" style="cursor:pointer;"

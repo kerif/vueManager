@@ -1,7 +1,7 @@
 <template>
-  <el-dialog :visible.sync="show" title="选择客户" class="user-container" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('选择客户')" class="user-container" @close="clear">
     <div class="searchUser">
-      <el-input placeholder="请输入内容" v-model="keyword"
+      <el-input :placeholder="$t('请输入内容')" v-model="keyword"
       @keyup.enter.native="getList">
         <!-- <template slot="append">
           <span @click="getList" class="search-btn">搜索</span>
@@ -22,25 +22,25 @@
       <!-- 客户ID -->
       <el-table-column
         prop="id"
-        label="客户ID">
+        :label="$t('客户ID')">
       </el-table-column>
       <!-- 客户昵称 -->
         <el-table-column
         prop="name"
-        label="客户昵称">
+        :label="$t('客户昵称')">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
         prop="last_login_at"
-        label="最后登录时间">
+        :label="$t('最后登录时间')">
       </el-table-column>
     </el-table>
     <div class="pagination-box">
         <nle-pagination :pageParams="page_params"></nle-pagination>
       </div>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -76,7 +76,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -85,7 +85,7 @@ export default {
     },
     confirm () {
       if (!this.chooseId) {
-        return this.$message.error('请选择客户')
+        return this.$message.error(this.$t('请选择客户'))
       }
       this.success(this.user)
       this.show = false

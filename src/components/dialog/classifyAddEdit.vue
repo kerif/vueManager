@@ -1,15 +1,15 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? '添加商品分类': '编辑商品分类'" class="dialog-addClassify"
+  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('添加商品分类'): $t('编辑商品分类')" class="dialog-addClassify"
   size="small" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-width="120px">
         <!-- 员工组中文名 -->
-        <el-form-item label="分类名称" prop="name" class="input-style">
+        <el-form-item :label="$t('分类名称')" prop="name" class="input-style">
           <el-input v-model="ruleForm.name"
-          placeholder="请输入分类名称"></el-input>
+          :placeholder="$t('请输入分类名称')"></el-input>
           </el-form-item>
         <!-- 用户组描述 -->
-          <el-form-item label="选择分类" prop="parent_id">
+          <el-form-item :label="$t('选择分类')" prop="parent_id">
              <el-select v-model="ruleForm.parent_id" clearable filterable>
                 <el-option
                     v-for="item in classifyList"
@@ -21,8 +21,8 @@
           </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -39,10 +39,10 @@ export default {
       id: '',
       rules: {
         name: [
-          { required: true, message: '请输入分类名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入分类名称'), trigger: 'blur' }
         ],
         parent_id: [
-          { required: true, message: '请选择分类', trigger: 'change' }
+          { required: true, message: this.$t('请选择分类'), trigger: 'change' }
         ]
       }
     }
@@ -56,7 +56,7 @@ export default {
           this.$notify({
             message: res.msg,
             type: 'error',
-            title: '操作失败'
+            title: this.$t('操作失败')
           })
         }
       })
@@ -66,7 +66,7 @@ export default {
       this.classifyList = [
         {
           id: 0,
-          name: '顶级分类'
+          name: this.$t('顶级分类')
         }
       ]
       this.$request.getAllTree().then(res => {
@@ -91,7 +91,7 @@ export default {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.msg
                 })
                 this.show = false
@@ -109,7 +109,7 @@ export default {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.msg
                 })
                 this.show = false

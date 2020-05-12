@@ -1,10 +1,10 @@
 <template>
-  <el-dialog :visible.sync="show" title="新增费用" class="dialog-addCost"  @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('新增费用')" class="dialog-addCost"  @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 费用名称 -->
-        <el-form-item label="费用名称" prop="name">
+        <el-form-item :label="$t('费用名称')" prop="name">
           <el-input v-model="ruleForm.name"
-          placeholder="请输入费用名称"></el-input>
+          :placeholder="$t('请输入费用名称')"></el-input>
           </el-form-item>
         <!-- 员工组英文名
           <el-form-item label="员工组英文名" prop="name_en">
@@ -19,8 +19,8 @@
           </el-form-item> -->
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -35,10 +35,10 @@ export default {
       id: '',
       rules: {
         name: [
-          { required: true, message: '请输入费用名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入费用名称'), trigger: 'blur' }
         ],
         name_en: [
-          { required: true, message: '请输入员工组英文名', trigger: 'blur' }
+          { required: true, message: this.$t('请输入员工组英文名'), trigger: 'blur' }
         ]
       }
     }
@@ -52,7 +52,7 @@ export default {
           this.$notify({
             message: res.msg,
             type: 'error',
-            title: '操作失败'
+            title: this.$t('操作失败')
           })
         }
       })
@@ -64,7 +64,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.show = false

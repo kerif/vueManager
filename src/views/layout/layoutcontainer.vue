@@ -10,7 +10,7 @@
         </div>
         <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
           <el-breadcrumb-item v-for="(item, index) in pagePath.split(',')" :key="index">
-            {{ item }}
+            {{ $t(item) }}
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>

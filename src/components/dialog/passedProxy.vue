@@ -1,33 +1,33 @@
 <template>
-  <el-dialog :visible.sync="show" title="审核" class="dialog-Passed" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-Passed" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 联系人 -->
-        <el-form-item label="联系人">
+        <el-form-item :label="$t('联系人')">
           <span class="right-padding">{{this.name}}</span>
           </el-form-item>
         <!-- 联系电话 -->
-        <el-form-item label="联系电话">
+        <el-form-item :label="$t('联系电话')">
           <span class="right-padding">{{this.phone}}</span>
         </el-form-item>
         <!-- 联系邮箱 -->
-        <el-form-item label="联系邮箱">
+        <el-form-item :label="$t('联系邮箱')">
         <span class="right-padding">{{this.email}}</span>
         </el-form-item>
         <!-- 佣金比例 -->
-        <el-form-item label="佣金比例%" prop="commission">
+        <el-form-item :label="$t('佣金比例%')" prop="commission">
           <el-input v-model="ruleForm.commission"
-          placeholder="请输入佣金比例"></el-input>
+          :placeholder="$t('请输入佣金比例')"></el-input>
           </el-form-item>
         <!-- 用户组描述 -->
-          <el-form-item label="备注">
+          <el-form-item :label="$t('备注')">
           <el-input type="textarea" v-model="ruleForm.remark"
           :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入备注"></el-input>
+          :placeholder="$t('请输入备注')"></el-input>
           </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -44,7 +44,7 @@ export default {
       name: '',
       rules: {
         commission: [
-          { required: true, message: '请输入佣金比例', trigger: 'blur' }
+          { required: true, message: this.$t('请输入佣金比例'), trigger: 'blur' }
         ]
       }
     }
@@ -57,7 +57,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.show = false

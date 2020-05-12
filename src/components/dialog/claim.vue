@@ -1,22 +1,22 @@
 <template>
-  <el-dialog :visible.sync="show" title="认领用户" class="dialog-claim"
+  <el-dialog :visible.sync="show" :title="$t('认领用户')" class="dialog-claim"
   @close="clear">
     <el-form :model="user" :rules="rules" ref="user" class="demo-ruleForm">
         <!-- 员工组中文名 -->
-        <el-form-item label="认领用户" prop="user_id">
+        <el-form-item :label="$t('认领用户')" prop="user_id">
           <!-- <el-input v-model="ruleForm.name_cn"
           placeholder="请输入用户id"></el-input> -->
               <el-autocomplete
               :fetch-suggestions="queryCNSearch"
               @select="handleSelect"
-              placeholder="请输入客户ID"
+              :placeholder="$t('请输入客户ID')"
               v-model="user.user_id">
             </el-autocomplete>
           </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('user')">取消</el-button>
-      <el-button type="primary" @click="confirm('user')">确定</el-button>
+      <el-button @click="cancelDialog('user')">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('user')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -32,7 +32,7 @@ export default {
       id: '',
       rules: {
         user_id: [
-          { required: true, message: '请输入认领用户', trigger: 'change' }
+          { required: true, message: this.$t('请输入认领用户'), trigger: 'change' }
         ]
       }
     }
@@ -66,7 +66,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.show = false

@@ -1,18 +1,18 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.picture_name + '的翻译内容'" class="dialog-banner-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="line.picture_name + $t('的翻译内容')" class="dialog-banner-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{'请注意以下内容请输入对应的' + '【' + this.lang.name + '】' +'信息'}}
+        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息')}}
         </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
       <!-- 名称 -->
-      <el-form-item label="名称" prop="picture_name">
+      <el-form-item :label="$t('名称')" prop="picture_name">
         <el-input v-model="ruleForm.picture_name"
-        placeholder="请输入"></el-input>
+        :placeholder="$t('请输入')"></el-input>
         </el-form-item>
-        <el-form-item label="*广告图">
+        <el-form-item :label="$t('*广告图')">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
             <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
@@ -31,12 +31,12 @@
               <i class="el-icon-plus">
               </i>
           </el-upload>
-          <p class="px-sty">建议尺寸：355px * 160px</p>
+          <p class="px-sty">{{$t('建议尺寸：355px * 160px')}}</p>
         </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -54,7 +54,7 @@ export default {
       baleImgList: [],
       rules: {
         picture_name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入名称'), trigger: 'blur' }
         ]
       },
       line: {
@@ -82,7 +82,7 @@ export default {
       if (this.baleImgList[0]) {
         this.ruleForm.picture_path = this.baleImgList[0]
       } else {
-        return this.$message.error('请上传广告图')
+        return this.$message.error(this.$t('请上传广告图'))
       }
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -90,7 +90,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.show = false

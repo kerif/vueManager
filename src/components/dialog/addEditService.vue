@@ -1,27 +1,27 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? '新增': '编辑'" class="dialog-addStaff"
+  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增'): $t('编辑')" class="dialog-addStaff"
    @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 增值服务名称 -->
-        <el-form-item label="增值服务名称" prop="name">
+        <el-form-item :label="$t('增值服务名称')" prop="name">
           <el-input v-model="ruleForm.name"
-          placeholder="请输入增值服务名称"></el-input>
+          :placeholder="$t('请输入增值服务名称')"></el-input>
           </el-form-item>
         <!-- 价格 -->
-          <el-form-item label="价格" prop="price">
+          <el-form-item :label="$t('价格')" prop="price">
           <el-input v-model="ruleForm.price"
-          placeholder="请输入价格"></el-input>
+          :placeholder="$t('请输入价格')"></el-input>
           </el-form-item>
         <!-- 备注 -->
-          <el-form-item label="备注">
+          <el-form-item :label="$t('备注')">
           <el-input type="textarea" v-model="ruleForm.remark"
           :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入备注"></el-input>
+          :placeholder="$t('请输入备注')"></el-input>
           </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{$('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -38,10 +38,10 @@ export default {
       id: '',
       rules: {
         name: [
-          { required: true, message: '请输入增值服务名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入增值服务名称'), trigger: 'blur' }
         ],
         price: [
-          { required: true, message: '请输入价格', trigger: 'blur' }
+          { required: true, message: this.$t('请输入价格'), trigger: 'blur' }
         ]
       }
     }
@@ -66,7 +66,7 @@ export default {
           this.$notify({
             message: res.msg,
             type: 'error',
-            title: '操作失败'
+            title: this.$t('操作失败')
           })
         }
       })
@@ -80,7 +80,7 @@ export default {
           this.$notify({
             message: res.msg,
             type: 'error',
-            title: '操作失败'
+            title: this.$t('操作失败')
           })
         }
       })
@@ -92,7 +92,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false
@@ -113,7 +113,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false
@@ -134,7 +134,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false
@@ -155,7 +155,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false

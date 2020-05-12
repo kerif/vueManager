@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="更改线路" class="dialog-change-line" width="35%"
+  <el-dialog :visible.sync="show" :title="$t('更改线路')" class="dialog-change-line" width="35%"
   @close="clear">
     <el-form :model="user" ref="user" class="demo-ruleForm"
     label-position="top">
@@ -10,14 +10,14 @@
                 v-for="item in expressData"
                 :key="item.id"
                 :value="item.id"
-                :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
+                :label="`${item.cn_name}---${$t('限重')}${item.max_weight}` + localization.weight_unit">
                 </el-option>
               </el-select>
             </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('user')">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('user')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -46,7 +46,7 @@ export default {
     },
     confirm () {
       if (this.user.express_line_id === '') {
-        return this.$message.error('请选择线路')
+        return this.$message.error(this.$t('请选择线路'))
       } else {
         let user = this.expressData.filter(item => item.id === this.user.express_line_id)[0]
         this.success(user)

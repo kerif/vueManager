@@ -151,7 +151,7 @@
             <el-col :span="18">
               <el-form-item label="寄往地区">
                   <el-select v-model="user.country_id"
-                   :disabled="(!!this.$route.params.id && !hasStore) || this.user.warehouse_id === '' || this.shipNum != ''" clearable>
+                   :disabled="this.user.warehouse_id === '' || this.shipNum != ''" clearable>
                   <el-option
                     v-for="item in shipData"
                     :key="item.id"

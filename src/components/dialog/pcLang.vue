@@ -1,21 +1,21 @@
 <template>
-  <el-dialog :visible.sync="show" title="网站名称的翻译内容" class="dialog-pc-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('网站名称的翻译内容')" class="dialog-pc-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{'请注意以下内容请输入对应的' + '【' + this.lang.name + '】' +'信息'}}
+        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息')}}
         </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 网站名称 -->
-        <el-form-item label="网站名称" prop="website_name">
+        <el-form-item :label="$t('网站名称')" prop="website_name">
           <el-input v-model="ruleForm.website_name"
-          placeholder="请输入"></el-input>
+          :placeholder="$t('请输入')"></el-input>
           </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -30,7 +30,7 @@ export default {
       },
       rules: {
         website_name: [
-          { required: true, message: '请输入网站名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入网站名称'), trigger: 'blur' }
         ]
       },
       lang: {
@@ -55,7 +55,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.show = false

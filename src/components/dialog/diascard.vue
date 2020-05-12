@@ -1,17 +1,17 @@
 <template>
-  <el-dialog :visible.sync="show" title="设为弃件包裹" class="dialog-discard"
+  <el-dialog :visible.sync="show" :title="$t('设为弃件包裹')" class="dialog-discard"
   size="small" @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
       <!-- 加入发货单 -->
-      <el-form-item label="*问题原因" prop="invalid_reason">
+      <el-form-item :label="$t('*问题原因')" prop="invalid_reason">
       <el-input type="textarea" v-model="ruleForm.invalid_reason"
       :autosize="{ minRows: 8, maxRows: 10}"
-      placeholder="请输入"></el-input>
+      :placeholder="$t('请输入')"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="cancelDialog">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -28,7 +28,7 @@ export default {
   methods: {
     confirm () {
       if (this.ruleForm.invalid_reason === '') {
-        return this.$message.error('请输入问题原因')
+        return this.$message.error(this.$t('请输入问题原因'))
       } else {
         this.$request.deleteInvalid({
           ids: this.deleteNum,
@@ -37,7 +37,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.show = false

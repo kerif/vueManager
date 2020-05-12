@@ -1,46 +1,46 @@
 <template>
-  <el-dialog :visible.sync="show" title="配置" class="dialog-config" width="50%"
+  <el-dialog :visible.sync="show" :title="$t('配置')" class="dialog-config" width="50%"
   @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 员工组中文名 -->
-        <el-form-item label="小程序ID" prop="app_id">
-            <el-input placeholder="请输入小程序ID" v-model="ruleForm.app_id"></el-input>
+        <el-form-item :label="$t('小程序ID')" prop="app_id">
+            <el-input :placeholder="$t('请输入小程序ID')" v-model="ruleForm.app_id"></el-input>
         </el-form-item>
-        <el-form-item label="商户号ID">
-            <el-input placeholder="请输入商户号ID" v-model="ruleForm.mch_id"></el-input>
+        <el-form-item :label="$t('商户号ID')">
+            <el-input :placeholder="$t('请输入商户号ID')" v-model="ruleForm.mch_id"></el-input>
         </el-form-item>
-        <el-form-item label="商户KEY">
-            <el-input placeholder="请输入商户KEY" v-model="ruleForm.key">
+        <el-form-item :label="$t('商户KEY')">
+            <el-input :placeholder="$t('请输入商户KEY')" v-model="ruleForm.key">
             </el-input>
             <!--  <el-button class="btn-main chooseBtn">选择</el-button> -->
         </el-form-item>
-        <el-form-item label="通信安全公钥证书">
-            <el-input placeholder="请输入通信安全公钥证书" v-model="ruleForm.cert_path"></el-input>
+        <el-form-item :label="$t('通信安全公钥证书')">
+            <el-input :placeholder="$t('请输入通信安全公钥证书')" v-model="ruleForm.cert_path"></el-input>
             <el-upload
                 class="upload-demo"
                 action=""
                 :on-preview="handlePreview"
                 :http-request="uploadRsaFile"
                 >
-                <el-button size="small" class="btn-main chooseBtn">选择</el-button>
+                <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
             </el-upload>
         </el-form-item>
-        <el-form-item label="通信安全私钥证书">
-            <el-input placeholder="请输入通信安全私钥证书" v-model="ruleForm.key_path"></el-input>
+        <el-form-item :label="$t('通信安全私钥证书')">
+            <el-input :placeholder="$t('请输入通信安全私钥证书')" v-model="ruleForm.key_path"></el-input>
             <el-upload
                 class="upload-demo"
                 action=""
                 :on-preview="handlePreview"
                 :http-request="uploadKeyFile">
-                <el-button size="small" class="btn-main chooseBtn">选择</el-button>
+                <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
             </el-upload>
         </el-form-item>
     </el-form>
-    <p class="noticeAddress">支付通知地址:  {{ruleForm.notify_url}}</p>
+    <p class="noticeAddress">{{$t('支付通知地址:')}}  {{ruleForm.notify_url}}</p>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -89,7 +89,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '成功',
+                title: this.$t('成功'),
                 message: res.msg
               })
               this.show = false

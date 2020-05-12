@@ -1,35 +1,35 @@
 <template>
-  <el-dialog :visible.sync="show" title="额外收录信息" class="dialog-fee" width="35%"
+  <el-dialog :visible.sync="show" :title="$t('额外收录信息')" class="dialog-fee" width="35%"
   @close="clear">
     <el-form :model="feeList" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 显示名称 -->
-        <el-form-item label="显示名称">
+        <el-form-item :label="$t('显示名称')">
           <el-input v-model="feeList.extra_remark_name">
           </el-input>
         </el-form-item>
         <!-- 说明 -->
-        <el-form-item label="说明">
+        <el-form-item :label="$t('说明')">
             <el-input type="textarea" v-model="feeList.extra_remark_instruction"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
     <!-- 是否显示 -->
-    <el-form-item label="*是否启用">
+    <el-form-item :label="$t('*是否启用')">
         <el-switch
           v-model="feeList.extra_remark_enabled"
-          active-text="开"
+          :active-text="$t('开')"
           :active-value="1"
           :inactive-value="0"
-          inactive-text="关"
+          :inactive-text="$t('关')"
           active-color="#13ce66"
           inactive-color="gray">
         </el-switch>
     </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -56,7 +56,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false
