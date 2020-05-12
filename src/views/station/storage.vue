@@ -151,13 +151,13 @@
             <el-col :span="18">
               <el-form-item label="寄往地区">
                   <el-select v-model="user.country_id"
-                   :disabled="(!!this.$route.params.id && !hasStore) || this.user.warehouse_id === '' || this.shipNum != ''" clearable>
-                  <el-option
-                    v-for="item in shipData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="item.name">
-                  </el-option>
+                   :disabled="this.user.warehouse_id === '' || this.shipNum != ''" clearable>
+                    <el-option
+                      v-for="item in shipData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.name">
+                    </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -420,7 +420,7 @@ export default {
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
           this.user.warehouse_id = res.data.warehouse.id
           this.user.express_company_id = res.data.express_company.id
-          this.user.country_id = res.data.country.id
+          this.$set(this.user, 'country_id', res.data.country.id)
           this.areaId = this.user.warehouse_id
           this.locationId = this.areaId
           res.data.package_pictures && (this.goodsImgList = res.data.package_pictures)
@@ -472,6 +472,11 @@ export default {
           }
         })
       }
+    },
+    changeShip (e) {
+      console.log(e)
+      this.$set(this.user, 'country_id', e)
+      console.log(this.user.country_id, 'user.country_id')
     },
     // 通过仓库id拉取相对应的地区
     updateAreaData () {
@@ -586,7 +591,7 @@ export default {
           i.value = i.id + '---' + i.name
         }
         list = res.data
-        callback(list)
+        callback && callback(list)
       })
     },
     // 货位搜索
@@ -609,7 +614,7 @@ export default {
       }).catch(() => {
         console.log(callback, 'callback')
         // eslint-disable-next-line no-array-constructor
-        callback(new Array())
+        callback && callback(new Array())
       })
     },
     // 客户id
