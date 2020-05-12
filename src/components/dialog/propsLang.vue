@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="物品属性的翻译内容" class="dialog-pc-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('物品属性的翻译内容')" class="dialog-pc-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
