@@ -26,7 +26,7 @@ switch (hostName) {
       IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com'
     }
     break
-  // v2 国内服
+  // v2 国内正式服
   case 'jiyun-cn.haiouoms.com':
     baseUrl = {
       BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
