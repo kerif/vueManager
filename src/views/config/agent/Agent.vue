@@ -1,19 +1,19 @@
 <template>
   <div class="agent-list-container">
       <div>
-      <search-group placeholder="请输入关键字" v-model="page_params.keyword"  @search="goSearch">
+      <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword"  @search="goSearch">
       </search-group>
     </div>
-    <div class="clear-box"><add-btn router="addAgent">添加代理</add-btn></div>
+    <div class="clear-box"><add-btn router="addAgent">{{$t('添加代理')}}</add-btn></div>
     <el-table class="data-list" border stripe :data="suggestList"
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="代理名称" prop="agent_name">
+      <el-table-column :label="$t('代理名称')" prop="agent_name">
       </el-table-column>
-      <el-table-column label="佣金分成%" prop="commission">
+      <el-table-column :label="$t('佣金分成%')" prop="commission">
       </el-table-column>
-      <el-table-column label="代理二维码" align="center">
+      <el-table-column :label="$t('代理二维码')" align="center">
         <template slot-scope="scope">
           <span style="cursor:pointer;"
             @click.stop="imgSrc=scope.row.qr_code, imgVisible=true">
@@ -21,20 +21,20 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" prop="created_at">
+      <el-table-column :label="$t('创建时间')" prop="created_at">
       </el-table-column>
-      <el-table-column label="下单/成交数">
+      <el-table-column :label="$t('下单/成交数')">
       <template slot-scope="scope">
         <span>{{scope.row.total_order}}/{{scope.row.deal_order}}</span>
       </template>
       </el-table-column>
-      <el-table-column label="是否启用" width="120">
+      <el-table-column :label="$t('是否启用')" width="120">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enabled"
             @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
-            active-text="开"
-            inactive-text="关"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
             active-color="#13ce66"
             inactive-color="gray">
           </el-switch>
@@ -43,14 +43,14 @@
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <!-- 修改 -->
-          <el-button class="btn-green" @click="editAgent(scope.row.id)">修改</el-button>
+          <el-button class="btn-green" @click="editAgent(scope.row.id)">{{$t('修改')}}</el-button>
           <!-- 成交记录 -->
-          <el-button class="btn-blue" @click="record(scope.row.id)">成交记录</el-button>
+          <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button>
           <!-- 设置佣金 -->
-          <el-button class="btn-deep-purple" @click="setCommission(scope.row.id, scope.row.agent_name, scope.row.commission)">设置佣金</el-button>
+          <el-button class="btn-deep-purple" @click="setCommission(scope.row.id, scope.row.agent_name, scope.row.commission)">{{$t('设置佣金')}}</el-button>
           <!-- 提现申请 -->
           <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
-            <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">提现申请</el-button>
+            <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">{{$t('提现申请')}}</el-button>
           </el-badge>
         </template>
       </el-table-column>
@@ -109,7 +109,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -141,7 +141,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.getList()

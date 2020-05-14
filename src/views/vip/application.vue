@@ -2,9 +2,9 @@
   <div class="application-list-container">
     <el-tabs v-model="activeName" class="tabLength">
         <!-- 待审核 -->
-        <el-tab-pane label="待审核" name="0"></el-tab-pane>
+        <el-tab-pane :label="$t('待审核')" name="0"></el-tab-pane>
         <!-- 审核拒绝 -->
-        <el-tab-pane label="审核拒绝" name="2"></el-tab-pane>
+        <el-tab-pane :label="$t('审核拒绝')" name="2"></el-tab-pane>
     </el-tabs>
     <!-- <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
       <div class="changeTime"> -->
@@ -62,42 +62,42 @@
       v-loading="tableLoading">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column label="客户ID" prop="user_id">
+      <el-table-column :label="$t('客户ID')" prop="user_id">
       </el-table-column>
       <!-- 客户昵称 -->
-      <el-table-column label="客户昵称">
+      <el-table-column :label="$t('客户昵称')">
         <template slot-scope="scope">
           {{scope.row.info.name}}
         </template>
       </el-table-column>
       <!-- 邮箱 -->
-      <el-table-column label="邮箱">
+      <el-table-column :label="$t('邮箱')">
         <template slot-scope="scope">
           {{scope.row.info.email}}
         </template>
       </el-table-column>
       <!-- 电话 -->
-      <el-table-column label="电话">
+      <el-table-column :label="$t('电话')">
         <template slot-scope="scope">
           {{scope.row.info.phone}}
         </template>
       </el-table-column>
       <!-- 状态 -->
-      <el-table-column label="状态" prop="status"></el-table-column>
+      <el-table-column :label="$t('状态')" prop="status"></el-table-column>
       <!-- 申请时间 -->
-      <el-table-column label="申请时间" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('申请时间')" prop="created_at"></el-table-column>
       <!-- 审核时间 -->
-      <el-table-column label="审核时间" v-if="activeName === '2'" prop="updated_at">
+      <el-table-column :label="$t('审核时间')" v-if="activeName === '2'" prop="updated_at">
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="200px" fixed="right">
+      <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 审核拒绝 -->
-          <el-button class="btn-light-red operating-btn" v-if="activeName === '0'" @click="rejectProxy(scope.row.id)">审核拒绝</el-button>
+          <el-button class="btn-light-red operating-btn" v-if="activeName === '0'" @click="rejectProxy(scope.row.id)">{{$t('审核拒绝')}}</el-button>
           <!-- 审核通过 -->
-          <el-button class="btn-main" v-if="activeName === '0'" @click="passedProxy(scope.row.id, scope.row.info.phone, scope.row.info.email, scope.row.info.name)">审核通过</el-button>
+          <el-button class="btn-main" v-if="activeName === '0'" @click="passedProxy(scope.row.id, scope.row.info.phone, scope.row.info.email, scope.row.info.name)">{{$t('审核通过')}}</el-button>
           <!-- 删除 -->
-          <el-button size="small" @click="deleteProxy(scope.row.id)" v-if="activeName ==='2'" class="btn-light-red">删除</el-button>
+          <el-button size="small" @click="deleteProxy(scope.row.id)" v-if="activeName ==='2'" class="btn-light-red">{{$t('删除')}}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -106,7 +106,7 @@
         </div>
       </template> -->
     </el-table>
-    <div class="noDate" v-else>暂无数据</div>
+    <div class="noDate" v-else>{{$t('暂无数据')}}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -171,7 +171,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -190,15 +190,15 @@ export default {
     },
     // 审核拒绝
     rejectProxy (id) {
-      this.$confirm(`您真的要审核拒绝吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要审核拒绝吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.refusedApproved(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
@@ -214,16 +214,16 @@ export default {
     },
     // 删除
     deleteProxy (id) {
-      this.$confirm(`您真的要删除吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
         this.$request.deleteApproved(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
@@ -241,11 +241,11 @@ export default {
     deleteData () {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
-        return this.$message.error('请选择包裹')
+        return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(`您真的要删除这个包裹吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除这个包裹吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
@@ -254,7 +254,7 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })

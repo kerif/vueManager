@@ -23,25 +23,31 @@
       <!-- <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="序号" type="index" :index="1" width="60"></el-table-column> -->
       <el-table-column type="index" width="55" align="center"></el-table-column>
-      <el-table-column label="流水号" prop="serial_no">
+      <el-table-column :label="$t('流水号')" prop="serial_no">
       </el-table-column>
-      <el-table-column label="代理ID">
+      <el-table-column :label="$t('代理ID')">
         <template slot-scope="scope">
           <span>{{scope.row.user.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="代理昵称">
+      <el-table-column :label="$t('代理昵称')">
         <template slot-scope="scope">
           <span>{{scope.row.user.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="'提现金额' + this.localization.currency_unit" prop="amount"></el-table-column>
-      <el-table-column label="状态" prop="status"></el-table-column>
-      <el-table-column label="申请时间" prop="created_at"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('提现金额') + this.localization.currency_unit" prop="amount"></el-table-column>
+      <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status === '待审核'" class="btn-green optionBtn" @click="inviteWithdrawal(scope.row.user.id,scope.row.id)">审核</el-button>
-          <el-button v-else class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.user.id,scope.row.id)">详情</el-button>
+          <span v-if="scope.row.status === 0">{{$t('待审核')}}</span>
+          <span v-if="scope.row.status === 1">{{$t('审核通过')}}</span>
+          <span v-if="scope.row.status === 2">{{$t('审核拒绝')}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('申请时间')" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('操作')">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.status === 0" class="btn-green optionBtn" @click="inviteWithdrawal(scope.row.user.id,scope.row.id)">{{$t('审核')}}</el-button>
+          <el-button v-else class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.user.id,scope.row.id)">{{$t('详情')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -62,15 +68,15 @@ export default {
       statusList: [
         {
           id: 0,
-          name: '待审核'
+          name: this.$t('待审核')
         },
         {
           id: 1,
-          name: '审核通过'
+          name: this.$t('审核通过')
         },
         {
           id: 2,
-          name: '审核拒绝'
+          name: this.$t('审核拒绝')
         }
       ],
       tableLoading: false,
@@ -110,7 +116,7 @@ export default {
           console.log('back', JSON.stringify(this.page_params))
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

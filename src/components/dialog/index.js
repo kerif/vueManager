@@ -56,6 +56,7 @@ import propsLang from './propsLang.vue'
 import bannerList from './bannerAddEdit.vue'
 import bannerLang from './bannerLang.vue'
 import warehouseSelf from './warehouseSelf.vue'
+import paypalSet from './paypalSet.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -112,6 +113,7 @@ const PropsLangController = Vue.extend(propsLang)
 const BannerListController = Vue.extend(bannerList)
 const BannerLangController = Vue.extend(bannerLang)
 const WarehouseSelfController = Vue.extend(warehouseSelf)
+const PayPalSetController = Vue.extend(paypalSet)
 
 const mixin = {
   data () {
@@ -501,6 +503,13 @@ function initInstance (type) {
     // 仓库自提 设为自提
     case 'warehouseSelf':
       instance = new WarehouseSelfController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 paypal 支付
+    case 'paypalSet':
+      instance = new PayPalSetController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

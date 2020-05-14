@@ -2,27 +2,27 @@
   <div class="applet-container">
     <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
       <!-- 开发配置 -->
-      <el-tab-pane label="开发配置" name="1"></el-tab-pane>
+      <el-tab-pane :label="$t('开发配置')" name="1"></el-tab-pane>
       <!-- 消息模版 -->
-      <el-tab-pane label="消息模版" name="2"></el-tab-pane>
+      <el-tab-pane :label="$t('消息模版')" name="2"></el-tab-pane>
       <!-- 图片配置 -->
-      <el-tab-pane label="图片配置" name="3"></el-tab-pane>
+      <el-tab-pane :label="$t('图片配置')" name="3"></el-tab-pane>
       <!-- 海报配置 -->
-      <el-tab-pane label="海报配置" name="4"></el-tab-pane>
+      <el-tab-pane :label="$t('海报配置')" name="4"></el-tab-pane>
       <!-- 功能配置 -->
-      <el-tab-pane label="功能配置" name="5"></el-tab-pane>
+      <el-tab-pane :label="$t('功能配置')" name="5"></el-tab-pane>
       <!-- 如何下单 -->
       <!-- <el-tab-pane label="如何下单" name="6"></el-tab-pane> -->
     </el-tabs>
     <el-row v-if="activeName === '1'">
       <el-col :span="11">
         <div class="applet-left">
-        <h4>开发者id</h4>
+        <h4>{{$t('开发者id')}}</h4>
         <el-form :model="appletForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
-          <el-form-item label="AppId(小程序ID)" prop="app_id">
-            <el-input placeholder="请输入AppId" v-model="appletForm.app_id"></el-input>
+          <el-form-item :label="$t('AppId(小程序ID)')" prop="app_id">
+            <el-input :placeholder="$t('请输入AppId')" v-model="appletForm.app_id"></el-input>
           </el-form-item>
-          <el-form-item label="AppSecret(小程序密钥)" prop="secret">
+          <el-form-item :label="$t('AppSecret(小程序密钥)')" prop="secret">
             <el-input placeholder="请输入AppSecret" v-model="appletForm.secret"></el-input>
           </el-form-item>
           <el-form-item label="小程序token">

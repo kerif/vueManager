@@ -2,7 +2,7 @@
   <div class="vip-list-container">
     <div>
       <search-group v-model="page_params.keyword" @search="goSearch">
-      <search-select placeholder="请选择客户组" :selectArr="clientGroupList"
+      <search-select :placeholder="$t('请选择客户组')" :selectArr="clientGroupList"
           v-model="page_params.group" @search="onGroupChange">
         </search-select>
       </search-group>
@@ -14,32 +14,32 @@
       :data="vipList"
        @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <el-table-column label="序号" type="index" :index="1" width="60"></el-table-column>
-      <el-table-column label="客户ID">
+      <el-table-column :label="$t('序号')" type="index" :index="1" width="60"></el-table-column>
+      <el-table-column :label="$t('客户ID')">
         <template slot-scope="scope">
         <span>{{scope.row.id}}</span>
         <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
       </el-table-column>
-      <el-table-column label="邮箱" prop="email"></el-table-column>
-      <el-table-column label="手机号码" prop="phone"></el-table-column>
-      <el-table-column prop="balance" :label="'余额' + this.localization.currency_unit"></el-table-column>
-      <el-table-column label="客户昵称" prop="name"></el-table-column>
-      <el-table-column label="客户组" prop="user_group.name_cn"></el-table-column>
-      <el-table-column label="注册时间" prop="created_at"></el-table-column>
-      <el-table-column label="最后登录时间" prop="last_login_at"></el-table-column>
-      <el-table-column label="邀请人 " prop="invitor"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('邮箱')" prop="email"></el-table-column>
+      <el-table-column :label="$t('手机号码')" prop="phone"></el-table-column>
+      <el-table-column prop="balance" :label="$t('余额') + this.localization.currency_unit"></el-table-column>
+      <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
+      <el-table-column :label="$t('客户组')" prop="user_group.name_cn"></el-table-column>
+      <el-table-column :label="$t('注册时间')" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
+      <el-table-column :label="$t('邀请人') " prop="invitor"></el-table-column>
+      <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-main optionBtn" @click="onUpdateGroup(scope.row.id)">修改客户组</el-button>
-          <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">邀请记录</el-button>
-          <el-button class="btn-light-red optionBtn" @click="voucher(scope.row.id)">券包</el-button>
+          <el-button class="btn-main optionBtn" @click="onUpdateGroup(scope.row.id)">{{$t('修改客户组')}}</el-button>
+          <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">{{$t('邀请记录')}}</el-button>
+          <el-button class="btn-light-red optionBtn" @click="voucher(scope.row.id)">{{$t('券包')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">禁止登录</el-button>
-          <el-button size="small" class="btn-green" @click="forbidLogin(1)">允许登录</el-button>
+          <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
+          <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -94,7 +94,7 @@ export default {
           console.log('back', JSON.stringify(this.page_params))
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -146,14 +146,14 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -165,14 +165,14 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

@@ -1,31 +1,31 @@
 <template>
-  <el-dialog :visible.sync="show" title="审核" class="dialog-recharge" width="35%"
+  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-recharge" width="35%"
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 充值金额 -->
-        <el-form-item label="充值金额" v-if="state === 'pass'">
+        <el-form-item :label="$t('充值金额')" v-if="state === 'pass'">
           <el-input v-model="rechargeFee" disabled>
             <template slot="append">{{this.currencyUnit}}</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="*确认金额" v-if="state === 'pass'">
+        <el-form-item :label="$t('*确认金额')" v-if="state === 'pass'">
           <el-input v-model="ruleForm.pay_amount">
             <template slot="append">{{this.currencyUnit}}</template>
           </el-input>
         </el-form-item>
         <!-- 备注 -->
-        <el-form-item label="备注" v-if="state === 'pass'">
+        <el-form-item :label="$t('备注')" v-if="state === 'pass'">
             <el-input type="textarea" v-model="ruleForm.customer_remark"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
-        <el-form-item label="*备注" v-if="state === 'reject'">
+        <el-form-item :label="$t('*备注')" v-if="state === 'reject'">
             <el-input type="textarea" v-model="ruleForm.customer_remark"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
-        <el-form-item label="上传照片" class="updateChe">
+        <el-form-item :label="$t('上传照片')" class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
             <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
@@ -47,8 +47,8 @@
     </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -75,9 +75,9 @@ export default {
     confirm () {
       this.ruleForm.customer_images = this.baleImgList
       if (this.state === 'pass' && !this.ruleForm.pay_amount && this.ruleForm.pay_amount !== 0) {
-        return this.$message.error('请输入金额')
+        return this.$message.error(this.$t('请输入金额'))
       } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
-        return this.$message.error('请输入备注')
+        return this.$message.error(this.$t('请输入备注'))
       }
       // 审核通过
       if (this.state === 'pass') {
@@ -88,7 +88,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '成功',
+              title: this.$t('成功'),
               message: res.msg
             })
             this.show = false
@@ -109,7 +109,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '成功',
+              title: this.$t('成功'),
               message: res.msg
             })
             this.show = false

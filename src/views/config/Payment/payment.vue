@@ -8,12 +8,12 @@
           <el-table v-if="paymentData.length" :data="paymentData" v-loading="tableLoading" class="data-list"
           border stripe>
             <el-table-column type="index"></el-table-column>
-            <el-table-column label="类型" prop="type"></el-table-column>
+            <el-table-column label="类型" prop="name"></el-table-column>
             <el-table-column label="是否启用">
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.enabled"
-                  @change="changeOnline($event)"
+                  @change="changeOnline($event, scope.row.name)"
                   active-text="开"
                   inactive-text="关"
                   active-color="#13ce66"
@@ -23,7 +23,7 @@
             </el-table-column>
             <el-table-column label="配置">
               <template slot-scope="scope">
-                <el-button class="btn-main" @click="configuration(scope.row.id)">配置</el-button>
+                <el-button class="btn-main" @click="configuration(scope.row.id, scope.row.name)">配置</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -575,8 +575,7 @@ export default {
     return {
       paymentData: [
         {
-          type: '微信支付',
-          enabled: ''
+          enabled: true
         }
       ],
       emailData: [
@@ -733,23 +732,12 @@ export default {
       this.getEmail()
       this.getType()
     }
-    // if (this.activeName === '1') {
-    //   this.getWechat()
-    //   this.getPayment()
-    //   this.getLanguageList()
-    // }
-    // if (this.$route.query.activeName === '7') {
-    //   this.activeName = '7'
-    //   this.getList()
-    //   this.getLanguageList()
-    // }
   },
   methods: {
     // 修改在线支付的开关
-    changeOnline (event) {
-      console.log(event, 'event')
-      console.log(typeof event, 'event')
-      this.$request.changePayment(Number(event)).then(res => {
+    changeOnline (event, name) {
+      console.log(name, 'name')
+      this.$request.changePayment(Number(event), name).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -1116,11 +1104,18 @@ export default {
       this.inputValue = ''
     },
     // 支付配置
-    configuration (id) {
-      dialog({ type: 'configuration', id: id
-      }, () => {
-        this.getWechat()
-      })
+    configuration (id, name) {
+      if (name === 'paypal') {
+        dialog({ type: 'paypalSet', id: id
+        }, () => {
+          this.getWechat()
+        })
+      } else if (name === 'wechat') {
+        dialog({ type: 'configuration', id: id
+        }, () => {
+          this.getWechat()
+        })
+      }
     },
     // 获取物流跟踪配置
     getLogisticsData () {
@@ -1295,13 +1290,15 @@ export default {
         this.getProps()
       })
     },
-    // 获取在线支付
+    //  支付配置 获取在线支付
     getWechat () {
       this.tableLoading = true
       this.$request.getPaymentOnline().then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.paymentData[0].enabled = Boolean(res.data.enabled)
+          this.paymentData = res.data.map(item => ({ ...item,
+            enabled: Boolean(item
+              .enabled) }))
         } else {
           this.$message({
             message: res.msg,

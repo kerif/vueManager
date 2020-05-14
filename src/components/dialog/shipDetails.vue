@@ -1,35 +1,35 @@
 <template>
-<el-dialog  :visible.sync="show" title="发货单详情" width="70%"            class="ship-details-container" @close="clear">
+<el-dialog  :visible.sync="show" :title="$t('发货单详情')" width="70%"            class="ship-details-container" @close="clear">
   <div class="import-list">
-    <el-button class="btn-deep-purple" @click="uploadList">导出清单</el-button>
+    <el-button class="btn-deep-purple" @click="uploadList">{{$t('导出清单')}}</el-button>
   </div>
     <el-table :data="shipData" border  @selection-change="selectionChange">
        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="订单号">
+        <el-table-column :label="$t('订单号')">
             <template slot-scope="scope">
                 <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
             </template>
         </el-table-column>
-        <el-table-column label="转运快递单号" prop="logistics_sn"></el-table-column>
+        <el-table-column :label="$t('转运快递单号')" prop="logistics_sn"></el-table-column>
         <!-- <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column> -->
-        <el-table-column label="线路名称" prop="express_line.cn_name"></el-table-column>
-        <el-table-column label="收货人" prop="address.receiver_name"></el-table-column>
-        <el-table-column label="收货国家/地区" prop="address.country_name"></el-table-column>
-        <el-table-column label="包裹数" prop="package_count"></el-table-column>
-        <el-table-column :label="'实际重量' + localization.weight_unit" prop="actual_weight"></el-table-column>
-        <el-table-column :label="'实际费用' + localization.currency_unit" prop="actual_payment_fee"></el-table-column>
-        <el-table-column :label="'申报价值' + localization.currency_unit" prop="declare_value"></el-table-column>
+        <el-table-column :label="$t('线路名称')" prop="express_line.cn_name"></el-table-column>
+        <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
+        <el-table-column :label="$t('收货国家/地区')" prop="address.country_name"></el-table-column>
+        <el-table-column :label="$t('包裹数')" prop="package_count"></el-table-column>
+        <el-table-column :label="$t('实际重量') + localization.weight_unit" prop="actual_weight"></el-table-column>
+        <el-table-column :label="$t('实际费用') + localization.currency_unit" prop="actual_payment_fee"></el-table-column>
+        <el-table-column :label="$t('申报价值') + localization.currency_unit" prop="declare_value"></el-table-column>
         <!-- <el-table-column label="备注" prop="remark"></el-table-column>
         <el-table-column label="提交时间" prop="packed_at"></el-table-column>
         <el-table-column label="拣货时间" prop="updated_at"></el-table-column> -->
-        <el-table-column label="操作" width="130" v-if="status === 0" >
+        <el-table-column :label="$t('操作')" width="130" v-if="status === 0" >
             <template slot-scope="scope">
-                <el-button @click="removeShip(scope.row.id)" class="btn-light-red">移除发货单</el-button>
+                <el-button @click="removeShip(scope.row.id)" class="btn-light-red">{{$t('移除发货单')}}</el-button>
             </template>
         </el-table-column>
         <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-main" @click="deleteData">导出发货单</el-button>
+          <el-button size="small" class="btn-main" @click="deleteData">{{$t('导出发货单')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -70,7 +70,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -85,7 +85,7 @@ export default {
     deleteData () {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
-        return this.$message.error('请选择')
+        return this.$message.error(this.$t('请选择'))
       }
       this.$request.uploadShipmentLabel(this.id, {
         order_ids: this.deleteNum
@@ -94,7 +94,7 @@ export default {
           this.urlExcel = res.data.url
           window.open(this.urlExcel)
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
@@ -122,9 +122,9 @@ export default {
     },
     // 移除发货单
     removeShip (id) {
-      this.$confirm(`是否确认移除`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('是否确认移除'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.removeOrders({
@@ -132,7 +132,7 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
@@ -140,7 +140,7 @@ export default {
             this.success()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -157,13 +157,13 @@ export default {
           // window.location.href = this.urlExcel
           window.open(this.urlExcel)
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

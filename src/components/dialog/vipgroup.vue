@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :visible.sync="show" title="修改客户组" class="dialog-vip-group" @close="clear">
-    <div>客户组中文名*</div>
+  <el-dialog :visible.sync="show" :title="$t('修改客户组')" class="dialog-vip-group" @close="clear">
+    <div>{{$t('客户组中文名*')}}</div>
     <el-select v-model="user.name_cn">
       <el-option
       v-for="item in userList"
@@ -10,8 +10,8 @@
       </el-option>
     </el-select>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -37,7 +37,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false

@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :visible.sync="show" title="所属仓库" class="dialog-warehouse-fo" @close="clear">
-    <div>*所属仓库</div>
+  <el-dialog :visible.sync="show" :title="$t('所属仓库')" class="dialog-warehouse-fo" @close="clear">
+    <div>{{$t('*所属仓库')}}</div>
     <el-select v-model="warehouseId">
       <el-option
       v-for="item in allHouse"
@@ -10,8 +10,8 @@
       </el-option>
     </el-select>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -40,7 +40,7 @@ export default {
       this.allHouse = [
         {
           id: 0,
-          warehouse_name: '全部仓库'
+          warehouse_name: this.$t('全部仓库')
         }
       ]
       this.$request.getAffiliationAll().then(res => {
@@ -57,7 +57,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false

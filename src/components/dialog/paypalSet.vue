@@ -3,30 +3,23 @@
   @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
-        <!-- 员工组中文名 -->
-        <el-form-item :label="$t('小程序ID')" prop="app_id">
-            <el-input :placeholder="$t('请输入小程序ID')" v-model="ruleForm.app_id"></el-input>
+        <el-form-item :label="$t('沙盒模式')">
+          <el-select v-model="ruleForm.sandbox" :placeholder="$t('请选择')" clearable>
+            <el-option
+              v-for="item in positionData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item :label="$t('商户号ID')">
-            <el-input :placeholder="$t('请输入商户号ID')" v-model="ruleForm.mch_id"></el-input>
+        <el-form-item label="Client ID" prop="client_id">
+            <el-input :placeholder="$t('请输入Client ID')" v-model="ruleForm.client_id"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('商户KEY')">
-            <el-input :placeholder="$t('请输入商户KEY')" v-model="ruleForm.key">
-            </el-input>
-            <!--  <el-button class="btn-main chooseBtn">选择</el-button> -->
+        <el-form-item label="Secret">
+            <el-input :placeholder="$t('请输入Secret')" v-model="ruleForm.secret"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('通信安全公钥证书')">
-            <el-input :placeholder="$t('请输入通信安全公钥证书')" v-model="ruleForm.cert_path"></el-input>
-            <el-upload
-                class="upload-demo"
-                action=""
-                :on-preview="handlePreview"
-                :http-request="uploadRsaFile"
-                >
-                <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
-            </el-upload>
-        </el-form-item>
-        <el-form-item :label="$t('通信安全私钥证书')">
+        <!-- <el-form-item :label="$t('通信安全私钥证书')">
             <el-input :placeholder="$t('请输入通信安全私钥证书')" v-model="ruleForm.key_path"></el-input>
             <el-upload
                 class="upload-demo"
@@ -35,9 +28,8 @@
                 :http-request="uploadKeyFile">
                 <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
             </el-upload>
-        </el-form-item>
+        </el-form-item> -->
     </el-form>
-    <p class="noticeAddress">{{$t('支付通知地址:')}}  {{ruleForm.notify_url}}</p>
     <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
       <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
@@ -50,14 +42,19 @@ export default {
     return {
       fileList: [],
       ruleForm: {
-        app_id: '',
-        mch_id: '',
-        key: '',
-        cert_path: '',
-        key_path: '',
-        notify_url: ''
+        sandbox: 0,
+        client_id: '',
+        secret: ''
       },
-      country: [],
+      positionData: [
+        {
+          id: 0,
+          name: '否'
+        }, {
+          id: 1,
+          name: '是'
+        }
+      ],
       rules: {
         // country_id: [
         //   { required: true, message: '请输入目的地', trigger: 'blur' }
@@ -67,9 +64,11 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getWechat().then(res => {
+      this.$request.getPaypal().then(res => {
         if (res.ret) {
-          this.ruleForm = res.data
+          this.ruleForm.sandbox = res.data.sandbox
+          this.ruleForm.client_id = res.data.client_id
+          this.ruleForm.secret = res.data.secret
         }
       })
     },
@@ -77,12 +76,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let params = { ...this.ruleForm }
-          for (const key in params) {
-            if (params.hasOwnProperty(key)) {
-              if (!params[key]) delete params[key]
-            }
-          }
-          this.$request.updateWechat(params).then(res => {
+          this.$request.updatePaypal(params).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -108,30 +102,23 @@ export default {
       console.log(file)
     },
     clear () {
-      this.ruleForm.country_id = ''
-      this.ruleForm.remark = ''
+      this.ruleForm.client_id = ''
+      this.ruleForm.secret = ''
+      this.ruleForm.sandbox = ''
     },
     // 上传商户 key_path 文件
-    uploadKeyFile (file) {
-      this.onUpload(file.file).then(res => {
-        if (res.ret) {
-          this.ruleForm.key_path = res.data[0].path
-        }
-      })
-    },
-    // 上传安全公钥文件
-    uploadRsaFile (file) {
-      this.onUpload(file.file).then(res => {
-        if (res.ret) {
-          this.ruleForm.cert_path = res.data[0].path
-        }
-      })
-    },
-    onUpload (file) {
-      let params = new FormData()
-      params.append(`files[${0}][file]`, file)
-      return this.$request.uploadCerts(params)
-    },
+    // uploadKeyFile (file) {
+    //   this.onUpload(file.file).then(res => {
+    //     if (res.ret) {
+    //       this.ruleForm.key_path = res.data[0].path
+    //     }
+    //   })
+    // },
+    // onUpload (file) {
+    //   let params = new FormData()
+    //   params.append(`files[${0}][file]`, file)
+    //   return this.$request.uploadCerts(params)
+    // },
     init () {
       this.getList()
     }
@@ -171,6 +158,10 @@ export default {
 
   .el-dialog__close {
     color: #FFF;
+  }
+  .banner-sty {
+    width: 45% !important;
+    margin-left: 50px;
   }
 }
 </style>

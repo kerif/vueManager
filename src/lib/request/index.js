@@ -681,9 +681,13 @@ exports.uploadFiles = (params) => {
 exports.getWechat = () => {
   return $form.get('payments/wechat')
 }
+// 获取paypal支付
+exports.getPaypal = () => {
+  return $form.get('payments/paypal')
+}
 // 更改 微信支付
-exports.updateWechat = (params) => {
-  return $form.put('payments/wechat', params)
+exports.updatePaypal = (params) => {
+  return $form.put('payments/paypal', params)
 }
 // 配置 获取仓库地址配置
 exports.getWarehouseAddress = (params) => {
@@ -743,11 +747,11 @@ exports.updateInstructions = (params) => {
 }
 // 更多配置 获取微信配置是否启用
 exports.getPaymentOnline = () => {
-  return $form.get(`payments/wechat/status`)
+  return $form.get(`payments/payment/status`)
 }
 // 更多配置 开启或关闭微信配置
-exports.changePayment = (status) => {
-  return $form.put(`payments/wechat/status/${status}`)
+exports.changePayment = (status, type) => {
+  return $form.put(`payments/payment/status/${status}/${type}`)
 }
 // 更多配置 获取转账支付
 exports.getPayments = () => {

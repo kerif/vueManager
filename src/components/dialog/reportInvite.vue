@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="邀请记录" class="dialog-invite-report" width="70%" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('邀请记录')" class="dialog-invite-report" width="70%" @close="clear">
     <el-table
       class="data-list"
       :data="tableData"
@@ -10,21 +10,21 @@
       <!-- 客户ID -->
       <el-table-column
         prop="id"
-        label="客户ID">
+        :label="$t('客户ID')">
       </el-table-column>
       <!-- 客户昵称 -->
         <el-table-column
         prop="name"
-        label="客户昵称">
+        :label="$t('客户昵称')">
       </el-table-column>
         <el-table-column
         prop="created_at"
-        label="注册时间">
+        :label="$t('注册时间')">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
         prop="last_login_at"
-        label="最后登录时间">
+        :label="$t('最后登录时间')">
       </el-table-column>
     </el-table>
      <nle-pagination :pageParams="page_params"></nle-pagination>

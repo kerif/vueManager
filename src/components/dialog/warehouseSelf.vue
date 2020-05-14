@@ -1,22 +1,22 @@
 <template>
-  <el-dialog :visible.sync="show" title="设为自提签收" class="dialog-warehouse-self" width="35%"
+  <el-dialog :visible.sync="show" :title="$t('设为自提签收')" class="dialog-warehouse-self" width="35%"
   @close="clear">
     <el-form ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 转运单号 -->
-        <el-form-item label="转运单号">
+        <el-form-item :label="$t('转运单号')">
           <span>{{this.order}}</span>
         </el-form-item>
         <!-- 签收备注 -->
-        <el-form-item label="签收备注">
+        <el-form-item :label="$t('签收备注')">
             <el-input type="textarea" v-model="remark"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -37,7 +37,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false

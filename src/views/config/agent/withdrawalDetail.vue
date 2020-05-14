@@ -1,48 +1,48 @@
 <template>
   <div class="withdrawal-container">
     <div class="receiverMSg">
-    <h4>客户信息</h4>
+    <h4>{{$t('客户信息')}}</h4>
     <el-row class="container-center" :gutter="20">
       <!-- 客户ID -->
       <el-col :span="9">
-        <span class="leftWidth">客户ID</span>
+        <span class="leftWidth">{{$t('客户ID')}}</span>
         <span>{{form.user && form.user.id}}</span>
       </el-col>
       <!-- 客户昵称 -->
         <el-col :span="9" :offset="1">
-         <span class="leftWidth">客户昵称</span>
+         <span class="leftWidth">{{$t('客户昵称')}}</span>
          <span>{{form.user && form.user.name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
      <!-- 流水号 -->
       <el-col :span="9">
-        <span class="leftWidth">流水号</span>
+        <span class="leftWidth">{{$t('流水号')}}</span>
         <span>{{form.serial_no}}</span>
       </el-col>
       <!-- 提交时间 -->
         <el-col :span="9" :offset="1">
-         <span class="leftWidth">提交时间</span>
+         <span class="leftWidth">{{$t('提交时间')}}</span>
          <span>{{form.created_at}}</span>
       </el-col>
     </el-row>
     </div>
     <!-- 提现信息 -->
     <div class="pay-message receiverMSg">
-      <h4>提现信息</h4>
+      <h4>{{$t('提现信息')}}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
-          <p class="transfer-right">{{'提现金额' + this.localization.currency_unit}}</p>
+          <p class="transfer-right">{{$t('提现金额') + this.localization.currency_unit}}</p>
           <span>{{form.amount}}</span><br/>
-          <p class="transfer-right">提现方式</p>
+          <p class="transfer-right">{{$t('提现方式')}}</p>
           <span>{{form.type}}</span><br/>
-          <p class="transfer-right">账户名</p>
+          <p class="transfer-right">{{$t('账户名')}}</p>
           <span>{{form.account}}</span><br/>
-          <p class="transfer-right">备注</p>
+          <p class="transfer-right">{{$t('备注')}}</p>
           <span>{{form.remark}}</span><br/>
         </el-col>
         <el-col :span="9" :offset="1">
-          <p>客户截图</p>
+          <p>{{$t('客户截图')}}</p>
           <span v-for="item in form.customer_images"
           :key="item.id" style="cursor:pointer;"
             @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
@@ -52,47 +52,47 @@
       </el-row>
     </div>
     <div class="receiverMSg">
-    <h4>提现明细</h4>
+    <h4>{{$t('提现明细')}}</h4>
     <el-table class="data-list" border stripe
       v-loading="tableLoading"
       :data="withdrawList">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 订单号 -->
-      <el-table-column label="订单号" prop="order_number"></el-table-column>
+      <el-table-column :label="$t('订单号')" prop="order_number"></el-table-column>
       <!-- 状态 -->
-      <el-table-column label="状态" prop="order_status"></el-table-column>
+      <el-table-column :label="$t('状态')" prop="order_status"></el-table-column>
       <!-- 总金额 -->
-      <el-table-column label="总金额" prop="order_amount"></el-table-column>
+      <el-table-column :label="$t('总金额')" prop="order_amount"></el-table-column>
       <!-- 佣金比例 -->
-      <el-table-column label="佣金比例%" prop="proportion"></el-table-column>
+      <el-table-column :label="$t('佣金比例') + '%'" prop="proportion"></el-table-column>
       <!-- 佣金 -->
-      <el-table-column :label="'佣金' + this.localization.currency_unit" prop="commission_amount"></el-table-column>
+      <el-table-column :label="$t('佣金') + this.localization.currency_unit" prop="commission_amount"></el-table-column>
         <template slot="append">
           <div class="append-box">
-           <span>{{'总计' + this.localization.currency_unit}}：{{this.amount}}</span>
+           <span>{{$t('总计') + this.localization.currency_unit}}：{{this.amount}}</span>
           </div>
       </template>
     </el-table>
     </div>
     <div class="footer-btn" v-if="this.$route.params.state === 'review'">
-      <el-button type="danger" @click="reviewReject">审核拒绝</el-button>
-      <el-button type="primary" @click="reviewPass">审核通过</el-button>
+      <el-button type="danger" @click="reviewReject">{{$t('审核拒绝')}}</el-button>
+      <el-button type="primary" @click="reviewPass">{{$t('审核通过')}}</el-button>
     </div>
     <div class="pay-message receiverMSg" v-if="this.$route.params.status === 'detail'">
-      <h4>确认信息</h4>
+      <h4>{{$t('确认信息')}}</h4>
       <el-row :gutter="0">
         <el-col :span="9">
-          <p class="transfer-right">{{'提现金额' + this.localization.currency_unit}}</p>
+          <p class="transfer-right">{{$t('提现金额') + this.localization.currency_unit}}</p>
           <span>{{form.confirm_amount}}</span><br/>
-          <p class="transfer-right">备注</p>
+          <p class="transfer-right">{{$t('备注')}}</p>
           <span>{{form.customer_remark}}</span><br/>
           <!-- <p class="transfer-right">上传图片</p>
           <div class="left-img">
             <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true" style="cursor:pointer;">
           </div> -->
-          <p class="transfer-right">操作人</p>
+          <p class="transfer-right">{{$t('操作人')}}</p>
           <span>{{form.operator}}</span><br/>
-          <p class="transfer-right">操作时间</p>
+          <p class="transfer-right">{{$t('操作时间')}}</p>
           <span>{{form.updated_at}}</span><br/>
         </el-col>
       </el-row>
@@ -150,7 +150,7 @@ export default {
           this.localization = res.localization
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

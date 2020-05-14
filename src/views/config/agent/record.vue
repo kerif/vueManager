@@ -3,31 +3,31 @@
     <el-table class="data-list" border stripe :data="suggestList"
     v-loading="tableLoading">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="下单人id" prop="user_id">
+      <el-table-column :label="$t('下单人id')" prop="user_id">
       </el-table-column>
-      <el-table-column label="姓名" prop="user_name">
+      <el-table-column :label="$t('姓名')" prop="user_name">
       </el-table-column>
-      <el-table-column label="订单号" prop="order_number">
+      <el-table-column :label="$t('订单号')" prop="order_number">
       </el-table-column>
-      <el-table-column :label="'订单金额' + this.localization.currency_unit" prop="order_amount">
+      <el-table-column :label="$t('订单金额') + this.localization.currency_unit" prop="order_amount">
       </el-table-column>
-      <el-table-column label="佣金比例%" prop="proportion">
+      <el-table-column :label="$t('佣金比例%')" prop="proportion">
       </el-table-column>
-      <el-table-column :label="'佣金' + this.localization.currency_unit" prop="commission_amount">
+      <el-table-column :label="$t('佣金') + this.localization.currency_unit" prop="commission_amount">
       </el-table-column>
-      <el-table-column label="成交时间" prop="created_at">
+      <el-table-column :label="$t('成交时间')" prop="created_at">
       </el-table-column>
-      <el-table-column label="状态">
+      <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.settled === 0">未结算</span>
-          <span v-if="scope.row.settled === 1">已结算</span>
-          <span v-if="scope.row.settled === 2">提现申请中</span>
-          <span v-if="scope.row.settled === 3">已提现</span>
+          <span v-if="scope.row.settled === 0">{{$t('未结算')}}</span>
+          <span v-if="scope.row.settled === 1">{{$t('已结算')}}</span>
+          <span v-if="scope.row.settled === 2">{{$t('提现申请中')}}</span>
+          <span v-if="scope.row.settled === 3">{{$t('已提现')}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否结算">
+      <el-table-column :label="$t('是否结算')">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.settled === 0" class="btn-dark-green" @click="settlement(scope.row.id)">结算</el-button>
+          <el-button v-if="scope.row.settled === 0" class="btn-dark-green" @click="settlement(scope.row.id)">{{$t('结算')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -76,7 +76,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -108,12 +108,12 @@ export default {
           this.$notify({
             message: res.msg,
             type: 'success',
-            title: '操作成功'
+            title: this.$t('操作成功')
           })
           this.getList()
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

@@ -1,86 +1,86 @@
 <template>
     <div class="edit-packed-container">
     <div class="receiverMSg">
-    <h4>收货人信息</h4>
+    <h4>{{$t('收货人信息')}}</h4>
     <el-row class="container-center" :gutter="20">
       <!-- 姓名 -->
       <el-col :span="7">
-        <span class="leftWidth">姓名</span>
+        <span class="leftWidth">{{$t('姓名')}}</span>
         <span>{{form.address && form.address.receiver_name}}</span>
       </el-col>
       <!-- 手机/联系电话 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">手机/联系电话</span>
+         <span class="leftWidth">{{$t('手机/联系电话')}}</span>
          <span>{{form.address &&form.address.phone}}</span>
       </el-col>
       <!-- 国家/地区 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">国家/地区</span>
+         <span class="leftWidth">{{$t('国家/地区')}}</span>
          <span>{{form.address && form.address.country.cn_name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
      <!-- 城市 -->
       <el-col :span="7">
-        <span class="leftWidth">城市</span>
+        <span class="leftWidth">{{$t('城市')}}</span>
         <span>{{form.address && form.address.city}}</span>
       </el-col>
       <!-- 街道/门牌号 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">街道门牌号</span>
+         <span class="leftWidth">{{$t('街道门牌号')}}</span>
          <span>{{form.address && form.address.street}}{{form.address && form.address.door_no}}</span>
       </el-col>
       <!-- 邮编 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">邮编</span>
+         <span class="leftWidth">{{$t('邮编')}}</span>
          <span>{{form.address && form.address.postcode}}</span>
       </el-col>
     </el-row>
     </div>
     <div class="receiverMSg">
-    <h4>打包详情</h4>
+    <h4>{{$t('打包详情')}}</h4>
     <el-row class="container-center" :gutter="20">
       <!-- 订单号 -->
       <el-col :span="7">
-        <span class="leftWidth">订单号</span>
+        <span class="leftWidth">{{$t('订单号')}}</span>
         <span>{{form.order_sn}}</span>
       </el-col>
       <!-- 线路名称 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">线路名称</span>
-         <span>{{form.express_line && form.express_line.cn_name}}---限重{{form.express_line && form.express_line.max_weight}}{{localization.weight_unit}}</span>
+         <span class="leftWidth">{{$t('线路名称')}}</span>
+         <span>{{form.express_line && form.express_line.cn_name}}---{{$t('限重')}}{{form.express_line && form.express_line.max_weight}}{{localization.weight_unit}}</span>
       </el-col>
       <!-- 提交时间 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">提交时间</span>
+         <span class="leftWidth">{{$t('提交时间')}}</span>
          <span>{{form.created_at}}</span>
       </el-col>
     </el-row>
     <!-- 客户ID -->
     <el-row class="container-center" :gutter="20">
       <el-col :span="7">
-         <span class="leftWidth">客户ID</span>
+         <span class="leftWidth">{{$t('客户ID')}}</span>
          <span>{{form.user_id}}---{{form.user_name}}</span>
       </el-col>
     </el-row>
     </div>
       <!-- 打包清单 -->
-      <h4>包裹清单</h4>
+      <h4>{{$t('包裹清单')}}</h4>
       <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column label="快递单号" prop="express_num"></el-table-column>
-        <el-table-column label="物品名称" prop="package_name"></el-table-column>
-        <el-table-column :label="'物品价值' + this.localization.currency_unit" prop="package_value"></el-table-column>
-        <el-table-column label="物品属性">
+        <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
+        <el-table-column :label="$t('物品名称')" prop="package_name"></el-table-column>
+        <el-table-column :label="$t('物品价值') + this.localization.currency_unit" prop="package_value"></el-table-column>
+        <el-table-column :label="$t('物品属性')">
           <template slot-scope="scope">
           <span v-for="item in scope.row.props" :key="item.id">
             {{item.cn_name}}
           </span>
           </template>
         </el-table-column>
-        <el-table-column label="代理" prop="agent"></el-table-column>
+        <el-table-column :label="$t('代理')" prop="agent"></el-table-column>
         <!-- 商品清单 -->
-        <el-table-column label="商品清单" prop="item_pictures" width="130">
+        <el-table-column :label="$t('商品清单')" prop="item_pictures" width="130">
           <template slot-scope="scope">
             <span v-for="item in scope.row.item_pictures"
             :key="item.id" style="cursor:pointer;"
@@ -89,7 +89,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="货位" prop="location"></el-table-column>
+        <el-table-column :label="$t('货位')" prop="location"></el-table-column>
       </el-table>
       <div class="receiverMSg">
         <el-form ref="params" :model="user" class="package-form" label-width="140px" label-position="left">
@@ -97,7 +97,7 @@
             <!-- 订单号 -->
             <el-row :gutter="20">
               <el-col :span="18">
-                <el-form-item label="订单号" prop="order_sn">
+                <el-form-item :label="$t('订单号')" prop="order_sn">
                   <el-input v-model="user.order_sn" :disabled="true"></el-input>
                 </el-form-item>
               </el-col>
@@ -105,8 +105,8 @@
             <!-- 重量 -->
             <el-row :gutter="20">
               <el-col :span="18">
-                <el-form-item label="*重量" prop="weight">
-                  <el-input v-model="user.weight" placeholder="请输入重量">
+                <el-form-item :label="$t('*重量')" prop="weight">
+                  <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
                   <template slot="append">{{this.localization.weight_unit}}</template>
                   </el-input>
                 </el-form-item>
@@ -115,18 +115,18 @@
             <!-- 尺寸 -->
             <el-row :gutter="20">
               <el-col :span="18">
-                <el-form-item label="*尺寸">
-                  <el-input v-model="user.length"  class="sizeLength" :placeholder="'长' + this.localization.length_unit"></el-input>
-                  <el-input v-model="user.width" class="sizeLength" :placeholder="'宽' + this.localization.length_unit"></el-input>
-                  <el-input v-model="user.height"  class="sizeLength" :placeholder="'高' + this.localization.length_unit"></el-input>
+                <el-form-item :label="$t('*尺寸')">
+                  <el-input v-model="user.length"  class="sizeLength" :placeholder="$t('长') + this.localization.length_unit"></el-input>
+                  <el-input v-model="user.width" class="sizeLength" :placeholder="$t('宽') + this.localization.length_unit"></el-input>
+                  <el-input v-model="user.height"  class="sizeLength" :placeholder="$t('高') + this.localization.length_unit"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <!-- 客服备注 -->
             <el-row :gutter="20">
               <el-col :span="18">
-                <el-form-item label="客服备注" class="customer">
-                  <el-input type="textarea" placeholder="请输入备注"
+                <el-form-item :label="$t('客服备注')" class="customer">
+                  <el-input type="textarea" :placeholder="$t('请输入备注')"
                   v-model="user.remark"
                   :autosize="{ minRows: 2, maxRows: 4}"></el-input>
                 </el-form-item>
@@ -135,7 +135,7 @@
             <!-- 上传打包照片 -->
             <el-row :gutter="20">
               <el-col :span="18">
-                <el-form-item label="*上传打包照片" class="updateChe">
+                <el-form-item :label="$t('*上传打包照片')" class="updateChe">
                     <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
                       <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                       <span class="model-box"></span>
@@ -155,14 +155,14 @@
                       <i class="el-icon-plus">
                       </i>
                   </el-upload>
-                  <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+                  <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <!-- 增值服务 -->
             <el-row :gutter="20">
               <el-col>
-                <el-form-item label="增值服务">
+                <el-form-item :label="$t('增值服务')">
                   <div v-for="item in updateProp" :key="item.id" class="service">
                     <div class="serviceLeft">
                     <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
@@ -183,16 +183,16 @@
             <!-- 留仓物品 -->
             <el-row :gutter="20">
               <el-col :span="18">
-                <el-form-item label="留仓物品">
-                  <el-input v-model="user.in_warehouse_item" placeholder="请输入留仓物品"></el-input>
+                <el-form-item :label="$t('留仓物品')">
+                  <el-input v-model="user.in_warehouse_item" :placeholder="$t('请输入留仓物品')"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <!-- 货位 -->
             <el-row :gutter="20">
               <el-col :span="18">
-                <el-form-item label="货位">
-                  <el-input v-model="user.location" placeholder="请输入货位"></el-input>
+                <el-form-item :label="$t('货位')">
+                  <el-input v-model="user.location" :placeholder="$t('请输入货位')"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -209,10 +209,10 @@
                       </el-option>
                     </el-select>
                 </el-form-item> -->
-                <el-form-item label="更改线路" class="express">
+                <el-form-item :label="$t('更改线路')" class="express">
                 <!-- <span class="leftWidth">更改线路</span> -->
                 <span class="change-line">
-                  {{express.CName}}---限重{{express.MaxWeight}}KG</span>
+                  {{express.CName}}---{{$t('限重')}}{{express.MaxWeight}}KG</span>
                     <!-- <el-select v-model="user.express_line_id" clearable>
                       <el-option
                       v-for="item in expressData"
@@ -221,14 +221,14 @@
                       :label="`${item.cn_name}---限重${item.max_weight}` + localization.weight_unit">
                       </el-option>
                     </el-select> -->
-                <el-button class="btn-main change-btn" @click="changeLine">更改</el-button>
+                <el-button class="btn-main change-btn" @click="changeLine">{{$t('更改')}}</el-button>
                 </el-form-item>
               </el-col>
             </el-row>
             <!-- 物品照片 -->
             <el-row :gutter="20">
               <el-col :span="18">
-                <el-form-item prop="password_confirmation" class="updateChe" label="物品照片">
+                <el-form-item prop="password_confirmation" class="updateChe" :label="$t('物品照片')">
                   <span class="img-item" v-for="(item, index) in goodsImgList" :key="item.name">
                     <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                     <span class="model-box"></span>
@@ -249,7 +249,7 @@
                     <i class="el-icon-plus">
                     </i>
                   </el-upload>
-                  <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+                  <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -259,7 +259,7 @@
     <!-- 保存 -->
     <el-row :gutter="20">
     <el-col :span="18">
-      <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">保存</el-button>
+      <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
     </el-col>
     </el-row>
     <el-dialog :visible.sync="imgVisible" size="small">
@@ -375,7 +375,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           // this.$router.push({ name: 'wayBillList' })
@@ -433,10 +433,10 @@ export default {
     },
     beforeUploadImg (file) {
       if (!(/^image/.test(file.type))) {
-        this.$message.info('请上传图片类型文件')
+        this.$message.info(this.$t('请上传图片类型文件'))
         return false
       } else if (file.size > 1024 * 1024 * 2) {
-        this.$message.info('上传图片大小不能超过2M')
+        this.$message.info(this.$t('上传图片大小不能超过2M'))
         return false
       }
       return true

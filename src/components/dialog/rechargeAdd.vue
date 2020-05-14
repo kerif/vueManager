@@ -1,44 +1,44 @@
 <template>
-  <el-dialog :visible.sync="show" title="新增" class="dialog-add-recharge" width="35%"
+  <el-dialog :visible.sync="show" :title="$t('新增')" class="dialog-add-recharge" width="35%"
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 客户编号 -->
-        <el-form-item label="*客户编号">
+        <el-form-item :label="$t('*客户编号')">
           <!-- <el-input v-model="ruleForm.user_id">
           </el-input> -->
           <el-autocomplete
           :fetch-suggestions="queryCNSearch"
           @select="handleSelect"
-          placeholder="请输入客户编号"
+          :placeholder="$t('请输入客户编号')"
           v-model="ruleForm.user_id">
         </el-autocomplete>
         </el-form-item>
         <!-- 充值金额 -->
-        <el-form-item :label="'*充值金额' + localization.currency_unit" class="input-style">
+        <el-form-item :label="$t('*充值金额') + localization.currency_unit" class="input-style">
           <el-input v-model="ruleForm.tran_amount">
           </el-input>
         </el-form-item>
         <!-- 充值方式 -->
-        <el-form-item label="*充值方式" class="input-style">
+        <el-form-item :label="$t('*充值方式')" class="input-style">
           <el-radio-group v-model="ruleForm.payment_type_id">
             <el-radio v-for="item in updateProp" :key="item.id" :label="item.id">{{item.name}}
             </el-radio>
           </el-radio-group>
         </el-form-item>
         <!-- 转账账户 -->
-        <el-form-item label="*转账账户" class="input-style">
+        <el-form-item :label="$t('*转账账户')" class="input-style">
           <el-input v-model="ruleForm.transfer_account">
           </el-input>
         </el-form-item>
         <!-- 转账备注 -->
-        <el-form-item label="转账备注" class="input-style">
+        <el-form-item :label="$t('转账备注')" class="input-style">
             <el-input type="textarea" v-model="ruleForm.remark"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
         <!-- 上传截图 -->
-        <el-form-item label="上传截图" class="updateChe">
+        <el-form-item :label="$t('上传截图')" class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
             <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
@@ -58,24 +58,24 @@
             <i class="el-icon-plus">
             </i>
         </el-upload>
-        <div class="updateImg">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</div>
+        <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div>
       </el-form-item>
     <!-- 是否审核 -->
-    <el-form-item label="是否审核">
+    <el-form-item :label="$t('是否审核')">
         <el-switch
           v-model="ruleForm.should_audit"
-          active-text="开"
+          :active-text="$t('开')"
           :active-value="1"
           :inactive-value="0"
-          inactive-text="关"
+          :inactive-text="$t('关')"
           active-color="#13ce66"
           inactive-color="gray">
         </el-switch>
     </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -97,16 +97,16 @@ export default {
       localization: {},
       rules: {
         user_id: [
-          { required: true, message: '请输入客户编号', trigger: 'blur' }
+          { required: true, message: this.$t('请输入客户编号'), trigger: 'blur' }
         ],
         tran_amount: [
-          { required: true, message: '请输入充值金额', trigger: 'change' }
+          { required: true, message: this.$t('请输入充值金额'), trigger: 'change' }
         ],
         payment_type_id: [
-          { required: true, message: '请选择充值方式', trigger: 'blur' }
+          { required: true, message: this.$t('请选择充值方式'), trigger: 'blur' }
         ],
         transfer_account: [
-          { required: true, message: '请输入转账账户', trigger: 'blur' }
+          { required: true, message: this.$t('请输入转账账户'), trigger: 'blur' }
         ]
       },
       tranAmount: '',
@@ -121,18 +121,18 @@ export default {
         this.ruleForm.images = []
       }
       if (this.ruleForm.user_id === '') {
-        return this.$message.error('请输入客户编号')
+        return this.$message.error(this.$t('请输入客户编号'))
       } else if (this.ruleForm.tran_amount === '') {
-        return this.$message.error('请输入充值金额')
+        return this.$message.error(this.$t('请输入充值金额'))
       } else if (this.ruleForm.transfer_account === '') {
-        return this.$message.error('请输入转账账户')
+        return this.$message.error(this.$t('请输入转账账户'))
       }
       this.ruleForm.user_id = this.ruleForm.user_id.split('---')[0]
       this.$request.addRecords(this.ruleForm).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false
@@ -187,10 +187,10 @@ export default {
     },
     beforeUploadImg (file) {
       if (!(/^image/.test(file.type))) {
-        this.$message.info('请上传图片类型文件')
+        this.$message.info(this.$t('请上传图片类型文件'))
         return false
       } else if (file.size > 1024 * 1024 * 2) {
-        this.$message.info('上传图片大小不能超过2M')
+        this.$message.info(this.$t('上传图片大小不能超过2M'))
         return false
       }
       return true
@@ -221,7 +221,7 @@ export default {
           this.localization = res.localization
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
