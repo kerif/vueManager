@@ -4,7 +4,7 @@
         <!-- 增值服务 -->
         <el-row :gutter="20">
             <el-col>
-            <el-form-item label="增值服务">
+            <el-form-item :label="$t('增值服务')">
                 <div v-for="item in updateProp" :key="item.id" class="service">
                 <div class="serviceLeft">
                 <el-checkbox v-model="item.selected">{{item.name}}</el-checkbox>
@@ -19,8 +19,8 @@
           <!-- 保存 -->
           <el-col>
           <el-form-item>
-            <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">保存</el-button>
-            <el-button type="success" @click="addCost" class="add-cost">新增费用</el-button>
+            <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
+            <el-button type="success" @click="addCost" class="add-cost">{{$t('新增费用')}}</el-button>
           </el-form-item>
           </el-col>
         </el-row>
@@ -79,7 +79,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.$router.push({ name: 'linelist' })

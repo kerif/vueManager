@@ -3,63 +3,63 @@
     <div class="add-btn-box">
       <el-row :gutter="10">
         <el-col :span="5">
-          <el-select placeholder="线路名称" multiple filterable
+          <el-select :placeholder="$t('线路名称')" multiple filterable
             collapse-tags v-model="query.lineName">
             <el-option v-for="(item, index) in lineNameColumn" :key="index"
               :label="item" :value="item"></el-option>
           </el-select>
         </el-col>
         <el-col :span="5">
-          <el-select placeholder="支持仓库" v-model="query.warehouses" multiple
+          <el-select :placeholder="$t('支持仓库')" v-model="query.warehouses" multiple
             collapse-tags filterable>
             <el-option v-for="(item, index) in warehousesColumn" :key="index"
               :label="item" :value="item"></el-option>
           </el-select>
         </el-col>
         <el-col :span="3">
-          <el-select placeholder="是否启用" v-model="query.enabled">
+          <el-select :placeholder="$t('是否启用')" v-model="query.enabled">
             <el-option v-for="item in enableList" :key="item.value"
               :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-col>
         <el-col :span="11">
-          <el-button type="success" @click="onHighSearch">{{ highSearch ? '取消高级搜索' : '高级搜索' }}</el-button>
-          <el-button type="primary" @click="onSearch">搜索</el-button>
-          <el-button type="primary" plain @click="onReset">重置</el-button>
-          <add-btn router="lineadd">添加路线</add-btn>
+          <el-button type="success" @click="onHighSearch">{{ highSearch ? $t('取消高级搜索') : $t('高级搜索') }}</el-button>
+          <el-button type="primary" @click="onSearch">{{$t('搜索')}}</el-button>
+          <el-button type="primary" plain @click="onReset">{{$t('重置')}}</el-button>
+          <add-btn router="lineadd">{{$t('添加路线')}}</add-btn>
         </el-col>
       </el-row>
       <el-row :gutter="10" style="margin-top:15px" v-show="highSearch">
         <el-col :span="4">
-          <el-select placeholder="支持国家/地区" v-model="query.countries" multiple
+          <el-select :placeholder="$t('支持国家/地区')" v-model="query.countries" multiple
             collapse-tags filterable>
             <el-option v-for="(item, index) in countriesColumn" :key="index"
               :label="item" :value="item"></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select placeholder="参考时效" v-model="query.referenceTime" multiple
+          <el-select :placeholder="$t('参考时效')" v-model="query.referenceTime" multiple
             collapse-tags filterable>
             <el-option v-for="(item, index) in referenceTimeColumn" :key="index"
               :label="item" :value="item"></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select placeholder="首重" v-model="query.firstWeight" multiple
+          <el-select :placeholder="$t('首重')" v-model="query.firstWeight" multiple
             collapse-tags filterable>
             <el-option v-for="(item, index) in firstWeightColumn" :key="index"
               :label="item" :value="item"></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select placeholder="首费" v-model="query.firstMoney" multiple
+          <el-select :placeholder="$t('首费')" v-model="query.firstMoney" multiple
             collapse-tags filterable>
             <el-option v-for="(item, index) in firstMoneyColumn" :key="index"
               :label="item" :value="item"></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select placeholder="续费" v-model="query.nextWeight" multiple
+          <el-select :placeholder="$t('续费')" v-model="query.nextWeight" multiple
             collapse-tags filterable>
             <el-option v-for="(item, index) in nextWeightColumn" :key="index"
               :label="item" :value="item"></el-option>
@@ -75,9 +75,9 @@
         </template>
       </el-table-column>
       <!-- 线路名称 -->
-      <el-table-column label="线路名称" prop="name"></el-table-column>
+      <el-table-column :label="$t('线路名称')" prop="name"></el-table-column>
       <!-- 支持国家/地区 -->
-      <el-table-column label="支持国家/地区">
+      <el-table-column :label="$t('支持国家/地区')">
         <template slot-scope="scope">
           <span v-for="item in scope.row.countries" :key="item.id">
             {{item.name}}
@@ -85,27 +85,35 @@
         </template>
       </el-table-column>
       <!-- 支持仓库 -->
-      <el-table-column label="支持仓库">
+      <el-table-column :label="$t('支持仓库')">
         <template slot-scope="scope">
           <span v-for="item in scope.row.warehouses" :key="item.id">
             {{item.warehouse_name}}
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="参考时效" prop="reference_time"></el-table-column>
-      <el-table-column :label="'首重' + this.localization.weight_unit" prop="first_weight"></el-table-column>
-      <el-table-column :label="'首费' + this.localization.currency_unit" prop="first_money"></el-table-column>
-      <el-table-column :label="'续重' + this.localization.weight_unit" prop="next_weight"></el-table-column>
-      <el-table-column :label="'续费' + this.localization.currency_unit" prop="next_money"></el-table-column>
-      <el-table-column :label="'最大重量' + this.localization.weight_unit" prop="max_weight"></el-table-column>
-      <el-table-column :label="'最小重量' + this.localization.weight_unit" prop="min_weight"></el-table-column>
-      <el-table-column label="是否启用" width="120">
+      <!-- 参考时效 -->
+      <el-table-column :label="$t('参考时效')" prop="reference_time"></el-table-column>
+      <!-- 首重 -->
+      <el-table-column :label="$t('首重') + this.localization.weight_unit" prop="first_weight"></el-table-column>
+      <!-- 首费 -->
+      <el-table-column :label="$t('首费') + this.localization.currency_unit" prop="first_money"></el-table-column>
+      <!-- 续重 -->
+      <el-table-column :label="$t('续重') + this.localization.weight_unit" prop="next_weight"></el-table-column>
+      <!-- 续费 -->
+      <el-table-column :label="$t('续费') + this.localization.currency_unit" prop="next_money"></el-table-column>
+      <!-- 最大重量 -->
+      <el-table-column :label="$t('最大重量') + this.localization.weight_unit" prop="max_weight"></el-table-column>
+      <!-- 最小重量 -->
+      <el-table-column :label="$t('最小重量') + this.localization.weight_unit" prop="min_weight"></el-table-column>
+      <!-- 是否启用 -->
+      <el-table-column :label="$t('是否启用')" width="120">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enabled"
             @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
-            active-text="开"
-            inactive-text="关"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
             active-color="#13ce66"
             inactive-color="gray">
           </el-switch>
@@ -119,15 +127,15 @@
       </el-table-column>
       <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
-          <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">修改</el-button>
-          <el-button class="btn-deep-purple others-btn" @click="goOthers(scope.row.id)">附加费用</el-button>
+          <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">{{$t('修改')}}</el-button>
+          <el-button class="btn-deep-purple others-btn" @click="goOthers(scope.row.id)">{{$t('附加费用')}}</el-button>
           <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
           <!-- 导出清单 -->
-          <el-button class="btn-main others-btn" @click="unloadShip">导出清单</el-button>
+          <el-button class="btn-main others-btn" @click="unloadShip">{{$t('导出清单')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -173,8 +181,8 @@ export default {
         nextWeight: [] // 续重
       },
       enableList: [
-        { label: '是', value: 1 },
-        { label: '否', value: 0 }
+        { label: this.$t('是'), value: 1 },
+        { label: this.$t('否'), value: 0 }
       ],
       languageData: [],
       transCode: ''
@@ -249,7 +257,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -277,13 +285,13 @@ export default {
           // window.location.href = this.urlExcel
           window.open(this.urlExcel)
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -306,7 +314,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.getList()

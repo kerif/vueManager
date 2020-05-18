@@ -3,17 +3,17 @@
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{'请注意以下内容请输入对应的' + '【' + this.lang.name + '】' +'信息'}}
+        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息')}}
         </p>
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
-      <el-form-item label="*标题">
+      <el-form-item :label="$t('*标题')">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="params.title"></el-input></el-col>
+            <el-input :placeholder="$t('请输入内容')" v-model="params.title"></el-input></el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="封面图" class="updateChe">
+      <el-form-item :label="$t('封面图')" class="updateChe">
           <el-row>
             <el-col :span="6">
               <span class="img-item" v-for="(item, index) in customerList" :key="index">
@@ -38,7 +38,7 @@
             </el-col>
           </el-row>
       </el-form-item>
-      <el-form-item label="*内容">
+      <el-form-item :label="$t('*内容')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>
@@ -47,7 +47,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="saveNotice()"
-        :loading="$store.state.btnLoading">保存</el-button>
+        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
         </el-form-item>
     </el-form>
   </div>
@@ -94,7 +94,7 @@ export default {
       customInsert: (insertImg, result, editor) => {
         console.log(result)
         if (result.ret === 1) {
-          this.$message.success('上传成功')
+          this.$message.success(this.$t('上传成功'))
           let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
           insertImg(url)
         }
@@ -136,9 +136,9 @@ export default {
     },
     saveNotice () {
       if (this.params.title === '') {
-        return this.$message.error('请输入标题')
+        return this.$message.error(this.$t('请输入标题'))
       } else if (this.params.content === '') {
-        return this.$message.error('请输入内容')
+        return this.$message.error(this.$t('请输入内容'))
       }
       if (this.customerList[0]) {
         this.params.cover = this.customerList[0]
@@ -148,7 +148,7 @@ export default {
       this.$request.updateNoticeLang(this.line.id, this.params).then(res => {
         if (res.ret) {
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.tips,
             type: 'success'
           })
@@ -156,7 +156,7 @@ export default {
           this.$router.go(-1)
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

@@ -5,14 +5,14 @@
       </search-group>
       </div>
     <div class="select-box">
-      <add-btn @click.native="addIcon">添加icon</add-btn>
+      <add-btn @click.native="addIcon">{{$t('添加icon')}}</add-btn>
     </div>
     <el-table :data="iconList" stripe border class="data-list"
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
-      <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="图标">
+      <el-table-column :label="$t('名称')" prop="name"></el-table-column>
+      <el-table-column :label="$t('图标')">
         <template slot-scope="scope">
           <div class="img-style"
             @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${scope.row.icon}`, imgVisible=true">
@@ -20,15 +20,15 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
+      <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.is_default === 1">默认</span>
+          <span v-if="scope.row.is_default === 1">{{$t('默认')}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column :label="$t('操作')" width="200">
         <template slot-scope="scope">
-          <el-button  v-if="scope.row.is_default === 0" class="btn-green" @click="setDefault(scope.row.id)">设为默认</el-button>
-          <el-button class="btn-light-red" @click="deleteIcon(scope.row.id)">删除</el-button>
+          <el-button  v-if="scope.row.is_default === 0" class="btn-green" @click="setDefault(scope.row.id)">{{$t('设为默认')}}</el-button>
+          <el-button class="btn-light-red" @click="deleteIcon(scope.row.id)">{{$t('删除')}}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -86,7 +86,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -104,7 +104,7 @@ export default {
       this.$request.asDefault(id).then(res => {
         if (res.ret) {
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
@@ -112,7 +112,7 @@ export default {
           this.$router.go(-1)
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -133,22 +133,22 @@ export default {
     },
     // 删除单条转账支付
     deleteIcon (id) {
-      this.$confirm(`您真的要删除此路线吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除此路线吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteIcon(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -156,36 +156,6 @@ export default {
         })
       })
     }
-    // // 删除
-    // deleteData () {
-    //   console.log(this.deleteNum, 'this.deleteNum')
-    //   if (!this.deleteNum || !this.deleteNum.length) {
-    //     return this.$message.error('请选择仓库')
-    //   }
-    //   this.$confirm(`是否确认删除？`, '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     this.$request.deleteWarehouseAddress({
-    //       DELETE: this.deleteNum
-    //     }).then(res => {
-    //       if (res.ret) {
-    //         this.$notify({
-    //           title: '操作成功',
-    //           message: res.msg,
-    //           type: 'success'
-    //         })
-    //         this.getList()
-    //       } else {
-    //         this.$message({
-    //           message: res.msg,
-    //           type: 'error'
-    //         })
-    //       }
-    //     })
-    //   })
-    // }
   }
 }
 </script>

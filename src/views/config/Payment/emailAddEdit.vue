@@ -1,10 +1,10 @@
 <template>
   <div class="email-add-container">
     <el-form label-position="top">
-      <el-form-item label="*模版类型" class="email-tmp">
+      <el-form-item :label="$t('*模版类型')" class="email-tmp">
         <el-row>
           <el-col :span="10">
-            <el-select v-model="params.type" placeholder="请选择" clearable>
+            <el-select v-model="params.type" :placeholder="$t('请选择')" clearable>
               <el-option
                 v-for="item in options"
                 :key="item.id"
@@ -15,19 +15,19 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="邮件标题">
+      <el-form-item :label="$t('邮件标题')">
         <el-row>
-          <el-col :span="10"><el-input placeholder="请输入内容" v-model="params.title"></el-input></el-col>
+          <el-col :span="10"><el-input :placeholder="$t('请输入内容')" v-model="params.title"></el-input></el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="邮件内容">
+      <el-form-item :label="$t('邮件内容')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="转义符号">
+      <el-form-item :label="$t('转义符号')">
         <el-row>
           <!-- <el-col :span="10">
           </el-col> -->
@@ -36,7 +36,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="saveNotice"
-        :loading="$store.state.btnLoading">保存</el-button>
+        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
         </el-form-item>
     </el-form>
   </div>
@@ -72,7 +72,7 @@ export default {
       customInsert: (insertImg, result, editor) => {
         console.log(result)
         if (result.ret === 1) {
-          this.$message.success('上传成功')
+          this.$message.success(this.$t('上传成功'))
           let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
           insertImg(url)
         }
@@ -114,13 +114,13 @@ export default {
     saveNotice () {
       if (!this.$route.params.id) { // 如果是新增状态
         if (this.params.type === '') {
-          return this.$message.error('请选择模版类型')
+          return this.$message.error(this.$t('请选择模版类型'))
         }
         this.$request.addEmail(this.params).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.$router.go(-1)
@@ -136,7 +136,7 @@ export default {
         this.$request.updateAloneEmail(this.$route.params.id, this.params).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.tips,
               type: 'success'
             })
@@ -144,7 +144,7 @@ export default {
             this.$router.go(-1)
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

@@ -1,34 +1,34 @@
 <template>
   <div class="notice-list-container">
-    <div class="clear-box"><add-btn router="noticeadd">添加</add-btn></div>
+    <div class="clear-box"><add-btn router="noticeadd">{{$t('添加')}}</add-btn></div>
     <el-table class="data-list" stripe border :data="noticeList"
     @selection-change="selectionChange"
     v-loading="tableLoading">
       <el-table-column type="selection"></el-table-column>
-      <el-table-column label="标题" prop="title"></el-table-column>
-      <el-table-column label="类型" prop="type">
+      <el-table-column :label="$t('标题')" prop="title"></el-table-column>
+      <el-table-column :label="$t('类型')" prop="type">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 1">常见问题</span>
-          <span v-if="scope.row.type === 2">其他问题</span>
+          <span v-if="scope.row.type === 1">{{$t('常见问题')}}</span>
+          <span v-if="scope.row.type === 2">{{$t('其他问题')}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" prop="creator"></el-table-column>
+      <el-table-column :label="$t('创建人')" prop="creator"></el-table-column>
       <!-- 创建时间 -->
-      <el-table-column label="创建时间" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
       <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="noticeEdit(scope.row.id)">修改</el-button>
+          <el-button class="btn-green" @click="noticeEdit(scope.row.id)">{{$t('修改')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -73,7 +73,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'warning'
           })
@@ -94,9 +94,9 @@ export default {
     },
     // 删除
     deleteData () {
-      this.$confirm(`是否确认删除？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteNotice({
@@ -104,7 +104,7 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })

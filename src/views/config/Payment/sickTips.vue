@@ -1,9 +1,9 @@
 <template>
   <div class="sick-tips-container">
     <el-form label-position="top">
-      <el-form-item label="标题">
+      <el-form-item :label="$t('标题')">
         <el-row>
-          <el-col :span="10"><el-input placeholder="请输入内容" v-model="params.risk_warning_title"></el-input></el-col>
+          <el-col :span="10"><el-input :placeholder="$t('请输入内容')" v-model="params.risk_warning_title"></el-input></el-col>
         </el-row>
       </el-form-item>
       <!-- <el-form-item label="问题类型">
@@ -16,7 +16,7 @@
           </el-col>
         </el-row>
       </el-form-item> -->
-      <el-form-item label="内容">
+      <el-form-item :label="$t('内容')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.risk_warning_content" @input="changeText"></div>
@@ -25,7 +25,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="saveNotice"
-        :loading="$store.state.btnLoading">保存</el-button>
+        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
         </el-form-item>
     </el-form>
   </div>
@@ -59,7 +59,7 @@ export default {
       customInsert: (insertImg, result, editor) => {
         console.log(result)
         if (result.ret === 1) {
-          this.$message.success('上传成功')
+          this.$message.success(this.$t('上传成功'))
           let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
           insertImg(url)
         }
@@ -94,7 +94,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.$router.push({ name: 'noticelist' })
@@ -109,7 +109,7 @@ export default {
         this.$request.updateRiskDetails(this.$route.params.id, this.params).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.tips,
               type: 'success'
             })
@@ -120,7 +120,7 @@ export default {
             // this.$router.go(-1)
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
