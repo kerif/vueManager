@@ -1,6 +1,18 @@
 <template>
   <div class="notice-list-container">
-    <div class="clear-box"><add-btn router="noticeadd">{{$t('添加')}}</add-btn></div>
+      <add-btn router="noticeadd">{{$t('添加')}}
+      </add-btn>
+      <div class="changeVou">
+        <el-select v-model="type" @change="onVocherTypeChange" clearable
+        :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in updateProp"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name">
+          </el-option>
+        </el-select>
+      </div>
     <el-table class="data-list" stripe border :data="noticeList"
     @selection-change="selectionChange"
     v-loading="tableLoading">
@@ -9,7 +21,10 @@
       <el-table-column :label="$t('类型')" prop="type">
         <template slot-scope="scope">
           <span v-if="scope.row.type === 1">{{$t('常见问题')}}</span>
-          <span v-if="scope.row.type === 2">{{$t('其他问题')}}</span>
+          <span v-if="scope.row.type === 2">{{$t('违禁品')}}</span>
+          <span v-if="scope.row.type === 3">{{$t('入门教程')}}</span>
+          <span v-if="scope.row.type === 4">{{$t('行业资讯')}}</span>
+          <span v-if="scope.row.type === 5">{{$t('关于我们')}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('创建人')" prop="creator"></el-table-column>
@@ -52,11 +67,14 @@ export default {
       tableLoading: false,
       deleteNum: [],
       languageData: [],
-      transCode: ''
+      transCode: '',
+      type: '',
+      updateProp: []
     }
   },
   created () {
     this.getList()
+    this.getType() // 获取筛选数据
     this.getLanguageList() // 获取支持语言
   },
   methods: {
@@ -64,7 +82,8 @@ export default {
       this.tableLoading = true
       this.$request.getNotice({
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.page_params.size,
+        type: this.type
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
@@ -77,6 +96,14 @@ export default {
             message: res.msg,
             type: 'warning'
           })
+        }
+      })
+    },
+    // 获取全部筛选数据
+    getType () {
+      this.$request.getArticlesType().then(res => {
+        if (res.ret) {
+          this.updateProp = res.data
         }
       })
     },
@@ -126,6 +153,11 @@ export default {
         }
       })
     },
+    // 筛选
+    onVocherTypeChange () {
+      this.page_params.handleQueryChange('type', this.type)
+      this.getList()
+    },
     // 修改语言
     onLang (line, lang) {
       this.transCode = line['trans_' + lang.language_code]
@@ -152,6 +184,14 @@ export default {
     // padding-left: 20px;
     font-weight: 700;
     color: black;
+  }
+  .changeVou {
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    .el-input {
+      width: 98%;
+    }
   }
 }
 </style>

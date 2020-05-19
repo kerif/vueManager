@@ -1,6 +1,6 @@
 <template>
   <div class="evaluation-management-container">
-    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
+    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
       <div class="changeTime">
       <!-- 提交时间 -->
         <el-date-picker
@@ -10,9 +10,9 @@
         @change="onTime"
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="提交开始日期"
-        end-placeholder="提交结束日期">
+        :range-separator="$t('至')"
+        :start-placeholder="$t('提交开始日期')"
+        :end-placeholder="$t('提交结束日期')">
       </el-date-picker>
     </div>
     <!-- 是否精选 -->
@@ -31,7 +31,7 @@
       <ul>
         <li v-for="(item, index) in evaluationData"
         :key="index" class="evaluation-list">
-        <div class="order-num">订单号：{{item.order}}</div>
+        <div class="order-num">{{$t('订单号：')}}{{item.order}}</div>
         <el-row :gutter="20">
           <!-- 头像 -->
           <el-col :span="2">
@@ -48,7 +48,7 @@
                 {{item.content}}
               </div>
               <div v-else class="noDate">
-                暂无数据
+                {{$t('暂无数据')}}
               </div>
               <div class="left-img" v-for="(ele, index) in item.images" :key="index">
                 <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele}`, imgVisible=true">
@@ -69,20 +69,20 @@
             <!-- 精选 -->
             <div class="featured" v-if="item.is_recommend === 1">
               <span class="featured-font">
-              精选
+              {{$t('精选')}}
               </span>
             </div>
           </el-col>
       </el-row>
       <div class="bottom-btn">
-        <el-button class="btn-light-red" v-if="item.is_recommend === 1" @click="resetRecommend(item.id, 0)">取消精选</el-button>
-        <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">设为精选</el-button>
+        <el-button class="btn-light-red" v-if="item.is_recommend === 1" @click="resetRecommend(item.id, 0)">{{$t('取消精选')}}</el-button>
+        <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">{{$t('设为精选')}}</el-button>
       </div>
         </li>
       </ul>
     </div>
     <div v-else class="noDate">
-       暂无数据
+      {{$t('暂无数据')}}
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
@@ -123,11 +123,11 @@ export default {
       statusList: [
         {
           id: 0,
-          name: '非精选'
+          name: this.$t('非精选')
         },
         {
           id: 1,
-          name: '精选'
+          name: this.$t('精选')
         }
       ]
     }
@@ -154,7 +154,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -184,22 +184,22 @@ export default {
     resetRecommend (id, status) {
       console.log(id, 'im id')
       console.log(status, 'im status')
-      this.$confirm(`您真的要执行此操作吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要执行此操作吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.updateRecommend(id, status).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

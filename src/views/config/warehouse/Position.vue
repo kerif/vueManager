@@ -5,19 +5,19 @@
       </search-group>
       </div> -->
     <div class="select-box">
-      <add-btn @click.native="addLocation">新增货位</add-btn>
+      <add-btn @click.native="addLocation">{{$t('新增货位')}}</add-btn>
     </div>
     <el-table :data="positionList" stripe border class="data-list"
     v-loading="tableLoading"
     @selection-change="selectionChange">
-       <el-table-column label="区域编号" prop="number"></el-table-column>
-      <el-table-column label="列数" prop="column"></el-table-column>
-      <el-table-column label="层数" prop="row"></el-table-column>
-      <el-table-column label="货位数量" prop="counts"></el-table-column>
-      <el-table-column label="操作" width="200">
+       <el-table-column :label="$t('区域编号')" prop="number"></el-table-column>
+      <el-table-column :label="$t('列数')" prop="column"></el-table-column>
+      <el-table-column :label="$t('层数')" prop="row"></el-table-column>
+      <el-table-column :label="$t('货位数量')" prop="counts"></el-table-column>
+      <el-table-column :label="$t('操作')" width="200">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editLocation(scope.row.id)">修改货位</el-button>
-          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">删除</el-button>
+          <el-button class="btn-green" @click="editLocation(scope.row.id)">{{$t('修改货位')}}</el-button>
+          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{$t('删除')}}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -75,7 +75,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -115,22 +115,22 @@ export default {
     },
     // 删除单条转账支付
     deleteWarehouse (areaId) {
-      this.$confirm(`您真的要删除此货位吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除此货位吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteLocation(this.$route.params.id, areaId).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: '',
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

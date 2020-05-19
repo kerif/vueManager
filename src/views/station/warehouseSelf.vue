@@ -34,12 +34,12 @@
         <el-row :gutter="20">
           <!-- 头像 -->
           <el-col :span="6">
-            <span><strong>转运订单号</strong></span><br/>
-            <span>收货人</span><br/>
-            <span>联系电话</span><br/>
-            <span>收货地址</span><br/>
-            <span>邮编</span><br/>
-            <span>国际物流单号</span><br/>
+            <span><strong>{{$t('转运订单号')}}</strong></span><br/>
+            <span>{{$t('转运订单号')}}收货人</span><br/>
+            <span>{{$t('转运订单号')}}联系电话</span><br/>
+            <span>{{$t('转运订单号')}}收货地址</span><br/>
+            <span>{{$t('转运订单号')}}邮编</span><br/>
+            <span>{{$t('转运订单号')}}国际物流单号</span><br/>
           </el-col>
           <el-col :span="12" :offset="1">
             <span><strong>{{item.order_sn}}</strong></span><br/>
@@ -54,14 +54,14 @@
             <span><strong>{{item.express_line.cn_name}}</strong></span><br/>
             <!-- 重量 -->
             <span><strong>{{item.actual_weight}}{{localization.weight_unit}}</strong></span><br/>
-            <el-button class="btn-dark-green btn-sty" @click="self(item.id, item.order_sn)">设为自提签收</el-button>
-            <el-button class="btn-purple btn-sty" @click="goDetails(item.id, item.status_name)">查看详情</el-button>
+            <el-button class="btn-dark-green btn-sty" @click="self(item.id, item.order_sn)">{{$t('转运订单号')}}设为自提签收</el-button>
+            <el-button class="btn-purple btn-sty" @click="goDetails(item.id, item.status_name)">{{$t('转运订单号')}}查看详情</el-button>
           </el-col>
       </el-row>
       <div class="bottom-btn">
         <el-row :gutter="20">
           <el-col :span="6">
-            <span>提交时间</span>
+            <span>{{$t('转运订单号')}}提交时间</span>
           </el-col>
           <el-col :span="12" :offset="1">
             <span>{{item.created_at}}</span>
@@ -74,7 +74,7 @@
       </ul>
     </div>
     <div v-else class="noDate">
-       暂无数据
+       {{$t('转运订单号')}}暂无数据
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
@@ -137,7 +137,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

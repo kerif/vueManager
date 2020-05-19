@@ -9,11 +9,11 @@
           @change="onTime"
           format="yyyy-MM-dd"
           value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
+          :range-separator="$t('至')"
+          :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')">
        </el-date-picker>
-      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou">
+      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('请选择')">
         <el-option
           v-for="item in voucherChange"
           :key="item.id"
@@ -27,36 +27,37 @@
     v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column label="客户ID" prop="user_id"></el-table-column>
+      <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <!-- 类型 -->
-      <el-table-column label="类型">
+      <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 1">消费</span>
-          <span v-if="scope.row.type === 2">充值</span>
-          <span v-if="scope.row.type === 3">退款</span>
-          <span v-if="scope.row.type === 4">提现</span>
+          <span v-if="scope.row.type === 1">{{$t('消费')}}</span>
+          <span v-if="scope.row.type === 2">{{$t('充值')}}</span>
+          <span v-if="scope.row.type === 3">{{$t('退款')}}</span>
+          <span v-if="scope.row.type === 4">{{$t('提现')}}</span>
+          <span v-if="scope.row.type === 4">{{$t('扣款')}}</span>
         </template>
       </el-table-column>
       <!-- 支付类型 -->
-      <el-table-column label="支付类型" prop="payment_type_name"> </el-table-column>
+      <el-table-column :label="$t('支付类型')" prop="payment_type_name"> </el-table-column>
       <!-- 支付方式 -->
       <!-- <el-table-column label="支付方式">
       </el-table-column> -->
       <!-- 应付金额¥ -->
-      <el-table-column :label="'应付金额' + this.localization.currency_unit" prop="order_amount"></el-table-column>
+      <el-table-column :label="$t('应付金额') + this.localization.currency_unit" prop="order_amount"></el-table-column>
       <!-- 抵用券金额¥ -->
-      <el-table-column :label="'抵用券金额' + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
+      <el-table-column :label="$t('抵用券金额') + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
       <!-- 支付金额¥ -->
-      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="pay_amount"></el-table-column>
+      <el-table-column :label="$t('支付金额') + this.localization.currency_unit" prop="pay_amount"></el-table-column>
       <!-- 相关订单 -->
-      <el-table-column label="相关订单" prop="order_sn"></el-table-column>
+      <el-table-column :label="$t('相关订单')" prop="order_sn"></el-table-column>
       <!-- 第三方流水号 -->
-      <el-table-column label="流水号" prop="serial_no"></el-table-column>
+      <el-table-column :label="$t('流水号')" prop="serial_no"></el-table-column>
       <!-- 支付时间 -->
-      <el-table-column label="支付时间" prop="created_at"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('支付时间')" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-deep-purple" @click="details(scope.row.type, scope.row.id,scope.row.order_id, scope.row.payment_type)">详情</el-button>
+          <el-button class="btn-deep-purple" @click="details(scope.row.type, scope.row.id,scope.row.order_id, scope.row.payment_type)">{{$t('详情')}}</el-button>
         </template>
       </el-table-column>
     </el-table>

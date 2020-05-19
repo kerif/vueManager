@@ -252,7 +252,7 @@ export default {
           this.option.series = [
             {
               type: 'line',
-              stack: '总量',
+              stack: this.$t('总量'),
               areaStyle: {},
               smooth: true,
               data: yData,
@@ -276,7 +276,7 @@ export default {
       if (!this.isPermissionFilterArr.includes(permissionNumber)) {
         this.$message({
           type: 'error',
-          message: '当前操作暂无权限！'
+          message: this.$t('当前操作暂无权限！')
         })
       } else {
         this.$router.push({ name: routerName, query: query })
@@ -318,14 +318,14 @@ export default {
       this.$request.noTips().then(res => {
         if (res.ret) {
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
           this.showTips = false
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

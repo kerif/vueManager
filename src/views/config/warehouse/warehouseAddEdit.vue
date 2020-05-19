@@ -1,36 +1,36 @@
 <template>
   <div class="warehouse-addEdit-container">
     <div class="tips-box">
-      <span class="tips-title">温馨提示: </span>
-      <span class="tips-content">当前页面配置的地址为用户发往仓库的真实收件地址，请填写有效准确的信息，请不要填写座机</span>
+      <span class="tips-title">{{$t('温馨提示')}}: </span>
+      <span class="tips-content">{{$t('当前页面配置的地址为用户发往仓库的真实收件地址，请填写有效准确的信息，请不要填写座机')}}</span>
     </div>
     <el-form label-position="top" class="warehouse-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <!-- 仓库名称 -->
-      <el-form-item label="仓库名称" prop="warehouse_name">
+      <el-form-item :label="$t('仓库名称')" prop="warehouse_name">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.warehouse_name"></el-input>
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.warehouse_name"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="收件人姓名" prop="receiver_name">
+      <el-form-item :label="$t('收件人姓名')" prop="receiver_name">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.receiver_name"></el-input>
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.receiver_name"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="联系电话" prop="phone">
+      <el-form-item :label="$t('联系电话')" prop="phone">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.phone"></el-input>
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.phone"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="邮编" prop="postcode">
+      <el-form-item :label="$t('邮编')" prop="postcode">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.postcode"></el-input>
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.postcode"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
@@ -38,50 +38,50 @@
         <el-row>
           <el-col :span="10">
             <div>
-              <span class="address-sty">忽略地址精确度检查</span>
-              <el-tooltip class="item" effect="dark" content="选择开启会忽略当次地址精确度检查。" placement="top">
+              <span class="address-sty">{{$t('忽略地址精确度检查')}}</span>
+              <el-tooltip class="item" effect="dark" :content="$t('选择开启会忽略当次地址精确度检查。')" placement="top">
                 <span class="el-icon-question icon-info"></span>
               </el-tooltip>
             </div>
             <el-radio-group v-model="ruleForm.ignore_lon_lat">
-              <el-radio :label="1">开启</el-radio>
-              <el-radio :label="0">关闭</el-radio>
+              <el-radio :label="1">{{$t('开启')}}</el-radio>
+              <el-radio :label="0">{{$t('关闭')}}</el-radio>
             </el-radio-group>
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="地址" prop="address">
+      <el-form-item :label="$t('地址')" prop="address">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" type="textarea" :row="3" v-model="ruleForm.address"></el-input>
+            <el-input :placeholder="$t('请输入内容')" type="textarea" :row="3" v-model="ruleForm.address"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="自动货位功能">
+      <el-form-item :label="$t('自动货位功能')">
         <el-row>
           <el-col :span="10">
             <el-radio-group v-model="ruleForm.auto_location">
-              <el-radio :label="1">开启</el-radio>
-              <el-radio :label="0">关闭</el-radio>
+              <el-radio :label="1">{{$t('开启')}}</el-radio>
+              <el-radio :label="0">{{$t('关闭')}}</el-radio>
             </el-radio-group>
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="温馨提示（主要提醒客户需要注意的事项，在客户端仓库地址页面显示）" prop="tips">
+      <el-form-item :label="$t('温馨提示（主要提醒客户需要注意的事项，在客户端仓库地址页面显示）')" prop="tips">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入温馨提示" type="textarea" :row="4" v-model="ruleForm.tips"></el-input>
+            <el-input :placeholder="$t('请输入温馨提示')" type="textarea" :row="4" v-model="ruleForm.tips"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item prop="support_countries" label="支持国家/地区">
+      <el-form-item prop="support_countries" :label="$t('支持国家/地区')">
           <el-col :span="10">
             <el-select
               v-model="ruleForm.support_countries"
               multiple
               filterable
               class="country-select"
-              placeholder="请选择国家/地区">
+              :placeholder="$t('请选择国家/地区')">
               <el-option
                 v-for="item in options"
                 :key="item.id"
@@ -91,12 +91,12 @@
             </el-select>
           </el-col>
           <el-col :span="4" class="country-btn">
-            <el-button type="primary" @click="onAddCountry">+ 新增国家/地区</el-button>
+            <el-button type="primary" @click="onAddCountry">+ {{$t('新增国家/地区')}}</el-button>
           </el-col>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="submit('ruleForm')"
-        :loading="$store.state.btnLoading">保存</el-button>
+        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
         </el-form-item>
     </el-form>
   </div>
@@ -121,25 +121,25 @@ export default {
       options: [],
       rules: {
         warehouse_name: [
-          { required: true, message: '请输入仓库名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入仓库名称'), trigger: 'blur' }
         ],
         receiver_name: [
-          { required: true, message: '请输入收件人姓名', trigger: 'blur' }
+          { required: true, message: this.$t('请输入收件人姓名'), trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: this.$t('请输入联系电话'), trigger: 'blur' }
         ],
         postcode: [
-          { required: true, message: '请输入邮编', trigger: 'blur' }
+          { required: true, message: this.$t('请输入邮编'), trigger: 'blur' }
         ],
         address: [
-          { required: true, message: '请输入地址', trigger: 'blur' }
+          { required: true, message: this.$t('请输入地址'), trigger: 'blur' }
         ],
         tips: [
-          { required: true, message: '请输入温馨提示', trigger: 'blur' }
+          { required: true, message: this.$t('请输入温馨提示'), trigger: 'blur' }
         ],
         support_countries: [
-          { required: true, message: '请选择国家或地区', trigger: 'blur' }
+          { required: true, message: this.$t('请选择国家或地区'), trigger: 'blur' }
         ]
       }
     }
@@ -180,7 +180,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.$router.push({ name: 'warehouse' })
@@ -198,7 +198,7 @@ export default {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.msg
                 })
                 this.$router.push({ name: 'warehouse' })

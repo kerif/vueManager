@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.name + $t('的翻译内容')" class="dialog-video-lang" @close="clear">
+  <el-dialog :visible.sync="show" :title="line.title + $t('的翻译内容')" class="dialog-video-lang" @close="clear">
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
@@ -44,7 +44,7 @@ export default {
       },
       line: {
         id: '',
-        name: ''
+        title: ''
       },
       lang: {
         name: '',
@@ -102,9 +102,9 @@ export default {
       this.ruleForm.language = this.lang.language_code
       this.transCode = this.transCode
       console.log(this.line, 'line')
-      console.log(this.lang, 'lang')
-      console.log(this.transCode, 'this.transCode')
-      console.log(this.ruleForm.language, 'this.ruleForm.language')
+      // console.log(this.lang, 'lang')
+      // console.log(this.transCode, 'this.transCode')
+      // console.log(this.ruleForm.language, 'this.ruleForm.language')
       if (this.transCode === 1) {
         this.getLang()
       }

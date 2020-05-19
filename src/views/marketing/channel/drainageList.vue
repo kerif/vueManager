@@ -1,17 +1,17 @@
 <template>
   <div class="drainage-container">
       <div class="poster-left">
-        <p class="left-name">渠道名称</p><span>{{ruleForm.channel_name}}</span><br/>
-        <p class="left-name">创建日期</p><span>{{ruleForm.created_at}}</span><br/>
-        <div class="code-font">专属小程序码</div>
+        <p class="left-name">{{$t('渠道名称')}}</p><span>{{ruleForm.channel_name}}</span><br/>
+        <p class="left-name">{{$t('创建日期')}}</p><span>{{ruleForm.created_at}}</span><br/>
+        <div class="code-font">{{$t('专属小程序码')}}</div>
         <div class="left-bottom">
           <!-- <img src="../../../assets/bale.png"> -->
           <img :src="$baseUrl.IMAGE_URL + ruleForm.app_code" alt="" class="goods-img">
         </div>
         <div class="upload-btn">
           <!-- <a :href="urlImg" download>xiazai</a> -->
-          <el-button type="primary" @click="uploadImg">下载</el-button>
-          <p class="share">推荐将小程序码放在公众号或广告插图进行推广</p>
+          <el-button type="primary" @click="uploadImg">{{$t('下载')}}</el-button>
+          <p class="share">{{$t('推荐将小程序码放在公众号或广告插图进行推广')}}</p>
         </div>
       </div>
       <div class="poster-right">
@@ -24,9 +24,9 @@
             @change="onTime"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            :range-separator="$t('至')"
+            :start-placeholder="$t('开始日期')"
+            :end-placeholder="$t('结束日期')">
         </el-date-picker>
         </search-group>
       </div>
@@ -34,17 +34,17 @@
       v-loading="tableLoading">
         <el-table-column type="index" :index="1"></el-table-column>
         <!-- 统计日期 -->
-        <el-table-column label="统计日期" prop="days"></el-table-column>
+        <el-table-column :label="$t('统计日期')" prop="days"></el-table-column>
         <!-- 注册用户 -->
-        <el-table-column label="注册用户" prop="count"> </el-table-column>
+        <el-table-column :label="$t('注册用户')" prop="count"> </el-table-column>
         <!-- 邮箱激活 -->
-        <el-table-column label="邮箱激活" prop="email_count"></el-table-column>
+        <el-table-column :label="$t('邮箱激活')" prop="email_count"></el-table-column>
         <!-- 手机号激活 -->
-        <el-table-column label="手机号激活" prop="phone_count"></el-table-column>
+        <el-table-column :label="$t('手机号激活')" prop="phone_count"></el-table-column>
         <!-- 预报量 -->
-        <el-table-column label="预报量" prop="package_count"></el-table-column>
+        <el-table-column :label="$t('预报量')" prop="package_count"></el-table-column>
         <!-- 转化率 -->
-        <el-table-column label="转化率%" prop="conversion_ratio"></el-table-column>
+        <el-table-column :label="$t('转化率%')" prop="conversion_ratio"></el-table-column>
       </el-table>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
@@ -98,7 +98,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

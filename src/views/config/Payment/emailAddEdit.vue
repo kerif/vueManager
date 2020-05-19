@@ -31,7 +31,9 @@
         <el-row>
           <!-- <el-col :span="10">
           </el-col> -->
-            <p v-text="'{{code}} = 验证码， {{created}} = 创建时间，{{email}} = 收件人邮箱'"></p>
+            <!-- <p v-text="'{{code}} = 验证码， {{created}} = 创建时间，{{email}} = 收件人邮箱'"></p> -->
+            <p v-text="'{{code}} = '+  $t('验证码') + '{{created}} = ' + $t('创建时间') + '{{email}} = ' + $t('收件人邮箱')">
+            </p>
         </el-row>
       </el-form-item>
       <el-form-item>

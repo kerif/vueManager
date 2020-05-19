@@ -1,8 +1,8 @@
 <template>
   <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']">
     <div class="aside-top">
-      <span class="app-name">集运</span>
-      <span>管理系统</span>
+      <span class="app-name">{{$t('集运')}}</span>
+      <span>{{$t('管理系统')}}</span>
     </div>
     <el-menu
       :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"
@@ -18,12 +18,12 @@
         :index="index + ''">
         <template slot="title">
           <i :class="['iconfont', 'icon-title', route.icon]"></i>
-          <span>{{ route.name }}</span>
+          <span>{{ $t(route.name) }}</span>
         </template>
         <el-menu-item-group v-for="(childRoute, childIndex) in route.children" :key="childIndex">
           <el-menu-item :index="childRoute.path"
             :key="childRoute.name" v-if="childRoute.level === 2" class="route-item"
-            @click="onRoute(route)">{{ childRoute.name }}</el-menu-item>
+            @click="onRoute(route)">{{ $t(childRoute.name) }}</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>

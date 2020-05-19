@@ -1,6 +1,6 @@
 <template>
   <div class="no-owner-container">
-    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
+    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
       <div class="changeTime">
       <!-- 提交时间 -->
         <el-date-picker
@@ -10,14 +10,14 @@
         @change="onTime"
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="提交开始日期"
-        end-placeholder="提交结束日期">
+        :range-separator="$t('至')"
+        :start-placeholder="$t('提交开始日期')"
+        :end-placeholder="$t('提交结束日期')">
       </el-date-picker>
     </div>
       <div class="chooseStatus">
         <el-select v-model="agent_name" @change="onAgentChange" clearable
-        placeholder="请选择仓库">
+        :placeholder="$t('请选择仓库')">
           <el-option
             v-for="item in agentData"
             :key="item.id"
@@ -27,7 +27,7 @@
         </el-select>
       </div>
     <div class="import-list">
-     <el-button @click="uploadList">导出清单</el-button>
+     <el-button @click="uploadList">{{$t('导出清单')}}</el-button>
     </div>
     </search-group>
     <el-table v-if="ownerData.length" class="data-list" border stripe
@@ -36,15 +36,15 @@
       v-loading="tableLoading">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 快递单号 -->
-      <el-table-column label="快递单号">
+      <el-table-column :label="$t('快递单号')">
         <template slot-scope="scope">
           <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
         </template>
       </el-table-column>
       <!-- 物品价值 -->
-      <el-table-column :label="'包裹重量' + this.localization.weight_unit" prop="package_weight"></el-table-column>
+      <el-table-column :label="$t('包裹重量') + this.localization.weight_unit" prop="package_weight"></el-table-column>
       <!-- 物品属性 -->
-      <el-table-column label="物品属性">
+      <el-table-column :label="$t('物品属性')">
         <template slot-scope="scope">
           <span v-for="item in scope.row.props" :key="item.id">
             {{item.cn_name}}
@@ -54,36 +54,36 @@
       <!-- 货位 -->
       <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
       <!-- 规格 -->
-      <el-table-column :label="'规格'+ this.localization.length_unit" prop="dimension"
+      <el-table-column :label="$t('规格')+ this.localization.length_unit" prop="dimension"
       width="120px"></el-table-column>
       <!-- 提交时间 -->
-      <el-table-column label="提交时间" prop="created_at">
+      <el-table-column :label="$t('提交时间')" prop="created_at">
       </el-table-column>
       <!-- 仓库 -->
-      <el-table-column label="仓库" prop="warehouse.warehouse_name">
+      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name">
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
       </template>
-      <el-table-column label="操作" width="220">
+      <el-table-column :label="$t('操作')" width="220">
         <template slot-scope="scope">
-         <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">打印标签</el-button>
-         <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">认领</el-button>
+         <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{$t('打印标签')}}</el-button>
+         <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">{{$t('认领')}}</el-button>
          <!-- <el-button class="btn-deep-purple">详细</el-button> -->
         </template>
       </el-table-column>
     </el-table>
-    <div class="noDate" v-else>暂无数据</div>
+    <div class="noDate" v-else>{{$t('暂无数据')}}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-      <el-dialog :visible.sync="show" title="预览打印标签" class="props-dialog" width="45%">
+      <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
         <div class="dialogSty">
           <iframe class="iframe" :src="urlHtml"></iframe>
         </div>
       <div slot="footer">
-        <el-button @click="show = false">取消</el-button>
-        <el-button type="primary" @click="updateLabel">下载</el-button>
+        <el-button @click="show = false">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="updateLabel">{{$t('下载')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -137,11 +137,11 @@ export default {
     deleteData () {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
-        return this.$message.error('请选择包裹')
+        return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(`您真的要删除这个包裹吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除这个包裹吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
@@ -150,7 +150,7 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
@@ -178,13 +178,13 @@ export default {
           this.urlHtml = res.data.url
           // this.urlImport = res.data.url
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -199,13 +199,13 @@ export default {
           // window.location.href = this.urlExcel
           window.open(this.urlExcel)
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -220,13 +220,13 @@ export default {
         if (res.ret) {
           window.open(res.data.url)
           this.$notify({
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg,
             type: 'success'
           })
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -255,7 +255,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

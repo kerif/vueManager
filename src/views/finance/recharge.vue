@@ -9,12 +9,12 @@
           @change="onTime"
           format="yyyy-MM-dd"
           value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
+          :range-separator="$t('至')"
+          :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')">
        </el-date-picker>
        <!-- 充值方式 -->
-      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou">
+      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('请选择')">
         <el-option
           v-for="item in voucherChange"
           :key="item.id"
@@ -24,7 +24,8 @@
        </el-select>
        <!-- 状态 -->
         <div class="chooseStatus">
-        <el-select v-model="status" @change="onShipStatus" clearable>
+        <el-select v-model="status" @change="onShipStatus" clearable
+        :placeholder="$t('请选择')">
           <el-option
             v-for="item in statusList"
             :key="item.id"
@@ -36,46 +37,47 @@
       </search-group>
     </div>
     <div class="select-box">
-      <add-btn @click.native="addVip">添加</add-btn>
+      <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
     </div>
     <el-table :data="rechargeList" stripe border class="data-list"
     v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column label="客户ID">
+      <el-table-column :label="$t('客户ID')">
         <template slot-scope="scope">
           {{scope.row.user.id}}
         </template>
       </el-table-column>
       <!-- 状态 -->
-      <el-table-column label="状态">
+      <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">待审核</span>
-          <span v-if="scope.row.status === 1">审核通过</span>
-          <span v-if="scope.row.status === 2">审核拒绝</span>
+          <span v-if="scope.row.status === 0">{{$t('待审核')}}</span>
+          <span v-if="scope.row.status === 1">{{$t('审核通过')}}</span>
+          <span v-if="scope.row.status === 2">{{$t('审核拒绝')}}</span>
         </template>
       </el-table-column>
       <!-- 充值方式 -->
-      <el-table-column label="充值方式" prop="payment_type_name"> </el-table-column>
+      <el-table-column :label="$t('充值方式')" prop="payment_type_name"> </el-table-column>
       <!-- 支付方式 -->
       <!-- <el-table-column label="支付方式">
       </el-table-column> -->
       <!-- 支付金额 -->
-      <el-table-column :label="'支付金额' + this.localization.currency_unit" prop="amount"></el-table-column>
+      <el-table-column :label="$t('支付金额') + this.localization.currency_unit" prop="amount"></el-table-column>
       <!-- 确认金额 -->
-      <el-table-column :label="'确认金额' + this.localization.currency_unit" prop="confirm_amount"></el-table-column>
+      <el-table-column :label="$t('确认金额') + this.localization.currency_unit" prop="confirm_amount"></el-table-column>
       <!-- 第三方流水号 -->
-      <el-table-column label="流水号" prop="serial_no"></el-table-column>
+      <el-table-column :label="$t('流水号')" prop="serial_no"></el-table-column>
       <!-- 支付时间 -->
-      <el-table-column label="支付时间" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('支付时间')" prop="created_at"></el-table-column>
       <!-- 审核时间 -->
-      <el-table-column label="审核时间" prop="updated_at"></el-table-column>
+      <el-table-column :label="$t('审核时间')" prop="updated_at"></el-table-column>
       <!-- 处理人 -->
-      <el-table-column label="处理人" prop="operator"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('处理人')" prop="operator"></el-table-column>
+      <!-- 操作 -->
+      <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status === 0" class="btn-green optionBtn" @click="inviteWithdrawal(scope.row.id)">审核</el-button>
-          <el-button v-else class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.id)">详情</el-button>
+          <el-button v-if="scope.row.status === 0" class="btn-green optionBtn" @click="inviteWithdrawal(scope.row.id)">{{$t('审核')}}</el-button>
+          <el-button v-else class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.id)">{{$t('详情')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -103,15 +105,15 @@ export default {
       statusList: [
         {
           id: 0,
-          name: '待审核'
+          name: this.$t('待审核')
         },
         {
           id: 1,
-          name: '审核通过'
+          name: this.$t('审核通过')
         },
         {
           id: 2,
-          name: '审核拒绝'
+          name: this.$t('审核拒绝')
         }
       ]
     }
@@ -156,7 +158,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -214,7 +216,7 @@ export default {
           this.voucherChange = res.data
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

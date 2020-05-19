@@ -2,44 +2,44 @@
   <div class="balance-container">
     <el-form label-position="top" class="warehouse-form" :model="ruleForm" ref="ruleForm">
       <!-- 客户 -->
-      <el-form-item label="*客户" class="changeQuery">
+      <el-form-item :label="$t('*客户')" class="changeQuery">
         <el-row>
           <el-col :span="10">
             <el-autocomplete
             :fetch-suggestions="queryCNSearch"
             @select="handleSelect"
-            placeholder="请输入客户ID"
+            :placeholder="$t('请输入客户ID')"
             v-model="ruleForm.user_id">
           </el-autocomplete>
             </el-col>
         </el-row>
       </el-form-item>
       <!-- 扣款金额 -->
-      <el-form-item :label="'*扣款金额' + localization.currency_unit">
+      <el-form-item :label="$t('*扣款金额') + localization.currency_unit">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.amount"></el-input>
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.amount"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
       <!-- 相关订单 -->
-      <el-form-item label="相关订单">
+      <el-form-item :label="$t('相关订单')">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.order_sn"></el-input>
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.order_sn"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
       <!-- 扣款备注 -->
-      <el-form-item label="扣款备注" prop="remark">
+      <el-form-item :label="$t('扣款备注')" prop="remark">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" type="textarea"
+            <el-input :placeholder="$t('请输入内容')" type="textarea"
             :autosize="{ minRows: 4, maxRows: 4}" v-model="ruleForm.remark"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item  class="updateChe" label="物品照片">
+      <el-form-item  class="updateChe" :label="$t('物品照片')">
           <el-row>
             <el-col :span="16">
               <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
@@ -61,13 +61,13 @@
                 <i class="el-icon-plus">
                 </i>
             </el-upload><br/>
-            <span class="suggest-btn">支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张</span>
+            <span class="suggest-btn">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</span>
             </el-col>
           </el-row>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="submit"
-        :loading="$store.state.btnLoading">保存</el-button>
+        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
         </el-form-item>
     </el-form>
   </div>
@@ -118,9 +118,9 @@ export default {
     },
     submit () {
       if (this.ruleForm.user_id === '') {
-        return this.$message.error('请输入客户')
+        return this.$message.error(this.$t('请输入客户'))
       } else if (this.ruleForm.amount === '') {
-        return this.$message.error('请输入扣款金额')
+        return this.$message.error(this.$t('请输入扣款金额'))
       }
       this.ruleForm.images = this.baleImgList
       this.ruleForm.user_id = this.ruleForm.user_id.split('---')[0]
@@ -128,7 +128,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.ruleForm.user_id = ''
@@ -168,10 +168,10 @@ export default {
     },
     beforeUploadImg (file) {
       if (!(/^image/.test(file.type))) {
-        this.$message.info('请上传图片类型文件')
+        this.$message.info(this.$t('请上传图片类型文件'))
         return false
       } else if (file.size > 1024 * 1024 * 2) {
-        this.$message.info('上传图片大小不能超过2M')
+        this.$message.info(this.$t('上传图片大小不能超过2M'))
         return false
       }
       return true

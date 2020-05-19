@@ -2,8 +2,8 @@
   <div class="pagination-container">
     <el-pagination
       background
-      prev-text="上一页"
-      next-text="下一页"
+      :prev-text="$t('上一页')"
+      :next-text="$t('下一页')"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageParams.page"

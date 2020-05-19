@@ -135,7 +135,7 @@ export default {
           this.localization = res.localization
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

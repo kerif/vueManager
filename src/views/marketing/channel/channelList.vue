@@ -5,35 +5,38 @@
       </search-group>
       </div>
     <div class="select-box">
-      <add-btn router="addChannel">添加</add-btn>
+      <add-btn router="addChannel">{{$t('添加')}}</add-btn>
     </div>
     <el-table :data="vipGroupList" stripe border class="data-list"
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 渠道号 -->
-      <el-table-column label="渠道号" prop="id"></el-table-column>
+      <el-table-column :label="$t('渠道号')" prop="id"></el-table-column>
       <!-- 渠道中文名 -->
-      <el-table-column label="渠道中文名" prop="channel_name"></el-table-column>
+      <el-table-column :label="$t('渠道中文名')" prop="channel_name"></el-table-column>
       <!-- 结算方式 -->
-      <el-table-column label="结算方式">
+      <el-table-column :label="$t('结算方式')">
         <template slot-scope="scope">
-          <span v-if="scope.row.settlement_method === 1">注册个数</span>
+          <!-- 注册个数 -->
+          <span v-if="scope.row.settlement_method === 1">{{$t('注册个数')}}</span>
         </template>
       </el-table-column>
       <!-- 渠道单价 -->
-      <el-table-column :label="'渠道单价' + localization.currency_unit" prop="channel_price"></el-table-column>
+      <el-table-column :label="$t('渠道单价') + localization.currency_unit" prop="channel_price"></el-table-column>
       <!-- 备注 -->
-      <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" width="150"></el-table-column>
+      <el-table-column :label="$t('备注')" prop="remark" :show-overflow-tooltip="true" width="150"></el-table-column>
       <!-- 创建日期 -->
-      <el-table-column label="创建日期" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('创建日期')" prop="created_at"></el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="260">
+      <el-table-column :label="$t('操作')" width="260">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editChannel(scope.row.id)">修改</el-button>
-          <el-button class="btn-light-red" @click="deleteChannel(scope.row.id)">删除</el-button>
+          <!-- 修改 -->
+          <el-button class="btn-green" @click="editChannel(scope.row.id)">{{$t('修改')}}</el-button>
+          <!-- 删除 -->
+          <el-button class="btn-light-red" @click="deleteChannel(scope.row.id)">{{$t('删除')}}</el-button>
           <!-- 引流列表 -->
-          <el-button class="btn-deep-purple" @click="drainage(scope.row.id)">引流列表</el-button>
+          <el-button class="btn-deep-purple" @click="drainage(scope.row.id)">{{$t('引流列表')}}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -92,7 +95,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -108,22 +111,22 @@ export default {
       )
     },
     deleteChannel (id) {
-      this.$confirm(`您真的要删除吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteChannel(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -145,22 +148,22 @@ export default {
     },
     // 删除单条转账支付
     deleteWarehouse (id) {
-      this.$confirm(`您真的要删除此仓库吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除此仓库吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteWarehouseAddress(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

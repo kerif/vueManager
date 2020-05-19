@@ -70,7 +70,7 @@
       <!-- </el-col> -->
       <!-- <el-col :span="4"> -->
         <div class="chooseStatus">
-          <el-select v-model="agent_name" @change="onAgentChange" clearable>
+          <el-select v-model="agent_name" @change="onAgentChange" clearable :placeholder="$t('请选择')">
             <el-option
               v-for="item in agentData"
               :key="item.id"

@@ -5,34 +5,34 @@
       </search-group>
       </div>
     <div class="select-box">
-      <add-btn @click.native="addBanner">添加广告图</add-btn>
+      <add-btn @click.native="addBanner">{{$t('添加广告图')}}</add-btn>
     </div>
     <el-table :data="vipGroupList" stripe border class="data-list"
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 名称 -->
-      <el-table-column label="名称" prop="picture_name"></el-table-column>
+      <el-table-column :label="$t('名称')" prop="picture_name"></el-table-column>
       <!-- 位置 -->
-      <el-table-column label="位置" prop="picture_path" :show-overflow-tooltip="true" width="200"></el-table-column>
+      <el-table-column :label="$t('位置')" prop="picture_path" :show-overflow-tooltip="true" width="200"></el-table-column>
       <!-- 应用 -->
-      <el-table-column label="应用">
+      <el-table-column :label="$t('应用')">
         <template slot-scope="scope">
-          <span v-if="scope.row.source === 1">小程序</span>
-          <span v-if="scope.row.source === 2">pc端</span>
+          <span v-if="scope.row.source === 1">{{$t('小程序')}}</span>
+          <span v-if="scope.row.source === 2">{{$t('pc端')}}</span>
         </template>
       </el-table-column>
       <!-- 类型 -->
-      <el-table-column label="类型">
+      <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 1">轮播图</span>
+          <span v-if="scope.row.type === 1">{{$t('轮播图')}}</span>
         </template>
       </el-table-column>
       <!-- 连接方式 -->
-      <el-table-column label="连接方式">
+      <el-table-column :label="$t('连接方式')">
         <template slot-scope="scope">
-          <span v-if="scope.row.link_type === 1">应用内跳转</span>
-          <span v-if="scope.row.link_type === 2">外部url</span>
+          <span v-if="scope.row.link_type === 1">{{$t('应用内跳转')}}</span>
+          <span v-if="scope.row.link_type === 2">{{$t('外部url')}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
@@ -41,12 +41,12 @@
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="260">
+      <el-table-column :label="$t('操作')" width="260">
         <template slot-scope="scope">
           <!-- 修改仓库 -->
-          <el-button class="btn-green" @click="editBanner(scope.row.id)">修改</el-button>
+          <el-button class="btn-green" @click="editBanner(scope.row.id)">{{$t('修改')}}</el-button>
           <!-- 删除 -->
-          <el-button class="btn-light-red" @click="deleteBanner(scope.row.id)">删除</el-button>
+          <el-button class="btn-light-red" @click="deleteBanner(scope.row.id)">{{$t('删除')}}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -100,7 +100,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -142,22 +142,22 @@ export default {
     },
     // 删除单条转账支付
     deleteBanner (id) {
-      this.$confirm(`您真的要删除吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteBanner(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

@@ -1,6 +1,6 @@
 <template>
   <div class="ship-container">
-    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
+    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
       <div class="changeTime">
         <!-- 提交 -->
           <el-date-picker
@@ -10,9 +10,9 @@
           @change="onTime"
           format="yyyy-MM-dd"
           value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="提交开始日期"
-          end-placeholder="提交结束日期">
+          :range-separator="$t('至')"
+          :start-placeholder="$t('提交开始日期')"
+          :end-placeholder="$t('提交结束日期')">
         </el-date-picker>
         <!-- 发货 -->
           <el-date-picker
@@ -22,14 +22,15 @@
           @change="onShipment"
           format="yyyy-MM-dd"
           value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="发货开始日期"
-          end-placeholder="发货结束日期">
+          :range-separator="$t('至')"
+          :start-placeholder="$t('发货开始日期')"
+          :end-placeholder="$t('发货结束日期')">
         </el-date-picker>
       </div>
         <!-- <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus" v-model="page_params.status"></search-select> -->
         <div class="chooseStatus">
-          <el-select v-model="page_params.status" @change="onShipStatus" clearable>
+          <el-select v-model="page_params.status" @change="onShipStatus" clearable
+          :placeholder="$t('请选择')">
             <el-option
               v-for="item in statusList"
               :key="item.id"
@@ -39,7 +40,7 @@
           </el-select>
         </div>
         <div class="select-box">
-          <add-btn @click.native="updateInvoice">创建发货单</add-btn>
+          <add-btn @click.native="updateInvoice">{{$t('创建发货单')}}</add-btn>
         </div>
     </search-group>
   <el-table :data="tableShip" stripe
@@ -77,49 +78,49 @@
     </el-table-column> -->
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 发货单号 -->
-      <el-table-column label="发货单号" prop="sn"></el-table-column>
+      <el-table-column :label="$t('发货单号')" prop="sn"></el-table-column>
       <!-- 创建时间 -->
-      <el-table-column label="提交时间" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('提交时间')" prop="created_at"></el-table-column>
       <!-- 发货时间 -->
-      <el-table-column label="发货时间" prop="shipped_at"></el-table-column>
+      <el-table-column :label="$t('发货时间')" prop="shipped_at"></el-table-column>
       <!-- 发出站点 -->
       <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
       <!-- 目的地 -->
-      <el-table-column label="目的地" prop="destination_country"></el-table-column>
+      <el-table-column :label="$t('目的地')" prop="destination_country"></el-table-column>
       <!-- 状态 -->
-      <el-table-column label="状态">
+      <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">未发货</span>
-          <span v-else>已发货</span>
+          <span v-if="scope.row.status === 0">{{$t('未发货')}}</span>
+          <span v-else>{{$t('已发货')}}</span>
         </template>
       </el-table-column>
       <!-- 箱数 -->
-      <el-table-column label="箱数" prop="box_count"></el-table-column>
+      <el-table-column :label="$t('箱数')" prop="box_count"></el-table-column>
       <!-- 重量 -->
-      <el-table-column :label="'重量' + this.localization.weight_unit" prop="weight"></el-table-column>
+      <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 价值 -->
-      <el-table-column :label="'价值' + this.localization.currency_unit" prop="value"></el-table-column>
+      <el-table-column :label="$t('价值') + this.localization.currency_unit" prop="value"></el-table-column>
       <!-- 物品属性 -->
-      <el-table-column label="物品属性" prop="props"></el-table-column>
+      <el-table-column :label="$t('物品属性')" prop="props"></el-table-column>
       <!-- 备注 -->
-      <el-table-column label="备注" prop="remark"></el-table-column>
+      <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="200">
+      <el-table-column :label="$t('操作')" width="200">
         <template slot-scope="scope">
           <!-- 导出清单 -->
           <!-- <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button> -->
-          <el-button class="btn-green btn-margin" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">发货</el-button>
+          <el-button class="btn-green btn-margin" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">{{$t('发货')}}</el-button>
           <!-- 详情 -->
-          <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id, scope.row.status)">详情</el-button>
+          <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id, scope.row.status)">{{$t('详情')}}</el-button>
           <!-- 删除 -->
-          <el-button class="btn-light-red btn-margin" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">删除</el-button>
+          <el-button class="btn-light-red btn-margin" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">{{$t('删除')}}</el-button>
           <!-- 加入发货单 -->
-          <el-button class="btn-blue-green btn-margin" @click="addShip(scope.row.id)">加入发货单</el-button>
+          <el-button class="btn-blue-green btn-margin" @click="addShip(scope.row.id)">{{$t('加入发货单')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-main" @click="deleteData">导出清单</el-button>
+          <el-button size="small" class="btn-main" @click="deleteData">{{$t('导出清单')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -159,11 +160,11 @@ export default {
       statusList: [
         {
           id: 0,
-          name: '未发货'
+          name: this.$t('未发货')
         },
         {
           id: 1,
-          name: '已发货'
+          name: this.$t('已发货')
         }
       ]
     }
@@ -209,7 +210,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -252,11 +253,11 @@ export default {
     deleteData () {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
-        return this.$message.error('请选择')
+        return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(`是否确认导出？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.uploadExcel({
@@ -266,7 +267,7 @@ export default {
             this.urlExcel = res.data.url
             window.open(this.urlExcel)
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
@@ -305,22 +306,22 @@ export default {
     },
     // 删除发货单
     deleteShip (id) {
-      this.$confirm(`您真的要删除发货单吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除发货单吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteShip(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -339,22 +340,22 @@ export default {
       })
     },
     goInvoice (id) {
-      this.$confirm(`您真的要发货吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要发货吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.getShipments(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

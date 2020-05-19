@@ -5,48 +5,50 @@
       </search-group>
       </div>
     <div class="select-box">
-      <add-btn @click.native="addVip">添加</add-btn>
+      <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
     </div>
     <el-table :data="videoList" stripe border class="data-list"
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <el-table-column label="标题" prop="title"></el-table-column>
-      <el-table-column label="内容介绍" prop="content"></el-table-column>
-      <el-table-column label="状态">
+      <el-table-column :label="$t('标题')" prop="title"></el-table-column>
+      <el-table-column :label="$t('内容介绍')" prop="content"></el-table-column>
+      <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enabled"
             @change="changeShow($event, scope.row.id)"
-            active-text="开"
-            inactive-text="关"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
             active-color="#13ce66"
             inactive-color="gray">
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
       <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editVip(scope.row.id)">修改</el-button>
-          <el-button class="btn-main" @click="Preview(scope.row.video)">预览</el-button>
+          <!-- 修改 -->
+          <el-button class="btn-green" @click="editVip(scope.row.id)">{{$t('修改')}}</el-button>
+          <!-- 预览 -->
+          <el-button class="btn-main" @click="Preview(scope.row.video)">{{$t('预览')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
       </template>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog
-      title="预览"
+      :title="$t('预览')"
       :visible.sync="videoVisible"
       :before-close="close"
       width="60%">
@@ -99,7 +101,7 @@ export default {
         sources: [],
         poster: '../../static/images/test.jpg', // 你的封面地址
         // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        notSupportedMessage: this.$t('此视频暂无法播放，请稍后再试'), // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controlBar: {
           timeDivider: true,
           durationDisplay: true,
@@ -137,7 +139,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -151,7 +153,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.getList()
@@ -198,11 +200,11 @@ export default {
     deleteData () {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
-        return this.$message.error('请选择')
+        return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(`是否确认删除？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.videoDelete({
@@ -210,7 +212,7 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })

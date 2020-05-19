@@ -6,7 +6,7 @@
       <div  :class="[isCollapse && 'isCollapses']" class="layout-nav">
         <div class="back-box" @click="$router.go(-1)">
           <span class="el-icon-back back-icon"></span>
-          <span class="back-text">返回</span>
+          <span class="back-text">{{$t('返回')}}</span>
         </div>
         <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
           <el-breadcrumb-item v-for="(item, index) in pagePath.split(',')" :key="index">

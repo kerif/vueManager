@@ -5,22 +5,22 @@
       :data="recordingData">
       <el-table-column type="index" width="55"></el-table-column>
       <!-- 券名称 -->
-      <el-table-column label="券名称" prop="coupon"></el-table-column>
+      <el-table-column :label="$t('券名称')" prop="coupon"></el-table-column>
       <!-- 券码 -->
-      <el-table-column label="券码" prop="coupon_code"></el-table-column>
+      <el-table-column :label="$t('券码')" prop="coupon_code"></el-table-column>
       <!-- 金额 -->
-      <el-table-column label="金额" prop="amount">
+      <el-table-column :label="$t('金额')" prop="amount">
       </el-table-column>
       <!-- 投放对象 -->
-      <el-table-column label="投放对象" prop="user_id"></el-table-column>
+      <el-table-column :label="$t('投放对象')" prop="user_id"></el-table-column>
       <!-- 使用时间 -->
-      <el-table-column label="使用时间" prop="used_at"></el-table-column>
+      <el-table-column :label="$t('使用时间')" prop="used_at"></el-table-column>
       <!-- 订单编码 -->
-      <el-table-column label="订单编码" prop="order_number"></el-table-column>
+      <el-table-column :label="$t('订单编码')" prop="order_number"></el-table-column>
       <!-- 订单金额 -->
-      <el-table-column label="订单金额" prop="order_amount"></el-table-column>
+      <el-table-column :label="$t('订单金额')" prop="order_amount"></el-table-column>
       <!-- 付款时间 -->
-      <el-table-column label="付款时间" prop="paid_at"></el-table-column>
+      <el-table-column :label="$t('付款时间')" prop="paid_at"></el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params"></nle-pagination>
   </div>
@@ -58,7 +58,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

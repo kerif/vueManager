@@ -1,6 +1,6 @@
 <template>
   <div class="suggest-list-container">
-    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
+    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
       <div class="changeTime">
       <!-- 提交时间 -->
         <el-date-picker
@@ -10,14 +10,14 @@
         @change="onTime"
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="提交开始日期"
-        end-placeholder="提交结束日期">
+        :range-separator="$t('至')"
+        :start-placeholder="$t('提交开始日期')"
+        :end-placeholder="$t('提交结束日期')">
       </el-date-picker>
     </div>
       <div class="chooseStatus">
         <el-select v-model="status" @change="onAgentChange" clearable
-        placeholder="请选择状态">
+        :placeholder="$t('请选择状态')">
           <el-option
             v-for="item in statusData"
             :key="item.id"
@@ -30,7 +30,7 @@
     <el-table class="data-list" border stripe :data="suggestList"
     v-loading="tableLoading">
     <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="标题" prop="title">
+      <el-table-column :label="$t('标题')" prop="title">
       </el-table-column>
       <!-- <el-table-column label="内容" prop="content">
       </el-table-column> -->
@@ -43,53 +43,53 @@
           </span>
        </template>
       </el-table-column> -->
-      <el-table-column label="状态">
+      <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-        <span v-if="scope.row.status == '1'">未处理</span>
-        <span v-if="scope.row.status == '2'">已处理</span>
+        <span v-if="scope.row.status == '1'">{{$t('未处理')}}</span>
+        <span v-if="scope.row.status == '2'">{{$t('已处理')}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="客户ID" prop="user_id">
+      <el-table-column :label="$t('客户ID')" prop="user_id">
       </el-table-column>
-      <el-table-column label="创建时间" prop="created_at">
+      <el-table-column :label="$t('创建时间')" prop="created_at">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="onChangeStatus(scope.row.id)">详情</el-button>
+          <el-button class="btn-green" @click="onChangeStatus(scope.row.id)">{{$t('详情')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :visible.sync="show" title="修改状态" class="change-status-dialog" @close="clear">
+    <el-dialog :visible.sync="show" :title="$t('修改状态')" class="change-status-dialog" @close="clear">
       <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm" label-width="70px">
       <!-- 标题 -->
-      <el-form-item label="标题" class="input-style">
+      <el-form-item :label="$t('标题')" class="input-style">
         <span>{{ruleForm.title}}</span>
       </el-form-item>
       <!-- 内容 -->
-      <el-form-item label="内容" class="input-style">
+      <el-form-item :label="$t('内容')" class="input-style">
         <span>{{ruleForm.content}}</span>
       </el-form-item>
       <!-- 联系方式 -->
-      <el-form-item label="联系方式" class="input-style">
+      <el-form-item :label="$t('联系方式')" class="input-style">
         {{ruleForm.contact}}
       </el-form-item>
       <!-- 附件 -->
-      <el-form-item label="附件" class="updateChe">
+      <el-form-item :label="$t('附件')" class="updateChe">
         <span v-for="item in ruleForm.images" :key="item.id" style="cursor:pointer;"
             @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
           <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
         </span>
         </el-form-item>
         <!-- 创建时间 -->
-        <el-form-item label="创建时间" class="input-style">
+        <el-form-item :label="$t('创建时间')" class="input-style">
           <span>{{ruleForm.created_at}}</span>
         </el-form-item>
         <!-- 更改状态 -->
-        <el-form-item label="更改状态">
+        <el-form-item :label="$t('更改状态')">
           <el-select v-model="ruleForm.status">
-            <el-option label="未处理" :value="1"></el-option>
-            <el-option label="已处理" :value="2"></el-option>
+            <el-option :label="$t('未处理')" :value="1"></el-option>
+            <el-option :label="$t('已处理')" :value="2"></el-option>
           </el-select>
         </el-form-item>
         </el-form>
@@ -99,8 +99,8 @@
         </div>
         </el-dialog>
         <div slot="footer">
-          <el-button @click="show = false">取消</el-button>
-          <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+          <el-button @click="show = false">{{$t('取消')}}</el-button>
+          <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
         </div>
      </el-dialog>
   </div>
@@ -125,10 +125,10 @@ export default {
       statusData: [
         {
           id: 0,
-          name: '未处理'
+          name: this.$t('未处理')
         }, {
           id: 1,
-          name: '已处理'
+          name: this.$t('已处理')
         }
       ],
       ruleForm: {
@@ -169,7 +169,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -213,7 +213,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.show = false

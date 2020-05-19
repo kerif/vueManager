@@ -5,24 +5,24 @@
       </search-group>
       </div>
     <div class="select-box">
-      <add-btn router="warehouseAdd">添加仓库</add-btn>
+      <add-btn router="warehouseAdd">{{$t('添加仓库')}}</add-btn>
     </div>
     <el-table :data="vipGroupList" stripe border class="data-list"
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="index" width="55" align="center"></el-table-column>
-      <el-table-column label="仓库名字" prop="warehouse_name"></el-table-column>
-      <el-table-column label="自动货位功能">
+      <el-table-column :label="$t('仓库名字')" prop="warehouse_name"></el-table-column>
+      <el-table-column :label="$t('自动货位功能')">
         <template slot-scope="scope">
-          <span v-if="scope.row.auto_location === 0">关闭</span>
-          <span v-if="scope.row.auto_location === 1">开启</span>
+          <span v-if="scope.row.auto_location === 0">{{$t('关闭')}}</span>
+          <span v-if="scope.row.auto_location === 1">{{$t('开启')}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收件人姓名" prop="receiver_name"></el-table-column>
-      <el-table-column label="联系电话" prop="phone"></el-table-column>
-      <el-table-column label="邮编" prop="postcode"></el-table-column>
-      <el-table-column label="地址" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>
-      <el-table-column label="支持国家" :show-overflow-tooltip="true" width="150" prop="countries">
+      <el-table-column :label="$t('收件人姓名')" prop="receiver_name"></el-table-column>
+      <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
+      <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
+      <el-table-column :label="$t('地址')" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>
+      <el-table-column :label="$t('支持国家')" :show-overflow-tooltip="true" width="150" prop="countries">
       </el-table-column>
       <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
         <template slot-scope="scope">
@@ -30,11 +30,11 @@
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="260">
+      <el-table-column :label="$t('操作')" width="260">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editWarehouse(scope.row.id)">修改仓库</el-button>
-          <el-button class="btn-deep-purple" @click="positionAdd(scope.row.id, scope.row.warehouse_name)">仓位管理</el-button>
-          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">删除</el-button>
+          <el-button class="btn-green" @click="editWarehouse(scope.row.id)">{{$t('修改仓库')}}</el-button>
+          <el-button class="btn-deep-purple" @click="positionAdd(scope.row.id, scope.row.warehouse_name)">{{$t('仓位管理')}}</el-button>
+          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{$t('删除')}}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -94,7 +94,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -132,22 +132,22 @@ export default {
     },
     // 删除单条转账支付
     deleteWarehouse (id) {
-      this.$confirm(`您真的要删除此仓库吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('您真的要删除此仓库吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteWarehouseAddress(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

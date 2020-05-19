@@ -1,9 +1,10 @@
 <template>
   <div class="voucher-container">
-    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
-    <add-btn router="addVoucher">添加</add-btn>
+    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group>
+    <add-btn router="addVoucher">{{$t('添加')}}</add-btn>
       <div class="changeVou">
-      <el-select v-model="type" @change="onVocherTypeChange" clearable>
+      <el-select v-model="type" @change="onVocherTypeChange" clearable
+      :placeholder="$t('请选择')">
         <el-option
           v-for="item in voucherChange"
           :key="item.id"
@@ -14,13 +15,13 @@
       </div>
       <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
         <!-- 全部 -->
-        <el-tab-pane label="全部" name="1"></el-tab-pane>
+        <el-tab-pane :label="$t('全部')" name="1"></el-tab-pane>
         <!-- 未开始 -->
-        <el-tab-pane label="未开始" name="2"></el-tab-pane>
+        <el-tab-pane :label="$t('未开始')" name="2"></el-tab-pane>
         <!-- 进行中 -->
-        <el-tab-pane label="进行中" name="3"></el-tab-pane>
+        <el-tab-pane :label="$t('进行中')" name="3"></el-tab-pane>
         <!-- 已失效 -->
-        <el-tab-pane label="已失效" name="4"></el-tab-pane>
+        <el-tab-pane :label="$t('已失效')" name="4"></el-tab-pane>
       <!-- v-if="oderData.length" -->
     </el-tabs>
       <el-table class="data-list" border stripe
@@ -29,22 +30,22 @@
       <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 优惠券名称 -->
-      <el-table-column label="优惠券名称" prop="name"></el-table-column>
+      <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
       <!-- 类型 -->
-      <el-table-column label="类型" prop="type"></el-table-column>
+      <el-table-column :label="$t('类型')" prop="type"></el-table-column>
       <!-- 金额 -->
-      <el-table-column :label="'金额' + this.localization.currency_unit" prop="amount">
+      <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
       </el-table-column>
       <!-- 状态 -->
-      <el-table-column label="状态" prop="status">
+      <el-table-column :label="$t('状态')" prop="status">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 1">未开始</span>
-          <span v-if="scope.row.status === 2">进行中</span>
-          <span v-if="scope.row.status === 3">已失效</span>
+          <span v-if="scope.row.status === 1">{{$t('未开始')}}</span>
+          <span v-if="scope.row.status === 2">{{$t('进行中')}}</span>
+          <span v-if="scope.row.status === 3">{{$t('已失效')}}</span>
         </template>
       </el-table-column>
       <!-- 使用范围 -->
-      <el-table-column label="使用范围" width="150" :show-overflow-tooltip="true">
+      <el-table-column :label="$t('使用范围')" width="150" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span v-for="item in scope.row.usable_lines" :key="item.id">
             {{item.name}}&nbsp;
@@ -52,13 +53,13 @@
         </template>
       </el-table-column>
       <!-- 最低消费金额 -->
-      <el-table-column label="最低消费金额" prop="threshold"></el-table-column>
+      <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
       <!-- 失效时间 -->
-      <el-table-column label="失效时间" prop="expired_at"></el-table-column>
+      <el-table-column :label="$t('失效时间')" prop="expired_at"></el-table-column>
       <!-- 投放数量 -->
-      <el-table-column label="投放数量" prop="total_count"></el-table-column>
+      <el-table-column :label="$t('投放数量')" prop="total_count"></el-table-column>
       <!-- 使用数量 -->
-      <el-table-column label="使用数量" prop="used_count"></el-table-column>
+      <el-table-column :label="$t('使用数量')" prop="used_count"></el-table-column>
       <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
@@ -66,31 +67,31 @@
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" width="200px" fixed="right">
+      <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 投放 -->
-          <el-button class="btn-purple detailsBtn" v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2" @click="serving(scope.row.id)">投放</el-button>
+          <el-button class="btn-purple detailsBtn" v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2" @click="serving(scope.row.id)">{{$t('投放')}}</el-button>
           <!-- 作废 -->
           <el-button class="btn-deep-blue detailsBtn" v-if="(activeName === '1' ||activeName === '2' || activeName === '3') &&scope.row.status !== 3"
-          @click="obsolete(scope.row.id)">作废</el-button>
+          @click="obsolete(scope.row.id)">{{$t('作废')}}</el-button>
           <!-- 记录 -->
           <el-button size="small" class="btn-dark-green detailsBtn"
-           @click="recoding(scope.row.id)">记录</el-button>
+           @click="recoding(scope.row.id)">{{$t('记录')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- <div class="noDate" v-else>暂无数据</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :visible.sync="show" title="请选择" class="change-status-dialog dialog-container" width="35%" @close="clear">
+    <el-dialog :visible.sync="show" :title="$t('请选择')" class="change-status-dialog dialog-container" width="35%" @close="clear">
         <div class="status-box">
             <el-radio-group v-model="ruleForm.status">
-                <el-radio :label="1">客户组投放</el-radio>
-                <el-radio :label="2">单个客户投放</el-radio>
+                <el-radio :label="1">{{$t('客户组投放')}}</el-radio>
+                <el-radio :label="2">{{$t('单个客户投放')}}</el-radio>
             </el-radio-group>
         </div>
         <div slot="footer">
-          <el-button @click="show = false">取消</el-button>
-          <el-button type="primary" @click="confirm">确定</el-button>
+          <el-button @click="show = false">{{$t('取消')}}</el-button>
+          <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
         </div>
       </el-dialog>
   </div>
@@ -118,13 +119,13 @@ export default {
       type: '1',
       voucherChange: [{
         id: '2',
-        name: '新用户福利券'
+        name: this.$t('新用户福利券')
       }, {
         id: '1',
-        name: '抵用券'
+        name: this.$t('抵用券')
       }, {
         id: '',
-        name: '全部'
+        name: this.$t('全部')
       }],
       show: false,
       selectIDs: [],
@@ -180,7 +181,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -193,22 +194,22 @@ export default {
     },
     // 作废
     obsolete (id) {
-      this.$confirm('确定要作废优惠券吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('确定要作废优惠券吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.disableCoupons(id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -219,7 +220,7 @@ export default {
     confirm () {
       console.log(this.ruleForm.status)
       if (!this.ruleForm.status) {
-        return this.$message.info('请选择客户或客户组')
+        return this.$message.info(this.$t('请选择客户或客户组'))
       }
       this.show = false
       if (this.ruleForm.status === 2) {
@@ -231,7 +232,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.getList()
@@ -252,7 +253,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.getList()
@@ -297,7 +298,7 @@ export default {
     // 保存添加转运快递单号
     saveLogistics (row) {
       if (!row.logistics_sn) {
-        return this.$message.info('请输入转运快递单号')
+        return this.$message.info(this.$t('请输入转运快递单号'))
       }
       this.$request.updateLogistics([{
         id: row.id,
@@ -305,14 +306,14 @@ export default {
       }]).then(res => {
         if (res.ret) {
           this.$notify({
-            title: '保存成功',
+            title: this.$t('保存成功'),
             message: res.msg,
             type: 'success'
           })
           row.disabled = true
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })

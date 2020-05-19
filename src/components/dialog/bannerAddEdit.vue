@@ -260,6 +260,8 @@ export default {
       this.ruleForm.link_type = ''
       this.ruleForm.link_path = ''
       this.baleImgList = []
+      this.state = ''
+      this.id = ''
     },
     cancelDialog () {
       this.ruleForm.picture_name = ''

@@ -2,31 +2,31 @@
   <div class="login-container">
     <div class="login-header">
       <span class="app-name">TKK</span>
-      <span>管理员</span>
+      <span>{{$t('管理员')}}</span>
     </div>
     <!-- 登陆页面 -->
     <div class="login-main" v-show="welcome === 1">
       <div class="info-box">
-        <p class="info-title">欢迎登录</p>
+        <p class="info-title">{{$t('欢迎登录')}}</p>
         <el-form>
           <el-form-item>
-            <el-input prefix-icon="el-icon-user" placeholder="请输入邮箱或手机号" v-model="userInfo.username"></el-input>
+            <el-input prefix-icon="el-icon-user" :placeholder="$t('请输入邮箱或手机号')" v-model="userInfo.username"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="userInfo.password" @keyup.native.enter="onLogin"></el-input>
+            <el-input type="password" :placeholder="$t('请输入密码')" prefix-icon="el-icon-unlock" v-model="userInfo.password" @keyup.native.enter="onLogin"></el-input>
           </el-form-item>
           <el-form-item>
             <el-checkbox class="login-checkbox" v-model="keep"></el-checkbox>
-            <span class="info-text">此设备上保留登录信息</span>
+            <span class="info-text">{{$t('此设备上保留登录信息')}}</span>
             <div class="forget">
-              <span @click="changeWelcome(2)">忘记密码</span>
+              <span @click="changeWelcome(2)">{{$t('忘记密码')}}</span>
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="onLogin" :loading="$store.state.btnLoading">登录</el-button>
+            <el-button class="login-btn" @click="onLogin" :loading="$store.state.btnLoading">{{$t('登录')}}</el-button>
           </el-form-item>
           <div class="register">
-            <p @click="changeWelcome(3)">注册账户</p>
+            <p @click="changeWelcome(3)">{{$t('注册账户')}}</p>
           </div>
         </el-form>
       </div>
@@ -35,40 +35,40 @@
     <div class="login-main" v-show="welcome === 2">
       <div class="info-box">
         <div class="step-box">
-          <span :class="['step-item', { 'select': forgetStep <= 3 }]">验证身份</span>
-          <span :class="['step-item', { 'select': forgetStep >= 2 }]">重置登录密码</span>
-          <span :class="{ 'select': forgetStep === 3 }">完成</span>
+          <span :class="['step-item', { 'select': forgetStep <= 3 }]">{{$t('验证身份')}}</span>
+          <span :class="['step-item', { 'select': forgetStep >= 2 }]">{{$t('重置登录密码')}}</span>
+          <span :class="{ 'select': forgetStep === 3 }">{{$t('完成')}}</span>
         </div>
         <!-- 忘记密码第一步：验证身份 -->
         <el-form v-show="forgetStep === 1" :model="forget" :rules="rules" ref="forgetForm">
           <el-form-item prop="phone">
-            <el-input prefix-icon="el-icon-user" placeholder="请输入您的手机号" v-model="forget.phone">
-            <span v-show="showPsd" slot="append" @click="onResetCode">获取验证码</span>
-            <span v-show="!showPsd" slot="append">倒计时{{count}}秒</span>
+            <el-input prefix-icon="el-icon-user" :placeholder="$t('请输入您的手机号')" v-model="forget.phone">
+            <span v-show="showPsd" slot="append" @click="onResetCode">{{$t('获取验证码')}}</span>
+            <span v-show="!showPsd" slot="append">{{$t('倒计时')}}{{count}}{{$t('秒')}}</span>
             </el-input>
           </el-form-item>
           <el-form-item prop="code">
-            <el-input type="text" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="forget.code"></el-input>
+            <el-input type="text" :placeholder="$t('请输入验证码')" prefix-icon="el-icon-unlock" v-model="forget.code"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="onForgetStep('forgetForm')" :loading="$store.state.btnLoading">下一步</el-button>
+            <el-button class="login-btn" @click="onForgetStep('forgetForm')" :loading="$store.state.btnLoading">{{$t('下一步')}}</el-button>
           </el-form-item>
           <div class="register">
-            <p @click="changeWelcome(1)">返回登录</p>
+            <p @click="changeWelcome(1)">{{$t('返回登录')}}</p>
           </div>
         </el-form>
         <!-- 忘记密码第二步：重置登录密码 -->
         <el-form v-show="forgetStep === 2" :model="forget" :rules="rules"
         ref="resetForm">
           <el-form-item prop="new_password">
-            <el-input placeholder="请输入新密码" v-model="forget.new_password"
+            <el-input :placeholder="$t('请输入新密码')" v-model="forget.new_password"
             type="password"></el-input>
           </el-form-item>
           <el-form-item prop="confirm_new_password">
-            <el-input placeholder="请确认您的密码" type="password" v-model="forget.confirm_new_password"></el-input>
+            <el-input :placeholder="$t('请确认您的密码')" type="password" v-model="forget.confirm_new_password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="onResetStep('resetForm')" :loading="$store.state.btnLoading">下一步</el-button>
+            <el-button class="login-btn" @click="onResetStep('resetForm')" :loading="$store.state.btnLoading">{{$t('下一步')}}</el-button>
           </el-form-item>
         </el-form>
         <!-- 忘记密码第三步：重置登录密码完成 -->
@@ -76,9 +76,9 @@
           <div class="happy-img">
             <img src="../assets/happy.png">
           </div>
-            <p class="account-btn">修改密码成功！</p>
+            <p class="account-btn">{{$t('修改密码成功！')}}</p>
             <div class="register">
-              <p @click="changeWelcome(1)">去登录</p>
+              <p @click="changeWelcome(1)">{{$t('去登录')}}</p>
             </div>
         </div>
       </div>
@@ -86,33 +86,33 @@
     <!-- 注册账号 -->
     <div class="login-main" v-show="welcome === 3">
       <div class="info-box">
-        <p class="info-title">注册</p>
+        <p class="info-title">{{$t('注册')}}</p>
         <el-form :model="reAccount" :rules="rules" ref="registerForm">
           <el-form-item prop="email">
-            <el-input prefix-icon="el-icon-user" placeholder="请输入邮箱" v-model="reAccount.email"></el-input>
+            <el-input prefix-icon="el-icon-user" :placeholder="$t('请输入邮箱')" v-model="reAccount.email"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input type="password" placeholder="请输入8-20位密码，区分大小写" prefix-icon="el-icon-unlock" v-model="reAccount.password"></el-input>
+            <el-input type="password" :placeholder="$t('请输入8-20位密码，区分大小写')" prefix-icon="el-icon-unlock" v-model="reAccount.password"></el-input>
           </el-form-item>
             <el-form-item prop="confirm_password">
-            <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" v-model="reAccount.confirm_password"></el-input>
+            <el-input type="password" :placeholder="$t('确认密码')" prefix-icon="el-icon-unlock" v-model="reAccount.confirm_password"></el-input>
           </el-form-item>
           <el-form-item prop="phone">
-            <el-input placeholder="请输入11位手机号码" v-model="reAccount.phone">
+            <el-input :placeholder="$t('请输入11位手机号码')" v-model="reAccount.phone">
               <template slot="prepend">+86</template>
             </el-input>
           </el-form-item>
           <el-form-item prop="code">
-            <el-input placeholder="请输入验证码" v-model="reAccount.code">
-              <span v-show="show" slot="append" @click="onRegisterCode">获取验证码</span>
-              <span v-show="!show" slot="append">倒计时{{count}}秒</span>
+            <el-input :placeholder="$t('请输入验证码')" v-model="reAccount.code">
+              <span v-show="show" slot="append" @click="onRegisterCode">{{$t('获取验证码')}}</span>
+              <span v-show="!show" slot="append">{{$t('倒计时')}}{{count}}{{$t('秒')}}</span>
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="registerAccount('registerForm')" :loading="$store.state.btnLoading">注册</el-button>
+            <el-button class="login-btn" @click="registerAccount('registerForm')" :loading="$store.state.btnLoading">{{$t('注册')}}</el-button>
           </el-form-item>
           <div class="register">
-            <p @click="changeWelcome(1)">使用已有账户登录</p>
+            <p @click="changeWelcome(1)">{{$t('使用已有账户登录')}}</p>
           </div>
         </el-form>
       </div>
@@ -131,14 +131,14 @@
             </el-button>
           </div> -->
           <div class="register">
-            <p @click="changeWelcome(1)">返回登录</p>
+            <p @click="changeWelcome(1)">{{$t('返回登录')}}</p>
           </div>
       </div>
     </div>
-    <div class="login-footer">© (2019) NLETECH <a href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备17000173号-5</a></div>
+    <div class="login-footer">© (2019) NLETECH <a href="http://www.beian.miit.gov.cn" target="_blank">{{$t('湘ICP备17000173号-5')}}</a></div>
     <!-- 身份验证弹窗 -->
     <el-dialog
-      title="身份验证"
+      :title="$t('身份验证')"
       :visible.sync="centerDialogVisible"
       width="35%"
       @close="dialogClear"
@@ -147,9 +147,9 @@
         <img :src="captha">
         <i class="el-icon-refresh id-icon" @click="getCaptcha"></i>
       </div>
-      <el-input v-model="userInfo.captcha" @keyup.native.enter="submit" placeholder="请输入验证码"></el-input>
+      <el-input v-model="userInfo.captcha" @keyup.native.enter="submit" :placeholder="$t('请输入验证码')"></el-input>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button type="primary" @click="submit">{{$t('确 定')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -161,9 +161,9 @@ export default {
     // 注册
     var validateRegister = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'))
+        callback(new Error(this.$t('请再次输入密码')))
       } else if (value !== this.reAccount.password) {
-        callback(new Error('两次输入密码不一致!'))
+        callback(new Error(this.$t('两次输入密码不一致!')))
       } else {
         callback()
       }
@@ -171,23 +171,23 @@ export default {
     // 重置
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'))
+        callback(new Error(this.$t('请再次输入密码')))
       } else if (value !== this.forget.new_password) {
-        callback(new Error('两次输入密码不一致!'))
+        callback(new Error(this.$t('两次输入密码不一致!')))
       } else {
         callback()
       }
     }
     var checkPhone = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('手机号不能为空'))
+        return callback(new Error(this.$t('手机号不能为空')))
       } else {
         const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
         console.log(reg.test(value))
         if (reg.test(value)) {
           callback()
         } else {
-          return callback(new Error('请输入正确的手机号'))
+          return callback(new Error(this.$t('请输入正确的手机号')))
         }
       }
     }
@@ -225,30 +225,30 @@ export default {
       forgetStep: 1,
       rules: {
         email: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          { required: true, message: this.$t('请输入邮箱地址'), trigger: 'blur' },
+          { type: 'email', message: this.$t('请输入正确的邮箱地址'), trigger: ['blur', 'change'] }
         ],
         code: [
-          { required: true, message: '请输入验证码', trigger: 'change' }
+          { required: true, message: this.$t('请输入验证码'), trigger: 'change' }
         ],
         phone: [
           { validator: checkPhone, trigger: 'change' }
         ],
         password: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 8, max: 20, message: '长度在8到20个字符', trigger: 'change' }
+          { required: true, message: this.$t('请输入新密码'), trigger: 'blur' },
+          { min: 8, max: 20, message: this.$t('长度在8到20个字符'), trigger: 'change' }
         ],
         confirm_password: [
           { required: true, validator: validateRegister, trigger: 'blur' },
-          { min: 8, max: 20, message: '长度在8到20个字符', trigger: 'change' }
+          { min: 8, max: 20, message: this.$t('长度在8到20个字符'), trigger: 'change' }
         ],
         new_password: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 8, max: 20, message: '长度在8到20个字符', trigger: 'change' }
+          { required: true, message: this.$t('请输入新密码'), trigger: 'blur' },
+          { min: 8, max: 20, message: this.$t('长度在8到20个字符'), trigger: 'change' }
         ],
         confirm_new_password: [
           { required: true, validator: validatePass2, trigger: 'blur' },
-          { min: 8, max: 20, message: '长度在8到20个字符', trigger: 'change' }
+          { min: 8, max: 20, message: this.$t('长度在8到20个字符'), trigger: 'change' }
         ]
       }
     }
@@ -262,9 +262,9 @@ export default {
     // 登录
     onLogin () {
       if (!this.userInfo.username.trim()) {
-        return this.$message.info('请输入邮箱或手机号')
+        return this.$message.info(this.$t('请输入邮箱或手机号'))
       } else if (!this.userInfo.password.trim()) {
-        return this.$message.info('请输入密码')
+        return this.$message.info(this.$t('请输入密码'))
       }
       if (this.keep) {
         localStorage.setItem('USERNAME', this.userInfo.username.trim())
@@ -289,12 +289,12 @@ export default {
     },
     submit () {
       if (this.userInfo.code === '') {
-        this.$message.error('请输入验证码')
+        this.$message.error(this.$t('请输入验证码'))
       } else {
         this.$request.login(this.userInfo).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
@@ -341,7 +341,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '成功',
+                title: this.$t('成功'),
                 message: res.msg
               })
               this.welcome = 4
@@ -364,7 +364,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '成功',
+                title: this.$t('成功'),
                 message: res.msg
               })
               this.forgetStep++
@@ -388,7 +388,7 @@ export default {
     // 获取注册验证码
     onRegisterCode () {
       if (!this.reAccount.phone) {
-        return this.$message.error('请先输入手机号')
+        return this.$message.error(this.$t('请先输入手机号'))
       }
       this.$request.getRegisterCode(this.reAccount.phone).then(res => {
         if (res.ret) {
@@ -419,7 +419,7 @@ export default {
     // 获取重置密码验证码
     onResetCode () {
       if (!this.forget.phone) {
-        return this.$message.error('请先输入手机号')
+        return this.$message.error(this.$t('请先输入手机号'))
       }
       this.$request.getResetCode(this.forget.phone).then(res => {
         if (res.ret) {

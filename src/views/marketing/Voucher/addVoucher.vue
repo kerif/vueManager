@@ -1,41 +1,41 @@
 <template>
   <div class="add-voucher-container">
   <el-form label-position="top" class="voucher-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-    <el-form-item label="名称" prop="name">
-          <el-input placeholder="请输入名称" v-model="ruleForm.name"></el-input>
+    <el-form-item :label="$t('名称')" prop="name">
+          <el-input :placeholder="$t('请输入名称')" v-model="ruleForm.name"></el-input>
     </el-form-item>
-    <el-form-item label="金额" prop="amount">
-          <el-input placeholder="请输入金额" v-model="ruleForm.amount"></el-input>
+    <el-form-item :label="$t('金额')" prop="amount">
+          <el-input :placeholder="$t('请输入金额')" v-model="ruleForm.amount"></el-input>
     </el-form-item>
-    <el-form-item label="最低消费" prop="threshold">
-          <el-input placeholder="请输入最低消费" v-model="ruleForm.threshold"></el-input>
+    <el-form-item :label="$t('最低消费')" prop="threshold">
+          <el-input :placeholder="$t('请输入最低消费')" v-model="ruleForm.threshold"></el-input>
     </el-form-item>
-    <el-form-item label="生效时间" prop="effected_at">
+    <el-form-item :label="$t('生效时间')" prop="effected_at">
            <el-date-picker
            value-format="yyyy-MM-dd"
             v-model="ruleForm.effected_at"
             type="date"
             :picker-options="pickerOptions"
-            placeholder="请输入生效时间">
+            :placeholder="$t('请输入生效时间')">
             </el-date-picker>
     </el-form-item>
-    <el-form-item label="失效时间" prop="expired_at">
+    <el-form-item :label="$t('失效时间')" prop="expired_at">
         <el-date-picker
           :picker-options="pickerOptions"
           value-format="yyyy-MM-dd"
           v-model="ruleForm.expired_at"
           type="date"
-          placeholder="请输入失效时间">
+          :placeholder="$t('请输入失效时间')">
         </el-date-picker>
     </el-form-item>
-    <el-form-item label="使用范围" prop="scope">
+    <el-form-item :label="$t('使用范围')" prop="scope">
       <el-radio-group v-model="ruleForm.scope">
-          <el-radio :label="0">全部</el-radio>
-          <el-radio :label="1">按路线</el-radio>
+          <el-radio :label="0">{{$t('全部')}}</el-radio>
+          <el-radio :label="1">{{$t('按路线')}}</el-radio>
         </el-radio-group>
     </el-form-item>
     <div v-if="this.ruleForm.scope === 1" class="choose-btn">
-      <el-button class="btn-deep-blue" @click="chooseLine">选择路线</el-button>
+      <el-button class="btn-deep-blue" @click="chooseLine">{{$t('选择路线')}}</el-button>
         <div class="display-line" v-if="this.lineName.length">
             <p v-for="item in lineName" :key="item.id">
               {{item.name}}
@@ -44,7 +44,7 @@
     </div>
     <el-form-item>
       <el-button type="primary" class="save-btn" @click="submit('ruleForm')"
-      :loading="$store.state.btnLoading">保存</el-button>
+      :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
       </el-form-item>
   </el-form>
   </div>
@@ -67,22 +67,22 @@ export default {
       lineName: [], // 保存获取到的路线
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入名称'), trigger: 'blur' }
         ],
         amount: [
-          { required: true, message: '请输入金额', trigger: 'blur' }
+          { required: true, message: this.$t('请输入金额'), trigger: 'blur' }
         ],
         threshold: [
-          { required: true, message: '请输入最低消费', trigger: 'blur' }
+          { required: true, message: this.$t('请输入最低消费'), trigger: 'blur' }
         ],
         expired_at: [
-          { required: true, message: '请输入失效时间', trigger: 'blur' }
+          { required: true, message: this.$t('请输入失效时间'), trigger: 'blur' }
         ],
         effected_at: [
-          { required: true, message: '请输入生效时间', trigger: 'blur' }
+          { required: true, message: this.$t('请输入生效时间'), trigger: 'blur' }
         ],
         scope: [
-          { required: true, message: '请选择使用范围', trigger: 'blur' }
+          { required: true, message: this.$t('请选择使用范围'), trigger: 'blur' }
         ]
       },
       pickerOptions: {
@@ -115,7 +115,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '操作成功',
+                title: this.$t('操作成功'),
                 message: res.msg
               })
               this.getList()

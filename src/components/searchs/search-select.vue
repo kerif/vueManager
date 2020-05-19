@@ -1,6 +1,6 @@
 <template>
     <el-col :lg=3 :md="3">
-      <el-select style="width: 100%;" @change="selectChange" v-model="select_value" :placeholder="placeholder" :clearable="true" :disabled="disabled">
+      <el-select style="width: 100%;" @change="selectChange" v-model="select_value" :placeholder="$t(placeholder)" :clearable="true" :disabled="disabled">
         <el-option
           v-for="item in selectArr"
           :key="item.value"
@@ -11,6 +11,7 @@
     </el-col>
 </template>
 <script>
+import $t from '../../utils/language'
 export default {
   name: 'searchSelect',
   props: {
@@ -32,6 +33,7 @@ export default {
   },
   data () {
     return {
+      $t
     }
   },
   computed: {

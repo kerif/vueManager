@@ -2,29 +2,29 @@
   <div class="channel-addEdit-container">
     <el-form label-position="top" class="warehouse-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <!-- 渠道名称 -->
-      <el-form-item label="渠道名称" prop="channel_name">
+      <el-form-item :label="$t('渠道名称')" prop="channel_name">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.channel_name"></el-input>
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.channel_name"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
       <!-- 渠道单价 -->
-      <el-form-item :label="'渠道单价' + localization.currency_unit" prop="channel_price">
+      <el-form-item :label="$t('渠道单价') + localization.currency_unit" prop="channel_price">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" v-model="ruleForm.channel_price"></el-input>
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.channel_price"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
       <!-- 结算方式 -->
-      <el-form-item prop="settlement_method" label="结算方式">
+      <el-form-item prop="settlement_method" :label="$t('结算方式')">
           <el-col :span="10">
             <el-select
               clearable
               v-model="ruleForm.settlement_method"
               class="country-select"
-              placeholder="请选择结算方式">
+              :placeholder="$t('请选择结算方式')">
               <el-option
                 v-for="item in options"
                 :key="item.id"
@@ -35,17 +35,17 @@
           </el-col>
       </el-form-item>
       <!-- 备注 -->
-      <el-form-item label="备注" prop="remark">
+      <el-form-item :label="$t('备注')" prop="remark">
         <el-row>
           <el-col :span="10">
-            <el-input placeholder="请输入内容" type="textarea"
+            <el-input :placeholder="$t('请输入内容')" type="textarea"
             :autosize="{ minRows: 4, maxRows: 4}" v-model="ruleForm.remark"></el-input>
             </el-col>
         </el-row>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="submit('ruleForm')"
-        :loading="$store.state.btnLoading">保存</el-button>
+        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
         </el-form-item>
     </el-form>
   </div>
@@ -65,13 +65,13 @@ export default {
       localization: {},
       rules: {
         channel_name: [
-          { required: true, message: '请输入渠道名称', trigger: 'blur' }
+          { required: true, message: this.$t('请输入渠道名称'), trigger: 'blur' }
         ],
         channel_price: [
-          { required: true, message: '请输入渠道单价', trigger: 'blur' }
+          { required: true, message: this.$t('请输入渠道单价'), trigger: 'blur' }
         ],
         settlement_method: [
-          { required: true, message: '请选择结算方式', trigger: 'change' }
+          { required: true, message: this.$t('请选择结算方式'), trigger: 'change' }
         ]
       }
     }
@@ -104,7 +104,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.$router.go(-1)
@@ -122,7 +122,7 @@ export default {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.msg
                 })
                 this.$router.go(-1)

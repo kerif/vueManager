@@ -516,11 +516,10 @@
               <template slot-scope="scope">
                 <span v-if="scope.row.type === 1">{{$t('绑定邮箱')}}</span>
                 <span v-if="scope.row.type === 2">{{$t('更改邮箱')}}</span>
-                <span v-if="scope.row.type === 3">{{$t('邮箱登录')}}</span>
-                <span v-if="scope.row.type === 4">{{$t('绑定邮箱')}}</span>
-                <span v-if="scope.row.type === 5">{{$t('订单支付成功')}}</span>
-                <span v-if="scope.row.type === 6">{{$t('已发货订单')}}</span>
-                <span v-if="scope.row.type === 7">{{$t('已入库包裹')}}</span>
+                <span v-if="scope.row.type === 3">{{$t('登录邮件')}}</span>
+                <span v-if="scope.row.type === 4">{{$t('订单支付成功')}}</span>
+                <span v-if="scope.row.type === 5">{{$t('已发货订单')}}</span>
+                <span v-if="scope.row.type === 6">{{$t('已入库包裹')}}</span>
                 <span v-if="scope.row.type === 7">{{$t('提交订单成功')}}</span>
               </template>
             </el-table-column>

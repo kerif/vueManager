@@ -2,20 +2,20 @@
   <div class="public-add-container">
     <el-form label-position="top">
       <!-- 公告标题 -->
-      <el-form-item label="*公告标题">
+      <el-form-item :label="$t('*公告标题')">
         <el-row>
-          <el-col :span="10"><el-input placeholder="公告标题不超过30个字" v-model="params.title"></el-input></el-col>
+          <el-col :span="10"><el-input :placeholder="$t('公告标题不超过30个字')" v-model="params.title"></el-input></el-col>
         </el-row>
       </el-form-item>
       <!-- 公告详情 -->
-      <el-form-item label="*公告详情">
+      <el-form-item :label="$t('*公告详情')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>
             </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="文件上传">
+      <el-form-item :label="$t('文件上传')">
         <el-row>
           <el-col :span="20">
             <el-upload
@@ -26,15 +26,15 @@
               :file-list="fileList"
               :before-upload="beforeUploadImg"
               :http-request="uploadBaleImg">
-              <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">支持格式：.doc .docx .pdf，单个文件不能超过3MB</div>
+              <el-button size="small" type="primary">{{$t('点击上传')}}</el-button>
+              <div slot="tip" class="el-upload__tip">{{$t('支持格式：.doc .docx .pdf，单个文件不能超过3MB')}}</div>
             </el-upload>
           </el-col>
         </el-row>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="saveNotice"
-        :loading="$store.state.btnLoading">保存</el-button>
+        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
         </el-form-item>
     </el-form>
   </div>
@@ -69,7 +69,7 @@ export default {
       customInsert: (insertImg, result, editor) => {
         console.log(result)
         if (result.ret === 1) {
-          this.$message.success('上传成功')
+          this.$message.success(this.$t('上传成功'))
           let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
           insertImg(url)
         }
@@ -128,10 +128,10 @@ export default {
       console.log(file)
       const mimeList = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/wps-writer']
       if (mimeList.indexOf(file.type) === -1) {
-        this.$message.error('请上传格式正确的文件')
+        this.$message.error(this.$t('请上传格式正确的文件'))
         return false
       } else if (file.size > 1024 * 1024 * 3) {
-        this.$message.error('上传图片大小不能超过3MB')
+        this.$message.error(this.$t('上传图片大小不能超过3MB'))
         return false
       }
       return true
@@ -145,7 +145,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg
             })
             this.$router.push({ name: 'Public' })
@@ -160,7 +160,7 @@ export default {
         this.$request.updateAnnouncements(this.$route.params.id, this.params).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.tips,
               type: 'success'
             })
@@ -168,7 +168,7 @@ export default {
             // this.$router.go(-1)
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

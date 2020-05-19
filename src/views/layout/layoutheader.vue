@@ -6,8 +6,8 @@
     </div>
     <el-switch
       v-model="isSimple"
-      active-text="简"
-      inactive-text="繁"
+      :active-text="$t('简')"
+      :inactive-text="$t('繁')"
       inactive-color="#13ce66" />
     <span class="user-box">{{ $store.state.userName }}</span>
     <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>

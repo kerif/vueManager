@@ -239,10 +239,19 @@
         </div>
       </div>
     </div>
+    <!-- 留仓物品 -->
     <div class="packed-details">
       <span>{{$t('留仓物品')}}</span>
       <span v-if="form.in_warehouse_item">
         {{form.in_warehouse_item}}
+        </span>
+      <span v-else class="nullProduct">{{$t('无')}}</span>
+    </div>
+    <!-- 签收备注 -->
+    <div class="packed-details" v-if="this.$route.params.activeName === '5'">
+      <h4 class="sign-remark">{{$t('签收备注')}}</h4>
+      <span v-if="form.sign_remark" class="sign-font">
+        {{form.sign_remark}}
         </span>
       <span v-else class="nullProduct">{{$t('无')}}</span>
     </div>
@@ -361,6 +370,12 @@ export default {
     .imgDialog{
       width: 50%;
     }
+  }
+  .sign-remark {
+    display: inline-block;
+  }
+  .sign-font {
+    font-size: 14px;
   }
 }
 </style>

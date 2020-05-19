@@ -130,7 +130,7 @@
       <!-- 备注 -->
       <el-table-column :label="$t('备注')" prop="remark" v-if="activeName === '2'"></el-table-column>
       <!-- 规格 -->
-      <el-table-column :label="$t(规格(长宽高cm))" prop="dimension"
+      <el-table-column :label="$t('规格(长宽高cm)')" prop="dimension"
       v-if="activeName === '2'" width="120px"></el-table-column>
       <!-- 存放货位 -->
       <el-table-column :label="$t('存放货位')" prop="location"

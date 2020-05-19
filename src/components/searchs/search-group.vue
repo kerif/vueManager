@@ -2,13 +2,14 @@
     <el-row class="search-group">
       <slot></slot>
       <el-col :lg="4" :sm="4" class="pull-right">
-        <el-input class="top-20" :value="value" :placeholder="placeholder" ref="input" @input="updateValue" @keyup.enter.native="Enter">
+        <el-input class="top-20" :value="value" :placeholder="$t(placeholder)" ref="input" @input="updateValue" @keyup.enter.native="Enter">
           <el-button class="search-btn" slot="append" @click="Enter" :loading="$store.state.btnLoading" icon="el-icon-search"></el-button>
         </el-input>
       </el-col>
     </el-row>
 </template>
 <script>
+import $t from '../../utils/language'
 export default {
   props: {
     value: {
@@ -21,6 +22,7 @@ export default {
   },
   data () {
     return {
+      $t
     }
   },
   name: 'SearchGroup',
