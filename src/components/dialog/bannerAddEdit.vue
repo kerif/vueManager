@@ -55,18 +55,22 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <!-- 内部跳转 -->
-              <el-form-item :label="$t('*内部跳转')" v-if="this.ruleForm.link_type === 1">
-                <el-select v-model="ruleForm.link_path" :placeholder="$t('请选择内部跳转')" clearable
-                 class="banner-sty">
-                  <el-option
-                    v-for="item in pathData"
-                    :key="item.link_type"
-                    :label="item.name"
-                    :value="item.link_path">
-                  </el-option>
-                </el-select>
-              </el-form-item>
+            <!-- 内部跳转 -->
+            <el-form-item :label="$t('内部跳转')" v-if="this.ruleForm.link_type === 1">
+              <el-select v-model="linkPath" :placeholder="$t('请选择内部跳转')" clearable @change="changePath"
+                class="banner-sty">
+                <el-option
+                  v-for="item in pathData"
+                  :key="item.link_type"
+                  :label="item.name"
+                  :value="item.link_path">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <!-- 内部跳转时 可编辑url -->
+            <el-form-item :label="$t('*内部url')" v-if="this.ruleForm.link_type === 1">
+              <el-input v-model="ruleForm.link_path" class="banner-sty"></el-input>
+            </el-form-item>
             <!-- 外部url -->
             <el-form-item :label="$t('*外部url')" v-if="this.ruleForm.link_type === 2">
               <el-input v-model="ruleForm.link_path"
@@ -123,7 +127,8 @@ export default {
       typeData: [],
       linkData: [],
       pathData: [],
-      baleImgList: []
+      baleImgList: [],
+      linkPath: ''
     }
   },
   methods: {
@@ -134,13 +139,17 @@ export default {
         this.sourceData = res.data.applications
         this.typeData = res.data.ads_types
         this.linkData = res.data.link_types
-        this.pathData = res.data.inner_paths
+        this.pathData = res.data.inner_paths // 内部跳转的值
+        if (this.state === 'edit') {
+          this.getList()
+        }
         // console.log(this.employeeGroup, 'this.employeeGroup')
       })
     },
     getType () {
       console.log(this.ruleForm.link_type, 'ruleForm.link_type')
       console.log(this.ruleForm, 'ruleForm')
+      this.linkPath = ''
       this.ruleForm.link_path = ''
     },
     // 获取详情
@@ -148,10 +157,16 @@ export default {
       this.$request.aloneBanner(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
+          this.linkPath = this.pathData.find(item => item.link_path === res.data.link_path) ? res.data.link_path : ''
+          console.log(this.link_)
           console.log(this.ruleForm, 'this.ruleForm')
           res.data.picture_path && (this.baleImgList[0] = res.data.picture_path)
         }
       })
+    },
+    changePath () {
+      console.log(this.linkPath, 'ruleForm.link_path')
+      this.ruleForm.link_path = this.linkPath
     },
     confirm (formName) {
       if (this.baleImgList[0]) {
@@ -171,7 +186,7 @@ export default {
         return this.$message.error(this.$t('请选择跳转方式'))
       }
       if (this.ruleForm.link_type === 1 && this.ruleForm.link_path === '') {
-        return this.$message.error(this.$t('请选择内部跳转'))
+        return this.$message.error(this.$t('请输入内部url'))
       } else if (this.ruleForm.link_type === 2 && this.ruleForm.link_path === '') {
         return this.$message.error(this.$t('请输入外部url'))
       }
@@ -260,6 +275,7 @@ export default {
       this.ruleForm.link_type = ''
       this.ruleForm.link_path = ''
       this.baleImgList = []
+      this.linkPath = ''
       this.state = ''
       this.id = ''
     },
@@ -267,6 +283,9 @@ export default {
       this.ruleForm.picture_name = ''
       this.ruleForm.position = ''
       this.ruleForm.source = ''
+      this.linkPath = ''
+      this.state = ''
+      this.id = ''
       this.ruleForm.type = ''
       this.ruleForm.link_type = ''
       this.ruleForm.link_path = ''
@@ -275,9 +294,6 @@ export default {
     },
     init () {
       this.getLeftData()
-      if (this.state === 'edit') {
-        this.getList()
-      }
     }
   }
 }
