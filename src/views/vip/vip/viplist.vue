@@ -2,7 +2,7 @@
   <div class="vip-list-container">
     <div>
       <search-group v-model="page_params.keyword" @search="goSearch">
-      <search-select :placeholder="$t('请选择客户组')" :selectArr="clientGroupList"
+      <search-select :selectArr="clientGroupList"
           v-model="page_params.group" @search="onGroupChange">
         </search-select>
       </search-group>
