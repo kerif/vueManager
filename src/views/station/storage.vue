@@ -29,7 +29,7 @@
             <el-col :span="18">
               <el-form-item :label="$t('*寄往仓库')">
                 <el-select v-model="user.warehouse_id" clearable
-                @change="getAreaData"
+                @change="getAreaData" :placeholder="$t('请选择')"
                  :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''">
                   <el-option
                     v-for="item in agentData"
@@ -135,7 +135,7 @@
             <el-col :span="18">
               <el-form-item :label="$t('*快递公司')">
                 <el-select v-model="user.express_company_id" clearable
-                :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''">
+                :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" :placeholder="$t('请选择')">
                   <el-option
                     v-for="item in expressData"
                     :key="item.id"

@@ -17,7 +17,8 @@
     </div>
     <!-- 是否精选 -->
     <div class="chooseStatus">
-      <el-select v-model="is_recommend" @change="onShipStatus" clearable>
+      <el-select v-model="is_recommend" @change="onShipStatus" clearable
+      :placeholder="$t('请选择')">
         <el-option
           v-for="item in statusList"
           :key="item.id"

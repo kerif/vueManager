@@ -139,7 +139,7 @@
             <el-form>
               <!-- 重量单位： -->
               <el-form-item :label="$t('重量单位：')">
-                  <el-select v-model="weightName">
+                  <el-select v-model="weightName" :placeholder="$t('请选择')">
                     <el-option
                     v-for="item in weightList"
                     :key="item.id"
@@ -150,7 +150,7 @@
               </el-form-item>
               <!-- 货币单位： -->
               <el-form-item :label="$t('货币单位：')">
-                  <el-select v-model="currencyName">
+                  <el-select v-model="currencyName" :placeholder="$t('请选择')">
                     <el-option
                     v-for="item in currencyList"
                     :key="item.id"
@@ -161,7 +161,7 @@
               </el-form-item>
               <!-- 长度单位 -->
               <el-form-item :label="$t('长度单位：')">
-                  <el-select v-model="lengthName">
+                  <el-select v-model="lengthName" :placeholder="$t('请选择')">
                     <el-option
                     v-for="(item, index) in lengthList"
                     :key="index"

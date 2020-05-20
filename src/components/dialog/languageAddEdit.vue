@@ -3,7 +3,7 @@
     <el-form :model="languageList" ref="ruleForm" class="demo-ruleForm"
     label-width="130px">
       <el-form-item :label="$t('*语言')">
-        <el-select v-model="languageList.language_code">
+        <el-select v-model="languageList.language_code" :placeholder="$t('请选择')">
           <el-option
           v-for="item in language"
           :key="item.language_code"

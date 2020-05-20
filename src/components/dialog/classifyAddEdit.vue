@@ -10,7 +10,7 @@
           </el-form-item>
         <!-- 用户组描述 -->
           <el-form-item :label="$t('选择分类')" prop="parent_id">
-             <el-select v-model="ruleForm.parent_id" clearable filterable>
+             <el-select v-model="ruleForm.parent_id" clearable filterable :placeholder="$t('请选择')">
                 <el-option
                     v-for="item in classifyList"
                     :key="item.id"

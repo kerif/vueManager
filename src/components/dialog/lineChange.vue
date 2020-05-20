@@ -5,7 +5,7 @@
     label-position="top">
         <!-- 员工组中文名 -->
             <el-form-item>
-              <el-select v-model="user.express_line_id" clearable>
+              <el-select v-model="user.express_line_id" clearable :placeholder="$t('请选择')">
                 <el-option
                 v-for="item in expressData"
                 :key="item.id"

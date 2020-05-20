@@ -87,7 +87,7 @@
         </el-form-item>
         <!-- 更改状态 -->
         <el-form-item :label="$t('更改状态')">
-          <el-select v-model="ruleForm.status">
+          <el-select v-model="ruleForm.status" :placeholder="$t('请选择')">
             <el-option :label="$t('未处理')" :value="1"></el-option>
             <el-option :label="$t('已处理')" :value="2"></el-option>
           </el-select>

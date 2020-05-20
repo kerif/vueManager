@@ -87,7 +87,7 @@
      <div class="show-box">
         <div class="show-list">
          <span class="package-text">{{ status === 2 ? $t('已入库包裹') : (status === 3 ? $t('已拣货包裹') : $t('已发货包裹')) }}</span>
-         <el-select v-model="scope" @change="getDatas">
+         <el-select v-model="scope" @change="getDatas" :placeholder="$t('请选择')">
            <el-option :value="1" :label="$t('近一周')"></el-option>
            <el-option :value="2" :label="$t('近一月')"></el-option>
            <el-option :value="3" :label="$t('近半年')"></el-option>

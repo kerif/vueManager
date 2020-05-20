@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('修改客户组')" class="dialog-vip-group" @close="clear">
     <div>{{$t('客户组中文名*')}}</div>
-    <el-select v-model="user.name_cn">
+    <el-select v-model="user.name_cn" :placeholder="$t('请选择')">
       <el-option
       v-for="item in userList"
       :key="item.id"

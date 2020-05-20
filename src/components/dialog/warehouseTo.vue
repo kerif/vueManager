@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('所属仓库')" class="dialog-warehouse-fo" @close="clear">
     <div>{{$t('*所属仓库')}}</div>
-    <el-select v-model="warehouseId">
+    <el-select v-model="warehouseId" :placeholder="$t('请选择')">
       <el-option
       v-for="item in allHouse"
       :key="item.id"

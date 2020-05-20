@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('加入发货单')" class="invoice-container" @close="clear">
-    <el-select v-model="invoice.sn">
+    <el-select v-model="invoice.sn" :placeholder="$t('请选择')">
       <el-option
       v-for="item in invoiceList"
       :title="item.remark"

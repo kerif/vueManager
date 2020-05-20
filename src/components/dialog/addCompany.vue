@@ -8,7 +8,7 @@
         <el-form-item :label="$t('*转运快递公司：')">
             <!-- <el-input v-model="company.company"></el-input> -->
              <el-select v-model="company.company" clearable filterable
-             allow-create default-first-option>
+             allow-create default-first-option :placeholder="$t('请选择')">
                 <el-option
                     v-for="(item, index) in companyList"
                     :key="index"
