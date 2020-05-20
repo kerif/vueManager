@@ -7,7 +7,7 @@
       <el-form-item prop="new_password" class="input" :label="this.$t('新密码')">
         <el-input type="password" v-model="params.new_password" auto-complete="off" :placeholder="this.$t('请输入新密码')"></el-input>
       </el-form-item>
-      <el-form-item prop="new_confirm_password" class="input" label="确认新密码">
+      <el-form-item prop="new_confirm_password" class="input" :label="$t('确认新密码')">
         <el-input type="password" v-model="params.new_confirm_password" auto-complete="off" :placeholder="this.$t('请再次输入新密码')"></el-input>
       </el-form-item>
       <el-form-item class="submit" label-width="100px">
