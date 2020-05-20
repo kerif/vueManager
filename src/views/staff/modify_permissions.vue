@@ -50,7 +50,7 @@ export default {
               id: `${item.id}-1`
             }
           })
-          console.log(this.permissionMenu)
+          console.log(this.permissionMenu, 'permissionMenu')
         } else {
           this.$message.error(res.msg)
         }

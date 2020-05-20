@@ -5,12 +5,12 @@
     <el-row class="container-center" :gutter="20">
       <!-- 客户ID -->
       <el-col :span="9">
-        <span class="leftWidth">{{$t('客户信息')}}客户ID</span>
+        <span class="leftWidth">{{$t('客户ID')}}</span>
         <span>{{form.user && form.user.id}}</span>
       </el-col>
       <!-- 客户昵称 -->
         <el-col :span="9" :offset="1">
-         <span class="leftWidth">{{$t('客户信息')}}客户昵称</span>
+         <span class="leftWidth">{{$t('客户昵称')}}</span>
          <span>{{form.user && form.user.name}}</span>
       </el-col>
     </el-row>

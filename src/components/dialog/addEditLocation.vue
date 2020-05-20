@@ -7,7 +7,7 @@
   <el-form ref="form" :model="location" label-width="140px">
     <el-row :gutter="20">
       <el-col :span="12">
-        <el-form-item label="*区域编号" v-if="this.state === 'edit'">
+        <el-form-item :label="$t('*区域编号')" v-if="this.state === 'edit'">
           <el-input v-model="location.number" disabled :placeholder="$t('请输入区域编号')"></el-input>
         </el-form-item>
          <el-form-item :label="$t('*区域编号')" v-else>
@@ -25,7 +25,7 @@
                 <el-input class="right-unit" v-model="location.row"
                 :placeholder="$t('请输入')" @blur="changeRow"></el-input>*{{$t('层')}}
         </div>
-        <el-form-item :label="$('仓库数量')">
+        <el-form-item :label="$t('仓库数量')">
           <el-input v-model="qty" disabled></el-input>
         </el-form-item>
       </el-col>
