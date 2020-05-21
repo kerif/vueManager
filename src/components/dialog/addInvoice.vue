@@ -19,7 +19,7 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
         label-position="top">
             <!-- 员工组中文名 -->
-                <el-form-item :label="$('目的地')" prop="country_id">
+                <el-form-item :label="$t('目的地')" prop="country_id">
                     <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择目的地')"
                     filterable>
                     <el-option
