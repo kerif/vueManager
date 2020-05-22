@@ -233,7 +233,7 @@ export default [
               level: 3,
               group: '员工',
               name: '修改权限',
-              parent: '/staff/stafflist'
+              parent: '/staff/staffgrouplist'
             }
           }
         ]
