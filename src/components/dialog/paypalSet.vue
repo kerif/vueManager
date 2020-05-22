@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('配置')" class="dialog-config" width="50%"
+  <el-dialog :visible.sync="show" :title="$t('配置')" class="dialog-paypal" width="50%"
   @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
@@ -18,6 +18,9 @@
         </el-form-item>
         <el-form-item label="Secret">
             <el-input :placeholder="$t('请输入Secret')" v-model="ruleForm.secret"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('账号')">
+            <el-input :placeholder="$t('请输入账号')" v-model="ruleForm.account"></el-input>
         </el-form-item>
         <!-- <el-form-item :label="$t('通信安全私钥证书')">
             <el-input :placeholder="$t('请输入通信安全私钥证书')" v-model="ruleForm.key_path"></el-input>
@@ -44,7 +47,8 @@ export default {
       ruleForm: {
         sandbox: 0,
         client_id: '',
-        secret: ''
+        secret: '',
+        account: ''
       },
       positionData: [
         {
@@ -69,6 +73,7 @@ export default {
           this.ruleForm.sandbox = res.data.sandbox
           this.ruleForm.client_id = res.data.client_id
           this.ruleForm.secret = res.data.secret
+          this.ruleForm.account = res.data.account
         }
       })
     },
@@ -105,6 +110,7 @@ export default {
       this.ruleForm.client_id = ''
       this.ruleForm.secret = ''
       this.ruleForm.sandbox = ''
+      this.ruleForm.account = ''
     },
     // 上传商户 key_path 文件
     // uploadKeyFile (file) {
@@ -126,7 +132,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.dialog-config {
+.dialog-paypal {
   .el-dialog__body {
      padding: 30px 50px;
     }
@@ -134,7 +140,7 @@ export default {
     width: 150px;
   }
   .el-input {
-    width: 70%;
+    // width: 70%;
   }
   .el-textarea__inner {
     width: 70%;

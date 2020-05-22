@@ -3,7 +3,7 @@
       <el-row>
         <el-col :span="12">
           <el-tree
-            :data="permissionMenu"
+            :data="ViewPermissionMenu"
             show-checkbox
             node-key="id"
             class="tree"
@@ -39,6 +39,21 @@ export default {
       this.getList()
     }
   },
+  computed: {
+    ViewPermissionMenu () {
+      return this.permissionMenu.map(item => {
+        return {
+          ...item,
+          child: item.child.map(item => ({ ...item, name: this.$t(item.name) })),
+          name: this.$t(item.name),
+          id: `${item.id}-1`
+        }
+      })
+    },
+    defaultChecked () {
+      return getCheckedChild(this.permissionMenu)
+    }
+  },
   methods: {
     getList () {
       this.$request.getPermissions(this.$route.params.id).then(res => {
@@ -47,6 +62,8 @@ export default {
           this.permissionMenu = res.data.map(item => {
             return {
               ...item,
+              child: item.child.map(item => ({ ...item, name: item.name })),
+              name: item.name,
               id: `${item.id}-1`
             }
           })
@@ -85,12 +102,6 @@ export default {
           console.log(this.defaultShowNodes, 'this.defaultShowNodes')
         })
       }
-    }
-  },
-  computed: {
-    defaultChecked () {
-      console.log(getCheckedChild(this.permissionMenu))
-      return getCheckedChild(this.permissionMenu)
     }
   }
 }

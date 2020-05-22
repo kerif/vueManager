@@ -1,3 +1,5 @@
+import $t from './language'
+
 export const formatWeek = (value) => {
   if (!value) return
   let date = new Date(value)
@@ -38,6 +40,7 @@ export const formatMonth = (value) => {
 export const getCheckedChild = (arr) => {
   let ret = []
   recArr(arr, ret)
+  console.log('arr', ret)
   return ret
 }
 
@@ -45,7 +48,7 @@ function recArr (arr, ret) {
   for (let i = 0; i < arr.length; i++) {
     const element = arr[i]
     if (element.child) {
-      recArr(element.child, ret)
+      recArr(element.child.map(item => ({ ...item, name: $t(item.name) })), ret)
     } else if (element.enabled) {
       ret.push(element.id)
     }
