@@ -681,6 +681,9 @@ exports.uploadFiles = (params) => {
 exports.getWechat = () => {
   return $form.get('payments/wechat')
 }
+exports.updateWechat = (params) => {
+  return $form.put('payments/wechat', params)
+}
 // 获取paypal支付
 exports.getPaypal = () => {
   return $form.get('payments/paypal')
