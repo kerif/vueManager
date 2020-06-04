@@ -60,56 +60,104 @@
           <el-col :span="10">
             <el-input v-model="form.reference_time" :placeholder="$t('例：5-12工作日/日')"></el-input>
           </el-col>
-          <!-- <el-col :span="4">
-            <el-input v-model="referenceTime.minTime" placeholder="最小天数"></el-input>
-          </el-col>
-          <el-col :span="4">
-            <el-input v-model="referenceTime.maxTime" placeholder="最大天数" class="max-time"></el-input>
-          </el-col>
-          <el-col :span="4">
-            <el-select class="select-box" v-model="referenceTime.symbol">
-              <el-option label="工作日" value="工作日"></el-option>
-              <el-option label="日" value="日"></el-option>
+        </el-row>
+      </el-form-item>
+      <!-- 计费价格模式 -->
+      <el-form-item>
+        <div>{{$t('*计费价格模式')}}</div>
+        <el-row>
+          <el-col :span="10">
+            <el-select
+              v-model="form.mode"
+              filterable
+              class="country-select"
+              :placeholder="$t('请选择')">
+              <el-option
+                v-for="item in modeData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
             </el-select>
-          </el-col> -->
-        </el-row>
-      </el-form-item>
-      <el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="10">
-            <div>{{$t('*首重') + this.localization.weight_unit}}</div>
-            <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
-          </el-col>
-          <el-col :span="10">
-            <div>{{$t('*首费') + this.localization.currency_unit}}</div>
-            <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="10">
-            <div>{{$t('*续重') + this.localization.weight_unit}}</div>
-            <el-input v-model="form.next_weight" :placeholder="$t('请输入内容')"></el-input>
+      <!-- 首重续重模式 -->
+      <div v-if="form.mode === 1">
+        <el-form-item>
+          <el-row :gutter="10">
+            <el-col :span="10">
+              <div>{{$t('*首重') + this.localization.weight_unit}}</div>
+              <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+            <el-col :span="10">
+              <div>{{$t('*首费') + this.localization.currency_unit}}</div>
+              <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item>
+          <el-row :gutter="10">
+            <el-col :span="10">
+              <div>{{$t('*续重') + this.localization.weight_unit}}</div>
+              <el-input v-model="form.next_weight" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+            <el-col :span="10">
+              <div>{{$t('*续费') + this.localization.currency_unit}}</div>
+              <el-input v-model="form.next_money" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item>
+          <el-row :gutter="10">
+            <el-col :span="10">
+              <div>{{$t('*最小重量') + this.localization.weight_unit}}</div>
+              <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+            <el-col :span="10">
+              <div>{{$t('*最大重量') + this.localization.weight_unit}}</div>
+              <el-input v-model="form.max_weight" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </div>
+      <!-- 阶梯价格模式 -->
+      <div v-if="form.mode === 2">
+        <el-form-item>
+          <el-col :span="14">
+          <div class="add-row">
+            <el-button @click="addRow" class="btn-deep-purple">{{$t('新增')}}</el-button>
+          </div>
+            <el-table :data="form.price_grade" style="width: 100%" border>
+               <el-table-column :label="$t('起始重量') + this.localization.weight_unit">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.start"></el-input>
+                  </template>
+                  </el-table-column>
+                  <el-table-column :label="'*' + $t('截止重量') + this.localization.weight_unit">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.end"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column :label="$t('成本价格') + this.localization.currency_unit">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.cost_price"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column :label="$t('销售价格') + this.localization.currency_unit">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.sale_price"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column :label="$t('操作')">
+                    <template slot-scope="scope">
+                      <el-button @click.native.prevent="deleteRow(scope.$index, form.price_grade)" class="btn-light-red">{{$t('移除')}}</el-button>
+                  </template>
+                </el-table-column>
+            </el-table>
           </el-col>
-          <el-col :span="10">
-            <div>{{$t('*续费') + this.localization.currency_unit}}</div>
-            <el-input v-model="form.next_money" :placeholder="$t('请输入内容')"></el-input>
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="10">
-            <div>{{$t('*最小重量') + this.localization.weight_unit}}</div>
-            <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
-          </el-col>
-           <el-col :span="10">
-             <div>{{$t('*最大重量') + this.localization.weight_unit}}</div>
-            <el-input v-model="form.max_weight" :placeholder="$t('请输入内容')"></el-input>
-          </el-col>
-        </el-row>
-      </el-form-item>
+        </el-form-item>
+      </div>
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
@@ -288,13 +336,15 @@ export default {
         has_factor: '',
         min_weight: '',
         reference_time: '',
+        mode: '',
         types: [],
-        is_great_value: '',
+        is_great_value: 0,
         icon: '',
         need_id_card: '',
         remark: '',
         clearance_code_remark: '',
-        need_clearance_code: 0
+        need_clearance_code: 0,
+        price_grade: []
       },
       referenceTime: {
         minTime: '',
@@ -303,6 +353,16 @@ export default {
       },
       value: [],
       options: [],
+      modeData: [
+        {
+          id: 1,
+          name: '首重续重模式'
+        },
+        {
+          id: 2,
+          name: '阶梯价格模式'
+        }
+      ],
       iconList: [],
       warehouseList: [], // 获取全部仓库
       typeList: [],
@@ -310,7 +370,8 @@ export default {
       warehouseIds: [], // 保存支持仓库的id
       imgVisible: false,
       imgSrc: '',
-      icon: {}
+      icon: {},
+      itemArr: {}
     }
   },
   created () {
@@ -391,7 +452,28 @@ export default {
         this.warehouseList = res.data
       })
     },
+    // 新增行
+    addRow () {
+      console.log(this.form.price_grade, 'this.form.price_grade')
+      this.form.price_grade.push({
+        start: '',
+        end: '',
+        cost_price: '',
+        sale_price: ''
+      })
+    },
+    deleteRow (index, rows) {
+      rows.splice(index, 1)
+    },
     saveLine () {
+      console.log(this.form.mode, 'mode')
+      if (this.form.price_grade.length) {
+        this.itemArr = JSON.stringify(this.form.price_grade)
+      }
+      console.log(this.itemArr, 'this.itemArr')
+      if (this.form.mode === 2 && this.itemArr === '') {
+        this.$message.error('不能为空')
+      }
       console.log(Number(this.form.has_factor), 'has_factor')
       if (this.form.name === '') {
         return this.$message.error(this.$t('请输入线路名称'))
@@ -399,17 +481,17 @@ export default {
         return this.$message.error(this.$t('请选择支持仓库'))
       } else if (this.form.countries === '') {
         return this.$message.error(this.$t('请选择支持国家或地区'))
-      } else if (this.form.first_weight === '') {
+      } else if (this.form.mode === 1 && this.form.first_weight === '') {
         return this.$message.error(this.$t('请输入首重'))
-      } else if (this.form.first_money === '') {
+      } else if (this.form.mode === 1 && this.form.first_money === '') {
         return this.$message.error(this.$t('请输入首费'))
-      } else if (this.form.next_weight === '') {
+      } else if (this.form.mode === 1 && this.form.next_weight === '') {
         return this.$message.error(this.$t('请输入续重'))
-      } else if (this.form.next_money === '') {
+      } else if (this.form.mode === 1 && this.form.next_money === '') {
         return this.$message.error(this.$t('请输入续费'))
-      } else if (this.form.min_weight === '') {
+      } else if (this.form.mode === 1 && this.form.min_weight === '') {
         return this.$message.error(this.$t('请输入最小重量'))
-      } else if (this.form.max_weight === '') {
+      } else if (this.form.mode === 1 && this.form.max_weight === '') {
         return this.$message.error(this.$t('请输入最大重量'))
       } else if (this.form.factor === '') {
         return this.$message.error(this.$t('请输入体积系数'))
@@ -421,6 +503,7 @@ export default {
       if (this.$route.params.id) { // 编辑状态
         this.$request.saveEditLine(this.$route.params.id, {
           ...this.form,
+          // price_grade: this.itemArr,
           has_factor: Number(this.form.has_factor)
         }).then(res => {
           if (res.ret) {
@@ -518,6 +601,10 @@ export default {
     .imgDialog{
       width: 50%;
     }
+  }
+  .add-row {
+    margin-bottom: 10px;
+    text-align: right;
   }
 }
 </style>
