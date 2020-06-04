@@ -1266,6 +1266,10 @@ exports.removeOrders = (id) => {
 exports.deleteShip = (id) => {
   return $form.delete(`shipments/${id}`)
 }
+// 取消发货
+exports.cancelShip = (id) => {
+  return $form.put(`shipments/${id}/un-ship`)
+}
 // 货站 仓库自提数据
 exports.getWarehouseSelf = (params) => {
   return $form.get('self-pickup-orders', { params })

@@ -116,6 +116,8 @@
           <el-button class="btn-light-red btn-margin" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">{{$t('删除')}}</el-button>
           <!-- 加入发货单 -->
           <el-button class="btn-blue-green btn-margin" @click="addShip(scope.row.id)">{{$t('加入发货单')}}</el-button>
+          <!-- 取消发货 -->
+          <el-button class="btn-orangey-red btn-margin" v-if="scope.row.status === 1" @click="cancelShip(scope.row.id)">{{$t('取消发货')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -285,6 +287,31 @@ export default {
     addShip (id) {
       dialog({ type: 'joinShip', id: id }, () => {
         this.getList()
+      })
+    },
+    // 取消发货
+    cancelShip (id) {
+      this.$confirm(this.$t('您真的要取消发货吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.cancelShip(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 创建时间
