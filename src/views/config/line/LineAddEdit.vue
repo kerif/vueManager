@@ -124,7 +124,7 @@
       <!-- 阶梯价格模式 -->
       <div v-if="form.mode === 2">
         <el-form-item>
-          <el-col :span="14">
+          <el-col :span="16">
           <div class="add-row">
             <el-button @click="addRow" class="btn-deep-purple">{{$t('新增')}}</el-button>
           </div>
@@ -139,12 +139,12 @@
                       <el-input v-model="scope.row.end"></el-input>
                     </template>
                   </el-table-column>
-                  <el-table-column :label="$t('成本价格') + this.localization.currency_unit">
+                  <el-table-column :label="$t('成本价格') + this.localization.currency_unit + '/' + this.localization.weight_unit">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.cost_price"></el-input>
                     </template>
                   </el-table-column>
-                  <el-table-column :label="$t('销售价格') + this.localization.currency_unit">
+                  <el-table-column :label="$t('销售价格') + this.localization.currency_unit + '/' + this.localization.weight_unit">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.sale_price"></el-input>
                     </template>
