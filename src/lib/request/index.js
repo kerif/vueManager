@@ -920,6 +920,34 @@ exports.getService = (id) => {
 exports.serviceLang = (id, params) => {
   return $form.get(`value-added-services/${id}`, { params })
 }
+// 更多配置 获取发货快递公司
+exports.getExpressValue = (params) => {
+  return $form.get('company-expresses', { params })
+}
+// 更多配置 获取详情 发货快递公司
+exports.getExpressDetails = (id) => {
+  return $form.get(`company-expresses/${id}`)
+}
+// 新增 发货快递公司
+exports.addExpress = (params) => {
+  return $form.post('company-expresses', params)
+}
+// 更新 发货快递公司
+exports.updateExpress = (id, params) => {
+  return $form.put(`company-expresses/${id}`, params)
+}
+// 发货快递公司 启用或关闭
+exports.closeExpress = (id, status) => {
+  return $form.put(`company-expresses/${id}/status/${status}`)
+}
+// 发货快递公司 语言详情
+exports.expressLang = (id, params) => {
+  return $form.get(`company-expresses/${id}`, { params })
+}
+// 发货快递公司 添加或修改语言
+exports.updateExpressLang = (id, params) => {
+  return $form.put(`company-expresses/${id}/translate-data`, params)
+}
 // 订单增值服务 添加或修改语言
 exports.updateServiceLang = (id, params) => {
   return $form.put(`value-added-services/${id}/translate-data`, params)

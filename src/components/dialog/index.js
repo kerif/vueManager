@@ -57,6 +57,8 @@ import bannerList from './bannerAddEdit.vue'
 import bannerLang from './bannerLang.vue'
 import warehouseSelf from './warehouseSelf.vue'
 import paypalSet from './paypalSet.vue'
+import expressEditAdd from './expressAddEdit.vue'
+import expressLang from './expressLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -114,6 +116,8 @@ const BannerListController = Vue.extend(bannerList)
 const BannerLangController = Vue.extend(bannerLang)
 const WarehouseSelfController = Vue.extend(warehouseSelf)
 const PayPalSetController = Vue.extend(paypalSet)
+const ExpressDetailsController = Vue.extend(expressEditAdd)
+const ExpressLangController = Vue.extend(expressLang)
 
 const mixin = {
   data () {
@@ -510,6 +514,20 @@ function initInstance (type) {
     // 更多配置 paypal 支付
     case 'paypalSet':
       instance = new PayPalSetController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 发货快递公司
+    case 'expressEditAdd':
+      instance = new ExpressDetailsController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 发货快递公司 修改语言
+    case 'expressLang':
+      instance = new ExpressLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
