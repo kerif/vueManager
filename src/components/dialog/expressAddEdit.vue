@@ -166,9 +166,12 @@ export default {
     },
     clear () {
       this.ruleForm.name = ''
-      this.ruleForm.remark = ''
+      this.ruleForm.contact_phone = ''
+      this.ruleForm.website = ''
+      this.ruleForm.code = ''
       this.baleImgList = []
       this.ruleForm.logo = []
+      this.state = ''
     },
     init () {
       console.log(this.id, '我是接受id')
