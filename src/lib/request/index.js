@@ -936,6 +936,10 @@ exports.addExpress = (params) => {
 exports.updateExpress = (id, params) => {
   return $form.put(`company-expresses/${id}`, params)
 }
+// 删除 发货快递公司
+exports.deleteExpress = (id) => {
+  return $form.delete(`company-expresses/${id}`)
+}
 // 发货快递公司 启用或关闭
 exports.closeExpress = (id, status) => {
   return $form.put(`company-expresses/${id}/status/${status}`)
