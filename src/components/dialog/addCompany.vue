@@ -100,7 +100,7 @@ export default {
 <style lang="scss" scope>
 .add-company {
   .input-select {
-    width: 60%;
+    width: 40%;
   }
   .el-dialog__header {
     background-color: #0E102A;
@@ -113,7 +113,7 @@ export default {
     color: #FFF;
   }
   .el-select {
-    width: 60%;
+    width: 40%;
   }
   .express-btn {
     margin-left: 10px;
