@@ -25,7 +25,7 @@
         </el-form-item>
         <el-form-item :label="$t('LOGO')" class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+            <img :src="item" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
                 <i class="el-icon-zoom-in" @click="onPreview(item)"></i>

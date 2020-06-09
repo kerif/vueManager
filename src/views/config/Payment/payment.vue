@@ -570,7 +570,7 @@
             </el-table-column>
             <el-table-column label="LOGO">
               <template slot-scope="scope">
-                <span style="cursor:pointer;"
+                <span style="cursor:pointer;" v-if="scope.row.logo"
                   @click.stop="imgSrc=scope.row.logo, imgVisible=true">
                     <img :src="scope.row.logo" style="width:70px; height: 80px;">
                 </span>

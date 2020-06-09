@@ -1,9 +1,10 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('添加物流信息')" class="add-company"
-  width="35%" @close="clear">
+  width="45%" @close="clear">
     <el-form ref="form" :model="company" label-width="140px">
         <el-form-item :label="$t('*转运快递单号：')">
             <el-input v-model="company.sn" class="input-select"></el-input>
+            <el-button @click.native="goExpress" class="express-btn">{{$t('管理发货快递公司')}}</el-button>
         </el-form-item>
         <el-form-item :label="$t('*转运快递公司：')">
             <!-- <el-input v-model="company.company"></el-input> -->
@@ -43,7 +44,9 @@ export default {
         if (res.ret) {
           if (res.data.length) {
             this.companyList = res.data
-            this.company.company = this.companyList[0].code
+            if (this.company.company === '') {
+              this.company.company = this.companyList[0].code
+            }
           }
         }
       })
@@ -78,6 +81,10 @@ export default {
         this.show = false
       })
     },
+    goExpress () {
+      this.show = false
+      this.$router.push({ name: 'payment', query: { activeName: '9' } })
+    },
     clear () {
       this.company.sn = ''
       this.company.company = ''
@@ -90,10 +97,10 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .add-company {
   .input-select {
-    width: 80%;
+    width: 60%;
   }
   .el-dialog__header {
     background-color: #0E102A;
@@ -106,7 +113,10 @@ export default {
     color: #FFF;
   }
   .el-select {
-    width: 80%;
+    width: 60%;
+  }
+  .express-btn {
+    margin-left: 10px;
   }
 }
 </style>
