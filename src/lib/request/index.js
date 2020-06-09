@@ -1271,8 +1271,8 @@ exports.updateOrderPdf = (id) => {
   return $form.get(`orders/${id}/label/pdf`)
 }
 // 订单 修改物流信息 获取转运快递公司
-exports.getCompanies = (params) => {
-  return $form.get(`orders/express-num/${params}/companies`)
+exports.getCompanies = () => {
+  return $form.get(`orders/company-expresses`)
 }
 // 订单 获取单条拣货日志
 exports.getOperate = (id) => {

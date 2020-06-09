@@ -3,16 +3,16 @@
   width="35%" @close="clear">
     <el-form ref="form" :model="company" label-width="140px">
         <el-form-item :label="$t('*转运快递单号：')">
-            <el-input v-model="company.sn" @blur="getCompany" class="input-select"></el-input>
+            <el-input v-model="company.sn" class="input-select"></el-input>
         </el-form-item>
         <el-form-item :label="$t('*转运快递公司：')">
             <!-- <el-input v-model="company.company"></el-input> -->
              <el-select v-model="company.company" clearable filterable
              allow-create default-first-option :placeholder="$t('请选择')">
                 <el-option
-                    v-for="(item, index) in companyList"
-                    :key="index"
-                    :value="item.name"
+                    v-for="item in companyList"
+                    :key="item.id"
+                    :value="item.code"
                     :label="item.name">
                 </el-option>
              </el-select>
@@ -39,18 +39,17 @@ export default {
   methods: {
     // 根据转运快递单号的值拉取相对应的转运快递公司
     getCompany () {
-      if (this.company.sn) {
-        this.$request.getCompanies(this.company.sn).then(res => {
-          if (res.ret) {
-            if (res.data.length) {
-              this.companyList = res.data
-              this.company.company = this.companyList[0].name
-            }
+      this.$request.getCompanies().then(res => {
+        if (res.ret) {
+          if (res.data.length) {
+            this.companyList = res.data
+            this.company.company = this.companyList[0].code
           }
-        })
-      }
+        }
+      })
     },
     confirm () {
+      // console.log(this.company.company, 'this.company.company')
       if (this.company.sn === '') {
         return this.$message.error(this.$t('请输入转运快递单号'))
       } else if (this.company.company === '') {
@@ -84,6 +83,7 @@ export default {
       this.company.company = ''
     },
     init () {
+      this.getCompany()
       this.company.sn = this.logistics_sn
       this.company.company = this.logistics_company
     }
