@@ -356,11 +356,11 @@ export default {
       modeData: [
         {
           id: 1,
-          name: '首重续重模式'
+          name: this.$t('首重续重模式')
         },
         {
           id: 2,
-          name: '阶梯价格模式'
+          name: this.$t('阶梯价格模式')
         }
       ],
       iconList: [],
