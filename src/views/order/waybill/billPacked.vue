@@ -360,7 +360,8 @@ export default {
       express: {
         MaxWeight: '',
         cName: ''
-      }
+      },
+      factor: ''
     }
   },
   created () {
@@ -402,16 +403,20 @@ export default {
       if (length && width && height) {
         this.user.box = this.user.box.map((item, index) => {
           if (index === row.$index) {
-            return { ...item, volume_weight: length * width * height }
+            return { ...item, volume_weight: (length * width * height) / this.factor }
           }
           return item
         })
-        console.log(this.volumeWeight, 'volumeWeight')
+        this.unitVolume()
       }
     },
-    _onTotalWeight (e) {
-      this.user.box.reduce((row, oldRow) => +row.weight + +oldRow.weight)
-      this.user.box.reduce((row, oldRow) => Number(row.weight) + Number(oldRow.weight) || 0)
+    // 计算实际总重量
+    _onTotalWeight (e, arr) {
+      this.TotalWeight = this.user.box.length === 1 ? this.user.box[0].weight : this.user.box.map(item => item.weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
+    },
+    // 计算体积总重量
+    unitVolume (arr) {
+      this.UnitTotalWeight = this.user.box.length === 1 ? this.user.box[0].volume_weight : this.user.box.map(item => item.volume_weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
     },
     savePacked () {
       // this.user.express_line_id = this.form.express_line.id
@@ -467,6 +472,9 @@ export default {
     },
     deleteRow (index, rows) {
       rows.splice(index, 1)
+      this._onTotalWeight()
+      this.unitVolume()
+      console.log(rows, 'rows')
     },
     // 更改线路
     changeLine () {
@@ -485,6 +493,8 @@ export default {
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name
         this.express.MaxWeight = this.form.express_line.max_weight
+        this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
+        console.log(this.factor, 'this.factor')
         this.localization = res.localization
       })
     },

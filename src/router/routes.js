@@ -88,6 +88,10 @@ const Picking = loadonDemand('station/picking')
 const warehouseSelf = loadonDemand('station/warehouseSelf')
 // 仓库自提 订单详情
 const selfDetails = loadonDemand('station/warehouseDetails')
+// 自定义物流
+const logisticsList = loadonDemand('station/logistics')
+// 自定义物流 导入数据
+const importLogistics = loadonDemand('station/importLogistics')
 // 订单 预报包裹列表
 const OrderList = loadonDemand('order/order/OrderList')
 // 订单 无人认领包裹
@@ -558,6 +562,29 @@ export default [
               group: '货站',
               name: '详情',
               parent: '/station/warehouseSelf'
+            }
+          },
+          {
+            path: '/station/logistics',
+            name: 'logistics',
+            component: logisticsList,
+            id: 505,
+            meta: {
+              level: 2,
+              group: '货站',
+              name: '自定义物流'
+            }
+          },
+          {
+            path: '/station/import/logistics',
+            name: 'importLogistics',
+            component: importLogistics,
+            id: 505,
+            meta: {
+              level: 3,
+              group: '货站',
+              name: '批量上传',
+              parent: '/station/logistics'
             }
           }
         ]

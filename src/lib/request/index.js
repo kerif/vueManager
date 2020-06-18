@@ -403,6 +403,10 @@ exports.addLocation = (id, params) => {
 exports.getAllLocation = (id, areaId) => {
   return $form.get(`warehouse-address/${id}/goods-allocation-areas/${areaId}`)
 }
+// 货位 锁定 或 解锁
+exports.lockLocation = (id, areaId, status) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/location/${areaId}/status/${status}`)
+}
 // 删除货位
 exports.deleteLocation = (id, areaId) => {
   return $form.delete(`warehouse-address/${id}/goods-allocation-areas/${areaId}`)
@@ -498,6 +502,10 @@ exports.agentApproved = (id, params) => {
 exports.refusedApproved = (id) => {
   return $form.put(`agent-applications/${id}/refused`)
 }
+// 新增 客户
+exports.addVip = (params) => {
+  return $form.post('users/add-user', params)
+}
 // 代理申请列表 删除
 exports.deleteApproved = (id) => {
   return $form.delete(`agent-applications/${id}`)
@@ -533,6 +541,10 @@ exports.allOrderSn = (id, params) => {
 // 删除预报包裹列表
 exports.deletePackages = (ids) => {
   return $form.put('packages/batch-delete', ids)
+}
+// 批量发送通知
+exports.sendingNotify = (params) => {
+  return $form.post('re-notify', params)
 }
 // 彻底删除 预报包裹
 exports.deleteDiscard = (ids) => {
@@ -1000,6 +1012,22 @@ exports.deleteParcel = (id) => {
 exports.closeParcel = (id, status) => {
   return $form.put(`package-services/${id}/status/${status}`)
 }
+// 更多配置 单号规则
+exports.getRules = (params) => {
+  return $form.get('serial-numbers', { params })
+}
+// 更多配置 单号规则 重新生成
+exports.goResetId = () => {
+  return $form.put(`serial-numbers/re-generate-uid`)
+}
+// 获取单号规则 详细
+exports.getRulesDetails = (id) => {
+  return $form.get(`serial-numbers/${id}`)
+}
+// 单号规则 更新详细
+exports.updateRules = (id, params) => {
+  return $form.put(`serial-numbers/${id}`, params)
+}
 // 更多配置 其余配置 获取
 exports.getWebsite = () => {
   return $form.get('website-settings')
@@ -1258,6 +1286,10 @@ exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`
 exports.getAdded = () => {
   return $form.get('orders/value-added-services')
 }
+// 订单列表 导出excel
+exports.uploadUserExcel = () => {
+  return $form.get('users/user-export')
+}
 // 订单列表 获取订单统计数据
 exports.getCounts = () => {
   return $form.get('orders/order-counts')
@@ -1301,6 +1333,34 @@ exports.deleteShip = (id) => {
 // 取消发货
 exports.cancelShip = (id) => {
   return $form.put(`shipments/${id}/un-ship`)
+}
+// 货站 自定义物流
+exports.getCustomLogistics = (params) => {
+  return $form.get('custom-logistics', { params })
+}
+// 货站 上传数据
+exports.getCustomerData = (name) => {
+  return $form.post('custom-logistics/import', name)
+}
+// 货站 导入数据 更新
+exports.saveLgExcel = (params) => {
+  return $json.post('custom-logistics/import-insert', params)
+}
+// 货站 导入数据 下载excel模版
+exports.uploadLgExcel = (type) => {
+  return $form.get('custom-logistics/template', { type })
+}
+// 货站 获取轨迹
+exports.getTracking = (id) => {
+  return $form.get(`custom-logistics/${id}/details`)
+}
+// 货站 更新轨迹
+exports.updateTracking = (id, params) => {
+  return $form.put(`custom-logistics/${id}`, params)
+}
+// 货站 删除
+exports.deleteCustomLogistics = (id) => {
+  return $form.delete(`custom-logistics/${id}`)
 }
 // 货站 仓库自提数据
 exports.getWarehouseSelf = (params) => {

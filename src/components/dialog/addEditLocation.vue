@@ -30,6 +30,13 @@
         </el-form-item>
       </el-col>
     </el-row>
+    <el-row :gutter="20">
+      <el-col :span="10">
+        <el-form-item>
+      <el-checkbox v-model="location.reusable">{{$t('允许同一个用户使用相同货位')}}</el-checkbox>
+        </el-form-item>
+      </el-col>
+    </el-row>
     <div class="bottom-btn">
       <el-button type="primary" @click="confirm">{{$t('生成货位')}}</el-button>
     </div>
@@ -57,7 +64,7 @@
       </el-table-column>
       <el-table-column
         prop="code"
-        :label="$('货位编码')">
+        :label="$t('货位编码')">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
@@ -65,6 +72,13 @@
         <template slot-scope="scope">
           <span v-if="scope.row.is_used === 0">{{$t('未使用')}}</span>
           <span v-if="scope.row.is_used === 1">{{$t('已使用')}}</span>
+          <span v-if="scope.row.is_used === 2">{{$t('已锁定')}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作')">
+        <template slot-scope="scope">
+          <el-button class="btn-light-red" v-if="scope.row.is_used === 0 || scope.row.is_used === 1" @click="lockLocation(scope.row.id, 1)">{{$t('锁定')}}</el-button>
+          <el-button class="btn-dark-green" v-if="scope.row.is_used === 2" @click="lockLocation(scope.row.id, 0)">{{$t('解锁')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,7 +101,8 @@ export default {
       location: {
         row: '',
         column: '',
-        number: ''
+        number: '',
+        reusable: ''
       },
       qty: '',
       areaId: '',
@@ -120,6 +135,7 @@ export default {
         if (res.ret) {
           this.location = res.data
           this.qty = res.data.column * res.data.row
+          this.location.reusable = Boolean(res.data.reusable)
         } else {
           return this.$message.error(res.msg)
         }
@@ -130,6 +146,24 @@ export default {
         this.qty = this.location.column * this.location.row
       }
     },
+    // 解锁 或 锁定
+    lockLocation (id, val) {
+      this.$request.lockLocation(1, id, val).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     confirm () {
       if (!this.location.number) {
         return this.$message.error(this.$t('请输入区域编号'))
@@ -139,7 +173,10 @@ export default {
         return this.$message.error(this.$t('请输入层数'))
       }
       if (this.state === 'add') {
-        this.$request.addLocation(this.id, this.location).then(res => {
+        this.$request.addLocation(this.id, {
+          ...this.location,
+          reusable: Number(this.location.reusable)
+        }).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -157,7 +194,10 @@ export default {
           this.show = false
         })
       } else {
-        this.$request.updateAllLocation(this.id, this.areaId, this.location).then(res => {
+        this.$request.updateAllLocation(this.id, this.areaId, {
+          ...this.location,
+          reusable: Number(this.location.reusable)
+        }).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -197,6 +237,7 @@ export default {
       this.qty = ''
       this.location.number = ''
       this.warehouseName = ''
+      this.location.reusable = ''
     }
   }
 }

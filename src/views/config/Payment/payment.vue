@@ -614,6 +614,41 @@
             </el-table>
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
         </el-tab-pane>
+        <!-- 单号规则 -->
+        <el-tab-pane :label="$t('单号规则')" name="10">
+          <el-table :data="rulesData" v-loading="tableLoading" class="data-list"
+            border stripe>
+            <el-table-column type="index"></el-table-column>
+            <!-- 状态 -->
+            <el-table-column :label="$t('项目名称')">
+              <template slot-scope="scope">
+                <span v-if="scope.row.type === 1">{{$t('会员编号')}}</span>
+                <span v-if="scope.row.type === 2">{{$t('订单编号')}}</span>
+              </template>
+            </el-table-column>
+            <!-- 状态 -->
+            <el-table-column :label="$t('状态')">
+              <template slot-scope="scope">
+                <span v-if="scope.row.status === 1">{{$t('启用')}}</span>
+              </template>
+            </el-table-column>
+            <!-- 前缀字符 -->
+             <el-table-column prop="prefix" :label="$t('前缀字符')"></el-table-column>
+             <!-- 单号长度 -->
+             <el-table-column prop="length" :label="$t('单号长度')"></el-table-column>
+             <!-- 数字增值 -->
+            <el-table-column prop="system" :label="$t('数字增值')"></el-table-column>
+            <el-table-column :label="$t('操作')">
+              <template slot-scope="scope">
+                <!-- 编辑 -->
+                <el-button class="btn-dark-green" @click="editRules(scope.row.id, scope.row.type)">{{$t('编辑')}}</el-button>
+                <!-- 重新生成 -->
+                <el-button class="btn-light-red delete-btn" @click="regenerate(scope.row.id)" v-if="scope.row.type === 1">{{$t('重新生成')}}</el-button>
+              </template>
+              </el-table-column>
+            </el-table>
+            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        </el-tab-pane>
       </el-tabs>
       <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -668,6 +703,7 @@ export default {
           status: true
         }
       ],
+      rulesData: [],
       tableLoading: false,
       imgVisible: false,
       imgSrc: '',
@@ -805,6 +841,8 @@ export default {
       this.getType()
     } else if (this.activeName === '9') {
       this.getExpress()
+    } else if (this.activeName === '10') {
+      this.getRules()
     }
   },
   methods: {
@@ -995,6 +1033,30 @@ export default {
               type: 'success'
             })
             this.getEmail()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    regenerate () {
+      this.$confirm(this.$t('确定要重新生成会员编号吗？原来的编号将会被重置，可能会部分影响到包裹订单出入库'), this.$t('重新生成'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.goResetId().then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getRules()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -1535,6 +1597,8 @@ export default {
         this.getCategories()
       } else if (this.activeName === '9') {
         this.getExpress()
+      } else if (this.activeName === '10') {
+        this.getRules()
       }
     },
     // 获取订单增值服务
@@ -1579,6 +1643,24 @@ export default {
             type: 'error'
           })
         }
+      })
+    },
+    // 获取单号规则数据
+    getRules () {
+      this.tableLoading = true
+      this.$request.getRules({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.rulesData = res.data
+        }
+      })
+    },
+    editRules (id, name) {
+      dialog({ type: 'rulesEdit', id: id, name: name }, () => {
+        this.getRules()
       })
     },
     // 获取包裹增值服务
@@ -1631,6 +1713,9 @@ export default {
       } else if (this.activeName === '9') {
         this.page_params.page = 1
         this.getExpress()
+      } else if (this.activeName === '10') {
+        this.page_params.page = 1
+        this.getRules()
       }
       this.page_params.handleQueryChange('activeName', this.activeName)
     },

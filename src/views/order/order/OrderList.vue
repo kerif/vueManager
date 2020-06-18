@@ -133,8 +133,13 @@
       <el-table-column :label="$t('规格(长宽高cm)')" prop="dimension"
       v-if="activeName === '2'" width="120px"></el-table-column>
       <!-- 存放货位 -->
-      <el-table-column :label="$t('存放货位')" prop="location"
-      v-if="activeName === '2'" width="120px"></el-table-column>
+      <el-table-column :label="$t('存放货位')"
+      v-if="activeName === '2'" width="120px">
+        <template slot-scope="scope">
+          <span>{{scope.row.location}}</span>
+          <span v-if="scope.row.location_suffix !== ''">_{{scope.row.location_suffix}}</span>
+        </template>
+      </el-table-column>
       <!-- 称重时间 -->
       <el-table-column :label="$t('入库时间')" v-if="activeName === '2'" prop="in_storage_at"></el-table-column>
       <!-- 弃件时间 -->
@@ -162,12 +167,19 @@
       </el-table-column>
       <template slot="append" v-if="activeName === '1' || activeName === '2' || activeName === '6'">
         <div class="append-box">
+          <!-- 删除 -->
           <el-button size="small" class="btn-light-red" @click="deleteData"
           v-if="activeName === '1'">{{$t('删除')}}</el-button>
+          <!-- 弃件 -->
           <el-button size="small" class="btn-blue-green" @click="discardPackage"
            v-if="this.activeName === '1' || this.activeName === '2'">{{$t('弃件')}}</el-button>
+           <!-- 批量发送通知 -->
+           <el-button size="small" class="btn-purple" @click="goNotify"
+           v-if="this.activeName === '2'">{{$t('批量发送通知')}}</el-button>
+           <!-- 恢复 -->
            <el-button size="small" class="btn-deep-purple" v-if="activeName === '6'"
            @click="restore">{{$t('恢复')}}</el-button>
+           <!-- 彻底删除 -->
            <el-button size="small" class="btn-light-red"
             v-if="activeName === '6'" @click="deleteDiscard">{{$t('彻底删除')}}</el-button>
         </div>
@@ -313,6 +325,37 @@ export default {
     goExpress (expressNum) {
       console.log(expressNum)
       window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
+    },
+    // 批量发送通知
+    goNotify () {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        console.log(this.deleteNum, '2222')
+        this.$request.sendingNotify({
+          ids: this.deleteNum,
+          type: 1
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
     },
     // 删除
     deleteData () {

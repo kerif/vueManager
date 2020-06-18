@@ -59,6 +59,8 @@ import warehouseSelf from './warehouseSelf.vue'
 import paypalSet from './paypalSet.vue'
 import expressEditAdd from './expressAddEdit.vue'
 import expressLang from './expressLang.vue'
+import rulesEdit from './rulesEdit.vue'
+import vipAdd from './vipAdd.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -118,6 +120,8 @@ const WarehouseSelfController = Vue.extend(warehouseSelf)
 const PayPalSetController = Vue.extend(paypalSet)
 const ExpressDetailsController = Vue.extend(expressEditAdd)
 const ExpressLangController = Vue.extend(expressLang)
+const RulesEditController = Vue.extend(rulesEdit)
+const VipAddController = Vue.extend(vipAdd)
 
 const mixin = {
   data () {
@@ -528,6 +532,20 @@ function initInstance (type) {
     // 发货快递公司 修改语言
     case 'expressLang':
       instance = new ExpressLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 单号规则 编辑
+    case 'rulesEdit':
+      instance = new RulesEditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 客户 新增
+    case 'vipAdd':
+      instance = new VipAddController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

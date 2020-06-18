@@ -86,7 +86,7 @@
       v-loading="tableLoading"
       :data="oderData" @selection-change="onSelectChange">
       <el-table-column type="selection" width="55" align="center"
-      v-if="activeName === '3'"></el-table-column>
+      v-if="activeName === '2'|| activeName === '3' || activeName === '4'"></el-table-column>
       <el-table-column v-else type="index" width="50"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
@@ -195,12 +195,15 @@
           v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">{{$t('取消')}}</el-button>
         </template>
       </el-table-column>
-      <template slot="append" v-if="activeName === '3'">
+      <template slot="append" v-if="activeName === '3' || activeName === '2' || activeName === '4'">
         <div class="append-box">
           <!-- 删除 -->
           <!-- <el-button size="small">删除</el-button> -->
           <!-- 加入发货单 -->
           <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
+            <!-- 批量发送通知 -->
+           <el-button size="small" class="btn-purple" @click="goNotify"
+           v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -331,6 +334,37 @@ export default {
     getAgentData () {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
+      })
+    },
+    // 批量发送通知
+    goNotify () {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        console.log(this.selectIDs, '2222')
+        this.$request.sendingNotify({
+          ids: this.selectIDs,
+          type: this.activeName === '2' ? 2 : 3
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     // 打印标签

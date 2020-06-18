@@ -5,6 +5,10 @@
       <search-select :selectArr="clientGroupList"
           v-model="page_params.group" @search="onGroupChange">
         </search-select>
+        <div class="import-list">
+          <el-button @click="uploadList">{{$t('导出Excel')}}</el-button>
+          <el-button @click="addUser">{{$t('添加用户')}}</el-button>
+        </div>
       </search-group>
     </div>
     <!-- <div class="select-box">
@@ -21,6 +25,7 @@
         <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('客户编号')" prop="uid"></el-table-column>
       <el-table-column :label="$t('邮箱')" prop="email"></el-table-column>
       <el-table-column :label="$t('手机号码')" prop="phone"></el-table-column>
       <el-table-column prop="balance" :label="$t('余额') + this.localization.currency_unit"></el-table-column>
@@ -62,7 +67,8 @@ export default {
       clientGroupList: [],
       page_params: {
         group: ''
-      }
+      },
+      urlExcel: ''
     }
   },
   mixins: [pagination],
@@ -118,6 +124,27 @@ export default {
         this.getList()
       })
     },
+    // 导出清单
+    uploadList () {
+      this.$request.uploadUserExcel().then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          // window.location.href = this.urlExcel
+          window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     invite (id) {
       dialog({ type: 'inviteList',
         state: 'invite',
@@ -130,6 +157,12 @@ export default {
         state: 'voucher',
         id
       }, () => {
+        this.getList()
+      })
+    },
+    // 添加用户
+    addUser () {
+      dialog({ type: 'vipAdd' }, () => {
         this.getList()
       })
     },
@@ -204,6 +237,11 @@ export default {
   }
   .optionBtn {
     margin: 3px;
+  }
+  .import-list {
+    display: inline-block;
+    margin-left: 10px;
+    // text-align: right;
   }
 }
 </style>
