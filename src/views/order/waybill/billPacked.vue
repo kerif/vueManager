@@ -227,8 +227,8 @@
                   </template>
                 </el-table-column>
               </el-table>
-              <p>{{$t('实际总重量')}}：{{TotalWeight}}</p>
-              <p>{{$t('体积总重量')}}：{{UnitTotalWeight}}</p>
+              <p>{{$t('实际总重量')}}{{localization.weight_unit}}：{{TotalWeight}}</p>
+              <p>{{$t('体积总重量')}}{{localization.weight_unit}}：{{UnitTotalWeight}}</p>
             </el-col>
           </el-form-item>
         </el-row>
@@ -590,12 +590,12 @@ export default {
     width: 33% !important;
   }
   .updateChe {
-    .el-form-item__content {
-      margin-left: 0 !important;
-    }
-    .el-form-item__label {
-      width: 500px !important;
-    }
+    // .el-form-item__content {
+    //   margin-left: 0 !important;
+    // }
+    // .el-form-item__label {
+    //   width: 500px !important;
+    // }
   }
   .upload_ball {
     text-align: center;

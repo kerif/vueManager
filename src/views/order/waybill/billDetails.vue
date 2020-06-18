@@ -184,12 +184,6 @@
           <el-table-column :label="$t('应付金额') + this.localization.currency_unit" prop="order_amount"></el-table-column>
           <el-table-column :label="$t('抵用券金额') + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
           <el-table-column :label="$t('实际支付') + this.localization.currency_unit" prop="pay_amount"></el-table-column>
-          <!-- 支付流水号 -->
-          <!-- <el-table-column label="支付流水号">
-            <template slot-scope="scope">
-              <span @click="goSerial(scope.row.serial_number)" class="chooseOrder">{{scope.row.serial_number}}</span>
-            </template>
-          </el-table-column> -->
           <el-table-column :label="$t('支付时间')" prop="paid_at"></el-table-column>
         </el-table>
     </div>
@@ -221,6 +215,19 @@
         </el-table-column>
         <el-table-column :label="$t('货位')" prop="location"></el-table-column>
       </el-table>
+      <!-- 多箱出库详情 -->
+      <div v-if="(this.$route.params.activeName === '2' || this.$route.params.activeName === '3' || this.$route.params.activeName === '4' || this.$route.params.activeName === '5') && this.form.box_type === 2">
+        <h4>{{$t('多箱出库详情')}}</h4>
+          <el-table :data="boxData" class="data-list" border stripe
+           v-loading="tableLoading">
+              <el-table-column type="index" width="50"></el-table-column>
+              <el-table-column :label="$t('包裹实际重量') + this.localization.weight_unit" prop="weight"></el-table-column>
+              <el-table-column :label="$t('长') + this.localization.length_unit" prop="length"></el-table-column>
+              <el-table-column :label="$t('宽') + this.localization.length_unit" prop="width"></el-table-column>
+              <el-table-column :label="$t('高') + this.localization.length_unit" prop="height"></el-table-column>
+              <el-table-column :label="$t('体积重量') + this.localization.weight_unit" prop="volume_weight"></el-table-column>
+          </el-table>
+    </div>
     <div class="bale">
       <div class="bale-left">
         <span>{{$t('打包照片')}}</span>
@@ -273,6 +280,7 @@ export default {
       services: [],
       localization: {},
       paymentData: [],
+      boxData: [],
       imgVisible: false,
       imgSrc: '',
       tableLoading: false
@@ -294,6 +302,7 @@ export default {
         this.services = res.data.services
         this.localization = res.localization
         this.paymentData = [res.data.payment]
+        this.boxData = res.data.box
       })
     },
     copyUrl () {
