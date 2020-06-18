@@ -15,11 +15,11 @@
       <!-- 客户昵称 -->
         <el-table-column
         prop="name"
-        :label="$t(客户昵称)">
+        :label="$t('客户昵称')">
       </el-table-column>
         <el-table-column
         prop="created_at"
-        label="注册时间">
+        :label="$t('注册时间')">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
