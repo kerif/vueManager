@@ -804,6 +804,18 @@ exports.updatePayments = (id, params) => {
 exports.closePayments = (id, status) => {
   return $form.put(`payments/${id}/status/${status}`)
 }
+// 更多配置 获取预设充值金额
+exports.getRechargeAmount = () => {
+  return $form.get('payments/payment/default-amount')
+}
+// 更多配置 新增 预设充值金额
+exports.updateRechargeAmount = (val) => {
+  return $form.post(`payments/payment/default-amount/${val}`)
+}
+// 更多配置 删除 预设充值金额
+exports.deleteRechargeAmount = (id) => {
+  return $form.delete(`payments/payment/default-amount/${id}`)
+}
 // 获取物品属性
 exports.getPackage = () => {
   return $form.get('package-props')

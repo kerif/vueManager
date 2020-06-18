@@ -61,6 +61,21 @@
               </template>
             </el-table-column>
           </el-table>
+          <!-- 预设充值金额 -->
+          <div class="select-box">
+          <h4>{{$t('预设充值金额')}}</h4>
+          <add-btn @click.native="addRecharge">{{$t('新增')}}</add-btn>
+        </div>
+          <el-table :data="rechargeAmount" v-loading="tableLoading" class="data-list"
+          border stripe>
+            <el-table-column type="index"></el-table-column>
+            <el-table-column :label="$t('金额')" prop="amount"></el-table-column>
+            <el-table-column :label="$t('操作')">
+              <template slot-scope="scope">
+                <el-button class="btn-light-red" @click="deleteRecharge(scope.row.id)">{{$t('删除')}}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
         <!-- 物流跟踪配置 -->
       <el-tab-pane :label="$t('服务配置')" name="2">
@@ -655,6 +670,13 @@
         <img :src="imgSrc" class="imgDialog">
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="rechargeDialog" size="small" :title="$t('预设充值金额')" @close="clear">
+      <el-input v-model="amount"></el-input>
+      <div slot="footer">
+        <el-button @click="rechargeDialog = false">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="submitRecharge">{{$t('确定')}}</el-button>
+      </div>
+  </el-dialog>
   </div>
 </template>
 
@@ -688,6 +710,8 @@ export default {
           enabled: true
         }
       ],
+      rechargeAmount: [],
+      amount: '',
       valueData: [
         {
           enabled: true
@@ -765,6 +789,7 @@ export default {
       serviceCode: '',
       packageCode: '',
       emailCode: '',
+      rechargeDialog: false,
       categoriesCode: '',
       page_params: {
         type: ''
@@ -818,6 +843,7 @@ export default {
     if (this.activeName === '1') {
       this.getWechat()
       this.getPayment()
+      this.getRecharge()
       // this.getLanguageList()
     } else if (this.activeName === '2') {
       this.getLogisticsData()
@@ -1007,6 +1033,50 @@ export default {
     addTransfer () {
       dialog({ type: 'addTransfer', state: 'add' }, () => {
         this.getPayment()
+      })
+    },
+    clear () {
+      this.amount = ''
+    },
+    submitRecharge () {
+      this.$request.updateRechargeAmount(this.amount).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.rechargeDialog = false
+          this.getRecharge()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 新增 预设充值金额
+    addRecharge () {
+      this.rechargeDialog = true
+    },
+    deleteRecharge (id) {
+      this.$request.deleteRechargeAmount(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getRecharge()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 编辑邮件模版
@@ -1496,6 +1566,21 @@ export default {
         }
       })
     },
+    // 获取预设充值金额
+    getRecharge () {
+      this.tableLoading = true
+      this.$request.getRechargeAmount().then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.rechargeAmount = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 获取邮件模版
     getEmail () {
       this.tableLoading = true
@@ -1689,6 +1774,7 @@ export default {
       if (this.activeName === '1') {
         this.getWechat()
         this.getPayment()
+        this.getRecharge()
         this.getLanguageList()
       } else if (this.activeName === '2') {
         this.getLogisticsData()
