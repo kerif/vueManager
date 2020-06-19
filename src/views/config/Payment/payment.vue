@@ -644,6 +644,7 @@
             <!-- 状态 -->
             <el-table-column :label="$t('状态')">
               <template slot-scope="scope">
+                <span v-if="scope.row.status === 0">{{$t('关闭')}}</span>
                 <span v-if="scope.row.status === 1">{{$t('启用')}}</span>
               </template>
             </el-table-column>
