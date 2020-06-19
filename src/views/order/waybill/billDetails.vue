@@ -182,6 +182,12 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('应付金额') + this.localization.currency_unit" prop="order_amount"></el-table-column>
+          <el-table-column :label="$t('计费价格模式')" prop="order_amount">
+            <template slot-scope="scope">
+              <span v-if="scope.row.freight_mode === 1">{{$t('首重续重模式')}}</span>
+              <span v-if="scope.row.freight_mode === 2">{{$t('阶梯价格模式')}}</span>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('抵用券金额') + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
           <el-table-column :label="$t('实际支付') + this.localization.currency_unit" prop="pay_amount"></el-table-column>
           <el-table-column :label="$t('支付时间')" prop="paid_at"></el-table-column>
