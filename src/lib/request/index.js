@@ -940,6 +940,30 @@ exports.addValue = (params) => {
 exports.getService = (id) => {
   return $form.get(`value-added-services/${id}`)
 }
+// 更多配置 获取保险服务列表
+exports.getInsurance = () => {
+  return $form.get('payments/insurance')
+}
+// 更多配置 获取单条 保险服务
+exports.getSingleInsurance = (id) => {
+  return $form.get(`payments/insurance/${id}`)
+}
+// 更多配置 更新 保险服务
+exports.updateInsurance = (id, params) => {
+  return $form.post(`payments/insurance/${id}`, params)
+}
+// 更多配置 保险服务的开关
+exports.changeInsurance = (status) => {
+  return $form.put(`payments/insurance/switch/${status}`)
+}
+// 更多配置 获取国家/地区 列表
+exports.countryLocation = () => {
+  return $form.get('countries')
+}
+// 更多配置 删除国家/地区
+exports.deleteCountryLocation = (id) => {
+  return $form.delete(`countries/${id}`)
+}
 // 订单增值服务 语言详情
 exports.serviceLang = (id, params) => {
   return $form.get(`value-added-services/${id}`, { params })

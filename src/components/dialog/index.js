@@ -61,6 +61,8 @@ import expressEditAdd from './expressAddEdit.vue'
 import expressLang from './expressLang.vue'
 import rulesEdit from './rulesEdit.vue'
 import vipAdd from './vipAdd.vue'
+import insuranceEdit from './insuranceEdit.vue'
+import setCountry from './setCountry.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -122,6 +124,8 @@ const ExpressDetailsController = Vue.extend(expressEditAdd)
 const ExpressLangController = Vue.extend(expressLang)
 const RulesEditController = Vue.extend(rulesEdit)
 const VipAddController = Vue.extend(vipAdd)
+const InsuranceEditController = Vue.extend(insuranceEdit)
+const SetCountryController = Vue.extend(setCountry)
 
 const mixin = {
   data () {
@@ -546,6 +550,20 @@ function initInstance (type) {
     // 客户 新增
     case 'vipAdd':
       instance = new VipAddController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 修改保险服务
+    case 'insuranceEdit':
+      instance = new InsuranceEditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 新增国家地区
+    case 'setCountry':
+      instance = new SetCountryController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -238,6 +238,50 @@
               </el-table-column>
             </el-table>
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+          <!-- 保险服务 -->
+          <div class="select-box">
+            <h4>{{$t('保险服务')}}</h4>&nbsp;&nbsp;&nbsp;
+              <!-- v-model="enabled" -->
+            <el-switch
+              v-model="insuranceEnabled"
+              @change="changeInsurance($event)"
+              :active-value="1"
+              :inactive-value="0"
+              :active-text="$t('开')"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray">
+          </el-switch>
+          </div>
+          <el-table :data="insuranceData" v-loading="tableLoading" class="data-list" v-if="insuranceEnabled === 1"
+          border stripe>
+            <el-table-column type="index"></el-table-column>
+            <el-table-column :label="$t('商品价值')+ this.localization.currency_unit" prop="insurance_proportion"></el-table-column>
+            <el-table-column :label="$t('保价类型')">
+              <template slot-scope="scope">
+                <span v-if="scope.row.insurance_type === 1">{{$t('比例')}}</span>
+                <span v-if="scope.row.insurance_type === 2">{{$t('固定金额')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('保价金额') + this.localization.currency_unit" prop="start"></el-table-column>
+            <el-table-column :label="$t('是否强制购买')">
+              <template slot-scope="scope">
+                <span v-if="scope.row.is_force === 0">{{$t('否')}}</span>
+                <span v-if="scope.row.is_force === 1">{{$t('是')}}</span>
+              </template>
+            </el-table-column>
+            <!-- <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+              <template slot-scope="scope">
+                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+                <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+              </template>
+            </el-table-column> -->
+            <el-table-column :label="$t('操作')">
+              <template slot-scope="scope">
+                <el-button class="btn-dark-green" @click="editInsurance(scope.row.id)">{{$t('编辑')}}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
         <!-- 包裹增值服务 -->
         <el-tab-pane :label="$t('包裹增值服务')" name="5">
@@ -665,6 +709,25 @@
             </el-table>
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
         </el-tab-pane>
+        <!-- 国家地区 -->
+        <el-tab-pane :label="$t('国家地区')" name="11">
+          <div class="select-box">
+            <add-btn @click.native="addCountry">{{$t('添加')}}</add-btn>
+          </div>
+          <el-table :data="countryData" v-loading="tableLoading" class="data-list"
+            border stripe>
+            <el-table-column type="index"></el-table-column>
+            <!-- 前缀字符 -->
+             <el-table-column prop="name" :label="$t('国家/地区')"></el-table-column>
+            <el-table-column :label="$t('操作')">
+              <template slot-scope="scope">
+                <!-- 删除 -->
+                <el-button class="btn-light-red" @click="deleteCountry(scope.row.id)">{{$t('删除')}}</el-button>
+              </template>
+              </el-table-column>
+            </el-table>
+            <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
+        </el-tab-pane>
       </el-tabs>
       <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -718,6 +781,8 @@ export default {
           enabled: true
         }
       ],
+      insuranceEnabled: 0,
+      insuranceData: [],
       parcelData: [
         {
           enabled: true
@@ -729,6 +794,7 @@ export default {
         }
       ],
       rulesData: [],
+      countryData: [],
       tableLoading: false,
       imgVisible: false,
       imgSrc: '',
@@ -870,6 +936,8 @@ export default {
       this.getExpress()
     } else if (this.activeName === '10') {
       this.getRules()
+    } else if (this.activeName === '11') {
+      this.getCountryList()
     }
   },
   methods: {
@@ -1114,6 +1182,31 @@ export default {
         })
       })
     },
+    // 删除国家地区
+    deleteCountry (id) {
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteCountryLocation(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getCountryList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
     regenerate () {
       this.$confirm(this.$t('确定要重新生成会员编号吗？原来的编号将会被重置，可能会部分影响到包裹订单出入库'), this.$t('重新生成'), {
         confirmButtonText: this.$t('确定'),
@@ -1143,6 +1236,13 @@ export default {
       console.log(id, 'id')
       dialog({ type: 'addTransfer', state: 'edit', id: id }, () => {
         this.getPayment()
+      })
+    },
+    // 编辑保险服务
+    editInsurance (id) {
+      console.log(id, 'id')
+      dialog({ type: 'insuranceEdit', id: id }, () => {
+        this.getInsurance()
       })
     },
     // 订单 增加增值服务
@@ -1663,7 +1763,6 @@ export default {
     },
     // 添加商品分类
     addClassify () {
-      console.log('进来了')
       dialog({ type: 'classifyGroup', state: 'add', id: '' }, () => {
         this.getList()
       })
@@ -1677,6 +1776,7 @@ export default {
     getList () {
       if (this.activeName === '4') {
         this.getValue()
+        this.getInsurance()
       } else if (this.activeName === '5') {
         this.getParcel()
       } else if (this.activeName === '7') {
@@ -1706,6 +1806,36 @@ export default {
             message: res.msg,
             type: 'error'
           })
+        }
+      })
+    },
+    // 更改保险服务的开关
+    changeInsurance (val) {
+      console.log(val, 'val')
+      this.$request.changeInsurance(val).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getInsurance()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 获取保险服务
+    getInsurance () {
+      this.tableLoading = true
+      this.$request.getInsurance().then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.insuranceEnabled = res.data.enabled
+          this.insuranceData = res.data.data
         }
       })
     },
@@ -1741,6 +1871,22 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.rulesData = res.data
+        }
+      })
+    },
+    // 添加国家/地区
+    addCountry () {
+      dialog({ type: 'setCountry' }, () => {
+        this.getCountryList()
+      })
+    },
+    // 获取国家/地区数据
+    getCountryList () {
+      this.tableLoading = true
+      this.$request.countryLocation().then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.countryData = res.data
         }
       })
     },
@@ -1803,6 +1949,8 @@ export default {
       } else if (this.activeName === '10') {
         this.page_params.page = 1
         this.getRules()
+      } else if (this.activeName === '11') {
+        this.getCountryList()
       }
       this.page_params.handleQueryChange('activeName', this.activeName)
     },
@@ -2193,6 +2341,9 @@ export default {
   }
   .delete-btn {
     margin: 8px;
+  }
+  .country-sty {
+    text-align: center;
   }
 }
 </style>

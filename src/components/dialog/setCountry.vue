@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('新增国家/地区')" class="add-country-dialog" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('新增国家/地区')" class="set-country-dialog" @close="clear">
     <el-form label-width="80" :model="ruleForm">
       <el-form-item :label="$t('国家/地区：')">
         <el-autocomplete
@@ -9,13 +9,6 @@
           v-model="ruleForm.name">
         </el-autocomplete>
       </el-form-item>
-      <!-- <el-form-item label="英文：">
-        <el-autocomplete
-          :fetch-suggestions="queryENSearch"
-          placeholder="请输入国家英文名"
-          v-model="ruleForm.en_name">
-        </el-autocomplete>
-      </el-form-item> -->
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
@@ -49,23 +42,7 @@ export default {
         callback(list)
       })
     },
-    // queryCNSearch (queryString, cb) {
-    //   let list = this.CNList
-    //   let result = queryString ? list.filter(this.createFilter(queryString)) : list
-    //   cb(result)
-    // },
-    // queryENSearch (queryString, cb) {
-    //   let list = this.ENList
-    //   let result = queryString ? list.filter(this.createFilter(queryString)) : list
-    //   cb(result)
-    // },
-    // createFilter (queryString) {
-    //   return (item) => {
-    //     return (item.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
-    //   }
-    // },
     handleSelect (item) {
-      // this.ruleForm.en_name = item.name
       this.supplierId = item.id
       console.log(this.supplierId, 'this.supplierId')
     },
@@ -94,18 +71,6 @@ export default {
     clear () {
       this.ruleForm.name = ''
     }
-  },
-  computed: {
-    // CNList () {
-    //   return countryList.map(item => {
-    //     return { value: item.cn_name }
-    //   })
-    // },
-    // ENList () {
-    //   return countryList.map(item => {
-    //     return { value: item.en_name }
-    //   })
-    // }
   }
 }
 </script>
@@ -113,7 +78,7 @@ export default {
 .el-autocomplete-suggestion {
   z-index: 4000 !important;
 }
-.add-country-dialog {
+.set-country-dialog {
   .el-dialog__header {
     background-color: #0E102A;
   }

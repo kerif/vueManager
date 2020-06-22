@@ -16,6 +16,7 @@
     "nprogress": "^0.2.0",
     "qiniu-js": "^2.5.5",
     "qs": "^6.8.0",
+    "sortablejs": "^1.10.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vue-video-player": "^5.0.2",
