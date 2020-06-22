@@ -4,15 +4,7 @@
     <el-container direction="vertical" :class="['layout', isCollapse ? 'is-collapse' : '']">
       <layout-header></layout-header>
       <div  :class="[isCollapse && 'isCollapses']" class="layout-nav">
-        <div class="back-box" @click="$router.go(-1)">
-          <span class="el-icon-back back-icon"></span>
-          <span class="back-text">{{$t('返回')}}</span>
-        </div>
-        <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
-          <el-breadcrumb-item v-for="(item, index) in pagePath.split(',')" :key="index">
-            {{ $t(item) }}
-          </el-breadcrumb-item>
-        </el-breadcrumb>
+        <tags-view />
       </div>
       <el-main :class="[isCollapse && 'isCollapses']">
         <router-view></router-view>
@@ -24,17 +16,16 @@
 <script>
 import LayoutAside from './layoutaside'
 import LayoutHeader from './layoutheader'
+import TagsView from './components/tagsview'
 // import LayoutFooter from './layoutfooter'
 export default {
   components: {
     LayoutAside,
-    LayoutHeader
+    LayoutHeader,
+    TagsView
     // LayoutFooter
   },
   computed: {
-    pagePath () {
-      return `${this.$route.meta.group}/${this.$route.meta.name}`
-    },
     isCollapse () {
       return this.$store.state.isCollapse
     }
@@ -65,8 +56,7 @@ export default {
     width: 100vw !important;
   }
   .layout-nav {
-    height: 60px;
-    padding: 0 20px;
+    padding: 10px 20px;
     width: calc(100vw - 230px);
     box-sizing: border-box;
     position: relative;
@@ -80,31 +70,6 @@ export default {
     .breadcrumb {
       line-height: 60px;
     }
-    .back-box {
-      float: right;
-      color: #3540a5;
-      font-size: 14px;
-      line-height: 60px;
-      cursor: pointer;
-      // &:hover {
-      //   .back-text {
-      //     display: inline-block;
-      //   }
-      //   transition: all 3s ease-in;
-      // }
-    }
-    .back-icon {
-      font-size: 18px;
-      border: 1px solid #ecedf0;
-      border-radius: 50%;
-      display: inline-block;
-      padding: 5px;
-      margin-top: 5px;
-      margin-right: 5px;
-    }
-    // .back-text {
-    //   display: none;
-    // }
   }
   .isCollapse {
     width: 0 !important;
