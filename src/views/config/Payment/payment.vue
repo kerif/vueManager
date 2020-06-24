@@ -266,7 +266,7 @@
             <el-table-column :label="$t('保险金额')">
               <template slot-scope="scope">
                 <span v-if="scope.row.insurance_type === 1">
-                  %{{scope.row.insurance_proportion}}
+                  {{scope.row.insurance_proportion}}%
                 </span>
                 <span v-if="scope.row.insurance_type === 2">
                   {{localization.currency_unit}}{{scope.row.insurance_proportion}}
