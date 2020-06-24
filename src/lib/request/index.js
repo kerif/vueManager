@@ -964,6 +964,10 @@ exports.countryLocation = () => {
 exports.deleteCountryLocation = (id) => {
   return $form.delete(`countries/${id}`)
 }
+// 更多配置 排序
+exports.countryLocationIndex = (params) => {
+  return $form.put('countries/sort-indexes', params)
+}
 // 订单增值服务 语言详情
 exports.serviceLang = (id, params) => {
   return $form.get(`value-added-services/${id}`, { params })

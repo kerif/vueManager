@@ -189,6 +189,7 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('抵用券金额') + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
+          <el-table-column :label="$t('保险金额') + this.localization.currency_unit" prop="insurance"></el-table-column>
           <el-table-column :label="$t('实际支付') + this.localization.currency_unit" prop="pay_amount"></el-table-column>
           <el-table-column :label="$t('支付时间')" prop="paid_at"></el-table-column>
         </el-table>

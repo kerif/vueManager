@@ -13,7 +13,7 @@
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.enabled"
-                  @change="changeOnline($event, scope.row.name)"
+                  @change="changeOnline($event, scope.row.type)"
                   :active-text="$t('开')"
                   :inactive-text="$t('关')"
                   active-color="#13ce66"
@@ -23,7 +23,7 @@
             </el-table-column>
             <el-table-column :label="$t('配置')">
               <template slot-scope="scope">
-                <el-button class="btn-main" @click="configuration(scope.row.id, scope.row.name)">{{$t('配置')}}</el-button>
+                <el-button v-if="scope.row.type === 1 || scope.row.type === 2" class="btn-main" @click="configuration(scope.row.id, scope.row.name)">{{$t('配置')}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -256,7 +256,7 @@
           <el-table :data="insuranceData" v-loading="tableLoading" class="data-list" v-if="insuranceEnabled === 1"
           border stripe>
             <el-table-column type="index"></el-table-column>
-            <el-table-column :label="$t('商品价值')+ this.localization.currency_unit" prop="insurance_proportion"></el-table-column>
+            <el-table-column :label="$t('商品价值')+ this.localization.currency_unit" prop="divide_string"></el-table-column>
             <el-table-column :label="$t('保价类型')">
               <template slot-scope="scope">
                 <span v-if="scope.row.insurance_type === 1">{{$t('比例')}}</span>
@@ -278,7 +278,7 @@
             </el-table-column> -->
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
-                <el-button class="btn-dark-green" @click="editInsurance(scope.row.id)">{{$t('编辑')}}</el-button>
+                <el-button class="btn-dark-green" @click="editInsurance(scope.row.id, scope.row.is_start)">{{$t('编辑')}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -714,11 +714,16 @@
           <div class="select-box">
             <add-btn @click.native="addCountry">{{$t('添加')}}</add-btn>
           </div>
-          <el-table :data="countryData" v-loading="tableLoading" class="data-list"
+          <el-table :data="countryData" v-loading="tableLoading" class="data-list country"
             border stripe>
-            <el-table-column type="index"></el-table-column>
+            <el-table-column prop="index">
+               <!-- <template slot-scope="scope">
+                  <button draggable="true" class="move" @dragstart="handleEdit(scope.row)"></button>
+                </template> -->
+            </el-table-column>
             <!-- 前缀字符 -->
-             <el-table-column prop="name" :label="$t('国家/地区')"></el-table-column>
+             <el-table-column prop="name" :label="$t('国家/地区')">
+             </el-table-column>
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
                 <!-- 删除 -->
@@ -727,6 +732,7 @@
               </el-table-column>
             </el-table>
             <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
+            <div class="sort-sty">*{{$t('拖拽行可以进行排序')}}</div>
         </el-tab-pane>
       </el-tabs>
       <el-dialog :visible.sync="imgVisible" size="small">
@@ -745,6 +751,7 @@
 </template>
 
 <script>
+import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
 import { SearchSelect } from '@/components/searchs'
 import { pagination } from '@/mixin'
@@ -940,7 +947,49 @@ export default {
       this.getCountryList()
     }
   },
+  mounted () {
+    console.log('进来了')
+  },
   methods: {
+    handleEdit (val) {
+      console.log(val)
+      this.id = val.id // 这里就是当前拖动行的值，把需要的值赋值给你之前定义好的就可以了
+    },
+    // 行拖拽
+    rowDrop () {
+      const tbody = document.querySelector('.country tbody')
+      // const _this = this
+      console.log(tbody, 'tbody')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          const ids = this.countryData.map((item, index) => {
+            if (index === newIndex) {
+              return this.countryData[oldIndex]
+            } else if (index === oldIndex) {
+              return this.countryData[newIndex]
+            }
+            return item
+          }).map((item, index) => ({ id: item.id, index, item }))
+          console.log(ids)
+          this.countryData = []
+          this.$request.countryLocationIndex(ids).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.getCountryList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+        }
+      })
+    },
     // 修改在线支付的开关
     changeOnline (event, name) {
       console.log(name, 'name')
@@ -1239,9 +1288,9 @@ export default {
       })
     },
     // 编辑保险服务
-    editInsurance (id) {
+    editInsurance (id, start) {
       console.log(id, 'id')
-      dialog({ type: 'insuranceEdit', id: id }, () => {
+      dialog({ type: 'insuranceEdit', id: id, start: start }, () => {
         this.getInsurance()
       })
     },
@@ -1887,6 +1936,10 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.countryData = res.data
+          console.log('countryData')
+          this.$nextTick(() => {
+            this.rowDrop()
+          })
         }
       })
     },
@@ -2344,6 +2397,10 @@ export default {
   }
   .country-sty {
     text-align: center;
+  }
+  .sort-sty {
+    color: red;
+    font-size: 13px;
   }
 }
 </style>

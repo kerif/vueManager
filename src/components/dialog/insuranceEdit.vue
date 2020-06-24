@@ -4,8 +4,12 @@
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 商品价值 -->
-        <el-form-item :label="$t('*商品价值') + this.localization.currency_unit + $t('大于')" class="input-sty price-sty">
-          <el-input v-model="ruleForm.insurance_proportion">
+        <el-form-item :label="$t('*商品价值') + this.localization.currency_unit + $t('小于')" class="input-sty price-sty" v-if="this.start === 0">
+          <el-input v-model="ruleForm.start" disabled>
+          </el-input>
+        </el-form-item>
+        <el-form-item :label="$t('*商品价值') + this.localization.currency_unit + $t('大于')" class="input-sty price-sty" v-else>
+          <el-input v-model="ruleForm.start">
           </el-input>
         </el-form-item>
         <!-- 保价类型 -->
@@ -21,7 +25,7 @@
         </el-form-item>
         <!-- 保险金额 -->
         <el-form-item :label="$t('*保险金额')+ this.localization.currency_unit" class="input-sty">
-          <el-input v-model="ruleForm.start">
+          <el-input v-model="ruleForm.insurance_proportion">
           </el-input>
         </el-form-item>
         <!-- 是否强制购买 -->
@@ -63,14 +67,15 @@ export default {
       options: [
         {
           id: 1,
-          name: '比例'
+          name: this.$t('比例')
         },
         {
           id: 2,
-          name: '固定金额'
+          name: this.$t('固定金额')
         }
       ],
       localization: '',
+      start: '',
       tranAmount: ''
     }
   },
@@ -89,14 +94,17 @@ export default {
       })
     },
     confirm () {
-      if (!this.ruleForm.insurance_proportion) {
+      if (!this.ruleForm.start) {
         return this.$message.error(this.$t('请输入商品价值'))
       } else if (!this.ruleForm.insurance_type) {
         return this.$message.error(this.$t('请选择保价类型'))
-      } else if (!this.ruleForm.start) {
+      } else if (!this.ruleForm.insurance_proportion) {
         return this.$message.error(this.$t('请输入保险金额'))
       }
-      this.$request.updateInsurance(this.id, this.ruleForm).then(res => {
+      this.$request.updateInsurance(this.id, {
+        ...this.ruleForm,
+        start: this.start === 0 ? 0 : this.ruleForm.start
+      }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -119,7 +127,8 @@ export default {
       this.ruleForm.remark = ''
     },
     init () {
-      console.log(this.id, '我是接受id')
+      this.start = this.start
+      console.log(this.start, 'start')
       this.getList()
     }
   }
