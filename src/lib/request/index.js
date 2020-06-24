@@ -1338,6 +1338,10 @@ exports.getCounts = () => {
 exports.getUsable = (id) => {
   return $form.get(`orders/${id}/usable-express-lines`)
 }
+// 订单 修改为已付款
+exports.payedOrders = (id) => {
+  return $form.put(`orders/${id}/payment/on-delivery-payed`)
+}
 // 订单 打印标签 查看
 exports.checkOrderLabel = (id) => {
   return $form.get(`orders/${id}/label/html`)

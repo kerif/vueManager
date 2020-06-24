@@ -24,7 +24,7 @@
             </el-select>
         </el-form-item>
         <!-- 保险金额 -->
-        <el-form-item :label="$t('*保险金额')+ this.localization.currency_unit" class="input-sty">
+        <el-form-item :label="$t('*保险金额')+ (this.ruleForm.insurance_type === 1 ? '%': this.localization.currency_unit)" class="input-sty">
           <el-input v-model="ruleForm.insurance_proportion">
           </el-input>
         </el-form-item>

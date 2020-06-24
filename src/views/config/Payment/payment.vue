@@ -263,7 +263,7 @@
                 <span v-if="scope.row.insurance_type === 2">{{$t('固定金额')}}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('保价金额') + this.localization.currency_unit" prop="start"></el-table-column>
+            <el-table-column :label="$t('保价金额') + this.localization.currency_unit" prop="insurance_proportion"></el-table-column>
             <el-table-column :label="$t('是否强制购买')">
               <template slot-scope="scope">
                 <span v-if="scope.row.is_force === 0">{{$t('否')}}</span>

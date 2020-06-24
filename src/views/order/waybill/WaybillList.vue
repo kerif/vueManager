@@ -186,6 +186,8 @@
           <!-- 拣货日志 -->
           <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('拣货日志')}}
           </el-button>
+          <el-button size="small" class="btn-pink" v-if="(activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
+          </el-button>
           <!-- 修改物流信息 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">{{$t('修改物流信息')}}</el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
@@ -334,6 +336,29 @@ export default {
     getAgentData () {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
+      })
+    },
+    payed (id) {
+      this.$confirm(this.$t('您真的确认更改状态为已付款吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.payedOrders(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     // 批量发送通知
