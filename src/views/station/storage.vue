@@ -193,7 +193,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row :gutter="20" v-if="this.$route.params.id">
+          <el-row :gutter="20" v-if="this.$route.params.id && this.user.express_line">
             <el-col :span="18">
               <el-form-item :label="$t('更改线路')" class="express">
                   <span class="change-line">{{user.CName}}---{{$t('限重')}}{{user.MaxWeight}}KG</span>
