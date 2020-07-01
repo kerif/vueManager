@@ -193,6 +193,14 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row :gutter="20" v-if="this.$route.params.id">
+            <el-col :span="18">
+              <el-form-item :label="$t('更改线路')" class="express">
+                  <span class="change-line">{{user.CName}}---{{$t('限重')}}{{user.MaxWeight}}KG</span>
+                  <el-button class="btn-main change-btn" @click="changeLine">{{$t('更改')}}</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 物品属性 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -322,6 +330,8 @@ export default {
         length: '',
         width: '',
         height: '',
+        MaxWeight: '',
+        cName: '',
         in_storage_remark: '',
         location: '',
         package_pictures: ''
@@ -419,6 +429,8 @@ export default {
           this.user.props = res.data.props.map(item => item.id)
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
           this.user.warehouse_id = res.data.warehouse.id
+          this.$set(this.user, 'CName', res.data.express_line.cn_name)
+          this.$set(this.user, 'MaxWeight', res.data.express_line.max_weight)
           this.user.express_company_id = res.data.express_company.id
           this.$set(this.user, 'country_id', res.data.country.id)
           this.areaId = this.user.warehouse_id
@@ -472,6 +484,17 @@ export default {
           }
         })
       }
+    },
+    // 更改线路
+    changeLine () {
+      dialog({ type: 'expressChange' }, data => {
+        console.log(data, 'data')
+        // this.$set(this.user, 'CName', data.cn_name)
+        console.log(this.user, 'CName', data.cn_name)
+        this.user.CName = data.cn_name
+        this.user.MaxWeight = data.max_weight
+        this.user.express_line_id = data.id
+      })
     },
     changeShip (e) {
       console.log(e)
@@ -919,6 +942,12 @@ export default {
     color: #67C23A;
     position: relative;
     top: 3px;
+  }
+  .change-line {
+    color: #606266;
+  }
+  .change-btn {
+    margin-left: 10px;
   }
 }
 </style>

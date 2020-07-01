@@ -130,6 +130,17 @@
                 <el-radio :label="2">{{$t('SSL加密')}}</el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item :label="$t('开启邮箱登录验证')">
+              <el-switch
+                v-model="logisticsData.validate_email"
+                :active-text="$t('开')"
+                :active-value="1"
+                :inactive-value="0"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+            </el-form-item>
           <div class="form-title">{{$t('短信配置——聚合')}}</div>
           <el-form-item label="Appkey" prop="juhe_key">
             <el-input v-model="logisticsData.juhe_key" placeholder="请输入Appkey"
@@ -141,9 +152,20 @@
                 <el-button class="btn-light-red" @click="testJuhe">{{$t('测试')}}</el-button>
               </div>
             </el-form-item>
+            <el-form-item :label="$t('开启短信登录验证')">
+              <el-switch
+                v-model="logisticsData.validate_phone"
+                :active-text="$t('开')"
+                :active-value="1"
+                :inactive-value="0"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+            </el-form-item>
           </el-form>
           <div>
-            <el-button class="save-btn" @click="confirmLogistic('ruleForm')">{{$t('保存')}}</el-button>
+            <el-button :loading="$store.state.btnLoading" class="save-btn" @click="confirmLogistic('ruleForm')">{{$t('保存')}}</el-button>
           </div>
         </div>
         </el-tab-pane>
@@ -152,53 +174,65 @@
           <!-- 重量及货币配置 -->
           <div class="settings-container">
             <el-form>
-              <!-- 重量单位： -->
-              <el-form-item :label="$t('重量单位：')">
-                  <el-select v-model="weightName" :placeholder="$t('请选择')">
-                    <el-option
-                    v-for="item in weightList"
+                <!-- 重量单位： -->
+                <el-form-item :label="$t('重量单位：')">
+                    <el-select v-model="weightName" :placeholder="$t('请选择')">
+                      <el-option
+                      v-for="item in weightList"
+                      :key="item.id"
+                      :value="item.name"
+                      :label="item.name">
+                      </el-option>
+                    </el-select>
+                </el-form-item>
+                <!-- 货币单位： -->
+                <el-form-item :label="$t('货币单位：')">
+                    <el-select v-model="currencyName" :placeholder="$t('请选择')">
+                      <el-option
+                      v-for="item in currencyList"
+                      :key="item.id"
+                      :value="item.name"
+                      :label="item.name">
+                      </el-option>
+                    </el-select>
+                </el-form-item>
+                <!-- 长度单位 -->
+                <el-form-item :label="$t('长度单位：')">
+                    <el-select v-model="lengthName" :placeholder="$t('请选择')">
+                      <el-option
+                      v-for="(item, index) in lengthList"
+                      :key="index"
+                      :value="item.name"
+                      :label="item.name">
+                      </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="$t('物品属性：')">
+                  <el-tag
                     :key="item.id"
-                    :value="item.name"
-                    :label="item.name">
-                    </el-option>
-                  </el-select>
-              </el-form-item>
-              <!-- 货币单位： -->
-              <el-form-item :label="$t('货币单位：')">
-                  <el-select v-model="currencyName" :placeholder="$t('请选择')">
-                    <el-option
-                    v-for="item in currencyList"
-                    :key="item.id"
-                    :value="item.name"
-                    :label="item.name">
-                    </el-option>
-                  </el-select>
-              </el-form-item>
-              <!-- 长度单位 -->
-              <el-form-item :label="$t('长度单位：')">
-                  <el-select v-model="lengthName" :placeholder="$t('请选择')">
-                    <el-option
-                    v-for="(item, index) in lengthList"
-                    :key="index"
-                    :value="item.name"
-                    :label="item.name">
-                    </el-option>
-                  </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('物品属性：')">
-                <el-tag
-                  :key="item.id"
-                  v-for="item in dynamicTags"
-                  closable
-                  :disable-transitions="false"
-                  @close="handleClose(item.id)">
-                  {{item.cn_name}}
-                </el-tag>
-              <el-button class="btn-light-red" @click="addProps">{{$t('添加属性')}}</el-button>
-              <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onProps(item)">{{item.name}}</el-button>
-              </el-form-item>
+                    v-for="item in dynamicTags"
+                    closable
+                    :disable-transitions="false"
+                    @close="handleClose(item.id)">
+                    {{item.cn_name}}
+                  </el-tag>
+                <el-button class="btn-light-red" @click="addProps">{{$t('添加属性')}}</el-button>
+                <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onProps(item)">{{item.name}}</el-button>
+                </el-form-item>
+                <!-- 预报选择线路 -->
+              <!-- <el-form-item :label="$t('预报选择线路')">
+                    <el-switch
+                      v-model="package_express_line"
+                      :active-text="$t('开')"
+                      :active-value="1"
+                      :inactive-value="0"
+                      :inactive-text="$t('关')"
+                      active-color="#13ce66"
+                      inactive-color="gray">
+                    </el-switch>
+                </el-form-item> -->
               </el-form>
-              <el-button class="save-btn" @click="saveSetting">{{$t('保存')}}</el-button>
+              <el-button :loading="$store.state.btnLoading" class="save-btn" @click="saveSetting">{{$t('保存')}}</el-button>
           </div>
         </el-tab-pane>
         <!-- 订单增值服务 -->
@@ -252,6 +286,7 @@
               active-color="#13ce66"
               inactive-color="gray">
           </el-switch>
+          <el-button class="add-insurance" @click="goInsurance">{{$t('保险说明')}}</el-button>
           </div>
           <el-table :data="insuranceData" v-loading="tableLoading" class="data-list" v-if="insuranceEnabled === 1"
           border stripe>
@@ -455,7 +490,7 @@
             </el-upload>
             </el-form-item>
             </el-form>
-          <el-button class="save-btn" @click="editOthers">{{$t('保存')}}</el-button>
+          <el-button :loading="$store.state.btnLoading" class="save-btn" @click="editOthers">{{$t('保存')}}</el-button>
         </div>
         </el-tab-pane>
         <!-- 订单增值服务 -->
@@ -825,6 +860,8 @@ export default {
         host: '',
         port: '',
         encryption: '',
+        validate_email: '',
+        validate_phone: '',
         username: '',
         password: '',
         from_address: '',
@@ -834,6 +871,7 @@ export default {
       inputVisible: false,
       inputValue: '',
       weightName: '',
+      package_express_line: '',
       lengthName: '',
       currencyName: '',
       weightList: [],
@@ -1043,6 +1081,12 @@ export default {
       console.log(item, 'item')
       dialog({ type: 'propsLang', lang: item, dynamicTags: this.dynamicTags }, () => {
         this.getProps()
+      })
+    },
+    // 保险服务 保险说明
+    goInsurance () {
+      dialog({ type: 'explanationAdd' }, () => {
+        this.getInsurance()
       })
     },
     // pc端配置 修改语言
@@ -1643,6 +1687,7 @@ export default {
           this.currencyName = res.data.currency_name
           this.weightName = res.data.weight_name
           this.lengthName = res.data.length_name
+          this.package_express_line = res.data.package_express_line
         }
       })
     },
@@ -1657,7 +1702,8 @@ export default {
         currency_name: currency[0].name,
         currency_symbol: currency[0].symbol,
         length_name: length[0].name,
-        length_symbol: length[0].symbol
+        length_symbol: length[0].symbol,
+        package_express_line: this.package_express_line
       }).then(res => {
         if (res.ret) {
           this.$notify({
@@ -2203,6 +2249,8 @@ export default {
         port: this.logisticsData.port,
         encryption: this.logisticsData.encryption,
         username: this.logisticsData.username,
+        validate_phone: this.logisticsData.validate_phone,
+        validate_email: this.logisticsData.validate_email,
         password: this.logisticsData.password,
         from_address: this.logisticsData.from_address,
         from_name: this.logisticsData.from_name
@@ -2410,6 +2458,10 @@ export default {
   .sort-sty {
     color: red;
     font-size: 13px;
+  }
+  .add-insurance {
+    float: right;
+    margin-top: 17px;
   }
 }
 </style>

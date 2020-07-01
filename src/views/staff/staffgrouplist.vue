@@ -42,7 +42,7 @@
         :label="$t('操作')" width="290">
         <template slot-scope="scope">
           <!-- 编辑 -->
-        <el-button class="btn-blue" @click.stop="editStaff(scope.row.id)">{{$t('编辑')}}</el-button>
+        <el-button v-if="scope.row.permissions === 1" class="btn-blue" @click.stop="editStaff(scope.row.id)">{{$t('编辑')}}</el-button>
           <!-- 修改权限 -->
         <el-button class="btn-purple" v-if="scope.row.permissions === 1"
           @click.stop="changePre(scope.row.id)">

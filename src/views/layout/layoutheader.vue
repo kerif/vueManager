@@ -4,17 +4,29 @@
      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
        style="font-size:24px;"></i>
     </div>
-    <el-switch
+    <!-- <el-switch
       v-model="isSimple"
       :active-text="$t('简')"
       :inactive-text="$t('繁')"
-      inactive-color="#13ce66" />
+      inactive-color="#13ce66" /> -->
+    <el-select v-model="isSimple">
+      <el-option v-for="item in language"
+        :key="item.id" :label="item.label" :value="item.value"></el-option>
+    </el-select>
     <span class="user-box">{{ $store.state.userName }}</span>
     <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
   </el-header>
 </template>
 <script>
 export default {
+  data () {
+    return {
+      language: [
+        { label: '简体', value: 1 },
+        { label: '繁体', value: 2 }
+      ]
+    }
+  },
   methods: {
     onLogout () {
       this.$confirm(this.$t('是否确认退出登录？'), this.$t('提示'), {
@@ -53,10 +65,14 @@ export default {
     },
     isSimple: {
       get () {
-        return this.$store.state.languageCode === 'simple'
+        if (this.$store.state.languageCode === 'simple') {
+          return 1
+        }
+        return 2
       },
       set (val) {
-        if (val) {
+        console.log('valu', val)
+        if (val === 1) {
           this.$store.commit('saveLanguageCode', 'simple')
         } else {
           this.$store.commit('saveLanguageCode', 'tradition')

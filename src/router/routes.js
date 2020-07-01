@@ -4,6 +4,7 @@ const loadonDemand = path => {
 const Layout = loadonDemand('layout/layouttop')
 const LayoutContainer = loadonDemand('layout/layoutcontainer')
 const Panel = loadonDemand('home/panel')
+
 // 修改密码
 const ResetPassword = loadonDemand('home/reset-password')
 // 员工列表
@@ -66,6 +67,10 @@ const AddEditAgent = loadonDemand('config/agent/AddEditAgent')
 const transactionRecord = loadonDemand('config/agent/record')
 // 配置 小程序配置
 const AppletConfiguration = loadonDemand('config/Applet/applet')
+// 配置 自提点配置
+const SinceList = loadonDemand('config/point/since')
+// 配置 新增或编辑自提点
+const sinceAddEdit = loadonDemand('config/point/sinceAddEdit')
 // 配置 更多配置
 const PaymentManagement = loadonDemand('config/Payment/payment')
 // 配置 更多配置 商品分类管理 风险提示
@@ -90,6 +95,8 @@ const warehouseSelf = loadonDemand('station/warehouseSelf')
 const selfDetails = loadonDemand('station/warehouseDetails')
 // 自定义物流
 const logisticsList = loadonDemand('station/logistics')
+// 物流查询
+const tracking = loadonDemand('station/tracking')
 // 自定义物流 导入数据
 const importLogistics = loadonDemand('station/importLogistics')
 // 订单 预报包裹列表
@@ -106,6 +113,10 @@ const reviewDetails = loadonDemand('order/waybill/review')
 // 订单 编辑打包数据
 const editPacked = loadonDemand('order/waybill/editBillPacked')
 const Billpacked = loadonDemand('order/waybill/billPacked')
+// 订单 运费查询
+const Freight = loadonDemand('order/freight/freight')
+// 订单 运费查询 路线详情
+const freightDetail = loadonDemand('order/freight/freightDetail')
 // 营销管理 新用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
 // 营销管理 抵用券管理
@@ -115,7 +126,7 @@ const Notes = loadonDemand('marketing/Voucher/notes')
 // 营销管理 添加
 const addVoucher = loadonDemand('marketing/Voucher/addVoucher')
 // 营销管理 视频管理
-const videoManagement = loadonDemand('marketing/video/videoMana')
+// const videoManagement = loadonDemand('marketing/video/videoMana')
 // 营销管理 渠道管理
 const channelManagement = loadonDemand('marketing/channel/channelList')
 // 营销管理 统计报表
@@ -417,6 +428,29 @@ export default [
             }
           },
           {
+            path: '/order/freight',
+            name: 'freight',
+            component: Freight,
+            id: 404,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '运费查询'
+            }
+          },
+          {
+            path: '/order/freight/detail/:id',
+            name: 'freightDetail',
+            component: freightDetail,
+            id: 404,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '详情',
+              parent: '/order/freight'
+            }
+          },
+          {
             path: '/order/billDetails/:id/:activeName',
             name: 'billDetails',
             component: Billdetails,
@@ -572,7 +606,18 @@ export default [
             meta: {
               level: 2,
               group: '货站',
-              name: '自定义物流'
+              name: '自定义物流轨迹'
+            }
+          },
+          {
+            path: '/station/tracking',
+            name: 'tracking',
+            component: tracking,
+            id: 506,
+            meta: {
+              level: 2,
+              group: '货站',
+              name: '物流查询'
             }
           },
           {
@@ -760,10 +805,45 @@ export default [
             }
           },
           {
+            path: '/config/point',
+            name: 'point',
+            component: SinceList,
+            id: 605,
+            meta: {
+              level: 2,
+              group: '配置',
+              name: '自提点配置'
+            }
+          },
+          {
+            path: '/config/point/add',
+            name: 'pointAdd',
+            component: sinceAddEdit,
+            id: 605,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '添加自提点配置',
+              parent: '/config/point'
+            }
+          },
+          {
+            path: '/config/point/edit',
+            name: 'pointEdit',
+            component: sinceAddEdit,
+            id: 605,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '编辑自提点配置',
+              parent: '/config/point'
+            }
+          },
+          {
             path: '/config/payment',
             name: 'payment',
             component: PaymentManagement,
-            id: 605,
+            id: 606,
             meta: {
               level: 2,
               group: '配置',
@@ -774,7 +854,7 @@ export default [
             path: '/config/payment/emailLang/add/:line/:lang/:transCode',
             component: emailLang,
             name: 'emailLangAdd',
-            id: 605,
+            id: 606,
             meta: {
               group: '配置',
               level: 3,
@@ -786,7 +866,7 @@ export default [
             path: '/config/payment/categoriesLang/add/:line/:lang/:transCode',
             component: categoriesLang,
             name: 'categoriesLangAdd',
-            id: 605,
+            id: 606,
             meta: {
               group: '配置',
               level: 3,
@@ -798,7 +878,7 @@ export default [
             path: '/config/payment/sickTips/:id',
             name: 'sickTips',
             component: EditSick,
-            id: 605,
+            id: 606,
             meta: {
               level: 3,
               group: '配置',
@@ -810,7 +890,7 @@ export default [
             path: '/config/payment/add',
             component: AddEditEmail,
             name: 'emailAdd',
-            id: 605,
+            id: 606,
             meta: {
               group: '配置',
               level: 3,
@@ -822,7 +902,7 @@ export default [
             path: '/config/payment/edit/:id',
             component: AddEditEmail,
             name: 'emailEdit',
-            id: 605,
+            id: 606,
             meta: {
               group: '配置',
               level: 3,
@@ -973,17 +1053,17 @@ export default [
               parent: '/marketing/voucher'
             }
           },
-          {
-            path: '/marketing/videoManagement',
-            name: 'video',
-            component: videoManagement,
-            id: 803,
-            meta: {
-              level: 2,
-              group: '营销管理',
-              name: '视频管理'
-            }
-          },
+          // {
+          //   path: '/marketing/videoManagement',
+          //   name: 'video',
+          //   component: videoManagement,
+          //   id: 803,
+          //   meta: {
+          //     level: 2,
+          //     group: '营销管理',
+          //     name: '视频管理'
+          //   }
+          // },
           {
             path: '/marketing/channelManagement',
             name: 'channel',

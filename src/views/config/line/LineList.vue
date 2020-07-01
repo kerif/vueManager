@@ -77,7 +77,7 @@
       <!-- 线路名称 -->
       <el-table-column :label="$t('线路名称')" prop="name"></el-table-column>
       <!-- 支持国家/地区 -->
-      <el-table-column :label="$t('支持国家/地区')">
+      <el-table-column :label="$t('支持国家/地区')" :show-overflow-tooltip="true" width="150">
         <template slot-scope="scope">
           <span v-for="item in scope.row.countries" :key="item.id">
             {{item.name}}
@@ -125,11 +125,13 @@
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" fixed="right">
+      <el-table-column label="操作" width="260" fixed="right">
         <template slot-scope="scope">
           <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">{{$t('修改')}}</el-button>
           <el-button class="btn-deep-purple others-btn" @click="goOthers(scope.row.id)">{{$t('附加费用')}}</el-button>
           <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
+          <!-- 高级配置 -->
+          <el-button class="btn-purple others-btn" @click="Advanced(scope.row.id)">{{$t('高级配置')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -140,6 +142,63 @@
       </template>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <!-- 高级配置 -->
+    <el-dialog
+      class="add-company"
+      :title="$t('高级设置')"
+      :visible.sync="dialogVisible"
+      width="45%">
+      <el-form ref="form" :model="company" label-width="220px">
+        <!-- <el-form-item :label="$t('是否自提线路')">
+           <el-select v-model="company.company" clearable filterable
+            allow-create default-first-option :placeholder="$t('请选择')">
+              <el-option
+                  v-for="item in companyList"
+                  :key="item.id"
+                  :value="item.code"
+                  :label="item.name">
+              </el-option>
+            </el-select>
+          </el-form-item> -->
+        <el-form-item :label="$t('是否自提线路')">
+            <el-switch
+              v-model="company.is_delivery"
+              :active-text="$t('开')"
+              :active-value="1"
+              :inactive-value="0"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray">
+            </el-switch>
+          </el-form-item>
+        <el-form-item :label="$t('默认自提点')">
+           <el-select v-model="company.default_pickup_station_id" clearable filterable
+            allow-create default-first-option :placeholder="$t('请选择')">
+              <el-option
+                  v-for="item in pickList"
+                  :key="item.id"
+                  :value="item.id"
+                  :label="item.name">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        <el-form-item :label="$t('打包自动生成货到付款订单')">
+            <el-switch
+              v-model="company.should_auto_delivery"
+              :active-text="$t('开')"
+              :active-value="1"
+              :inactive-value="0"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray">
+            </el-switch>
+          </el-form-item>
+        </el-form>
+      <span slot="footer">
+        <el-button @click="dialogVisible = false">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="updateAuto">{{$t('确定')}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -185,7 +244,15 @@ export default {
         { label: this.$t('否'), value: 0 }
       ],
       languageData: [],
-      transCode: ''
+      transCode: '',
+      dialogVisible: false,
+      company: {
+        should_auto_delivery: '',
+        default_pickup_station_id: '',
+        is_delivery: ''
+      },
+      pickList: [],
+      advancedId: ''
     }
   },
   created () {
@@ -277,6 +344,31 @@ export default {
     addFee (id) {
       dialog({ type: 'feeList', id: id })
     },
+    // 获取高级配置
+    getSorting () {
+      this.$request.getExpressLine(this.advancedId).then(res => {
+        if (res.ret) {
+          this.company.is_delivery = res.data.is_delivery
+          this.company.default_pickup_station_id = res.data.default_pickup_station_id
+          this.company.should_auto_delivery = res.data.should_auto_delivery
+        }
+      })
+    },
+    // 获取自提点数据
+    getPick () {
+      this.$request.autoPick(this.advancedId).then(res => {
+        if (res.ret) {
+          this.pickList = res.data
+        }
+      })
+    },
+    // 高级配置
+    Advanced (id) {
+      this.advancedId = id
+      this.dialogVisible = true
+      this.getSorting()
+      this.getPick()
+    },
     // 导出清单
     unloadShip (id) {
       this.$request.importLines(id).then(res => {
@@ -303,6 +395,27 @@ export default {
         name: 'othersCost',
         params: {
           id: id
+        }
+      })
+    },
+    // 更新 高级配置
+    updateAuto () {
+      this.$request.updateAutoPick(this.advancedId, {
+        ...this.company
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.dialogVisible = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },

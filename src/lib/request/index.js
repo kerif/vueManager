@@ -16,6 +16,10 @@ exports.logout = () => $form.post('logout')
 exports.getLines = (params) => {
   return $form.get('express-lines', { params })
 }
+// 获取高级配置
+// exports.getSorting = (id) => {
+//   return $form.get(`orders/${id}/re-sorting`)
+// }
 // 配置 路线修改开启或关闭
 exports.resetLines = (id, status) => {
   return $form.put(`express-lines/${id}/status/${status}`)
@@ -305,6 +309,14 @@ exports.getStorage = (params) => {
 }
 exports.getPick = (params) => {
   return $form.get('shipment-logs/picking', { params })
+}
+// 获取自提点数据
+exports.autoPick = (id) => {
+  return $form.get(`express-lines/${id}/self-pickup-stations`)
+}
+// 更新自提点
+exports.updateAutoPick = (id, params) => {
+  return $form.put(`express-lines/${id}/advance-settings`, params)
 }
 // 包裹快速入库 获取全部物品属性
 exports.getProps = () => {
@@ -748,6 +760,14 @@ exports.getLocalization = () => {
 exports.chooseLocalization = () => {
   return $form.get('localization')
 }
+// 保险服务 获取保险说明
+exports.getExplanation = () => {
+  return $form.get('payments/insurance/explanation')
+}
+// 保险服务 更新保险说明
+exports.updateExplanation = (params) => {
+  return $form.put('payments/insurance/explanation', params)
+}
 // 更改当前的重量及货币配置
 exports.confirmLocalization = (params) => {
   return $form.put('localization', params)
@@ -1008,6 +1028,18 @@ exports.updateExpressLang = (id, params) => {
 exports.updateServiceLang = (id, params) => {
   return $form.put(`value-added-services/${id}/translate-data`, params)
 }
+// 订单 运费查询
+exports.queryExpress = (params) => {
+  return $json.post('express-fee-query', params)
+}
+// 订单 运费查询 单条详情
+exports.getLineDetail = (id) => {
+  return $form.get(`express-fee-query/express-line/${id}`)
+}
+// 运费查询 获取寄往仓库
+exports.getExpressFee = (params) => {
+  return $form.get('express-fee-query/warehouses', { params })
+}
 // 更多配置 订单修改单条增值服务
 exports.updateService = (id, params) => {
   return $form.put(`value-added-services/${id}`, params)
@@ -1131,6 +1163,30 @@ exports.updateCategories = (id, params) => {
 // 更多配置 新建商品分类
 exports.newCategories = (params) => {
   return $form.post(`package-categories`, params)
+}
+// 更多配置 自提点配置
+exports.getSelf = (params) => {
+  return $form.get('self-pickup-stations', { params })
+}
+// 获取支持线路
+exports.getStations = (params) => {
+  return $form.get(`self-pickup-stations/express-line-list`, { params })
+}
+// 新建 自提点
+exports.addSelf = (params) => {
+  return $form.post('self-pickup-stations', params)
+}
+// 删除 自提点
+exports.deleteSelf = (id) => {
+  return $form.delete(`self-pickup-stations/${id}`)
+}
+// 自提点 获取详细
+exports.getOneSelf = (id) => {
+  return $form.get(`self-pickup-stations/${id}`)
+}
+// 自提点 更新
+exports.updateOneSelf = (id, params) => {
+  return $form.put(`self-pickup-stations/${id}`, params)
 }
 // 营销管理 新用户福利
 exports.getCoupons = () => {
@@ -1308,6 +1364,10 @@ exports.getIndexData = (params) => $form.get('statistics/index-log', { params })
 exports.getGuides = () => {
   return $form.get('user-guides')
 }
+// 查询物流弹窗
+exports.goTracking = (params) => {
+  return $form.get('tracking', { params })
+}
 // 控制面板 弹窗 设置成完成状态
 exports.updateGuides = (id) => {
   return $form.put(`user-guides/${id}`)
@@ -1315,6 +1375,10 @@ exports.updateGuides = (id) => {
 // 控制面板 弹窗 不再提示
 exports.noTips = () => {
   return $form.put('user-guides/no-more-tips')
+}
+// 控制面板 系统通知
+exports.getSystem = () => {
+  return $form.get('system-notifications')
 }
 // 控制面板 弹窗 判断是否显示弹窗
 exports.tipStatus = () => {
@@ -1337,6 +1401,10 @@ exports.getCounts = () => {
 // 订单 打包 获取线路详情
 exports.getUsable = (id) => {
   return $form.get(`orders/${id}/usable-express-lines`)
+}
+// 订单 打包 获取线路详情
+exports.getExpressLines = (id) => {
+  return $form.get(`packages/${id}/express-lines`)
 }
 // 订单 修改为已付款
 exports.payedOrders = (id) => {

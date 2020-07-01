@@ -23,7 +23,7 @@
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" @click="onLogin" :loading="$store.state.btnLoading">{{$t('登录')}}</el-button>
+            <el-button class="login-btn" @click="onLogin">{{$t('登录')}}</el-button>
           </el-form-item>
           <div class="register">
             <p @click="changeWelcome(3)">{{$t('注册账户')}}</p>
@@ -304,6 +304,7 @@ export default {
             this.$router.push('/')
           } else {
             this.$message.error(res.msg)
+            this.getCaptcha()
           }
         }).catch((err) => {
           this.$message.error(err.msg)

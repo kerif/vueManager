@@ -3,7 +3,7 @@
     <div class="searchUser">
       <el-input :placeholder="$t('请输入关键字')" v-model="keyword" @keyup.enter.native="getList">
         <template slot="append">
-          <span @click="getList" class="search-btn">{{$('搜索')}}</span>
+          <span @click="getList" class="search-btn">{{$t('搜索')}}</span>
         </template>
       </el-input>
     </div>

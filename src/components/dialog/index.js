@@ -63,6 +63,8 @@ import rulesEdit from './rulesEdit.vue'
 import vipAdd from './vipAdd.vue'
 import insuranceEdit from './insuranceEdit.vue'
 import setCountry from './setCountry.vue'
+import explanationAdd from './insuranceAdd.vue'
+import expressChange from './storageChange.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -126,6 +128,8 @@ const RulesEditController = Vue.extend(rulesEdit)
 const VipAddController = Vue.extend(vipAdd)
 const InsuranceEditController = Vue.extend(insuranceEdit)
 const SetCountryController = Vue.extend(setCountry)
+const ExplanationController = Vue.extend(explanationAdd)
+const ExpressLineController = Vue.extend(expressChange)
 
 const mixin = {
   data () {
@@ -564,6 +568,20 @@ function initInstance (type) {
     // 更多配置 新增国家地区
     case 'setCountry':
       instance = new SetCountryController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 保险服务 保险说明
+    case 'explanationAdd':
+      instance = new ExplanationController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 包裹快速入库 更改线路
+    case 'expressChange':
+      instance = new ExpressLineController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

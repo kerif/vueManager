@@ -525,7 +525,19 @@
     <div class="Features-container" v-if="activeName === '5'">
       <el-form>
         <!-- 开启短信邮件验证 -->
-        <el-form-item :label="$t('开启短信邮件验证：')">
+        <el-form-item :label="$t('开启邮箱登录验证：')">
+            <el-switch
+              v-model="validateList.validate_email"
+              :active-text="$t('开')"
+              :active-value="1"
+              :inactive-value="0"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray">
+            </el-switch>
+        </el-form-item>
+        <!-- 开启短信邮件验证 -->
+        <el-form-item :label="$t('开启短信登录验证：')">
             <el-switch
               v-model="validateList.validate_phone"
               :active-text="$t('开')"
@@ -608,7 +620,8 @@ export default {
         share_info: ''
       },
       validateList: { // 功能配置
-        validate_phone: 0
+        validate_phone: '',
+        validate_email: ''
       },
       params: {
         instruction: ''
