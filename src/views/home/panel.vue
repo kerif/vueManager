@@ -6,10 +6,10 @@
         <el-col :span="24">
           <el-row>
             <el-col :span="6">
-              <div class="addCustomer add-line" @click="goToOtherPage(301, 'viplist')">
+              <div class="addCustomer add-line blue-sty" @click="goToOtherPage(301, 'viplist')">
                 <div class="box-header">
-                  <div class="bold-box">{{ user.current_month }}</div>
                   <div>{{$t('当月新增客户')}}</div>
+                  <div class="bold-box">{{ user.current_month }}</div>
                 </div>
                 <div class="box-footer">
                   <span>{{$t('总用户')}}</span>
@@ -18,10 +18,10 @@
               </div>
             </el-col>
             <el-col :span="6">
-              <div class="addCustomer add-line" @click="goToOtherPage(402, 'wayBillList')">
+              <div class="addCustomer add-line yellow-sty" @click="goToOtherPage(402, 'wayBillList')">
                 <div class="box-header">
-                  <div class="bold-box">{{ order.current_month }}</div>
                   <div>{{$t('当月新增订单')}}</div>
+                  <div class="bold-box">{{ order.current_month }}</div>
                 </div>
                 <div class="box-footer">
                   <span>{{$t('总运单')}}</span>
@@ -30,10 +30,10 @@
               </div>
             </el-col>
             <el-col :span="6">
-              <div class="addCustomer add-line"  @click="goToOtherPage(401, 'orderlist')">
+              <div class="addCustomer add-line green-sty"  @click="goToOtherPage(401, 'orderlist')">
                 <div class="box-header">
-                  <div class="bold-box">{{ packages.current_month }}</div>
                   <div>{{$t('当月预报包裹')}}</div>
+                  <div class="bold-box">{{ packages.current_month }}</div>
                 </div>
                 <div class="box-footer">
                   <span>{{$t('总包裹量')}}</span>
@@ -42,10 +42,10 @@
               </div>
             </el-col>
             <el-col :span="6">
-              <div class="addCustomer" @click="goToOtherPage(502, 'shipContainer')">
+              <div class="addCustomer light-blue" @click="goToOtherPage(502, 'shipContainer')">
                 <div class="box-header">
-                  <div class="bold-box">{{ shipment.current_month }}</div>
                   <div>{{$t('当月新增发货单')}}</div>
+                  <div class="bold-box">{{ shipment.current_month }}</div>
                 </div>
                 <div class="box-footer">
                   <span>{{$t('总发货单')}}</span>
@@ -511,12 +511,24 @@ export default {
     line-height: 35px;
   }
   .addCustomer {
-    background: #E5E7FB;
-    // border-radius: 4px;
+    // background: #E5E7FB;
+    border-radius: 4px;
     cursor: pointer;
   }
   .add-line {
-    border-right: 1px solid #ccc;
+    margin-right: 5px;
+  }
+  .blue-sty {
+    background-color: #e5e6fd;
+  }
+  .yellow-sty {
+    background-color: #fff0d2;
+  }
+  .green-sty {
+    background-color: #e3f1fc;
+  }
+  .light-blue{
+    background-color: #c3e8d4;
   }
   .panel-right {
     box-sizing: border-box;
@@ -567,9 +579,9 @@ export default {
     padding: 0 10px;
     line-height: 35px;
   }
-  // .box-header {
-  //   border-bottom: 1px solid #ccc;
-  // }
+  .box-header {
+    border-bottom: 1px solid #ccc;
+  }
   .bold-box {
     padding-top: 10px;
     font-weight: bold;
