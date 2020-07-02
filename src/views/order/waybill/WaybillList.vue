@@ -69,13 +69,23 @@
         </div>
       <!-- </el-col> -->
       <!-- <el-col :span="4"> -->
-        <div class="chooseStatus">
+        <div class="chooseStatus customer-sty">
           <el-select v-model="agent_name" @change="onAgentChange" clearable :placeholder="$t('请选择')">
             <el-option
               v-for="item in agentData"
               :key="item.id"
               :value="item.user_id"
               :label="item.agent_name">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="chooseStatus">
+          <el-select v-model="payment_type" @change="onPaymentChange" clearable :placeholder="$t('请选择')">
+            <el-option
+              v-for="item in paymentData"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name">
             </el-option>
           </el-select>
         </div>
@@ -252,7 +262,9 @@ export default {
       status: 1,
       selectIDs: [],
       agent_name: '',
+      payment_type: '',
       agentData: [],
+      paymentData: [],
       tableLoading: false,
       countData: {},
       urlImport: '',
@@ -274,6 +286,7 @@ export default {
       this.agent_name = Number(this.$route.query.agent)
     }
     this.getAgentData()
+    this.getPaymentType()
   },
   mounted () {
     this.getList()
@@ -286,6 +299,7 @@ export default {
         page: this.page_params.page,
         size: this.page_params.size,
         agent: this.agent_name,
+        payment_type: this.payment_type,
         status: this.status
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
@@ -332,10 +346,16 @@ export default {
         }
       })
     },
-    // 获得下拉列表
+    // 获得客户下拉列表
     getAgentData () {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
+      })
+    },
+    // 获取支付方式列表
+    getPaymentType () {
+      this.$request.paymentType().then(res => {
+        this.paymentData = res.data
       })
     },
     payed (id) {
@@ -617,6 +637,11 @@ export default {
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
     },
+    // 选择支付方式
+    onPaymentChange () {
+      this.page_params.handleQueryChange('payment_type', this.payment_type)
+      this.getList()
+    },
     // 拣货日志
     onLogs (id) {
       dialog({ type: 'pickingLog', id: id }, () => {
@@ -650,6 +675,9 @@ export default {
     .el-select {
       // width: 100%;
     }
+  }
+  .customer-sty {
+    margin-right: 10px;
   }
   .chooseOrder {
     cursor: pointer;

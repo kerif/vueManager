@@ -15,7 +15,9 @@
             <div>{{$t('*所属国家/地区')}}</div>
             <el-select
               v-model="form.country_id"
+              @change="changeCountry"
               filterable
+              :disabled="!!this.$route.params.id && !hasStore"
               class="country-select"
               :placeholder="$t('请选择')">
               <el-option
@@ -135,7 +137,8 @@ export default {
       lineVisible: false,
       lineData: [],
       lineIds: [],
-      countryId: ''
+      countryId: '',
+      hasStore: false
     }
   },
   created () {
@@ -152,6 +155,11 @@ export default {
         this.form = res.data
         this.form.country_id = res.data.country.id
       })
+    },
+    // 切换国家
+    changeCountry () {
+      console.log(this.form.country_id, 'this.form.country_id')
+      this.form.expressLines = []
     },
     // 获取所属国家地区
     getWarehouse () {
@@ -218,6 +226,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
+            this.hasStore = true
             this.$router.go(-1)
           } else {
             this.$message({
@@ -236,6 +245,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
+            this.hasStore = true
             this.$router.go(-1)
           } else {
             this.$message({

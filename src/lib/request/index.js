@@ -1394,6 +1394,10 @@ exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`
 exports.getAdded = () => {
   return $form.get('orders/value-added-services')
 }
+// 订单列表 获取支付方式列表
+exports.paymentType = () => {
+  return $form.get('orders/payment-types')
+}
 // 订单列表 导出excel
 exports.uploadUserExcel = () => {
   return $form.get('users/user-export')
