@@ -18,7 +18,7 @@
               </div>
             </el-col>
             <el-col :span="6">
-              <div class="addCustomer add-line" @click="goToOtherPage(401, 'orderlist')">
+              <div class="addCustomer add-line" @click="goToOtherPage(402, 'wayBillList')">
                 <div class="box-header">
                   <div class="bold-box">{{ order.current_month }}</div>
                   <div>{{$t('当月新增订单')}}</div>
@@ -30,7 +30,7 @@
               </div>
             </el-col>
             <el-col :span="6">
-              <div class="addCustomer add-line" @click="goToOtherPage(502, 'shipContainer')">
+              <div class="addCustomer add-line"  @click="goToOtherPage(401, 'orderlist')">
                 <div class="box-header">
                   <div class="bold-box">{{ packages.current_month }}</div>
                   <div>{{$t('当月预报包裹')}}</div>
@@ -42,14 +42,14 @@
               </div>
             </el-col>
             <el-col :span="6">
-              <div class="addCustomer" @click="goToOtherPage(401, 'orderlist')">
+              <div class="addCustomer" @click="goToOtherPage(502, 'shipContainer')">
                 <div class="box-header">
-                  <div class="bold-box">{{ order.current_month }}</div>
-                  <div>{{$t('当月新增订单')}}</div>
+                  <div class="bold-box">{{ shipment.current_month }}</div>
+                  <div>{{$t('当月新增发货单')}}</div>
                 </div>
                 <div class="box-footer">
-                  <span>{{$t('总运单')}}</span>
-                  <span class="count">{{ order.total }}</span>
+                  <span>{{$t('总发货单')}}</span>
+                  <span class="count">{{ shipment.total }}</span>
                 </div>
               </div>
             </el-col>

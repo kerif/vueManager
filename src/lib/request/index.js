@@ -1168,6 +1168,10 @@ exports.newCategories = (params) => {
 exports.getSelf = (params) => {
   return $form.get('self-pickup-stations', { params })
 }
+// 自提点配置 查看单条支持线路
+exports.getPointLines = (id) => {
+  return $form.get(`self-pickup-stations/${id}/express-lines`)
+}
 // 获取支持线路
 exports.getStations = (params) => {
   return $form.get(`self-pickup-stations/express-line-list`, { params })

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('新增费用')" class="dialog-addCost"  @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('保险说明')" class="dialog-addCost"  @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <el-form-item :label="$t('中文')" prop="cn">
         <el-input v-model="ruleForm.cn" type="textarea"

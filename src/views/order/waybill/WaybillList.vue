@@ -132,6 +132,8 @@
       <!-- 详见产品图 -->
       <el-table-column :label="activeName === '1' ? $t('预计费用') + this.localization.currency_unit : $t('实际费用') + this.localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
       <el-table-column :label="$t('申报价值') + this.localization.currency_unit" prop="declare_value"></el-table-column>
+      <!-- 支付方式 -->
+      <el-table-column :label="$t('支付方式')" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="payment_type_name"></el-table-column>
       <!-- 所属代理 -->
       <el-table-column :label="$t('所属代理')" prop="agent + agent_commission" width="100px">
         <template slot-scope="scope">
@@ -139,8 +141,6 @@
           <span>({{scope.row.agent_commission}}%)</span>
         </template>
       </el-table-column>
-      <!-- 备注 -->
-      <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
       <!-- 提交时间 -->
       <el-table-column :label="$t('提交时间')" prop="updated_at" v-if="activeName === '1' || activeName === '2' || activeName === '3' || activeName === '4'"></el-table-column>
       <!-- 拣货时间 -->

@@ -10,7 +10,7 @@
                 v-for="item in expressData"
                 :key="item.id"
                 :value="item.id"
-                :label="`${item.cn_name}---${$t('限重')}${item.max_weight}` + localization.weight_unit">
+                :label="`${item.name}---${$t('限重')}${item.max_weight}` + localization.weight_unit">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -27,7 +27,7 @@ export default {
     return {
       user: {
         express_line_id: '',
-        cn_name: '',
+        name: '',
         max_weight: ''
       },
       expressData: [],

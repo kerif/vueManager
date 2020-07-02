@@ -20,7 +20,11 @@
       <el-table-column :label="$t('详细地址')" prop="address"></el-table-column>
       <el-table-column :label="$t('联系电话')" prop="contact_info"></el-table-column>
       <el-table-column :label="$t('联系人')" prop="contactor"></el-table-column>
-      <el-table-column :label="$t('支持线路')" prop="expressLines_count"></el-table-column>
+      <el-table-column :label="$t('支持线路')">
+        <template slot-scope="scope">
+          <div class="check-sty" @click="checkLines(scope.row.id, scope.row.name)">{{scope.row.expressLines_count}}</div>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('操作')" width="150px">
         <template slot-scope="scope">
           <!-- 编辑 -->
@@ -36,6 +40,28 @@
       </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :visible.sync="lineDialog" width="40%" @close="clear"
+    :title="$t('查看自提点支持线路')">
+    <div class="self-sty">{{$t('自提点名称：')}}{{this.lineName}}</div>
+    <div class="self-sty">{{$t('支持线路')}}</div>
+    <el-table
+      :data="tableData"
+      border
+      stripe
+      style="width: 100%">
+      <el-table-column
+      type="index">
+    </el-table-column>
+      <el-table-column
+        prop="name"
+        :label="$t('线路名称')">
+      </el-table-column>
+    </el-table>
+      <!-- <div slot="footer">
+      <el-button @click="lineDialog = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirmLines">{{$t('确定')}}</el-button>
+    </div> -->
+  </el-dialog>
   </div>
 </template>
 <script>
@@ -58,9 +84,13 @@ export default {
       tableLoading: false,
       deleteNum: [],
       trackDialog: false,
+      tableData: [],
       details: [],
       sn: '',
-      trackId: ''
+      trackId: '',
+      linesId: '',
+      lineName: '',
+      lineDialog: false
     }
   },
   created () {
@@ -88,6 +118,20 @@ export default {
         }
       })
     },
+    // 查看支持线路
+    checkLines (id, name) {
+      this.linesId = id
+      this.lineName = name
+      this.lineDialog = true
+      this.getLines()
+    },
+    getLines () {
+      this.$request.getPointLines(this.linesId).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+        }
+      })
+    },
     // 编辑
     editSelf (id) {
       this.$router.push({ name: 'pointEdit',
@@ -97,8 +141,8 @@ export default {
       )
     },
     clear () {
-      this.sn = ''
-      this.trackId = ''
+      this.linesId = ''
+      this.lineName = ''
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
@@ -183,6 +227,12 @@ export default {
   .add-row {
     margin-bottom: 10px;
     text-align: right;
+  }
+  .check-sty {
+    cursor: pointer;
+  }
+  .self-sty {
+    margin-bottom: 20px;
   }
 }
 </style>

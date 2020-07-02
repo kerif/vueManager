@@ -429,7 +429,7 @@ export default {
           this.user.props = res.data.props.map(item => item.id)
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
           this.user.warehouse_id = res.data.warehouse.id
-          this.$set(this.user, 'CName', res.data.express_line.cn_name)
+          this.$set(this.user, 'CName', res.data.express_line.name)
           this.$set(this.user, 'MaxWeight', res.data.express_line.max_weight)
           this.user.express_company_id = res.data.express_company.id
           this.$set(this.user, 'country_id', res.data.country.id)
@@ -490,8 +490,8 @@ export default {
       dialog({ type: 'expressChange' }, data => {
         console.log(data, 'data')
         // this.$set(this.user, 'CName', data.cn_name)
-        console.log(this.user, 'CName', data.cn_name)
-        this.user.CName = data.cn_name
+        console.log(this.user, 'CName', data.name)
+        this.user.CName = data.name
         this.user.MaxWeight = data.max_weight
         this.user.express_line_id = data.id
       })
