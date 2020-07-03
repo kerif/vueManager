@@ -34,6 +34,13 @@
             </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item :label="$t('打印面单地址')" prop="short_address">
+        <el-row>
+          <el-col :span="10">
+            <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.short_address"></el-input>
+            </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item>
         <el-row>
           <el-col :span="10">
@@ -112,6 +119,7 @@ export default {
         warehouse_name: '',
         phone: '',
         postcode: '',
+        short_address: '',
         address: '',
         tips: '',
         auto_location: 0,
