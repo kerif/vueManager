@@ -16,6 +16,7 @@
          <el-input v-model="expressNumber" @keyup.enter.native="goExpress" class="input-sty">
         </el-input>
         <el-button @click.native="goExpress">{{$t('查询')}}</el-button>
+        <el-button @click.native="trackingMana">{{$t('管理自定义物流轨迹')}}</el-button>
       </div>
         <div class="express-content" v-loading="$store.state.btnLoading">
           <div v-if="TrackingData.length" class="line-sty">
@@ -110,6 +111,10 @@ export default {
           }
         })
       }
+    },
+    // 管理自定义物流轨迹
+    trackingMana () {
+      this.$router.push({ name: 'logistics' })
     }
   }
 }

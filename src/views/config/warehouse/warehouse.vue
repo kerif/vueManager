@@ -19,6 +19,7 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('收件人姓名')" prop="receiver_name"></el-table-column>
+      <el-table-column :label="$t('打印面单地址')" prop="short_address"></el-table-column>
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
       <el-table-column :label="$t('地址')" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>

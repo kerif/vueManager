@@ -612,17 +612,6 @@ export default [
             }
           },
           {
-            path: '/station/logistics',
-            name: 'logistics',
-            component: logisticsList,
-            id: 505,
-            meta: {
-              level: 2,
-              group: '货站',
-              name: '自定义物流轨迹'
-            }
-          },
-          {
             path: '/station/tracking',
             name: 'tracking',
             component: tracking,
@@ -631,6 +620,18 @@ export default [
               level: 2,
               group: '货站',
               name: '物流查询'
+            }
+          },
+          {
+            path: '/station/tracking/logistics',
+            name: 'logistics',
+            component: logisticsList,
+            id: 506,
+            meta: {
+              level: 3,
+              group: '货站',
+              name: '自定义物流轨迹',
+              parent: '/station/tracking'
             }
           },
           {

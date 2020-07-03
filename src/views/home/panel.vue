@@ -3,7 +3,7 @@
   <el-row :gutter="20">
     <el-col :span="18">
       <el-row :gutter="0" class="main-item">
-        <el-col :span="24">
+        <el-col :span="24" class="main-top">
           <el-row>
             <el-col :span="6">
               <div class="addCustomer add-line blue-sty" @click="goToOtherPage(301, 'viplist')">
@@ -735,6 +735,9 @@ export default {
     img {
       width: 150px;
     }
+  }
+  .main-top {
+    background-color: #f5f5f5;
   }
 }
 </style>
