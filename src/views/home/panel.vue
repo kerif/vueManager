@@ -125,7 +125,7 @@
       <div class="main-item right-item">
         <div>{{$t('系统通知')}}</div>
         <div v-for="item in systemData" :key="item.id" class="system-sty">
-          <span class="check-sty" @click="checkSystem(item)">{{item.title}}</span>
+          <span class="check-sty" @click="checkSystem(item.id)">{{item.title}}</span>
         </div>
       </div>
     </el-col>
@@ -151,36 +151,8 @@
         <el-button @click="notMind" class="btn-light-red">{{$t('不再提示')}}</el-button>
       </div>
     </el-dialog>
-    <!-- 系统通知内容 -->
-    <el-dialog :visible.sync="systemVisible" size="small" @close="clear">
-      <el-table
-        :data="dialogData"
-        border
-        style="width: 100%">
-        <el-table-column
-          prop="title"
-          label="标题">
-        </el-table-column>
-        <el-table-column
-          prop="content"
-          label="内容">
-        </el-table-column>
-        <el-table-column
-          prop="content"
-          label="creator">
-        </el-table-column>
-        <el-table-column
-          prop="created_at"
-          label="发布时间">
-        </el-table-column>
-      </el-table>
-      <!-- <div slot="footer">
-      <el-button @click="lineVisible = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirmLines">{{$t('确定')}}</el-button>
-    </div> -->
-  </el-dialog>
   <!-- 查询物流 -->
-    <el-dialog :visible.sync="trackingVisible" class="express-dialog-container" size="small" @close="clear">
+    <el-dialog :visible.sync="trackingVisible" class="express-dialog-container" size="small">
     <div class="express-content" v-loading="$store.state.btnLoading">
       <div v-if="TrackingData.length">
         <div class="content-top">
@@ -242,9 +214,7 @@ export default {
       types: [],
       moreTips: '',
       items: [],
-      systemVisible: false,
       trackingVisible: false,
-      dialogData: [],
       TrackingData: [],
       options: [
         {
@@ -344,12 +314,12 @@ export default {
         }
       })
     },
-    checkSystem (item) {
-      this.systemVisible = true
-      this.dialogData = [item]
-      console.log(item.id, 'item')
+    checkSystem (id) {
+      this.$router.push({ name: 'systemNotice',
+        params: {
+          id: id
+        } })
     },
-    clear () {},
     // 获取图表数据
     getDatas () {
       this.$request.getIndexData({

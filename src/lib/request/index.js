@@ -1384,6 +1384,10 @@ exports.noTips = () => {
 exports.getSystem = () => {
   return $form.get('system-notifications')
 }
+// 控制面板 系统通知 获取单条内容
+exports.getSystemNotice = (id) => {
+  return $form.get(`system-notifications/${id}`)
+}
 // 控制面板 弹窗 判断是否显示弹窗
 exports.tipStatus = () => {
   return $form.get('user-guides/tip-status')

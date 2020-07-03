@@ -4,6 +4,7 @@ const loadonDemand = path => {
 const Layout = loadonDemand('layout/layouttop')
 const LayoutContainer = loadonDemand('layout/layoutcontainer')
 const Panel = loadonDemand('home/panel')
+const homeNotice = loadonDemand('home/notice')
 
 // 修改密码
 const ResetPassword = loadonDemand('home/reset-password')
@@ -172,6 +173,18 @@ export default [
               level: 2,
               group: '首页',
               name: '控制面板'
+            }
+          },
+          {
+            path: '/home/notice/:id',
+            name: 'systemNotice',
+            component: homeNotice,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '控制面板',
+              parent: '/home/panel'
             }
           },
           {
