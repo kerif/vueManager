@@ -429,8 +429,10 @@ export default {
           this.user.props = res.data.props.map(item => item.id)
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
           this.user.warehouse_id = res.data.warehouse.id
-          this.$set(this.user, 'CName', res.data.express_line.name)
-          this.$set(this.user, 'MaxWeight', res.data.express_line.max_weight)
+          if (res.data.express_line) {
+            this.$set(this.user, 'CName', res.data.express_line.name)
+            this.$set(this.user, 'MaxWeight', res.data.express_line.max_weight)
+          }
           this.user.express_company_id = res.data.express_company.id
           this.$set(this.user, 'country_id', res.data.country.id)
           this.areaId = this.user.warehouse_id
