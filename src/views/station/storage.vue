@@ -165,7 +165,7 @@
           <!-- 尺寸 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item :label="$t('*尺寸')">
+              <el-form-item :label="$t('尺寸')">
                 <el-input v-model="user.length"  class="sizeLength" :placeholder="$t('长') + this.localization.length_unit"></el-input>
                 <el-input v-model="user.width" class="sizeLength" :placeholder="$t('宽') + this.localization.length_unit"></el-input>
                 <el-input v-model="user.height"  class="sizeLength" :placeholder="$t('高') + this.localization.length_unit"></el-input>
@@ -204,7 +204,7 @@
           <!-- 物品属性 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item :label="$t('*物品属性')" class="service-style">
+              <el-form-item :label="$t('物品属性')" class="service-style">
                 <el-checkbox-group v-model="user.props">
                   <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id">{{item.cn_name}}
                   </el-checkbox>
@@ -663,14 +663,6 @@ export default {
         return this.$message.error(this.$t('请输入快递单号'))
       } else if (this.user.package_weight === '') {
         return this.$message.error(this.$t('请输入重量'))
-      } else if (this.user.length === '') {
-        return this.$message.error(this.$t('请输入长度'))
-      } else if (this.user.width === '') {
-        return this.$message.error(this.$t('请输入长度'))
-      } else if (this.user.height === '') {
-        return this.$message.error(this.$t('请输入高度'))
-      } else if (!this.user.props.length) {
-        return this.$message.error(this.$t('请选择属性'))
       } else if (this.user.express_company_id === '') {
         return this.$message.error(this.$t('请选择快递公司'))
       } else if (this.user.warehouse_id === '') {

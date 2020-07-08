@@ -24,7 +24,7 @@
       <el-tab-pane v-else :label="$t('作废订单') + '(' + this.countData.invalid
 + ')'" name="19"></el-tab-pane>
   </el-tabs>
-  <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
+  <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goMatch">
       <!-- <el-col :span="13"> -->
         <div class="changeTime">
           <!-- 创建 -->
@@ -115,7 +115,7 @@
         </template>
       </el-table-column>
       <!-- 转运快递单号 -->
-      <el-table-column :label="$t('转运快递单号')" v-if="activeName === '2'|| activeName === '3' ||activeName === '4' || activeName === '5' || activeName === '6'" prop="logistics_sn">
+      <el-table-column :label="$t('转运快递单号')" v-if="activeName === '3' ||activeName === '4' || activeName === '5' || activeName === '6'" prop="logistics_sn">
       </el-table-column>
         <!-- 转运快递公司 -->
         <el-table-column :label="$t('转运快递公司')" v-if="activeName === '3'|| activeName === '4' || activeName === '5' || activeName === '6'" prop="logistics_company"></el-table-column>
@@ -143,7 +143,12 @@
       <el-table-column :label="activeName === '1' ? $t('预计费用') + this.localization.currency_unit : $t('实际费用') + this.localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
       <el-table-column :label="$t('申报价值') + this.localization.currency_unit" prop="declare_value"></el-table-column>
       <!-- 支付方式 -->
-      <el-table-column :label="$t('支付方式')" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="payment_type_name"></el-table-column>
+      <el-table-column :label="$t('支付方式')" v-if="activeName === '3'|| activeName === '4' || activeName === '5'">
+        <template slot-scope="scope">
+          <span class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">{{scope.row.payment_type_name}}</span>
+          <span v-else>{{scope.row.payment_type_name}}</span>
+        </template>
+      </el-table-column>
       <!-- 所属代理 -->
       <el-table-column :label="$t('所属代理')" prop="agent + agent_commission" width="100px">
         <template slot-scope="scope">
@@ -193,6 +198,9 @@
           <!-- 作废 -->
           <el-button class="btn-light-red detailsBtn" @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
           v-if="activeName === '1' || activeName === '2' || activeName === '3'">{{$t('作废')}}</el-button>
+          <!-- 改价 -->
+          <el-button class="btn-pink detailsBtn" @click="changePrice(scope.row.id, scope.row.order_sn)"
+          v-if="activeName === '2'">{{$t('改价')}}</el-button>
           <!-- 拣货日志 -->
           <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('拣货日志')}}
           </el-button>
@@ -200,6 +208,7 @@
           </el-button>
           <!-- 修改物流信息 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">{{$t('修改物流信息')}}</el-button>
+          <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '4'" @click="logistics(scope.row.id, scope.row.order_sn)">{{$t('轨迹')}}</el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
            v-show="activeName === '3' && !scope.row.disabled"
            @click="saveLogistics(scope.row)">{{$t('保存')}}</el-button>
@@ -216,6 +225,8 @@
             <!-- 批量发送通知 -->
            <el-button size="small" class="btn-purple" @click="goNotify"
            v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
+            <el-button size="small" class="btn-deep-purple" @click="updateTracking"
+           v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -230,6 +241,69 @@
       </div>
     </el-dialog>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('更新物流状态')" @close="clear">
+        <el-form label-position="top" :model="form" ref="form">
+          <el-form-item :label="$t('物流状态')">
+            <el-select
+              v-model="form.logistics_type_id"
+              filterable
+              class="country-select"
+              :placeholder="$t('请选择')">
+                <el-option
+                  v-for="item in modeData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+              <el-button class="type-sty" @click="goMore">{{$t('管理')}}</el-button>
+            </el-form-item>
+          </el-form>
+        <div slot="footer">
+          <el-button @click="trackDialog = false">{{$t('取消')}}</el-button>
+          <el-button type="primary" @click="changeStatus">{{$t('确定')}}</el-button>
+        </div>
+      </el-dialog>
+    <!-- 轨迹 -->
+    <el-dialog :visible.sync="showDialog" width="45%" :title="$t('轨迹')" @close="clearSn">
+      <div class="table-sty">
+        {{$t('发货单号：')}}{{this.tableSn}}
+      </div>
+      <el-table :data="tableData" stripe border style="width: 100%">
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column :label="$t('物流轨迹')" prop="context"></el-table-column>
+        <el-table-column :label="$t('时间')" prop="created_at"></el-table-column>
+        <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-light-red" @click="deleteTable(scope.row.id)">{{$t('删除')}}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+    <!-- 改价 -->
+    <el-dialog :visible.sync="priceDialog" width="35%" :title="$t('改价')" @close="clearPrice">
+      <div class="table-sty">
+        {{$t('订单号：')}}{{this.priceSn}}
+      </div>
+        <el-form :model="priceForm" ref="form">
+          <el-form-item :label="$t('*最终价格') + this.localization.currency_unit">
+            <el-input v-model="priceForm.actual_payment_fee"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('*备注')">
+            <el-input type="textarea" v-model="priceForm.remark"
+              :autosize="{ minRows: 2, maxRows: 4}">
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <div class="change-sty">
+          <p>{{$t('*您的改价操作记录将会保存在日志记录中')}}</p>
+        </div>
+        <div slot="footer">
+          <el-button @click="priceDialog = false">{{$t('取消')}}</el-button>
+          <el-button type="primary" @click="submitPrice">{{$t('确定')}}</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
@@ -270,7 +344,23 @@ export default {
       urlImport: '',
       urlHtml: '',
       show: false,
-      labelId: ''
+      labelId: '',
+      modeData: [],
+      trackDialog: false,
+      priceDialog: false,
+      priceForm: {
+        actual_payment_fee: '',
+        remark: ''
+      },
+      form: {
+        logistics_type_id: ''
+      },
+      showDialog: false,
+      tableData: [],
+      tableId: '',
+      tableSn: '',
+      priceSn: '',
+      priceId: ''
     }
   },
   created () {
@@ -333,9 +423,99 @@ export default {
         }
       })
     },
+    goMatch () {
+      this.page_params.page = 1
+      this.page_params.size = 10
+      this.handleQueryChange('page', this.page_params.page)
+      this.handleQueryChange('size', this.page_params.size)
+      this.handleQueryChange('keyword', this.page_params.keyword)
+      this.getList()
+      this.getCounts()
+    },
+    // 更新物流状态
+    updateTracking () {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.trackDialog = true
+      this.getType()
+    },
+    // 更改物流状态
+    changeStatus () {
+      this.$request.changeOrderStatus({
+        logistics_type_id: this.form.logistics_type_id,
+        order_ids: this.selectIDs
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.trackDialog = false
+          this.getList()
+          this.selectIDs = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    clear () {
+      this.form.logistics_type_id = ''
+      this.selectIDs = []
+    },
+    clearSn () {
+      this.tableSn = ''
+      this.tableId = ''
+    },
+    // 轨迹
+    logistics (id, sn) {
+      this.tableId = id
+      this.tableSn = sn
+      this.showDialog = true
+      this.getAlone()
+    },
+    // 获取单条轨迹
+    getAlone () {
+      this.$request.getAloneOrder(this.tableId).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+        }
+      })
+    },
+    deleteTable (id) {
+      this.$request.deleteOrderTable(this.tableId, id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getAlone()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 弹窗 管理
+    goMore () {
+      this.$router.push({ name: 'payment',
+        query: {
+          activeName: '12'
+        } })
+    },
     // 获取订单统计数据
     getCounts () {
-      this.$request.getCounts().then(res => {
+      this.$request.getCounts({
+        keyword: this.page_params.keyword
+      }).then(res => {
         if (res.ret) {
           this.countData = res.data
         } else {
@@ -379,6 +559,14 @@ export default {
             })
           }
         })
+      })
+    },
+    // 获取全部物流状态
+    getType () {
+      this.$request.getOrderStatus().then(res => {
+        if (res.ret) {
+          this.modeData = res.data
+        }
       })
     },
     // 批量发送通知
@@ -580,6 +768,46 @@ export default {
         this.getCounts()
       })
     },
+    // 改价
+    submitPrice () {
+      if (!this.priceForm.actual_payment_fee) {
+        return this.$message.error('请输入最终价格')
+      } else if (!this.priceForm.remark) {
+        return this.$message.error('请输入备注')
+      }
+      this.$request.changeOrderPrice(this.priceId, {
+        actual_payment_fee: this.priceForm.actual_payment_fee,
+        remark: this.priceForm.remark
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('保存成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.priceDialog = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 改价
+    changePrice (id, sn) {
+      this.priceId = id
+      this.priceSn = sn
+      this.priceDialog = true
+    },
+    clearPrice () {
+      this.priceSn = ''
+      this.priceId = ''
+      this.priceForm.actual_payment_fee = ''
+      this.priceForm.remark = ''
+    },
     // 添加转运快递单号
     edit (row) {
       row.disabled = !row.disabled
@@ -691,6 +919,18 @@ export default {
       margin-right: 10px;
       width: 276px !important;
     }
+  }
+  .payment-sty {
+    color: red;
+  }
+  .type-sty {
+    margin-left: 10px;
+  }
+  .table-sty {
+    margin-bottom: 10px;
+  }
+  .change-sty {
+    color: red;
   }
 }
 </style>

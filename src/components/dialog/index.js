@@ -65,6 +65,7 @@ import insuranceEdit from './insuranceEdit.vue'
 import setCountry from './setCountry.vue'
 import explanationAdd from './insuranceAdd.vue'
 import expressChange from './storageChange.vue'
+import trackingLang from './trackingLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -130,6 +131,7 @@ const InsuranceEditController = Vue.extend(insuranceEdit)
 const SetCountryController = Vue.extend(setCountry)
 const ExplanationController = Vue.extend(explanationAdd)
 const ExpressLineController = Vue.extend(expressChange)
+const TrackingLangController = Vue.extend(trackingLang)
 
 const mixin = {
   data () {
@@ -582,6 +584,13 @@ function initInstance (type) {
     // 包裹快速入库 更改线路
     case 'expressChange':
       instance = new ExpressLineController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 系统物流类型 更改语言
+    case 'trackingLang':
+      instance = new TrackingLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

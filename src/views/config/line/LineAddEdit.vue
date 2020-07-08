@@ -62,6 +62,28 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <!-- 取消包裹重量限制 -->
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+           <div>
+              <span>{{$t('取消包裹重量限制')}}</span>
+              <el-tooltip class="item" effect="dark" :content="$t('当包裹重量不足最小重量时，按最小重量来计算。')" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+              <el-switch
+                v-model="form.ceil_weight"
+                :active-text="$t('开')"
+                :active-value="1"
+                :inactive-value="0"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 计费价格模式 -->
       <el-form-item>
         <div>{{$t('*计费价格模式')}}</div>
@@ -86,35 +108,43 @@
       <div v-if="form.mode === 1">
         <el-form-item>
           <el-row :gutter="10">
-            <el-col :span="10">
+            <el-col :span="5">
               <div>{{$t('*首重') + this.localization.weight_unit}}</div>
               <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="5">
               <div>{{$t('*首费') + this.localization.currency_unit}}</div>
               <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
+            <el-col :span="5">
+              <div>{{$t('首费成本价') + this.localization.currency_unit}}</div>
+              <el-input v-model="form.first_cost_money" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
           </el-row>
         </el-form-item>
         <el-form-item>
           <el-row :gutter="10">
-            <el-col :span="10">
+            <el-col :span="5">
               <div>{{$t('*续重') + this.localization.weight_unit}}</div>
               <el-input v-model="form.next_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="5">
               <div>{{$t('*续费') + this.localization.currency_unit}}</div>
               <el-input v-model="form.next_money" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+            <el-col :span="5">
+              <div>{{$t('续费成本价') + this.localization.currency_unit}}</div>
+              <el-input v-model="form.next_cost_money" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
           </el-row>
         </el-form-item>
         <el-form-item>
           <el-row :gutter="10">
-            <el-col :span="10">
+            <el-col :span="5">
               <div>{{$t('*最小重量') + this.localization.weight_unit}}</div>
               <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="5">
               <div>{{$t('*最大重量') + this.localization.weight_unit}}</div>
               <el-input v-model="form.max_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
@@ -123,6 +153,59 @@
       </div>
       <!-- 阶梯价格模式 -->
       <div v-if="form.mode === 2">
+        <el-form-item>
+          <el-col :span="16">
+          <div class="add-row">
+            <el-button @click="addRow" class="btn-deep-purple">{{$t('新增')}}</el-button>
+          </div>
+            <el-table :data="form.price_grade" style="width: 100%" border>
+               <el-table-column :label="$t('起始重量') + this.localization.weight_unit">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.start"></el-input>
+                  </template>
+                  </el-table-column>
+                  <el-table-column :label="'*' + $t('截止重量') + this.localization.weight_unit">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.end"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column :label="$t('成本价格') + this.localization.currency_unit + '/' + this.localization.weight_unit">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.cost_price"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column :label="$t('销售价格') + this.localization.currency_unit + '/' + this.localization.weight_unit">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.sale_price"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column :label="$t('操作')">
+                    <template slot-scope="scope">
+                      <el-button @click.native.prevent="deleteRow(scope.$index, form.price_grade)" class="btn-light-red">{{$t('移除')}}</el-button>
+                  </template>
+                </el-table-column>
+            </el-table>
+          </el-col>
+        </el-form-item>
+      </div>
+      <!-- 首重 + 阶梯价格模式 -->
+      <div v-if="form.mode === 3">
+        <el-form-item>
+          <el-row :gutter="10">
+            <el-col :span="5">
+              <div>{{$t('*首重') + this.localization.weight_unit}}</div>
+              <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+            <el-col :span="5">
+              <div>{{$t('*首费') + this.localization.currency_unit}}</div>
+              <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+            <el-col :span="5">
+              <div>{{$t('首费成本价') + this.localization.currency_unit}}</div>
+              <el-input v-model="form.first_cost_money" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
         <el-form-item>
           <el-col :span="16">
           <div class="add-row">
@@ -329,6 +412,8 @@ export default {
         countries: '',
         first_weight: '',
         first_money: '',
+        first_cost_money: '',
+        next_cost_money: '',
         next_weight: '',
         next_money: '',
         max_weight: '',
@@ -344,6 +429,7 @@ export default {
         remark: '',
         clearance_code_remark: '',
         need_clearance_code: 0,
+        ceil_weight: 0,
         price_grade: []
       },
       referenceTime: {
@@ -361,6 +447,10 @@ export default {
         {
           id: 2,
           name: this.$t('阶梯价格模式')
+        },
+        {
+          id: 3,
+          name: this.$t('首重+阶段价格档')
         }
       ],
       iconList: [],

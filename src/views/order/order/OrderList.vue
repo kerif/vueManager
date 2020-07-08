@@ -1,20 +1,28 @@
 <template>
   <div class="order-list-container">
     <el-tabs v-model="activeName" class="tabLength">
-        <!-- 未入库 -->
-        <el-tab-pane :label="$t('未入库')" name="1"></el-tab-pane>
-        <!-- 已入库 -->
-        <el-tab-pane :label="$t('已入库')" name="2"></el-tab-pane>
-        <!-- 已集包 -->
-        <el-tab-pane :label="$t('已集包')" name="3"></el-tab-pane>
-        <!-- 已发货 -->
-        <el-tab-pane :label="$t('已发货')" name="4"></el-tab-pane>
-        <!-- 已收货 -->
-        <el-tab-pane :label="$t('已收货')" name="5"></el-tab-pane>
-        <!-- 弃件包裹 -->
-        <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
+      <!-- 未入库 -->
+      <el-tab-pane :label="$t('未入库') + '(' + 0 + ')'" name="1" v-if="!this.countData.wait_in_storage"></el-tab-pane>
+      <el-tab-pane v-else :label="$t('未入库') + '(' + this.countData.wait_in_storage + ')'" name="1"></el-tab-pane>
+      <!-- 已入库 -->
+      <el-tab-pane :label="$t('已入库') + '(' + 0 + ')'" name="2" v-if="!this.countData.in_storage"></el-tab-pane>
+      <el-tab-pane v-else :label="$t('已入库') + '(' + this.countData.in_storage + ')'" name="2"></el-tab-pane>
+      <!-- 已集包 -->
+      <el-tab-pane :label="$t('已集包') + '(' + 0 + ')'" name="3" v-if="!this.countData.packed"></el-tab-pane>
+      <el-tab-pane v-else :label="$t('已集包') + '(' + this.countData.packed
++ ')'" name="3"></el-tab-pane>
+      <!-- 已发货 -->
+      <el-tab-pane :label="$t('已发货') + '(' + 0 + ')'" name="4" v-if="!this.countData.shipped"></el-tab-pane>
+      <el-tab-pane v-else :label="$t('已发货') + '(' + this.countData.shipped
++ ')'" name="4"></el-tab-pane>
+      <!-- 已收货 -->
+      <el-tab-pane :label="$t('已收货') + '(' + 0 + ')'" name="5" v-if="!this.countData.received"></el-tab-pane>
+      <el-tab-pane v-else :label="$t('已收货') + '(' + this.countData.received
++ ')'" name="5"></el-tab-pane>
+      <!-- 弃件包裹 -->
+      <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
     </el-tabs>
-    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
+    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goMatch">
       <div class="changeTime">
       <!-- 提交时间 -->
         <el-date-picker
@@ -237,10 +245,35 @@ export default {
       urlHtml: '',
       show: false,
       labelId: '',
-      deleteNum: []
+      deleteNum: [],
+      countData: {}
     }
   },
   methods: {
+    // 获取订单统计数据
+    getCounts () {
+      this.$request.getOrderCounts({
+        keyword: this.page_params.keyword
+      }).then(res => {
+        if (res.ret) {
+          this.countData = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    goMatch () {
+      this.page_params.page = 1
+      this.page_params.size = 10
+      this.handleQueryChange('page', this.page_params.page)
+      this.handleQueryChange('size', this.page_params.size)
+      this.handleQueryChange('keyword', this.page_params.keyword)
+      this.getList()
+      this.getCounts()
+    },
     getList () {
       if (this.activeName === '6') {
         return this.getDiscard()
@@ -379,6 +412,7 @@ export default {
               type: 'success'
             })
             this.getList()
+            this.getCounts()
           } else {
             this.$message({
               message: res.msg,
@@ -550,6 +584,7 @@ export default {
   created () {
     this.getAgentData()
     this.getList()
+    this.getCounts()
   },
   watch: {
     // 监听tab组件参数
@@ -630,7 +665,7 @@ export default {
 <style lang="scss">
 .order-list-container {
   .tabLength {
-    width: 500px !important;
+    width: 620px !important;
     display: inline-block;
   }
   .agentRight {

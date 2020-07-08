@@ -554,6 +554,10 @@ exports.allOrderSn = (id, params) => {
 exports.deletePackages = (ids) => {
   return $form.put('packages/batch-delete', ids)
 }
+// 预报包裹列表 获取订单统计数据
+exports.getOrderCounts = (params) => {
+  return $form.get('packages/counts', { params })
+}
 // 批量发送通知
 exports.sendingNotify = (params) => {
   return $form.post('re-notify', params)
@@ -788,6 +792,66 @@ exports.getPaymentOnline = () => {
 exports.changePayment = (status, type) => {
   return $form.put(`payments/payment/status/${status}/${type}`)
 }
+// 更多配置 获取系统物流类型
+exports.getSetSystem = () => {
+  return $form.get('logistics-types/system')
+}
+// 系统物流类型 修改开关启用
+exports.closeSystem = (id, status) => {
+  return $form.put(`logistics-types/system/${id}/status/${status}`)
+}
+// 系统物流类型 添加或修改语言
+exports.updateTrackingLang = (id, params) => {
+  return $form.put(`logistics-types/system/${id}/translate-data`, params)
+}
+// 系统物流类型 语言详情
+exports.systemLang = (id, params) => {
+  return $form.get(`logistics-types/system/${id}`, { params })
+}
+// 获取单条系统物流系统
+exports.getAloneTracking = (id) => {
+  return $form.get(`logistics-types/system/${id}`)
+}
+// 更新 单条系统物流系统
+exports.updateAloneTracking = (id, params) => {
+  return $form.put(`logistics-types/system/${id}`, params)
+}
+// 自定义物流系统列表
+exports.TypeData = () => {
+  return $form.get('logistics-types/custom')
+}
+// 自定义物流类型 修改开关启用
+exports.closeType = (id, status) => {
+  return $form.put(`logistics-types/custom/${id}/status/${status}`)
+}
+// 自定义物流类型 语言详情
+exports.typeLang = (id, params) => {
+  return $form.get(`logistics-types/custom/${id}`, { params })
+}
+// 自定义物流类型 添加或修改语言
+exports.updateTypeLang = (id, params) => {
+  return $form.put(`logistics-types/custom/${id}/translate-data`, params)
+}
+// 自定义物流类型 排序
+exports.typeLocationIndex = (params) => {
+  return $form.put('logistics-types/custom/sort-indexes', params)
+}
+// 新增 自定义物流系统
+exports.addTypeData = (params) => {
+  return $form.post('logistics-types/custom', params)
+}
+// 删除 自定义物流系统
+exports.deleteTypeData = (id) => {
+  return $form.delete(`logistics-types/custom/${id}`)
+}
+// 修改 自定义物流系统
+exports.updateTypeData = (id, params) => {
+  return $form.put(`logistics-types/custom/${id}`, params)
+}
+// 获取 单条自定义物流系统
+exports.getAloneType = (id) => {
+  return $form.get(`logistics-types/custom/${id}`)
+}
 // 更多配置 获取转账支付
 exports.getPayments = () => {
   return $form.get('payments')
@@ -984,7 +1048,7 @@ exports.countryLocation = () => {
 exports.deleteCountryLocation = (id) => {
   return $form.delete(`countries/${id}`)
 }
-// 更多配置 排序
+// 更多配置 国家地区 排序
 exports.countryLocationIndex = (params) => {
   return $form.put('countries/sort-indexes', params)
 }
@@ -1407,8 +1471,24 @@ exports.uploadUserExcel = () => {
   return $form.get('users/user-export')
 }
 // 订单列表 获取订单统计数据
-exports.getCounts = () => {
-  return $form.get('orders/order-counts')
+exports.getCounts = (params) => {
+  return $form.get('orders/order-counts', { params })
+}
+// 发货单 获取弹窗里可使用的物流状态
+exports.getOrderStatus = () => {
+  return $form.get('orders/logistics-types')
+}
+// 发货单 更改当前物流状态
+exports.changeOrderStatus = (params) => {
+  return $form.put(`orders/logistics`, params)
+}
+// 发货单 删除轨迹
+exports.deleteOrderTable = (shipId, id) => {
+  return $form.delete(`orders/${shipId}/logistics/${id}`)
+}
+// 发货单 获取单条轨迹
+exports.getAloneOrder = (id) => {
+  return $form.get(`orders/${id}/logistics`)
 }
 // 订单 打包 获取线路详情
 exports.getUsable = (id) => {
@@ -1417,6 +1497,10 @@ exports.getUsable = (id) => {
 // 订单 打包 获取线路详情
 exports.getExpressLines = (id) => {
   return $form.get(`packages/${id}/express-lines`)
+}
+// 订单 设置改价金额
+exports.changeOrderPrice = (id, params) => {
+  return $form.put(`orders/${id}/payment-fee`, params)
 }
 // 订单 修改为已付款
 exports.payedOrders = (id) => {
@@ -1505,6 +1589,22 @@ exports.uploadExcel = (ids) => {
 // 发货单 详情批量导出发货单
 exports.uploadShipmentLabel = (id, ids) => {
   return $form.post(`shipments/${id}/order-shipment-label`, ids)
+}
+// 发货单 获取弹窗里可使用的物流状态
+exports.getShipStatus = () => {
+  return $form.get('shipments/logistics-types')
+}
+// 发货单 更改当前物流状态
+exports.changeShipStatus = (params) => {
+  return $form.put(`shipments/logistics`, params)
+}
+// 发货单 删除轨迹
+exports.deleteShipTable = (shipId, id) => {
+  return $form.delete(`shipments/${shipId}/logistics/${id}`)
+}
+// 发货单 获取单条轨迹
+exports.getAloneShip = (id) => {
+  return $form.get(`shipments/${id}/logistics`)
 }
 // 详情里的导出
 exports.uploadAloneExcel = (id) => {

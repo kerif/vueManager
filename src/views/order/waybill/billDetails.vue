@@ -31,10 +31,10 @@
          <span class="leftWidth">{{$t('街道门牌号')}}</span>
          <span>{{form.address && form.address.street}}{{form.address && form.address.door_no}}</span>
       </el-col>
-      <!-- 邮编 -->
+      <!-- 附加地址 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">{{$t('邮编')}}</span>
-         <span>{{form.address && form.address.postcode}}</span>
+         <span class="leftWidth">{{$t('附加地址')}}</span>
+         <span>{{form.address && form.address.address}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
@@ -42,6 +42,11 @@
       <el-col :span="7">
         <span class="leftWidth">{{$t('清关编码')}}</span>
         <span>{{form.clearance_code}}</span>
+      </el-col>
+      <!-- 邮编 -->
+        <el-col :span="7" :offset="1">
+         <span class="leftWidth">{{$t('邮编')}}</span>
+         <span>{{form.address && form.address.postcode}}</span>
       </el-col>
     </el-row>
     </div>

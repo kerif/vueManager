@@ -88,11 +88,11 @@
       <!-- 目的地 -->
       <el-table-column :label="$t('目的地')" prop="destination_country"></el-table-column>
       <!-- 状态 -->
-      <el-table-column :label="$t('状态')">
-        <template slot-scope="scope">
+      <el-table-column :label="$t('状态')" prop="status_name">
+        <!-- <template slot-scope="scope">
           <span v-if="scope.row.status === 0">{{$t('未发货')}}</span>
           <span v-else>{{$t('已发货')}}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <!-- 箱数 -->
       <el-table-column :label="$t('箱数')" prop="box_count"></el-table-column>
@@ -118,15 +118,58 @@
           <el-button class="btn-blue-green btn-margin" @click="addShip(scope.row.id)">{{$t('加入发货单')}}</el-button>
           <!-- 取消发货 -->
           <el-button class="btn-orangey-red btn-margin" v-if="scope.row.status === 1" @click="cancelShip(scope.row.id)">{{$t('取消发货')}}</el-button>
+          <!-- 轨迹 -->
+          <el-button class="btn-deep-blue" @click="logistics(scope.row.id, scope.row.sn)">{{$t('轨迹')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-main" @click="deleteData">{{$t('导出清单')}}</el-button>
+          <el-button size="small" class="btn-deep-purple" @click="updateTracking">{{$t('更新物流状态')}}</el-button>
+           <el-button size="small" class="btn-main" @click="deleteData">{{$t('导出清单')}}</el-button>
         </div>
       </template>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
+      <el-form label-position="top" :model="form" ref="form">
+        <el-form-item :label="$t('物流状态')">
+          <el-select
+            v-model="form.logistics_type_id"
+            filterable
+            class="country-select"
+            :placeholder="$t('请选择')">
+              <el-option
+                v-for="item in modeData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+            <el-button class="type-sty" @click="goMore">{{$t('管理')}}</el-button>
+          </el-form-item>
+        </el-form>
+      <div slot="footer">
+        <el-button @click="trackDialog = false">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="changeStatus">{{$t('确定')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 轨迹 -->
+    <el-dialog :visible.sync="showDialog" width="45%" :title="$t('更新物流状态')" @close="clearSn">
+      <div class="table-sty">
+        {{$t('发货单号：')}}{{this.tableSn}}
+      </div>
+      <el-table :data="tableData" stripe border style="width: 100%">
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column :label="$t('物流轨迹')" prop="context"></el-table-column>
+        <el-table-column :label="$t('时间')" prop="created_at"></el-table-column>
+        <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-light-red" @click="deleteTable(scope.row.id)">{{$t('删除')}}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -168,7 +211,16 @@ export default {
           id: 1,
           name: this.$t('已发货')
         }
-      ]
+      ],
+      trackDialog: false,
+      modeData: [],
+      form: {
+        logistics_type_id: ''
+      },
+      showDialog: false,
+      tableData: [],
+      tableId: '',
+      tableSn: ''
     }
   },
   created () {
@@ -227,6 +279,44 @@ export default {
         this.getList()
       })
     },
+    // 获取全部物流状态
+    getType () {
+      this.$request.getShipStatus().then(res => {
+        if (res.ret) {
+          this.modeData = res.data
+        }
+      })
+    },
+    // 弹窗 管理
+    goMore () {
+      this.$router.push({ name: 'payment',
+        query: {
+          activeName: '12'
+        } })
+    },
+    // 更改物流状态
+    changeStatus () {
+      this.$request.changeShipStatus({
+        logistics_type_id: this.form.logistics_type_id,
+        shipment_ids: this.deleteNum
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.trackDialog = false
+          this.getList()
+          this.deleteNum = []
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 导出清单
     // unloadShip (id) {
     //   this.$request.uploadExcel(id).then(res => {
@@ -250,6 +340,22 @@ export default {
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
+    },
+    clear () {
+      this.form.logistics_type_id = ''
+      this.deleteNum = []
+    },
+    clearSn () {
+      this.tableSn = ''
+      this.tableId = ''
+    },
+    // 更新物流状态
+    updateTracking () {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.trackDialog = true
+      this.getType()
     },
     // 导出清单
     deleteData () {
@@ -287,6 +393,39 @@ export default {
     addShip (id) {
       dialog({ type: 'joinShip', id: id }, () => {
         this.getList()
+      })
+    },
+    // 轨迹
+    logistics (id, sn) {
+      this.tableId = id
+      this.tableSn = sn
+      this.showDialog = true
+      this.getAlone()
+    },
+    // 获取单条轨迹
+    getAlone () {
+      this.$request.getAloneShip(this.tableId).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+        }
+      })
+    },
+    deleteTable (id) {
+      this.$request.deleteShipTable(this.tableId, id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getAlone()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 取消发货
@@ -436,6 +575,12 @@ export default {
   .chooseStatus {
     width: 150px;
     display: inline-block;
+  }
+  .type-sty {
+    margin-left: 10px;
+  }
+  .table-sty {
+    margin-bottom: 10px;
   }
 }
 </style>
