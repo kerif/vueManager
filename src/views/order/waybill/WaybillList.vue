@@ -202,7 +202,7 @@
           <el-button class="btn-pink detailsBtn" @click="changePrice(scope.row.id, scope.row.order_sn)"
           v-if="activeName === '2'">{{$t('改价')}}</el-button>
           <!-- 拣货日志 -->
-          <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('拣货日志')}}
+          <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
           </el-button>
           <el-button size="small" class="btn-pink" v-if="(activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
           </el-button>
@@ -870,7 +870,7 @@ export default {
       this.page_params.handleQueryChange('payment_type', this.payment_type)
       this.getList()
     },
-    // 拣货日志
+    // 订单日志
     onLogs (id) {
       dialog({ type: 'pickingLog', id: id }, () => {
         this.getList()

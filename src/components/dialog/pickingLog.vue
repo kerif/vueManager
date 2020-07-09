@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('拣货日志')" class="dialog-picking-list"
+  <el-dialog :visible.sync="show" :title="$t('订单日志')" class="dialog-picking-list"
   @close="clear">
   <h4>包裹日志</h4>
     <el-table
@@ -29,7 +29,7 @@
         </template> -->
       </el-table-column>
     </el-table>
-  <h4>{{$t('订单日志')}}</h4>
+  <h4>{{$t('打包日志')}}</h4>
   <el-table :data="orderData"
       border
       style="width: 100%">
@@ -55,7 +55,17 @@
           </span>
         </template>
       </el-table-column>
-  </el-table>
+      </el-table>
+    <h4>{{$t('操作日志')}}</h4>
+    <el-table :data="operatorData"
+      border
+      style="width: 100%">
+      <el-table-column type="index" width="50"></el-table-column>
+      <!-- 操作 -->
+      <el-table-column :label="$t('操作')" prop="log" :show-overflow-tooltip="true" width="400"></el-table-column>
+      <!-- 时间 -->
+      <el-table-column :label="$t('时间')" prop="created_at"></el-table-column>
+      </el-table>
     <!-- <div slot="footer">
       <el-button @click="show = false">取消</el-button>
       <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
@@ -78,6 +88,7 @@ export default {
     return {
       pickingData: [],
       orderData: [],
+      operatorData: [],
       imgVisible: false,
       imgSrc: '',
       localization: {}
@@ -93,6 +104,7 @@ export default {
         if (res.ret) {
           this.pickingData = res.data.packages
           this.orderData = res.data.orders
+          this.operatorData = res.data.logs
           this.localization = res.localization
           // this.page_params.page = res.meta.current_page
           // this.page_params.total = res.meta.total
