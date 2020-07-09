@@ -832,11 +832,7 @@
               </template>
             </el-table-column>
             <!-- 物流类型 -->
-             <el-table-column prop="name" :label="$t('物流类型')">
-             </el-table-column>
-             <!-- 描述 -->
-             <el-table-column prop="context" :label="$t('描述')"
-             :show-overflow-tooltip="true" width="120">
+             <el-table-column prop="name" :label="$t('物流信息')">
              </el-table-column>
              <!-- 是否启用 -->
             <el-table-column :label="$t('是否启用')">
@@ -899,12 +895,6 @@
         <el-form-item :label="$t('物流信息')">
           <el-input v-model="typeForm.name"></el-input>
         </el-form-item>
-        <!-- 描述 -->
-          <el-form-item :label="$t('描述')">
-          <el-input type="textarea" v-model="typeForm.context"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          :placeholder="$t('请输入')"></el-input>
-          </el-form-item>
         </el-form>
         <div slot="footer">
         <el-button @click="expressDialog = false">{{$t('取消')}}</el-button>
@@ -951,8 +941,7 @@ export default {
       logisticsTypeData: [],
       TypeData: [],
       typeForm: {
-        name: '',
-        context: ''
+        name: ''
       },
       rechargeAmount: [],
       amount: '',
@@ -1400,7 +1389,6 @@ export default {
       this.amount = ''
     },
     clearType () {
-      this.typeForm.context = ''
       this.typeForm.name = ''
     },
     submitRecharge () {
@@ -2281,7 +2269,6 @@ export default {
       this.$request.getAloneType(this.typeId).then(res => {
         if (res.ret) {
           this.typeForm.name = res.data.name
-          this.typeForm.context = res.data.context
         }
       })
     },

@@ -193,15 +193,15 @@
         <el-form-item>
           <el-row :gutter="10">
             <el-col :span="5">
-              <div>{{$t('*首重') + this.localization.weight_unit}}</div>
+              <div>{{$t('*首重价格') +  this.localization.currency_unit + '/' + this.localization.weight_unit}}</div>
               <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
-            <el-col :span="5">
+            <!-- <el-col :span="5">
               <div>{{$t('*首费') + this.localization.currency_unit}}</div>
               <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
+            </el-col> -->
             <el-col :span="5">
-              <div>{{$t('首费成本价') + this.localization.currency_unit}}</div>
+              <div>{{$t('首费成本价') + this.localization.currency_unit + '/' + this.localization.weight_unit}}</div>
               <el-input v-model="form.first_cost_money" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
           </el-row>
@@ -222,12 +222,12 @@
                       <el-input v-model="scope.row.end"></el-input>
                     </template>
                   </el-table-column>
-                  <el-table-column :label="$t('成本价格') + this.localization.currency_unit + '/' + this.localization.weight_unit">
+                  <el-table-column :label="$t('成本价格') + this.localization.currency_unit">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.cost_price"></el-input>
                     </template>
                   </el-table-column>
-                  <el-table-column :label="$t('销售价格') + this.localization.currency_unit + '/' + this.localization.weight_unit">
+                  <el-table-column :label="$t('销售价格') + this.localization.currency_unit">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.sale_price"></el-input>
                     </template>

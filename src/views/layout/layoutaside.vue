@@ -67,7 +67,7 @@ export default {
 </script>
 <style lang="scss">
 .layout-aside {
-  width: 230px !important;
+  width: 180px !important;
   height: 100vh;
   overflow: auto;
   position: fixed;
@@ -77,7 +77,7 @@ export default {
   transition: width .3s ease-in-out;
   overflow-x: hidden;
   .aside-top {
-    width: 230px;
+    width: 180px;
     height: 60px;
     line-height: 60px;
     background-color: #3540A5;
@@ -91,12 +91,12 @@ export default {
     margin-right: 5px;
   }
   .route-menu {
-    width: 230px;
+    width: 180px;
     border: none;
     margin-top: 50px;
   }
   .route-item {
-    padding-left: 80px !important;
+    padding-left: 60px !important;
   }
   .el-menu-item-group__title {
     padding: 0;
@@ -105,7 +105,7 @@ export default {
     width: 0 !important;
   }
   .el-submenu__title {
-    padding-left: 40px !important;
+    padding-left: 20px !important;
   }
   .icon-title {
     font-size: 18px;

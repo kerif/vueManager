@@ -88,10 +88,10 @@ export default {
   left: 0px;
 }
 .layout-header {
-  width: calc(100vw - 230px);
+  width: calc(100vw - 180px);
   position: fixed;
   top: 0;
-  left: 230px;
+  left: 180px;
   background-color: #fff;
   z-index: 99;
   transition: all .3s ease-in;

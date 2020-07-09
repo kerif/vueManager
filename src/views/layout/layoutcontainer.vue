@@ -35,9 +35,9 @@ export default {
 <style lang="scss">
 .layout-contaniner {
   .el-main {
-    left: 230px;
+    left: 180px;
     padding: 0;
-    width: calc(100vw - 230px);
+    width: calc(100vw - 180px);
     // height: calc(100vh - 170px);
     height: calc(100vh - 120px);
     transition: all 0.3s ease-in;
@@ -57,11 +57,11 @@ export default {
   }
   .layout-nav {
     padding: 10px 20px;
-    width: calc(100vw - 230px);
+    width: calc(100vw - 180px);
     box-sizing: border-box;
     position: relative;
     top: 60px;
-    left: 230px;
+    left: 180px;
     transition: all 0.3s ease-in;
     border: {
       top: 1px solid #e8e9eb;
