@@ -464,8 +464,8 @@ export default {
       })
     },
     clear () {
-      this.selectIDs = []
-      console.log(this.selectIDs, 'this.selectIDs = []111')
+      // this.selectIDs = []
+      // console.log(this.selectIDs, 'this.selectIDs = []111')
       this.form.logistics_type_id = ''
     },
     clearSn () {
