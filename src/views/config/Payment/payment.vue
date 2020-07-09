@@ -2268,7 +2268,7 @@ export default {
     getTypeDialog () {
       this.$request.getAloneType(this.typeId).then(res => {
         if (res.ret) {
-          this.typeForm.name = res.data.name
+          this.typeForm.context = res.data.context
         }
       })
     },

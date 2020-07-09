@@ -480,7 +480,7 @@ export default {
     changeLine () {
       dialog({ type: 'lineChange' }, data => {
         console.log(data, 'data')
-        this.express.CName = data.cn_name
+        this.express.CName = data.name
         this.express.MaxWeight = data.max_weight
         this.user.express_line_id = data.id
       })
