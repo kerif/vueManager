@@ -194,7 +194,7 @@
           <el-row :gutter="10">
             <el-col :span="5">
               <div>{{$t('*首重价格') +  this.localization.currency_unit + '/' + this.localization.weight_unit}}</div>
-              <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
+              <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
             <!-- <el-col :span="5">
               <div>{{$t('*首费') + this.localization.currency_unit}}</div>

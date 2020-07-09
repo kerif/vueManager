@@ -199,7 +199,7 @@
           <el-button class="btn-light-red detailsBtn" @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
           v-if="activeName === '1' || activeName === '2' || activeName === '3'">{{$t('作废')}}</el-button>
           <!-- 改价 -->
-          <el-button class="btn-pink detailsBtn" @click="changePrice(scope.row.id, scope.row.order_sn)"
+          <el-button class="btn-pink detailsBtn" @click="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)"
           v-if="activeName === '2'">{{$t('改价')}}</el-button>
           <!-- 拣货日志 -->
           <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
@@ -252,7 +252,7 @@
                 <el-option
                   v-for="item in modeData"
                   :key="item.id"
-                  :label="item.name"
+                  :label="item.context"
                   :value="item.id">
                 </el-option>
               </el-select>
@@ -464,8 +464,9 @@ export default {
       })
     },
     clear () {
-      this.form.logistics_type_id = ''
       this.selectIDs = []
+      console.log(this.selectIDs, 'this.selectIDs = []111')
+      this.form.logistics_type_id = ''
     },
     clearSn () {
       this.tableSn = ''
@@ -797,10 +798,11 @@ export default {
       })
     },
     // 改价
-    changePrice (id, sn) {
+    changePrice (id, sn, fee) {
       this.priceId = id
       this.priceSn = sn
       this.priceDialog = true
+      this.priceForm.actual_payment_fee = fee
     },
     clearPrice () {
       this.priceSn = ''
