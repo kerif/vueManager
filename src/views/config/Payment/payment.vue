@@ -832,7 +832,7 @@
               </template>
             </el-table-column>
             <!-- 物流类型 -->
-             <el-table-column prop="name" :label="$t('物流信息')">
+             <el-table-column prop="context" :label="$t('物流信息')">
              </el-table-column>
              <!-- 是否启用 -->
             <el-table-column :label="$t('是否启用')">
@@ -893,7 +893,7 @@
     <el-dialog :visible.sync="expressDialog" width="30%" :title="this.typeId ? $t('编辑') : $t('新增')" @close="clearType">
       <el-form :model="typeForm" ref="typeForm" class="demo-ruleForm">
         <el-form-item :label="$t('物流信息')">
-          <el-input v-model="typeForm.name"></el-input>
+          <el-input v-model="typeForm.context"></el-input>
         </el-form-item>
         </el-form>
         <div slot="footer">
@@ -941,7 +941,7 @@ export default {
       logisticsTypeData: [],
       TypeData: [],
       typeForm: {
-        name: ''
+        context: ''
       },
       rechargeAmount: [],
       amount: '',
@@ -1389,7 +1389,7 @@ export default {
       this.amount = ''
     },
     clearType () {
-      this.typeForm.name = ''
+      this.typeForm.context = ''
     },
     submitRecharge () {
       if (!this.amount) {
