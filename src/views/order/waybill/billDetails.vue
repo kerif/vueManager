@@ -17,6 +17,7 @@
       <!-- 国家或地区 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">{{$t('国家/地区')}}</span>
+         <span>{{form.address && form.address.code}}</span>&nbsp;
          <span>{{form.address && form.address.country.cn_name}}</span>
       </el-col>
     </el-row>
@@ -38,15 +39,15 @@
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
-     <!-- 清关编码 -->
-      <el-col :span="7">
-        <span class="leftWidth">{{$t('清关编码')}}</span>
-        <span>{{form.clearance_code}}</span>
-      </el-col>
       <!-- 邮编 -->
-        <el-col :span="7" :offset="1">
+        <el-col :span="7">
          <span class="leftWidth">{{$t('邮编')}}</span>
          <span>{{form.address && form.address.postcode}}</span>
+      </el-col>
+     <!-- 清关编码 -->
+      <el-col :span="7" :offset="1" v-if="form.clearance_code">
+        <span class="leftWidth">{{$t('清关编码')}}</span>
+        <span>{{form.clearance_code}}</span>
       </el-col>
     </el-row>
     </div>
