@@ -450,7 +450,7 @@ export default {
         },
         {
           id: 3,
-          name: this.$t('首重+阶段价格档')
+          name: this.$t('首重+阶梯价格档')
         }
       ],
       iconList: [],
