@@ -1180,9 +1180,9 @@ export default {
     // 确定拖拽 自定义物流
     typeRowUpdate () {
       // eslint-disable-next-line camelcase
-      const ids = this.typeSendData.map(({ id, name }, index) => ({ id, index, name }))
+      const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
       console.log(ids)
-      this.typeSendData = []
+      this.TypeData = []
       this.$request.typeLocationIndex(ids).then(res => {
         if (res.ret) {
           this.$notify({

@@ -343,7 +343,6 @@ export default {
     },
     clear () {
       this.form.logistics_type_id = ''
-      this.deleteNum = []
     },
     clearSn () {
       this.tableSn = ''
