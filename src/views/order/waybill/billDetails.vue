@@ -12,7 +12,7 @@
       <!-- 手机/联系电话 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">{{$t('手机/联系电话')}}</span>
-         <span>{{form.address &&form.address.phone}}</span>
+         <span>{{form.address &&form.address.timezone}}-{{form.address &&form.address.phone}}</span>
       </el-col>
       <!-- 国家或地区 -->
         <el-col :span="7" :offset="1">
