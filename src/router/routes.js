@@ -98,6 +98,8 @@ const selfDetails = loadonDemand('station/warehouseDetails')
 const logisticsList = loadonDemand('station/logistics')
 // 物流查询
 const tracking = loadonDemand('station/tracking')
+// 申请集包
+// const applyPackage = loadonDemand('station/applyPackage')
 // 自定义物流 导入数据
 const importLogistics = loadonDemand('station/importLogistics')
 // 订单 预报包裹列表
@@ -646,6 +648,17 @@ export default [
               parent: '/station/logistics'
             }
           }
+          // {
+          //   path: '/station/applyPackage',
+          //   name: 'applyPackage',
+          //   component: applyPackage,
+          //   id: 506,
+          //   meta: {
+          //     level: 2,
+          //     group: '货站',
+          //     name: '申请集包'
+          //   }
+          // }
         ]
       },
       {

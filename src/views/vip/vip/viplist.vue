@@ -25,7 +25,7 @@
         <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('客户编号')" prop="uid"></el-table-column>
+      <!-- <el-table-column :label="$t('客户编号')" prop="uid"></el-table-column> -->
       <el-table-column :label="$t('邮箱')" prop="email"></el-table-column>
       <el-table-column :label="$t('手机号码')" prop="phone"></el-table-column>
       <el-table-column prop="balance" :label="$t('余额') + this.localization.currency_unit"></el-table-column>
