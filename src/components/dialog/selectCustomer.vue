@@ -117,7 +117,6 @@ export default {
     font-size: 14px;
     color: #FFF;
   }
-
   .el-dialog__close {
     color: #FFF;
   }

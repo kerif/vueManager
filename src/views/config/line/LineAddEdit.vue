@@ -212,12 +212,12 @@
             <el-button @click="addRow" class="btn-deep-purple">{{$t('新增')}}</el-button>
           </div>
             <el-table :data="form.price_grade" style="width: 100%" border>
-               <el-table-column :label="$t('起始重量') + this.localization.weight_unit">
+               <el-table-column :label="$t('起始重量') + this.localization.weight_unit + ' >='">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.start"></el-input>
                   </template>
                   </el-table-column>
-                  <el-table-column :label="'*' + $t('截止重量') + this.localization.weight_unit">
+                  <el-table-column :label="'*' + $t('截止重量') + this.localization.weight_unit + ' <'">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.end"></el-input>
                     </template>

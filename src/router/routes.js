@@ -100,6 +100,8 @@ const logisticsList = loadonDemand('station/logistics')
 const tracking = loadonDemand('station/tracking')
 // 申请集包
 // const applyPackage = loadonDemand('station/applyPackage')
+// 申请打包合箱
+// const boxing = loadonDemand('station/boxing')
 // 自定义物流 导入数据
 const importLogistics = loadonDemand('station/importLogistics')
 // 订单 预报包裹列表
@@ -657,6 +659,18 @@ export default [
           //     level: 2,
           //     group: '货站',
           //     name: '申请集包'
+          //   }
+          // },
+          // {
+          //   path: '/station/boxing',
+          //   name: 'boxing',
+          //   component: boxing,
+          //   id: 506,
+          //   meta: {
+          //     level: 3,
+          //     group: '货站',
+          //     name: '打包合箱',
+          //     parent: '/station/applyPackage'
           //   }
           // }
         ]

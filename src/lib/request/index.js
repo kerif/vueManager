@@ -1582,6 +1582,22 @@ exports.setSelf = (id, params) => {
 exports.getAloneSelf = (id) => {
   return $form.get(`self-pickup-orders/${id}`)
 }
+// 货站 申请集包
+exports.packs = (params) => {
+  return $form.get('package-packs/packages', { params })
+}
+// 申请集包 发起集包
+exports.preview = (params) => {
+  return $form.post('package-packs/preview', params)
+}
+// 发起集包 获取地址数据
+exports.previewAddress = (params) => {
+  return $form.get('package-packs/user-address', { params })
+}
+// 发起集包 获取快递数据
+exports.usableLines = (params) => {
+  return $form.post('package-packs/usable-express-lines', params)
+}
 // 发货单 导出清单
 exports.uploadExcel = (ids) => {
   return $form.post(`shipments/order-export-batch`, ids)
