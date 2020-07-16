@@ -654,18 +654,18 @@ export default [
             path: '/station/applyPackage',
             name: 'applyPackage',
             component: applyPackage,
-            id: 506,
+            id: 507,
             meta: {
               level: 2,
               group: '货站',
-              name: '申请集包'
+              name: '包裹快速合箱'
             }
           },
           {
             path: '/station/boxing',
             name: 'boxing',
             component: boxing,
-            id: 506,
+            id: 507,
             meta: {
               level: 3,
               group: '货站',

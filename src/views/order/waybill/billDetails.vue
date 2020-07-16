@@ -194,7 +194,7 @@
             <template slot-scope="scope">
               <span v-if="scope.row.freight_mode === 1">{{$t('首重续重模式')}}</span>
               <span v-if="scope.row.freight_mode === 2">{{$t('阶梯价格模式')}}</span>
-              <span v-if="scope.row.freight_mode === 2">{{$t('首重+阶梯价格档模式')}}</span>
+              <span v-if="scope.row.freight_mode === 3">{{$t('首重+阶梯价格档模式')}}</span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('抵用券金额') + this.localization.currency_unit" prop="coupon_amount"></el-table-column>

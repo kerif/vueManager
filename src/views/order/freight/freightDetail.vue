@@ -17,22 +17,22 @@
       <div v-if="line.mode === 1">
         <!-- 首重、续重模式 -->
         <div v-if="count">{{$t('计费重量')}}：
-          {{ count.countWeight | formatWeight }}{{ this.localization.weight_unit }}
+          {{ count.countWeight | formatWeight }}{{ localization.weight_unit }}
           </div>
         <div v-else>{{$t('首重')}}：
-          {{ line.first_weight | formatWeight }}{{ this.localization.weight_unit }}
+          {{ line.first_weight | formatWeight }}{{ localization.weight_unit }}
         </div>
         <div v-if="count">{{$t('预计费用')}}：
-          {{ this.localization.currency_unit }}{{ count.exceptFee | formatPrice }}
+          {{ localization.currency_unit }}{{ count.exceptFee | formatPrice }}
           </div>
         <div v-else>{{$t('续重')}}：
-          {{ line.next_weight | formatWeight }}{{ this.localization.weight_unit }}
+          {{ line.next_weight | formatWeight }}{{ localization.weight_unit }}
           </div>
         <div>{{$t('首重收费')}}：
-          {{ this.localization.currency_unit }}{{ (count ? count.countFirst : line.first_money) | formatPrice }}
+          {{ localization.currency_unit }}{{ (count ? count.countFirst : line.first_money) | formatPrice }}
           </div>
         <div>{{$t('续重收费')}}：
-          {{ this.localization.currency_unit }}{{ count ? count.countNext : line.next_money | formatPrice }}
+          {{ localization.currency_unit }}{{ count ? count.countNext : line.next_money | formatPrice }}
           </div>
       </div>
       <div v-else>
@@ -40,17 +40,17 @@
         <div v-for="item in line.price_grade" :key="item.id">
           <div>
             <span>{{$t('重量范围')}}：</span>
-            <span>{{item.start | formatWeight}}~{{item.end | formatWeight}}{{this.localization.weight_unit}}</span>
+            <span>{{item.start | formatWeight}}~{{item.end | formatWeight}}{{localization.weight_unit}}</span>
           </div>
           <div>
             <span>{{$t('运费')}}：</span>
-            <span>{{this.localization.currency_unit}}{{item.sale_price | formatPrice}}/{{this.localization.weight_unit}}</span>
+            <span>{{localization.currency_unit}}{{item.sale_price | formatPrice}}/{{localization.weight_unit}}</span>
           </div>
         </div>
       </div>
       <div v-for="item in line.costs" :key="item.id">
         {{ item.name }}：
-        {{ this.localization.currency_unit }}
+        {{ localization.currency_unit }}
         {{ item.pivot.price | formatPrice }}
       </div>
     </div>
@@ -83,6 +83,7 @@ export default {
       this.$request.getLineDetail(this.$route.params.id).then(res => {
         if (res.ret) {
           this.line = res.data
+          console.log(this.localization, 'localization')
           this.localization = res.localization
           this.line.countryStr = this.line.countries.map(item => item.name).join('，')
         }
