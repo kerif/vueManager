@@ -3,7 +3,7 @@
     <div>
     <div class="receiverMSg msg-top">
     <h4 class="change-sty">{{$t('收货人信息')}}</h4>
-    <el-button class="change-sty msg-sty btn-deep-purple" @click="changeReceive">{{$t('更换收货人信息')}}</el-button>
+    <el-button v-if="this.$route.params.activeName === '1' || this.$route.params.activeName === '2'" class="change-sty msg-sty btn-deep-purple" @click="changeReceive">{{$t('更换收货人信息')}}</el-button>
     <el-row class="container-center" :gutter="20">
       <!-- 姓名 -->
       <el-col :span="7">
