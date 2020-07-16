@@ -133,9 +133,9 @@
           <!-- 快递公司 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item :label="$t('*快递公司')">
+              <el-form-item :label="$t('快递公司')">
                 <el-select v-model="user.express_company_id" clearable
-                :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" :placeholder="$t('请选择')">
+                 :placeholder="$t('请选择')">
                   <el-option
                     v-for="item in expressData"
                     :key="item.id"
@@ -433,7 +433,9 @@ export default {
             this.$set(this.user, 'CName', res.data.express_line.name)
             this.$set(this.user, 'MaxWeight', res.data.express_line.max_weight)
           }
-          this.user.express_company_id = res.data.express_company.id
+          if (res.data.express_company) {
+            this.user.express_company_id = res.data.express_company.id
+          }
           this.$set(this.user, 'country_id', res.data.country.id)
           this.areaId = this.user.warehouse_id
           this.locationId = this.areaId
@@ -663,8 +665,6 @@ export default {
         return this.$message.error(this.$t('请输入快递单号'))
       } else if (this.user.package_weight === '') {
         return this.$message.error(this.$t('请输入重量'))
-      } else if (this.user.express_company_id === '') {
-        return this.$message.error(this.$t('请选择快递公司'))
       } else if (this.user.warehouse_id === '') {
         return this.$message.error(this.$t('请选择仓库'))
       } else {
