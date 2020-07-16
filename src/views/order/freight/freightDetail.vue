@@ -17,16 +17,16 @@
       <div v-if="line.mode === 1">
         <!-- 首重、续重模式 -->
         <div v-if="count">{{$t('计费重量')}}：
-          {{ count.countWeight | formatWeight }}{{ localization.weight_unit }}
+          {{ count.countWeight}}{{ localization.weight_unit }}
           </div>
         <div v-else>{{$t('首重')}}：
-          {{ line.first_weight | formatWeight }}{{ localization.weight_unit }}
+          {{ line.first_weight}}{{ localization.weight_unit }}
         </div>
         <div v-if="count">{{$t('预计费用')}}：
           {{ localization.currency_unit }}{{ count.exceptFee | formatPrice }}
           </div>
         <div v-else>{{$t('续重')}}：
-          {{ line.next_weight | formatWeight }}{{ localization.weight_unit }}
+          {{ line.next_weight}}{{ localization.weight_unit }}
           </div>
         <div>{{$t('首重收费')}}：
           {{ localization.currency_unit }}{{ (count ? count.countFirst : line.first_money) | formatPrice }}
@@ -35,16 +35,33 @@
           {{ localization.currency_unit }}{{ count ? count.countNext : line.next_money | formatPrice }}
           </div>
       </div>
-      <div v-else>
+      <div v-if="line.mode === 2">
         <!-- 阶梯价格档模式 -->
         <div v-for="item in line.price_grade" :key="item.id">
           <div>
             <span>{{$t('重量范围')}}：</span>
-            <span>{{item.start | formatWeight}}~{{item.end | formatWeight}}{{localization.weight_unit}}</span>
+            <span>{{item.start}}~{{item.end}}{{localization.weight_unit}}</span>
           </div>
           <div>
             <span>{{$t('运费')}}：</span>
             <span>{{localization.currency_unit}}{{item.sale_price | formatPrice}}/{{localization.weight_unit}}</span>
+          </div>
+        </div>
+      </div>
+      <div v-if="line.mode === 3">
+        <!-- 阶梯价格档模式 -->
+          <div>
+          <span>{{$t('首重价格')}}：</span>
+          <span>{{localization.currency_unit}}{{line.first_money}}/{{localization.weight_unit}}</span>
+        </div>
+        <div v-for="item in line.price_grade" :key="item.id">
+          <div>
+            <span>{{$t('重量范围')}}：</span>
+            <span>{{item.start}}~{{item.end}}{{localization.weight_unit}}</span>
+          </div>
+          <div>
+            <span>{{$t('运费')}}：</span>
+            <span>{{localization.currency_unit}}{{item.sale_price | formatPrice}}</span>
           </div>
         </div>
       </div>
