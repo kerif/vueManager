@@ -241,6 +241,31 @@
           </el-col>
         </el-form-item>
       </div>
+      <!-- 包裹重量向上取值 -->
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+           <div>
+              <span>{{$t('包裹重量向上取值')}}</span>
+              <el-tooltip class="item" effect="dark" :content="$t('例如包裹重量1.1kg,向上取整0.5，就会变成1.5kg。向上取整1，就会变成2kg。')" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+            <el-select
+              v-model="form.weight_rise"
+              filterable
+              class="country-select"
+              :placeholder="$t('请选择')">
+              <el-option
+                v-for="(item, index) in priceData"
+                :key="index"
+                :label="item.name"
+                :value="item.name">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
@@ -426,6 +451,7 @@ export default {
         is_great_value: 0,
         icon: '',
         need_id_card: '',
+        weight_rise: '',
         remark: '',
         clearance_code_remark: '',
         need_clearance_code: 0,
@@ -451,6 +477,17 @@ export default {
         {
           id: 3,
           name: this.$t('首重+阶梯价格档')
+        }
+      ],
+      priceData: [
+        {
+          name: 0
+        },
+        {
+          name: 0.5
+        },
+        {
+          name: 1
         }
       ],
       iconList: [],

@@ -550,6 +550,14 @@ exports.getInvoice = () => {
 exports.allOrderSn = (id, params) => {
   return $form.put('shipments/add-order-by-sn', id, params)
 }
+// 发货单 确认添加物流信息
+exports.confirmExpress = (id, params) => {
+  return $form.put(`shipments/${id}/logistics-sn`, params)
+}
+// 发货单 确认批量上传单号
+exports.updateBatch = (id, params) => {
+  return $form.put(`shipments/${id}/logistics-import`, params)
+}
 // 删除预报包裹列表
 exports.deletePackages = (ids) => {
   return $form.put('packages/batch-delete', ids)
@@ -1597,6 +1605,30 @@ exports.previewAddress = (params) => {
 // 发起集包 获取快递数据
 exports.usableLines = (params) => {
   return $form.post('package-packs/usable-express-lines', params)
+}
+// 发起集包 获取增值服务
+exports.servicesPackage = () => {
+  return $form.get('package-packs/value-added-services')
+}
+// 发起集包 获取付款方式
+exports.packsConfig = () => {
+  return $form.get('package-packs/insurance-config')
+}
+// 发起集包 保存
+exports.savePacks = (params) => {
+  return $form.post('package-packs/packing', params)
+}
+// 获取自提点地址
+exports.lineStations = (id) => {
+  return $form.get(`package-packs/express-line/${id}/stations`)
+}
+// 获取支持的id跟清关编码
+exports.idCards = (id) => {
+  return $form.get(`package-packs/express-line/${id}`)
+}
+// 发货单 获取物流信息模版
+exports.uploadBatch = (id) => {
+  return $form.get(`shipments/${id}/logistics-export`)
 }
 // 发货单 导出清单
 exports.uploadExcel = (ids) => {

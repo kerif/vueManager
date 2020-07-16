@@ -66,6 +66,7 @@ import setCountry from './setCountry.vue'
 import explanationAdd from './insuranceAdd.vue'
 import expressChange from './storageChange.vue'
 import trackingLang from './trackingLang.vue'
+import batchExpress from './batchExpress.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -132,6 +133,7 @@ const SetCountryController = Vue.extend(setCountry)
 const ExplanationController = Vue.extend(explanationAdd)
 const ExpressLineController = Vue.extend(expressChange)
 const TrackingLangController = Vue.extend(trackingLang)
+const BatchController = Vue.extend(batchExpress)
 
 const mixin = {
   data () {
@@ -591,6 +593,13 @@ function initInstance (type) {
     // 更多配置 系统物流类型 更改语言
     case 'trackingLang':
       instance = new TrackingLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 发货单 添加物流信息
+    case 'batchExpress':
+      instance = new BatchController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

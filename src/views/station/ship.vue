@@ -119,7 +119,11 @@
           <!-- 取消发货 -->
           <el-button class="btn-orangey-red btn-margin" v-if="scope.row.status === 1" @click="cancelShip(scope.row.id)">{{$t('取消发货')}}</el-button>
           <!-- 轨迹 -->
-          <el-button class="btn-deep-blue" @click="logistics(scope.row.id, scope.row.sn)">{{$t('轨迹')}}</el-button>
+          <el-button class="btn-deep-blue btn-margin" @click="logistics(scope.row.id, scope.row.sn)">{{$t('轨迹')}}</el-button>
+          <!-- 批量更新单号 -->
+          <el-button class="btn-pink btn-margin" @click="batchNum(scope.row.id, scope.row.sn)">{{$t('批量更新单号')}}</el-button>
+          <!-- 添加物流信息 -->
+          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" class="btn-green btn-margin">{{$t('添加物流信息')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -169,6 +173,42 @@
           </template>
         </el-table-column>
       </el-table>
+    </el-dialog>
+    <!-- 批量更新单号 -->
+    <el-dialog :visible.sync="batchDialog" width="45%" :title="$t('批量更新单号:') + this.batchSn" @close="clearBatch">
+      <el-form>
+      <!-- 公告标题 -->
+      <el-form-item :label="$t('模版下载')">
+        <el-row>
+          <el-col :span="10">
+            <el-button @click="uploadList">{{this.batchSn}}{{$t('模版下载')}}</el-button>
+            <span class="batch-sty">1，{{$t('请先下载指定的模版')}}</span><br/>
+            <span class="batch-sty">2，{{$t('根据模版内容填充物流信息')}}</span><br/>
+            <span class="batch-sty">3，{{$t('上传')}}</span><br/>
+            </el-col>
+        </el-row>
+      </el-form-item>
+       <el-form-item :label="$t('模版上传')">
+        <el-row>
+          <el-col :span="20">
+            <el-upload
+              class="upload-demo"
+              action=""
+              :limit="3"
+              :on-remove="onFileRemove"
+              :file-list="fileList"
+              :http-request="uploadBaleImg">
+              <el-button size="small" type="primary">{{$t('请选择要上传的文件')}}</el-button>
+              <!-- <div slot="tip" class="el-upload__tip">{{$t('支持格式：.doc .docx .pdf，单个文件不能超过3MB')}}</div> -->
+            </el-upload>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      </el-form>
+       <div slot="footer">
+        <el-button @click="batchDialog = false">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="confirmBatch">{{$t('确定')}}</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -220,7 +260,12 @@ export default {
       showDialog: false,
       tableData: [],
       tableId: '',
-      tableSn: ''
+      tableSn: '',
+      batchDialog: false,
+      batchSn: '',
+      batchId: '',
+      urlName: '',
+      fileList: []
     }
   },
   created () {
@@ -271,6 +316,85 @@ export default {
         }
       })
     },
+    // 下载excel
+    uploadList () {
+      this.$request.uploadBatch(this.batchId).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          // window.location.href = this.urlExcel
+          window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    uploadBaleImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.fileList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+          console.log(res.data, 'res.data')
+          this.urlName = res.data[0].name
+          console.log(this.urlName, 'this.urlName')
+          // this.getList()
+        }
+      })
+    },
+    // 确认 批量更新单号
+    confirmBatch () {
+      this.$request.updateBatch(this.batchId, {
+        name: this.urlName
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.batchDialog = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onUpload (file) {
+      let params = new FormData()
+      params.append(`files[${0}][file]`, file)
+      return this.$request.uploadFiles(params)
+    },
+    // 文件删除
+    onFileRemove (file, fileList) {
+      this.fileList = fileList
+    },
+    // 批量更新单号
+    batchNum (id, sn) {
+      this.batchId = id
+      this.batchSn = sn
+      this.batchDialog = true
+    },
+    clearBatch () {
+      this.batchId = ''
+      this.batchSn = ''
+    },
     // 跳转至详情
     goDetails (id, status) {
       console.log(id, '我是传过去id')
@@ -285,6 +409,13 @@ export default {
         if (res.ret) {
           this.modeData = res.data
         }
+      })
+    },
+    addCompany (id, logisticsSn, logisticsCompany) {
+      console.log(id, 'id')
+      console.log(logisticsSn, 'logisticsSn')
+      dialog({ type: 'batchExpress', id: id, logistics_sn: logisticsSn, logistics_company: logisticsCompany }, () => {
+        this.getList()
       })
     },
     // 弹窗 管理
@@ -580,6 +711,9 @@ export default {
   }
   .table-sty {
     margin-bottom: 10px;
+  }
+  .batch-sty {
+    color: red;
   }
 }
 </style>

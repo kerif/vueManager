@@ -109,12 +109,11 @@ export default {
         this.$request.packs({
           express_num: this.expressNum
         }).then(res => {
-          if (res.ret) {
+          if (res.data.length) {
             this.applyList = res.data
           } else {
             this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
+              title: this.$t('包裹未找到'),
               type: 'warning'
             })
           }
@@ -123,12 +122,11 @@ export default {
         this.$request.packs({
           user_id: this.userId
         }).then(res => {
-          if (res.ret) {
+          if (res.data.length) {
             this.applyList = res.data
           } else {
             this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
+              title: this.$t('会员未找到'),
               type: 'warning'
             })
           }

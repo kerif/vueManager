@@ -62,6 +62,8 @@
       <!-- 仓库 -->
       <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name">
       </el-table-column>
+      <el-table-column :label="$t('货位')" prop="location">
+      </el-table-column>
       <template slot="append">
         <div class="append-box">
           <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>

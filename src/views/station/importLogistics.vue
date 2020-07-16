@@ -6,8 +6,8 @@
           <span class="import-sty">{{$t('下载对应模版，如实填写批量下单表后，请以Excel形式保存，点击第二步上传')}}</span><br/>
         <el-row>
           <el-col :span="10">
-            <el-button @click="uploadList(1)">覆盖模版</el-button>
-            <el-button @click="uploadList(2)">追加模版</el-button>
+            <el-button @click="uploadList(1)">{{$t('覆盖模版')}}</el-button>
+            <el-button @click="uploadList(2)">{{$t('追加模版')}}</el-button>
             </el-col>
         </el-row>
       </el-form-item>
@@ -63,7 +63,7 @@
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="saveImport"
         :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
-        </el-form-item>
+      </el-form-item>
     </el-form>
     <el-dialog :visible.sync="trackDialog" :title="this.sn + $t('的物流轨迹')" class="add-company"
       width="55%" @close="clear">
