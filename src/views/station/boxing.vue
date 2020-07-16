@@ -23,7 +23,7 @@
         <div class="address-main">
           <div class="express-left">
             <p>{{$t('收件地址')}}</p>
-              <div v-if="this.userData.id" class="choose-sty">
+              <div v-if="this.userData.id">
                 <p>{{userData.receiver_name}}</p>
                 <p>{{userData.phone}}</p>
                 <p>{{userData.city}}&nbsp;
@@ -61,7 +61,7 @@
             <div class="express-left express-right radio-sty">
                <el-radio-group v-model="radio" @change="changeRadio">
                   <el-radio :label="1">{{$t('送货上门')}}</el-radio>
-                  <el-radio :label="2" v-if="this.stationsData.length">{{$t('自提点提货')}}</el-radio>
+                  <el-radio :label="2" v-if="this.stationsData.length && this.isDelivery === 1">{{$t('自提点提货')}}</el-radio>
               </el-radio-group>
             </div>
             <div class="line-sty"></div>
@@ -238,6 +238,7 @@ export default {
       lineId: '',
       needCode: '',
       idCode: '',
+      isDelivery: '',
       box: {
         package_ids: [],
         express_line_id: '',
@@ -277,6 +278,12 @@ export default {
           this.box.is_insurance = res.data.items.insurance
           this.box.payment_mode = res.data.items.payment_mode
           this.getExpress()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
@@ -303,6 +310,7 @@ export default {
       this.selfData.address = ''
       this.box.clearance_code = ''
       this.box.id_card = ''
+      this.isDelivery = ''
     },
     // 获取身份证号码跟清关编码
     getId () {
@@ -311,6 +319,8 @@ export default {
           console.log(res.data, 'res')
           this.needCode = res.data.need_clearance_code
           this.idCode = res.data.need_id_card
+          this.isDelivery = res.data.is_delivery
+          console.log(this.isDelivery, 'this.isDelivery')
         }
       })
     },

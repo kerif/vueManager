@@ -182,7 +182,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-        <el-form-item :label="$t('打包自动生成货到付款订单')">
+        <!-- <el-form-item :label="$t('打包自动生成货到付款订单')">
             <el-switch
               v-model="company.should_auto_delivery"
               :active-text="$t('开')"
@@ -192,7 +192,7 @@
               active-color="#13ce66"
               inactive-color="gray">
             </el-switch>
-          </el-form-item>
+        </el-form-item> -->
         </el-form>
       <span slot="footer">
         <el-button @click="dialogVisible = false">{{$t('取消')}}</el-button>
@@ -247,7 +247,7 @@ export default {
       transCode: '',
       dialogVisible: false,
       company: {
-        should_auto_delivery: '',
+        // should_auto_delivery: '',
         default_pickup_station_id: '',
         is_delivery: ''
       },
@@ -350,7 +350,7 @@ export default {
         if (res.ret) {
           this.company.is_delivery = res.data.is_delivery
           this.company.default_pickup_station_id = res.data.default_pickup_station_id
-          this.company.should_auto_delivery = res.data.should_auto_delivery
+          // this.company.should_auto_delivery = res.data.should_auto_delivery
         }
       })
     },
