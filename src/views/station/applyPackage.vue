@@ -84,6 +84,7 @@ export default {
       radio: 1,
       expressNum: [],
       userId: '',
+      userNum: [],
       localization: {}
     }
   },
@@ -138,13 +139,19 @@ export default {
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
+      this.userNum = selection.map(item => (item.user_id))
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 打包合箱
     boxing () {
       console.log(this.deleteNum, 'this.deleteNum')
+      console.log(this.userNum, 'this.userNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
+      }
+      const Num = new Set(this.userNum)
+      if (Num.size > 1) {
+        return this.$message.error(this.$t('不能将不同用户的包裹合并打包'))
       }
       this.$router.push({ name: 'boxing',
         query: {

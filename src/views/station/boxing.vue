@@ -130,7 +130,8 @@
       </div>
       <div class="save-main">
         <el-button type="primary" class="sava-btn" :loading="$store.state. btnLoading" @click="saveBoxing">{{$t('提交')}}</el-button>
-        <p class="save-tips">{{$t('在仓库打包完成后再进行支付')}}</p>
+        <p v-if="this.box.payment_mode === 1" class="save-tips">{{$t('在仓库打包完成后再进行支付')}}</p>
+        <p v-if="this.box.payment_mode === 2" class="save-tips">{{$t('到达目的地后再进行支付')}}</p>
       </div>
     </div>
     <!-- 收件地址弹窗 -->

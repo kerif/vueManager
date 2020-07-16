@@ -181,7 +181,7 @@
       <el-form-item :label="$t('模版下载')">
         <el-row>
           <el-col :span="10">
-            <el-button @click="uploadList">{{this.batchSn}}{{$t('模版下载')}}</el-button>
+            <el-button @click="uploadList">{{this.batchSn}}{{$t('模版下载')}}</el-button><br/>
             <span class="batch-sty">1，{{$t('请先下载指定的模版')}}</span><br/>
             <span class="batch-sty">2，{{$t('根据模版内容填充物流信息')}}</span><br/>
             <span class="batch-sty">3，{{$t('上传')}}</span><br/>
