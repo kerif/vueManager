@@ -610,6 +610,10 @@ exports.claimPackage = (id, users) => {
 exports.deleteNoOwner = (ids) => {
   return $form.put('packages/no-owner/batch-delete', ids)
 }
+// 预报包裹列表 导出
+exports.uploadPackage = () => {
+  return $form.get('packages/export')
+}
 // 预报包裹列表 获得仓库列表数据
 exports.getSimpleList = () => {
   return $form.get('packages/warehouse-simple-list')
@@ -1469,6 +1473,14 @@ exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`
 // 订单列表 获取增值服务
 exports.getAdded = () => {
   return $form.get('orders/value-added-services')
+}
+// 订单列表 详情 获取可更改的地址信息
+exports.detailsAddress = (params) => {
+  return $form.get(`orders/user-address`, { params })
+}
+// 详情 更换收货地址
+exports.confirmChange = (id, addId) => {
+  return $form.put(`orders/${id}/address/${addId}`)
 }
 // 订单列表 获取支付方式列表
 exports.paymentType = () => {

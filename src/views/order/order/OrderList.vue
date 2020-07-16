@@ -1,6 +1,8 @@
 <template>
   <div class="order-list-container">
     <el-tabs v-model="activeName" class="tabLength">
+      <el-tab-pane :label="$t('全部') + '(' + 0 + ')'" name="0" v-if="!this.countData.all"></el-tab-pane>
+      <el-tab-pane v-else :label="$t('全部') + '(' + this.countData.all + ')'" name="0"></el-tab-pane>
       <!-- 未入库 -->
       <el-tab-pane :label="$t('未入库') + '(' + 0 + ')'" name="1" v-if="!this.countData.wait_in_storage"></el-tab-pane>
       <el-tab-pane v-else :label="$t('未入库') + '(' + this.countData.wait_in_storage + ')'" name="1"></el-tab-pane>
@@ -61,6 +63,9 @@
           </el-option>
         </el-select>
       </div>
+    <div class="import-list">
+     <el-button @click="uploadList">{{$t('导出清单')}}</el-button>
+    </div>
     </search-group>
     <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
     <!-- <el-select v-model="agent_name" @change="getList" clearable>
@@ -156,7 +161,7 @@
       <el-table-column :label="$t('提交时间')" prop="created_at">
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="200px" fixed="right">
+      <el-table-column :label="$t('操作')" width="200px" fixed="right" v-if="activeName === '1' || activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || activeName === '6'">
         <template slot-scope="scope">
           <!-- 入库 -->
           <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id)">{{$t('入库')}}</el-button>
@@ -246,7 +251,8 @@ export default {
       show: false,
       labelId: '',
       deleteNum: [],
-      countData: {}
+      countData: {},
+      urlExcel: ''
     }
   },
   methods: {
@@ -550,6 +556,26 @@ export default {
         }
       })
     },
+    // 导出清单
+    uploadList () {
+      this.$request.uploadPackage().then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 获取代理列表
     getAgentData () {
       this.$request.getSimpleList().then(res => {
@@ -590,6 +616,17 @@ export default {
     // 监听tab组件参数
     activeName (newValue) {
       switch (newValue) {
+        case '0': // 全部
+          this.page_params.page = 1
+          this.status = 0
+          this.timeList = []
+          this.begin_date = ''
+          this.end_date = ''
+          this.in_storage_end_date = ''
+          this.in_storage_end_date = ''
+          this.storageList = []
+          this.getList()
+          break
         case '1': // 未入库
           this.page_params.page = 1
           this.status = 1
@@ -665,7 +702,7 @@ export default {
 <style lang="scss">
 .order-list-container {
   .tabLength {
-    width: 620px !important;
+    width: 720px !important;
     display: inline-block;
   }
   .agentRight {
@@ -707,6 +744,10 @@ export default {
     .el-select {
       // width: 100%;
     }
+  }
+  .import-list {
+    display: inline-block;
+    margin-left: 10px;
   }
 }
 </style>

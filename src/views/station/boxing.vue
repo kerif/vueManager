@@ -22,14 +22,20 @@
         <h3>{{$t('收件地址')}}</h3>
         <div class="address-main">
           <div class="express-left">
-                <p>{{$t('收件地址')}}</p>
+            <p>{{$t('收件地址')}}</p>
+              <div v-if="this.userData.id" class="choose-sty">
+                <p>{{userData.receiver_name}}</p>
+                <p>{{userData.phone}}</p>
+                <p>{{userData.street}},&nbsp;{{userData.door_no}},&nbsp;{{userData.city}}&nbsp;
+                </p>
             </div>
-            <div class="express-left express-right" v-if="this.userData.id">
+          </div>
+            <!-- v-if="this.userData.id" -->
+            <!-- <div class="express-left express-right">
               <p>{{userData.street}}&nbsp;{{userData.door_no}}&nbsp;{{userData.city}}&nbsp;
-                <!-- <span v-if="user.address">({{user.address}})</span> -->
               </p>
-            </div>
-            <div class="express-left express-right" v-else>
+            </div> -->
+            <div class="express-left express-right">
               <p class="express-sty" @click="chooseUser">{{$t('请选择')}} ></p>
             </div>
             <div class="line-sty"></div>
@@ -53,18 +59,20 @@
               <p>{{$t('收货形式')}}</p>
             </div>
             <div class="express-left express-right radio-sty">
-               <el-radio-group v-model="radio">
+               <el-radio-group v-model="radio" @change="changeRadio">
                   <el-radio :label="1">{{$t('送货上门')}}</el-radio>
                   <el-radio :label="2" v-if="this.stationsData.length">{{$t('自提点提货')}}</el-radio>
               </el-radio-group>
             </div>
             <div class="line-sty"></div>
-            <div class="express-left" v-if="this.stationsData.length">
+            <div class="express-left" v-if="this.stationsData.length && this.radio === 2">
               <p>{{$t('自提点地址')}}</p>
+              <div class="choose-sty" v-if="this.selfData.id">
+                 <p>{{selfData.address}}</p>
+              </div>
             </div>
-            <div class="express-left express-right" v-if="this.stationsData.length">
-              <p v-if="this.selfData.id">{{selfData.address}}</p>
-              <p v-else class="express-sty" @click="selectStation">{{$t('请选择')}} ></p>
+            <div class="express-left express-right" v-if="this.stationsData.length && this.radio === 2">
+              <p class="express-sty" @click="selectStation">{{$t('请选择')}} ></p>
             </div>
             <div class="line-sty" v-if="this.stationsData.length"></div>
             <!-- 清关编码 -->
@@ -72,7 +80,7 @@
                 <p>{{$t('清关编码')}}</p>
             </div>
             <div class="express-left express-right radio-sty" v-if="this.needCode">
-                <el-input v-model="this.box.clearance_code" :placeholder="$t('请输入')"></el-input>
+                <el-input v-model="box.clearance_code" :placeholder="$t('请输入')"></el-input>
             </div>
             <div class="line-sty" v-if="this.needCode"></div>
             <!-- 身份证号码 -->
@@ -80,7 +88,7 @@
                 <p>{{$t('身份证号码')}}</p>
             </div>
             <div class="express-left express-right radio-sty" v-if="this.idCode">
-                <el-input v-model="this.box.id_card" :placeholder="$t('请输入')"></el-input>
+                <el-input v-model="box.id_card" :placeholder="$t('请输入')"></el-input>
             </div>
             <div class="line-sty" v-if="this.idCode"></div>
         </div>
@@ -289,6 +297,11 @@ export default {
       // this.need_id_card = val.need_id_card
       this.lineStations()
       this.getId()
+      this.selfData.id = ''
+      this.radio = ''
+      this.selfData.address = ''
+      this.box.clearance_code = ''
+      this.box.id_card = ''
     },
     // 获取身份证号码跟清关编码
     getId () {
@@ -299,6 +312,9 @@ export default {
           this.idCode = res.data.need_id_card
         }
       })
+    },
+    changeRadio () {
+      console.log(this.radio, 'radio')
     },
     // 获取自提点地址
     lineStations () {
@@ -349,8 +365,8 @@ export default {
     saveBoxing () {
       this.$request.savePacks({
         ...this.box,
-        package_ids: this.packageId,
-        clearance_code: this.box.clearance_code === 0 ? '' : this.box.clearance_code
+        package_ids: this.packageId
+        // clearance_code: this.box.clearance_code === 0 ? '' : this.box.clearance_code
       }).then(res => {
         if (res.ret) {
           this.$notify({

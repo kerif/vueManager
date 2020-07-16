@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
       <!-- 物品重量 -->
-      <el-table-column :label="$t('物品重量')" prop="package_weight"></el-table-column>
+      <el-table-column :label="$t('物品重量') + (this.localization.weight_unit ? this.localization.weight_unit : '')" prop="package_weight"></el-table-column>
       <!-- 寄往国家 -->
       <el-table-column :label="$t('寄往国家')" prop="destination_country.name"></el-table-column>
       <!-- 入库时间 -->
@@ -81,9 +81,10 @@ export default {
       tableLoading: false,
       deleteNum: [],
       textarea2: '',
-      radio: '',
+      radio: 1,
       expressNum: [],
-      userId: ''
+      userId: '',
+      localization: {}
     }
   },
   methods: {
@@ -111,6 +112,7 @@ export default {
         }).then(res => {
           if (res.data.length) {
             this.applyList = res.data
+            this.localization = res.localization
           } else {
             this.$notify({
               title: this.$t('包裹未找到'),
@@ -124,6 +126,7 @@ export default {
         }).then(res => {
           if (res.data.length) {
             this.applyList = res.data
+            this.localization = res.localization
           } else {
             this.$notify({
               title: this.$t('会员未找到'),

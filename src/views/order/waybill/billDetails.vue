@@ -2,7 +2,8 @@
   <div class="bill-details-container">
     <div>
     <div class="receiverMSg msg-top">
-    <h4>{{$t('收货人信息')}}</h4>
+    <h4 class="change-sty">{{$t('收货人信息')}}</h4>
+    <el-button class="change-sty msg-sty btn-deep-purple" @click="changeReceive">{{$t('更换收货人信息')}}</el-button>
     <el-row class="container-center" :gutter="20">
       <!-- 姓名 -->
       <el-col :span="7">
@@ -281,6 +282,50 @@
         <img :src="imgSrc" class="imgDialog">
       </div>
     </el-dialog>
+    <!-- 收件地址弹窗 -->
+  <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
+    <el-table
+      :data="tableData"
+      border
+      @row-click="onRowChange"
+      style="width: 100%">
+      <el-table-column>
+        <template slot-scope="scope">
+          <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
+        </template>
+       </el-table-column>
+      <!-- 国家 -->
+      <el-table-column
+        prop="country.cn_name"
+        :label="$t('国家')">
+      </el-table-column>
+      <!-- 收件人 -->
+        <el-table-column
+        prop="receiver_name"
+        :label="$t('收件人')">
+      </el-table-column>
+      <!-- 收件电话 -->
+        <el-table-column
+        :label="$t('收件电话')">
+        <template slot-scope="scope">
+          <span>{{scope.row.timezone}}-{{scope.row.phone}}</span>
+        </template>
+        </el-table-column>
+        <!-- 详细地址 -->
+        <el-table-column
+        :label="$t('详细地址')">
+        <template slot-scope="scope">
+          <span>{{scope.row.street}}&nbsp;{{scope.row.door_no}}&nbsp;{{scope.row.city}}
+            <span v-if="scope.row.address">({{scope.row.address}})</span>
+          </span>
+        </template>
+        </el-table-column>
+    </el-table>
+    <div slot="footer">
+      <el-button @click="boxDialog = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+    </div>
+  </el-dialog>
   </div>
 </template>
 
@@ -295,9 +340,13 @@ export default {
       localization: {},
       paymentData: [],
       boxData: [],
+      chooseId: 0,
       imgVisible: false,
       imgSrc: '',
-      tableLoading: false
+      tableLoading: false,
+      boxDialog: false,
+      tableData: [],
+      userId: ''
     }
   },
   created () {
@@ -317,7 +366,27 @@ export default {
         this.localization = res.localization
         this.paymentData = [res.data.payment]
         this.boxData = res.data.box
+        this.userId = res.data.user_id
       })
+    },
+    // 获取收件人可选信息
+    getAddress () {
+      this.$request.detailsAddress({
+        user_id: this.userId
+      }).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+        }
+      })
+    },
+    clear () {
+      this.chooseId = ''
+      this.user = {}
+    },
+    // 更换收件人信息
+    changeReceive () {
+      this.getAddress()
+      this.boxDialog = true
     },
     copyUrl () {
       const input = document.createElement('input')
@@ -333,6 +402,36 @@ export default {
     // 跳转到财务 流水记录
     goSerial (serialNumber) {
       this.$router.push({ name: 'transaction', query: { serial_number: serialNumber } })
+    },
+    onRowChange (row) {
+      this.chooseId = row.id
+      // this.box.address_id = this.chooseId
+      this.user = row
+    },
+    confirm (val) {
+      if (!this.chooseId) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$request.confirmChange(this.$route.params.id, this.chooseId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('保存成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.boxDialog = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+      // console.log(this.user, 'user')
+      // this.userData = this.user
+      // this.boxDialog = false
     }
   }
 }
@@ -399,6 +498,12 @@ export default {
   }
   .sign-font {
     font-size: 14px;
+  }
+  .change-sty {
+    display: inline-block;
+  }
+  .msg-sty {
+    margin-left: 10px;
   }
 }
 </style>
