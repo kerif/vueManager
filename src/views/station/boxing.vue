@@ -26,7 +26,7 @@
               <div v-if="this.userData.id" class="choose-sty">
                 <p>{{userData.receiver_name}}</p>
                 <p>{{userData.phone}}</p>
-                <p>{{userData.street}},&nbsp;{{userData.door_no}},&nbsp;{{userData.city}}&nbsp;
+                <p>{{userData.city}}&nbsp;
                 </p>
             </div>
           </div>
@@ -364,10 +364,10 @@ export default {
       }
     },
     saveBoxing () {
+      console.log(this.box.add_service, 'box.add_service')
       this.$request.savePacks({
         ...this.box,
         package_ids: this.packageId
-        // clearance_code: this.box.clearance_code === 0 ? '' : this.box.clearance_code
       }).then(res => {
         if (res.ret) {
           this.$notify({
