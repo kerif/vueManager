@@ -194,7 +194,7 @@
             <el-upload
               class="upload-demo"
               action=""
-              :limit="3"
+              :limit="1"
               :on-remove="onFileRemove"
               :file-list="fileList"
               :http-request="uploadBaleImg">
@@ -394,6 +394,7 @@ export default {
     clearBatch () {
       this.batchId = ''
       this.batchSn = ''
+      this.fileList = []
     },
     // 跳转至详情
     goDetails (id, status) {
