@@ -8,7 +8,7 @@
         <div>{{$t('目的地')}}：{{ line.countryStr }}</div>
         <div>{{$t('运送时效')}}：{{ line.reference_time }}</div>
         <div v-if="count">{{$t('预计运费')}}：
-          {{ localization.currency_unit }}{{ count.exceptFee | formatPrice }}
+          {{ localization.currency_unit }}{{ count.exceptFee}}
           </div>
       </div>
     </div>
@@ -23,16 +23,16 @@
           {{ line.first_weight}}{{ localization.weight_unit }}
         </div>
         <div v-if="count">{{$t('预计费用')}}：
-          {{ localization.currency_unit }}{{ count.exceptFee | formatPrice }}
+          {{ localization.currency_unit }}{{ count.exceptFee}}
           </div>
         <div v-else>{{$t('续重')}}：
           {{ line.next_weight}}{{ localization.weight_unit }}
           </div>
         <div>{{$t('首重收费')}}：
-          {{ localization.currency_unit }}{{ (count ? count.countFirst : line.first_money) | formatPrice }}
+          {{ localization.currency_unit }}{{ (count ? count.countFirst : line.first_money)}}
           </div>
         <div>{{$t('续重收费')}}：
-          {{ localization.currency_unit }}{{ count ? count.countNext : line.next_money | formatPrice }}
+          {{ localization.currency_unit }}{{ count ? count.countNext : line.next_money}}
           </div>
       </div>
       <div v-if="line.mode === 2">
@@ -44,7 +44,7 @@
           </div>
           <div>
             <span>{{$t('运费')}}：</span>
-            <span>{{localization.currency_unit}}{{item.sale_price | formatPrice}}/{{localization.weight_unit}}</span>
+            <span>{{localization.currency_unit}}{{item.sale_price}}/{{localization.weight_unit}}</span>
           </div>
         </div>
       </div>
@@ -61,14 +61,14 @@
           </div>
           <div>
             <span>{{$t('运费')}}：</span>
-            <span>{{localization.currency_unit}}{{item.sale_price | formatPrice}}</span>
+            <span>{{localization.currency_unit}}{{item.sale_price}}</span>
           </div>
         </div>
       </div>
       <div v-for="item in line.costs" :key="item.id">
         {{ item.name }}：
         {{ localization.currency_unit }}
-        {{ item.pivot.price | formatPrice }}
+        {{ item.pivot.price}}
       </div>
     </div>
     <div>

@@ -95,6 +95,7 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.TrackingData = res.data.data
+            console.log(res.data.data, 'TrackingData')
             if (!this.TrackingData.length) {
               this.isEmpty = true
             } else {
