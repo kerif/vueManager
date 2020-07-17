@@ -16,7 +16,7 @@
             <el-input
               type="textarea"
               :autosize="{ minRows: 4, maxRows: 8}"
-              :placeholder="$t('多个包裹单号，请用回车分割')"
+              :placeholder="this.radio === 1 ? $t('多个包裹单号，请用回车分割') : $t('请输入会员ID')"
               v-model="textarea2">
             </el-input>
             <span class="tips-sty">*{{$t('不能将不同用户的包裹合并打包')}}</span>
