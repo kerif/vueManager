@@ -136,6 +136,9 @@
     </div>
     <!-- 收件地址弹窗 -->
   <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
+    <div class="add-box" width="80%">
+      <el-button @click="goCreated">{{$t('新增')}}</el-button>
+    </div>
     <el-table
       :data="tableData"
       border
@@ -150,6 +153,15 @@
       <el-table-column
         prop="country.cn_name"
         :label="$t('国家')">
+      </el-table-column>
+      <!-- 邮编 -->
+       <el-table-column
+        prop="postcode"
+        :label="$t('邮编')">
+      </el-table-column>
+      <el-table-column
+        prop="timezone"
+        :label="$t('区号')">
       </el-table-column>
       <!-- 收件人 -->
         <el-table-column
@@ -177,6 +189,87 @@
       <el-button @click="boxDialog = false">{{$t('取消')}}</el-button>
       <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
+  </el-dialog>
+  <!-- 新建收货地址 -->
+  <el-dialog :visible.sync="innerVisible" :title="$t('新建收货地址')" width="45%" @close="clear" append-to-body>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-form-inline" label-width="100px">
+      <el-row :gutter="20">
+        <el-col :span="10">
+        <!-- 员工组中文名 -->
+        <el-form-item :label="$t('国家')">
+          <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')"
+              filterable>
+              <el-option
+                v-for="item in countryData"
+                :key="item.id"
+                :label="item.cn_name"
+                :value="item.id">
+                </el-option>
+              </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 收件电话 -->
+          <el-form-item :label="$t('收件电话')">
+            <el-input v-model="ruleForm.phone" class="inner-textarea"
+            :placeholder="$t('请输入收件电话')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 城市 -->
+          <el-form-item :label="$t('城市')">
+            <el-input v-model="ruleForm.city" class="inner-textarea"
+            :placeholder="$t('请输入城市')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 收件人 -->
+          <el-form-item :label="$t('收件人')">
+            <el-input v-model="ruleForm.receiver_name" class="inner-textarea"
+            :placeholder="$t('请输入收件人')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 门牌号 -->
+          <el-form-item :label="$t('门牌号')">
+            <el-input v-model="ruleForm.door_no" class="inner-textarea"
+            :placeholder="$t('请输入门牌号')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+        <!-- 员工组中文名 -->
+        <el-form-item :label="$t('区号')">
+          <el-select v-model="ruleForm.timezone" :placeholder="$t('请选择区号')"
+              filterable>
+              <el-option
+                v-for="item in countryData"
+                :key="item.id"
+                :label="item.timezone"
+                :value="item.timezone">
+                </el-option>
+              </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 附加地址 -->
+          <el-form-item :label="$t('附加地址')">
+            <el-input v-model="ruleForm.address" class="inner-textarea"
+            :placeholder="$t('请输入附加地址')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 街道 -->
+          <el-form-item :label="$t('街道')">
+            <el-input v-model="ruleForm.street" class="inner-textarea"
+            :placeholder="$t('请输入街道')"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="returnShip">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="confirmCreated('ruleForm')">{{$t('确定')}}</el-button>
+      </div>
   </el-dialog>
   <!-- 自提点地址 -->
   <el-dialog :visible.sync="addressDialog" :title="$t('自提点地址')" @close="clearSelf">
@@ -216,6 +309,7 @@ export default {
       value: '',
       options: [],
       boxDialog: false,
+      innerVisible: false,
       addressDialog: false,
       tableData: [],
       chooseId: 0,
@@ -249,6 +343,32 @@ export default {
         id_card: '',
         clearance_code: '',
         address_id: ''
+      },
+      ruleForm: {
+        receiver_name: '',
+        phone: '',
+        timezone: '',
+        country_id: '',
+        door_no: '',
+        city: '',
+        postcode: '',
+        street: '',
+        address: ''
+      },
+      countryData: [],
+      rules: {
+        country_id: [
+          { required: true, message: this.$t('请选择国家'), trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: this.$t('请输入电话'), trigger: 'blur' }
+        ],
+        receiver_name: [
+          { required: true, message: this.$t('请输入收件人'), trigger: 'blur' }
+        ],
+        city: [
+          { required: true, message: this.$t('请输入城市'), trigger: 'blur' }
+        ]
       }
     }
   },
@@ -367,11 +487,59 @@ export default {
         }
       })
     },
+    // 获取所有可选择的国家
+    getCountry () {
+      this.$request.getCountry().then(res => {
+        this.countryData = res.data
+      })
+    },
     chooseUser () {
       this.boxDialog = true
       if (this.userId) {
         this.getAddressDialog()
+        this.getCountry()
       }
+    },
+    // 确认创建发货单
+    confirmCreated (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$request.addAddress({
+            ...this.ruleForm,
+            user_id: this.userId
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('成功'),
+                message: res.msg
+              })
+              this.innerVisible = false
+              this.boxDialog = true
+              this.getAddressDialog()
+              // this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            // this.innerVisible = false
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    // 新建收货地址
+    goCreated () {
+      this.innerVisible = true
+      this.boxDialog = false
+    },
+    // 创建发货单 取消
+    returnShip () {
+      this.innerVisible = false
+      this.boxDialog = true
     },
     saveBoxing () {
       console.log(this.box.add_service, 'box.add_service')
@@ -436,7 +604,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 .boxing-container {
   .apply-main {
     background-color: #fff;
@@ -508,6 +676,15 @@ export default {
     color: #b6b6b6;
     font-size: 14px;
     margin-right: 40px;
+  }
+  .add-box {
+    text-align: right;
+    margin-bottom: 10px;
+  }
+}
+.inner-textarea {
+  .el-input__inner {
+    // width: 40% !important;
   }
 }
 </style>

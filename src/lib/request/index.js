@@ -1606,6 +1606,10 @@ exports.getAloneSelf = (id) => {
 exports.packs = (params) => {
   return $form.get('package-packs/packages', { params })
 }
+// 集包 新增收货地址
+exports.addAddress = (params) => {
+  return $form.post(`package-packs/user-address`, params)
+}
 // 申请集包 发起集包
 exports.preview = (params) => {
   return $form.post('package-packs/preview', params)

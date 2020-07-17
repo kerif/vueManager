@@ -498,6 +498,7 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
+        this.user.insurance_fee = res.data.payment.insurance_fee
         this.services = res.data.services
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name
