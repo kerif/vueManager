@@ -40,7 +40,7 @@ export default {
   methods: {
     // 根据转运快递单号的值拉取相对应的转运快递公司
     getCompany () {
-      this.$request.getCompanies().then(res => {
+      this.$request.shipmentCompanies().then(res => {
         if (res.ret) {
           if (res.data.length) {
             this.companyList = res.data

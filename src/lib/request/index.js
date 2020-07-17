@@ -1642,6 +1642,10 @@ exports.idCards = (id) => {
 exports.uploadBatch = (id) => {
   return $form.get(`shipments/${id}/logistics-export`)
 }
+// 发货单 修改物流信息 获取转运快递公司
+exports.shipmentCompanies = () => {
+  return $form.get(`shipments/company-expresses`)
+}
 // 发货单 导出清单
 exports.uploadExcel = (ids) => {
   return $form.post(`shipments/order-export-batch`, ids)
