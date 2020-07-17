@@ -283,6 +283,14 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!--   -->
+        <el-row :gutter="20">
+          <el-col :span="11">
+            <el-form-item :label="$t('保险金额') + localization.currency_unit">
+              <el-input v-model="user.insurance_fee" :placeholder="$t('请输入')"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <!-- 增值服务 -->
         <el-row :gutter="20">
           <el-col>
@@ -340,6 +348,7 @@ export default {
         location: '',
         box_type: 1,
         express_line_id: '',
+        insurance_fee: '',
         services: [],
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片

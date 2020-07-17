@@ -188,7 +188,7 @@
               </el-tooltip>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('保险金额') + this.localization.currency_unit" prop="insurance"></el-table-column>
+          <el-table-column :label="$t('保险金额') + this.localization.currency_unit" prop="insurance_fee"></el-table-column>
           <el-table-column :label="$t('应付金额') + this.localization.currency_unit" prop="order_amount"></el-table-column>
           <el-table-column :label="$t('计费价格模式')" prop="order_amount">
             <template slot-scope="scope">
