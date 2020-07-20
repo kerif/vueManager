@@ -1514,6 +1514,10 @@ exports.getAloneOrder = (id) => {
 exports.getUsable = (id) => {
   return $form.get(`orders/${id}/usable-express-lines`)
 }
+// 订单列表 获取一键打包数据
+exports.getOrderBatch = (params) => {
+  return $form.get(`order`, { params })
+}
 // 订单 打包 获取线路详情
 exports.getExpressLines = (id) => {
   return $form.get(`packages/${id}/express-lines`)

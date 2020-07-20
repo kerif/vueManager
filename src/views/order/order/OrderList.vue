@@ -231,7 +231,7 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      activeName: '1',
+      activeName: '',
       oderData: [],
       status: 1,
       tableLoading: false,

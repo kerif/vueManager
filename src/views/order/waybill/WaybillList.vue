@@ -96,7 +96,7 @@
       v-loading="tableLoading"
       :data="oderData" @selection-change="onSelectChange">
       <el-table-column type="selection" width="55" align="center"
-      v-if="activeName === '2'|| activeName === '3' || activeName === '4'"></el-table-column>
+      v-if="activeName === '1'|| activeName === '2'|| activeName === '3' || activeName === '4'"></el-table-column>
       <el-table-column v-else type="index" width="50"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
@@ -221,6 +221,7 @@
           <!-- 删除 -->
           <!-- <el-button size="small">删除</el-button> -->
           <!-- 加入发货单 -->
+          <!-- <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button> -->
           <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
             <!-- 批量发送通知 -->
            <el-button size="small" class="btn-purple" @click="goNotify"
@@ -304,6 +305,154 @@
           <el-button type="primary" @click="submitPrice">{{$t('确定')}}</el-button>
         </div>
       </el-dialog>
+    <!-- 一键批量打包 -->
+  <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
+    <div class="add-box" width="80%">
+      <el-button @click="goCreated">{{$t('新增')}}</el-button>
+    </div>
+    <el-table
+      :data="boxDialogData"
+      border
+      @row-click="onRowChange"
+      style="width: 100%">
+      <el-table-column>
+        <template slot-scope="scope">
+          <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
+        </template>
+       </el-table-column>
+      <!-- 客户ID -->
+      <el-table-column
+        prop="country.cn_name"
+        :label="$t('客户ID')">
+      </el-table-column>
+      <!-- 线路名称 -->
+       <el-table-column
+        prop="postcode"
+        :label="$t('线路名称')">
+      </el-table-column>
+      <!-- 支付方式 -->
+      <el-table-column
+        prop="timezone"
+        :label="$t('支付方式')">
+      </el-table-column>
+      <!-- 包裹数量 -->
+      <el-table-column
+        prop="receiver_name"
+        :label="$t('包裹数量')">
+      </el-table-column>
+      <!-- 预计重量 -->
+      <el-table-column
+        prop="receiver_name"
+        :label="$t('预计重量')">
+      </el-table-column>
+      <!-- 预计重量 -->
+        <el-table-column
+        :label="$t('实际重量')">
+        <template slot-scope="scope">
+          <el-input>{{scope.row.timezone}}</el-input>
+        </template>
+        </el-table-column>
+        <!-- 实际尺寸 -->
+        <el-table-column
+        :label="$t('实际尺寸')">
+        <template slot-scope="scope">
+          <el-input>{{scope.row.timezone}}</el-input>
+        </template>
+        </el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')">
+            <template slot-scope="scope">
+              <!-- 删除 -->
+              <el-button class="btn-light-red" @click="deleteTrack(scope.$index, boxDialogData)">{{$t('删除')}}</el-button>
+            </template>
+          </el-table-column>
+    </el-table>
+    <div slot="footer">
+      <el-button @click="boxDialog = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+    </div>
+  </el-dialog>
+  <!-- 新建收货地址 -->
+  <el-dialog :visible.sync="innerVisible" :title="$t('新建收货地址')" width="45%" @close="clear" append-to-body>
+    <el-form :model="ruleForm" ref="ruleForm" class="demo-form-inline" label-width="100px">
+      <el-row :gutter="20">
+        <el-col :span="10">
+        <!-- 员工组中文名 -->
+        <el-form-item :label="$t('国家')">
+          <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')"
+              filterable>
+              <el-option
+                v-for="item in countryData"
+                :key="item.id"
+                :label="item.cn_name"
+                :value="item.id">
+                </el-option>
+              </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 收件电话 -->
+          <el-form-item :label="$t('收件电话')">
+            <el-input v-model="ruleForm.phone" class="inner-textarea"
+            :placeholder="$t('请输入收件电话')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 城市 -->
+          <el-form-item :label="$t('城市')">
+            <el-input v-model="ruleForm.city" class="inner-textarea"
+            :placeholder="$t('请输入城市')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 收件人 -->
+          <el-form-item :label="$t('收件人')">
+            <el-input v-model="ruleForm.receiver_name" class="inner-textarea"
+            :placeholder="$t('请输入收件人')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 门牌号 -->
+          <el-form-item :label="$t('门牌号')">
+            <el-input v-model="ruleForm.door_no" class="inner-textarea"
+            :placeholder="$t('请输入门牌号')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+        <!-- 员工组中文名 -->
+        <el-form-item :label="$t('区号')">
+          <el-select v-model="ruleForm.timezone" :placeholder="$t('请选择区号')"
+              filterable>
+              <el-option
+                v-for="item in countryData"
+                :key="item.id"
+                :label="item.timezone"
+                :value="item.timezone">
+                </el-option>
+              </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 附加地址 -->
+          <el-form-item :label="$t('附加地址')">
+            <el-input v-model="ruleForm.address" class="inner-textarea"
+            :placeholder="$t('请输入附加地址')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 街道 -->
+          <el-form-item :label="$t('街道')">
+            <el-input v-model="ruleForm.street" class="inner-textarea"
+            :placeholder="$t('请输入街道')"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="returnShip">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="confirmCreated('ruleForm')">{{$t('确定')}}</el-button>
+      </div>
+  </el-dialog>
   </div>
 </template>
 
@@ -360,7 +509,22 @@ export default {
       tableId: '',
       tableSn: '',
       priceSn: '',
-      priceId: ''
+      priceId: '',
+      boxDialog: false,
+      innerVisible: false,
+      ruleForm: {
+        receiver_name: '',
+        phone: '',
+        timezone: '',
+        country_id: '',
+        door_no: '',
+        city: '',
+        postcode: '',
+        street: '',
+        address: ''
+      },
+      countryData: [],
+      boxDialogData: []
     }
   },
   created () {
@@ -878,6 +1042,83 @@ export default {
         this.getList()
       })
       // this.$router.push({ name: 'pickingContainer', query: { active: '2', keyword: orderSN } })
+    },
+    // 新建收货地址
+    goCreated () {
+      this.innerVisible = true
+      this.boxDialog = false
+    },
+    // 确认创建发货单
+    confirmCreated (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$request.addAddress({
+            ...this.ruleForm,
+            user_id: this.userId
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('成功'),
+                message: res.msg
+              })
+              this.innerVisible = false
+              this.boxDialog = true
+              this.getAddressDialog()
+              // this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            // this.innerVisible = false
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    // 一键批量打包
+    oneBatch () {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.boxDialog = true
+      this.getBatch()
+    },
+    // 获取批量打包数据
+    getBatch () {
+      this.$request.getOrderBatch({
+        order_ids: this.selectIDs
+      }).then(res => {
+        if (res.ret) {
+          this.boxDialogData = res.data
+        }
+      })
+    },
+    // 创建发货单 取消
+    returnShip () {
+      this.innerVisible = false
+      this.boxDialog = true
+    },
+    // 收件地址
+    onRowChange (row) {
+      this.chooseId = row.id
+      this.box.address_id = this.chooseId
+      this.user = row
+    },
+    confirm (val) {
+      if (!this.chooseId) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      console.log(this.user, 'user')
+      this.userData = this.user
+      this.boxDialog = false
+    },
+    // 表格删除
+    deleteTrack (index, rows) {
+      rows.splice(index, 1)
     }
   }
 }

@@ -436,7 +436,9 @@ export default {
           if (res.data.express_company) {
             this.user.express_company_id = res.data.express_company.id
           }
-          this.$set(this.user, 'country_id', res.data.country.id)
+          if (res.data.country) {
+            this.$set(this.user, 'country_id', res.data.country.id)
+          }
           this.areaId = this.user.warehouse_id
           this.locationId = this.areaId
           res.data.package_pictures && (this.goodsImgList = res.data.package_pictures)
