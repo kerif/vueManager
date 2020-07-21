@@ -153,10 +153,22 @@ export default {
       if (Num.size > 1) {
         return this.$message.error(this.$t('不能将不同用户的包裹合并打包'))
       }
-      this.$router.push({ name: 'boxing',
-        query: {
-          id: this.deleteNum
-        } })
+      this.$request.preview({
+        package_ids: this.deleteNum
+      }).then(res => {
+        if (res.ret) {
+          this.$router.push({ name: 'boxing',
+            query: {
+              id: this.deleteNum
+            } })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }

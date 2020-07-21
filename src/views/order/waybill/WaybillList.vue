@@ -216,16 +216,18 @@
           v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">{{$t('取消')}}</el-button>
         </template>
       </el-table-column>
-      <template slot="append" v-if="activeName === '3' || activeName === '2' || activeName === '4'">
+      <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4'">
         <div class="append-box">
           <!-- 删除 -->
           <!-- <el-button size="small">删除</el-button> -->
           <!-- 加入发货单 -->
-          <!-- <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button> -->
+          <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button>
           <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
             <!-- 批量发送通知 -->
            <el-button size="small" class="btn-purple" @click="goNotify"
            v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
+           <!-- 批量改成货到付款 -->
+           <el-button size="small" class="btn-light-green" v-if="this.activeName === '2'" @click="changeDelivery">{{$t('批量改成货到付款')}}</el-button>
             <el-button size="small" class="btn-deep-purple" @click="updateTracking"
            v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
         </div>
@@ -306,57 +308,57 @@
         </div>
       </el-dialog>
     <!-- 一键批量打包 -->
-  <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
-    <div class="add-box" width="80%">
-      <el-button @click="goCreated">{{$t('新增')}}</el-button>
+  <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" @close="clear">
+    <div class="add-box" width="100%">
+      <el-button @click="changeWeight">{{$t('一键将预计重量改成实际重量')}}</el-button>
+      <el-button @click="goCreated">{{$t('批量改支付方式')}}</el-button>
     </div>
     <el-table
       :data="boxDialogData"
       border
-      @row-click="onRowChange"
       style="width: 100%">
-      <el-table-column>
-        <template slot-scope="scope">
-          <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
-        </template>
-       </el-table-column>
       <!-- 客户ID -->
       <el-table-column
-        prop="country.cn_name"
+        prop="user_id"
         :label="$t('客户ID')">
       </el-table-column>
       <!-- 线路名称 -->
        <el-table-column
-        prop="postcode"
+        prop="express_line.cn_name"
         :label="$t('线路名称')">
       </el-table-column>
       <!-- 支付方式 -->
       <el-table-column
-        prop="timezone"
         :label="$t('支付方式')">
+         <template slot-scope="scope">
+          <span class="payment-sty" v-if="scope.row.payment_mode === 2">{{scope.row.payment_mode}}</span>
+          <span v-else>{{scope.row.payment_mode}}</span>
+        </template>
       </el-table-column>
       <!-- 包裹数量 -->
       <el-table-column
-        prop="receiver_name"
+        prop="package_count"
         :label="$t('包裹数量')">
       </el-table-column>
       <!-- 预计重量 -->
       <el-table-column
-        prop="receiver_name"
-        :label="$t('预计重量')">
+        prop="except_weight"
+        :label="$t('预计重量') + this.localization.weight_unit">
       </el-table-column>
       <!-- 预计重量 -->
         <el-table-column
-        :label="$t('实际重量')">
+        :label="$t('实际重量') + this.localization.weight_unit">
         <template slot-scope="scope">
-          <el-input>{{scope.row.timezone}}</el-input>
+          <el-input v-model="scope.row.actual_weight"></el-input>
         </template>
         </el-table-column>
         <!-- 实际尺寸 -->
         <el-table-column
-        :label="$t('实际尺寸')">
+        :label="$t('实际尺寸') + this.localization.length_unit" width="200px">
         <template slot-scope="scope">
-          <el-input>{{scope.row.timezone}}</el-input>
+          <el-input class="dialog-input" :placeholder="$t('长')" v-model="scope.row.length"></el-input>
+          <el-input class="dialog-input" :placeholder="$t('宽')" v-model="scope.row.width"></el-input>
+          <el-input class="dialog-input" :placeholder="$t('高')" v-model="scope.row.height"></el-input>
         </template>
         </el-table-column>
         <!-- 操作 -->
@@ -367,90 +369,42 @@
             </template>
           </el-table-column>
     </el-table>
+    <el-form>
+      <el-form-item :label="$t('统一备注')">
+        <el-input type="textarea"
+          :autosize="{ minRows: 4, maxRows: 6}"
+          :placeholder="$t('请输入内容')" v-model="batch.remark">
+        </el-input>
+      </el-form-item>
+    </el-form>
     <div slot="footer">
       <el-button @click="boxDialog = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button type="primary" @click="confirmPack">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
-  <!-- 新建收货地址 -->
-  <el-dialog :visible.sync="innerVisible" :title="$t('新建收货地址')" width="45%" @close="clear" append-to-body>
-    <el-form :model="ruleForm" ref="ruleForm" class="demo-form-inline" label-width="100px">
+  <!-- 批量更改支付方式 -->
+  <el-dialog :visible.sync="innerVisible" :title="$t('批量更改支付方式')" width="45%" @close="clearPayment" append-to-body>
+    <el-form ref="ruleForm" class="demo-form-inline" label-width="100px">
       <el-row :gutter="20">
         <el-col :span="10">
         <!-- 员工组中文名 -->
-        <el-form-item :label="$t('国家')">
-          <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')"
+        <el-form-item :label="$t('支付方式')">
+          <el-select v-model="payment_mode" :placeholder="$t('请选择')"
               filterable>
               <el-option
-                v-for="item in countryData"
+                v-for="item in payMode"
                 :key="item.id"
-                :label="item.cn_name"
+                :label="item.name"
                 :value="item.id">
                 </el-option>
               </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <!-- 收件电话 -->
-          <el-form-item :label="$t('收件电话')">
-            <el-input v-model="ruleForm.phone" class="inner-textarea"
-            :placeholder="$t('请输入收件电话')"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <!-- 城市 -->
-          <el-form-item :label="$t('城市')">
-            <el-input v-model="ruleForm.city" class="inner-textarea"
-            :placeholder="$t('请输入城市')"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <!-- 收件人 -->
-          <el-form-item :label="$t('收件人')">
-            <el-input v-model="ruleForm.receiver_name" class="inner-textarea"
-            :placeholder="$t('请输入收件人')"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <!-- 门牌号 -->
-          <el-form-item :label="$t('门牌号')">
-            <el-input v-model="ruleForm.door_no" class="inner-textarea"
-            :placeholder="$t('请输入门牌号')"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-        <!-- 员工组中文名 -->
-        <el-form-item :label="$t('区号')">
-          <el-select v-model="ruleForm.timezone" :placeholder="$t('请选择区号')"
-              filterable>
-              <el-option
-                v-for="item in countryData"
-                :key="item.id"
-                :label="item.timezone"
-                :value="item.timezone">
-                </el-option>
-              </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <!-- 附加地址 -->
-          <el-form-item :label="$t('附加地址')">
-            <el-input v-model="ruleForm.address" class="inner-textarea"
-            :placeholder="$t('请输入附加地址')"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <!-- 街道 -->
-          <el-form-item :label="$t('街道')">
-            <el-input v-model="ruleForm.street" class="inner-textarea"
-            :placeholder="$t('请输入街道')"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       </el-form>
       <div slot="footer">
         <el-button @click="returnShip">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="confirmCreated('ruleForm')">{{$t('确定')}}</el-button>
+        <el-button type="primary" @click="confirmCreated">{{$t('确定')}}</el-button>
       </div>
   </el-dialog>
   </div>
@@ -512,19 +466,22 @@ export default {
       priceId: '',
       boxDialog: false,
       innerVisible: false,
-      ruleForm: {
-        receiver_name: '',
-        phone: '',
-        timezone: '',
-        country_id: '',
-        door_no: '',
-        city: '',
-        postcode: '',
-        street: '',
-        address: ''
-      },
       countryData: [],
-      boxDialogData: []
+      boxDialogData: [],
+      payment_mode: '',
+      payMode: [
+        {
+          id: 1,
+          name: this.$t('预付')
+        },
+        {
+          id: 2,
+          name: this.$t('货到付款')
+        }
+      ],
+      batch: {
+        remark: ''
+      }
     }
   },
   created () {
@@ -1009,6 +966,36 @@ export default {
         }
       })
     },
+    // 批量改成货到付款
+    changeDelivery () {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('您真的要批量改成货到付款吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.changePayMode({
+          ids: this.selectIDs,
+          payment_mode: 2
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
     // Tab Change
     onTabChange (tab) {
       this.status = Number(tab.name)
@@ -1043,39 +1030,37 @@ export default {
       })
       // this.$router.push({ name: 'pickingContainer', query: { active: '2', keyword: orderSN } })
     },
-    // 新建收货地址
+    // 批量更改支付方式
     goCreated () {
       this.innerVisible = true
       this.boxDialog = false
     },
+    // 一键修改预计重量
+    changeWeight () {
+      this.boxDialogData.forEach(item => {
+        item.actual_weight = item.except_weight
+      })
+    },
     // 确认创建发货单
-    confirmCreated (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$request.addAddress({
-            ...this.ruleForm,
-            user_id: this.userId
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
-              this.innerVisible = false
-              this.boxDialog = true
-              this.getAddressDialog()
-              // this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            // this.innerVisible = false
+    confirmCreated () {
+      this.$request.changePayMode({
+        ids: this.selectIDs,
+        payment_mode: this.payment_mode
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
           })
+          this.innerVisible = false
+          this.boxDialog = true
+          this.getBatch()
         } else {
-          return false
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
@@ -1099,32 +1084,51 @@ export default {
     },
     // 创建发货单 取消
     returnShip () {
+      this.payment_mode = ''
       this.innerVisible = false
       this.boxDialog = true
     },
-    // 收件地址
-    onRowChange (row) {
-      this.chooseId = row.id
-      this.box.address_id = this.chooseId
-      this.user = row
-    },
-    confirm (val) {
-      if (!this.chooseId) {
-        return this.$message.error(this.$t('请选择'))
-      }
-      console.log(this.user, 'user')
-      this.userData = this.user
-      this.boxDialog = false
+    confirmPack () {
+      this.$request.confirmBatch({
+        remark: this.batch.remark,
+        order: this.boxDialogData.map(item => {
+          return {
+            length: item.length,
+            height: item.height,
+            width: item.width,
+            weight: item.actual_weight,
+            id: item.id
+          }
+        })
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.boxDialog = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 表格删除
     deleteTrack (index, rows) {
       rows.splice(index, 1)
+    },
+    clearPayment () {
+      this.payment_mode = ''
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 .way-list-container {
   .tabLength {
     width: 620px !important;
@@ -1175,5 +1179,12 @@ export default {
   .change-sty {
     color: red;
   }
+}
+.dialog-input {
+  width: 30% !important;
+}
+.add-box {
+  margin-bottom: 10px;
+  margin-right: 5px;
 }
 </style>

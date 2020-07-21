@@ -1516,7 +1516,15 @@ exports.getUsable = (id) => {
 }
 // 订单列表 获取一键打包数据
 exports.getOrderBatch = (params) => {
-  return $form.get(`order`, { params })
+  return $form.get(`orders`, { params })
+}
+// 一键更改支付方式
+exports.changePayMode = (params) => {
+  return $form.put('orders/payment-mode', params)
+}
+// 确定一键打包
+exports.confirmBatch = (params) => {
+  return $form.put('orders/batch-pack', params)
 }
 // 订单 打包 获取线路详情
 exports.getExpressLines = (id) => {
