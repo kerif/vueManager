@@ -24,6 +24,9 @@
           <el-col :span="2">
             <el-button @click.native="search">{{$t('查询')}}</el-button>
           </el-col>
+          <!-- <el-col :span="2">
+            <el-button @click.native="byBatch">{{$t('按预报批次集包')}}</el-button>
+          </el-col> -->
         </el-row>
       </div>
     <el-table :data="applyList" stripe border class="data-list"
@@ -63,16 +66,107 @@
         </div>
       </template>
     </el-table>
+    <!-- 按预报批次集包弹窗 -->
+    <el-dialog :visible.sync="boxDialog" :title="$t('按预报批次集包')" @close="clear"
+    width="74%">
+        <search-group v-model="page_params.keyword" @search="goSearch"
+        :placeholder="$t('请输入客户ID')">
+          <el-date-picker
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            @change="onTime"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('开始日期')"
+            :end-placeholder="$t('结束日期')">
+          </el-date-picker>
+          </search-group>
+      <div class="box-main">
+        <p>批次号: ，本次同时预报了个包裹，个已入库</p>
+      <el-table :data="pickData" stripe border class="data-list"
+        v-loading="tableLoading" height="150"
+        @selection-change="pickChange">
+          <el-table-column type="selection" width="55" align="center"></el-table-column>
+          <!-- 公告标题 -->
+          <el-table-column :label="$t('客户ID')" prop="title"></el-table-column>
+          <!-- 发布人员 -->
+          <el-table-column :label="$t('预报单号')" prop="operator">
+          </el-table-column>
+          <!-- 发布时间 -->
+          <el-table-column :label="$t('物品名称')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('物品属性')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('物品重量')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('寄往国家')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('入库时间')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
+          <!-- <template slot="append">
+            <div class="append-box">
+              <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('您当前选择了')}}{{$t('包裹')}}</el-button>
+            </div>
+          </template> -->
+        </el-table>
+      </div>
+      <el-table :data="pickData" stripe border class="data-list"
+        v-loading="tableLoading" height="150"
+        @selection-change="pickChange">
+          <el-table-column type="selection" width="55" align="center"></el-table-column>
+          <!-- 公告标题 -->
+          <el-table-column :label="$t('客户ID')" prop="title"></el-table-column>
+          <!-- 发布人员 -->
+          <el-table-column :label="$t('预报单号')" prop="operator">
+          </el-table-column>
+          <!-- 发布时间 -->
+          <el-table-column :label="$t('物品名称')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('物品属性')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('物品重量')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('寄往国家')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('入库时间')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
+          <!-- <template slot="append">
+            <div class="append-box">
+              <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('您当前选择了')}}{{$t('包裹')}}</el-button>
+            </div>
+          </template> -->
+        </el-table>
+      <el-table :data="pickData" stripe border class="data-list"
+        v-loading="tableLoading" height="150"
+        @selection-change="pickChange">
+          <el-table-column type="selection" width="55" align="center"></el-table-column>
+          <!-- 公告标题 -->
+          <el-table-column :label="$t('客户ID')" prop="title"></el-table-column>
+          <!-- 发布人员 -->
+          <el-table-column :label="$t('预报单号')" prop="operator">
+          </el-table-column>
+          <!-- 发布时间 -->
+          <el-table-column :label="$t('物品名称')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('物品属性')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('物品重量')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('寄往国家')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('入库时间')" prop="created_at"> </el-table-column>
+          <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
+          <!-- <template slot="append">
+            <div class="append-box">
+              <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('您当前选择了')}}{{$t('包裹')}}</el-button>
+            </div>
+          </template> -->
+        </el-table>
+        <div slot="footer">
+          <el-button @click="boxDialog = false">{{$t('取消')}}</el-button>
+          <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+        </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-// import { SearchGroup } from '@/components/searchs'
+import { SearchGroup } from '@/components/searchs'
 // import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   name: 'applyList',
   components: {
-    // SearchGroup,
+    SearchGroup
   },
   mixins: [pagination],
   data () {
@@ -85,7 +179,11 @@ export default {
       expressNum: [],
       userId: '',
       userNum: [],
-      localization: {}
+      localization: {},
+      boxDialog: false,
+      timeList: [],
+      pickData: [],
+      pickNum: []
     }
   },
   methods: {
@@ -169,11 +267,35 @@ export default {
           })
         }
       })
-    }
+    },
+    byBatch () {
+      this.boxDialog = true
+      this.getGroup()
+    },
+    // 获取按预报批次集包 数据
+    getGroup () {
+      this.$request.groupBy().then(res => {
+        if (res.ret) {
+          // this.
+        }
+      })
+    },
+    pickChange (selection) {
+      this.pickNum = selection.map(item => (item.id))
+    },
+    onTime (val) {
+      this.begin_date = val ? val[0] : ''
+      this.end_date = val ? val[1] : ''
+      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
+      this.getList()
+    },
+    deleteData () {},
+    clear () {},
+    confirm () {}
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .apply-list-container {
   .radio-sty {
     margin-bottom: 15px;

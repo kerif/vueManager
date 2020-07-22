@@ -204,7 +204,7 @@
           <!-- 拣货日志 -->
           <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
           </el-button>
-          <el-button size="small" class="btn-pink" v-if="(activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
+          <el-button size="small" class="btn-yellow" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
           </el-button>
           <!-- 修改物流信息 -->
           <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">{{$t('修改物流信息')}}</el-button>
@@ -308,8 +308,8 @@
         </div>
       </el-dialog>
     <!-- 一键批量打包 -->
-  <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" @close="clear">
-    <div class="add-box" width="100%">
+  <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" @close="clear"  width="80%">
+    <div class="add-box">
       <el-button @click="changeWeight">{{$t('一键将预计重量改成实际重量')}}</el-button>
       <el-button @click="goCreated">{{$t('批量改支付方式')}}</el-button>
     </div>
@@ -322,6 +322,11 @@
         prop="user_id"
         :label="$t('客户ID')">
       </el-table-column>
+      <!-- 订单号 -->
+      <el-table-column
+        prop="order_sn"
+        :label="$t('订单号')">
+      </el-table-column>
       <!-- 线路名称 -->
        <el-table-column
         prop="express_line.cn_name"
@@ -331,8 +336,8 @@
       <el-table-column
         :label="$t('支付方式')">
          <template slot-scope="scope">
-          <span class="payment-sty" v-if="scope.row.payment_mode === 2">{{scope.row.payment_mode}}</span>
-          <span v-else>{{scope.row.payment_mode}}</span>
+          <span class="payment-sty" v-if="scope.row.payment_mode === 2">{{$t('货到付款')}}</span>
+          <span v-else>{{$t('预付')}}</span>
         </template>
       </el-table-column>
       <!-- 包裹数量 -->
@@ -481,7 +486,8 @@ export default {
       ],
       batch: {
         remark: ''
-      }
+      },
+      createdIds: []
     }
   },
   created () {
@@ -1017,11 +1023,13 @@ export default {
     onAgentChange () {
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
+      this.getCounts()
     },
     // 选择支付方式
     onPaymentChange () {
       this.page_params.handleQueryChange('payment_type', this.payment_type)
       this.getList()
+      this.getCounts()
     },
     // 订单日志
     onLogs (id) {
@@ -1034,6 +1042,8 @@ export default {
     goCreated () {
       this.innerVisible = true
       this.boxDialog = false
+      this.createdIds = this.boxDialogData.map(item => item.id)
+      console.log(this.createdIds, 'this.createdIds')
     },
     // 一键修改预计重量
     changeWeight () {
@@ -1041,10 +1051,10 @@ export default {
         item.actual_weight = item.except_weight
       })
     },
-    // 确认创建发货单
+    // 确认更改支付方式
     confirmCreated () {
       this.$request.changePayMode({
-        ids: this.selectIDs,
+        ids: this.createdIds,
         payment_mode: this.payment_mode
       }).then(res => {
         if (res.ret) {
@@ -1055,7 +1065,13 @@ export default {
           })
           this.innerVisible = false
           this.boxDialog = true
-          this.getBatch()
+          this.$request.getOrderBatch({
+            order_ids: this.createdIds
+          }).then(res => {
+            if (res.ret) {
+              this.boxDialogData = res.data
+            }
+          })
         } else {
           this.$message({
             message: res.msg,

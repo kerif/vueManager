@@ -23,18 +23,19 @@
         <div class="address-main">
           <div class="express-left">
             <p>{{$t('收件地址')}}</p>
-              <div v-if="this.userData.id">
+              <div v-if="this.userData.door_no">
                 <p>{{userData.receiver_name}}</p>
                 <p>{{userData.phone}}</p>
-                <p>{{userData.city}}&nbsp;
+                <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.city}}
                 </p>
-            </div>
+              </div>
+              <div v-if="this.userData.contact_info">
+                <p>{{userData.contactor}}</p>
+                <p>{{userData.contact_info}}</p>
+                <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.address}}
+                </p>
+              </div>
           </div>
-            <!-- v-if="this.userData.id" -->
-            <!-- <div class="express-left express-right">
-              <p>{{userData.street}}&nbsp;{{userData.door_no}}&nbsp;{{userData.city}}&nbsp;
-              </p>
-            </div> -->
             <div class="express-left express-right">
               <p class="express-sty" @click="chooseUser">{{$t('请选择')}} ></p>
             </div>
@@ -185,6 +186,9 @@
         </template>
         </el-table-column>
     </el-table>
+    <div class="choose-self">
+      <el-button @click="pickPoint">{{$t('选择自提点')}}</el-button>
+    </div>
     <div slot="footer">
       <el-button @click="boxDialog = false">{{$t('取消')}}</el-button>
       <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
@@ -299,6 +303,48 @@
       <el-button type="primary" @click="confirmSelf">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
+  <!-- 选择自提点地址 -->
+  <el-dialog :visible.sync="selfDialog" :title="$t('收件地址列表')" @close="clear">
+    <el-table
+      :data="selfForm"
+      border
+      @row-click="onPickChange"
+      style="width: 100%">
+      <el-table-column>
+        <template slot-scope="scope">
+          <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
+        </template>
+       </el-table-column>
+      <!-- 国家 -->
+      <el-table-column
+        prop="country.cn_name"
+        :label="$t('国家')">
+      </el-table-column>
+      <!-- 收件人 -->
+        <el-table-column
+        prop="contactor"
+        :label="$t('收件人')">
+      </el-table-column>
+      <!-- 联系电话 -->
+        <el-table-column
+        :label="$t('联系电话')"
+        prop="contact_info">
+        </el-table-column>
+        <!-- 详细地址 -->
+        <el-table-column
+        :label="$t('详细地址')">
+        <template slot-scope="scope">
+          <span>{{scope.row.street}}&nbsp;{{scope.row.door_no}}&nbsp;{{scope.row.city}}
+            <span v-if="scope.row.address">({{scope.row.address}})</span>
+          </span>
+        </template>
+        </el-table-column>
+    </el-table>
+    <div slot="footer">
+      <el-button @click="returnPick">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="realPick">{{$t('确定')}}</el-button>
+    </div>
+  </el-dialog>
   </div>
 </template>
 
@@ -309,6 +355,8 @@ export default {
       value: '',
       options: [],
       boxDialog: false,
+      selfDialog: false,
+      selfForm: [],
       innerVisible: false,
       addressDialog: false,
       tableData: [],
@@ -541,11 +589,32 @@ export default {
       this.innerVisible = false
       this.boxDialog = true
     },
+    // 选择自提点
+    pickPoint () {
+      this.innerVisible = false
+      this.boxDialog = false
+      this.selfDialog = true
+      this.getSelfAddress()
+    },
+    // 收件地址 取消自提点
+    returnPick () {
+      this.selfDialog = false
+      this.boxDialog = true
+    },
+    // 收件地址 获取自提点数据
+    getSelfAddress () {
+      this.$request.selfData().then(res => {
+        if (res.ret) {
+          this.selfForm = res.data
+        }
+      })
+    },
     saveBoxing () {
       console.log(this.box.add_service, 'box.add_service')
       this.$request.savePacks({
         ...this.box,
-        package_ids: this.packageId
+        package_ids: this.packageId,
+        address_type: this.userData.contact_info ? 2 : ''
       }).then(res => {
         if (res.ret) {
           this.$notify({
@@ -563,6 +632,17 @@ export default {
         }
       })
     },
+    // 收件地址 自提确认
+    realPick () {
+      if (!this.chooseId) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      console.log(this.user, 'user')
+      this.userData = this.user
+      console.log(this.userData, 'this.userData1111')
+      this.boxDialog = false
+      this.selfDialog = false
+    },
     confirm (val) {
       if (!this.chooseId) {
         return this.$message.error(this.$t('请选择'))
@@ -576,6 +656,12 @@ export default {
       this.chooseId = row.id
       this.box.address_id = this.chooseId
       this.user = row
+    },
+    //  收件地址 选择自提点弹窗
+    onPickChange (row) {
+      this.chooseId = row.id
+      this.user = row
+      this.box.address_id = this.chooseId
     },
     // 自提点地址
     onRowAddress (row) {
@@ -686,5 +772,8 @@ export default {
   .el-input__inner {
     // width: 40% !important;
   }
+}
+.choose-self {
+  margin-top: 20px;
 }
 </style>

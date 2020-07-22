@@ -318,6 +318,14 @@ exports.autoPick = (id) => {
 exports.updateAutoPick = (id, params) => {
   return $form.put(`express-lines/${id}/advance-settings`, params)
 }
+// 包裹快速合箱 获取自提点数据
+exports.selfData = () => {
+  return $form.get(`package-packs/stations`)
+}
+// 包裹快速合箱 按预报批次集包
+exports.groupBy = (params) => {
+  return $form.get('package-packs/packages-group-by-batch', { params })
+}
 // 包裹快速入库 获取全部物品属性
 exports.getProps = () => {
   return $form.get('package-props')
