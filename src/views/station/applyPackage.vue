@@ -24,9 +24,9 @@
           <el-col :span="2">
             <el-button @click.native="search">{{$t('查询')}}</el-button>
           </el-col>
-          <!-- <el-col :span="2">
+          <el-col :span="2">
             <el-button @click.native="byBatch">{{$t('按预报批次集包')}}</el-button>
-          </el-col> -->
+          </el-col>
         </el-row>
       </div>
     <el-table :data="applyList" stripe border class="data-list"
