@@ -23,13 +23,13 @@
         <div class="address-main">
           <div class="express-left">
             <p>{{$t('收件地址')}}</p>
-              <div v-if="this.userData.door_no">
+              <div v-if="this.userData.user_id">
                 <p>{{userData.receiver_name}}</p>
                 <p>{{userData.phone}}</p>
                 <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.city}}
                 </p>
               </div>
-              <div v-if="this.userData.contact_info">
+              <div v-else>
                 <p>{{userData.contactor}}</p>
                 <p>{{userData.contact_info}}</p>
                 <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.address}}

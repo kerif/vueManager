@@ -50,6 +50,11 @@
         <span class="leftWidth">{{$t('清关编码')}}</span>
         <span>{{form.clearance_code}}</span>
       </el-col>
+     <!-- 清关编码 -->
+      <el-col :span="7" :offset="1" v-if="form.id_card">
+        <span class="leftWidth">{{$t('身份证号码')}}</span>
+        <span>{{form.id_card}}</span>
+      </el-col>
     </el-row>
     </div>
     <div class="receiverMSg">
