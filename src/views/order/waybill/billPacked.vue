@@ -283,7 +283,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!--   -->
+        <!-- 保险金额  -->
         <el-row :gutter="20">
           <el-col :span="11">
             <el-form-item :label="$t('保险金额') + localization.currency_unit">
@@ -379,12 +379,6 @@ export default {
     // this.getProp() // 获取多选框数据
   },
   methods: {
-    getList () {
-      // this.$request.getOrderDetails(this.$route.params.id).then(res => {
-      //   this.form = res.data
-      //   this.oderData = [res.data.details]
-      // })
-    },
     // 获取多选框
     getProp (arr) {
       this.$request.getAdded().then(res => {
@@ -428,8 +422,6 @@ export default {
       this.UnitTotalWeight = this.user.box.length === 1 ? this.user.box[0].volume_weight : this.user.box.map(item => item.volume_weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
     },
     savePacked () {
-      // this.user.express_line_id = this.form.express_line.id
-      // console.log(this.user.express_line_id, 'this.user.express_line.id')
       this.user.services = this.updateProp
         .filter(item => item.checked)
         .map(item => {
