@@ -291,7 +291,13 @@ export default {
       this.getGroup()
     },
     deleteData () {},
-    clear () {},
+    clear () {
+      this.timeList = []
+      this.page_params.user_id = ''
+      this.forecastData = []
+      this.pickNumArr = []
+      this.pickNum = []
+    },
     confirm () {
       this.$request.preview({
         package_ids: this.pickNum
