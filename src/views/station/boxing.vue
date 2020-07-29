@@ -10,6 +10,8 @@
             <div class="express-left">
               <p><strong>{{item.express_num}}</strong></p>
               <p v-for="val in item.props" :key="val.id">{{val.name}}</p>
+              <p v-if="item.has_insurance === 1" class="apply-number">要求购买保险</p>
+              <p v-else class="apply-number">不要求购买保险</p>
             </div>
             <div class="express-left express-right">
               <p>{{item.destination_country && item.destination_country.name}}</p>

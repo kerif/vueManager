@@ -187,7 +187,7 @@ export default [
             meta: {
               level: 3,
               group: '首页',
-              name: '控制面板',
+              name: '更新日志',
               parent: '/home/panel'
             }
           },
