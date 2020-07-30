@@ -496,6 +496,12 @@ export default {
         this.user.length = res.data.length
         this.user.width = res.data.width
         this.user.height = res.data.height
+        this.user.box_type = res.data.box_type
+        if (res.data.box_type === 2) { // 出箱类型等于多箱出库时
+          this.user.box = res.data.box
+          this.TotalWeight = this.user.box.length === 1 ? this.user.box[0].weight : this.user.box.map(item => item.weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
+          this.UnitTotalWeight = this.user.box.length === 1 ? this.user.box[0].volume_weight : this.user.box.map(item => item.volume_weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
+        }
         this.tableLoading = false
         this.form = res.data
         this.baleImgList = res.data.pack_pictures // 打包照片
