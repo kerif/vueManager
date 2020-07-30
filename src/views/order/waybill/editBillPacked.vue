@@ -420,7 +420,7 @@ export default {
     },
     // 计算体积总重量
     unitVolume (arr) {
-      this.UnitTotalWeight = this.user.box.length === 1 ? this.user.box[0].volume_weight : this.user.box.map(item => item.volume_weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
+      this.UnitTotalWeight = this.user.box.length === 1 ? this.user.box[0].volume_weight : this.user.box.map(item => item.volume_weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0).toFixed(2)
     },
     savePacked () {
       this.user.services = this.updateProp
