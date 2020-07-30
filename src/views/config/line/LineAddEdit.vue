@@ -84,6 +84,28 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <!-- 多箱出库按多箱重量计价 -->
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+           <div>
+              <span>{{$t('多箱出库按多箱重量计价')}}</span>
+              <el-tooltip class="item" effect="dark" :content="$t('仅对多箱出库时生效，关闭按统一的重量计算价格。')" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+              <el-switch
+                v-model="form.multi_boxes"
+                :active-text="$t('开')"
+                :active-value="1"
+                :inactive-value="0"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 计费价格模式 -->
       <el-form-item>
         <div>{{$t('*计费价格模式')}}</div>
@@ -456,6 +478,7 @@ export default {
         clearance_code_remark: '',
         need_clearance_code: 0,
         ceil_weight: 0,
+        multi_boxes: 0,
         price_grade: []
       },
       referenceTime: {
