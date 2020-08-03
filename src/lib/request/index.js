@@ -57,8 +57,8 @@ exports.supportCountry = (ids) => {
   return $form.post('express-lines/warehouse-countries', ids)
 }
 // 配置 路线 获取路线icon
-exports.iconLines = () => {
-  return $form.get(`express-lines/icons`)
+exports.iconLines = (params) => {
+  return $form.get(`express-lines/icons`, { params })
 }
 // 配置 路线icon 设置为默认
 exports.asDefault = (id) => {
