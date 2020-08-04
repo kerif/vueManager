@@ -52,6 +52,10 @@ exports.updateCosts = (id, params) => {
 exports.addLinesCost = (params) => {
   return $form.post('express-lines/costs', params)
 }
+// 配置 路线 复制 线路
+exports.copyLine = (id, params) => {
+  return $form.post(`express-lines/${id}/copy`, params)
+}
 // 配置 路线 获取支持国家/地区
 exports.supportCountry = (ids) => {
   return $form.post('express-lines/warehouse-countries', ids)
@@ -1481,6 +1485,10 @@ exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`
 // 订单列表 获取增值服务
 exports.getAdded = () => {
   return $form.get('orders/value-added-services')
+}
+// 订单列表 获取日志
+exports.getInvalid = (id) => {
+  return $form.get(`orders/${id}/invalid-log`)
 }
 // 订单列表 详情 获取可更改的地址信息
 exports.detailsAddress = (params) => {

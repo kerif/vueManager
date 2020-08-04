@@ -1,141 +1,153 @@
 <template>
   <div class="boxing-container">
     <div class="apply-main">
-      <p class="choose-sty">{{$t('您本次选择')}}
-        <span class="apply-number">{{packageData.length}}</span>
-        {{$t('个包裹')}}</p>
-      <ul>
-        <li class="main-sty" v-for="item in packageData" :key="item.id">
-          <div class="apply-express">
-            <div class="express-left">
-              <p><strong>{{item.express_num}}</strong></p>
-              <p v-for="val in item.props" :key="val.id">{{val.name}}</p>
-              <p v-if="item.has_insurance === 1" class="apply-number">{{$t('要求购买保险')}}</p>
-              <p v-else class="apply-number">{{$t('不要求购买保险')}}</p>
-            </div>
-            <div class="express-left express-right">
-              <p>{{item.destination_country && item.destination_country.name}}</p>
-              <p><strong>{{item.package_weight}}{{localization.weight_unit}}</strong></p>
-            </div>
+      <div class="poster-left">
+        <div class="choose-sty">
+          <p>
+            {{$t('您本次选择')}}
+          <span class="apply-number">{{packageData.length}}</span>
+          {{$t('个包裹')}}
+          </p>
           </div>
-        </li>
-      </ul>
-      <div class="recipient-address apply-express">
-        <h3>{{$t('收件地址')}}</h3>
-        <div class="address-main">
+          <div class="left-top">
+            <ul>
+              <li class="main-sty" v-for="item in packageData" :key="item.id">
+                <div class="apply-express">
+                  <div class="express-left">
+                    <p><strong>{{item.express_num}}</strong></p>
+                    <p v-for="val in item.props" :key="val.id">{{val.name}}</p>
+                    <p v-if="item.has_insurance === 1" class="apply-number">{{$t('要求购买保险')}}</p>
+                    <p v-else class="apply-number">{{$t('不要求购买保险')}}</p>
+                  </div>
+                  <div class="express-left express-right">
+                    <p>{{item.destination_country && item.destination_country.name}}</p>
+                    <p><strong>{{item.package_weight}}{{localization.weight_unit}}</strong></p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="poster-right">
+        <div class="recipient-address apply-express">
+          <h3>{{$t('收件地址')}}</h3>
+          <div class="address-main">
+            <div class="express-left">
+              <p>{{$t('收件地址')}}</p>
+                <div v-if="this.userData.user_id">
+                  <p>{{userData.receiver_name}}</p>
+                  <p>{{userData.phone}}</p>
+                  <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.city}}
+                  </p>
+                </div>
+                <div v-else>
+                  <p>{{userData.contactor}}</p>
+                  <p>{{userData.contact_info}}</p>
+                  <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.address}}
+                  </p>
+                </div>
+            </div>
+              <div class="express-left express-right">
+                <p class="express-sty" @click="chooseUser">{{$t('请选择')}} ></p>
+              </div>
+              <div class="line-sty"></div>
+              <div class="express-left">
+                  <p>{{$t('快递方式')}}</p>
+              </div>
+              <div class="express-left right-margin">
+                <!-- <p>请选择快递方式</p> -->
+                  <el-select v-model="box.express_line_id" :placeholder="$t('请选择')"
+                  @change="changeExpress">
+                    <el-option
+                      v-for="item in options"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+              </div>
+              <div class="line-sty"></div>
+              <div class="express-left">
+                <p>{{$t('收货形式')}}</p>
+              </div>
+              <div class="express-left right-margin">
+                <el-radio-group v-model="radio" @change="changeRadio">
+                    <el-radio :label="1">{{$t('送货上门')}}</el-radio>
+                    <el-radio :label="2" v-if="this.stationsData.length && this.isDelivery === 1">{{$t('自提点提货')}}</el-radio>
+                </el-radio-group>
+              </div>
+              <div class="line-sty"></div>
+              <div class="express-left" v-if="this.stationsData.length && this.radio === 2">
+                <p>{{$t('自提点地址')}}</p>
+                <div class="choose-sty" v-if="this.selfData.id">
+                  <p>{{selfData.address}}</p>
+                </div>
+              </div>
+              <div class="express-left express-right" v-if="this.stationsData.length && this.radio === 2">
+                <p class="express-sty" @click="selectStation">{{$t('请选择')}} ></p>
+              </div>
+              <!-- <div class="line-sty" v-if="this.stationsData.length"></div> -->
+              <!-- 清关编码 -->
+              <div class="express-left" v-if="this.needCode">
+                  <p>{{$t('清关编码')}}</p>
+              </div>
+              <div class="express-left right-margin" v-if="this.needCode">
+                  <el-input v-model="box.clearance_code" :placeholder="$t('请输入')"></el-input>
+              </div>
+              <div class="line-sty" v-if="this.needCode"></div>
+              <!-- 身份证号码 -->
+              <div class="express-left" v-if="this.idCode">
+                  <p>{{$t('身份证号码')}}</p>
+              </div>
+              <div class="express-left right-margin" v-if="this.idCode">
+                  <el-input v-model="box.id_card" :placeholder="$t('请输入')"></el-input>
+              </div>
+              <div class="line-sty" v-if="this.idCode"></div>
+          </div>
+        </div>
+        <div class="recipient-address">
+        <h3>{{$t('增值服务')}}</h3>
           <div class="express-left">
-            <p>{{$t('收件地址')}}</p>
-              <div v-if="this.userData.user_id">
-                <p>{{userData.receiver_name}}</p>
-                <p>{{userData.phone}}</p>
-                <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.city}}
-                </p>
-              </div>
-              <div v-else>
-                <p>{{userData.contactor}}</p>
-                <p>{{userData.contact_info}}</p>
-                <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.address}}
-                </p>
-              </div>
-          </div>
+              <span>{{$t('保险服务')}}</span>
+                <el-tooltip class="item" effect="dark" :content="explanation" placement="top">
+                  <span class="el-icon-warning-outline icon-info"></span>
+              </el-tooltip><br/>
+              <!-- <el-radio-group v-model="box.add_service" class="radio-select-sty">
+                <el-radio :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-radio>
+              </el-radio-group> -->
+              <el-checkbox-group v-model="box.add_service" class="radio-select-sty">
+                <el-checkbox :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-checkbox>
+              </el-checkbox-group>
+            </div>
             <div class="express-left express-right">
-              <p class="express-sty" @click="chooseUser">{{$t('请选择')}} ></p>
+              <el-switch
+                v-model="box.is_insurance"
+                :active-text="$t('开')"
+                :active-value="1"
+                :inactive-value="0"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
             </div>
-            <div class="line-sty"></div>
-            <div class="express-left">
-                <p>{{$t('快递方式')}}</p>
-            </div>
-            <div class="express-left express-right radio-sty">
-              <!-- <p>请选择快递方式</p> -->
-                <el-select v-model="box.express_line_id" :placeholder="$t('请选择')"
-                @change="changeExpress">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                  </el-option>
-                </el-select>
-            </div>
-            <div class="line-sty"></div>
-            <div class="express-left">
-              <p>{{$t('收货形式')}}</p>
-            </div>
-            <div class="express-left express-right radio-sty">
-               <el-radio-group v-model="radio" @change="changeRadio">
-                  <el-radio :label="1">{{$t('送货上门')}}</el-radio>
-                  <el-radio :label="2" v-if="this.stationsData.length && this.isDelivery === 1">{{$t('自提点提货')}}</el-radio>
+        </div>
+        <div class="line-sty"></div>
+        <div class="recipient-address">
+        <h3>{{$t('付款方式')}}</h3>
+          <div class="express-left">
+              <el-radio-group v-model="box.payment_mode" class="radio-select-sty">
+                <el-radio :label="1" class="radio-main">{{$t('预付')}}</el-radio>
+                <el-radio :label="2" class="radio-main">{{$t('货到付款')}}</el-radio>
               </el-radio-group>
             </div>
-            <div class="line-sty"></div>
-            <div class="express-left" v-if="this.stationsData.length && this.radio === 2">
-              <p>{{$t('自提点地址')}}</p>
-              <div class="choose-sty" v-if="this.selfData.id">
-                 <p>{{selfData.address}}</p>
-              </div>
-            </div>
-            <div class="express-left express-right" v-if="this.stationsData.length && this.radio === 2">
-              <p class="express-sty" @click="selectStation">{{$t('请选择')}} ></p>
-            </div>
-            <div class="line-sty" v-if="this.stationsData.length"></div>
-            <!-- 清关编码 -->
-            <div class="express-left" v-if="this.needCode">
-                <p>{{$t('清关编码')}}</p>
-            </div>
-            <div class="express-left express-right radio-sty" v-if="this.needCode">
-                <el-input v-model="box.clearance_code" :placeholder="$t('请输入')"></el-input>
-            </div>
-            <div class="line-sty" v-if="this.needCode"></div>
-            <!-- 身份证号码 -->
-            <div class="express-left" v-if="this.idCode">
-                <p>{{$t('身份证号码')}}</p>
-            </div>
-            <div class="express-left express-right radio-sty" v-if="this.idCode">
-                <el-input v-model="box.id_card" :placeholder="$t('请输入')"></el-input>
-            </div>
-            <div class="line-sty" v-if="this.idCode"></div>
         </div>
-      </div>
-      <div class="recipient-address">
-      <h3>{{$t('增值服务')}}</h3>
-         <div class="express-left">
-            <span>{{$t('保险服务')}}</span>
-              <el-tooltip class="item" effect="dark" :content="explanation" placement="top">
-                <span class="el-icon-warning-outline icon-info"></span>
-            </el-tooltip><br/>
-            <!-- <el-radio-group v-model="box.add_service" class="radio-select-sty">
-              <el-radio :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-radio>
-            </el-radio-group> -->
-            <el-checkbox-group v-model="box.add_service" class="radio-select-sty">
-              <el-checkbox :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-checkbox>
-            </el-checkbox-group>
-          </div>
-          <div class="express-left express-right">
-            <el-switch
-              v-model="box.is_insurance"
-              :active-text="$t('开')"
-              :active-value="1"
-              :inactive-value="0"
-              :inactive-text="$t('关')"
-              active-color="#13ce66"
-              inactive-color="gray">
-            </el-switch>
-          </div>
-      </div>
-      <div class="recipient-address">
-      <h3>{{$t('付款方式')}}</h3>
-         <div class="express-left">
-            <el-radio-group v-model="box.payment_mode" class="radio-select-sty">
-              <el-radio :label="1" class="radio-main">{{$t('预付')}}</el-radio>
-              <el-radio :label="2" class="radio-main">{{$t('货到付款')}}</el-radio>
-            </el-radio-group>
-          </div>
-      </div>
-      <div class="save-main">
-        <el-button type="primary" class="sava-btn" :loading="$store.state. btnLoading" @click="saveBoxing">{{$t('提交')}}</el-button>
-        <p v-if="this.box.payment_mode === 1" class="save-tips">{{$t('在仓库打包完成后再进行支付')}}</p>
-        <p v-if="this.box.payment_mode === 2" class="save-tips">{{$t('到达目的地后再进行支付')}}</p>
-      </div>
+        <div class="line-sty"></div>
+        <div class="save-main">
+          <el-button type="primary" class="sava-btn" :loading="$store.state. btnLoading" @click="saveBoxing">{{$t('提交')}}</el-button>
+          <p v-if="this.box.payment_mode === 1" class="save-tips">{{$t('在仓库打包完成后再进行支付')}}</p>
+          <p v-if="this.box.payment_mode === 2" class="save-tips">{{$t('到达目的地后再进行支付')}}</p>
+        </div>
+        </div>
     </div>
     <!-- 收件地址弹窗 -->
   <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
@@ -695,7 +707,6 @@ export default {
 <style lang="scss" scope>
 .boxing-container {
   .apply-main {
-    background-color: #fff;
     padding: 20px;
   }
   ul {
@@ -710,6 +721,7 @@ export default {
     float: right;
   }
   .apply-express {
+    text-align: left;
     overflow: hidden;
   }
   .main-sty {
@@ -722,22 +734,27 @@ export default {
     font-weight: 700;
   }
   .choose-sty {
+    text-align: left;
     color: #b6b6b6;
   }
   .top-sty {
     padding-bottom: 20px;
   }
   .recipient-address {
-    margin-top: 80px;
+    // margin-top: 80px;
   }
   .address-main {
     padding-left: 10px;
   }
   .line-sty {
+    margin-top: 10px;
     border: 1px solid #fbfbfb;
   }
   .radio-sty {
     margin-top: 10px;
+  }
+  .right-margin {
+    margin-left: 20px;
   }
   .express-sty {
     cursor: pointer;
@@ -777,5 +794,29 @@ export default {
 }
 .choose-self {
   margin-top: 20px;
+}
+.poster-left {
+  width:300px;
+  height: 580px;
+  overflow: hidden;
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+  background-color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+  margin-right:20px;
+}
+.poster-right {
+  width: calc(100%-340px);
+  width: -moz-calc(100% - 340px);
+  width: -webkit-calc(100% - 340px);
+  vertical-align: top;
+  display: inline-block;
+  background-color: #fff;
+  padding:15px;
+  height: 880px;
+  box-sizing: border-box;
 }
 </style>

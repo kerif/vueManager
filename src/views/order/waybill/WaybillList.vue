@@ -214,6 +214,8 @@
            @click="saveLogistics(scope.row)">{{$t('保存')}}</el-button>
           <el-button size="small" class="btn-dark-green detailsBtn"
           v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">{{$t('取消')}}</el-button>
+          <!-- 日志 -->
+          <el-button class="btn-blue" v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4'">
@@ -412,6 +414,26 @@
         <el-button type="primary" @click="confirmCreated">{{$t('确定')}}</el-button>
       </div>
   </el-dialog>
+  <!-- 日志 -->
+  <el-dialog :visible.sync="invalidLog" :title="$t('批量更改支付方式')" width="45%">
+    <el-table
+      :data="invalidData"
+      style="width: 100%">
+      <el-table-column :label="$t('图片')">
+        <template slot-scope="scope">
+          <span v-for="(ele, index) in scope.row.images" :key="index"  style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele}`, imgVisible=true">
+            <img :src="`${$baseUrl.IMAGE_URL}${ele}`" class="productImg">
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作日志')" prop="remark"></el-table-column>
+    </el-table>
+  </el-dialog>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -487,7 +509,12 @@ export default {
       batch: {
         remark: ''
       },
-      createdIds: []
+      createdIds: [],
+      invalidData: [],
+      invalidLog: false,
+      invalidId: '',
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   created () {
@@ -598,6 +625,26 @@ export default {
     clearSn () {
       this.tableSn = ''
       this.tableId = ''
+    },
+    // 日志
+    checkInvalid (id) {
+      this.invalidId = id
+      this.invalidLog = true
+      this.getInvalid()
+    },
+    getInvalid () {
+      this.$request.getInvalid(this.invalidId).then(res => {
+        if (res.ret) {
+          this.invalidData = [res.data]
+          console.log(this.invalidData, 'this.invalidData')
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 轨迹
     logistics (id, sn) {
@@ -1202,5 +1249,15 @@ export default {
 .add-box {
   margin-bottom: 10px;
   margin-right: 5px;
+}
+.productImg {
+  width: 110px;
+  height: 100px;
+}
+.img_box{
+  text-align: center;
+  .imgDialog{
+    width: 50%;
+  }
 }
 </style>

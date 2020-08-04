@@ -132,6 +132,7 @@
           <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
           <!-- 高级配置 -->
           <el-button class="btn-purple others-btn" @click="Advanced(scope.row.id)">{{$t('高级配置')}}</el-button>
+          <el-button @click="copyLine(scope.row.id)" class="btn-deep-blue others-btn">{{$t('复制')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -199,6 +200,18 @@
         <el-button type="primary" @click="updateAuto">{{$t('确定')}}</el-button>
       </span>
     </el-dialog>
+    <!-- 复制线路 -->
+    <el-dialog :title="$t('复制')" :visible.sync="copyDialog" width="45%" @close="clear">
+      <el-form ref="form" :model="copyData" label-width="100px">
+        <el-form-item :label="$t('*新线路名称')">
+          <el-input v-model="copyData.name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="copyDialog = false">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="confirmCopy">{{$t('确定')}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -252,7 +265,12 @@ export default {
         is_delivery: ''
       },
       pickList: [],
-      advancedId: ''
+      advancedId: '',
+      copyId: '',
+      copyData: {
+        name: ''
+      },
+      copyDialog: false
     }
   },
   created () {
@@ -339,6 +357,40 @@ export default {
           id: id
         } }
       )
+    },
+    // 复制线路
+    copyLine (id) {
+      this.copyId = id
+      this.copyDialog = true
+    },
+    clear () {
+      this.copyId = ''
+      this.copyData.name = ''
+    },
+    // 确定复制
+    confirmCopy () {
+      if (!this.copyData.name) {
+        return this.$message.error(this.$t('请输入新线路名称'))
+      }
+      this.$request.copyLine(this.copyId, {
+        name: this.copyData.name
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.copyDialog = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 额外收录信息
     addFee (id) {

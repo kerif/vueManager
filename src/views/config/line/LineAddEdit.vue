@@ -320,6 +320,9 @@
                 {{item.name}}</el-checkbox>
             </el-checkbox-group>
           </el-col>
+          <el-col :span="10" class="country-btn">
+            <el-button type="primary" @click="addProps">{{$t('添加属性')}}</el-button>
+          </el-col>
         </el-row>
       </el-form-item>
       <!-- 设为推荐 -->
@@ -450,6 +453,7 @@
   </div>
 </template>
 <script>
+import dialog from '@/components/dialog'
 export default {
   data () {
     return {
@@ -564,6 +568,12 @@ export default {
         if (res.ret) {
           this.iconList = res.data
         }
+      })
+    },
+    // 添加属性
+    addProps () {
+      dialog({ type: 'addPackage' }, () => {
+        this.getProp()
       })
     },
     // 获取多选框
