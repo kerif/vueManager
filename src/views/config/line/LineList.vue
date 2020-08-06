@@ -26,7 +26,7 @@
           <el-button type="success" @click="onHighSearch">{{ highSearch ? $t('取消高级搜索') : $t('高级搜索') }}</el-button>
           <el-button type="primary" @click="onSearch">{{$t('搜索')}}</el-button>
           <el-button type="primary" plain @click="onReset">{{$t('重置')}}</el-button>
-          <add-btn router="lineadd">{{$t('添加路线')}}</add-btn>
+          <add-btn :params="{add: 1}" router="lineadd">{{$t('添加路线')}}</add-btn>
         </el-col>
       </el-row>
       <el-row :gutter="10" style="margin-top:15px" v-show="highSearch">
@@ -351,6 +351,7 @@ export default {
     },
     // 修改线路
     editLine (id) {
+      localStorage.setItem('add', '')
       this.$router.push({ name: 'lineedit',
         params: {
           state: 'edit',

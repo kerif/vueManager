@@ -1,6 +1,6 @@
 <template>
   <div class="rebate-container">
-  <el-form label-width="180px" label-position="left" class="voucher-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+  <el-form label-width="200px" label-position="left" class="voucher-form" :model="ruleForm" :rules="rules" ref="ruleForm">
     <!-- 新用户送券 -->
     <el-form-item :label="$t('支付成功送券')">
       <el-radio-group v-model="ruleForm.status">
@@ -51,7 +51,7 @@
         <span>&nbsp;&nbsp;&nbsp;%</span>
     </el-form-item>
     <!-- 券最大上限金额 -->
-    <el-form-item :label="$t('券最大上限金额') + this.localization.currency_unit" prop="max_coupon_amount">
+    <el-form-item v-if="this.ruleForm.type === 2" :label="$t('券最大上限金额') + this.localization.currency_unit" prop="max_coupon_amount">
         <el-input class="less-sty" :placeholder="$t('请输入')" v-model="ruleForm.max_coupon_amount"></el-input>
     </el-form-item>
     <el-form-item>

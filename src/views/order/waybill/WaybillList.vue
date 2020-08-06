@@ -415,7 +415,7 @@
       </div>
   </el-dialog>
   <!-- 日志 -->
-  <el-dialog :visible.sync="invalidLog" :title="$t('批量更改支付方式')" width="45%">
+  <el-dialog :visible.sync="invalidLog" :title="$t('作废日志')" width="45%">
     <el-table
       :data="invalidData"
       style="width: 100%">

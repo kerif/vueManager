@@ -71,6 +71,7 @@ export default {
   },
   created () {
     this.getList()
+    localStorage.setItem('add', '')
   },
   methods: {
     getList () {

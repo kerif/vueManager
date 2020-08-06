@@ -7,7 +7,9 @@
         <tags-view />
       </div>
       <el-main :class="[isCollapse && 'isCollapses']">
-        <router-view></router-view>
+        <keep-alive include="LineAddEdit">
+          <router-view></router-view>
+        </keep-alive>
       </el-main>
       <!-- <layout-footer></layout-footer> -->
     </el-container>

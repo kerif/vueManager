@@ -455,6 +455,7 @@
 <script>
 import dialog from '@/components/dialog'
 export default {
+  name: 'LineAddEdit',
   data () {
     return {
       form: {
@@ -528,7 +529,39 @@ export default {
       itemArr: {}
     }
   },
-  created () {
+  activated () {
+    const add = localStorage.getItem('add')
+    console.log(add, 'add')
+    if (add) {
+      this.form = {
+        name: '',
+        warehouses: '',
+        countries: '',
+        first_weight: '',
+        first_money: '',
+        first_cost_money: '',
+        next_cost_money: '',
+        next_weight: '',
+        next_money: '',
+        max_weight: '',
+        factor: '',
+        has_factor: '',
+        min_weight: '',
+        reference_time: '',
+        mode: '',
+        types: [],
+        is_great_value: 0,
+        icon: '',
+        need_id_card: '',
+        weight_rise: '',
+        remark: '',
+        clearance_code_remark: '',
+        need_clearance_code: 0,
+        ceil_weight: 0,
+        multi_boxes: 0,
+        price_grade: []
+      }
+    }
     this.getProp()
     this.getWarehouse()
     this.getIcon()

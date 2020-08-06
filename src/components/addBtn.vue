@@ -9,12 +9,16 @@
 <script>
 export default {
   props: {
-    router: String
+    router: String,
+    params: Object
   },
   methods: {
     clickMethod () {
       if (this.router) {
-        this.$router.push({ name: this.router })
+        if (this.params && this.params.add) {
+          localStorage.setItem('add', 1)
+        }
+        this.$router.push({ name: this.router, query: this.params })
       }
     }
   }
