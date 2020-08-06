@@ -25,9 +25,10 @@
           <span v-if="scope.row.is_default === 1">{{$t('默认')}}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('操作')" width="200">
+      <el-table-column :label="$t('操作')" width="220">
         <template slot-scope="scope">
           <el-button  v-if="scope.row.is_default === 0" class="btn-green" @click="setDefault(scope.row.id)">{{$t('设为默认')}}</el-button>
+          <el-button class="btn-deep-blue" @click="editIcon(scope.row.id)">{{$t('编辑')}}</el-button>
           <el-button class="btn-light-red" @click="deleteIcon(scope.row.id)">{{$t('删除')}}</el-button>
         </template>
       </el-table-column>
@@ -96,6 +97,12 @@ export default {
     // 跳转至添加icon
     addIcon () {
       dialog({ type: 'addIcon', state: 'add' }, () => {
+        this.getList()
+      })
+    },
+    // 编辑icon
+    editIcon (id) {
+      dialog({ type: 'addIcon', state: 'edit', id: id }, () => {
         this.getList()
       })
     },

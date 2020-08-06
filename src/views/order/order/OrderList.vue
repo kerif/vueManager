@@ -95,6 +95,15 @@
           <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
         </template> -->
       </el-table-column>
+      <el-table-column :label="$t('状态')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === 1">{{$t('未入库')}}</span>
+          <span v-if="scope.row.status === 2">{{$t('已入库')}}</span>
+          <span v-if="scope.row.status === 3 || scope.row.status === 4">{{$t('已集包')}}</span>
+          <span v-if="scope.row.status === 5">{{$t('已发货')}}</span>
+          <span v-if="scope.row.status === 6">{{$t('已收货')}}</span>
+        </template>
+      </el-table-column>
       <!-- 物品名称 -->
       <el-table-column :label="$t('物品名称')" prop="package_name" width="150" :show-overflow-tooltip="true"></el-table-column>
       <!-- 物品价值 -->
@@ -161,21 +170,21 @@
       <el-table-column :label="$t('提交时间')" prop="created_at">
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="200px" fixed="right" v-if="activeName === '1' || activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || activeName === '6'">
+      <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 入库 -->
-          <el-button class="btn-main" v-if="activeName === '1'" @click="storage(scope.row.id)">{{$t('入库')}}</el-button>
+          <el-button class="btn-main" v-if="activeName === '1' || scope.row.status === 1" @click="storage(scope.row.id)">{{$t('入库')}}</el-button>
           <!-- 单号追踪 -->
-          <el-button class="btn-green operating-btn" @click="goExpress(scope.row.express_num)" v-if="activeName === '1' || activeName === '2'">{{$t('单号追踪')}}</el-button>
+          <el-button class="btn-green operating-btn" @click="goExpress(scope.row.express_num)" v-if="activeName === '1' || activeName === '2' || scope.row.status === 1 || scope.row.status === 2">{{$t('单号追踪')}}</el-button>
           <!-- 入库日志 -->
-          <el-button class="btn-blue operating-btn" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.express_num)">{{$t('入库日志')}}</el-button>
+          <el-button class="btn-blue operating-btn" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || scope.row.status === 2 || scope.row.status === 3 || scope.row.status === 4 || scope.row.status === 5 || scope.row.status === 6" @click="onLogs(scope.row.express_num)">{{$t('入库日志')}}</el-button>
           <!-- 编辑 -->
-          <el-button class="btn-deep-purple" v-if="activeName === '2'" @click="editWarehoused(scope.row.id)">{{$t('编辑')}}</el-button>
+          <el-button class="btn-deep-purple" v-if="activeName === '2' || scope.row.status === 2" @click="editWarehoused(scope.row.id)">{{$t('编辑')}}</el-button>
           <!-- 日志 -->
           <el-button class="btn-blue operating-btn" v-if="activeName === '6'"
           @click="invalidLog(scope.row.id)">{{$t('日志')}}</el-button>
           <!-- 打印标签 -->
-          <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='2'" class="btn-pink operating-btn">{{$t('打印标签')}}</el-button>
+          <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='2' || scope.row.status === 2" class="btn-pink operating-btn">{{$t('打印标签')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append" v-if="activeName === '1' || activeName === '2' || activeName === '6'">

@@ -55,6 +55,11 @@
         <span class="leftWidth">{{$t('身份证号码')}}</span>
         <span>{{form.id_card}}</span>
       </el-col>
+       <!-- 微信号 -->
+      <el-col :span="7" :offset="1">
+        <span class="leftWidth">{{$t('微信号')}}</span>
+        <span>{{form.address && form.address.wechat_id}}</span>
+      </el-col>
     </el-row>
     </div>
     <div class="receiverMSg">

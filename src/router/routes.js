@@ -124,6 +124,8 @@ const Freight = loadonDemand('order/freight/freight')
 const freightDetail = loadonDemand('order/freight/freightDetail')
 // 营销管理 新用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
+// 营销管理  下单返券
+const rebate = loadonDemand('marketing/rebate')
 // 营销管理 抵用券管理
 const Voucher = loadonDemand('marketing/Voucher/voucher')
 // 营销管理 记录
@@ -1172,6 +1174,17 @@ export default [
               level: 2,
               group: '营销管理',
               name: '广告图管理'
+            }
+          },
+          {
+            path: '/marketing/rebate',
+            name: 'rebate',
+            component: rebate,
+            id: 807,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '下单返券'
             }
           }
         ]

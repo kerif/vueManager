@@ -76,6 +76,14 @@ exports.deleteIcon = (id) => {
 exports.addIcon = (params) => {
   return $form.post('express-lines/icons', params)
 }
+// 配置 路线icon  获取单条
+exports.getIcon = (id) => {
+  return $form.get(`express-lines/icons/${id}`)
+}
+// 配置 路线icon 更新某条
+exports.updateIcon = (id, params) => {
+  return $form.put(`express-lines/icons/${id}`, params)
+}
 // 配置 路线 获取全部路线icon
 exports.getAllIcon = () => {
   return $form.get('express-lines/simple-icon-list')
@@ -820,6 +828,14 @@ exports.changePayment = (status, type) => {
 exports.getSetSystem = () => {
   return $form.get('logistics-types/system')
 }
+// 更多配置 基础配置 
+exports.getBasic = () => {
+  return $form.get('basic-settings')
+}
+// 更多配置 修改基础配置 
+exports.updateBasic = (params) => {
+  return $form.put('basic-settings', params)
+}
 // 系统物流类型 修改开关启用
 exports.closeSystem = (id, status) => {
   return $form.put(`logistics-types/system/${id}/status/${status}`)
@@ -1291,6 +1307,22 @@ exports.editCoupons = (params) => {
 // 营销管理 抵用券管理
 exports.getCouponList = (params) => {
   return $form.get('coupons', { params })
+}
+// 营销管理 下单返券
+exports.rebateList = () => {
+  return $form.get(`ordering-coupon`)
+}
+// 营销管理 更新 下单返券
+exports.updateRebate = (params) => {
+  return $form.put(`ordering-coupon`, params)
+}
+// 营销管理 下单返券 语言详情
+exports.rebateLang = (params) => {
+  return $form.get(`ordering-coupon`, { params })
+}
+// 营销管理 下单返券 添加或修改语言
+exports.updateRebateLang = (params) => {
+  return $form.put(`ordering-coupon/translate-data`, params)
 }
 // 抵用券管理 路线列表
 exports.getLineList = (params) => {

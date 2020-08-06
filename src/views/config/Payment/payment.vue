@@ -231,8 +231,32 @@
                       inactive-color="gray">
                     </el-switch>
                 </el-form-item> -->
-              </el-form>
+                <el-form-item :label="$t('入库是否必填尺寸')">
+                  <el-switch
+                    v-model="basic.size"
+                    @change="changeBasic($event)"
+                    :active-text="$t('开')"
+                    :inactive-text="$t('关')"
+                    :active-value="1"
+                    :inactive-value="0"
+                    active-color="#13ce66"
+                    inactive-color="gray">
+                  </el-switch>
+                </el-form-item>
+                <el-form-item :label="$t('入库是否必填货位')">
+                  <el-switch
+                    v-model="basic.location"
+                    @change="changeBasic($event)"
+                    :active-text="$t('开')"
+                    :inactive-text="$t('关')"
+                    :active-value="1"
+                    :inactive-value="0"
+                    active-color="#13ce66"
+                    inactive-color="gray">
+                  </el-switch>
+                </el-form-item>
               <el-button :loading="$store.state.btnLoading" class="save-btn" @click="saveSetting">{{$t('保存')}}</el-button>
+              </el-form>
           </div>
         </el-tab-pane>
         <!-- 订单增值服务 -->
@@ -1039,6 +1063,10 @@ export default {
       page_params: {
         type: ''
       },
+      basic: {
+        size: '',
+        location: ''
+      },
       rules: {
         kd100_app_id: [
           { required: true, message: this.$t('请输入Customer ID'), trigger: 'change' }
@@ -1096,6 +1124,7 @@ export default {
       this.confirmSetting()
       this.getSetting()
       this.getProps()
+      this.getBasic()
     } else if (this.activeName === '4') {
       this.page_params.page = 1
       this.getList()
@@ -1876,6 +1905,35 @@ export default {
         }
       })
     },
+    // 获取入库是否必填
+    getBasic () {
+      this.$request.getBasic().then(res => {
+        if (res.ret) {
+          this.basic.size = res.data.size
+          this.basic.location = res.data.location
+        }
+      })
+    },
+    changeBasic (val) {
+      this.$request.updateBasic({
+        size: this.basic.size,
+        location: this.basic.location
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getBasic()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 保存当前选择的重量及货币配置
     saveSetting () {
       let weight = this.weightList.filter(item => item.name === this.weightName)
@@ -2406,6 +2464,7 @@ export default {
         this.confirmSetting()
         this.getSetting()
         this.getProps()
+        this.getBasic()
       } else if (this.activeName === '4') {
         this.page_params.page = 1
         this.getList()

@@ -67,6 +67,7 @@ import explanationAdd from './insuranceAdd.vue'
 import expressChange from './storageChange.vue'
 import trackingLang from './trackingLang.vue'
 import batchExpress from './batchExpress.vue'
+import rebateLang from './rebateLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -134,6 +135,7 @@ const ExplanationController = Vue.extend(explanationAdd)
 const ExpressLineController = Vue.extend(expressChange)
 const TrackingLangController = Vue.extend(trackingLang)
 const BatchController = Vue.extend(batchExpress)
+const rebateLangController = Vue.extend(rebateLang)
 
 const mixin = {
   data () {
@@ -600,6 +602,13 @@ function initInstance (type) {
     // 发货单 添加物流信息
     case 'batchExpress':
       instance = new BatchController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 下单返券 修改语言
+    case 'rebateLang':
+      instance = new rebateLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

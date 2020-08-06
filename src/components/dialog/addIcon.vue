@@ -59,17 +59,18 @@ export default {
   },
   methods: {
     getList () {
-    //   this.$request.editPayments(this.id).then(res => {
-    //     if (res.ret) {
-    //       this.ruleForm = res.data
-    //       res.data.qr_code && (this.baleImgList[0] = { url: res.data.qr_code })
-    //     } else {
-    //       this.$message({
-    //         message: res.msg,
-    //         type: 'error'
-    //       })
-    //     }
-    //   })
+      this.$request.getIcon(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm = res.data
+          res.data.icon && (this.baleImgList[0] = res.data.icon)
+          console.log(this.baleImgList[0], 'this.baleImgList[0]')
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     confirm () {
       if (!this.ruleForm.name) {
@@ -99,7 +100,7 @@ export default {
           this.show = false
         })
       } else {
-        this.$request.updatePayments(this.id, this.ruleForm).then(res => {
+        this.$request.updateIcon(this.id, this.ruleForm).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
