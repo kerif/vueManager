@@ -93,7 +93,7 @@
         <div class="chooseStatus">
           <el-select v-model="express_line_id" @change="onPaymentChange" clearable :placeholder="$t('请选择')">
             <el-option
-              v-for="item in paymentData"
+              v-for="item in lineData"
               :key="item.id"
               :value="item.id"
               :label="item.name">
