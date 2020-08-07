@@ -828,11 +828,11 @@ exports.changePayment = (status, type) => {
 exports.getSetSystem = () => {
   return $form.get('logistics-types/system')
 }
-// 更多配置 基础配置 
+// 更多配置 基础配置
 exports.getBasic = () => {
   return $form.get('basic-settings')
 }
-// 更多配置 修改基础配置 
+// 更多配置 修改基础配置
 exports.updateBasic = (params) => {
   return $form.put('basic-settings', params)
 }
@@ -1533,6 +1533,10 @@ exports.confirmChange = (id, addId) => {
 // 订单列表 获取支付方式列表
 exports.paymentType = () => {
   return $form.get('orders/payment-types')
+}
+// 订单列表 获取线路筛选列表
+exports.lineType = () => {
+  return $form.get('orders/express-line-list')
 }
 // 订单列表 导出excel
 exports.uploadUserExcel = () => {

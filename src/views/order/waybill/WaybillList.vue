@@ -24,7 +24,7 @@
       <el-tab-pane v-else :label="$t('作废订单') + '(' + this.countData.invalid
 + ')'" name="19"></el-tab-pane>
   </el-tabs>
-  <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goMatch">
+  <search-group :placeholder="$t('请输入')" v-model="page_params.keyword" @search="goMatch">
       <!-- <el-col :span="13"> -->
         <div class="changeTime">
           <!-- 创建 -->
@@ -79,8 +79,19 @@
             </el-option>
           </el-select>
         </div>
-        <div class="chooseStatus">
+        <div class="chooseStatus customer-sty">
           <el-select v-model="payment_type" @change="onPaymentChange" clearable :placeholder="$t('请选择')">
+            <el-option
+              v-for="item in paymentData"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name">
+            </el-option>
+          </el-select>
+        </div>
+        <!-- 线路筛选 -->
+        <div class="chooseStatus">
+          <el-select v-model="express_line_id" @change="onPaymentChange" clearable :placeholder="$t('请选择')">
             <el-option
               v-for="item in paymentData"
               :key="item.id"
@@ -467,8 +478,10 @@ export default {
       selectIDs: [],
       agent_name: '',
       payment_type: '',
+      express_line_id: '',
       agentData: [],
       paymentData: [],
+      lineData: [],
       tableLoading: false,
       countData: {},
       urlImport: '',
@@ -531,6 +544,7 @@ export default {
     }
     this.getAgentData()
     this.getPaymentType()
+    this.getLineType()
   },
   mounted () {
     this.getList()
@@ -544,6 +558,7 @@ export default {
         size: this.page_params.size,
         agent: this.agent_name,
         payment_type: this.payment_type,
+        express_line_id: this.express_line_id,
         status: this.status
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
@@ -711,6 +726,12 @@ export default {
     getPaymentType () {
       this.$request.paymentType().then(res => {
         this.paymentData = res.data
+      })
+    },
+    // 获取筛选线路列表
+    getLineType () {
+      this.$request.lineType().then(res => {
+        this.lineData = res.data
       })
     },
     payed (id) {
