@@ -245,7 +245,6 @@
                 </span>
               </span>
               <el-upload
-                v-show="baleImgList.length < 3"
                 class="avatar-uploader"
                 action
                 list-type="picture-card"
@@ -255,7 +254,7 @@
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div>
+              <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M')}}</div>
             </el-form-item>
           </el-col>
           <el-col :span="10" :offset="2">
@@ -586,7 +585,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .packed-container {
   .sizeLength {
     width: 33% !important;
@@ -646,8 +645,8 @@ export default {
   .img-item {
     display: inline-block;
     border: 1px dashed #d9d9d9;
-    width: 148px;
-    height: 148px;
+    width: 80px;
+    height: 80px;
     margin-right: 10px;
     margin-bottom: 10px;
     border-radius: 6px;
@@ -723,5 +722,11 @@ export default {
     margin-bottom: 10px;
     text-align: right;
   }
+  // .avatar-uploader {
+  //   width: 80px;
+  // }
+  // .el-upload--picture-card {
+  //   width: 80px !important;
+  // }
 }
 </style>

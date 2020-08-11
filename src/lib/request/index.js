@@ -1602,6 +1602,10 @@ exports.updateOrderPdf = (id) => {
 exports.getCompanies = () => {
   return $form.get(`orders/company-expresses`)
 }
+// 订单 编辑物流信息 获取单条信息
+exports.getInfo = (id) => {
+  return $form.get(`orders/${id}/logistics-info`)
+}
 // 订单 获取单条拣货日志
 exports.getOperate = (id) => {
   return $form.get(`orders/${id}/operate-logs`)

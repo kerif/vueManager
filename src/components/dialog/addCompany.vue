@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('添加物流信息')" class="add-company"
+  <el-dialog :visible.sync="show" :title="this.state === 'add' ? $t('添加物流信息') : $t('修改物流信息')" class="add-company"
   width="45%" @close="clear">
     <el-form ref="form" :model="company" label-width="140px">
         <el-form-item :label="$t('*转运快递单号：')">
@@ -34,7 +34,8 @@ export default {
         sn: '',
         company: ''
       },
-      companyList: []
+      companyList: [],
+      state: ''
     }
   },
   methods: {
@@ -46,6 +47,7 @@ export default {
             this.companyList = res.data
             if (this.company.company === '') {
               this.company.company = this.companyList[0].code
+              console.log(this.company.company, 'this.company.company')
             }
           }
         }
@@ -91,8 +93,18 @@ export default {
     },
     init () {
       this.getCompany()
-      this.company.sn = this.logistics_sn
-      this.company.company = this.logistics_company
+      if (this.state === 'edit') {
+        this.$request.getInfo(this.id).then(res => {
+          if (res.ret) {
+            this.company.sn = res.data.logistics_sn
+            this.company.company = res.data.code
+          }
+        })
+      } else if (this.state === 'add') {
+        this.company.sn = this.logistics_sn
+        this.company.company = this.logistics_company
+        this.state = this.state
+      }
     }
   }
 }

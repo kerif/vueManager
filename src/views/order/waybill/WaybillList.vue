@@ -218,7 +218,7 @@
           <el-button size="small" class="btn-yellow" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
           </el-button>
           <!-- 修改物流信息 -->
-          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">{{$t('修改物流信息')}}</el-button>
+          <el-button size="small" @click="editCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">{{$t('修改物流信息')}}</el-button>
           <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '4'" @click="logistics(scope.row.id, scope.row.order_sn)">{{$t('轨迹')}}</el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
            v-show="activeName === '3' && !scope.row.disabled"
@@ -953,7 +953,13 @@ export default {
     addCompany (id, logisticsSn, logisticsCompany) {
       console.log(id, 'id')
       console.log(logisticsSn, 'logisticsSn')
-      dialog({ type: 'addCompany', id: id, logistics_sn: logisticsSn, logistics_company: logisticsCompany }, () => {
+      dialog({ type: 'addCompany', id: id, logistics_sn: logisticsSn, logistics_company: logisticsCompany, state: 'add' }, () => {
+        this.getList()
+      })
+    },
+    // 修改转运快递公司
+    editCompany (id) {
+      dialog({ type: 'addCompany', id: id, state: 'edit' }, () => {
         this.getList()
       })
     },
