@@ -418,6 +418,10 @@
               <el-input v-model="setForm.app_id">
               </el-input>
             </el-form-item>
+             <el-form-item :label="$t('*备案号')">
+              <el-input v-model="setForm.icp">
+              </el-input>
+            </el-form-item>
             <el-form-item :label="$t('*网站Secret')">
               <el-input v-model="setForm.secret">
               </el-input>
@@ -1027,6 +1031,7 @@ export default {
         pc_website_url: '',
         secret: '',
         app_id: '',
+        icp: '',
         token: '',
         aes_key: ''
       },
@@ -1823,23 +1828,25 @@ export default {
         this.setForm.background_image = []
       }
       if (!this.setForm.website_name) {
-        return this.$message.error('请输入网站名称')
+        return this.$message.error(this.$t('请输入网站名称'))
       } else if (!this.baleImgList[0]) {
-        return this.$message.error('请上传小程序码')
+        return this.$message.error(this.$t('请上传小程序码'))
       } else if (!this.customerList[0]) {
-        return this.$message.error('请上传pc端客户二维码')
+        return this.$message.error(this.$t('请上传pc端客户二维码'))
       } else if (!this.setForm.secret) {
-        return this.$message.error('请输入网站Secret')
+        return this.$message.error(this.$t('请输入网站Secret'))
       } else if (!this.setForm.app_id) {
-        return this.$message.error('请输入网站ID')
+        return this.$message.error(this.$t('请输入网站ID'))
+      } else if (!this.setForm.icp) {
+        return this.$message.error(this.$t('请输入备案号'))
       } else if (!this.setForm.token) {
-        return this.$message.error('请输入token')
+        return this.$message.error(this.$t('请输入token'))
       } else if (!this.setForm.aes_key) {
-        return this.$message.error('请输入aes_key')
+        return this.$message.error(this.$t('请输入aes_key'))
       } else if (!this.LogoImgList[0]) {
-        return this.$message.error('请上传logo图')
+        return this.$message.error(this.$t('请上传logo图'))
       } else if (!this.bgList[0]) {
-        return this.$message.error('请上传登录页背景图')
+        return this.$message.error(this.$t('请上传登录页背景图'))
       }
       console.log(this.setForm.pc_website_url.split(','))
       this.$request.editWebsite({ ...this.setForm, pc_website_url: this.setForm.pc_website_url.split(',') }).then(res => {
