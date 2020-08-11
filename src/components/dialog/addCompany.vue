@@ -53,6 +53,15 @@ export default {
         }
       })
     },
+    // 获取当前值
+    getList () {
+      this.$request.getInfo(this.id).then(res => {
+        if (res.ret) {
+          this.company.sn = res.data.logistics_sn
+          this.company.company = res.data.code
+        }
+      })
+    },
     confirm () {
       // console.log(this.company.company, 'this.company.company')
       if (this.company.sn === '') {
@@ -93,18 +102,7 @@ export default {
     },
     init () {
       this.getCompany()
-      if (this.state === 'edit') {
-        this.$request.getInfo(this.id).then(res => {
-          if (res.ret) {
-            this.company.sn = res.data.logistics_sn
-            this.company.company = res.data.code
-          }
-        })
-      } else if (this.state === 'add') {
-        this.company.sn = this.logistics_sn
-        this.company.company = this.logistics_company
-        this.state = this.state
-      }
+      this.getList()
     }
   }
 }

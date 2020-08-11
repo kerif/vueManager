@@ -202,7 +202,7 @@
           <!-- 打印标签 -->
           <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'" class="btn-pink detailsBtn">{{$t('打印标签')}}</el-button>
           <!-- 添加转运快递公司 -->
-          <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '3'" class="btn-green detailsBtn">{{$t('添加物流信息')}}</el-button>
+          <el-button size="small" @click="addCompany(scope.row.id)" v-if="activeName === '3'" class="btn-green detailsBtn">{{$t('添加物流信息')}}</el-button>
           <!-- 移除发货单 -->
           <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">{{$t('移除发货单')}}
           </el-button>
@@ -218,7 +218,7 @@
           <el-button size="small" class="btn-yellow" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
           </el-button>
           <!-- 修改物流信息 -->
-          <el-button size="small" @click="editCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" v-if="activeName === '4'" class="btn-green detailsBtn">{{$t('修改物流信息')}}</el-button>
+          <el-button size="small" @click="editCompany(scope.row.id)" v-if="activeName === '4'" class="btn-green detailsBtn">{{$t('修改物流信息')}}</el-button>
           <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '4'" @click="logistics(scope.row.id, scope.row.order_sn)">{{$t('轨迹')}}</el-button>
           <el-button size="small" class="btn-light-red detailsBtn"
            v-show="activeName === '3' && !scope.row.disabled"
@@ -950,10 +950,9 @@ export default {
       })
     },
     // 添加转运快递公司
-    addCompany (id, logisticsSn, logisticsCompany) {
+    addCompany (id) {
       console.log(id, 'id')
-      console.log(logisticsSn, 'logisticsSn')
-      dialog({ type: 'addCompany', id: id, logistics_sn: logisticsSn, logistics_company: logisticsCompany, state: 'add' }, () => {
+      dialog({ type: 'addCompany', id: id, state: 'add' }, () => {
         this.getList()
       })
     },
