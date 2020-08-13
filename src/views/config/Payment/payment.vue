@@ -932,7 +932,7 @@
               <el-table-column :label="$t('操作')">
                 <template slot-scope="scope">
                   <el-button v-if="scope.row.enabled === 0" class="btn-dark-green" @click="changeRate(scope.row.id)">{{$t('生效')}}</el-button>
-                  <el-button class="btn-light-red" @click="deleteService(scope.row.id)">{{$t('删除')}}</el-button>
+                  <el-button class="btn-light-red" @click="deleteRate(scope.row.id)">{{$t('删除')}}</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -2300,6 +2300,31 @@ export default {
             type: 'error'
           })
         }
+      })
+    },
+    // 汇率 删除
+    deleteRate (id) {
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteRate(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getRate()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 汇率 开启或关闭

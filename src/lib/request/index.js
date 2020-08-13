@@ -844,6 +844,10 @@ exports.updateBasic = (params) => {
 exports.getRates = (params) => {
   return $form.get('exchange-rates', { params })
 }
+// 更多配置 删除汇率
+exports.deleteRate = (id) => {
+  return $form.delete(`exchange-rates/${id}`)
+}
 // 更多配置 自动获取
 exports.autoGet = () => {
   return $form.get('exchange-rates/rate')
