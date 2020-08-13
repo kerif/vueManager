@@ -207,6 +207,16 @@
                       </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="$t('结算货币：')">
+                  <el-select v-model="currency" :placeholder="$t('请选择')">
+                    <el-option
+                    v-for="item in rateList"
+                    :key="item.id"
+                    :value="item.code"
+                    :label="item.name">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
                 <el-form-item :label="$t('物品属性：')">
                   <el-tag
                     :key="item.id"
@@ -895,6 +905,39 @@
               <el-button @click="typeRowUpdate" class="btn-deep-purple save-sort">{{$t('保存排序结果')}}</el-button>
             </div>
         </el-tab-pane>
+        <!-- 汇率配置 -->
+        <el-tab-pane :label="$t('汇率配置')" name="13">
+          <div class="rate-top">
+            <div class="rate-left">
+              1&nbsp;{{$t('人民币')}}&nbsp;= <el-input v-model="rate" class="input-sty" :placeholder="$t('请输入')"></el-input>
+              {{currencyData.name}}
+            </div>
+            <el-button class="btn-dark-green" @click="saveRate">{{$t('保存')}}</el-button>
+            <el-button class="btn-blue-green" @click="autoGet">{{$t('自动获取')}}</el-button>
+          </div>
+            <el-table :data="ratesData" v-loading="tableLoading" class="data-list"
+            border stripe>
+            <el-table-column type="index"></el-table-column>
+            <el-table-column prop="rate" :label="$t('汇率（当前币种:' + currencyData.name + '）')"></el-table-column>
+            <el-table-column :label="$t('是否生效')">
+              <template slot-scope="scope">
+                <span v-if="scope.row.enabled === 1">{{$t('是')}}</span>
+                <span v-if="scope.row.enabled === 0">{{$t('否')}}</span>
+              </template>
+              </el-table-column>
+              <!-- 创建人 -->
+              <el-table-column :label="$t('创建人')" prop="operator"></el-table-column>
+              <!-- 创建时间 -->
+              <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
+              <el-table-column :label="$t('操作')">
+                <template slot-scope="scope">
+                  <el-button v-if="scope.row.enabled === 0" class="btn-dark-green" @click="changeRate(scope.row.id)">{{$t('生效')}}</el-button>
+                  <el-button class="btn-light-red" @click="deleteService(scope.row.id)">{{$t('删除')}}</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        </el-tab-pane>
       </el-tabs>
       <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -978,6 +1021,9 @@ export default {
           enabled: true
         }
       ],
+      ratesData: [],
+      rate: '',
+      currencyData: {},
       insuranceEnabled: 0,
       insuranceData: [],
       parcelData: [
@@ -1020,10 +1066,12 @@ export default {
       weightName: '',
       package_express_line: '',
       lengthName: '',
+      currency: '',
       currencyName: '',
       weightList: [],
       currencyList: [],
       lengthList: [],
+      rateList: [],
       setForm: {
         website_name: '',
         default_img: [],
@@ -1127,6 +1175,7 @@ export default {
       this.getLogisticsData()
     } else if (this.activeName === '3') {
       this.confirmSetting()
+      this.getAllCurrency()
       this.getSetting()
       this.getProps()
       this.getBasic()
@@ -1153,6 +1202,9 @@ export default {
     } else if (this.activeName === '12') {
       this.getSystem()
       this.getTypeData()
+    } else if (this.activeName === '13') {
+      this.getRate()
+      this.getCurrency()
     }
   },
   mounted () {
@@ -1901,6 +1953,14 @@ export default {
         this.lengthList = res.data.length
       })
     },
+    // 获取全部结算货币
+    getAllCurrency () {
+      this.$request.getAllRate().then(res => {
+        if (res.ret) {
+          this.rateList = res.data
+        }
+      })
+    },
     // 获取当前选择的重量及货币配置
     getSetting () {
       this.$request.chooseLocalization().then(res => {
@@ -1909,6 +1969,7 @@ export default {
           this.weightName = res.data.weight_name
           this.lengthName = res.data.length_name
           this.package_express_line = res.data.package_express_line
+          this.currency = res.data.currency
         }
       })
     },
@@ -1953,7 +2014,8 @@ export default {
         currency_symbol: currency[0].symbol,
         length_name: length[0].name,
         length_symbol: length[0].symbol,
-        package_express_line: this.package_express_line
+        package_express_line: this.package_express_line,
+        currency: this.currency
       }).then(res => {
         if (res.ret) {
           this.$notify({
@@ -2168,6 +2230,9 @@ export default {
         this.getExpress()
       } else if (this.activeName === '10') {
         this.getRules()
+      } else if (this.activeName === '13') {
+        this.getRate()
+        this.getCurrency()
       }
     },
     // 获取订单增值服务
@@ -2191,6 +2256,94 @@ export default {
           })
         }
       })
+    },
+    // 获取汇率配置
+    getRate () {
+      this.$request.getRates({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        if (res.ret) {
+          this.ratesData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+          this.localization = res.localization
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 获取当前结算货币
+    getCurrency () {
+      this.$request.getCurrency().then(res => {
+        if (res.ret) {
+          this.currencyData = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 自动获取
+    autoGet () {
+      this.$request.autoGet().then(res => {
+        if (res.ret) {
+          this.rate = res.data.rate
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 汇率 开启或关闭
+    changeRate (id) {
+      this.$request.closeRate(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getRate()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 新建汇率
+    saveRate () {
+      if (!this.rate) {
+        return this.$message.error(this.$t('请输入汇率'))
+      } else {
+        this.$request.saveRate({
+          rate: this.rate
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getRate()
+            this.rate = ''
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
     },
     // 更改保险服务的开关
     changeInsurance (val) {
@@ -2469,6 +2622,7 @@ export default {
         this.getLogisticsData()
       } else if (this.activeName === '3') {
         this.confirmSetting()
+        this.getAllCurrency()
         this.getSetting()
         this.getProps()
         this.getBasic()
@@ -2497,6 +2651,9 @@ export default {
       } else if (this.activeName === '12') {
         this.getSystem()
         this.getTypeData()
+      } else if (this.activeName === '13') {
+        this.getRate()
+        this.getCurrency() // 获取当前结算货币
       }
       this.page_params.handleQueryChange('activeName', this.activeName)
     },
@@ -2906,6 +3063,14 @@ export default {
   }
   .save-sort {
     margin-left: 10px;
+  }
+  .rate-left {
+    display: inline-block;
+  }
+  .input-sty {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 50%;
   }
 }
 </style>

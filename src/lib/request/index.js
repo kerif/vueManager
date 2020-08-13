@@ -792,6 +792,10 @@ exports.locationArea = (id, params) => {
 exports.getLocalization = () => {
   return $form.get('localization/configs')
 }
+// 获取全部结算货币
+exports.getAllRate = () => {
+  return $form.get('localization/currency-list')
+}
 // 获取当前选择的重量及货币配置
 exports.chooseLocalization = () => {
   return $form.get('localization')
@@ -835,6 +839,26 @@ exports.getBasic = () => {
 // 更多配置 修改基础配置
 exports.updateBasic = (params) => {
   return $form.put('basic-settings', params)
+}
+// 更多配置  获取汇率配置
+exports.getRates = (params) => {
+  return $form.get('exchange-rates', { params })
+}
+// 更多配置 自动获取
+exports.autoGet = () => {
+  return $form.get('exchange-rates/rate')
+}
+// 更多配置 新建汇率
+exports.saveRate = (params) => {
+  return $form.post('exchange-rates', params)
+}
+// 更多配置 新建汇率 开关启用状态
+exports.closeRate = (id) => {
+  return $form.put(`exchange-rates/${id}/enabled`)
+}
+// 更多配置 获取当前结算货币
+exports.getCurrency = () => {
+  return $form.get('exchange-rates/currency')
 }
 // 系统物流类型 修改开关启用
 exports.closeSystem = (id, status) => {
