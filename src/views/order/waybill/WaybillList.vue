@@ -111,6 +111,7 @@
       <el-table-column v-else type="index" width="50"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+      <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
       <!-- 订单号 -->
       <el-table-column :label="$t('订单号')" prop="order_sn">
       </el-table-column>

@@ -63,8 +63,8 @@
           </el-option>
         </el-select>
       </div>
-    <div class="import-list">
-     <el-button @click="uploadList">{{$t('导出清单')}}</el-button>
+    <div class="import-list" v-if="activeName === '0' || activeName === '1'|| activeName === '2'|| activeName === '3'|| activeName === '4'|| activeName === '5'">
+     <el-button @click="uploadList(status)">{{$t('导出清单')}}</el-button>
     </div>
     </search-group>
     <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
@@ -566,8 +566,10 @@ export default {
       })
     },
     // 导出清单
-    uploadList () {
-      this.$request.uploadPackage().then(res => {
+    uploadList (val) {
+      this.$request.uploadPackage({
+        status: val
+      }).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           window.open(this.urlExcel)

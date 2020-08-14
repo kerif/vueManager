@@ -631,8 +631,8 @@ exports.deleteNoOwner = (ids) => {
   return $form.put('packages/no-owner/batch-delete', ids)
 }
 // 预报包裹列表 导出
-exports.uploadPackage = () => {
-  return $form.get('packages/export')
+exports.uploadPackage = (params) => {
+  return $form.get('packages/export', { params })
 }
 // 预报包裹列表 获得仓库列表数据
 exports.getSimpleList = () => {
