@@ -50,6 +50,8 @@
           <!-- 关联单号 -->
           <p class="transfer-right">{{$t('关联单号')}}</p>
           <span>{{form.order_sn}}</span><br/>
+          <p class="transfer-right">{{$t('外部交易号')}}</p>
+          <span>{{form.outer_sn}}</span><br/>
           <!-- <p class="transfer-right">备注</p>
           <span>{{form.remark}}</span><br/> -->
           <!-- <p class="transfer-right">创建时间</p>

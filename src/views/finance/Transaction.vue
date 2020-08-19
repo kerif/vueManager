@@ -51,8 +51,10 @@
       <el-table-column :label="$t('支付金额') + this.localization.currency_unit" prop="pay_amount"></el-table-column>
       <!-- 相关订单 -->
       <el-table-column :label="$t('相关订单')" prop="order_sn"></el-table-column>
-      <!-- 第三方流水号 -->
+      <!-- 流水号 -->
       <el-table-column :label="$t('流水号')" prop="serial_no"></el-table-column>
+      <!-- 外部交易号 -->
+      <el-table-column :label="$t('外部交易号')" prop="outer_sn"></el-table-column>
       <!-- 支付时间 -->
       <el-table-column :label="$t('支付时间')" prop="created_at"></el-table-column>
       <el-table-column :label="$t('操作')">
