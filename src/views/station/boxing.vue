@@ -502,6 +502,7 @@ export default {
     },
     // 更换快递方式
     changeExpress () {
+      // this.options = []
       this.selfData = {}
       this.lineId = this.box.express_line_id
       console.log(this.lineId, 'this.lineId')
@@ -529,6 +530,8 @@ export default {
     },
     changeRadio () {
       console.log(this.radio, 'radio')
+      this.box.express_line_id = ''
+      this.options = []
       this.getExpress()
     },
     // 获取自提点地址
