@@ -92,10 +92,20 @@
           </el-select>
         </div>
         <!-- 线路名称 -->
-        <div class="chooseStatus">
-          <el-select v-model="express_line_id" @change="onPaymentChange" clearable :placeholder="$t('线路名称')">
+        <div class="chooseStatus customer-sty">
+          <el-select v-model="express_line_id" @change="onExpressChange" clearable :placeholder="$t('线路名称')">
             <el-option
               v-for="item in lineData"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="chooseStatus">
+          <el-select v-model="pay_delivery" @change="onDeliveryChange" clearable :placeholder="$t('货到付款')">
+            <el-option
+              v-for="item in deliveryData"
               :key="item.id"
               :value="item.id"
               :label="item.name">
@@ -482,8 +492,23 @@ export default {
       agent_name: '',
       payment_type: '',
       express_line_id: '',
+      pay_delivery: '',
       agentData: [],
       paymentData: [],
+      deliveryData: [
+        {
+          id: 1,
+          name: this.$t('全部货到付款')
+        },
+        {
+          id: 2,
+          name: this.$t('未支付')
+        },
+        {
+          id: 3,
+          name: this.$t('已支付')
+        }
+      ],
       lineData: [],
       tableLoading: false,
       countData: {},
@@ -562,6 +587,7 @@ export default {
         agent: this.agent_name,
         payment_type: this.payment_type,
         express_line_id: this.express_line_id,
+        pay_delivery: this.pay_delivery,
         status: this.status
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
@@ -1104,6 +1130,18 @@ export default {
     // 选择支付方式
     onPaymentChange () {
       this.page_params.handleQueryChange('payment_type', this.payment_type)
+      this.getList()
+      this.getCounts()
+    },
+    // 选择线路名称
+    onExpressChange () {
+      this.page_params.handleQueryChange('express_line_id', this.express_line_id)
+      this.getList()
+      this.getCounts()
+    },
+    // 选择货到付款
+    onDeliveryChange () {
+      this.page_params.handleQueryChange('pay_delivery ', this.pay_delivery)
       this.getList()
       this.getCounts()
     },
