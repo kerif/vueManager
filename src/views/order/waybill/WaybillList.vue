@@ -732,9 +732,16 @@ export default {
     },
     // 获取订单统计数据
     getCounts () {
-      this.$request.getCounts({
+      let params = {
+        agent: this.agent_name,
+        payment_type: this.payment_type,
+        express_line_id: this.express_line_id,
+        pay_delivery: this.pay_delivery,
         keyword: this.page_params.keyword
-      }).then(res => {
+      }
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.getCounts(params).then(res => {
         if (res.ret) {
           this.countData = res.data
         } else {
@@ -908,6 +915,7 @@ export default {
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
+      this.getCounts()
     },
     // 拣货时间
     onPick (val) {
@@ -1120,6 +1128,7 @@ export default {
       this.updated_begin_date = ''
       this.updated_end_date = ''
       this.getList()
+      this.getCounts()
     },
     // 选择代理用户
     onAgentChange () {
@@ -1261,7 +1270,7 @@ export default {
 <style lang="scss" scope>
 .way-list-container {
   .tabLength {
-    width: 620px !important;
+    // width: 620px !important;
   }
   .detailsBtn {
     margin: 3px 2px !important;
