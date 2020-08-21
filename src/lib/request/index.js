@@ -1436,6 +1436,10 @@ exports.getOrderData = (params) => {
 exports.getTransactionData = (params) => {
   return $form.get('statistics/transaction-data', { params })
 }
+// 流水记录 导出excel
+exports.transactionExcel = (params) => {
+  return $form.get('transaction-records/export', { params })
+}
 // 营销管理 统计报表 下单排行榜
 exports.getUserOrder = (params) => {
   return $form.get('statistics/user-order-data', { params })

@@ -32,6 +32,19 @@
         <div class="recipient-address apply-express">
           <h3>{{$t('收件地址')}}</h3>
           <div class="address-main">
+            <!-- 收货形式 -->
+            <div class="express-left">
+                <p>{{$t('收货形式')}}</p>
+            </div>
+            <div class="express-left right-margin">
+              <el-radio-group v-model="radio" @change="changeRadio">
+                  <el-radio :label="1">{{$t('送货上门')}}</el-radio>
+                  <el-radio :label="2">{{$t('自提点提货')}}</el-radio>
+              </el-radio-group>
+            </div>
+            <div class="line-sty"></div>
+              <!-- 收件地址 -->
+            <div v-if="this.radio === 1">
             <div class="express-left">
               <p>{{$t('收件地址')}}</p>
                 <div v-if="this.userData.user_id">
@@ -50,6 +63,7 @@
               <div class="express-left express-right">
                 <p class="express-sty" @click="chooseUser">{{$t('请选择')}} ></p>
               </div>
+              </div>
               <div class="line-sty"></div>
               <div class="express-left">
                   <p>{{$t('快递方式')}}</p>
@@ -67,29 +81,21 @@
                   </el-select>
               </div>
               <div class="line-sty"></div>
+              <div v-if="this.radio === 2">
               <div class="express-left">
-                <p>{{$t('收货形式')}}</p>
-              </div>
-              <div class="express-left right-margin">
-                <el-radio-group v-model="radio" @change="changeRadio">
-                    <el-radio :label="1">{{$t('送货上门')}}</el-radio>
-                    <el-radio :label="2" v-if="this.stationsData.length && this.isDelivery === 1">{{$t('自提点提货')}}</el-radio>
-                </el-radio-group>
-              </div>
-              <div class="line-sty"></div>
-              <div class="express-left" v-if="this.stationsData.length && this.radio === 2">
                 <p>{{$t('自提点地址')}}</p>
                 <div class="choose-sty" v-if="this.selfData.id">
                   <p>{{selfData.address}}</p>
                 </div>
               </div>
-              <div class="express-left express-right" v-if="this.stationsData.length && this.radio === 2">
+              <div class="express-left express-right">
                 <p class="express-sty" @click="selectStation">{{$t('请选择')}} ></p>
+              </div>
               </div>
               <!-- <div class="line-sty" v-if="this.stationsData.length"></div> -->
               <!-- 清关编码 -->
               <div class="express-left" v-if="this.needCode">
-                  <p>{{$t('清关编码')}}</p>
+                <p>{{$t('清关编码')}}&nbsp;&nbsp;&nbsp;</p>
               </div>
               <div class="express-left right-margin" v-if="this.needCode">
                   <el-input v-model="box.clearance_code" :placeholder="$t('请输入')"></el-input>
@@ -97,7 +103,7 @@
               <div class="line-sty" v-if="this.needCode"></div>
               <!-- 身份证号码 -->
               <div class="express-left" v-if="this.idCode">
-                  <p>{{$t('身份证号码')}}</p>
+                <p>{{$t('身份证号码')}}</p>
               </div>
               <div class="express-left right-margin" v-if="this.idCode">
                   <el-input v-model="box.id_card" :placeholder="$t('请输入')"></el-input>
@@ -200,9 +206,9 @@
         </template>
         </el-table-column>
     </el-table>
-    <div class="choose-self">
+    <!-- <div class="choose-self">
       <el-button @click="pickPoint">{{$t('选择自提点')}}</el-button>
-    </div>
+    </div> -->
     <div slot="footer">
       <el-button @click="boxDialog = false">{{$t('取消')}}</el-button>
       <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
@@ -381,7 +387,7 @@ export default {
       userId: '',
       userData: {},
       optionsId: [],
-      radio: '',
+      radio: 1,
       servicesData: [],
       localization: {},
       insurance: {},
@@ -451,6 +457,10 @@ export default {
         if (res.ret) {
           this.packageData = res.data.packages
           this.userId = res.data.packages[0].user_id
+          if (this.userId) {
+            this.getAddressDialog() // 获取收件地址
+            this.getCountry() // 获取新建收件地址的国家
+          }
           this.optionsId = res.data.packages.map(item => item.id)
           console.log(this.optionsId, 'optionsId')
           this.localization = res.localization
@@ -472,27 +482,38 @@ export default {
     // 获取快递方式
     getExpress () {
       this.$request.usableLines({
-        package_ids: this.optionsId
+        package_ids: this.optionsId,
+        type: this.radio
       }).then(res => {
         if (res.ret) {
           this.options = res.data
+          this.box.express_line_id = res.data[0].id
+          this.lineId = this.box.express_line_id
+          this.lineStations()
+          console.log(this.box.express_line_id, 'this.box.express_line_id')
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
     // 更换快递方式
     changeExpress () {
+      this.selfData = {}
       this.lineId = this.box.express_line_id
-      console.log(this.lineId)
+      console.log(this.lineId, 'this.lineId')
       // this.clearance_code = val.need_clearance_code
       // this.need_id_card = val.need_id_card
       this.lineStations()
       this.getId()
-      this.selfData.id = ''
-      this.radio = ''
-      this.selfData.address = ''
+      // this.selfData.id = ''
+      // this.selfData.address = ''
       this.box.clearance_code = ''
       this.box.id_card = ''
-      this.isDelivery = ''
+      // this.isDelivery = ''
     },
     // 获取身份证号码跟清关编码
     getId () {
@@ -508,12 +529,14 @@ export default {
     },
     changeRadio () {
       console.log(this.radio, 'radio')
+      this.getExpress()
     },
     // 获取自提点地址
     lineStations () {
       this.$request.lineStations(this.lineId).then(res => {
         if (res.ret) {
           this.stationsData = res.data
+          this.selfData = res.data[0]
         }
       })
     },
@@ -546,6 +569,8 @@ export default {
       }).then(res => {
         if (res.ret) {
           this.tableData = res.data
+          this.userData = this.tableData[0]
+          console.log(this.userData, 'this.userData')
         }
       })
     },
@@ -558,8 +583,7 @@ export default {
     chooseUser () {
       this.boxDialog = true
       if (this.userId) {
-        this.getAddressDialog()
-        this.getCountry()
+        // this.getAddressDialog()
       }
     },
     // 确认创建发货单
@@ -628,7 +652,8 @@ export default {
       this.$request.savePacks({
         ...this.box,
         package_ids: this.packageId,
-        address_type: this.userData.contact_info ? 2 : ''
+        address_type: this.userData.contact_info ? 2 : '',
+        type: this.radio === 2 ? 2 : ''
       }).then(res => {
         if (res.ret) {
           this.$notify({

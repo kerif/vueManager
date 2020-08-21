@@ -69,8 +69,9 @@
         </div>
       <!-- </el-col> -->
       <!-- <el-col :span="4"> -->
+        <!-- 用户名 -->
         <div class="chooseStatus customer-sty">
-          <el-select v-model="agent_name" @change="onAgentChange" clearable :placeholder="$t('请选择')">
+          <el-select v-model="agent_name" @change="onAgentChange" clearable :placeholder="$t('用户名')">
             <el-option
               v-for="item in agentData"
               :key="item.id"
@@ -79,8 +80,9 @@
             </el-option>
           </el-select>
         </div>
+        <!-- 支付方式 -->
         <div class="chooseStatus customer-sty">
-          <el-select v-model="payment_type" @change="onPaymentChange" clearable :placeholder="$t('请选择')">
+          <el-select v-model="payment_type" @change="onPaymentChange" clearable :placeholder="$t('支付方式')">
             <el-option
               v-for="item in paymentData"
               :key="item.id"
@@ -89,9 +91,9 @@
             </el-option>
           </el-select>
         </div>
-        <!-- 线路筛选 -->
+        <!-- 线路名称 -->
         <div class="chooseStatus">
-          <el-select v-model="express_line_id" @change="onPaymentChange" clearable :placeholder="$t('请选择')">
+          <el-select v-model="express_line_id" @change="onPaymentChange" clearable :placeholder="$t('线路名称')">
             <el-option
               v-for="item in lineData"
               :key="item.id"

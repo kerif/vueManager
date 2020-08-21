@@ -13,7 +13,7 @@
           :start-placeholder="$t('开始日期')"
           :end-placeholder="$t('结束日期')">
        </el-date-picker>
-      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('请选择')">
+      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('支付类型')">
         <el-option
           v-for="item in voucherChange"
           :key="item.id"
@@ -21,6 +21,7 @@
           :label="item.name">
         </el-option>
        </el-select>
+        <el-button class="upload-sty" @click="uploadList">{{$t('导出Excel')}}</el-button>
       </search-group>
     </div>
     <el-table :data="transactionList" stripe border class="data-list"
@@ -171,6 +172,31 @@ export default {
           })
         }
       })
+    },
+    // 导出Excel
+    uploadList (val) {
+      let params = {
+        payment_type: this.type
+      }
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.transactionExcel(params).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }
@@ -183,6 +209,9 @@ export default {
   .timeStyle {
     margin-right: 10px;
     width: 276px !important;
+  }
+  .upload-sty {
+    margin-left: 10px;
   }
 }
 </style>
