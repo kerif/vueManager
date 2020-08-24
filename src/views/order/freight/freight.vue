@@ -192,6 +192,11 @@ export default {
             this.$message.error(this.$t('暂无符合条件的路线'))
             this.isEmpty = true
           }
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
