@@ -63,6 +63,14 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 品牌 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item :label="$t('品牌')">
+                <el-input v-model="user.brand_name" :placeholder="$t('请输入品牌')"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
         <!-- 物品总价值 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -324,6 +332,7 @@ export default {
         package_weight: '',
         package_value: '',
         package_name: '',
+        brand_name: '',
         props: [],
         chosen_services: [],
         country_id: '',
@@ -683,7 +692,7 @@ export default {
                   message: res.msg
                 })
                 this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
-                this.user.user_id = this.user.warehouse_id = this.user.package_name = ''
+                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name = ''
                 this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
                 this.goodsImgList = []
                 this.user.props = []
@@ -711,7 +720,7 @@ export default {
                   message: res.msg
                 })
                 this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
-                this.user.user_id = this.user.warehouse_id = this.user.package_name = ''
+                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name = ''
                 this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
                 this.goodsImgList = []
                 this.user.props = []
@@ -740,7 +749,7 @@ export default {
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = ''
+              this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.brand_name = ''
               this.user.user_id = this.user.warehouse_id = this.user.package_value = ''
               this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
               this.goodsImgList = []
@@ -763,7 +772,7 @@ export default {
                       message: res.msg,
                       type: 'success'
                     })
-                    this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = ''
+                    this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = this.user.brand_name = ''
                     this.user.user_id = this.user.warehouse_id = ''
                     this.user.express_num = this.user.express_company_id = this.user.in_storage_remark = this.user.country_id = ''
                     this.user.props = []
