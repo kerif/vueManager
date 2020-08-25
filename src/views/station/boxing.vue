@@ -573,7 +573,8 @@ export default {
         if (res.ret) {
           this.tableData = res.data
           this.userData = this.tableData[0]
-          console.log(this.userData, 'this.userData')
+          this.box.address_id = this.userData.id
+          console.log(this.box.address_id, 'this.address_id')
         }
       })
     },

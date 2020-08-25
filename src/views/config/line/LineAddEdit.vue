@@ -291,6 +291,30 @@
       <el-form-item>
         <el-row :gutter="10">
           <el-col :span="10">
+           <div>
+              <span>{{$t('订单多箱打包重量向上取值')}}</span>
+              <el-tooltip class="item" effect="dark" :content="$t('订单多箱打包时，每个打包箱重量分别上浮，而不是整个上浮。')" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+            <el-select
+              v-model="form.multi_boxes_ceil"
+              filterable
+              class="country-select"
+              :placeholder="$t('请选择')">
+              <el-option
+                v-for="(item, index) in priceData"
+                :key="index"
+                :label="item.name"
+                :value="item.name">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
             <div>
               <span>{{$t('*体积系数')}}</span>
               <el-tooltip class="item" effect="dark" :content="$t('主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数')" placement="top">
@@ -479,6 +503,7 @@ export default {
         icon: '',
         need_id_card: '',
         weight_rise: '',
+        multi_boxes_ceil: '',
         remark: '',
         clearance_code_remark: '',
         need_clearance_code: 0,
