@@ -490,6 +490,7 @@ export default {
           this.box.express_line_id = res.data[0].id
           this.lineId = this.box.express_line_id
           this.lineStations()
+          this.getId()
           console.log(this.box.express_line_id, 'this.box.express_line_id')
         } else {
           this.$notify({
@@ -509,7 +510,7 @@ export default {
       // this.clearance_code = val.need_clearance_code
       // this.need_id_card = val.need_id_card
       this.lineStations()
-      this.getId()
+      this.getId() // 获取身份证号码跟清关编码
       // this.selfData.id = ''
       // this.selfData.address = ''
       this.box.clearance_code = ''
