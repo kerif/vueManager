@@ -135,7 +135,7 @@ const ExplanationController = Vue.extend(explanationAdd)
 const ExpressLineController = Vue.extend(expressChange)
 const TrackingLangController = Vue.extend(trackingLang)
 const BatchController = Vue.extend(batchExpress)
-const rebateLangController = Vue.extend(rebateLang)
+const RebateLangController = Vue.extend(rebateLang)
 
 const mixin = {
   data () {
@@ -608,7 +608,7 @@ function initInstance (type) {
       break
     // 下单返券 修改语言
     case 'rebateLang':
-      instance = new rebateLangController({
+      instance = new RebateLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

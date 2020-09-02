@@ -72,12 +72,11 @@ export default {
 .layout-aside {
   width: 180px !important;
   height: 100vh;
-  overflow: auto;
   position: fixed;
   top: 0;
   z-index: 99;
   background-color: #171B42;
-  transition: all 0.2s ease-in;
+  // transition: all 0.2s ease-in;
   overflow-x: hidden;
   .aside-top {
     width: 180px;
