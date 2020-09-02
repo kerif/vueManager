@@ -42,7 +42,7 @@ export default {
     width: calc(100vw - 180px);
     // height: calc(100vh - 170px);
     height: calc(100vh - 120px);
-    transition: all 0.3s ease-in;
+    transition: all 0.2s ease-in;
     position: relative;
     top: 60px;
     // padding-bottom: 60px;
@@ -54,17 +54,17 @@ export default {
     min-height: calc(100vh - 120px);
   }
   .isCollapses {
-    left: 0 !important;
+    left: 60px !important;
     width: 100vw !important;
   }
   .layout-nav {
-    padding: 10px 20px;
+    padding: 15px 20px;
     width: calc(100vw - 180px);
     box-sizing: border-box;
     position: relative;
-    top: 60px;
+    top: 70px;
     left: 180px;
-    transition: all 0.3s ease-in;
+    transition: all 0.2s ease-in;
     border: {
       top: 1px solid #e8e9eb;
       bottom: 1px solid #e8e9eb;
@@ -74,7 +74,7 @@ export default {
     }
   }
   .isCollapse {
-    width: 0 !important;
+    width: 60px !important;
   }
 }
 </style>

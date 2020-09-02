@@ -106,6 +106,8 @@ const boxing = loadonDemand('station/boxing')
 const importLogistics = loadonDemand('station/importLogistics')
 // 订单 预报包裹列表
 const OrderList = loadonDemand('order/order/OrderList')
+// 订单 预报包裹列表 批量入库
+const ImportOrder = loadonDemand('order/order/importOrder')
 // 订单 无人认领包裹
 const noOwner = loadonDemand('order/noOwner/noOwner')
 // 订单 运单列表
@@ -422,6 +424,18 @@ export default [
               level: 2,
               group: '订单',
               name: '预报包裹列表'
+            }
+          },
+          {
+            path: '/order/orderlist/importOrder',
+            component: ImportOrder,
+            name: 'ImportOrder',
+            id: 401,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '批量入库',
+              parent: '/order/orderlist'
             }
           },
           {

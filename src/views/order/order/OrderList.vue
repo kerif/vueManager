@@ -65,6 +65,8 @@
       </div>
     <div class="import-list" v-if="activeName === '0' || activeName === '1'|| activeName === '2'|| activeName === '3'|| activeName === '4'|| activeName === '5'">
      <el-button @click="uploadList(status)">{{$t('导出清单')}}</el-button>
+     <el-button @click="importOrder">{{$t('批量入库')}}</el-button>
+     <el-button @click="goFilter">{{$t('筛选')}}</el-button>
     </div>
     </search-group>
     <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
@@ -91,9 +93,6 @@
       </el-table-column>
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')" prop="express_num">
-        <!-- <template slot-scope="scope">
-          <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
-        </template> -->
       </el-table-column>
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
@@ -214,14 +213,29 @@
         <img :src="imgSrc" class="imgDialog">
       </div>
     </el-dialog>
-      <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
-        <div class="dialogSty">
-          <iframe class="iframe" :src="urlHtml"></iframe>
+    <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
+      <div class="dialogSty">
+        <iframe class="iframe" :src="urlHtml"></iframe>
         </div>
       <div slot="footer">
-        <el-button @click="show = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="updateLabel">{{$t('下载')}}</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="updateLabel">{{$t('下载')}}</el-button>
       </div>
+    </el-dialog>
+    <!-- 筛选 -->
+    <el-dialog :title="$t('筛选')" :visible.sync="dialogFilter" width="40%" @close="clearFilter">
+      <div class="excel-date">
+        <el-form ref="form" :model="filterForm">
+          <el-form-item :label="$t('价格区间') + localization.currency_unit">
+            <el-input :placeholder="$t('请输入起始价格')" v-model="filterForm.start" class="input-sty"></el-input> -
+            <el-input :placeholder="$t('请输入结束价格')" v-model="filterForm.end" class="input-sty"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFilter = false" class="cancel-btn">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="createPrice" :loading="$store.state.btnLoading">{{$t('确定')}}</el-button>
+    </div>
     </el-dialog>
   </div>
 </template>
@@ -261,7 +275,12 @@ export default {
       labelId: '',
       deleteNum: [],
       countData: {},
-      urlExcel: ''
+      urlExcel: '',
+      dialogFilter: false,
+      filterForm: {
+        start: '',
+        end: ''
+      }
     }
   },
   methods: {
@@ -279,6 +298,22 @@ export default {
           })
         }
       })
+    },
+    goFilter () {
+      this.dialogFilter = true
+    },
+    clearFilter () {
+      this.filterForm.start = ''
+      this.filterForm.end = ''
+    },
+    // 筛选
+    createPrice () {
+      if (!this.filterForm.start) {
+        return this.$message.error(this.$t('请输入起始价格'))
+      } else if (!this.filterForm.end) {
+        return this.$message.error(this.$t('请输入结束价格'))
+      }
+      this.getList()
     },
     goMatch () {
       this.page_params.page = 1
@@ -300,7 +335,9 @@ export default {
         page: this.page_params.page,
         size: this.page_params.size,
         warehouse: this.agent_name,
-        status: this.status
+        status: this.status,
+        start: this.filterForm.start,
+        end: this.filterForm.end
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 已入库
@@ -331,6 +368,9 @@ export default {
         }
       })
     },
+    importOrder () {
+      this.$router.push({ name: 'ImportOrder' })
+    },
     getDiscard () {
       this.tableLoading = true
       this.oderData = []
@@ -338,7 +378,9 @@ export default {
         page: this.page_params.page,
         size: this.page_params.size,
         status: this.status,
-        warehouse: this.agent_name
+        warehouse: this.agent_name,
+        start: this.filterForm.start,
+        end: this.filterForm.end
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)
@@ -347,7 +389,6 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.oderData = res.data
-          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
@@ -759,6 +800,12 @@ export default {
   .import-list {
     display: inline-block;
     margin-left: 10px;
+  }
+  .excel-date {
+    margin-top: 20px;
+  }
+  .input-sty {
+    width: 30%;
   }
 }
 </style>

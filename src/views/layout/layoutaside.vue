@@ -1,8 +1,11 @@
 <template>
   <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']">
-    <div class="aside-top">
+    <div v-if="!isCollapse"  class="aside-top">
       <span class="app-name">{{$t('集运')}}</span>
       <span>{{$t('管理系统')}}</span>
+    </div>
+    <div v-else class="unTop">
+      <img src="../../assets/top.png">
     </div>
     <el-menu
       :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"
@@ -74,7 +77,7 @@ export default {
   top: 0;
   z-index: 99;
   background-color: #171B42;
-  transition: width .3s ease-in-out;
+  transition: all 0.2s ease-in;
   overflow-x: hidden;
   .aside-top {
     width: 180px;
@@ -85,13 +88,22 @@ export default {
     font-size: 18px;
     text-align: center;
   }
+  .unTop {
+    background-color: #3540A5;
+    text-align: center;
+    img {
+      height: 60px;
+      width: 61px;
+      padding-top: 5px;
+    }
+  }
   .app-name {
     font-size: 35px;
     font-weight: bold;
     margin-right: 5px;
   }
   .route-menu {
-    width: 180px;
+    // width: 180px;
     border: none;
     margin-top: 50px;
   }
@@ -102,7 +114,7 @@ export default {
     padding: 0;
   }
   .isCollapse {
-    width: 0 !important;
+    width: 50px !important;
   }
   .el-submenu__title {
     padding-left: 20px !important;
@@ -117,5 +129,8 @@ export default {
       background-color: #3540A5 !important;
     }
   }
+}
+.el-menu-item-group__title {
+  padding: 0;
 }
 </style>

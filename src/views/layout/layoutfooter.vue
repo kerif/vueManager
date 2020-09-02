@@ -25,7 +25,7 @@ export default {
   background: #fff;
   text-align: center;
   right: 0;
-  transition: all 0.3s ease-in;
+  transition: all 0.2s ease-in;
 }
 .layout-footers {
   width: 100%;

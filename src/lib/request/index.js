@@ -610,6 +610,18 @@ exports.getInvalidLog = (id) => {
 exports.getAgent = () => {
   return $form.get('agents/simple-list')
 }
+// 预报包裹列表 批量入库
+exports.importOrder = () => {
+  return $form.get('packages/import-template')
+}
+// 预报包裹列表 批量入库 上传数据
+exports.importData = (name) => {
+  return $form.post('packages/import-data', name)
+}
+// 预报包裹列表 确定批量入库
+exports.updateImport = (params) => {
+  return $form.post('packages/import', params)
+}
 // 无人认领包裹
 exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
@@ -1753,6 +1765,10 @@ exports.shipmentCompanies = () => {
 // 发货单 导出清单
 exports.uploadExcel = (ids) => {
   return $form.post(`shipments/order-export-batch`, ids)
+}
+// 订单列表 导出发票
+exports.uploadOrder = (ids) => {
+  return $form.post('orders/invoices', ids)
 }
 // 发货单 详情批量导出发货单
 exports.uploadShipmentLabel = (id, ids) => {

@@ -1,6 +1,8 @@
 <template>
   <div class="way-list-container">
     <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
+      <el-tab-pane :label="$t('全部') + '(' + 0 + ')'" name="0" v-if="!this.countData.all"></el-tab-pane>
+      <el-tab-pane v-else :label="$t('全部') + '(' + this.countData.all + ')'" name="0"></el-tab-pane>
       <!-- 待处理 -->
       <el-tab-pane :label="$t('待处理') + '(' + 0 + ')'" name="1" v-if="!this.countData.pending"></el-tab-pane>
       <el-tab-pane v-else :label="$t('待处理') + '(' + this.countData.pending + ')'" name="1"></el-tab-pane>
@@ -112,6 +114,9 @@
             </el-option>
           </el-select>
         </div>
+        <div class="import-list" v-if="activeName === '0' || activeName === '1'|| activeName === '2'|| activeName === '3'|| activeName === '4'|| activeName === '5'">
+          <el-button @click="goFilter">{{$t('筛选')}}</el-button>
+        </div>
       <!-- </el-col> -->
     </search-group>
     <el-table class="data-list" border stripe
@@ -222,6 +227,9 @@
           <!-- 作废 -->
           <el-button class="btn-light-red detailsBtn" @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
           v-if="activeName === '1' || activeName === '2' || activeName === '3'">{{$t('作废')}}</el-button>
+          <!-- 导出发票 -->
+           <!-- <el-button class="btn-yellow detailsBtn" @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
+          v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button> -->
           <!-- 改价 -->
           <el-button class="btn-pink detailsBtn" @click="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)"
           v-if="activeName === '2'">{{$t('改价')}}</el-button>
@@ -246,9 +254,11 @@
         <div class="append-box">
           <!-- 删除 -->
           <!-- <el-button size="small">删除</el-button> -->
-          <!-- 加入发货单 -->
           <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button>
+          <!-- 加入发货单 -->
           <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
+           <!-- 导出发票 -->
+           <el-button @click="uploadInvoice(selectIDs)" v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button>
             <!-- 批量发送通知 -->
            <el-button size="small" class="btn-purple" @click="goNotify"
            v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
@@ -458,6 +468,21 @@
         <img :src="imgSrc" class="imgDialog">
       </div>
     </el-dialog>
+    <!-- 筛选 -->
+    <el-dialog :title="$t('筛选')" :visible.sync="dialogFilter" width="40%" @close="clearFilter">
+      <div class="excel-date">
+        <el-form ref="form" :model="filterForm">
+          <el-form-item :label="$t('价格区间') + localization.currency_unit">
+            <el-input :placeholder="$t('请输入起始价格')" v-model="filterForm.start" class="input-sty"></el-input> -
+            <el-input :placeholder="$t('请输入结束价格')" v-model="filterForm.end" class="input-sty"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFilter = false" class="cancel-btn">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="createPrice" :loading="$store.state.btnLoading">{{$t('确定')}}</el-button>
+    </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -555,7 +580,12 @@ export default {
       invalidLog: false,
       invalidId: '',
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      dialogFilter: false,
+      filterForm: {
+        start: '',
+        end: ''
+      }
     }
   },
   created () {
@@ -588,7 +618,9 @@ export default {
         payment_type: this.payment_type,
         express_line_id: this.express_line_id,
         pay_delivery: this.pay_delivery,
-        status: this.status
+        status: this.status,
+        start: this.filterForm.start,
+        end: this.filterForm.end
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 提交时间
@@ -620,6 +652,22 @@ export default {
           })
         }
       })
+    },
+    goFilter () {
+      this.dialogFilter = true
+    },
+    clearFilter () {
+      this.filterForm.start = ''
+      this.filterForm.end = ''
+    },
+    // 筛选
+    createPrice () {
+      if (!this.filterForm.start) {
+        return this.$message.error(this.$t('请输入起始价格'))
+      } else if (!this.filterForm.end) {
+        return this.$message.error(this.$t('请输入结束价格'))
+      }
+      this.getList()
     },
     goMatch () {
       this.page_params.page = 1
@@ -986,6 +1034,37 @@ export default {
         })
       })
     },
+    // 导出发票
+    uploadInvoice (ids) {
+      if (!ids.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.uploadOrder({
+          ids
+        }).then(res => {
+          if (res.ret) {
+            this.urlExcel = res.data.url
+            window.open(this.urlExcel)
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
     // 添加转运快递公司
     addCompany (id) {
       console.log(id, 'id')
@@ -1270,7 +1349,7 @@ export default {
 <style lang="scss" scope>
 .way-list-container {
   .tabLength {
-    // width: 620px !important;
+    width: 720px !important;
   }
   .detailsBtn {
     margin: 3px 2px !important;
@@ -1335,5 +1414,15 @@ export default {
   .imgDialog{
     width: 50%;
   }
+}
+.import-list {
+  display: inline-block;
+  margin-left: 10px;
+}
+.excel-date {
+  margin-top: 20px;
+}
+.input-sty {
+  width: 30%;
 }
 </style>

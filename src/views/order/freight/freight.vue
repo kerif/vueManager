@@ -260,7 +260,7 @@ export default {
   .freight-right {
     padding: 20px 40px;
     width: calc(100% - 350px);
-    min-height: calc(100vh - 180px);
+    min-height: calc(100vh - 60px);
     border-left: 15px solid #f0f0f0;
   }
   .short-item {

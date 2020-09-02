@@ -85,7 +85,7 @@ export default {
 <style lang="scss">
 .isCollapses {
   width: 100vw !important;
-  left: 0px;
+  left: 60px;
 }
 .layout-header {
   width: calc(100vw - 180px);

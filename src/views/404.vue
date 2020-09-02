@@ -126,7 +126,7 @@ export default {
         }
         70% {
           top: 130px;
-          left: 180px;
+          left: 60px;
           opacity: 1;
         }
         100% {
@@ -147,7 +147,7 @@ export default {
           opacity: 1;
         }
         80% {
-          top: 180px;
+          top: 60px;
           left: 340px;
           opacity: 1;
         }

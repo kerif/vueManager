@@ -272,6 +272,11 @@
           prop="unit_price"
           :label="$t('单价') + this.localization.currency_unit">
           </el-table-column>
+          <!-- 总价 -->
+          <el-table-column
+          prop="total_price"
+          :label="$t('总价') + this.localization.currency_unit">
+          </el-table-column>
           <!-- 状态 -->
           <el-table-column
           :label="$t('状态')">
