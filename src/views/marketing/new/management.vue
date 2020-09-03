@@ -1,0 +1,282 @@
+<template>
+  <div class="management-new-container">
+    <!-- <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group> -->
+      <div class="add-sty">
+        <add-btn router="addNew">{{$t('添加')}}</add-btn>
+      </div>
+      <el-table class="data-list" border stripe
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+      :data="voucherData">
+      <el-table-column type="selection" width="55" align="center"></el-table-column>
+      <el-table-column type="index" width="50"></el-table-column>
+      <!-- 优惠券名称 -->
+      <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
+      <!-- 金额 -->
+      <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
+      </el-table-column>
+      <!-- 使用范围 -->
+      <!-- <el-table-column :label="$t('使用范围')" width="150" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.usable_lines" :key="item.id">
+            {{item.name}}&nbsp;
+          </span>
+        </template>
+      </el-table-column> -->
+      <!-- 最低消费金额 -->
+      <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
+      <!-- 失效时间 -->
+      <el-table-column :label="$t('有效时长')" prop="days"></el-table-column>
+      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+        <template slot-scope="scope">
+          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+        </template>
+      </el-table-column>
+      <!-- 操作 -->
+      <el-table-column :label="$t('操作')" width="200px" fixed="right">
+        <template slot-scope="scope">
+          <!-- 记录 -->
+          <el-button size="small" class="btn-dark-green detailsBtn"
+           @click="recoding(scope.row.id)">{{$t('记录')}}</el-button>
+        </template>
+      </el-table-column>
+       <template slot="append">
+        <div class="append-box">
+          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+        </div>
+      </template>
+    </el-table>
+    <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
+  </div>
+</template>
+
+<script>
+import AddBtn from '@/components/addBtn'
+// import { SearchGroup } from '@/components/searchs'
+// import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
+export default {
+  components: {
+    // SearchGroup,
+    // NlePagination,
+    AddBtn
+  },
+  mixins: [pagination],
+  name: 'voucherList',
+  data () {
+    return {
+      activeName: '1',
+      voucherData: [],
+      status: '',
+      type: '1',
+      voucherChange: [{
+        id: '2',
+        name: this.$t('新用户福利券')
+      }, {
+        id: '1',
+        name: this.$t('抵用券')
+      }, {
+        id: '',
+        name: this.$t('全部')
+      }],
+      show: false,
+      selectIDs: [],
+      localization: {},
+      tableLoading: false,
+      languageData: [],
+      transCode: '',
+      ruleForm: {
+        status: []
+      },
+      deleteNum: []
+    }
+  },
+  created () {
+    // if (this.$route.query.activeName) {
+    //   this.activeName = this.$route.query.activeName
+    //   this.status = Number(this.activeName) === 0 ? '' : Number(this.activeName) - 1
+    // }
+    // if (this.$route.query.type) {
+    //   this.type = this.$route.query.type
+    // }
+    console.log(this.$route.params.type, 'type')
+    console.log(typeof (this.$route.params.type), 'type')
+  },
+  mounted () {
+    this.getList()
+    this.getLanguageList()
+  },
+  computed: {
+    formatLangData () {
+      return this.languageData.filter(item => item.language_code !== 'zh_CN')
+    }
+  },
+  methods: {
+    getList () {
+      this.tableLoading = true
+      this.voucherData = []
+      this.$request.newManaList(this.$route.params.type, {
+        // keyword: this.page_params.keyword,
+        // page: this.page_params.page,
+        // size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.voucherData = res.data
+          this.localization = res.localization
+          // this.page_params.page = res.meta.current_page
+          // this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 记录
+    recoding (id) {
+      this.$router.push({ name: 'voucher', query: { type: '2', id: id } })
+    },
+    // 删除
+    deleteData () {
+      console.log(this.deleteNum, 'this.deleteNum')
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.newDelete({
+          ids: this.deleteNum
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
+    // 获取全部语言
+    getLanguageList () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    },
+    onSelectChange (selection) {
+      this.selectIDs = selection.map(item => item.id)
+    },
+    // 添加转运快递单号
+    edit (row) {
+      row.disabled = !row.disabled
+    },
+    // 取消
+    cancel (row) {
+      row.logistics_sn = row.copySN
+      row.disabled = true
+    },
+    // 保存添加转运快递单号
+    saveLogistics (row) {
+      if (!row.logistics_sn) {
+        return this.$message.info(this.$t('请输入转运快递单号'))
+      }
+      this.$request.updateLogistics([{
+        id: row.id,
+        sn: row.logistics_sn
+      }]).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('保存成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          row.disabled = true
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // tab change
+    onTabChange (tab) {
+      switch (tab.name) {
+        case '1': // 全部
+          this.status = ''
+          break
+        case '2': // 未开始
+          this.status = 1
+          break
+        case '3': // 进行中
+          this.status = 2
+          break
+        case '4': // 已失效
+          this.status = 3
+          break
+      }
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('page', 1)
+      this.page_params.handleQueryChange('activeName', tab.name)
+      this.getList()
+    },
+    // 选择不同类型优惠券
+    onVocherTypeChange () {
+      this.page_params.handleQueryChange('type', this.type)
+      this.getList()
+    },
+    // 转账 修改语言
+    onLang (line, lang) {
+      console.log(line, lang)
+      this.transCode = line['trans_' + lang.language_code]
+      // console.log(line['trans_' + lang.language_code])
+      dialog({ type: 'newLang', line: line, lang: lang, transCode: this.transCode }, () => {
+        this.getList()
+      })
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.management-new-container {
+  .tabLength {
+    width: 350px !important;
+  }
+  .detailsBtn {
+    margin: 3px 2px !important;
+  }
+  .changeVou {
+    float: right;
+    margin-right: 10px;
+    .el-input {
+      width: 98%;
+    }
+  }
+  .add-sty {
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+}
+</style>

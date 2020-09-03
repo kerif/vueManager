@@ -62,7 +62,7 @@
         :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
       </el-form-item>
     </el-form>
-    <el-dialog :visible.sync="trackDialog" :title="$t('客户') + this.sn + $t('的商品清单')" class="add-company"
+    <el-dialog :visible.sync="trackDialog" :title="this.sn + $t('的商品清单')" class="add-company"
       width="55%" @close="clear">
           <el-table :data="details" style="width: 100%" border>
             <!-- 货品名称 -->

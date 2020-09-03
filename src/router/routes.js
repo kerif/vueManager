@@ -126,6 +126,10 @@ const Freight = loadonDemand('order/freight/freight')
 const freightDetail = loadonDemand('order/freight/freightDetail')
 // 营销管理 新用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
+// 营销管理 新用户福利 新增
+const addNew = loadonDemand('marketing/new/addNew')
+// 营销管理 新用户福利 管理
+const managementNew = loadonDemand('marketing/new/management')
 // 营销管理  下单返券
 const rebate = loadonDemand('marketing/rebate')
 // 营销管理 抵用券管理
@@ -1073,6 +1077,30 @@ export default [
               level: 2,
               group: '营销管理',
               name: '新用户福利'
+            }
+          },
+          {
+            path: '/marketing/new/addNew/:type',
+            name: 'addNew',
+            component: addNew,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '新增新用户福利',
+              parent: '/marketing/new'
+            }
+          },
+          {
+            path: '/marketing/new/managementNew/:type',
+            name: 'managementNew',
+            component: managementNew,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '新用户送券',
+              parent: '/marketing/new'
             }
           },
           {

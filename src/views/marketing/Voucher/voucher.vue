@@ -147,6 +147,9 @@ export default {
     if (this.$route.query.type) {
       this.type = this.$route.query.type
     }
+    if (this.$route.query.type === '2') {
+
+    }
   },
   mounted () {
     this.getList()
@@ -166,7 +169,8 @@ export default {
         keyword: this.page_params.keyword,
         page: this.page_params.page,
         size: this.page_params.size,
-        type: this.type
+        type: this.type,
+        template_id: this.$route.query.type === '2' ? this.$route.query.id : ''
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {

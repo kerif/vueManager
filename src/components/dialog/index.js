@@ -68,6 +68,7 @@ import expressChange from './storageChange.vue'
 import trackingLang from './trackingLang.vue'
 import batchExpress from './batchExpress.vue'
 import rebateLang from './rebateLang.vue'
+import newLang from './newLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -136,6 +137,7 @@ const ExpressLineController = Vue.extend(expressChange)
 const TrackingLangController = Vue.extend(trackingLang)
 const BatchController = Vue.extend(batchExpress)
 const RebateLangController = Vue.extend(rebateLang)
+const NewLangController = Vue.extend(newLang)
 
 const mixin = {
   data () {
@@ -609,6 +611,13 @@ function initInstance (type) {
     // 下单返券 修改语言
     case 'rebateLang':
       instance = new RebateLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 新用户福利 管理  修改语言
+    case 'newLang':
+      instance = new NewLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

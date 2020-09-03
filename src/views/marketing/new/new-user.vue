@@ -1,50 +1,48 @@
 <template>
   <div class="new-user-container">
-  <el-form label-position="top" class="voucher-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-    <!-- 新用户送券 -->
-    <el-form-item :label="$t('新用户送券')">
-      <el-radio-group v-model="ruleForm.new_cus_send">
-        <el-radio :label="1">{{$t('开启')}}</el-radio>
-        <el-radio :label="0">{{$t('关闭')}}</el-radio>
-      </el-radio-group>
-    </el-form-item>
-    <!-- 邀请新人送券 -->
-    <el-form-item :label="$t('邀请新人送券')">
-      <el-radio-group v-model="ruleForm.invitor_send">
-        <el-radio :label="1">{{$t('开启')}}</el-radio>
-        <el-radio :label="0">{{$t('关闭')}}</el-radio>
-      </el-radio-group>
-    </el-form-item>
-    <!-- 被邀请人送券 -->
-    <el-form-item :label="$t('被邀请人送券')">
-      <el-radio-group v-model="ruleForm.invited_send">
-        <el-radio :label="1">{{$t('开启')}}</el-radio>
-        <el-radio :label="0">{{$t('关闭')}}</el-radio>
-      </el-radio-group>
-    </el-form-item>
-    <!-- 名称 -->
-    <el-form-item :label="$t('名称')" prop="name">
-      <el-input :placeholder="$t('请输入名称')" v-model="ruleForm.name"></el-input>
-    </el-form-item>
-    <!-- 金额 -->
-    <el-form-item :label="$t('金额')" prop="amount">
-      <el-input :placeholder="$t('请输入金额')" v-model="ruleForm.amount"></el-input>
-    </el-form-item>
-    <!-- 最低消费 -->
-    <el-form-item :label="$t('最低消费')" prop="threshold">
-        <el-input :placeholder="$t('请输入最低消费')" v-model="ruleForm.threshold"></el-input>
-    </el-form-item>
-    <!-- 有效时长 -->
-    <el-form-item :label="$t('有效时长')" prop="day">
-      <el-input :placeholder="$t('请输入有效时长')" v-model="ruleForm.day">
-        <template slot="append">{{$t('天')}}</template>
-      </el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" class="save-btn" @click="submit('ruleForm')"
-      :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
-    </el-form-item>
-  </el-form>
+    <el-row :gutter="20">
+      <el-col :span="7" class="user-left" v-for="(item, index) in ruleForm" :key="index">
+        <div class="new-top">
+          <div class="top-img" v-if="item.type === 1">
+            <img src="../../../assets/top-1.png">
+            <p>
+                <strong><span>{{$t('新用户送券')}}</span></strong>
+              </p>
+          </div>
+          <div class="top-img" v-if="item.type === 2">
+            <img src="../../../assets/top-2.png">
+            <p>
+                <strong><span>{{$t('邀请新人送券')}}</span></strong>
+              </p>
+          </div>
+          <div class="top-img" v-if="item.type === 3">
+            <img src="../../../assets/top-3.png">
+            <p>
+                <strong><span>{{$t('被邀请人送券')}}</span></strong>
+              </p>
+          </div>
+          <div class="user-bottom">
+            <div class="bottom-left">
+              <el-button class="btn-deep-blue" @click="goAdd(item.type)">{{$t('增加')}}</el-button>
+              <el-button class="btn-deep-purple" @click="goMana(item.type)">{{$t('管理')}}</el-button>
+            </div>
+            <div class="bottom-right">
+              <el-switch
+                class="switch-sty"
+                @change="changeOnline(item.type, item.status)"
+                v-model="item.status"
+                :active-text="$t('开')"
+                :active-value="1"
+                :inactive-value="0"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+            </div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -52,29 +50,8 @@
 export default {
   data () {
     return {
-      ruleForm: {
-        new_cus_send: '',
-        invitor_send: '',
-        invited_send: '',
-        name: '',
-        amount: '',
-        threshold: '',
-        day: ''
-      },
-      rules: {
-        name: [
-          { required: true, message: this.$t('请输入名称'), trigger: 'blur' }
-        ],
-        amount: [
-          { required: true, message: this.$t('请输入金额'), trigger: 'blur' }
-        ],
-        threshold: [
-          { required: true, message: this.$t('请输入最低消费'), trigger: 'blur' }
-        ],
-        day: [
-          { required: true, message: this.$t('请输入有效时长'), trigger: 'blur' }
-        ]
-      }
+      validate_email: '',
+      ruleForm: []
     }
   },
   created () {
@@ -86,44 +63,68 @@ export default {
         this.ruleForm = res.data
       })
     },
-    submit (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$request.editCoupons(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
-              this.getList()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
+    changeOnline (type, val) {
+      console.log(type, 'type')
+      const status = val === 0 ? 0 : 1
+      this.$request.closeCoupons(type, status).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
           })
+          // this.getWechat()
         } else {
-          return false
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
+    },
+    // 新增
+    goAdd (type) {
+      this.$router.push({ name: 'addNew', params: { type: type } })
+    },
+    // 管理
+    goMana (type) {
+      this.$router.push({ name: 'managementNew', params: { type: type } })
     }
   }
 }
 </script>
 <style lang="scss">
 .new-user-container {
-  background-color: #fff !important;
+  background-color: #F5F5F5 !important;
   padding: 20px;
-  .voucher-form {
-    // padding-left: 50px;
+  .new-top {
+    padding: 20px;
+    background: #fff;
+    .top-img {
+      margin-top: 50px;
+      margin-bottom: 40px;
+      text-align: center;
+      img {
+        width: 40px;
+        height: 40px;
+      }
+    }
   }
-  .save-btn {
-    min-width: 100px;
+  .user-bottom {
+    overflow: hidden;
+    .bottom-left {
+      // display: inline-block;
+      float: left;
+    }
+    .bottom-right {
+      // display: inline-block;
+      float: right;
+    }
+    .switch-sty {
+    }
   }
-  .el-input {
-    width: 40%;
+  .user-left {
+    margin-left: 30px;
   }
 }
 </style>

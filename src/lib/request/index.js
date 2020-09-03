@@ -1340,9 +1340,33 @@ exports.updateOneSelf = (id, params) => {
 exports.getCoupons = () => {
   return $form.get('new-user-coupons')
 }
+// 营销管理 新用户福利 开启或关闭
+exports.closeCoupons = (type, status) => {
+  return $form.put(`new-user-coupons/type/${type}/status/${status}`)
+}
 // 营销管理 修改新用户福利
 exports.editCoupons = (params) => {
   return $form.put('new-user-coupons', params)
+}
+// 营销管理 新用户福利 管理 删除
+exports.newDelete = (ids) => {
+  return $form.put('new-user-coupons/template/batch-delete', ids)
+}
+// 营销管理 新增 新用户福利
+exports.addNew = (id, params) => {
+  return $form.post(`new-user-coupons/type/${id}`, params)
+}
+// 营销管理 新用户福利 管理
+exports.newManaList = (id, params) => {
+  return $form.get(`new-user-coupons/type/${id}`, { params })
+}
+// 转账支付 新用户福利 管理 语言详情
+exports.newLang = (id, params) => {
+  return $form.get(`new-user-coupons/${id}`, { params })
+}
+// 转账支付 新用户福利 管理 添加或修改语言
+exports.updateNewLang = (id, params) => {
+  return $form.put(`new-user-coupons/${id}/translate-data`, params)
 }
 // 营销管理 抵用券管理
 exports.getCouponList = (params) => {
