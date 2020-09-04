@@ -303,8 +303,8 @@ export default {
       this.dialogFilter = true
     },
     clearFilter () {
-      this.filterForm.start = ''
-      this.filterForm.end = ''
+      // this.filterForm.start = ''
+      // this.filterForm.end = ''
     },
     // 筛选
     createPrice () {
@@ -313,7 +313,9 @@ export default {
       } else if (!this.filterForm.end) {
         return this.$message.error(this.$t('请输入结束价格'))
       }
+      // this.handleQueryChange('value_start', this.filterForm.start)
       this.getList()
+      this.dialogFilter = false
     },
     goMatch () {
       this.page_params.page = 1
@@ -379,8 +381,8 @@ export default {
         size: this.page_params.size,
         status: this.status,
         warehouse: this.agent_name,
-        start: this.filterForm.start,
-        end: this.filterForm.end
+        value_start: this.filterForm.start,
+        value_end: this.filterForm.end
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)

@@ -668,6 +668,7 @@ export default {
         return this.$message.error(this.$t('请输入结束价格'))
       }
       this.getList()
+      this.dialogFilter = false
     },
     goMatch () {
       this.page_params.page = 1
