@@ -657,8 +657,8 @@ export default {
       this.dialogFilter = true
     },
     clearFilter () {
-      this.filterForm.start = ''
-      this.filterForm.end = ''
+      // this.filterForm.start = ''
+      // this.filterForm.end = ''
     },
     // 筛选
     createPrice () {
