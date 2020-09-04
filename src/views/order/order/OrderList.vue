@@ -336,8 +336,8 @@ export default {
         size: this.page_params.size,
         warehouse: this.agent_name,
         status: this.status,
-        start: this.filterForm.start,
-        end: this.filterForm.end
+        value_start: this.filterForm.start,
+        value_end: this.filterForm.end
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 已入库

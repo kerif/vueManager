@@ -619,8 +619,8 @@ export default {
         express_line_id: this.express_line_id,
         pay_delivery: this.pay_delivery,
         status: this.status,
-        start: this.filterForm.start,
-        end: this.filterForm.end
+        value_start: this.filterForm.start,
+        value_end: this.filterForm.end
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 提交时间
