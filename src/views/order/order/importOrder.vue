@@ -37,13 +37,11 @@
           </el-table-column>
            <el-table-column :label="$t('商品数量')">
              <template slot-scope="scope">
-               <span>{{scope.row.details.qty}}</span>
+               <span>{{scope.row.details.length}}</span>
              </template>
            </el-table-column>
-            <el-table-column :label="$t('商品名称')">
-             <template slot-scope="scope">
-               <span>{{scope.row.details.name}}</span>
-             </template>
+           <!-- 商品名称 -->
+            <el-table-column :label="$t('商品名称')" prop="package_name">
            </el-table-column>
            <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('重量') + `${localization.weight_unit || ''}`" prop="package_weight"></el-table-column>
