@@ -17,9 +17,10 @@
             <el-upload
               class="upload-demo"
               action=""
-              :limit="3"
+              :limit="1"
               :on-remove="onFileRemove"
               :file-list="fileList"
+              :on-exceed="handleExceed"
               :before-upload="beforeUploadImg"
               :http-request="uploadBaleImg">
               <el-button size="small" type="primary">{{$t('点击上传')}}</el-button>
@@ -39,6 +40,12 @@
                <span>{{scope.row.details.qty}}</span>
              </template>
            </el-table-column>
+            <el-table-column :label="$t('商品名称')">
+             <template slot-scope="scope">
+               <span>{{scope.row.details.name}}</span>
+             </template>
+           </el-table-column>
+           <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('重量') + `${localization.weight_unit || ''}`" prop="package_weight"></el-table-column>
           <el-table-column :label="$t('物品价值') + `${localization.currency_unit || ''}`" prop="package_value"></el-table-column>
           <el-table-column :label="$t('操作')" width="260">
@@ -119,6 +126,12 @@ export default {
           this.localization = res.localization
           // this.page_params.page = res.meta.current_page
           // this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
@@ -190,7 +203,7 @@ export default {
       // this.getList()
     },
     beforeUploadImg (file) {
-      // console.log(file)
+      // console.log(file, 'file')
       // const mimeList = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/wps-writer']
       // if (mimeList.indexOf(file.type) === -1) {
       //   this.$message.error(this.$t('请上传格式正确的文件'))
@@ -200,6 +213,9 @@ export default {
       //   return false
       // }
       // return true
+    },
+    handleExceed (files, fileList) {
+      return this.$message.warning(this.$t('当前限制上传1个文件'))
     },
     saveImport () {
       this.$request.updateImport({
