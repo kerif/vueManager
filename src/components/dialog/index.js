@@ -69,6 +69,8 @@ import trackingLang from './trackingLang.vue'
 import batchExpress from './batchExpress.vue'
 import rebateLang from './rebateLang.vue'
 import newLang from './newLang.vue'
+import columnChoose from './columnChoose.vue'
+import columnLang from './columnLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -138,6 +140,8 @@ const TrackingLangController = Vue.extend(trackingLang)
 const BatchController = Vue.extend(batchExpress)
 const RebateLangController = Vue.extend(rebateLang)
 const NewLangController = Vue.extend(newLang)
+const ColumnChooseController = Vue.extend(columnChoose)
+const ColumnLangController = Vue.extend(columnLang)
 
 const mixin = {
   data () {
@@ -618,6 +622,20 @@ function initInstance (type) {
     // 新用户福利 管理  修改语言
     case 'newLang':
       instance = new NewLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 官网管理 栏目管理 选择标题
+    case 'columnChoose':
+      instance = new ColumnChooseController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 官网管理 栏目管理 修改语言
+    case 'columnLang':
+      instance = new ColumnLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

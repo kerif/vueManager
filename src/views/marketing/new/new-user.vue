@@ -88,7 +88,14 @@ export default {
     },
     // 管理
     goMana (type) {
-      this.$router.push({ name: 'managementNew', params: { type: type } })
+      if (type === 1) { // 新用户送券
+        this.$router.push({ name: 'new', params: { type: type } })
+      } else if (type === 2) { // 邀请新人送券
+        this.$router.push({ name: 'invite', params: { type: type } })
+      } else if (type === 3) { // 被邀请人送券
+        this.$router.push({ name: 'invitees', params: { type: type } })
+      }
+      // this.$router.push({ name: 'managementNew', params: { type: type } })
     }
   }
 }

@@ -4,63 +4,81 @@
     <div class="receiverMSg msg-top">
     <h4 class="change-sty">{{$t('收货人信息')}}</h4>
     <el-button v-if="this.$route.params.activeName === '1' || this.$route.params.activeName === '2'" class="change-sty msg-sty btn-deep-purple" @click="changeReceive">{{$t('更换收货人信息')}}</el-button>
+    <el-button v-if="(this.$route.params.activeName === '1' || this.$route.params.activeName === '2') && unEdit === false" class="btn-deep-blue change-sty msg-sty" @click="goEdit">{{$t('编辑')}}</el-button>
+    <el-button v-if="(this.$route.params.activeName === '1' || this.$route.params.activeName === '2') && unEdit === true" class="btn-dark-green change-sty msg-sty" @click="saveMsg">{{$t('保存')}}</el-button>
+    <el-button v-if="(this.$route.params.activeName === '1' || this.$route.params.activeName === '2') && unEdit === true" class="btn-light-red change-sty msg-sty" @click="cancelMsg">{{$t('取消')}}</el-button>
+    <el-form ref="form" :model="form" label-width="100px" label-position="right">
+      <!-- <el-form-item :label="$t('姓名')"></el-form-item> -->
     <el-row class="container-center" :gutter="20">
       <!-- 姓名 -->
       <el-col :span="7">
         <span class="leftWidth">{{$t('姓名')}}</span>
-        <span>{{form.address && form.address.receiver_name}}</span>
+        <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.receiver_name"></el-input>
+        <span v-if="unEdit === false">{{form.address && form.address.receiver_name}}</span>
       </el-col>
       <!-- 手机/联系电话 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">{{$t('手机/联系电话')}}</span>
-         <span>{{form.address &&form.address.timezone}}-{{form.address &&form.address.phone}}</span>
+         <el-input class="second-sty" v-if="form.address && unEdit === true" v-model="form.address.timezone" :placeholder="$t('区号')"></el-input>
+         <el-input class="second-sty" v-if="form.address && unEdit === true" v-model="form.address.phone" :placeholder="$t('号码')"></el-input>
+         <span v-if="unEdit === false">{{form.address &&form.address.timezone}}-{{form.address &&form.address.phone}}</span>
       </el-col>
       <!-- 国家或地区 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">{{$t('国家/地区')}}</span>
-         <span>{{form.address && form.address.code}}</span>&nbsp;
-         <span>{{form.address && form.address.country.cn_name}}</span>
+          <el-input class="second-sty" v-if="form.address && unEdit === true" v-model="form.address.country.cn_name"></el-input>
+         <span v-if="unEdit === false">{{form.address && form.address.code}}</span>&nbsp;
+         <span v-if="unEdit === false">{{form.address && form.address.country.cn_name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
      <!-- 城市 -->
       <el-col :span="7">
         <span class="leftWidth">{{$t('城市')}}</span>
-        <span>{{form.address && form.address.city}}</span>
+        <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.city"></el-input>
+        <span v-if="unEdit === false">{{form.address && form.address.city}}</span>
       </el-col>
       <!-- 街道/门牌号 -->
         <el-col :span="7" :offset="1">
-         <span class="leftWidth">{{$t('街道门牌号')}}</span>
-         <span>{{form.address && form.address.street}}{{form.address && form.address.door_no}}</span>
+         <span class="leftWidth">{{$t('街道/门牌号')}}</span>
+         <el-input class="second-sty" v-if="form.address && unEdit === true" v-model="form.address.street" :placeholder="$t('街道')"></el-input>
+          <el-input class="second-sty" v-if="form.address && unEdit === true" v-model="form.address.door_no" :placeholder="$t('门牌号')"></el-input>
+         <span v-if="unEdit === false">{{form.address && form.address.street}}{{form.address && form.address.door_no}}</span>
       </el-col>
       <!-- 附加地址 -->
         <el-col :span="7" :offset="1">
          <span class="leftWidth">{{$t('附加地址')}}</span>
-         <span>{{form.address && form.address.address}}</span>
+          <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.address"></el-input>
+         <span v-if="unEdit === false">{{form.address && form.address.address}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
       <!-- 邮编 -->
         <el-col :span="7">
          <span class="leftWidth">{{$t('邮编')}}</span>
-         <span>{{form.address && form.address.postcode}}</span>
+         <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.postcode"></el-input>
+         <span v-if="unEdit === false">{{form.address && form.address.postcode}}</span>
       </el-col>
      <!-- 清关编码 -->
       <el-col :span="7" :offset="1" v-if="form.clearance_code">
         <span class="leftWidth">{{$t('清关编码')}}</span>
-        <span>{{form.clearance_code}}</span>
+         <el-input class="input-sty" v-if="form && unEdit === true" v-model="form.clearance_code"></el-input>
+        <span v-if="unEdit === false">{{form.clearance_code}}</span>
       </el-col>
-     <!-- 清关编码 -->
+     <!-- 身份证号码 -->
       <el-col :span="7" :offset="1" v-if="form.id_card">
         <span class="leftWidth">{{$t('身份证号码')}}</span>
-        <span>{{form.id_card}}</span>
+        <el-input class="input-sty" v-if="form && unEdit === true" v-model="form.id_card"></el-input>
+        <span v-if="unEdit === false">{{form.id_card}}</span>
       </el-col>
        <!-- 微信号 -->
       <el-col :span="7" :offset="1">
         <span class="leftWidth">{{$t('微信号')}}</span>
-        <span>{{form.address && form.address.wechat_id}}</span>
+        <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.wechat_id"></el-input>
+        <span v-if="unEdit === false">{{form.address && form.address.wechat_id}}</span>
       </el-col>
     </el-row>
+     </el-form>
     </div>
     <div class="receiverMSg">
     <h4>{{$t('运单详情')}}</h4>
@@ -118,9 +136,14 @@
     </el-row>
     <el-row class="container-center" :gutter="20">
       <!-- 增值服务 -->
-      <el-col>
+      <el-col :span="7">
         <span class="leftWidth">{{$t('增值服务')}}</span>
         <span v-for="item in services" :key="item.id">{{item.name}}{{localization.currency_unit}}{{item.price}}&nbsp;&nbsp;&nbsp;</span>
+      </el-col>
+      <!-- 付款方式 -->
+      <el-col :span="7" :offset="1">
+        <span class="leftWidth">{{$t('付款方式')}}</span>
+        <span>{{form.payment && form.payment.payment_type_name}}</span>
       </el-col>
     </el-row>
     </div>
@@ -356,7 +379,8 @@ export default {
       tableLoading: false,
       boxDialog: false,
       tableData: [],
-      userId: ''
+      userId: '',
+      unEdit: false
     }
   },
   created () {
@@ -397,6 +421,47 @@ export default {
     changeReceive () {
       this.getAddress()
       this.boxDialog = true
+    },
+    // 编辑
+    goEdit () {
+      this.unEdit = true
+    },
+    // 保存 编辑
+    saveMsg () {
+      this.$request.modifyReceive(this.$route.params.id, {
+        receiver_name: this.form.address.receiver_name,
+        street: this.form.address.street,
+        door_no: this.form.address.door_no,
+        phone: this.form.address.phone,
+        timezone: this.form.address.timezone,
+        city: this.form.address.city,
+        postcode: this.form.address.postcode,
+        address: this.form.address.address,
+        country: this.form.address.country.cn_name,
+        clearance_code: this.form.clearance_code,
+        wechat_id: this.form.address.wechat_id
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('保存成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.unEdit = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 取消
+    cancelMsg () {
+      this.unEdit = false
+      this.getList()
     },
     copyUrl () {
       const input = document.createElement('input')
@@ -514,6 +579,12 @@ export default {
   }
   .msg-sty {
     margin-left: 10px;
+  }
+  .input-sty {
+    width: 50%;
+  }
+  .second-sty {
+    width: 25%;
   }
 }
 </style>

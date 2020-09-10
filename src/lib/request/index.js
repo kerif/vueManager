@@ -1594,6 +1594,10 @@ exports.getInvalid = (id) => {
 exports.detailsAddress = (params) => {
   return $form.get(`orders/user-address`, { params })
 }
+// 订单列表 详情 修改收货人信息
+exports.modifyReceive = (id, params) => {
+  return $form.put(`orders/${id}/address`, params)
+}
 // 详情 更换收货地址
 exports.confirmChange = (id, addId) => {
   return $form.put(`orders/${id}/address/${addId}`)
@@ -1841,6 +1845,78 @@ exports.acceptReject = (id, params) => {
 // 完成支付
 exports.finishOrder = (id) => {
   return $form.put(`orders/${id}/paid`)
+}
+// 官网管理 栏目管理 列表
+exports.getWebsites = (params) => {
+  return $form.get('website-sections', { params })
+}
+// 官网管理 栏目管理 获取单条详情
+exports.getAloneWebsites = (id) => {
+  return $form.get(`website-sections/${id}`)
+}
+// 栏目管理 语言详情
+exports.websiteLang = (id, params) => {
+  return $form.get(`website-sections/${id}`, { params })
+}
+// 栏目管理 添加或修改语言
+exports.updateWebsiteLang = (id, params) => {
+  return $form.put(`website-sections/${id}/translate-data`, params)
+}
+// 官网管理 栏目管理 删除
+exports.deleteWebsites = (ids) => {
+  return $form.put('website-sections/batch-delete', ids)
+}
+// 官网管理 栏目管理 获取栏目分类管理二级菜单
+exports.getSecondWebsites = (id) => {
+  return $form.get(`website-sections/${id}/children`)
+}
+// 官网管理 栏目管理 获取文章类型
+exports.articleData = () => {
+  return $form.get('website-sections/article-types')
+}
+// 管理管理 栏目管理 获取上级栏目数据
+exports.parentData = () => {
+  return $form.get('website-sections/parent-list')
+}
+// 官网管理 栏目管理 获取标题数据
+exports.titleData = (id, params) => {
+  return $form.get(`website-sections/articles/type/${id}`, { params })
+}
+// 新增 栏目
+exports.addArticle = (params) => {
+  return $form.post('website-sections', params)
+}
+// 栏目 当存在子栏目时
+exports.editArticle = (id, params) => {
+  return $form.put(`website-sections/${id}`, params)
+}
+// 单页管理 列表
+exports.singlePage = (params) => {
+  return $form.get('website-pages', { params })
+}
+// 单页管理 删除
+exports.deletePage = (ids) => {
+  return $form.put('website-pages/batch-delete', ids)
+}
+// 单页管理 新增
+exports.singlePageAdd = (params) => {
+  return $form.post('website-pages', params)
+}
+// 单页管理 编辑
+exports.singlePageEdit = (id, params) => {
+  return $form.put(`website-pages/${id}`, params)
+}
+// 单页管理 获取单条详情
+exports.singlePageData = (id) => {
+  return $form.get(`website-pages/${id}`)
+}
+// 单页管理 获取语言单条详细
+exports.pageLang = (id, params) => {
+  return $form.get(`website-pages/${id}`, { params })
+}
+// 单页管理 更新语言配置
+exports.updatePageLang = (id, params) => {
+  return $form.put(`website-pages/${id}/translate-data`, params)
 }
 
 // 注册验证码
