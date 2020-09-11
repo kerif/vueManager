@@ -208,7 +208,7 @@
           <!-- 审核 -->
           <el-button v-show="activeName === '2' && scope.row.status === 11" class="btn-dark-green" @click="reviewPackage(scope.row.id)">{{$t('审核')}}
           </el-button>
-          <el-button v-show="activeName === '2'" class="btn-deep-blue" @click="editPacked(scope.row.id, activeName)">{{$t('编辑')}}
+          <el-button class="btn-deep-blue" @click="editPacked(scope.row.id, activeName)">{{$t('编辑')}}
           </el-button>
           <!-- 打包 -->
           <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">{{$t('打包')}}</el-button>

@@ -59,8 +59,22 @@
          <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.postcode"></el-input>
          <span v-if="unEdit === false">{{form.address && form.address.postcode}}</span>
       </el-col>
+       <!-- 微信号 -->
+      <el-col :span="7" :offset="1">
+        <span class="leftWidth">{{$t('微信号')}}</span>
+        <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.wechat_id"></el-input>
+        <span v-if="unEdit === false">{{form.address && form.address.wechat_id}}</span>
+      </el-col>
+      <!-- 区域 -->
+      <el-col :span="7" :offset="1" v-if="form.address.area">
+        <span class="leftWidth">{{$t('区域')}}</span>
+        <el-input class="input-sty" v-if="(form.address && unEdit === true) && form.address.area" v-model="form.address.area"></el-input>
+        <span v-if="unEdit === false && form.address.area">{{form.address && form.address.area}}</span>
+      </el-col>
+    </el-row>
+    <el-row class="container-center" :gutter="20" v-if="form.clearance_code" || form.id_card >
      <!-- 清关编码 -->
-      <el-col :span="7" :offset="1" v-if="form.clearance_code">
+      <el-col :span="7" v-if="form.clearance_code">
         <span class="leftWidth">{{$t('清关编码')}}</span>
          <el-input class="input-sty" v-if="form && unEdit === true" v-model="form.clearance_code"></el-input>
         <span v-if="unEdit === false">{{form.clearance_code}}</span>
@@ -70,12 +84,6 @@
         <span class="leftWidth">{{$t('身份证号码')}}</span>
         <el-input class="input-sty" v-if="form && unEdit === true" v-model="form.id_card"></el-input>
         <span v-if="unEdit === false">{{form.id_card}}</span>
-      </el-col>
-       <!-- 微信号 -->
-      <el-col :span="7" :offset="1">
-        <span class="leftWidth">{{$t('微信号')}}</span>
-        <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.wechat_id"></el-input>
-        <span v-if="unEdit === false">{{form.address && form.address.wechat_id}}</span>
       </el-col>
     </el-row>
      </el-form>
