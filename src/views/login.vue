@@ -1,13 +1,12 @@
 <template>
   <div class="login-container">
     <div class="login-header">
-      <span class="app-name">TKK</span>
-      <span>{{$t('管理员')}}</span>
+      <span>{{$t('海鸥集运管理系统')}}</span>
     </div>
     <!-- 登陆页面 -->
     <div class="login-main" v-show="welcome === 1">
       <div class="info-box">
-        <p class="info-title">{{$t('欢迎登录')}}</p>
+        <p class="info-title">{{$t('欢迎使用')}}</p>
         <el-form>
           <el-form-item>
             <el-input prefix-icon="el-icon-user" :placeholder="$t('请输入邮箱或手机号')" v-model="userInfo.username"></el-input>
@@ -451,14 +450,16 @@ export default {
 .login-container {
   height: 100%;
   height: 100vh;
-  background-color: #3540A5;
-  // background: url("../assets/logo-img.png") no-repeat;
+  // background-color: #3540A5;
+  background: url("../assets/logo-img.png") no-repeat center;
   position: relative;
   overflow: hidden;
   .login-header {
+    text-align: center;
     color: #fff;
+    // padding-top: 10px;
     font-size: 18px;
-    padding: 10px 15px;
+    padding: 15px 15px 5px 15px;
     font-weight: bold;
     border-bottom: 1px solid #4A55B7;
   }
