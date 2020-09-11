@@ -66,13 +66,13 @@
         <span v-if="unEdit === false">{{form.address && form.address.wechat_id}}</span>
       </el-col>
       <!-- 区域 -->
-      <el-col :span="7" :offset="1" v-if="form.address.area">
+      <el-col :span="7" :offset="1" v-if="form.address && form.address.area">
         <span class="leftWidth">{{$t('区域')}}</span>
         <el-input class="input-sty" v-if="(form.address && unEdit === true) && form.address.area" v-model="form.address.area"></el-input>
         <span v-if="unEdit === false && form.address.area">{{form.address && form.address.area}}</span>
       </el-col>
     </el-row>
-    <el-row class="container-center" :gutter="20" v-if="form.clearance_code" || form.id_card >
+    <el-row class="container-center" :gutter="20" v-if="form.clearance_code || form.id_card">
      <!-- 清关编码 -->
       <el-col :span="7" v-if="form.clearance_code">
         <span class="leftWidth">{{$t('清关编码')}}</span>
