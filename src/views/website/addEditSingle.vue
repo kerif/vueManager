@@ -88,6 +88,13 @@ export default {
       this.$emit('input', this.editor.txt.html())
     },
     saveNotice () {
+      if (!this.params.title) {
+        return this.$message.error(this.$t('请输入标题'))
+      } else if (!this.params.content) {
+        return this.$message.error(this.$t('请输入单页详情'))
+      } else if (!this.params.tags) {
+        return this.$message.error(this.$t('请输入标签'))
+      }
       if (!this.$route.params.id) { // 如果是新增状态
         this.$request.singlePageAdd(this.params).then(res => {
           if (res.ret) {
