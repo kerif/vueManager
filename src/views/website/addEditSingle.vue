@@ -88,10 +88,9 @@ export default {
       this.$emit('input', this.editor.txt.html())
     },
     saveNotice () {
+      console.log(this.params.content, 'content')
       if (!this.params.title) {
         return this.$message.error(this.$t('请输入标题'))
-      } else if (!this.params.content) {
-        return this.$message.error(this.$t('请输入单页详情'))
       } else if (!this.params.tags) {
         return this.$message.error(this.$t('请输入标签'))
       }
