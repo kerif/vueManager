@@ -104,6 +104,11 @@ export default {
     console.log(this.$route.params.type, 'type')
     console.log(typeof (this.$route.params.type), 'type')
   },
+  activated () {
+    console.log(1111)
+    this.getList()
+    this.getLanguageList()
+  },
   mounted () {
     this.getList()
     this.getLanguageList()

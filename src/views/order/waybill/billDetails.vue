@@ -4,9 +4,9 @@
     <div class="receiverMSg msg-top">
     <h4 class="change-sty">{{$t('收货人信息')}}</h4>
     <el-button v-if="this.$route.params.activeName === '1' || this.$route.params.activeName === '2'" class="change-sty msg-sty btn-deep-purple" @click="changeReceive">{{$t('更换收货人信息')}}</el-button>
-    <el-button v-if="(this.$route.params.activeName === '1' || this.$route.params.activeName === '2') && unEdit === false" class="btn-deep-blue change-sty msg-sty" @click="goEdit">{{$t('编辑')}}</el-button>
-    <el-button v-if="(this.$route.params.activeName === '1' || this.$route.params.activeName === '2') && unEdit === true" class="btn-dark-green change-sty msg-sty" @click="saveMsg">{{$t('保存')}}</el-button>
-    <el-button v-if="(this.$route.params.activeName === '1' || this.$route.params.activeName === '2') && unEdit === true" class="btn-light-red change-sty msg-sty" @click="cancelMsg">{{$t('取消')}}</el-button>
+    <el-button v-if="unEdit === false" class="btn-deep-blue change-sty msg-sty" @click="goEdit">{{$t('编辑')}}</el-button>
+    <el-button v-if="unEdit === true" class="btn-dark-green change-sty msg-sty" @click="saveMsg">{{$t('保存')}}</el-button>
+    <el-button v-if="unEdit === true" class="btn-light-red change-sty msg-sty" @click="cancelMsg">{{$t('取消')}}</el-button>
     <el-form ref="form" :model="form" label-width="100px" label-position="right">
       <!-- <el-form-item :label="$t('姓名')"></el-form-item> -->
     <el-row class="container-center" :gutter="20">

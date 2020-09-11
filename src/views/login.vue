@@ -1,8 +1,8 @@
 <template>
   <div class="login-container">
-    <div class="login-header">
+    <!-- <div class="login-header">
       <span>{{$t('海鸥集运管理系统')}}</span>
-    </div>
+    </div> -->
     <!-- 登陆页面 -->
     <div class="login-main" v-show="welcome === 1">
       <div class="info-box">
@@ -134,7 +134,7 @@
           </div>
       </div>
     </div>
-    <div class="login-footer">© (2019) NLETECH <a href="http://www.beian.miit.gov.cn" target="_blank">{{$t('湘ICP备17000173号-5')}}</a></div>
+    <div class="login-footer">© (2019) haiouoms.com <a href="http://www.beian.miit.gov.cn" target="_blank">{{$t('湘ICP备17000173号-5')}}</a></div>
     <!-- 身份验证弹窗 -->
     <el-dialog
       :title="$t('身份验证')"
@@ -452,6 +452,7 @@ export default {
   height: 100vh;
   // background-color: #3540A5;
   background: url("../assets/logo-img.png") no-repeat center;
+  background-size: cover;
   position: relative;
   overflow: hidden;
   .login-header {
