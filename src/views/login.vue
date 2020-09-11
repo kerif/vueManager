@@ -452,6 +452,7 @@ export default {
   height: 100%;
   height: 100vh;
   background-color: #3540A5;
+  // background: url("../assets/logo-img.png") no-repeat;
   position: relative;
   overflow: hidden;
   .login-header {

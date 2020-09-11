@@ -43,7 +43,8 @@ export default {
       chooseId: 0,
       lineNum: [],
       user: {},
-      id: ''
+      id: '',
+      state: ''
     }
   },
   components: {
@@ -52,7 +53,35 @@ export default {
   mixins: [pagination],
   methods: {
     getList () {
+      if (this.state === 'article') {
+        this.getArticle()
+      } else if (this.state === 'page') {
+        this.getPage()
+      }
+    },
+    // 类型 文章
+    getArticle () {
       this.$request.titleData(this.id, {
+        keyword: this.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 类型 单页
+    getPage () {
+      this.$request.titlePageData({
         keyword: this.keyword,
         page: this.page_params.page,
         size: this.page_params.size
@@ -77,7 +106,7 @@ export default {
     },
     confirm () {
       if (!this.chooseId) {
-        return this.$message.error(this.$t('请选择客户'))
+        return this.$message.error(this.$t('请选择'))
       }
       console.log(this.user, '1111')
       this.success(this.user)

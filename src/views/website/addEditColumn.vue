@@ -42,7 +42,8 @@
       </el-upload>
     </el-form-item>
     <el-form-item :label="$t('栏目类型')">
-      <el-select v-model="ruleForm.type" :placeholder="$t('栏目类型')">
+      <el-select v-model="ruleForm.type" :placeholder="$t('栏目类型')"
+      @change="clearType">
           <el-option
             v-for="item in columnType"
             :key="item.id"
@@ -52,7 +53,7 @@
         </el-select>
     </el-form-item>
     <!-- 文章类型 -->
-    <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1 || ruleForm.type === 3">
+    <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1">
       <el-select v-model="ruleForm.article_type" :placeholder="$t('文章类型')">
           <el-option
             v-for="item in articleType"
@@ -167,17 +168,33 @@ export default {
         }
       })
     },
-    // 选择路线
+    // 切换栏目类型清楚数据
+    clearType () {
+      this.ruleForm.article_type = ''
+    },
+    // 选择标题
     chooseLine () {
-      if (!this.ruleForm.article_type) {
+      if (this.ruleForm.type === 1 && !this.ruleForm.article_type) {
         return this.$message.error(this.$t('请选择文章类型'))
       }
-      dialog({ type: 'columnChoose', id: this.ruleForm.article_type }, (data) => {
-        // console.log(data, '我是路线data')
-        this.ruleForm.title = data.title
-        console.log(this.lineName, 'this.lineName ')
-        this.ruleForm.value = data.id
-      })
+      // if (!this.ruleForm.article_type) {
+      //   return this.$message.error(this.$t('请选择文章类型'))
+      // }
+      if (this.ruleForm.type === 1) {
+        dialog({ type: 'columnChoose', id: this.ruleForm.article_type, state: 'article' }, (data) => {
+          // console.log(data, '我是路线data')
+          this.ruleForm.title = data.title
+          console.log(this.lineName, 'this.lineName ')
+          this.ruleForm.value = data.id
+        })
+      } else if (this.ruleForm.type === 3) {
+        dialog({ type: 'columnChoose', state: 'page' }, (data) => {
+          // console.log(data, '我是路线data')
+          this.ruleForm.title = data.title
+          console.log(this.lineName, 'this.lineName ')
+          this.ruleForm.value = data.id
+        })
+      }
     },
     // 预览图片
     onPreview (image) {

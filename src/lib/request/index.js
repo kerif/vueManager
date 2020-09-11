@@ -1878,9 +1878,13 @@ exports.articleData = () => {
 exports.parentData = () => {
   return $form.get('website-sections/parent-list')
 }
-// 官网管理 栏目管理 获取标题数据
+// 官网管理 栏目管理 文章 获取标题数据
 exports.titleData = (id, params) => {
   return $form.get(`website-sections/articles/type/${id}`, { params })
+}
+// 官网管理 栏目管理 单页 获取标题数据
+exports.titlePageData = (params) => {
+  return $form.get('website-sections/pages', { params })
 }
 // 新增 栏目
 exports.addArticle = (params) => {
