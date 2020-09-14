@@ -657,11 +657,13 @@ export default {
     },
     // 提交
     saveBoxing () {
+      console.log(this.box.address_id, 'address_id')
       console.log(this.box.add_service, 'box.add_service')
       this.$request.savePacks({
         ...this.box,
         package_ids: this.packageId,
-        address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
+        address_type: this.radio === 2 ? 2 : '',
+        // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
         type: this.radio === 2 ? 2 : ''
       }).then(res => {
         if (res.ret) {
