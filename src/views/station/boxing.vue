@@ -542,6 +542,7 @@ export default {
         if (res.ret) {
           this.stationsData = res.data
           this.selfData = res.data[0]
+          this.box.address_id = this.selfData.id
         }
       })
     },
@@ -725,6 +726,7 @@ export default {
       }
       console.log(this.selfAddress, 'selfAddress')
       this.selfData = this.selfAddress
+      this.box.address_id = this.selfData.id
       console.log(this.selfData, 'selfData')
       this.addressDialog = false
     },
