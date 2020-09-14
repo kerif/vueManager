@@ -1922,6 +1922,18 @@ exports.pageLang = (id, params) => {
 exports.updatePageLang = (id, params) => {
   return $form.put(`website-pages/${id}/translate-data`, params)
 }
+// 官网管理 区块管理 列表
+exports.getBlocks = () => {
+  return $form.get('website-blocks')
+}
+// 官网管理 区块管理 获取详细
+exports.getBlocksDetails = (id) => {
+  return $form.get(`website-blocks/${id}`)
+}
+// 官网管理 区块管理 更新
+exports.updateBlocksDetails = (id, params) => {
+  return $form.put(`website-blocks/${id}`, params)
+}
 
 // 注册验证码
 exports.getRegisterCode = (phone) => $form.post('register/apply', { phone })

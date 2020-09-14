@@ -47,13 +47,13 @@
             <div v-if="this.radio === 1">
             <div class="express-left">
               <p>{{$t('收件地址')}}</p>
-                <div v-if="this.userData.user_id">
+                <div v-if="this.userData && this.userData.user_id">
                   <p>{{userData.receiver_name}}</p>
                   <p>{{userData.phone}}</p>
                   <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.city}}
                   </p>
                 </div>
-                <div v-else>
+                <div v-if="this.userData">
                   <p>{{userData.contactor}}</p>
                   <p>{{userData.contact_info}}</p>
                   <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.address}}
@@ -457,6 +457,7 @@ export default {
         if (res.ret) {
           this.packageData = res.data.packages
           this.userId = res.data.packages[0].user_id
+          console.log(this.userId, 'this.userId')
           if (this.userId) {
             this.getAddressDialog() // 获取收件地址
             this.getCountry() // 获取新建收件地址的国家
@@ -574,8 +575,10 @@ export default {
         if (res.ret) {
           this.tableData = res.data
           this.userData = this.tableData[0]
-          this.box.address_id = this.userData.id
-          console.log(this.box.address_id, 'this.address_id')
+          if (this.userData) {
+            this.box.address_id = this.userData.id
+            console.log(this.box.address_id, 'this.address_id')
+          }
         }
       })
     },
@@ -652,12 +655,13 @@ export default {
         }
       })
     },
+    // 提交
     saveBoxing () {
       console.log(this.box.add_service, 'box.add_service')
       this.$request.savePacks({
         ...this.box,
         package_ids: this.packageId,
-        address_type: this.userData.contact_info ? 2 : '',
+        address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
         type: this.radio === 2 ? 2 : ''
       }).then(res => {
         if (res.ret) {

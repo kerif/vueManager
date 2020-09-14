@@ -162,18 +162,22 @@ const AddEditPublic = loadonDemand('customer/publicAddEdit')
 const publicLang = loadonDemand('customer/publicLang')
 // 语言包
 const LanguageSupport = loadonDemand('language/support')
-// // 官网管理 栏目管理
-// const website = loadonDemand('website/column')
-// // 官网管理 新增 编辑 栏目管理
-// const addEditWebsite = loadonDemand('website/addEditColumn')
-// // 官网管理 新增 编辑 一级栏目管理 如果是存在二级菜单的情况下
-// const editFirstWeb = loadonDemand('website/firstColumn')
-// // 官网管理 单页管理
-// const singlePage = loadonDemand('website/singlePage')
-// // 官网管理 新增  编辑 单页管理
-// const addEditSingle = loadonDemand('website/addEditSingle')
-// // 单页管理 多语言修改
-// const pageLang = loadonDemand('website/pageLang')
+// 官网管理 栏目管理
+const website = loadonDemand('website/column')
+// 官网管理 新增 编辑 栏目管理
+const addEditWebsite = loadonDemand('website/addEditColumn')
+// 官网管理 新增 编辑 一级栏目管理 如果是存在二级菜单的情况下
+const editFirstWeb = loadonDemand('website/firstColumn')
+// 官网管理 单页管理
+const singlePage = loadonDemand('website/singlePage')
+// 官网管理 新增  编辑 单页管理
+const addEditSingle = loadonDemand('website/addEditSingle')
+// 单页管理 多语言修改
+const pageLang = loadonDemand('website/pageLang')
+// 官网管理 区块管理
+const blockManagement = loadonDemand('website/block')
+// 区块管理 编辑
+const blockEdit = loadonDemand('website/blockAddEdit')
 export default [
   {
     path: '/',
@@ -1362,121 +1366,144 @@ export default [
             }
           }
         ]
+      },
+      {
+        path: 'website',
+        component: LayoutContainer,
+        icon: 'icon-diannao',
+        id: 1000,
+        children: [
+          {
+            path: '/website/column',
+            name: 'column',
+            component: website,
+            id: 1001,
+            meta: {
+              level: 2,
+              group: '官网管理',
+              name: '栏目管理'
+            }
+          },
+          {
+            path: '/website/column/add',
+            name: 'addColumn',
+            component: addEditWebsite,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '新增栏目',
+              parent: '/website/column'
+            }
+          },
+          {
+            path: '/website/column/edit/:id',
+            name: 'editColumn',
+            component: addEditWebsite,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑栏目',
+              parent: '/website/column'
+            }
+          },
+          {
+            path: '/website/column/:parent/:state',
+            name: 'addSecondColumn',
+            component: addEditWebsite,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '新增子栏目',
+              parent: '/website/column'
+            }
+          },
+          {
+            path: '/website/column/first/edit/:id',
+            name: 'editFirstWeb',
+            component: editFirstWeb,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑栏目',
+              parent: '/website/column'
+            }
+          },
+          {
+            path: '/website/singlePage',
+            name: 'singlePage',
+            component: singlePage,
+            id: 1001,
+            meta: {
+              level: 2,
+              group: '官网管理',
+              name: '单页管理'
+            }
+          },
+          {
+            path: '/website/singlePage/add',
+            name: 'addSingle',
+            component: addEditSingle,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '新增单页',
+              parent: '/website/singlePage'
+            }
+          },
+          {
+            path: '/website/singlePage/edit/:id',
+            name: 'editSingle',
+            component: addEditSingle,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑单页',
+              parent: '/website/singlePage'
+            }
+          },
+          {
+            path: '/website/page/lang/add/:line/:lang/:transCode',
+            component: pageLang,
+            name: 'pageLang',
+            id: 1001,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '单页管理的翻译内容',
+              parent: '/website/singlePage'
+            }
+          },
+          {
+            path: '/website/block',
+            name: 'block',
+            component: blockManagement,
+            id: 1001,
+            meta: {
+              level: 2,
+              group: '官网管理',
+              name: '区块管理'
+            }
+          },
+          {
+            path: '/website/block/edit/:id',
+            name: 'blockEdit',
+            component: blockEdit,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑区块',
+              parent: '/website/block'
+            }
+          }
+        ]
       }
-      // {
-      //   path: 'website',
-      //   component: LayoutContainer,
-      //   icon: 'icon-diannao',
-      //   id: 1000,
-      //   children: [
-      //     {
-      //       path: '/website/column',
-      //       name: 'column',
-      //       component: website,
-      //       id: 1001,
-      //       meta: {
-      //         level: 2,
-      //         group: '官网管理',
-      //         name: '栏目管理'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/column/add',
-      //       name: 'addColumn',
-      //       component: addEditWebsite,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '新增栏目',
-      //         parent: '/website/column'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/column/edit/:id',
-      //       name: 'editColumn',
-      //       component: addEditWebsite,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '编辑栏目',
-      //         parent: '/website/column'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/column/:parent/:state',
-      //       name: 'addSecondColumn',
-      //       component: addEditWebsite,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '新增子栏目',
-      //         parent: '/website/column'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/column/first/edit/:id',
-      //       name: 'editFirstWeb',
-      //       component: editFirstWeb,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '编辑栏目',
-      //         parent: '/website/column'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/singlePage',
-      //       name: 'singlePage',
-      //       component: singlePage,
-      //       id: 1001,
-      //       meta: {
-      //         level: 2,
-      //         group: '官网管理',
-      //         name: '单页管理'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/singlePage/add',
-      //       name: 'addSingle',
-      //       component: addEditSingle,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '新增单页',
-      //         parent: '/website/singlePage'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/singlePage/edit/:id',
-      //       name: 'editSingle',
-      //       component: addEditSingle,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '编辑单页',
-      //         parent: '/website/singlePage'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/page/lang/add/:line/:lang/:transCode',
-      //       component: pageLang,
-      //       name: 'pageLang',
-      //       id: 1001,
-      //       meta: {
-      //         group: '官网管理',
-      //         level: 3,
-      //         name: '单页管理的翻译内容',
-      //         parent: '/website/singlePage'
-      //       }
-      //     }
-      //   ]
-      // }
     ]
   }
 ]
