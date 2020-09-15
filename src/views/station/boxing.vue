@@ -658,6 +658,9 @@ export default {
     },
     // 提交
     saveBoxing () {
+      if (this.radio === 1 && !this.userData) {
+        return this.$message.error('请选择收件地址')
+      }
       console.log(this.box.address_id, 'address_id')
       console.log(this.box.add_service, 'box.add_service')
       this.$request.savePacks({
