@@ -519,7 +519,7 @@ export default {
           ]
           this.orderRight.series = [
             {
-              name: '新增包裹数',
+              name: '新增订单数',
               type: 'bar',
               barWidth: '60%',
               data: yData
