@@ -72,11 +72,15 @@
     </div>
     <div class="echarts-bottom" v-if="unShow && checked">
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" min-height="100">
-        <el-table-column :label="$t('区间')" prop="days"></el-table-column>
-        <el-table-column :label="$t('应付金额')" prop="order_amount"></el-table-column>
-        <el-table-column :label="$t('抵用券优惠')" prop="coupon_amount"></el-table-column>
-        <el-table-column :label="$t('支付金额')" prop="pay_amount"></el-table-column>
-        <el-table-column :label="$t('充值金额')" prop="recharge_amount"></el-table-column>
+        <el-table-column :label="$t('总计')" prop="days"></el-table-column>
+        <!-- <el-table-column :label="$t('应付金额')" prop="order_amount"></el-table-column> -->
+        <el-table-column prop="order_amount"></el-table-column>
+        <!-- <el-table-column :label="$t('抵用券优惠')" prop="coupon_amount"></el-table-column> -->
+        <el-table-column prop="coupon_amount"></el-table-column>
+        <!-- <el-table-column :label="$t('支付金额')" prop="pay_amount"></el-table-column> -->
+        <el-table-column prop="pay_amount"></el-table-column>
+        <!-- <el-table-column :label="$t('充值金额')" prop="recharge_amount"></el-table-column> -->
+        <el-table-column prop="recharge_amount"></el-table-column>
       </el-table>
     </div>
   </div>
@@ -327,10 +331,11 @@ export default {
   }
   .charts-right {
     // display: inline-block;
-    width: 80%;
+    width: 100%;
     height: 400px;
   }
   .charts-content {
+    text-align: center;
     margin-top: 60px;
   }
   ul{

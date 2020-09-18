@@ -127,16 +127,24 @@
       </el-table>
     </div>
     <div class="echarts-bottom" v-if="unShow && checked">
-      <h3>{{$t('包裹对比')}}</h3>
+      <!-- <h3>{{$t('包裹对比')}}</h3> -->
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" min-height="100">
-        <el-table-column :label="$t('区间')" prop="days"></el-table-column>
+        <!-- <el-table-column :label="$t('区间')" prop="days"></el-table-column>
        <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('未入库')" prop="wait_storage"></el-table-column>
         <el-table-column :label="$t('已入库')" prop="already_storage"></el-table-column>
         <el-table-column :label="$t('已集包')" prop="packed"></el-table-column>
         <el-table-column :label="$t('已发货')" prop="shipped"></el-table-column>
         <el-table-column :label="$t('已收货')" prop="received"></el-table-column>
-        <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column>
+        <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column> -->
+        <el-table-column :label="$t('合计')" prop="days"></el-table-column>
+        <el-table-column prop="total"></el-table-column>
+        <el-table-column prop="wait_storage"></el-table-column>
+        <el-table-column prop="already_storage"></el-table-column>
+        <el-table-column prop="packed"></el-table-column>
+        <el-table-column prop="shipped"></el-table-column>
+        <el-table-column prop="received"></el-table-column>
+        <el-table-column prop="invalid"></el-table-column>
       </el-table>
     </div>
     <div class="echarts-bottom">
@@ -153,16 +161,24 @@
       </el-table>
     </div>
     <div class="echarts-bottom" v-if="unShow && checked">
-      <h3>{{$t('订单对比')}}</h3>
+      <!-- <h3>{{$t('订单对比')}}</h3> -->
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="orderCompare" min-height="100">
-        <el-table-column :label="$t('区间')" prop="days"></el-table-column>
+        <!-- <el-table-column :label="$t('区间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('待处理')" prop="wait_pack"></el-table-column>
         <el-table-column :label="$t('待支付')" prop="wait_payment"></el-table-column>
         <el-table-column :label="$t('待发货')" prop="wait_shipped"></el-table-column>
         <el-table-column :label="$t('已发货')" prop="shipped"></el-table-column>
         <el-table-column :label="$t('已签收')" prop="received"></el-table-column>
-        <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column>
+        <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column> -->
+         <el-table-column :label="$t('合计')" prop="days"></el-table-column>
+        <el-table-column prop="total"></el-table-column>
+        <el-table-column prop="wait_pack"></el-table-column>
+        <el-table-column prop="wait_payment"></el-table-column>
+        <el-table-column prop="wait_shipped"></el-table-column>
+        <el-table-column prop="shipped"></el-table-column>
+        <el-table-column prop="received"></el-table-column>
+        <el-table-column prop="invalid"></el-table-column>
       </el-table>
     </div>
   </div>
