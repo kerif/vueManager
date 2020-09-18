@@ -115,7 +115,7 @@
     </div>
     <div class="echarts-bottom">
       <h3>{{$t('包裹列表')}}</h3>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" height="300">
+      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" min-height="100">
         <el-table-column :label="$t('时间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('未入库')" prop="wait_storage"></el-table-column>
@@ -126,10 +126,10 @@
         <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column>
       </el-table>
     </div>
-    <div class="echarts-bottom" v-if="unShow">
-      <h3>{{$t('包裹总计')}}</h3>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" height="300">
-        <el-table-column :label="$t('总计')" prop="total"></el-table-column>
+    <div class="echarts-bottom" v-if="unShow && checked">
+      <h3>{{$t('包裹对比')}}</h3>
+      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" min-height="100">
+        <el-table-column :label="$t('区间')" prop="days"></el-table-column>
        <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('未入库')" prop="wait_storage"></el-table-column>
         <el-table-column :label="$t('已入库')" prop="already_storage"></el-table-column>
@@ -141,8 +141,8 @@
     </div>
     <div class="echarts-bottom">
       <h3>{{$t('订单列表')}}</h3>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="oderData" height="300" show-summary :summary-method="getSummaries">
-        <el-table-column :label="$t('时间')" prop="total"></el-table-column>
+      <el-table class="data-list" border stripe v-loading="tableLoading" :data="oderData" min-height="100" show-summary :summary-method="getSummaries">
+        <el-table-column :label="$t('时间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('待处理')" prop="wait_pack"></el-table-column>
         <el-table-column :label="$t('待支付')" prop="wait_payment"></el-table-column>
@@ -152,10 +152,10 @@
         <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column>
       </el-table>
     </div>
-    <div class="echarts-bottom" v-if="unShow">
-      <h3>{{$t('订单总计')}}</h3>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="orderCompare" height="300">
-        <el-table-column :label="$t('总计')" prop="days"></el-table-column>
+    <div class="echarts-bottom" v-if="unShow && checked">
+      <h3>{{$t('订单对比')}}</h3>
+      <el-table class="data-list" border stripe v-loading="tableLoading" :data="orderCompare" min-height="100">
+        <el-table-column :label="$t('区间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('待处理')" prop="wait_pack"></el-table-column>
         <el-table-column :label="$t('待支付')" prop="wait_payment"></el-table-column>
@@ -219,7 +219,7 @@ export default {
     window.onresize = this.myChart.resize
     this.option = {
       backgroundColor: '#ffffff',
-      color: ['#A30014', '#F56E6A', '#6EC81E', '#8400FF', '#4EA8F9'],
+      color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -249,7 +249,7 @@ export default {
     window.onresize = this.myOrder.resize
     this.orderLeft = {
       backgroundColor: '#ffffff',
-      color: ['#A30014', '#F56E6A', '#6EC81E', '#8400FF', '#4EA8F9'],
+      color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -689,7 +689,7 @@ export default {
   }
   .charts-right {
     display: inline-block;
-    width: 45%;
+    width: 55%;
     height: 400px;
   }
   .charts-content {

@@ -258,7 +258,7 @@
           <!-- 加入发货单 -->
           <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
            <!-- 导出发票 -->
-           <el-button @click="uploadInvoice(selectIDs)" v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button>
+           <el-button size="small" @click="uploadInvoice(selectIDs)" v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button>
             <!-- 批量发送通知 -->
            <el-button size="small" class="btn-purple" @click="goNotify"
            v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>

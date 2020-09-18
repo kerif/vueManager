@@ -62,7 +62,7 @@
     </div>
     <div class="echarts-bottom">
       <!-- <h3>{{$t('包裹列表')}}</h3> -->
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" height="300">
+      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" min-height="100">
         <el-table-column :label="$t('时间')" prop="days"></el-table-column>
         <el-table-column :label="$t('应付金额')" prop="order_amount"></el-table-column>
         <el-table-column :label="$t('抵用券优惠')" prop="coupon_amount"></el-table-column>
@@ -70,9 +70,9 @@
         <el-table-column :label="$t('充值金额')" prop="recharge_amount"></el-table-column>
       </el-table>
     </div>
-    <div class="echarts-bottom" v-if="unShow">
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare">
-        <el-table-column :label="$t('总计')" prop="days"></el-table-column>
+    <div class="echarts-bottom" v-if="unShow && checked">
+      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" min-height="100">
+        <el-table-column :label="$t('区间')" prop="days"></el-table-column>
         <el-table-column :label="$t('应付金额')" prop="order_amount"></el-table-column>
         <el-table-column :label="$t('抵用券优惠')" prop="coupon_amount"></el-table-column>
         <el-table-column :label="$t('支付金额')" prop="pay_amount"></el-table-column>

@@ -54,7 +54,7 @@
     </div>
     <!-- 仅首次下单返券 -->
     <el-form-item :label="$t('仅首次下单返券')">
-      <el-radio-group v-model="ruleForm.status">
+      <el-radio-group v-model="ruleForm.times">
         <el-radio :label="1">{{$t('开启')}}</el-radio>
         <el-radio :label="0">{{$t('关闭')}}</el-radio>
       </el-radio-group>
@@ -102,6 +102,7 @@ export default {
     return {
       ruleForm: {
         status: '',
+        times: 1,
         invited_send: '',
         name: '',
         threshold: '',

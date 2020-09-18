@@ -58,7 +58,7 @@ export default {
   }
   .isCollapses {
     left: 60px !important;
-    width: 100vw !important;
+    width: calc(100vw - 60px) !important;
   }
   .layout-nav {
     padding: 15px 20px;
