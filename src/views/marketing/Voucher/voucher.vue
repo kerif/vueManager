@@ -70,7 +70,7 @@
       <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 投放 -->
-          <!-- <el-button class="btn-purple detailsBtn" v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2" @click="serving(scope.row.id)">{{$t('投放')}}</el-button> -->
+          <el-button class="btn-purple detailsBtn" v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2" @click="serving(scope.row.id)">{{$t('投放')}}</el-button>
           <!-- 作废 -->
           <el-button class="btn-deep-blue detailsBtn" v-if="(activeName === '1' ||activeName === '2' || activeName === '3') &&scope.row.status !== 3"
           @click="obsolete(scope.row.id)">{{$t('作废')}}</el-button>
