@@ -163,9 +163,9 @@ export default {
         if (res.ret) {
           console.log(res.data.total)
           let xData = res.data.total.map(item => item.days)
-          let paymentData = res.data.total.map(item => item.amounts)
+          let paymentData = res.data.payment.map(item => item.amounts)
           let rechargeData = res.data.recharge.map(item => item.amounts)
-          let totalData = res.data.recharge.map(item => item.amounts)
+          let totalData = res.data.total.map(item => item.amounts)
           this.packageOption.xAxis = [
             {
               type: 'category',
