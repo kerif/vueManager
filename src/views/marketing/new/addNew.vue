@@ -113,7 +113,16 @@ export default {
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              this.$router.push({ name: 'managementNew', params: { type: this.$route.params.type } })
+              if (this.$route.params.type === 1) { // 新用户送券
+                this.$router.push({ name: 'new', params: { type: this.$route.params.type } })
+              } else if (this.$route.params.type === 2) { // 邀请新人送券
+                this.$router.push({ name: 'invite', params: { type: this.$route.params.type } })
+              } else if (this.$route.params.type === 3) { // 被邀请人送券
+                this.$router.push({ name: 'invitees', params: { type: this.$route.params.type } })
+              } else if (this.$route.params.type === 4) { // 下单返券
+                this.$router.push({ name: 'rebate', params: { type: this.$route.params.type } })
+              }
+              // this.$router.push({ name: 'managementNew', params: { type: this.$route.params.type } })
             } else {
               this.$message({
                 message: res.msg,
@@ -141,7 +150,6 @@ export default {
   }
   .choose-btn {
     margin-bottom: 20px;
-    // margin-left: 80px;
     .el-button {
       vertical-align: top;
     }

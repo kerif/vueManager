@@ -394,6 +394,24 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+            <div>
+              <span>{{$t('个人通关码')}}</span>
+            </div>
+              <el-switch
+                v-model="form.need_personal_code"
+                :active-text="$t('开')"
+                :active-value="1"
+                :inactive-value="0"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 下单是否需要身份证 -->
       <el-form-item>
         <el-row :gutter="10">
@@ -507,6 +525,7 @@ export default {
         remark: '',
         clearance_code_remark: '',
         need_clearance_code: 0,
+        need_personal_code: 0,
         ceil_weight: 0,
         multi_boxes: 0,
         price_grade: []
@@ -582,6 +601,7 @@ export default {
         remark: '',
         clearance_code_remark: '',
         need_clearance_code: 0,
+        need_personal_code: 0,
         ceil_weight: 0,
         multi_boxes: 0,
         price_grade: []

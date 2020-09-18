@@ -72,7 +72,7 @@
         <span v-if="unEdit === false && form.address.area">{{form.address && form.address.area}}</span>
       </el-col>
     </el-row>
-    <el-row class="container-center" :gutter="20" v-if="form.clearance_code || form.id_card">
+    <el-row class="container-center" :gutter="20" v-if="form.clearance_code || form.id_card || form.personal_code">
      <!-- 清关编码 -->
       <el-col :span="7" v-if="form.clearance_code">
         <span class="leftWidth">{{$t('清关编码')}}</span>
@@ -84,6 +84,11 @@
         <span class="leftWidth">{{$t('身份证号码')}}</span>
         <el-input class="input-sty" v-if="form && unEdit === true" v-model="form.id_card"></el-input>
         <span v-if="unEdit === false">{{form.id_card}}</span>
+      </el-col>
+       <el-col :span="7" :offset="1" v-if="form.personal_code">
+        <span class="leftWidth">{{$t('身份证号码')}}</span>
+        <el-input class="input-sty" v-if="form && unEdit === true" v-model="form.personal_code"></el-input>
+        <span v-if="unEdit === false">{{form.personal_code}}</span>
       </el-col>
     </el-row>
      </el-form>

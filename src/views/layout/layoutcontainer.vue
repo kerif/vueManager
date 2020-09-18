@@ -8,7 +8,7 @@
       </div>
       <el-main :class="[isCollapse && 'isCollapses']">
         <keep-alive include="LineAddEdit">
-          <router-view></router-view>
+          <router-view key="key"></router-view>
         </keep-alive>
       </el-main>
       <!-- <layout-footer></layout-footer> -->
@@ -30,6 +30,9 @@ export default {
   computed: {
     isCollapse () {
       return this.$store.state.isCollapse
+    },
+    key () {
+      return this.$route.name !== undefined ? this.$route.name + new Date() : this.$route + new Date()
     }
   }
 }

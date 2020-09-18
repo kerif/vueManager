@@ -1,17 +1,20 @@
 <template>
   <div class="rebate-container">
   <el-form label-width="200px" label-position="left" class="voucher-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+    <el-form-item :label="$t('种类')">
+      <span>{{$t('下单返券')}}</span>
+    </el-form-item>
     <!-- 新用户送券 -->
-    <el-form-item :label="$t('支付成功送券')">
+    <!-- <el-form-item :label="$t('支付成功送券')">
       <el-radio-group v-model="ruleForm.status">
         <el-radio :label="1">{{$t('开启')}}</el-radio>
         <el-radio :label="0">{{$t('关闭')}}</el-radio>
       </el-radio-group>
-    </el-form-item>
+    </el-form-item> -->
     <!-- 券名称 -->
     <el-form-item :label="$t('券名称')" prop="name">
       <el-input class="input-sty" :placeholder="$t('请输入名称')" v-model="ruleForm.name"></el-input>
-      <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onProps(ruleForm.name, item)">{{item.name}}</el-button>
+      <!-- <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onProps(ruleForm.name, item)">{{item.name}}</el-button> -->
     </el-form-item>
     <!-- 最低消费 -->
     <el-form-item :label="$t('最低消费')" prop="threshold">
@@ -23,9 +26,39 @@
         <template slot="append">{{$t('天')}}</template>
       </el-input>
     </el-form-item>
+    <el-form-item :label="$t('生效时间')" prop="begin_at">
+      <el-date-picker
+      value-format="yyyy-MM-dd"
+      v-model="ruleForm.begin_at"
+      type="date"
+      :picker-options="pickerOptions"
+      :placeholder="$t('请输入生效时间')">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item :label="$t('使用范围')" prop="scope">
+      <el-radio-group v-model="ruleForm.scope">
+          <el-radio :label="0">{{$t('全部')}}</el-radio>
+          <el-radio :label="1">{{$t('按路线')}}</el-radio>
+        </el-radio-group>
+    </el-form-item>
+    <div v-if="this.ruleForm.scope === 1" class="choose-btn">
+      <el-button class="btn-deep-blue" @click="chooseLine">{{$t('选择路线')}}</el-button>
+        <div class="display-line" v-if="this.lineName.length">
+            <p v-for="item in lineName" :key="item.id">
+              {{item.name}}
+            </p>
+        </div>
+    </div>
     <div class="coupons">
       <p>{{$t('送券条件')}}：</p>
     </div>
+    <!-- 仅首次下单返券 -->
+    <el-form-item :label="$t('仅首次下单返券')">
+      <el-radio-group v-model="ruleForm.status">
+        <el-radio :label="1">{{$t('开启')}}</el-radio>
+        <el-radio :label="0">{{$t('关闭')}}</el-radio>
+      </el-radio-group>
+    </el-form-item>
     <!-- 下单支付最小满足金额 -->
     <el-form-item :label="$t('下单支付最小满足金额') + this.localization.currency_unit" prop="order_amount">
         <el-input class="less-sty" :placeholder="$t('请输入最低消费')" v-model="ruleForm.order_amount"></el-input>
@@ -73,9 +106,12 @@ export default {
         name: '',
         threshold: '',
         days: '',
+        begin_at: '',
         amount: '',
         max_coupon_amount: '',
-        type: 1
+        type: 1,
+        scope: 0,
+        express_line_ids: []
       },
       options: [
         {
@@ -108,11 +144,17 @@ export default {
           { required: true, message: this.$t('请输入下单支付最小满足金额'), trigger: 'blur' }
         ]
       },
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      },
+      lineName: [], // 保存获取到的路线
       localization: {}
     }
   },
   created () {
-    this.getList()
+    // this.getList()
     this.getLanguageList()
   },
   computed: {
@@ -121,24 +163,26 @@ export default {
     }
   },
   methods: {
-    getList () {
-      this.$request.rebateList().then(res => {
-        this.ruleForm = res.data
-        this.ruleForm.type = res.data.type
-        this.localization = res.localization
-      })
-    },
+    // getList () {
+    //   this.$request.rebateList().then(res => {
+    //     this.ruleForm = res.data
+    //     this.ruleForm.type = res.data.type
+    //     this.localization = res.localization
+    //   })
+    // },
     submit (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.updateRebate(this.ruleForm).then(res => {
+          this.$request.addNew(this.$route.params.type, this.ruleForm).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              this.getList()
+              this.$router.push({ name: 'rebates', params: { type: this.$route.params.type } })
+              // this.getList()
+              // this.$router.push({ name: 'managementNew', params: { type: this.$route.params.type } })
             } else {
               this.$message({
                 message: res.msg,
@@ -151,11 +195,19 @@ export default {
         }
       })
     },
+    chooseLine () {
+      dialog({ type: 'lineChoose' }, (data) => {
+        // console.log(data, '我是路线data')
+        this.lineName = data
+        this.ruleForm.express_line_ids = data.map(item => (item.id))
+      })
+    },
     // 获取全部语言
     getLanguageList () {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
+          this.localization = res.localization
         }
       })
     },
@@ -191,6 +243,24 @@ export default {
   }
   .others-btn {
     margin-left: 15px;
+  }
+  .choose-btn {
+    margin-bottom: 20px;
+    // margin-left: 80px;
+    margin-left: 290px;
+    .el-button {
+      vertical-align: top;
+    }
+  }
+  .display-line {
+    display: inline-block;
+    padding: 5px;
+    width: 245px;
+    margin-left: 15px;
+    background-color: #ccc;
+    p {
+      margin: 0;
+    }
   }
 }
 </style>

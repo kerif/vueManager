@@ -1184,6 +1184,54 @@ exports.getLineDetail = (id) => {
 exports.getExpressFee = (params) => {
   return $form.get('express-fee-query/warehouses', { params })
 }
+// 订单 包裹订单概览 饼图
+exports.getPie = (params) => {
+  return $form.get('order-overviews/package/status-count', { params })
+}
+// 订单 包裹订单概览 柱状图
+exports.getColumnar = (params) => {
+  return $form.get('order-overviews/package/created-count', { params })
+}
+// 订单 订单订单概览 饼图
+exports.getOrderPie = (params) => {
+  return $form.get('order-overviews/order/status-count', { params })
+}
+// 订单 订单订单概览 柱状图
+exports.getOrderColumnar = (params) => {
+  return $form.get('order-overviews/order/created-count', { params })
+}
+// 订单概览 订单对比数据
+exports.orderCompare = (params) => {
+  return $form.get('order-overviews/order/compare-data', { params })
+}
+// 订单概览 包裹对比数据
+exports.packageCompare = (params) => {
+  return $form.get('order-overviews/package/compare-data', { params })
+}
+// 财务 财务概览 柱状图
+exports.financeColumnar = (params) => {
+  return $form.get('transaction-overviews/trade-count', { params })
+}
+// 财务概览 对比数据
+exports.financeCompare = (params) => {
+  return $form.get('transaction-overviews/compare-data', { params })
+}
+// 财务概览 获取金额统计
+exports.transactionAmount = (params) => {
+  return $form.get('transaction-overviews/amount-count', { params })
+}
+// 财务 财务概览 表格
+exports.financeData = (params) => {
+  return $form.get('transaction-overviews/daily-count', { params })
+}
+// 订单概览 包裹列表
+exports.packageDaily = (params) => {
+  return $form.get('order-overviews/package/daily-count', { params })
+}
+// 订单概览 包裹列表
+exports.orderDaily = (params) => {
+  return $form.get('order-overviews/order/daily-count', { params })
+}
 // 更多配置 订单修改单条增值服务
 exports.updateService = (id, params) => {
   return $form.put(`value-added-services/${id}`, params)

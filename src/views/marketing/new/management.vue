@@ -2,7 +2,7 @@
   <div class="management-new-container">
     <!-- <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group> -->
       <div class="add-sty">
-        <add-btn router="addNew">{{$t('添加')}}</add-btn>
+        <add-btn @click.native="goAdd">{{$t('添加')}}</add-btn>
       </div>
       <el-table class="data-list" border stripe
       v-loading="tableLoading"
@@ -106,8 +106,8 @@ export default {
   },
   activated () {
     console.log(1111)
-    this.getList()
-    this.getLanguageList()
+    // this.getList()
+    // this.getLanguageList()
   },
   mounted () {
     this.getList()
@@ -188,6 +188,13 @@ export default {
         }
       })
     },
+    goAdd () {
+      if (this.$route.params.type === 4) {
+        this.$router.push({ name: 'rebate', params: { type: this.$route.params.type } })
+      } else {
+        this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
+      }
+    },
     onSelectChange (selection) {
       this.selectIDs = selection.map(item => item.id)
     },
@@ -259,6 +266,12 @@ export default {
       dialog({ type: 'newLang', line: line, lang: lang, transCode: this.transCode }, () => {
         this.getList()
       })
+    }
+  },
+  watch: {
+    '$route.path': (value, oldValue) => {
+      this.getList()
+      this.getLanguageList()
     }
   }
 }

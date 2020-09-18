@@ -36,6 +36,8 @@ const Recharge = loadonDemand('finance/recharge')
 const balance = loadonDemand('finance/balance')
 // 财务 审核跟详情页面
 const RechargeDetails = loadonDemand('finance/rechargeDetails')
+// 财务 财务概览
+const financeCharts = loadonDemand('finance/financeCharts')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
@@ -124,11 +126,13 @@ const Billpacked = loadonDemand('order/waybill/billPacked')
 const Freight = loadonDemand('order/freight/freight')
 // 订单 运费查询 路线详情
 const freightDetail = loadonDemand('order/freight/freightDetail')
-// 营销管理 新用户福利
+// 订单 包裹订单概览
+const orderEcharts = loadonDemand('order/echarts/orderEcharts')
+// 营销管理 用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
-// 营销管理 新用户福利 新增
+// 营销管理 用户福利 新增
 const addNew = loadonDemand('marketing/new/addNew')
-// 营销管理 新用户福利 管理
+// 营销管理 用户福利 管理
 const managementNew = loadonDemand('marketing/new/management')
 // 营销管理  下单返券
 const rebate = loadonDemand('marketing/rebate')
@@ -162,22 +166,22 @@ const AddEditPublic = loadonDemand('customer/publicAddEdit')
 const publicLang = loadonDemand('customer/publicLang')
 // 语言包
 const LanguageSupport = loadonDemand('language/support')
-// // 官网管理 栏目管理
-// const website = loadonDemand('website/column')
-// // 官网管理 新增 编辑 栏目管理
-// const addEditWebsite = loadonDemand('website/addEditColumn')
-// // 官网管理 新增 编辑 一级栏目管理 如果是存在二级菜单的情况下
-// const editFirstWeb = loadonDemand('website/firstColumn')
-// // 官网管理 单页管理
-// const singlePage = loadonDemand('website/singlePage')
-// // 官网管理 新增  编辑 单页管理
-// const addEditSingle = loadonDemand('website/addEditSingle')
-// // 单页管理 多语言修改
-// const pageLang = loadonDemand('website/pageLang')
-// // 官网管理 区块管理
-// const blockManagement = loadonDemand('website/block')
-// // 区块管理 编辑
-// const blockEdit = loadonDemand('website/blockAddEdit')
+// 官网管理 栏目管理
+const website = loadonDemand('website/column')
+// 官网管理 新增 编辑 栏目管理
+const addEditWebsite = loadonDemand('website/addEditColumn')
+// 官网管理 新增 编辑 一级栏目管理 如果是存在二级菜单的情况下
+const editFirstWeb = loadonDemand('website/firstColumn')
+// 官网管理 单页管理
+const singlePage = loadonDemand('website/singlePage')
+// 官网管理 新增  编辑 单页管理
+const addEditSingle = loadonDemand('website/addEditSingle')
+// 单页管理 多语言修改
+const pageLang = loadonDemand('website/pageLang')
+// 官网管理 区块管理
+const blockManagement = loadonDemand('website/block')
+// 区块管理 编辑
+const blockEdit = loadonDemand('website/blockAddEdit')
 export default [
   {
     path: '/',
@@ -549,6 +553,17 @@ export default [
               group: '订单',
               name: '打包处理',
               parent: '/order/waybill_list'
+            }
+          },
+          {
+            path: '/order/orderEcharts',
+            name: 'orderEcharts',
+            component: orderEcharts,
+            id: 404,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '包裹订单概览'
             }
           }
         ]
@@ -1075,6 +1090,17 @@ export default [
               level: 2,
               name: '余额扣款处理'
             }
+          },
+          {
+            path: '/finance/financeCharts',
+            name: 'financeCharts',
+            component: financeCharts,
+            id: 703,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '财务概览'
+            }
           }
         ]
       },
@@ -1092,7 +1118,7 @@ export default [
             meta: {
               level: 2,
               group: '营销管理',
-              name: '新用户福利'
+              name: '用户福利'
             }
           },
           {
@@ -1103,12 +1129,24 @@ export default [
             meta: {
               level: 3,
               group: '营销管理',
-              name: '新增新用户福利',
+              name: '新增用户福利',
               parent: '/marketing/new'
             }
           },
           {
-            path: '/marketing/new/managementNew/:type',
+            path: '/marketing/rebate',
+            name: 'rebate',
+            component: rebate,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '下单返券',
+              parent: '/marketing/new'
+            }
+          },
+          {
+            path: '/marketing/new/:type',
             name: 'new',
             component: managementNew,
             id: 801,
@@ -1120,7 +1158,7 @@ export default [
             }
           },
           {
-            path: '/marketing/new/managementNew/:type',
+            path: '/marketing/invitees/:type',
             name: 'invitees',
             component: managementNew,
             id: 801,
@@ -1132,7 +1170,7 @@ export default [
             }
           },
           {
-            path: '/marketing/new/managementNew/:type',
+            path: '/marketing/invite/:type',
             name: 'invite',
             component: managementNew,
             id: 801,
@@ -1140,6 +1178,18 @@ export default [
               level: 3,
               group: '营销管理',
               name: '邀请新人送券',
+              parent: '/marketing/new'
+            }
+          },
+          {
+            path: '/marketing/rebate/:type',
+            name: 'rebates',
+            component: managementNew,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '下单返券',
               parent: '/marketing/new'
             }
           },
@@ -1257,17 +1307,6 @@ export default [
               group: '营销管理',
               name: '广告图管理'
             }
-          },
-          {
-            path: '/marketing/rebate',
-            name: 'rebate',
-            component: rebate,
-            id: 807,
-            meta: {
-              level: 2,
-              group: '营销管理',
-              name: '下单返券'
-            }
           }
         ]
       },
@@ -1366,144 +1405,144 @@ export default [
             }
           }
         ]
+      },
+      {
+        path: 'website',
+        component: LayoutContainer,
+        icon: 'icon-diannao',
+        id: 1000,
+        children: [
+          {
+            path: '/website/column',
+            name: 'column',
+            component: website,
+            id: 1001,
+            meta: {
+              level: 2,
+              group: '官网管理',
+              name: '栏目管理'
+            }
+          },
+          {
+            path: '/website/column/add',
+            name: 'addColumn',
+            component: addEditWebsite,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '新增栏目',
+              parent: '/website/column'
+            }
+          },
+          {
+            path: '/website/column/edit/:id',
+            name: 'editColumn',
+            component: addEditWebsite,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑栏目',
+              parent: '/website/column'
+            }
+          },
+          {
+            path: '/website/column/:parent/:state',
+            name: 'addSecondColumn',
+            component: addEditWebsite,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '新增子栏目',
+              parent: '/website/column'
+            }
+          },
+          {
+            path: '/website/column/first/edit/:id',
+            name: 'editFirstWeb',
+            component: editFirstWeb,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑栏目',
+              parent: '/website/column'
+            }
+          },
+          {
+            path: '/website/singlePage',
+            name: 'singlePage',
+            component: singlePage,
+            id: 1001,
+            meta: {
+              level: 2,
+              group: '官网管理',
+              name: '单页管理'
+            }
+          },
+          {
+            path: '/website/singlePage/add',
+            name: 'addSingle',
+            component: addEditSingle,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '新增单页',
+              parent: '/website/singlePage'
+            }
+          },
+          {
+            path: '/website/singlePage/edit/:id',
+            name: 'editSingle',
+            component: addEditSingle,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑单页',
+              parent: '/website/singlePage'
+            }
+          },
+          {
+            path: '/website/page/lang/add/:line/:lang/:transCode',
+            component: pageLang,
+            name: 'pageLang',
+            id: 1001,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '单页管理的翻译内容',
+              parent: '/website/singlePage'
+            }
+          },
+          {
+            path: '/website/block',
+            name: 'block',
+            component: blockManagement,
+            id: 1001,
+            meta: {
+              level: 2,
+              group: '官网管理',
+              name: '区块管理'
+            }
+          },
+          {
+            path: '/website/block/edit/:id',
+            name: 'blockEdit',
+            component: blockEdit,
+            id: 1001,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑区块',
+              parent: '/website/block'
+            }
+          }
+        ]
       }
-      // {
-      //   path: 'website',
-      //   component: LayoutContainer,
-      //   icon: 'icon-diannao',
-      //   id: 1000,
-      //   children: [
-      //     {
-      //       path: '/website/column',
-      //       name: 'column',
-      //       component: website,
-      //       id: 1001,
-      //       meta: {
-      //         level: 2,
-      //         group: '官网管理',
-      //         name: '栏目管理'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/column/add',
-      //       name: 'addColumn',
-      //       component: addEditWebsite,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '新增栏目',
-      //         parent: '/website/column'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/column/edit/:id',
-      //       name: 'editColumn',
-      //       component: addEditWebsite,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '编辑栏目',
-      //         parent: '/website/column'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/column/:parent/:state',
-      //       name: 'addSecondColumn',
-      //       component: addEditWebsite,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '新增子栏目',
-      //         parent: '/website/column'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/column/first/edit/:id',
-      //       name: 'editFirstWeb',
-      //       component: editFirstWeb,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '编辑栏目',
-      //         parent: '/website/column'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/singlePage',
-      //       name: 'singlePage',
-      //       component: singlePage,
-      //       id: 1001,
-      //       meta: {
-      //         level: 2,
-      //         group: '官网管理',
-      //         name: '单页管理'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/singlePage/add',
-      //       name: 'addSingle',
-      //       component: addEditSingle,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '新增单页',
-      //         parent: '/website/singlePage'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/singlePage/edit/:id',
-      //       name: 'editSingle',
-      //       component: addEditSingle,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '编辑单页',
-      //         parent: '/website/singlePage'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/page/lang/add/:line/:lang/:transCode',
-      //       component: pageLang,
-      //       name: 'pageLang',
-      //       id: 1001,
-      //       meta: {
-      //         group: '官网管理',
-      //         level: 3,
-      //         name: '单页管理的翻译内容',
-      //         parent: '/website/singlePage'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/block',
-      //       name: 'block',
-      //       component: blockManagement,
-      //       id: 1001,
-      //       meta: {
-      //         level: 2,
-      //         group: '官网管理',
-      //         name: '区块管理'
-      //       }
-      //     },
-      //     {
-      //       path: '/website/block/edit/:id',
-      //       name: 'blockEdit',
-      //       component: blockEdit,
-      //       id: 1001,
-      //       meta: {
-      //         level: 3,
-      //         group: '官网管理',
-      //         name: '编辑区块',
-      //         parent: '/website/block'
-      //       }
-      //     }
-      //   ]
-      // }
     ]
   }
 ]

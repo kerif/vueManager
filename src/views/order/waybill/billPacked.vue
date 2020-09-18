@@ -145,7 +145,7 @@
           </el-col>
           <el-col :span="10" :offset="2">
             <el-form-item :label="$t('更改线路')" class="express">
-              <span class="change-line">{{express.CName}}---{{$t('限重')}}{{express.MaxWeight}}KG</span>
+              <span class="change-line">{{express.CName}}---{{$t('限重')}}{{express.MaxWeight}}{{localization.weight_unit}}</span>
               <el-button class="btn-main change-btn" @click="changeLine">{{$t('更改')}}</el-button>
             </el-form-item>
           </el-col>

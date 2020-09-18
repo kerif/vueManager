@@ -3,22 +3,32 @@
     <el-row :gutter="20">
       <el-col :span="7" class="user-left" v-for="(item, index) in ruleForm" :key="index">
         <div class="new-top">
+          <!-- 新用户送券 -->
           <div class="top-img" v-if="item.type === 1">
             <img src="../../../assets/top-1.png">
             <p>
                 <strong><span>{{$t('新用户送券')}}</span></strong>
               </p>
           </div>
+          <!-- 邀请新人送券 -->
           <div class="top-img" v-if="item.type === 2">
             <img src="../../../assets/top-2.png">
             <p>
                 <strong><span>{{$t('邀请新人送券')}}</span></strong>
               </p>
           </div>
+          <!-- 被邀请人送券 -->
           <div class="top-img" v-if="item.type === 3">
             <img src="../../../assets/top-3.png">
             <p>
                 <strong><span>{{$t('被邀请人送券')}}</span></strong>
+              </p>
+          </div>
+          <!-- 下单返券 -->
+          <div class="top-img" v-if="item.type === 4">
+            <img src="../../../assets/top-4.png">
+            <p>
+                <strong><span>{{$t('下单返券')}}</span></strong>
               </p>
           </div>
           <div class="user-bottom">
@@ -84,7 +94,11 @@ export default {
     },
     // 新增
     goAdd (type) {
-      this.$router.push({ name: 'addNew', params: { type: type } })
+      if (type === 4) {
+        this.$router.push({ name: 'rebate', params: { type: type } })
+      } else {
+        this.$router.push({ name: 'addNew', params: { type: type } })
+      }
     },
     // 管理
     goMana (type) {
@@ -94,6 +108,8 @@ export default {
         this.$router.push({ name: 'invite', params: { type: type } })
       } else if (type === 3) { // 被邀请人送券
         this.$router.push({ name: 'invitees', params: { type: type } })
+      } else if (type === 4) { // 下单返券
+        this.$router.push({ name: 'rebates', params: { type: type } })
       }
       // this.$router.push({ name: 'managementNew', params: { type: type } })
     }
@@ -105,6 +121,7 @@ export default {
   background-color: #F5F5F5 !important;
   padding: 20px;
   .new-top {
+    margin-bottom: 10px;
     padding: 20px;
     background: #fff;
     .top-img {

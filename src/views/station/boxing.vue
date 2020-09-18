@@ -109,6 +109,14 @@
                   <el-input v-model="box.id_card" :placeholder="$t('请输入')"></el-input>
               </div>
               <div class="line-sty" v-if="this.idCode"></div>
+               <!-- 个人通关码 -->
+              <div class="express-left" v-if="this.personalCode">
+                <p>{{$t('身份证号码')}}</p>
+              </div>
+              <div class="express-left right-margin" v-if="this.personalCode">
+                  <el-input v-model="box.personal_code" :placeholder="$t('请输入')"></el-input>
+              </div>
+              <div class="line-sty" v-if="this.personalCode"></div>
           </div>
         </div>
         <div class="recipient-address">
@@ -399,6 +407,7 @@ export default {
       selfData: {},
       lineId: '',
       needCode: '',
+      personalCode: '',
       idCode: '',
       isDelivery: '',
       box: {
@@ -409,6 +418,7 @@ export default {
         add_service: [],
         station_id: '',
         id_card: '',
+        personal_code: '',
         clearance_code: '',
         address_id: ''
       },
@@ -516,6 +526,7 @@ export default {
       // this.selfData.address = ''
       this.box.clearance_code = ''
       this.box.id_card = ''
+      this.personal_code = ''
       // this.isDelivery = ''
     },
     // 获取身份证号码跟清关编码
@@ -525,6 +536,7 @@ export default {
           console.log(res.data, 'res')
           this.needCode = res.data.need_clearance_code
           this.idCode = res.data.need_id_card
+          this.personalCode = res.data.need_personal_code
           this.isDelivery = res.data.is_delivery
           console.log(this.isDelivery, 'this.isDelivery')
         }
