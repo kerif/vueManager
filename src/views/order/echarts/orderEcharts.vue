@@ -114,7 +114,7 @@
       </div>
     </div>
     <div class="echarts-bottom">
-      <h3>{{$t('包裹列表')}}</h3>
+      <h3>{{$t('包裹统计')}}</h3>
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" min-height="100">
         <el-table-column :label="$t('时间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
@@ -148,7 +148,7 @@
       </el-table>
     </div>
     <div class="echarts-bottom">
-      <h3>{{$t('订单列表')}}</h3>
+      <h3>{{$t('订单统计')}}</h3>
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="oderData" min-height="100" show-summary :summary-method="getSummaries">
         <el-table-column :label="$t('时间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
