@@ -300,7 +300,7 @@ export default {
         const values = data.map(item => Number(item[column.property]))
         if (!values.every(value => isNaN(value))) {
           sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr).toFixed(2)
+            const value = Number(curr)
             console.log(value, 'value')
             if (!isNaN(value)) {
               return prev + curr

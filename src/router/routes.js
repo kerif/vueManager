@@ -440,17 +440,6 @@ export default [
         id: 400,
         children: [
           {
-            path: '/order/orderEcharts',
-            name: 'orderEcharts',
-            component: orderEcharts,
-            id: 401,
-            meta: {
-              level: 2,
-              group: '订单',
-              name: '包裹订单概览'
-            }
-          },
-          {
             path: '/order/orderlist',
             component: OrderList,
             name: 'orderlist',
@@ -564,6 +553,17 @@ export default [
               group: '订单',
               name: '打包处理',
               parent: '/order/waybill_list'
+            }
+          },
+          {
+            path: '/order/orderEcharts',
+            name: 'orderEcharts',
+            component: orderEcharts,
+            id: 405,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '包裹订单概览'
             }
           }
         ]
@@ -1011,17 +1011,6 @@ export default [
         id: 700,
         children: [
           {
-            path: '/finance/financeCharts',
-            name: 'financeCharts',
-            component: financeCharts,
-            id: 701,
-            meta: {
-              group: '财务',
-              level: 2,
-              name: '财务概览'
-            }
-          },
-          {
             path: '/finance/transaction',
             name: 'transaction',
             component: Transaction,
@@ -1100,6 +1089,17 @@ export default [
               group: '财务',
               level: 2,
               name: '余额扣款处理'
+            }
+          },
+          {
+            path: '/finance/financeCharts',
+            name: 'financeCharts',
+            component: financeCharts,
+            id: 704,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '财务概览'
             }
           }
         ]
