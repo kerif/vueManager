@@ -134,7 +134,18 @@ export default {
     this.packageOption = {
       backgroundColor: '#ffffff',
       tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          crossStyle: {
+            color: '#999'
+          }
+        }
+      },
+      legend: {
+        data: ['总收入', '充值收入', '营业额'],
+        left: '200',
+        top: 'bottom'
       }
     }
   },
@@ -152,35 +163,106 @@ export default {
         if (res.ret) {
           console.log(res.data.total)
           let xData = res.data.total.map(item => item.days)
-          let yData = res.data.total.map(item => item.amounts)
-          this.packageOption.xAxis = {
-            type: 'category',
-            data: xData
-          }
-          this.packageOption.yAxis = {
-            type: 'value',
-            'axisLine': { // y轴
-              'show': false
+          let paymentData = res.data.total.map(item => item.amounts)
+          let rechargeData = res.data.recharge.map(item => item.amounts)
+          let totalData = res.data.recharge.map(item => item.amounts)
+          this.packageOption.xAxis = [
+            {
+              type: 'category',
+              boundaryGap: true,
+              data: xData
             },
-            'axisTick': { // y轴刻度线
-              'show': false
+            {
+              type: 'category',
+              boundaryGap: true
             },
-            'splitLine': { // 网格线
-              'show': true
+            {
+              type: 'category',
+              boundaryGap: true
             }
-          }
-          this.packageOption.series = [{
-            data: yData,
-            type: 'line',
-            itemStyle: {
-              normal: {
-                color: '#4EA8F9',
-                lineStyle: {
-                  color: '#4EA8F9'
+          ]
+          this.packageOption.yAxis = [
+            {
+              type: 'value',
+              scale: true,
+              name: '总收入(元)',
+              min: 0,
+              'axisLine': { // y轴
+                'show': false
+              },
+              'axisTick': { // y轴刻度线
+                'show': false
+              },
+              'splitLine': { // 网格线
+                'show': true
+              }
+            },
+            {
+              type: 'value',
+              'axisLine': { // y轴
+                'show': false
+              },
+              'axisTick': { // y轴刻度线
+                'show': false
+              },
+              'splitLine': { // 网格线
+                'show': true
+              }
+            },
+            {
+              type: 'value',
+              'axisLine': { // y轴
+                'show': false
+              },
+              'axisTick': { // y轴刻度线
+                'show': false
+              },
+              'splitLine': { // 网格线
+                'show': true
+              }
+            }
+          ]
+          this.packageOption.series = [
+            {
+              name: '总收入',
+              type: 'bar',
+              data: totalData,
+              itemStyle: {
+                normal: {
+                  color: '#D0E5FF',
+                  lineStyle: {
+                    color: '#D0E5FF'
+                  }
+                }
+              }
+            },
+            {
+              name: '充值收入',
+              type: 'line',
+              data: rechargeData,
+              itemStyle: {
+                normal: {
+                  color: '#3499CC',
+                  lineStyle: {
+                    color: '#3499CC'
+                  }
+                }
+              }
+            },
+            {
+              name: '营业额',
+              type: 'line',
+              data: paymentData,
+              itemStyle: {
+                normal: {
+                  color: '#EC6B68',
+                  lineStyle: {
+                    color: '#EC6B68'
+                  }
                 }
               }
             }
-          }]
+          ]
           this.packageChart.setOption(this.packageOption)
         }
       })
