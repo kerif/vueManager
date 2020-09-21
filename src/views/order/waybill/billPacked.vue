@@ -405,7 +405,7 @@ export default {
       if (length && width && height) {
         this.user.box = this.user.box.map((item, index) => {
           if (index === row.$index) {
-            return { ...item, volume_weight: (length * width * height) / this.factor }
+            return { ...item, volume_weight: ((length * width * height) / this.factor).toFixed(3) }
           }
           return item
         })
@@ -418,7 +418,7 @@ export default {
     },
     // 计算体积总重量
     unitVolume (arr) {
-      this.UnitTotalWeight = this.user.box.length === 1 ? this.user.box[0].volume_weight : this.user.box.map(item => item.volume_weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
+      this.UnitTotalWeight = this.user.box.length === 1 ? Number(this.user.box[0].volume_weight).toFixed(3) : this.user.box.map(item => item.volume_weight).reduce((accumulator, currentValue) => (Number(accumulator) + Number(currentValue)).toFixed(3), 0)
     },
     savePacked () {
       this.user.services = this.updateProp
