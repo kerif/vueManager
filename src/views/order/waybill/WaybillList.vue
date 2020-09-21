@@ -73,7 +73,7 @@
       <!-- <el-col :span="4"> -->
         <!-- 用户名 -->
         <div class="chooseStatus customer-sty">
-          <el-select v-model="agent_name" @change="onAgentChange" clearable :placeholder="$t('用户名')">
+          <el-select v-model="agent_name" @change="onAgentChange" clearable :placeholder="$t('代理筛选')">
             <el-option
               v-for="item in agentData"
               :key="item.id"
