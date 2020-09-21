@@ -250,7 +250,7 @@
           <el-button class="btn-blue" v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</el-button>
         </template>
       </el-table-column>
-      <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4'">
+      <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
         <div class="append-box">
           <!-- 删除 -->
           <!-- <el-button size="small">删除</el-button> -->
@@ -264,8 +264,12 @@
            v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
            <!-- 批量改成货到付款 -->
            <el-button size="small" class="btn-light-green" v-if="this.activeName === '2'" @click="changeDelivery">{{$t('批量改成货到付款')}}</el-button>
+           <!-- 更新物流状态 -->
             <el-button size="small" class="btn-deep-purple" @click="updateTracking"
            v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
+           <!-- 已付款 -->
+            <el-button size="small" v-if="activeName === '3' ||activeName === '4' || activeName === '5'" @click="payed">{{$t('已付款')}}
+          </el-button>
         </div>
       </template>
     </el-table>
@@ -820,12 +824,17 @@ export default {
       })
     },
     payed (id) {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
       this.$confirm(this.$t('您真的确认更改状态为已付款吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.payedOrders(id).then(res => {
+        this.$request.payedOrders({
+          ids: this.selectIDs
+        }).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
