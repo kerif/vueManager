@@ -301,9 +301,8 @@ export default {
         if (!values.every(value => isNaN(value))) {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr)
-            console.log(value, 'value')
             if (!isNaN(value)) {
-              return prev + curr
+              return Number(prev + curr).toFixed(2)
             } else {
               return prev
             }
