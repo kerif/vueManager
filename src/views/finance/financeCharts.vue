@@ -300,13 +300,17 @@ export default {
         const values = data.map(item => Number(item[column.property]))
         if (!values.every(value => isNaN(value))) {
           sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr)
-            if (!isNaN(value)) {
-              return Number(prev + curr).toFixed(2)
-            } else {
-              return prev
-            }
+            return prev + curr
+            // const value = Number(curr)
+            // if (!isNaN(value)) {
+            //   console.log(prev, 'prev')
+            //   console.log(curr, 'curr')
+            //   return prev + curr
+            // } else {
+            //   return prev
+            // }
           }, 0)
+          sums[index] = Number(sums[index]).toFixed(2)
           // sums[index] += '个'
         } else {
           sums[index] = 'N/A'

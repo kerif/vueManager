@@ -178,6 +178,9 @@
           <span v-else>{{scope.row.payment_type_name}}</span>
         </template>
       </el-table-column>
+      <!-- 抵用券金额 -->
+       <el-table-column :label="$t('抵用券金额') + localization.currency_unit" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="coupon_amount">
+      </el-table-column>
       <!-- 所属代理 -->
       <el-table-column :label="$t('所属代理')" prop="agent + agent_commission" width="100px">
         <template slot-scope="scope">

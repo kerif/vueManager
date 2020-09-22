@@ -187,8 +187,8 @@ export default {
     img {
       // width: 100%;
       // height: 100%;
-      width:60px;
-      height: 60px;
+      width: 200px;
+      // height: 60px;
       padding: 5px;
     }
   }
