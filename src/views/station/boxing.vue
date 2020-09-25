@@ -453,16 +453,51 @@ export default {
   created () {
     if (this.$route.query.id) {
       this.packageId = this.$route.query.id
-      console.log(this.packageId, 'this.packageId')
       this.getList()
       this.getRadio()
       this.getInsurance()
+    } else if (this.$route.query.packageId) {
+      console.log(this.$route.query.packageId, 'packageId')
+      this.getBatch()
+      this.radio = 2
+      this.packageId = this.$route.query.packageId
     }
   },
   methods: {
     getList () {
       this.$request.preview({
         package_ids: this.packageId
+      }).then(res => {
+        if (res.ret) {
+          this.packageData = res.data.packages
+          this.userId = res.data.packages[0].user_id
+          console.log(this.userId, 'this.userId')
+          if (this.userId) {
+            this.getAddressDialog() // 获取收件地址
+            this.getCountry() // 获取新建收件地址的国家
+          }
+          this.optionsId = res.data.packages.map(item => item.id)
+          console.log(this.optionsId, 'optionsId')
+          this.localization = res.localization
+          if (res.data.items.added_service.length) {
+            this.box.add_service = res.data.items.added_service
+          }
+          this.box.is_insurance = res.data.items.insurance
+          this.box.payment_mode = res.data.items.payment_mode
+          this.getExpress()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 批量集包
+    getBatch () {
+      this.$request.batchPreview({
+        package_ids: this.$route.query.packageId
       }).then(res => {
         if (res.ret) {
           this.packageData = res.data.packages
@@ -679,6 +714,7 @@ export default {
         ...this.box,
         package_ids: this.packageId,
         address_type: this.radio === 2 ? 2 : '',
+        batch_mode: this.$route.query.packageId ? 1 : '',
         // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
         type: this.radio === 2 ? 2 : ''
       }).then(res => {

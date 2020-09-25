@@ -210,6 +210,30 @@ exports.updateRecommend = (id, status) => {
 exports.getAnnouncements = (params) => {
   return $form.get('announcements', { params })
 }
+// 客户 客户概览 柱状图
+exports.vipColumnar = (params) => {
+  return $form.get('user-overviews/daily-count', { params })
+}
+// 客户 代理概览 柱状图
+exports.proxyColumnar = (params) => {
+  return $form.get('user-overviews/agent-daily-count', { params })
+}
+// 客户概览 客户统计数量
+exports.vipCounts = (params) => {
+  return $form.get('user-overviews/user-count', { params })
+}
+// 客户概览 代理统计数量
+exports.proxyCounts = (params) => {
+  return $form.get('user-overviews/agent-count', { params })
+}
+// 客户概览 用户表格数据
+exports.vipRank = (params) => {
+  return $form.get('user-overviews/order-rank', { params })
+}
+// 客户概览 代理表格数据
+exports.agentRank = (params) => {
+  return $form.get('user-overviews/agent-order-rank', { params })
+}
 // 获取单条公告详细
 exports.getSingleAnnouncements = (id) => {
   return $form.get(`announcements/${id}`)
@@ -1801,6 +1825,10 @@ exports.addAddress = (params) => {
 // 申请集包 发起集包
 exports.preview = (params) => {
   return $form.post('package-packs/preview', params)
+}
+// 申请集包 发起 批量集包
+exports.batchPreview = (params) => {
+  return $form.post('package-packs/batch-preview', params)
 }
 // 发起集包 获取地址数据
 exports.previewAddress = (params) => {

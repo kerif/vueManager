@@ -253,7 +253,7 @@
           <el-button class="btn-blue" v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</el-button>
         </template>
       </el-table-column>
-      <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4'">
+      <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
         <div class="append-box">
           <!-- 删除 -->
           <!-- <el-button size="small">删除</el-button> -->
@@ -271,8 +271,8 @@
             <el-button size="small" @click="updateTracking"
            v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
            <!-- 已付款 -->
-            <!-- <el-button size="small" v-if="activeName === '3' ||activeName === '4' || activeName === '5'" @click="payed">{{$t('已付款')}}
-          </el-button> -->
+            <el-button size="small" v-if="activeName === '3' ||activeName === '4' || activeName === '5'" @click="payed">{{$t('已付款')}}
+          </el-button>
         </div>
       </template>
     </el-table>

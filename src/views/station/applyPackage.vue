@@ -153,6 +153,27 @@ export default {
       pickNumArr: []
     }
   },
+  created () {
+    if (this.$route.query.userId) {
+      this.radio = 2
+      this.textarea2 = this.$route.query.userId
+      this.$request.packs({
+        user_id: this.$route.query.userId
+      }).then(res => {
+        if (res.data.length) {
+          this.applyList = res.data
+          this.localization = res.localization
+        } else {
+          this.$notify({
+            title: this.$t('当前用户没有可打包的包裹'),
+            type: 'warning'
+          })
+        }
+      })
+      // this.search()
+      console.log(this.$route.query.userId, 'this.$route.query.userId')
+    }
+  },
   methods: {
     // 编辑
     editWarehoused (id) {
@@ -187,6 +208,7 @@ export default {
           }
         })
       } else {
+        console.log('woshi2222')
         this.$request.packs({
           user_id: this.userId
         }).then(res => {

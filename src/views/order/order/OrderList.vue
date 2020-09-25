@@ -179,6 +179,8 @@
           <el-button class="btn-blue operating-btn" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || scope.row.status === 2 || scope.row.status === 3 || scope.row.status === 4 || scope.row.status === 5 || scope.row.status === 6" @click="onLogs(scope.row.express_num)">{{$t('入库日志')}}</el-button>
           <!-- 编辑 -->
           <el-button class="btn-deep-purple" v-if="activeName === '2' || scope.row.status === 2" @click="editWarehoused(scope.row.id)">{{$t('编辑')}}</el-button>
+          <!-- 快速合箱 -->
+          <el-button class="btn-blue-green operating-btn" v-if="activeName === '2'" @click="fastClosing(scope.row.user_id)">{{$t('快速合箱')}}</el-button>
           <!-- 日志 -->
           <el-button class="btn-blue operating-btn" v-if="activeName === '6'"
           @click="invalidLog(scope.row.id)">{{$t('日志')}}</el-button>
@@ -189,19 +191,22 @@
       <template slot="append" v-if="activeName === '1' || activeName === '2' || activeName === '6'">
         <div class="append-box">
           <!-- 删除 -->
-          <el-button size="small" class="btn-light-red" @click="deleteData"
+          <el-button size="small" @click="deleteData"
           v-if="activeName === '1'">{{$t('删除')}}</el-button>
           <!-- 弃件 -->
-          <el-button size="small" class="btn-blue-green" @click="discardPackage"
+          <el-button size="small" @click="discardPackage"
            v-if="this.activeName === '1' || this.activeName === '2'">{{$t('弃件')}}</el-button>
+           <!-- 批量集包 -->
+           <el-button size="small" @click="batchPackage"
+           v-if="this.activeName === '2'">{{$t('批量集包')}}</el-button>
            <!-- 批量发送通知 -->
-           <el-button size="small" class="btn-purple" @click="goNotify"
+           <el-button size="small" @click="goNotify"
            v-if="this.activeName === '2'">{{$t('批量发送通知')}}</el-button>
            <!-- 恢复 -->
-           <el-button size="small" class="btn-deep-purple" v-if="activeName === '6'"
+           <el-button size="small" v-if="activeName === '6'"
            @click="restore">{{$t('恢复')}}</el-button>
            <!-- 彻底删除 -->
-           <el-button size="small" class="btn-light-red"
+           <el-button size="small"
             v-if="activeName === '6'" @click="deleteDiscard">{{$t('彻底删除')}}</el-button>
         </div>
       </template>
@@ -409,6 +414,11 @@ export default {
     editWarehoused (id) {
       this.$router.push({ name: 'editWarehouse', params: { id: id, state: 'editWarehouse' } })
     },
+    // 快速合箱
+    fastClosing (userId) {
+      console.log(userId, 'userId')
+      this.$router.push({ name: 'applyPackage', query: { userId: userId } })
+    },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
@@ -493,6 +503,13 @@ export default {
       dialog({ type: 'discardList', deleteNum: this.deleteNum }, () => {
         this.getList()
       })
+    },
+    // 批量集包
+    batchPackage () {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择包裹'))
+      }
+      this.$router.push({ name: 'boxing', query: { packageId: this.deleteNum } })
     },
     // 彻底删除
     deleteDiscard () {

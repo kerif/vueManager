@@ -180,6 +180,14 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 件数 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item :label="$t('件数')">
+                <el-input v-model="user.number" :placeholder="$t('请输入件数')"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 存放货位 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -347,6 +355,7 @@ export default {
         MaxWeight: '',
         cName: '',
         in_storage_remark: '',
+        number: '',
         location: '',
         package_pictures: ''
       },
@@ -698,7 +707,7 @@ export default {
                 })
                 this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
                 this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name = ''
-                this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
+                this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = this.user.number = ''
                 this.goodsImgList = []
                 this.user.props = []
                 this.user.chosen_services = []
@@ -726,7 +735,7 @@ export default {
                 })
                 this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
                 this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name = ''
-                this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
+                this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = this.user.number = ''
                 this.goodsImgList = []
                 this.user.props = []
                 this.user.chosen_services = []
@@ -756,7 +765,7 @@ export default {
               })
               this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.brand_name = ''
               this.user.user_id = this.user.warehouse_id = this.user.package_value = ''
-              this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = ''
+              this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = this.user.number = ''
               this.goodsImgList = []
               this.user.props = []
               this.user.chosen_services = []
@@ -779,7 +788,7 @@ export default {
                     })
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = this.user.brand_name = ''
                     this.user.user_id = this.user.warehouse_id = ''
-                    this.user.express_num = this.user.express_company_id = this.user.in_storage_remark = this.user.country_id = ''
+                    this.user.express_num = this.user.express_company_id = this.user.in_storage_remark = this.user.number = this.user.country_id = ''
                     this.user.props = []
                     this.goodsImgList = []
                     this.user.chosen_services = []
