@@ -349,11 +349,15 @@ export default {
       this.end && (params.end = this.end)
       this.$request.proxyColumnar(params).then(res => {
         if (res.ret) {
-          let maxValue
           let xData = res.data.amounts.map(item => item.days)
           // let paymentData = res.data.created.map(item => item.counts)
           let countsData = res.data.counts.map(item => item.counts)
           let amountsData = res.data.amounts.map(item => item.amounts)
+          const listMax = Math.max(...amountsData)
+          const maxValue = Math.ceil(listMax / 5) * 5
+          console.log(maxValue)
+          const amountInterval = maxValue / 5
+          console.log('inte', amountInterval)
           this.proxyOption.xAxis = [
             {
               type: 'category',
@@ -379,7 +383,7 @@ export default {
                 return Math.ceil(value.max / 5) * 5
               },
               boundaryGap: true,
-              // splitNumber: 5,
+              splitNumber: 5,
               'axisLine': { // y轴
                 'show': false
               },
@@ -394,16 +398,10 @@ export default {
               type: 'value',
               scale: true,
               name: '成交金额(元)',
-              // splitNumber: 5,
+              splitNumber: 5,
               min: 0,
-              max (value) {
-                maxValue = Math.ceil(value.max / 5) * 5
-                console.log(maxValue, 'this.maxValue')
-                return Math.ceil(value.max / 5) * 5
-              },
-              interval () {
-                return maxValue / 5
-              },
+              max: maxValue,
+              interval: amountInterval,
               boundaryGap: true,
               'axisLine': { // y轴
                 'show': false
