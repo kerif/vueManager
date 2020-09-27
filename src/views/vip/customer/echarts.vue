@@ -158,7 +158,8 @@ export default {
         size: 10,
         total: 0,
         handleCurrentChange: this.proxyCurrentChange,
-        handleSizeChange: this.proxySizeChange
+        handleSizeChange: this.proxySizeChange,
+        handleQueryChange: this.proxyQueryChange
       }
     }
   },
@@ -475,6 +476,7 @@ export default {
     // 天数
     getDatas () {
       this.page_params.handleQueryChange('days', this.days)
+      this.page_proxy.handleQueryChange('days', this.days)
       this.getColumnar()
       this.proxyColumnar()
       this.packageList()
@@ -522,38 +524,20 @@ export default {
       this.page_proxy.page = pageId
       this.getCompare()
     },
-    // 总计
-    getSummaries (param) {
-      const { columns, data } = param
-      const sums = []
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = '总计'
-          return
-        }
-        const values = data.map(item => Number(item[column.property]))
-        if (!values.every(value => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
-            return prev + curr
-            // const value = Number(curr)
-            // if (!isNaN(value)) {
-            //   console.log(prev, 'prev')
-            //   console.log(curr, 'curr')
-            //   return prev + curr
-            // } else {
-            //   return prev
-            // }
-          }, 0)
-          sums[index] = Number(sums[index]).toFixed(2)
-          // sums[index] += '个'
-        } else {
-          sums[index] = 'N/A'
+    proxyQueryChange (key, value) {
+      const { name, params, query } = this.$route
+      this.$router.replace({
+        name,
+        params,
+        query: {
+          ...query,
+          [key]: value
         }
       })
-      return sums
     },
     // 时间
     onPick (val) {
+      console.log(val, 'val')
       this.begin = val ? val[0] : ''
       this.end = val ? val[1] : ''
       this.page_params.page = 1
