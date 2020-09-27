@@ -98,7 +98,21 @@
         <el-table-column :label="$t('成交金额')" prop="order_amount"></el-table-column>
         <el-table-column :label="$t('提现金额')" prop="withdraw"></el-table-column>
       </el-table>
-      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      <div class="proxy-sty">
+        <el-pagination
+          background
+          :prev-text="$t('上一页')"
+          :next-text="$t('下一页')"
+          @size-change="page_proxy.handleSizeChange"
+          @current-change="page_proxy.handleCurrentChange"
+          :current-page="page_proxy.page"
+          :page-sizes="[10, 20, 30]"
+          :page-size="page_proxy.size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="page_proxy.total">
+        </el-pagination>
+      </div>
+      <!-- <nle-pagination :pageParams="page_proxy" :notNeedInitQuery="false"></nle-pagination> -->
     </div>
   </div>
 </template>
@@ -137,7 +151,15 @@ export default {
       tableLoading: false,
       packageData: [],
       unShow: false,
-      localization: {}
+      localization: {},
+      maxValue: '',
+      page_proxy: {
+        page: 1,
+        size: 10,
+        total: 0,
+        handleCurrentChange: this.proxyCurrentChange,
+        handleSizeChange: this.proxySizeChange
+      }
     }
   },
   created () {
@@ -326,6 +348,7 @@ export default {
       this.end && (params.end = this.end)
       this.$request.proxyColumnar(params).then(res => {
         if (res.ret) {
+          let maxValue
           let xData = res.data.amounts.map(item => item.days)
           // let paymentData = res.data.created.map(item => item.counts)
           let countsData = res.data.counts.map(item => item.counts)
@@ -355,7 +378,7 @@ export default {
                 return Math.ceil(value.max / 5) * 5
               },
               boundaryGap: true,
-              splitNumber: 5,
+              // splitNumber: 5,
               'axisLine': { // y轴
                 'show': false
               },
@@ -370,8 +393,16 @@ export default {
               type: 'value',
               scale: true,
               name: '成交金额(元)',
-              splitNumber: 5,
+              // splitNumber: 5,
               min: 0,
+              max (value) {
+                maxValue = Math.ceil(value.max / 5) * 5
+                console.log(maxValue, 'this.maxValue')
+                return Math.ceil(value.max / 5) * 5
+              },
+              interval () {
+                return maxValue / 5
+              },
               boundaryGap: true,
               'axisLine': { // y轴
                 'show': false
@@ -451,6 +482,9 @@ export default {
       this.financeAmount()
       this.proxyAmount()
     },
+    getList () {
+      this.packageList()
+    },
     // 获取新增客户统计
     financeAmount () {
       let params = {
@@ -477,6 +511,16 @@ export default {
           this.localization = res.localization
         }
       })
+    },
+    proxySizeChange (pageSize) {
+      this.page_proxy.page = 1
+      this.page_proxy.size = pageSize
+      this.getCompare()
+    },
+    // 分页
+    proxyCurrentChange (pageId) {
+      this.page_proxy.page = pageId
+      this.getCompare()
     },
     // 总计
     getSummaries (param) {
@@ -512,8 +556,10 @@ export default {
     onPick (val) {
       this.begin = val ? val[0] : ''
       this.end = val ? val[1] : ''
-      // this.page_params.page = 1
+      this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin} ${this.end}`)
+      this.page_proxy.page = 1
+      this.page_proxy.handleQueryChange('times', `${this.begin} ${this.end}`)
       this.getColumnar()
       this.proxyColumnar()
       this.packageList()
@@ -524,8 +570,8 @@ export default {
     // 代理数据
     getCompare () {
       let params = {
-        page: this.page_params.page,
-        size: this.page_params.size,
+        page: this.page_proxy.page,
+        size: this.page_proxy.size,
         days: this.days
       }
       this.begin && (params.begin = this.begin)
@@ -533,8 +579,8 @@ export default {
       this.$request.agentRank(params).then(res => {
         if (res.ret) {
           this.packageCompare = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
+          this.page_proxy.page = res.meta.current_page
+          this.page_proxy.total = res.meta.total
         }
       })
     },
@@ -619,6 +665,17 @@ export default {
   }
    .total-first:last-child{
     border-right: none !important;
+  }
+  .proxy-sty {
+    text-align: right;
+    .btn-prev, .btn-next {
+      padding: 0 10px !important;
+    }
+    .el-pagination.is-background .el-pager li:not(.disabled).active {
+      background-color: #f5f5f5;
+      color: black;
+      border: 1px solid #3540A5;
+    }
   }
 }
 </style>

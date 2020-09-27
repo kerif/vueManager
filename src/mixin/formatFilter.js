@@ -8,8 +8,9 @@ export default {
     // 格式化重量显示（将以克为单位的重量转换成为千克为单位）
     formatWeight (value) {
       if (!value) return value
-      let len = value < 10 ? 3 : 2
-      return Number(value / 1000).toFixed(len)
+      // let len = value < 10 ? 3 : 2
+      // return Number(value / 1000).toFixed(len)
+      return Number(value / 1000)
     },
     // 格式化长、宽、高、显示转成 CM
     formatCM (value) {

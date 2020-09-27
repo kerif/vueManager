@@ -25,6 +25,7 @@
           <span v-if="scope.row.type === 3">{{$t('入门教程')}}</span>
           <span v-if="scope.row.type === 4">{{$t('行业资讯')}}</span>
           <span v-if="scope.row.type === 5">{{$t('关于我们')}}</span>
+          <span v-if="scope.row.type === 6">{{$t('新闻')}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('创建人')" prop="creator"></el-table-column>
