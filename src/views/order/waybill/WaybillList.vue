@@ -202,55 +202,96 @@
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column :label="$t('操作')" :width="activeName === '3' ? '250px' : '170px'" fixed="right">
+      <el-table-column :label="$t('操作')" fixed="right" width="160">
         <template slot-scope="scope">
-          <!-- 详情 -->
-          <el-button class="btn-purple detailsBtn" @click="details(scope.row.id, activeName)">{{$t('详情')}}</el-button>
+          <el-dropdown>
+            <el-button type="primary">
+              {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item class="item-sty">
+                <!-- 详情 -->
+                <span @click="details(scope.row.id, activeName)">{{$t('详情')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 审核 -->
+                <span v-show="activeName === '2' && scope.row.status === 11" @click="reviewPackage(scope.row.id)">{{$t('审核')}}
+                </span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <span v-show="activeName === '1' || activeName === '2'" @click="editPacked(scope.row.id, activeName)">{{$t('编辑')}}
+                </span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 打包 -->
+                <span v-show="activeName === '1'" @click="packed(scope.row.id,scope.row.order_sn)">{{$t('打包')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 加入发货单 -->
+                <span v-show="activeName === '3'"
+                @click="addInvoice([scope.row.id])">{{$t('加入发货单')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                 <!-- 打印标签 -->
+                <span size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'">{{$t('打印标签')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 添加转运快递公司 -->
+                <span size="small" @click="addCompany(scope.row.id)" v-if="activeName === '3'">{{$t('添加物流信息')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 移除发货单 -->
+                <span size="small" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">{{$t('移除发货单')}}
+                </span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 作废 -->
+                <span @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
+                v-if="activeName === '1' || activeName === '2' || activeName === '3'">{{$t('作废')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 改价 -->
+                <span @click="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)"
+                v-if="activeName === '2'">{{$t('改价')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 拣货日志 -->
+                <span size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
+                </span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <span size="small" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
+                </span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 修改物流信息 -->
+                <span size="small" @click="editCompany(scope.row.id)" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <span v-if="activeName === '4'" @click="logistics(scope.row.id, scope.row.order_sn)">{{$t('轨迹')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <span size="small"
+                v-show="activeName === '3' && !scope.row.disabled"
+                @click="saveLogistics(scope.row)">{{$t('保存')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <span size="small"
+                v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">{{$t('取消')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 日志 -->
+                <span class="btn-blue" v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+        </el-dropdown>
           <!-- 完成支付 -->
           <!-- <el-button v-show="activeName === '2'" class="btn-orangey-red" @click="finishPay(scope.row.id)">完成支付</el-button> -->
-          <!-- 审核 -->
-          <el-button v-show="activeName === '2' && scope.row.status === 11" class="btn-dark-green" @click="reviewPackage(scope.row.id)">{{$t('审核')}}
-          </el-button>
-          <el-button v-show="activeName === '1' || activeName === '2'" class="btn-deep-blue" @click="editPacked(scope.row.id, activeName)">{{$t('编辑')}}
-          </el-button>
-          <!-- 打包 -->
-          <el-button v-show="activeName === '1'" class="btn-dark-green detailsBtn" @click="packed(scope.row.id,scope.row.order_sn)">{{$t('打包')}}</el-button>
-          <!-- 加入发货单 -->
-          <el-button v-show="activeName === '3'" class="btn-deep-blue detailsBtn"
-          @click="addInvoice([scope.row.id])">{{$t('加入发货单')}}</el-button>
           <!-- 添加转运快递单号 -->
           <!-- <el-button size="small" @click="edit(scope.row)" v-if="activeName === '3' && scope.row.disabled" class="btn-deep-purple detailsBtn">添加转运快递单号</el-button> -->
-          <!-- 打印标签 -->
-          <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'" class="btn-pink detailsBtn">{{$t('打印标签')}}</el-button>
-          <!-- 添加转运快递公司 -->
-          <el-button size="small" @click="addCompany(scope.row.id)" v-if="activeName === '3'" class="btn-green detailsBtn">{{$t('添加物流信息')}}</el-button>
-          <!-- 移除发货单 -->
-          <el-button size="small" class="btn-light-red" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">{{$t('移除发货单')}}
-          </el-button>
-          <!-- 作废 -->
-          <el-button class="btn-light-red detailsBtn" @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
-          v-if="activeName === '1' || activeName === '2' || activeName === '3'">{{$t('作废')}}</el-button>
           <!-- 导出发票 -->
            <!-- <el-button class="btn-yellow detailsBtn" @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
           v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button> -->
-          <!-- 改价 -->
-          <el-button class="btn-pink detailsBtn" @click="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)"
-          v-if="activeName === '2'">{{$t('改价')}}</el-button>
-          <!-- 拣货日志 -->
-          <el-button size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
-          </el-button>
-          <el-button size="small" class="btn-yellow" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
-          </el-button>
-          <!-- 修改物流信息 -->
-          <el-button size="small" @click="editCompany(scope.row.id)" v-if="activeName === '4'" class="btn-green detailsBtn">{{$t('修改物流信息')}}</el-button>
-          <el-button class="btn-deep-blue detailsBtn" v-if="activeName === '4'" @click="logistics(scope.row.id, scope.row.order_sn)">{{$t('轨迹')}}</el-button>
-          <el-button size="small" class="btn-light-red detailsBtn"
-           v-show="activeName === '3' && !scope.row.disabled"
-           @click="saveLogistics(scope.row)">{{$t('保存')}}</el-button>
-          <el-button size="small" class="btn-dark-green detailsBtn"
-          v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">{{$t('取消')}}</el-button>
-          <!-- 日志 -->
-          <el-button class="btn-blue" v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
@@ -1437,5 +1478,9 @@ export default {
 }
 .input-sty {
   width: 30%;
+}
+.item-sty {
+  text-align: center;
+  color: #5b60b4;
 }
 </style>

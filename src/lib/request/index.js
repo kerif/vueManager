@@ -789,8 +789,8 @@ exports.getAlipay = () => {
   return $form.get('payments/alipay')
 }
 // 更新支付宝支付
-exports.updateAlipay = () => {
-  return $form.put('payments/alipay')
+exports.updateAlipay = (params) => {
+  return $form.put('payments/alipay', params)
 }
 // 更改 微信支付
 exports.updatePaypal = (params) => {
