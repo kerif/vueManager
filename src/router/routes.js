@@ -437,7 +437,7 @@ export default [
             path: '/vip/customer/echarts',
             name: 'customerEcharts',
             component: customerEcharts,
-            id: 305,
+            id: 306,
             meta: {
               level: 2,
               group: '客户',
@@ -1423,13 +1423,13 @@ export default [
         path: 'website',
         component: LayoutContainer,
         icon: 'icon-diannao',
-        id: 1000,
+        id: 1100,
         children: [
           {
             path: '/website/column',
             name: 'column',
             component: website,
-            id: 1001,
+            id: 1101,
             meta: {
               level: 2,
               group: '官网管理',
@@ -1440,7 +1440,7 @@ export default [
             path: '/website/column/add',
             name: 'addColumn',
             component: addEditWebsite,
-            id: 1001,
+            id: 1101,
             meta: {
               level: 3,
               group: '官网管理',
@@ -1452,7 +1452,7 @@ export default [
             path: '/website/column/edit/:id',
             name: 'editColumn',
             component: addEditWebsite,
-            id: 1001,
+            id: 1101,
             meta: {
               level: 3,
               group: '官网管理',
@@ -1464,7 +1464,7 @@ export default [
             path: '/website/column/:parent/:state',
             name: 'addSecondColumn',
             component: addEditWebsite,
-            id: 1001,
+            id: 1101,
             meta: {
               level: 3,
               group: '官网管理',
@@ -1476,7 +1476,7 @@ export default [
             path: '/website/column/first/edit/:id',
             name: 'editFirstWeb',
             component: editFirstWeb,
-            id: 1001,
+            id: 1101,
             meta: {
               level: 3,
               group: '官网管理',
@@ -1488,7 +1488,7 @@ export default [
             path: '/website/singlePage',
             name: 'singlePage',
             component: singlePage,
-            id: 1001,
+            id: 1102,
             meta: {
               level: 2,
               group: '官网管理',
@@ -1499,7 +1499,7 @@ export default [
             path: '/website/singlePage/add',
             name: 'addSingle',
             component: addEditSingle,
-            id: 1001,
+            id: 1102,
             meta: {
               level: 3,
               group: '官网管理',
@@ -1511,7 +1511,7 @@ export default [
             path: '/website/singlePage/edit/:id',
             name: 'editSingle',
             component: addEditSingle,
-            id: 1001,
+            id: 1102,
             meta: {
               level: 3,
               group: '官网管理',
@@ -1523,7 +1523,7 @@ export default [
             path: '/website/page/lang/add/:line/:lang/:transCode',
             component: pageLang,
             name: 'pageLang',
-            id: 1001,
+            id: 1102,
             meta: {
               group: '官网管理',
               level: 3,
@@ -1535,7 +1535,7 @@ export default [
             path: '/website/block',
             name: 'block',
             component: blockManagement,
-            id: 1001,
+            id: 1103,
             meta: {
               level: 2,
               group: '官网管理',
@@ -1546,7 +1546,7 @@ export default [
             path: '/website/block/edit/:id',
             name: 'blockEdit',
             component: blockEdit,
-            id: 1001,
+            id: 1103,
             meta: {
               level: 3,
               group: '官网管理',
