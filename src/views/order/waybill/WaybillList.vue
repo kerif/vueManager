@@ -1403,7 +1403,7 @@ export default {
 <style lang="scss" scope>
 .way-list-container {
   .tabLength {
-    width: 720px !important;
+    width: 820px !important;
   }
   .detailsBtn {
     margin: 3px 2px !important;
