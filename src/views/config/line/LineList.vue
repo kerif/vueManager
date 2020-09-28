@@ -125,14 +125,29 @@
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="260" fixed="right">
+      <el-table-column label="操作" width="160" fixed="right">
         <template slot-scope="scope">
-          <el-button class="btn-green others-btn" @click="editLine(scope.row.id)">{{$t('修改')}}</el-button>
-          <el-button class="btn-deep-purple others-btn" @click="goOthers(scope.row.id)">{{$t('附加费用')}}</el-button>
+           <el-dropdown>
+            <el-button type="primary">
+              {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item class="item-sty">
+                <span @click="editLine(scope.row.id)">{{$t('修改')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <span @click="goOthers(scope.row.id)">{{$t('附加费用')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <span @click="Advanced(scope.row.id)">{{$t('高级配置')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <span @click="copyLine(scope.row.id)">{{$t('复制')}}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+           </el-dropdown>
           <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
           <!-- 高级配置 -->
-          <el-button class="btn-purple others-btn" @click="Advanced(scope.row.id)">{{$t('高级配置')}}</el-button>
-          <el-button @click="copyLine(scope.row.id)" class="btn-deep-blue others-btn">{{$t('复制')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -634,6 +649,10 @@ export default {
     // padding-left: 40px;
     font-weight: 700;
     color: black;
+  }
+  .item-sty {
+    text-align: center;
+    color: #5b60b4;
   }
 }
 </style>

@@ -169,23 +169,44 @@
       <el-table-column :label="$t('提交时间')" prop="created_at">
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="200px" fixed="right">
+      <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
-          <!-- 入库 -->
-          <el-button class="btn-main" v-if="activeName === '1' || scope.row.status === 1" @click="storage(scope.row.id)">{{$t('入库')}}</el-button>
-          <!-- 单号追踪 -->
-          <el-button class="btn-green operating-btn" @click="goExpress(scope.row.express_num)" v-if="activeName === '1' || activeName === '2' || scope.row.status === 1 || scope.row.status === 2">{{$t('单号追踪')}}</el-button>
-          <!-- 入库日志 -->
-          <el-button class="btn-blue operating-btn" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || scope.row.status === 2 || scope.row.status === 3 || scope.row.status === 4 || scope.row.status === 5 || scope.row.status === 6" @click="onLogs(scope.row.express_num)">{{$t('入库日志')}}</el-button>
-          <!-- 编辑 -->
-          <el-button class="btn-deep-purple" v-if="activeName === '2' || scope.row.status === 2" @click="editWarehoused(scope.row.id)">{{$t('编辑')}}</el-button>
-          <!-- 快速合箱 -->
-          <el-button class="btn-blue-green operating-btn" v-if="activeName === '2'" @click="fastClosing(scope.row.user_id)">{{$t('快速合箱')}}</el-button>
-          <!-- 日志 -->
-          <el-button class="btn-blue operating-btn" v-if="activeName === '6'"
-          @click="invalidLog(scope.row.id)">{{$t('日志')}}</el-button>
-          <!-- 打印标签 -->
-          <el-button size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='2' || scope.row.status === 2" class="btn-pink operating-btn">{{$t('打印标签')}}</el-button>
+          <el-dropdown>
+            <el-button type="primary">
+              {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item class="item-sty">
+                <!-- 入库 -->
+                 <span v-if="activeName === '1' || scope.row.status === 1" @click="storage(scope.row.id)">{{$t('入库')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 单号追踪 -->
+                <span @click="goExpress(scope.row.express_num)" v-if="activeName === '1' || activeName === '2' || scope.row.status === 1 || scope.row.status === 2">{{$t('单号追踪')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+               <!-- 入库日志 -->
+                <span v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || scope.row.status === 2 || scope.row.status === 3 || scope.row.status === 4 || scope.row.status === 5 || scope.row.status === 6" @click="onLogs(scope.row.express_num)">{{$t('入库日志')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 编辑 -->
+                <span v-if="activeName === '2' || scope.row.status === 2" @click="editWarehoused(scope.row.id)">{{$t('编辑')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 快速合箱 -->
+                 <span v-if="activeName === '2'" @click="fastClosing(scope.row.user_id)">{{$t('快速合箱')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                 <!-- 日志 -->
+                <span v-if="activeName === '6'"
+                @click="invalidLog(scope.row.id)">{{$t('日志')}}</span>
+              </el-dropdown-item>
+              <el-dropdown-item class="item-sty">
+                <!-- 打印标签 -->
+                <span size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='2' || scope.row.status === 2">{{$t('打印标签')}}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
       <template slot="append" v-if="activeName === '1' || activeName === '2' || activeName === '6'">

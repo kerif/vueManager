@@ -256,7 +256,7 @@
               </el-dropdown-item>
               <el-dropdown-item class="item-sty">
                 <!-- 拣货日志 -->
-                <span size="small" class="btn-blue" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
+                <span size="small" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty">
@@ -281,7 +281,7 @@
               </el-dropdown-item>
               <el-dropdown-item class="item-sty">
                 <!-- 日志 -->
-                <span class="btn-blue" v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</span>
+                <span v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
