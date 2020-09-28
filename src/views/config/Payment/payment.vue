@@ -23,7 +23,7 @@
             </el-table-column>
             <el-table-column :label="$t('配置')">
               <template slot-scope="scope">
-                <el-button v-if="scope.row.type === 1 || scope.row.type === 2" class="btn-main" @click="configuration(scope.row.id, scope.row.name)">{{$t('配置')}}</el-button>
+                <el-button v-if="scope.row.type === 1 || scope.row.type === 2 || scope.row.type === 4" class="btn-main" @click="configuration(scope.row.type, scope.row.name)">{{$t('配置')}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -1822,15 +1822,17 @@ export default {
       this.inputValue = ''
     },
     // 支付配置
-    configuration (id, name) {
-      if (name === 'paypal') {
-        dialog({ type: 'paypalSet', id: id
-        }, () => {
+    configuration (type, name) {
+      if (type === 1) {
+        dialog({ type: 'paypalSet' }, () => {
           this.getWechat()
         })
-      } else if (name === 'wechat') {
-        dialog({ type: 'configuration', id: id
-        }, () => {
+      } else if (type === 2) {
+        dialog({ type: 'configuration' }, () => {
+          this.getWechat()
+        })
+      } else if (type === 4) {
+        dialog({ type: 'alipay' }, () => {
           this.getWechat()
         })
       }

@@ -784,6 +784,14 @@ exports.updateWechat = (params) => {
 exports.getPaypal = () => {
   return $form.get('payments/paypal')
 }
+// 获取支付宝支付
+exports.getAlipay = () => {
+  return $form.get('payments/alipay')
+}
+// 更新支付宝支付
+exports.updateAlipay = () => {
+  return $form.put('payments/alipay')
+}
 // 更改 微信支付
 exports.updatePaypal = (params) => {
   return $form.put('payments/paypal', params)

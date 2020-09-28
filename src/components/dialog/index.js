@@ -71,6 +71,7 @@ import rebateLang from './rebateLang.vue'
 import newLang from './newLang.vue'
 import columnChoose from './columnChoose.vue'
 import columnLang from './columnLang.vue'
+import alipay from './alipay.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -142,6 +143,7 @@ const RebateLangController = Vue.extend(rebateLang)
 const NewLangController = Vue.extend(newLang)
 const ColumnChooseController = Vue.extend(columnChoose)
 const ColumnLangController = Vue.extend(columnLang)
+const AlipayController = Vue.extend(alipay)
 
 const mixin = {
   data () {
@@ -636,6 +638,13 @@ function initInstance (type) {
     // 官网管理 栏目管理 修改语言
     case 'columnLang':
       instance = new ColumnLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 支付配置 支付宝配置
+    case 'alipay':
+      instance = new AlipayController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
