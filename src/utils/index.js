@@ -40,7 +40,6 @@ export const formatMonth = (value) => {
 export const getCheckedChild = (arr) => {
   let ret = []
   recArr(arr, ret)
-  console.log('arr', ret)
   return ret
 }
 

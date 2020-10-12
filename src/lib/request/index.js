@@ -1666,6 +1666,10 @@ exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`
 exports.getAdded = () => {
   return $form.get('orders/value-added-services')
 }
+// 订单列表 获取团购数据
+exports.orderSecond = (id) => {
+  return $form.get(`orders/${id}/sub-orders`)
+}
 // 订单列表 获取日志
 exports.getInvalid = (id) => {
   return $form.get(`orders/${id}/invalid-log`)

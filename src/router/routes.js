@@ -151,7 +151,13 @@ const channelManagement = loadonDemand('marketing/channel/channelList')
 // 营销管理 统计报表
 const reportList = loadonDemand('marketing/report/report')
 // 营销管理 广告图管理
+const advertising = loadonDemand('marketing/advertising')
+// 营销管理 轮播图管理
 const bannerList = loadonDemand('marketing/banner/bannerList')
+// 营销管理 广告图管理 海报管理
+const poster = loadonDemand('marketing/poster')
+// 营销管理 广告图管理 页面广告管理
+const imageSet = loadonDemand('marketing/imageSet')
 // 营销管理 新增或编辑渠道管理
 const AddEditChannel = loadonDemand('marketing/channel/AddEditChannel')
 // 营销管理 引流列表
@@ -1311,14 +1317,50 @@ export default [
             }
           },
           {
-            path: '/marketing/banner',
-            name: 'bannerList',
-            component: bannerList,
+            path: '/marketing/advertising',
+            name: 'advertising',
+            component: advertising,
             id: 806,
             meta: {
               level: 2,
               group: '营销管理',
               name: '广告图管理'
+            }
+          },
+          {
+            path: '/marketing/banner',
+            name: 'bannerList',
+            component: bannerList,
+            id: 806,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '轮播图管理',
+              parent: '/marketing/advertising'
+            }
+          },
+          {
+            path: '/marketing/poster',
+            name: 'poster',
+            component: poster,
+            id: 806,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '海报管理',
+              parent: '/marketing/advertising'
+            }
+          },
+          {
+            path: '/marketing/imageSet',
+            name: 'imageSet',
+            component: imageSet,
+            id: 806,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '页面广告管理',
+              parent: '/marketing/advertising'
             }
           }
         ]

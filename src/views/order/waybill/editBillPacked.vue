@@ -108,7 +108,7 @@
             </el-form-item>
           </el-col>
           <!-- 留仓物品 -->
-          <el-col :span="10" :offset="2">
+          <el-col :span="10" :offset="2" v-if="this.$route.query.parent === 0">
             <el-form-item :label="$t('留仓物品')">
               <el-input v-model="user.in_warehouse_item" :placeholder="$t('请输入留仓物品')"></el-input>
             </el-form-item>
@@ -127,7 +127,7 @@
             </el-form-item>
           </el-col>
           <!-- 货位 -->
-          <el-col :span="10" :offset="2">
+          <el-col :span="10" :offset="2" v-if="this.$route.query.parent === 0">
             <el-form-item :label="$t('货位')">
               <el-input v-model="user.location" :placeholder="$t('请输入货位')"></el-input>
             </el-form-item>
@@ -146,7 +146,7 @@
           <el-col :span="10" :offset="2">
             <el-form-item :label="$t('更改线路')" class="express">
               <span class="change-line">{{express.CName}}---{{$t('限重')}}{{express.MaxWeight}}KG</span>
-              <el-button class="btn-main change-btn" @click="changeLine">{{$t('更改')}}</el-button>
+              <el-button class="btn-main change-btn" v-if="this.$route.query.parent === 0" @click="changeLine">{{$t('更改')}}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -284,7 +284,7 @@
           </el-col>
         </el-row>
         <!-- 保险金额  -->
-        <el-row :gutter="20">
+        <el-row :gutter="20" v-if="this.$route.query.parent === 0">
           <el-col :span="11">
             <el-form-item :label="$t('保险金额') + localization.currency_unit">
               <el-input v-model="user.insurance_fee" :placeholder="$t('请输入')"></el-input>
@@ -292,7 +292,7 @@
           </el-col>
         </el-row>
         <!-- 增值服务 -->
-        <el-row :gutter="20">
+        <el-row :gutter="20" v-if="this.$route.query.parent === 0">
           <el-col>
             <el-form-item :label="$t('增值服务')">
               <div v-for="item in updateProp" :key="item.id" class="service">
@@ -377,6 +377,7 @@ export default {
   created () {
     this.getPackage()
     this.getExpress()
+    console.log(this.$route.query.parent, 'parent: parent')
     // this.getProp() // 获取多选框数据
   },
   methods: {
