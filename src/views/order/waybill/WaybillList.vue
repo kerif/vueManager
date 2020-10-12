@@ -130,25 +130,76 @@
         <template slot-scope="props">
           <el-table :data="props.row.secondData">
             <!-- 客户ID -->
-            <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
-            <!-- 用户名 -->
-            <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
-            <!-- 订单号 -->
-            <el-table-column :label="$t('订单号')" prop="order_sn"></el-table-column>
-            <!-- 收货人 -->
-            <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
-            <!-- 包裹数 -->
-            <el-table-column :label="$t('包裹数')" prop="package_count"></el-table-column>
-            <!-- 预计重量 -->
-            <el-table-column :label="$t('预计重量')" prop="except_weight"></el-table-column>
-            <!-- 预计费用 -->
-            <el-table-column :label="$t('预计费用')" prop="payment_fee"></el-table-column>
-            <!-- 申报价值 -->
-            <el-table-column :label="$t('申报价值')" prop="declare_value"></el-table-column>
-            <!-- 所属代理 -->
-            <el-table-column :label="$t('所属代理')" prop="agent + agent_commission"></el-table-column>
-            <!-- 提交时间 -->
-            <el-table-column :label="$t('提交时间')" prop="updated_at"></el-table-column>
+      <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+      <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
+      <!-- 订单号 -->
+      <el-table-column :label="$t('订单号')">
+        <template slot-scope="scope">
+          <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i>
+          <span>{{scope.row.order_sn}}</span>
+        </template>
+      </el-table-column>
+      <!-- 审核状态 -->
+      <el-table-column :label="$t('审核状态')" v-if="activeName === '2'">
+        <template slot-scope="scope">
+          <!-- <span v-if="scope.row.status === 11">待审核</span> -->
+          <router-link v-if="scope.row.status === 12"
+          class="chooseOrder"
+          :to="`/order/review/?id=${scope.row.id}`">
+            {{$t('审核拒绝')}}
+          </router-link>
+        </template>
+      </el-table-column>
+      <!-- 转运快递单号 -->
+      <el-table-column :label="$t('转运快递单号')" v-if="activeName === '3' ||activeName === '4' || activeName === '5' || activeName === '6'" prop="logistics_sn">
+      </el-table-column>
+        <!-- 转运快递公司 -->
+        <el-table-column :label="$t('转运快递公司')" v-if="activeName === '3'|| activeName === '4' || activeName === '5' || activeName === '6'" prop="logistics_company"></el-table-column>
+      <!-- 线路名称 -->
+      <el-table-column :label="$t('线路名称')" prop="express_line.cn_name">
+        <!-- <template slot-scope="scope">{{$t(scope.row.express_line.cn_name)}}</template> -->
+      </el-table-column>
+      <!-- 收货人 -->
+      <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
+      <!-- 收货国家或地区 -->
+      <el-table-column :label="$t('收货国家/地区')" prop="address.country_name"></el-table-column>
+      <!-- 包裹数 -->
+      <el-table-column :label="$t('包裹数')" prop="package_count"></el-table-column>
+      <!-- 预计重量KG -->
+      <el-table-column :label="activeName === '1' ? $t('预计重量') + localization.weight_unit : $t('实际重量') + localization.weight_unit" :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"></el-table-column>
+      <!-- 详见产品图 -->
+      <el-table-column :label="activeName === '1' ? $t('预计费用') + localization.currency_unit : $t('实际费用') + localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
+      <el-table-column :label="$t('申报价值') + localization.currency_unit" prop="declare_value"></el-table-column>
+      <!-- 支付方式 -->
+      <el-table-column :label="$t('支付方式')" v-if="activeName === '3'|| activeName === '4' || activeName === '5'">
+        <template slot-scope="scope">
+          <span class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">{{scope.row.payment_type_name}}</span>
+          <span v-else>{{scope.row.payment_type_name}}</span>
+        </template>
+      </el-table-column>
+      <!-- 抵用券金额 -->
+       <el-table-column :label="$t('抵用券金额') + localization.currency_unit" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="coupon_amount">
+      </el-table-column>
+      <!-- 所属代理 -->
+      <el-table-column :label="$t('所属代理')" prop="agent + agent_commission" width="100px">
+        <template slot-scope="scope">
+          <span>{{scope.row.agent}}</span>
+          <span>({{scope.row.agent_commission}}%)</span>
+        </template>
+      </el-table-column>
+      <!-- 提交时间 -->
+      <el-table-column :label="$t('提交时间')" prop="updated_at" v-if="activeName === '1' || activeName === '2' || activeName === '3' || activeName === '4'"></el-table-column>
+      <!-- 拣货时间 -->
+      <el-table-column :label="$t('拣货时间')" prop="packed_at" v-if="activeName === '2' || activeName === '3'"></el-table-column>
+      <!-- 签收时间 -->
+      <el-table-column :label="$t('签收时间')" prop="updated_at" v-if="activeName === '5'">
+      </el-table-column>
+      <!-- 所属发货单 -->
+      <el-table-column :label="$t('所属发货单')" v-if="activeName === '4' || activeName === '3' || activeName === '5'">
+        <template slot-scope="scope">
+          <span @click="goShip(scope.row.shipment_sn)" class="chooseOrder">{{scope.row.shipment_sn}}</span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" fixed="right" width="140">
         <template slot-scope="scope">
@@ -248,7 +299,6 @@
       <!-- 订单号 -->
       <el-table-column :label="$t('订单号')">
         <template slot-scope="scope">
-          <!-- <p class="group-sty">{{$t('团')}}</p> -->
           <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i>
           <span>{{scope.row.order_sn}}</span>
         </template>
@@ -288,10 +338,10 @@
       <!-- 包裹数 -->
       <el-table-column :label="$t('包裹数')" prop="package_count"></el-table-column>
       <!-- 预计重量KG -->
-      <el-table-column :label="activeName === '1' ? $t('预计重量') + this.localization.weight_unit : $t('实际重量') + this.localization.weight_unit" :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"></el-table-column>
+      <el-table-column :label="activeName === '1' ? $t('预计重量') + localization.weight_unit : $t('实际重量') + localization.weight_unit" :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"></el-table-column>
       <!-- 详见产品图 -->
-      <el-table-column :label="activeName === '1' ? $t('预计费用') + this.localization.currency_unit : $t('实际费用') + this.localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
-      <el-table-column :label="$t('申报价值') + this.localization.currency_unit" prop="declare_value"></el-table-column>
+      <el-table-column :label="activeName === '1' ? $t('预计费用') + localization.currency_unit : $t('实际费用') + localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
+      <el-table-column :label="$t('申报价值') + localization.currency_unit" prop="declare_value"></el-table-column>
       <!-- 支付方式 -->
       <el-table-column :label="$t('支付方式')" v-if="activeName === '3'|| activeName === '4' || activeName === '5'">
         <template slot-scope="scope">
@@ -806,6 +856,7 @@ export default {
             }
           })
         }
+        this.localization = res.localization
       })
     },
     getList () {
