@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1380051",
+      "name": "团购",
+      "font_class": "icon-test",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
       "icon_id": "8351803",
       "name": "电脑",
       "font_class": "diannao",

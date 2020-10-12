@@ -249,6 +249,7 @@
       <el-table-column :label="$t('订单号')">
         <template slot-scope="scope">
           <!-- <p class="group-sty">{{$t('团')}}</p> -->
+          <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i>
           <span>{{scope.row.order_sn}}</span>
         </template>
       </el-table-column>
@@ -1624,12 +1625,7 @@ export default {
     color: red;
   }
   .group-sty {
-    display: inline-block;
-    color: #fff;
-    padding:5px;
-    font-size: 14px;
-    background: red;
-    border-radius: 50%;
+    color: #ff4b3d;
     margin-right: 5px;
   }
 }
