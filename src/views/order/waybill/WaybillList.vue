@@ -218,10 +218,10 @@
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)">
-                <span v-show="activeName === '1' || activeName === '2'">{{$t('编辑')}}
+                <span v-show="activeName === '2'">{{$t('编辑')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn)">
+              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent)">
                 <!-- 打包 -->
                 <span v-show="activeName === '1'">{{$t('打包')}}</span>
               </el-dropdown-item>
@@ -382,7 +382,7 @@
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName)">
-                <span v-show="activeName === '1' || activeName === '2'">{{$t('编辑')}}
+                <span v-show="activeName === '2'">{{$t('编辑')}}
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn)">
@@ -1250,8 +1250,8 @@ export default {
       this.getList()
     },
     // 打包
-    packed (id, orderSN) {
-      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN } })
+    packed (id, orderSN, parent) {
+      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN }, query: { parent: parent } })
     },
     // 详情
     details (id, activeName) {
