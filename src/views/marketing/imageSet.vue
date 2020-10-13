@@ -362,7 +362,7 @@
               </i>
           </el-upload>
           </el-form-item>
-          <p class="font-sty">{{$t('首页')}}</p>
+          <p class="font-sty">{{$t('H5登录/注册页')}}</p>
           <div class="user-bottom">
             <!-- <div class="bottom-left">
               <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
@@ -373,9 +373,9 @@
           </div>
           </div>
         </el-col>
-        <el-col :span="8">
+        <!-- 视频区 -->
+        <!-- <el-col :span="8">
           <div class="new-top">
-          <!-- 视频区 -->
             <el-form-item class="updateChe">
               <span class="img-item" v-for="(item, index) in videoList" :key="index">
               <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
@@ -398,17 +398,12 @@
               </el-form-item>
             <p class="font-sty">{{$t('视频区')}}</p>
             <div class="user-bottom">
-              <!-- <div class="bottom-left">
-                <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
-              </div> -->
               <div class="bottom-right">
                 <span class="suggest-btn">{{$t('建议尺寸：355px*160px')}}</span>
               </div>
           </div>
           </div>
-        </el-col>
-        </el-row>
-      <el-row :gutter="20">
+        </el-col> -->
         <!-- 评论区 -->
         <el-col :span="8">
           <div class="new-top">
@@ -443,6 +438,8 @@
           </div>
           </div>
         </el-col>
+        </el-row>
+      <el-row :gutter="20">
       <el-col :span="8">
         <div class="new-top">
         <!-- 个人中心背景图片 -->

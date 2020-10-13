@@ -200,7 +200,7 @@
           <span @click="goShip(scope.row.shipment_sn)" class="chooseOrder">{{scope.row.shipment_sn}}</span>
         </template>
       </el-table-column>
-      <!-- 操作 -->
+      <!-- 二级操作栏 -->
       <el-table-column :label="$t('操作')" fixed="right" width="140">
         <template slot-scope="scope">
           <el-dropdown>
@@ -225,11 +225,11 @@
                 <!-- 打包 -->
                 <span v-show="activeName === '1'" @click="packed(scope.row.id,scope.row.order_sn)">{{$t('打包')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <!-- 加入发货单 -->
-                <span v-show="activeName === '3' && scope.row.is_parent === 0"
+              <!-- 加入发货单 -->
+              <!-- <el-dropdown-item class="item-sty">
+                <span v-show="activeName === '3'"
                 @click="addInvoice([scope.row.id])">{{$t('加入发货单')}}</span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <el-dropdown-item class="item-sty">
                  <!-- 打印标签 -->
                 <span size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'">{{$t('打印标签')}}</span>
@@ -238,11 +238,11 @@
                 <!-- 添加转运快递公司 -->
                 <span size="small" @click="addCompany(scope.row.id)" v-if="activeName === '3'">{{$t('添加物流信息')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <!-- 移除发货单 -->
+              <!-- 移除发货单 -->
+              <!-- <el-dropdown-item class="item-sty">
                 <span size="small" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">{{$t('移除发货单')}}
                 </span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <!-- 作废 -->
               <!-- <el-dropdown-item class="item-sty">
                 <span @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
@@ -268,15 +268,6 @@
               </el-dropdown-item>
               <el-dropdown-item class="item-sty">
                 <span v-if="activeName === '4'" @click="logistics(scope.row.id, scope.row.order_sn)">{{$t('轨迹')}}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span size="small"
-                v-show="activeName === '3' && !scope.row.disabled"
-                @click="saveLogistics(scope.row)">{{$t('保存')}}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span size="small"
-                v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">{{$t('取消')}}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty">
                 <!-- 日志 -->
@@ -402,14 +393,14 @@
                 <span v-show="activeName === '3'"
                 @click="addInvoice([scope.row.id])">{{$t('加入发货单')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                 <!-- 打印标签 -->
+              <!-- 打印标签 -->
+              <!-- <el-dropdown-item class="item-sty">
                 <span size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'">{{$t('打印标签')}}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <!-- 添加转运快递公司 -->
+              </el-dropdown-item> -->
+              <!-- 添加转运快递公司 -->
+              <!-- <el-dropdown-item class="item-sty">
                 <span size="small" @click="addCompany(scope.row.id)" v-if="activeName === '3'">{{$t('添加物流信息')}}</span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <el-dropdown-item class="item-sty">
                 <!-- 移除发货单 -->
                 <span size="small" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">{{$t('移除发货单')}}
