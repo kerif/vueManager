@@ -132,17 +132,17 @@
               {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty">
-                <span @click="editLine(scope.row.id)">{{$t('修改')}}</span>
+              <el-dropdown-item class="item-sty" @click.native="editLine(scope.row.id)">
+                <span>{{$t('修改')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span @click="goOthers(scope.row.id)">{{$t('附加费用')}}</span>
+              <el-dropdown-item class="item-sty" @click.native="goOthers(scope.row.id)">
+                <span>{{$t('附加费用')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span @click="Advanced(scope.row.id)">{{$t('高级配置')}}</span>
+              <el-dropdown-item class="item-sty" @click.native="Advanced(scope.row.id)">
+                <span>{{$t('高级配置')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span @click="copyLine(scope.row.id)">{{$t('复制')}}</span>
+              <el-dropdown-item class="item-sty" @click.native="copyLine(scope.row.id)">
+                <span>{{$t('复制')}}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
            </el-dropdown>

@@ -176,34 +176,33 @@
               {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="storage(scope.row.id)">
                 <!-- 入库 -->
-                 <span v-if="activeName === '1' || scope.row.status === 1" @click="storage(scope.row.id)">{{$t('入库')}}</span>
+                 <span v-if="activeName === '1' || scope.row.status === 1">{{$t('入库')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="goExpress(scope.row.express_num)">
                 <!-- 单号追踪 -->
-                <span @click="goExpress(scope.row.express_num)" v-if="activeName === '1' || activeName === '2' || scope.row.status === 1 || scope.row.status === 2">{{$t('单号追踪')}}</span>
+                <span v-if="activeName === '1' || activeName === '2' || scope.row.status === 1 || scope.row.status === 2">{{$t('单号追踪')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="onLogs(scope.row.express_num)">
                <!-- 入库日志 -->
-                <span v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || scope.row.status === 2 || scope.row.status === 3 || scope.row.status === 4 || scope.row.status === 5 || scope.row.status === 6" @click="onLogs(scope.row.express_num)">{{$t('入库日志')}}</span>
+                <span v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || scope.row.status === 2 || scope.row.status === 3 || scope.row.status === 4 || scope.row.status === 5 || scope.row.status === 6">{{$t('入库日志')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="editWarehoused(scope.row.id)">
                 <!-- 编辑 -->
-                <span v-if="activeName === '2' || scope.row.status === 2" @click="editWarehoused(scope.row.id)">{{$t('编辑')}}</span>
+                <span v-if="activeName === '2' || scope.row.status === 2">{{$t('编辑')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="fastClosing(scope.row.user_id)">
                 <!-- 快速合箱 -->
-                 <span v-if="activeName === '2'" @click="fastClosing(scope.row.user_id)">{{$t('快速合箱')}}</span>
+                 <span v-if="activeName === '2'">{{$t('快速合箱')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="invalidLog(scope.row.id)">
                  <!-- 日志 -->
-                <span v-if="activeName === '6'"
-                @click="invalidLog(scope.row.id)">{{$t('日志')}}</span>
+                <span v-if="activeName === '6'">{{$t('日志')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="getLabel(scope.row.id)">
                 <!-- 打印标签 -->
-                <span size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='2' || scope.row.status === 2">{{$t('打印标签')}}</span>
+                <span size="small" v-if="activeName ==='2' || scope.row.status === 2">{{$t('打印标签')}}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

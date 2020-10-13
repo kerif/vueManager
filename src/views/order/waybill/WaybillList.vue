@@ -208,35 +208,35 @@
               {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="details(scope.row.id, activeName)">
                 <!-- 详情 -->
-                <span @click="details(scope.row.id, activeName)">{{$t('详情')}}</span>
+                <span>{{$t('详情')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="reviewPackage(scope.row.id)">
                 <!-- 审核 -->
-                <span v-show="activeName === '2' && scope.row.status === 11" @click="reviewPackage(scope.row.id)">{{$t('审核')}}
+                <span v-show="activeName === '2' && scope.row.status === 11">{{$t('审核')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span v-show="activeName === '1' || activeName === '2'" @click="editPacked(scope.row.id, activeName, scope.row.is_parent)">{{$t('编辑')}}
+              <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)">
+                <span v-show="activeName === '1' || activeName === '2'">{{$t('编辑')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn)">
                 <!-- 打包 -->
-                <span v-show="activeName === '1'" @click="packed(scope.row.id,scope.row.order_sn)">{{$t('打包')}}</span>
+                <span v-show="activeName === '1'">{{$t('打包')}}</span>
               </el-dropdown-item>
               <!-- 加入发货单 -->
               <!-- <el-dropdown-item class="item-sty">
                 <span v-show="activeName === '3'"
                 @click="addInvoice([scope.row.id])">{{$t('加入发货单')}}</span>
               </el-dropdown-item> -->
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="getLabel(scope.row.id)">
                  <!-- 打印标签 -->
-                <span size="small" @click="getLabel(scope.row.id)" v-if="activeName ==='3'">{{$t('打印标签')}}</span>
+                <span size="small" v-if="activeName ==='3'">{{$t('打印标签')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="addCompany(scope.row.id)">
                 <!-- 添加转运快递公司 -->
-                <span size="small" @click="addCompany(scope.row.id)" v-if="activeName === '3'">{{$t('添加物流信息')}}</span>
+                <span size="small" v-if="activeName === '3'">{{$t('添加物流信息')}}</span>
               </el-dropdown-item>
               <!-- 移除发货单 -->
               <!-- <el-dropdown-item class="item-sty">
@@ -248,30 +248,30 @@
                 <span @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
                 v-if="activeName === '1' || activeName === '2' || activeName === '3'">{{$t('作废')}}</span>
               </el-dropdown-item> -->
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)">
                 <!-- 改价 -->
-                <span @click="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)"
+                <span
                 v-if="activeName === '2' || scope.row.on_delivery_status === 1">{{$t('改价')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="onLogs(scope.row.id)">
                 <!-- 拣货日志 -->
-                <span size="small" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
+                <span size="small" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'">{{$t('订单日志')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span size="small" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
+              <el-dropdown-item class="item-sty" @click.native="payed(scope.row.id)">
+                <span size="small" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1">{{$t('已付款')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="editCompany(scope.row.id)">
                 <!-- 修改物流信息 -->
-                <span size="small" @click="editCompany(scope.row.id)" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
+                <span size="small" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span v-if="activeName === '4'" @click="logistics(scope.row.id, scope.row.order_sn)">{{$t('轨迹')}}</span>
+              <el-dropdown-item class="item-sty" @click.native="logistics(scope.row.id, scope.row.order_sn)">
+                <span v-if="activeName === '4'">{{$t('轨迹')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="checkInvalid(scope.row.id)">
                 <!-- 日志 -->
-                <span v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</span>
+                <span v-if="activeName === '19'">{{$t('日志')}}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -371,27 +371,27 @@
               {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty">
-                <!-- 详情 -->
-                <span @click="details(scope.row.id, activeName)">{{$t('详情')}}</span>
+              <!-- 详情 -->
+              <el-dropdown-item class="item-sty" @click.native="details(scope.row.id, activeName)">
+                <span>{{$t('详情')}}</span>
+                <!-- <div @click="details(scope.row.id, activeName)">{{$t('详情')}}</div> -->
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="reviewPackage(scope.row.id)">
                 <!-- 审核 -->
-                <span v-show="activeName === '2' && scope.row.status === 11" @click="reviewPackage(scope.row.id)">{{$t('审核')}}
+                <span v-show="activeName === '2' && scope.row.status === 11">{{$t('审核')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span v-show="activeName === '1' || activeName === '2'" @click="editPacked(scope.row.id, activeName)">{{$t('编辑')}}
+              <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName)">
+                <span v-show="activeName === '1' || activeName === '2'">{{$t('编辑')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn)">
                 <!-- 打包 -->
-                <span v-show="activeName === '1'" @click="packed(scope.row.id,scope.row.order_sn)">{{$t('打包')}}</span>
+                <span v-show="activeName === '1'">{{$t('打包')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="addInvoice([scope.row.id])">
                 <!-- 加入发货单 -->
-                <span v-show="activeName === '3'"
-                @click="addInvoice([scope.row.id])">{{$t('加入发货单')}}</span>
+                <span v-show="activeName === '3'">{{$t('加入发货单')}}</span>
               </el-dropdown-item>
               <!-- 打印标签 -->
               <!-- <el-dropdown-item class="item-sty">
@@ -401,55 +401,54 @@
               <!-- <el-dropdown-item class="item-sty">
                 <span size="small" @click="addCompany(scope.row.id)" v-if="activeName === '3'">{{$t('添加物流信息')}}</span>
               </el-dropdown-item> -->
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="removeShip(scope.row.id)">
                 <!-- 移除发货单 -->
-                <span size="small" v-if="activeName === '3' && scope.row.shipment_sn" @click="removeShip(scope.row.id)">{{$t('移除发货单')}}
+                <span size="small" v-if="activeName === '3' && scope.row.shipment_sn">{{$t('移除发货单')}}
                 </span>
               </el-dropdown-item>
-               <el-dropdown-item class="item-sty">
+               <el-dropdown-item class="item-sty" @click.native="groupBuy(scope.row)">
                 <!-- 团购 -->
                 <!-- v-if="scope.row.is_parent_order === 1" -->
-                <span size="small" v-if="scope.row.is_parent === 1" @click="groupBuy(scope.row)">{{$t('团购')}}
+                <span size="small" v-if="scope.row.is_parent === 1">{{$t('团购')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <!-- 作废 -->
-                <span @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
-                v-if="(activeName === '1' || activeName === '2' || activeName === '3') && scope.row.is_parent === 0">{{$t('作废')}}</span>
+              <!-- 作废 -->
+              <el-dropdown-item class="item-sty" @click.native="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)">
+                <span v-if="(activeName === '1' || activeName === '2' || activeName === '3') && scope.row.is_parent === 0">{{$t('作废')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)">
                 <!-- 改价 -->
-                <span @click="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)"
+                <span
                 v-if="(activeName === '2' || scope.row.on_delivery_status === 1) && scope.row.is_parent === 0">{{$t('改价')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="onLogs(scope.row.id)">
                 <!-- 拣货日志 -->
-                <span size="small" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'" @click="onLogs(scope.row.id)">{{$t('订单日志')}}
+                <span size="small" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'">{{$t('订单日志')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span size="small" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1" @click="payed(scope.row.id)">{{$t('已付款')}}
+              <el-dropdown-item class="item-sty" @click.native="payed(scope.row.id)">
+                <span size="small" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1">{{$t('已付款')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="editCompany(scope.row.id)">
                 <!-- 修改物流信息 -->
-                <span size="small" @click="editCompany(scope.row.id)" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
+                <span size="small" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
-                <span v-if="activeName === '4'" @click="logistics(scope.row.id, scope.row.order_sn)">{{$t('轨迹')}}</span>
+              <el-dropdown-item class="item-sty" @click.native="logistics(scope.row.id, scope.row.order_sn)">
+                <span v-if="activeName === '4'">{{$t('轨迹')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="saveLogistics(scope.row)">
                 <span size="small"
                 v-show="activeName === '3' && !scope.row.disabled"
-                @click="saveLogistics(scope.row)">{{$t('保存')}}</span>
+                >{{$t('保存')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="cancel(scope.row)">
                 <span size="small"
-                v-show="activeName === '3' && !scope.row.disabled" @click="cancel(scope.row)">{{$t('取消')}}</span>
+                v-show="activeName === '3' && !scope.row.disabled">{{$t('取消')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty" @click.native="checkInvalid(scope.row.id)">
                 <!-- 日志 -->
-                <span v-if="activeName === '19'" @click="checkInvalid(scope.row.id)">{{$t('日志')}}</span>
+                <span v-if="activeName === '19'">{{$t('日志')}}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
