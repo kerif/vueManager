@@ -94,7 +94,13 @@
      </el-form>
     </div>
     <div class="receiverMSg">
-    <h4>{{$t('运单详情')}}</h4>
+    <h4 class="all-group">{{$t('运单详情')}}</h4>
+    <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
+      <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
+    </div>
+    <div v-else class="all-group all-sty">
+      {{form.group_name}}
+    </div>
     <el-row class="container-center" :gutter="20">
       <!-- 客户id -->
       <el-col :span="7">
@@ -157,6 +163,11 @@
       <el-col :span="7" :offset="1">
         <span class="leftWidth">{{$t('付款方式')}}</span>
         <span>{{form.payment && form.payment.payment_type_name}}</span>
+      </el-col>
+      <!-- 团长ID -->
+       <el-col :span="7" :offset="1" v-if="form.group_leader_id !== ''">
+        <span class="leftWidth">{{$t('团长ID')}}</span>
+        <span>{{form.group_leader_id}}</span>
       </el-col>
     </el-row>
     </div>
@@ -598,6 +609,13 @@ export default {
   }
   .second-sty {
     width: 25%;
+  }
+  .all-group {
+    display: inline-block;
+  }
+  .all-sty {
+    margin-left: 20px;
+    // color: red;
   }
 }
 </style>

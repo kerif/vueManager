@@ -201,7 +201,7 @@
         </template>
       </el-table-column>
       <!-- 二级操作栏 -->
-      <el-table-column :label="$t('操作')" fixed="right" width="140">
+      <el-table-column :label="$t('操作')" fixed="right" width="160">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary">
@@ -277,7 +277,7 @@
           </el-dropdown>
           </template>
         </el-table-column>
-          </el-table>
+        </el-table>
         </template>
       </el-table-column>
       <!-- 一级 -->
@@ -826,8 +826,12 @@ export default {
   },
   methods: {
     groupBuy (row) {
-      console.log(row.id)
-      this.expands.push(row.id)
+      if (this.expands.find(item => item === row.id)) {
+        this.expands = this.expands.filter(item => item !== row.id)
+      } else {
+        this.expands.push(row.id)
+      }
+      console.log(this.expands)
       // console.log(this.expands, 'expands')
       // this.$request.orderSecond(eId).then(res => {
       //   if (res.ret) {
