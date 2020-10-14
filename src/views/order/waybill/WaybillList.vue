@@ -139,6 +139,12 @@
           <span>{{scope.row.order_sn}}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('打包状态')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.group_buying_status === 0">{{$t('未打包')}}</span>
+          <span v-if="scope.row.group_buying_status === 1">{{$t('已打包')}}</span>
+        </template>
+      </el-table-column>
       <!-- 审核状态 -->
       <el-table-column :label="$t('审核状态')" v-if="activeName === '2'">
         <template slot-scope="scope">
@@ -201,7 +207,7 @@
         </template>
       </el-table-column>
       <!-- 二级操作栏 -->
-      <el-table-column :label="$t('操作')" fixed="right" width="160">
+      <el-table-column :label="$t('操作')" fixed="right" width="160" class="table-fixed">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary">
@@ -802,7 +808,8 @@ export default {
       filterForm: {
         start: '',
         end: ''
-      }
+      },
+      secondExpands: {}
     }
   },
   created () {
@@ -826,6 +833,7 @@ export default {
   },
   methods: {
     groupBuy (row) {
+      this.secondExpands = row
       if (this.expands.find(item => item === row.id)) {
         this.expands = this.expands.filter(item => item !== row.id)
       } else {
@@ -1463,6 +1471,7 @@ export default {
     },
     // Tab Change
     onTabChange (tab) {
+      console.log('wwowowow')
       this.status = Number(tab.name)
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)
@@ -1478,6 +1487,9 @@ export default {
       this.updated_end_date = ''
       this.getList()
       this.getCounts()
+      if (this.expands.find(item => item === this.secondExpands.id)) {
+        this.expands = this.expands.filter(item => item !== this.secondExpands.id)
+      }
     },
     // 选择代理用户
     onAgentChange () {
@@ -1704,5 +1716,12 @@ export default {
 .item-sty {
   text-align: center;
   color: #5b60b4;
+}
+.table-fixed {
+  // height: 100% !important;
+  // width: 100%;
+  .el-table__fixed-right {
+  height: 100% !important; //设置高优先，以覆盖内联样式
+  }
 }
 </style>
