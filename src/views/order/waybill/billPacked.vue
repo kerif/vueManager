@@ -39,11 +39,13 @@
     </div>
     <div class="receiverMSg">
       <h4 class="all-group">{{$t('打包详情')}}</h4>
-      <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
+      <!-- <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
         <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
-      </div>
+      </div> -->
       <div v-if="form.group_name !== ''" class="all-group all-sty">
         <el-button class="btn-light-red">{{form.group_name}}</el-button>
+        <span class="group-sty" v-if="form.is_group_completed === 0">{{$t('拼团进行中')}}</span>
+        <span class="group-sty" v-if="form.is_group_completed === 1">{{$t('拼团已完成')}}</span>
       </div>
       <el-row class="container-center" :gutter="20">
         <!-- 订单号 -->
@@ -740,6 +742,11 @@ export default {
   }
   .all-sty {
     margin-left: 20px;
+  }
+  .group-sty {
+    padding-left: 20px;
+    font-size: 14px;
+    color:#909399;
   }
 }
 </style>
