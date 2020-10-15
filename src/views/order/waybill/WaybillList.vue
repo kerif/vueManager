@@ -124,11 +124,12 @@
       v-loading="tableLoading"
       @expand-change="onExpand"
       highlight-current-row
-      :data="oderData" @selection-change="onSelectChange">
+      :data="oderData" @selection-change="onSelectChange"
+      >
       <!-- 二级分类列表 -->
       <el-table-column width="0" type="expand">
         <template slot-scope="props">
-          <el-table :data="props.row.secondData">
+          <el-table :data="props.row.secondData" style="width: 80%">
             <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
@@ -210,7 +211,7 @@
         </template>
       </el-table-column>
       <!-- 二级操作栏 -->
-      <el-table-column :label="$t('操作')" fixed="right" width="160" class="table-fixed">
+      <el-table-column :label="$t('操作')" class="table-fixed" width="160">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary">
