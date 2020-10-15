@@ -186,6 +186,9 @@
       <!-- 抵用券金额 -->
        <el-table-column :label="$t('抵用券金额') + localization.currency_unit" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="coupon_amount">
       </el-table-column>
+       <!-- 增值服务金额 -->
+       <el-table-column :label="$t('增值服务金额') + localization.currency_unit" v-if="activeName === '3'|| activeName === '4' || activeName === '5'" prop="value_added_amount">
+      </el-table-column>
       <!-- 所属代理 -->
       <el-table-column :label="$t('所属代理')" prop="agent + agent_commission" width="100px">
         <template slot-scope="scope">
@@ -387,11 +390,12 @@
                 <span v-show="activeName === '2' && scope.row.status === 11">{{$t('审核')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName)">
+              <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)">
                 <span v-show="activeName === '2'">{{$t('编辑')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn)">
+              <!-- 打包 -->
+              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent)">
                 <!-- 打包 -->
                 <span v-show="activeName === '1'">{{$t('打包')}}</span>
               </el-dropdown-item>
@@ -1263,6 +1267,7 @@ export default {
     },
     // 打包
     packed (id, orderSN, parent) {
+      console.log(parent, 'parent111')
       this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN }, query: { parent: parent } })
     },
     // 详情

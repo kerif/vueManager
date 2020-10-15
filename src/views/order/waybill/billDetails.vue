@@ -98,8 +98,8 @@
     <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
       <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
     </div>
-    <div v-else class="all-group all-sty">
-      {{form.group_name}}
+    <div v-if="form.group_name !== ''" class="all-group all-sty">
+      <el-button class="btn-light-red">{{form.group_name}}</el-button>
     </div>
     <el-row class="container-center" :gutter="20">
       <!-- 客户id -->
@@ -615,7 +615,6 @@ export default {
   }
   .all-sty {
     margin-left: 20px;
-    // color: red;
   }
 }
 </style>

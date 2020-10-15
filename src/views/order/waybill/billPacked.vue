@@ -38,7 +38,13 @@
       </el-row>
     </div>
     <div class="receiverMSg">
-      <h4>{{$t('打包详情')}}</h4>
+      <h4 class="all-group">{{$t('打包详情')}}</h4>
+      <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
+        <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
+      </div>
+      <div v-if="form.group_name !== ''" class="all-group all-sty">
+        <el-button class="btn-light-red">{{form.group_name}}</el-button>
+      </div>
       <el-row class="container-center" :gutter="20">
         <!-- 订单号 -->
         <el-col :span="7">
@@ -373,6 +379,7 @@ export default {
     }
   },
   created () {
+    console.log('我是打包')
     this.getPackage()
     this.getExpress()
     // this.getProp() // 获取多选框数据
@@ -728,5 +735,11 @@ export default {
   // .el-upload--picture-card {
   //   width: 80px !important;
   // }
+  .all-group {
+    display: inline-block;
+  }
+  .all-sty {
+    margin-left: 20px;
+  }
 }
 </style>
