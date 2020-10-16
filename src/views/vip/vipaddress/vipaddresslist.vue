@@ -15,6 +15,11 @@
       <el-table-column :label="$t('街道')" prop="street"></el-table-column>
       <el-table-column :label="$t('门牌号')" prop="door_no"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
+       <!-- <el-table-column :label="$t('操作')">
+        <template slot-scope="scope">
+          <el-button class="btn-green" @click="editVip(scope.row.id)">{{$t('修改资料')}}</el-button>
+        </template>
+      </el-table-column> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
@@ -23,6 +28,7 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   name: 'vipAddressList',
   data () {
@@ -59,6 +65,12 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    // 修改资料
+    editVip (id) {
+      dialog({ type: 'editVip', id: id }, () => {
+        this.getList()
       })
     }
   }
