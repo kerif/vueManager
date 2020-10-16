@@ -277,6 +277,8 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('代理')" prop="agent"></el-table-column>
+        <el-table-column :label="$t('长宽高') + this.localization.length_unit" prop="dimension"></el-table-column>
+        <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="package_weight"></el-table-column>
         <!-- 商品清单 -->
         <el-table-column :label="$t('商品清单')" prop="item_pictures" width="130">
           <template slot-scope="scope">
