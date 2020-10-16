@@ -1493,7 +1493,7 @@ export default {
       this.updated_end_date = ''
       this.getList()
       this.getCounts()
-      this.expands = this.expands.filter(item => item !== this.secondExpands.id)
+      this.expands = []
       // if (this.expands.find(item => item === this.secondExpands.id)) {
       // }
     },
