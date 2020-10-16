@@ -910,6 +910,7 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.expands = []
         } else {
           this.$notify({
             title: this.$t('操作失败'),
