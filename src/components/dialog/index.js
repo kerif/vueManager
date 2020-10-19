@@ -72,6 +72,7 @@ import newLang from './newLang.vue'
 import columnChoose from './columnChoose.vue'
 import columnLang from './columnLang.vue'
 import alipay from './alipay.vue'
+import addressEdit from './addressEdit.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -144,6 +145,7 @@ const NewLangController = Vue.extend(newLang)
 const ColumnChooseController = Vue.extend(columnChoose)
 const ColumnLangController = Vue.extend(columnLang)
 const AlipayController = Vue.extend(alipay)
+const AddressEditController = Vue.extend(addressEdit)
 
 const mixin = {
   data () {
@@ -645,6 +647,13 @@ function initInstance (type) {
     // 更多配置 支付配置 支付宝配置
     case 'alipay':
       instance = new AlipayController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 客户 客户地址 编辑地址
+    case 'addressEdit':
+      instance = new AddressEditController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

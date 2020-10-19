@@ -15,9 +15,9 @@
       <el-table-column :label="$t('街道')" prop="street"></el-table-column>
       <el-table-column :label="$t('门牌号')" prop="door_no"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
-       <!-- <el-table-column :label="$t('操作')">
+      <!-- <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editVip(scope.row.id)">{{$t('修改资料')}}</el-button>
+          <el-button class="btn-green" @click="editVip(scope.row.id)">{{$t('修改')}}</el-button>
         </template>
       </el-table-column> -->
     </el-table>
@@ -69,7 +69,7 @@ export default {
     },
     // 修改资料
     editVip (id) {
-      dialog({ type: 'editVip', id: id }, () => {
+      dialog({ type: 'addressEdit', id: id }, () => {
         this.getList()
       })
     }

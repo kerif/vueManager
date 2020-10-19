@@ -506,6 +506,10 @@ exports.saveOrderPack = (id, params) => {
 exports.getUserAddress = (params) => {
   return $form.get('user-addresses', { params })
 }
+// 获取客户地址 编辑 全部国家地区数据
+exports.allCountry = () => {
+  return $form.get('countries/search')
+}
 // 获取客户列表
 exports.getUsers = (params) => {
   return $form.get('users', { params })

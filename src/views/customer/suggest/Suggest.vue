@@ -124,10 +124,10 @@ export default {
       show: false,
       statusData: [
         {
-          id: 0,
+          id: 1,
           name: this.$t('未处理')
         }, {
-          id: 1,
+          id: 2,
           name: this.$t('已处理')
         }
       ],
