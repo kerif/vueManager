@@ -506,9 +506,17 @@ exports.saveOrderPack = (id, params) => {
 exports.getUserAddress = (params) => {
   return $form.get('user-addresses', { params })
 }
-// 获取客户地址 编辑 全部国家地区数据
-exports.allCountry = () => {
-  return $form.get('countries/search')
+// 客户地址 获取单条地址信息
+exports.singleAddress = (id) => {
+  return $form.get(`user-addresses/${id}`)
+}
+// 客户地址 更新单条地址信息
+exports.updateSingleAddress = (id, params) => {
+  return $form.put(`user-addresses/${id}`, params)
+}
+// 客户 删除
+exports.deleteUser = (ids) => {
+  return $form.put('users/batch-delete', ids)
 }
 // 获取客户列表
 exports.getUsers = (params) => {

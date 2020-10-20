@@ -38,13 +38,14 @@
         <template slot-scope="scope">
           <el-button class="btn-main optionBtn" @click="onUpdateGroup(scope.row.id)">{{$t('修改客户组')}}</el-button>
           <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">{{$t('邀请记录')}}</el-button>
-          <el-button class="btn-light-red optionBtn" @click="voucher(scope.row.id)">{{$t('券包')}}</el-button>
+          <el-button class="btn-purple optionBtn" @click="voucher(scope.row.id)">{{$t('券包')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
           <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
           <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -105,6 +106,34 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    deleteData (id) {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择客户'))
+      }
+      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteUser({
+          DELETE: this.deleteNum
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     // 获取客户组
