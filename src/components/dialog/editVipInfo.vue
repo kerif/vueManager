@@ -34,7 +34,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="10">
-        <el-form-item :label="'*' + $t('城市')">
+        <el-form-item :label="$t('城市')">
           <span>{{form.city}}</span>
           <!-- <el-input v-model="form.city"></el-input> -->
         </el-form-item>
@@ -42,7 +42,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item :label="('联系电话')">
+          <el-form-item :label="$t('联系电话')">
             <span>{{form.phone}}</span>
             <!-- <el-input v-model="form.street"></el-input> -->
           </el-form-item>
@@ -62,7 +62,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item :label="'*' + $t('门派号')">
+          <el-form-item :label="$t('门牌号')">
             <!-- <el-input v-model="form.phone"></el-input> -->
             <span>{{form.door_no}}</span>
           </el-form-item>
