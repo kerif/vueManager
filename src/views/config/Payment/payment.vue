@@ -81,7 +81,7 @@
       <el-tab-pane :label="$t('服务配置')" name="2">
         <div class="logistics-container">
           <div class="form-title">{{$t('快递100配置')}}</div>
-          <el-form :model="logisticsData" :rules="rules" ref="ruleForm" class="demo-ruleForm"
+          <el-form :model="logisticsData" ref="ruleForm" class="demo-ruleForm"
             label-position="left" label-width="150px">
             <!-- Customer ID -->
             <el-form-item label="Customer ID" prop="kd100_app_id">
