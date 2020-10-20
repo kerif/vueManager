@@ -518,6 +518,10 @@ exports.updateSingleAddress = (id, params) => {
 exports.deleteUser = (ids) => {
   return $form.put('users/batch-delete', ids)
 }
+// 客户 查看个人信息
+exports.checkVipInfo = (id) => {
+  return $form.get(`users/${id}/profile`)
+}
 // 获取客户列表
 exports.getUsers = (params) => {
   return $form.get('users', { params })

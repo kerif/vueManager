@@ -73,6 +73,7 @@ import columnChoose from './columnChoose.vue'
 import columnLang from './columnLang.vue'
 import alipay from './alipay.vue'
 import addressEdit from './addressEdit.vue'
+import editInfo from './editVipInfo.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -146,6 +147,7 @@ const ColumnChooseController = Vue.extend(columnChoose)
 const ColumnLangController = Vue.extend(columnLang)
 const AlipayController = Vue.extend(alipay)
 const AddressEditController = Vue.extend(addressEdit)
+const EditVipInfoController = Vue.extend(editInfo)
 
 const mixin = {
   data () {
@@ -654,6 +656,13 @@ function initInstance (type) {
     // 客户 客户地址 编辑地址
     case 'addressEdit':
       instance = new AddressEditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 客户 查看个人信息
+    case 'editInfo':
+      instance = new EditVipInfoController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

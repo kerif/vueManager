@@ -39,6 +39,7 @@
           <el-button class="btn-main optionBtn" @click="onUpdateGroup(scope.row.id)">{{$t('修改客户组')}}</el-button>
           <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">{{$t('邀请记录')}}</el-button>
           <el-button class="btn-purple optionBtn" @click="voucher(scope.row.id)">{{$t('券包')}}</el-button>
+          <el-button class="btn-yellow optionBtn" @click="checkInfo(scope.row.id, scope.row.name)">{{$t('个人信息')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -107,6 +108,10 @@ export default {
           })
         }
       })
+    },
+    // 个人信息
+    checkInfo (id, name) {
+      dialog({ type: 'editInfo', id: id, name: name })
     },
     deleteData (id) {
       if (!this.deleteNum || !this.deleteNum.length) {

@@ -1,15 +1,17 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('编辑客户') + this.userId + $t('的个人信息')" class="address-edit-dialog" @close="clear">
+  <el-dialog :visible.sync="show" :title="this.name + $t('的个人信息')" class="edit-info-dialog" @close="clear">
     <el-form label-width="80" :model="form">
     <el-row :gutter="20">
       <el-col :span="10">
-         <el-form-item :label="'*' + $t('收件人')">
-          <el-input v-model="form.receiver_name"></el-input>
+         <el-form-item :label="$t('用户ID')">
+           <span>{{form.user_id}}</span>
+          <!-- <el-input v-model="form.receiver_name"></el-input> -->
         </el-form-item>
       </el-col>
       <el-col :span="10">
-        <el-form-item :label="'*' + $t('国家/地区')">
-          <el-select
+        <el-form-item :label="$t('国家/地区')">
+        <span>{{form.country_name}}</span>
+          <!-- <el-select
             v-model="form.country_id"
             filterable
             class="country-select"
@@ -20,75 +22,71 @@
               :label="item.name"
               :value="item.id">
             </el-option>
-          </el-select>
+          </el-select> -->
         </el-form-item>
       </el-col>
     </el-row>
     <el-row :gutter="20">
       <el-col :span="10">
-       <el-form-item :label="$t('微信号')">
-          <el-input v-model="form.wechat_id"></el-input>
+       <el-form-item :label="$t('收件人')">
+         <span>{{form.receiver_name}}</span>
+          <!-- <el-input v-model="form.wechat_id"></el-input> -->
         </el-form-item>
       </el-col>
       <el-col :span="10">
         <el-form-item :label="'*' + $t('城市')">
-          <el-input v-model="form.city"></el-input>
+          <span>{{form.city}}</span>
+          <!-- <el-input v-model="form.city"></el-input> -->
         </el-form-item>
       </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item :label="'*' + $t('街道')">
-            <el-input v-model="form.street"></el-input>
+          <el-form-item :label="('联系电话')">
+            <span>{{form.phone}}</span>
+            <!-- <el-input v-model="form.street"></el-input> -->
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item :label="$t('门牌号')">
-            <el-input v-model="form.door_no"></el-input>
+          <el-form-item :label="$t('街道')">
+            <span>{{form.street}}</span>
+            <!-- <el-input v-model="form.door_no"></el-input> -->
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="10">
-          <el-form-item :label="$t('邮编')">
-            <el-input v-model="form.postcode"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <el-form-item :label="'*' + $t('联系电话')">
-            <el-input v-model="form.phone"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="10">
-          <el-form-item :label="$t('附加地址')">
-            <el-input v-model="form.address"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <el-form-item :label="$t('区域')">
-            <el-input v-model="form.area"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="10">
-          <el-form-item :label="$t('清关编码')">
-            <el-input v-model="form.clearance_code"></el-input>
-          </el-form-item>
-        </el-col>
         <el-col :span="10">
           <el-form-item :label="$t('身份证号码')">
-            <el-input v-model="form.id_card"></el-input>
+            <span>{{form.id_card}}</span>
+            <!-- <el-input v-model="form.postcode"></el-input> -->
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="'*' + $t('门派号')">
+            <!-- <el-input v-model="form.phone"></el-input> -->
+            <span>{{form.door_no}}</span>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item :label="$t('微信号')">
+            <span>{{form.wechat_id}}</span>
+            <!-- <el-input v-model="form.address"></el-input> -->
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="$t('邮编')">
+            <span>{{form.postcode}}</span>
+            <!-- <el-input v-model="form.area"></el-input> -->
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <div slot="footer">
+    <!-- <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
       <el-button type="primary" @click="submit">{{$t('确定')}}</el-button>
-    </div>
+    </div> -->
   </el-dialog>
 </template>
 <script>
@@ -97,10 +95,11 @@ export default {
   data () {
     return {
       form: {
+        user_id: '',
         receiver_name: '',
         phone: '',
         timezone: '',
-        country_id: '',
+        country_name: '',
         door_no: '',
         city: '',
         postcode: '',
@@ -114,18 +113,19 @@ export default {
       supplierId: '',
       options: [],
       id: '',
-      userId: ''
+      name: ''
     }
   },
   methods: {
     getList () {
-      this.$request.singleAddress(this.id).then(res => {
+      this.$request.checkVipInfo(this.id).then(res => {
         if (res.ret) {
           this.form = res.data
+          this.form.usre_id = res.data.user_id
           this.form.receiver_name = res.data.receiver_name
           this.form.phone = res.data.phone
           this.form.timezone = res.data.timezone
-          this.form.country_id = res.data.country.id
+          this.form.country_name = res.data.country_name
           this.form.door_no = res.data.door_no
           this.form.city = res.data.city
           this.form.postcode = res.data.postcode
@@ -185,7 +185,7 @@ export default {
     },
     init () {
       this.getList()
-      this.searchCountry()
+      // this.searchCountry()
     }
   }
 }
@@ -194,7 +194,7 @@ export default {
 .el-autocomplete-suggestion {
   z-index: 4000 !important;
 }
-.address-edit-dialog {
+.edit-info-dialog {
   .el-dialog__header {
     background-color: #0E102A;
   }
