@@ -254,10 +254,10 @@
                 </span>
               </el-dropdown-item> -->
               <!-- 作废 -->
-              <!-- <el-dropdown-item class="item-sty">
+              <el-dropdown-item class="item-sty">
                 <span @click="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)"
                 v-if="activeName === '1' || activeName === '2' || activeName === '3'">{{$t('作废')}}</span>
-              </el-dropdown-item> -->
+              </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)">
                 <!-- 改价 -->
                 <span
