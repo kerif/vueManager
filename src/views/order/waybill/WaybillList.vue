@@ -424,7 +424,7 @@
                 </span>
               </el-dropdown-item>
               <!-- 作废 -->
-              <el-dropdown-item class="item-sty" @click.native="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name)">
+              <el-dropdown-item class="item-sty" @click.native="invalidOrder(scope.row.id, activeName, scope.row.pay_amount, scope.row.payment_type_name, scope.row.is_parent)">
                 <span v-if="activeName === '1' || activeName === '2' || activeName === '3'">{{$t('作废')}}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)">
@@ -1364,8 +1364,8 @@ export default {
       })
     },
     // 作废
-    invalidOrder (id, activeName, payAmount, paymentTypeName) {
-      dialog({ type: 'voidList', id: id, activeName: activeName, payAmount: payAmount, paymentTypeName: paymentTypeName }, () => {
+    invalidOrder (id, activeName, payAmount, paymentTypeName, parent) {
+      dialog({ type: 'voidList', id: id, activeName: activeName, payAmount: payAmount, paymentTypeName: paymentTypeName, parent: parent }, () => {
         this.getList()
         this.getCounts()
       })

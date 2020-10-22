@@ -1,6 +1,10 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('设为作废订单')" class="dialog-invalid-order" width="55%"
   @close="clear">
+  <div v-if="parent === 1" class="invalid-sty">
+    <el-checkbox v-model="ruleForm.should_invalid_packages">{{$t('是否同时作废所有包裹')}}</el-checkbox>
+  </div>
+  <div v-else>
   <h4>{{$t('选择弃件的包裹列表（勾选了用户不能再提交）')}}</h4>
   <el-table :data="voidList" class="data-list" border stripe
   @selection-change="onSelectChange">
@@ -15,6 +19,7 @@
       </template>
     </el-table-column>
   </el-table>
+  </div>
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 问题原因 -->
@@ -81,7 +86,8 @@ export default {
         invalid_reason: '',
         images: [],
         invalid_package_ids: [],
-        should_return_wechat: 0
+        should_return_wechat: 0,
+        should_invalid_packages: ''
       },
       state: '',
       tranAmount: '',
@@ -91,6 +97,8 @@ export default {
       payAmount: '',
       paymentTypeName: '',
       localization: {},
+      parent: '',
+      packages: '',
       updateProp: [
         {
           id: 0,
@@ -99,7 +107,8 @@ export default {
           id: 1,
           name: this.$t('是')
         }
-      ]
+      ],
+      should_invalid_packages: ''
     }
   },
   methods: {
@@ -130,7 +139,10 @@ export default {
       } else if (this.ruleForm.refund_amount > this.payAmount) {
         return this.$message.error(this.$t('退款金额不能大于实际支付金额'))
       }
-      this.$request.ordersInvalid(this.id, this.ruleForm).then(res => {
+      this.$request.ordersInvalid(this.id, {
+        ...this.ruleForm,
+        should_invalid_packages: Number(this.ruleForm.should_invalid_packages)
+      }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -207,7 +219,7 @@ export default {
       this.getList()
       this.paymentTypeName = this.paymentTypeName
       this.payAmount = this.payAmount
-      console.log(this.payAmount, 'payAmount')
+      console.log(this.parent, 'parent')
     }
   }
 }
@@ -294,6 +306,9 @@ export default {
     margin-top: 10px;
     color: #ccc;
     font-size: 13px;
+  }
+  .invalid-sty {
+    margin-bottom: 15px;
   }
 }
 </style>
