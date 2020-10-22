@@ -154,7 +154,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .invoice-container{
   .el-dialog__header {
     background-color: #0E102A;
@@ -174,12 +174,15 @@ export default {
     .el-scrollbar {
       width: 200px !important;
     }
-    .el-select-dropdown .el-popper {
-      width: 180px !important;
-      white-space: nowrap;/*设置不换行*/
-      overflow: hidden; /*设置隐藏*/
-      text-overflow: ellipsis;
-    }
   }
+}
+.el-select-dropdown__item.hover{
+    width: auto;
+}
+.el-select-dropdown__item {
+  width: 180px;
+  white-space: nowrap;/*设置不换行*/
+  overflow: hidden; /*设置隐藏*/
+  text-overflow: ellipsis;
 }
 </style>
