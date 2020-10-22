@@ -233,7 +233,7 @@
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent)">
                 <!-- 打包 -->
-                <span v-show="activeName === '1'">{{$t('打包')}}</span>
+                <span v-show="activeName === '1' && (scope.row.group_buying_status === 0 || scope.row.group_buying_status === 1)">{{$t('打包')}}</span>
               </el-dropdown-item>
               <!-- 加入发货单 -->
               <!-- <el-dropdown-item class="item-sty">
@@ -398,7 +398,7 @@
               <!-- 打包 -->
               <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent)">
                 <!-- 打包 -->
-                <span v-show="activeName === '1'">{{$t('打包')}}</span>
+                <span v-show="activeName === '1' && (scope.row.group_buying_status === 0 || scope.row.group_buying_status === 1)">{{$t('打包')}}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="addInvoice([scope.row.id])">
                 <!-- 加入发货单 -->
