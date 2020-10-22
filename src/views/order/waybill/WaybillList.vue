@@ -129,7 +129,7 @@
       <!-- 二级分类列表 -->
       <el-table-column width="0" type="expand">
         <template slot-scope="props">
-          <el-table :data="props.row.secondData" style="width: 80%">
+          <el-table :data="props.row.secondData" class="expand-table">
             <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
@@ -142,8 +142,8 @@
       </el-table-column>
       <el-table-column :label="$t('打包状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.group_buying_status === 0">{{$t('未打包')}}</span>
-          <span v-if="scope.row.group_buying_status === 1">{{$t('已打包')}}</span>
+          <div class="no-package" v-if="scope.row.group_buying_status === 0">{{$t('未打包')}}</div>
+          <div class="packaged" v-if="scope.row.group_buying_status === 1">{{$t('已打包')}}</div>
         </template>
       </el-table-column>
       <!-- 审核状态 -->
@@ -228,7 +228,7 @@
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)">
-                <span v-show="activeName === '2'">{{$t('编辑')}}
+                <span v-show="(activeName === '1' && scope.row.group_buying_status === 1) || activeName === '2'">{{$t('编辑')}}
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent)">
@@ -1692,6 +1692,12 @@ export default {
     color: #ff4b3d;
     margin-right: 5px;
   }
+  .no-package {
+    color:red !important;
+  }
+  .packaged {
+    color:green !important;
+  }
 }
 .dialog-input {
   width: 30% !important;
@@ -1729,6 +1735,14 @@ export default {
   // width: 100%;
   .el-table__fixed-right {
   height: 100% !important; //设置高优先，以覆盖内联样式
+  }
+}
+.expand-table {
+  width: 80%;
+}
+@media (min-width: 1550px) {
+  .expand-table {
+    width: 100%;
   }
 }
 </style>

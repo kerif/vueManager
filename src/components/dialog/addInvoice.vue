@@ -1,12 +1,12 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('加入发货单')" class="invoice-container" @close="clear">
-    <el-select v-model="invoice.sn" :placeholder="$t('请选择')">
+    <el-select v-model="invoice.sn" :placeholder="$t('请选择')" class="content-long">
       <el-option
-      v-for="item in invoiceList"
-      :title="item.remark"
-      :key="item.id"
-      :value="item.id"
-      :label="`${item.sn} ${item.destination_country}`">
+        v-for="item in invoiceList"
+        :title="item.remark"
+        :key="item.id"
+        :value="item.id"
+        :label="`${item.sn} ${item.destination_country} ${item.name}`">
       </el-option>
     </el-select>
     <el-button class="created-btn" @click="goCreated">{{$t('创建发货单')}}</el-button>
@@ -66,6 +66,9 @@ export default {
     }
   },
   methods: {
+    getName (val) {
+      console.log(val)
+    },
     // 创建发货单
     goCreated () {
       this.innerVisible = true
@@ -166,6 +169,17 @@ export default {
   }
   .created-btn {
     margin-left: 5px;
+  }
+  .content-long {
+    .el-scrollbar {
+      width: 200px !important;
+    }
+    .el-select-dropdown .el-popper {
+      width: 180px !important;
+      white-space: nowrap;/*设置不换行*/
+      overflow: hidden; /*设置隐藏*/
+      text-overflow: ellipsis;
+    }
   }
 }
 </style>

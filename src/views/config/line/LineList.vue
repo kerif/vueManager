@@ -144,6 +144,10 @@
               <el-dropdown-item class="item-sty" @click.native="copyLine(scope.row.id)">
                 <span>{{$t('复制')}}</span>
               </el-dropdown-item>
+              <!-- 拼团配置 -->
+              <el-dropdown-item class="item-sty" @click.native="groupSet(scope.row.id)">
+                <span>{{$t('拼团配置')}}</span>
+              </el-dropdown-item>
             </el-dropdown-menu>
            </el-dropdown>
           <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
@@ -227,6 +231,34 @@
         <el-button type="primary" @click="confirmCopy">{{$t('确定')}}</el-button>
       </span>
     </el-dialog>
+    <!-- 拼团配置 -->
+    <el-dialog
+      class="add-company"
+      :title="$t('拼团配置')"
+      :visible.sync="groupDialog"
+      width="45%">
+      <el-form ref="form" :model="groupData" label-width="220px">
+        <el-form-item :label="$t('是否拼团线路')">
+          <el-switch
+            v-model="groupData.is_group"
+            :active-text="$t('开')"
+            :active-value="1"
+            :inactive-value="0"
+            :inactive-text="$t('关')"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </el-form-item>
+          <!-- 此线路门槛重量 -->
+        <el-form-item :label="$t('此线路门槛重量') + localization.weight_unit">
+          <el-input class="input-sty" v-model="groupData.group_raise_threshold"></el-input>
+        </el-form-item>
+        </el-form>
+      <span slot="footer">
+        <el-button @click="groupDialog = false">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="updateGroup">{{$t('确定')}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -285,7 +317,13 @@ export default {
       copyData: {
         name: ''
       },
-      copyDialog: false
+      copyDialog: false,
+      groupDialog: false,
+      groupData: {
+        group_raise_threshold: '',
+        is_group: ''
+      },
+      groupId: ''
     }
   },
   created () {
@@ -373,6 +411,47 @@ export default {
           id: id
         } }
       )
+    },
+    // 拼团配置
+    groupSet (id) {
+      this.groupId = id
+      this.getGroup()
+      this.groupDialog = true
+    },
+    // 获取 拼团配置数据
+    getGroup () {
+      this.$request.getGroupLine(this.groupId).then(res => {
+        if (res.ret) {
+          this.groupData.is_group = res.data.is_group
+          this.groupData.group_raise_threshold = res.data.group_raise_threshold
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 更新 拼团配置
+    updateGroup () {
+      this.$request.updateGroupLine(this.groupId, this.groupData).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.groupDialog = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 复制线路
     copyLine (id) {
@@ -653,6 +732,9 @@ export default {
   .item-sty {
     text-align: center;
     color: #5b60b4;
+  }
+  .input-sty {
+    width: 40%;
   }
 }
 </style>

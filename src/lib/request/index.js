@@ -28,6 +28,14 @@ exports.resetLines = (id, status) => {
 exports.importLines = () => {
   return $form.get(`express-lines/excel-export-all`)
 }
+// 路线 获取拼团配置
+exports.getGroupLine = (id) => {
+  return $form.get(`express-lines/${id}/group-config`)
+}
+// 路线 更新 拼团配置
+exports.updateGroupLine = (id, params) => {
+  return $form.put(`express-lines/${id}/group-config`, params)
+}
 // 路线 获取额外收录信息
 exports.getFee = (id) => {
   return $form.get(`express-lines/${id}/extra-remark`)

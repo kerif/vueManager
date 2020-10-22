@@ -15,11 +15,15 @@
                 </el-option>
               </el-select>
             </el-form-item>
-        <!-- 用户组描述 -->
-        <el-form-item :label="$t('备注')">
-          <el-input type="textarea" v-model="ruleForm.remark"
-          :placeholder="$t('请输入备注')"></el-input>
-        </el-form-item>
+            <el-form-item :label="$t('名称')">
+              <el-input v-model="ruleForm.name"
+              :placeholder="$t('请输入名称，字数限制在五十个字内')"></el-input>
+            </el-form-item>
+          <!-- 用户组描述 -->
+          <el-form-item :label="$t('备注')">
+            <el-input type="textarea" v-model="ruleForm.remark"
+            :placeholder="$t('请输入备注')"></el-input>
+          </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
@@ -33,6 +37,7 @@ export default {
     return {
       ruleForm: {
         country_id: '',
+        name: '',
         remark: ''
       },
       country: [],
@@ -80,15 +85,20 @@ export default {
     clear () {
       this.ruleForm.country_id = ''
       this.ruleForm.remark = ''
+      this.ruleForm.name = ''
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .dialog-invoice {
   .el-input {
     // width: 300px !important;
     margin-left: 50px;
+    width: 250px !important;
+  }
+  .el-select {
+    width: 60%;
   }
   .el-textarea {
     width: 250px !important;
