@@ -87,6 +87,8 @@
       <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
       <!-- 目的地 -->
       <el-table-column :label="$t('目的地')" prop="destination_country"></el-table-column>
+      <!-- 发货单名称 -->
+      <el-table-column :label="$t('发货单名称')" prop="name"></el-table-column>
       <!-- 状态 -->
       <el-table-column :label="$t('状态')" prop="status_name">
         <!-- <template slot-scope="scope">

@@ -19,17 +19,21 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
         label-position="top">
             <!-- 员工组中文名 -->
-                <el-form-item :label="$t('目的地')" prop="country_id">
-                    <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择目的地')"
-                    filterable>
-                    <el-option
-                      v-for="item in country"
-                      :key="item.id"
-                      :label="item.cn_name"
-                      :value="item.id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
+            <el-form-item :label="$t('目的地')" prop="country_id">
+                <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择目的地')"
+                filterable>
+                <el-option
+                  v-for="item in country"
+                  :key="item.id"
+                  :label="item.cn_name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('名称')">
+              <el-input v-model="ruleForm.name"
+              :placeholder="$t('请输入名称，字数限制在五十个字内')"></el-input>
+            </el-form-item>
             <!-- 用户组描述 -->
             <el-form-item :label="$t('备注')">
               <el-input type="textarea" v-model="ruleForm.remark"
@@ -55,6 +59,7 @@ export default {
       },
       ruleForm: {
         country_id: '',
+        name: '',
         remark: ''
       },
       country: [],
@@ -144,6 +149,7 @@ export default {
     },
     clear () {
       this.ruleForm.country_id = ''
+      this.ruleForm.name = ''
       this.ruleForm.remark = ''
       this.invoice.sn = ''
     },

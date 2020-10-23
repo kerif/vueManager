@@ -149,7 +149,7 @@
       <!-- 审核状态 -->
       <el-table-column :label="$t('审核状态')" v-if="activeName === '2'">
         <template slot-scope="scope">
-          <!-- <span v-if="scope.row.status === 11">待审核</span> -->
+          <span v-if="scope.row.status === 11">{{$t('待审核')}}</span>
           <router-link v-if="scope.row.status === 12"
           class="chooseOrder"
           :to="`/order/review/?id=${scope.row.id}`">
@@ -346,8 +346,10 @@
       <!-- 支付方式 -->
       <el-table-column :label="$t('支付方式')" v-if="activeName === '3'|| activeName === '4' || activeName === '5'">
         <template slot-scope="scope">
-          <span class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">{{scope.row.payment_type_name}}</span>
-          <span v-else>{{scope.row.payment_type_name}}</span>
+          <div class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">{{scope.row.payment_type_name}}
+          <p v-if="scope.row.on_delivery_status === 2">({{$t('已付款')}})</p>
+          </div>
+          <div v-else>{{scope.row.payment_type_name}}</div>
         </template>
       </el-table-column>
       <!-- 抵用券金额 -->

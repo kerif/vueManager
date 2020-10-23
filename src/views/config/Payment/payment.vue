@@ -217,6 +217,18 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
+                 <el-form-item>
+                  <span class="no-warehouse">{{$t('未入库丢包预警')}}</span>
+                  <el-tooltip class="item" effect="dark" :content="$t('开启后，若预报包裹超过设定时间未入库，将会在包裹列表进行提示，表示包裹有丢失风险')" placement="top">
+                  <span class="el-icon-question icon-question"></span>
+                  </el-tooltip>
+                  <el-radio-group v-model="basic.package_warning" @change="changeBasic" class="radio-sty">
+                    <el-radio :label="5">{{$t('5天')}}</el-radio>
+                    <el-radio :label="7">{{$t('7天')}}</el-radio>
+                    <el-radio :label="10">{{$t('10天')}}</el-radio>
+                    <el-radio :label="0">{{$t('不开启')}}</el-radio>
+                  </el-radio-group>
+                </el-form-item>
                 <el-form-item :label="$t('物品属性：')">
                   <el-tag
                     :key="item.id"
@@ -1072,6 +1084,24 @@ export default {
       currencyList: [],
       lengthList: [],
       rateList: [],
+      noWarehouse: [
+        {
+          id: 5,
+          name: this.$t('5天')
+        },
+        {
+          id: 7,
+          name: this.$t('7天')
+        },
+        {
+          id: 10,
+          name: this.$t('10天')
+        },
+        {
+          id: 0,
+          name: this.$t('不开启')
+        }
+      ],
       setForm: {
         website_name: '',
         default_img: [],
@@ -1981,13 +2011,15 @@ export default {
         if (res.ret) {
           this.basic.size = res.data.size
           this.basic.location = res.data.location
+          this.basic.package_warning = res.data.package_warning
         }
       })
     },
     changeBasic (val) {
       this.$request.updateBasic({
         size: this.basic.size,
-        location: this.basic.location
+        location: this.basic.location,
+        package_warning: this.basic.package_warning
       }).then(res => {
         if (res.ret) {
           this.$notify({
@@ -3098,6 +3130,12 @@ export default {
     margin-left: 10px;
     margin-right: 10px;
     width: 50%;
+  }
+  .no-warehouse {
+    color: #606266;
+  }
+  .radio-sty {
+    margin-left: 20px;
   }
 }
 </style>
