@@ -1148,7 +1148,8 @@ export default {
       },
       basic: {
         size: '',
-        location: ''
+        location: '',
+        package_warning: 0
       },
       rules: {
         kd100_app_id: [
