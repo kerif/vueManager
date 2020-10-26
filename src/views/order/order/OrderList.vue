@@ -63,6 +63,8 @@
           </el-option>
         </el-select>
       </div>
+      <!-- 包裹预警 -->
+    <el-checkbox v-if="activeName === '0' || activeName === '1'" class="dialogSty" v-model="is_warning" @change="onWarning">{{$t('包裹预警')}}</el-checkbox>
     <div class="import-list" v-if="activeName === '0' || activeName === '1'|| activeName === '2'|| activeName === '3'|| activeName === '4'|| activeName === '5'">
      <el-button @click="uploadList(status)">{{$t('导出清单')}}</el-button>
      <el-button @click="importOrder">{{$t('批量入库')}}</el-button>
@@ -94,13 +96,14 @@
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')" prop="express_num">
       </el-table-column>
-      <el-table-column :label="$t('状态')">
+      <el-table-column :label="$t('状态')" width="160">
         <template slot-scope="scope">
           <span v-if="scope.row.status === 1">{{$t('未入库')}}</span>
           <span v-if="scope.row.status === 2">{{$t('已入库')}}</span>
           <span v-if="scope.row.status === 3 || scope.row.status === 4">{{$t('已集包')}}</span>
           <span v-if="scope.row.status === 5">{{$t('已发货')}}</span>
           <span v-if="scope.row.status === 6">{{$t('已收货')}}</span>
+          <span class="warning-sty" v-if="scope.row.is_warning === 1">（{{$t('丢包预警')}}）</span>
         </template>
       </el-table-column>
       <!-- 物品名称 -->
@@ -284,6 +287,7 @@ export default {
       status: 1,
       tableLoading: false,
       agent_name: '',
+      is_warning: '',
       agentData: [],
       localization: {},
       ownerData: [],
@@ -364,7 +368,8 @@ export default {
         warehouse: this.agent_name,
         status: this.status,
         value_start: this.filterForm.start,
-        value_end: this.filterForm.end
+        value_end: this.filterForm.end,
+        is_warning: Number(this.is_warning)
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 已入库
@@ -597,10 +602,14 @@ export default {
       this.page_params.page = 1
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
-      // if (this.activeName === '3') {
-      //   // this.getDiscard()
-      // } else {
-      // }
+      // this.getCounts()
+    },
+    onWarning () {
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('is_warning', Number(this.is_warning))
+      this.getList()
+      // this.getCounts()
+      // console.log(Number(this.is_warning), 'is_warning')
     },
     // 打印标签
     getLabel (id) {
@@ -845,6 +854,9 @@ export default {
   }
   .input-sty {
     width: 30%;
+  }
+  .warning-sty {
+    color: red;
   }
 }
 </style>
