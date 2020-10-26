@@ -268,10 +268,11 @@
                 <span size="small" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'">{{$t('订单日志')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="payed(scope.row.id)">
+              <!-- 已付款 -->
+              <!-- <el-dropdown-item class="item-sty" @click.native="payed(scope.row.id)">
                 <span size="small" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1">{{$t('已付款')}}
                 </span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <el-dropdown-item class="item-sty" @click.native="editCompany(scope.row.id)">
                 <!-- 修改物流信息 -->
                 <span size="small" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
@@ -439,10 +440,11 @@
                 <span size="small" v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5'">{{$t('订单日志')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="payed(scope.row.id)">
+              <!-- 已付款 -->
+              <!-- <el-dropdown-item class="item-sty" @click.native="payed(scope.row.id)">
                 <span size="small" v-if="(activeName === '3' ||activeName === '4' || activeName === '5') && scope.row.on_delivery_status === 1">{{$t('已付款')}}
                 </span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <el-dropdown-item class="item-sty" @click.native="editCompany(scope.row.id)">
                 <!-- 修改物流信息 -->
                 <span size="small" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
