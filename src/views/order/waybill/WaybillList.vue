@@ -1499,6 +1499,7 @@ export default {
       this.getList()
       this.getCounts()
       this.expands = []
+      this.selectIDs = []
       // if (this.expands.find(item => item === this.secondExpands.id)) {
       // }
     },
