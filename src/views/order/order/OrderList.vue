@@ -64,7 +64,7 @@
         </el-select>
       </div>
       <!-- 包裹预警 -->
-    <!-- <el-checkbox v-if="activeName === '0' || activeName === '1'" class="dialogSty" v-model="is_warning" @change="onWarning">{{$t('包裹预警')}}</el-checkbox> -->
+    <el-checkbox v-if="activeName === '0' || activeName === '1'" class="dialogSty" v-model="is_warning" @change="onWarning">{{$t('包裹预警')}}</el-checkbox>
     <div class="import-list" v-if="activeName === '0' || activeName === '1'|| activeName === '2'|| activeName === '3'|| activeName === '4'|| activeName === '5'">
      <el-button @click="uploadList(status)">{{$t('导出清单')}}</el-button>
      <el-button @click="importOrder">{{$t('批量入库')}}</el-button>
@@ -96,7 +96,7 @@
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')" prop="express_num">
       </el-table-column>
-      <el-table-column :label="$t('状态')">
+      <el-table-column :label="$t('状态')" width="160">
         <!-- width="160" -->
         <template slot-scope="scope">
           <span v-if="scope.row.status === 1">{{$t('未入库')}}</span>
@@ -104,7 +104,7 @@
           <span v-if="scope.row.status === 3 || scope.row.status === 4">{{$t('已集包')}}</span>
           <span v-if="scope.row.status === 5">{{$t('已发货')}}</span>
           <span v-if="scope.row.status === 6">{{$t('已收货')}}</span>
-          <!-- <span class="warning-sty" v-if="scope.row.is_warning === 1">（{{$t('丢包预警')}}）</span> -->
+          <span class="warning-sty" v-if="scope.row.is_warning === 1">（{{$t('丢包预警')}}）</span>
         </template>
       </el-table-column>
       <!-- 物品名称 -->

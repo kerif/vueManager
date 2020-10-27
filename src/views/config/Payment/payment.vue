@@ -218,7 +218,7 @@
                   </el-select>
                 </el-form-item>
                 <!-- 未入库丢包预警 -->
-                <!-- <el-form-item>
+                <el-form-item>
                   <span class="no-warehouse">{{$t('未入库丢包预警')}}</span>
                   <el-tooltip class="item" effect="dark" :content="$t('开启后，若预报包裹超过设定时间未入库，将会在包裹列表进行提示，表示包裹有丢失风险')" placement="top">
                   <span class="el-icon-question icon-question"></span>
@@ -229,7 +229,7 @@
                     <el-radio :label="10">{{$t('10天')}}</el-radio>
                     <el-radio :label="0">{{$t('不开启')}}</el-radio>
                   </el-radio-group>
-                </el-form-item> -->
+                </el-form-item>
                 <el-form-item :label="$t('物品属性：')">
                   <el-tag
                     :key="item.id"
