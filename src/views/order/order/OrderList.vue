@@ -360,7 +360,7 @@ export default {
       if (this.activeName === '6') {
         return this.getDiscard()
       }
-      // console.log('我没有执行下一步')
+      console.log(this.is_warning, '我没有执行下一步')
       this.tableLoading = true
       this.oderData = []
       let params = {
@@ -370,7 +370,7 @@ export default {
         status: this.status,
         value_start: this.filterForm.start,
         value_end: this.filterForm.end,
-        is_warning: Number(this.is_warning)
+        is_warning: this.is_warning === true ? 1 : ''
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 已入库
@@ -606,8 +606,10 @@ export default {
       // this.getCounts()
     },
     onWarning () {
+      console.log(this.is_warning, 'his.is_warning')
+      const warning = this.is_warning === 'true' ? 1 : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('is_warning', Number(this.is_warning))
+      this.page_params.handleQueryChange('is_warning', warning)
       this.getList()
       // this.getCounts()
       // console.log(Number(this.is_warning), 'is_warning')

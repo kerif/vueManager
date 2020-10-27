@@ -74,6 +74,7 @@ import columnLang from './columnLang.vue'
 import alipay from './alipay.vue'
 import addressEdit from './addressEdit.vue'
 import editInfo from './editVipInfo.vue'
+import notifyOrder from './notifyOder.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -148,6 +149,7 @@ const ColumnLangController = Vue.extend(columnLang)
 const AlipayController = Vue.extend(alipay)
 const AddressEditController = Vue.extend(addressEdit)
 const EditVipInfoController = Vue.extend(editInfo)
+const NotifyOrderController = Vue.extend(notifyOrder)
 
 const mixin = {
   data () {
@@ -663,6 +665,13 @@ function initInstance (type) {
     // 客户 查看个人信息
     case 'editInfo':
       instance = new EditVipInfoController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 订单 批量发送通知
+    case 'notifyOrder':
+      instance = new NotifyOrderController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

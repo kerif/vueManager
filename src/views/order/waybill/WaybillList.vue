@@ -1147,30 +1147,38 @@ export default {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
-        confirmButtonText: this.$t('确定'),
-        cancelButtonText: this.$t('取消'),
-        type: 'warning'
-      }).then(() => {
-        this.$request.sendingNotify({
-          ids: this.selectIDs,
-          type: this.activeName === '2' ? 2 : 3
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
+      if (this.activeName === '2') {
+        this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }).then(() => {
+          this.$request.sendingNotify({
+            ids: this.selectIDs,
+            // type: this.activeName === '2' ? 2 : 3
+            type: 2
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
         })
-      })
+      } else if (this.activeName === '4') {
+        dialog({ type: 'notifyOrder', ids: this.selectIDs }, () => {
+          this.getList()
+          this.selectIDs = []
+        })
+      }
     },
     // 打印标签
     getLabel (id) {
