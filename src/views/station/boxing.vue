@@ -887,7 +887,8 @@ export default {
 .poster-left {
   width:300px;
   height: 580px;
-  overflow: hidden;
+  overflow: auto;
+  // overflow: hidden;
   vertical-align: top;
   display: inline-block;
   text-align: center;
