@@ -627,9 +627,9 @@
         <el-table-column
         :label="$t('实际尺寸') + this.localization.length_unit" width="200px">
         <template slot-scope="scope">
-          <el-input class="dialog-input" :placeholder="$t('长')" v-model="scope.row.length"></el-input>
-          <el-input class="dialog-input" :placeholder="$t('宽')" v-model="scope.row.width"></el-input>
-          <el-input class="dialog-input" :placeholder="$t('高')" v-model="scope.row.height"></el-input>
+          <el-input class="dialog-input" :placeholder="$t('长')" v-model="scope.row.except_dimension.length"></el-input>
+          <el-input class="dialog-input" :placeholder="$t('宽')" v-model="scope.row.except_dimension.width"></el-input>
+          <el-input class="dialog-input" :placeholder="$t('高')" v-model="scope.row.except_dimension.height"></el-input>
         </template>
         </el-table-column>
         <!-- 操作 -->
@@ -1612,9 +1612,9 @@ export default {
         remark: this.batch.remark,
         order: this.boxDialogData.map(item => {
           return {
-            length: item.length,
-            height: item.height,
-            width: item.width,
+            length: item.except_dimension.length,
+            height: item.except_dimension.height,
+            width: item.except_dimension.width,
             weight: item.actual_weight,
             id: item.id
           }

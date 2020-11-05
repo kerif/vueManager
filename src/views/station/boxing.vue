@@ -47,7 +47,34 @@
             <div v-if="this.radio === 1">
             <div class="express-left">
               <p>{{$t('收件地址')}}</p>
-                <div v-if="this.userData && this.userData.user_id">
+            </div>
+              <el-table :data="addressList" stripe border class="data-list"
+        v-loading="tableLoading" max-height="150">
+                <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+                <el-table-column :label="$t('选择包裹数')" prop="package_count"></el-table-column>
+                <el-table-column :label="$t('默认收货信息')">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.address.receiver_name}}</span>&nbsp;
+                    <span>{{scope.row.address.timezone}}</span>
+                    <span v-if="scope.row.address.timezone">-</span>
+                    <span>{{scope.row.address.phone}}</span>&nbsp;
+                    <span>{{scope.row.address.country_name}}</span>&nbsp;
+                    <span>{{scope.row.address.postcode}}</span>&nbsp;
+                    <span>{{scope.row.address.city}}</span>&nbsp;
+                    <span>{{scope.row.address.street}}</span>&nbsp;
+                    <span>{{scope.row.address.door_no}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('操作')">
+                  <template slot-scope="scope">
+                    <!-- 更改地址 -->
+                    <el-button class="btn-green" @click="changeAddress(scope.row.user_id, scope.row, addressList)">{{$t('更改地址')}}</el-button>
+                    <!-- 删除 -->
+                    <el-button class="btn-light-red" @click="deleteAddress(scope.$index, addressList)">{{$t('删除')}}</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+                <!-- <div v-if="this.userData && this.userData.user_id">
                   <p>{{userData.receiver_name}}</p>
                   <p>{{userData.phone}}</p>
                   <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.city}}
@@ -58,11 +85,10 @@
                   <p>{{userData.contact_info}}</p>
                   <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.address}}
                   </p>
-                </div>
-            </div>
-              <div class="express-left express-right">
+                </div> -->
+              <!-- <div class="express-left express-right">
                 <p class="express-sty" @click="chooseUser">{{$t('请选择')}} ></p>
-              </div>
+              </div> -->
               </div>
               <div class="line-sty"></div>
               <div class="express-left">
@@ -219,7 +245,7 @@
     </div> -->
     <div slot="footer">
       <el-button @click="boxDialog = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button type="primary" @click="selectAddress">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
   <!-- 新建收货地址 -->
@@ -447,7 +473,12 @@ export default {
         city: [
           { required: true, message: this.$t('请输入城市'), trigger: 'blur' }
         ]
-      }
+      },
+      addressList: [],
+      tableLoading: false,
+      counts: '',
+      clientId: '',
+      addressData: []
     }
   },
   created () {
@@ -456,11 +487,13 @@ export default {
       this.getList()
       this.getRadio()
       this.getInsurance()
+      this.getRecipeAddress()
     } else if (this.$route.query.packageId) {
       console.log(this.$route.query.packageId, 'packageId')
       this.getBatch()
       this.radio = 2
       this.packageId = this.$route.query.packageId
+      this.getRecipeAddress()
     }
   },
   methods: {
@@ -524,6 +557,79 @@ export default {
           })
         }
       })
+    },
+    // 获取收件地址列表数据
+    getRecipeAddress () {
+      this.tableLoading = true
+      this.$request.recipeAddress({
+        package_ids: this.packageId
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.addressList = res.data
+          console.log(this.addressList, 'this.addressList')
+        } else {
+          this.$notify({
+            title: this.$t('获取失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 表格删除
+    deleteAddress (index, rows) {
+      rows.splice(index, 1)
+    },
+    // 更改地址
+    changeAddress (userId, counts, addressList) {
+      console.log(addressList, 'addressList')
+      this.clientId = userId // 客户ID
+      this.counts = counts // 选择包果数
+      this.addressData = addressList // 收件地址数据
+      this.boxDialog = true
+    },
+    // 确定 更改地址
+    selectAddress (val) {
+      if (!this.chooseId) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      // chooseId
+      // let params = [
+      //   {
+      //     address_id: this.chooseId,
+      //     package_count: this.counts,
+      //     user_id: this.clientId
+      //   }
+      // ]
+      let params = this.addressList.map(item => {
+        // const { userId, packageCount, addressId } = item
+        if (item.user_id === this.counts.user_id) {
+          return { address_id: this.chooseId, package_count: item.package_count, user_id: item.user_id }
+        }
+        return { user_id: item.user_id, package_count: item.package_count, address_id: item.address.id }
+      })
+      console.log(params, 'params')
+      this.$request.confirmChangeAddress(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.boxDialog = false
+          this.getRecipeAddress() // 重新拉取收件地址
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+        this.boxDialog = false
+      })
+      // this.userData = this.user
+      this.boxDialog = false
     },
     // 获取快递方式
     getExpress () {
@@ -589,7 +695,10 @@ export default {
         if (res.ret) {
           this.stationsData = res.data
           this.selfData = res.data[0]
-          this.box.address_id = this.selfData.id
+          console.log(this.selfData, 'this.selfData.id')
+          if (this.selfData) {
+            this.box.address_id = this.selfData.id
+          }
         }
       })
     },
@@ -744,14 +853,6 @@ export default {
       console.log(this.userData, 'this.userData1111')
       this.boxDialog = false
       this.selfDialog = false
-    },
-    confirm (val) {
-      if (!this.chooseId) {
-        return this.$message.error(this.$t('请选择'))
-      }
-      console.log(this.user, 'user')
-      this.userData = this.user
-      this.boxDialog = false
     },
     // 收件地址
     onRowChange (row) {

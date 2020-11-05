@@ -659,9 +659,28 @@ export default {
     },
     // 导出清单
     uploadList (val) {
-      this.$request.uploadPackage({
-        status: val
-      }).then(res => {
+      let params = {
+        status: val,
+        warehouse: this.agent_name,
+        // status: this.status,
+        value_start: this.filterForm.start,
+        value_end: this.filterForm.end,
+        is_warning: this.is_warning === true ? 1 : ''
+      }
+      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // 已入库
+      if (this.activeName === '2') {
+        // 提交时间
+        this.begin_date && (params.begin_date = this.begin_date)
+        this.end_date && (params.end_date = this.end_date)
+        // 称重时间
+        this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
+        this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
+      } else { // 未入库
+        this.begin_date && (params.begin_date = this.begin_date)
+        this.end_date && (params.end_date = this.end_date)
+      }
+      this.$request.uploadPackage(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           window.open(this.urlExcel)

@@ -366,6 +366,14 @@ exports.updateAutoPick = (id, params) => {
 exports.selfData = () => {
   return $form.get(`package-packs/stations`)
 }
+// 包裹快速合箱 获取收件地址列表
+exports.recipeAddress = (params) => {
+  return $form.post('package-packs/user-first-address', params)
+}
+// 包裹快速合箱 确认更改 收件地址
+exports.confirmChangeAddress = (params) => {
+  return $json.post('package-packs/user-specific-address', params)
+}
 // 包裹快速合箱 按预报批次集包
 exports.groupBy = (params) => {
   return $form.get('package-packs/packages-group-by-batch', { params })
