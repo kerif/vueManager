@@ -49,20 +49,20 @@
               <p>{{$t('收件地址')}}</p>
             </div>
               <el-table :data="addressList" stripe border class="data-list"
-        v-loading="tableLoading" max-height="150">
+                v-loading="tableLoading">
                 <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
                 <el-table-column :label="$t('选择包裹数')" prop="package_count"></el-table-column>
                 <el-table-column :label="$t('默认收货信息')">
                   <template slot-scope="scope">
-                    <span>{{scope.row.address.receiver_name}}</span>&nbsp;
-                    <span>{{scope.row.address.timezone}}</span>
-                    <span v-if="scope.row.address.timezone">-</span>
-                    <span>{{scope.row.address.phone}}</span>&nbsp;
-                    <span>{{scope.row.address.country_name}}</span>&nbsp;
-                    <span>{{scope.row.address.postcode}}</span>&nbsp;
-                    <span>{{scope.row.address.city}}</span>&nbsp;
-                    <span>{{scope.row.address.street}}</span>&nbsp;
-                    <span>{{scope.row.address.door_no}}</span>
+                    <span>{{scope.row.address && scope.row.address.receiver_name}}</span>&nbsp;
+                    <span>{{scope.row.address && scope.row.address.timezone}}</span>
+                    <span v-if="scope.row.address && scope.row.address.timezone">-</span>
+                    <span>{{scope.row.address && scope.row.address.phone}}</span>&nbsp;
+                    <span>{{scope.row.address && scope.row.address.country_name}}</span>&nbsp;
+                    <span>{{scope.row.address && scope.row.address.postcode}}</span>&nbsp;
+                    <span>{{scope.row.address && scope.row.address.city}}</span>&nbsp;
+                    <span>{{scope.row.address && scope.row.address.street}}</span>&nbsp;
+                    <span>{{scope.row.address && scope.row.address.door_no}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('操作')">
@@ -817,12 +817,22 @@ export default {
       if (this.radio === 1 && !this.userData) {
         return this.$message.error('请选择收件地址')
       }
-      console.log(this.box.address_id, 'address_id')
-      console.log(this.box.add_service, 'box.add_service')
+      let params = this.addressList.map(item => {
+        console.log(item.address, 'item111')
+        return {
+          user_id: item.user_id,
+          address_id: item.address ? item.address.id : ''
+        }
+      })
+      console.log(params, 'params111')
+      // console.log(this.box.address_id, 'address_id')
+      // console.log(this.box.add_service, 'box.add_service')
       this.$request.savePacks({
         ...this.box,
+        address_id: this.radio === 2 ? this.box.address_id : '',
+        address: this.radio === 1 ? params : '',
         package_ids: this.packageId,
-        address_type: this.radio === 2 ? 2 : '',
+        address_type: this.radio === 2 ? 2 : 1,
         batch_mode: this.$route.query.packageId ? 1 : '',
         // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
         type: this.radio === 2 ? 2 : ''
@@ -1008,6 +1018,7 @@ export default {
   background-color: #fff;
   padding:15px;
   height: 880px;
+  overflow: auto;
   box-sizing: border-box;
 }
 </style>

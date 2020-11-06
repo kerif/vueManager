@@ -117,6 +117,9 @@
         <div class="import-list" v-if="activeName === '0' || activeName === '1'|| activeName === '2'|| activeName === '3'|| activeName === '4'|| activeName === '5'">
           <el-button @click="goFilter">{{$t('筛选')}}</el-button>
         </div>
+        <div class="import-list">
+          <el-button @click="uploadList(status)">{{$t('导出清单')}}</el-button>
+        </div>
       <!-- </el-col> -->
     </search-group>
     <el-table row-key="id" :expand-row-keys="expands" class="data-list" border stripe
@@ -956,6 +959,49 @@ export default {
       }
       this.getList()
       this.dialogFilter = false
+    },
+    // 导出清单
+    uploadList (val) {
+      console.log(val, 'val')
+      let params = {
+        page: this.page_params.page,
+        size: this.page_params.size,
+        agent: this.agent_name,
+        payment_type: this.payment_type,
+        express_line_id: this.express_line_id,
+        pay_delivery: this.pay_delivery,
+        status: val,
+        value_start: this.filterForm.start,
+        value_end: this.filterForm.end
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // 提交时间
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      // 拣货时间
+      this.packed_begin_date && (params.packed_begin_date = this.packed_begin_date)
+      this.packed_end_date && (params.packed_end_date = this.packed_end_date)
+      // 签收时间
+      this.updated_begin_date && (params.updated_begin_date = this.updated_begin_date)
+      this.updated_end_date && (params.updated_end_date = this.updated_end_date)
+      console.log(params, 'params1111')
+      this.$request.orderExport(params).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     goMatch () {
       this.page_params.page = 1

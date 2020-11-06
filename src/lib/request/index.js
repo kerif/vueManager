@@ -1918,6 +1918,10 @@ exports.uploadExcel = (ids) => {
 exports.uploadOrder = (ids) => {
   return $form.post('orders/invoices', ids)
 }
+// 订单列表 导出清单
+exports.orderExport = (params) => {
+  return $form.get('orders/export', { params })
+}
 // 发货单 详情批量导出发货单
 exports.uploadShipmentLabel = (id, ids) => {
   return $form.post(`shipments/${id}/order-shipment-label`, ids)
