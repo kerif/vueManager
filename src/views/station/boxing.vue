@@ -622,7 +622,8 @@ export default {
             message: res.msg
           })
           this.boxDialog = false
-          this.getRecipeAddress() // 重新拉取收件地址
+          this.addressList = res.data
+          // this.getRecipeAddress() // 重新拉取收件地址
         } else {
           this.$notify({
             title: this.$t('操作失败'),
