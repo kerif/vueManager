@@ -70,7 +70,7 @@
                     <!-- 更改地址 -->
                     <el-button class="btn-green" @click="changeAddress(scope.row.user_id, scope.row, addressList)">{{$t('更改地址')}}</el-button>
                     <!-- 删除 -->
-                    <el-button class="btn-light-red" @click="deleteAddress(scope.$index, addressList)">{{$t('删除')}}</el-button>
+                    <el-button class="btn-light-red" @click="deleteAddress(scope.$index, addressList, scope.row.user_id)">{{$t('删除')}}</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -190,7 +190,7 @@
         </div>
     </div>
     <!-- 收件地址弹窗 -->
-  <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
+  <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clearAddress">
     <div class="add-box" width="80%">
       <el-button @click="goCreated">{{$t('新增')}}</el-button>
     </div>
@@ -578,8 +578,11 @@ export default {
       })
     },
     // 表格删除
-    deleteAddress (index, rows) {
-      rows.splice(index, 1)
+    deleteAddress (index, rows, userId) {
+      this.addressList = this.addressList.filter(item => item.user_id !== userId)
+      this.packageData = this.packageData.filter(item => item.user_id !== userId)
+      this.packageId = this.packageData.map(item => item.id)
+      console.log(this.packageId, 'this.packageId')
     },
     // 更改地址
     changeAddress (userId, counts, addressList) {
@@ -588,6 +591,7 @@ export default {
       this.counts = counts // 选择包果数
       this.addressData = addressList // 收件地址数据
       this.boxDialog = true
+      this.getAddressDialog()
     },
     // 确定 更改地址
     selectAddress (val) {
@@ -727,7 +731,7 @@ export default {
     // 获取地址数据
     getAddressDialog () {
       this.$request.previewAddress({
-        user_id: this.userId
+        user_id: this.clientId
       }).then(res => {
         if (res.ret) {
           this.tableData = res.data
@@ -814,9 +818,9 @@ export default {
     },
     // 提交
     saveBoxing () {
-      if (this.radio === 1 && !this.userData) {
-        return this.$message.error('请选择收件地址')
-      }
+      // if (this.radio === 1 && !this.userData) {
+      //   return this.$message.error('请选择收件地址')
+      // }
       let params = this.addressList.map(item => {
         console.log(item.address, 'item111')
         return {
@@ -899,6 +903,10 @@ export default {
     clear () {
       this.chooseId = ''
       this.user = {}
+    },
+    clearAddress () {
+      this.clientId = ''
+      this.chooseId = ''
     }
   }
 }
