@@ -148,6 +148,10 @@
               <el-dropdown-item class="item-sty" @click.native="groupSet(scope.row.id)">
                 <span>{{$t('拼团配置')}}</span>
               </el-dropdown-item>
+              <!-- 删除 -->
+              <el-dropdown-item class="item-sty" @click.native="deleteLine(scope.row.id)">
+                <span>{{$t('删除')}}</span>
+              </el-dropdown-item>
             </el-dropdown-menu>
            </el-dropdown>
           <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
@@ -431,6 +435,31 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    // 删除
+    deleteLine (id) {
+      this.$confirm(this.$t('您真的要删除此路线吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteLines(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 更新 拼团配置

@@ -131,7 +131,7 @@ export default {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
     },
-    // 删除单条转账支付
+    // 删除
     deleteWarehouse (id) {
       this.$confirm(this.$t('您真的要删除此仓库吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),

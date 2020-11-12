@@ -182,6 +182,16 @@
             </div>
         </div>
         <div class="line-sty"></div>
+        <div class="recipient-address">
+        <h3>{{$t('批量集包方式')}}</h3>
+          <div class="express-left">
+              <el-radio-group v-model="changeUpdate" class="radio-select-sty">
+                <el-radio :label="1" class="radio-main">{{$t('按客户ID集包')}}</el-radio>
+                <el-radio :label="2" class="radio-main">{{$t('每个包裹单独集包')}}</el-radio>
+              </el-radio-group>
+            </div>
+        </div>
+        <div class="line-sty"></div>
         <div class="save-main">
           <el-button type="primary" class="sava-btn" :loading="$store.state. btnLoading" @click="saveBoxing">{{$t('提交')}}</el-button>
           <p v-if="this.box.payment_mode === 1" class="save-tips">{{$t('在仓库打包完成后再进行支付')}}</p>
@@ -478,7 +488,8 @@ export default {
       tableLoading: false,
       counts: '',
       clientId: '',
-      addressData: []
+      addressData: [],
+      changeUpdate: 1
     }
   },
   created () {
@@ -832,31 +843,59 @@ export default {
       console.log(params, 'params111')
       // console.log(this.box.address_id, 'address_id')
       // console.log(this.box.add_service, 'box.add_service')
-      this.$request.savePacks({
-        ...this.box,
-        address_id: this.radio === 2 ? this.box.address_id : '',
-        address: this.radio === 1 ? params : '',
-        package_ids: this.packageId,
-        address_type: this.radio === 2 ? 2 : 1,
-        batch_mode: this.$route.query.packageId ? 1 : '',
-        // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
-        type: this.radio === 2 ? 2 : ''
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('保存成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.$router.push({ name: 'wayBillList' })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      if (this.changeUpdate === 1) {
+        this.$request.savePacksUser({
+          ...this.box,
+          address_id: this.radio === 2 ? this.box.address_id : '',
+          address: this.radio === 1 ? params : '',
+          package_ids: this.packageId,
+          address_type: this.radio === 2 ? 2 : 1,
+          batch_mode: this.$route.query.packageId ? 1 : '',
+          // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
+          type: this.radio === 2 ? 2 : ''
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('保存成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.$router.push({ name: 'wayBillList' })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.changeUpdate === 2) {
+        this.$request.savePacksAlone({
+          ...this.box,
+          address_id: this.radio === 2 ? this.box.address_id : '',
+          address: this.radio === 1 ? params : '',
+          package_ids: this.packageId,
+          address_type: this.radio === 2 ? 2 : 1,
+          batch_mode: this.$route.query.packageId ? 1 : '',
+          // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
+          type: this.radio === 2 ? 2 : ''
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('保存成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.$router.push({ name: 'wayBillList' })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     },
     // 收件地址 自提确认
     realPick () {
@@ -973,7 +1012,7 @@ export default {
     padding-left: 10px;
   }
   .radio-select-sty {
-    width: 200px;
+    // width: 200px;
     margin-top: 20px;
     .radio-main {
       margin-bottom: 10px;
@@ -984,7 +1023,7 @@ export default {
     margin-top: 20px;
   }
   .save-main {
-    text-align: right;
+    text-align: left;
   }
   .save-tips {
     color: #b6b6b6;

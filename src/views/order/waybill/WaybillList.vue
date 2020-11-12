@@ -579,7 +579,7 @@
     <!-- 一键批量打包 -->
   <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" @close="clear"  width="80%">
     <div class="add-box">
-      <el-tooltip :content="$t('“一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹重量/尺寸直接相加，数据误差较大时请手动更改”')" placement="top">
+      <el-tooltip :content="$t('一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹重量/尺寸直接相加，数据误差较大时请手动更改')" placement="top">
         <el-button @click="changeWeight">{{$t('一键将预计重量改成实际重量')}}</el-button>
       </el-tooltip>
       <el-button @click="goCreated">{{$t('批量改支付方式')}}</el-button>

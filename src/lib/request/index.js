@@ -16,6 +16,10 @@ exports.logout = () => $form.post('logout')
 exports.getLines = (params) => {
   return $form.get('express-lines', { params })
 }
+// 配置 路线 删除
+exports.deleteLines = (id) => {
+  return $form.delete(`express-lines/${id}`)
+}
 // 获取高级配置
 // exports.getSorting = (id) => {
 //   return $form.get(`orders/${id}/re-sorting`)
@@ -1890,9 +1894,13 @@ exports.servicesPackage = () => {
 exports.packsConfig = () => {
   return $form.get('package-packs/insurance-config')
 }
-// 发起集包 保存
-exports.savePacks = (params) => {
+// 发起集包 保存 按客户ID集包
+exports.savePacksUser = (params) => {
   return $form.post('package-packs/packing', params)
+}
+// 发起集包 保存 按包裹单独集包
+exports.savePacksAlone = (params) => {
+  return $form.post('package-packs/single-package-order', params)
 }
 // 获取自提点地址
 exports.lineStations = (id) => {
