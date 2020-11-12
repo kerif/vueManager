@@ -187,7 +187,7 @@
           <div class="express-left">
               <el-radio-group v-model="changeUpdate" class="radio-select-sty">
                 <el-radio :label="1" class="radio-main">{{$t('按客户ID集包')}}</el-radio>
-                <el-radio :label="2" class="radio-main">{{$t('每个包裹单独集包')}}</el-radio>
+                <el-radio :label="2" class="radio-main">{{$t('每个包裹单独集包/打包')}}</el-radio>
               </el-radio-group>
             </div>
         </div>

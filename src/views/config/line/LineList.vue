@@ -439,7 +439,7 @@ export default {
     },
     // 删除
     deleteLine (id) {
-      this.$confirm(this.$t('您真的要删除此路线吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('该操作无法恢复，请确认该路线彻底弃用后再删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
