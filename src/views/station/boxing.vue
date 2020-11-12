@@ -773,7 +773,7 @@ export default {
         if (valid) {
           this.$request.addAddress({
             ...this.ruleForm,
-            user_id: this.userId
+            user_id: this.clientId
           }).then(res => {
             if (res.ret) {
               this.$notify({
