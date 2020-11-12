@@ -259,7 +259,7 @@
     </div>
   </el-dialog>
   <!-- 新建收货地址 -->
-  <el-dialog :visible.sync="innerVisible" :title="$t('新建收货地址')" width="45%" @close="clear" append-to-body>
+  <el-dialog :visible.sync="innerVisible" :title="$t('新建收货地址')" width="45%" @close="clearNewAddress" append-to-body>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-form-inline" label-width="100px">
       <el-row :gutter="20">
         <el-col :span="10">
@@ -767,7 +767,7 @@ export default {
         // this.getAddressDialog()
       }
     },
-    // 确认创建发货单
+    // 确认新建地址
     confirmCreated (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -783,6 +783,7 @@ export default {
               })
               this.innerVisible = false
               this.boxDialog = true
+              // this.clientId
               this.getAddressDialog()
               // this.success()
             } else {
@@ -944,9 +945,21 @@ export default {
       this.chooseId = ''
       this.user = {}
     },
+    // 收件地址弹窗
     clearAddress () {
-      this.clientId = ''
+      // this.clientId = ''
       this.chooseId = ''
+    },
+    // 清除新建收货地址
+    clearNewAddress () {
+      this.ruleForm.country_id = ''
+      this.ruleForm.phone = ''
+      this.ruleForm.city = ''
+      this.ruleForm.receiver_name = ''
+      this.ruleForm.door_no = ''
+      this.ruleForm.timezone = ''
+      this.ruleForm.address = ''
+      this.ruleForm.street = ''
     }
   }
 }
