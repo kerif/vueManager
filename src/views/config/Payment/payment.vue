@@ -657,9 +657,18 @@
         <!-- 邮件模版 -->
         <el-tab-pane :label="$t('邮件模版')" name="8">
           <div class="select-box">
-            <search-select :placeholder="$t('请选择')" :selectArr="emailType"
+            <!-- <search-select :placeholder="$t('请选择')" :selectArr="emailType"
             v-model="page_params.type" @search="onGroupChange">
-          </search-select>
+          </search-select> -->
+          <el-select v-model="page_params.type" @change="onGroupChange" clearable
+          :placeholder="$t('请选择')">
+            <el-option
+              v-for="item in emailType"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name">
+            </el-option>
+          </el-select>
           <add-btn router="emailAdd">{{$t('添加邮件模版')}}</add-btn>
         </div>
           <el-table :data="emailData" v-loading="tableLoading" class="data-list"
@@ -991,15 +1000,15 @@
 <script>
 import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
-import { SearchSelect } from '@/components/searchs'
+// import { SearchSelect } from '@/components/searchs'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
 export default {
   components: {
     AddBtn,
-    NlePagination,
-    SearchSelect
+    NlePagination
+    // SearchSelect
   },
   mixins: [pagination],
   data () {
@@ -2183,12 +2192,15 @@ export default {
     // 获取模版类型数据
     getType () {
       this.$request.emailType().then(res => {
-        res.data.forEach(item => {
-          this.emailType.push({
-            value: item.id,
-            label: item.name
-          })
-        })
+        if (res.ret) {
+          this.emailType = res.data
+        }
+        // res.data.forEach(item => {
+        //   this.emailType.push({
+        //     value: item.id,
+        //     label: item.name
+        //   })
+        // })
       })
     },
     onGroupChange () {

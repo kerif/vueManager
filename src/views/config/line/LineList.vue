@@ -331,6 +331,7 @@ export default {
     }
   },
   created () {
+    console.log(this.$route.query.size || 10, 'size')
     this.getLanguageList() // 获取支持语言
     // this.getList()
     // 获取线路名称筛选列表
@@ -382,7 +383,7 @@ export default {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.$route.query.size ? this.$route.query.size : this.page_params.size
       }
       if (typeof this.query.enabled === 'number') {
         params.enabled = this.query.enabled
@@ -731,6 +732,9 @@ export default {
     },
     'query.warehouses': function (val) {
       this.handleQueryChange('warehouses', encodeURIComponent(val.join(',')))
+    },
+    '.size': function (val) {
+      this.handleQueryChange('size', this.page_params.size)
     },
     highSearch (val) {
       this.handleQueryChange('highSearch', ~~val)
