@@ -159,7 +159,7 @@
                 <el-checkbox :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-checkbox>
               </el-checkbox-group>
             </div>
-            <div class="express-left express-right">
+            <!-- <div class="express-left express-right">
               <el-switch
                 v-model="box.is_insurance"
                 :active-text="$t('开')"
@@ -169,8 +169,13 @@
                 active-color="#13ce66"
                 inactive-color="gray">
               </el-switch>
-            </div>
+            </div> -->
         </div>
+        <el-radio-group v-model="box.is_insurance">
+          <el-radio :label="1">{{$t('启用保险')}}</el-radio>
+          <el-radio :label="0">{{$t('不启用保险')}}</el-radio>
+          <el-radio :label="2">{{$t('仅强制要求购买保险的订单启用')}}</el-radio>
+        </el-radio-group>
         <div class="line-sty"></div>
         <div class="recipient-address">
         <h3>{{$t('付款方式')}}</h3>
