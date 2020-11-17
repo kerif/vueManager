@@ -149,9 +149,10 @@
           <div class="packaged" v-if="scope.row.group_buying_status === 1">{{$t('已打包')}}</div>
         </template>
       </el-table-column>
-      <!-- 审核状态 -->
-      <el-table-column :label="$t('审核状态')" v-if="activeName === '2'">
+      <!-- 支付状态 -->
+      <el-table-column :label="$t('支付状态')" v-if="activeName === '2'">
         <template slot-scope="scope">
+          <span v-if="scope.row.status === 3" class="packaged">{{$t('已支付')}}</span>
           <span v-if="scope.row.status === 11">{{$t('待审核')}}</span>
           <router-link v-if="scope.row.status === 12"
           class="chooseOrder"
@@ -311,7 +312,7 @@
       <!-- 审核状态 -->
       <el-table-column :label="$t('审核状态')" v-if="activeName === '2'">
         <template slot-scope="scope">
-          <!-- <span v-if="scope.row.status === 11">待审核</span> -->
+          <span v-if="scope.row.status === 11">{{$t('待审核')}}</span>
           <router-link v-if="scope.row.status === 12"
           class="chooseOrder"
           :to="`/order/review/?id=${scope.row.id}`">

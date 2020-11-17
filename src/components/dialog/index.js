@@ -75,6 +75,7 @@ import alipay from './alipay.vue'
 import addressEdit from './addressEdit.vue'
 import editInfo from './editVipInfo.vue'
 import notifyOrder from './notifyOder.vue'
+import groupAdd from './groupAdd.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -150,6 +151,7 @@ const AlipayController = Vue.extend(alipay)
 const AddressEditController = Vue.extend(addressEdit)
 const EditVipInfoController = Vue.extend(editInfo)
 const NotifyOrderController = Vue.extend(notifyOrder)
+const GroupAddController = Vue.extend(groupAdd)
 
 const mixin = {
   data () {
@@ -672,6 +674,13 @@ function initInstance (type) {
     // 订单 批量发送通知
     case 'notifyOrder':
       instance = new NotifyOrderController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 新增 拼团配置
+    case 'groupAdd':
+      instance = new GroupAddController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

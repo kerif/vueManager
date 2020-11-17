@@ -960,6 +960,37 @@
             </el-table>
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
         </el-tab-pane>
+        <!-- 拼团配置 -->
+        <el-tab-pane :label="$t('拼团配置')" name="14">
+          <div class="rate-top">
+            <div class="rate-left">
+             {{$t(' 授权公开拼团团长')}}：
+            </div>
+            <el-button class="btn-blue-green" @click="groupAdd">{{$t('新增授权')}}</el-button>
+          </div>
+            <el-table :data="configurationData" v-loading="tableLoading" class="data-list"
+            border stripe>
+            <el-table-column type="index"></el-table-column>
+            <el-table-column prop="id" :label="$t('客户ID')"></el-table-column>
+            <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
+              <!-- 创建人 -->
+              <el-table-column :label="$t('客户组')">
+                <template slot-scope="scope">
+                  <span>{{scope.row.user_group.name_cn}}</span>
+                </template>
+              </el-table-column>
+              <!-- 注册时间 -->
+              <el-table-column :label="$t('注册时间')" prop="created_at"></el-table-column>
+              <!-- 最后登录时间 -->
+              <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
+              <el-table-column :label="$t('操作')">
+                <template slot-scope="scope">
+                  <el-button class="btn-light-red" @click="deleteGroup(scope.row.id)">{{$t('删除')}}</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        </el-tab-pane>
       </el-tabs>
       <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -1044,6 +1075,7 @@ export default {
         }
       ],
       ratesData: [],
+      configurationData: [], // 拼团配置数据
       rate: '',
       currencyData: {},
       insuranceEnabled: 0,
@@ -1246,6 +1278,8 @@ export default {
     } else if (this.activeName === '13') {
       this.getRate()
       this.getCurrency()
+    } else if (this.activeName === '14') {
+      this.getConfiguration()
     }
   },
   mounted () {
@@ -2281,6 +2315,8 @@ export default {
       } else if (this.activeName === '13') {
         this.getRate()
         this.getCurrency()
+      } else if (this.activeName === '14') {
+        this.getConfiguration()
       }
     },
     // 获取订单增值服务
@@ -2322,6 +2358,49 @@ export default {
             type: 'error'
           })
         }
+      })
+    },
+    // 获取拼团配置数据
+    getConfiguration () {
+      this.$request.getConfiguration().then(res => {
+        if (res.ret) {
+          this.configurationData = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    groupAdd () {
+      dialog({ type: 'groupAdd' }, () => {
+        this.getConfiguration()
+      })
+    },
+    // 拼团配置 删除
+    deleteGroup (id) {
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteConfiguration(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getConfiguration()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 获取当前结算货币
@@ -2727,6 +2806,8 @@ export default {
       } else if (this.activeName === '13') {
         this.getRate()
         this.getCurrency() // 获取当前结算货币
+      } else if (this.activeName === '14') {
+        this.getConfiguration()
       }
       this.page_params.handleQueryChange('activeName', this.activeName)
     },

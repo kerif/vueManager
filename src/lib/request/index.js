@@ -928,6 +928,22 @@ exports.getRates = (params) => {
 exports.deleteRate = (id) => {
   return $form.delete(`exchange-rates/${id}`)
 }
+// 更多配置 获取拼团配置
+exports.getConfiguration = () => {
+  return $form.get('group-buying/user-config')
+}
+// 更多配置 新增 拼团配置
+exports.addConfiguration = (params) => {
+  return $form.post('group-buying/user-config', params)
+}
+// 更多配置 拼团配置 删除
+exports.deleteConfiguration = (id) => {
+  return $form.delete(`group-buying/user-config/${id}`)
+}
+// 更多配置 拼团配置 获取单条客户信息
+exports.getUserDetails = (id) => {
+  return $form.get(`users/${id}`)
+}
 // 更多配置 自动获取
 exports.autoGet = () => {
   return $form.get('exchange-rates/rate')

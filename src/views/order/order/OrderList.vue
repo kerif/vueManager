@@ -96,7 +96,7 @@
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')" prop="express_num">
       </el-table-column>
-      <el-table-column :label="$t('状态')" width="160">
+      <el-table-column :label="$t('状态')" :width="activeName === '1' ? 160 : 90">
         <!-- width="160" -->
         <template slot-scope="scope">
           <span v-if="scope.row.status === 1">{{$t('未入库')}}</span>
@@ -104,13 +104,14 @@
           <span v-if="scope.row.status === 3 || scope.row.status === 4">{{$t('已集包')}}</span>
           <span v-if="scope.row.status === 5">{{$t('已发货')}}</span>
           <span v-if="scope.row.status === 6">{{$t('已收货')}}</span>
-          <span class="warning-sty" v-if="scope.row.is_warning === 1">（{{$t('丢包预警')}}）</span>
+          <span class="warning-sty" v-if="activeName === '1' && scope.row.is_warning === 1">（{{$t('丢包预警')}}）</span>
         </template>
       </el-table-column>
       <!-- 物品名称 -->
       <el-table-column :label="$t('物品名称')" prop="package_name" width="150" :show-overflow-tooltip="true"></el-table-column>
       <!-- 物品价值 -->
       <el-table-column :label="$t('物品价值') + this.localization.currency_unit" prop="package_value"></el-table-column>
+      <el-table-column :label="$t('物品单价') + this.localization.currency_unit + '/' + this.localization.weight_unit" prop="unit_value"></el-table-column>
       <!-- 物品属性 -->
       <el-table-column :label="$t('物品属性')">
         <template slot-scope="scope">
