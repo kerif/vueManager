@@ -979,8 +979,8 @@
                   <span>{{scope.row.user_group.name_cn}}</span>
                 </template>
               </el-table-column>
-              <!-- 注册时间 -->
-              <el-table-column :label="$t('注册时间')" prop="created_at"></el-table-column>
+              <!-- 授权时间 -->
+              <el-table-column :label="$t('授权时间')" prop="created_at"></el-table-column>
               <!-- 最后登录时间 -->
               <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
               <el-table-column :label="$t('操作')">
