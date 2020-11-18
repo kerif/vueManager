@@ -2362,9 +2362,15 @@ export default {
     },
     // 获取拼团配置数据
     getConfiguration () {
-      this.$request.getConfiguration().then(res => {
+      this.$request.getConfiguration({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
         if (res.ret) {
           this.configurationData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+          this.localization = res.localization
         } else {
           this.$message({
             message: res.msg,

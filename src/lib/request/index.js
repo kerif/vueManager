@@ -929,8 +929,8 @@ exports.deleteRate = (id) => {
   return $form.delete(`exchange-rates/${id}`)
 }
 // 更多配置 获取拼团配置
-exports.getConfiguration = () => {
-  return $form.get('group-buying/user-config')
+exports.getConfiguration = (params) => {
+  return $form.get('group-buying/user-config', { params })
 }
 // 更多配置 新增 拼团配置
 exports.addConfiguration = (params) => {
