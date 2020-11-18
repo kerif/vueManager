@@ -317,6 +317,7 @@
           type="primary"
           :loading="$store.state.btnLoading"
         >{{$t('保存')}}</el-button>
+        <span class="save-btn" v-if="form.group_name && form.is_parent === 0">*{{$t('不管数据有无更改，点击保存后，请务必重新操作总订单“编辑-保存“，以重新计算正确价格')}}！</span>
       </el-col>
     </el-row>
     <el-dialog :visible.sync="imgVisible" size="small">
@@ -742,6 +743,11 @@ export default {
   .add-row {
     margin-bottom: 10px;
     text-align: right;
+  }
+  .save-btn {
+    padding-left: 30px;
+    font-size: 13px;
+    color: red;
   }
 }
 </style>
