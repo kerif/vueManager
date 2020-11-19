@@ -232,7 +232,7 @@
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)">
-                <span v-show="(activeName === '1' && scope.row.group_buying_status === 1) || activeName === '2'">{{$t('编辑')}}
+                <span v-show="(activeName === '1' && scope.row.group_buying_status === 1)">{{$t('编辑')}}
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent)">
