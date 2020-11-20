@@ -4,7 +4,7 @@
     <el-row :gutter="20">
       <el-col :span="10">
          <el-form-item :label="$t('用户ID')">
-           <span>{{form.user_id}}</span>
+           <span>{{userId}}</span>
           <!-- <el-input v-model="form.receiver_name"></el-input> -->
         </el-form-item>
       </el-col>
@@ -72,21 +72,44 @@
         <el-col :span="10">
           <el-form-item :label="$t('微信号')">
             <span>{{form.wechat_id}}</span>
-            <!-- <el-input v-model="form.address"></el-input> -->
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item :label="$t('邮编')">
             <span>{{form.postcode}}</span>
-            <!-- <el-input v-model="form.area"></el-input> -->
           </el-form-item>
         </el-col>
       </el-row>
+            <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item :label="$t('邀请人')" prop="invitorId">
+          <!-- <el-input v-model="ruleForm.name_cn"
+          placeholder="请输入用户id"></el-input> -->
+            <el-autocomplete
+              class="input-sty"
+              :fetch-suggestions="queryCNSearch"
+              @select="handleSelect"
+              :placeholder="$t('请输入邀请人ID')"
+              v-model="invitorId">
+            </el-autocomplete>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item>
+            <span>{{$t('会员识别码')}}</span>
+            <el-tooltip class="item code-sty" effect="dark" :content="$t('修改会员识别码后，将会替换系统中注册的客户昵称。如要使用初始注册用户名，请清空内容。')" placement="top">
+            <span class="el-icon-question icon-info"></span>
+            </el-tooltip>
+            <el-input v-model="remarkName" class="input-sty"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <span class="red-sty">*{{$t('修改邀请人的操作将会被日志记录,请谨慎操作')}}</span>
     </el-form>
-    <!-- <div slot="footer">
+    <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
       <el-button type="primary" @click="submit">{{$t('确定')}}</el-button>
-    </div> -->
+    </div>
   </el-dialog>
 </template>
 <script>
@@ -95,7 +118,6 @@ export default {
   data () {
     return {
       form: {
-        user_id: '',
         receiver_name: '',
         phone: '',
         timezone: '',
@@ -110,9 +132,12 @@ export default {
         id_card: '',
         area: ''
       },
+      remarkName: '',
+      invitorId: '',
       supplierId: '',
       options: [],
       id: '',
+      userId: '',
       name: ''
     }
   },
@@ -121,36 +146,51 @@ export default {
       this.$request.checkVipInfo(this.id).then(res => {
         if (res.ret) {
           this.form = res.data
-          this.form.usre_id = res.data.user_id
-          this.form.receiver_name = res.data.receiver_name
-          this.form.phone = res.data.phone
-          this.form.timezone = res.data.timezone
-          this.form.country_name = res.data.country_name
-          this.form.door_no = res.data.door_no
-          this.form.city = res.data.city
-          this.form.postcode = res.data.postcode
-          this.form.street = res.data.street
-          this.form.address = res.data.address
-          this.form.wechat_id = res.data.wechat_id
-          this.form.clearance_code = res.data.clearance_code
-          this.form.id_card = res.data.id_card
-          this.form.area = res.data.area
+          this.userId = res.data.id
+          this.form.receiver_name = res.data.profile && res.data.profile.receiver_name
+          this.form.phone = res.data.profile && res.data.profile.phone
+          this.form.timezone = res.data.profile && res.data.profile.timezone
+          this.form.country_name = res.data.profile && res.data.profile.country_name
+          this.form.door_no = res.data.profile && res.data.profile.door_no
+          this.form.city = res.data.profile && res.data.profile.city
+          this.form.postcode = res.data.profile && res.data.profile.postcode
+          this.form.street = res.data.profile && res.data.profile.street
+          this.form.address = res.data.profile && res.data.profile.address
+          this.form.wechat_id = res.data.profile && res.data.profile.wechat_id
+          this.form.clearance_code = res.data.profile && res.data.profile.clearance_code
+          this.form.id_card = res.data.profile && res.data.profile.id_card
+          this.form.area = res.data.profile && res.data.profile.area
+          this.remarkName = res.data.remark_name
+          this.invitorId = res.data.invitor_id.toString()
+          console.log(typeof (this.invitorId), 'this.invitorId')
         }
       })
     },
+    queryCNSearch (queryString, callback) {
+      console.log(this.invitorId)
+      var list = [{}]
+      this.$request.noUsers({
+        keyword: this.invitorId
+      }).then(res => {
+        for (let i of res.data) {
+          // i.value = i.id
+          i.value = i.id + '---' + i.name
+        }
+        list = res.data
+        callback(list)
+      })
+    },
+    handleSelect (item) {
+      this.supplierId = item.id
+      console.log(typeof (this.supplierId), 'this.supplierId 我是选择的ID')
+      this.supplierName = item.name
+    },
     submit () {
-      if (this.form.country_id === '') {
-        return this.$message.error(this.$t('请选择国家/地区'))
-      } else if (this.form.city === '') {
-        return this.$message.error(this.$t('请输入城市'))
-      } else if (this.form.receiver_name === '') {
-        return this.$message.error(this.$t('请输入收件人'))
-      } else if (this.form.street === '') {
-        return this.$message.error(this.$t('请输入街道'))
-      } else if (this.form.phone === '') {
-        return this.$message.error(this.$t('请输入联系电话'))
-      }
-      this.$request.updateSingleAddress(this.id, this.form).then(res => {
+      console.log(this.supplierId, 'this.supplierId,  我是保存的ID')
+      this.$request.updateVipInfo(this.id, {
+        invitor_id: this.supplierId ? this.supplierId : this.invitorId,
+        remark_name: this.remarkName
+      }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -158,6 +198,7 @@ export default {
             message: res.msg
           })
           this.show = false
+          this.success()
         } else {
           this.$message({
             message: res.msg,
@@ -182,6 +223,7 @@ export default {
       })
     },
     clear () {
+      this.supplierId = ''
     },
     init () {
       this.getList()
@@ -208,6 +250,15 @@ export default {
   }
   .country-select {
     width: 100%;
+  }
+  .input-sty {
+    width: 55%;
+  }
+  .red-sty {
+    color: red;
+  }
+  .code-sty {
+    padding-right: 5px;
   }
 }
 </style>

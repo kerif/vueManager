@@ -171,6 +171,10 @@ exports.forbidUser = (ids) => {
 exports.customerForbid = (ids) => {
   return $form.put('users/forbid-login', ids)
 }
+// 客户 个人信息 获取客户数据
+exports.noUsers = (params) => {
+  return $form.get(`users/agent-search`, { params })
+}
 // 客户允许登录
 exports.customerLogin = (ids) => {
   return $form.put('users/allow-login', ids)
@@ -540,7 +544,15 @@ exports.deleteUser = (ids) => {
 }
 // 客户 查看个人信息
 exports.checkVipInfo = (id) => {
-  return $form.get(`users/${id}/profile`)
+  return $form.get(`users/${id}`)
+}
+// 客户 更新 个人信息
+exports.updateVipInfo = (id, params) => {
+  return $form.put(`users/${id}`, params)
+}
+// 客户 操作日志
+exports.getVipLogs = (id) => {
+  return $form.get(`users/${id}/logs`)
 }
 // 获取客户列表
 exports.getUsers = (params) => {

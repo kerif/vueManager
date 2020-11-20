@@ -40,6 +40,7 @@
           <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">{{$t('邀请记录')}}</el-button>
           <el-button class="btn-purple optionBtn" @click="voucher(scope.row.id)">{{$t('券包')}}</el-button>
           <el-button class="btn-yellow optionBtn" @click="checkInfo(scope.row.id, scope.row.name)">{{$t('个人信息')}}</el-button>
+          <el-button class="btn-blue-green optionBtn" @click="getLogs(scope.row.id)">{{$t('操作日志')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -108,6 +109,10 @@ export default {
           })
         }
       })
+    },
+    // 操作日志
+    getLogs (id) {
+      dialog({ type: 'vipLogs', id: id })
     },
     // 个人信息
     checkInfo (id, name) {

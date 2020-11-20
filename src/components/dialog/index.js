@@ -76,6 +76,7 @@ import addressEdit from './addressEdit.vue'
 import editInfo from './editVipInfo.vue'
 import notifyOrder from './notifyOder.vue'
 import groupAdd from './groupAdd.vue'
+import vipLogs from './vipLogs.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -152,6 +153,7 @@ const AddressEditController = Vue.extend(addressEdit)
 const EditVipInfoController = Vue.extend(editInfo)
 const NotifyOrderController = Vue.extend(notifyOrder)
 const GroupAddController = Vue.extend(groupAdd)
+const VipLogsController = Vue.extend(vipLogs)
 
 const mixin = {
   data () {
@@ -681,6 +683,13 @@ function initInstance (type) {
     // 更多配置 新增 拼团配置
     case 'groupAdd':
       instance = new GroupAddController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 客户 操作日志
+    case 'vipLogs':
+      instance = new VipLogsController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
