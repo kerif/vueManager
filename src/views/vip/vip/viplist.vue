@@ -34,13 +34,40 @@
       <el-table-column :label="$t('注册时间')" prop="created_at"></el-table-column>
       <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
       <el-table-column :label="$t('邀请人') " prop="invitor"></el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('操作')" width="160" fixed="right">
         <template slot-scope="scope">
-          <el-button class="btn-main optionBtn" @click="onUpdateGroup(scope.row.id)">{{$t('修改客户组')}}</el-button>
-          <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">{{$t('邀请记录')}}</el-button>
-          <el-button class="btn-purple optionBtn" @click="voucher(scope.row.id)">{{$t('券包')}}</el-button>
-          <el-button class="btn-yellow optionBtn" @click="checkInfo(scope.row.id, scope.row.name)">{{$t('个人信息')}}</el-button>
-          <el-button class="btn-blue-green optionBtn" @click="getLogs(scope.row.id)">{{$t('操作日志')}}</el-button>
+           <el-dropdown>
+            <el-button type="primary">
+              {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <!-- 修改客户组 -->
+              <el-dropdown-item class="item-sty" @click.native="onUpdateGroup(scope.row.id)">
+                <span>{{$t('修改客户组')}}</span>
+              </el-dropdown-item>
+              <!-- 邀请记录 -->
+              <el-dropdown-item class="item-sty" @click.native="invite(scope.row.id)">
+                <span>{{$t('邀请记录')}}</span>
+              </el-dropdown-item>
+              <!-- 券包 -->
+              <el-dropdown-item class="item-sty" @click.native="voucher(scope.row.id)">
+                <span>{{$t('券包')}}</span>
+              </el-dropdown-item>
+              <!-- 个人信息 -->
+              <el-dropdown-item class="item-sty" @click.native="checkInfo(scope.row.id, scope.row.name)">
+                <span>{{$t('个人信息')}}</span>
+              </el-dropdown-item>
+              <!-- 操作日志 -->
+              <el-dropdown-item class="item-sty" @click.native="getLogs(scope.row.id)">
+                <span>{{$t('操作日志')}}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+           </el-dropdown>
+          <!-- <el-button class="btn-main optionBtn" @click="onUpdateGroup(scope.row.id)">{{$t('修改客户组')}}</el-button> -->
+          <!-- <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">{{$t('邀请记录')}}</el-button> -->
+          <!-- <el-button class="btn-purple optionBtn" @click="voucher(scope.row.id)">{{$t('券包')}}</el-button> -->
+          <!-- <el-button class="btn-yellow optionBtn" @click="checkInfo(scope.row.id, scope.row.name)">{{$t('个人信息')}}</el-button> -->
+          <!-- <el-button class="btn-blue-green optionBtn" @click="getLogs(scope.row.id)">{{$t('操作日志')}}</el-button> -->
         </template>
       </el-table-column>
       <template slot="append">
@@ -116,7 +143,9 @@ export default {
     },
     // 个人信息
     checkInfo (id, name) {
-      dialog({ type: 'editInfo', id: id, name: name })
+      dialog({ type: 'editInfo', id: id, name: name }, () => {
+        this.getList()
+      })
     },
     deleteData (id) {
       if (!this.deleteNum || !this.deleteNum.length) {
