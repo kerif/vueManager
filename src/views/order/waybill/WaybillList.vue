@@ -580,8 +580,12 @@
     <!-- 一键批量打包 -->
   <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" @close="clear"  width="80%">
     <div class="add-box">
+      <!-- 一键将预计重量改成实际重量 -->
       <el-tooltip :content="$t('一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹重量/尺寸直接相加，数据误差较大时请手动更改')" placement="top">
         <el-button @click="changeWeight">{{$t('一键将预计重量改成实际重量')}}</el-button>
+      </el-tooltip>
+      <el-tooltip :content="$t('一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹体积重量相加，数据误差较大时请手动更改')" placement="top">
+        <el-button @click="changeVolume">{{$t('一键将预计体积重量设为实际体积重量')}}</el-button>
       </el-tooltip>
       <el-button @click="goCreated">{{$t('批量改支付方式')}}</el-button>
     </div>
@@ -622,11 +626,18 @@
         prop="except_weight"
         :label="$t('预计重量') + this.localization.weight_unit">
       </el-table-column>
-      <!-- 预计重量 -->
+      <!-- 实际重量 -->
         <el-table-column
         :label="$t('实际重量') + this.localization.weight_unit">
         <template slot-scope="scope">
           <el-input v-model="scope.row.actual_weight"></el-input>
+        </template>
+        </el-table-column>
+        <!-- 实际体积重量 -->
+        <el-table-column
+        :label="$t('实际体积重量') + this.localization.weight_unit">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.volume_weight"></el-input>
         </template>
         </el-table-column>
         <!-- 实际尺寸 -->
@@ -1600,7 +1611,13 @@ export default {
     // 一键修改预计重量
     changeWeight () {
       this.boxDialogData.forEach(item => {
-        item.actual_weight = item.except_weight
+        item.actual_weight = item.except_package_weight
+      })
+    },
+    // 一键修改预计体积重量
+    changeVolume () {
+      this.boxDialogData.forEach(item => {
+        item.volume_weight = item.except_package_volume_weight
       })
     },
     // 确认更改支付方式
