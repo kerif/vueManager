@@ -578,7 +578,7 @@
         </div>
       </el-dialog>
     <!-- 一键批量打包 -->
-  <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" @close="clear"  width="80%">
+  <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" @close="batchClear"  width="80%">
     <div class="add-box">
       <!-- 一键将预计重量改成实际重量 -->
       <el-tooltip :content="$t('一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹重量直接相加，数据误差较大时请手动更改')" placement="top">
@@ -835,7 +835,12 @@ export default {
         start: '',
         end: ''
       },
-      secondExpands: {}
+      secondExpands: {},
+      except_dimension: {
+        width: 0,
+        height: 0,
+        length: 0
+      }
     }
   },
   created () {
@@ -1657,6 +1662,12 @@ export default {
       this.boxDialog = true
       this.getBatch()
     },
+    // 清除一键批量打包
+    batchClear () {
+      this.except_dimension.length = 0
+      this.except_dimension.width = 0
+      this.except_dimension.height = 0
+    },
     // 获取批量打包数据
     getBatch () {
       this.$request.getOrderBatch({
@@ -1665,11 +1676,12 @@ export default {
         if (res.ret) {
           this.boxDialogData = res.data
           this.boxDialogData.forEach(item => {
-            item.except_dimension = {
-              width: 0,
-              height: 0,
-              length: 0
-            }
+            // item.except_dimension = {
+            //   width: 0,
+            //   height: 0,
+            //   length: 0
+            // }
+            item.except_dimension = this.except_dimension
             console.log(this.boxDialogData, 'boxDialogData')
           })
         }
