@@ -83,8 +83,8 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('备注')">
-                <el-input v-model="user.in_storage_remark" :placeholder="$t('请输入备注')"
-                type="textarea"  :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+                <el-input v-model="user.remark" :placeholder="$t('请输入备注')"
+                type="textarea" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
               </el-form-item>
             </el-col>
           </el-row>

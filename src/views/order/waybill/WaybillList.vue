@@ -581,7 +581,7 @@
   <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" @close="clear"  width="80%">
     <div class="add-box">
       <!-- 一键将预计重量改成实际重量 -->
-      <el-tooltip :content="$t('一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹重量/尺寸直接相加，数据误差较大时请手动更改')" placement="top">
+      <el-tooltip :content="$t('一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹重量直接相加，数据误差较大时请手动更改')" placement="top">
         <el-button @click="changeWeight">{{$t('一键将预计重量改成实际重量')}}</el-button>
       </el-tooltip>
       <el-tooltip :content="$t('一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹体积重量相加，数据误差较大时请手动更改')" placement="top">
@@ -1664,6 +1664,14 @@ export default {
       }).then(res => {
         if (res.ret) {
           this.boxDialogData = res.data
+          this.boxDialogData.forEach(item => {
+            item.except_dimension = {
+              width: 0,
+              height: 0,
+              length: 0
+            }
+            console.log(this.boxDialogData, 'boxDialogData')
+          })
         }
       })
     },
@@ -1673,6 +1681,7 @@ export default {
       this.innerVisible = false
       this.boxDialog = true
     },
+    // 确认打包
     confirmPack () {
       this.$request.confirmBatch({
         remark: this.batch.remark,

@@ -64,6 +64,16 @@
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location">
       </el-table-column>
+      <!-- 包裹图片 -->
+      <el-table-column :label="$t('包裹图片')" prop="package_pictures" width="150">
+        <template slot-scope="scope">
+          <span v-for="(item, index) in scope.row.package_pictures"
+          :key="index" style="cursor:pointer;"
+          @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
+           <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 40px; margin-right: 5px;">
+          </span>
+        </template>
+      </el-table-column>
       <template slot="append">
         <div class="append-box">
           <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
@@ -86,6 +96,11 @@
       <div slot="footer">
         <el-button @click="show = false">{{$t('取消')}}</el-button>
         <el-button type="primary" @click="updateLabel">{{$t('下载')}}</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog">
       </div>
     </el-dialog>
   </div>
@@ -119,7 +134,8 @@ export default {
       imgVisible: false,
       urlHtml: '',
       show: false,
-      labelId: ''
+      labelId: '',
+      imgSrc: ''
     }
   },
   methods: {
