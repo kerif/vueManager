@@ -1691,6 +1691,7 @@ export default {
             height: item.except_dimension.height,
             width: item.except_dimension.width,
             weight: item.actual_weight,
+            volume_weight: item.volume_weight,
             id: item.id
           }
         })
