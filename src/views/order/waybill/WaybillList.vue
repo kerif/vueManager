@@ -644,9 +644,9 @@
         <el-table-column
         :label="$t('实际尺寸') + this.localization.length_unit" width="200px">
         <template slot-scope="scope">
-          <el-input class="dialog-input" :placeholder="$t('长')" v-model="scope.row.except_dimension.length"></el-input>
-          <el-input class="dialog-input" :placeholder="$t('宽')" v-model="scope.row.except_dimension.width"></el-input>
-          <el-input class="dialog-input" :placeholder="$t('高')" v-model="scope.row.except_dimension.height"></el-input>
+          <el-input class="dialog-input" :placeholder="$t('长')" v-model="scope.row.exceptLength"></el-input>
+          <el-input class="dialog-input" :placeholder="$t('宽')" v-model="scope.row.exceptWidth"></el-input>
+          <el-input class="dialog-input" :placeholder="$t('高')" v-model="scope.row.exceptHeight"></el-input>
         </template>
         </el-table-column>
         <!-- 操作 -->
@@ -835,12 +835,12 @@ export default {
         start: '',
         end: ''
       },
-      secondExpands: {},
-      except_dimension: {
-        width: 0,
-        height: 0,
-        length: 0
-      }
+      secondExpands: {}
+      // except_dimension: {
+      //   width: 0,
+      //   height: 0,
+      //   length: 0
+      // }
     }
   },
   created () {
@@ -1675,15 +1675,15 @@ export default {
       }).then(res => {
         if (res.ret) {
           this.boxDialogData = res.data
-          this.boxDialogData.forEach(item => {
-            // item.except_dimension = {
-            //   width: 0,
-            //   height: 0,
-            //   length: 0
-            // }
-            item.except_dimension = this.except_dimension
-            console.log(this.boxDialogData, 'boxDialogData')
+          this.boxDialogData = this.boxDialogData.map(item => {
+            return {
+              ...item,
+              exceptLength: 0,
+              exceptHeight: 0,
+              exceptWidth: 0
+            }
           })
+          console.log(this.boxDialogData, 'boxDialogData')
         }
       })
     },
@@ -1699,9 +1699,9 @@ export default {
         remark: this.batch.remark,
         order: this.boxDialogData.map(item => {
           return {
-            length: item.except_dimension.length,
-            height: item.except_dimension.height,
-            width: item.except_dimension.width,
+            length: item.exceptLength,
+            height: item.exceptHeight,
+            width: item.exceptWidth,
             weight: item.actual_weight,
             volume_weight: item.volume_weight,
             id: item.id
