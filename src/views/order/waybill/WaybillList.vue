@@ -634,11 +634,21 @@
         </template>
         </el-table-column>
         <!-- 实际体积重量 -->
-        <el-table-column
-        :label="$t('实际体积重量') + this.localization.weight_unit">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.volume_weight"></el-input>
-        </template>
+        <el-table-column>
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.volume_weight"></el-input>
+          </template>
+          <template slot="header">
+              <span>{{$t('实际体积重量')}}{{localization.weight_unit}}</span>
+              <el-tooltip placement="top">
+                <span slot="content">
+                  <span>
+                  {{$t('如有合箱操作，请勿填写此项，填入实际尺寸即可')}}
+                  </span>
+                  </span>
+              <i class="el-icon-question" style="font-size: 18px; color:#35B85A;"></i>
+              </el-tooltip>
+          </template>
         </el-table-column>
         <!-- 实际尺寸 -->
         <el-table-column
@@ -1664,9 +1674,9 @@ export default {
     },
     // 清除一键批量打包
     batchClear () {
-      this.except_dimension.length = 0
-      this.except_dimension.width = 0
-      this.except_dimension.height = 0
+      // this.except_dimension.length = 0
+      // this.except_dimension.width = 0
+      // this.except_dimension.height = 0
     },
     // 获取批量打包数据
     getBatch () {
