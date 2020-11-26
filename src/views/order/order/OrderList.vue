@@ -668,7 +668,7 @@ export default {
         value_end: this.filterForm.end,
         is_warning: this.is_warning === true ? 1 : ''
       }
-      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 已入库
       if (this.activeName === '2') {
         // 提交时间
