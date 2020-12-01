@@ -961,7 +961,7 @@
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
         </el-tab-pane>
         <!-- 拼团配置 -->
-        <el-tab-pane :label="$t('拼团配置')" name="14">
+        <el-tab-pane :label="$t('拼团配置')" name="14" v-if="this.unShow === 1">
           <div class="rate-top">
             <div class="rate-left">
              {{$t(' 授权公开拼团团长')}}：
@@ -1193,6 +1193,7 @@ export default {
         location: '',
         package_warning: 0
       },
+      unShow: '', // 保存是否显示拼团配置
       rules: {
         kd100_app_id: [
           { required: true, message: this.$t('请输入Customer ID'), trigger: 'change' }
@@ -1284,6 +1285,8 @@ export default {
   },
   mounted () {
     console.log('进来了')
+    this.unShow = localStorage.getItem('me')
+    console.log(this.unShow, 'unShow')
   },
   methods: {
     handleEdit (val) {

@@ -291,6 +291,39 @@
         </el-table-column>
         <el-table-column :label="$t('货位')" prop="location"></el-table-column>
       </el-table>
+      <h4>{{$t('商品清单')}}</h4>
+      <el-table :data="productData" class="data-list" border stripe
+       v-loading="tableLoading">
+        <el-table-column type="index" width="50"></el-table-column>
+        <!-- 物品名称 -->
+        <el-table-column :label="$t('物品名称')" prop="name"></el-table-column>
+        <!-- 数量 -->
+        <el-table-column :label="$t('数量')" prop="qty"></el-table-column>
+        <!-- 单价 -->
+        <el-table-column :label="$t('单价') + this.localization.currency_unit" prop="unit_price"></el-table-column>
+        <!-- 总价 -->
+        <el-table-column :label="$t('总价') + this.localization.currency_unit">
+          <template slot-scope="scope">
+            <span>{{scope.row.unit_price * scope.row.qty}}</span>
+          </template>
+        </el-table-column>
+        <!-- 材质 -->
+        <el-table-column :label="$t('材质')" prop="material"></el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')" prop="status_name"></el-table-column>
+        <!-- 图片 -->
+        <el-table-column :label="$t('图片')" prop="images" width="130">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.images"
+            :key="item.id" style="cursor:pointer;"
+            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item, imgVisible=true">
+            <img :src="$baseUrl.IMAGE_URL + item" style="width: 40px; margin-right: 5px;">
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 所属包裹 -->
+        <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
+      </el-table>
       <!-- 多箱出库详情 -->
       <div v-if="(this.$route.params.activeName === '2' || this.$route.params.activeName === '3' || this.$route.params.activeName === '4' || this.$route.params.activeName === '5') && this.form.box_type === 2">
         <h4>{{$t('多箱出库详情')}}</h4>
@@ -397,6 +430,7 @@ export default {
       form: {},
       oderData: [],
       PackageData: [],
+      productData: [], // 商品清单
       services: [],
       localization: {},
       paymentData: [],
@@ -414,6 +448,7 @@ export default {
   created () {
     if (this.$route.params.id) {
       this.getList()
+      this.getProduct()
     }
   },
   methods: {
@@ -429,6 +464,14 @@ export default {
         this.paymentData = [res.data.payment]
         this.boxData = res.data.box
         this.userId = res.data.user_id
+      })
+    },
+    // 获取商品清单
+    getProduct () {
+      this.$request.packageDetails(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.productData = res.data
+        }
       })
     },
     // 获取收件人可选信息

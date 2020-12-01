@@ -222,6 +222,7 @@ export default {
       },
       welcome: 1,
       forgetStep: 1,
+      groupBuy: '',
       rules: {
         email: [
           { required: true, message: this.$t('请输入邮箱地址'), trigger: 'blur' },
@@ -258,6 +259,15 @@ export default {
     if (this.userInfo.username && this.userInfo.password) this.keep = true
   },
   methods: {
+    // 获取是否显示拼团配置
+    getMe () {
+      this.$request.getMe().then(res => {
+        if (res.ret) {
+          this.groupBuy = Number(res.data.group_buying_config)
+          console.log(this.groupBuy, 'this.groupBuy')
+        }
+      })
+    },
     // 登录
     onLogin () {
       if (!this.userInfo.username.trim()) {
@@ -296,6 +306,14 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
+            })
+            // this.getMe()
+            this.$request.getMe().then(res => {
+              if (res.ret) {
+                this.groupBuy = Number(res.data.group_buying_config)
+                this.$store.commit('saveMe', this.groupBuy)
+                console.log(this.groupBuy, 'this.groupBuy')
+              }
             })
             this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
             this.$store.commit('saveName', res.data.email)

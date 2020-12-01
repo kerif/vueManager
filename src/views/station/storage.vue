@@ -270,6 +270,11 @@
           prop="name"
           :label="$t('货品名称')">
           </el-table-column>
+          <!-- 材质 -->
+          <el-table-column
+          prop="material"
+          :label="$t('材质')">
+          </el-table-column>
           <!-- 数量 -->
           <el-table-column
           prop="qty"

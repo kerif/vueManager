@@ -13,6 +13,7 @@ export default new Vuex.Store({
     isPermissionFilterArr: [],
     token: '',
     userName: '', // 用户名
+    groupMe: '', // 是否显示拼团配置
     btnLoading: false,
     isCollapse: false,
     languageCode: 'simple', // 默认简体中文
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     initToken (state) {
       state.token = localStorage.getItem('TOKEN') || ''
       state.userName = localStorage.getItem('NAME') || ''
+      state.groupMe = localStorage.getItem('me') || ''
     },
     removeToken (state) {
       state.token = ''
@@ -43,6 +45,12 @@ export default new Vuex.Store({
     saveName (state, data) {
       state.userName = data
       localStorage.setItem('NAME', data)
+    },
+    saveMe (state, data) {
+      state.groupMe = data
+      console.log(state.groupMe, 'state.groupMe')
+      localStorage.setItem('me', data)
+      console.log(localStorage.setItem, 'localStorage.setItem')
     },
     savePermissionStatus (state, data) {
       state.isPermissionFilter = data

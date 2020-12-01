@@ -523,6 +523,9 @@ exports.getOrder = (params) => {
 exports.getOrderDetails = (id) => {
   return $form.get(`orders/${id}`)
 }
+exports.packageDetails = (id) => {
+  return $form.get(`orders/${id}/package-details `)
+}
 exports.saveOrderPack = (id, params) => {
   return $form.put(`orders/${id}/pack`, params)
 }
@@ -2113,6 +2116,8 @@ exports.resetPassword = (params) => $json.put('reset-password', params)
 // 获取权限
 exports.getCurrentUserPermissions = () => $form.get('menu-tree')
 
+// 获取是否显示拼团配置
+exports.getMe = () => $form.get('me')
 // 获取视频上传临时 token
 exports.getVideoUploadToken = () => $form.get('videos/upload-token')
 
