@@ -243,7 +243,7 @@
         <!-- 上传打包照片 -->
         <el-row :gutter="20">
           <el-col :span="11">
-            <el-form-item :label="$t('*上传打包照片')" class="updateChe">
+            <el-form-item :label="$t('上传打包照片')" class="updateChe">
               <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt class="goods-img" />
                 <span class="model-box"></span>
