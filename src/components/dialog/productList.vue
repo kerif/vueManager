@@ -17,6 +17,11 @@
           <el-input v-model="ruleForm.unit_price">
           </el-input>
         </el-form-item>
+        <!-- 材质 -->
+        <el-form-item :label="$t('材质') + this.currencyUnit">
+          <el-input v-model="ruleForm.material">
+          </el-input>
+        </el-form-item>
         <!-- 货品状态 -->
         <el-form-item :label="$t('*货品状态')" class="service-style">
           <el-radio-group v-model="ruleForm.status">
@@ -66,6 +71,7 @@ export default {
     return {
       ruleForm: {
         unit_price: '',
+        material: '',
         name: '',
         remark: '',
         status: '',
@@ -199,6 +205,7 @@ export default {
     },
     clear () {
       this.ruleForm.unit_price = ''
+      this.ruleForm.material = ''
       this.ruleForm.qty = ''
       this.ruleForm.name = ''
       this.ruleForm.status = ''
