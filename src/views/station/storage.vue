@@ -20,7 +20,7 @@
             <el-col :span="18">
               <el-form-item :label="$t('*快递单号')">
                 <el-input v-model="user.express_num" :placeholder="$t('请输入快递单号')"
-                @blur="getNum(user.express_num)" :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"></el-input>
+                @blur="getNum(user.express_num)" :disabled="(!!this.$route.params.id && !hasStore)"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
