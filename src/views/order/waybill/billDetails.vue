@@ -267,6 +267,8 @@
        v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
+        <!-- 包裹编码 -->
+        <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
         <el-table-column :label="$t('物品名称')" prop="package_name"></el-table-column>
         <el-table-column :label="$t('物品价值') + this.localization.currency_unit" prop="package_value"></el-table-column>
         <el-table-column :label="$t('物品属性')">

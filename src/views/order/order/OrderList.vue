@@ -96,6 +96,9 @@
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')" prop="express_num">
       </el-table-column>
+      <!-- 包裹编码 -->
+      <el-table-column :label="$t('包裹编码')" prop="code">
+      </el-table-column>
       <el-table-column :label="$t('状态')" :width="activeName === '1' ? 160 : 90">
         <!-- width="160" -->
         <template slot-scope="scope">

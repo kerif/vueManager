@@ -41,6 +41,8 @@
           <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
         </template>
       </el-table-column>
+      <!-- 包裹编码 -->
+      <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
       <!-- 物品价值 -->
       <el-table-column :label="$t('包裹重量') + this.localization.weight_unit" prop="package_weight"></el-table-column>
       <!-- 物品属性 -->

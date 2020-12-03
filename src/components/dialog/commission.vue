@@ -24,7 +24,7 @@
       <el-table-column
         :label="$t('分成方式')">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.type" :placeholder="$t('请选择')">
+          <el-select v-model="scope.row.type" :placeholder="$t('请选择')" clearable>
             <el-option
               v-for="item in options"
               :key="item.id"

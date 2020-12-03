@@ -5,6 +5,18 @@
   </div>
     <el-table :data="shipData" border  @selection-change="selectionChange">
        <el-table-column type="selection" width="55"></el-table-column>
+       <!-- 客户ID -->
+        <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+        <!-- 客户昵称 -->
+        <el-table-column :label="$t('客户昵称')" prop="user_name"></el-table-column>
+        <!-- 付款状态 -->
+        <el-table-column :label="$t('付款状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.on_delivery_status === 0">{{$t('已付款')}}</span>
+            <span v-if="scope.row.on_delivery_status === 1">{{$t('货到付款')}}</span>
+            <span v-if="scope.row.on_delivery_status === 2">{{$t('货到付款（已付款）')}}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('订单号')">
             <template slot-scope="scope">
                 <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
