@@ -17,22 +17,22 @@
       <div v-if="line.mode === 1">
         <!-- 首重、续重模式 -->
         <div v-if="count">{{$t('计费重量')}}：
-          {{ count.countWeight}}{{ localization.weight_unit }}
+          {{ count.countWeight/ 1000}}{{ localization.weight_unit }}
           </div>
         <div v-else>{{$t('首重')}}：
           {{ line.first_weight}}{{ localization.weight_unit }}
         </div>
         <div v-if="count">{{$t('预计费用')}}：
-          {{ localization.currency_unit }}{{ count.exceptFee}}
+          {{ localization.currency_unit }}{{ count.exceptFee/100}}
           </div>
         <div v-else>{{$t('续重')}}：
           {{ line.next_weight}}{{ localization.weight_unit }}
           </div>
         <div>{{$t('首重收费')}}：
-          {{ localization.currency_unit }}{{ (count ? count.countFirst : line.first_money)}}
+          {{ localization.currency_unit }}{{ (count ? count.countFirst : line.first_money)/100}}
           </div>
         <div>{{$t('续重收费')}}：
-          {{ localization.currency_unit }}{{ count ? count.countNext : line.next_money}}
+          {{ localization.currency_unit }}{{ (count ? count.countNext : line.next_money)/100}}
           </div>
       </div>
       <div v-if="line.mode === 2">
