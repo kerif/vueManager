@@ -665,6 +665,10 @@ exports.getOrderCounts = (params) => {
 exports.sendingNotify = (params) => {
   return $form.post('re-notify', params)
 }
+// 退回未入库
+exports.returnBack = (id) => {
+  return $form.put(`packages/${id}/rollback`)
+}
 // 彻底删除 预报包裹
 exports.deleteDiscard = (ids) => {
   return $form.put('packages/batch-complete-delete', ids)
@@ -700,6 +704,10 @@ exports.updateImport = (params) => {
 // 无人认领包裹
 exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
+}
+// 认领记录
+exports.claimLogs = () => {
+  return $form.get('packages/no-owner/claim-logs')
 }
 // 无人认领包裹 导出
 exports.uploadNoOwner = () => {
@@ -1050,6 +1058,10 @@ exports.deleteTransfer = (id) => {
 // 获取转账支付详情
 exports.editPayments = (id) => {
   return $form.get(`payments/${id}`)
+}
+// 获取当前结算货币
+exports.currencyPayment = () => {
+  return $form.get('payments/currency')
 }
 // 转账支付 语言详情
 exports.paymentLang = (id, params) => {

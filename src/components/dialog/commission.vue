@@ -1,9 +1,12 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('设置佣金')" class="dialog-commission"
-  @close="clear">
-    <el-form ref="form" :model="ruleForm" label-width="140px">
+  @close="clear" width="65%">
+    <el-form ref="form" :model="ruleForm" class="commission-top">
       <el-form-item :label="$t('代理名称')">
         <span>{{agentName}}</span>
+      </el-form-item>
+      <el-form-item>
+       <el-checkbox v-model="ruleForm.mode">{{$t('按比例计佣时，仅计算实际运费佣金（不包含增值费用、保险费用、抵用券等）')}}</el-checkbox>
       </el-form-item>
       <el-form-item :label="$t('默认佣金')">
           <el-input v-model="ruleForm.commission" class="input-select"></el-input>%
@@ -62,7 +65,8 @@ export default {
   data () {
     return {
       ruleForm: {
-        commission: ''
+        commission: '',
+        mode: ''
       },
       options: [
         {
@@ -93,6 +97,13 @@ export default {
         this.page_params.total = res.meta.total
       })
     },
+    getAgent () {
+      this.$request.getEditAgent(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm.mode = Boolean(res.data.mode)
+        }
+      })
+    },
     confirm (ruleForm, tableData) {
       let arr = tableData.map(item => {
         return {
@@ -103,6 +114,7 @@ export default {
       })
       this.$request.updateCommissions(this.id, {
         commission: this.ruleForm.commission,
+        mode: Number(this.ruleForm.mode),
         rules: arr
       }).then(res => {
         if (res.ret) {
@@ -126,10 +138,12 @@ export default {
       this.agentName = this.agentName
       this.ruleForm.commission = this.commission
       this.getList()
+      this.getAgent()
     },
     clear () {
       this.page_params.page = 1
       this.ruleForm.commission = ''
+      this.ruleForm.mode = ''
     }
   }
 }
@@ -152,6 +166,9 @@ export default {
   }
   .el-dialog__close {
     color: #FFF;
+  }
+  .commission-top {
+    margin-left: 20px;
   }
 }
 </style>

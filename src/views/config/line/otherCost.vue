@@ -9,6 +9,16 @@
                 <div class="serviceLeft">
                 <el-checkbox v-model="item.selected">{{item.name}}</el-checkbox>
                 </div>
+                <div class="middle">
+                   <el-select v-model="item.type" :placeholder="$t('请选择')">
+                    <el-option
+                    v-for="item in options"
+                    :key="item.id"
+                    :value="item.id"
+                    :label="item.name">
+                    </el-option>
+                  </el-select>
+                </div>
                 <div class="serviceRight">
                 <span>{{localization.currency_unit}}</span>
                 <el-input v-model="item.price" class="add-value-ipt"></el-input>
@@ -36,7 +46,17 @@ export default {
       checked: false,
       tableLoading: false,
       updateProp: [],
-      localization: {}
+      localization: {},
+      options: [
+        {
+          id: 0,
+          name: this.$t('按固定数值金额')
+        },
+        {
+          id: 1,
+          name: this.$t('按计算的运费比例')
+        }
+      ]
     }
   },
   created () {
@@ -58,6 +78,7 @@ export default {
               if (ele) {
                 selected = ele.selected
                 items.price = ele.price
+                items.type = ele.type
               }
             }
             items.selected = selected
@@ -74,7 +95,7 @@ export default {
       })
     },
     savePacked () {
-      const params = this.updateProp.filter(item => item.selected).map(item => ({ id: item.id, price: item.price }))
+      const params = this.updateProp.filter(item => item.selected).map(item => ({ id: item.id, price: item.price, type: item.type }))
       this.$request.updateCosts(this.$route.params.id, params).then(res => {
         if (res.ret) {
           this.$notify({
@@ -99,7 +120,7 @@ export default {
 .others-cost-container {
   background-color: #fff !important;
   .service {
-    width: 450px;
+    width: 500px;
     overflow: hidden;
     .el-input__inner {
       line-height: 40px !important;
@@ -108,10 +129,15 @@ export default {
     .serviceLeft {
       display: inline-block;
       float: left;
+      width: 100px;
+      // margin-right: 20px;
     }
     .serviceRight {
       display: inline-block;
       float: right;
+    }
+    .middle {
+      display: inline-block;
     }
   }
   .add-value-ipt {

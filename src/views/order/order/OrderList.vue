@@ -192,6 +192,10 @@
                 <!-- 单号追踪 -->
                 <span v-if="activeName === '1' || activeName === '2' || scope.row.status === 1 || scope.row.status === 2">{{$t('单号追踪')}}</span>
               </el-dropdown-item>
+              <!-- 退回未入库 -->
+              <el-dropdown-item class="item-sty" @click.native="returnWarehouse(scope.row.id)">
+                 <span v-if="activeName === '2'">{{$t('退回未入库')}}</span>
+              </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="onLogs(scope.row.express_num)">
                <!-- 入库日志 -->
                 <span v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || scope.row.status === 2 || scope.row.status === 3 || scope.row.status === 4 || scope.row.status === 5 || scope.row.status === 6">{{$t('入库日志')}}</span>
@@ -472,6 +476,30 @@ export default {
           ids: this.deleteNum,
           type: 1
         }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
+    // 退回未入库
+    returnWarehouse (id) {
+      this.$confirm(this.$t('您是否确认将该包裹退回未入库状态'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.returnBack(id).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),

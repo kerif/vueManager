@@ -228,7 +228,7 @@
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="reviewPackage(scope.row.id)">
                 <!-- 审核 -->
-                <span v-show="activeName === '2' && scope.row.status === 11">{{$t('审核')}}
+                <span v-show="(activeName === '2' && scope.row.status === 11 ) || ((activeName === '3' || activeName === '4') && scope.row.on_delivery_status === 11)">{{$t('审核')}}
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)">
@@ -395,7 +395,9 @@
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="reviewPackage(scope.row.id)">
                 <!-- 审核 -->
-                <span v-show="activeName === '2' && scope.row.status === 11">{{$t('审核')}}
+                <!-- <span v-show="activeName === '2' && scope.row.status === 11">{{$t('审核')}}
+                </span> -->
+                <span v-show="(activeName === '2' && scope.row.status === 11 ) || ((activeName === '3' || activeName === '4') && scope.row.on_delivery_status === 11)">{{$t('审核')}}
                 </span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)">
@@ -791,6 +793,14 @@ export default {
         {
           id: 3,
           name: this.$t('已支付')
+        },
+        {
+          id: 11,
+          name: this.$t('待审核')
+        },
+        {
+          id: 12,
+          name: this.$t('审核拒绝')
         }
       ],
       lineData: [],
