@@ -46,7 +46,10 @@
               {{'抵用券金额' + this.localization.currency_unit}}</p>
           <span>{{form.amount}}</span><br/> -->
           <p class="transfer-right">{{$t('支付金额') + this.localization.currency_unit}}</p>
-          <span>{{form.amount}}</span><br/>
+          <span>{{form.amount}}</span>
+          <span v-if="this.form.show_rate == true">
+            （{{this.form.currency_code}}&nbsp;{{this.form.currency_symbol}}&nbsp;{{this.form.rate_amount}}）
+          </span><br/>
           <!-- <p class="transfer-right">关联单号</p>
           <span>{{form.order_number}}</span><br/> -->
           <!-- 备注 -->

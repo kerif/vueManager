@@ -41,11 +41,11 @@
               {{$t('抵用券金额') + this.localization.currency_unit}}</p>
           <span>{{form.coupon_amount}}</span><br/>
           <p class="transfer-right">{{$t('支付金额') + this.localization.currency_unit}}
-            <span v-if="this.form.show_rate == true">
-              ({{this.form.currency_code}}{{this.form.currency_symbol}}{{this.form.rate_amount}})
-            </span>
           </p>
-          <span>{{form.tran_amount}}</span><br/>
+          <span>{{form.tran_amount}}</span>
+          <span v-if="this.form.show_rate == true">
+            （{{this.form.currency_code}}&nbsp;{{this.form.currency_symbol}}&nbsp;{{this.form.rate_amount}}）
+          </span><br/>
           <p class="transfer-right">{{$t('关联单号')}}</p>
           <span>{{form.order_number}}</span><br/>
           <p class="transfer-right">{{$t('备注')}}</p>

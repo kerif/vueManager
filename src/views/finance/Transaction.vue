@@ -138,7 +138,7 @@ export default {
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
     },
-    // 跳转到审核
+    // 详情
     details (type, id, orderId, paymentType) {
       console.log(type, 'paymentType')
       // type等于消费的时候 就要判断消费类型
