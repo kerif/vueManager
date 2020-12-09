@@ -112,7 +112,11 @@
       :data="claimData">
         <el-table-column type="index"></el-table-column>
         <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
-        <el-table-column :label="$t('认领人')" prop="user"></el-table-column>
+        <el-table-column :label="$t('认领人')">
+          <template slot-scope="scope">
+            <span>{{scope.row.user.name}}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('操作时间')" prop="created_at"></el-table-column>
         <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
       </el-table>
