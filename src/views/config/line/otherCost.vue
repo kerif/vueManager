@@ -20,7 +20,7 @@
                   </el-select>
                 </div>
                 <div class="serviceRight">
-                <span>{{localization.currency_unit}}</span>
+                <span v-if="item.type === 0">{{localization.currency_unit}}</span>
                 <el-input v-model="item.price" class="add-value-ipt"></el-input>
                 </div>
                 </div>
@@ -54,7 +54,7 @@ export default {
         },
         {
           id: 1,
-          name: this.$t('按计算的运费比例')
+          name: `${this.$t('按计算的运费比例')}%`
         }
       ]
     }
