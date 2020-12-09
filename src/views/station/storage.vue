@@ -25,12 +25,12 @@
             </el-col>
           </el-row>
         <!-- 寄往仓库 -->
+         <!-- :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('*寄往仓库')">
                 <el-select v-model="user.warehouse_id" clearable
-                @change="getAreaData" :placeholder="$t('请选择')"
-                 :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''">
+                @change="getAreaData" :placeholder="$t('请选择')">
                   <el-option
                     v-for="item in agentData"
                     :key="item.id"
