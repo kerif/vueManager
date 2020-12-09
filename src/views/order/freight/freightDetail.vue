@@ -62,6 +62,14 @@
           <span>{{$t('首重价格')}}：</span>
           <span>{{localization.currency_unit}}{{line.first_money}}/{{localization.weight_unit}}</span>
         </div>
+        <div>
+          {{$t('预计费用')}}：
+          {{ localization.currency_unit }}{{ count.exceptFee/100}}
+        </div>
+        <div>
+          {{$t('计费重量')}}：
+          {{ count.countWeight/ 1000}}{{ localization.weight_unit }}
+        </div>
         <div v-for="item in line.price_grade" :key="item.id">
           <div>
             <span>{{$t('重量范围')}}：</span>
