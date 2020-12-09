@@ -140,6 +140,7 @@ export default {
       })
     },
     confirm () {
+      // console.log(this.ruleForm.show_rate, 'ruleForm.show_rate')
       if (this.baleImgList[0]) {
         this.ruleForm.qr_code = this.baleImgList[0]
       } else {
@@ -235,10 +236,10 @@ export default {
       this.baleImgList = []
       this.ruleForm.qr_code = []
       this.ruleForm.account = ''
-      this.ruleForm.show_rate = ''
+      this.ruleForm.show_rate = 0
       this.ruleForm.currency = ''
       this.ruleForm.rate = ''
-      this.ruleForm.rate_type = ''
+      this.ruleForm.rate_type = 0
     },
     init () {
       console.log(this.id, '我是接受id')
