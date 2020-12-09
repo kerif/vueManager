@@ -120,7 +120,7 @@ export default {
 .others-cost-container {
   background-color: #fff !important;
   .service {
-    width: 500px;
+    width: 560px;
     overflow: hidden;
     .el-input__inner {
       line-height: 40px !important;
@@ -129,7 +129,7 @@ export default {
     .serviceLeft {
       display: inline-block;
       float: left;
-      width: 100px;
+      width: 120px;
       // margin-right: 20px;
     }
     .serviceRight {
@@ -138,6 +138,7 @@ export default {
     }
     .middle {
       display: inline-block;
+      width: 40%;
     }
   }
   .add-value-ipt {
