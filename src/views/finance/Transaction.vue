@@ -49,7 +49,14 @@
       <!-- 抵用券金额¥ -->
       <el-table-column :label="$t('抵用券金额') + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
       <!-- 支付金额¥ -->
-      <el-table-column :label="$t('支付金额') + this.localization.currency_unit" prop="pay_amount"></el-table-column>
+      <el-table-column :label="$t('支付金额') + this.localization.currency_unit">
+        <template slot-scope="scope">
+          <span>{{scope.row.pay_amount}}</span>
+          <span v-if="scope.row.show_rate == true">
+            （{{scope.row.currency_code}}&nbsp;{{scope.row.currency_symbol}}&nbsp;{{scope.row.rate_amount}}）
+          </span>
+        </template>
+      </el-table-column>
       <!-- 相关订单 -->
       <el-table-column :label="$t('相关订单')" prop="order_sn"></el-table-column>
       <!-- 流水号 -->
