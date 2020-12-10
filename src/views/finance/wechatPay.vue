@@ -47,8 +47,8 @@
           <!-- 支付金额 -->
           <p class="transfer-right">{{$t('支付金额') + this.localization.currency_unit}}</p>
           <span>{{form.pay_amount}}</span>
-          <span v-if="this.form.show_rate == true">
-            （{{this.form.currency_code}}&nbsp;{{this.form.currency_symbol}}&nbsp;{{this.form.rate_amount}}）
+          <span v-if="form.show_rate == true">
+            （{{form.currency_code}}&nbsp;{{form.currency_symbol}}&nbsp;{{form.rate_amount}}）
           </span><br/>
           <!-- 关联单号 -->
           <p class="transfer-right">{{$t('关联单号')}}</p>

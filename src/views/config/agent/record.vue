@@ -9,7 +9,7 @@
       </el-table-column>
       <el-table-column :label="$t('订单号')" prop="order_number">
       </el-table-column>
-      <el-table-column :label="$t('订单金额') + this.localization.currency_unit" prop="order_amount">
+      <el-table-column :label="$t('计佣金额') + this.localization.currency_unit" prop="order_amount">
       </el-table-column>
       <el-table-column :label="$t('佣金比例%')" prop="proportion">
       </el-table-column>
