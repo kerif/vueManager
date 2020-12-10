@@ -1262,7 +1262,7 @@ export default [
             path: '/marketing/channelManagement',
             name: 'channel',
             component: channelManagement,
-            id: 804,
+            id: 803,
             meta: {
               level: 2,
               group: '营销管理',
@@ -1273,7 +1273,7 @@ export default [
             path: '/marketing/add/channel',
             name: 'addChannel',
             component: AddEditChannel,
-            id: 804,
+            id: 803,
             meta: {
               level: 3,
               group: '营销管理',
@@ -1285,7 +1285,7 @@ export default [
             path: '/marketing/edit/channel/:id',
             name: 'editChannel',
             component: AddEditChannel,
-            id: 804,
+            id: 803,
             meta: {
               level: 3,
               group: '营销管理',
@@ -1297,7 +1297,7 @@ export default [
             path: '/marketing/drainage/:id',
             name: 'drainageList',
             component: drainageList,
-            id: 804,
+            id: 803,
             meta: {
               level: 3,
               group: '营销管理',
@@ -1309,7 +1309,7 @@ export default [
             path: '/marketing/report',
             name: 'reportList',
             component: reportList,
-            id: 805,
+            id: 804,
             meta: {
               level: 2,
               group: '营销管理',
@@ -1320,7 +1320,7 @@ export default [
             path: '/marketing/advertising',
             name: 'advertising',
             component: advertising,
-            id: 806,
+            id: 805,
             meta: {
               level: 2,
               group: '营销管理',
@@ -1331,7 +1331,7 @@ export default [
             path: '/marketing/banner',
             name: 'bannerList',
             component: bannerList,
-            id: 806,
+            id: 805,
             meta: {
               level: 3,
               group: '营销管理',
@@ -1343,7 +1343,7 @@ export default [
             path: '/marketing/poster',
             name: 'poster',
             component: poster,
-            id: 806,
+            id: 805,
             meta: {
               level: 3,
               group: '营销管理',
@@ -1355,7 +1355,7 @@ export default [
             path: '/marketing/imageSet',
             name: 'imageSet',
             component: imageSet,
-            id: 806,
+            id: 805,
             meta: {
               level: 3,
               group: '营销管理',

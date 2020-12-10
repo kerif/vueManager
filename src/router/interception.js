@@ -19,7 +19,7 @@ const dynamicAddRouter = (router, next, to) => {
     })
     // 筛选有权限的路由
     filteredRouterMap[0] = multiTree(filteredRouterMap[0], isPermissionFilterArr)
-    // console.log(filteredRouterMap, 'filteredRouterMap')
+    console.log(filteredRouterMap, 'filteredRouterMap')
     router.addRoutes(filteredRouterMap)
     store.commit('saveFileterAfterRouterMap', { fileterAfterRouterMap: filteredRouterMap, isPermissionFilterArr })
     store.commit('savePermissionStatus', true) // 标记筛选完成
