@@ -76,7 +76,7 @@
         </el-radio-group>
        </el-form-item>
        <el-form-item v-if="ruleForm.rate_type === 1">
-        1{{$t('人民币')}}CNY = &nbsp;
+        1{{current}}{{currentCode}} = &nbsp;
         <el-input class="input-sty" v-model="ruleForm.rate" :placeholder="$t('请输入转换汇率')"></el-input>
        </el-form-item>
     </el-form>
@@ -103,6 +103,7 @@ export default {
       },
       state: '',
       current: '',
+      currentCode: '',
       options: [],
       value: '',
       tranAmount: '',
@@ -123,6 +124,7 @@ export default {
       this.$request.currencyPayment().then(res => {
         if (res.ret) {
           this.current = res.data.name
+          this.currentCode = res.data.code
         }
       })
     },
@@ -238,6 +240,7 @@ export default {
       this.ruleForm.account = ''
       this.ruleForm.show_rate = 0
       this.ruleForm.currency = ''
+      this.ruleForm.currentCode = ''
       this.ruleForm.rate = ''
       this.ruleForm.rate_type = 0
     },
