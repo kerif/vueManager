@@ -650,8 +650,8 @@ exports.confirmExpress = (id, params) => {
   return $form.put(`shipments/${id}/logistics-sn`, params)
 }
 // 发货单 确认批量上传单号
-exports.updateBatch = (id, params) => {
-  return $form.put(`shipments/${id}/logistics-import`, params)
+exports.updateBatch = (params) => {
+  return $form.post('shipments/logistics-export', params)
 }
 // 删除预报包裹列表
 exports.deletePackages = (ids) => {
@@ -1966,8 +1966,8 @@ exports.idCards = (id) => {
   return $form.get(`package-packs/express-line/${id}`)
 }
 // 发货单 获取物流信息模版
-exports.uploadBatch = (id) => {
-  return $form.get(`shipments/${id}/logistics-export`)
+exports.uploadBatch = (params) => {
+  return $form.post('shipments/logistics-export', params)
 }
 // 发货单 修改物流信息 获取转运快递公司
 exports.shipmentCompanies = () => {

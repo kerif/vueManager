@@ -141,9 +141,9 @@
                 <span>{{$t('轨迹')}}</span>
               </el-dropdown-item>
               <!-- 批量更新单号 -->
-              <el-dropdown-item class="item-sty" @click.native="batchNum(scope.row.id, scope.row.sn)">
+              <!-- <el-dropdown-item class="item-sty" @click.native="batchNum(scope.row.id, scope.row.sn)">
                 <span>{{$t('批量更新单号')}}</span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <!-- 添加物流信息 -->
               <el-dropdown-item class="item-sty" @click.native="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)">
                 <span>{{$t('添加物流信息')}}</span>
@@ -173,6 +173,7 @@
            <el-button size="small" @click="deleteData">{{$t('导出清单')}}</el-button>
             <!-- 批量发送通知 -->
            <el-button size="small" @click="goNotify">{{$t('批量发送通知')}}</el-button>
+           <el-button size="small" @click="batchNum">{{$t('批量更新单号')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -218,13 +219,19 @@
       </el-table>
     </el-dialog>
     <!-- 批量更新单号 -->
-    <el-dialog :visible.sync="batchDialog" width="45%" :title="$t('批量更新单号:') + this.batchSn" @close="clearBatch">
+    <el-dialog :visible.sync="batchDialog" width="45%" :title="$t('批量更新单号')" @close="clearBatch">
       <el-form>
       <!-- 公告标题 -->
+      <el-form-item :label="$t('发货单号')">
+        <span v-for="(item, index) in orderNum" :key="index">
+          {{item}}
+        </span><br/>
+      </el-form-item>
       <el-form-item :label="$t('模版下载')">
         <el-row>
           <el-col :span="10">
-            <el-button @click="uploadList">{{this.batchSn}}{{$t('模版下载')}}</el-button><br/>
+            <el-button @click="uploadList">
+              {{$t('模版下载')}}</el-button><br/>
             <span class="batch-sty">1，{{$t('请先下载指定的模版')}}</span><br/>
             <span class="batch-sty">2，{{$t('根据模版内容填充物流信息')}}</span><br/>
             <span class="batch-sty">3，{{$t('上传')}}</span><br/>
@@ -275,6 +282,7 @@ export default {
       localization: {},
       tableLoading: false,
       deleteNum: [],
+      orderNum: [],
       timeList: [],
       begin_date: '',
       end_date: '',
@@ -305,8 +313,7 @@ export default {
       tableId: '',
       tableSn: '',
       batchDialog: false,
-      batchSn: '',
-      batchId: '',
+      // batchId: '',
       urlName: '',
       fileList: []
     }
@@ -361,7 +368,9 @@ export default {
     },
     // 下载excel
     uploadList () {
-      this.$request.uploadBatch(this.batchId).then(res => {
+      this.$request.uploadBatch({
+        ids: this.deleteNum
+      }).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           // window.location.href = this.urlExcel
@@ -399,7 +408,8 @@ export default {
     },
     // 确认 批量更新单号
     confirmBatch () {
-      this.$request.updateBatch(this.batchId, {
+      this.$request.updateBatch({
+        ids: this.deleteNum,
         name: this.urlName
       }).then(res => {
         if (res.ret) {
@@ -428,15 +438,8 @@ export default {
     onFileRemove (file, fileList) {
       this.fileList = fileList
     },
-    // 批量更新单号
-    batchNum (id, sn) {
-      this.batchId = id
-      this.batchSn = sn
-      this.batchDialog = true
-    },
     clearBatch () {
-      this.batchId = ''
-      this.batchSn = ''
+      // this.batchId = ''
       this.fileList = []
     },
     // 跳转至详情
@@ -514,6 +517,7 @@ export default {
     // },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
+      this.orderNum = selection.map(item => (item.sn))
       console.log(this.deleteNum, 'this.deleteNum')
     },
     clear () {
@@ -572,6 +576,12 @@ export default {
         this.getList()
         this.deleteNum = []
       })
+    },
+    batchNum () {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.batchDialog = true
     },
     // 跳至加入发货单
     addShip (id) {
