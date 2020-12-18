@@ -585,6 +585,7 @@ export default {
               type: 'success'
             })
             this.getList()
+            this.getProduct()
           } else {
             this.$notify({
               title: this.$t('操作失败'),

@@ -714,8 +714,8 @@ exports.claimLogs = (params) => {
   return $form.get('packages/no-owner/claim-logs', { params })
 }
 // 无人认领包裹 导出
-exports.uploadNoOwner = () => {
-  return $form.get('packages/no-owner/export')
+exports.uploadNoOwner = (params) => {
+  return $form.get('packages/no-owner/export', { params })
 }
 // 无人认领包裹 获取认领包裹的id
 exports.getClaimList = (params) => {

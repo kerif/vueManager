@@ -219,7 +219,16 @@ export default {
     },
     // 导出清单
     uploadList () {
-      this.$request.uploadNoOwner().then(res => {
+      let params = {
+        page: this.page_params.page,
+        size: this.page_params.size,
+        warehouse: this.agent_name
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // 提交时间
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.uploadNoOwner(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           // window.location.href = this.urlExcel
