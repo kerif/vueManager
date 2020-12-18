@@ -1985,6 +1985,10 @@ exports.uploadOrder = (ids) => {
 exports.orderExport = (params) => {
   return $form.get('orders/export', { params })
 }
+// 订单列表 详情 移除包裹清单
+exports.removePackage = (orderId, packageId) => {
+  return $form.put(`orders/${orderId}/packages/${packageId}/remove`)
+}
 // 发货单 详情批量导出发货单
 exports.uploadShipmentLabel = (id, ids) => {
   return $form.post(`shipments/${id}/order-shipment-label`, ids)

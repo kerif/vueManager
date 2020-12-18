@@ -292,6 +292,16 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('货位')" prop="location"></el-table-column>
+        <el-table-column :label="$t('操作')" width="140" v-if="this.$route.params.activeName === '1'">
+          <template slot-scope="scope">
+            <el-button @click="packageDetails(scope.row.id)" class="btn-deep-purple">
+              {{$t('详情')}}
+            </el-button>
+            <el-button class="btn-light-red" @click="removePackage(scope.row.id, scope.row.express_num, scope.row.order_sn)">
+              {{$t('移除')}}
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <h4>{{$t('商品清单')}}</h4>
       <el-table :data="productData" class="data-list" border stripe
@@ -555,6 +565,35 @@ export default {
       this.chooseId = row.id
       // this.box.address_id = this.chooseId
       this.user = row
+    },
+    // 包裹清单 详情
+    packageDetails (id) {
+      this.$router.push({ name: 'oderDetails', params: { id: id } })
+    },
+    // 移除 包裹清单
+    removePackage (id, expressNum, orderSn) {
+      this.$confirm(this.$t(`该操作无法撤回，移除后的包裹将回到已入库状态，您是否确认将包裹（${expressNum}）从订单（${orderSn}）中移除？注：若该订单只有一个包裹，则该包裹移除后订单自动作废`), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.removePackage(this.$route.params.id, id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     },
     confirm (val) {
       if (!this.chooseId) {
