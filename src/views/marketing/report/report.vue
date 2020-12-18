@@ -27,6 +27,7 @@
           :end-placeholder="$t('提交结束日期')">
         </el-date-picker>
       </div>
+      <el-button @click="uploadList">{{$t('导出清单')}}</el-button>
     <!-- </search-group> -->
     <el-table class="data-list" border stripe
       v-if="oderData.length"
@@ -121,7 +122,8 @@ export default {
       oderData: [],
       localization: {},
       status: 1,
-      tableLoading: false
+      tableLoading: false,
+      urlExcel: ''
     }
   },
   created () {
@@ -197,6 +199,38 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 导出清单
+    uploadList () {
+      let params = {
+        // status: val
+        // warehouse: this.agent_name,
+        // status: this.status,
+        // value_start: this.filterForm.start,
+        // value_end: this.filterForm.end,
+        // is_warning: this.is_warning === true ? 1 : ''
+      }
+      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // 已入库
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.uploadStatistics(params).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

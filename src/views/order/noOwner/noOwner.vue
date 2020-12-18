@@ -106,21 +106,6 @@
         <img :src="imgSrc" class="imgDialog">
       </div>
     </el-dialog>
-    <!-- 认领记录 -->
-    <el-dialog :visible.sync="showClaim" :title="$t('认领记录')" class="props-dialog" width="45%">
-      <el-table class="data-list" border stripe
-      :data="claimData">
-        <el-table-column type="index"></el-table-column>
-        <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
-        <el-table-column :label="$t('认领人')">
-          <template slot-scope="scope">
-            <span>{{scope.row.user.name}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('操作时间')" prop="created_at"></el-table-column>
-        <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
-      </el-table>
-    </el-dialog>
   </div>
 </template>
 
@@ -153,7 +138,6 @@ export default {
       imgVisible: false,
       urlHtml: '',
       show: false,
-      showClaim: false,
       labelId: '',
       imgSrc: ''
     }
@@ -231,8 +215,7 @@ export default {
     },
     // 认领记录
     claimList () {
-      this.showClaim = true
-      this.getClaim()
+      dialog({ type: 'claimRecord' })
     },
     // 导出清单
     uploadList () {
@@ -296,20 +279,6 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
-    },
-    // 认领日志
-    getClaim () {
-      this.$request.claimLogs().then(res => {
-        if (res.ret) {
-          this.claimData = res.data
         } else {
           this.$notify({
             title: this.$t('操作失败'),

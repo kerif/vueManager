@@ -196,9 +196,13 @@
               <el-dropdown-item class="item-sty" @click.native="returnWarehouse(scope.row.id)">
                  <span v-if="activeName === '2'">{{$t('退回未入库')}}</span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="onLogs(scope.row.express_num)">
                <!-- 入库日志 -->
+              <el-dropdown-item class="item-sty" @click.native="onLogs(scope.row.express_num)">
                 <span v-if="activeName === '2' || activeName === '3' || activeName === '4' || activeName === '5' || scope.row.status === 2 || scope.row.status === 3 || scope.row.status === 4 || scope.row.status === 5 || scope.row.status === 6">{{$t('入库日志')}}</span>
+              </el-dropdown-item>
+              <!-- 详情 -->
+              <el-dropdown-item class="item-sty" @click.native="oderDetails(scope.row.id)">
+                <span v-if="activeName === '3' || activeName === '4' || activeName === '5' || activeName === '6'">{{$t('详情')}}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="editWarehoused(scope.row.id)">
                 <!-- 编辑 -->
@@ -759,6 +763,10 @@ export default {
     // 入库日志
     onLogs (expressNum) {
       this.$router.push({ name: 'pickingContainer', query: { keyword: expressNum } })
+    },
+    // 详情
+    oderDetails (id) {
+      this.$router.push({ name: 'oderDetails', params: { id: id } })
     }
   },
   created () {

@@ -705,9 +705,13 @@ exports.updateImport = (params) => {
 exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
 }
+// 无人认领记录  无人认领导出
+exports.uploadOwner = () => {
+  return $form.get('packages/no-owner/claim-logs/export')
+}
 // 认领记录
-exports.claimLogs = () => {
-  return $form.get('packages/no-owner/claim-logs')
+exports.claimLogs = (params) => {
+  return $form.get('packages/no-owner/claim-logs', { params })
 }
 // 无人认领包裹 导出
 exports.uploadNoOwner = () => {
@@ -728,6 +732,10 @@ exports.deleteNoOwner = (ids) => {
 // 预报包裹列表 导出
 exports.uploadPackage = (params) => {
   return $form.get('packages/export', { params })
+}
+// 预报包裹列表 详情
+exports.getPackageDetails = (id) => {
+  return $form.get(`packages/${id}`)
 }
 // 预报包裹列表 获得仓库列表数据
 exports.getSimpleList = () => {
@@ -1638,6 +1646,10 @@ exports.transactionExcel = (params) => {
 // 营销管理 统计报表 下单排行榜
 exports.getUserOrder = (params) => {
   return $form.get('statistics/user-order-data', { params })
+}
+// 营销管理 统计报表 导出清单
+exports.uploadStatistics = (params) => {
+  return $form.get('statistics/export', { params })
 }
 // 营销管理 广告图管理 列表
 exports.getBanner = (params) => {

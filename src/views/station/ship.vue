@@ -169,8 +169,10 @@
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-deep-purple" @click="updateTracking">{{$t('更新物流状态')}}</el-button>
-           <el-button size="small" class="btn-main" @click="deleteData">{{$t('导出清单')}}</el-button>
+          <el-button size="small" @click="updateTracking">{{$t('更新物流状态')}}</el-button>
+           <el-button size="small" @click="deleteData">{{$t('导出清单')}}</el-button>
+            <!-- 批量发送通知 -->
+           <el-button size="small" @click="goNotify">{{$t('批量发送通知')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -559,6 +561,16 @@ export default {
             })
           }
         })
+      })
+    },
+    // 批量发送通知
+    goNotify () {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog({ type: 'notifyOrder', ids: this.deleteNum }, () => {
+        this.getList()
+        this.deleteNum = []
       })
     },
     // 跳至加入发货单

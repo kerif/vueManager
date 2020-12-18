@@ -2,10 +2,17 @@ const hostName = location.hostname
 let baseUrl
 switch (hostName) {
   // 开发服
-  case 'dev-jiyun-admin-v2.nle-tech.com':
+  // case 'dev-jiyun-admin-v2.nle-tech.com':
+  //   baseUrl = {
+  //     BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
+  //     IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
+  //     // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
+  //   }
+  // 临时开发服地址
+  case 'dev-admin.haiouoms.com':
     baseUrl = {
-      BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
-      IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
+      BASE_API_URL: 'https://dev-api.haiouoms.com/api/admin',
+      IMAGE_URL: 'https://dev-api.haiouoms.com'
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     break
@@ -41,9 +48,14 @@ switch (hostName) {
     }
     break
   default:
+    // baseUrl = {
+    //   BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
+    //   IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
+    // }
     baseUrl = {
-      BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
-      IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
+      BASE_API_URL: 'https://dev-api.haiouoms.com/api/admin',
+      IMAGE_URL: 'https://dev-api.haiouoms.com'
+      // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     break
 }

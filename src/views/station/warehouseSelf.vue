@@ -54,7 +54,7 @@
             <span><strong>{{item.express_line.cn_name}}</strong></span><br/>
             <!-- 重量 -->
             <span><strong>{{item.actual_weight}}{{localization.weight_unit}}</strong></span><br/>
-            <el-button class="btn-dark-green btn-sty" @click="self(item.id, item.order_sn)">{{$t('转运订单号')}}设为自提签收</el-button>
+            <el-button class="btn-dark-green btn-sty" @click="self(item.id, item.order_sn, item.status)">{{$t('转运订单号')}}设为自提签收</el-button>
             <el-button class="btn-purple btn-sty" @click="goDetails(item.id, item.status_name)">{{$t('转运订单号')}}查看详情</el-button>
           </el-col>
       </el-row>
@@ -172,9 +172,9 @@ export default {
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
     },
-    self (id, order) {
-      console.log(id, 'id')
-      dialog({ type: 'warehouseSelf', id: id, order: order }, () => {
+    self (id, order, status) {
+      console.log(id, 'id', status)
+      dialog({ type: 'warehouseSelf', id, order, status }, () => {
         this.getList()
       })
     }

@@ -6,6 +6,7 @@
         <!-- 转运单号 -->
         <el-form-item :label="$t('转运单号')">
           <span>{{this.order}}</span>
+          <p v-if="status === 3" class="red-text">{{$t('该订单还未发货，是否确认自提签收')}}</p>
         </el-form-item>
         <!-- 签收备注 -->
         <el-form-item :label="$t('签收备注')">
@@ -26,7 +27,8 @@ export default {
     return {
       id: '',
       remark: '',
-      order: ''
+      order: '',
+      status: ''
     }
   },
   methods: {
@@ -50,6 +52,7 @@ export default {
     clear () {
       this.remark = ''
       this.order = ''
+      this.status = ''
     },
     init () {
       console.log(this.id, 'id')
@@ -78,6 +81,9 @@ export default {
 
   .el-dialog__close {
     color: #FFF;
+  }
+  .red-text {
+    color: #f00;
   }
 }
 </style>
