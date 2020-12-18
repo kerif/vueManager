@@ -29,10 +29,10 @@
           {{ line.next_weight}}{{ localization.weight_unit }}
           </div>
         <div>{{$t('首重收费')}}：
-          {{ localization.currency_unit }}{{ (count ? count.countFirst : line.first_money)/100}}
+          {{ localization.currency_unit }}{{ (count ? count.countFirst : line.first_money)/100}} （{{localization.currency_unit}}{{line.first_money}}/{{$t('每')}}{{line.first_weight}}{{localization.weight_unit}}）
           </div>
         <div>{{$t('续重收费')}}：
-          {{ localization.currency_unit }}{{ (count ? count.countNext : line.next_money)/100}}
+          {{ localization.currency_unit }}{{ (count ? count.countNext : line.next_money)/100}}（{{localization.currency_unit}}{{line.next_money}}/{{$t('每')}}{{line.next_weight}}{{localization.weight_unit}}）
           </div>
       </div>
       <div v-if="line.mode === 2">
