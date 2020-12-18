@@ -76,7 +76,9 @@ export default {
     },
     // 导出清单
     unloadNoOwner () {
-      this.$request.uploadOwner().then(res => {
+      this.$request.uploadOwner({
+        keyword: this.keyword
+      }).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           // window.location.href = this.urlExcel

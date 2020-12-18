@@ -706,8 +706,8 @@ exports.getNoOwner = (params) => {
   return $form.get('packages/no-owner', { params })
 }
 // 无人认领记录  无人认领导出
-exports.uploadOwner = () => {
-  return $form.get('packages/no-owner/claim-logs/export')
+exports.uploadOwner = (params) => {
+  return $form.get('packages/no-owner/claim-logs/export', { params })
 }
 // 认领记录
 exports.claimLogs = (params) => {
