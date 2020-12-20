@@ -235,7 +235,7 @@
                 <span v-show="(activeName === '1' && scope.row.group_buying_status === 1)">{{$t('编辑')}}
                 </span>
               </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent)">
+              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent, activeName)">
                 <!-- 打包 -->
                 <span v-show="activeName === '1' && scope.row.group_buying_status === 0">{{$t('打包')}}</span>
               </el-dropdown-item>
@@ -405,7 +405,7 @@
                 </span>
               </el-dropdown-item>
               <!-- 打包 -->
-              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent)">
+              <el-dropdown-item class="item-sty" @click.native="packed(scope.row.id,scope.row.order_sn, scope.row.is_parent, activeName)">
                 <!-- 打包 -->
                 <span v-show="activeName === '1' && (scope.row.group_buying_status === 0 || scope.row.group_buying_status === 1)">{{$t('打包')}}</span>
               </el-dropdown-item>
@@ -1365,9 +1365,9 @@ export default {
       this.getList()
     },
     // 打包
-    packed (id, orderSN, parent) {
+    packed (id, orderSN, parent, activeName) {
       console.log(parent, 'parent111')
-      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN }, query: { parent: parent } })
+      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN, activeName: activeName }, query: { parent: parent } })
     },
     // 详情
     details (id, activeName) {

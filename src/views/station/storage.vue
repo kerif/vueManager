@@ -128,7 +128,7 @@
       <el-col :lg="12">
         <!-- 服务 -->
         <el-row :gutter="20">
-          <el-col :span="18">
+          <el-col>
             <el-form-item :label="$t('服务')" class="service-style">
               <el-checkbox-group v-model="user.chosen_services">
                 <el-checkbox v-for="item in updateService" :key="item.id" :label="item.id">{{item.name}}

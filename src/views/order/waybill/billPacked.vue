@@ -77,6 +77,8 @@
     <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
+      <!-- 包裹编码 -->
+      <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
       <el-table-column :label="$t('物品名称')" prop="package_name"></el-table-column>
       <el-table-column :label="$t('物品价值') + this.localization.currency_unit" prop="package_value"></el-table-column>
       <el-table-column :label="$t('物品属性')">
@@ -99,7 +101,50 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
+      <el-table-column :label="$t('操作')" width="140" v-if="this.$route.params.activeName === '1'">
+          <template slot-scope="scope">
+            <el-button @click="packageDetails(scope.row.id)" class="btn-deep-purple">
+              {{$t('详情')}}
+            </el-button>
+            <el-button class="btn-light-red" @click="removePackage(scope.row.id, scope.row.express_num, scope.row.order_sn)">
+              {{$t('移除')}}
+            </el-button>
+          </template>
+      </el-table-column>
     </el-table>
+    <h4>{{$t('商品清单')}}</h4>
+      <el-table :data="productData" class="data-list" border stripe
+       v-loading="tableLoading">
+        <el-table-column type="index" width="50"></el-table-column>
+        <!-- 物品名称 -->
+        <el-table-column :label="$t('物品名称')" prop="name"></el-table-column>
+        <!-- 数量 -->
+        <el-table-column :label="$t('数量')" prop="qty"></el-table-column>
+        <!-- 单价 -->
+        <el-table-column :label="$t('单价') + this.localization.currency_unit" prop="unit_price"></el-table-column>
+        <!-- 总价 -->
+        <el-table-column :label="$t('总价') + this.localization.currency_unit">
+          <template slot-scope="scope">
+            <span>{{scope.row.unit_price * scope.row.qty}}</span>
+          </template>
+        </el-table-column>
+        <!-- 材质 -->
+        <el-table-column :label="$t('材质')" prop="material"></el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')" prop="status_name"></el-table-column>
+        <!-- 图片 -->
+        <el-table-column :label="$t('图片')" prop="images" width="130">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.images"
+            :key="item.id" style="cursor:pointer;"
+            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item, imgVisible=true">
+            <img :src="$baseUrl.IMAGE_URL + item" style="width: 40px; margin-right: 5px;">
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 所属包裹 -->
+        <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
+      </el-table>
     <div class="receiverMSg">
       <el-form
         ref="params"
@@ -372,6 +417,7 @@ export default {
       imgVisible: false,
       imgSrc: '',
       expressData: [],
+      productData: [], // 商品清单
       weightName: '',
       express: {
         MaxWeight: '',
@@ -382,8 +428,10 @@ export default {
   },
   created () {
     console.log('我是打包')
+    console.log(this.$route.params.activeName, 'activename')
     this.getPackage()
     this.getExpress()
+    this.getProduct()
     // this.getProp() // 获取多选框数据
   },
   methods: {
@@ -405,6 +453,44 @@ export default {
             }
           })
         }
+      })
+    },
+    // 获取商品清单
+    getProduct () {
+      this.$request.packageDetails(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.productData = res.data
+        }
+      })
+    },
+    // 包裹清单 详情
+    packageDetails (id) {
+      this.$router.push({ name: 'oderDetails', params: { id: id } })
+    },
+    // 移除 包裹清单
+    removePackage (id, expressNum, orderSn) {
+      this.$confirm(this.$t(`该操作无法撤回，移除后的包裹将回到已入库状态，您是否确认将包裹（${expressNum}）从订单（${orderSn}）中移除？注：若该订单只有一个包裹，则该包裹移除后订单自动作废`), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.removePackage(this.$route.params.id, id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+            this.getProduct()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 计算体积重量
