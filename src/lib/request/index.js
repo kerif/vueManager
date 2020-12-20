@@ -651,7 +651,7 @@ exports.confirmExpress = (id, params) => {
 }
 // 发货单 确认批量上传单号
 exports.updateBatch = (params) => {
-  return $form.post('shipments/logistics-export', params)
+  return $form.post('shipments/logistics-import', params)
 }
 // 删除预报包裹列表
 exports.deletePackages = (ids) => {
