@@ -153,7 +153,18 @@ export default {
       this.$request.getOneSelf(this.$route.params.id).then(res => {
         // const warehouses = res.data.warehouses.map(item => item.id)
         this.form = res.data
+        this.form.name = res.data.name
         this.form.country_id = res.data.country.id
+        this.form.address = res.data.address
+        this.form.contact_info = res.data.contactor
+        this.form.contactor = res.data.contact_info
+        this.form.expressLines = res.data.expressLines.map(item => {
+          return {
+            name: item.name,
+            id: item.id
+          }
+        })
+        console.log(this.form.expressLines, 'this.form.expressLines')
       })
     },
     // 切换国家
