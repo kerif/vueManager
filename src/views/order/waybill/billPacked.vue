@@ -481,7 +481,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getList()
+            this.getPackage()
             this.getProduct()
           } else {
             this.$notify({
