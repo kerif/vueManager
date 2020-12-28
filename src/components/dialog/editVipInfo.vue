@@ -152,7 +152,7 @@ export default {
           this.form.receiver_name = res.data.profile && res.data.profile.receiver_name
           this.form.phone = res.data.profile && res.data.profile.phone
           this.form.timezone = res.data.profile && res.data.profile.timezone
-          this.form.country_id = res.data.profile && res.data.profile.country_name
+          this.form.country_id = res.data.profile && res.data.profile.country_id
           this.form.door_no = res.data.profile && res.data.profile.door_no
           this.form.city = res.data.profile && res.data.profile.city
           this.form.postcode = res.data.profile && res.data.profile.postcode

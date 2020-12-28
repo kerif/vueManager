@@ -283,6 +283,14 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 关税金额 -->
+        <el-row :gutter="20" v-if="this.$route.query.parent === 0">
+          <el-col :span="11">
+            <el-form-item :label="$t('关税金额') + localization.currency_unit">
+              <el-input v-model="user.tariff_fee" :placeholder="$t('请输入')"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <!-- 保险金额  -->
         <el-row :gutter="20" v-if="this.$route.query.parent === 0">
           <el-col :span="11">
@@ -351,6 +359,7 @@ export default {
         box_type: 1,
         express_line_id: '',
         insurance_fee: '',
+        tariff_fee: '',
         services: [],
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片
@@ -493,6 +502,7 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
+        this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.order_sn = res.data.order_sn
         this.user.length = res.data.length
