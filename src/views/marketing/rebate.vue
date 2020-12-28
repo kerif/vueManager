@@ -26,7 +26,7 @@
         <template slot="append">{{$t('天')}}</template>
       </el-input>
     </el-form-item>
-    <el-form-item :label="$t('生效时间')" prop="begin_at">
+    <!-- <el-form-item :label="$t('生效时间')" prop="begin_at">
       <el-date-picker
       value-format="yyyy-MM-dd"
       v-model="ruleForm.begin_at"
@@ -34,7 +34,7 @@
       :picker-options="pickerOptions"
       :placeholder="$t('请输入生效时间')">
       </el-date-picker>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item :label="$t('使用范围')" prop="scope">
       <el-radio-group v-model="ruleForm.scope">
           <el-radio :label="0">{{$t('全部')}}</el-radio>

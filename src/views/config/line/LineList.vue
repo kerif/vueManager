@@ -199,8 +199,8 @@
           <!-- <el-radio-group></el-radio-group> -->
           <!-- <el-radio></el-radio> -->
           <el-radio v-model="company.is_delivery" :label="0">{{$t('仅送货上门')}}</el-radio>
-          <el-radio v-model="company.is_delivery" :label="2">{{$t('仅自提')}}</el-radio>
-          <el-radio v-model="company.is_delivery" :label="1">{{$t('送货上门与自提')}}</el-radio>
+          <el-radio v-model="company.is_delivery" :label="1">{{$t('仅自提')}}</el-radio>
+          <el-radio v-model="company.is_delivery" :label="2">{{$t('送货上门与自提')}}</el-radio>
         </el-form-item>
         <el-form-item :label="$t('默认自提点')">
            <el-select v-model="company.default_pickup_station_id" clearable filterable

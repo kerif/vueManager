@@ -1,19 +1,30 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('更改线路')" class="dialog-change-line" width="35%"
+  <el-dialog :visible.sync="show" :title="this.state === 'line' ? $t('更改线路') : $t('更改仓库')" class="dialog-change-line" width="35%"
   @close="clear">
     <el-form :model="user" ref="user" class="demo-ruleForm"
     label-position="top">
-        <!-- 员工组中文名 -->
-            <el-form-item>
-              <el-select v-model="user.express_line_id" clearable :placeholder="$t('请选择')">
-                <el-option
-                v-for="item in expressData"
-                :key="item.id"
-                :value="item.id"
-                :label="`${item.name}---${$t('限重')}${item.max_weight}` + localization.weight_unit">
-                </el-option>
-              </el-select>
-            </el-form-item>
+      <!-- 更改线路 -->
+      <el-form-item v-if="state === 'line'">
+        <el-select v-model="user.express_line_id" clearable :placeholder="$t('请选择')">
+          <el-option
+          v-for="item in expressData"
+          :key="item.id"
+          :value="item.id"
+          :label="`${item.name}---${$t('限重')}${item.max_weight}` + localization.weight_unit">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 更改仓库 -->
+      <el-form-item v-if="state === 'warehouse'">
+        <el-select v-model="user.warehouse_id" clearable :placeholder="$t('请选择')">
+          <el-option
+          v-for="item in warehouseData"
+          :key="item.id"
+          :value="item.id"
+          :label="item.warehouse_name">
+          </el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
@@ -28,36 +39,69 @@ export default {
       user: {
         express_line_id: '',
         name: '',
-        max_weight: ''
+        max_weight: '',
+        warehouse_id: '',
+        warehouse_name: ''
       },
       expressData: [],
-      localization: {}
+      warehouseData: [],
+      localization: {},
+      state: '',
+      id: ''
     }
   },
   methods: {
+    getList () {
+      if (this.state === 'line') {
+        this.getExpress()
+      } else if (this.state === 'warehouse') {
+        this.getWarehouse()
+      }
+    },
     // 获取全部线路详情
     getExpress () {
-      this.$request.getUsable(this.$route.params.id).then(res => {
+      this.$request.getUsable(this.$route.params.id, {
+        warehouse_id: this.id
+      }).then(res => {
         if (res.ret) {
           this.expressData = res.data
           this.localization = res.localization
         }
       })
     },
+    // 获取全部仓库详情
+    getWarehouse () {
+      this.$request.getUsableWarehouse().then(res => {
+        if (res.ret) {
+          this.warehouseData = res.data
+        }
+      })
+    },
     confirm () {
-      if (this.user.express_line_id === '') {
+      if (this.state === 'line' && this.user.express_line_id === '') {
         return this.$message.error(this.$t('请选择线路'))
-      } else {
+      }
+      if (this.state === 'warehouse' && this.user.warehouse_id === '') {
+        return this.$message.error(this.$t('请选择仓库'))
+      }
+      if (this.state === 'line') {
         let user = this.expressData.filter(item => item.id === this.user.express_line_id)[0]
         this.success(user)
+        this.show = false
+      } else if (this.state === 'warehouse') {
+        let warehouse = this.warehouseData.filter(item => item.id === this.user.warehouse_id)[0]
+        this.success(warehouse)
         this.show = false
       }
     },
     clear () {
       this.user.express_line_id = ''
+      this.user.warehouse_id = ''
     },
     init () {
-      this.getExpress()
+      console.log(this.state, 'state')
+      console.log(this.id, 'id')
+      this.getList()
     }
   }
 }

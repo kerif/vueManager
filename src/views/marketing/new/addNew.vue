@@ -15,7 +15,7 @@
     <el-form-item :label="$t('最低消费')" prop="threshold">
           <el-input class="input-sty" :placeholder="$t('请输入最低消费')" v-model="ruleForm.threshold"></el-input>
     </el-form-item>
-    <el-form-item :label="$t('生效时间')" prop="begin_at">
+    <!-- <el-form-item :label="$t('生效时间')" prop="begin_at">
            <el-date-picker
            value-format="yyyy-MM-dd"
             v-model="ruleForm.begin_at"
@@ -23,7 +23,7 @@
             :picker-options="pickerOptions"
             :placeholder="$t('请输入生效时间')">
             </el-date-picker>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item :label="$t('有效期')" prop="days">
         <el-input class="input-sty" :placeholder="$t('请输入有效期')" v-model="ruleForm.days"></el-input>
     </el-form-item>

@@ -577,7 +577,7 @@ export default [
             }
           },
           {
-            path: '/order/billPacked/:id/:order_sn/:activeName',
+            path: '/order/billPacked/:id/:order_sn/:activeName/:parent',
             name: 'billPacked',
             component: Billpacked,
             id: 402,

@@ -1846,8 +1846,12 @@ exports.getAloneOrder = (id) => {
   return $form.get(`orders/${id}/logistics`)
 }
 // 订单 打包 获取线路详情
-exports.getUsable = (id) => {
-  return $form.get(`orders/${id}/usable-express-lines`)
+exports.getUsable = (id, params) => {
+  return $form.get(`orders/${id}/usable-express-lines`, { params })
+}
+// 订单 打包 获取仓库详情
+exports.getUsableWarehouse = () => {
+  return $form.get(`orders/warehouse-simple-list`)
 }
 // 订单列表 获取一键打包数据
 exports.getOrderBatch = (params) => {

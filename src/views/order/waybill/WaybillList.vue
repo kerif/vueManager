@@ -1367,7 +1367,7 @@ export default {
     // 打包
     packed (id, orderSN, parent, activeName) {
       console.log(parent, 'parent111')
-      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN, activeName: activeName }, query: { parent: parent } })
+      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN, activeName: activeName, parent: parent } })
     },
     // 详情
     details (id, activeName) {

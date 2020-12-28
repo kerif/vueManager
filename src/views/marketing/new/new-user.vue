@@ -4,32 +4,44 @@
       <el-col :span="7" class="user-left" v-for="(item, index) in ruleForm" :key="index">
         <div class="new-top">
           <!-- 新用户送券 -->
-          <div class="top-img" v-if="item.type === 1">
-            <img src="../../../assets/top-1.png">
-            <p>
-                <strong><span>{{$t('新用户送券')}}</span></strong>
-              </p>
+          <div v-if="item.type === 1">
+            <div class="top-img">
+              <img src="../../../assets/top-1.png">
+              <p>
+                  <strong><span>{{$t('新用户送券')}}</span></strong>
+                </p>
+            </div>
+              <p class="font-sty">{{$t('用户注册即送券')}}</p>
           </div>
           <!-- 邀请新人送券 -->
-          <div class="top-img" v-if="item.type === 2">
-            <img src="../../../assets/top-2.png">
-            <p>
-                <strong><span>{{$t('邀请新人送券')}}</span></strong>
-              </p>
+          <div v-if="item.type === 2">
+            <div class="top-img">
+              <img src="../../../assets/top-2.png">
+              <p>
+                  <strong><span>{{$t('邀请新人送券')}}</span></strong>
+                </p>
+            </div>
+            <p class="font-sty">{{$t('新人注册登录并完成一笔订单后，邀请人送券')}}</p>
           </div>
           <!-- 被邀请人送券 -->
-          <div class="top-img" v-if="item.type === 3">
-            <img src="../../../assets/top-3.png">
-            <p>
-                <strong><span>{{$t('被邀请人送券')}}</span></strong>
-              </p>
+          <div v-if="item.type === 3">
+            <div class="top-img">
+              <img src="../../../assets/top-3.png">
+              <p>
+                  <strong><span>{{$t('被邀请人送券')}}</span></strong>
+                </p>
+            </div>
+            <p class="font-sty">{{$t('新人通过老客户链接注册登录即可获券（与“新用户送券”同时享受）')}}</p>
           </div>
           <!-- 下单返券 -->
-          <div class="top-img" v-if="item.type === 4">
-            <img src="../../../assets/top-4.png">
-            <p>
-                <strong><span>{{$t('下单返券')}}</span></strong>
-              </p>
+          <div v-if="item.type === 4">
+            <div class="top-img">
+              <img src="../../../assets/top-4.png">
+              <p>
+                  <strong><span>{{$t('下单返券')}}</span></strong>
+                </p>
+            </div>
+            <p class="font-sty">{{$t('客户订单支付成功后，即可返券')}}</p>
           </div>
           <div class="user-bottom">
             <div class="bottom-left">
@@ -124,6 +136,7 @@ export default {
     margin-bottom: 10px;
     padding: 20px;
     background: #fff;
+    height: 260px;
     .top-img {
       margin-top: 50px;
       margin-bottom: 40px;
@@ -149,6 +162,9 @@ export default {
   }
   .user-left {
     margin-left: 30px;
+  }
+  .font-sty {
+    font-size: 12px;
   }
 }
 </style>

@@ -145,8 +145,12 @@ export default {
       }
     },
     clear () {
-      this.ruleForm.name = ''
+      this.id = ''
+      this.ruleForm.amount = ''
+      this.ruleForm.type = ''
+      this.ruleForm.threshold = ''
       this.ruleForm.remark = ''
+      this.ruleForm.enforce = 0
     },
     init () {
       this.start = this.start
