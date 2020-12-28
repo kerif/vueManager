@@ -1,17 +1,17 @@
 <template>
   <el-dialog :visible.sync="show" :title="this.name + $t('的个人信息')" class="edit-info-dialog" @close="clear">
-    <el-form label-width="80" :model="form">
+    <el-form :model="form">
     <el-row :gutter="20">
       <el-col :span="10">
-         <el-form-item :label="$t('用户ID')">
+         <el-form-item :label="$t('用户ID')" class="label-sty">
            <span>{{userId}}</span>
           <!-- <el-input v-model="form.receiver_name"></el-input> -->
         </el-form-item>
       </el-col>
       <el-col :span="10">
-        <el-form-item :label="$t('国家/地区')">
-        <span>{{form.country_name}}</span>
-          <!-- <el-select
+        <el-form-item :label="$t('国家/地区')" class="label-sty">
+        <!-- <span>{{form.country_name}}</span> -->
+          <el-select
             v-model="form.country_id"
             filterable
             class="country-select"
@@ -22,67 +22,69 @@
               :label="item.name"
               :value="item.id">
             </el-option>
-          </el-select> -->
+          </el-select>
         </el-form-item>
       </el-col>
     </el-row>
     <el-row :gutter="20">
       <el-col :span="10">
-       <el-form-item :label="$t('收件人')">
-         <span>{{form.receiver_name}}</span>
-          <!-- <el-input v-model="form.wechat_id"></el-input> -->
+       <el-form-item :label="$t('收件人')" class="label-sty">
+         <!-- <span>{{form.receiver_name}}</span> -->
+          <el-input class="input-sty" v-model="form.receiver_name"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="10">
-        <el-form-item :label="$t('城市')">
-          <span>{{form.city}}</span>
-          <!-- <el-input v-model="form.city"></el-input> -->
+        <el-form-item :label="$t('城市')" class="label-sty">
+          <!-- <span>{{form.city}}</span> -->
+          <el-input class="input-sty" v-model="form.city"></el-input>
         </el-form-item>
       </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item :label="$t('联系电话')">
-            <span>{{form.phone}}</span>
-            <!-- <el-input v-model="form.street"></el-input> -->
+          <el-form-item :label="$t('联系电话')" class="label-sty">
+            <!-- <span>{{form.phone}}</span> -->
+            <el-input class="input-sty" v-model="form.phone"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item :label="$t('街道')">
-            <span>{{form.street}}</span>
-            <!-- <el-input v-model="form.door_no"></el-input> -->
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="10">
-          <el-form-item :label="$t('身份证号码')">
-            <span>{{form.id_card}}</span>
-            <!-- <el-input v-model="form.postcode"></el-input> -->
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <el-form-item :label="$t('门牌号')">
-            <!-- <el-input v-model="form.phone"></el-input> -->
-            <span>{{form.door_no}}</span>
+          <el-form-item :label="$t('街道')" class="label-sty">
+            <!-- <span>{{form.street}}</span> -->
+            <el-input class="input-sty" v-model="form.street"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item :label="$t('微信号')">
-            <span>{{form.wechat_id}}</span>
+          <el-form-item :label="$t('身份证号码')" class="label-sty">
+            <!-- <span>{{form.id_card}}</span> -->
+            <el-input class="input-sty" v-model="form.id_card"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item :label="$t('邮编')">
-            <span>{{form.postcode}}</span>
+          <el-form-item :label="$t('门牌号')" class="label-sty">
+            <!-- <span>{{form.door_no}}</span> -->
+            <el-input class="input-sty" v-model="form.door_no"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-            <el-row :gutter="20">
+      <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item :label="$t('邀请人')" prop="invitorId">
+          <el-form-item :label="$t('微信号')" class="label-sty">
+            <!-- <span>{{form.wechat_id}}</span> -->
+            <el-input class="input-sty" v-model="form.wechat_id"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="$t('邮编')" class="label-sty">
+            <!-- <span>{{form.postcode}}</span> -->
+            <el-input class="input-sty" v-model="form.postcode"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item :label="$t('邀请人')" prop="invitorId" class="label-sty">
           <!-- <el-input v-model="ruleForm.name_cn"
           placeholder="请输入用户id"></el-input> -->
             <el-autocomplete
@@ -95,7 +97,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item>
+          <el-form-item class="label-sty">
             <span>{{$t('会员识别码')}}</span>
             <el-tooltip class="item code-sty" effect="dark" :content="$t('修改会员识别码后，将会替换系统中注册的客户昵称。如要使用初始注册用户名，请清空内容。')" placement="top">
             <span class="el-icon-question icon-info"></span>
@@ -121,7 +123,7 @@ export default {
         receiver_name: '',
         phone: '',
         timezone: '',
-        country_name: '',
+        country_id: '',
         door_no: '',
         city: '',
         postcode: '',
@@ -145,12 +147,12 @@ export default {
     getList () {
       this.$request.checkVipInfo(this.id).then(res => {
         if (res.ret) {
-          this.form = res.data
+          this.form = res.data.profile
           this.userId = res.data.id
           this.form.receiver_name = res.data.profile && res.data.profile.receiver_name
           this.form.phone = res.data.profile && res.data.profile.phone
           this.form.timezone = res.data.profile && res.data.profile.timezone
-          this.form.country_name = res.data.profile && res.data.profile.country_name
+          this.form.country_id = res.data.profile && res.data.profile.country_name
           this.form.door_no = res.data.profile && res.data.profile.door_no
           this.form.city = res.data.profile && res.data.profile.city
           this.form.postcode = res.data.profile && res.data.profile.postcode
@@ -188,6 +190,7 @@ export default {
     submit () {
       console.log(this.supplierId, 'this.supplierId,  我是保存的ID')
       this.$request.updateVipInfo(this.id, {
+        ...this.form,
         invitor_id: this.supplierId ? this.supplierId : this.invitorId,
         remark_name: this.remarkName
       }).then(res => {
@@ -210,7 +213,6 @@ export default {
     },
     // 获取支持国家数据
     searchCountry () {
-      console.log('111')
       this.$request.countryLocation().then(res => {
         if (res.ret) {
           this.options = res.data
@@ -227,7 +229,7 @@ export default {
     },
     init () {
       this.getList()
-      // this.searchCountry()
+      this.searchCountry()
     }
   }
 }
@@ -249,16 +251,21 @@ export default {
     color: #FFF;
   }
   .country-select {
-    width: 100%;
+    width: 60%;
   }
   .input-sty {
-    width: 55%;
+    width: 60%;
   }
   .red-sty {
     color: red;
   }
   .code-sty {
     padding-right: 5px;
+  }
+  .label-sty {
+    .el-form-item__label {
+      width: 85px;
+    }
   }
 }
 </style>

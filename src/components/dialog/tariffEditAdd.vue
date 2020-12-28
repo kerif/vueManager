@@ -1,20 +1,16 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('修改保险服务')" class="dialog-edit-insurance" width="35%"
+  <el-dialog :visible.sync="show" :title="state == 'add'? $t('新增关税服务') : $t('修改关税服务')" class="dialog-edit-tariff" width="35%"
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
-        <!-- 商品价值 -->
-        <el-form-item :label="$t('*商品价值') + this.localization.currency_unit + $t('小于')" class="input-sty price-sty" v-if="this.start === 0">
-          <el-input v-model="ruleForm.start" disabled>
+    <!-- 商品价值 -->
+      <el-form-item :label="$t('*商品价值') + currencyUnit + $t('大于')" class="input-sty price-sty">
+        <el-input v-model="ruleForm.threshold">
           </el-input>
         </el-form-item>
-        <el-form-item :label="$t('*商品价值') + this.localization.currency_unit + $t('大于')" class="input-sty price-sty" v-else>
-          <el-input v-model="ruleForm.start">
-          </el-input>
-        </el-form-item>
-        <!-- 保价类型 -->
-        <el-form-item :label="$t('*保价类型')">
-          <el-select v-model="ruleForm.insurance_type" clearable :placeholder="$t('请选择')">
+        <!-- 收费类型 -->
+        <el-form-item :label="$t('*收费类型')">
+          <el-select v-model="ruleForm.type" clearable :placeholder="$t('请选择')">
               <el-option
                 v-for="item in options"
                 :key="item.id"
@@ -24,14 +20,14 @@
             </el-select>
         </el-form-item>
         <!-- 保险金额 -->
-        <el-form-item :label="(this.ruleForm.insurance_type === 1 ? '比例': $t('*保险金额'))+ (this.ruleForm.insurance_type === 1 ? '%': this.localization.currency_unit)" class="input-sty">
-          <el-input v-model="ruleForm.insurance_proportion">
+        <el-form-item :label="(this.ruleForm.type === 1 ? '比例': $t('*保险金额'))+ (this.ruleForm.type === 1 ? '%': currencyUnit)" class="input-sty">
+          <el-input v-model="ruleForm.amount">
           </el-input>
         </el-form-item>
         <!-- 是否强制购买 -->
         <el-form-item :label="$t('是否强制购买')">
           <el-switch
-            v-model="ruleForm.is_force"
+            v-model="ruleForm.enforce"
             :active-text="$t('开')"
             :active-value="1"
             :inactive-value="0"
@@ -58,11 +54,11 @@ export default {
   data () {
     return {
       ruleForm: {
-        insurance_proportion: '',
-        insurance_type: '',
-        start: '',
+        amount: '',
+        type: '',
+        threshold: '',
         remark: '',
-        is_force: 0
+        enforce: 0
       },
       options: [
         {
@@ -75,13 +71,16 @@ export default {
         }
       ],
       localization: '',
+      currencyUnit: '',
       start: '',
-      tranAmount: ''
+      tranAmount: '',
+      state: '',
+      id: ''
     }
   },
   methods: {
     getList () {
-      this.$request.getSingleInsurance(this.id).then(res => {
+      this.$request.getAloneTariff(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
           this.localization = res.localization
@@ -94,33 +93,56 @@ export default {
       })
     },
     confirm () {
-      if (!this.ruleForm.start) {
+      if (!this.ruleForm.threshold) {
         return this.$message.error(this.$t('请输入商品价值'))
-      } else if (!this.ruleForm.insurance_type) {
-        return this.$message.error(this.$t('请选择保价类型'))
-      } else if (!this.ruleForm.insurance_proportion) {
+      } else if (!this.ruleForm.type) {
+        return this.$message.error(this.$t('请选择收费类型'))
+      } else if (!this.ruleForm.amount) {
         return this.$message.error(this.$t('请输入保险金额'))
       }
-      this.$request.updateInsurance(this.id, {
-        ...this.ruleForm,
-        start: this.start === 0 ? 0 : this.ruleForm.start
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('成功'),
-            message: res.msg
-          })
+      if (this.state === 'add') {
+        this.$request.tariffAdd({
+          ...this.ruleForm,
+          threshold: this.ruleForm.threshold === 0 ? 0 : this.ruleForm.threshold
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
           this.show = false
-          this.success()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-        this.show = false
-      })
+        })
+      } else if (this.state === 'edit') {
+        this.$request.tariffEdit(this.id, {
+          ...this.ruleForm,
+          threshold: this.ruleForm.threshold === 0 ? 0 : this.ruleForm.threshold
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+          this.show = false
+        })
+      }
     },
     clear () {
       this.ruleForm.name = ''
@@ -128,14 +150,16 @@ export default {
     },
     init () {
       this.start = this.start
+      if (this.id) {
+        this.getList()
+      }
       console.log(this.start, 'start')
-      this.getList()
     }
   }
 }
 </script>
 <style lang="scss" scope>
-.dialog-edit-insurance {
+.dialog-edit-tariff {
   .el-dialog__body {
     margin-left: 20px !important;
   }

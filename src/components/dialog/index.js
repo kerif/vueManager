@@ -78,6 +78,7 @@ import notifyOrder from './notifyOder.vue'
 import groupAdd from './groupAdd.vue'
 import vipLogs from './vipLogs.vue'
 import claimRecord from './claimRecord.vue'
+import tariffEditAdd from './tariffEditAdd.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -156,6 +157,7 @@ const NotifyOrderController = Vue.extend(notifyOrder)
 const GroupAddController = Vue.extend(groupAdd)
 const VipLogsController = Vue.extend(vipLogs)
 const ClaimRecordController = Vue.extend(claimRecord)
+const TariffController = Vue.extend(tariffEditAdd)
 
 const mixin = {
   data () {
@@ -699,6 +701,13 @@ function initInstance (type) {
     // 无人认领包裹 认领记录
     case 'claimRecord':
       instance = new ClaimRecordController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 关税服务
+    case 'tariffEditAdd':
+      instance = new TariffController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

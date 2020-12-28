@@ -172,7 +172,7 @@
       :title="$t('高级设置')"
       :visible.sync="dialogVisible"
       width="45%">
-      <el-form ref="form" :model="company" label-width="220px">
+      <el-form ref="form" :model="company" label-width="120px">
         <!-- <el-form-item :label="$t('是否自提线路')">
            <el-select v-model="company.company" clearable filterable
             allow-create default-first-option :placeholder="$t('请选择')">
@@ -184,7 +184,7 @@
               </el-option>
             </el-select>
           </el-form-item> -->
-        <el-form-item :label="$t('是否自提线路')">
+        <!-- <el-form-item :label="$t('是否自提线路')">
             <el-switch
               v-model="company.is_delivery"
               :active-text="$t('开')"
@@ -194,7 +194,14 @@
               active-color="#13ce66"
               inactive-color="gray">
             </el-switch>
-          </el-form-item>
+          </el-form-item> -->
+        <el-form-item :label="$t('线路类型')">
+          <!-- <el-radio-group></el-radio-group> -->
+          <!-- <el-radio></el-radio> -->
+          <el-radio v-model="company.is_delivery" :label="0">{{$t('仅送货上门')}}</el-radio>
+          <el-radio v-model="company.is_delivery" :label="2">{{$t('仅自提')}}</el-radio>
+          <el-radio v-model="company.is_delivery" :label="1">{{$t('送货上门与自提')}}</el-radio>
+        </el-form-item>
         <el-form-item :label="$t('默认自提点')">
            <el-select v-model="company.default_pickup_station_id" clearable filterable
             allow-create default-first-option :placeholder="$t('请选择')">

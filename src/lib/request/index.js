@@ -1227,6 +1227,38 @@ exports.getService = (id) => {
 exports.getInsurance = () => {
   return $form.get('payments/insurance')
 }
+// 更多配置 获取关税服务列表
+exports.getTariff = () => {
+  return $form.get('order-tariff-configs')
+}
+// 更多配置 获取关税说明
+exports.tariffExplanation = () => {
+  return $form.get('order-tariff-configs/explanation')
+}
+// 更多配置 获取关税说明
+exports.uploadTariffExplanation = (params) => {
+  return $form.put('order-tariff-configs/explanation', params)
+}
+// 更多配置 获取单条关税
+exports.getAloneTariff = (id) => {
+  return $form.get(`order-tariff-configs/${id}`)
+}
+// 更多配置 新增 关税服务
+exports.tariffAdd = (params) => {
+  return $form.post(`order-tariff-configs`, params)
+}
+// 更多配置 更新 关税服务
+exports.tariffEdit = (id, params) => {
+  return $form.put(`order-tariff-configs/${id}`, params)
+}
+// 更多配置 删除 关税服务
+exports.tariffDelete = (id) => {
+  return $form.delete(`order-tariff-configs/${id}`)
+}
+// 更多配置 获取关税配置开关
+exports.tariffEnabled = () => {
+  return $form.get('order-tariff-configs/status')
+}
 // 更多配置 获取单条 保险服务
 exports.getSingleInsurance = (id) => {
   return $form.get(`payments/insurance/${id}`)
@@ -1238,6 +1270,10 @@ exports.updateInsurance = (id, params) => {
 // 更多配置 保险服务的开关
 exports.changeInsurance = (status) => {
   return $form.put(`payments/insurance/switch/${status}`)
+}
+// 更多配置 关税服务的开关
+exports.changeTariff = (status) => {
+  return $form.put(`order-tariff-configs/status/${status}`)
 }
 // 更多配置 获取国家/地区 列表
 exports.countryLocation = () => {

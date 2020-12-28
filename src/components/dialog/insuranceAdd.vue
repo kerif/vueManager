@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('保险说明')" class="dialog-addCost"  @close="clear">
+  <el-dialog :visible.sync="show" :title="value == 'insurance' ? $t('保险说明') : $t('关税说明')" class="dialog-addCost"  @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <el-form-item :label="$t('中文')" prop="cn">
         <el-input v-model="ruleForm.cn" type="textarea"
@@ -26,6 +26,7 @@ export default {
       },
       staff: '',
       id: '',
+      value: '',
       rules: {
         cn: [
           { required: true, message: this.$t('请输入中文'), trigger: 'blur' }
@@ -38,38 +39,72 @@ export default {
   },
   methods: {
     getList () {
-      this.$request.getExplanation().then(res => {
-        if (res.ret) {
-          this.ruleForm = res.data
-        } else {
-          this.$notify({
-            message: res.msg,
-            type: 'error',
-            title: this.$t('操作失败')
-          })
-        }
-      })
+      if (this.value === 'insurance') {
+        this.$request.getExplanation().then(res => {
+          if (res.ret) {
+            this.ruleForm = res.data
+          } else {
+            this.$notify({
+              message: res.msg,
+              type: 'error',
+              title: this.$t('操作失败')
+            })
+          }
+        })
+      } else if (this.value === 'tariff') {
+        this.$request.tariffExplanation().then(res => {
+          if (res.ret) {
+            this.ruleForm = res.data
+          } else {
+            this.$notify({
+              message: res.msg,
+              type: 'error',
+              title: this.$t('操作失败')
+            })
+          }
+        })
+      }
     },
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.updateExplanation(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
+          if (this.value === 'insurance') {
+            this.$request.updateExplanation(this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+          } else if (this.value === 'tariff') {
+            this.$request.uploadTariffExplanation(this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+          }
         } else {
           return false
         }
