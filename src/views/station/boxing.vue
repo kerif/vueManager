@@ -187,9 +187,9 @@
                 <el-radio :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-radio>
               </el-radio-group> -->
               <el-radio-group v-model="box.is_tariff">
-                <el-radio :label="1">{{$t('启用保险')}}</el-radio>
-                <el-radio :label="0">{{$t('不启用保险')}}</el-radio>
-                <el-radio :label="2">{{$t('仅强制要求购买保险的订单启用')}}</el-radio>
+                <el-radio :label="1">{{$t('启用关税')}}</el-radio>
+                <el-radio :label="0">{{$t('不启用关税')}}</el-radio>
+                <el-radio :label="2">{{$t('仅强制要求购买关税的订单启用')}}</el-radio>
               </el-radio-group>
             </div>
             <!-- <div class="express-left express-right">
