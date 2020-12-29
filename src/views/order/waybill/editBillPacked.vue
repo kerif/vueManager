@@ -108,7 +108,7 @@
             </el-form-item>
           </el-col>
           <!-- 留仓物品 -->
-          <el-col :span="10" :offset="2" v-if="this.$route.query.parent === 0">
+          <el-col :span="10" :offset="2" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('留仓物品')">
               <el-input v-model="user.in_warehouse_item" :placeholder="$t('请输入留仓物品')"></el-input>
             </el-form-item>
@@ -116,20 +116,16 @@
         </el-row>
         <!-- 客服备注 -->
         <el-row :gutter="20">
-          <el-col el-col :span="11">
-            <el-form-item :label="$t('客服备注')" class="customer">
-              <el-input
-                type="textarea"
-                :placeholder="$t('请输入备注')"
-                v-model="user.remark"
-                :autosize="{ minRows: 2, maxRows: 4}"
-              ></el-input>
-            </el-form-item>
-          </el-col>
           <!-- 货位 -->
-          <el-col :span="10" :offset="2" v-if="this.$route.query.parent === 0">
+          <el-col :span="11" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('货位')">
               <el-input v-model="user.location" :placeholder="$t('请输入货位')"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10" :offset="2">
+            <el-form-item :label="$t('更改仓库')" class="express">
+              <span class="change-line">{{warehouse.warehouse_name}}</span>
+              <el-button v-if="$route.params.parent == 0" class="btn-main change-btn" @click="changeWarehouse">{{$t('更改')}}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -146,7 +142,7 @@
           <el-col :span="10" :offset="2">
             <el-form-item :label="$t('更改线路')" class="express">
               <span class="change-line">{{express.CName}}---{{$t('限重')}}{{express.MaxWeight}}KG</span>
-              <el-button class="btn-main change-btn" v-if="this.$route.query.parent === 0" @click="changeLine">{{$t('更改')}}</el-button>
+              <el-button class="btn-main change-btn" v-if="$route.params.parent == 0" @click="changeLine">{{$t('更改')}}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -284,15 +280,25 @@
           </el-col>
         </el-row>
         <!-- 关税金额 -->
-        <el-row :gutter="20" v-if="this.$route.query.parent === 0">
-          <el-col :span="11">
+        <el-row :gutter="20">
+          <el-col :span="11" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('关税金额') + localization.currency_unit">
               <el-input v-model="user.tariff_fee" :placeholder="$t('请输入')"></el-input>
             </el-form-item>
           </el-col>
+          <el-col el-col :span="10" :offset="2">
+            <el-form-item :label="$t('客服备注')" class="customer">
+              <el-input
+                type="textarea"
+                :placeholder="$t('请输入备注')"
+                v-model="user.remark"
+                :autosize="{ minRows: 2, maxRows: 4}"
+              ></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <!-- 保险金额  -->
-        <el-row :gutter="20" v-if="this.$route.query.parent === 0">
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
           <el-col :span="11">
             <el-form-item :label="$t('保险金额') + localization.currency_unit">
               <el-input v-model="user.insurance_fee" :placeholder="$t('请输入')"></el-input>
@@ -300,7 +306,7 @@
           </el-col>
         </el-row>
         <!-- 增值服务 -->
-        <el-row :gutter="20" v-if="this.$route.query.parent === 0">
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
           <el-col>
             <el-form-item :label="$t('增值服务')">
               <div v-for="item in updateProp" :key="item.id" class="service">
@@ -358,6 +364,7 @@ export default {
         location: '',
         box_type: 1,
         express_line_id: '',
+        warehouse_id: '',
         insurance_fee: '',
         tariff_fee: '',
         services: [],
@@ -381,13 +388,16 @@ export default {
         MaxWeight: '',
         cName: ''
       },
+      warehouse: {
+        warehouse_name: ''
+      },
       factor: ''
     }
   },
   created () {
     this.getPackage()
     this.getExpress()
-    console.log(this.$route.query.parent, 'parent: parent')
+    console.log(this.$route.params.parent, 'parent: parent')
     // this.getProp() // 获取多选框数据
   },
   methods: {
@@ -489,9 +499,18 @@ export default {
       this.unitVolume()
       console.log(rows, 'rows')
     },
+    // 更改仓库
+    changeWarehouse () {
+      dialog({ type: 'lineChange', state: 'warehouse' }, data => {
+        console.log(data, 'data')
+        // this.warehouse.warehouse_id = data.id
+        this.user.warehouse_id = data.id
+        this.warehouse.warehouse_name = data.warehouse_name
+      })
+    },
     // 更改线路
     changeLine () {
-      dialog({ type: 'lineChange' }, data => {
+      dialog({ type: 'lineChange', state: 'line', id: this.user.warehouse_id }, data => {
         console.log(data, 'data')
         this.express.CName = data.name
         this.express.MaxWeight = data.max_weight
@@ -526,6 +545,8 @@ export default {
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name
         this.express.MaxWeight = this.form.express_line.max_weight
+        this.user.warehouse_id = this.form.warehouse.id
+        this.warehouse.warehouse_name = this.form.warehouse.warehouse_name
         this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
         console.log(this.factor, 'this.factor')
         this.localization = res.localization

@@ -1313,7 +1313,7 @@ export default {
     },
     // 待支付 编辑打包数据
     editPacked (id, activeName, parent) {
-      this.$router.push({ name: 'editPacked', params: { id: id, activeName: activeName }, query: { parent: parent } })
+      this.$router.push({ name: 'editPacked', params: { id: id, activeName: activeName, parent: parent } })
     },
     // 跳转到发货
     goShip (shipmentSn) {

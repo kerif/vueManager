@@ -565,7 +565,7 @@ export default [
             }
           },
           {
-            path: '/order/editBillPacked/:id/:activeName',
+            path: '/order/editBillPacked/:id/:activeName/:parent',
             name: 'editPacked',
             component: editPacked,
             id: 402,

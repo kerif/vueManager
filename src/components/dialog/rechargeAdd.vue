@@ -146,6 +146,13 @@ export default {
       this.$refs['ruleForm'].resetFields()
       this.$refs['ruleForm'].clearValidate()
       this.ruleForm.images = []
+      this.ruleForm.user_id = ''
+      this.ruleForm.payment_type_id = ''
+      this.ruleForm.tran_amount = ''
+      this.ruleForm.transfer_account = ''
+      this.ruleForm.should_audit = 0
+      this.ruleForm.remark = ''
+      this.ruleForm.images = []
     },
     // 客户id
     queryCNSearch (queryString, callback) {

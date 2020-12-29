@@ -414,6 +414,7 @@ export default {
         location: '',
         box_type: 1,
         express_line_id: '',
+        warehouse_id: '',
         insurance_fee: '',
         tariff_fee: '',
         services: [],
@@ -439,7 +440,6 @@ export default {
         cName: ''
       },
       warehouse: {
-        warehouse_id: '',
         warehouse_name: ''
       },
       factor: ''
@@ -595,13 +595,14 @@ export default {
     changeWarehouse () {
       dialog({ type: 'lineChange', state: 'warehouse' }, data => {
         console.log(data, 'data')
-        this.warehouse.warehouse_id = data.id
+        // this.warehouse.warehouse_id = data.id
+        this.user.warehouse_id = data.id
         this.warehouse.warehouse_name = data.warehouse_name
       })
     },
     // 更改线路
     changeLine () {
-      dialog({ type: 'lineChange', state: 'line', id: this.warehouse.warehouse_id }, data => {
+      dialog({ type: 'lineChange', state: 'line', id: this.user.warehouse_id }, data => {
         console.log(data, 'data')
         this.express.CName = data.name
         this.express.MaxWeight = data.max_weight
@@ -618,7 +619,7 @@ export default {
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name
         this.express.MaxWeight = this.form.express_line.max_weight
-        this.warehouse.warehouse_id = this.form.warehouse.id
+        this.user.warehouse_id = this.form.warehouse.id
         this.warehouse.warehouse_name = this.form.warehouse.warehouse_name
         this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
         console.log(this.factor, 'this.factor')

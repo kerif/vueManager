@@ -155,9 +155,11 @@
               <!-- <el-radio-group v-model="box.add_service" class="radio-select-sty">
                 <el-radio :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-radio>
               </el-radio-group> -->
-              <el-checkbox-group v-model="box.add_service" class="radio-select-sty">
-                <el-checkbox :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-checkbox>
-              </el-checkbox-group>
+              <el-radio-group v-model="box.is_insurance">
+                <el-radio :label="1">{{$t('启用保险')}}</el-radio>
+                <el-radio :label="0">{{$t('不启用保险')}}</el-radio>
+                <el-radio :label="2">{{$t('仅强制要求购买保险的订单启用')}}</el-radio>
+              </el-radio-group>
             </div>
             <!-- <div class="express-left express-right">
               <el-switch
@@ -171,11 +173,37 @@
               </el-switch>
             </div> -->
         </div>
-        <el-radio-group v-model="box.is_insurance">
-          <el-radio :label="1">{{$t('启用保险')}}</el-radio>
-          <el-radio :label="0">{{$t('不启用保险')}}</el-radio>
-          <el-radio :label="2">{{$t('仅强制要求购买保险的订单启用')}}</el-radio>
-        </el-radio-group>
+        <el-checkbox-group v-model="box.add_service" class="radio-select-sty">
+          <el-checkbox :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-checkbox>
+        </el-checkbox-group>
+        <div class="line-sty"></div>
+        <div class="recipient-address">
+          <div class="express-left">
+              <span>{{$t('关税服务')}}</span>
+                <el-tooltip class="item" effect="dark" :content="tariffExplanation" placement="top">
+                  <span class="el-icon-warning-outline icon-info"></span>
+              </el-tooltip><br/>
+              <!-- <el-radio-group v-model="box.add_service" class="radio-select-sty">
+                <el-radio :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-radio>
+              </el-radio-group> -->
+              <el-radio-group v-model="box.is_tariff">
+                <el-radio :label="1">{{$t('启用保险')}}</el-radio>
+                <el-radio :label="0">{{$t('不启用保险')}}</el-radio>
+                <el-radio :label="2">{{$t('仅强制要求购买保险的订单启用')}}</el-radio>
+              </el-radio-group>
+            </div>
+            <!-- <div class="express-left express-right">
+              <el-switch
+                v-model="box.is_insurance"
+                :active-text="$t('开')"
+                :active-value="1"
+                :inactive-value="0"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+            </div> -->
+        </div>
         <div class="line-sty"></div>
         <div class="recipient-address">
         <h3>{{$t('付款方式')}}</h3>
@@ -443,6 +471,7 @@ export default {
       stationsData: [],
       enabled: 0,
       explanation: '',
+      tariffExplanation: '',
       chooseSelf: '',
       selfAddress: {},
       selfData: {},
@@ -456,6 +485,7 @@ export default {
         express_line_id: '',
         payment_mode: '',
         is_insurance: 0,
+        is_tariff: 0,
         add_service: [],
         station_id: '',
         id_card: '',
@@ -532,6 +562,7 @@ export default {
             this.box.add_service = res.data.items.added_service
           }
           this.box.is_insurance = res.data.items.insurance
+          this.box.is_tariff = res.data.items.is_tariff
           this.box.payment_mode = res.data.items.payment_mode
           this.getExpress()
         } else {
@@ -563,6 +594,7 @@ export default {
             this.box.add_service = res.data.items.added_service
           }
           this.box.is_insurance = res.data.items.insurance
+          this.box.is_tariff = res.data.items.is_tariff
           this.box.payment_mode = res.data.items.payment_mode
           this.getExpress()
         } else {
@@ -741,7 +773,9 @@ export default {
         if (res.ret) {
           this.insurance = res.data
           this.box.is_insurance = res.data.is_insurance
+          this.box.is_tariff = res.data.is_tariff
           this.explanation = res.data.explanation
+          this.tariffExplanation = res.data.tariffExplanation
         }
       })
     },
