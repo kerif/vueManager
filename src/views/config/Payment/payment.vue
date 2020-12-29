@@ -823,7 +823,7 @@
               <el-table-column :label="$t('操作')">
                 <template slot-scope="scope">
                   <el-button class="btn-dark-green" @click="editExpress(scope.row.id)" v-if="scope.row.is_default === 0">{{$t('编辑')}}</el-button>
-                  <el-button class="btn-light-red delete-btn" @click="deleteService(scope.row.id)" v-if="scope.row.is_default === 0">{{$t('删除')}}</el-button>
+                  <el-button class="btn-light-red delete-btn" @click="deleteExpress(scope.row.id)" v-if="scope.row.is_default === 0">{{$t('删除')}}</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -1814,6 +1814,31 @@ export default {
         this.getList()
       })
     },
+    // 订单 删除 增值服务
+    deleteService (id) {
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteValue(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
     // 包裹 增加增值服务
     addParcel () {
       dialog({ type: 'addService', state: 'add', name: 'addParcel' }, () => {
@@ -1826,8 +1851,8 @@ export default {
         this.getList()
       })
     },
-    // 订单 删除增值服务
-    deleteService (id) {
+    // 订单 删除 快递公司
+    deleteExpress (id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
