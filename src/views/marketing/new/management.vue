@@ -101,6 +101,10 @@ export default {
     // if (this.$route.query.type) {
     //   this.type = this.$route.query.type
     // }
+    if (this.$route.params.type) {
+      this.$route.params.type = Number(this.$route.params.type)
+      console.log(this.$route.params.type, 'this.$route.params.type')
+    }
     console.log(this.$route.params.type, 'type')
     console.log(typeof (this.$route.params.type), 'type')
   },
