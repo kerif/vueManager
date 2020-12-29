@@ -619,6 +619,7 @@ export default {
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name
         this.express.MaxWeight = this.form.express_line.max_weight
+        this.user.express_line_id = this.form.express_line.id
         this.user.warehouse_id = this.form.warehouse.id
         this.warehouse.warehouse_name = this.form.warehouse.warehouse_name
         this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
