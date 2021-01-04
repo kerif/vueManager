@@ -699,7 +699,7 @@ exports.importData = (name) => {
 }
 // 预报包裹列表 确定批量入库
 exports.updateImport = (params) => {
-  return $form.post('packages/import', params)
+  return $json.post('packages/import', params)
 }
 // 无人认领包裹
 exports.getNoOwner = (params) => {
