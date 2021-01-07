@@ -11,8 +11,10 @@
        <span>{{user.key}}</span>
     </el-form-item>
     <el-form-item :label="$t('分组')">
-       <el-radio v-model="user.source" :label="1">{{$t('网站')}}</el-radio>
-       <el-radio  v-model="user.source" :label="3">{{$t('H5/小程序')}}</el-radio>
+      <span v-if="user.source === 1">{{$t('网站')}}</span>
+      <span v-if="user.source === 3">{{$t('H5/小程序')}}</span>
+       <!-- <el-radio v-model="user.source" :label="1">{{$t('网站')}}</el-radio> -->
+       <!-- <el-radio  v-model="user.source" :label="3">{{$t('H5/小程序')}}</el-radio> -->
     </el-form-item>
     <el-form-item v-for="item in stringData" :key="item.id" :label="item.name">
         <!-- <span></span> -->
