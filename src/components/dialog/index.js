@@ -79,6 +79,7 @@ import groupAdd from './groupAdd.vue'
 import vipLogs from './vipLogs.vue'
 import claimRecord from './claimRecord.vue'
 import tariffEditAdd from './tariffEditAdd.vue'
+import stringAddEdit from './stringAddEdit.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -158,6 +159,7 @@ const GroupAddController = Vue.extend(groupAdd)
 const VipLogsController = Vue.extend(vipLogs)
 const ClaimRecordController = Vue.extend(claimRecord)
 const TariffController = Vue.extend(tariffEditAdd)
+const StringController = Vue.extend(stringAddEdit)
 
 const mixin = {
   data () {
@@ -708,6 +710,13 @@ function initInstance (type) {
     // 更多配置 关税服务
     case 'tariffEditAdd':
       instance = new TariffController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 语言包 字符串翻译
+    case 'stringAddEdit':
+      instance = new StringController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

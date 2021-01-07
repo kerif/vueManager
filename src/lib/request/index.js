@@ -1207,6 +1207,26 @@ exports.addLg = (params) => {
 exports.singleLg = (id) => {
   return $form.get(`languages/${id}`)
 }
+// 字符串翻译
+exports.stringTranslate = (params) => {
+  return $form.get('string-translations', { params })
+}
+// 字符串翻译 获取支持的字符串
+exports.getString = () => {
+  return $form.get('string-translations/enabled-languages')
+}
+// 字符串翻译 新建
+exports.addString = (params) => {
+  return $form.post('string-translations', params)
+}
+// 字符串翻译 更新
+exports.updateString = (id, params) => {
+  return $form.put(`string-translations/${id}`, params)
+}
+// 字符串翻译 获取单条详细
+exports.detailsString = (id) => {
+  return $form.get(`string-translations/${id}`)
+}
 // 更新单条详细
 exports.updateLg = (id, params) => {
   return $form.put(`languages/${id}`, params)

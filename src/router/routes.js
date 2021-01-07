@@ -176,6 +176,8 @@ const AddEditPublic = loadonDemand('customer/publicAddEdit')
 const publicLang = loadonDemand('customer/publicLang')
 // 语言包
 const LanguageSupport = loadonDemand('language/support')
+// 字符串翻译
+const stringTranslate = loadonDemand('language/string')
 // 官网管理 栏目管理
 const website = loadonDemand('website/column')
 // 官网管理 新增 编辑 栏目管理
@@ -1471,6 +1473,17 @@ export default [
               level: 2,
               group: '语言包',
               name: '支持语言'
+            }
+          },
+          {
+            path: '/language/string',
+            name: 'string',
+            component: stringTranslate,
+            id: 1002,
+            meta: {
+              level: 2,
+              group: '语言包',
+              name: '字符串翻译'
             }
           }
         ]

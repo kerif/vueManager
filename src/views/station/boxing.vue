@@ -220,9 +220,11 @@
           <div class="express-left">
               <el-radio-group v-model="changeUpdate" class="radio-select-sty">
                 <el-radio :label="1" class="radio-main">{{$t('按客户ID集包')}}</el-radio>
-                <el-radio :label="2" class="radio-main">{{$t('每个包裹单独集包/打包')}}</el-radio>
+                <el-radio :label="2" class="radio-main">{{$t('快速下单')}}</el-radio>
               </el-radio-group>
             </div>
+            <div class="tips-sty" v-if="packageData.multi_boxes === 1 && changeUpdate == 2">{{$t('注：当前线路多箱出库结算方式为 ：每个包裹单独计费后，价格相加汇总。（如需修改，请在路线配置中进行设置')}}</div>
+            <div  class="tips-sty" v-if="packageData.multi_boxes === 0 && changeUpdate == 2">{{$t('注：当前线路多箱出库结算方式为 ：多个包裹重量相加后，按照总重量计算价格。（如需修改，请在路线配置中进行设置）')}}</div>
         </div>
         <div class="line-sty"></div>
         <div class="save-main">
@@ -1120,5 +1122,9 @@ export default {
   height: 880px;
   overflow: auto;
   box-sizing: border-box;
+}
+.tips-sty {
+  font-size: 13px;
+  color: red;
 }
 </style>

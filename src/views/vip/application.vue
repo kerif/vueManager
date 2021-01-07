@@ -83,7 +83,7 @@
         </template>
       </el-table-column>
       <!-- 状态 -->
-      <el-table-column :label="$t('状态')" prop="status"></el-table-column>
+      <!-- <el-table-column :label="$t('状态')" prop="status"></el-table-column> -->
       <!-- 申请时间 -->
       <el-table-column :label="$t('申请时间')" prop="created_at"></el-table-column>
       <!-- 审核时间 -->
