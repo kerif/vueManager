@@ -45,12 +45,12 @@
           <!-- 修改 -->
           <el-button class="btn-green" @click="editAgent(scope.row.id)">{{$t('修改')}}</el-button>
           <!-- 成交记录 -->
-          <!-- <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button> -->
-           <el-badge :value="scope.row.settle_count > 0 ? scope.row.settle_count : ''" class="item">
-            <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button>
-          </el-badge>
           <!-- 设置佣金 -->
           <el-button class="btn-deep-purple" @click="setCommission(scope.row.id, scope.row.agent_name, scope.row.commission)">{{$t('设置佣金')}}</el-button>
+          <!-- <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button> -->
+           <el-badge :value="scope.row.settle_count > 0 ? scope.row.settle_count : ''" class="item record-sty">
+            <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button>
+          </el-badge>
           <!-- 提现申请 -->
           <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
             <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">{{$t('提现申请')}}</el-button>
@@ -215,5 +215,8 @@ export default {
 }
 .el-button {
   margin: 3px;
+}
+.record-sty {
+  margin-right: 8px;
 }
 </style>
