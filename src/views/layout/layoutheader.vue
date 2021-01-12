@@ -9,6 +9,33 @@
       :active-text="$t('简')"
       :inactive-text="$t('繁')"
       inactive-color="#13ce66" /> -->
+    <!-- <el-button class="upload-btn">{{$t('下载管理')}}</el-button> -->
+    <el-popover
+      placement="top"
+      width="600"
+      trigger="click">
+      <el-table :data="gridData">
+        <el-table-column>
+          <template slot-scope="scope">
+            <div class="name-sty">{{scope.row.name}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column property="created_at"></el-table-column>
+        <el-table-column width="80">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">{{$t('处理中')}}</span>
+            <span v-if="scope.row.status === 1">{{$t('完成')}}</span>
+            <span v-if="scope.row.status === 2">{{$t('失败')}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="100">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.status === 1" @click="goUpload(scope.row.url)">{{$t('下载')}}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-button class="upload-btn" slot="reference" @click="uploadManagenent">{{$t('下载管理')}}</el-button>
+    </el-popover>
     <el-select v-model="isSimple">
       <el-option v-for="item in language"
         :key="item.id" :label="item.label" :value="item.value"></el-option>
@@ -24,7 +51,8 @@ export default {
       language: [
         { label: '简体', value: 1 },
         { label: '繁体', value: 2 }
-      ]
+      ],
+      gridData: []
     }
   },
   methods: {
@@ -54,6 +82,23 @@ export default {
           }
         })
       })
+    },
+    uploadManagenent () {
+      console.log('11')
+      this.getUpload()
+    },
+    // 下载管理 获取数据
+    getUpload () {
+      this.$request.exportsDownloads().then(res => {
+        if (res.ret) {
+          this.gridData = res.data
+          console.log(this.gridData)
+        }
+      })
+    },
+    // 确定下载
+    goUpload (url) {
+      window.open(url)
     },
     switchLeft () {
       this.$store.commit('switchCollapse', !this.$store.state.isCollapse)
@@ -128,6 +173,16 @@ export default {
     display: flex;
     align-items: center;
     cursor: pointer;
+  }
+  .upload-btn {
+    margin-right: 10px;
+    // color: #3aa8fc;
+  }
+  .name-sty {
+    width: 70px !important;
+    overflow: hidden !important;
+    text-overflow:ellipsis !important;
+    white-space: nowrap !important;
   }
 }
 </style>

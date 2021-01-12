@@ -12,6 +12,8 @@ exports.login = (params) => {
 }
 // 退出登录
 exports.logout = () => $form.post('logout')
+// 下载管理 获取列表
+exports.exportsDownloads = () => $form.get('export-downloads')
 // 配置 路线
 exports.getLines = (params) => {
   return $form.get('express-lines', { params })
@@ -1482,6 +1484,14 @@ exports.updatePcLang = (params) => {
 // 更多配置 其余配置 修改
 exports.editWebsite = (params) => {
   return $form.put('website-settings', params)
+}
+// 更多配置 PC端配置 获取第三方登录配置数据
+exports.getOauth = () => {
+  return $form.get('website-settings/oauth-config')
+}
+// 更多配置 PC端配置 获取第三方登录配置数据
+exports.updateOauth = (params) => {
+  return $form.put('website-settings/oauth-config', params)
 }
 // 更多配置 获取商品分类管理
 exports.getCategories = (params) => {

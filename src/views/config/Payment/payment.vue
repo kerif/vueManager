@@ -509,6 +509,38 @@
               <el-input v-model="setForm.aes_key">
               </el-input>
             </el-form-item>
+            <el-form-item :label="$t('第三方登录')">
+            <el-popover
+              width="500"
+              placement="right"
+              v-model="visibleOauth">
+              <el-form ref="form" :model="oauthData" label-width="120px">
+                <el-form-item label="Google ID">
+                  <el-input v-model="oauthData.google_id"></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('Google 密钥')">
+                  <el-input v-model="oauthData.google_secret"></el-input>
+                </el-form-item>
+                <el-form-item label="Line ID">
+                  <el-input v-model="oauthData.line_id"></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('Line 密钥')">
+                  <el-input v-model="oauthData.line_secret"></el-input>
+                </el-form-item>
+                <el-form-item label="Facebook ID">
+                  <el-input v-model="oauthData.facebook_id"></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('Facebook 密钥')">
+                  <el-input v-model="oauthData.facebook_secret"></el-input>
+                </el-form-item>
+              </el-form>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini" type="text" @click="visibleOauth = false">{{$t('取消')}}</el-button>
+                <el-button type="primary" size="mini" @click="saveOauth">{{$t('确定')}}</el-button>
+              </div>
+              <el-button slot="reference" @click="goOauth">{{$t('配置')}}</el-button>
+            </el-popover>
+            </el-form-item>
             <el-form-item :label="$t('*小程序码')" class="updateChe">
                 <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
@@ -1127,6 +1159,15 @@ export default {
         }
       ],
       ratesData: [],
+      oauthData: {
+        google_id: '',
+        google_secret: '',
+        line_id: '',
+        line_secret: '',
+        facebook_id: '',
+        facebook_secret: ''
+      },
+      visibleOauth: false,
       configurationData: [], // 拼团配置数据
       rate: '',
       currencyData: {},
@@ -2109,6 +2150,33 @@ export default {
             message: res.msg
           })
           this.getOthers()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // pc端配置 第三方登录 获取数据
+    goOauth () {
+      // this.visibleOauth = true
+      this.$request.getOauth().then(res => {
+        if (res.ret) {
+          this.oauthData = res.data
+        }
+      })
+    },
+    // 更新第三方登录配置数据
+    saveOauth () {
+      this.$request.updateOauth(this.oauthData).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.visibleOauth = false
         } else {
           this.$message({
             message: res.msg,
