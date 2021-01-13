@@ -22,7 +22,7 @@
                 <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{scope.row.order_sn}}</span>
             </template>
         </el-table-column>
-        <el-table-column :label="$t('转运快递单号')" prop="logistics_sn"></el-table-column>
+        <el-table-column :label="$t('转运快递单号-二程')" prop="logistics_sn" width="120"></el-table-column>
         <!-- <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column> -->
         <el-table-column :label="$t('线路名称')" prop="express_line.cn_name"></el-table-column>
         <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>

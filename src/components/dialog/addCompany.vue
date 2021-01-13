@@ -1,12 +1,12 @@
 <template>
   <el-dialog :visible.sync="show" :title="this.state === 'add' ? $t('添加物流信息') : $t('修改物流信息')" class="add-company"
   width="45%" @close="clear">
-    <el-form ref="form" :model="company" label-width="140px">
-        <el-form-item :label="$t('*转运快递单号：')">
+    <el-form ref="form" :model="company" label-width="160px">
+        <el-form-item :label="$t('*转运快递单号-二程：')">
             <el-input v-model="company.sn" class="input-select"></el-input>
             <el-button @click.native="goExpress" class="express-btn">{{$t('管理发货快递公司')}}</el-button>
         </el-form-item>
-        <el-form-item :label="$t('*转运快递公司：')">
+        <el-form-item :label="$t('*转运快递公司-二程：')">
             <!-- <el-input v-model="company.company"></el-input> -->
              <el-select v-model="company.company" clearable
              allow-create default-first-option :placeholder="$t('请选择')">
@@ -65,9 +65,9 @@ export default {
     confirm () {
       // console.log(this.company.company, 'this.company.company')
       if (this.company.sn === '') {
-        return this.$message.error(this.$t('请输入转运快递单号'))
+        return this.$message.error(this.$t('请输入转运快递单号二程'))
       } else if (this.company.company === '') {
-        return this.$message.error(this.$t('请输入转运快递公司'))
+        return this.$message.error(this.$t('请输入转运快递公司二程'))
       }
       this.$request.updateLogistics([{
         id: this.id,

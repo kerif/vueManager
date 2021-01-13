@@ -83,6 +83,12 @@
       <el-table-column :label="$t('提交时间')" prop="created_at"></el-table-column>
       <!-- 发货时间 -->
       <el-table-column :label="$t('发货时间')" prop="shipped_at"></el-table-column>
+
+      <el-table-column :label="$t('转运快递单号-头程')">
+        <template slot-scope="scope">
+          <span>{{scope.row.logistics_company}}{{scope.row.logistics_sn}}</span>
+        </template>
+      </el-table-column>
       <!-- 发出站点 -->
       <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
       <!-- 目的地 -->
