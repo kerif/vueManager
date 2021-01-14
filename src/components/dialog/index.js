@@ -80,6 +80,7 @@ import vipLogs from './vipLogs.vue'
 import claimRecord from './claimRecord.vue'
 import tariffEditAdd from './tariffEditAdd.vue'
 import stringAddEdit from './stringAddEdit.vue'
+import pickPoint from './pickPiont.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -160,6 +161,7 @@ const VipLogsController = Vue.extend(vipLogs)
 const ClaimRecordController = Vue.extend(claimRecord)
 const TariffController = Vue.extend(tariffEditAdd)
 const StringController = Vue.extend(stringAddEdit)
+const PickPiontController = Vue.extend(pickPoint)
 
 const mixin = {
   data () {
@@ -717,6 +719,13 @@ function initInstance (type) {
     // 语言包 字符串翻译
     case 'stringAddEdit':
       instance = new StringController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 员工组列表 自提点权限
+    case 'pickPoint':
+      instance = new PickPiontController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

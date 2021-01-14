@@ -164,12 +164,12 @@
       <!-- 转运快递单号 -->
       <el-table-column :label="$t('转运快递单号-头程（发货单）')" v-if="activeName === '3' ||activeName === '4' || activeName === '5' || activeName === '6'">
         <template slot-scope="scope">
-          <span>{{scope.row.shipment && scope.row.shipment.logistics_company}}{{scope.row.shipment && scope.row.shipment.logistics_sn}}</span>
+          <span>{{scope.row.shipment && scope.row.shipment.logistics_company}}&nbsp;{{scope.row.shipment && scope.row.shipment.logistics_sn}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('转运快递单号-二程')" v-if="activeName === '3' ||activeName === '4' || activeName === '5' || activeName === '6'">
         <template slot-scope="scope">
-          <span>{{scope.row.logistics_company}}{{scope.row.logistics_sn}}</span>
+          <span>{{scope.row.logistics_company}}&nbsp;{{scope.row.logistics_sn}}</span>
         </template>
       </el-table-column>
         <!-- 转运快递公司 -->
@@ -330,13 +330,13 @@
       </el-table-column>
       <el-table-column :label="$t('转运快递单号-头程（发货单）')" v-if="activeName === '3' ||activeName === '4' || activeName === '5' || activeName === '6'">
         <template slot-scope="scope">
-          <span>{{scope.row.shipment && scope.row.shipment.logistics_company}}{{scope.row.shipment && scope.row.shipment.logistics_sn}}</span>
+          <span>{{scope.row.shipment && scope.row.shipment.logistics_company}}&nbsp;{{scope.row.shipment && scope.row.shipment.logistics_sn}}</span>
         </template>
       </el-table-column>
       <!-- 转运快递单号 -->
       <el-table-column :label="$t('转运快递单号-二程')" v-if="activeName === '3' ||activeName === '4' || activeName === '5' || activeName === '6'">
         <template slot-scope="scope">
-          <span>{{scope.row.logistics_company}}{{scope.row.logistics_sn}}</span>
+          <span>{{scope.row.logistics_company}}&nbsp;{{scope.row.logistics_sn}}</span>
         </template>
       </el-table-column>
         <!-- 转运快递公司 -->

@@ -86,7 +86,7 @@
 
       <el-table-column :label="$t('转运快递单号-头程')">
         <template slot-scope="scope">
-          <span>{{scope.row.logistics_company}}{{scope.row.logistics_sn}}</span>
+          <span>{{scope.row.logistics_company}}&nbsp;{{scope.row.logistics_sn}}</span>
         </template>
       </el-table-column>
       <!-- 发出站点 -->

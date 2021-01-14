@@ -375,7 +375,7 @@ export default {
         height: '',
         MaxWeight: '',
         cName: '',
-        in_storage_remark: '',
+        remark: '',
         number: '',
         qty: '',
         code: '',
@@ -730,7 +730,7 @@ export default {
                 })
                 this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
                 this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name = ''
-                this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
+                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
                 this.goodsImgList = []
                 this.user.props = []
                 this.user.chosen_services = []
@@ -758,7 +758,7 @@ export default {
                 })
                 this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
                 this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name = ''
-                this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
+                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
                 this.goodsImgList = []
                 this.user.props = []
                 this.user.chosen_services = []
@@ -788,7 +788,7 @@ export default {
               })
               this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.brand_name = ''
               this.user.user_id = this.user.warehouse_id = this.user.package_value = ''
-              this.user.express_num = this.user.in_storage_remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
+              this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
               this.goodsImgList = []
               this.user.props = []
               this.user.chosen_services = []
@@ -811,7 +811,7 @@ export default {
                     })
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = this.user.brand_name = ''
                     this.user.user_id = this.user.warehouse_id = ''
-                    this.user.express_num = this.user.express_company_id = this.user.in_storage_remark = this.user.number = this.user.qty = this.user.code = this.user.country_id = ''
+                    this.user.express_num = this.user.express_company_id = this.user.remark = this.user.number = this.user.qty = this.user.code = this.user.country_id = ''
                     this.user.props = []
                     this.goodsImgList = []
                     this.user.chosen_services = []

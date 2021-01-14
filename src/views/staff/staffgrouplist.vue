@@ -52,6 +52,8 @@
         <el-button @click.stop="member(scope.row.id)" class="btn-green">{{$t('成员')}}</el-button>
         <!-- 所属仓库 -->
         <el-button class="btn-deep-blue" v-if="scope.row.permissions === 1" @click="warehouseChange(scope.row.id)">{{$t('所属仓库')}}</el-button>
+        <!-- 自提点权限 -->
+        <!-- <el-button class="btn-pink" v-if="scope.row.permissions === 1" @click="pickPiont(scope.row.id)">{{$t('自提点权限')}}</el-button> -->
       </template>
       </el-table-column>
       <template slot="append">
@@ -128,6 +130,12 @@ export default {
     // 修改所属仓库
     warehouseChange (id) {
       dialog({ type: 'warehouseTo', id: id }, () => {
+        this.getList()
+      })
+    },
+    // 自提点权限
+    pickPiont (id) {
+      dialog({ type: 'pickPoint', id: id }, () => {
         this.getList()
       })
     },
