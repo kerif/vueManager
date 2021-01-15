@@ -136,7 +136,7 @@
               </el-dropdown-item>
               <!-- 加入发货单 -->
               <el-dropdown-item class="item-sty" @click.native="addShip(scope.row.id)">
-                <span>{{$t('加入发货单')}}</span>
+                <span v-if="scope.row.status === 0">{{$t('加入发货单')}}</span>
               </el-dropdown-item>
               <!-- 取消发货 -->
               <el-dropdown-item class="item-sty" @click.native="cancelShip(scope.row.id)">
