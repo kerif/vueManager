@@ -179,7 +179,7 @@
            <el-button size="small" @click="deleteData">{{$t('导出清单')}}</el-button>
             <!-- 批量发送通知 -->
            <el-button size="small" @click="goNotify">{{$t('批量发送通知')}}</el-button>
-           <el-button size="small" @click="batchNum">{{$t('批量更新单号')}}</el-button>
+           <el-button size="small" @click="batchNum">{{$t('批量更新单号-二程')}}</el-button>
         </div>
       </template>
     </el-table>
