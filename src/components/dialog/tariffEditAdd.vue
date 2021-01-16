@@ -19,8 +19,8 @@
               </el-option>
             </el-select>
         </el-form-item>
-        <!-- 保险金额 -->
-        <el-form-item :label="(this.ruleForm.type === 1 ? '比例': $t('*保险金额'))+ (this.ruleForm.type === 1 ? '%': currencyUnit)" class="input-sty">
+        <!-- 关税金额 -->
+        <el-form-item :label="(this.ruleForm.type === 1 ? '比例': $t('*关税金额'))+ (this.ruleForm.type === 1 ? '%': currencyUnit)" class="input-sty">
           <el-input v-model="ruleForm.amount">
           </el-input>
         </el-form-item>
@@ -98,7 +98,7 @@ export default {
       } else if (!this.ruleForm.type) {
         return this.$message.error(this.$t('请选择收费类型'))
       } else if (!this.ruleForm.amount) {
-        return this.$message.error(this.$t('请输入保险金额'))
+        return this.$message.error(this.$t('请输入关税金额'))
       }
       if (this.state === 'add') {
         this.$request.tariffAdd({
