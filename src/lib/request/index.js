@@ -142,6 +142,18 @@ exports.editGroup = (id, params) => {
 exports.getGroup = (id) => {
   return $form.get(`admin-groups/${id}`)
 }
+// 获取员工组自提点权限数据
+exports.getPickPoint = (id) => {
+  return $form.get(`admin-groups/${id}/members`)
+}
+// 员工组自提点权限 获取自提点列表
+exports.stationList = () => {
+  return $form.get(`admin-groups/station-list`)
+}
+// 员工组自提点权限 更新自提点列表
+exports.updateStation = (params) => {
+  return $json.put(`admin-groups/admins/station-permissions`, params)
+}
 exports.getVipMember = (id, params) => {
   return $form.get(`admin-groups/${id}/members`, { params })
 }

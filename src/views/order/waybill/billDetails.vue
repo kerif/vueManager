@@ -65,8 +65,16 @@
         <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.wechat_id"></el-input>
         <span v-if="unEdit === false">{{form.address && form.address.wechat_id}}</span>
       </el-col>
+       <!-- 收货自提点 -->
+      <el-col :span="7" :offset="1">
+        <span class="leftWidth">{{$t('收货自提点')}}</span>
+        <!-- <el-input class="input-sty" v-model="form.address.wechat_id"></el-input> -->
+        <span>{{form.station_name}}</span>
+      </el-col>
+    </el-row>
+    <el-row class="container-center" :gutter="20">
       <!-- 区域 -->
-      <el-col :span="7" :offset="1" v-if="form.address && form.address.area">
+      <el-col :span="7" v-if="form.address && form.address.area">
         <span class="leftWidth">{{$t('区域')}}</span>
         <el-input class="input-sty" v-if="(form.address && unEdit === true) && form.address.area" v-model="form.address.area"></el-input>
         <span v-if="unEdit === false && form.address.area">{{form.address && form.address.area}}</span>
@@ -119,6 +127,9 @@
         <el-col :span="7" :offset="1">
          <span class="leftWidth">{{$t('线路名称')}}</span>
          <span>{{form.express_line && form.express_line.cn_name}}</span>
+         <span v-if="form.express_line && form.express_line.is_delivery === 0">（{{$t('仅送货上门')}}）</span>
+         <span v-if="form.express_line && form.express_line.is_delivery === 1">（{{$t('仅自提')}}）</span>
+         <span v-if="form.express_line && form.express_line.is_delivery === 2">（{{$t('送货上门与自提')}}）</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
@@ -165,6 +176,12 @@
       <el-col :span="7" :offset="1">
         <span class="leftWidth">{{$t('付款方式')}}</span>
         <span>{{form.payment && form.payment.payment_type_name}}</span>
+      </el-col>
+      <!-- 签收方式 -->
+      <el-col :span="7" :offset="1" v-if="form.sign_type === 1 || form.sign_type === 2">
+        <span class="leftWidth">{{$t('签收方式')}}</span>
+        <span v-if="form.sign_type === 1">{{$t('客户自行签收')}}</span>
+        <span v-if="form.sign_type === 2">{{$t('自提点签收')}}</span>
       </el-col>
       <!-- 团长ID -->
        <el-col :span="7" :offset="1" v-if="form.group_leader_id !== ''">
@@ -370,12 +387,22 @@
       </div>
     </div>
     <!-- 留仓物品 -->
-    <div class="packed-details">
-      <span>{{$t('留仓物品')}}</span>
-      <span v-if="form.in_warehouse_item">
-        {{form.in_warehouse_item}}
-        </span>
-      <span v-else class="nullProduct">{{$t('无')}}</span>
+    <div class="bale">
+      <div class="bale-left packed-details">
+        <span>{{$t('留仓物品')}}</span>
+        <span v-if="form.in_warehouse_item">
+          {{form.in_warehouse_item}}
+          </span>
+        <span v-else class="nullProduct">{{$t('无')}}</span>
+      </div>
+      <div class="bale-left packed-details">
+          <span>{{$t('签收照片')}}</span>
+          <div class="left-img" v-for="item in form.sign_images" :key="item.id">
+            <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
+              <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" >
+            </span>
+          </div>
+        </div>
     </div>
     <!-- 签收备注 -->
     <div class="packed-details" v-if="this.$route.params.activeName === '5'">

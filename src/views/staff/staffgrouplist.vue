@@ -53,7 +53,7 @@
         <!-- 所属仓库 -->
         <el-button class="btn-deep-blue" v-if="scope.row.permissions === 1" @click="warehouseChange(scope.row.id)">{{$t('所属仓库')}}</el-button>
         <!-- 自提点权限 -->
-        <!-- <el-button class="btn-pink" v-if="scope.row.permissions === 1" @click="pickPiont(scope.row.id)">{{$t('自提点权限')}}</el-button> -->
+        <el-button class="btn-pink" v-if="scope.row.permissions === 1" @click="pickPiont(scope.row.id)">{{$t('自提点权限')}}</el-button>
       </template>
       </el-table-column>
       <template slot="append">
