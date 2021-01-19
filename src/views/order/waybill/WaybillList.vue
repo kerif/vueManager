@@ -761,8 +761,8 @@
     <!-- 导出清单 -->
     <el-dialog :title="$t('导出清单')" :visible.sync="dialogPackages" width="40%" @close="clearFilter">
       <div class="excel-date">
-        <el-radio :label="1" v-model="uploadRadio">{{$t('导出清单')}}</el-radio>
-        <el-radio :label="2" v-model="uploadRadio">{{$t('导出清单（含包裹信息）')}}</el-radio>
+        <el-radio :label="1" v-model="uploadRadio">{{$t('导出清单（含包裹信息）')}}</el-radio>
+        <el-radio :label="2" v-model="uploadRadio">{{$t('导出清单')}}</el-radio>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogPackages = false" class="cancel-btn">{{$t('取消')}}</el-button>
