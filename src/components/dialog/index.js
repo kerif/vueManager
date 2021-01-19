@@ -81,6 +81,8 @@ import claimRecord from './claimRecord.vue'
 import tariffEditAdd from './tariffEditAdd.vue'
 import stringAddEdit from './stringAddEdit.vue'
 import pickPoint from './pickPiont.vue'
+import fastReceipt from './fastReceipt.vue'
+import fastSign from './fastSign.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -162,7 +164,8 @@ const ClaimRecordController = Vue.extend(claimRecord)
 const TariffController = Vue.extend(tariffEditAdd)
 const StringController = Vue.extend(stringAddEdit)
 const PickPiontController = Vue.extend(pickPoint)
-
+const FastReceiptController = Vue.extend(fastReceipt)
+const FastSignController = Vue.extend(fastSign)
 const mixin = {
   data () {
     return {
@@ -726,6 +729,20 @@ function initInstance (type) {
     // 员工组列表 自提点权限
     case 'pickPoint':
       instance = new PickPiontController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自提点 转运包裹管理 快速收货
+    case 'fastReceipt':
+      instance = new FastReceiptController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自提点 转运包裹管理 快速签收 快速出库
+    case 'fastSign':
+      instance = new FastSignController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

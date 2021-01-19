@@ -88,6 +88,8 @@ const emailLang = loadonDemand('config/Payment/emailLang')
 const categoriesLang = loadonDemand('config/Payment/categoriesLang')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
+// 自提点 转运包裹管理
+const PackageManagement = loadonDemand('pick/packageMana')
 // 发货单
 const Ship = loadonDemand('station/ship')
 // 发货单 详情
@@ -757,6 +759,25 @@ export default [
               group: '货站',
               name: '打包合箱',
               parent: '/station/applyPackage'
+            }
+          }
+        ]
+      },
+      {
+        path: 'pick',
+        component: LayoutContainer,
+        icon: 'icon-gongbao',
+        id: 1200,
+        children: [
+          {
+            path: '/pick/packageManagement',
+            name: 'packageMana',
+            component: PackageManagement,
+            id: 1201,
+            meta: {
+              level: 2,
+              group: '自提点',
+              name: '转运包裹管理'
             }
           }
         ]
