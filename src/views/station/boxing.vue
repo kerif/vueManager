@@ -892,7 +892,7 @@ export default {
         this.$request.savePacksUser({
           ...this.box,
           station_id: this.radio === 2 ? this.box.address_id : '',
-          address: this.radio === 1 ? params : '',
+          address: params,
           package_ids: this.packageId,
           address_type: this.radio === 2 ? 2 : 1,
           batch_mode: this.$route.query.packageId ? 1 : '',
@@ -918,7 +918,7 @@ export default {
         this.$request.savePacksAlone({
           ...this.box,
           station_id: this.radio === 2 ? this.box.address_id : '',
-          address: this.radio === 1 ? params : '',
+          address: params,
           package_ids: this.packageId,
           address_type: this.radio === 2 ? 2 : 1,
           batch_mode: this.$route.query.packageId ? 1 : '',
