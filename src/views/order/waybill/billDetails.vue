@@ -398,8 +398,8 @@
       <div class="bale-left packed-details">
           <span>{{$t('签收照片')}}</span>
           <div class="left-img" v-for="item in form.sign_images" :key="item.id">
-            <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
-              <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" >
+            <span style="cursor:pointer;" @click.stop="imgSrc=`${item}`, imgVisible=true">
+              <img :src="`${item}`" class="productImg" >
             </span>
           </div>
         </div>
