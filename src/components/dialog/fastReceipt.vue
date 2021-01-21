@@ -5,19 +5,19 @@
     <el-col :span="10">
       <div>
         <span>{{$t('请选择收货方式：')}}</span><br/>
-        <el-radio v-model="radio" class="radio-sty" :label="1">{{$t('单票收货（单个包裹一个扫码收货，无复核）')}}</el-radio>
-        <el-radio v-model="radio" :label="2">{{$t('整发货单（先扫码发货单号，然后包裹一个扫码核对，需复核）')}}</el-radio>
+        <el-radio v-model="type" class="radio-sty" :label="2">{{$t('单票收货（单个包裹一个扫码收货，无复核）')}}</el-radio>
+        <el-radio v-model="type" :label="1">{{$t('整发货单（先扫码发货单号，然后包裹一个扫码核对，需复核）')}}</el-radio>
       </div>
     </el-col>
     <el-col :span="11" :offset="1">
-      <div v-if="radio === 1">
+      <div v-if="type === 2">
         <span>{{$t('发货单：')}}</span><br/>
         <el-input class="input-sty radio-sty" placeholder="请输入发货单号或相关订单号"></el-input>
         <el-button>{{$t('确定')}}</el-button>
         <el-input type="textarea" :rows="3" class="input-sty" placeholder="多个订单号，请用回车分割"></el-input>
         <el-button>{{$t('复核')}}</el-button>
       </div>
-      <div v-if="radio === 2">
+      <div v-if="type === 1">
         <el-input type="textarea" :rows="4" class="input-sty" placeholder="多个订单号，请用回车分割"></el-input>
         <el-button>{{$t('确定')}}</el-button>
       </div>
@@ -95,12 +95,14 @@ export default {
     return {
       tableData: [],
       deleteNum: [],
-      radio: 1
+      type: 2,
+      id: ''
     }
   },
   methods: {
     getList () {
-      this.$request.getVipMember(this.id, {
+      this.$request.getReceive({
+        XStationId: this.id,
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {
@@ -115,7 +117,7 @@ export default {
     },
     confirm () {},
     init () {
-      this.getList()
+      // this.getList()
     },
     clear () {
       this.page_params.page = 1

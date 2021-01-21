@@ -2260,3 +2260,7 @@ exports.pickData = (id) => {
 exports.updatePickData = (id, params) => {
   return $form.put(`stations/${id}`, params)
 }
+// 转运包裹管理 获取 快速收货
+exports.getReceive = (params) => {
+  return $form.get(`stations/receive/search`, { params })
+}

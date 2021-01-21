@@ -345,7 +345,7 @@ export default {
     },
     // 快速收货
     fastReceipt () {
-      dialog({ type: 'fastReceipt' })
+      dialog({ type: 'fastReceipt', id: this.transferId })
     },
     // 快速签收
     fastSign () {
