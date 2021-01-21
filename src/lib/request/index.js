@@ -2239,3 +2239,24 @@ exports.editVideo = (id, params) => $json.put(`videos/${id}`, params)
 // 获取线路筛选条件某一列列表
 exports.getLineColumnList = (column) => $form.get(`express-lines/column/${column}/data`)
 export default exports
+
+// 自提点 转运包裹管理 获取自提点信息筛选
+exports.packagePick = () => {
+  return $form.get('stations')
+}
+// 转运包裹管理 获取tab数量
+exports.stationsCounts = (params) => {
+  return $form.get('stations/orders/count', { params })
+}
+// 转运包裹管理 获取列表数据
+exports.stationsData = (params) => {
+  return $form.get('stations/orders', { params })
+}
+// 转运包裹管理 获取自提点信息
+exports.pickData = (id) => {
+  return $form.get(`stations/${id}`)
+}
+// 转运包裹管理 更新 公告设置
+exports.updatePickData = (id, params) => {
+  return $form.put(`stations/${id}`, params)
+}
