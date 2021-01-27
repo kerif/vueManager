@@ -1581,6 +1581,30 @@ exports.getOneSelf = (id) => {
 exports.updateOneSelf = (id, params) => {
   return $form.put(`self-pickup-stations/${id}`, params)
 }
+// 自提点 获取树状数据
+exports.treeIndex = () => {
+  return $form.get('self-pickup-stations/tree-index')
+}
+// 自提点 计佣方式列表
+exports.pickRules = (params) => {
+  return $form.get('self-pickup-stations/rules', { params })
+}
+// 自提点 计佣方式列表 新增
+exports.addPickRules = (params) => {
+  return $form.post('self-pickup-stations/rules', params)
+}
+// 自提点 计佣方式列表 单条详情
+exports.getPickDetails = (id) => {
+  return $form.get(`self-pickup-stations/rules/${id}`)
+}
+// 自提点 计佣方式列表 更新
+exports.updatePickRules = (id, params) => {
+  return $form.put(`self-pickup-stations/rules/${id}`, params)
+}
+// 自提点 计佣方式列表 删除
+exports.deletePickRules = (id) => {
+  return $form.delete(`self-pickup-stations/rules/${id}`)
+}
 // 营销管理 新用户福利
 exports.getCoupons = () => {
   return $form.get('new-user-coupons')
@@ -2262,5 +2286,65 @@ exports.updatePickData = (id, params) => {
 }
 // 转运包裹管理 获取 快速收货
 exports.getReceive = (params) => {
-  return $form.get(`stations/receive/search`, { params })
+  return $json.get(`stations/receive/search`, { params })
+}
+// 转运包裹管理 获取 快速收货
+exports.updateReceive = (params) => {
+  return $form.put(`stations/receive`, params)
+}
+// 快速签收 获取查询数据
+exports.signData = (params) => {
+  return $form.get('stations/sign/search', { params })
+}
+// 快速签收 获取单条签收照片数据
+exports.photosData = (id, params) => {
+  return $form.get(`stations/sign/${id}`, { params })
+}
+// 快速签收 更新 单条签收照片数据
+exports.updatePhotosData = (id, params) => {
+  return $form.put(`stations/sign/${id}`, params)
+}
+// 快速签收 确定签收
+exports.batchSign = (params) => {
+  return $form.put(`stations/sign/batch`, params)
+}
+// 快速出库 获取查询数据
+exports.shipData = (params) => {
+  return $form.get('stations/ship/search', { params })
+}
+// 快速出库 确定出库
+exports.shipBatch = (params) => {
+  return $form.put('stations/ship', params)
+}
+// 自提点 仓位管理列表
+exports.locationData = (params) => {
+  return $form.get('stations/locations/areas', { params })
+}
+// 自提点 仓位管理列表 添加
+exports.locationAdd = (params) => {
+  return $form.post('stations/locations/areas', params)
+}
+// 自提点 仓位管理列表 编辑
+exports.locationEdit = (id, params) => {
+  return $form.put(`stations/locations/areas/${id}`, params)
+}
+// 自提点 仓位管理列表 编辑
+exports.getAlongLocation = (id, params) => {
+  return $form.get(`stations/locations/areas/${id}`, { params })
+}
+// 自提点 仓位管理列表 货位列表
+exports.locationList = (id, params) => {
+  return $form.get(`stations/locations/${id}`, { params })
+}
+// 自提点 仓位管理列表 货位列表 解锁 或锁定
+exports.locationLocked = (id, status, params) => {
+  return $form.put(`stations/locations/location/${id}/status/${status}`, { params })
+}
+// 自提点 仓位管理列表 货位列表
+exports.locationDelete = (id, params) => {
+  return $form.delete(`stations/locations/areas/${id}`, { params })
+}
+// 自提点 自提点概览
+exports.getPickEcharts = (params) => {
+  return $form.get('station-statistics', { params })
 }

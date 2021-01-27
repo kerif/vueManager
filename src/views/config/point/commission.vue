@@ -1,49 +1,28 @@
 <template>
-  <div class="since-container">
+  <div class="commission-container">
     <div>
       <search-group v-model="page_params.keyword" @search="goSearch">
-        <div class="chooseStatus">
-          <el-select v-model="status" @change="changeStatus" clearable
-          :placeholder="$t('请选择')">
-            <el-option
-              v-for="item in statusList"
-              :key="item.id"
-              :value="item.id"
-              :label="item.name">
-            </el-option>
-          </el-select>
-        </div>
       </search-group>
       </div>
     <div class="select-box">
-      <add-btn router="commissionSet">{{$t('计佣方式配置')}}</add-btn>
-      <add-btn router="pointAdd">{{$t('添加')}}</add-btn>
+      <add-btn @click.native="addCommission">{{$t('添加')}}</add-btn>
     </div>
-    <div v-if="status === 1">
-    <el-table :data="logisticsList" stripe border class="data-list"
+    <el-table :data="rulesList" stripe border class="data-list"
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="index" width="55" align="center"></el-table-column>
-      <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
-      <el-table-column :label="$t('所属国家/地区')">
+      <el-table-column :label="$t('名称')" prop="name"></el-table-column>
+      <el-table-column :label="$t('计佣方式')">
         <template slot-scope="scope">
-          <span>{{scope.row.country.name}}</span>
+          <span v-if="scope.row.type === 1">{{$t('固定金额')}}</span>
+          <span v-if="scope.row.type === 2">{{$t('重量体积重')}}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('详细地址')" prop="address"></el-table-column>
-      <el-table-column :label="$t('联系电话')" prop="contact_info"></el-table-column>
-      <el-table-column :label="$t('联系人')" prop="contactor"></el-table-column>
-      <el-table-column :label="$t('支持线路')">
-        <template slot-scope="scope">
-          <div class="check-sty" @click="checkLines(scope.row.id, scope.row.name)">{{scope.row.expressLines_count}}</div>
-        </template>
-      </el-table-column>
-      <!-- 计佣方式 -->
-      <el-table-column :label="$t('计佣方式')" prop="contactor"></el-table-column>
+      <el-table-column :label="$t('计佣金额')" prop="amount"></el-table-column>
       <el-table-column :label="$t('操作')" width="150px">
         <template slot-scope="scope">
           <!-- 编辑 -->
-          <el-button class="btn-green" @click="editSelf(scope.row.id, scope.row.logistics_sn)">{{$t('编辑')}}</el-button>
+          <el-button class="btn-green" @click="editCommission(scope.row.id)">{{$t('编辑')}}</el-button>
           <!-- 删除 -->
           <el-button class="btn-light-red" @click="deleteSelf(scope.row.id)">{{$t('删除')}}</el-button>
         </template>
@@ -55,10 +34,6 @@
       </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    </div>
-    <div v-if="status === 2">
-      <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-    </div>
     <el-dialog :visible.sync="lineDialog" width="40%" @close="clear"
     :title="$t('查看自提点支持线路')">
     <div class="self-sty">{{$t('自提点名称：')}}{{this.lineName}}</div>
@@ -87,10 +62,10 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
-// import dialog from '@/components/dialog'
+import dialog from '@/components/dialog'
 import { pagination } from '@/mixin'
 export default {
-  name: 'logisticsList',
+  name: 'rulesList',
   components: {
     SearchGroup,
     NlePagination,
@@ -99,7 +74,7 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      logisticsList: [],
+      rulesList: [],
       tableLoading: false,
       deleteNum: [],
       trackDialog: false,
@@ -111,21 +86,7 @@ export default {
       lineName: '',
       status: 1,
       lineDialog: false,
-      statusList: [
-        {
-          id: 1,
-          name: this.$t('全部显示')
-        },
-        {
-          id: 2,
-          name: this.$t('按地区分类显示')
-        }
-      ],
-      treeData: [],
-      defaultProps: {
-        children: 'child',
-        label: 'name'
-      }
+      localization: {}
     }
   },
   created () {
@@ -134,14 +95,15 @@ export default {
   methods: {
     getList () {
       this.tableLoading = true
-      this.$request.getSelf({
+      this.$request.pickRules({
         keyword: this.page_params.keyword,
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.logisticsList = res.data
+          this.rulesList = res.data
+          this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         } else {
@@ -153,31 +115,17 @@ export default {
         }
       })
     },
-    // 获取自提点树状数据
-    getTree () {
-      this.$request.treeIndex().then(res => {
-        if (res.ret) {
-          this.treeData = res.data
-          console.log(this.treeData, 'this.treeData')
-          this.treeData.map(item => {
-            return {
-              ...item,
-              child: item.child.map(item => ({ ...item, name: this.$t(item.name) })),
-              name: this.$t(item.name),
-              id: `${item.id}-1`
-            }
-          })
-        }
+    // 添加计佣方式
+    addCommission () {
+      dialog({ type: 'commissionAddEdit', state: 'add', weightUnit: this.localization.weight_unit, currencyUnit: this.localization.currency_unit }, () => {
+        this.getList()
       })
     },
-    // 自提点状态选择
-    changeStatus () {
-      if (this.status === 2) {
-        this.getTree()
-      }
-    },
-    handleNodeClick (data) {
-      console.log(data)
+    // 编辑 计佣方式
+    editCommission (id) {
+      dialog({ type: 'commissionAddEdit', state: 'edit', id: id, weightUnit: this.localization.weight_unit, currencyUnit: this.localization.currency_unit }, () => {
+        this.getList()
+      })
     },
     // 查看支持线路
     checkLines (id, name) {
@@ -192,14 +140,6 @@ export default {
           this.tableData = res.data
         }
       })
-    },
-    // 编辑
-    editSelf (id) {
-      this.$router.push({ name: 'pointEdit',
-        params: {
-          id: id
-        } }
-      )
     },
     clear () {
       this.linesId = ''
@@ -216,7 +156,7 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.deleteSelf(id).then(res => {
+        this.$request.deletePickRules(id).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
@@ -267,7 +207,7 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-.since-container {
+.commission-container {
   .select-box {
     overflow: hidden;
   }

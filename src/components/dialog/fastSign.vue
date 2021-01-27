@@ -11,7 +11,7 @@
       </el-input>
       </el-col>
       <el-col :span="2" :offset="1">
-        <el-button @click.native="search">{{$t('查询')}}</el-button>
+        <el-button @click.native="search">{{$t('确定')}}</el-button>
       </el-col>
     </el-row>
     <el-table
@@ -23,47 +23,50 @@
       </el-table-column>
       <!-- 客户ID -->
       <el-table-column
-        prop="username"
         :label="$t('客户ID')">
+        <template slot-scope="scope">
+          <span>{{scope.row.user.id}}-{{scope.row.user.name}}</span>
+        </template>
       </el-table-column>
       <!-- 转运单号 -->
       <el-table-column
-        prop="username"
+        prop="order_sn"
         :label="$t('转运单号')">
       </el-table-column>
       <!-- 收件人 -->
       <el-table-column
-        prop="username"
+        prop="receiver_name"
         :label="$t('收件人')">
       </el-table-column>
       <!-- 联系电话 -->
       <el-table-column
-        prop="username"
+        prop="receiver_phone"
         :label="$t('联系电话')">
       </el-table-column>
       <!-- 到站时间 -->
       <el-table-column
-        prop="username"
+        prop="shipped_at"
         :label="$t('到站时间')">
       </el-table-column>
       <!-- 箱数 -->
       <el-table-column
-        prop="username"
+        prop="box_count"
         :label="$t('箱数')">
       </el-table-column>
       <!-- 重量 -->
       <el-table-column
-        prop="username"
-        :label="$t('重量')">
+        prop="actual_weight"
+        :label="$t('重量') + `${localization.weight_unit ? localization.weight_unit : '' }`">
       </el-table-column>
       <!-- 尺寸/体积 -->
-      <el-table-column
-        prop="username"
-        :label="$t('尺寸/体积')">
+      <el-table-column :label="$t('尺寸') + `${localization.length_unit ? localization.length_unit : '' }`">
+        <template slot-scope="scope">
+          <span>{{scope.row.length}}</span>*<span>{{scope.row.width}}</span>*<span>{{scope.row.height}}</span>
+        </template>
       </el-table-column>
       <!-- 所属发货单 -->
       <el-table-column
-        prop="username"
+        prop="shipment_sn"
         :label="$t('所属发货单')">
       </el-table-column>
       <!-- 操作 -->
@@ -71,8 +74,8 @@
         :label="$t('操作')"
         width="190px">
         <template slot-scope="scope">
-          <el-button class="btn-light-red" @click="delete(scope.row.id)">{{$t('删除')}}</el-button>
-          <el-button class="btn-green" @click="goPhont">{{$t('添加签收照片')}}</el-button>
+          <el-button class="btn-light-red" @click="deleteRow(scope.$index, tableData)">{{$t('移除')}}</el-button>
+          <el-button class="btn-green" @click="goPhont(scope.row.id)">{{$t('添加签收照片')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -92,52 +95,52 @@
           <el-row class="container-center" :gutter="20">
             <!-- 客户ID -->
             <el-col :span="7">
-              <span class="leftWidth">{{$t('客户ID')}}</span>
-              <span>{{form.address && form.address.receiver_name}}</span>
+              <p class="leftWidth">{{$t('客户ID')}}</p>
+              <span>{{form.user_id}}</span>
             </el-col>
             <!-- 收件人 -->
               <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{$t('收件人')}}</span>
-              <span>{{form.address &&form.address.timezone}}-{{form.address &&form.address.phone}}</span>
+              <p class="leftWidth">{{$t('收件人')}}</p>
+              <span>{{form.address &&form.address.receiver_name}}</span>
             </el-col>
             <!-- 邮编 -->
               <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{$t('邮编')}}</span>
-              <span>{{form.address && form.address.country.cn_name}}</span>
+              <p class="leftWidth">{{$t('邮编')}}</p>
+              <span>{{form.address && form.address.postcode}}</span>
             </el-col>
           </el-row>
           <el-row class="container-center" :gutter="20">
             <!-- 电话 -->
             <el-col :span="7">
-              <span class="leftWidth">{{$t('电话')}}</span>
-              <span>{{form.address && form.address.receiver_name}}</span>
+              <p class="leftWidth">{{$t('电话')}}</p>
+              <span>{{form.address && form.address.phone}}</span>
             </el-col>
             <!-- 收件人 -->
               <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{$t('地址')}}</span>
-              <span>{{form.address &&form.address.timezone}}-{{form.address &&form.address.phone}}</span>
+              <p class="leftWidth">{{$t('地址')}}</p>
+              <span>{{form.address &&form.address.address}}</span>
             </el-col>
             <!-- 邮编 -->
               <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{$t('线路类型')}}</span>
-              <span>{{form.address && form.address.country.cn_name}}</span>
+              <p class="leftWidth">{{$t('线路类型')}}</p>
+              <span>{{form.express_line && form.express_line.cn_name}}</span>
             </el-col>
           </el-row>
           <el-row class="container-center" :gutter="20">
             <!-- 客户ID -->
             <el-col :span="7">
               <span class="leftWidth">{{$t('转运单号')}}</span>
-              <span>{{form.address && form.address.receiver_name}}</span>
+              <span>{{form.logistics_sn}}</span>
             </el-col>
             <!-- 收件人 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('发货时间')}}</span>
-              <span>{{form.address &&form.address.timezone}}-{{form.address &&form.address.phone}}</span>
+              <span>{{form.shipped_at}}</span>
             </el-col>
             <!-- 邮编 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('自提点到货时间')}}</span>
-              <span>{{form.address && form.address.country.cn_name}}</span>
+              <span>{{form.station_shipped_at}}</span>
             </el-col>
           </el-row>
          <h3 class="change-sty">{{$t('费用信息')}}</h3>
@@ -145,29 +148,29 @@
             <!-- 应付金额 -->
             <el-col :span="7">
               <span class="leftWidth">{{$t('应付金额')}}</span>
-              <span>{{form.address && form.address.receiver_name}}</span>
+              <span>{{form.payment && form.payment.order_amount}}</span>
             </el-col>
             <!-- 支付时间 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('支付时间')}}</span>
-              <span>{{form.address &&form.address.timezone}}-{{form.address &&form.address.phone}}</span>
+              <span>{{form.payment &&form.payment.paid_at}}</span>
             </el-col>
             <!-- 支付金额 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('支付金额')}}</span>
-              <span>{{form.address && form.address.country.cn_name}}</span>
+              <span>{{form.payment && form.payment.pay_amount}}</span>
             </el-col>
           </el-row>
           <el-row class="container-center" :gutter="20">
             <!-- 抵用券金额 -->
             <el-col :span="7">
               <span class="leftWidth">{{$t('抵用券金额')}}</span>
-              <span>{{form.address && form.address.receiver_name}}</span>
+              <span>{{form.payment && form.payment.coupon_amount}}</span>
             </el-col>
             <!-- 支付方式 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('支付方式')}}</span>
-              <span>{{form.address &&form.address.timezone}}-{{form.address &&form.address.phone}}</span>
+              <span>{{form.payment &&form.payment.payment_type_name }}</span>
             </el-col>
             <!-- 邮编 -->
               <!-- <el-col :span="7" :offset="1">
@@ -178,8 +181,18 @@
           <el-row class="container-center" :gutter="20">
             <!-- 支付截图 -->
             <el-col :span="7">
-              <span class="leftWidth">{{$t('支付截图')}}</span>
-              <span>{{form.address && form.address.receiver_name}}</span>
+              <!-- <span class="leftWidth">{{$t('支付截图')}}</span> -->
+              <!-- payment_images -->
+              <!-- <span>{{form.address && form.address.receiver_name}}</span> -->
+              <div class="bale-left packed-details">
+                <span class="leftWidth">{{$t('支付截图')}}</span>
+                <!-- ${$baseUrl.IMAGE_URL}${item}` -->
+                <div class="left-img" v-for="(item, index) in form.payment && form.payment.payment_images" :key="index">
+                  <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
+                    <img :src="`${$baseUrl.IMAGE_URL}${item}`" class="productImg" >
+                  </span>
+                </div>
+              </div>
             </el-col>
           </el-row>
         </el-form>
@@ -187,27 +200,47 @@
           <h3>{{$t('原始包裹清单')}}</h3>
           <el-table :data="pakeageData" class="data-list" border stripe
            v-loading="tableLoading">
-            <el-table-column :label="$t('快递单号')"></el-table-column>
-            <el-table-column :label="$t('物品名称')"></el-table-column>
-            <el-table-column :label="$t('物品价格')"></el-table-column>
-            <el-table-column :label="$t('物品属性')"></el-table-column>
+            <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
+            <el-table-column :label="$t('物品名称')" prop="package_name"></el-table-column>
+            <el-table-column :label="$t('物品价格')" prop="package_value"></el-table-column>
+            <el-table-column :label="$t('物品属性')">
+              <template slot-scope="scope">
+                <span v-for="item in scope.row.props" :key="item.id">{{item.cn_name}}</span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <el-row>
           <el-col :span="10">
             <h3>{{$t('出库清单')}}
             </h3>
-              <span>共有2箱物品</span>
-            <el-table :data="pakeageData" class="data-list" border stripe
+              <span>{{$t('共有')}}{{boxData.length}}{{$t('箱物品')}}</span>
+            <el-table :data="boxData" class="data-list" border stripe
             v-loading="tableLoading">
-              <el-table-column :label="$t('快递单号')"></el-table-column>
-              <el-table-column :label="$t('重量')"></el-table-column>
-              <el-table-column :label="$t('尺寸')"></el-table-column>
-              <el-table-column :label="$t('体积')"></el-table-column>
+              <el-table-column :label="$t('单号')" prop="sn"></el-table-column>
+              <el-table-column :label="$t('重量') + `${localization.weight_unit ? localization.weight_unit : ''}`" prop="weight"></el-table-column>
+              <el-table-column :label="$t('尺寸') + `${localization.length_unit ? localization.length_unit : ''}`">
+                <template slot-scope="scope">
+                  <span>{{scope.row.lenght}}</span>*
+                  <span>{{scope.row.weight}}</span>*
+                  <span>{{scope.row.height}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('体积')" prop="volume_weight"></el-table-column>
             </el-table>
           </el-col>
           <el-col :span="10" :offset="1">
-            <p>打包照片</p>
+            <div class="updateChe">
+              <p>{{$t('打包照片')}}</p>
+              <span class="img-item" v-for="(item, index) in packageImgList" :key="index">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+                <span class="model-box"></span>
+                <span class="operat-box">
+                  <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                  <!-- <i class="el-icon-delete" @click="onDeleteImg(index)"></i> -->
+                </span>
+              </span>
+            </div>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -215,15 +248,15 @@
             <div class="updateChe">
               <span>{{$t('上传签收照片')}}</span>
               <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
-                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                  <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
                   <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
                 </span>
               </span>
               <el-upload
-                v-show="goodsImgList.length < 3"
+                v-show="goodsImgList.length < 1"
                 class="avatar-uploader"
                 list-type="picture-card"
                 action=""
@@ -234,19 +267,19 @@
                 <i class="el-icon-plus">
                 </i>
                 </el-upload>
-                <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div>
+                <!-- <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div> -->
               </div>
             </el-col>
             </el-row>
             <el-row>
               <el-col>
-                <p>签收备注（选填）：</p>
-                <el-input type="textarea" :rows="3" :placeholder="$t('请输入内容')"></el-input>
+                <p>{{$t('签收备注（选填）')}}：</p>
+                <el-input v-model="sign.sign_remark" type="textarea" :rows="3" :placeholder="$t('请输入内容')"></el-input>
               </el-col>
             </el-row>
           <div slot="footer">
             <el-button @click="returnShip">{{$t('取消')}}</el-button>
-            <el-button type="primary" @click="confirmCreated('ruleForm')">{{$t('确定')}}</el-button>
+            <el-button type="primary" @click="confirmSign">{{$t('确定')}}</el-button>
           </div>
     </el-dialog>
   </el-dialog>
@@ -269,40 +302,73 @@ export default {
         remark: ''
       },
       country: [],
-      tableData: [
-        {
-          username: 1
-        }
-      ],
+      tableData: [],
       textarea2: '',
       form: {},
       pakeageData: [],
+      boxData: [],
+      localization: {},
       goodsImgList: [],
+      packageImgList: [],
       rules: {
         country_id: [
           { required: true, message: this.$t('请输入目的地'), trigger: 'blur' }
         ]
-      }
+      },
+      id: '',
+      sign: {
+        sign_images: '',
+        sign_remark: ''
+      },
+      photoId: ''
     }
   },
   methods: {
+    // 查询单号数据
+    search () {
+      this.$request.signData({
+        XStationId: this.id,
+        sn: this.textarea2
+      }).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+          this.localization = res.localization
+        }
+      })
+    },
     getName (val) {
       console.log(val)
     },
-    // 创建发货单
-    goPhont () {
+    // 添加签收照片
+    goPhont (id) {
+      this.photoId = id
       this.innerVisible = true
-      this.show = false
+      // this.show = false
+      this.$request.photosData(id, {
+        XStationId: this.id
+      }).then(res => {
+        if (res.ret) {
+          this.form = res.data
+          this.pakeageData = res.data.packages // 原始包裹清单
+          this.boxData = res.data.box // 出库清单
+          this.localization = res.localization
+          this.goodsImgList = res.data.sign_images
+          this.packageImgList = res.data.pack_pictures
+          this.sign.sign_remark = res.data.sign_remark
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
-    // 创建发货单 取消
+    // 添加签收照片 取消
     returnShip () {
       this.innerVisible = false
-      this.show = true
+      // this.show = true
     },
     getUser () {
-      this.$request.getInvoice().then(res => {
-        this.invoiceList = res.data
-      })
     },
     getCountry () {
       this.$request.getCountry().then(res => {
@@ -315,7 +381,10 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.goodsImgList.push(item.path)
+            this.goodsImgList.push({
+              name: item.name,
+              url: item.path
+            })
           })
         }
       })
@@ -347,70 +416,67 @@ export default {
       }
       return true
     },
-    // 确认加入发货单
+    // 确认签收
     confirmShip () {
-      // this.textarea2.split(/[(\r\n)\r\n]+/)
-      if (this.invoice.sn === '') {
-        return this.$message.error(this.$t('请选择发货单'))
-      }
-      this.show = false
-      this.success(this.invoice.sn)
-      // this.$request.updateShipment(this.id, this.invoice.sn).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       type: 'success',
-      //       title: '操作成功',
-      //       message: res.msg
-      //     })
-      //     this.show = false
-      //     this.success()
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      //   this.show = false
-      // })
+      let dataId = this.tableData.map(item => item.id)
+      console.log(dataId, 'dataId')
+      this.$request.batchSign({
+        XStationId: this.id,
+        ids: dataId
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        this.show = false
+      })
     },
     // 确认创建发货单
-    confirmCreated (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$request.saveShip(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
-              this.innerVisible = false
-              this.show = true
-              this.getUser()
-              // this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            // this.innerVisible = false
+    confirmSign () {
+      this.sign.sign_images = this.goodsImgList.map(item => item.url)
+      console.log(this.sign.sign_images, 'this.sign.sign_images')
+      this.$request.updatePhotosData(this.photoId, {
+        XStationId: this.id,
+        sign_images: this.sign.sign_images,
+        sign_remark: this.sign.sign_remark
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
           })
+          this.innerVisible = false
+          this.show = true
+          this.getUser()
+          // this.success()
         } else {
-          return false
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
-    delete () {},
+    deleteRow (index, rows) {
+      rows.splice(index, 1)
+    },
     clear () {
-      this.ruleForm.country_id = ''
-      this.ruleForm.name = ''
-      this.ruleForm.remark = ''
-      this.invoice.sn = ''
+      this.textarea2 = ''
+      this.tableData = []
     },
     init () {
-      this.getUser()
-      this.getCountry()
+      // this.getUser()
     }
   }
 }
@@ -424,7 +490,6 @@ export default {
     font-size: 14px;
     color: #FFF;
   }
-
   .el-dialog__close {
     color: #FFF;
   }
@@ -440,11 +505,47 @@ export default {
     margin-top: 20px;
   }
 }
+.bale-left {
+  width: 50%;
+  display: inline-block;
+  vertical-align: top;
+}
+.left-img {
+  margin-top: 20px;
+  padding: 10px 5px;
+}
+.productImg {
+  border: 1px dashed #ccc;
+  display: inline-block;
+  margin-right: 15px;
+  width: 110px;
+  height: 100px;
+}
+.img-item {
+  display: inline-block;
+  border: 1px dashed #d9d9d9;
+  width: 148px;
+  height: 148px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+  &:hover {
+    .model-box,
+    .operat-box {
+      opacity: 1;
+      transition: all 0.5s ease-in;
+    }
+    }
+  }
 .container-center {
   margin-bottom: 20px !important;
 }
 .leftWidth {
-  // display: inline-block;
+  display: inline-block;
   width: 120px;
 }
 .el-select-dropdown__item.hover{
@@ -455,5 +556,10 @@ export default {
   white-space: nowrap;/*设置不换行*/
   overflow: hidden; /*设置隐藏*/
   text-overflow: ellipsis;
+}
+.goods-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
 }
 </style>

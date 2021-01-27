@@ -76,6 +76,8 @@ const AppletConfiguration = loadonDemand('config/Applet/applet')
 const SinceList = loadonDemand('config/point/since')
 // 配置 新增或编辑自提点
 const sinceAddEdit = loadonDemand('config/point/sinceAddEdit')
+// 配置 自提点配置 计佣方式配置
+const commissionSet = loadonDemand('config/point/commission')
 // 配置 更多配置
 const PaymentManagement = loadonDemand('config/Payment/payment')
 // 配置 更多配置 商品分类管理 风险提示
@@ -90,6 +92,10 @@ const categoriesLang = loadonDemand('config/Payment/categoriesLang')
 const Storage = loadonDemand('station/storage')
 // 自提点 转运包裹管理
 const PackageManagement = loadonDemand('pick/packageMana')
+// 自提点 仓位管理
+const pickLocation = loadonDemand('pick/pickWarehouse')
+// 自提点 自提点概览
+const pickEcharts = loadonDemand('pick/pickEcharts')
 // 发货单
 const Ship = loadonDemand('station/ship')
 // 发货单 详情
@@ -779,6 +785,29 @@ export default [
               group: '自提点',
               name: '转运包裹管理'
             }
+          },
+          {
+            path: '/pick/packageManagement/pickLocation/:XStationId',
+            name: 'pickLocation',
+            component: pickLocation,
+            id: 1201,
+            meta: {
+              level: 3,
+              group: '自提点',
+              name: '仓位管理',
+              parent: '/pick/packageManagement'
+            }
+          },
+          {
+            path: '/pick/pickEcharts',
+            name: 'pickEcharts',
+            component: pickEcharts,
+            id: 1202,
+            meta: {
+              level: 2,
+              group: '自提点',
+              name: '自提点概览'
+            }
           }
         ]
       },
@@ -984,6 +1013,18 @@ export default [
               level: 3,
               group: '配置',
               name: '编辑自提点配置',
+              parent: '/config/point'
+            }
+          },
+          {
+            path: '/config/point/commissionSet',
+            name: 'commissionSet',
+            component: commissionSet,
+            id: 605,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '计佣方式配置',
               parent: '/config/point'
             }
           },

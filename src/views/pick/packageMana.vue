@@ -11,7 +11,7 @@
             :value="item.id">
           </el-option>
         </el-select>
-        <el-button class="location-sty">{{$t('仓位管理')}}</el-button>
+        <el-button class="location-sty" @click="goWarehouse">{{$t('仓位管理')}}</el-button>
       </div>
       <el-form ref="form" :model="form" label-width="100px" label-position="right">
         <el-row class="container-center" :gutter="20">
@@ -115,7 +115,7 @@
         </template>
       </el-table-column>
       <!-- 转运单号 -->
-      <el-table-column :label="$t('转运单号')" prop="logistics_sn">
+      <el-table-column :label="$t('转运单号')" prop="order_sn">
       </el-table-column>
       <!-- 收件人 -->
       <el-table-column :label="$t('收件人')" prop="receiver_name">
@@ -130,15 +130,12 @@
       <el-table-column :label="$t('箱数')" prop="box_count">
       </el-table-column>
       <!-- 重量 -->
-      <el-table-column :label="$t('重量')" prop="actual_weight">
+      <el-table-column :label="$t('重量') + `${localization ? localization.weight_unit : '' }`" prop="actual_weight">
       </el-table-column>
       <!-- 尺寸/体积 -->
-      <el-table-column :label="$t('尺寸/体积')">
+      <el-table-column :label="$t('尺寸') + `${localization ? localization.length_unit : '' }`">
         <template slot-scope="scope">
-          <span>{{scope.row.length}}</span>
-          <span>{{scope.row.width}}</span>
-          <span>{{scope.row.height}}</span>/
-          <span>{{scope.row.volume_weight}}</span>
+          <span>{{scope.row.length}}</span>*<span>{{scope.row.width}}</span>*<span>{{scope.row.height}}</span>
         </template>
       </el-table-column>
       <!-- 所属发货单 -->
@@ -147,21 +144,8 @@
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
-          <el-dropdown>
-            <el-button type="primary">
-              {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty" @click.native="storage(scope.row.id)">
-                <!-- 收货 -->
-                 <span>{{$t('收货')}}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="goExpress(scope.row.express_num)">
-                <!-- 跟踪 -->
-                <span>{{$t('跟踪')}}</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-button class="btn-dark-green" @click="goReceive(scope.row.id)">{{$t('收货')}}</el-button>
+          <el-button class="btn-purple btn-sty" @click="goExpress(scope.row.order_sn)">{{$t('跟踪')}}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
@@ -298,6 +282,13 @@ export default {
         }
       })
     },
+    // 仓位管理
+    goWarehouse () {
+      this.$router.push({ name: 'pickLocation',
+        params: {
+          XStationId: this.transferId
+        } })
+    },
     // 自提点信息详情
     pickDetails () {
       this.$request.pickData(this.transferId).then(res => {
@@ -349,22 +340,47 @@ export default {
     },
     // 快速签收
     fastSign () {
-      dialog({ type: 'fastSign' })
+      dialog({ type: 'fastSign', id: this.transferId })
     },
     // 快速出库
     fastDelivery () {
-      dialog({ type: 'fastDelivery' })
+      dialog({ type: 'fastDelivery', id: this.transferId })
     },
-    storage (id) {
-      this.$router.push({ name: 'editStorage', params: { id: id } })
+    // 收货
+    goReceive (id) {
+      this.$confirm(this.$t('您确认进行收货吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.updateReceive({
+          XStationId: this.transferId,
+          ids: [id]
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
     },
-    goExpress (expressNum) {
-      console.log(expressNum)
-      // window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
+    goExpress (orderSn) {
+      console.log(orderSn, 'orderSn')
+      this.$router.push({ name: 'tracking', query: { orderSn: orderSn } })
     },
     // 批量弃件
     discardPackage () {
@@ -486,8 +502,10 @@ export default {
           this.timeList = []
           this.shipped_begin = ''
           this.shipped_end = ''
-          this.storageList = []
-          // this.getList()
+          // this.storageList = []
+          if (this.transferId) {
+            this.getList()
+          }
           break
         case '1': // 未入库
           this.page_params.page = 1
@@ -495,14 +513,14 @@ export default {
           this.timeList = []
           this.shipped_begin = ''
           this.shipped_end = ''
-          this.storageList = []
+          // this.storageList = []
           this.getList()
           break
         case '2': // 已入库
           this.page_params.page = 1
           this.status = 2
           this.timeList = []
-          this.storageList = []
+          // this.storageList = []
           this.shipped_begin = ''
           this.shipped_end = ''
           this.getList()
@@ -513,7 +531,7 @@ export default {
           this.timeList = []
           this.shipped_begin = ''
           this.shipped_end = ''
-          this.storageList = []
+          // this.storageList = []
           this.getList()
           break
       }

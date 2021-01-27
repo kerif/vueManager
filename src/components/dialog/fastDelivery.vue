@@ -19,51 +19,53 @@
       :data="tableData"
       border
       style="width: 100%">
-      <el-table-column type="index">
-      </el-table-column>
-      <!-- 客户ID -->
+      <el-table-column type="index"></el-table-column>
+           <!-- 客户ID -->
       <el-table-column
-        prop="username"
         :label="$t('客户ID')">
+        <template slot-scope="scope">
+          <span>{{scope.row.user.id}}-{{scope.row.user.name}}</span>
+        </template>
       </el-table-column>
       <!-- 转运单号 -->
       <el-table-column
-        prop="username"
+        prop="order_sn"
         :label="$t('转运单号')">
       </el-table-column>
       <!-- 收件人 -->
       <el-table-column
-        prop="username"
+        prop="receiver_name"
         :label="$t('收件人')">
       </el-table-column>
-      <!-- 收件地址 -->
+      <!-- 联系电话 -->
       <el-table-column
-        prop="username"
-        :label="$t('收件地址')">
+        prop="receiver_phone"
+        :label="$t('联系电话')">
       </el-table-column>
       <!-- 到站时间 -->
       <el-table-column
-        prop="username"
+        prop="shipped_at"
         :label="$t('到站时间')">
       </el-table-column>
       <!-- 箱数 -->
       <el-table-column
-        prop="username"
+        prop="box_count"
         :label="$t('箱数')">
       </el-table-column>
       <!-- 重量 -->
       <el-table-column
-        prop="username"
-        :label="$t('重量')">
+        prop="actual_weight"
+        :label="$t('重量') + `${localization.weight_unit ? localization.weight_unit : '' }`">
       </el-table-column>
       <!-- 尺寸/体积 -->
-      <el-table-column
-        prop="username"
-        :label="$t('尺寸/体积')">
+      <el-table-column :label="$t('尺寸') + `${localization.length_unit ? localization.length_unit : '' }`">
+        <template slot-scope="scope">
+          <span>{{scope.row.length}}</span>*<span>{{scope.row.width}}</span>*<span>{{scope.row.height}}</span>
+        </template>
       </el-table-column>
       <!-- 所属发货单 -->
       <el-table-column
-        prop="username"
+        prop="shipment_sn"
         :label="$t('所属发货单')">
       </el-table-column>
       <!-- 操作 -->
@@ -71,11 +73,13 @@
         :label="$t('操作')"
         width="190px">
         <template slot-scope="scope">
-          <el-button class="btn-light-red" @click="delete(scope.row.id)">{{$t('删除')}}</el-button>
+          <el-button class="btn-light-red" @click="deleteRow(scope.$index, tableData)">{{$t('删除')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <p class="order-sty">{{$t('订单数')}}：</p>
+    <p class="order-sty">{{$t('订单数')}}：
+      {{tableData.length}}
+    </p>
     <!-- <el-button class="created-btn" @click="goCreated">{{$t('创建发货单')}}</el-button> -->
     <div slot="footer">
       <!-- <el-button @click="show = false">{{$t('取消')}}</el-button> -->
@@ -95,29 +99,27 @@ export default {
       invoice: {
         sn: ''
       },
-      ruleForm: {
-        country_id: '',
-        name: '',
-        remark: ''
-      },
       country: [],
-      tableData: [
-        {
-          username: 1
-        }
-      ],
+      tableData: [],
       textarea2: '',
       form: {},
-      pakeageData: [],
-      goodsImgList: [],
-      rules: {
-        country_id: [
-          { required: true, message: this.$t('请输入目的地'), trigger: 'blur' }
-        ]
-      }
+      id: '',
+      localization: {}
     }
   },
   methods: {
+    // 查询单号数据
+    search () {
+      this.$request.shipData({
+        XStationId: this.id,
+        sn: this.textarea2
+      }).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+          this.localization = res.localization
+        }
+      })
+    },
     getName (val) {
       console.log(val)
     },
@@ -126,74 +128,39 @@ export default {
       this.innerVisible = false
       this.show = true
     },
-    getUser () {
-      this.$request.getInvoice().then(res => {
-        this.invoiceList = res.data
-      })
-    },
-    // 确认加入发货单
+    // 确认出库
     confirmShip () {
-      // this.textarea2.split(/[(\r\n)\r\n]+/)
-      if (this.invoice.sn === '') {
-        return this.$message.error(this.$t('请选择发货单'))
-      }
-      this.show = false
-      this.success(this.invoice.sn)
-      // this.$request.updateShipment(this.id, this.invoice.sn).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       type: 'success',
-      //       title: '操作成功',
-      //       message: res.msg
-      //     })
-      //     this.show = false
-      //     this.success()
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      //   this.show = false
-      // })
-    },
-    // 确认创建发货单
-    confirmCreated (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$request.saveShip(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
-              this.innerVisible = false
-              this.show = true
-              this.getUser()
-              // this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            // this.innerVisible = false
+      let dataId = this.tableData.map(item => item.id)
+      console.log(dataId, 'dataId')
+      this.$request.shipBatch({
+        XStationId: this.id,
+        ids: dataId
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: '操作成功',
+            message: res.msg
           })
+          this.show = false
+          this.success()
         } else {
-          return false
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
+        this.show = false
       })
     },
-    delete () {},
+    deleteRow (index, rows) {
+      rows.splice(index, 1)
+    },
     clear () {
-      this.ruleForm.country_id = ''
-      this.ruleForm.name = ''
-      this.ruleForm.remark = ''
-      this.invoice.sn = ''
+      this.textarea2 = ''
+      this.tableData = []
     },
     init () {
-      this.getUser()
     }
   }
 }
