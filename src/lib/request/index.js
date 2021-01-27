@@ -897,6 +897,14 @@ exports.warehouseLang = (id, params) => {
 exports.updateWarehouseLang = (id, params) => {
   return $form.put(`warehouse-address/${id}/translate-data`, params)
 }
+// 仓库地址 仓位管理 拖拽排序
+exports.positionsSort = (id, params) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/sort-index`, params)
+}
+// 仓库地址配置 仓位管理 按区域编号自动排序
+exports.resetIndex = (id) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/reset-index`)
+}
 // 配置 编辑保存单条仓库地址配置
 exports.editWarehouseAddress = (id, params) => {
   return $form.put(`warehouse-address/${id}`, params)

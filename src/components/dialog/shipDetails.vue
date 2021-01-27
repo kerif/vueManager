@@ -41,7 +41,8 @@
         </el-table-column>
         <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-main" @click="deleteData">{{$t('导出发货单')}}</el-button>
+          <el-button size="small" @click="deleteData">{{$t('导出发货单')}}</el-button>
+          <el-button size="small" @click="removeBatch">{{$t('批量移除发货单')}}</el-button>
         </div>
       </template>
     </el-table>
@@ -118,12 +119,6 @@ export default {
           })
         }
       })
-      // this.$confirm(`是否确认导出？`, '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => {
-      // })
     },
     // 跳转至订单 运单
     goOrder (orderSn, status) {
@@ -159,6 +154,29 @@ export default {
           }
           this.show = false
         })
+      })
+    },
+    // 批量移除发货单
+    removeBatch () {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$request.removeOrders({
+        id: this.deleteNum
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     // 导出清单

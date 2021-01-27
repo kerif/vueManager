@@ -457,6 +457,17 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item>
+        <el-col :span="10">
+             <div>
+              <el-checkbox class="checkbox-sty" v-model="form.is_unique">{{$t('开启线路Icon过滤')}}</el-checkbox>
+              <!-- <span>{{$t('计重模式')}}</span> -->
+              <el-tooltip class="item" effect="dark" :content="$t('开启后该线路Icon所有符合条件路线中，仅提供价格最低的一条供选择')" placement="top">
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+          </el-col>
+      </el-form-item>
       <!-- icon预览 -->
       <el-form-item>
         <el-row>
@@ -513,6 +524,7 @@ export default {
         max_weight: '',
         factor: '',
         has_factor: '',
+        is_unique: '',
         min_weight: '',
         reference_time: '',
         mode: '',
@@ -590,6 +602,7 @@ export default {
         max_weight: '',
         factor: '',
         has_factor: '',
+        is_unique: '',
         min_weight: '',
         reference_time: '',
         mode: '',
@@ -626,6 +639,7 @@ export default {
         this.form.countries = res.data.countries.map(item => item.id)
         this.form.warehouses = res.data.warehouses.map(item => item.id)
         this.form.has_factor = Boolean(res.data.has_factor)
+        this.form.is_unique = Boolean(res.data.is_unique)
         this.supportWarehouse(warehouses)
       })
     },
@@ -712,7 +726,6 @@ export default {
       if (this.form.mode === 2 && this.itemArr === '') {
         this.$message.error('不能为空')
       }
-      console.log(Number(this.form.has_factor), 'has_factor')
       if (this.form.name === '') {
         return this.$message.error(this.$t('请输入线路名称'))
       } else if (this.form.warehouses === '') {
@@ -742,7 +755,8 @@ export default {
         this.$request.saveEditLine(this.$route.params.id, {
           ...this.form,
           // price_grade: this.itemArr,
-          has_factor: Number(this.form.has_factor)
+          has_factor: Number(this.form.has_factor),
+          is_unique: Number(this.form.is_unique)
         }).then(res => {
           if (res.ret) {
             this.$notify({
@@ -762,7 +776,8 @@ export default {
       } else { // 新建状态
         this.$request.updateLines({
           ...this.form,
-          has_factor: Number(this.form.has_factor) }).then(res => {
+          has_factor: Number(this.form.has_factor),
+          is_unique: Number(this.form.is_unique) }).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -843,6 +858,9 @@ export default {
   .add-row {
     margin-bottom: 10px;
     text-align: right;
+  }
+  .checkbox-sty {
+    margin-right: 0;
   }
 }
 </style>

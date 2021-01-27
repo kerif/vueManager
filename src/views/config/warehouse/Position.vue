@@ -7,10 +7,15 @@
     <div class="select-box">
       <add-btn @click.native="addLocation">{{$t('新增货位')}}</add-btn>
     </div>
-    <el-table :data="positionList" stripe border class="data-list"
+    <el-table :data="positionList" stripe border class="data-list positions-type"
     v-loading="tableLoading"
     @selection-change="selectionChange">
-       <el-table-column :label="$t('区域编号')" prop="number"></el-table-column>
+      <el-table-column width="100px" align="center">
+        <template >
+          <i class="el-icon-sort icon-fonts"></i>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('区域编号')" prop="number"></el-table-column>
       <el-table-column :label="$t('列数')" prop="column"></el-table-column>
       <el-table-column :label="$t('层数')" prop="row"></el-table-column>
       <el-table-column :label="$t('货位数量')" prop="counts"></el-table-column>
@@ -27,6 +32,10 @@
       </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <div class="sort-sty">*{{$t('拖拽行可以进行排序')}}
+      <el-button @click="typeRowUpdate" class="btn-deep-purple save-sort">{{$t('保存排序结果')}}</el-button>
+      <el-button @click="autoRow" class="btn-pink save-sort">{{$t('按区域编号自动排序')}}</el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -35,6 +44,7 @@ import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
+import Sortable from 'sortablejs'
 export default {
   name: 'positionList',
   components: {
@@ -46,6 +56,7 @@ export default {
   data () {
     return {
       positionList: [],
+      typeSendData: [],
       tableLoading: false,
       deleteNum: []
     }
@@ -64,6 +75,10 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.positionList = res.data
+          this.typeSendData = [...res.data]
+          this.$nextTick(() => {
+            this.typeRowDrop()
+          })
           // this.positionList = res.data.map(item => {
           //   let arr = item.support_countries.map(item => item.cn_name)
           //   return {
@@ -80,6 +95,64 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    // 自定义物流 行拖拽
+    typeRowDrop () {
+      const tbody = document.querySelector('.positions-type tbody')
+      console.log(tbody, 'tbody')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          if (oldIndex === newIndex) return false
+          console.log(oldIndex, newIndex)
+          const oldItem = this.typeSendData.splice(oldIndex, 1)[0]
+          this.typeSendData.splice(newIndex, 0, oldItem)
+        }
+      })
+    },
+    // 确定拖拽
+    typeRowUpdate () {
+      const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
+      console.log(ids)
+      this.positionList = []
+      this.$request.positionsSort(this.$route.params.id, ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 按区域编号自动排序
+    autoRow () {
+      this.$confirm(this.$t('您是否确认按区域编号自动排序'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.resetIndex(this.$route.params.id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     // 修改仓库
@@ -183,6 +256,17 @@ export default {
   }
   .add-btn-container {
     margin-left: 10px;
+  }
+  .icon-fonts {
+    font-size: 28px;
+  }
+  .save-sort {
+    margin-left: 10px;
+  }
+  .sort-sty {
+    margin-top: 20px;
+    color: red;
+    font-size: 13px;
   }
 }
 </style>
