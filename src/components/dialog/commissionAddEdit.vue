@@ -204,8 +204,15 @@ export default {
       }
     },
     clear () {
-      this.state = ''
-      this.id = ''
+      this.form.name = ''
+      this.form.amount = ''
+      this.form.weight_type = ''
+      this.form.multi_boxes = ''
+      this.form.first_weight = ''
+      this.form.first_money = ''
+      this.form.next_weight = ''
+      this.form.next_money = ''
+      this.form.type = ''
     },
     init () {
       if (this.state === 'edit') {
