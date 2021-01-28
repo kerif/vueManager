@@ -170,7 +170,8 @@ export default {
             message: res.msg,
             type: 'success'
           })
-          this.getList()
+          this.show = false
+          this.success()
         } else {
           this.$message({
             message: res.msg,
