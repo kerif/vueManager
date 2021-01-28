@@ -11,8 +11,8 @@
       </el-form-item>
       <el-form-item>
         <el-row :gutter="20">
-          <el-col :span="10">
-            <div>{{$t('*所属国家/地区')}}</div>
+          <div>{{$t('*所属国家/地区')}}</div>
+          <el-col :span="5">
             <el-select
               v-model="form.country_id"
               @change="changeCountry"
@@ -27,7 +27,35 @@
                 :value="item.id">
               </el-option>
             </el-select>
-          </el-col>
+            </el-col>
+            <el-col :span="5">
+              <el-select size="small"
+                v-if="form.country_id === 19"
+                v-model="selectCity"
+                placeholder="请选择"
+                v-on:change="getCity($event)">
+                <el-option
+                  v-for="item in areas"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="5">
+              <el-select size="small"
+                v-if="form.country_id === 19"
+                v-model="selectCity"
+                placeholder="请选择"
+                v-on:change="getArea($event)">
+                <el-option
+                  v-for="item in citys"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-col>
         </el-row>
       </el-form-item>
       <!-- 详细地址 -->
@@ -138,7 +166,9 @@ export default {
       lineData: [],
       lineIds: [],
       countryId: '',
-      hasStore: false
+      hasStore: false,
+      areas: [],
+      citys: []
     }
   },
   created () {
@@ -172,6 +202,8 @@ export default {
       console.log(this.form.country_id, 'this.form.country_id')
       this.form.expressLines = []
     },
+    getCity () {},
+    getArea () {},
     // 获取所属国家地区
     getWarehouse () {
       this.$request.countryLocation().then(res => {
