@@ -380,6 +380,10 @@ exports.getPick = (params) => {
 exports.autoPick = (id) => {
   return $form.get(`express-lines/${id}/self-pickup-stations`)
 }
+// 获取落地配配置数据
+exports.dockingPick = () => {
+  return $form.get(`express-lines/docking-types`)
+}
 // 更新自提点
 exports.updateAutoPick = (id, params) => {
   return $form.put(`express-lines/${id}/advance-settings`, params)
