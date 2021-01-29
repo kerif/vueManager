@@ -22,6 +22,32 @@
               :placeholder="$t('请选择')">
               <el-option
                 v-for="item in warehouseList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+            <el-col :span="5" v-if="form.country_id === 19">
+            <el-cascader
+              filterable
+              class="country-select"
+              :disabled="!!this.$route.params.id && !hasStore"
+              v-model="areaData"
+              :options="newWarehouseList"
+              @change="handleChange">
+            </el-cascader>
+          </el-col>
+          <!-- <el-col :span="5">
+            <el-select
+              v-model="form.country_id"
+              @change="changeCountry"
+              filterable
+              :disabled="!!this.$route.params.id && !hasStore"
+              class="country-select"
+              :placeholder="$t('请选择')">
+              <el-option
+                v-for="item in warehouseList"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id">
@@ -31,7 +57,7 @@
             <el-col :span="5">
               <el-select size="small"
                 v-if="form.country_id === 19"
-                v-model="selectCity"
+                v-model="form.area_id"
                 placeholder="请选择"
                 v-on:change="getCity($event)">
                 <el-option
@@ -45,7 +71,7 @@
             <el-col :span="5">
               <el-select size="small"
                 v-if="form.country_id === 19"
-                v-model="selectCity"
+                v-model="form.sub_area_id"
                 placeholder="请选择"
                 v-on:change="getArea($event)">
                 <el-option
@@ -55,7 +81,7 @@
                   :value="item.id">
                 </el-option>
               </el-select>
-            </el-col>
+            </el-col> -->
         </el-row>
       </el-form-item>
       <!-- 详细地址 -->
@@ -144,17 +170,21 @@ export default {
       form: {
         name: '',
         country_id: '',
+        area_id: '',
+        sub_area_id: '',
         address: '',
         contact_info: '',
         contactor: '',
         expressLines: []
       },
+      areaData: [],
       referenceTime: {
         minTime: '',
         maxTime: '',
         symbol: '工作日'
       },
       warehouseList: [], // 获取全部仓库
+      newWarehouseList: [],
       typeList: [],
       localization: {},
       warehouseIds: [], // 保存支持仓库的id
@@ -184,7 +214,9 @@ export default {
         // const warehouses = res.data.warehouses.map(item => item.id)
         this.form = res.data
         this.form.name = res.data.name
-        this.form.country_id = res.data.country.id
+        this.areaData = res.data.area_id ? [res.data.area_id, res.data.sub_area_id] : ''
+        console.log(this.areaData111, 'areaData')
+        // this.form.country_id = res.data.sub_area_id ? res.data.sub_area_id : res.data.country.id
         this.form.address = res.data.address
         this.form.contact_info = res.data.contactor
         this.form.contactor = res.data.contact_info
@@ -201,13 +233,57 @@ export default {
     changeCountry () {
       console.log(this.form.country_id, 'this.form.country_id')
       this.form.expressLines = []
+      console.log(this.warehouseList, 'this.warehouseList')
+      if (this.form.country_id !== 19) {
+        this.areaData = []
+      }
+      // this.areas = this.warehouseList.map(item => {
+      //   item.map(val => {
+      //     return {
+      //       id: val.id,
+      //       name: val.name
+      //     }
+      //   })
+      // })
+      // this.areas = this.warehouseList.map(item => item.area)
+      console.log(this.areas, 'this.areas')
     },
-    getCity () {},
-    getArea () {},
     // 获取所属国家地区
     getWarehouse () {
       this.$request.countryLocation().then(res => {
-        this.warehouseList = res.data
+        this.warehouseList = res.data.map(item => {
+          return {
+            value: item.id,
+            label: item.name,
+            children: item.areas.map(item => {
+              return {
+                value: item.id,
+                label: item.name,
+                children: item.areas.map(item => {
+                  return {
+                    value: item.id,
+                    label: item.name
+                  }
+                })
+              }
+            })
+          }
+        })
+        console.log(res.data[0].areas)
+        this.newWarehouseList = res.data[0].areas.map(item => {
+          return {
+            value: item.id,
+            label: item.name,
+            children: item.areas.map(item => {
+              return {
+                value: item.id,
+                label: item.name
+              }
+            })
+          }
+        })
+        // this.warehouseList = res.data
+        console.log(this.newWarehouseList, 'this.newWarehouseList')
       })
     },
     // 获取支持线路弹窗数据
@@ -246,6 +322,16 @@ export default {
     deleteRow (index, rows) {
       rows.splice(index, 1)
     },
+    handleChange (value) {
+      // this.form.country_id = this.areaData[0]
+      this.form.area_id = this.areaData[0]
+      this.form.sub_area_id = this.areaData[1]
+      console.log(value, 'value')
+      // console.log(this.form.area_id, 'form.area_id')
+      // console.log(this.form.sub_area_id, 'form.sub_area_id')
+    },
+    getCity () {},
+    getArea () {},
     saveLine () {
       if (!this.form.name) {
         return this.$message.error(this.$t('请输入自提点名称'))

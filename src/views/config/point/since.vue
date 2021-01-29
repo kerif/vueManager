@@ -58,6 +58,33 @@
     </div>
     <div v-if="status === 2">
       <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+      <el-table :data="treesList" stripe border class="data-list"
+      v-loading="tableLoading">
+        <el-table-column type="index" width="55" align="center"></el-table-column>
+        <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
+        <el-table-column :label="$t('所属国家/地区')">
+          <template slot-scope="scope">
+            <span>{{scope.row.country.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('详细地址')" prop="address"></el-table-column>
+        <el-table-column :label="$t('联系电话')" prop="contact_info"></el-table-column>
+        <el-table-column :label="$t('联系人')" prop="contactor"></el-table-column>
+        <el-table-column :label="$t('支持线路')">
+          <template slot-scope="scope">
+            <div class="check-sty" @click="checkLines(scope.row.id, scope.row.name)">{{scope.row.expressLines_count}}</div>
+          </template>
+        </el-table-column>
+        <!-- 计佣方式 -->
+        <el-table-column :label="$t('操作')" width="150px">
+          <template slot-scope="scope">
+            <!-- 编辑 -->
+            <el-button class="btn-green" @click="editSelf(scope.row.id, scope.row.logistics_sn)">{{$t('编辑')}}</el-button>
+            <!-- 删除 -->
+            <el-button class="btn-light-red" @click="deleteSelf(scope.row.id)">{{$t('删除')}}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <el-dialog :visible.sync="lineDialog" width="40%" @close="clear"
     :title="$t('查看自提点支持线路')">
@@ -100,6 +127,7 @@ export default {
   data () {
     return {
       logisticsList: [],
+      treesList: [],
       tableLoading: false,
       deleteNum: [],
       trackDialog: false,
@@ -158,6 +186,7 @@ export default {
       this.$request.treeIndex().then(res => {
         if (res.ret) {
           this.treeData = res.data
+          this.stations = res.data.stations
           console.log(this.treeData, 'this.treeData')
           this.treeData.map(item => {
             return {
