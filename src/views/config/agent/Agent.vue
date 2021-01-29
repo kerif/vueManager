@@ -9,7 +9,10 @@
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column :label="$t('代理名称')" prop="agent_name">
+      <el-table-column :label="$t('代理名称')">
+        <template slot-scope="scope">
+          <span>{{scope.row.user_id}}-{{scope.row.agent_name}}-</span>
+        </template>
       </el-table-column>
       <el-table-column :label="$t('佣金分成%')" prop="commission">
       </el-table-column>
