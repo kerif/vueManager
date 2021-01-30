@@ -28,7 +28,7 @@
               </el-option>
             </el-select>
           </el-col>
-            <el-col :span="5" v-if="form.country_id === 19">
+            <el-col :span="5" v-if="newWarehouseList.length !== 0 && form.country_id">
             <el-cascader
               filterable
               class="country-select"
@@ -177,7 +177,7 @@ export default {
         contactor: '',
         expressLines: []
       },
-      areaData: [],
+      areaData: null,
       referenceTime: {
         minTime: '',
         maxTime: '',
@@ -214,8 +214,8 @@ export default {
         // const warehouses = res.data.warehouses.map(item => item.id)
         this.form = res.data
         this.form.name = res.data.name
-        this.areaData = res.data.area_id ? [res.data.area_id, res.data.sub_area_id] : ''
-        console.log(this.areaData111, 'areaData')
+        this.areaData = res.data.area_id ? [res.data.area_id, res.data.sub_area_id] : null
+        // console.log(this.areaData111, 'areaData')
         // this.form.country_id = res.data.sub_area_id ? res.data.sub_area_id : res.data.country.id
         this.form.address = res.data.address
         this.form.contact_info = res.data.contactor
@@ -231,12 +231,14 @@ export default {
     },
     // 切换国家
     changeCountry () {
-      console.log(this.form.country_id, 'this.form.country_id')
+      this.areaData = []
       this.form.expressLines = []
-      console.log(this.warehouseList, 'this.warehouseList')
-      if (this.form.country_id !== 19) {
-        this.areaData = []
-      }
+      // if (this.newWarehouseList !== 19) {
+      //   this.areaData = []
+      //   this.newWarehouseList = []
+      // }
+      const selectList = this.warehouseList.find(item => item.value === this.form.country_id)
+      this.newWarehouseList = selectList ? selectList.children : []
       // this.areas = this.warehouseList.map(item => {
       //   item.map(val => {
       //     return {
@@ -269,8 +271,9 @@ export default {
             })
           }
         })
-        console.log(res.data[0].areas)
-        this.newWarehouseList = res.data[0].areas.map(item => {
+        const mapWarehouseList = res.data.find(item => item.areas.length) || { areas: [] }
+        console.log(mapWarehouseList, 'mapWarehouseList')
+        this.newWarehouseList = mapWarehouseList.areas.map(item => {
           return {
             value: item.id,
             label: item.name,

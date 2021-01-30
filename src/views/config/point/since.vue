@@ -56,25 +56,21 @@
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
-    <div v-if="status === 2">
-      <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+    <div v-if="status === 2" class="second-sty">
+      <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick">
+      </el-tree>
       <el-table :data="treesList" stripe border class="data-list"
       v-loading="tableLoading">
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('所属国家/地区')">
-          <template slot-scope="scope">
-            <span>{{scope.row.country.name}}</span>
-          </template>
-        </el-table-column>
         <el-table-column :label="$t('详细地址')" prop="address"></el-table-column>
         <el-table-column :label="$t('联系电话')" prop="contact_info"></el-table-column>
         <el-table-column :label="$t('联系人')" prop="contactor"></el-table-column>
-        <el-table-column :label="$t('支持线路')">
+        <!-- <el-table-column :label="$t('支持线路')">
           <template slot-scope="scope">
             <div class="check-sty" @click="checkLines(scope.row.id, scope.row.name)">{{scope.row.expressLines_count}}</div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <!-- 计佣方式 -->
         <el-table-column :label="$t('操作')" width="150px">
           <template slot-scope="scope">
@@ -185,17 +181,34 @@ export default {
     getTree () {
       this.$request.treeIndex().then(res => {
         if (res.ret) {
-          this.treeData = res.data
-          this.stations = res.data.stations
-          console.log(this.treeData, 'this.treeData')
-          this.treeData.map(item => {
+          const secondeData = res.data
+          this.treeData = secondeData.map(item => {
+            console.log(item, 'secondeData')
             return {
+              name: this.$t(item.cn_name),
+              // value: item.id,
               ...item,
-              child: item.child.map(item => ({ ...item, name: this.$t(item.name) })),
-              name: this.$t(item.name),
-              id: `${item.id}-1`
+              // label: this.$t(item.cn_name),
+              id: `${item.id}-1`,
+              stations: item.stations,
+              child: item.areas.map(item => ({
+                name: this.$t(item.name),
+                id: item.id,
+                child: item.areas.map(item => ({
+                  name: this.$t(item.name),
+                  id: item.id
+                }))
+              }
+              ))
             }
           })
+          // this.treesList = this.treeData.map(item => {
+          //   return {
+          //     stations: item.stations
+          //   }
+          // })
+          console.log(this.treeData, 'treeData')
+          console.log(this.treesList, 'treesList')
         }
       })
     },
@@ -206,7 +219,8 @@ export default {
       }
     },
     handleNodeClick (data) {
-      console.log(data)
+      console.log(data, 'data')
+      this.treesList = data.stations
     },
     // 查看支持线路
     checkLines (id, name) {
@@ -327,6 +341,9 @@ export default {
   .chooseStatus {
     width: 150px;
     display: inline-block;
+  }
+  .second-sty {
+    margin-top: 20px;
   }
 }
 </style>
