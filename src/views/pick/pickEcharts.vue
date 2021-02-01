@@ -314,7 +314,6 @@ export default {
         if (res.ret) {
           this.pieData = res.data.graph
           const obj = {
-            'all': '全部',
             'wait_receive': '未到自提点',
             'received': '已到自提点',
             'signed': '客户签收',
@@ -328,17 +327,25 @@ export default {
           //     name: obj[item.name]
           //   }
           // })
-          let pieOrderList = res.data.graph.map(item => {
+          let pieOrderList = res.data.graph.filter(item => {
+            return item.name !== 'all'
+          }).map(item => {
             return {
               value: item.counts,
               name: obj[item.name]
             }
           })
+          // let pieOrderList = res.data.graph.map(item => {
+          //   return {
+          //     value: item.counts,
+          //     name: obj[item.name]
+          //   }
+          // })
           console.log(pieOrderList, 'pieOrderList')
           this.option.legend = {
             orient: 'vertical',
             left: 10,
-            data: ['全部', '未到自提点', '已到自提点', '客户签收', '已出库']
+            data: ['未到自提点', '已到自提点', '客户签收', '已出库']
           }
           this.option.series = [
             {
