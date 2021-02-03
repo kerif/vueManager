@@ -351,6 +351,32 @@ export default {
       } else {
         localStorage.removeItem('USERNAME')
         localStorage.removeItem('PASSWORD')
+        this.$request.login(this.userInfo).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            // this.getMe()
+            this.$request.getMe().then(res => {
+              if (res.ret) {
+                this.groupBuy = Number(res.data.group_buying_config)
+                this.$store.commit('saveMe', this.groupBuy)
+                console.log(this.groupBuy, 'this.groupBuy')
+              }
+            })
+            this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
+            this.$store.commit('saveName', res.data.email)
+            this.centerDialogVisible = false
+            this.$router.push('/')
+          } else {
+            this.$message.error(res.msg)
+            this.getCaptcha()
+          }
+        }).catch((err) => {
+          this.$message.error(err.msg)
+        })
       }
       // this.getCaptcha()
     },
