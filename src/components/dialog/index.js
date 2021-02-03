@@ -81,6 +81,7 @@ import claimRecord from './claimRecord.vue'
 import tariffEditAdd from './tariffEditAdd.vue'
 import stringAddEdit from './stringAddEdit.vue'
 import pickPoint from './pickPiont.vue'
+import addPackages from './addPackages.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -162,6 +163,7 @@ const ClaimRecordController = Vue.extend(claimRecord)
 const TariffController = Vue.extend(tariffEditAdd)
 const StringController = Vue.extend(stringAddEdit)
 const PickPiontController = Vue.extend(pickPoint)
+const AddPackagesController = Vue.extend(addPackages)
 
 const mixin = {
   data () {
@@ -726,6 +728,13 @@ function initInstance (type) {
     // 员工组列表 自提点权限
     case 'pickPoint':
       instance = new PickPiontController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 订单列表 详情 添加包裹
+    case 'addPackages':
+      instance = new AddPackagesController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

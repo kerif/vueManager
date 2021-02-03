@@ -6,11 +6,35 @@
       </div> -->
       <div class="apply-top">
         <el-row :gutter="20">
-          <el-col :span="3">
+          <el-col :span="4">
             <el-radio-group v-model="radio">
               <el-radio :label="1" class="radio-sty">{{$t('按预报单号')}}</el-radio>
               <el-radio :label="2">{{$t('按会员ID')}}</el-radio>
             </el-radio-group>
+            <el-select v-model="warehouse_id" :placeholder="$t('仓库')" class="select-sty" clearable>
+              <el-option
+                v-for="item in warehouseData"
+                :key="item.id"
+                :label="item.warehouse_name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+            <el-select multiple v-model="prop_ids" :placeholder="$t('物品属性')" class="select-sty" clearable>
+              <el-option
+                v-for="item in propsData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+           <el-select v-model="country_id" filterable :placeholder="$t('请选择国家/地区')" clearable>
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+          </el-select>
           </el-col>
           <el-col :span="12" :offset="1">
             <el-input
@@ -105,6 +129,7 @@
           </el-table-column>
           <el-table-column :label="$t('物品重量')" prop="package_weight"> </el-table-column>
           <el-table-column :label="$t('寄往国家')" prop="destination_country.cn_name"> </el-table-column>
+          <el-table-column :label="$t('仓库')" prop="warehouse.name"> </el-table-column>
           <el-table-column :label="$t('入库时间')" prop="in_storage_at"> </el-table-column>
           <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
           <!-- <template slot="append">
@@ -150,10 +175,20 @@ export default {
       timeList: [],
       forecastData: [],
       pickNum: [],
-      pickNumArr: []
+      pickNumArr: [],
+      options: [],
+      warehouseData: [], // 仓库
+      propsData: [], // 物品属性
+      days: '',
+      country_id: '',
+      prop_ids: '',
+      warehouse_id: ''
     }
   },
   created () {
+    this.searchCountry()
+    this.getProp()
+    this.getWarehouseData()
     if (this.$route.query.userId) {
       this.radio = 2
       this.textarea2 = this.$route.query.userId
@@ -179,7 +214,20 @@ export default {
     editWarehoused (id) {
       this.$router.push({ name: 'editWarehouse', params: { id: id, state: 'editWarehouse' } })
     },
+    // 获取全部物品属性
+    getProp () {
+      this.$request.getProps().then(res => {
+        this.propsData = res.data
+      })
+    },
+    // 获取仓库数据
+    getWarehouseData () {
+      this.$request.getSimpleWarehouse().then(res => {
+        this.warehouseData = res.data
+      })
+    },
     search () {
+      console.log(this.prop_ids, 'prop_ids')
       if (this.radio === '') {
         return this.$message.error(this.$t('请选择按预报单号或会员ID查询'))
       } else if (this.textarea2 === '') {
@@ -195,7 +243,10 @@ export default {
       console.log(this.expressNum, 'this.expressNum')
       if (this.radio === 1) {
         this.$request.packs({
-          express_num: this.expressNum
+          express_num: this.expressNum,
+          warehouse_id: this.warehouse_id,
+          country_id: this.country_id,
+          prop_ids: this.prop_ids
         }).then(res => {
           if (res.data.length) {
             this.applyList = res.data
@@ -210,7 +261,10 @@ export default {
       } else {
         console.log('woshi2222')
         this.$request.packs({
-          user_id: this.userId
+          user_id: this.userId,
+          warehouse_id: this.warehouse_id,
+          country_id: this.country_id,
+          prop_ids: this.prop_ids
         }).then(res => {
           if (res.data.length) {
             this.applyList = res.data
@@ -228,6 +282,9 @@ export default {
       this.deleteNum = selection.map(item => (item.id))
       this.userNum = selection.map(item => (item.user_id))
       console.log(this.deleteNum, 'this.deleteNum')
+    },
+    getDatas () {
+      // this.page_params.handleQueryChange('days', this.days)
     },
     // 打包合箱
     boxing () {
@@ -253,6 +310,19 @@ export default {
             title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
+          })
+        }
+      })
+    },
+    // 获取支持国家数据
+    searchCountry () {
+      this.$request.countryLocation().then(res => {
+        if (res.ret) {
+          this.options = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
           })
         }
       })
@@ -353,6 +423,10 @@ export default {
   .tips-sty {
     font-size: 13px;
     color: #adadad;
+  }
+  .select-sty {
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 }
 .item-sty {

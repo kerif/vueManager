@@ -1,5 +1,8 @@
 <template>
   <div class="record-list-container">
+    <div class="batch-settlement">
+      <el-button class="btn-green" @click="batchSettlement">{{$t('批量结算')}}</el-button>
+    </div>
     <el-table class="data-list" border stripe :data="suggestList"
     v-loading="tableLoading">
       <el-table-column type="index" width="50"></el-table-column>
@@ -100,6 +103,30 @@ export default {
       }
       )
     },
+    // 批量结算
+    batchSettlement () {
+      this.$confirm(this.$t('您真的确认批量结算吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.batchOrders(this.$route.query.userId).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
     // 成交记录
     settlement (id) {
       console.log(id, 'id')
@@ -132,5 +159,8 @@ export default {
 }
 .el-button {
   margin: 3px;
+}
+.batch-settlement {
+  text-align: right;
 }
 </style>

@@ -15,7 +15,7 @@
       <div class="poster-right">
         <h4>{{$t('设置面板')}}</h4>
         <el-form :model="backgroundList" ref="ruleForm" class="demo-ruleForm"
-        label-width="130px">
+        label-width="140px">
         <!-- 开启用户头像 -->
           <el-form-item :label="$t('开启用户头像')">
             <el-switch
@@ -84,6 +84,28 @@
             </el-upload><br/>
             <span class="suggest-btn">{{$t('背景图像上传最多不超过五张，建议尺寸750px*1334px')}}</span>
           </el-form-item>
+          <!-- 分享链接自定义图片 -->
+          <el-form-item :label="$t('分享链接自定义图片')">
+              <span class="img-item" v-for="(item, index) in shareImg" :key="index">
+              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+              <span class="model-box"></span>
+              <span class="operat-box">
+                  <i class="el-icon-zoom-in" @click="previewBackground(item)"></i>
+                  <i class="el-icon-delete" @click="onDeleteShare(index)"></i>
+              </span>
+              </span>
+              <el-upload
+                v-show="shareImg.length < 1"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="uploadShareImg"
+                :show-file-list="false">
+                <i class="el-icon-plus">
+                </i>
+            </el-upload><br/>
+            <span class="suggest-btn">{{$t('链接自定义图片只需要上传一张，显示图片长宽比5:4')}}</span>
+          </el-form-item>
           <div class="background-btn">
             <el-button class="save-btn" @click="updateBackground">{{$t('保存')}}</el-button>
           </div>
@@ -109,6 +131,7 @@ export default {
       businessData: [],
       baleImgList: [], // 小程序首页视频入口图
       backgroundImg: [], // 海报配置背景图像
+      shareImg: [], // 分享链接图像
       choosePoster: '',
       backgroundList: { // 海报配置
         display_user_avatar: 0,
@@ -116,6 +139,7 @@ export default {
         display_share_info: 0,
         avatar_size: '',
         background_images: [],
+        share_image: '',
         share_info: ''
       },
       params: {
@@ -138,6 +162,7 @@ export default {
       this.$request.getProgramShare().then(res => {
         this.backgroundList = res.data
         res.data.background_images && (this.backgroundImg = res.data.background_images)
+        res.data.share_image && (this.shareImg[0] = res.data.share_image)
       })
     },
     // 保存
@@ -146,6 +171,11 @@ export default {
         this.backgroundList.background_images = this.backgroundImg
       } else {
         this.backgroundList.background_images = []
+      }
+      if (this.shareImg[0]) {
+        this.backgroundList.share_image = this.shareImg[0]
+      } else {
+        this.backgroundList.share_image = []
       }
       if (!this.backgroundImg[0]) {
         return this.$message.error(this.$t('请上传背景图像'))
@@ -191,6 +221,17 @@ export default {
         }
       })
     },
+    // 上传分享链接图像
+    uploadShareImg (item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.shareImg.push(item.path)
+          })
+        }
+      })
+    },
     // 上传小程序首页视频图片
     uploadBaleImg (item) {
       let file = item.file
@@ -205,6 +246,10 @@ export default {
     // 删除海报配置 背景图
     onDeleteBg (index) {
       this.backgroundImg.splice(index, 1)
+    },
+    // 删除分享链接图
+    onDeleteShare (index) {
+      this.shareImg.splice(index, 1)
     },
     // 上传图片
     onUpload (file) {
@@ -426,7 +471,7 @@ export default {
     display: inline-block;
     background-color: #fff;
     padding:15px;
-    height: 880px;
+    height: 1080px;
     box-sizing: border-box;
   }
   .background-btn {

@@ -282,6 +282,9 @@
     </div>
     <!-- 包裹清单 -->
       <h4>{{$t('包裹清单')}}</h4>
+      <div class="add-sty" v-if="this.$route.params.activeName === '1'">
+        <el-button class="btn-blue" @click="addPackages">{{$t('添加包裹')}}</el-button>
+      </div>
       <el-table :data="PackageData" class="data-list" border stripe
        v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
@@ -465,6 +468,7 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data () {
     return {
@@ -568,6 +572,12 @@ export default {
             type: 'warning'
           })
         }
+      })
+    },
+    // 新增包裹
+    addPackages () {
+      dialog({ type: 'addPackages', id: this.$route.params.id }, () => {
+        this.getList()
       })
     },
     // 取消
@@ -738,6 +748,9 @@ export default {
     padding-left: 20px;
     font-size: 14px;
     color:#909399;
+  }
+  .add-sty {
+    text-align: right;
   }
 }
 </style>

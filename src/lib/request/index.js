@@ -802,6 +802,10 @@ exports.getAgentOrders = (id, params) => {
 exports.finishOrders = (id) => {
   return $form.put(`agents/commission/${id}`)
 }
+// 成交记录 批量结算
+exports.batchOrders = (id) => {
+  return $form.put(`agents/${id}/commissions/settled`)
+}
 // 代理管理的添加代理
 exports.addAgents = (params) => {
   return $form.post('agents', params)
@@ -813,6 +817,10 @@ exports.getCommissions = (id, params) => {
 // 代理管理 更新佣金
 exports.updateCommissions = (id, params) => {
   return $json.put(`agents/${id}/line-commissions`, params)
+}
+// 代理管理 佣金管理 导出清单
+exports.uploadWithdraws = (id, params) => {
+  return $form.get(`agents/${id}/withdraws/export`, { params })
 }
 // 小程序配置
 exports.getMini = () => {
@@ -1866,6 +1874,14 @@ exports.modifyReceive = (id, params) => {
 // 详情 更换收货地址
 exports.confirmChange = (id, addId) => {
   return $form.put(`orders/${id}/address/${addId}`)
+}
+// 订单列表 详情 添加包裹 获取可添加的包裹
+exports.getAddable = (id, params) => {
+  return $form.get(`orders/${id}/addable-packages`, { params })
+}
+// 订单列表 详情 添加包裹 确认添加
+exports.updateAddable = (id, params) => {
+  return $form.put(`orders/${id}/add-packages`, params)
 }
 // 订单列表 获取支付方式列表
 exports.paymentType = () => {
