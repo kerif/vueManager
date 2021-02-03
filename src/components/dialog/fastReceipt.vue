@@ -131,11 +131,13 @@ export default {
       })
     },
     selectionChange (selection) {
-      // this.deleteNum = selection
+      this.deleteNum = selection.map(item => (item.id))
       // console.log(this.deleteNum, 'this.deleteNum')
     },
     changeRadio () {
-      // this.form.sn = ''adfaf
+      this.tableData = []
+      this.form.sn = ''
+      this.orderNumber = ''
     },
     // 复核
     clickOrders () {
@@ -167,6 +169,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
+      console.log(this.deleteNum, 'this.deleteNum')
       this.$request.updateReceive({
         XStationId: this.id,
         ids: this.deleteNum

@@ -2288,9 +2288,13 @@ exports.updatePickData = (id, params) => {
 exports.getReceive = (params) => {
   return $json.get(`stations/receive/search`, { params })
 }
-// 转运包裹管理 获取 快速收货
+// 转运包裹管理 快速收货
 exports.updateReceive = (params) => {
   return $form.put(`stations/receive`, params)
+}
+// 转运包裹管理 出库
+exports.updateShip = (params) => {
+  return $form.put(`stations/ship`, params)
 }
 // 快速签收 获取查询数据
 exports.signData = (params) => {

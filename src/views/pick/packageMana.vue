@@ -144,8 +144,10 @@
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
-          <el-button class="btn-dark-green" @click="goReceive(scope.row.id)">{{$t('收货')}}</el-button>
-          <el-button class="btn-purple btn-sty" @click="goExpress(scope.row.order_sn)">{{$t('跟踪')}}</el-button>
+          <el-button v-if="activeName === '0'" class="btn-dark-green" @click="goReceive(scope.row.id)">{{$t('收货')}}</el-button>
+          <el-button v-if="activeName === '0'" class="btn-purple btn-sty" @click="goExpress(scope.row.order_sn)">{{$t('跟踪')}}</el-button>
+          <el-button v-if="activeName === '1'" class="btn-dark-green" @click="goShip(scope.row.id)">{{$t('出库')}}</el-button>
+          <!-- <el-button v-if="activeName === '1'" class="btn-purple btn-sty" @click="goExpress(scope.row.order_sn)">{{$t('签收')}}</el-button> -->
         </template>
       </el-table-column>
       <template slot="append">
@@ -354,6 +356,34 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$request.updateReceive({
+          XStationId: this.transferId,
+          ids: [id]
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    // 出库
+    goShip (id) {
+      this.$confirm(this.$t('您确认进行出库吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.updateShip({
           XStationId: this.transferId,
           ids: [id]
         }).then(res => {
