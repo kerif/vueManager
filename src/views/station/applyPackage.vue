@@ -256,6 +256,7 @@ export default {
               title: this.$t('包裹未找到'),
               type: 'warning'
             })
+            this.applyList = []
           }
         })
       } else {
@@ -274,6 +275,7 @@ export default {
               title: this.$t('当前用户没有可打包的包裹'),
               type: 'warning'
             })
+            this.applyList = []
           }
         })
       }

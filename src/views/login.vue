@@ -171,8 +171,12 @@
       </div>
     </div>
     <div class="login-footer">
-      <div class="language-sty">简体中文</div>
-      © (2021) haiouoms.com <a href="http://www.beian.miit.gov.cn" target="_blank">{{$t('湘ICP备17000173号-5')}}</a></div>
+      <div class="language-sty">
+        <p>
+        <span :class="{active: active === 'simple'}" @click="languageCut('simple')">简体中文</span> | <span :class="{active: active === 'tradition'}" @click="languageCut('tradition')">繁体中文</span>
+        </p>
+      </div>
+      © ({{year}}) haiouoms.com <a href="http://www.beian.miit.gov.cn" target="_blank">{{$t('湘ICP备17000173号-5')}}</a></div>
     </div>
     <!-- 身份验证弹窗 -->
     <!-- <el-dialog
@@ -262,6 +266,7 @@ export default {
       welcome: 1,
       forgetStep: 1,
       groupBuy: '',
+      active: '',
       rules: {
         email: [
           { required: true, message: this.$t('请输入邮箱地址'), trigger: 'blur' },
@@ -292,15 +297,29 @@ export default {
       }
     }
   },
+  computed: {
+    year: function () {
+      return new Date().getFullYear()
+    }
+  },
   mounted () {
     this.userInfo.username = localStorage.getItem('USERNAME') || ''
     this.userInfo.password = localStorage.getItem('PASSWORD') || ''
     if (this.userInfo.username && this.userInfo.password) this.keep = true
   },
   created () {
+    this.active = localStorage.getItem('language') || 'simple'
+    this.languageCut(this.active)
     this.getCaptcha() // 获取图型验证码
   },
   methods: {
+    languageCut (locale) {
+      this.active = locale
+      // this.$i18n.locale = locale
+      localStorage.setItem('language', locale)
+      this.$store.commit('saveLanguageCode', locale)
+      // this.$store.commit('switchLang', { lang: locale })
+    },
     // 获取是否显示拼团配置
     getMe () {
       this.$request.getMe().then(res => {
@@ -748,6 +767,24 @@ export default {
   .language-sty {
     margin-top: 20px;
     // color: black;
+    p:first-child {
+      padding: 1.5em 0 1em;
+      span {
+        cursor: pointer;
+        // cursor: not-allowed;
+      }
+      .active {
+        color: #9e9e9e;
+        cursor: default;
+      }
+    }
+    p:last-child {
+      padding-bottom: 30px;
+      img {
+        margin-left: 10px;
+        transform: translateY(30%)
+      }
+    }
   }
 }
 </style>
