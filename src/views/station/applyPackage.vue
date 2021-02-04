@@ -73,6 +73,7 @@
       <el-table-column :label="$t('物品重量') + (this.localization.weight_unit ? this.localization.weight_unit : '')" prop="package_weight"></el-table-column>
       <!-- 寄往国家 -->
       <el-table-column :label="$t('寄往国家')" prop="destination_country.name"></el-table-column>
+      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name"></el-table-column>
       <!-- 入库时间 -->
       <el-table-column :label="$t('入库时间')" prop="in_storage_at"></el-table-column>
       <!-- 提交时间 -->
