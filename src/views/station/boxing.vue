@@ -44,7 +44,7 @@
             </div>
             <div class="line-sty"></div>
               <!-- 收件地址 -->
-            <div v-if="this.radio === 1">
+            <div>
             <div class="express-left">
               <p>{{$t('收件地址')}}</p>
             </div>
@@ -755,6 +755,7 @@ export default {
           console.log(this.selfData, 'this.selfData.id')
           if (this.selfData) {
             this.box.address_id = this.selfData.id
+            console.log(this.box.address_id, 'box.address_id')
           }
         }
       })
@@ -890,8 +891,8 @@ export default {
       if (this.changeUpdate === 1) {
         this.$request.savePacksUser({
           ...this.box,
-          address_id: this.radio === 2 ? this.box.address_id : '',
-          address: this.radio === 1 ? params : '',
+          station_id: this.radio === 2 ? this.box.address_id : '',
+          address: params,
           package_ids: this.packageId,
           address_type: this.radio === 2 ? 2 : 1,
           batch_mode: this.$route.query.packageId ? 1 : '',
@@ -916,8 +917,8 @@ export default {
       } else if (this.changeUpdate === 2) {
         this.$request.savePacksAlone({
           ...this.box,
-          address_id: this.radio === 2 ? this.box.address_id : '',
-          address: this.radio === 1 ? params : '',
+          station_id: this.radio === 2 ? this.box.address_id : '',
+          address: params,
           package_ids: this.packageId,
           address_type: this.radio === 2 ? 2 : 1,
           batch_mode: this.$route.query.packageId ? 1 : '',

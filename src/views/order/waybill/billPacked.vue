@@ -74,6 +74,9 @@
     </div>
     <!-- 打包清单 -->
     <h4>{{$t('包裹清单')}}</h4>
+    <div class="add-sty" v-if="this.$route.params.activeName === '1'">
+        <el-button class="btn-blue" @click="addPackages">{{$t('添加包裹')}}</el-button>
+    </div>
     <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
@@ -475,6 +478,12 @@ export default {
         }
       })
     },
+    // 新增包裹
+    addPackages () {
+      dialog({ type: 'addPackages', id: this.$route.params.id }, () => {
+        this.getPackage()
+      })
+    },
     // 获取商品清单
     getProduct () {
       this.$request.packageDetails(this.$route.params.id).then(res => {
@@ -866,6 +875,9 @@ export default {
     padding-left: 20px;
     font-size: 14px;
     color:#909399;
+  }
+  .add-sty {
+    text-align: right;
   }
 }
 </style>

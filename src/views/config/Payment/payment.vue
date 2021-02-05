@@ -759,16 +759,7 @@
           border stripe>
             <el-table-column type="index"></el-table-column>
             <!-- 模版类型 -->
-            <el-table-column :label="$t('模版类型')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.type === 1">{{$t('绑定邮箱')}}</span>
-                <span v-if="scope.row.type === 2">{{$t('更改邮箱')}}</span>
-                <span v-if="scope.row.type === 3">{{$t('登录邮件')}}</span>
-                <span v-if="scope.row.type === 4">{{$t('订单支付成功')}}</span>
-                <span v-if="scope.row.type === 5">{{$t('已发货订单')}}</span>
-                <span v-if="scope.row.type === 6">{{$t('已入库包裹')}}</span>
-                <span v-if="scope.row.type === 7">{{$t('提交订单成功')}}</span>
-              </template>
+            <el-table-column :label="$t('模版类型')" prop="type_name">
             </el-table-column>
             <!-- 邮件标题 -->
             <el-table-column :label="$t('邮件标题')" prop="title"></el-table-column>
@@ -1438,7 +1429,6 @@ export default {
     },
     // 确定拖拽 自定义物流
     typeRowUpdate () {
-      // eslint-disable-next-line camelcase
       const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
       console.log(ids)
       this.TypeData = []

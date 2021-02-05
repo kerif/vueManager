@@ -203,16 +203,27 @@
           <el-radio v-model="company.is_delivery" :label="2">{{$t('送货上门与自提')}}</el-radio>
         </el-form-item>
         <el-form-item :label="$t('默认自提点')">
-           <el-select v-model="company.default_pickup_station_id" clearable filterable
-            allow-create default-first-option :placeholder="$t('请选择')">
-              <el-option
-                  v-for="item in pickList"
-                  :key="item.id"
-                  :value="item.id"
-                  :label="item.name">
-              </el-option>
-            </el-select>
-          </el-form-item>
+          <el-select v-model="company.default_pickup_station_id" clearable filterable
+          allow-create default-first-option :placeholder="$t('请选择')">
+            <el-option
+                v-for="item in pickList"
+                :key="item.id"
+                :value="item.id"
+                :label="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('落地配配置')">
+          <el-select v-model="company.express_company_id" clearable filterable
+          allow-create default-first-option :placeholder="$t('请选择')">
+            <el-option
+                v-for="item in dockingList"
+                :key="item.id"
+                :value="item.id"
+                :label="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <!-- <el-form-item :label="$t('打包自动生成货到付款订单')">
             <el-switch
               v-model="company.should_auto_delivery"
@@ -320,9 +331,11 @@ export default {
       company: {
         // should_auto_delivery: '',
         default_pickup_station_id: '',
+        express_company_id: '',
         is_delivery: ''
       },
       pickList: [],
+      dockingList: [],
       advancedId: '',
       copyId: '',
       copyData: {
@@ -537,6 +550,7 @@ export default {
         if (res.ret) {
           this.company.is_delivery = res.data.is_delivery
           this.company.default_pickup_station_id = res.data.default_pickup_station_id
+          this.company.express_company_id = res.data.express_company_id
           // this.company.should_auto_delivery = res.data.should_auto_delivery
         }
       })
@@ -549,12 +563,21 @@ export default {
         }
       })
     },
+    // 获取落地陪配置数据
+    getDocking () {
+      this.$request.dockingPick().then(res => {
+        if (res.ret) {
+          this.dockingList = res.data
+        }
+      })
+    },
     // 高级配置
     Advanced (id) {
       this.advancedId = id
       this.dialogVisible = true
       this.getSorting()
       this.getPick()
+      this.getDocking()
     },
     // 导出清单
     unloadShip (id) {

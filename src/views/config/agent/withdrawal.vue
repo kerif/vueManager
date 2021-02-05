@@ -2,16 +2,19 @@
   <div class="withdrawal-list-container">
     <div>
       <search-group v-model="page_params.keyword" @search="goSearch">
-      <div class="chooseStatus">
-        <el-select v-model="status" @change="onShipStatus" clearable>
-          <el-option
-            v-for="item in statusList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name">
-          </el-option>
-        </el-select>
-    </div>
+        <div class="chooseStatus">
+          <el-select v-model="status" @change="onShipStatus" clearable>
+            <el-option
+              v-for="item in statusList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="import-list">
+          <el-button @click="uploadList">{{$t('导出清单')}}</el-button>
+        </div>
       </search-group>
     </div>
     <!-- <div class="select-box">
@@ -83,7 +86,8 @@ export default {
       localization: {},
       page_params: {
         group: ''
-      }
+      },
+      urlExcel: ''
     }
   },
   components: {
@@ -149,6 +153,30 @@ export default {
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 导出清单
+    uploadList () {
+      let params = {
+        status: this.status
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      this.$request.uploadWithdraws(this.$route.params.id, params).then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }
@@ -168,6 +196,10 @@ export default {
   .chooseStatus {
     width: 150px;
     display: inline-block;
+  }
+  .import-list {
+    display: inline-block;
+    margin-left: 10px;
   }
 }
 </style>

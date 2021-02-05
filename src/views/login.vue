@@ -1,37 +1,62 @@
 <template>
   <div class="login-container">
-    <!-- <div class="login-header">
+    <div class="login-header">
+      <img src="../assets/logo-top.png" class="img-sty">
       <span>{{$t('海鸥集运管理系统')}}</span>
-    </div> -->
+    </div>
+    <div class="main">
     <!-- 登陆页面 -->
     <div class="login-main" v-show="welcome === 1">
-      <div class="info-box">
-        <p class="info-title">{{$t('欢迎使用')}}</p>
-        <el-form>
-          <el-form-item>
-            <el-input prefix-icon="el-icon-user" :placeholder="$t('请输入邮箱或手机号')" v-model="userInfo.username"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input type="password" :placeholder="$t('请输入密码')" prefix-icon="el-icon-unlock" v-model="userInfo.password" @keyup.native.enter="onLogin"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox class="login-checkbox" v-model="keep"></el-checkbox>
-            <span class="info-text">{{$t('此设备上保留登录信息')}}</span>
-            <div class="forget">
-              <span @click="changeWelcome(2)">{{$t('忘记密码')}}</span>
+      <div class="main-container">
+        <div class="login-logo">
+        </div>
+        <div class="info-box">
+          <div class="info-title">
+            <span class="welcome-sty"><strong>{{$t('欢迎使用')}}</strong></span>
+            <div class="go-sty">
+              <span @click="changeWelcome(3)">{{$t('去注册')}}</span>
             </div>
-          </el-form-item>
-          <el-form-item>
-            <el-button class="login-btn" @click="onLogin">{{$t('登录')}}</el-button>
-          </el-form-item>
-          <div class="register">
-            <p @click="changeWelcome(3)">{{$t('注册账户')}}</p>
           </div>
-        </el-form>
+          <el-form>
+            <el-form-item>
+              <el-input prefix-icon="el-icon-user" :placeholder="$t('请输入邮箱或手机号')" v-model="userInfo.username"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input type="password" :placeholder="$t('请输入密码')" prefix-icon="el-icon-unlock" v-model="userInfo.password" @keyup.native.enter="onLogin"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-col :span="12">
+                <el-input type="password" :placeholder="$t('请输入验证码')" prefix-icon="el-icon-unlock" v-model="userInfo.captcha" @keyup.native.enter="onLogin"></el-input>
+              </el-col>
+              <el-col :span="11" :offset="1">
+               <img :src="captha" @click="getCaptcha" class="captha-sty">
+              </el-col>
+            </el-form-item>
+            <el-form-item>
+              <el-checkbox class="login-checkbox" v-model="keep"></el-checkbox>
+              <span class="info-text">{{$t('保持登录')}}</span>
+              <!-- <div class="forget">
+                <span @click="changeWelcome(2)">{{$t('忘记密码')}}</span>
+              </div> -->
+            </el-form-item>
+            <el-form-item>
+              <el-button class="login-btn" @click="onLogin">{{$t('登录')}}</el-button>
+              <div class="forget-sty">
+                <span @click="changeWelcome(2)">{{$t('忘记密码')}}</span>
+              </div>
+            </el-form-item>
+            <!-- <div class="register">
+              <p @click="changeWelcome(3)">{{$t('注册账户')}}</p>
+            </div> -->
+          </el-form>
+        </div>
       </div>
     </div>
     <!-- 忘记密码 -->
     <div class="login-main" v-show="welcome === 2">
+      <div class="main-container">
+        <div class="login-logo">
+        </div>
       <div class="info-box">
         <div class="step-box">
           <span :class="['step-item', { 'select': forgetStep <= 3 }]">{{$t('验证身份')}}</span>
@@ -81,11 +106,21 @@
             </div>
         </div>
       </div>
+      </div>
     </div>
     <!-- 注册账号 -->
     <div class="login-main" v-show="welcome === 3">
+      <div class="main-container">
+        <div class="login-logo">
+        </div>
       <div class="info-box">
-        <p class="info-title">{{$t('注册')}}</p>
+        <!-- <p class="info-title">{{$t('注册')}}</p> -->
+        <div class="info-title">
+          <span class="welcome-sty"><strong>{{$t('注册')}}</strong></span>
+          <div class="go-sty">
+            <span @click="changeWelcome(1)">{{$t('去登录')}}</span>
+          </div>
+        </div>
         <el-form :model="reAccount" :rules="rules" ref="registerForm">
           <el-form-item prop="email">
             <el-input prefix-icon="el-icon-user" :placeholder="$t('请输入邮箱')" v-model="reAccount.email"></el-input>
@@ -110,10 +145,11 @@
           <el-form-item>
             <el-button class="login-btn" @click="registerAccount('registerForm')" :loading="$store.state.btnLoading">{{$t('注册')}}</el-button>
           </el-form-item>
-          <div class="register">
+          <!-- <div class="register">
             <p @click="changeWelcome(1)">{{$t('使用已有账户登录')}}</p>
-          </div>
+          </div> -->
         </el-form>
+      </div>
       </div>
     </div>
     <!-- 注册成功 -->
@@ -134,9 +170,16 @@
           </div>
       </div>
     </div>
-    <div class="login-footer">© (2019) haiouoms.com <a href="http://www.beian.miit.gov.cn" target="_blank">{{$t('湘ICP备17000173号-5')}}</a></div>
+    <div class="login-footer">
+      <div class="language-sty">
+        <p>
+        <span :class="{active: active === 'simple'}" @click="languageCut('simple')">简体中文</span> | <span :class="{active: active === 'tradition'}" @click="languageCut('tradition')">繁体中文</span>
+        </p>
+      </div>
+      © ({{year}}) haiouoms.com <a href="http://www.beian.miit.gov.cn" target="_blank">{{$t('湘ICP备17000173号-5')}}</a></div>
+    </div>
     <!-- 身份验证弹窗 -->
-    <el-dialog
+    <!-- <el-dialog
       :title="$t('身份验证')"
       :visible.sync="centerDialogVisible"
       width="35%"
@@ -150,7 +193,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submit">{{$t('确 定')}}</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -223,6 +266,7 @@ export default {
       welcome: 1,
       forgetStep: 1,
       groupBuy: '',
+      active: '',
       rules: {
         email: [
           { required: true, message: this.$t('请输入邮箱地址'), trigger: 'blur' },
@@ -253,12 +297,29 @@ export default {
       }
     }
   },
+  computed: {
+    year: function () {
+      return new Date().getFullYear()
+    }
+  },
   mounted () {
     this.userInfo.username = localStorage.getItem('USERNAME') || ''
     this.userInfo.password = localStorage.getItem('PASSWORD') || ''
     if (this.userInfo.username && this.userInfo.password) this.keep = true
   },
+  created () {
+    this.active = localStorage.getItem('language') || 'simple'
+    this.languageCut(this.active)
+    this.getCaptcha() // 获取图型验证码
+  },
   methods: {
+    languageCut (locale) {
+      this.active = locale
+      // this.$i18n.locale = locale
+      localStorage.setItem('language', locale)
+      this.$store.commit('saveLanguageCode', locale)
+      // this.$store.commit('switchLang', { lang: locale })
+    },
     // 获取是否显示拼团配置
     getMe () {
       this.$request.getMe().then(res => {
@@ -274,15 +335,69 @@ export default {
         return this.$message.info(this.$t('请输入邮箱或手机号'))
       } else if (!this.userInfo.password.trim()) {
         return this.$message.info(this.$t('请输入密码'))
+      } else if (!this.userInfo.captcha.trim()) {
+        return this.$message.info(this.$t('请输入验证码'))
       }
       if (this.keep) {
         localStorage.setItem('USERNAME', this.userInfo.username.trim())
         localStorage.setItem('PASSWORD', this.userInfo.password.trim())
+        this.$request.login(this.userInfo).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            // this.getMe()
+            this.$request.getMe().then(res => {
+              if (res.ret) {
+                this.groupBuy = Number(res.data.group_buying_config)
+                this.$store.commit('saveMe', this.groupBuy)
+                console.log(this.groupBuy, 'this.groupBuy')
+              }
+            })
+            this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
+            this.$store.commit('saveName', res.data.email)
+            this.centerDialogVisible = false
+            this.$router.push('/')
+          } else {
+            this.$message.error(res.msg)
+            this.getCaptcha()
+          }
+        }).catch((err) => {
+          this.$message.error(err.msg)
+        })
       } else {
         localStorage.removeItem('USERNAME')
         localStorage.removeItem('PASSWORD')
+        this.$request.login(this.userInfo).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            // this.getMe()
+            this.$request.getMe().then(res => {
+              if (res.ret) {
+                this.groupBuy = Number(res.data.group_buying_config)
+                this.$store.commit('saveMe', this.groupBuy)
+                console.log(this.groupBuy, 'this.groupBuy')
+              }
+            })
+            this.$store.commit('saveToken', `${res.data.token_type} ${res.data.access_token}`)
+            this.$store.commit('saveName', res.data.email)
+            this.centerDialogVisible = false
+            this.$router.push('/')
+          } else {
+            this.$message.error(res.msg)
+            this.getCaptcha()
+          }
+        }).catch((err) => {
+          this.$message.error(err.msg)
+        })
       }
-      this.getCaptcha()
+      // this.getCaptcha()
     },
     // 获取图片验证码
     getCaptcha () {
@@ -469,18 +584,18 @@ export default {
   height: 100%;
   height: 100vh;
   // background-color: #3540A5;
-  background: url("../assets/logo-img.png") no-repeat center;
-  background-size: cover;
-  position: relative;
+  // background: url("../assets/logo-img.png") no-repeat center;
+  // background-size: cover;
+  // position: relative;
   overflow: hidden;
   .login-header {
-    text-align: center;
-    color: #fff;
+    text-align: left;
+    color: #3540A5;
     // padding-top: 10px;
     font-size: 18px;
-    padding: 15px 15px 5px 15px;
+    padding: 10px;
     font-weight: bold;
-    border-bottom: 1px solid #4A55B7;
+    // border-bottom: 1px solid #4A55B7;
   }
   .app-name {
     font-size: 35px;
@@ -488,30 +603,50 @@ export default {
   .login-main {
     background-color: #fff;
     border-radius: 4px;
-    width: 600px;
-    // height: 430px;
+    width: 1000px;
+    height: 450px;
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
   .info-box {
-    width: 50%;
-    margin: 30px auto;
+    display: inline-block;
+    position: absolute;
+    transform: translateY(-50%);
+    resize: both;
+    top: 50%;
+    right: 11%;
+    width: 30%;
+    // margin: 30px auto;
   }
   .info-title {
-    font-size: 18px;
-    margin: 40px 0;
+    // font-size: 18px;
+    margin: 30px 0;
+    overflow: hidden;
+    // margin-bottom: 40px;
+  }
+  .go-sty {
+    display: inline-block;
+    float: right;
+    font-size: 15px;
+    cursor: pointer;
+    // text-align: right;
+  }
+  .welcome-sty {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 900;
   }
   .login-footer {
     color: #3540A5;
     text-align: center;
     padding: 10px 0;
     position: absolute;
-    bottom: 0;
+    bottom: 98px;
     width: 100%;
     font-size: 14px;
-    background-color: #fff;
+    // background-color: #fff;
     a {
       text-decoration: none;
     }
@@ -528,6 +663,7 @@ export default {
     color: #fff;
     border-color: #35B85A;
     background-color: #35B85A;
+    border-radius: 20px;
   }
   .forget {
     float: right;
@@ -536,7 +672,7 @@ export default {
   }
   .register {
     text-align: center;
-    padding-top: 25px;
+    // padding-top: 25px;
     color:#35B85A;
     cursor: pointer;
   }
@@ -603,6 +739,52 @@ export default {
     background-color: #A2A2A2;
     position: relative;
     bottom: 4px;
+  }
+  .img-sty {
+    vertical-align: middle;
+    padding-right: 5px;
+  }
+  .main {
+    background-color: #EFEFEF !important;
+     min-height: calc(100vh - 60px);
+  }
+  .main-container {
+    position: relative;
+  }
+  .login-logo {
+    width: 500px;
+    height: 450px;
+    background: url("../assets/img-main.png") no-repeat;
+  }
+  .forget-sty {
+    text-align: center;
+    // color: #000000;
+    cursor: pointer;
+  }
+  .captha-sty {
+    cursor: pointer;
+  }
+  .language-sty {
+    margin-top: 20px;
+    // color: black;
+    p:first-child {
+      padding: 1.5em 0 1em;
+      span {
+        cursor: pointer;
+        // cursor: not-allowed;
+      }
+      .active {
+        color: #9e9e9e;
+        cursor: default;
+      }
+    }
+    p:last-child {
+      padding-bottom: 30px;
+      img {
+        margin-left: 10px;
+        transform: translateY(30%)
+      }
+    }
   }
 }
 </style>

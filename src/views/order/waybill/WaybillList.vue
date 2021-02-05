@@ -758,6 +758,17 @@
         <el-button type="primary" @click="createPrice" :loading="$store.state.btnLoading">{{$t('确定')}}</el-button>
     </div>
     </el-dialog>
+    <!-- 导出清单 -->
+    <el-dialog :title="$t('导出清单')" :visible.sync="dialogPackages" width="40%" @close="clearFilter">
+      <div class="excel-date">
+        <el-radio :label="1" v-model="uploadRadio">{{$t('导出清单（含包裹信息）')}}</el-radio>
+        <el-radio :label="2" v-model="uploadRadio">{{$t('导出清单')}}</el-radio>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogPackages = false" class="cancel-btn">{{$t('取消')}}</el-button>
+        <el-button type="primary" @click="updatePackages" :loading="$store.state.btnLoading">{{$t('确定')}}</el-button>
+    </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -776,6 +787,7 @@ export default {
   data () {
     return {
       timeList: [],
+      uploadRadio: 1,
       pickingList: [],
       expands: [],
       signList: [],
@@ -871,12 +883,9 @@ export default {
         start: '',
         end: ''
       },
-      secondExpands: {}
-      // except_dimension: {
-      //   width: 0,
-      //   height: 0,
-      //   length: 0
-      // }
+      secondExpands: {},
+      dialogPackages: false,
+      paramsData: {}
     }
   },
   created () {
@@ -1018,7 +1027,7 @@ export default {
     // 导出清单
     uploadList (val) {
       console.log(val, 'val')
-      let params = {
+      this.paramsData = {
         page: this.page_params.page,
         size: this.page_params.size,
         agent: this.agent_name,
@@ -1029,34 +1038,61 @@ export default {
         value_start: this.filterForm.start,
         value_end: this.filterForm.end
       }
-      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      this.page_params.keyword && (this.paramsData.keyword = this.page_params.keyword)
       // 提交时间
-      this.begin_date && (params.begin_date = this.begin_date)
-      this.end_date && (params.end_date = this.end_date)
+      this.begin_date && (this.paramsData.begin_date = this.begin_date)
+      this.end_date && (this.paramsData.end_date = this.end_date)
       // 拣货时间
-      this.packed_begin_date && (params.packed_begin_date = this.packed_begin_date)
-      this.packed_end_date && (params.packed_end_date = this.packed_end_date)
+      this.packed_begin_date && (this.paramsData.packed_begin_date = this.packed_begin_date)
+      this.packed_end_date && (this.paramsData.packed_end_date = this.packed_end_date)
       // 签收时间
-      this.updated_begin_date && (params.updated_begin_date = this.updated_begin_date)
-      this.updated_end_date && (params.updated_end_date = this.updated_end_date)
-      console.log(params, 'params1111')
-      this.$request.orderExport(params).then(res => {
-        if (res.ret) {
-          // this.urlExcel = res.data.url
-          // window.open(this.urlExcel)
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.updated_begin_date && (this.paramsData.updated_begin_date = this.updated_begin_date)
+      this.updated_end_date && (this.paramsData.updated_end_date = this.updated_end_date)
+      // console.log(params, 'params1111')
+      this.dialogPackages = true
+    },
+    updatePackages () {
+      console.log(this.paramsData, 'paramsData')
+      if (this.uploadRadio === 1) {
+        this.$request.orderExport(this.paramsData).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.dialogPackages = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.uploadRadio === 2) {
+        this.$request.orderExport({
+          ...this.paramsData,
+          type: 1
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.dialogPackages = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     },
     goMatch () {
       this.page_params.page = 1

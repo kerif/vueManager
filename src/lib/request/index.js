@@ -380,6 +380,10 @@ exports.getPick = (params) => {
 exports.autoPick = (id) => {
   return $form.get(`express-lines/${id}/self-pickup-stations`)
 }
+// 获取落地配配置数据
+exports.dockingPick = () => {
+  return $form.get(`express-lines/docking-types`)
+}
 // 更新自提点
 exports.updateAutoPick = (id, params) => {
   return $form.put(`express-lines/${id}/advance-settings`, params)
@@ -798,6 +802,10 @@ exports.getAgentOrders = (id, params) => {
 exports.finishOrders = (id) => {
   return $form.put(`agents/commission/${id}`)
 }
+// 成交记录 批量结算
+exports.batchOrders = (id) => {
+  return $form.put(`agents/${id}/commissions/settled`)
+}
 // 代理管理的添加代理
 exports.addAgents = (params) => {
   return $form.post('agents', params)
@@ -809,6 +817,10 @@ exports.getCommissions = (id, params) => {
 // 代理管理 更新佣金
 exports.updateCommissions = (id, params) => {
   return $json.put(`agents/${id}/line-commissions`, params)
+}
+// 代理管理 佣金管理 导出清单
+exports.uploadWithdraws = (id, params) => {
+  return $form.get(`agents/${id}/withdraws/export`, { params })
 }
 // 小程序配置
 exports.getMini = () => {
@@ -896,6 +908,14 @@ exports.warehouseLang = (id, params) => {
 // 仓库地址配置 更改语言详情
 exports.updateWarehouseLang = (id, params) => {
   return $form.put(`warehouse-address/${id}/translate-data`, params)
+}
+// 仓库地址 仓位管理 拖拽排序
+exports.positionsSort = (id, params) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/sort-index`, params)
+}
+// 仓库地址配置 仓位管理 按区域编号自动排序
+exports.resetIndex = (id) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/reset-index`)
 }
 // 配置 编辑保存单条仓库地址配置
 exports.editWarehouseAddress = (id, params) => {
@@ -1879,6 +1899,14 @@ exports.modifyReceive = (id, params) => {
 exports.confirmChange = (id, addId) => {
   return $form.put(`orders/${id}/address/${addId}`)
 }
+// 订单列表 详情 添加包裹 获取可添加的包裹
+exports.getAddable = (id, params) => {
+  return $form.get(`orders/${id}/addable-packages`, { params })
+}
+// 订单列表 详情 添加包裹 确认添加
+exports.updateAddable = (id, params) => {
+  return $form.put(`orders/${id}/add-packages`, params)
+}
 // 订单列表 获取支付方式列表
 exports.paymentType = () => {
   return $form.get('orders/payment-types')
@@ -2295,6 +2323,10 @@ exports.updateReceive = (params) => {
 // 转运包裹管理 出库
 exports.updateShip = (params) => {
   return $form.put(`stations/ship`, params)
+}
+// 转运包裹管理 导出
+exports.stationsUpload = (params) => {
+  return $form.get(`stations/export`, { params })
 }
 // 快速签收 获取查询数据
 exports.signData = (params) => {

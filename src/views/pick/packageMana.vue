@@ -338,15 +338,21 @@ export default {
     },
     // 快速收货
     fastReceipt () {
-      dialog({ type: 'fastReceipt', id: this.transferId })
+      dialog({ type: 'fastReceipt', id: this.transferId }, () => {
+        this.getList()
+      })
     },
     // 快速签收
     fastSign () {
-      dialog({ type: 'fastSign', id: this.transferId })
+      dialog({ type: 'fastSign', id: this.transferId }, () => {
+        this.getList()
+      })
     },
     // 快速出库
     fastDelivery () {
-      dialog({ type: 'fastDelivery', id: this.transferId })
+      dialog({ type: 'fastDelivery', id: this.transferId }, () => {
+        this.getList()
+      })
     },
     // 收货
     goReceive (id) {
@@ -451,18 +457,9 @@ export default {
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 已入库
-      if (this.activeName === '2') {
-        // 提交时间
-        this.begin_date && (params.begin_date = this.begin_date)
-        this.end_date && (params.end_date = this.end_date)
-        // 称重时间
-        this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
-        this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
-      } else { // 未入库
-        this.begin_date && (params.begin_date = this.begin_date)
-        this.end_date && (params.end_date = this.end_date)
-      }
-      this.$request.uploadPackage(params).then(res => {
+      this.shipped_begin && (params.shipped_begin = this.shipped_begin)
+      this.shipped_end && (params.shipped_end = this.shipped_end)
+      this.$request.stationsUpload(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           window.open(this.urlExcel)

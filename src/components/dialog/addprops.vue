@@ -27,7 +27,7 @@ export default {
     confirm () {
       if (!this.ruleForm.cn_name) return this.$message.error(this.$t('请输入属性名称'))
       console.log(this.ruleForm.cn_name, 'this.ruleForm.cn_name')
-      this.$request.addPackage({
+      this.$request.updateAddable(this.id, {
         cn_name: this.ruleForm.cn_name
       }).then(res => {
         if (res.ret) {

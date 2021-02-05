@@ -86,6 +86,7 @@ import fastSign from './fastSign.vue'
 import fastDelivery from './fastDelivery.vue'
 import pickWarehouse from './pickWarehouse.vue'
 import commissionAddEdit from './commissionAddEdit.vue'
+import addPackages from './addPackages.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -172,6 +173,7 @@ const FastSignController = Vue.extend(fastSign)
 const FastDeliveryController = Vue.extend(fastDelivery)
 const PickWarehouseController = Vue.extend(pickWarehouse)
 const CommissionAddEditController = Vue.extend(commissionAddEdit)
+const AddPackagesController = Vue.extend(addPackages)
 
 const mixin = {
   data () {
@@ -771,6 +773,13 @@ function initInstance (type) {
     // 自提点配置 计佣方式配置 添加 或编辑
     case 'commissionAddEdit':
       instance = new CommissionAddEditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 订单列表 详情 添加包裹
+    case 'addPackages':
+      instance = new AddPackagesController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

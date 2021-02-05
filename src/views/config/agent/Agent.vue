@@ -9,7 +9,10 @@
     v-loading="tableLoading"
     @selection-change="selectionChange">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column :label="$t('代理名称')" prop="agent_name">
+      <el-table-column :label="$t('代理名称')">
+        <template slot-scope="scope">
+          <span>{{scope.row.user_id}}-{{scope.row.agent_name}}-</span>
+        </template>
       </el-table-column>
       <el-table-column :label="$t('佣金分成%')" prop="commission">
       </el-table-column>
@@ -49,7 +52,7 @@
           <el-button class="btn-deep-purple" @click="setCommission(scope.row.id, scope.row.agent_name, scope.row.commission)">{{$t('设置佣金')}}</el-button>
           <!-- <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button> -->
            <el-badge :value="scope.row.settle_count > 0 ? scope.row.settle_count : ''" class="item record-sty">
-            <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button>
+            <el-button class="btn-blue" @click="record(scope.row.id, scope.row.user_id)">{{$t('成交记录')}}</el-button>
           </el-badge>
           <!-- 提现申请 -->
           <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
@@ -161,11 +164,12 @@ export default {
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 成交记录
-    record (id) {
+    record (id, userId) {
       this.$router.push({
         name: 'record',
         query: {
-          id: id
+          id: id,
+          userId: userId
         }
       })
     },
