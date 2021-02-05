@@ -57,50 +57,35 @@
               <span>{{form.station_shipped_at}}</span>
             </el-col>
           </el-row>
-         <h3 class="change-sty">{{$t('费用信息')}}</h3>
-         <el-row class="container-center" :gutter="20">
-            <!-- 应付金额 -->
+         <!-- <h3 class="change-sty">{{$t('费用信息')}}</h3> -->
+         <!-- <el-row class="container-center" :gutter="20">
             <el-col :span="7">
               <span class="leftWidth">{{$t('应付金额')}}</span>
               <span>{{form.payment && form.payment.order_amount}}</span>
             </el-col>
-            <!-- 支付时间 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('支付时间')}}</span>
               <span>{{form.payment &&form.payment.paid_at}}</span>
             </el-col>
-            <!-- 支付金额 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('支付金额')}}</span>
               <span>{{form.payment && form.payment.pay_amount}}</span>
             </el-col>
-          </el-row>
-          <el-row class="container-center" :gutter="20">
-            <!-- 抵用券金额 -->
+          </el-row> -->
+          <!-- <el-row class="container-center" :gutter="20">
             <el-col :span="7">
               <span class="leftWidth">{{$t('抵用券金额')}}</span>
               <span>{{form.payment && form.payment.coupon_amount}}</span>
             </el-col>
-            <!-- 支付方式 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('支付方式')}}</span>
               <span>{{form.payment &&form.payment.payment_type_name }}</span>
             </el-col>
-            <!-- 邮编 -->
-              <!-- <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{$t('线路类型')}}</span>
-              <span>{{form.address && form.address.country.cn_name}}</span>
-            </el-col> -->
-          </el-row>
-          <el-row class="container-center" :gutter="20">
-            <!-- 支付截图 -->
+          </el-row> -->
+          <!-- <el-row class="container-center" :gutter="20">
             <el-col :span="7">
-              <!-- <span class="leftWidth">{{$t('支付截图')}}</span> -->
-              <!-- payment_images -->
-              <!-- <span>{{form.address && form.address.receiver_name}}</span> -->
               <div class="bale-left packed-details">
                 <span class="leftWidth">{{$t('支付截图')}}</span>
-                <!-- ${$baseUrl.IMAGE_URL}${item}` -->
                 <div class="left-img" v-for="(item, index) in form.payment && form.payment.payment_images" :key="index">
                   <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
                     <img :src="`${$baseUrl.IMAGE_URL}${item}`" class="productImg" >
@@ -108,9 +93,9 @@
                 </div>
               </div>
             </el-col>
-          </el-row>
+          </el-row> -->
         </el-form>
-        <div>
+        <!-- <div>
           <h3>{{$t('原始包裹清单')}}</h3>
           <el-table :data="pakeageData" class="data-list" border stripe
            v-loading="tableLoading">
@@ -123,11 +108,10 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
+        </div> -->
         <el-row>
           <el-col :span="10">
-            <h3>{{$t('出库清单')}}
-            </h3>
+            <h3 class="outWahouse-sty">{{$t('出库清单')}}</h3>
               <span>{{$t('共有')}}{{boxData.length}}{{$t('箱物品')}}</span>
             <el-table :data="boxData" class="data-list" border stripe
             v-loading="tableLoading">
@@ -157,40 +141,62 @@
             </div>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :span="18">
-            <div class="updateChe">
-              <span>{{$t('上传签收照片')}}</span>
-              <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
-                <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+        <h3 class="change-sty">{{$t('反馈信息')}}</h3>
+         <el-row class="container-center" :gutter="20">
+            <el-col :span="7">
+              <span class="leftWidth">{{$t('发货时间')}}</span>
+              <span>{{form.shipped_at}}</span>
+            </el-col>
+              <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{$t('自提点收货')}}</span>
+              <span>{{form.station_received_at}}</span>
+            </el-col>
+              <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{$t('状态')}}</span>
+              <span v-if="form.station_status === 3">{{$t('直接出库')}}</span>
+              <span v-if="form.station_status === 4">{{$t('自提签收')}}</span>
+            </el-col>
+          </el-row>
+          <el-row class="container-center" :gutter="20">
+            <el-col :span="7">
+              <span class="leftWidth">{{$t('完成时间')}}</span>
+              <span v-if="form.station_shipped_at">{{form.station_shipped_at}}</span>
+              <span v-else>{{form.signed_at}}</span>
+            </el-col>
+            <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{$t('签收备注')}}</span>
+              <span>{{form.sign_remark}}</span>
+            </el-col>
+          </el-row>
+          <el-row class="container-center" :gutter="20">
+            <el-col :span="7">
+              <!-- <span class="leftWidth">{{$t('签收签字')}}</span>
+              <span>
+                <img :src="form.sign_signature" class="productImg">
+              </span> -->
+              <div class="updateChe">
+              <p>{{$t('签收签字')}}</p>
+              <span class="img-item">
+                <img :src="form.sign_signature" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
-                  <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                  <i class="el-icon-zoom-in" @click="onPreview(form.sign_signature)"></i>
+                  <!-- <i class="el-icon-delete" @click="onDeleteImg(index)"></i> -->
                 </span>
               </span>
-              <el-upload
-                v-show="goodsImgList.length < 1"
-                class="avatar-uploader"
-                list-type="picture-card"
-                action=""
-                :before-upload="beforeUploadImg"
-                :http-request="uploadGoodsImg"
-                :show-file-list="false"
-                >
-                <i class="el-icon-plus">
-                </i>
-                </el-upload>
-                <!-- <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div> -->
+            </div>
+            </el-col>
+            <el-col :span="7">
+              <div class="bale-left packed-details">
+                <span class="leftWidth">{{$t('签收照片')}}</span>
+                <div class="left-img" v-for="(item, index) in form.sign_images" :key="index">
+                  <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
+                    <img :src="`${$baseUrl.IMAGE_URL}${item}`" class="productImg">
+                  </span>
+                </div>
               </div>
             </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <p>{{$t('签收备注（选填）')}}：</p>
-                <el-input v-model="sign.sign_remark" type="textarea" :rows="3" :placeholder="$t('请输入内容')"></el-input>
-              </el-col>
-            </el-row>
+          </el-row>
           <div slot="footer">
             <el-button @click="returnShip">{{$t('取消')}}</el-button>
             <el-button type="primary" @click="confirmSign">{{$t('确定')}}</el-button>
@@ -272,6 +278,7 @@ export default {
     },
     // 预览图片
     onPreview (image) {
+      console.log(image, 'image')
       dialog({
         type: 'previewimage',
         image
@@ -349,6 +356,10 @@ export default {
   }
   .table-sty {
     margin-top: 20px;
+  }
+  .outWahouse-sty {
+    display: inline-block;
+    margin-right: 10px;
   }
 }
 .bale-left {
