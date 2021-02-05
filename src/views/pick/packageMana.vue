@@ -21,7 +21,7 @@
           </el-col>
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{$t('联系人')}}</span>
-            <span>{{form.contact_info}}</span>
+            <span>{{form.contactor}}</span>
           </el-col>
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{$t('计佣方式')}}</span>
@@ -36,6 +36,7 @@
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{$t('联系电话')}}</span>
             <!-- <span>{{111}}</span> -->
+             <span>{{form.contact_info}}</span>
           </el-col>
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{$t('计佣金额')}}</span>

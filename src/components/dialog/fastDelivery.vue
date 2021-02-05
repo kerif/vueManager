@@ -131,6 +131,9 @@ export default {
     // 确认出库
     confirmShip () {
       let dataId = this.tableData.map(item => item.id)
+      if (!dataId.length) {
+        return this.$message(this.$t('没有可选择的订单'))
+      }
       console.log(dataId, 'dataId')
       this.$request.shipBatch({
         XStationId: this.id,

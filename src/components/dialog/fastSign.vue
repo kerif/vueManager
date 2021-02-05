@@ -140,7 +140,7 @@
             <!-- 邮编 -->
               <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('自提点到货时间')}}</span>
-              <span>{{form.station_shipped_at}}</span>
+              <span>{{form.station_received_at}}</span>
             </el-col>
           </el-row>
          <h3 class="change-sty">{{$t('费用信息')}}</h3>
