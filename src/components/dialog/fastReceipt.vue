@@ -169,6 +169,9 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
+      if (this.deleteNum.length !== this.tableData.length) {
+        return this.$message.error(this.$t('需要全选才能确定收货'))
+      }
       console.log(this.deleteNum, 'this.deleteNum')
       this.$request.updateReceive({
         XStationId: this.id,
