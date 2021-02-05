@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('添加物流信息')" class="add-batch"
+  <el-dialog :visible.sync="show" :title="$t('添加物流信息1')" class="add-batch"
   width="45%" @close="clear">
     <el-form ref="form" :model="company" label-width="160px">
         <el-form-item :label="$t('*转运快递单号-头程：')">
@@ -34,7 +34,8 @@ export default {
         sn: '',
         company: ''
       },
-      companyList: []
+      companyList: [],
+      id: ''
     }
   },
   methods: {
@@ -48,6 +49,15 @@ export default {
               this.company.company = this.companyList[0].code
             }
           }
+        }
+      })
+    },
+    // 获取当前值
+    getInfo () {
+      this.$request.aloneShipmentsDetails(this.id).then(res => {
+        if (res.ret) {
+          this.company.sn = res.data.logistics_sn
+          this.company.company = res.data.code
         }
       })
     },
@@ -90,8 +100,9 @@ export default {
     },
     init () {
       this.getCompany()
-      this.company.sn = this.logistics_sn
-      this.company.company = this.logistics_company
+      this.getInfo()
+      // this.company.sn = this.logistics_sn
+      // this.company.company = this.logistics_company
     }
   }
 }
