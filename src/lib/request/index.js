@@ -659,6 +659,10 @@ exports.editAffiliation = (id, warehouseId) => {
 exports.getInvoice = () => {
   return $form.get('orders/shipments')
 }
+// 发货单 获取添加物流信息详情
+exports.aloneShipmentsDetails = (id) => {
+  return $form.get(`shipments/${id}/logistics-info`)
+}
 // 发货单 批量加入发货单
 exports.allOrderSn = (id, params) => {
   return $form.put('shipments/add-order-by-sn', id, params)
