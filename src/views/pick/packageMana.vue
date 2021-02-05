@@ -147,15 +147,15 @@
           <el-button v-if="activeName === '0'" class="btn-dark-green" @click="goReceive(scope.row.id)">{{$t('收货')}}</el-button>
           <el-button v-if="activeName === '0'" class="btn-purple btn-sty" @click="goExpress(scope.row.order_sn)">{{$t('跟踪')}}</el-button>
           <el-button v-if="activeName === '1'" class="btn-dark-green" @click="goShip(scope.row.id)">{{$t('出库')}}</el-button>
-          <!-- <el-button v-if="activeName === '1'" class="btn-purple btn-sty" @click="goExpress(scope.row.order_sn)">{{$t('签收')}}</el-button> -->
+          <el-button v-if="activeName === '1'" class="btn-purple btn-sty" @click="goSign(scope.row.id)">{{$t('签收')}}</el-button>
+          <el-button v-if="activeName === '2'" class="btn-purple" @click="goDetails(scope.row.id)">{{$t('详情')}}</el-button>
         </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <!-- 弃件 -->
           <el-button size="small" @click="discardPackage">{{$t('批量收货')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
     <div class="noDate" v-else>{{$t('暂无数据')}}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -340,17 +340,26 @@ export default {
     fastReceipt () {
       dialog({ type: 'fastReceipt', id: this.transferId }, () => {
         this.getList()
+        this.getCounts()
       })
     },
     // 快速签收
     fastSign () {
       dialog({ type: 'fastSign', id: this.transferId }, () => {
         this.getList()
+        this.getCounts()
       })
     },
     // 快速出库
     fastDelivery () {
       dialog({ type: 'fastDelivery', id: this.transferId }, () => {
+        this.getList()
+        this.getCounts()
+      })
+    },
+    // 详情
+    goDetails (id) {
+      dialog({ type: 'pickDetails', id: id, transferId: this.transferId }, () => {
         this.getList()
       })
     },
@@ -372,6 +381,7 @@ export default {
               type: 'success'
             })
             this.getList()
+            this.getCounts()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -400,6 +410,7 @@ export default {
               type: 'success'
             })
             this.getList()
+            this.getCounts()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -410,6 +421,13 @@ export default {
         })
       })
     },
+    // 签收
+    goSign (id) {
+      dialog({ type: 'signDetails', id: id, transferId: this.transferId }, () => {
+        this.getList()
+        this.getCounts()
+      })
+    },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
@@ -418,15 +436,12 @@ export default {
       console.log(orderSn, 'orderSn')
       this.$router.push({ name: 'tracking', query: { orderSn: orderSn } })
     },
-    // 批量弃件
+    // 批量收货
     discardPackage () {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      dialog({ type: 'discardList', deleteNum: this.deleteNum }, () => {
-        this.getList()
-      })
     },
     // 确认下载标签
     updateLabel () {

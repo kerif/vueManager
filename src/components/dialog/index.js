@@ -87,6 +87,8 @@ import fastDelivery from './fastDelivery.vue'
 import pickWarehouse from './pickWarehouse.vue'
 import commissionAddEdit from './commissionAddEdit.vue'
 import addPackages from './addPackages.vue'
+import signDetails from './signDetails.vue'
+import pickDetails from './pickDetails.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -174,6 +176,8 @@ const FastDeliveryController = Vue.extend(fastDelivery)
 const PickWarehouseController = Vue.extend(pickWarehouse)
 const CommissionAddEditController = Vue.extend(commissionAddEdit)
 const AddPackagesController = Vue.extend(addPackages)
+const SignDetailsController = Vue.extend(signDetails)
+const PickDetailsController = Vue.extend(pickDetails)
 
 const mixin = {
   data () {
@@ -780,6 +784,20 @@ function initInstance (type) {
     // 订单列表 详情 添加包裹
     case 'addPackages':
       instance = new AddPackagesController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自提点 转运包裹管理 签收
+    case 'signDetails':
+      instance = new SignDetailsController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自提点 签收详情
+    case 'pickDetails':
+      instance = new PickDetailsController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
