@@ -134,6 +134,25 @@
         </el-form-item>
       </div>
       <el-form-item>
+        <div>{{$t('计佣方式')}}</div>
+        <el-row>
+          <el-col :span="10">
+            <el-select
+             clearable
+              v-model="form.rule_id"
+              class="country-select"
+              :placeholder="$t('请选择')">
+              <el-option
+                v-for="item in rulesData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
         <el-button type="primary" class="sava-btn" :loading="$store.state.btnLoading" @click="saveLine">{{$t('保存')}}</el-button>
       </el-form-item>
     </el-form>
@@ -174,6 +193,7 @@ export default {
         sub_area_id: '',
         address: '',
         contact_info: '',
+        rule_id: '',
         contactor: '',
         expressLines: []
       },
@@ -198,7 +218,17 @@ export default {
       countryId: '',
       hasStore: false,
       areas: [],
-      citys: []
+      citys: [],
+      rulesData: [
+        {
+          id: 1,
+          name: this.$t('每单固定金额')
+        },
+        {
+          id: 2,
+          name: this.$t('按重量或体积重量')
+        }
+      ]
     }
   },
   created () {
@@ -219,6 +249,7 @@ export default {
         // this.form.country_id = res.data.sub_area_id ? res.data.sub_area_id : res.data.country.id
         this.form.address = res.data.address
         this.form.contact_info = res.data.contactor
+        this.form.rule_id = res.data.rule_id
         this.form.contactor = res.data.contact_info
         this.form.expressLines = res.data.expressLines.map(item => {
           return {
@@ -340,6 +371,8 @@ export default {
         return this.$message.error(this.$t('请输入自提点名称'))
       } else if (!this.form.country_id) {
         return this.$message.error(this.$t('请选择所属国家地区'))
+      } else if (this.form.country_id && !this.areaData.length) {
+        return this.$message.error(this.$t('请选择所属地区'))
       } else if (!this.form.address) {
         return this.$message.error(this.$t('请输入详细地址'))
       } else if (!this.form.contact_info) {

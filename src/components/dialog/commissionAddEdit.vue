@@ -17,7 +17,7 @@
              @change="changeType"
               v-model="form.type"
               class="country-select"
-              :placeholder="$t('请选择国家/地区')">
+              :placeholder="$t('请选择')">
               <el-option
                 v-for="item in options"
                 :key="item.id"

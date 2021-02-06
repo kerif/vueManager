@@ -176,7 +176,7 @@
               </span> -->
               <div class="updateChe">
               <p>{{$t('签收签字')}}</p>
-              <span class="img-item">
+              <span class="img-item" v-if="form.sign_signature">
                 <img :src="form.sign_signature" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
@@ -187,20 +187,21 @@
             </div>
             </el-col>
             <el-col :span="7">
+              <!-- `${$baseUrl.IMAGE_URL}${item}` -->
               <div class="bale-left packed-details">
-                <span class="leftWidth">{{$t('签收照片')}}</span>
+                <p class="leftWidth">{{$t('签收照片')}}</p>
                 <div class="left-img" v-for="(item, index) in form.sign_images" :key="index">
-                  <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
-                    <img :src="`${$baseUrl.IMAGE_URL}${item}`" class="productImg">
+                  <span style="cursor:pointer;" @click.stop="imgSrc=`${item}`, imgVisible=true">
+                    <img :src="`${item}`" class="productImg">
                   </span>
                 </div>
               </div>
             </el-col>
           </el-row>
-          <div slot="footer">
+          <!-- <div slot="footer">
             <el-button @click="returnShip">{{$t('取消')}}</el-button>
             <el-button type="primary" @click="confirmSign">{{$t('确定')}}</el-button>
-          </div>
+          </div> -->
   </el-dialog>
 </template>
 
@@ -241,7 +242,8 @@ export default {
           this.pakeageData = res.data.packages // 原始包裹清单
           this.boxData = res.data.box // 出库清单
           this.localization = res.localization
-          this.goodsImgList = res.data.sign_images
+          this.form.sign_images = res.data.sign_images
+          this.form.sign_signature = res.data.sign_signature
           this.packageImgList = res.data.pack_pictures
           this.sign.sign_remark = res.data.sign_remark
         } else {
