@@ -104,7 +104,9 @@ export default {
       textarea2: '',
       form: {},
       id: '',
-      localization: {}
+      localization: {},
+      orderSnNum: [],
+      state: ''
     }
   },
   methods: {
@@ -164,6 +166,11 @@ export default {
       this.tableData = []
     },
     init () {
+      if (this.state === 'batch') {
+        this.textarea2 = this.orderSnNum.join('\n')
+        this.search()
+        console.log(this.orderSnNum, '1111')
+      }
     }
   }
 }

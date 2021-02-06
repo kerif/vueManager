@@ -75,9 +75,7 @@
           <!-- /{{scope.row.length*scope.row.width*scope.row.height/1000/1000}} -->
         </template>
       </el-table-column>
-        <el-table-column
-        prop="shipment_sn"
-        :label="$t('所属发货单')">
+      <el-table-column prop="shipment_sn" :label="$t('所属发货单')">
       </el-table-column>
     </el-table>
     <p class="order-sty">{{$t('订单数')}}：{{tableLength}}</p>
@@ -195,12 +193,18 @@ export default {
       })
     },
     init () {
-      this.form.sn = ''
-      this.tableData = []
+      if (this.state === 'batch') {
+        this.form.type = 2
+        this.form.sn = this.orderSnNum.join('\n')
+        this.getList()
+        console.log(this.orderSnNum, '1111')
+      }
       // this.getList()
     },
     clear () {
       this.page_params.page = 1
+      this.form.sn = ''
+      this.tableData = []
     }
   }
 }

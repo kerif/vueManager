@@ -320,7 +320,9 @@ export default {
         sign_images: '',
         sign_remark: ''
       },
-      photoId: ''
+      photoId: '',
+      orderSnNum: [],
+      state: ''
     }
   },
   methods: {
@@ -477,6 +479,12 @@ export default {
     },
     init () {
       // this.getUser()
+      console.log(this.state, 'state')
+      if (this.state === 'batch') {
+        this.textarea2 = this.orderSnNum.join('\n')
+        this.search()
+        console.log(this.orderSnNum, '1111')
+      }
     }
   }
 }

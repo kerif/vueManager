@@ -142,6 +142,13 @@
       <!-- 所属发货单 -->
       <el-table-column :label="$t('所属发货单')" prop="shipment_sn">
       </el-table-column>
+            <!-- 状态 -->
+      <el-table-column :label="$t('状态')" v-if="activeName === '2'">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === 3">{{$t('直接出库')}}</span>
+          <span v-if="scope.row.status === 4">{{$t('自提签收')}}</span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
@@ -152,11 +159,13 @@
           <el-button v-if="activeName === '2'" class="btn-purple" @click="goDetails(scope.row.id)">{{$t('详情')}}</el-button>
         </template>
       </el-table-column>
-      <!-- <template slot="append">
+      <template slot="append" v-if="activeName === '0' || activeName === '1'">
         <div class="append-box">
-          <el-button size="small" @click="discardPackage">{{$t('批量收货')}}</el-button>
+          <el-button v-if="activeName === '0'" size="small" @click="BatchReceipt">{{$t('批量收货')}}</el-button>
+          <el-button v-if="activeName === '1'" size="small" @click="batchSign">{{$t('批量签收')}}</el-button>
+          <el-button v-if="activeName === '1'" size="small" @click="bacthDelivery">{{$t('批量出库')}}</el-button>
         </div>
-      </template> -->
+      </template>
     </el-table>
     <div class="noDate" v-else>{{$t('暂无数据')}}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -223,6 +232,7 @@ export default {
       show: false,
       labelId: '',
       deleteNum: [],
+      orderSnNum: [],
       countData: {},
       urlExcel: '',
       filterForm: {
@@ -339,21 +349,53 @@ export default {
     },
     // 快速收货
     fastReceipt () {
-      dialog({ type: 'fastReceipt', id: this.transferId }, () => {
+      dialog({ type: 'fastReceipt', id: this.transferId, state: 'add' }, () => {
+        this.getList()
+        this.getCounts()
+      })
+    },
+    // 批量收货
+    BatchReceipt () {
+      console.log(this.deleteNum, 'this.deleteNum')
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog({ type: 'fastReceipt', id: this.transferId, orderSnNum: this.orderSnNum, state: 'batch' }, () => {
         this.getList()
         this.getCounts()
       })
     },
     // 快速签收
     fastSign () {
-      dialog({ type: 'fastSign', id: this.transferId }, () => {
+      dialog({ type: 'fastSign', id: this.transferId, state: 'add' }, () => {
+        this.getList()
+        this.getCounts()
+      })
+    },
+    // 批量签收
+    batchSign () {
+      console.log(this.orderSnNum, 'orderSnNum')
+      if (!this.orderSnNum || !this.orderSnNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog({ type: 'fastSign', id: this.transferId, orderSnNum: this.orderSnNum, state: 'batch' }, () => {
         this.getList()
         this.getCounts()
       })
     },
     // 快速出库
     fastDelivery () {
-      dialog({ type: 'fastDelivery', id: this.transferId }, () => {
+      dialog({ type: 'fastDelivery', id: this.transferId, state: 'add' }, () => {
+        this.getList()
+        this.getCounts()
+      })
+    },
+    // 批量出库
+    bacthDelivery () {
+      if (!this.orderSnNum || !this.orderSnNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog({ type: 'fastDelivery', id: this.transferId, orderSnNum: this.orderSnNum, state: 'batch' }, () => {
         this.getList()
         this.getCounts()
       })
@@ -431,18 +473,12 @@ export default {
     },
     selectionChange (selection) {
       this.deleteNum = selection.map(item => (item.id))
+      this.orderSnNum = selection.map(item => (item.order_sn))
       console.log(this.deleteNum, 'this.deleteNum')
     },
     goExpress (orderSn) {
       console.log(orderSn, 'orderSn')
       this.$router.push({ name: 'tracking', query: { orderSn: orderSn } })
-    },
-    // 批量收货
-    discardPackage () {
-      console.log(this.deleteNum, 'this.deleteNum')
-      if (!this.deleteNum || !this.deleteNum.length) {
-        return this.$message.error(this.$t('请选择包裹'))
-      }
     },
     // 确认下载标签
     updateLabel () {
