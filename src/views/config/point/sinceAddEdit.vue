@@ -219,20 +219,12 @@ export default {
       hasStore: false,
       areas: [],
       citys: [],
-      rulesData: [
-        {
-          id: 1,
-          name: this.$t('每单固定金额')
-        },
-        {
-          id: 2,
-          name: this.$t('按重量或体积重量')
-        }
-      ]
+      rulesData: []
     }
   },
   created () {
     this.getWarehouse()
+    this.getRules()
     if (this.$route.params.id) {
       this.getList()
     }
@@ -327,6 +319,19 @@ export default {
       }).then(res => {
         this.lineData = res.data
         console.log(this.lineData, 'lineData')
+      })
+    },
+    // 获取计佣方式
+    getRules () {
+      this.$request.pickRules().then(res => {
+        if (res.ret) {
+          this.rulesData = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     confirmLines () {

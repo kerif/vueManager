@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增') : $t('编辑')"
-  class="edit-info-dialog" @close="clear" width="75%">
+  class="edit-info-dialog" @close="clear" width="85%">
     <el-form :model="form">
       <el-row :gutter="20">
         <el-col :span="13">
@@ -60,19 +60,19 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
-          <el-form-item :label="$t('首重') + currencyUnit">
+        <el-col :span="5">
+          <el-form-item :label="$t('首重') + weightUnit">
             <el-input class="input-sty" v-model="form.first_weight"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('续重') + currencyUnit">
+          <el-form-item :label="$t('续重') + weightUnit">
             <el-input class="input-sty" v-model="form.next_weight"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
-          <el-form-item :label="$t('首重佣金') + weightUnit">
+        <el-col :span="6">
+          <el-form-item :label="$t('首重佣金') + currencyUnit">
             <el-input class="input-sty" v-model="form.first_money"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('续重佣金') + weightUnit">
+          <el-form-item :label="$t('续重佣金') + currencyUnit">
             <el-input class="input-sty" v-model="form.next_money"></el-input>
           </el-form-item>
         </el-col>
