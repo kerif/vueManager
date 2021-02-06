@@ -514,8 +514,8 @@ export default {
       this.shipped_end && (params.shipped_end = this.shipped_end)
       this.$request.stationsUpload(params).then(res => {
         if (res.ret) {
-          this.urlExcel = res.data.url
-          window.open(this.urlExcel)
+          // this.urlExcel = res.data.url
+          // window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
