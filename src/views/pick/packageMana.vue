@@ -504,7 +504,8 @@ export default {
     // 导出清单
     uploadList (val) {
       let params = {
-        status: val
+        status: val,
+        XStationId: this.transferId
         // status: this.status,
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
