@@ -52,10 +52,10 @@
               <span>{{form.shipped_at}}</span>
             </el-col>
             <!-- 邮编 -->
-              <el-col :span="7" :offset="1">
+              <!-- <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('自提点到货时间')}}</span>
               <span>{{form.station_shipped_at}}</span>
-            </el-col>
+            </el-col> -->
           </el-row>
          <!-- <h3 class="change-sty">{{$t('费用信息')}}</h3> -->
          <!-- <el-row class="container-center" :gutter="20">
@@ -180,7 +180,7 @@
                 <img :src="form.sign_signature" alt="" class="goods-img">
                 <span class="model-box"></span>
                 <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(form.sign_signature)"></i>
+                  <!-- <i class="el-icon-zoom-in" @click="onPreview(form.sign_signature)"></i> -->
                   <!-- <i class="el-icon-delete" @click="onDeleteImg(index)"></i> -->
                 </span>
               </span>

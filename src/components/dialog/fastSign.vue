@@ -69,6 +69,13 @@
         prop="shipment_sn"
         :label="$t('所属发货单')">
       </el-table-column>
+      <!-- 付款状态 -->
+      <el-table-column
+        :label="$t('付款状态')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.on_delivery_status === 0 && scope.row.on_delivery_status === 2">{{('货到付款（未付款）')}}</span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column
         :label="$t('操作')"
