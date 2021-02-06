@@ -142,11 +142,11 @@
       <!-- 所属发货单 -->
       <el-table-column :label="$t('所属发货单')" prop="shipment_sn">
       </el-table-column>
-            <!-- 状态 -->
+       <!-- 状态 -->
       <el-table-column :label="$t('状态')" v-if="activeName === '2'">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 3">{{$t('直接出库')}}</span>
-          <span v-if="scope.row.status === 4">{{$t('自提签收')}}</span>
+          <span v-if="scope.row.station_status === 3">{{$t('直接出库')}}</span>
+          <span v-if="scope.row.station_status === 4">{{$t('自提签收')}}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
