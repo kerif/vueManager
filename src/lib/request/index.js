@@ -22,6 +22,10 @@ exports.getLines = (params) => {
 exports.deleteLines = (id) => {
   return $form.delete(`express-lines/${id}`)
 }
+// 配置 路线 添加物品属性
+exports.addPackageProps = (params) => {
+  return $form.post('package-props', params)
+}
 // 获取高级配置
 // exports.getSorting = (id) => {
 //   return $form.get(`orders/${id}/re-sorting`)
