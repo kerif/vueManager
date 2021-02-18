@@ -119,7 +119,7 @@
               <el-table-column :label="$t('重量') + `${localization.weight_unit ? localization.weight_unit : ''}`" prop="weight"></el-table-column>
               <el-table-column :label="$t('尺寸') + `${localization.length_unit ? localization.length_unit : ''}`">
                 <template slot-scope="scope">
-                  <span>{{scope.row.lenght}}</span>*
+                  <span>{{scope.row.length}}</span>*
                   <span>{{scope.row.weight}}</span>*
                   <span>{{scope.row.height}}</span>
                 </template>

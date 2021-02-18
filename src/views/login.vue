@@ -40,7 +40,7 @@
               </div> -->
             </el-form-item>
             <el-form-item>
-              <el-button class="login-btn" @click="onLogin">{{$t('登录')}}</el-button>
+              <el-button :loading="$store.state.btnLoading" class="login-btn" @click="onLogin">{{$t('登录')}}</el-button>
               <div class="forget-sty">
                 <span @click="changeWelcome(2)">{{$t('忘记密码')}}</span>
               </div>

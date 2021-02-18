@@ -454,28 +454,59 @@ export default {
     confirmSign () {
       this.sign.sign_images = this.goodsImgList.map(item => item.url)
       console.log(this.sign.sign_images, 'this.sign.sign_images')
-      this.$request.updatePhotosData(this.photoId, {
-        XStationId: this.id,
-        sign_images: this.sign.sign_images,
-        sign_remark: this.sign.sign_remark
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('成功'),
-            message: res.msg
+      if (this.form.on_delivery_status > 0 && this.form.on_delivery_status !== 2) {
+        this.$confirm(this.$t('该订单为货到付款订单（未付款），是否确认收款并签收'), this.$t('提示'), {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }).then(() => {
+          this.$request.updatePhotosData(this.photoId, {
+            XStationId: this.id,
+            sign_images: this.sign.sign_images,
+            sign_remark: this.sign.sign_remark
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('成功'),
+                message: res.msg
+              })
+              this.innerVisible = false
+              this.show = true
+              this.getUser()
+              // this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
           })
-          this.innerVisible = false
-          this.show = true
-          this.getUser()
-          // this.success()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+        })
+      } else {
+        this.$request.updatePhotosData(this.photoId, {
+          XStationId: this.id,
+          sign_images: this.sign.sign_images,
+          sign_remark: this.sign.sign_remark
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('成功'),
+              message: res.msg
+            })
+            this.innerVisible = false
+            this.show = true
+            this.getUser()
+            // this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
     },
     deleteRow (index, rows) {
       rows.splice(index, 1)
