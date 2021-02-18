@@ -26,7 +26,7 @@
             </el-form-item>
             <el-form-item>
               <el-col :span="12">
-                <el-input type="password" :placeholder="$t('请输入验证码')" prefix-icon="el-icon-unlock" v-model="userInfo.captcha" @keyup.native.enter="onLogin"></el-input>
+                <el-input type="text" :placeholder="$t('请输入验证码')" prefix-icon="el-icon-unlock" v-model="userInfo.captcha" @keyup.native.enter="onLogin"></el-input>
               </el-col>
               <el-col :span="11" :offset="1">
                <img :src="captha" @click="getCaptcha" class="captha-sty">
@@ -643,7 +643,7 @@ export default {
     text-align: center;
     padding: 10px 0;
     position: absolute;
-    bottom: 98px;
+    bottom: 30px;
     width: 100%;
     font-size: 14px;
     // background-color: #fff;
@@ -779,7 +779,7 @@ export default {
       }
     }
     p:last-child {
-      padding-bottom: 30px;
+      // padding-bottom: 30px;
       img {
         margin-left: 10px;
         transform: translateY(30%)
