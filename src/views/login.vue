@@ -643,7 +643,7 @@ export default {
     text-align: center;
     padding: 10px 0;
     position: absolute;
-    bottom: 30px;
+    bottom: 0;
     width: 100%;
     font-size: 14px;
     // background-color: #fff;
