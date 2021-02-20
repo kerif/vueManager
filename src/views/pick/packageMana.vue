@@ -261,6 +261,7 @@ export default {
       this.$request.packagePick().then(res => {
         if (res.ret) {
           this.options = res.data
+          this.XStationId = res.data[0].id
           this.transferId = res.data[0].id
           if (this.transferId) {
             this.getCounts()
