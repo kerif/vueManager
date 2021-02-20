@@ -82,6 +82,7 @@ import tariffEditAdd from './tariffEditAdd.vue'
 import stringAddEdit from './stringAddEdit.vue'
 import pickPoint from './pickPiont.vue'
 import addPackages from './addPackages.vue'
+import ottPay from './ottpay.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -164,6 +165,7 @@ const TariffController = Vue.extend(tariffEditAdd)
 const StringController = Vue.extend(stringAddEdit)
 const PickPiontController = Vue.extend(pickPoint)
 const AddPackagesController = Vue.extend(addPackages)
+const OttPayController = Vue.extend(ottPay)
 
 const mixin = {
   data () {
@@ -735,6 +737,13 @@ function initInstance (type) {
     // 订单列表 详情 添加包裹
     case 'addPackages':
       instance = new AddPackagesController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 支付配置 ottpay
+    case 'ottPay':
+      instance = new OttPayController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
