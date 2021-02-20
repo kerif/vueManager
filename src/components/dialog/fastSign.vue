@@ -91,7 +91,7 @@
       <!-- <el-button @click="show = false">{{$t('取消')}}</el-button> -->
       <el-button type="primary" @click="confirmShip">{{$t('确定签收')}}</el-button>
     </div>
-      <!-- 创建发货单 -->
+      <!-- 签收详情 -->
       <el-dialog :visible.sync="innerVisible" :title="$t('签收详情')" class="dialog-invoice"
       width="85%" @close="clear" append-to-body>
         <div class="receiverMSg msg-top">
@@ -228,7 +228,7 @@
               <el-table-column :label="$t('重量') + `${localization.weight_unit ? localization.weight_unit : ''}`" prop="weight"></el-table-column>
               <el-table-column :label="$t('尺寸') + `${localization.length_unit ? localization.length_unit : ''}`">
                 <template slot-scope="scope">
-                  <span>{{scope.row.lenght}}</span>*
+                  <span>{{scope.row.length}}</span>*
                   <span>{{scope.row.weight}}</span>*
                   <span>{{scope.row.height}}</span>
                 </template>

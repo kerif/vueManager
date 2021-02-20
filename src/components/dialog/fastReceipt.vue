@@ -79,7 +79,7 @@
       </el-table-column>
     </el-table>
     <p class="order-sty">{{$t('订单数')}}：{{tableLength}}</p>
-    <span>{{$t('已复核')}}：</span>
+    <span v-if="form.type === 1">{{$t('已复核')}}：{{chooseNum.length}}</span>
     <div slot="footer">
       <el-button type="primary" @click="confirm">{{$t('确定收货')}}</el-button>
     </div>
@@ -204,6 +204,7 @@ export default {
     clear () {
       this.page_params.page = 1
       this.form.sn = ''
+      this.orderNumber = ''
       this.tableData = []
     }
   }

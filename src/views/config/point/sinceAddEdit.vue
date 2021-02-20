@@ -234,14 +234,17 @@ export default {
     getList () {
       this.$request.getOneSelf(this.$route.params.id).then(res => {
         // const warehouses = res.data.warehouses.map(item => item.id)
-        this.form = res.data
+        // this.form = res.data
+        this.form.country_id = res.data.country_id
         this.form.name = res.data.name
         this.areaData = res.data.area_id ? [res.data.area_id, res.data.sub_area_id] : null
         // console.log(this.areaData111, 'areaData')
         // this.form.country_id = res.data.sub_area_id ? res.data.sub_area_id : res.data.country.id
         this.form.address = res.data.address
         this.form.contact_info = res.data.contactor
-        this.form.rule_id = res.data.rule_id
+        if (res.data.rule) {
+          this.form.rule_id = res.data.rule.id
+        }
         this.form.contactor = res.data.contact_info
         this.form.expressLines = res.data.expressLines.map(item => {
           return {
@@ -376,8 +379,6 @@ export default {
         return this.$message.error(this.$t('请输入自提点名称'))
       } else if (!this.form.country_id) {
         return this.$message.error(this.$t('请选择所属国家地区'))
-      } else if (this.form.country_id && !this.areaData.length) {
-        return this.$message.error(this.$t('请选择所属地区'))
       } else if (!this.form.address) {
         return this.$message.error(this.$t('请输入详细地址'))
       } else if (!this.form.contact_info) {
