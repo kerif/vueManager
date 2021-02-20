@@ -427,28 +427,42 @@ export default {
     },
     // 确认签收
     confirmShip () {
-      let dataId = this.tableData.map(item => item.id)
-      console.log(dataId, 'dataId')
-      this.$request.batchSign({
-        XStationId: this.id,
-        ids: dataId
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: '操作成功',
-            message: res.msg
-          })
-          this.show = false
-          this.success()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
+      let arr = this.tableData.map(item => {
+        return {
+          status: item.on_delivery_status
         }
-        this.show = false
       })
+      // this.user.services = this.updateProp
+      // .filter(item => item.checked)
+      // .map(item => {
+      //   return {
+      //     id: item.id,
+      //     price: item.price
+      //   }
+      // })
+      console.log(arr, 'arr')
+      // let dataId = this.tableData.map(item => item.id)
+      // console.log(dataId, 'dataId')
+      // this.$request.batchSign({
+      //   XStationId: this.id,
+      //   ids: dataId
+      // }).then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       type: 'success',
+      //       title: '操作成功',
+      //       message: res.msg
+      //     })
+      //     this.show = false
+      //     this.success()
+      //   } else {
+      //     this.$message({
+      //       message: res.msg,
+      //       type: 'error'
+      //     })
+      //   }
+      //   this.show = false
+      // })
     },
     // 确认创建发货单
     confirmSign () {
