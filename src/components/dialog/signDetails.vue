@@ -135,7 +135,7 @@
               <el-table-column :label="$t('重量') + `${localization.weight_unit ? localization.weight_unit : ''}`" prop="weight"></el-table-column>
               <el-table-column :label="$t('尺寸') + `${localization.length_unit ? localization.length_unit : ''}`">
                 <template slot-scope="scope">
-                  <span>{{scope.row.lenght}}</span>*
+                  <span>{{scope.row.length}}</span>*
                   <span>{{scope.row.weight}}</span>*
                   <span>{{scope.row.height}}</span>
                 </template>
@@ -295,27 +295,57 @@ export default {
     confirmSign () {
       this.sign.sign_images = this.goodsImgList.map(item => item.url)
       console.log(this.sign.sign_images, 'this.sign.sign_images')
-      this.$request.updatePhotosData(this.id, {
-        XStationId: this.transferId,
-        sign_images: this.sign.sign_images,
-        sign_remark: this.sign.sign_remark
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('成功'),
-            message: res.msg
+      if (this.form.on_delivery_status > 0 && this.form.on_delivery_status !== 2) {
+        this.$confirm(this.$t('该订单为货到付款订单（未付款），是否确认收款并签收'), this.$t('提示'), {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }).then(() => {
+          this.$request.updatePhotosData(this.id, {
+            XStationId: this.transferId,
+            sign_images: this.sign.sign_images,
+            sign_remark: this.sign.sign_remark
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            this.show = false
           })
+        })
+      } else {
+        this.$request.updatePhotosData(this.id, {
+          XStationId: this.transferId,
+          sign_images: this.sign.sign_images,
+          sign_remark: this.sign.sign_remark
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('成功'),
+              message: res.msg
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
           this.show = false
-          this.success()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-        this.show = false
-      })
+        })
+      }
     },
     clear () {
       this.sign.sign_images = ''

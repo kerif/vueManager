@@ -25,7 +25,7 @@
           </el-col>
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{$t('计佣方式')}}</span>
-            <!-- <span>{{111}}</span> -->
+            <span>{{form.rule && form.rule.name}}</span>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -40,7 +40,10 @@
           </el-col>
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{$t('计佣金额')}}</span>
-            <!-- <span>{{111}}</span> -->
+            <span v-if="form.rule && form.rule.type !== 2">{{localization.currency_unit}}{{form.rule && form.rule.amount}}</span>
+            <span v-if="form.rule && form.rule.type === 2">{{$t('首重')}}: {{form.rule && form.rule.first_weight}}{{localization.weight_unit}}/{{localization.currency_unit}}{{form.rule && form.rule.first_money}}
+              {{$t('续重')}}:{{form.rule && form.rule.next_weight}}{{localization.weight_unit}}/{{localization.currency_unit}}{{form.rule && form.rule.next_money}}
+            </span>
           </el-col>
         </el-row>
       </el-form>
