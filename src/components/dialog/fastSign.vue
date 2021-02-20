@@ -73,7 +73,7 @@
       <el-table-column
         :label="$t('付款状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.on_delivery_status === 0 && scope.row.on_delivery_status === 2">{{('货到付款（未付款）')}}</span>
+          <span v-if="scope.row.on_delivery_status > 0 && scope.row.on_delivery_status !== 2">{{('货到付款（未付款）')}}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -430,7 +430,7 @@ export default {
       let dataId = this.tableData.map(item => item.id)
       this.tableData.forEach(item => {
         if (item.on_delivery_status > 0 && item.on_delivery_status !== 2) {
-          this.$confirm(this.$t('该订单为货到付款订单（未付款），是否确认收款并签收'), this.$t('提示'), {
+          this.$confirm(this.$t(`该订单${item.order_sn}为货到付款订单（未付款），是否确认收款并签收`), this.$t('提示'), {
             confirmButtonText: this.$t('确定'),
             cancelButtonText: this.$t('取消'),
             type: 'warning'
