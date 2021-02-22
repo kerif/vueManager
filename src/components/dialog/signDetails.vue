@@ -136,7 +136,7 @@
               <el-table-column :label="$t('尺寸') + `${localization.length_unit ? localization.length_unit : ''}`">
                 <template slot-scope="scope">
                   <span>{{scope.row.length}}</span>*
-                  <span>{{scope.row.weight}}</span>*
+                  <span>{{scope.row.width}}</span>*
                   <span>{{scope.row.height}}</span>
                 </template>
               </el-table-column>
