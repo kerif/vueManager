@@ -196,7 +196,8 @@ export default {
                 id: item.id,
                 child: item.areas.map(item => ({
                   name: this.$t(item.name),
-                  id: item.id
+                  id: item.id,
+                  stations: item.stations
                 }))
               }
               ))
