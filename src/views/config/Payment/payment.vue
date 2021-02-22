@@ -23,7 +23,7 @@
             </el-table-column>
             <el-table-column :label="$t('配置')">
               <template slot-scope="scope">
-                <el-button v-if="scope.row.type === 1 || scope.row.type === 2 || scope.row.type === 4" class="btn-main" @click="configuration(scope.row.type, scope.row.name)">{{$t('配置')}}</el-button>
+                <el-button v-if="scope.row.type === 1 || scope.row.type === 2 || scope.row.type === 4 || scope.row.type === 5" class="btn-main" @click="configuration(scope.row.type, scope.row.name)">{{$t('配置')}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -2062,6 +2062,10 @@ export default {
         })
       } else if (type === 4) {
         dialog({ type: 'alipay' }, () => {
+          this.getWechat()
+        })
+      } else if (type === 5) {
+        dialog({ type: 'ottPay' }, () => {
           this.getWechat()
         })
       }

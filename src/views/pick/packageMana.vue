@@ -131,7 +131,11 @@
       <el-table-column :label="$t('发货时间')" prop="shipped_at">
       </el-table-column>
       <!-- 箱数 -->
-      <el-table-column :label="$t('箱数')" prop="box_count">
+      <el-table-column :label="$t('箱数')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.box_count > 0">{{scope.row.box_count}}</span>
+          <span v-else>{{scope.row.box_count}}</span>
+        </template>
       </el-table-column>
       <!-- 重量 -->
       <el-table-column :label="$t('重量') + `${localization ? localization.weight_unit : '' }`" prop="actual_weight">

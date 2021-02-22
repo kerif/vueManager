@@ -150,7 +150,7 @@ export default {
       console.log(type, 'paymentType')
       // type等于消费的时候 就要判断消费类型
       if (type === 1) {
-        if (paymentType === 0 || paymentType === 1 || paymentType === 6) {
+        if (paymentType === 0 || paymentType === 1 || paymentType === 6 || paymentType === 4 || paymentType === 7) {
           console.log('我是微信')
           this.$router.push({ name: 'wechatPay', query: { id: id } })
         } else {

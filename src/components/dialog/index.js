@@ -89,6 +89,7 @@ import commissionAddEdit from './commissionAddEdit.vue'
 import addPackages from './addPackages.vue'
 import signDetails from './signDetails.vue'
 import pickDetails from './pickDetails.vue'
+import ottPay from './ottpay.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -178,6 +179,7 @@ const CommissionAddEditController = Vue.extend(commissionAddEdit)
 const AddPackagesController = Vue.extend(addPackages)
 const SignDetailsController = Vue.extend(signDetails)
 const PickDetailsController = Vue.extend(pickDetails)
+const OttPayController = Vue.extend(ottPay)
 
 const mixin = {
   data () {
@@ -798,6 +800,13 @@ function initInstance (type) {
     // 自提点 签收详情
     case 'pickDetails':
       instance = new PickDetailsController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 支付配置 ottpay
+    case 'ottPay':
+      instance = new OttPayController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

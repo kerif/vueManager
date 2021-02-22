@@ -893,6 +893,14 @@ exports.getAlipay = () => {
 exports.updateAlipay = (params) => {
   return $form.put('payments/alipay', params)
 }
+// 获取ottpay支付
+exports.getOttPay = () => {
+  return $form.get('payments/ottpay')
+}
+// 更新ottpay支付
+exports.updateOttPay = (params) => {
+  return $form.put('payments/ottpay', params)
+}
 // 更改 微信支付
 exports.updatePaypal = (params) => {
   return $form.put('payments/paypal', params)
