@@ -16,7 +16,7 @@
       </search-group>
       </div>
     <div class="select-box">
-      <add-btn router="commissionSet">{{$t('计佣方式配置')}}</add-btn>
+      <!-- <add-btn router="commissionSet">{{$t('计佣方式配置')}}</add-btn> -->
       <add-btn router="pointAdd">{{$t('添加')}}</add-btn>
     </div>
     <div v-if="status === 1">
@@ -39,7 +39,7 @@
         </template>
       </el-table-column>
       <!-- 计佣方式 -->
-      <el-table-column :label="$t('计佣方式')" prop="contactor"></el-table-column>
+      <!-- <el-table-column :label="$t('计佣方式')" prop="contactor"></el-table-column> -->
       <el-table-column :label="$t('操作')" width="150px">
         <template slot-scope="scope">
           <!-- 编辑 -->
