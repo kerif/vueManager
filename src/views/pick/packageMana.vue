@@ -134,7 +134,7 @@
       <el-table-column :label="$t('箱数')">
         <template slot-scope="scope">
           <span v-if="scope.row.box_count > 0">{{scope.row.box_count}}</span>
-          <span v-else>{{scope.row.box_count}}</span>
+          <span v-else>1</span>
         </template>
       </el-table-column>
       <!-- 重量 -->
