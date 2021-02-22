@@ -133,7 +133,7 @@
           </el-col>
         </el-form-item>
       </div>
-      <!-- <el-form-item>
+      <el-form-item>
         <div>{{$t('计佣方式')}}</div>
         <el-row>
           <el-col :span="10">
@@ -151,7 +151,7 @@
             </el-select>
           </el-col>
         </el-row>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" class="sava-btn" :loading="$store.state.btnLoading" @click="saveLine">{{$t('保存')}}</el-button>
       </el-form-item>
@@ -224,7 +224,7 @@ export default {
   },
   created () {
     this.getWarehouse()
-    // this.getRules()
+    this.getRules()
     if (this.$route.params.id) {
       this.getList()
     }

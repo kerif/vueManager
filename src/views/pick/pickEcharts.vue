@@ -114,19 +114,37 @@
         <div class="charts-right" id="chartsFourth"></div>
       </div>
     </div> -->
-    <!-- <div class="echarts-bottom">
+    <div class="echarts-bottom">
       <h3>{{$t('佣金报表')}}</h3>
+      <el-date-picker
+          class="timeStyle"
+          v-model="pickingList"
+          type="daterange"
+          @change="onPick"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')">
+        </el-date-picker>
+        <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
+        <el-option :value="1" :label="$t('今天')"></el-option>
+        <el-option :value="7" :label="$t('近7天')"></el-option>
+        <el-option :value="30" :label="$t('近30天')"></el-option>
+      </el-select>
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" min-height="100">
         <el-table-column :label="$t('时间')" prop="days"></el-table-column>
-        <el-table-column :label="$t('全部')" prop="all"></el-table-column>
-        <el-table-column :label="$t('未入库')" prop="wait_receive"></el-table-column>
-        <el-table-column :label="$t('已入库')" prop="already_storage"></el-table-column>
-        <el-table-column :label="$t('已集包')" prop="packed"></el-table-column>
-        <el-table-column :label="$t('已发货')" prop="shipped"></el-table-column>
-        <el-table-column :label="$t('已收货')" prop="received"></el-table-column>
-        <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column>
+        <el-table-column :label="$t('完成订单数')" prop="all"></el-table-column>
+        <el-table-column :label="$t('佣金总数')" prop="wait_receive"></el-table-column>
+        <el-table-column :label="$t('结算状态')" prop="already_storage"></el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button @click="goDetails(scope.row.id)">{{$t('明细')}}</el-button>
+            <el-button>{{$t('确认佣金，申请结算')}}</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-    </div> -->
+    </div>
     <!-- <div class="echarts-bottom" v-if="unShow && checked">
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" min-height="100">
         <el-table-column :label="$t('合计')" prop="days"></el-table-column>
@@ -169,6 +187,7 @@
 
 <script>
 import echarts from 'echarts'
+import dialog from '@/components/dialog'
 // import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
@@ -675,6 +694,10 @@ export default {
           })
         }
       })
+    },
+    // 佣金明细
+    goDetails (id) {
+      dialog({ type: 'settlementDetails', id: id })
     }
   }
 }

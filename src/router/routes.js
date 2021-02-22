@@ -40,6 +40,10 @@ const balance = loadonDemand('finance/balance')
 const RechargeDetails = loadonDemand('finance/rechargeDetails')
 // 财务 财务概览
 const financeCharts = loadonDemand('finance/financeCharts')
+// 财务 自提点佣金结算
+const selfSettlement = loadonDemand('finance/selfSettlement')
+// 财务 自提点佣金结算 结算记录
+const recordDetails = loadonDemand('finance/recordDetails')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
@@ -1186,6 +1190,29 @@ export default [
               group: '财务',
               level: 2,
               name: '余额扣款处理'
+            }
+          },
+          {
+            path: '/finance/selfSettlement',
+            name: 'selfSettlement',
+            component: selfSettlement,
+            id: 705,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '自提点佣金结算'
+            }
+          },
+          {
+            path: '/finance/selfSettlement/recordDetails/:id',
+            name: 'recordDetails',
+            component: recordDetails,
+            id: 705,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '结算记录',
+              parent: '/finance/selfSettlement'
             }
           },
           {

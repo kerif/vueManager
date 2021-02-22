@@ -90,6 +90,7 @@ import addPackages from './addPackages.vue'
 import signDetails from './signDetails.vue'
 import pickDetails from './pickDetails.vue'
 import ottPay from './ottpay.vue'
+import settlementDetails from './settlementDetails.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -180,6 +181,7 @@ const AddPackagesController = Vue.extend(addPackages)
 const SignDetailsController = Vue.extend(signDetails)
 const PickDetailsController = Vue.extend(pickDetails)
 const OttPayController = Vue.extend(ottPay)
+const SettlementDetailsController = Vue.extend(settlementDetails)
 
 const mixin = {
   data () {
@@ -807,6 +809,13 @@ function initInstance (type) {
     // 更多配置 支付配置 ottpay
     case 'ottPay':
       instance = new OttPayController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自提点 自提点概览 佣金报表明细
+    case 'settlementDetails':
+      instance = new SettlementDetailsController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
