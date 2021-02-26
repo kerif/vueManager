@@ -4,25 +4,32 @@
       <search-group v-model="page_params.keyword" @search="goSearch">
       </search-group>
     </div> -->
-    <h2>{{$t('自提点结算记录')}}</h2>
+    <h2>{{this.$route.params.name}}{{$t('结算记录')}}</h2>
     <el-table :data="rechargeList" stripe border class="data-list"
     v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 时间 -->
-      <el-table-column :label="$t('时间')"></el-table-column>
+      <el-table-column :label="$t('时间')" prop="time"></el-table-column>
       <!-- 完成订单数 -->
-      <el-table-column :label="$t('完成订单数')">
+      <el-table-column :label="$t('完成订单数')" prop="order_count">
       </el-table-column>
       <!-- 佣金总数 -->
-      <el-table-column :label="$t('佣金总数')" prop="payment_type_name"> </el-table-column>
+      <el-table-column :label="$t('佣金金额') + this.localization.currency_unit" prop="amount"> </el-table-column>
       <!-- 结算状态 -->
-      <el-table-column :label="$t('结算状态') + this.localization.currency_unit" prop="amount"></el-table-column>
+      <el-table-column :label="$t('结算状态')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === 0">{{$t('未结算')}}</span>
+          <span v-if="scope.row.status === 1">{{$t('待提交')}}</span>
+          <span v-if="scope.row.status === 2">{{$t('审核中')}}</span>
+          <span v-if="scope.row.status === 3">{{$t('已完成')}}</span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
           <el-button class="btn-green optionBtn" @click="goDetails(scope.row.id)">{{$t('明细')}}</el-button>
-          <el-button class="btn-light-red optionBtn" @click="inviteWithdrawal(scope.row.id)">{{$t('审核并支付')}}</el-button>
-          <el-button class="btn-deep-purple optionBtn" @click="inviteWithdrawal(scope.row.id)">{{$t('查看支付详情')}}</el-button>
+          <el-button  v-if="scope.row.status === 2" class="btn-light-red optionBtn" @click="reviewPay(scope.row.id)">{{$t('审核并支付')}}</el-button>
+          <el-button v-if="scope.row.status === 3" class="btn-deep-purple optionBtn" @click="payDetails(scope.row.id)">{{$t('查看支付详情')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,29 +79,29 @@ export default {
   },
   created () {
     this.getList()
-    this.getTypes()
-    if (this.$route.query.serial_number) {
-      this.page_params.keyword = this.$route.query.serial_number
-    }
-    if (this.$route.query.times) {
-      this.timeList = this.$route.query.times.split(' ')
-      this.begin_date = this.timeList[0]
-      this.end_date = this.timeList[1]
-    }
+    // this.getTypes()
+    // if (this.$route.query.serial_number) {
+    //   this.page_params.keyword = this.$route.query.serial_number
+    // }
+    // if (this.$route.query.times) {
+    //   this.timeList = this.$route.query.times.split(' ')
+    //   this.begin_date = this.timeList[0]
+    //   this.end_date = this.timeList[1]
+    // }
   },
   methods: {
     getList () {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
-        size: this.page_params.size,
-        payment_type: this.type,
-        status: this.status
+        size: this.page_params.size
+        // payment_type: this.type,
+        // status: this.status
       }
-      this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      this.begin_date && (params.begin_date = this.begin_date)
-      this.end_date && (params.end_date = this.end_date)
-      this.$request.getRecharge(params).then(res => {
+      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // this.begin_date && (params.begin_date = this.begin_date)
+      // this.end_date && (params.end_date = this.end_date)
+      this.$request.commissionsRecords(this.$route.params.id, params).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.rechargeList = res.data
@@ -117,17 +124,20 @@ export default {
           id: id
         } })
     },
-    // 审核
-    inviteWithdrawal (id) {
-      this.$router.push({ name: 'rechargeReview',
-        params: {
-          id: id,
-          state: 'review'
-        } })
+    // 审核并支付
+    reviewPay (id) {
+      dialog({ type: 'selfReview', id: id }, () => {
+        this.getList()
+      })
+    },
+    // 查看支付详情
+    payDetails (id) {
+      // XStationId
+      dialog({ type: 'payDetails', id: id, state: 'pay' })
     },
     goDetails (id) {
       // settlementDetails
-      dialog({ type: 'settlementDetails', id: id })
+      dialog({ type: 'settlementDetails', state: 'pay', id: id, XStationId: this.$route.params.id })
     },
     onTime (val) {
       this.begin_date = val ? val[0] : ''

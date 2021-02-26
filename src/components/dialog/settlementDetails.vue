@@ -1,58 +1,61 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('结算明细')" class="dialog-add-packages"
   @close="clear" width="70%">
-    <div class="searchUser">
+    <!-- <div class="searchUser">
       <el-input :placeholder="$t('请输入关键字')" v-model="keyword" @keyup.enter.native="getList">
         <template slot="append">
           <span @click="getList" class="search-btn">{{$t('搜索')}}</span>
         </template>
       </el-input>
-    </div>
+    </div> -->
     <el-table
       :data="tableData"
       border
       style="width: 100%">
-      <el-table-column
-      type="selection"
-      width="55">
-      </el-table-column>
       <!-- 客户ID -->
       <el-table-column
         :label="$t('客户ID')">
         <template slot-scope="scope">
-          <span>{{scope.row.user_id}}-{{scope.row.user_name}}</span>
+          <span>{{scope.row.user_id}}</span>
         </template>
       </el-table-column>
       <!-- 订单号 -->
       <el-table-column
-        prop="express_num"
+        prop="order_sn"
         :label="$t('订单号')">
       </el-table-column>
       <!-- 物品名称 -->
       <el-table-column
-        prop="package_name"
+        prop="boxes_count"
         :label="$t('箱数')">
       </el-table-column>
       <!-- 物品价值 -->
       <el-table-column
-        prop="package_value"
-        :label="$t('重量')">
+        prop="weight"
+        :label="$t('重量') + `${localization.weight_unit ? localization.weight_unit : ''}`">
       </el-table-column>
       <el-table-column
         prop="package_value"
         :label="$t('尺寸/体积')">
+        <template slot-scope="scope">
+          <span>{{scope.row.length}}*{{scope.row.width}}*{{scope.row.height}}{{`${localization.length_unit ? localization.length_unit : ''}`}}/{{scope.row.volume}}</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="package_value"
+        prop="created_at"
         :label="$t('完成时间')">
       </el-table-column>
       <!-- 佣金 -->
       <el-table-column
-      :label="$t('佣金')">
+      prop="amount"
+      :label="$t('佣金') + `${localization.currency_unit ? localization.currency_unit : ''}`">
       </el-table-column>
     </el-table>
     <div class="pagination-box">
         <nle-pagination :pageParams="page_params"></nle-pagination>
+     </div>
+     <div>
+       <p>{{$t('合计')}}：{{tableData.length}}{{$t('个订单')}} {{$t('总佣金')}}{{`${localization.currency_unit ? localization.currency_unit : ''}`}}{{count}}</p>
      </div>
     <!-- <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
@@ -70,7 +73,10 @@ export default {
       keyword: '',
       chooseId: 0,
       lineNum: [],
-      id: ''
+      id: '',
+      XStationId: '',
+      localization: {},
+      count: ''
     }
   },
   components: {
@@ -78,9 +84,10 @@ export default {
   },
   mixins: [pagination],
   methods: {
-    getList () {
-      this.$request.getAddable(this.id, {
+    getPick () {
+      this.$request.recordDetails(this.id, {
         keyword: this.keyword,
+        XStationId: this.XStationId,
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {
@@ -88,6 +95,33 @@ export default {
           this.tableData = res.data
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.localization = res.localization
+          this.count = res.data.reduce((p, e) => p + e.amount, 0)
+          console.log(this.count, 'this.count')
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 自提点佣金结算 明细
+    getPay () {
+      this.$request.recordsDetails(this.id, {
+        keyword: this.keyword,
+        XStationId: this.XStationId,
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        if (res.ret) {
+          this.tableData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+          this.localization = res.localization
+          this.count = res.data.reduce((p, e) => p + e.amount, 0)
+          console.log(this.count, 'this.count')
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -129,7 +163,12 @@ export default {
       this.lineNum = []
     },
     init () {
-      this.getList()
+      if (this.state === 'pick') {
+        this.getPick()
+      } else if (this.state === 'pay') {
+        this.getPay()
+      }
+      // this.getList()
     }
   }
 }

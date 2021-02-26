@@ -43,34 +43,28 @@
     v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 自提点名称 -->
-      <el-table-column :label="$t('自提点名称')">
-        <template slot-scope="scope">
-          {{scope.row.user.id}}
-        </template>
+      <el-table-column :label="$t('自提点名称')" prop="name">
       </el-table-column>
       <!-- 所属国家/地区 -->
-      <el-table-column :label="$t('所属国家/地区')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{$t('待审核')}}</span>
-          <span v-if="scope.row.status === 1">{{$t('审核通过')}}</span>
-          <span v-if="scope.row.status === 2">{{$t('审核拒绝')}}</span>
-        </template>
+      <el-table-column :label="$t('所属国家/地区')" prop="country_name">
       </el-table-column>
       <!-- 联系人 -->
-      <el-table-column :label="$t('联系人')" prop="payment_type_name"> </el-table-column>
-      <!-- 支付方式 -->
-      <!-- <el-table-column label="支付方式">
-      </el-table-column> -->
+      <el-table-column :label="$t('联系人')" prop="contactor"> </el-table-column>
       <!-- 联系电话 -->
-      <el-table-column :label="$t('联系电话') + this.localization.currency_unit" prop="amount"></el-table-column>
+      <el-table-column :label="$t('联系电话')" prop="contact_info"></el-table-column>
       <!-- 计佣方式 -->
-      <el-table-column :label="$t('计佣方式') + this.localization.currency_unit" prop="confirm_amount"></el-table-column>
+      <el-table-column :label="$t('计佣方式')" prop="rule.name"></el-table-column>
       <!-- 计佣金额 -->
-      <el-table-column :label="$t('计佣金额')" prop="serial_no"></el-table-column>
+      <el-table-column :label="$t('计佣金额')+ `${localization.weight_unit ? localization.weight_unit : ''}`+ '/ '+ `${localization.currency_unit ? localization.currency_unit : ''}`">
+        <template slot-scope="scope">
+          <span>{{$t('首重')}}：{{scope.row.rule && scope.row.rule.first_weight}}/{{scope.row.rule && scope.row.rule.first_money}}</span>
+          <span>{{$t('续重')}}：{{scope.row.rule && scope.row.rule.next_weight}}/{{scope.row.rule && scope.row.rule.next_money}}</span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-green optionBtn" @click="recordDetails(scope.row.id)">{{$t('结算记录')}}</el-button>
+          <el-button class="btn-green optionBtn" @click="recordDetails(scope.row.id, scope.row.name)">{{$t('结算记录')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -120,29 +114,18 @@ export default {
   },
   created () {
     this.getList()
-    this.getTypes()
-    if (this.$route.query.serial_number) {
-      this.page_params.keyword = this.$route.query.serial_number
-    }
-    if (this.$route.query.times) {
-      this.timeList = this.$route.query.times.split(' ')
-      this.begin_date = this.timeList[0]
-      this.end_date = this.timeList[1]
-    }
   },
   methods: {
     getList () {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
-        size: this.page_params.size,
-        payment_type: this.type,
-        status: this.status
+        size: this.page_params.size
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      this.begin_date && (params.begin_date = this.begin_date)
-      this.end_date && (params.end_date = this.end_date)
-      this.$request.getRecharge(params).then(res => {
+      // this.begin_date && (params.begin_date = this.begin_date)
+      // this.end_date && (params.end_date = this.end_date)
+      this.$request.commissionsPick(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.rechargeList = res.data
@@ -166,10 +149,11 @@ export default {
         } })
     },
     // 结算记录
-    recordDetails (id) {
+    recordDetails (id, name) {
       this.$router.push({ name: 'recordDetails',
         params: {
-          id: id
+          id: id,
+          name: name
         } })
     },
     // 审核

@@ -127,61 +127,34 @@
           :start-placeholder="$t('开始日期')"
           :end-placeholder="$t('结束日期')">
         </el-date-picker>
-        <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
-        <el-option :value="1" :label="$t('今天')"></el-option>
-        <el-option :value="7" :label="$t('近7天')"></el-option>
-        <el-option :value="30" :label="$t('近30天')"></el-option>
+        <el-select v-model="status" @change="changeStatus" :placeholder="$t('请选择')" class="select-sty">
+        <el-option :value="0" :label="$t('未结算')"></el-option>
+        <el-option :value="1" :label="$t('待提交')"></el-option>
+        <el-option :value="2" :label="$t('审核中')"></el-option>
+        <el-option :value="3" :label="$t('已完成')"></el-option>
       </el-select>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" min-height="100">
-        <el-table-column :label="$t('时间')" prop="days"></el-table-column>
-        <el-table-column :label="$t('完成订单数')" prop="all"></el-table-column>
-        <el-table-column :label="$t('佣金总数')" prop="wait_receive"></el-table-column>
-        <el-table-column :label="$t('结算状态')" prop="already_storage"></el-table-column>
+      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" min-height="100">
+        <el-table-column :label="$t('时间')" prop="time"></el-table-column>
+        <el-table-column :label="$t('完成订单数')" prop="order_count"></el-table-column>
+        <el-table-column :label="$t('佣金总数')" prop="amount"></el-table-column>
+        <el-table-column :label="$t('结算状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">{{$t('未结算')}}</span>
+            <span v-if="scope.row.status === 1">{{$t('待提交')}}</span>
+            <span v-if="scope.row.status === 2">{{$t('审核中')}}</span>
+            <span v-if="scope.row.status === 3">{{$t('已完成')}}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button @click="goDetails(scope.row.id)">{{$t('明细')}}</el-button>
-            <el-button>{{$t('确认佣金，申请结算')}}</el-button>
+            <el-button v-if="scope.row.status === 0 || scope.row.status === 2" class="btn-purple" @click="goDetails(scope.row.id)">{{$t('明细')}}</el-button>
+            <el-button v-if="scope.row.status === 1" class="btn-blue-green" @click="sumbitSettlement(scope.row.id)">{{$t('提交结算')}}</el-button>
+            <!-- v-if="scope.row.status === 3" -->
+            <el-button v-if="scope.row.status === 3" class="btn-light-green" @click="payDetails(scope.row.id)">{{$t('支付详情')}}</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <!-- <div class="echarts-bottom" v-if="unShow && checked">
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" min-height="100">
-        <el-table-column :label="$t('合计')" prop="days"></el-table-column>
-        <el-table-column prop="total"></el-table-column>
-        <el-table-column prop="wait_receive"></el-table-column>
-        <el-table-column prop="already_storage"></el-table-column>
-        <el-table-column prop="packed"></el-table-column>
-        <el-table-column prop="shipped"></el-table-column>
-        <el-table-column prop="received"></el-table-column>
-        <el-table-column prop="invalid"></el-table-column>
-      </el-table>
-    </div> -->
-    <!-- <div class="echarts-bottom">
-      <h3>{{$t('订单统计')}}</h3>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="oderData" min-height="100" show-summary :summary-method="getSummaries">
-        <el-table-column :label="$t('时间')" prop="days"></el-table-column>
-        <el-table-column :label="$t('全部')" prop="total"></el-table-column>
-        <el-table-column :label="$t('待处理')" prop="wait_pack"></el-table-column>
-        <el-table-column :label="$t('待支付')" prop="wait_payment"></el-table-column>
-        <el-table-column :label="$t('待发货')" prop="wait_shipped"></el-table-column>
-        <el-table-column :label="$t('已发货')" prop="shipped"></el-table-column>
-        <el-table-column :label="$t('已签收')" prop="received"></el-table-column>
-        <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column>
-      </el-table>
-    </div>
-    <div class="echarts-bottom" v-if="unShow && checked">
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="orderCompare" min-height="100">
-        <el-table-column :label="$t('合计')" prop="days"></el-table-column>
-        <el-table-column prop="total"></el-table-column>
-        <el-table-column prop="wait_pack"></el-table-column>
-        <el-table-column prop="wait_payment"></el-table-column>
-        <el-table-column prop="wait_shipped"></el-table-column>
-        <el-table-column prop="shipped"></el-table-column>
-        <el-table-column prop="received"></el-table-column>
-        <el-table-column prop="invalid"></el-table-column>
-      </el-table>
-    </div> -->
   </div>
 </template>
 
@@ -223,7 +196,8 @@ export default {
       orderCompare: [],
       options: [],
       XStationId: '',
-      transferId: ''
+      transferId: '',
+      status: ''
     }
   },
   created () {
@@ -306,6 +280,7 @@ export default {
           this.transferId = res.data[0].id
           if (this.transferId) {
             this.getPie()
+            this.packageList()
           }
         }
       })
@@ -317,6 +292,7 @@ export default {
       if (this.XStationId) {
         this.transferId = this.XStationId
         this.getPie()
+        this.packageList()
       }
     },
     // 包裹饼图数据
@@ -578,7 +554,7 @@ export default {
       this.end = val ? val[1] : ''
       // this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin} ${this.end}`)
-      this.getPie()
+      this.packageList()
       // this.getColumnar()
       // this.getOrderPie()
       // this.getOrderColumnar()
@@ -592,50 +568,24 @@ export default {
       // this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.compare_begin} ${this.compare_end}`)
       this.comparePackage()
-      this.compareOrder()
     },
-    // 包裹订单对比
-    comparePackage () {
-      let params = {
-        days: this.days
-      }
-      this.begin && (params.begin = this.begin)
-      this.end && (params.end = this.end)
-      this.compare_begin && (params.compare_begin = this.compare_begin)
-      this.compare_end && (params.compare_end = this.compare_end)
-      this.$request.packageCompare(params).then(res => {
-        if (res.ret) {
-          this.packageCompare = res.data
-          this.unShow = true
-        }
-      })
+    // 佣金报表 筛选
+    changeStatus () {
+      this.page_params.handleQueryChange('status', this.status)
+      this.packageList()
     },
-    // 订单对比
-    compareOrder () {
-      let params = {
-        days: this.days
-      }
-      this.begin && (params.begin = this.begin)
-      this.end && (params.end = this.end)
-      this.compare_begin && (params.compare_begin = this.compare_begin)
-      this.compare_end && (params.compare_end = this.compare_end)
-      this.$request.orderCompare(params).then(res => {
-        if (res.ret) {
-          this.orderCompare = res.data
-          this.unShow = true
-        }
-      })
-    },
-    // 包裹列表
+    // 佣金报表数据
     packageList () {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
-        days: this.days
+        days: this.days,
+        status: this.status,
+        XStationId: this.transferId
       }
       this.begin && (params.begin = this.begin)
       this.end && (params.end = this.end)
-      this.$request.packageDaily(params).then(res => {
+      this.$request.commissionRecords(params).then(res => {
         if (res.ret) {
           this.packageData = res.data
           // this.page_params.page = res.meta.current_page
@@ -648,31 +598,30 @@ export default {
         }
       })
     },
-    getSummaries (param) {
-      const { columns, data } = param
-      const sums = []
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = '总计'
-          return
-        }
-        const values = data.map(item => Number(item[column.property]))
-        if (!values.every(value => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr)
-            if (!isNaN(value)) {
-              return prev + curr
-            } else {
-              return prev
-            }
-          }, 0)
-          // sums[index] += '个'
-        } else {
-          sums[index] = 'N/A'
-        }
-      })
-      return sums
-    },
+    // getSummaries (param) {
+    //   const { columns, data } = param
+    //   const sums = []
+    //   columns.forEach((column, index) => {
+    //     if (index === 0) {
+    //       sums[index] = '总计'
+    //       return
+    //     }
+    //     const values = data.map(item => Number(item[column.property]))
+    //     if (!values.every(value => isNaN(value))) {
+    //       sums[index] = values.reduce((prev, curr) => {
+    //         const value = Number(curr)
+    //         if (!isNaN(value)) {
+    //           return prev + curr
+    //         } else {
+    //           return prev
+    //         }
+    //       }, 0)
+    //     } else {
+    //       sums[index] = 'N/A'
+    //     }
+    //   })
+    //   return sums
+    // },
     // 订单列表
     orderList () {
       let params = {
@@ -697,7 +646,38 @@ export default {
     },
     // 佣金明细
     goDetails (id) {
-      dialog({ type: 'settlementDetails', id: id })
+      dialog({ type: 'settlementDetails', state: 'pick', id: id, XStationId: this.transferId })
+    },
+    // 提交结算
+    sumbitSettlement (id) {
+      this.$confirm(this.$t('您是否已确认佣金，申请结算吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.updateSettlement(id, {
+          XStationId: this.transferId
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.packageList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    // 支付详情
+    payDetails (id) {
+      dialog({ type: 'payDetails', id: id, state: 'pick', XStationId: this.transferId })
     }
   }
 }

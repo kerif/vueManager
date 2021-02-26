@@ -900,6 +900,40 @@ export default {
     if (this.$route.query.agent) {
       this.agent_name = Number(this.$route.query.agent)
     }
+    // 拣货日期筛选保留
+    if (this.$route.query.pickTimes) {
+      this.pickingList = this.$route.query.pickTimes.split(' ')
+      console.log(this.$route.query.pickTimes)
+      console.log(this.pickingList, 'this.pickingList ')
+      this.packed_begin_date = this.pickingList ? this.pickingList[0] : ''
+      this.packed_end_date = this.pickingList ? this.pickingList[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('pickTimes', `${this.packed_begin_date} ${this.packed_end_date}`)
+      this.getList()
+    }
+    // 签收时间筛选保留
+    if (this.$route.query.signTimes) {
+      this.signList = this.$route.query.signTimes.split(' ')
+      console.log(this.$route.query.signTimes)
+      console.log(this.signList, 'this.signList ')
+      this.updated_begin_date = this.signList ? this.signList[0] : ''
+      this.updated_end_date = this.signList ? this.signList[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('signTimes', `${this.updated_begin_date} ${this.updated_end_date}`)
+      this.getList()
+    }
+    // 提交日期时间筛选保留
+    // createdTimes
+    if (this.$route.query.createdTimes) {
+      this.timeList = this.$route.query.createdTimes.split(' ')
+      console.log(this.$route.query.createdTimes)
+      console.log(this.timeList, 'this.timeList ')
+      this.begin_date = this.timeList ? this.timeList[0] : ''
+      this.end_date = this.timeList ? this.timeList[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('createdTimes', `${this.begin_date} ${this.end_date}`)
+      this.getList()
+    }
     this.getAgentData()
     this.getPaymentType()
     this.getLineType()
@@ -1396,16 +1430,17 @@ export default {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
+      this.page_params.handleQueryChange('createdTimes', `${this.begin_date} ${this.end_date}`)
       this.getList()
       this.getCounts()
     },
     // 拣货时间
     onPick (val) {
+      console.log(val, 'val')
       this.packed_begin_date = val ? val[0] : ''
       this.packed_end_date = val ? val[1] : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.packed_begin_date} ${this.packed_end_date}`)
+      this.page_params.handleQueryChange('pickTimes', `${this.packed_begin_date} ${this.packed_end_date}`)
       this.getList()
     },
     // 签收时间
@@ -1413,17 +1448,18 @@ export default {
       this.updated_begin_date = val ? val[0] : ''
       this.updated_end_date = val ? val[1] : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.updated_begin_date} ${this.updated_end_date}`)
+      this.page_params.handleQueryChange('signTimes', `${this.updated_begin_date} ${this.updated_end_date}`)
       this.getList()
     },
     // 打包
     packed (id, orderSN, parent, activeName) {
-      console.log(parent, 'parent111')
-      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN, activeName: activeName, parent: parent } })
+      this.$router.push({ name: 'billPacked',
+        params: { id: id, order_sn: orderSN, activeName: activeName, parent: parent } })
     },
     // 详情
     details (id, activeName) {
-      this.$router.push({ name: 'billDetails', params: { id: id, activeName: activeName } })
+      this.$router.push({ name: 'billDetails',
+        params: { id: id, activeName: activeName } })
     },
     onSelectChange (selection) {
       this.selectIDs = selection.map(item => item.id)

@@ -324,6 +324,42 @@ exports.saveCountries = (id) => {
 exports.getTransaction = (params) => {
   return $form.get('transaction-records', { params })
 }
+// 财务 订单财务审核 退款审核
+exports.financesData = (params) => {
+  return $form.get('order-finances/refunds', { params })
+}
+// 财务 订单财务审核 退款详情
+exports.refundsData = (id) => {
+  return $form.get(`order-finances/refunds/${id}`)
+}
+// 财务 订单财务审核 支付审核
+exports.financesPayments = (params) => {
+  return $form.get('order-finances/payments', { params })
+}
+// 财务 订单财务审核 支付详情
+exports.payData = (id) => {
+  return $form.get(`order-finances/payments/${id}`)
+}
+// 财务 订单财务审核 支付审核 通过
+exports.approvedPay = (id, params) => {
+  return $form.put(`order-finances/payments/${id}/approved`, params)
+}
+// 财务 订单财务审核 支付审核 拒绝
+exports.refundPay = (id, params) => {
+  return $form.put(`order-finances/payments/${id}/refused`, params)
+}
+// 财务 订单财务审核 退款审核 通过
+exports.approvedRefunds = (id, params) => {
+  return $form.put(`order-finances/refunds/${id}/approved`, params)
+}
+// 财务 订单财务审核 退款审核 拒绝
+exports.refundRefunds = (id, params) => {
+  return $form.put(`order-finances/refunds/${id}/refused`, params)
+}
+// 财务 订单财务审核 获取支付方式数据
+exports.financesPaymentsType = () => {
+  return $form.get('order-finances/payments/payment-types')
+}
 // 流水记录 获取充值方式下拉框
 exports.getPaymentType = () => {
   return $form.get('transaction-records/payment-types')
@@ -331,6 +367,26 @@ exports.getPaymentType = () => {
 // 财务 充值记录
 exports.getRecharge = (params) => {
   return $form.get('recharge-records', { params })
+}
+// 财务 自提点佣金结算
+exports.commissionsPick = (params) => {
+  return $form.get('station-commissions', { params })
+}
+// 财务 自提点佣金结算 结算记录
+exports.commissionsRecords = (id, params) => {
+  return $form.get(`station-commissions/${id}/records`, { params })
+}
+// 自提点佣金结算 结算明细
+exports.recordsDetails = (id, params) => {
+  return $form.get(`station-commissions/records/${id}/commissions`, { params })
+}
+// 自提点佣金结算 审核并支付 获取当条数据
+exports.aloneRecordsDetails = (id, params) => {
+  return $form.get(`station-commissions/records/${id}`, { params })
+}
+// 自提点佣金结算 审核并支付 确认
+exports.verifyRecords = (id, params) => {
+  return $form.put(`station-commissions/records/${id}/verify`, params)
 }
 // 充值记录 详细
 exports.getRechargeDetails = (id) => {
@@ -2311,6 +2367,22 @@ export default exports
 // 自提点 转运包裹管理 获取自提点信息筛选
 exports.packagePick = () => {
   return $form.get('stations')
+}
+// 自提点 自提点概览 获取佣金报表
+exports.commissionRecords = (params) => {
+  return $form.get('station-statistics/commission-records', { params })
+}
+// 自提点 自提点概览 佣金报表 确认提交
+exports.updateSettlement = (id, params) => {
+  return $form.put(`station-statistics/commission-records/${id}/confirm`, params)
+}
+// 自提点 自提点概览 佣金报表 查看明细
+exports.recordDetails = (id, params) => {
+  return $form.get(`station-statistics/commission-records/${id}/commissions`, { params })
+}
+// 自提点 自提点概览 支付详情
+exports.pickRecordDetails = (id, params) => {
+  return $form.get(`station-statistics/commission-records/${id}`, { params })
 }
 // 转运包裹管理 获取tab数量
 exports.stationsCounts = (params) => {
