@@ -9,12 +9,16 @@
 <script>
 export default {
   props: {
-    router: String
+    router: String,
+    params: Object
   },
   methods: {
     clickMethod () {
       if (this.router) {
-        this.$router.push({ name: this.router })
+        if (this.params && this.params.add) {
+          localStorage.setItem('add', 1)
+        }
+        this.$router.push({ name: this.router, query: this.params })
       }
     }
   }
@@ -23,9 +27,9 @@ export default {
 <style lang="scss">
 @import '@/styles/communalVariate.scss';
 .add-btn-container {
-  background-color: $bg-btn;
+  background-color: #3540A5;
   border-radius: 6px;
-  color: $main-color;
+  color: #fff;
   line-height: 40px;
   padding: 0 10px;
   float: right;

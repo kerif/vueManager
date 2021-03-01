@@ -16,6 +16,7 @@ export default {
 </script>
 <style lang="scss">
 .dialog-preview {
+  z-index: 11000 !important;
   .preview-img {
     width: 100%;
   }

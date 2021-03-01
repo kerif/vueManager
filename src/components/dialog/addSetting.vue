@@ -1,43 +1,88 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? '新增' : '修改'" class="dialog-add-setting" width="35%"
+  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增') : $t('修改')" class="dialog-add-setting" width="55%"
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 支付类型名称 -->
-        <el-form-item label="*支付类型名称">
+        <el-form-item :label="$t('*支付类型名称')">
           <el-input v-model="ruleForm.name">
           </el-input>
         </el-form-item>
+        <!-- 收款姓名与账号 -->
+        <el-form-item :label="$t('收款姓名与账号')">
+          <el-input v-model="ruleForm.account">
+          </el-input>
+        </el-form-item>
         <!-- 备注 -->
-        <el-form-item label="备注">
+        <el-form-item :label="$t('备注')">
             <el-input type="textarea" v-model="ruleForm.remark"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
-        <el-form-item label="上传收款二维码" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-            <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+        <el-form-item :label="$t('上传收款二维码')" class="updateChe">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                 <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
             </span>
-          <el-upload
-            v-show="baleImgList.length < 1"
-            class="avatar-uploader"
-            action=""
-            list-type="picture-card"
-            :http-request="uploadBaleImg"
-            :show-file-list="false">
-            <i class="el-icon-plus">
-            </i>
-        </el-upload>
-    </el-form-item>
+            <el-upload
+              v-show="baleImgList.length < 1"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :http-request="uploadBaleImg"
+              :show-file-list="false">
+              <i class="el-icon-plus">
+              </i>
+          </el-upload>
+       </el-form-item>
+      <el-form-item>
+        <span>{{$t('结算时显示汇率转换后价格')}}</span>
+        <el-tooltip class="item code-sty" effect="dark" :content="$t('仅新增显示，方便审核收款与核对账目，不改变系统结算数据')" placement="top">
+        <span class="el-icon-question icon-info"></span>
+        </el-tooltip>
+        <el-switch
+          v-model="ruleForm.show_rate"
+          :active-text="$t('开')"
+          :active-value="1"
+          :inactive-value="0"
+          :inactive-text="$t('关')"
+          active-color="#13ce66"
+          inactive-color="gray">
+        </el-switch>
+      </el-form-item>
+      <el-form-item>
+        <span>{{$t('当前结算货币为')}}：</span>
+        <span>{{current}}</span>
+      </el-form-item>
+      <el-form-item :label="$t('汇率转换显示')">
+        <el-select v-model="ruleForm.currency" clearable placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.id"
+            :label="item.name"
+            :value="item.code">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-radio-group v-model="ruleForm.rate_type" @change="clearRate">
+          <el-radio :label="0" class="radio-sty">{{$t('获取实时汇率（以客户提交支付汇率为准）')}}</el-radio><br/>
+          <el-radio :label="1">{{$t('固定汇率')}}
+          </el-radio>
+        </el-radio-group>
+       </el-form-item>
+       <el-form-item v-if="ruleForm.rate_type === 1">
+        1{{current}}{{currentCode}} = &nbsp;
+        <el-input class="input-sty" v-model="ruleForm.rate" :placeholder="$t('请输入转换汇率')"></el-input>
+       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button :loading="$store.state.btnLoading" type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -49,19 +94,45 @@ export default {
       ruleForm: {
         name: '',
         remark: '',
+        account: '',
+        show_rate: 0,
+        currency: '',
+        rate: '',
+        rate_type: 0,
         qr_code: []
       },
       state: '',
+      current: '',
+      currentCode: '',
+      options: [],
+      value: '',
       tranAmount: '',
       baleImgList: []
     }
   },
   methods: {
+    // 获取汇率列表
+    getRate () {
+      this.$request.getAllRate().then(res => {
+        if (res.ret) {
+          this.options = res.data
+        }
+      })
+    },
+    // 获取当前结算货币
+    getCurrent () {
+      this.$request.currencyPayment().then(res => {
+        if (res.ret) {
+          this.current = res.data.name
+          this.currentCode = res.data.code
+        }
+      })
+    },
     getList () {
       this.$request.editPayments(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
-          res.data.qr_code && (this.baleImgList[0] = { url: res.data.qr_code })
+          res.data.qr_code && (this.baleImgList[0] = res.data.qr_code)
         } else {
           this.$message({
             message: res.msg,
@@ -71,22 +142,25 @@ export default {
       })
     },
     confirm () {
+      // console.log(this.ruleForm.show_rate, 'ruleForm.show_rate')
       if (this.baleImgList[0]) {
-        this.ruleForm.qr_code = this.baleImgList[0].url
+        this.ruleForm.qr_code = this.baleImgList[0]
       } else {
         this.ruleForm.qr_code = []
       }
       if (!this.ruleForm.name) {
-        return this.$message.error('请输入支付类型名称')
+        return this.$message.error(this.$t('请输入支付类型名称'))
       } else if (!this.ruleForm.remark && !this.baleImgList[0]) {
-        return this.$message.error('请输入备注')
+        return this.$message.error(this.$t('请输入备注'))
+      } else if (this.ruleForm.rate_type === 1 && !this.ruleForm.rate) {
+        return this.$message.error(this.$t('请输入转换汇率'))
       }
       if (this.state === 'add') {
         this.$request.addPayments(this.ruleForm).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '成功',
+              title: this.$t('成功'),
               message: res.msg
             })
             this.show = false
@@ -104,7 +178,7 @@ export default {
           if (res.ret) {
             this.$notify({
               type: 'success',
-              title: '成功',
+              title: this.$t('成功'),
               message: res.msg
             })
             this.show = false
@@ -126,10 +200,7 @@ export default {
         console.log(res)
         if (res.ret) {
           res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.baleImgList.push(item.path)
           })
         } else {
           this.$message({
@@ -156,14 +227,27 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
+    clearRate () {
+      if (this.ruleForm.rate_type === 0) {
+        this.ruleForm.rate = ''
+      }
+    },
     clear () {
       this.ruleForm.name = ''
       this.ruleForm.remark = ''
       this.baleImgList = []
       this.ruleForm.qr_code = []
+      this.ruleForm.account = ''
+      this.ruleForm.show_rate = 0
+      this.ruleForm.currency = ''
+      this.ruleForm.currentCode = ''
+      this.ruleForm.rate = ''
+      this.ruleForm.rate_type = 0
     },
     init () {
       console.log(this.id, '我是接受id')
+      this.getRate()
+      this.getCurrent()
       if (this.state === 'edit') {
         this.getList()
       }
@@ -249,6 +333,21 @@ export default {
 
   .el-dialog__close {
     color: #FFF;
+  }
+  .code-sty {
+    padding-right: 10px;
+  }
+  .input-sty {
+    width: 35% !important;
+    // .el-input {
+    // }
+    display: inline-block;
+    .el-input__inner {
+      // width: 30%;
+    }
+  }
+  .radio-sty {
+    margin-bottom: 12px;
   }
 }
 </style>

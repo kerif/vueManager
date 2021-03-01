@@ -1,11 +1,11 @@
 <template>
   <div class="picking-list-container">
-    <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"></search-group>
+    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group>
       <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
         <!-- 入库日志 -->
-        <el-tab-pane label="入库日志" name="1"></el-tab-pane>
+        <el-tab-pane :label="$t('入库日志')" name="1"></el-tab-pane>
         <!-- 拣货日志 -->
-        <el-tab-pane label="拣货日志" name="2"></el-tab-pane>
+        <el-tab-pane :label="$t('拣货日志')" name="2"></el-tab-pane>
     </el-tabs>
    <el-table class="data-list" border stripe
    v-if="oderData.length"
@@ -13,28 +13,28 @@
       :data="oderData">
       <!-- 操作人 -->
      <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="操作人" prop="operator"></el-table-column>
+      <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
       <!-- 操作时间 -->
-      <el-table-column label="操作时间" prop="created_at"></el-table-column>
+      <el-table-column :label="$t('操作时间')" prop="created_at"></el-table-column>
       <!-- 快递单号 -->
-      <el-table-column label="快递单号" prop="express_num" v-if="activeName === '1'"></el-table-column>
+      <el-table-column :label="$t('快递单号')" prop="express_num" v-if="activeName === '1'"></el-table-column>
       <!-- 订单号 -->
-      <el-table-column label="订单号" v-if="activeName === '2'" prop="order_sn"></el-table-column>
+      <el-table-column :label="$t('订单号')" v-if="activeName === '2'" prop="order_sn"></el-table-column>
       <!-- 重量kg -->
       <el-table-column :label="'重量' + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 长宽高cm -->
-      <el-table-column :label="'长宽高' + this.localization.length_unit" prop="dimension"></el-table-column>
+      <el-table-column :label="$t('长宽高') + this.localization.length_unit" prop="dimension"></el-table-column>
       <!-- 备注 -->
-      <el-table-column label="备注" prop="remark"></el-table-column>
+      <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
       <!-- 物品属性 -->
-      <el-table-column label="物品属性" v-if="activeName === '1'" prop="props"></el-table-column>
+      <el-table-column :label="$t('物品属性')" v-if="activeName === '1'" prop="props"></el-table-column>
       <!-- 打包图片 -->
-      <el-table-column label="打包图片" v-if="activeName === '2'" prop="pictures">
+      <el-table-column :label="$t('打包图片')" v-if="activeName === '2'" prop="pictures">
         <template slot-scope="scope">
           <span v-for="item in scope.row.pictures"
           :key="item.id" style="cursor:pointer;"
-          @click.stop="imgSrc=item.full_path, imgVisible=true">
-           <img :src="item.full_path" style="width: 40px; margin-right: 5px;">
+          @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
+           <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
           </span>
         </template>
       </el-table-column>
@@ -44,7 +44,7 @@
         </div>
       </template> -->
     </el-table>
-    <div v-else class="noDate">暂无数据</div>
+    <div v-else class="noDate">{{$t('暂无数据')}}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -67,7 +67,7 @@ export default {
   name: 'pickList',
   data () {
     return {
-      activeName: '',
+      activeName: '1',
       oderData: [],
       imgVisible: false,
       imgSrc: '',
@@ -114,7 +114,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -138,7 +138,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -147,7 +147,12 @@ export default {
     }
   },
   created () {
-    this.activeName = '1'
+    if (this.$route.query.active) {
+      this.activeName = this.$route.query.active
+    }
+    if (this.$route.query.keyword) {
+      this.page_params.keyword = this.$route.query.keyword
+    }
   },
   mounted () {
     this.getList()
@@ -165,10 +170,6 @@ export default {
     .imgDialog{
       width: 50%;
     }
-  }
-  .noDate {
-    text-align: center;
-    color: #ccc;
   }
 }
 </style>

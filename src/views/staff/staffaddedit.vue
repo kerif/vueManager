@@ -7,32 +7,32 @@
           <!-- 用户名 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="用户名" prop="username">
-                <el-input v-model="user.username" placeholder="请输入用户名"></el-input>
+              <el-form-item :label="$t('用户名')" prop="username">
+                <el-input v-model="user.username" :placeholder="$t('请输入用户名')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 密码 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="密码" prop="password" v-if="!this.$route.params.id">
-                <el-input v-model="user.password"  type="password" placeholder="请输入密码"></el-input>
+              <el-form-item :label="this.$t('密码')" prop="password" v-if="!this.$route.params.id">
+                <el-input v-model="user.password"  type="password" :placeholder="$t('请输入密码')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 邮箱 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="邮箱" prop="email">
-                <el-input v-model="user.email" placeholder="请输入邮箱"></el-input>
+              <el-form-item :label="$t('邮箱')" prop="email">
+                <el-input v-model="user.email" :placeholder="$t('请输入邮箱')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 员工组 -->
            <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="员工组" prop="group_id" class="employ">
-                <el-select v-model="user.group_id" placeholder="请选择员工组" clearable>
+              <el-form-item :label="$t('员工组')" prop="group_id" class="employ">
+                <el-select v-model="user.group_id" :placeholder="$t('请选择员工组')" clearable>
                   <el-option
                     v-for="item in employeeGroup"
                     :key="item.id"
@@ -49,25 +49,25 @@
           <!-- 姓名 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="姓名" prop="name">
-                <el-input v-model="user.name" placeholder="请输入姓名"></el-input>
+              <el-form-item :label="$t('姓名')" prop="name">
+                <el-input v-model="user.name" :placeholder="$t('请输入姓名')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 确认密码 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="确认密码" prop="confirm_password"
+              <el-form-item :label="$t('确认密码')" prop="confirm_password"
                v-if="!this.$route.params.id">
-                <el-input v-model="user.confirm_password" type="password" placeholder="请再次输入密码"></el-input>
+                <el-input v-model="user.confirm_password" type="password" :placeholder="$t('请再次输入密码')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 联系电话 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="联系电话" prop="phone">
-                <el-input v-model="user.phone" placeholder="请输入联系电话"></el-input>
+              <el-form-item :label="$t('联系电话')" prop="phone">
+                <el-input v-model="user.phone" :placeholder="$t('请输入联系电话')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -76,7 +76,7 @@
     </el-row>
     <div class="btn_box">
       <el-button type="primary" @click="update('params')" :loading="$store.state.btnLoading">
-        保存
+        {{$t('保存')}}
         </el-button>
       </div>
   </div>
@@ -98,28 +98,28 @@ export default {
       employeeGroup: [],
       rules: { // 必填项校验
         username: [
-          { required: true, message: '请输入用户名', trigger: 'change' }
+          { required: true, message: this.$t('请输入用户名'), trigger: 'change' }
         ],
         name: [
-          { required: true, message: '请输入姓名', trigger: 'change' }
+          { required: true, message: this.$t('请输入姓名'), trigger: 'change' }
         ],
         email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          { required: true, message: this.$t('请输入邮箱'), trigger: 'blur' },
+          { type: 'email', message: this.$t('请输入正确的邮箱地址'), trigger: ['blur', 'change'] }
         ],
         phone: [
-          { required: true, message: '请输入电话号码', trigger: 'change' }
+          { required: true, message: this.$t('请输入电话号码'), trigger: 'change' }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 8, max: 32, message: '长度在 8 到 20 个字符', trigger: 'change' }
+          { required: true, message: this.$t('请输入密码'), trigger: 'blur' },
+          { min: 8, max: 32, message: this.$t('长度在 8 到 20 个字符'), trigger: 'change' }
         ],
         confirm_password: [
           { required: true, validator: validatePass2, trigger: 'blur' },
-          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'change' }
+          { min: 8, max: 20, message: this.$t('长度在 8 到 20 个字符'), trigger: 'change' }
         ],
         group: [
-          { required: true, message: '请输入员工组', trigger: 'change' }
+          { required: true, message: this.$t('请输入员工组'), trigger: 'change' }
         ]
       },
       user: {
@@ -172,7 +172,7 @@ export default {
             this.$request.editAdmins(this.$route.params.id, this.user).then((res) => {
               if (res.ret) {
                 this.$notify({
-                  title: '成功操作',
+                  title: this.$t('成功操作'),
                   message: res.msg,
                   type: 'success'
                 })
@@ -180,7 +180,7 @@ export default {
                 this.$router.go(-1)
               } else {
                 this.$notify({
-                  title: '操作失败',
+                  title: this.$t('操作失败'),
                   message: res.msg,
                   type: 'warning'
                 })
@@ -196,14 +196,14 @@ export default {
             this.$request.saveVip(this.user).then((res) => {
               if (res.ret) {
                 this.$notify({
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.tips,
                   type: 'success'
                 })
                 this.$router.push({ name: 'stafflist' })
               } else {
                 this.$notify({
-                  title: '操作失败',
+                  title: this.$t('操作失败'),
                   message: res.msg,
                   type: 'warning'
                 })
@@ -222,7 +222,7 @@ export default {
 @import '../../styles/commonality.scss';
   .staff-add-container {
     min-height: 67vh;
-    background-color: $white;
+    background-color: #fff !important;
     padding: 1em 3em;
     .title_box{
       text-align: right;

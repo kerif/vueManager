@@ -2,12 +2,12 @@
   <div class="pagination-container">
     <el-pagination
       background
-      prev-text="上一页"
-      next-text="下一页"
+      :prev-text="$t('上一页')"
+      :next-text="$t('下一页')"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageParams.page"
-      :page-sizes="[10, 20, 30]"
+      :page-sizes="[10, 20, 30, 50, 100, 200, 300]"
       :page-size="pageParams.size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="pageParams.total">
@@ -63,6 +63,11 @@ export default {
   text-align: right;
   .btn-prev, .btn-next {
     padding: 0 10px !important;
+  }
+  .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #f5f5f5;
+    color: black;
+    border: 1px solid #3540A5;
   }
 }
 </style>

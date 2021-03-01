@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'invite' ? '邀请记录' : '卡券包'" class="dialog-invite" width="70%" @close="clear">
+  <el-dialog :visible.sync="show" :title="state === 'invite' ? $t('邀请记录') : $t('卡券包')" class="dialog-invite" width="70%" @close="clear">
     <el-table v-if="state === 'invite'"
       class="data-list"
       :data="tableData"
@@ -10,21 +10,21 @@
       <!-- 客户ID -->
       <el-table-column
         prop="id"
-        label="客户ID">
+        :label="$t('客户ID')">
       </el-table-column>
       <!-- 客户昵称 -->
         <el-table-column
         prop="name"
-        label="客户昵称">
+        :label="$t('客户昵称')">
       </el-table-column>
         <el-table-column
         prop="created_at"
-        label="注册时间">
+        :label="$t('注册时间')">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
         prop="last_login_at"
-        label="最后登录时间">
+        :label="$t('最后登录时间')">
       </el-table-column>
     </el-table>
     <!-- 卡券包 -->
@@ -33,32 +33,32 @@
         </el-table-column>
         <el-table-column
         prop="name"
-        label="券名称">
+        :label="$t('券名称')">
       </el-table-column>
         <el-table-column
         prop="code"
-        label="券码">
+        :label="$t('券码')">
       </el-table-column>
         <el-table-column
         prop="amount"
-        label="金额">
+        :label="$t('金额')">
       </el-table-column>
         <el-table-column
         prop="status"
-        label="状态">
+        :label="$t('状态')">
         </el-table-column>
         <el-table-column
         prop="created_at"
-        label="发放时间">
+        :label="$t('发放时间')">
       </el-table-column>
       <el-table-column
         prop="used_at"
-        label="使用时间">
+        :label="$t('使用时间')">
       </el-table-column>
       <el-table-column label="操作">
       <template slot-scope="scope">
         <!-- 作废 -->
-        <el-button class="btn-light-red" v-if="scope.row.status === '进行中'" @click="failCoupon(scope.row.id)">作废</el-button>
+        <el-button class="btn-light-red" v-if="scope.row.usable === true" @click="failCoupon(scope.row.id)">{{$t('作废')}}</el-button>
       </template>
       </el-table-column>
     </el-table>
@@ -101,22 +101,22 @@ export default {
     // 作废优惠券
     failCoupon (id) {
       this.show = false
-      this.$confirm('确定要作废优惠券吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('确定要作废优惠券吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteCoupons(this.id, id).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.success()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

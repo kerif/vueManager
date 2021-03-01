@@ -1,27 +1,26 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'edit' ? '修改客户组' : '添加客户组'" class="dialog-vip"
-  size="small" @close="clear">
+  <el-dialog :visible.sync="show" :title="state === 'edit' ? $t('修改客户组') : $t('添加客户组')" class="dialog-vip" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <!-- 员工组中文名 -->
-        <el-form-item label="客户组中文名" prop="name_cn">
+        <el-form-item :label="$t('客户组中文名')" prop="name_cn">
           <el-input v-model="ruleForm.name_cn"
-          placeholder="请输入客户组中文名"></el-input>
+          :placeholder="$t('请输入客户组中文名')"></el-input>
           </el-form-item>
         <!-- 员工组英文名 -->
-          <el-form-item label="客户组英文名" prop="name_en">
+          <el-form-item :label="$t('客户组英文名')" prop="name_en">
           <el-input v-model="ruleForm.name_en"
-          placeholder="请输入客户组英文名"></el-input>
+          :placeholder="$t('请输入客户组英文名')"></el-input>
           </el-form-item>
         <!-- 用户组描述 -->
-          <el-form-item label="客户组描述">
+          <el-form-item :label="$t('客户组描述')">
           <el-input type="textarea" v-model="ruleForm.description"
           :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入客户组描述"></el-input>
+          :placeholder="$t('请输入客户组描述')"></el-input>
           </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -37,10 +36,10 @@ export default {
       state: '',
       rules: {
         name_cn: [
-          { required: true, message: '请输入客户组中文名', trigger: 'blur' }
+          { required: true, message: this.$t('请输入客户组中文名'), trigger: 'blur' }
         ],
         name_en: [
-          { required: true, message: '请输入客户组英文名', trigger: 'blur' }
+          { required: true, message: this.$t('请输入客户组英文名'), trigger: 'blur' }
         ]
       }
     }
@@ -54,7 +53,7 @@ export default {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.msg
                 })
                 this.show = false
@@ -72,7 +71,7 @@ export default {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.msg
                 })
                 this.show = false

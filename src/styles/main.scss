@@ -11,6 +11,9 @@ body,
 html {
   min-height: 100vh;
 }
+body {
+  overflow-x: hidden;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -18,8 +21,19 @@ html {
 }
 
 .data-list {
-  margin: 35px 0;
+  margin: 15px 0;
 }
+
+.noDate {
+  margin: 20px 0;
+  text-align: center;
+  color: #ccc;
+}
+
+// .content-style {
+//   padding: 0 20px;
+//   min-height: calc(100vh - 170px);
+// }
 
 .append-box {
   margin: 15px;
@@ -33,6 +47,7 @@ html {
   .el-dialog__header {
     background-color: #0E102A;
   }
+
   .el-dialog__title {
     font-size: 14px;
     color: #FFF;
