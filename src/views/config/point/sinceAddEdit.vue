@@ -382,9 +382,9 @@ export default {
       } else if (!this.form.address) {
         return this.$message.error(this.$t('请输入详细地址'))
       } else if (!this.form.contact_info) {
-        return this.$message.error(this.$t('请输入联系人'))
-      } else if (!this.form.contactor) {
         return this.$message.error(this.$t('请输入联系电话'))
+      } else if (!this.form.contactor) {
+        return this.$message.error(this.$t('请输入联系人'))
       }
       console.log(this.form.expressLines, 'form.expressLines')
       if (this.$route.params.id) { // 编辑状态
