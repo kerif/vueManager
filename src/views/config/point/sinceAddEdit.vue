@@ -241,11 +241,11 @@ export default {
         // console.log(this.areaData111, 'areaData')
         // this.form.country_id = res.data.sub_area_id ? res.data.sub_area_id : res.data.country.id
         this.form.address = res.data.address
-        this.form.contact_info = res.data.contactor
+        this.form.contactor = res.data.contactor
         if (res.data.rule) {
           this.form.rule_id = res.data.rule.id
         }
-        this.form.contactor = res.data.contact_info
+        this.form.contact_info = res.data.contact_info
         this.form.expressLines = res.data.expressLines.map(item => {
           return {
             name: item.name,
@@ -382,9 +382,9 @@ export default {
       } else if (!this.form.address) {
         return this.$message.error(this.$t('请输入详细地址'))
       } else if (!this.form.contact_info) {
-        return this.$message.error(this.$t('请输入联系人'))
-      } else if (!this.form.contactor) {
         return this.$message.error(this.$t('请输入联系电话'))
+      } else if (!this.form.contactor) {
+        return this.$message.error(this.$t('请输入联系人'))
       }
       console.log(this.form.expressLines, 'form.expressLines')
       if (this.$route.params.id) { // 编辑状态

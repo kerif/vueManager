@@ -489,23 +489,23 @@
               </el-input>
             </el-form-item>
             <!-- 网站ID -->
-            <el-form-item :label="$t('*网站ID')">
+            <el-form-item :label="$t('网站ID')">
               <el-input v-model="setForm.app_id">
               </el-input>
             </el-form-item>
-             <el-form-item :label="$t('*备案号')">
+             <el-form-item :label="$t('备案号')">
               <el-input v-model="setForm.icp">
               </el-input>
             </el-form-item>
-            <el-form-item :label="$t('*网站Secret')">
+            <el-form-item :label="$t('网站Secret')">
               <el-input v-model="setForm.secret">
               </el-input>
             </el-form-item>
-            <el-form-item label="*token">
+            <el-form-item label="token">
               <el-input v-model="setForm.token">
               </el-input>
             </el-form-item>
-            <el-form-item label="*aes_key">
+            <el-form-item label="aes_key">
               <el-input v-model="setForm.aes_key">
               </el-input>
             </el-form-item>
@@ -541,7 +541,7 @@
               <el-button slot="reference" @click="goOauth">{{$t('配置')}}</el-button>
             </el-popover>
             </el-form-item>
-            <el-form-item :label="$t('*小程序码')" class="updateChe">
+            <el-form-item :label="$t('小程序码')" class="updateChe">
                 <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -562,7 +562,7 @@
               </el-upload>
             </el-form-item>
             <!-- pc端客服二维码 -->
-            <el-form-item :label="$t('*pc端客服二维码')" class="updateChe">
+            <el-form-item :label="$t('pc端客服二维码')" class="updateChe">
                 <span class="img-item" v-for="(item, index) in customerList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -583,7 +583,7 @@
             </el-upload>
             </el-form-item>
             <!-- LOGO -->
-            <el-form-item label="*LOGO" class="updateChe">
+            <el-form-item label="LOGO" class="updateChe">
                 <span class="img-item" v-for="(item, index) in LogoImgList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -604,7 +604,7 @@
               </el-upload>
             </el-form-item>
             <!-- 登录页背景图 -->
-            <el-form-item :label="$t('*登录页背景图')" class="updateChe">
+            <el-form-item :label="$t('登录页背景图')" class="updateChe">
                 <span class="img-item" v-for="(item, index) in bgList" :key="index">
                 <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
                 <span class="model-box"></span>
@@ -2116,24 +2116,6 @@ export default {
       }
       if (!this.setForm.website_name) {
         return this.$message.error(this.$t('请输入网站名称'))
-      } else if (!this.baleImgList[0]) {
-        return this.$message.error(this.$t('请上传小程序码'))
-      } else if (!this.customerList[0]) {
-        return this.$message.error(this.$t('请上传pc端客户二维码'))
-      } else if (!this.setForm.secret) {
-        return this.$message.error(this.$t('请输入网站Secret'))
-      } else if (!this.setForm.app_id) {
-        return this.$message.error(this.$t('请输入网站ID'))
-      } else if (!this.setForm.icp) {
-        return this.$message.error(this.$t('请输入备案号'))
-      } else if (!this.setForm.token) {
-        return this.$message.error(this.$t('请输入token'))
-      } else if (!this.setForm.aes_key) {
-        return this.$message.error(this.$t('请输入aes_key'))
-      } else if (!this.LogoImgList[0]) {
-        return this.$message.error(this.$t('请上传logo图'))
-      } else if (!this.bgList[0]) {
-        return this.$message.error(this.$t('请上传登录页背景图'))
       }
       console.log(this.setForm.pc_website_url.split(','))
       this.$request.editWebsite({ ...this.setForm, pc_website_url: this.setForm.pc_website_url.split(',') }).then(res => {
