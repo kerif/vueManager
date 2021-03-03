@@ -98,6 +98,7 @@ export default {
       ruleForm: {
         refund_amount: 0,
         invalid_reason: '',
+        refund_method: '',
         images: [],
         invalid_package_ids: [],
         should_return_wechat: 0,
