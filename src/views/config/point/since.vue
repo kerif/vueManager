@@ -16,7 +16,7 @@
       </search-group>
       </div>
     <div class="select-box">
-      <!-- <add-btn router="commissionSet">{{$t('计佣方式配置')}}</add-btn> -->
+      <add-btn router="commissionSet">{{$t('计佣方式配置')}}</add-btn>
       <add-btn router="pointAdd">{{$t('添加')}}</add-btn>
     </div>
     <div v-if="status === 1">
