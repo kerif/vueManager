@@ -127,7 +127,7 @@
           :start-placeholder="$t('开始日期')"
           :end-placeholder="$t('结束日期')">
         </el-date-picker>
-        <el-select v-model="status" @change="changeStatus" :placeholder="$t('请选择')" class="select-sty">
+        <el-select clearable v-model="status" @change="changeStatus" :placeholder="$t('请选择')" class="select-sty">
         <el-option :value="0" :label="$t('未结算')"></el-option>
         <el-option :value="1" :label="$t('待提交')"></el-option>
         <el-option :value="2" :label="$t('审核中')"></el-option>
@@ -277,6 +277,7 @@ export default {
       this.$request.packagePick().then(res => {
         if (res.ret) {
           this.options = res.data
+          this.XStationId = res.data[0].id
           this.transferId = res.data[0].id
           if (this.transferId) {
             this.getPie()
