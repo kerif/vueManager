@@ -18,13 +18,8 @@
           </el-input>
         </el-form-item>
         <!-- 材质 -->
-        <el-form-item :label="$t('材质')">
+        <el-form-item :label="$t('材质') + this.currencyUnit">
           <el-input v-model="ruleForm.material">
-          </el-input>
-        </el-form-item>
-        <!-- 货品单价 -->
-        <el-form-item :label="$t('*货品单价') + this.currencyUnit">
-          <el-input v-model="ruleForm.unit_price">
           </el-input>
         </el-form-item>
         <!-- 品牌 -->
@@ -33,9 +28,16 @@
           </el-input>
         </el-form-item>
         <!-- 规格 -->
-        <el-form-item :label="$t('规格')">
+        <el-form-item :label="$t('规格') + this.currencyUnit">
           <el-input v-model="ruleForm.spec">
           </el-input>
+        </el-form-item>
+        <!-- 货品状态 -->
+        <el-form-item :label="$t('*货品状态')" class="service-style">
+          <el-radio-group v-model="ruleForm.status">
+            <el-radio v-for="item in updateProp" :key="item.id" :label="item.id">{{item.name}}
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
         <!-- 照片 -->
         <el-form-item :label="$t('照片')" class="updateChe">
@@ -79,9 +81,9 @@ export default {
     return {
       ruleForm: {
         unit_price: '',
+        material: '',
         brand: '',
         spec: '',
-        material: '',
         name: '',
         remark: '',
         status: '',
@@ -215,10 +217,10 @@ export default {
     },
     clear () {
       this.ruleForm.unit_price = ''
-      this.ruleForm.brand = ''
-      this.ruleForm.spec = ''
       this.ruleForm.material = ''
       this.ruleForm.qty = ''
+      this.ruleForm.brand = ''
+      this.ruleForm.spec = ''
       this.ruleForm.name = ''
       this.ruleForm.status = ''
       this.ruleForm.remark = ''
