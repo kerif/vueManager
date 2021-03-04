@@ -763,6 +763,7 @@
       <div class="excel-date">
         <el-radio :label="1" v-model="uploadRadio">{{$t('导出清单（含包裹信息）')}}</el-radio>
         <el-radio :label="2" v-model="uploadRadio">{{$t('导出清单')}}</el-radio>
+        <el-radio :label="3" v-model="uploadRadio">{{$t('美中国际定制')}}</el-radio>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogPackages = false" class="cancel-btn">{{$t('取消')}}</el-button>
@@ -1109,6 +1110,27 @@ export default {
         this.$request.orderExport({
           ...this.paramsData,
           type: 1
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.dialogPackages = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.uploadRadio === 3) {
+        this.$request.orderExport({
+          ...this.paramsData,
+          type: 2
         }).then(res => {
           if (res.ret) {
             this.$notify({
