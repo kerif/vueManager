@@ -1,6 +1,6 @@
 <template>
   <div class="since-add-container">
-    <el-form label-position="top" :model="form" ref="form">
+    <el-form :model="form" ref="form">
       <el-form-item>
         <el-row>
           <el-col :span="10">
@@ -87,11 +87,27 @@
       <!-- 详细地址 -->
       <el-form-item>
         <div>{{$t('*详细地址')}}</div>
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="10">
             <el-input v-model="form.address" :placeholder="$t('请输入')"></el-input>
           </el-col>
+          <el-col :span="5" v-if="form.area_id">
+            <el-button type="primary" plain @click="onShowLocation">{{$t('地图选点')}}</el-button>
+          </el-col>
         </el-row>
+      </el-form-item>
+      <el-form-item v-show="isLocation">
+        <el-row :gutter="20">
+          <el-col :span="5">
+            <div>{{$t('经度')}}</div>
+            <el-input v-model="lng" disabled></el-input>
+          </el-col>
+          <el-col :span="5">
+            <div>{{$t('纬度')}}</div>
+            <el-input v-model="lat" disabled></el-input>
+          </el-col>
+        </el-row>
+        <div id="map" class="map-box"></div>
       </el-form-item>
       <!-- 联系人 -->
       <el-form-item>
@@ -183,6 +199,7 @@
   </div>
 </template>
 <script>
+import BMap from 'BMap'
 export default {
   data () {
     return {
@@ -219,17 +236,79 @@ export default {
       hasStore: false,
       areas: [],
       citys: [],
-      rulesData: []
+      rulesData: [],
+      isLocation: false,
+      map: null,
+      lng: '', // 经度
+      lat: '' // 纬度
     }
   },
   created () {
     this.getWarehouse()
     // this.getRules()
+  },
+  mounted () {
+    this.initMap()
     if (this.$route.params.id) {
       this.getList()
     }
   },
   methods: {
+    // 初始化地图信息
+    initMap () {
+      const map = new BMap.Map('map')
+      let point = new BMap.Point(116.404, 39.915)
+      map.setDefaultCursor('crosshair')
+      map.enableScrollWheelZoom(true)
+      map.centerAndZoom(point, 15)
+      map.addControl(new BMap.NavigationControl())
+      let marker = new BMap.Marker(point)
+      map.addOverlay(marker)
+      this.map = map
+      this.map.addEventListener('click', this.onPoint)
+    },
+    // 选取地图上的点
+    onPoint (e) {
+      this.map.clearOverlays()
+      this.lng = e.point.lng
+      this.lat = e.point.lat
+      let point = new BMap.Point(this.lng, this.lat)
+      let marker = new BMap.Marker(point)
+      this.map.addOverlay(marker)
+    },
+    // 根据客户填写地址标点
+    onShowLocation () {
+      let topArea = ''
+      let subArea = ''
+      if (this.areaData && this.areaData.length) {
+        this.newWarehouseList.forEach(item => {
+          if (item.value === this.areaData[0]) {
+            topArea = item.label
+            item.children.forEach(ele => {
+              if (ele.value === this.areaData[1]) {
+                subArea = ele.label
+              }
+            })
+          }
+        })
+      }
+      const address = `${topArea}${subArea}${this.form.address}`
+      const geo = new BMap.Geocoder()
+      const _this = this
+      _this.isLocation = true
+      geo.getPoint(address, function (point) {
+        if (point) {
+          _this.lng = point.lng
+          _this.lat = point.lat
+          _this.map.clearOverlays()
+          _this.map.addOverlay(new BMap.Marker(point))
+          _this.map.panTo(point)
+          _this.map.setZoom(18)
+        } else {
+          _this.$message.error(_this.$t('查询不到相应地址'))
+        }
+      })
+    },
     // 编辑时拉取的数据
     getList () {
       this.$request.getOneSelf(this.$route.params.id).then(res => {
@@ -237,7 +316,11 @@ export default {
         // this.form = res.data
         this.form.country_id = res.data.country_id
         this.form.name = res.data.name
-        this.areaData = res.data.area_id ? [res.data.area_id, res.data.sub_area_id] : null
+        if (res.data.area_id) {
+          this.areaData = [res.data.area_id, res.data.sub_area_id]
+          this.form.area_id = res.data.area_id
+          this.form.sub_area_id = res.data.sub_area_id
+        }
         // console.log(this.areaData111, 'areaData')
         // this.form.country_id = res.data.sub_area_id ? res.data.sub_area_id : res.data.country.id
         this.form.address = res.data.address
@@ -368,7 +451,6 @@ export default {
       // this.form.country_id = this.areaData[0]
       this.form.area_id = this.areaData[0]
       this.form.sub_area_id = this.areaData[1]
-      console.log(value, 'value')
       // console.log(this.form.area_id, 'form.area_id')
       // console.log(this.form.sub_area_id, 'form.sub_area_id')
     },
@@ -386,10 +468,11 @@ export default {
       } else if (!this.form.contactor) {
         return this.$message.error(this.$t('请输入联系人'))
       }
-      console.log(this.form.expressLines, 'form.expressLines')
       if (this.$route.params.id) { // 编辑状态
         this.$request.updateOneSelf(this.$route.params.id, {
-          ...this.form
+          ...this.form,
+          lon: this.lng,
+          lat: this.lat
         }).then(res => {
           if (res.ret) {
             this.$notify({
@@ -408,7 +491,9 @@ export default {
         })
       } else { // 新建状态
         this.$request.addSelf({
-          ...this.form
+          ...this.form,
+          lon: this.lng,
+          lat: this.lat
         }).then(res => {
           if (res.ret) {
             this.$notify({
@@ -435,6 +520,11 @@ export default {
   background-color: #fff !important;
   .country-select {
     width: 100%;
+  }
+  .map-box {
+    width: 100%;
+    height: 400px;
+    margin-top: 15px;
   }
   .sava-btn {
     min-width: 100px;
