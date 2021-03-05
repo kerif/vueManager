@@ -1417,7 +1417,12 @@ export default {
     },
     // 跳转到审核
     reviewPackage (id) {
-      this.$router.push({ name: 'review', query: { id: id, state: 'review' } })
+      // this.$router.push({ name: 'review', query: { id: id, state: 'review' } })
+      this.$router.push({ name: 'reviewFinance',
+        params: {
+          id: id,
+          state: 'pay'
+        } })
     },
     // 待支付 编辑打包数据
     editPacked (id, activeName, parent) {

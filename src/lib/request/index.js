@@ -719,6 +719,10 @@ exports.editAffiliation = (id, warehouseId) => {
 exports.getInvoice = () => {
   return $form.get('orders/shipments')
 }
+// 获取全部发货单支持的仓库数据
+exports.getShipWarehouse = () => {
+  return $form.get('warehouse-address/all')
+}
 // 发货单 获取添加物流信息详情
 exports.aloneShipmentsDetails = (id) => {
   return $form.get(`shipments/${id}/logistics-info`)
