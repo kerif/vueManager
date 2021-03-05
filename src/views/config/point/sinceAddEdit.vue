@@ -245,14 +245,10 @@ export default {
   },
   created () {
     this.getWarehouse()
-<<<<<<< HEAD
-    this.getRules()
-=======
     // this.getRules()
   },
   mounted () {
     this.initMap()
->>>>>>> 009f2bcb40a3f8417474a7d09fcf97dc59380a16
     if (this.$route.params.id) {
       this.getList()
     }
