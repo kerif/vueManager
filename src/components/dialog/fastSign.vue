@@ -329,7 +329,8 @@ export default {
       },
       photoId: '',
       orderSnNum: [],
-      state: ''
+      state: '',
+      strArr: []
     }
   },
   methods: {
@@ -428,35 +429,32 @@ export default {
     // 确认签收
     confirmShip () {
       let dataId = this.tableData.map(item => item.id)
-      this.tableData.forEach(item => {
-        if (item.on_delivery_status > 0 && item.on_delivery_status !== 2) {
-          this.$confirm(this.$t(`该订单${item.order_sn}为货到付款订单（未付款），是否确认收款并签收`), this.$t('提示'), {
-            confirmButtonText: this.$t('确定'),
-            cancelButtonText: this.$t('取消'),
-            type: 'warning'
-          }).then(() => {
-            this.$request.batchSign({
-              XStationId: this.id,
-              ids: dataId
-            }).then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: '操作成功',
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
+      this.strArr = this.tableData.filter(item => item.on_delivery_status > 0 && item.on_delivery_status !== 2).map(item => item.order_sn)
+      this.$confirm(this.$t(`该订单${this.strArr.toString()}为货到付款订单（未付款），是否确认收款并签收`), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.batchSign({
+          XStationId: this.id,
+          ids: dataId
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: '操作成功',
+              message: res.msg
             })
-          })
-        }
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+          this.show = false
+        })
       })
       // let dataId = this.tableData.map(item => item.id)
       // console.log(dataId, 'dataId')
