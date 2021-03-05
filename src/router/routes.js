@@ -1013,7 +1013,7 @@ export default [
             }
           },
           {
-            path: '/config/point/edit',
+            path: '/config/point/edit/:id',
             name: 'pointEdit',
             component: sinceAddEdit,
             id: 605,
