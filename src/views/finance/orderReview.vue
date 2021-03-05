@@ -220,7 +220,7 @@ export default {
       this.handleQueryChange('size', this.page_params.size)
       this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
-      this.getCounts()
+      // this.getCounts()
     },
     getList () {
       this.tableLoading = true
