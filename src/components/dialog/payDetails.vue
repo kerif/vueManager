@@ -54,10 +54,10 @@
           </el-input>
         </el-form-item>
     </el-form>
-    <div slot="footer">
+    <!-- <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
       <el-button :loading="$store.state.btnLoading" type="primary" @click="confirm">{{$t('确定')}}</el-button>
-    </div>
+    </div> -->
   </el-dialog>
 </template>
 <script>

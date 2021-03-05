@@ -16,7 +16,7 @@
             :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
         <!-- 退款方式 -->
-        <el-form-item :label="$t('退款方式')" v-if="state === 'reject' && name === 'refund'">
+        <el-form-item :label="$t('退款方式')" v-if="state === 'pass' && name === 'refund'">
           <el-select class="input-sty" v-model="ruleForm.refund_type" placeholder="请选择">
             <el-option
               v-for="item in options"
@@ -150,7 +150,10 @@ export default {
         } else { // 退款审核或拒绝
           if (this.state === 'pass') {
             console.log(this.state, 'state 333')
-            this.$request.approvedRefunds(this.id, this.ruleForm).then(res => {
+            this.$request.approvedRefunds(this.id, {
+              refund_amount: this.ruleForm.pay_amount,
+              ...this.ruleForm
+            }).then(res => {
               if (res.ret) {
                 this.$notify({
                   type: 'success',

@@ -430,7 +430,7 @@ export default {
     confirmShip () {
       let dataId = this.tableData.map(item => item.id)
       this.strArr = this.tableData.filter(item => item.on_delivery_status > 0 && item.on_delivery_status !== 2).map(item => item.order_sn)
-      if (!this.strArr.length) {
+      if (this.strArr.length) {
         this.$confirm(this.$t(`该订单${this.strArr.toString()}为货到付款订单（未付款），是否确认收款并签收`), this.$t('提示'), {
           confirmButtonText: this.$t('确定'),
           cancelButtonText: this.$t('取消'),
@@ -485,28 +485,6 @@ export default {
           })
         })
       }
-      // let dataId = this.tableData.map(item => item.id)
-      // console.log(dataId, 'dataId')
-      // this.$request.batchSign({
-      //   XStationId: this.id,
-      //   ids: dataId
-      // }).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       type: 'success',
-      //       title: '操作成功',
-      //       message: res.msg
-      //     })
-      //     this.show = false
-      //     this.success()
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      //   this.show = false
-      // })
     },
     // 确认创建发货单
     confirmSign () {
