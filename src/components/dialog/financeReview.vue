@@ -5,7 +5,7 @@
     label-position="top">
         <!-- 支付金额 -->
         <el-form-item :label="$t('*支付金额')" v-if="state === 'pass'">
-          <el-input v-model="ruleForm.pay_amount" :disabled="!!this.$route.query.id">
+          <el-input v-model="ruleForm.pay_amount" :disabled="!!this.$route.params.id">
             <template slot="append">{{this.localization.currency_unit}}</template>
           </el-input>
         </el-form-item>

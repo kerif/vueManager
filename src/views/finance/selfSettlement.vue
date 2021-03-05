@@ -55,10 +55,13 @@
       <!-- 计佣方式 -->
       <el-table-column :label="$t('计佣方式')" prop="rule.name"></el-table-column>
       <!-- 计佣金额 -->
-      <el-table-column :label="$t('计佣金额')+ `${localization.weight_unit ? localization.weight_unit : ''}`+ '/ '+ `${localization.currency_unit ? localization.currency_unit : ''}`">
+      <el-table-column :label="$t('计佣金额')">
         <template slot-scope="scope">
-          <span>{{$t('首重')}}：{{scope.row.rule && scope.row.rule.first_weight}}/{{scope.row.rule && scope.row.rule.first_money}}</span>
-          <span>{{$t('续重')}}：{{scope.row.rule && scope.row.rule.next_weight}}/{{scope.row.rule && scope.row.rule.next_money}}</span>
+          <span v-if="scope.row.rule.type === 1">{{localization.currency_unit ? localization.currency_unit : ''}}{{scope.row.rule.amount}}</span>
+          <div v-if="scope.row.rule.type ===2">
+            <span>{{$t('首重')}}：{{localization.currency_unit ? localization.currency_unit : ''}}{{scope.row.rule && scope.row.rule.first_money}}/{{scope.row.rule && scope.row.rule.first_weight}}{{localization.weight_unit ? localization.weight_unit : ''}}</span><br>
+            <span>{{$t('续重')}}：{{localization.currency_unit ? localization.currency_unit : ''}}{{scope.row.rule && scope.row.rule.next_money}}/{{scope.row.rule && scope.row.rule.next_weight}}{{localization.weight_unit ? localization.weight_unit : ''}}</span>
+          </div>
         </template>
       </el-table-column>
       <!-- 操作 -->

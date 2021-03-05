@@ -84,6 +84,13 @@ export default {
   },
   mixins: [pagination],
   methods: {
+    getList () {
+      if (this.state === 'pick') {
+        this.getPick()
+      } else if (this.state === 'pay') {
+        this.getPay()
+      }
+    },
     getPick () {
       this.$request.recordDetails(this.id, {
         keyword: this.keyword,
@@ -163,12 +170,7 @@ export default {
       this.lineNum = []
     },
     init () {
-      if (this.state === 'pick') {
-        this.getPick()
-      } else if (this.state === 'pay') {
-        this.getPay()
-      }
-      // this.getList()
+      this.getList()
     }
   }
 }

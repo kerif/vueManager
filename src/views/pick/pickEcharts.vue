@@ -147,7 +147,7 @@
         </el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status === 0 || scope.row.status === 2" class="btn-purple" @click="goDetails(scope.row.id)">{{$t('明细')}}</el-button>
+            <el-button class="btn-purple" @click="goDetails(scope.row.id)">{{$t('明细')}}</el-button>
             <el-button v-if="scope.row.status === 1" class="btn-blue-green" @click="sumbitSettlement(scope.row.id)">{{$t('提交结算')}}</el-button>
             <!-- v-if="scope.row.status === 3" -->
             <el-button v-if="scope.row.status === 3" class="btn-light-green" @click="payDetails(scope.row.id)">{{$t('支付详情')}}</el-button>

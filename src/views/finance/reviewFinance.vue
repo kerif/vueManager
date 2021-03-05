@@ -72,7 +72,7 @@
           <p class="transfer-right">{{$t('关联单号')}}</p>
           <span>{{form.order_sn}}</span><br/>
           <p class="transfer-right">{{$t('实际支付金额')}}</p>
-          <span>{{form.confirm_amount}}</span><br/>
+          <span>{{form.payment_amount}}</span><br/>
           <p class="transfer-right">{{$t('退款金额') + this.localization.currency_unit}}</p>
           <span>{{form.refund_amount}}</span><br/>
           <p class="transfer-right">{{$t('退款方式')}}</p>
@@ -84,11 +84,11 @@
             <span>{{form.refund_method}}</span><br/>
           </div>
           <p class="transfer-right">{{$t('备注')}}</p>
-          <span>{{form.remark}}</span><br/>
+          <span>{{form.refund_remark}}</span><br/>
         </el-col>
         <el-col :span="9" :offset="1">
           <p>{{$t('备注截图')}}</p>
-          <span v-for="item in form.images"
+          <span v-for="item in form.refund_images"
           :key="item.id" style="cursor:pointer;"
             @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
               <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px;">
@@ -100,7 +100,8 @@
       <el-button type="danger" @click="reviewReject">{{$t('审核拒绝')}}</el-button>
       <el-button type="primary" @click="reviewPass">{{$t('审核通过')}}</el-button>
     </div>
-    <div class="pay-message receiverMSg" v-if="form.status === 1">
+    <!-- 支付审核通过信息 -->
+    <div class="pay-message receiverMSg" v-if="this.$route.params.state === 'pay' && form.status === 1">
       <h4>{{$t('审核通过信息')}}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
@@ -115,8 +116,8 @@
         </el-col>
       </el-row>
     </div>
-    <!-- 审核拒绝信息 -->
-    <div class="pay-message receiverMSg" v-if="form.status === 2">
+    <!-- 支付审核拒绝信息 -->
+    <div class="pay-message receiverMSg" v-if="this.$route.params.state === 'pay' && form.status === 2">
       <h4>{{$t('审核拒绝信息')}}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
@@ -127,7 +128,47 @@
            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" style="cursor:pointer;"
            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
          </div>
-          <!-- <span>{{form.customer_images}}</span><br/> -->
+        </el-col>
+      </el-row>
+    </div>
+    <!-- 退款审核通过信息 -->
+    <div class="pay-message receiverMSg" v-if="this.$route.params.state === 'refund' && form.status === 1">
+      <h4>{{$t('审核通过信息')}}</h4>
+      <el-row :gutter="20">
+        <el-col :span="9">
+          <p class="transfer-right">{{'确认支付金额' + this.localization.currency_unit}}</p>
+          <span>{{form.confirm_amount}}</span><br/>
+          <p class="transfer-right">{{$t('备注')}}</p>
+          <span>{{form.remark}}</span><br/>
+          <p class="transfer-right">{{$t('上传图片')}}</p>
+          <div class="left-img">
+            <span v-for="item in form.images"
+            :key="item.id" style="cursor:pointer;"
+              @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
+                <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px;">
+            </span>
+            <!-- <img :src="`${$baseUrl.IMAGE_URL}${item}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true" style="cursor:pointer;"> -->
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- 退款审核拒绝信息 -->
+    <div class="pay-message receiverMSg" v-if="this.$route.params.state === 'refund' && form.status === 2">
+      <h4>{{$t('审核拒绝信息')}}</h4>
+      <el-row :gutter="20">
+        <el-col :span="9">
+          <p class="transfer-right">{{$t('备注')}}</p>
+          <span>{{form.remark}}</span><br/>
+          <p class="transfer-right">{{$t('上传照片')}}</p>
+         <div class="left-img">
+           <!-- <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" style="cursor:pointer;"
+           @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true"> -->
+           <span v-for="item in form.images"
+            :key="item.id" style="cursor:pointer;"
+              @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
+                <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px;">
+            </span>
+         </div>
         </el-col>
       </el-row>
     </div>
@@ -206,7 +247,7 @@ export default {
           this.$router.go(-1)
         })
       } else {
-        dialog({ type: 'financeReview', name: this.$route.params.state, id: this.$route.params.id, state: 'pass', tranAmount: this.form.tran_amount }, () => {
+        dialog({ type: 'financeReview', name: this.$route.params.state, id: this.$route.params.id, state: 'pass', tranAmount: this.form.refund_amount }, () => {
           this.$router.go(-1)
         })
       }
