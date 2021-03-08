@@ -2476,3 +2476,11 @@ exports.locationDelete = (id, params) => {
 exports.getPickEcharts = (params) => {
   return $form.get('station-statistics', { params })
 }
+
+// 地址解析
+exports.onGeocoder = (params) => {
+  return $form.get('ws/geocoder/v1', {
+    params,
+    baseURL: 'https://apis.map.qq.com'
+  })
+}
