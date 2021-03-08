@@ -26,6 +26,10 @@
             </el-option>
           </el-select>
         </el-form-item>
+         <el-form-item :label="$t('*其他方式')" v-if="ruleForm.refund_type === 2">
+            <el-input v-model="ruleForm.refund_method"
+            :placeholder="$t('请输入备注具体退款方式')"></el-input>
+        </el-form-item>
         <el-form-item :label="$t('*备注')" v-if="state === 'reject'">
             <el-input type="textarea" v-model="ruleForm.customer_remark"
             :autosize="{ minRows: 2, maxRows: 4}"
@@ -104,6 +108,8 @@ export default {
         return this.$message.error(this.$t('请输入金额'))
       } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
         return this.$message.error(this.$t('请输入备注'))
+      } else if (this.ruleForm.refund_type === 2 && !this.ruleForm.refund_method) {
+        return this.$message.error(this.$t('请输入具体退款方式'))
       }
       // 订单列表审核
       if (this.$route.params.id) {
