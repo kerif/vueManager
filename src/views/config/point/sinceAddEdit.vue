@@ -199,7 +199,7 @@
   </div>
 </template>
 <script>
-import BMap from 'BMap'
+// import BMap from 'BMap'
 export default {
   data () {
     return {
@@ -248,67 +248,67 @@ export default {
     // this.getRules()
   },
   mounted () {
-    this.initMap()
+    // this.initMap()
     if (this.$route.params.id) {
       this.getList()
     }
   },
   methods: {
     // 初始化地图信息
-    initMap () {
-      const map = new BMap.Map('map')
-      let point = new BMap.Point(116.404, 39.915)
-      map.setDefaultCursor('crosshair')
-      map.enableScrollWheelZoom(true)
-      map.centerAndZoom(point, 15)
-      map.addControl(new BMap.NavigationControl())
-      let marker = new BMap.Marker(point)
-      map.addOverlay(marker)
-      this.map = map
-      this.map.addEventListener('click', this.onPoint)
-    },
-    // 选取地图上的点
-    onPoint (e) {
-      this.map.clearOverlays()
-      this.lng = e.point.lng
-      this.lat = e.point.lat
-      let point = new BMap.Point(this.lng, this.lat)
-      let marker = new BMap.Marker(point)
-      this.map.addOverlay(marker)
-    },
+    // initMap () {
+    //   const map = new BMap.Map('map')
+    //   let point = new BMap.Point(116.404, 39.915)
+    //   map.setDefaultCursor('crosshair')
+    //   map.enableScrollWheelZoom(true)
+    //   map.centerAndZoom(point, 15)
+    //   map.addControl(new BMap.NavigationControl())
+    //   let marker = new BMap.Marker(point)
+    //   map.addOverlay(marker)
+    //   this.map = map
+    //   this.map.addEventListener('click', this.onPoint)
+    // },
+    // // 选取地图上的点
+    // onPoint (e) {
+    //   this.map.clearOverlays()
+    //   this.lng = e.point.lng
+    //   this.lat = e.point.lat
+    //   let point = new BMap.Point(this.lng, this.lat)
+    //   let marker = new BMap.Marker(point)
+    //   this.map.addOverlay(marker)
+    // },
     // 根据客户填写地址标点
-    onShowLocation () {
-      let topArea = ''
-      let subArea = ''
-      if (this.areaData && this.areaData.length) {
-        this.newWarehouseList.forEach(item => {
-          if (item.value === this.areaData[0]) {
-            topArea = item.label
-            item.children.forEach(ele => {
-              if (ele.value === this.areaData[1]) {
-                subArea = ele.label
-              }
-            })
-          }
-        })
-      }
-      const address = `${topArea}${subArea}${this.form.address}`
-      const geo = new BMap.Geocoder()
-      const _this = this
-      _this.isLocation = true
-      geo.getPoint(address, function (point) {
-        if (point) {
-          _this.lng = point.lng
-          _this.lat = point.lat
-          _this.map.clearOverlays()
-          _this.map.addOverlay(new BMap.Marker(point))
-          _this.map.panTo(point)
-          _this.map.setZoom(18)
-        } else {
-          _this.$message.error(_this.$t('查询不到相应地址'))
-        }
-      })
-    },
+    // onShowLocation () {
+    //   let topArea = ''
+    //   let subArea = ''
+    //   if (this.areaData && this.areaData.length) {
+    //     this.newWarehouseList.forEach(item => {
+    //       if (item.value === this.areaData[0]) {
+    //         topArea = item.label
+    //         item.children.forEach(ele => {
+    //           if (ele.value === this.areaData[1]) {
+    //             subArea = ele.label
+    //           }
+    //         })
+    //       }
+    //     })
+    //   }
+    //   const address = `${topArea}${subArea}${this.form.address}`
+    //   const geo = new BMap.Geocoder()
+    //   const _this = this
+    //   _this.isLocation = true
+    //   geo.getPoint(address, function (point) {
+    //     if (point) {
+    //       _this.lng = point.lng
+    //       _this.lat = point.lat
+    //       _this.map.clearOverlays()
+    //       _this.map.addOverlay(new BMap.Marker(point))
+    //       _this.map.panTo(point)
+    //       _this.map.setZoom(18)
+    //     } else {
+    //       _this.$message.error(_this.$t('查询不到相应地址'))
+    //     }
+    //   })
+    // },
     // 编辑时拉取的数据
     getList () {
       this.$request.getOneSelf(this.$route.params.id).then(res => {
