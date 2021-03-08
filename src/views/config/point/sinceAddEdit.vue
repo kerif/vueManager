@@ -245,7 +245,7 @@ export default {
   },
   created () {
     this.getWarehouse()
-    // this.getRules()
+    this.getRules()
   },
   mounted () {
     // this.initMap()
