@@ -26,7 +26,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-         <el-form-item :label="$t('*其他方式')" v-if="ruleForm.refund_type === 2">
+         <el-form-item :label="$t('*其他方式')" v-if="(state === 'pass' && name === 'refund') && ruleForm.refund_type === 2">
             <el-input v-model="ruleForm.refund_method"
             :placeholder="$t('请输入备注具体退款方式')"></el-input>
         </el-form-item>
@@ -231,6 +231,8 @@ export default {
       this.$refs['ruleForm'].resetFields()
       this.$refs['ruleForm'].clearValidate()
       this.ruleForm.pay_amount = ''
+      this.ruleForm.refund_type = ''
+      this.ruleForm.refund_method = ''
       this.ruleForm.customer_remark = ''
       this.baleImgList = []
       this.ruleForm.customer_images = []
