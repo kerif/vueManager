@@ -159,10 +159,10 @@ export default {
           if (this.state === 'pass') {
             console.log(this.state, 'state 333')
             this.$request.approvedRefunds(this.id, {
+              ...this.ruleForm,
               refund_amount: this.ruleForm.pay_amount,
               refund_images: this.ruleForm.customer_images,
-              refund_remark: this.ruleForm.customer_remark,
-              ...this.ruleForm
+              refund_remark: this.ruleForm.customer_remark
             }).then(res => {
               if (res.ret) {
                 this.$notify({
