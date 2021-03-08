@@ -71,7 +71,9 @@ export default {
         pay_amount: '',
         customer_remark: '',
         refund_type: '',
-        customer_images: []
+        customer_images: [],
+        refund_images: [],
+        refund_remark: ''
       },
       state: '',
       id: '',
@@ -158,6 +160,8 @@ export default {
             console.log(this.state, 'state 333')
             this.$request.approvedRefunds(this.id, {
               refund_amount: this.ruleForm.pay_amount,
+              refund_images: this.ruleForm.customer_images,
+              refund_remark: this.ruleForm.refund_remark,
               ...this.ruleForm
             }).then(res => {
               if (res.ret) {
@@ -178,7 +182,10 @@ export default {
             })
           } else {
             console.log(this.state, 'state 444')
-            this.$request.refundRefunds(this.id, this.ruleForm).then(res => {
+            this.$request.refundRefunds(this.id, {
+              refund_images: this.ruleForm.customer_images,
+              refund_remark: this.ruleForm.refund_remark
+            }).then(res => {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
