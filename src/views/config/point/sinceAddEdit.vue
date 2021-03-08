@@ -96,7 +96,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item v-show="isLocation">
+      <el-form-item v-show="form.area_id">
         <el-row :gutter="20">
           <el-col :span="5">
             <div>{{$t('经度')}}</div>
@@ -105,6 +105,9 @@
           <el-col :span="5">
             <div>{{$t('纬度')}}</div>
             <el-input v-model="lat" disabled></el-input>
+          </el-col>
+          <el-col :span="5">
+            <el-button type="primary" plain class="clear-btn" @click="onClearMap">{{$t('清除')}}</el-button>
           </el-col>
         </el-row>
         <div id="map" class="map-box"></div>
@@ -199,7 +202,8 @@
   </div>
 </template>
 <script>
-import BMap from 'BMap'
+import TMap from 'TMap'
+import { jsonp } from 'vue-jsonp'
 export default {
   data () {
     return {
@@ -239,13 +243,14 @@ export default {
       rulesData: [],
       isLocation: false,
       map: null,
+      marker: null,
       lng: '', // 经度
       lat: '' // 纬度
     }
   },
   created () {
     this.getWarehouse()
-    // this.getRules()
+    this.getRules()
   },
   mounted () {
     this.initMap()
@@ -256,25 +261,33 @@ export default {
   methods: {
     // 初始化地图信息
     initMap () {
-      const map = new BMap.Map('map')
-      let point = new BMap.Point(116.404, 39.915)
-      map.setDefaultCursor('crosshair')
-      map.enableScrollWheelZoom(true)
-      map.centerAndZoom(point, 15)
-      map.addControl(new BMap.NavigationControl())
-      let marker = new BMap.Marker(point)
-      map.addOverlay(marker)
+      let point = new TMap.LatLng(22.307387, 114.187179)
+      const map = new TMap.Map(document.getElementById('map'), {
+        center: point,
+        zoom: 11,
+        draggableCursor: 'crosshair'
+      })
       this.map = map
-      this.map.addEventListener('click', this.onPoint)
+      TMap.event.addListener(this.map, 'click', this.onPoint)
     },
     // 选取地图上的点
     onPoint (e) {
-      this.map.clearOverlays()
-      this.lng = e.point.lng
-      this.lat = e.point.lat
-      let point = new BMap.Point(this.lng, this.lat)
-      let marker = new BMap.Marker(point)
-      this.map.addOverlay(marker)
+      this.lng = e.latLng.lng
+      this.lat = e.latLng.lat
+      if (!this.marker) {
+        this.marker = new TMap.Marker({
+          position: e.latLng,
+          map: this.map
+        })
+      } else {
+        this.marker.setPosition(e.latLng)
+      }
+    },
+    // 清除地址选点
+    onClearMap () {
+      this.lat = ''
+      this.lng = ''
+      this.marker.setPosition(null)
     },
     // 根据客户填写地址标点
     onShowLocation () {
@@ -293,20 +306,26 @@ export default {
         })
       }
       const address = `${topArea}${subArea}${this.form.address}`
-      const geo = new BMap.Geocoder()
-      const _this = this
-      _this.isLocation = true
-      geo.getPoint(address, function (point) {
-        if (point) {
-          _this.lng = point.lng
-          _this.lat = point.lat
-          _this.map.clearOverlays()
-          _this.map.addOverlay(new BMap.Marker(point))
-          _this.map.panTo(point)
-          _this.map.setZoom(18)
+      jsonp('https://apis.map.qq.com/ws/geocoder/v1', {
+        address,
+        key: 'ZMOBZ-QDU3P-XGMDH-L7IB2-JWWUO-X5BPG',
+        output: 'jsonp'
+      }).then(res => {
+        this.lng = res.result.location.lng
+        this.lat = res.result.location.lat
+        let point = new TMap.LatLng(this.lat, this.lng)
+        if (!this.marker) {
+          this.marker = new TMap.Marker({
+            position: point,
+            map: this.map
+          })
         } else {
-          _this.$message.error(_this.$t('查询不到相应地址'))
+          this.marker.setPosition(point)
         }
+        this.map.panTo(point)
+        this.map.setZoom(13)
+      }).catch(err => {
+        console.log('error', err)
       })
     },
     // 编辑时拉取的数据
@@ -320,6 +339,18 @@ export default {
           this.areaData = [res.data.area_id, res.data.sub_area_id]
           this.form.area_id = res.data.area_id
           this.form.sub_area_id = res.data.sub_area_id
+        }
+        if (res.data.lat) {
+          this.lat = res.data.lat
+          this.lng = res.data.lon
+          if (!this.marker) {
+            this.marker = new TMap.Marker({
+              position: new TMap.LatLng(this.lat, this.lng),
+              map: this.map
+            })
+          } else {
+            this.marker.setPosition(new TMap.LatLng(this.lat, this.lng))
+          }
         }
         // console.log(this.areaData111, 'areaData')
         // this.form.country_id = res.data.sub_area_id ? res.data.sub_area_id : res.data.country.id
@@ -520,6 +551,9 @@ export default {
   background-color: #fff !important;
   .country-select {
     width: 100%;
+  }
+  .clear-btn {
+    margin-top: 40px;
   }
   .map-box {
     width: 100%;

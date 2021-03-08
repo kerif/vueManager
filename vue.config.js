@@ -14,7 +14,7 @@ module.exports = {
       config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
     }
     config.externals = {
-      BMap: 'window.BMap'
+      TMap: 'window.qq.maps'
     }
   }
 }
