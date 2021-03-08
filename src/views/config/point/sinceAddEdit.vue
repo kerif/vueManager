@@ -91,9 +91,9 @@
           <el-col :span="10">
             <el-input v-model="form.address" :placeholder="$t('请输入')"></el-input>
           </el-col>
-          <el-col :span="5" v-if="form.area_id">
+          <!-- <el-col :span="5" v-if="form.area_id">
             <el-button type="primary" plain @click="onShowLocation">{{$t('地图选点')}}</el-button>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form-item>
       <el-form-item v-show="isLocation">
