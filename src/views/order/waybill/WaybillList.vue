@@ -763,6 +763,7 @@
       <div class="excel-date">
         <el-radio :label="1" v-model="uploadRadio">{{$t('导出清单（含包裹信息）')}}</el-radio>
         <el-radio :label="2" v-model="uploadRadio">{{$t('导出清单')}}</el-radio>
+        <el-radio :label="3" v-model="uploadRadio">{{$t('美中国际定制')}}</el-radio>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogPackages = false" class="cancel-btn">{{$t('取消')}}</el-button>
@@ -899,6 +900,40 @@ export default {
     }
     if (this.$route.query.agent) {
       this.agent_name = Number(this.$route.query.agent)
+    }
+    // 拣货日期筛选保留
+    if (this.$route.query.pickTimes) {
+      this.pickingList = this.$route.query.pickTimes.split(' ')
+      console.log(this.$route.query.pickTimes)
+      console.log(this.pickingList, 'this.pickingList ')
+      this.packed_begin_date = this.pickingList ? this.pickingList[0] : ''
+      this.packed_end_date = this.pickingList ? this.pickingList[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('pickTimes', `${this.packed_begin_date} ${this.packed_end_date}`)
+      this.getList()
+    }
+    // 签收时间筛选保留
+    if (this.$route.query.signTimes) {
+      this.signList = this.$route.query.signTimes.split(' ')
+      console.log(this.$route.query.signTimes)
+      console.log(this.signList, 'this.signList ')
+      this.updated_begin_date = this.signList ? this.signList[0] : ''
+      this.updated_end_date = this.signList ? this.signList[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('signTimes', `${this.updated_begin_date} ${this.updated_end_date}`)
+      this.getList()
+    }
+    // 提交日期时间筛选保留
+    // createdTimes
+    if (this.$route.query.createdTimes) {
+      this.timeList = this.$route.query.createdTimes.split(' ')
+      console.log(this.$route.query.createdTimes)
+      console.log(this.timeList, 'this.timeList ')
+      this.begin_date = this.timeList ? this.timeList[0] : ''
+      this.end_date = this.timeList ? this.timeList[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('createdTimes', `${this.begin_date} ${this.end_date}`)
+      this.getList()
     }
     this.getAgentData()
     this.getPaymentType()
@@ -1075,6 +1110,27 @@ export default {
         this.$request.orderExport({
           ...this.paramsData,
           type: 1
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.dialogPackages = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.uploadRadio === 3) {
+        this.$request.orderExport({
+          ...this.paramsData,
+          type: 2
         }).then(res => {
           if (res.ret) {
             this.$notify({
@@ -1361,7 +1417,12 @@ export default {
     },
     // 跳转到审核
     reviewPackage (id) {
-      this.$router.push({ name: 'review', query: { id: id, state: 'review' } })
+      // this.$router.push({ name: 'review', query: { id: id, state: 'review' } })
+      this.$router.push({ name: 'reviewFinance',
+        params: {
+          id: id,
+          state: 'pay'
+        } })
     },
     // 待支付 编辑打包数据
     editPacked (id, activeName, parent) {
@@ -1396,16 +1457,17 @@ export default {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
+      this.page_params.handleQueryChange('createdTimes', `${this.begin_date} ${this.end_date}`)
       this.getList()
       this.getCounts()
     },
     // 拣货时间
     onPick (val) {
+      console.log(val, 'val')
       this.packed_begin_date = val ? val[0] : ''
       this.packed_end_date = val ? val[1] : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.packed_begin_date} ${this.packed_end_date}`)
+      this.page_params.handleQueryChange('pickTimes', `${this.packed_begin_date} ${this.packed_end_date}`)
       this.getList()
     },
     // 签收时间
@@ -1413,17 +1475,18 @@ export default {
       this.updated_begin_date = val ? val[0] : ''
       this.updated_end_date = val ? val[1] : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.updated_begin_date} ${this.updated_end_date}`)
+      this.page_params.handleQueryChange('signTimes', `${this.updated_begin_date} ${this.updated_end_date}`)
       this.getList()
     },
     // 打包
     packed (id, orderSN, parent, activeName) {
-      console.log(parent, 'parent111')
-      this.$router.push({ name: 'billPacked', params: { id: id, order_sn: orderSN, activeName: activeName, parent: parent } })
+      this.$router.push({ name: 'billPacked',
+        params: { id: id, order_sn: orderSN, activeName: activeName, parent: parent } })
     },
     // 详情
     details (id, activeName) {
-      this.$router.push({ name: 'billDetails', params: { id: id, activeName: activeName } })
+      this.$router.push({ name: 'billDetails',
+        params: { id: id, activeName: activeName } })
     },
     onSelectChange (selection) {
       this.selectIDs = selection.map(item => item.id)

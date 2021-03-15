@@ -22,6 +22,16 @@
           <el-input v-model="ruleForm.material">
           </el-input>
         </el-form-item>
+        <!-- 品牌 -->
+        <el-form-item :label="$t('品牌')">
+          <el-input v-model="ruleForm.brand">
+          </el-input>
+        </el-form-item>
+        <!-- 规格 -->
+        <el-form-item :label="$t('规格') + this.currencyUnit">
+          <el-input v-model="ruleForm.spec">
+          </el-input>
+        </el-form-item>
         <!-- 货品状态 -->
         <el-form-item :label="$t('*货品状态')" class="service-style">
           <el-radio-group v-model="ruleForm.status">
@@ -72,6 +82,8 @@ export default {
       ruleForm: {
         unit_price: '',
         material: '',
+        brand: '',
+        spec: '',
         name: '',
         remark: '',
         status: '',
@@ -207,6 +219,8 @@ export default {
       this.ruleForm.unit_price = ''
       this.ruleForm.material = ''
       this.ruleForm.qty = ''
+      this.ruleForm.brand = ''
+      this.ruleForm.spec = ''
       this.ruleForm.name = ''
       this.ruleForm.status = ''
       this.ruleForm.remark = ''
