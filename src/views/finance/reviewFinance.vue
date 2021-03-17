@@ -125,8 +125,8 @@
           <span>{{form.customer_remark}}</span><br/>
           <p class="transfer-right">{{$t('上传照片')}}</p>
          <div class="left-img">
-           <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" style="cursor:pointer;"
-           @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
+           <img :src="`${$baseUrl.IMAGE_URL}${item}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" style="cursor:pointer;"
+           @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
          </div>
         </el-col>
       </el-row>
