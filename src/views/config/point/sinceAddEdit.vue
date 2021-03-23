@@ -373,21 +373,8 @@ export default {
     changeCountry () {
       this.areaData = []
       this.form.expressLines = []
-      // if (this.newWarehouseList !== 19) {
-      //   this.areaData = []
-      //   this.newWarehouseList = []
-      // }
       const selectList = this.warehouseList.find(item => item.value === this.form.country_id)
       this.newWarehouseList = selectList ? selectList.children : []
-      // this.areas = this.warehouseList.map(item => {
-      //   item.map(val => {
-      //     return {
-      //       id: val.id,
-      //       name: val.name
-      //     }
-      //   })
-      // })
-      // this.areas = this.warehouseList.map(item => item.area)
       console.log(this.areas, 'this.areas')
     },
     // 获取所属国家地区
