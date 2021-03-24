@@ -969,6 +969,10 @@ exports.updatePaypal = (params) => {
 exports.getWarehouseAddress = (params) => {
   return $form.get('warehouse-address', { params })
 }
+// 配置 仓库地址配置 开启或关闭
+exports.warehouseEnabled = (id, status) => {
+  return $form.put(`warehouse-address/${id}/status/${status}`)
+}
 // 配置 新建仓库地址配置
 exports.addWarehouseAddress = (params) => {
   return $form.post('warehouse-address', params)
