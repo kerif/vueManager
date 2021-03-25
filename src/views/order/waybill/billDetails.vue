@@ -306,7 +306,7 @@
         <el-table-column :label="$t('长宽高') + this.localization.length_unit" prop="dimension"></el-table-column>
         <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="package_weight"></el-table-column>
         <!-- 商品清单 -->
-        <el-table-column :label="$t('商品清单')" prop="item_pictures" width="130">
+        <el-table-column :label="$t('入库照片')" prop="package_pictures" width="130">
           <template slot-scope="scope">
             <span v-for="item in scope.row.item_pictures"
             :key="item.id" style="cursor:pointer;"

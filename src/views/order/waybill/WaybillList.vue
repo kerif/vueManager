@@ -287,7 +287,7 @@
               </el-dropdown-item> -->
               <el-dropdown-item class="item-sty" @click.native="editCompany(scope.row.id)">
                 <!-- 修改物流信息 -->
-                <span size="small" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
+                <span size="small" v-if="activeName === '3' || activeName === '4'">{{$t('修改物流信息')}}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="logistics(scope.row.id, scope.row.order_sn)">
                 <span v-if="activeName === '4'">{{$t('轨迹')}}</span>
@@ -469,7 +469,7 @@
               </el-dropdown-item> -->
               <el-dropdown-item class="item-sty" @click.native="editCompany(scope.row.id)">
                 <!-- 修改物流信息 -->
-                <span size="small" v-if="activeName === '4'">{{$t('修改物流信息')}}</span>
+                <span size="small" v-if="activeName === '3' || activeName === '4'">{{$t('修改物流信息')}}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="logistics(scope.row.id, scope.row.order_sn)">
                 <span v-if="activeName === '4'">{{$t('轨迹')}}</span>
@@ -1690,7 +1690,7 @@ export default {
     },
     // Tab Change
     onTabChange (tab) {
-      console.log('wwowowow')
+      console.log(this.activeName, 'activeName')
       this.status = Number(tab.name)
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)
