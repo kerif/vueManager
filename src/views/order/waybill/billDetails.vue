@@ -306,12 +306,12 @@
         <el-table-column :label="$t('长宽高') + this.localization.length_unit" prop="dimension"></el-table-column>
         <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="package_weight"></el-table-column>
         <!-- 商品清单 -->
-        <el-table-column :label="$t('入库照片')" prop="package_pictures" width="130">
+        <el-table-column :label="$t('入库照片')" width="130">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.item_pictures"
+            <span v-for="item in scope.row.package_pictures"
             :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item.path, imgVisible=true">
-            <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px;">
+            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item, imgVisible=true">
+            <img :src="$baseUrl.IMAGE_URL + item" style="width: 40px; margin-right: 5px;">
             </span>
           </template>
         </el-table-column>
