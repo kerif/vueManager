@@ -137,7 +137,7 @@
               <div class="line-sty" v-if="this.idCode"></div>
                <!-- 个人通关码 -->
               <div class="express-left" v-if="this.personalCode">
-                <p>{{$t('身份证号码')}}</p>
+                <p>{{$t('个人通关码')}}</p>
               </div>
               <div class="express-left right-margin" v-if="this.personalCode">
                   <el-input v-model="box.personal_code" :placeholder="$t('请输入')"></el-input>
@@ -147,6 +147,7 @@
         </div>
         <div class="recipient-address">
         <h3>{{$t('增值服务')}}</h3>
+        <!-- 保险服务 -->
           <div class="express-left">
               <span>{{$t('保险服务')}}</span>
                 <el-tooltip class="item" effect="dark" :content="explanation" placement="top">
@@ -173,6 +174,9 @@
               </el-switch>
             </div> -->
         </div>
+        <div class="line-sty"></div>
+        <!-- 增值服务 -->
+        <span>{{$t('增值服务')}}</span>
         <el-checkbox-group v-model="box.add_service" class="radio-select-sty">
           <el-checkbox :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-checkbox>
         </el-checkbox-group>
@@ -183,6 +187,7 @@
                 <el-tooltip class="item" effect="dark" :content="tariffExplanation" placement="top">
                   <span class="el-icon-warning-outline icon-info"></span>
               </el-tooltip><br/>
+              <!-- 增值服务 -->
               <!-- <el-radio-group v-model="box.add_service" class="radio-select-sty">
                 <el-radio :label="item.id" v-for="item in servicesData" :key="item.id" class="radio-main">{{item.name}}</el-radio>
               </el-radio-group> -->
@@ -531,6 +536,7 @@ export default {
     }
   },
   created () {
+    this.getRadio()
     if (this.$route.query.id) {
       this.packageId = this.$route.query.id
       this.getList()

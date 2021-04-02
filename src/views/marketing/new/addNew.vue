@@ -25,7 +25,7 @@
             </el-date-picker>
     </el-form-item> -->
     <el-form-item :label="$t('有效期')" prop="days">
-        <el-input class="input-sty" :placeholder="$t('请输入有效期')" v-model="ruleForm.days"></el-input>
+        <el-input class="input-sty" :placeholder="$t('请输入有效期，例如78而不是2020-01-01')" v-model="ruleForm.days"></el-input>
     </el-form-item>
     <el-form-item :label="$t('使用范围')" prop="scope">
       <el-radio-group v-model="ruleForm.scope">

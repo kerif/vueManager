@@ -1036,7 +1036,7 @@
             <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
         </el-tab-pane>
         <!-- 拼团配置 -->
-        <el-tab-pane :label="$t('拼团配置')" name="14" v-if="this.unShow === 1">
+        <el-tab-pane :label="$t('拼团配置')" name="14" v-if="unShow === 1">
           <div class="rate-top">
             <div class="rate-left">
              {{$t(' 授权公开拼团团长')}}：
@@ -1371,7 +1371,8 @@ export default {
   },
   mounted () {
     console.log('进来了')
-    this.unShow = localStorage.getItem('me')
+    this.unShow = localStorage.getItem('me') === 'true' ? 1 : 0
+    console.log(typeof this.unShow, 'unShow')
     console.log(this.unShow, 'unShow')
   },
   methods: {

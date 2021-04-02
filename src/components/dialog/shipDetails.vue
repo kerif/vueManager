@@ -28,6 +28,7 @@
         <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
         <el-table-column :label="$t('收货国家/地区')" prop="address.country_name"></el-table-column>
         <el-table-column :label="$t('包裹数')" prop="package_count"></el-table-column>
+        <el-table-column :label="$t('出库箱数')" prop="boxes_count"></el-table-column>
         <el-table-column :label="$t('实际重量') + localization.weight_unit" prop="actual_weight"></el-table-column>
         <el-table-column :label="$t('实际费用') + localization.currency_unit" prop="actual_payment_fee"></el-table-column>
         <el-table-column :label="$t('申报价值') + localization.currency_unit" prop="declare_value"></el-table-column>

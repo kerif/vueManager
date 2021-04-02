@@ -40,6 +40,14 @@ const balance = loadonDemand('finance/balance')
 const RechargeDetails = loadonDemand('finance/rechargeDetails')
 // 财务 财务概览
 const financeCharts = loadonDemand('finance/financeCharts')
+// 财务 订单财务审核
+const orderReview = loadonDemand('finance/orderReview')
+// 财务 财务订单审核 审核
+const reviewFinance = loadonDemand('finance/reviewFinance')
+// 财务 自提点佣金结算
+const selfSettlement = loadonDemand('finance/selfSettlement')
+// 财务 自提点佣金结算 结算记录
+const recordDetails = loadonDemand('finance/recordDetails')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
 // 配置 添加、修改路线
@@ -1189,6 +1197,29 @@ export default [
             }
           },
           {
+            path: '/finance/selfSettlement',
+            name: 'selfSettlement',
+            component: selfSettlement,
+            id: 705,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '自提点佣金结算'
+            }
+          },
+          {
+            path: '/finance/selfSettlement/recordDetails/:id/:name',
+            name: 'recordDetails',
+            component: recordDetails,
+            id: 705,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '结算记录',
+              parent: '/finance/selfSettlement'
+            }
+          },
+          {
             path: '/finance/financeCharts',
             name: 'financeCharts',
             component: financeCharts,
@@ -1197,6 +1228,29 @@ export default [
               group: '财务',
               level: 2,
               name: '财务概览'
+            }
+          },
+          {
+            path: '/finance/orderReview',
+            name: 'orderReview',
+            component: orderReview,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '订单财务审核'
+            }
+          },
+          {
+            path: '/finance/orderReview/reviewFinance/:id/:state',
+            name: 'reviewFinance',
+            component: reviewFinance,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '审核',
+              parent: '/finance/orderReview'
             }
           }
         ]

@@ -103,7 +103,8 @@
         </template> -->
       </el-table-column>
       <!-- 箱数 -->
-      <el-table-column :label="$t('箱数')" prop="box_count"></el-table-column>
+      <el-table-column :label="$t('订单数')" prop="box_count"></el-table-column>
+      <el-table-column :label="$t('出库箱数')" prop="order_boxes_count"></el-table-column>
       <!-- 重量 -->
       <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="weight"></el-table-column>
       <!-- 价值 -->

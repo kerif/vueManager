@@ -25,6 +25,19 @@
       <el-table-column :label="$t('地址')" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>
       <el-table-column :label="$t('支持国家')" :show-overflow-tooltip="true" width="150" prop="countries">
       </el-table-column>
+      <!-- 是否启用 -->
+      <el-table-column :label="$t('是否启用')" width="120">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.enabled"
+            @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
@@ -84,10 +97,12 @@ export default {
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
+          // this.lineList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
           this.vipGroupList = res.data.map(item => {
             let arr = item.support_countries.map(item => item.name)
             return {
               ...item,
+              enabled: Boolean(item.enabled),
               countries: arr.join(' ')
             }
           })
@@ -98,6 +113,26 @@ export default {
             title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
+          })
+        }
+      })
+    },
+    // 修改开关
+    changeTransfer (event, enabled, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.warehouseEnabled(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
           })
         }
       })

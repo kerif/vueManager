@@ -22,12 +22,6 @@
   </div>
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
-        <!-- 问题原因 -->
-        <el-form-item :label="$t('*问题原因')">
-            <el-input type="textarea" v-model="ruleForm.invalid_reason"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            :placeholder="$t('请输入')"></el-input>
-        </el-form-item>
         <!-- 实际支付金额 -->
         <el-form-item :label="$t('实际支付金额') + this.localization.currency_unit"
         v-if="activeName === '3'">
@@ -36,16 +30,35 @@
         </el-form-item>
         <!-- 退款金额 -->
         <el-form-item :label="$t('*退款金额') + this.localization.currency_unit">
-          <el-input v-model="ruleForm.refund_amount" :disabled="activeName === '1' || activeName === '2'">
+          <el-input class="input-sty" v-model="ruleForm.refund_amount" :disabled="activeName === '1' || activeName === '2'">
           </el-input>
           <div class="updateImg">{{$t('退款金额不能超过下单实际支付金额，且券不能返还，代理产生的佣金将会被清掉')}}</div>
         </el-form-item>
-        <el-form-item :label="$t('原路返回')">
+        <!-- 退款方式 -->
+        <el-form-item :label="$t('退款方式')">
+          <el-select v-model="ruleForm.refund_type" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <!-- <el-form-item :label="$t('原路返回')">
           <el-radio-group v-model="ruleForm.should_return_wechat">
             <el-radio v-for="item in updateProp" :key="item.id" :label="item.id">{{item.name}}
             </el-radio>
           </el-radio-group>
           <div class="updateImg">{{$t('选择是，如果是微信支付，直接退到微信账号上面。选择否的话，就退到余额中。')}}</div>
+        </el-form-item> -->
+        <el-form-item :label="$t('*其它方式')" v-if="ruleForm.refund_type === 2">
+          <el-input type="textarea" :rows="2" :placeholder="$t('请备注具体退款方式')" v-model="ruleForm.refund_method"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('备注')">
+            <el-input type="textarea" v-model="ruleForm.invalid_reason"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            :placeholder="$t('请输入')"></el-input>
         </el-form-item>
         <el-form-item :label="$t('备注截图')" class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
@@ -69,6 +82,7 @@
         </el-upload>
         <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div>
     </el-form-item>
+    <div class="tips-sty">*{{$t('已付款订单作废后，退款将进入财务模块进行审核')}}</div>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{$t('取消')}}</el-button>
@@ -84,10 +98,12 @@ export default {
       ruleForm: {
         refund_amount: 0,
         invalid_reason: '',
+        refund_method: '',
         images: [],
         invalid_package_ids: [],
         should_return_wechat: 0,
-        should_invalid_packages: ''
+        should_invalid_packages: '',
+        refund_type: 0
       },
       state: '',
       tranAmount: '',
@@ -108,7 +124,21 @@ export default {
           name: this.$t('是')
         }
       ],
-      should_invalid_packages: ''
+      options: [
+        {
+          id: 0,
+          name: this.$t('原路返回（仅微信支付，其他方式退回余额）')
+        }, {
+          id: 1,
+          name: this.$t('账户余额')
+        }, {
+          id: 2,
+          name: this.$t('其他方式')
+        }
+      ],
+      should_invalid_packages: '',
+      value: '',
+      textarea: ''
     }
   },
   methods: {
@@ -132,12 +162,12 @@ export default {
       } else {
         this.ruleForm.images = []
       }
-      if (!this.ruleForm.invalid_reason) {
-        return this.$message.error(this.$t('请输入问题原因'))
-      } else if (this.ruleForm.refund_amount === '') {
+      if (this.ruleForm.refund_amount === '') {
         return this.$message.error(this.$t('请输入退款金额'))
       } else if (this.ruleForm.refund_amount > this.payAmount) {
         return this.$message.error(this.$t('退款金额不能大于实际支付金额'))
+      } else if (this.ruleForm.refund_type === 2 && !this.ruleForm.refund_method) {
+        return this.$message.error(this.$t('请备注具体退款方式'))
       }
       this.$request.ordersInvalid(this.id, {
         ...this.ruleForm,
@@ -211,6 +241,8 @@ export default {
       this.ruleForm.refund_amount = 0
       this.ruleForm.should_return_wechat = 0
       this.ruleForm.invalid_reason = ''
+      this.ruleForm.refund_method = ''
+      this.ruleForm.refund_type = 0
       this.baleImgList = []
       this.ruleForm.images = []
       this.ruleForm.invalid_package_ids = []
@@ -229,7 +261,7 @@ export default {
   .el-dialog__body {
     margin-left: 20px !important;
   }
-  .el-input {
+  .input-sty {
     width: 70%;
   }
   .el-textarea__inner {
@@ -309,6 +341,9 @@ export default {
   }
   .invalid-sty {
     margin-bottom: 15px;
+  }
+  .tips-sty {
+    color: red;
   }
 }
 </style>

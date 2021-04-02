@@ -30,6 +30,17 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item :label="$t('仓库')" prop="warehouse_id">
+                <el-select v-model="ruleForm.warehouse_id" :placeholder="$t('请选择仓库')"
+                filterable>
+                <el-option
+                  v-for="item in warehouseData"
+                  :key="item.id"
+                  :label="item.warehouse_name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item :label="$t('名称')">
               <el-input v-model="ruleForm.name"
               :placeholder="$t('请输入名称，字数限制在五十个字内')"></el-input>
@@ -59,10 +70,12 @@ export default {
       },
       ruleForm: {
         country_id: '',
+        warehouse_id: '',
         name: '',
         remark: ''
       },
       country: [],
+      warehouseData: [],
       rules: {
         country_id: [
           { required: true, message: this.$t('请输入目的地'), trigger: 'blur' }
@@ -92,6 +105,12 @@ export default {
     getCountry () {
       this.$request.getCountry().then(res => {
         this.country = res.data
+      })
+    },
+    // 获取仓库数据
+    getWarehouse () {
+      this.$request.getShipWarehouse().then(res => {
+        this.warehouseData = res.data
       })
     },
     // 确认加入发货单
@@ -149,6 +168,7 @@ export default {
     },
     clear () {
       this.ruleForm.country_id = ''
+      this.ruleForm.warehouse_id = ''
       this.ruleForm.name = ''
       this.ruleForm.remark = ''
       this.invoice.sn = ''
@@ -156,6 +176,7 @@ export default {
     init () {
       this.getUser()
       this.getCountry()
+      this.getWarehouse()
     }
   }
 }

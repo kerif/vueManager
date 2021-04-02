@@ -126,12 +126,13 @@ export default {
     },
     beforeUploadImg (file) {
       console.log(file)
-      const mimeList = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/wps-writer']
-      if (mimeList.indexOf(file.type) === -1) {
-        this.$message.error(this.$t('请上传格式正确的文件'))
-        return false
-      } else if (file.size > 1024 * 1024 * 3) {
-        this.$message.error(this.$t('上传图片大小不能超过3MB'))
+      // const mimeList = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/wps-writer']
+      // if (mimeList.indexOf(file.type) === -1) {
+      //   this.$message.error(this.$t('请上传格式正确的文件'))
+      //   return false
+      // }
+      if (file.size > 1024 * 1024 * 4) {
+        this.$message.error(this.$t('上传图片大小不能超过4MB'))
         return false
       }
       return true

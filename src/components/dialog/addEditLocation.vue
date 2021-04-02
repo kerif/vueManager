@@ -16,6 +16,9 @@
         <el-form-item :label="$t('所属仓库')">
           <el-input v-model="warehouseName" disabled></el-input>
         </el-form-item>
+        <el-form-item :label="$t('货位容量')">
+          <el-input-number v-model="location.max_count" :min="1" :max="1000"></el-input-number>
+        </el-form-item>
       </el-col>
       <el-col :span="12">
         <div class="unit">
@@ -25,18 +28,21 @@
                 <el-input class="right-unit" v-model="location.row"
                 :placeholder="$t('请输入')" @blur="changeRow"></el-input>*{{$t('层')}}
         </div>
-        <el-form-item :label="$t('仓库数量')">
+        <el-form-item :label="$t('仓位数量')">
           <el-input v-model="qty" disabled></el-input>
         </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="10">
         <el-form-item>
-      <el-checkbox v-model="location.reusable">{{$t('允许同一个用户使用相同货位')}}</el-checkbox>
+           <el-checkbox v-model="location.reusable">{{$t('允许同一个用户使用相同货位')}}</el-checkbox>
         </el-form-item>
       </el-col>
     </el-row>
+    <!-- <el-row :gutter="20">
+      <el-col :span="10">
+        <el-form-item :label="$t('货位容量')">
+          <el-input-number v-model="location.max_count" :min="1" :max="1000"></el-input-number>
+        </el-form-item>
+      </el-col>
+    </el-row> -->
     <div class="bottom-btn">
       <el-button type="primary" @click="confirm">{{$t('生成货位')}}</el-button>
     </div>
@@ -101,6 +107,7 @@ export default {
       location: {
         row: '',
         column: '',
+        max_count: '',
         number: '',
         reusable: ''
       },
@@ -233,6 +240,7 @@ export default {
     clear () {
       this.page_params.page = 1
       this.location.column = ''
+      this.location.max_count = ''
       this.location.row = ''
       this.qty = ''
       this.location.number = ''
