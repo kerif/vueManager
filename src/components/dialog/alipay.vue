@@ -121,8 +121,8 @@ export default {
       console.log(file)
     },
     clear () {
-      this.ruleForm.country_id = ''
-      this.ruleForm.remark = ''
+      // this.ruleForm.country_id = ''
+      // this.ruleForm.remark = ''
     },
     // 上传商户 key_path 文件
     uploadKeyFile (file) {
