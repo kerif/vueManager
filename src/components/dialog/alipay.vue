@@ -7,9 +7,6 @@
         <el-form-item :label="$t('APP ID')" prop="app_id">
             <el-input :placeholder="$t('请输入APP ID')" v-model="ruleForm.app_id"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('回调域名')">
-            <el-input :placeholder="$t('请输入回调域名')" v-model="ruleForm.return_url"></el-input>
-        </el-form-item>
         <el-form-item :label="$t('支付宝公钥证书')">
             <el-input :placeholder="$t('请输入支付宝公钥证书')" v-model="ruleForm.ali_public_key"></el-input>
             <el-upload
@@ -21,8 +18,29 @@
                 <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
             </el-upload>
         </el-form-item>
-        <el-form-item :label="$t('支付宝私钥证书')">
-            <el-input :placeholder="$t('请输入支付宝私钥证书')" v-model="ruleForm.private_key"></el-input>
+        <el-form-item :label="$t('应用私钥证书')">
+            <el-input :placeholder="$t('请输入应用私钥证书')" v-model="ruleForm.private_key"></el-input>
+            <el-upload
+                class="upload-demo"
+                action=""
+                :on-preview="handlePreview"
+                :http-request="uploadKeyFile">
+                <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
+            </el-upload>
+        </el-form-item>
+        <el-form-item :label="$t('应用公钥证书')">
+            <el-input :placeholder="$t('请输入应用公钥证书')" v-model="ruleForm.app_cert_public_key"></el-input>
+            <el-upload
+                class="upload-demo"
+                action=""
+                :on-preview="handlePreview"
+                :http-request="uploadRsaFile"
+                >
+                <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
+            </el-upload>
+        </el-form-item>
+        <el-form-item :label="$t('支付宝根证书')">
+            <el-input :placeholder="$t('请输入支付宝根证书')" v-model="ruleForm.alipay_root_cert"></el-input>
             <el-upload
                 class="upload-demo"
                 action=""
@@ -46,10 +64,10 @@ export default {
       fileList: [],
       ruleForm: {
         app_id: '',
-        return_url: '',
         key: '',
         ali_public_key: '',
         private_key: '',
+        app_cert_public_key: '',
         alipay_root_cert: ''
       },
       country: [],
