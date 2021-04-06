@@ -146,7 +146,7 @@
               </el-dropdown-item>
               <!-- 拼团配置 -->
               <el-dropdown-item class="item-sty" @click.native="groupSet(scope.row.id)">
-                <span v-show="unShow == 1">{{$t('拼团配置')}}</span>
+                <span v-show="unShow">{{$t('拼团配置')}}</span>
               </el-dropdown-item>
               <!-- 删除 -->
               <el-dropdown-item class="item-sty" @click.native="deleteLine(scope.row.id)">
@@ -352,7 +352,7 @@ export default {
     }
   },
   created () {
-    this.unShow = localStorage.getItem('me')
+    this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
     console.log(this.unShow, 'this.unShow')
     console.log(this.$route.query.size || 10, 'size')
     this.getLanguageList() // 获取支持语言

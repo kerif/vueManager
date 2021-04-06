@@ -351,7 +351,7 @@ export default {
             // this.getMe()
             this.$request.getMe().then(res => {
               if (res.ret) {
-                this.groupBuy = res.data.group_buying_config
+                this.groupBuy = Number(res.data.group_buying_config)
                 this.$store.commit('saveMe', this.groupBuy)
                 console.log(typeof this.groupBuy, 'this.groupBuy')
               }
