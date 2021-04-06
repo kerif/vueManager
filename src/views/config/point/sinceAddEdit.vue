@@ -172,6 +172,18 @@
         </el-row>
       </el-form-item>
       <el-form-item>
+        <el-button class="notice-sty">{{$t('公告设置')}}</el-button>
+        <el-switch
+          v-model="form.edit_notice_jurisdiction"
+          :active-text="$t('允许自提点页面编辑公告')"
+          :active-value="1"
+          :inactive-value="0"
+          :inactive-text="$t('')"
+          active-color="#13ce66"
+          inactive-color="gray">
+        </el-switch>
+      </el-form-item>
+      <el-form-item>
         <el-button type="primary" class="sava-btn" :loading="$store.state.btnLoading" @click="saveLine">{{$t('保存')}}</el-button>
       </el-form-item>
     </el-form>
@@ -214,6 +226,7 @@ export default {
         sub_area_id: '',
         address: '',
         contact_info: '',
+        edit_notice_jurisdiction: '',
         rule_id: '',
         contactor: '',
         expressLines: []
@@ -604,6 +617,9 @@ export default {
   }
   .line-sty {
     margin-bottom: 15px;
+  }
+  .notice-sty {
+    margin-right: 20px;
   }
 }
 </style>

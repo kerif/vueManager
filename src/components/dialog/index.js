@@ -94,6 +94,7 @@ import settlementDetails from './settlementDetails.vue'
 import selfReview from './selfReview.vue'
 import payDetails from './payDetails.vue'
 import financeReview from './financeReview.vue'
+import openLine from './openLine.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -188,6 +189,7 @@ const SettlementDetailsController = Vue.extend(settlementDetails)
 const SelfReviewController = Vue.extend(selfReview)
 const PayDetailsController = Vue.extend(payDetails)
 const FinanceReviewController = Vue.extend(financeReview)
+const OpenLineController = Vue.extend(openLine)
 
 const mixin = {
   data () {
@@ -843,6 +845,13 @@ function initInstance (type) {
     // 财务订单审核 审核或拒绝
     case 'financeReview':
       instance = new FinanceReviewController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 更多配置 保险服务或关税服务 开启线路
+    case 'openLine':
+      instance = new OpenLineController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

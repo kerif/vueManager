@@ -1033,6 +1033,22 @@ exports.getExplanation = () => {
 exports.updateExplanation = (params) => {
   return $form.put('payments/insurance/explanation', params)
 }
+// 保险服务 获取开启路线
+exports.getInsuranceLine = (params) => {
+  return $form.get('payments/insurance/lines', { params })
+}
+// 保险服务 更新开启路线
+exports.updateInsuranceLine = (params) => {
+  return $form.put('payments/insurance/lines', params)
+}
+// 关税服务 获取开启路线
+exports.getTariffLine = (params) => {
+  return $form.get('order-tariff-configs/lines', { params })
+}
+// 关税服务 更新开启路线
+exports.updateTariffLine = (params) => {
+  return $form.put('order-tariff-configs/lines', params)
+}
 // 更改当前的重量及货币配置
 exports.confirmLocalization = (params) => {
   return $form.put('localization', params)

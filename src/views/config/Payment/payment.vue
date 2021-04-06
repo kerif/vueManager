@@ -333,6 +333,7 @@
               active-color="#13ce66"
               inactive-color="gray">
           </el-switch>
+          <el-button @click="openLines('insurance')" v-if="insuranceEnabled === 1" class="openStyle">{{$t('开启线路')}}</el-button>
           <el-button class="add-insurance" @click="goInsurance('insurance')">{{$t('保险说明')}}</el-button>
           </div>
           <el-table :data="insuranceData" v-loading="tableLoading" class="data-list" v-if="insuranceEnabled === 1"
@@ -381,6 +382,7 @@
               active-color="#13ce66"
               inactive-color="gray">
           </el-switch>
+          <el-button @click="openLines('tariff')" v-if="tariffEnabled === 1" class="openStyle">{{$t('开启线路')}}</el-button>
           <div class="add-insurance">
             <el-button @click="addTariff">{{$t('添加')}}</el-button>
             <el-button @click="goInsurance('tariff')">{{$t('关税说明')}}</el-button>
@@ -1523,6 +1525,11 @@ export default {
           this.getTariffData()
         }
       })
+    },
+    // 保险服务 开启线路
+    openLines (val) {
+      console.log(val, 'val')
+      dialog({ type: 'openLine', state: val })
     },
     // pc端配置 修改语言
     onPc (item) {
@@ -3446,6 +3453,9 @@ export default {
   }
   .radio-sty {
     margin-left: 20px;
+  }
+  .openStyle {
+    margin-left: 10px;
   }
 }
 </style>
