@@ -193,11 +193,11 @@
     <!-- 公告设置 -->
     <el-dialog close="clearAnnouncement" :visible.sync="announcementDailog" :title="$t('自提点公告设置')" class="props-dialog" width="45%">
       <span>{{$t('营业时间')}}</span>
-      <el-input v-model="announcementData.opening_hours"
+      <el-input v-model="announcementData.opening_hours" :disabled="form.edit_notice_jurisdiction === 0"
       type="textarea" :rows="4" :placeholder="$t('例：周一至周六 08:00 ～ 20:00')">
       </el-input>
       <span>{{$t('公告')}}</span>
-      <el-input v-model="announcementData.announcement"
+      <el-input v-model="announcementData.announcement" :disabled="form.edit_notice_jurisdiction === 0"
       type="textarea" :rows="4" :placeholder="$t('例：本自提点免费保存两日，逾期收费2¥/日。重量限制：40KG。长度限制：180CM')">
       </el-input>
       <div slot="footer">
