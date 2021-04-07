@@ -172,7 +172,7 @@
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-button class="notice-sty">{{$t('公告设置')}}</el-button>
+        <el-button @click="editSet" class="notice-sty">{{$t('公告设置')}}</el-button>
         <el-switch
           v-model="form.edit_notice_jurisdiction"
           :active-text="$t('允许自提点页面编辑公告')"
@@ -211,6 +211,21 @@
       <el-button type="primary" @click="confirmLines">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
+    <!-- 公告设置 -->
+  <el-dialog close="clearAnnouncement" :visible.sync="announcementDailog" :title="$t('自提点公告设置')" class="props-dialog" width="45%">
+      <span>{{$t('营业时间')}}</span>
+      <el-input v-model="announcementData.opening_hours"
+      type="textarea" :rows="4" :placeholder="$t('例：周一至周六 08:00 ～ 20:00')">
+      </el-input>
+      <span>{{$t('公告')}}</span>
+      <el-input v-model="announcementData.announcement"
+      type="textarea" :rows="4" :placeholder="$t('例：本自提点免费保存两日，逾期收费2¥/日。重量限制：40KG。长度限制：180CM')">
+      </el-input>
+      <div slot="footer">
+      <el-button @click="announcementDailog = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="updateAnnoucement">{{$t('确定')}}</el-button>
+      </div>
+  </el-dialog>
   </div>
 </template>
 <script>
@@ -226,10 +241,12 @@ export default {
         sub_area_id: '',
         address: '',
         contact_info: '',
-        edit_notice_jurisdiction: '',
+        edit_notice_jurisdiction: 0,
         rule_id: '',
         contactor: '',
-        expressLines: []
+        expressLines: [],
+        announcement: '',
+        opening_hours: ''
       },
       areaData: null,
       referenceTime: {
@@ -258,7 +275,12 @@ export default {
       map: null,
       marker: null,
       lng: '', // 经度
-      lat: '' // 纬度
+      lat: '', // 纬度
+      announcementDailog: false,
+      announcementData: {
+        opening_hours: '',
+        announcement: ''
+      }
     }
   },
   created () {
@@ -348,6 +370,9 @@ export default {
         // this.form = res.data
         this.form.country_id = res.data.country_id
         this.form.name = res.data.name
+        this.form.announcement = res.data.announcement
+        this.form.opening_hours = res.data.opening_hours
+        this.form.edit_notice_jurisdiction = res.data.edit_notice_jurisdiction
         if (res.data.area_id) {
           this.areaData = [res.data.area_id, res.data.sub_area_id]
           this.form.area_id = res.data.area_id
@@ -389,6 +414,23 @@ export default {
       const selectList = this.warehouseList.find(item => item.value === this.form.country_id)
       this.newWarehouseList = selectList ? selectList.children : []
       console.log(this.areas, 'this.areas')
+    },
+    editSet () {
+      this.announcementDailog = true
+      this.announcementData.opening_hours = this.form.opening_hours
+      this.announcementData.announcement = this.form.announcement
+    },
+    // 更新 公告设置
+    updateAnnoucement () {
+      console.log(this.announcementData, 'announcementData')
+      this.form.opening_hours = this.announcementData.opening_hours
+      this.form.announcement = this.announcementData.announcement
+      this.announcementDailog = false
+      console.log(this.form, 'this.form')
+    },
+    clearAnnouncement () {
+      this.announcementData.opening_hours = ''
+      this.announcementData.announcement = ''
     },
     // 获取所属国家地区
     getWarehouse () {

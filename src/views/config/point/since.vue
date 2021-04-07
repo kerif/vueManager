@@ -38,6 +38,21 @@
           <div class="check-sty" @click="checkLines(scope.row.id, scope.row.name)">{{scope.row.expressLines_count}}</div>
         </template>
       </el-table-column>
+      <!-- 支持货到付款 -->
+      <el-table-column :label="$t('支持货到付款')" width="120">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.is_delivery"
+            @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+            :active-text="$t('开')"
+            :active-value="1"
+            :inactive-value="0"
+            :inactive-text="$t('关')"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </template>
+      </el-table-column>
       <!-- 计佣方式 -->
       <!-- <el-table-column :label="$t('计佣方式')" prop="contactor"></el-table-column> -->
       <el-table-column :label="$t('操作')" width="150px">
@@ -173,6 +188,26 @@ export default {
             title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
+          })
+        }
+      })
+    },
+    // 修改开关
+    changeTransfer (event, enabled, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.resetSelf(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
           })
         }
       })

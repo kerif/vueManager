@@ -1673,6 +1673,10 @@ exports.newCategories = (params) => {
 exports.getSelf = (params) => {
   return $form.get('self-pickup-stations', { params })
 }
+// 配置 路线修改开启或关闭
+exports.resetSelf = (id, status) => {
+  return $form.put(`self-pickup-stations/${id}/status/${status}`)
+}
 // 自提点配置 查看单条支持线路
 exports.getPointLines = (id) => {
   return $form.get(`self-pickup-stations/${id}/express-lines`)
