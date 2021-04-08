@@ -65,19 +65,21 @@
         <el-input class="input-sty" v-if="form.address && unEdit === true" v-model="form.address.wechat_id"></el-input>
         <span v-if="unEdit === false">{{form.address && form.address.wechat_id}}</span>
       </el-col>
-       <!-- 收货自提点 -->
-      <el-col :span="7" :offset="1">
-        <span class="leftWidth">{{$t('收货自提点')}}</span>
-        <!-- <el-input class="input-sty" v-model="form.address.wechat_id"></el-input> -->
-        <span>{{form.station_name}}</span>
+      <!-- 区域 -->
+      <el-col :span="7" :offset="1" v-if="form.address && form.address.area">
+        <span class="leftWidth">{{$t('区域')}}</span>
+        <el-input class="area-sty" v-if="(form.address && unEdit === true) && form.address.area" v-model="form.address.area.name"></el-input>
+        <span v-if="unEdit === false && form.address.area">{{form.address && form.address.area.name}}</span>
+        <el-input class="area-sty" v-if="(form.address && unEdit === true) && form.address.sub_area" v-model="form.address.sub_area.name"></el-input>
+        <span v-if="unEdit === false && form.address.sub_area">{{form.address && form.address.sub_area.name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
-      <!-- 区域 -->
-      <el-col :span="7" v-if="form.address && form.address.area">
-        <span class="leftWidth">{{$t('区域')}}</span>
-        <el-input class="input-sty" v-if="(form.address && unEdit === true) && form.address.area" v-model="form.address.area"></el-input>
-        <span v-if="unEdit === false && form.address.area">{{form.address && form.address.area}}</span>
+       <!-- 收货自提点 -->
+      <el-col :span="7">
+        <span class="leftWidth">{{$t('收货自提点')}}</span>
+        <!-- <el-input class="input-sty" v-model="form.address.wechat_id"></el-input> -->
+        <span>{{form.station_name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20" v-if="form.clearance_code || form.id_card || form.personal_code">
@@ -304,12 +306,12 @@
         <el-table-column :label="$t('长宽高') + this.localization.length_unit" prop="dimension"></el-table-column>
         <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="package_weight"></el-table-column>
         <!-- 商品清单 -->
-        <el-table-column :label="$t('商品清单')" prop="item_pictures" width="130">
+        <el-table-column :label="$t('入库照片')" width="130">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.item_pictures"
+            <span v-for="item in scope.row.package_pictures"
             :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item.path, imgVisible=true">
-            <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px;">
+            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item, imgVisible=true">
+            <img :src="$baseUrl.IMAGE_URL + item" style="width: 40px; margin-right: 5px;">
             </span>
           </template>
         </el-table-column>
@@ -734,6 +736,9 @@ export default {
   }
   .input-sty {
     width: 50%;
+  }
+  .area-sty {
+    width: 29%;
   }
   .second-sty {
     width: 25%;
