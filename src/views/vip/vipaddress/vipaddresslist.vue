@@ -30,7 +30,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
-  name: 'vipAddressList',
+  name: 'vipaddress',
   data () {
     return {
       addressList: [],

@@ -282,7 +282,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  name: 'shipList',
+  name: 'shipContainer',
   data () {
     return {
       tableShip: [], // 表格数据

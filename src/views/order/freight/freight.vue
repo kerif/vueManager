@@ -92,6 +92,7 @@
 <script>
 import { formatFilter } from '@/mixin'
 export default {
+  name: 'freight',
   data () {
     return {
       countryList: [],

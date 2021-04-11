@@ -64,7 +64,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  name: 'pickList',
+  name: 'pickingContainer',
   data () {
     return {
       activeName: '1',

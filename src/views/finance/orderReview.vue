@@ -156,7 +156,7 @@ export default {
     SearchGroup,
     NlePagination
   },
-  name: 'orderList',
+  name: 'orderReview',
   mixins: [pagination],
   data () {
     return {

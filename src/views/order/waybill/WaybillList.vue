@@ -784,7 +784,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  name: 'wallbillList',
+  name: 'wayBillList',
   data () {
     return {
       timeList: [],

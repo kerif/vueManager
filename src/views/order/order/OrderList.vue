@@ -291,7 +291,7 @@ export default {
     SearchGroup,
     NlePagination
   },
-  name: 'orderList',
+  name: 'orderlist',
   mixins: [pagination],
   data () {
     return {

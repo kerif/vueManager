@@ -290,6 +290,7 @@ import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   mixins: [pagination],
+  name: 'linelist',
   components: {
     AddBtn,
     NlePagination

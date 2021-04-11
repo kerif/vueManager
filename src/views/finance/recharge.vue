@@ -119,7 +119,7 @@ export default {
     }
   },
   mixins: [pagination],
-  name: 'rechargeList',
+  name: 'recharge',
   components: {
     SearchGroup,
     NlePagination,

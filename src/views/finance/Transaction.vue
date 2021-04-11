@@ -92,7 +92,7 @@ export default {
     }
   },
   mixins: [pagination],
-  name: 'transactionList',
+  name: 'transaction',
   components: {
     SearchGroup,
     NlePagination

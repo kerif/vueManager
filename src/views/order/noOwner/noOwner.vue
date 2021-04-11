@@ -119,7 +119,7 @@ export default {
     SearchGroup,
     NlePagination
   },
-  name: 'noOwnerList',
+  name: 'noOwner',
   mixins: [pagination],
   data () {
     return {

@@ -94,7 +94,7 @@ export default {
     SearchGroup,
     NlePagination
   },
-  name: 'evaluationList',
+  name: 'warehouseSelf',
   mixins: [pagination],
   data () {
     return {

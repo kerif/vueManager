@@ -87,7 +87,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
-  name: 'vipList',
+  name: 'viplist',
   data () {
     return {
       vipList: [],

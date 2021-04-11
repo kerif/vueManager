@@ -218,7 +218,7 @@ export default {
     SearchGroup,
     NlePagination
   },
-  name: 'orderList',
+  name: 'packageMana',
   mixins: [pagination],
   data () {
     return {

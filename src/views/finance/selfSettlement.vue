@@ -109,7 +109,7 @@ export default {
     }
   },
   mixins: [pagination],
-  name: 'rechargeList',
+  name: 'selfSettlement',
   components: {
     SearchGroup,
     NlePagination

@@ -3,13 +3,16 @@
     <layout-aside></layout-aside>
     <el-container direction="vertical" :class="['layout', isCollapse ? 'is-collapse' : '']">
       <layout-header></layout-header>
+          {{ String(cachedViews) }}
       <div  :class="[isCollapse && 'isCollapses']" class="layout-nav">
         <tags-view />
       </div>
       <el-main :class="[isCollapse && 'isCollapses']">
-        <keep-alive include="LineAddEdit">
-          <router-view key="key"></router-view>
-        </keep-alive>
+        <transition name="fade-transform" mode="out-in">
+          <keep-alive :include="cachedViews">
+            <router-view :key="key"></router-view>
+          </keep-alive>
+        </transition>
       </el-main>
       <!-- <layout-footer></layout-footer> -->
     </el-container>
@@ -28,11 +31,14 @@ export default {
     // LayoutFooter
   },
   computed: {
+    cachedViews () {
+      return this.$store.state.tagsView.cachedViews
+    },
     isCollapse () {
       return this.$store.state.isCollapse
     },
     key () {
-      return this.$route.name !== undefined ? this.$route.name + new Date() : this.$route + new Date()
+      return this.$route.path
     }
   }
 }
