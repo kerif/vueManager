@@ -34,7 +34,7 @@
                 class="upload-demo"
                 action=""
                 :on-preview="handlePreview"
-                :http-request="uploadRsaFile"
+                :http-request="uploadAplicationFile"
                 >
                 <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
             </el-upload>
@@ -45,7 +45,7 @@
                 class="upload-demo"
                 action=""
                 :on-preview="handlePreview"
-                :http-request="uploadKeyFile">
+                :http-request="uploadRootFile">
                 <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
             </el-upload>
         </el-form-item>
@@ -137,6 +137,22 @@ export default {
       this.onUpload(file.file).then(res => {
         if (res.ret) {
           this.ruleForm.ali_public_key = res.data[0].path
+        }
+      })
+    },
+    // 上传应用公钥文件
+    uploadAplicationFile (file) {
+      this.onUpload(file.file).then(res => {
+        if (res.ret) {
+          this.ruleForm.app_cert_public_key = res.data[0].path
+        }
+      })
+    },
+    // 上传应用公钥文件
+    uploadRootFile (file) {
+      this.onUpload(file.file).then(res => {
+        if (res.ret) {
+          this.ruleForm.alipay_root_cert = res.data[0].path
         }
       })
     },
