@@ -12,18 +12,11 @@
       <el-button @click="show = false">{{$t('取消')}}</el-button>
       <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
-    <div class="pagination-box">
-      <nle-pagination :pageParams="page_params"></nle-pagination>
-    </div>
   </el-dialog>
 </template>
 <script>
-import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
-  components: {
-    NlePagination
-  },
   mixins: [pagination],
   data () {
     return {
@@ -43,12 +36,10 @@ export default {
     // 获取保险服务路线
     getInsurance () {
       this.$request.getInsuranceLine({
-        page: this.page_params.page,
-        size: this.page_params.size
+        page: 1,
+        size: 99999
       }).then(res => {
         if (res.ret) {
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
           let ids = this.lineData.map(item => item.id)
           res.data.forEach(items => {
             let enabled = !!items.enabled
@@ -67,12 +58,10 @@ export default {
     // 获取关税服务路线
     getTariff () {
       this.$request.getTariffLine({
-        page: this.page_params.page,
-        size: this.page_params.size
+        page: 1,
+        size: 99999
       }).then(res => {
         if (res.ret) {
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
           let ids = this.lineData.map(item => item.id)
           res.data.forEach(items => {
             let enabled = !!items.enabled
