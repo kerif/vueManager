@@ -81,7 +81,7 @@
         :label="$t('货位状态')">
         <template slot-scope="scope">
           <span v-if="scope.row.is_locked === 0 && scope.row.is_used === 0">{{$t('未使用')}}</span>
-          <span class="click-sty" v-if="scope.row.is_locked === 0 && scope.row.is_used > 1" @click="finishedUser (scope.row.id, scope.row.code)">{{$t('已使用')}}</span>
+          <span class="click-sty" v-if="scope.row.is_locked === 0 && scope.row.is_used > 0" @click="finishedUser (scope.row.id, scope.row.code)">{{$t('已使用')}}</span>
           <span v-if="scope.row.is_locked === 1">{{$t('已锁定')}}</span>
         </template>
       </el-table-column>
