@@ -8,7 +8,7 @@
       <add-btn router="addSingle">{{$t('添加')}}</add-btn>
     </div> -->
     <el-table :data="blockList" stripe border class="data-list"
-    v-loading="tableLoading" @selection-change="selectionChange">
+    v-loading="tableLoading" @selection-change="selectionChange" height="550">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 区块名 -->
       <el-table-column :label="$t('区块名')" prop="name">

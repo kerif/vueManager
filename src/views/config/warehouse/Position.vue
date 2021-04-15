@@ -21,6 +21,8 @@
       <el-table-column :label="$t('货位数量')" prop="counts"></el-table-column>
       <el-table-column :label="$t('操作')" width="200">
         <template slot-scope="scope">
+          <el-button class="btn-yellow" v-if="scope.row.status == 0" @click="lockNot(scope.row.id, 1)">{{$t('解锁')}}</el-button>
+          <el-button class="btn-pink" v-if="scope.row.status == 1" @click="lockNot(scope.row.id, 1)">{{$t('锁定')}}</el-button>
           <el-button class="btn-green" @click="editLocation(scope.row.id)">{{$t('修改货位')}}</el-button>
           <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{$t('删除')}}</el-button>
         </template>
@@ -162,6 +164,26 @@ export default {
           id: id
         } }
       )
+    },
+    // 解锁或 锁定
+    lockNot (id, status) {
+      console.log(id, status)
+      this.$request.updateLocks(id, status).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: '',
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 新增货位
     addLocation () {

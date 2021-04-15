@@ -364,6 +364,14 @@ exports.financesPaymentsType = () => {
 exports.getPaymentType = () => {
   return $form.get('transaction-records/payment-types')
 }
+// 流水记录 获取路线筛选数据
+exports.getSimpleLines = () => {
+  return $form.get('simple-express-lines')
+}
+// 流水记录 获取交易类型数据
+exports.getRecordType = () => {
+  return $form.get('transaction-records/types')
+}
 // 财务 充值记录
 exports.getRecharge = (params) => {
   return $form.get('recharge-records', { params })
@@ -424,6 +432,39 @@ exports.AutoDeductions = (params) => {
 exports.rechargeReject = (id, params) => {
   return $form.put(`recharge-records/${id}/refused`, params)
 }
+// 代理管理 获取提现说明
+exports.withdrawData = (params) => {
+  return $form.get('agents/withdraw-rule', { params })
+}
+// 代理管理 确定 提现说明
+exports.updateWithdrawData = (params) => {
+  return $form.put('agents/withdraw-rule', params)
+}
+// 代理管理 计佣模版配置列表
+exports.agentTemplate = (params) => {
+  return $form.get('agents/commission-templates', { params })
+}
+// 计佣模版配置 获取form表单详情
+exports.commissionSet = (id) => {
+  return $form.get(`agents/commission-templates/${id}`)
+}
+// 计佣模版配置 获取表格详情
+exports.commissionData = (id, params) => {
+  return $form.get(`agents/commission-templates/${id}/lines`, { params })
+}
+
+// 计佣模版配置 更新单条数据
+exports.commissionUpdate = (id, params) => {
+  return $form.put(`agents/commission-templates/${id}`, params)
+}
+// 计佣模版配置 新建单条数据
+exports.commissionAdd = (params) => {
+  return $form.post(`agents/commission-templates`, params)
+}
+// 计佣模版配置 删除单条数据
+exports.commissionDelete = (id) => {
+  return $form.delete(`agents/commission-templates/${id}`)
+}
 exports.saveShip = (params) => {
   return $form.post(`shipments`, params)
 }
@@ -467,6 +508,10 @@ exports.groupBy = (params) => {
 // 包裹快速入库 获取全部物品属性
 exports.getProps = () => {
   return $form.get('package-props')
+}
+// 包裹快速入库 获取推荐货位
+exports.getAreaLocation = (id) => {
+  return $form.get(`packages/user-location/${id}`)
 }
 // 包裹快速入库 获取全部服务
 exports.getAllService = () => {
@@ -894,6 +939,14 @@ exports.uploadWithdraws = (id, params) => {
 exports.getMini = () => {
   return $form.get('mini-program/settings')
 }
+// 小程序配置 获取转运规则
+exports.getTranshipment = (params) => {
+  return $form.get('mini-program/transhipment-rule', { params })
+}
+// 小程序配置 更新 转运规则
+exports.updateTranshipment = (params) => {
+  return $form.put('mini-program/transhipment-rule', params)
+}
 // 编辑保存小程序配置
 exports.updateMini = (params) => {
   return $form.put('mini-program/settings', params)
@@ -972,6 +1025,17 @@ exports.getWarehouseAddress = (params) => {
 // 配置 仓库地址配置 开启或关闭
 exports.warehouseEnabled = (id, status) => {
   return $form.put(`warehouse-address/${id}/status/${status}`)
+}
+exports.warehouseLocationIndex = (params) => {
+  return $form.put('warehouse-address/sort', params)
+}
+// 仓位管理 锁定或开锁
+exports.updateLocks = (id, status) => {
+  return $form.put(`warehouse-address/${id}/status/${status}`)
+}
+// 仓位管理 查看货位状态
+exports.checkedFinish = (id) => {
+  return $form.get(`warehouse-address/whole-package-number/${id}`)
 }
 // 配置 新建仓库地址配置
 exports.addWarehouseAddress = (params) => {
@@ -1585,6 +1649,10 @@ exports.closeParcel = (id, status) => {
 exports.getRules = (params) => {
   return $form.get('serial-numbers', { params })
 }
+// 更多配置 单号规则
+exports.changeRules = (id, status) => {
+  return $form.put(`serial-numbers/${id}/status/${status}`)
+}
 // 更多配置 单号规则 重新生成
 exports.goResetId = () => {
   return $form.put(`serial-numbers/re-generate-uid`)
@@ -1673,9 +1741,13 @@ exports.newCategories = (params) => {
 exports.getSelf = (params) => {
   return $form.get('self-pickup-stations', { params })
 }
-// 配置 路线修改开启或关闭
+// 自提点配置 是否支持货到付款
 exports.resetSelf = (id, status) => {
   return $form.put(`self-pickup-stations/${id}/status/${status}`)
+}
+// 自提点配置 修改开启或关闭
+exports.resetEnabled = (id, status) => {
+  return $form.put(`self-pickup-stations/${id}/enabled/${status}`)
 }
 // 自提点配置 查看单条支持线路
 exports.getPointLines = (id) => {
@@ -2070,6 +2142,10 @@ exports.changeOrderPrice = (id, params) => {
 // 订单 修改为已付款
 exports.payedOrders = (params) => {
   return $form.put(`orders/on-delivery-paid`, params)
+}
+// 订单 修改为已签收
+exports.signedOrders = (params) => {
+  return $form.put(`orders/signed`, params)
 }
 // 订单 打印标签 查看
 exports.checkOrderLabel = (id) => {

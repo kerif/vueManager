@@ -638,7 +638,7 @@
         <el-table :data="CategoriesList" stripe
           border class="data-list"
           @expand-change="onExpand"
-          v-loading="tableLoading">
+          v-loading="tableLoading" height="550">
           <!-- 二级分类列表 -->
           <el-table-column type="expand">
             <template slot-scope="props">
@@ -758,7 +758,7 @@
           <add-btn router="emailAdd">{{$t('添加邮件模版')}}</add-btn>
         </div>
           <el-table :data="emailData" v-loading="tableLoading" class="data-list"
-          border stripe>
+          border stripe height="550">
             <el-table-column type="index"></el-table-column>
             <!-- 模版类型 -->
             <el-table-column :label="$t('模版类型')" prop="type_name">
@@ -799,7 +799,7 @@
             <add-btn @click.native="addExpress">{{$t('添加')}}</add-btn>
           </div>
             <el-table :data="expressData" v-loading="tableLoading" class="data-list"
-            border stripe>
+            border stripe height="550">
             <el-table-column type="index"></el-table-column>
             <!-- 状态 -->
             <el-table-column :label="$t('状态')">
@@ -868,9 +868,17 @@
             </el-table-column>
             <!-- 状态 -->
             <el-table-column :label="$t('状态')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.status === 0">{{$t('关闭')}}</span>
-                <span v-if="scope.row.status === 1">{{$t('启用')}}</span>
+               <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.status"
+                  @change="changeRules($event, scope.row.status, scope.row.id)"
+                  :active-text="$t('开')"
+                  :inactive-text="$t('关')"
+                  :active-value="1"
+                  :inactive-value="0"
+                  active-color="#13ce66"
+                  inactive-color="gray">
+                </el-switch>
               </template>
             </el-table-column>
             <!-- 前缀字符 -->
@@ -896,7 +904,7 @@
             <add-btn @click.native="addCountry">{{$t('添加')}}</add-btn>
           </div>
           <el-table :data="countryData" v-loading="tableLoading" class="data-list country"
-            border stripe>
+            border stripe height="550">
             <el-table-column width="100px" align="center">
               <template >
                 <i class="el-icon-sort icon-fonts"></i>
@@ -2781,6 +2789,24 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.rulesData = res.data
+        }
+      })
+    },
+    // 单号规则 开启或关闭
+    changeRules (event, enabled, id) {
+      this.$request.changeRules(id, event).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getRules()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },

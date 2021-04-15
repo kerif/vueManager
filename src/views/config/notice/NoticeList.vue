@@ -15,7 +15,7 @@
       </div>
     <el-table class="data-list" stripe border :data="noticeList"
     @selection-change="selectionChange"
-    v-loading="tableLoading">
+    v-loading="tableLoading" height="550">
       <el-table-column type="selection"></el-table-column>
       <el-table-column :label="$t('标题')" prop="title"></el-table-column>
       <el-table-column :label="$t('类型')" prop="type">

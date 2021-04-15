@@ -47,7 +47,7 @@
     border class="data-list"
     @expand-change="onExpand"
     @selection-change="selectionChange"
-    v-loading="tableLoading">
+    v-loading="tableLoading" height="550">
     <!-- <el-table-column type="expand">
       <template slot-scope="props">
         <el-table :data="props.row.orders">

@@ -128,7 +128,7 @@
       @expand-change="onExpand"
       highlight-current-row
       :data="oderData" @selection-change="onSelectChange"
-      >
+      height="550">
       <!-- 二级分类列表 -->
       <el-table-column width="0" type="expand">
         <template slot-scope="props">
@@ -517,6 +517,9 @@
            v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
            <!-- 已付款 -->
             <el-button size="small" v-if="activeName === '3' ||activeName === '4' || activeName === '5'" @click="payed">{{$t('已付款')}}
+          </el-button>
+           <!-- 已签收 -->
+            <el-button size="small" v-if="activeName === '4'" @click="signed">{{$t('已签收')}}
           </el-button>
         </div>
       </template>
@@ -1299,7 +1302,7 @@ export default {
       })
     },
     // eslint-disable-next-line no-unused-vars
-    payed (id) {
+    payed () {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -1309,6 +1312,34 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$request.payedOrders({
+          ids: this.selectIDs
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
+    signed () {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('您真的确认更改状态为已签收吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.signedOrders({
           ids: this.selectIDs
         }).then(res => {
           if (res.ret) {

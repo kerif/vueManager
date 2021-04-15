@@ -15,7 +15,8 @@
         border
         ref="table"
         @selection-change="selectionChange"
-        v-loading="tableLoading">
+        v-loading="tableLoading"
+        height="650">
       <el-table-column
         type="selection"
         width="55">

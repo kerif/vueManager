@@ -27,7 +27,7 @@
       </div>
     </div>
     <el-table :data="transactionList" stripe border class="data-list"
-    v-loading="tableLoading"
+    v-loading="tableLoading" height="450"
     @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 公告标题 -->

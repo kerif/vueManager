@@ -28,7 +28,7 @@
       </div>
     </search-group>
     <el-table class="data-list" border stripe :data="suggestList"
-    v-loading="tableLoading">
+    v-loading="tableLoading" height="550">
     <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('标题')" prop="title">
       </el-table-column>

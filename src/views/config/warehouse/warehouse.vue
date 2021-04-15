@@ -7,9 +7,14 @@
     <div class="select-box">
       <add-btn router="warehouseAdd">{{$t('添加仓库')}}</add-btn>
     </div>
-    <el-table :data="vipGroupList" stripe border class="data-list"
+    <el-table :data="vipGroupList" stripe border class="data-list country"
     v-loading="tableLoading"
     @selection-change="selectionChange">
+      <el-table-column width="100px" align="center">
+        <template >
+          <i class="el-icon-sort icon-fonts"></i>
+        </template>
+      </el-table-column>
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('仓库名字')" prop="warehouse_name"></el-table-column>
       <el-table-column :label="$t('自动货位功能')">
@@ -23,7 +28,10 @@
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
       <el-table-column :label="$t('地址')" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>
-      <el-table-column :label="$t('支持国家')" :show-overflow-tooltip="true" width="150" prop="countries">
+      <el-table-column :label="$t('支持国家')" :show-overflow-tooltip="true" width="150">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.support_countries" :key="item.id">{{item.name}}&nbsp;</span>
+        </template>
       </el-table-column>
       <!-- 是否启用 -->
       <el-table-column :label="$t('是否启用')" width="120">
@@ -57,11 +65,15 @@
         </div>
       </template> -->
     </el-table>
+     <div class="sort-sty">*{{$t('拖拽行可以进行排序')}}
+       <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{$t('保存排序结果')}}</el-button>
+      </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
 import { SearchGroup } from '@/components/searchs'
+import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import dialog from '@/components/dialog'
@@ -80,7 +92,8 @@ export default {
       tableLoading: false,
       deleteNum: [],
       languageData: [],
-      transCode: ''
+      transCode: '',
+      countrySendData: []
     }
   },
   created () {
@@ -97,14 +110,18 @@ export default {
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          // this.lineList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
-          this.vipGroupList = res.data.map(item => {
-            let arr = item.support_countries.map(item => item.name)
-            return {
-              ...item,
-              enabled: Boolean(item.enabled),
-              countries: arr.join(' ')
-            }
+          // this.vipGroupList = res.data.map(item => {
+          //   let arr = item.support_countries.map(item => item.name)
+          //   return {
+          //     ...item,
+          //     enabled: Boolean(item.enabled),
+          //     countries: arr.join(' ')
+          //   }
+          // })
+          this.vipGroupList = res.data
+          this.countrySendData = [...res.data]
+          this.$nextTick(() => {
+            this.rowDrop()
           })
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
@@ -199,6 +216,41 @@ export default {
       dialog({ type: 'warehouseLang', line: line, lang: lang, transCode: this.transCode }, () => {
         this.getList()
       })
+    },
+    // 国家地区 行拖拽
+    rowDrop () {
+      const tbody = document.querySelector('.country tbody')
+      console.log(tbody, 'tbody')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          if (oldIndex === newIndex) return false
+          console.log(oldIndex, newIndex)
+          const oldItem = this.countrySendData.splice(oldIndex, 1)[0]
+          this.countrySendData.splice(newIndex, 0, oldItem)
+        }
+      })
+    },
+    // 确定拖拽 国家地区
+    rowUpdate () {
+      // eslint-disable-next-line camelcase
+      const ids = this.countrySendData.map(({ id, name }, index) => ({ id, index, name }))
+      console.log(ids)
+      this.vipGroupList = []
+      this.$request.warehouseLocationIndex(ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   },
   computed: {
@@ -226,6 +278,12 @@ export default {
     // padding-left: 20px;
     font-weight: 700;
     color: black;
+  }
+  .icon-fonts {
+    font-size: 28px;
+  }
+  .save-sort {
+    margin-left: 10px;
   }
 }
 </style>

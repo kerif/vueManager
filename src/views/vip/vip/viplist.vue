@@ -16,7 +16,8 @@
     <el-table class="data-list" border stripe
       v-loading="tableLoading"
       :data="vipList"
-       @selection-change="selectionChange">
+       @selection-change="selectionChange"
+       height="650">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('序号')" type="index" :index="1" width="60"></el-table-column>
       <el-table-column :label="$t('客户ID')">

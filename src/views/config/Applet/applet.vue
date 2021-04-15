@@ -8,7 +8,7 @@
       <!-- 功能配置 -->
       <el-tab-pane :label="$t('功能配置')" name="5"></el-tab-pane>
       <!-- 如何下单 -->
-      <!-- <el-tab-pane label="如何下单" name="6"></el-tab-pane> -->
+      <el-tab-pane :label="$t('转运规则')" name="6"></el-tab-pane>
     </el-tabs>
     <el-row v-if="activeName === '1'">
       <el-col :span="11">
@@ -16,16 +16,16 @@
         <h4>{{$t('开发者id')}}</h4>
         <el-form :model="appletForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
           <el-form-item :label="$t('AppId(小程序ID)')" prop="app_id">
-            <el-input :placeholder="$t('请输入AppId')" v-model="appletForm.app_id"></el-input>
+            <el-input class="input-sty" :placeholder="$t('请输入AppId')" v-model="appletForm.app_id"></el-input>
           </el-form-item>
           <el-form-item :label="$t('AppSecret(小程序密钥)')" prop="secret">
-            <el-input placeholder="请输入AppSecret" v-model="appletForm.secret"></el-input>
+            <el-input class="input-sty" placeholder="请输入AppSecret" v-model="appletForm.secret"></el-input>
           </el-form-item>
           <el-form-item :label="$t('小程序token')">
-            <el-input :placeholder="$t('请输入小程序token')" v-model="appletForm.token"></el-input>
+            <el-input class="input-sty" :placeholder="$t('请输入小程序token')" v-model="appletForm.token"></el-input>
           </el-form-item>
           <el-form-item label="aes_key">
-            <el-input :placeholder="$t('请输入aes_key')" v-model="appletForm.aes_key"></el-input>
+            <el-input class="input-sty" :placeholder="$t('请输入aes_key')" v-model="appletForm.aes_key"></el-input>
           </el-form-item>
         </el-form>
         <el-button class="savaBtn" @click="saveDev('ruleForm')">{{$t('保存')}}</el-button>
@@ -107,11 +107,24 @@
   <!-- 如何下单 -->
   <div class="how-container" v-show="activeName === '6'">
     <el-form label-position="top">
+      <el-form-item :label="$t('选择语言')">
+        <el-select v-model="params.language" placeholder="请选择" @change="changeLang">
+          <el-option
+            v-for="item in options"
+            :key="item.language_code"
+            :label="item.name"
+            :value="item.language_code">
+          </el-option>
+          </el-select>
+        </el-form-item>
+      <el-form-item :label="$t('标题')">
+        <el-input class="input-sty" v-model="params.title"></el-input>
+      </el-form-item>
       <!-- 如何下单 -->
-      <el-form-item>
+      <el-form-item :label="$t('内容')">
         <el-row>
           <el-col :span="20">
-            <div id="editor" :value="params.instruction" @input="changeText"></div>
+            <div id="editor" :value="params.content" @input="changeText"></div>
             </el-col>
         </el-row>
       </el-form-item>
@@ -140,6 +153,7 @@ export default {
       },
       tableLoading: false,
       severData: [],
+      options: [],
       businessData: [],
       baleImgList: [], // 小程序首页视频入口图
       evaluationImgList: [], // 小程序首页评论入口图
@@ -177,7 +191,9 @@ export default {
         validate_email: ''
       },
       params: {
-        instruction: ''
+        title: '',
+        language: '',
+        content: ''
       },
       editor: null,
       rules: {
@@ -236,6 +252,27 @@ export default {
             message: res.msg,
             type: 'warning'
           })
+        }
+      })
+    },
+    // 获取语言列表
+    getLanguage () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.options = res.data
+        }
+      })
+    },
+    // 切换语言
+    changeLang () {
+      this.$request.getTranshipment({
+        lang: this.params.language
+      }).then(res => {
+        if (res.ret) {
+          this.params.title = res.data.title
+          this.params.content = res.data.content
+          this.params.language = res.data.language
+          this.editor.txt.html(this.params.content)
         }
       })
     },
@@ -737,12 +774,12 @@ export default {
     },
     // 获取如何下单
     getHowOrder () {
-      this.$request.getInstructions().then(res => {
+      this.$request.getTranshipment().then(res => {
         if (res.ret) {
-          // this.params.title = res.data.title
-          this.params.instruction = res.data.instruction
-          // this.params.type_id = res.data.type
-          this.editor.txt.html(this.params.instruction)
+          this.params.title = res.data.title
+          this.params.content = res.data.content
+          this.params.language = res.data.language
+          this.editor.txt.html(this.params.content)
         }
       })
     },
@@ -752,7 +789,7 @@ export default {
     },
     // 保存如何下单
     saveHowOrder () {
-      this.$request.updateInstructions(this.params).then(res => {
+      this.$request.updateTranshipment(this.params).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -781,6 +818,7 @@ export default {
         this.getValidate()
       } else if (this.activeName === '6') {
         this.getHowOrder()
+        this.getLanguage()
       }
     }
   }
@@ -790,8 +828,8 @@ export default {
 <style lang="scss">
 .applet-container {
    .tabLength {
-    // width: 560px !important;
-    width: 300px !important;
+    width: 560px !important;
+    // width: 300px !important;
   }
   .applet-left {
     padding: 15px;
@@ -802,8 +840,10 @@ export default {
     color: #fff;
     width: 100px;
   }
-  .el-input__inner {
+  .input-sty {
     width: 60%;
+  }
+  .el-input__inner {
   }
   .setOthers {
     background-color: #fff !important;

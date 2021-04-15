@@ -76,6 +76,8 @@ const Withdrawal = loadonDemand('config/agent/withdrawal')
 const wdDetail = loadonDemand('config/agent/withdrawalDetail')
 // 修改、添加代理
 const AddEditAgent = loadonDemand('config/agent/AddEditAgent')
+// 客户 计佣模版配置
+const agentTemplate = loadonDemand('config/agent/agentTemplate')
 // 成交记录
 const transactionRecord = loadonDemand('config/agent/record')
 // 配置 小程序配置
@@ -397,6 +399,18 @@ export default [
               level: 3,
               group: '客户',
               name: '修改代理',
+              parent: '/vip/agent'
+            }
+          },
+          {
+            path: '/vip/agent/template',
+            name: 'agentTemplate',
+            component: agentTemplate,
+            id: 304,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '计佣模版配置',
               parent: '/vip/agent'
             }
           },

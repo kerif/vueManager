@@ -68,7 +68,7 @@
       </el-row>
     </div>
     <el-table stripe border class="data-list" :data="lineList"
-      v-loading="tableLoading">
+      v-loading="tableLoading" height="550">
       <el-table-column type="expand">
         <template slot-scope="scope">
           {{scope.row.remark || "无" }}
@@ -180,7 +180,7 @@
                   v-for="item in companyList"
                   :key="item.id"
                   :value="item.code"
-                  :label="item.name">
+                  :label="item.name">0.
               </el-option>
             </el-select>
           </el-form-item> -->
@@ -195,7 +195,15 @@
               inactive-color="gray">
             </el-switch>
           </el-form-item> -->
-        <el-form-item :label="$t('线路类型')">
+        <el-form-item class="label-sty">
+          <span>{{$t('线路下单类型')}}</span>
+          <el-tooltip class="item code-sty" effect="dark" :content="$t('标准模式：包裹入库并经客户提交后，还需仓库合箱打包，称量出库（计费）数据，再生成待支付订单；快读下单模式：包裹入库经客户提交，即生成待支付订单（每个包裹为独立订单），入库称量数据即为出库（计费）数据')" placement="top">
+          <span class="el-icon-question icon-info"></span>
+          </el-tooltip>
+          <el-radio v-model="company.order_mode" :label="0">{{$t('标准模式')}}</el-radio>
+          <el-radio v-model="company.order_mode" :label="1">{{$t('快速下单（无需合箱）')}}</el-radio>
+        </el-form-item>
+        <el-form-item :label="$t('线路送货方式')">
           <!-- <el-radio-group></el-radio-group> -->
           <!-- <el-radio></el-radio> -->
           <el-radio v-model="company.is_delivery" :label="0">{{$t('仅送货上门')}}</el-radio>
@@ -333,7 +341,8 @@ export default {
         // should_auto_delivery: '',
         default_pickup_station_id: '',
         express_company_id: '',
-        is_delivery: ''
+        is_delivery: '',
+        order_mode: ''
       },
       pickList: [],
       dockingList: [],
@@ -550,6 +559,7 @@ export default {
       this.$request.getExpressLine(this.advancedId).then(res => {
         if (res.ret) {
           this.company.is_delivery = res.data.is_delivery
+          this.company.order_mode = res.data.order_mode
           this.company.default_pickup_station_id = res.data.default_pickup_station_id
           this.company.express_company_id = res.data.express_company_id
           // this.company.should_auto_delivery = res.data.should_auto_delivery
@@ -802,6 +812,16 @@ export default {
   }
   .input-sty {
     width: 40%;
+  }
+  .label-sty {
+    .el-form-item__content {
+      // width: 85px;
+      margin-left: 20px !important;
+    }
+  }
+  .code-sty {
+    padding-right: 5px;
+    color: green;
   }
 }
 </style>

@@ -84,7 +84,7 @@
       <el-table v-if="oderData.length" class="data-list" border stripe
       :data="oderData"
       @selection-change="selectionChange"
-      v-loading="tableLoading">
+      v-loading="tableLoading" height="550">
       <el-table-column type="selection" width="55" align="center"
       v-if="activeName === '1' || activeName === '2' || activeName === '6'"></el-table-column>
       <!-- 客户ID -->
@@ -864,7 +864,7 @@ export default {
 <style lang="scss">
 .order-list-container {
   .tabLength {
-    width: 720px !important;
+    // width: 720px !important;
     display: inline-block;
   }
   .agentRight {

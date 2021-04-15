@@ -359,6 +359,13 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
+          <!-- 街道 -->
+          <el-form-item :label="$t('邮编')">
+            <el-input v-model="ruleForm.postcode" class="inner-textarea"
+            :placeholder="$t('请输入邮编')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
           <!-- 附加地址 -->
           <el-form-item :label="$t('附加地址')">
             <el-input v-model="ruleForm.address" class="inner-textarea"
@@ -1008,6 +1015,7 @@ export default {
       this.ruleForm.receiver_name = ''
       this.ruleForm.door_no = ''
       this.ruleForm.timezone = ''
+      this.ruleForm.postcode = ''
       this.ruleForm.address = ''
       this.ruleForm.street = ''
     }

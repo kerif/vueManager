@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增') : $t('编辑')"
-  class="edit-info-dialog" @close="clear" width="85%">
+  class="edit-commission-dialog" @close="clear" width="85%">
     <el-form :model="form">
       <el-row :gutter="20">
         <el-col :span="13">
@@ -226,7 +226,7 @@ export default {
 .el-autocomplete-suggestion {
   z-index: 4000 !important;
 }
-.edit-info-dialog {
+.edit-commission-dialog {
   .el-dialog__header {
     background-color: #0E102A;
   }

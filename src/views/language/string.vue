@@ -5,7 +5,7 @@
       <add-btn @click.native="addString">{{$t('添加')}}</add-btn>
     </div> -->
     <el-table :data="transferData" v-loading="tableLoading" class="data-list"
-    border stripe>
+    border stripe height="450">
       <el-table-column type="index"></el-table-column>
       <!-- 语言 -->
       <el-table-column :label="$t('字符串')" prop="key"></el-table-column>

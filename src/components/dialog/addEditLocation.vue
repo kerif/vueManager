@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增货位'): $t('编辑货位')" class="dialog-editAdd-location"
-  @close="clear" width="60%">
+  @close="clear" width="65%">
   <div class="tips">
     <span>{{$t('货位号生成规则：区域编号+连接符+所属列+连接符+所属层；限99列99层；货位数量=列数*层数')}}</span>
   </div>
@@ -77,7 +77,7 @@
         :label="$t('货位状态')">
         <template slot-scope="scope">
           <span v-if="scope.row.is_used === 0">{{$t('未使用')}}</span>
-          <span v-if="scope.row.is_used === 1">{{$t('已使用')}}</span>
+          <span class="click-sty" v-if="scope.row.is_used === 1" @click="finishedUser (scope.row.id, scope.row.code)">{{$t('已使用')}}</span>
           <span v-if="scope.row.is_used === 2">{{$t('已锁定')}}</span>
         </template>
       </el-table-column>
@@ -95,7 +95,14 @@
     <div class="pagination-box" v-if="this.state === 'edit'">
       <nle-pagination :pageParams="page_params"></nle-pagination>
     </div>
-  </el-dialog>
+    <el-dialog :visible.sync="innerVisible" :title="$t('货位') + finishCode" class="dialog-invoice" width="35%" @close="clearSecond" append-to-body>
+      <el-table :data="finishData" style="100%" border>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column :label="$t('快递单号/订单号')" prop="express_num"></el-table-column>
+        <el-table-column :label="$t('上架时间')" prop="in_storage_at"></el-table-column>
+      </el-table>
+    </el-dialog>
+    </el-dialog>
 </template>
 <script>
 import NlePagination from '@/components/pagination'
@@ -115,7 +122,11 @@ export default {
       areaId: '',
       state: '',
       warehouseName: '',
-      id: ''
+      id: '',
+      innerVisible: false,
+      finishId: '',
+      finishCode: '',
+      finishData: []
     }
   },
   components: {
@@ -171,6 +182,20 @@ export default {
         }
       })
     },
+    finishedUser (id, code) {
+      this.innerVisible = true
+      this.finishId = id
+      this.finishCode = code
+      this.getFinish()
+    },
+    getFinish () {
+      this.$request.checkedFinish(this.finishId).then(res => {
+        if (res.ret) {
+          this.finishData = res.data
+        }
+      })
+    },
+    clearSecond () {},
     confirm () {
       if (!this.location.number) {
         return this.$message.error(this.$t('请输入区域编号'))
@@ -283,6 +308,9 @@ export default {
   .bottom-btn {
     margin-left: 70px;
     margin-bottom: 20px;
+  }
+  .click-sty {
+    cursor: pointer;
   }
 }
 </style>
