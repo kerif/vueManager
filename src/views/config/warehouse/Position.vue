@@ -19,10 +19,23 @@
       <el-table-column :label="$t('列数')" prop="column"></el-table-column>
       <el-table-column :label="$t('层数')" prop="row"></el-table-column>
       <el-table-column :label="$t('货位数量')" prop="counts"></el-table-column>
+      <!-- 是否启用 -->
+      <el-table-column :label="$t('是否启用')" width="120">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            @change="changeTransfer($event, scope.row.status, scope.row.id)"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
+            :active-value="1"
+            :inactive-value="0"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('操作')" width="200">
         <template slot-scope="scope">
-          <el-button class="btn-yellow" v-if="scope.row.status == 0" @click="lockNot(scope.row.id, 1)">{{$t('解锁')}}</el-button>
-          <el-button class="btn-pink" v-if="scope.row.status == 1" @click="lockNot(scope.row.id, 1)">{{$t('锁定')}}</el-button>
           <el-button class="btn-green" @click="editLocation(scope.row.id)">{{$t('修改货位')}}</el-button>
           <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{$t('删除')}}</el-button>
         </template>
@@ -165,22 +178,22 @@ export default {
         } }
       )
     },
-    // 解锁或 锁定
-    lockNot (id, status) {
-      console.log(id, status)
-      this.$request.updateLocks(id, status).then(res => {
+    // 修改开关
+    changeTransfer (event, enabled, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.updateLocks(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
-            title: '',
-            message: res.msg,
-            type: 'success'
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
           })
           this.getList()
         } else {
-          this.$notify({
-            title: this.$t('操作失败'),
+          this.$message({
             message: res.msg,
-            type: 'warning'
+            type: 'error'
           })
         }
       })

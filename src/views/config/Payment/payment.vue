@@ -913,6 +913,21 @@
             <!-- 前缀字符 -->
              <el-table-column prop="name" :label="$t('国家/地区')">
              </el-table-column>
+               <!-- 状态 -->
+            <el-table-column :label="$t('状态')">
+               <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.enabled"
+                  @change="changeCountry($event, scope.row.enabled, scope.row.id)"
+                  :active-text="$t('开')"
+                  :inactive-text="$t('关')"
+                  :active-value="1"
+                  :inactive-value="0"
+                  active-color="#13ce66"
+                  inactive-color="gray">
+                </el-switch>
+              </template>
+            </el-table-column>
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
                 <!-- 删除 -->
@@ -2814,6 +2829,24 @@ export default {
     addCountry () {
       dialog({ type: 'setCountry' }, () => {
         this.getCountryList()
+      })
+    },
+    // 国家地区 开启或关闭
+    changeCountry (event, enabled, id) {
+      this.$request.closeCountryLocation(id, event).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getCountryList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     // 系统物流类型 开启或关闭

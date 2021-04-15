@@ -12,6 +12,10 @@ exports.login = (params) => {
 }
 // 退出登录
 exports.logout = () => $form.post('logout')
+// 关于我们
+exports.aboutUs = () => $form.get('about-us')
+// 公司信息
+exports.aboutMe = () => $form.get('me')
 // 下载管理 获取列表
 exports.exportsDownloads = () => $form.get('export-downloads')
 // 配置 路线
@@ -375,6 +379,10 @@ exports.getRecordType = () => {
 // 财务 充值记录
 exports.getRecharge = (params) => {
   return $form.get('recharge-records', { params })
+}
+// 财务 充值记录 导出
+exports.uploadRecharge = (params) => {
+  return $form.get('recharge-records/export', { params })
 }
 // 财务 自提点佣金结算
 exports.commissionsPick = (params) => {
@@ -1031,7 +1039,7 @@ exports.warehouseLocationIndex = (params) => {
 }
 // 仓位管理 锁定或开锁
 exports.updateLocks = (id, status) => {
-  return $form.put(`warehouse-address/${id}/status/${status}`)
+  return $form.put(`warehouse-address/area-Unlock/${id}/status/${status}`)
 }
 // 仓位管理 查看货位状态
 exports.checkedFinish = (id) => {
@@ -1497,6 +1505,11 @@ exports.countryLocation = () => {
 exports.deleteCountryLocation = (id) => {
   return $form.delete(`countries/${id}`)
 }
+// 更多配置 开启或关闭 国家/地区
+exports.closeCountryLocation = (id, status) => {
+  return $form.put(`countries/${id}/status/${status}`)
+}
+
 // 更多配置 国家地区 排序
 exports.countryLocationIndex = (params) => {
   return $form.put('countries/sort-indexes', params)

@@ -38,6 +38,7 @@
     </div>
     <div class="select-box">
       <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
+      <el-button class="upload-sty" @click="uploadList">{{$t('导出清单')}}</el-button>
     </div>
     <el-table :data="rechargeList" stripe border class="data-list"
     v-loading="tableLoading" height="550">
@@ -165,6 +166,34 @@ export default {
         }
       })
     },
+    // 导出
+    uploadList () {
+      let params = {
+        payment_type: this.type,
+        status: this.status
+      }
+      this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // 已入库
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.uploadRecharge(params).then(res => {
+        if (res.ret) {
+          // this.urlExcel = res.data.url
+          // window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 详情
     withdrawalDetail (id) {
       this.$router.push({ name: 'rechargeDetails',
@@ -247,6 +276,10 @@ export default {
   }
   .select-box {
     overflow: hidden;
+  }
+  .upload-sty {
+    float: right;
+    margin-right: 10px;
   }
 }
 </style>

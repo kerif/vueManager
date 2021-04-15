@@ -41,6 +41,8 @@
             @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
             :active-text="$t('开')"
             :inactive-text="$t('关')"
+            :active-value="1"
+            :inactive-value="0"
             active-color="#13ce66"
             inactive-color="gray">
           </el-switch>
