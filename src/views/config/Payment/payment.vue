@@ -130,7 +130,7 @@
                 <el-radio :label="2">{{$t('SSL加密')}}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item :label="$t('开启邮箱登录验证')">
+            <!-- <el-form-item :label="$t('开启邮箱登录验证')">
               <el-switch
                 v-model="logisticsData.validate_email"
                 :active-text="$t('开')"
@@ -140,7 +140,7 @@
                 active-color="#13ce66"
                 inactive-color="gray">
               </el-switch>
-            </el-form-item>
+            </el-form-item> -->
           <div class="form-title">{{$t('短信配置——聚合')}}</div>
           <el-form-item label="Appkey" prop="juhe_key">
             <el-input v-model="logisticsData.juhe_key" placeholder="请输入Appkey"
@@ -152,7 +152,7 @@
                 <el-button class="btn-light-red" @click="testJuhe">{{$t('测试')}}</el-button>
               </div>
             </el-form-item>
-            <el-form-item :label="$t('开启短信登录验证')">
+            <!-- <el-form-item :label="$t('开启短信登录验证')">
               <el-switch
                 v-model="logisticsData.validate_phone"
                 :active-text="$t('开')"
@@ -162,7 +162,7 @@
                 active-color="#13ce66"
                 inactive-color="gray">
               </el-switch>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
           <div>
             <el-button :loading="$store.state.btnLoading" class="save-btn" @click="confirmLogistic('ruleForm')">{{$t('保存')}}</el-button>

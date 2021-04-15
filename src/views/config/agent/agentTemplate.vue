@@ -49,7 +49,10 @@
               :label="item.name"
               :value="item.id">
             </el-option>
-          </el-select>
+          </el-select>&nbsp;
+          <span v-if="form.type === 1">%/{{$t('单')}}</span>
+          <span v-if="form.type === 2">¥/{{$t('单')}}</span>
+          <span v-if="form.type === 3">¥/KG</span>
         </el-form-item>
       </el-form>
       <el-table
@@ -152,15 +155,15 @@ export default {
     }
   },
   created () {
-    this.getList()
+    this.getRules()
   },
   methods: {
-    getList () {
+    getRules () {
       this.tableLoading = true
       this.$request.agentTemplate({
         // keyword: this.page_params.keyword,
-        // page: this.page_params.page,
-        // size: this.page_params.size
+        page: this.page_params.page,
+        size: this.page_params.size
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
@@ -180,27 +183,29 @@ export default {
     // 添加计佣方式
     addCommission () {
       this.withdrawVisible = true
-      this.$request.commissionData(0, {
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        if (res.ret) {
-          this.tableData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        }
-      })
+      this.getList()
+      // this.$request.commissionData(0, {
+      //   page: this.page_params.page,
+      //   size: this.page_params.size
+      // }).then(res => {
+      //   if (res.ret) {
+      //     this.tableData = res.data
+      //     this.page_params.page = res.meta.current_page
+      //     this.page_params.total = res.meta.total
+      //   }
+      // })
     },
     // 编辑 计佣方式
     editCommission (id) {
       this.setId = id
       this.withdrawVisible = true
-      this.getLines()
+      this.getList()
       this.getWithdraw()
     },
     // 获取列表数据
-    getLines () {
-      this.$request.commissionData(this.setId, {
+    getList () {
+      console.log(this.setId, 'this.setId')
+      this.$request.commissionData(`${this.setId ? this.setId : 0}`, {
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {
@@ -213,6 +218,7 @@ export default {
     },
     // 获取模版数据
     getWithdraw () {
+      console.log('我是form')
       this.$request.commissionSet(this.setId).then(res => {
         if (res.ret) {
           this.form.name = res.data.name
@@ -252,7 +258,7 @@ export default {
               message: res.msg
             })
             this.withdrawVisible = false
-            this.getList()
+            this.getRules()
           } else {
             this.$message({
               message: res.msg,
@@ -276,7 +282,7 @@ export default {
               message: res.msg
             })
             this.withdrawVisible = false
-            this.getList()
+            this.getRules()
           } else {
             this.$message({
               message: res.msg,
@@ -305,7 +311,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getList()
+            this.getRules()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -341,7 +347,7 @@ export default {
       }).then(res => {
         if (res.ret) {
           this.trackDialog = false
-          this.getList()
+          this.getRules()
         }
       })
     }
