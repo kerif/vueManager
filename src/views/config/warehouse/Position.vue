@@ -19,14 +19,14 @@
       <el-table-column :label="$t('列数')" prop="column"></el-table-column>
       <el-table-column :label="$t('层数')" prop="row"></el-table-column>
       <el-table-column :label="$t('货位数量')" prop="counts"></el-table-column>
-      <!-- 是否启用 -->
-      <el-table-column :label="$t('是否启用')" width="120">
+      <!-- 状态 -->
+      <el-table-column :label="$t('状态')" width="180px">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
             @change="changeTransfer($event, scope.row.status, scope.row.id)"
-            :active-text="$t('开')"
-            :inactive-text="$t('关')"
+            :active-text="$t('解锁')"
+            :inactive-text="$t('锁定')"
             :active-value="1"
             :inactive-value="0"
             active-color="#13ce66"

@@ -87,8 +87,8 @@
       </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-light-red" v-if="scope.row.is_locked === 0" @click="lockLocation(scope.row.id, 1)">{{$t('锁定')}}</el-button>
-          <el-button class="btn-dark-green" v-if="scope.row.is_locked === 1" @click="lockLocation(scope.row.id, 0)">{{$t('解锁')}}</el-button>
+          <el-button class="btn-light-red" v-if="scope.row.is_locked === 0" @click="lockLocation(scope.row.id, 1)">{{$t('解锁')}}</el-button>
+          <el-button class="btn-dark-green" v-if="scope.row.is_locked === 1" @click="lockLocation(scope.row.id, 0)">{{$t('锁定')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
