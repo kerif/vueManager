@@ -2833,21 +2833,46 @@ export default {
     },
     // 国家地区 开启或关闭
     changeCountry (event, enabled, id) {
-      this.$request.closeCountryLocation(id, event).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
+      console.log(event, 'event')
+      if (event === 0) {
+        this.$confirm(this.$t('停止支持该国家后，再次开启时需重新添加支持仓库与路线'), this.$t('提示'), {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }).then(() => {
+          this.$request.closeCountryLocation(id, event).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.getCountryList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
           })
-          this.getCountryList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+        })
+      } else {
+        this.$request.closeCountryLocation(id, event).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getCountryList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
     },
     // 系统物流类型 开启或关闭
     changeType (event, enabled, id) {

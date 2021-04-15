@@ -245,7 +245,9 @@ export default {
     // 导出Excel
     uploadList (val) {
       let params = {
-        payment_type: this.type
+        payment_type: this.type,
+        express_line_id: this.line,
+        type: this.record
       }
       this.begin_date && (params.begin_date = this.begin_date)
       this.end_date && (params.end_date = this.end_date)

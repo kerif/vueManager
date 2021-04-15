@@ -210,7 +210,7 @@ export default {
     this.editor = new Wangeditor('#editor')
     this.editor.customConfig.menus = ['head', 'fontSize', 'fontName', 'bold', 'italic', 'underline', 'strikeThrough', 'foreColor', 'backColor', 'link', 'list', 'justify', 'quote', 'video', 'image', 'table']
     this.editor.customConfig.onchange = (html) => {
-      this.params.instruction = html
+      this.params.content = html
     }
     this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
     this.editor.customConfig.uploadImgParams = {}
