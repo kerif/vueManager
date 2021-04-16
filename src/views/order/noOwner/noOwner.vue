@@ -31,10 +31,10 @@
      <el-button @click="claimList">{{$t('认领记录')}}</el-button>
     </div>
     </search-group>
-    <el-table v-if="ownerData.length" class="data-list" border stripe
+    <el-table class="data-list" border stripe
       :data="ownerData"
       @selection-change="selectionChange"
-      v-loading="tableLoading" max-height="550">
+      v-loading="tableLoading" height="550">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')">

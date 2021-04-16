@@ -5,10 +5,6 @@
      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
        style="font-size:24px;"></i>
     </div>
-    <div class="about-sty" @click="checkAbout">
-      <i class="el-icon-warning-outline i-sty"></i>
-      <span class="we-sty">{{$t('关于我们')}}</span>
-    </div>
     <!-- <el-switch
       v-model="isSimple"
       :active-text="$t('简')"
@@ -66,7 +62,6 @@
 </template>
 <script>
 import TagsView from './components/tagsview'
-import dialog from '@/components/dialog'
 export default {
   components: {
     TagsView
@@ -87,10 +82,6 @@ export default {
     }
   },
   methods: {
-    // 关于我们
-    checkAbout () {
-      dialog({ type: 'aboutCheck' })
-    },
     checkUser () {
       this.$request.aboutMe().then(res => {
         if (res.ret) {
@@ -227,19 +218,6 @@ export default {
     overflow: hidden !important;
     text-overflow:ellipsis !important;
     white-space: nowrap !important;
-  }
-  .about-sty {
-    float: left;
-    cursor: pointer;
-    margin-left: 20px;
-    margin-top: 10px;
-    display: flex;
-    .i-sty {
-      font-size: 22px;
-    }
-    .we-sty {
-      padding-left: 5px;
-    }
   }
   .withdraw-sty {
   .el-dialog__header {

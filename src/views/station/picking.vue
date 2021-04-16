@@ -54,7 +54,7 @@
         </div>
       </template> -->
     </el-table>
-    <div v-else class="noDate">{{$t('暂无数据')}}</div>
+    <!-- <div v-else class="noDate">{{$t('暂无数据')}}</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">

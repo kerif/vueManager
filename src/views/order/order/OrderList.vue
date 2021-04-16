@@ -81,10 +81,11 @@
       </el-option>
     </el-select> -->
     <!-- </div> -->
-      <el-table v-if="oderData.length" class="data-list" border stripe
+    <el-table class="data-list" border stripe
+    v-if="oderData.length"
       :data="oderData"
       @selection-change="selectionChange"
-      v-loading="tableLoading" max-height="550">
+      v-loading="tableLoading" height="550">
       <el-table-column type="selection" width="55" align="center"
       v-if="activeName === '1' || activeName === '2' || activeName === '6'"></el-table-column>
       <!-- 客户ID -->
@@ -241,7 +242,7 @@
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty" v-if="activeName === '1' || activeName === '2' || activeName === '6'">
+    <div class="bottom-sty" v-if="oderData.length && (activeName === '1' || activeName === '2' || activeName === '6')">
       <!-- 删除 -->
       <el-button size="small" @click="deleteData"
       v-if="activeName === '1'">{{$t('删除')}}</el-button>
@@ -261,7 +262,7 @@
         <el-button size="small"
         v-if="activeName === '6'" @click="deleteDiscard">{{$t('彻底删除')}}</el-button>
     </div>
-    <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
+    <div class="noDate" v-if="!oderData.length">{{$t('暂无数据')}}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">

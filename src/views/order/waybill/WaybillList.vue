@@ -123,8 +123,7 @@
       <!-- </el-col> -->
     </search-group>
     <el-table row-key="id" :expand-row-keys="expands" class="data-list" border stripe
-      v-if="oderData.length"
-      v-loading="tableLoading"
+      v-loading="tableLoading" v-if="oderData.length"
       @expand-change="onExpand"
       highlight-current-row
       :data="oderData" @selection-change="onSelectChange"
@@ -503,7 +502,7 @@
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
+    <div class="bottom-sty" v-if="oderData.length && (activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5')">
       <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button>
       <!-- 加入发货单 -->
       <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
@@ -524,7 +523,7 @@
         <el-button size="small" v-if="activeName === '4'" @click="signed">{{$t('已签收')}}
       </el-button>
     </div>
-    <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
+    <div class="noDate" v-if="!oderData.length">{{$t('暂无数据')}}</div>
       <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
         <div class="dialogSty">
           <iframe class="iframe" :src="urlHtml"></iframe>
