@@ -27,8 +27,8 @@
             @change="changeTransfer($event, scope.row.status, scope.row.id)"
             :active-text="$t('解锁')"
             :inactive-text="$t('锁定')"
-            :active-value="1"
-            :inactive-value="0"
+            :active-value="0"
+            :inactive-value="1"
             active-color="#13ce66"
             inactive-color="gray">
           </el-switch>
