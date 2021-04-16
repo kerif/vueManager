@@ -977,6 +977,7 @@ export default {
     },
     getList () {
       this.tableLoading = true
+      this.selectIDs = []
       this.oderData = []
       let params = {
         page: this.page_params.page,
