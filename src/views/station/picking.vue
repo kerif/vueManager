@@ -17,7 +17,7 @@
       <!-- 操作时间 -->
       <el-table-column :label="$t('操作时间')" prop="created_at"></el-table-column>
       <!-- 具体操作 -->
-      <el-table-column :label="$t('具体操作')">
+      <el-table-column :label="$t('具体操作')" v-if="activeName === '1'">
         <template slot-scope="scope">
           <span v-if="scope.row.type === 1">{{$t('包裹入库')}}</span>
           <span v-if="scope.row.type === 2">{{$t('退回未入库')}}</span>

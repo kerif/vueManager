@@ -192,7 +192,8 @@
               <el-radio-group v-model="user.box_type">
                 <el-radio :label="1">{{$t('单箱出库')}}</el-radio>
                 <el-radio :label="2">{{$t('多箱出库')}}</el-radio>
-              </el-radio-group>
+              </el-radio-group>&nbsp;&nbsp;
+              <el-button @click="originalBox">{{$t('原箱出库')}}</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="10" :offset="2">
@@ -450,8 +451,6 @@ export default {
   },
   created () {
     console.log('我是打包')
-    console.log(this.$route.params.parent, 'this.$route.params.parent')
-    console.log(this.$route.params.activeName, 'activename')
     this.getPackage()
     this.getExpress()
     this.getProduct()
@@ -618,10 +617,30 @@ export default {
         this.user.express_line_id = data.id
       })
     },
+    // 原箱出库
+    originalBox () {
+      if (this.PackageData.length > 1) {
+        this.user.box_type = 2
+        this.user.box = this.PackageData.map(item => {
+          return {
+            length: item.length,
+            width: item.width,
+            height: item.height,
+            weight: item.package_weight
+          }
+        })
+      } else {
+        this.user.weight = this.PackageData[0].package_weight
+        this.user.length = this.PackageData[0].length
+        this.user.width = this.PackageData[0].width
+        this.user.height = this.PackageData[0].height
+      }
+    },
     getPackage () {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
+        console.log(this.PackageData.length, 'this.PackageData')
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.services = res.data.services
