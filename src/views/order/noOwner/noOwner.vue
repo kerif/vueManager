@@ -31,7 +31,7 @@
      <el-button @click="claimList">{{$t('认领记录')}}</el-button>
     </div>
     </search-group>
-    <el-table v-if="ownerData.length" class="data-list" border stripe
+    <el-table class="data-list" border stripe
       :data="ownerData"
       @selection-change="selectionChange"
       v-loading="tableLoading" max-height="550">

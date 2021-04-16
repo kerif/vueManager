@@ -81,10 +81,10 @@
       </el-option>
     </el-select> -->
     <!-- </div> -->
-      <el-table v-if="oderData.length" class="data-list" border stripe
+    <el-table class="data-list" border stripe
       :data="oderData"
       @selection-change="selectionChange"
-      v-loading="tableLoading" max-height="550">
+      v-loading="tableLoading" height="550">
       <el-table-column type="selection" width="55" align="center"
       v-if="activeName === '1' || activeName === '2' || activeName === '6'"></el-table-column>
       <!-- 客户ID -->

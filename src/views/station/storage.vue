@@ -716,7 +716,9 @@ export default {
     handleSelect (item) {
       console.log(item)
       this.supplierId = item.id
+      this.userId = item.id
       this.supplierName = item.name
+      this.getAreaLocation()
     },
     // 货位
     locationSelect (item) {

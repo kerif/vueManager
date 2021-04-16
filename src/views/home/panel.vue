@@ -128,6 +128,9 @@
           <span class="check-sty" @click="checkSystem(item.id)">{{item.title}}</span>
         </div>
       </div>
+      <div class="about-sty" @click="checkAbout">
+      <el-button class="we-sty">{{$t('客户端下载')}}</el-button>
+    </div>
     </el-col>
   </el-row>
     <el-dialog :visible.sync="showTips" :title="$t('系统配置助手')" class="dialog-start-loading" width="45%">
@@ -181,6 +184,7 @@
 </template>
 <script>
 import echarts from 'echarts'
+import dialog from '@/components/dialog'
 import { formatWeek, formatMonth } from '@/utils'
 export default {
   name: 'panel',
@@ -305,6 +309,10 @@ export default {
     onStatus (status) {
       this.status = status
       this.getDatas()
+    },
+    // 客户端下载
+    checkAbout () {
+      dialog({ type: 'aboutCheck' })
     },
     // 获取系统通知
     getSystem () {
@@ -738,6 +746,9 @@ export default {
   }
   .main-top {
     background-color: #f5f5f5;
+  }
+  .about-sty {
+    cursor: pointer;
   }
 }
 </style>
