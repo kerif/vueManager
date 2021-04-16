@@ -468,6 +468,7 @@ export default {
     },
     // 获取可推荐货位
     getAreaLocation () {
+      this.locationCode = ''
       console.log(this.user.warehouse_id, 'ware')
       console.log(this.userId, 'this.userId')
       if (this.user.warehouse_id && this.userId) {
