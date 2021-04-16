@@ -25,7 +25,7 @@
       <!-- v-if="oderData.length" -->
     </el-tabs>
       <el-table class="data-list" border stripe
-      v-loading="tableLoading"
+      v-loading="tableLoading" height="550"
       :data="voucherData" @selection-change="onSelectChange">
       <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
       <el-table-column type="index" width="50"></el-table-column>

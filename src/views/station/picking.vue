@@ -10,12 +10,22 @@
    <el-table class="data-list" border stripe
    v-if="oderData.length"
     v-loading="tableLoading"
-      :data="oderData">
+      :data="oderData" height="550">
       <!-- 操作人 -->
      <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
       <!-- 操作时间 -->
       <el-table-column :label="$t('操作时间')" prop="created_at"></el-table-column>
+      <!-- 具体操作 -->
+      <el-table-column :label="$t('具体操作')" v-if="activeName === '1'">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type === 1">{{$t('包裹入库')}}</span>
+          <span v-if="scope.row.type === 2">{{$t('退回未入库')}}</span>
+          <span v-if="scope.row.type === 3">{{$t('弃件')}}</span>
+          <span v-if="scope.row.type === 4">{{$t('彻底删除')}}</span>
+          <span v-if="scope.row.type === 5">{{$t('恢复')}}</span>
+        </template>
+      </el-table-column>
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')" prop="express_num" v-if="activeName === '1'"></el-table-column>
       <!-- 订单号 -->

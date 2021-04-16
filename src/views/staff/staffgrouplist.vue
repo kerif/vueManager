@@ -12,7 +12,8 @@
         border
         @selection-change="selectionChange"
         v-loading='tableLoading'
-        ref="table">
+        ref="table"
+        height="550">
       <el-table-column
         type="selection"
         width="55">
@@ -56,13 +57,15 @@
         <el-button class="btn-pink" v-if="scope.row.permissions === 1" @click="pickPiont(scope.row.id)">{{$t('自提点权限')}}</el-button>
       </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <!-- 删除 -->
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
+    <div class="bottom-sty">
+      <!-- 删除 -->
+      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+    </div>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>

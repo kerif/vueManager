@@ -47,7 +47,7 @@
     border class="data-list"
     @expand-change="onExpand"
     @selection-change="selectionChange"
-    v-loading="tableLoading">
+    v-loading="tableLoading" height="550">
     <!-- <el-table-column type="expand">
       <template slot-scope="props">
         <el-table :data="props.row.orders">
@@ -114,12 +114,12 @@
       <!-- 备注 -->
       <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
       <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="160" fixed="right">
+      <el-table-column :label="$t('操作')" width="116px" fixed="right">
         <template slot-scope="scope">
           <!-- 导出清单 -->
           <!-- <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button> -->
           <el-dropdown>
-            <el-button type="primary">
+            <el-button type="primary" plain>
               {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -157,33 +157,20 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <!-- <el-button class="btn-green btn-margin" @click="goInvoice(scope.row.id)" v-if="scope.row.status === 0">{{$t('发货')}}</el-button> -->
-          <!-- 详情 -->
-          <!-- <el-button class="btn-deep-purple btn-margin" @click="goDetails(scope.row.id, scope.row.status)">{{$t('详情')}}</el-button> -->
-          <!-- 删除 -->
-          <!-- <el-button class="btn-light-red btn-margin" v-if="scope.row.box_count === 0" @click="deleteShip(scope.row.id)">{{$t('删除')}}</el-button> -->
-          <!-- 加入发货单 -->
-          <!-- <el-button class="btn-blue-green btn-margin" @click="addShip(scope.row.id)">{{$t('加入发货单')}}</el-button> -->
-          <!-- 取消发货 -->
-          <!-- <el-button class="btn-orangey-red btn-margin" v-if="scope.row.status === 1" @click="cancelShip(scope.row.id)">{{$t('取消发货')}}</el-button> -->
-          <!-- 轨迹 -->
-          <!-- <el-button class="btn-deep-blue btn-margin" @click="logistics(scope.row.id, scope.row.sn)">{{$t('轨迹')}}</el-button> -->
-          <!-- 批量更新单号 -->
-          <!-- <el-button class="btn-pink btn-margin" @click="batchNum(scope.row.id, scope.row.sn)">{{$t('批量更新单号')}}</el-button> -->
-          <!-- 添加物流信息 -->
-          <!-- <el-button size="small" @click="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)" class="btn-green btn-margin">{{$t('添加物流信息')}}</el-button> -->
         </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <el-button size="small" @click="updateTracking">{{$t('更新物流状态')}}</el-button>
-           <el-button size="small" @click="deleteData">{{$t('导出清单')}}</el-button>
-            <!-- 批量发送通知 -->
-           <el-button size="small" @click="goNotify">{{$t('批量发送通知')}}</el-button>
-           <el-button size="small" @click="batchNum">{{$t('批量更新单号-二程')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
+    <div class="bottom-sty">
+      <el-button size="small" @click="updateTracking">{{$t('更新物流状态')}}</el-button>
+        <el-button size="small" @click="deleteData">{{$t('导出清单')}}</el-button>
+        <!-- 批量发送通知 -->
+        <el-button size="small" @click="goNotify">{{$t('批量发送通知')}}</el-button>
+        <el-button size="small" @click="batchNum">{{$t('批量更新单号-二程')}}</el-button>
+    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
       <el-form label-position="top" :model="form" ref="form">
@@ -785,6 +772,10 @@ export default {
   }
   .batch-sty {
     color: red;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>

@@ -34,7 +34,7 @@
     <el-table v-if="ownerData.length" class="data-list" border stripe
       :data="ownerData"
       @selection-change="selectionChange"
-      v-loading="tableLoading">
+      v-loading="tableLoading" max-height="550">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')">
@@ -77,11 +77,10 @@
           </span>
         </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
-      </template>
+      </template> -->
       <el-table-column :label="$t('操作')" width="220">
         <template slot-scope="scope">
          <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{$t('打印标签')}}</el-button>
@@ -90,7 +89,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="noDate" v-else>{{$t('暂无数据')}}</div>
+    <div class="bottom-sty">
+      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+    </div>
+    <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
       <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
         <div class="dialogSty">
@@ -374,6 +376,10 @@ export default {
   .import-list {
     display: inline-block;
     margin-left: 10px;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>

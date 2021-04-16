@@ -19,6 +19,21 @@
       <el-table-column :label="$t('列数')" prop="column"></el-table-column>
       <el-table-column :label="$t('层数')" prop="row"></el-table-column>
       <el-table-column :label="$t('货位数量')" prop="counts"></el-table-column>
+      <!-- 状态 -->
+      <el-table-column :label="$t('状态')" width="180px">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            @change="changeTransfer($event, scope.row.status, scope.row.id)"
+            :active-text="$t('解锁')"
+            :inactive-text="$t('锁定')"
+            :active-value="0"
+            :inactive-value="1"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('操作')" width="200">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="editLocation(scope.row.id)">{{$t('修改货位')}}</el-button>
@@ -162,6 +177,26 @@ export default {
           id: id
         } }
       )
+    },
+    // 修改开关
+    changeTransfer (event, enabled, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.updateLocks(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 新增货位
     addLocation () {

@@ -198,7 +198,7 @@
           </el-row>
           <!-- 存放货位 -->
           <el-row :gutter="20">
-            <el-col :span="18">
+            <el-col :span="12">
               <el-form-item>
               <div slot="label">
                 <span>{{$t('存放货位')}}</span>
@@ -215,6 +215,11 @@
                   v-model="user.location">
                 </el-autocomplete>
               </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <p style="margin-top: 8px">{{$t('推荐货位')}}
+                <span>{{locationCode}}</span>
+              </p>
             </el-col>
           </el-row>
           <!-- 包裹编码 -->
@@ -399,7 +404,9 @@ export default {
       locationId: '',
       form: {},
       shipNum: '', // 通过快递单号拉取的包裹id
-      expressNum: '' // 保存的快递单号
+      expressNum: '', // 保存的快递单号
+      userId: '',
+      locationCode: ''
     }
   },
   created () {
@@ -459,6 +466,14 @@ export default {
         }
       })
     },
+    // 获取可推荐货位
+    getAreaLocation () {
+      this.$request.getAreaLocation(this.userId).then(res => {
+        if (res.ret) {
+          this.locationCode = res.data.code
+        }
+      })
+    },
     // 从包裹快速入库时获取整页数据
     getList () {
       let id
@@ -470,6 +485,11 @@ export default {
       this.$request.getProductDetails(id).then(res => {
         if (res.ret) {
           this.user = res.data
+          if (res.data.user_id) {
+            this.userId = res.data.user_id
+            console.log(this.userId)
+            this.getAreaLocation()
+          }
           // this.user.express_num = this.$route.params.express_num
           this.user.user_id = res.data.user_id + '---' + res.data.user_name
           this.user.props = res.data.props.map(item => item.id)

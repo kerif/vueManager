@@ -15,7 +15,8 @@
         border
         ref="table"
         @selection-change="selectionChange"
-        v-loading="tableLoading">
+        v-loading="tableLoading"
+        height="550">
       <el-table-column
         type="selection"
         width="55">
@@ -69,16 +70,21 @@
         </el-button>
       </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <!-- 禁止登录 -->
           <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
           <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
-          <!-- 删除 -->
           <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
+    <div class="bottom-sty">
+      <!-- 禁止登录 -->
+      <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
+      <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
+      <!-- 删除 -->
+      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+    </div>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -198,6 +204,9 @@ export default {
     },
     // 禁止/允许登录
     forbidLogin (type) {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择员工'))
+      }
       console.log(type)
       if (type === 0) {
         this.$request.forbidUser({
@@ -268,6 +277,10 @@ export default {
   }
   .select-box {
     overflow: hidden;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>

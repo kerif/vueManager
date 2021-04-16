@@ -95,6 +95,7 @@ import selfReview from './selfReview.vue'
 import payDetails from './payDetails.vue'
 import financeReview from './financeReview.vue'
 import openLine from './openLine.vue'
+import aboutCheck from './checkAbout.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -190,6 +191,7 @@ const SelfReviewController = Vue.extend(selfReview)
 const PayDetailsController = Vue.extend(payDetails)
 const FinanceReviewController = Vue.extend(financeReview)
 const OpenLineController = Vue.extend(openLine)
+const CheckAboutController = Vue.extend(aboutCheck)
 
 const mixin = {
   data () {
@@ -852,6 +854,13 @@ function initInstance (type) {
     // 更多配置 保险服务或关税服务 开启线路
     case 'openLine':
       instance = new OpenLineController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 关于我们
+    case 'aboutCheck':
+      instance = new CheckAboutController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

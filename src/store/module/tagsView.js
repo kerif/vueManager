@@ -1,6 +1,6 @@
 const state = {
   visitedViews: [],
-  cachedViews: ['LineAddEdit']
+  cachedViews: []
 }
 
 const mutations = {
@@ -13,11 +13,9 @@ const mutations = {
     )
   },
   ADD_CACHED_VIEW: (state, view) => {
-    console.log(view, 'view')
     if (state.cachedViews.includes(view.name)) return
     if (!view.meta.noCache) {
       state.cachedViews.push(view.name)
-      console.log(state.cachedViews, 'state.cachedViews')
     }
   },
 

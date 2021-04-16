@@ -40,7 +40,7 @@
       <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
     </div> -->
     <el-table :data="rechargeList" stripe border class="data-list"
-    v-loading="tableLoading">
+    v-loading="tableLoading" height="550">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 自提点名称 -->
       <el-table-column :label="$t('自提点名称')" prop="name">

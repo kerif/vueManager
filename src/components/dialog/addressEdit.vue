@@ -31,14 +31,14 @@
         </el-form-item>
       </el-col>
       <el-col :span="10">
-        <el-form-item :label="'*' + $t('城市')">
+        <el-form-item :label="$t('城市')">
           <el-input v-model="form.city"></el-input>
         </el-form-item>
       </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item :label="'*' + $t('街道')">
+          <el-form-item :label="$t('街道')">
             <el-input v-model="form.street"></el-input>
           </el-form-item>
         </el-col>
@@ -141,12 +141,8 @@ export default {
     submit () {
       if (this.form.country_id === '') {
         return this.$message.error(this.$t('请选择国家/地区'))
-      } else if (this.form.city === '') {
-        return this.$message.error(this.$t('请输入城市'))
       } else if (this.form.receiver_name === '') {
         return this.$message.error(this.$t('请输入收件人'))
-      } else if (this.form.street === '') {
-        return this.$message.error(this.$t('请输入街道'))
       } else if (this.form.phone === '') {
         return this.$message.error(this.$t('请输入联系电话'))
       }

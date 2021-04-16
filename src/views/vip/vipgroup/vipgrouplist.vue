@@ -20,12 +20,14 @@
           <el-button class="btn-main" @click="member(scope.row.id)">{{$t('成员')}}</el-button>
         </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
+    <div class="bottom-sty">
+      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -141,6 +143,10 @@ export default {
 .vipgroup-list-container {
   .select-box {
     overflow: hidden;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>

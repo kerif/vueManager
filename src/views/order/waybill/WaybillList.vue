@@ -128,7 +128,7 @@
       @expand-change="onExpand"
       highlight-current-row
       :data="oderData" @selection-change="onSelectChange"
-      >
+      height="550">
       <!-- 二级分类列表 -->
       <el-table-column width="0" type="expand">
         <template slot-scope="props">
@@ -223,12 +223,12 @@
         </template>
       </el-table-column>
       <!-- 二级操作栏 -->
-      <el-table-column :label="$t('操作')" class="table-fixed" width="160">
+      <el-table-column :label="$t('操作')" width="116px" fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
-            <el-button type="primary">
+            <!-- <el-button type="primary" plain>
               {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
+            </el-button> -->
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item class="item-sty" @click.native="details(scope.row.id, activeName)">
                 <!-- 详情 -->
@@ -397,10 +397,10 @@
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column :label="$t('操作')" fixed="right" width="160">
+      <el-table-column :label="$t('操作')" width="115px" fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
-            <el-button type="primary">
+            <el-button type="primary" plain>
               {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -498,30 +498,33 @@
           v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button> -->
         </template>
       </el-table-column>
-      <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
+      <!-- <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
         <div class="append-box">
-          <!-- 删除 -->
-          <!-- <el-button size="small">删除</el-button> -->
-          <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button>
-          <!-- 加入发货单 -->
-          <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
-           <!-- 导出发票 -->
-           <el-button size="small" @click="uploadInvoice(selectIDs)" v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button>
-            <!-- 批量发送通知 -->
-           <el-button size="small" @click="goNotify"
-           v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
-           <!-- 批量改成货到付款 -->
-           <el-button size="small"  v-if="this.activeName === '2'" @click="changeDelivery">{{$t('批量改成货到付款')}}</el-button>
-           <!-- 更新物流状态 -->
-            <el-button size="small" @click="updateTracking"
-           v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
-           <!-- 已付款 -->
-            <el-button size="small" v-if="activeName === '3' ||activeName === '4' || activeName === '5'" @click="payed">{{$t('已付款')}}
-          </el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
-    <div class="noDate" v-else>{{$t('暂无数据')}}</div>
+    <div class="bottom-sty" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
+      <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button>
+      <!-- 加入发货单 -->
+      <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
+        <!-- 导出发票 -->
+        <el-button size="small" @click="uploadInvoice(selectIDs)" v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button>
+        <!-- 批量发送通知 -->
+        <el-button size="small" @click="goNotify"
+        v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
+        <!-- 批量改成货到付款 -->
+        <el-button size="small"  v-if="this.activeName === '2'" @click="changeDelivery">{{$t('批量改成货到付款')}}</el-button>
+        <!-- 更新物流状态 -->
+        <el-button size="small" @click="updateTracking"
+        v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
+        <!-- 已付款 -->
+        <el-button size="small" v-if="activeName === '3' ||activeName === '4' || activeName === '5'" @click="payed">{{$t('已付款')}}
+      </el-button>
+        <!-- 已签收 -->
+        <el-button size="small" v-if="activeName === '4'" @click="signed">{{$t('已签收')}}
+      </el-button>
+    </div>
+    <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
       <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
         <div class="dialogSty">
           <iframe class="iframe" :src="urlHtml"></iframe>
@@ -974,6 +977,7 @@ export default {
     },
     getList () {
       this.tableLoading = true
+      this.selectIDs = []
       this.oderData = []
       let params = {
         page: this.page_params.page,
@@ -1299,7 +1303,7 @@ export default {
       })
     },
     // eslint-disable-next-line no-unused-vars
-    payed (id) {
+    payed () {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -1309,6 +1313,34 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$request.payedOrders({
+          ids: this.selectIDs
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
+    },
+    signed () {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$confirm(this.$t('您真的确认更改状态为已签收吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.signedOrders({
           ids: this.selectIDs
         }).then(res => {
           if (res.ret) {
@@ -1933,6 +1965,10 @@ export default {
   }
   .packaged {
     color:green !important;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 .dialog-input {

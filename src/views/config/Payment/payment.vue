@@ -130,7 +130,7 @@
                 <el-radio :label="2">{{$t('SSL加密')}}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item :label="$t('开启邮箱登录验证')">
+            <!-- <el-form-item :label="$t('开启邮箱登录验证')">
               <el-switch
                 v-model="logisticsData.validate_email"
                 :active-text="$t('开')"
@@ -140,7 +140,7 @@
                 active-color="#13ce66"
                 inactive-color="gray">
               </el-switch>
-            </el-form-item>
+            </el-form-item> -->
           <div class="form-title">{{$t('短信配置——聚合')}}</div>
           <el-form-item label="Appkey" prop="juhe_key">
             <el-input v-model="logisticsData.juhe_key" placeholder="请输入Appkey"
@@ -152,7 +152,7 @@
                 <el-button class="btn-light-red" @click="testJuhe">{{$t('测试')}}</el-button>
               </div>
             </el-form-item>
-            <el-form-item :label="$t('开启短信登录验证')">
+            <!-- <el-form-item :label="$t('开启短信登录验证')">
               <el-switch
                 v-model="logisticsData.validate_phone"
                 :active-text="$t('开')"
@@ -162,7 +162,7 @@
                 active-color="#13ce66"
                 inactive-color="gray">
               </el-switch>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
           <div>
             <el-button :loading="$store.state.btnLoading" class="save-btn" @click="confirmLogistic('ruleForm')">{{$t('保存')}}</el-button>
@@ -638,7 +638,7 @@
         <el-table :data="CategoriesList" stripe
           border class="data-list"
           @expand-change="onExpand"
-          v-loading="tableLoading">
+          v-loading="tableLoading" height="550">
           <!-- 二级分类列表 -->
           <el-table-column type="expand">
             <template slot-scope="props">
@@ -758,7 +758,7 @@
           <add-btn router="emailAdd">{{$t('添加邮件模版')}}</add-btn>
         </div>
           <el-table :data="emailData" v-loading="tableLoading" class="data-list"
-          border stripe>
+          border stripe height="550">
             <el-table-column type="index"></el-table-column>
             <!-- 模版类型 -->
             <el-table-column :label="$t('模版类型')" prop="type_name">
@@ -799,7 +799,7 @@
             <add-btn @click.native="addExpress">{{$t('添加')}}</add-btn>
           </div>
             <el-table :data="expressData" v-loading="tableLoading" class="data-list"
-            border stripe>
+            border stripe height="550">
             <el-table-column type="index"></el-table-column>
             <!-- 状态 -->
             <el-table-column :label="$t('状态')">
@@ -868,9 +868,17 @@
             </el-table-column>
             <!-- 状态 -->
             <el-table-column :label="$t('状态')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.status === 0">{{$t('关闭')}}</span>
-                <span v-if="scope.row.status === 1">{{$t('启用')}}</span>
+               <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.status"
+                  @change="changeRules($event, scope.row.status, scope.row.id)"
+                  :active-text="$t('开')"
+                  :inactive-text="$t('关')"
+                  :active-value="1"
+                  :inactive-value="0"
+                  active-color="#13ce66"
+                  inactive-color="gray">
+                </el-switch>
               </template>
             </el-table-column>
             <!-- 前缀字符 -->
@@ -896,7 +904,7 @@
             <add-btn @click.native="addCountry">{{$t('添加')}}</add-btn>
           </div>
           <el-table :data="countryData" v-loading="tableLoading" class="data-list country"
-            border stripe>
+            border stripe height="550">
             <el-table-column width="100px" align="center">
               <template >
                 <i class="el-icon-sort icon-fonts"></i>
@@ -905,6 +913,21 @@
             <!-- 前缀字符 -->
              <el-table-column prop="name" :label="$t('国家/地区')">
              </el-table-column>
+               <!-- 状态 -->
+            <el-table-column :label="$t('状态')">
+               <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.enabled"
+                  @change="changeCountry($event, scope.row.enabled, scope.row.id)"
+                  :active-text="$t('开')"
+                  :inactive-text="$t('关')"
+                  :active-value="1"
+                  :inactive-value="0"
+                  active-color="#13ce66"
+                  inactive-color="gray">
+                </el-switch>
+              </template>
+            </el-table-column>
             <el-table-column :label="$t('操作')">
               <template slot-scope="scope">
                 <!-- 删除 -->
@@ -2784,11 +2807,72 @@ export default {
         }
       })
     },
+    // 单号规则 开启或关闭
+    changeRules (event, enabled, id) {
+      this.$request.changeRules(id, event).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getRules()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 添加国家/地区
     addCountry () {
       dialog({ type: 'setCountry' }, () => {
         this.getCountryList()
       })
+    },
+    // 国家地区 开启或关闭
+    changeCountry (event, enabled, id) {
+      console.log(event, 'event')
+      if (event === 0) {
+        this.$confirm(this.$t('停止支持该国家后，再次开启时需重新添加支持仓库与路线'), this.$t('提示'), {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }).then(() => {
+          this.$request.closeCountryLocation(id, event).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.getCountryList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+        })
+      } else {
+        this.$request.closeCountryLocation(id, event).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getCountryList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
     },
     // 系统物流类型 开启或关闭
     changeType (event, enabled, id) {

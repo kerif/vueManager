@@ -4,7 +4,7 @@
     <el-container direction="vertical" :class="['layout', isCollapse ? 'is-collapse' : '']">
       <layout-header></layout-header>
       <el-main :class="[isCollapse && 'isCollapses']">
-        <transition name="fade-transform" mode="out-in">
+        <transition :css="false">
           <keep-alive :include="cachedViews">
             <router-view :key="key"></router-view>
           </keep-alive>
@@ -17,6 +17,7 @@
 import LayoutAside from './layoutaside'
 import LayoutHeader from './layoutheader'
 export default {
+  name: 'layoutContainer',
   components: {
     LayoutAside,
     LayoutHeader
@@ -29,7 +30,7 @@ export default {
       return this.$store.state.isCollapse
     },
     key () {
-      return this.$route.path
+      return this.$route.name
     }
   }
 }

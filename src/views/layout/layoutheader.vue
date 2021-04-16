@@ -5,12 +5,17 @@
      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
        style="font-size:24px;"></i>
     </div>
+    <div class="about-sty" @click="checkAbout">
+      <i class="el-icon-warning-outline i-sty"></i>
+      <span class="we-sty">{{$t('关于我们')}}</span>
+    </div>
     <!-- <el-switch
       v-model="isSimple"
       :active-text="$t('简')"
       :inactive-text="$t('繁')"
       inactive-color="#13ce66" /> -->
     <!-- <el-button class="upload-btn">{{$t('下载管理')}}</el-button> -->
+    <!-- <div>关于我们</div> -->
     <el-popover
       placement="top"
       width="600"
@@ -41,7 +46,17 @@
       <el-option v-for="item in language"
         :key="item.id" :label="item.label" :value="item.value"></el-option>
     </el-select>
-    <span class="user-box">{{ $store.state.userName }}</span>
+    <!-- <span class="user-box" @click="checkUser">{{ $store.state.userName }}</span> -->
+    <el-popover
+      class="user-box"
+      placement="bottom"
+      trigger="click"
+      width="250">
+    <p>{{$t('公司')}}：{{form.company_name}}</p>
+    <p>{{$t('系统有效期')}}：{{form.expired_at}}</p>
+    <p>{{$t('所属员工组')}}：{{form.group_name}}</p>
+    <el-button slot="reference" @click="checkUser">{{ $store.state.userName }}</el-button>
+  </el-popover>
     <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
     </div>
     <div :class="[isCollapse && 'isCollapses']" class="layout-nav">
@@ -51,6 +66,7 @@
 </template>
 <script>
 import TagsView from './components/tagsview'
+import dialog from '@/components/dialog'
 export default {
   components: {
     TagsView
@@ -61,10 +77,29 @@ export default {
         { label: '简体', value: 1 },
         { label: '繁体', value: 2 }
       ],
-      gridData: []
+      gridData: [],
+      aboutDialog: false,
+      form: {
+        company_name: '',
+        expired_at: '',
+        group_name: ''
+      }
     }
   },
   methods: {
+    // 关于我们
+    checkAbout () {
+      dialog({ type: 'aboutCheck' })
+    },
+    checkUser () {
+      this.$request.aboutMe().then(res => {
+        if (res.ret) {
+          this.form.company_name = res.data.company_name
+          this.form.expired_at = res.data.expired_at
+          this.form.group_name = res.data.group_name
+        }
+      })
+    },
     onLogout () {
       this.$confirm(this.$t('是否确认退出登录？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
@@ -164,6 +199,7 @@ export default {
     }
   }
   .user-box {
+    cursor: pointer;
     margin: 0 30px;
   }
   .logout-icon {
@@ -191,6 +227,28 @@ export default {
     overflow: hidden !important;
     text-overflow:ellipsis !important;
     white-space: nowrap !important;
+  }
+  .about-sty {
+    float: left;
+    cursor: pointer;
+    margin-left: 20px;
+    margin-top: 10px;
+    display: flex;
+    .i-sty {
+      font-size: 22px;
+    }
+    .we-sty {
+      padding-left: 5px;
+    }
+  }
+  .withdraw-sty {
+  .el-dialog__header {
+    background-color: #0E102A;
+    }
+    .el-dialog__title {
+      color: #fff;
+      font-size: 14px;
+    }
   }
 }
 </style>

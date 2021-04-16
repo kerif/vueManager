@@ -21,7 +21,7 @@
     </div>
     <div v-if="status === 1">
     <el-table :data="logisticsList" stripe border class="data-list"
-    v-loading="tableLoading"
+    v-loading="tableLoading" height="550"
     @selection-change="selectionChange">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
@@ -38,7 +38,21 @@
           <div class="check-sty" @click="checkLines(scope.row.id, scope.row.name)">{{scope.row.expressLines_count}}</div>
         </template>
       </el-table-column>
-      <!-- 支持货到付款 -->
+      <!-- 是否启用 -->
+      <el-table-column :label="$t('是否启用')" width="120">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.enabled"
+            @change="changeEnabled($event, scope.row.enabled, scope.row.id)"
+            :active-text="$t('开')"
+            :active-value="1"
+            :inactive-value="0"
+            :inactive-text="$t('关')"
+            active-color="#13ce66"
+            inactive-color="gray">
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('支持货到付款')" width="120">
         <template slot-scope="scope">
           <el-switch
@@ -197,6 +211,26 @@ export default {
       console.log(typeof (event), '我是event')
       console.log(event, 'event')
       this.$request.resetSelf(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 是否启用
+    changeEnabled (event, enabled, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.resetEnabled(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',

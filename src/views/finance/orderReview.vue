@@ -52,7 +52,7 @@
       </div>
     </search-group>
     <el-table v-if="reviewData.length && this.activeName === '0'" class="data-list" border stripe
-      :data="reviewData"
+      :data="reviewData" height="550"
       v-loading="tableLoading">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 客户ID -->

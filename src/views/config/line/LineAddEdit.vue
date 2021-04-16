@@ -508,7 +508,7 @@
 <script>
 import dialog from '@/components/dialog'
 export default {
-  name: 'LineAddEdit',
+  name: 'lineAddEdit',
   data () {
     return {
       form: {
@@ -585,7 +585,7 @@ export default {
       itemArr: {}
     }
   },
-  activated () {
+  created () {
     const add = localStorage.getItem('add')
     console.log(add, 'add')
     if (add) {

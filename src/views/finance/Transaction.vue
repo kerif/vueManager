@@ -13,9 +13,25 @@
           :start-placeholder="$t('开始日期')"
           :end-placeholder="$t('结束日期')">
        </el-date-picker>
+      <el-select v-model="line" @change="onLineTypeChange" clearable :placeholder="$t('路线筛选')">
+        <el-option
+          v-for="item in linesChange"
+          :key="item.id"
+          :value="item.id"
+          :label="item.name">
+        </el-option>
+       </el-select>
       <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('支付类型')">
         <el-option
           v-for="item in voucherChange"
+          :key="item.id"
+          :value="item.id"
+          :label="item.name">
+        </el-option>
+       </el-select>
+      <el-select v-model="record" @change="onRecordTypeChange" clearable class="changeVou" :placeholder="$t('交易类型')">
+        <el-option
+          v-for="item in recordChange"
           :key="item.id"
           :value="item.id"
           :label="item.name">
@@ -25,7 +41,7 @@
       </search-group>
     </div>
     <el-table :data="transactionList" stripe border class="data-list"
-    v-loading="tableLoading">
+    v-loading="tableLoading" height="650">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
@@ -88,7 +104,11 @@ export default {
       begin_date: '',
       end_date: '',
       type: '',
-      voucherChange: []
+      line: '',
+      record: '',
+      voucherChange: [],
+      recordChange: [],
+      linesChange: []
     }
   },
   mixins: [pagination],
@@ -110,6 +130,8 @@ export default {
   mounted () {
     this.getList()
     this.getTypes()
+    this.getRecord()
+    this.getLines()
   },
   methods: {
     getList () {
@@ -117,7 +139,9 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        payment_type: this.type
+        payment_type: this.type,
+        express_line_id: this.line,
+        type: this.record
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       this.begin_date && (params.begin_date = this.begin_date)
@@ -166,7 +190,17 @@ export default {
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },
-    // 获取下拉框
+    // 选择不同类型优惠券
+    onRecordTypeChange () {
+      this.page_params.handleQueryChange('record', this.record)
+      this.getList()
+    },
+    // 选择不同类型路线
+    onLineTypeChange () {
+      this.page_params.handleQueryChange('line', this.line)
+      this.getList()
+    },
+    // 获取支付类型
     getTypes () {
       this.$request.getPaymentType().then(res => {
         if (res.ret) {
@@ -180,17 +214,47 @@ export default {
         }
       })
     },
+    // 获取交易类型
+    getRecord () {
+      this.$request.getRecordType().then(res => {
+        if (res.ret) {
+          this.recordChange = res.data
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 获取路线筛选
+    getLines () {
+      this.$request.getSimpleLines().then(res => {
+        if (res.ret) {
+          this.linesChange = res.data
+        } else {
+          this.$notify({
+            title: '操作失败',
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 导出Excel
     uploadList (val) {
       let params = {
-        payment_type: this.type
+        payment_type: this.type,
+        express_line_id: this.line,
+        type: this.record
       }
       this.begin_date && (params.begin_date = this.begin_date)
       this.end_date && (params.end_date = this.end_date)
       this.$request.transactionExcel(params).then(res => {
         if (res.ret) {
-          this.urlExcel = res.data.url
-          window.open(this.urlExcel)
+          // this.urlExcel = res.data.url
+          // window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
@@ -211,7 +275,7 @@ export default {
 <style lang="scss">
 .transaction-list-container {
   .changeVou {
-    margin-left: 20px;
+    margin-left: 10px;
   }
   .timeStyle {
     margin-right: 10px;

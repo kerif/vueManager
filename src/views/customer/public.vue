@@ -27,7 +27,7 @@
       </div>
     </div>
     <el-table :data="transactionList" stripe border class="data-list"
-    v-loading="tableLoading"
+    v-loading="tableLoading" height="450"
     @selection-change="selectionChange">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 公告标题 -->
@@ -48,12 +48,14 @@
           <el-button class="btn-deep-purple" @click="details(scope.row.id)">{{$t('详情')}}</el-button>
         </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
+    <div class="bottom-sty">
+      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -221,6 +223,10 @@ export default {
   .timeStyle {
     margin-right: 10px;
     width: 276px !important;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>

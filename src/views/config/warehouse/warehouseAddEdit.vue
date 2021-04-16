@@ -177,7 +177,7 @@ export default {
     },
     // 获取支持国家数据
     getCountry () {
-      this.$request.getCountry().then(res => {
+      this.$request.getEnabledCountry().then(res => {
         this.options = res.data
       })
     },

@@ -5,7 +5,7 @@
       ></search-group>
     </div>
     <el-table border stripe :data="addressList" class="data-list"
-    v-loading="tableLoading">
+    v-loading="tableLoading" height="550">
       <el-table-column type="index" :index="1"></el-table-column>
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
