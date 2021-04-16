@@ -89,7 +89,7 @@
         </el-form-item>
       </el-form>
        <div slot="footer">
-      <el-button @click="this.withdrawVisible = false">{{$t('取消')}}</el-button>
+      <el-button @click="withdrawVisible = false">{{$t('取消')}}</el-button>
       <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
     </el-dialog>
