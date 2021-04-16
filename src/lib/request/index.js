@@ -518,8 +518,8 @@ exports.getProps = () => {
   return $form.get('package-props')
 }
 // 包裹快速入库 获取推荐货位
-exports.getAreaLocation = (id) => {
-  return $form.get(`packages/user-location/${id}`)
+exports.getAreaLocation = (warehouseid, id) => {
+  return $form.get(`packages/${warehouseid}/user-location/${id}`)
 }
 // 包裹快速入库 获取全部服务
 exports.getAllService = () => {

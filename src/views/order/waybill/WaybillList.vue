@@ -123,7 +123,7 @@
       <!-- </el-col> -->
     </search-group>
     <el-table row-key="id" :expand-row-keys="expands" class="data-list" border stripe
-      v-loading="tableLoading"
+      v-loading="tableLoading" v-if="oderData.length"
       @expand-change="onExpand"
       highlight-current-row
       :data="oderData" @selection-change="onSelectChange"

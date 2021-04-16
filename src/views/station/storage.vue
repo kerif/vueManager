@@ -216,7 +216,7 @@
                 </el-autocomplete>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="8" v-if="locationCode">
               <p style="margin-top: 8px">{{$t('推荐货位')}}
                 <span>{{locationCode}}</span>
               </p>
@@ -468,11 +468,15 @@ export default {
     },
     // 获取可推荐货位
     getAreaLocation () {
-      this.$request.getAreaLocation(this.userId).then(res => {
-        if (res.ret) {
-          this.locationCode = res.data.code
-        }
-      })
+      console.log(this.user.warehouse_id, 'ware')
+      console.log(this.userId, 'this.userId')
+      if (this.user.warehouse_id && this.userId) {
+        this.$request.getAreaLocation(this.user.warehouse_id, this.userId).then(res => {
+          if (res.ret) {
+            this.locationCode = res.data.code
+          }
+        })
+      }
     },
     // 从包裹快速入库时获取整页数据
     getList () {
@@ -487,14 +491,14 @@ export default {
           this.user = res.data
           if (res.data.user_id) {
             this.userId = res.data.user_id
-            console.log(this.userId)
-            this.getAreaLocation()
+            console.log(this.userId, 'userId')
           }
           // this.user.express_num = this.$route.params.express_num
           this.user.user_id = res.data.user_id + '---' + res.data.user_name
           this.user.props = res.data.props.map(item => item.id)
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
           this.user.warehouse_id = res.data.warehouse.id
+          this.getAreaLocation()
           if (res.data.express_line) {
             this.$set(this.user, 'CName', res.data.express_line.name)
             this.$set(this.user, 'MaxWeight', res.data.express_line.max_weight)

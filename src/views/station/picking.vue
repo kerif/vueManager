@@ -8,6 +8,7 @@
         <el-tab-pane :label="$t('拣货日志')" name="2"></el-tab-pane>
     </el-tabs>
    <el-table class="data-list" border stripe
+   v-if="oderData.length"
     v-loading="tableLoading"
       :data="oderData" height="550">
       <!-- 操作人 -->

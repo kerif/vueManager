@@ -82,6 +82,7 @@
     </el-select> -->
     <!-- </div> -->
     <el-table class="data-list" border stripe
+    v-if="oderData.length"
       :data="oderData"
       @selection-change="selectionChange"
       v-loading="tableLoading" height="550">
