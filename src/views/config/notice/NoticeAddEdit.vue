@@ -87,17 +87,16 @@ export default {
     this.editor.customConfig.uploadFileName = `images[${0}][file]`
     this.editor.customConfig.uploadImgHooks = {
       customInsert: (insertImg, result, editor) => {
-        console.log(result)
         if (result.ret === 1) {
           this.$message.success(this.$t('上传成功'))
           let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
-          insertImg(url)
+          // insertImg(url)
+          editor.cmd.do('insertHTML', `<div class='img-wrap'><img class='add-img' src=${url} alt=''></div>`)
         }
       }
     }
     this.editor.customConfig.showLinkImg = true
     this.editor.create()
-    console.log(this.editor, 'this.editor')
   },
   created () {
     this.getTypes()

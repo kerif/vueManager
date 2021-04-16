@@ -3,10 +3,6 @@
     <layout-aside></layout-aside>
     <el-container direction="vertical" :class="['layout', isCollapse ? 'is-collapse' : '']">
       <layout-header></layout-header>
-          {{ String(cachedViews) }}
-      <div  :class="[isCollapse && 'isCollapses']" class="layout-nav">
-        <tags-view />
-      </div>
       <el-main :class="[isCollapse && 'isCollapses']">
         <transition name="fade-transform" mode="out-in">
           <keep-alive :include="cachedViews">
@@ -14,21 +10,16 @@
           </keep-alive>
         </transition>
       </el-main>
-      <!-- <layout-footer></layout-footer> -->
     </el-container>
   </el-container>
 </template>
 <script>
 import LayoutAside from './layoutaside'
 import LayoutHeader from './layoutheader'
-import TagsView from './components/tagsview'
-// import LayoutFooter from './layoutfooter'
 export default {
   components: {
     LayoutAside,
-    LayoutHeader,
-    TagsView
-    // LayoutFooter
+    LayoutHeader
   },
   computed: {
     cachedViews () {
@@ -46,24 +37,18 @@ export default {
 <style lang="scss">
 .layout-contaniner {
   .el-main {
-    left: 180px;
     padding: 0;
     width: calc(100vw - 180px);
-    // height: calc(100vh - 170px);
-    height: calc(100vh - 120px);
+    height: calc(100vh - 140px);
     transition: all 0.2s ease-in;
     position: relative;
-    top: 60px;
-    // padding-bottom: 60px;
   }
   .el-main > div {
     background-color: #F5F5F5;
     padding: 20px;
-    // min-height: calc(100vh - 170px);
-    min-height: calc(100vh - 120px);
   }
   .isCollapses {
-    left: 60px !important;
+    left: 0px !important;
     width: calc(100vw - 60px) !important;
   }
   .layout-nav {
@@ -71,8 +56,6 @@ export default {
     width: calc(100vw - 180px);
     box-sizing: border-box;
     position: relative;
-    top: 70px;
-    left: 180px;
     transition: all 0.2s ease-in;
     border: {
       top: 1px solid #e8e9eb;

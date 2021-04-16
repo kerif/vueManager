@@ -72,7 +72,7 @@ export default {
 .layout-aside {
   width: 180px !important;
   height: 100vh;
-  position: fixed;
+  position: relative;
   top: 0;
   z-index: 99;
   background-color: #171B42;

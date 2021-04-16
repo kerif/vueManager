@@ -1,6 +1,7 @@
 <template>
-  <el-header :class="[isCollapse && 'isCollapses']" class="layout-header">
-   <div @click="switchLeft" class="TransferLeft">
+  <el-header :class="[isCollapse && 'isCollapses']" class="layout-header" style="height:auto;">
+    <div class="header-top">
+   <div @click="switchLeft" class="transfer-left">
      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
        style="font-size:24px;"></i>
     </div>
@@ -42,10 +43,18 @@
     </el-select>
     <span class="user-box">{{ $store.state.userName }}</span>
     <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
+    </div>
+    <div :class="[isCollapse && 'isCollapses']" class="layout-nav">
+      <tags-view />
+    </div>
   </el-header>
 </template>
 <script>
+import TagsView from './components/tagsview'
 export default {
+  components: {
+    TagsView
+  },
   data () {
     return {
       language: [
@@ -133,13 +142,16 @@ export default {
   left: 60px;
 }
 .layout-header {
-  width: calc(100vw - 180px);
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 180px;
   background-color: #fff;
   z-index: 99;
   transition: all .3s ease-in;
+  padding: 0;
+  .header-top {
+    text-align: right;
+    padding: 10px;
+  }
   @keyframes move {
     0% {
       transform: translateY(0);
@@ -151,9 +163,6 @@ export default {
       transform: translateY(0);
     }
   }
-  height: 60px;
-  line-height: 60px;
-  text-align: right;
   .user-box {
     margin: 0 30px;
   }
@@ -167,16 +176,15 @@ export default {
       animation: move .3s ease-in 2;
     }
   }
-  .TransferLeft {
+  .transfer-left {
     float: left;
-    height: 60px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     cursor: pointer;
   }
   .upload-btn {
     margin-right: 10px;
-    // color: #3aa8fc;
   }
   .name-sty {
     width: 70px !important;
