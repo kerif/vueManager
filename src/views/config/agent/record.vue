@@ -14,9 +14,9 @@
       </el-table-column>
       <el-table-column :label="$t('计佣金额') + this.localization.currency_unit" prop="order_amount">
       </el-table-column>
-      <el-table-column :label="$t('佣金比例%')" prop="proportion">
+      <el-table-column :label="`${$t('比例%/金额')}${localization.currency_unit}/${$t('单位金额')}${localization.currency_unit}`" prop="proportion">
       </el-table-column>
-      <el-table-column :label="$t('佣金') + this.localization.currency_unit" prop="commission_amount">
+      <el-table-column :label="$t('佣金') + localization.currency_unit" prop="commission_amount">
       </el-table-column>
       <el-table-column :label="$t('成交时间')" prop="created_at">
       </el-table-column>

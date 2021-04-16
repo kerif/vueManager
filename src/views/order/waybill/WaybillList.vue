@@ -127,7 +127,7 @@
       @expand-change="onExpand"
       highlight-current-row
       :data="oderData" @selection-change="onSelectChange"
-      max-height="550">
+      height="550">
       <!-- 二级分类列表 -->
       <el-table-column width="0" type="expand">
         <template slot-scope="props">
