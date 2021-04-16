@@ -197,7 +197,7 @@
           </el-form-item> -->
         <el-form-item class="label-sty">
           <span>{{$t('线路下单类型')}}</span>
-          <el-tooltip class="item code-sty" effect="dark" :content="$t('标准模式：包裹入库并经客户提交后，还需仓库合箱打包，称量出库（计费）数据，再生成待支付订单；快读下单模式：包裹入库经客户提交，即生成待支付订单（每个包裹为独立订单），入库称量数据即为出库（计费）数据')" placement="top">
+          <el-tooltip class="item code-sty" effect="dark" :content="$t('标准模式：包裹入库并经客户提交后，还需仓库合箱打包，称量出库（计费）数据，再生成待支付订单；快速下单模式：包裹入库经客户提交，即生成待支付订单（每个包裹为独立订单），入库称量数据即为出库（计费）数据')" placement="top">
           <span class="el-icon-question icon-info"></span>
           </el-tooltip>
           <el-radio v-model="company.order_mode" :label="0">{{$t('标准模式')}}</el-radio>
