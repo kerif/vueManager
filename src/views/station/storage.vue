@@ -554,6 +554,7 @@ export default {
         this.user.location = ''
         this.locationCNSearch()
         console.log(this.locationId, '我是改变的locationId')
+        this.getAreaLocation()
         this.$request.getArea(id).then(res => {
           if (res.ret) {
             this.shipData = res.data
