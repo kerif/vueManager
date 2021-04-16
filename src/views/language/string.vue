@@ -1,9 +1,9 @@
 <template>
   <div class="string-container">
     <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group>
-    <!-- <div class="select-box">
+    <div class="select-box">
       <add-btn @click.native="addString">{{$t('添加')}}</add-btn>
-    </div> -->
+    </div>
     <el-table :data="transferData" v-loading="tableLoading" class="data-list"
     border stripe height="450">
       <el-table-column type="index"></el-table-column>
@@ -51,13 +51,13 @@
 
 <script>
 import dialog from '@/components/dialog'
-// import AddBtn from '@/components/addBtn'
+import AddBtn from '@/components/addBtn'
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   components: {
-    // AddBtn,
+    AddBtn,
     SearchGroup,
     NlePagination
   },

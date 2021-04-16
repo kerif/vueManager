@@ -1501,6 +1501,10 @@ exports.changeTariff = (status) => {
 exports.countryLocation = () => {
   return $form.get('countries')
 }
+// 仓库地址配置 获取支持国家地区数据
+exports.getEnabledCountry = () => {
+  return $form.get('countries/enabled')
+}
 // 更多配置 删除国家/地区
 exports.deleteCountryLocation = (id) => {
   return $form.delete(`countries/${id}`)

@@ -23,6 +23,7 @@
           <span v-if="scope.row.type === 2">{{$t('退回未入库')}}</span>
           <span v-if="scope.row.type === 3">{{$t('弃件')}}</span>
           <span v-if="scope.row.type === 4">{{$t('彻底删除')}}</span>
+          <span v-if="scope.row.type === 5">{{$t('恢复')}}</span>
         </template>
       </el-table-column>
       <!-- 快递单号 -->
