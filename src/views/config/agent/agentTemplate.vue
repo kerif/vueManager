@@ -39,7 +39,10 @@
           <el-checkbox v-model="form.mode">{{$t('按比例计佣时，仅计算实际运费佣金（不包含增值费用、保险费用、抵用券等）')}}</el-checkbox>
         </el-form-item>
         <el-form-item :label="$t('默认佣金')">
-          <el-input v-model="form.value" class="input-sty"></el-input>&nbsp;%
+          <el-input v-model="form.value" class="input-sty"></el-input>&nbsp;
+          <span v-if="form.type === 1">%/{{$t('单')}}</span>
+          <span v-if="form.type === 2">¥/{{$t('单')}}</span>
+          <span v-if="form.type === 3">¥/KG</span>
         </el-form-item>
         <el-form-item :label="$t('分成方式')">
           <el-select class="select-sty" v-model="form.type" :placeholder="$t('请选择')" clearable>
@@ -49,10 +52,7 @@
               :label="item.name"
               :value="item.id">
             </el-option>
-          </el-select>&nbsp;
-          <span v-if="form.type === 1">%/{{$t('单')}}</span>
-          <span v-if="form.type === 2">¥/{{$t('单')}}</span>
-          <span v-if="form.type === 3">¥/KG</span>
+          </el-select>
         </el-form-item>
       </el-form>
       <el-table
