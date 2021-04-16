@@ -24,11 +24,10 @@
       </el-table-column>
       <!-- 创建日期 -->
       <el-table-column :label="$t('创建日期')" prop="created_at"> </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
-      </template>
+      </template> -->
       <!-- 操作 -->
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
@@ -36,6 +35,9 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="bottom-sty">
+      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -216,6 +218,10 @@ export default {
   }
   .select-box {
     overflow: hidden;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>

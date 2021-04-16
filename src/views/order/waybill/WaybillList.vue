@@ -128,7 +128,7 @@
       @expand-change="onExpand"
       highlight-current-row
       :data="oderData" @selection-change="onSelectChange"
-      height="550">
+      max-height="550">
       <!-- 二级分类列表 -->
       <el-table-column width="0" type="expand">
         <template slot-scope="props">
@@ -498,33 +498,33 @@
           v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button> -->
         </template>
       </el-table-column>
-      <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
+      <!-- <template slot="append" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
         <div class="append-box">
-          <!-- 删除 -->
-          <!-- <el-button size="small">删除</el-button> -->
-          <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button>
-          <!-- 加入发货单 -->
-          <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
-           <!-- 导出发票 -->
-           <el-button size="small" @click="uploadInvoice(selectIDs)" v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button>
-            <!-- 批量发送通知 -->
-           <el-button size="small" @click="goNotify"
-           v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
-           <!-- 批量改成货到付款 -->
-           <el-button size="small"  v-if="this.activeName === '2'" @click="changeDelivery">{{$t('批量改成货到付款')}}</el-button>
-           <!-- 更新物流状态 -->
-            <el-button size="small" @click="updateTracking"
-           v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
-           <!-- 已付款 -->
-            <el-button size="small" v-if="activeName === '3' ||activeName === '4' || activeName === '5'" @click="payed">{{$t('已付款')}}
-          </el-button>
-           <!-- 已签收 -->
-            <el-button size="small" v-if="activeName === '4'" @click="signed">{{$t('已签收')}}
-          </el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
-    <div class="noDate" v-else>{{$t('暂无数据')}}</div>
+    <div class="bottom-sty" v-if="activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5'">
+      <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button>
+      <!-- 加入发货单 -->
+      <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
+        <!-- 导出发票 -->
+        <el-button size="small" @click="uploadInvoice(selectIDs)" v-if="activeName === '3' || activeName === '4' || activeName === '5'">{{$t('导出发票')}}</el-button>
+        <!-- 批量发送通知 -->
+        <el-button size="small" @click="goNotify"
+        v-if="this.activeName === '2' || this.activeName === '4'">{{$t('批量发送通知')}}</el-button>
+        <!-- 批量改成货到付款 -->
+        <el-button size="small"  v-if="this.activeName === '2'" @click="changeDelivery">{{$t('批量改成货到付款')}}</el-button>
+        <!-- 更新物流状态 -->
+        <el-button size="small" @click="updateTracking"
+        v-if="this.activeName === '4'">{{$t('更新物流状态')}}</el-button>
+        <!-- 已付款 -->
+        <el-button size="small" v-if="activeName === '3' ||activeName === '4' || activeName === '5'" @click="payed">{{$t('已付款')}}
+      </el-button>
+        <!-- 已签收 -->
+        <el-button size="small" v-if="activeName === '4'" @click="signed">{{$t('已签收')}}
+      </el-button>
+    </div>
+    <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
       <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
         <div class="dialogSty">
           <iframe class="iframe" :src="urlHtml"></iframe>
@@ -1965,6 +1965,10 @@ export default {
   }
   .packaged {
     color:green !important;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 .dialog-input {

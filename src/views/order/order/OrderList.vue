@@ -84,7 +84,7 @@
       <el-table v-if="oderData.length" class="data-list" border stripe
       :data="oderData"
       @selection-change="selectionChange"
-      v-loading="tableLoading" height="550">
+      v-loading="tableLoading" max-height="550">
       <el-table-column type="selection" width="55" align="center"
       v-if="activeName === '1' || activeName === '2' || activeName === '6'"></el-table-column>
       <!-- 客户ID -->
@@ -224,30 +224,44 @@
           </el-dropdown>
         </template>
       </el-table-column>
-      <template slot="append" v-if="activeName === '1' || activeName === '2' || activeName === '6'">
+      <!-- <template slot="append" v-if="activeName === '1' || activeName === '2' || activeName === '6'">
         <div class="append-box">
-          <!-- 删除 -->
           <el-button size="small" @click="deleteData"
           v-if="activeName === '1'">{{$t('删除')}}</el-button>
-          <!-- 弃件 -->
           <el-button size="small" @click="discardPackage"
            v-if="this.activeName === '1' || this.activeName === '2'">{{$t('弃件')}}</el-button>
-           <!-- 批量集包 -->
            <el-button size="small" @click="batchPackage"
            v-if="this.activeName === '2'">{{$t('批量集包')}}</el-button>
-           <!-- 批量发送通知 -->
            <el-button size="small" @click="goNotify"
            v-if="this.activeName === '2'">{{$t('批量发送通知')}}</el-button>
-           <!-- 恢复 -->
            <el-button size="small" v-if="activeName === '6'"
            @click="restore">{{$t('恢复')}}</el-button>
-           <!-- 彻底删除 -->
            <el-button size="small"
             v-if="activeName === '6'" @click="deleteDiscard">{{$t('彻底删除')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
-    <div class="noDate" v-else>{{$t('暂无数据')}}</div>
+    <div class="bottom-sty" v-if="activeName === '1' || activeName === '2' || activeName === '6'">
+      <!-- 删除 -->
+      <el-button size="small" @click="deleteData"
+      v-if="activeName === '1'">{{$t('删除')}}</el-button>
+      <!-- 弃件 -->
+      <el-button size="small" @click="discardPackage"
+        v-if="this.activeName === '1' || this.activeName === '2'">{{$t('弃件')}}</el-button>
+        <!-- 批量集包 -->
+        <el-button size="small" @click="batchPackage"
+        v-if="this.activeName === '2'">{{$t('批量集包')}}</el-button>
+        <!-- 批量发送通知 -->
+        <el-button size="small" @click="goNotify"
+        v-if="this.activeName === '2'">{{$t('批量发送通知')}}</el-button>
+        <!-- 恢复 -->
+        <el-button size="small" v-if="activeName === '6'"
+        @click="restore">{{$t('恢复')}}</el-button>
+        <!-- 彻底删除 -->
+        <el-button size="small"
+        v-if="activeName === '6'" @click="deleteDiscard">{{$t('彻底删除')}}</el-button>
+    </div>
+    <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -919,6 +933,10 @@ export default {
   }
   .warning-sty {
     color: red;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>

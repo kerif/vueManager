@@ -158,13 +158,14 @@
           <!-- 高级配置 -->
         </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <!-- 导出清单 -->
-          <el-button class="btn-main others-btn" @click="unloadShip">{{$t('导出清单')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
+    <div class="bottom-sty">
+      <el-button class="btn-main others-btn" @click="unloadShip">{{$t('导出清单')}}</el-button>
+    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <!-- 高级配置 -->
     <el-dialog
@@ -822,6 +823,10 @@ export default {
   .code-sty {
     padding-right: 5px;
     color: green;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>
