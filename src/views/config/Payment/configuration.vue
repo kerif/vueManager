@@ -10,30 +10,32 @@
     <el-row :gutter="20">
       <el-col :span="4">
         <el-menu
-        default-active="activeIndex"
+        default-active="1"
         class="el-menu-vertical-demo"
          @select="handleSelect">
-        <el-menu-item index="1">
-          {{$t('单位配置')}}
-        </el-menu-item>
-        <el-menu-item index="2">
-          {{$t('预报与入库')}}
-        </el-menu-item>
-        <el-menu-item index="3">
-          {{$t('支付配置')}}
-        </el-menu-item>
-        <el-menu-item index="4">
-          {{$t('汇率配置')}}
-        </el-menu-item>
-        <el-menu-item index="5">
-          {{$t('国家地区')}}
-        </el-menu-item>
-        <el-menu-item index="6">
-          {{$t('转运规则')}}
-        </el-menu-item>
+         <el-menu-item-group>
+            <el-menu-item index="1">
+              {{$t('单位配置')}}
+            </el-menu-item>
+            <el-menu-item index="2">
+              {{$t('预报与入库')}}
+            </el-menu-item>
+            <el-menu-item index="3">
+              {{$t('支付配置')}}
+            </el-menu-item>
+            <el-menu-item index="4">
+              {{$t('汇率配置')}}
+            </el-menu-item>
+            <el-menu-item index="5">
+              {{$t('国家地区')}}
+            </el-menu-item>
+            <el-menu-item index="6">
+              {{$t('转运规则')}}
+            </el-menu-item>
+         </el-menu-item-group>
       </el-menu>
       </el-col>
-      <el-col :span="13">
+      <el-col :span="13" v-if="secondTab === '1'">
         <div class="settings-container">
           <el-form>
           <!-- 重量单位： -->
@@ -163,6 +165,7 @@ export default {
   data () {
     return {
       activeIndex: '1',
+      secondTab: '1',
       countrySendData: [],
       typeSendData: [],
       paymentData: [
@@ -365,6 +368,7 @@ export default {
     }
   },
   created () {
+    console.log(this.secondTab, 'secondTab')
     this.getLanguageList()
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
@@ -422,8 +426,9 @@ export default {
   },
   methods: {
     handleSelect (key) {
-      console.log(key, 'key')
-      console.log(this.activeIndex, 'activeIndex')
+      this.secondTab = key
+      console.log(this.secondTab, 'key')
+      console.log(typeof (this.secondTab), 'key')
     },
     handleEdit (val) {
       console.log(val)
