@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" title="员工组成员" class="dialog-staff-group"
+  <el-dialog :visible.sync="show" :title="$t('员工组成员')" class="dialog-staff-group"
   @close="clear">
     <el-table
       :data="tableData"
@@ -10,27 +10,27 @@
       <!-- 用户名 -->
       <el-table-column
         prop="username"
-        label="用户名">
+        :label="$t('用户名')">
       </el-table-column>
       <!-- 姓名 -->
       <el-table-column
         prop="name"
-        label="姓名">
+        :label="$t('姓名')">
       </el-table-column>
       <!-- 邮箱 -->
         <el-table-column
         prop="email"
-        label="邮箱">
+        :label="$t('邮箱')">
       </el-table-column>
       <!-- 电话 -->
         <el-table-column
         prop="phone"
-        label="电话">
+        :label="$t('电话')">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
         prop="last_login_at"
-        label="最后登录时间">
+        :label="$t('最后登录时间')">
       </el-table-column>
     </el-table>
     <!-- <div slot="footer">
@@ -52,15 +52,7 @@ export default {
   mixins: [pagination],
   data () {
     return {
-      tableData: [],
-      rules: {
-        name: [
-          { required: true, message: '请输入员工组中文名', trigger: 'blur' }
-        ],
-        enName: [
-          { required: true, message: '请输入员工组英文名', trigger: 'blur' }
-        ]
-      }
+      tableData: []
     }
   },
   methods: {

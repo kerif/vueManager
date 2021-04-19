@@ -1,31 +1,31 @@
 <template>
-  <el-dialog :visible.sync="show" title="审核" class="dialog-review" width="35%"
+  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-review" width="35%"
   @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 支付金额 -->
-        <el-form-item label="*支付金额" v-if="state === 'pass'">
-          <el-input v-model="ruleForm.pay_amount" disabled>
+        <el-form-item :label="$t('*支付金额')" v-if="state === 'pass'">
+          <el-input v-model="ruleForm.pay_amount" :disabled="!!this.$route.query.id">
             <template slot="append">{{this.localization.currency_unit}}</template>
           </el-input>
         </el-form-item>
         <!-- 备注 -->
-        <el-form-item label="备注" v-if="state === 'pass'">
+        <el-form-item :label="$t('备注')" v-if="state === 'pass'">
             <el-input type="textarea" v-model="ruleForm.customer_remark"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
-        <el-form-item label="*备注" v-if="state === 'reject'">
+        <el-form-item :label="$t('*备注')" v-if="state === 'reject'">
             <el-input type="textarea" v-model="ruleForm.customer_remark"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入备注"></el-input>
+            :placeholder="$t('请输入备注')"></el-input>
         </el-form-item>
-        <el-form-item label="上传照片" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
-            <img :src="$baseUrl.IMAGE_URL + item.url" alt="" class="goods-img">
+        <el-form-item :label="$t('上传照片')" class="updateChe">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
             <span class="model-box"></span>
             <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
                 <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
             </span>
@@ -42,8 +42,8 @@
     </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -58,6 +58,8 @@ export default {
         customer_images: []
       },
       state: '',
+      id: '',
+      userId: '',
       tranAmount: '',
       baleImgList: [],
       localization: {}
@@ -72,52 +74,95 @@ export default {
     },
     confirm () {
       console.log(this.state, 'this.state')
-      this.ruleForm.customer_images = this.baleImgList.map(item => {
-        return {
-          url: item.url
-        }
-      })
+      this.ruleForm.customer_images = this.baleImgList
       if (this.state === 'pass' && !this.ruleForm.pay_amount && this.ruleForm.pay_amount !== 0) {
-        return this.$message.error('请输入金额')
+        return this.$message.error(this.$t('请输入金额'))
       } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
-        return this.$message.error('请输入备注')
+        return this.$message.error(this.$t('请输入备注'))
       }
-      if (this.state === 'pass') {
-        this.$request.acceptPayment(this.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '成功',
-              message: res.msg
-            })
+      // 订单列表审核
+      if (this.$route.query.id) {
+        if (this.state === 'pass') {
+          this.$request.acceptPayment(this.id, this.ruleForm).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
-      } else {
-        this.$request.acceptReject(this.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: '成功',
-              message: res.msg
-            })
+          })
+        } else {
+          this.$request.acceptReject(this.id, this.ruleForm).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
+        }
+      } else { // 代理管理审核
+        if (this.state === 'pass') {
+          this.$request.agentPassed(this.userId, this.id, {
+            confirm_amount: this.ruleForm.pay_amount,
+            ...this.ruleForm
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            this.show = false
+          })
+        } else {
+          this.$request.agentReject(this.userId, this.id, {
+            confirm_amount: this.ruleForm.pay_amount,
+            ...this.ruleForm
+          }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            this.show = false
+          })
+        }
       }
     },
     // 上传打包照片
@@ -126,10 +171,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.baleImgList.push({
-              name: item.name,
-              url: item.path
-            })
+            this.baleImgList.push(item.path)
           })
         }
       })
@@ -161,7 +203,10 @@ export default {
     },
     init () {
       console.log(this.tranAmount, 'this.tranAmount')
-      if (this.state === 'pass') {
+      console.log(this.userId, 'userId')
+      if (this.state === 'pass' && this.$route.query.id) {
+        this.ruleForm.pay_amount = this.tranAmount
+      } else if (this.state === 'pass' && this.$route.params.id) {
         this.ruleForm.pay_amount = this.tranAmount
       }
       this.getCountry()

@@ -1,49 +1,60 @@
 <template>
   <div class="wechat-container">
     <div class="receiverMSg">
-    <h4>客户信息</h4>
+    <h4>{{$t('客户信息')}}</h4>
     <el-row class="container-center" :gutter="20">
       <!-- 客户ID -->
       <el-col :span="11">
-        <span class="leftWidth">客户ID</span>
+        <span class="leftWidth">{{$t('客户ID')}}</span>
         <span>{{form.user_id}}</span>
       </el-col>
       <!-- 客户昵称 -->
         <el-col :span="8" :offset="1">
-         <span class="leftWidth">客户昵称</span>
+         <span class="leftWidth">{{$t('客户昵称')}}</span>
          <span>{{form.user_name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
      <!-- 流水号 -->
       <el-col :span="11">
-        <span class="leftWidth">流水号</span>
+        <span class="leftWidth">{{$t('流水号')}}</span>
         <span>{{form.serial_no}}</span>
       </el-col>
       <!-- 提交时间 -->
         <el-col :span="8" :offset="1">
-         <span class="leftWidth">提交时间</span>
+         <span class="leftWidth">{{$t('提交时间')}}</span>
          <span>{{form.created_at}}</span>
       </el-col>
     </el-row>
     </div>
     <div class="pay-message receiverMSg">
-      <h4>支付信息</h4>
+      <!-- 支付信息 -->
+      <h4>{{$t('支付信息')}}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
-          <p class="transfer-right">支付方式</p>
+          <!-- 支付方式 -->
+          <p class="transfer-right">{{$t('支付方式')}}</p>
           <!-- <span v-if="form.payment_type === 2">在线支付</span><br/> -->
           <span>{{form.payment_type_name}}</span><br/>
           <!-- 在线支付 -->
           <p class="transfer-right">
-              {{'抵用券金额' + this.localization.currency_unit}}</p>
+            <!-- 抵用券金额 -->
+              {{$t('抵用券金额') + this.localization.currency_unit}}</p>
           <span>{{form.coupon_amount}}</span><br/>
-          <p class="transfer-right">{{'总金额' + this.localization.currency_unit}}</p>
+          <!-- 应付金额 -->
+          <p class="transfer-right">{{$t('应付金额') + this.localization.currency_unit}}</p>
           <span>{{form.order_amount}}</span><br/>
-          <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
-          <span>{{form.pay_amount}}</span><br/>
-          <p class="transfer-right">关联单号</p>
+          <!-- 支付金额 -->
+          <p class="transfer-right">{{$t('支付金额') + this.localization.currency_unit}}</p>
+          <span>{{form.pay_amount}}</span>
+          <span v-if="form.show_rate == true">
+            （{{form.currency_code}}&nbsp;{{form.currency_symbol}}&nbsp;{{form.rate_amount}}）
+          </span><br/>
+          <!-- 关联单号 -->
+          <p class="transfer-right">{{$t('关联单号')}}</p>
           <span>{{form.order_sn}}</span><br/>
+          <p class="transfer-right">{{$t('外部交易号')}}</p>
+          <span>{{form.outer_sn}}</span><br/>
           <!-- <p class="transfer-right">备注</p>
           <span>{{form.remark}}</span><br/> -->
           <!-- <p class="transfer-right">创建时间</p>
@@ -84,7 +95,7 @@ export default {
           this.localization = res.localization
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -101,7 +112,9 @@ export default {
     margin-bottom: 20px;
   }
   .receiverMSg {
-    border-bottom: 1px #ccc solid;
+     padding: 10px;
+     background-color: #fff !important;
+     margin-bottom: 20px;
   }
   .leftWidth {
     display: inline-block;

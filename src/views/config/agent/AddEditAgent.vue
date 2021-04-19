@@ -7,36 +7,29 @@
           <!-- 用户名 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="代理用户" prop="user_id">
-                <el-input v-model="user.user_id" placeholder="请输入代理用户"></el-input>
+              <el-form-item :label="$t('代理用户')" prop="user_id">
+                 <el-input v-model="user.user_id" :placeholder="$t('请输入代理用户')" v-if="this.$route.query.id" disabled></el-input>
+                <el-input v-else v-model="user.user_id" :placeholder="$t('请输入代理用户')"></el-input>
               </el-form-item>
             </el-col>
-              <el-button class="choose" @click="chooseUser">选择</el-button>
+              <el-button class="choose" @click="chooseUser" v-if="!this.$route.query.id">{{$t('选择')}}</el-button>
           </el-row>
           <!-- 密码 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="联系人" prop="contact_name">
-                <el-input v-model="user.contact_name" placeholder="请输入联系人"></el-input>
+              <el-form-item :label="$t('联系人')" prop="contact_name">
+                <el-input v-model="user.contact_name" :placeholder="$t('请输入联系人')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- 邮箱 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="邮箱" prop="contact_email">
-                <el-input v-model="user.contact_email" placeholder="请输入邮箱"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 员工组 -->
+          <!-- 备注 -->
            <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="备注" prop="remark" class="employ">
+              <el-form-item :label="$t('备注')" prop="remark" class="employ">
                 <el-input
                   type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 4}"
-                  placeholder="请输入内容"
+                  :autosize="{ minRows: 4, maxRows: 6}"
+                  :placeholder="$t('请输入内容')"
                   v-model="user.remark">
               </el-input>
               </el-form-item>
@@ -47,28 +40,36 @@
           <!-- 姓名 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="代理名称" prop="agent_name">
-                <el-input v-model="user.agent_name" placeholder="请输入代理名称" v-if="this.$route.query.id" disabled></el-input>
-                <el-input v-else v-model="user.agent_name" placeholder="请输入代理名称"></el-input>
+              <el-form-item :label="$t('代理名称')" prop="agent_name">
+                <el-input v-model="user.agent_name" :placeholder="$t('请输入代理名称')" v-if="this.$route.query.id" disabled></el-input>
+                <el-input v-else v-model="user.agent_name" :placeholder="$t('请输入代理名称')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 联系电话 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="联系电话" prop="contact_phone"
+              <el-form-item :label="$t('联系电话')" prop="contact_phone"
                v-if="!this.$route.query.id">
-                <el-input v-model="user.contact_phone" placeholder="请输入联系电话"></el-input>
+                <el-input v-model="user.contact_phone" :placeholder="$t('请输入联系电话')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <!-- 佣金分成 -->
-          <el-row :gutter="20">
+          <!-- <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item label="佣金分成" prop="commission">
                 <el-input v-model="user.commission" placeholder="请输入佣金分成">
                   <template slot="append">%</template>
                 </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <!-- 邮箱 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item :label="$t('邮箱')" prop="contact_email">
+                <el-input v-model="user.contact_email" :placeholder="$t('请输入邮箱')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -77,7 +78,7 @@
     </el-row>
     <div class="btn_box">
       <el-button type="primary" @click="update('params')" :loading="$store.state.btnLoading">
-        保存
+        {{$t('保存')}}
         </el-button>
       </div>
   </div>
@@ -90,23 +91,23 @@ export default {
       btn_loading: false,
       rules: { // 必填项校验
         user_id: [
-          { required: true, message: '请输入代理用户', trigger: 'change' }
+          { required: true, message: this.$t('请输入代理用户'), trigger: 'change' }
         ],
         agent_name: [
-          { required: true, message: '请输入代理名称', trigger: 'change' }
+          { required: true, message: this.$t('请输入代理名称'), trigger: 'change' }
         ],
         contact_name: [
-          { required: true, message: '请输入联系人', trigger: 'change' }
+          { required: true, message: this.$t('请输入联系人'), trigger: 'change' }
         ],
         contact_email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          { required: true, message: this.$t('请输入邮箱'), trigger: 'blur' },
+          { type: 'email', message: this.$t('请输入正确的邮箱地址'), trigger: ['blur', 'change'] }
         ],
         contact_phone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: this.$t('请输入联系电话'), trigger: 'blur' }
         ],
         commission: [
-          { required: true, message: '请输入佣金分成', trigger: 'change' }
+          { required: true, message: this.$t('请输入佣金分成'), trigger: 'change' }
         ]
       },
       user: {
@@ -154,7 +155,7 @@ export default {
             this.$request.updateVip(this.$route.query.id, this.user).then((res) => {
               if (res.ret) {
                 this.$notify({
-                  title: '成功操作',
+                  title: this.$t('成功操作'),
                   message: res.msg,
                   type: 'success'
                 })
@@ -162,7 +163,7 @@ export default {
                 this.$router.go(-1)
               } else {
                 this.$notify({
-                  title: '操作失败',
+                  title: this.$t('操作失败'),
                   message: res.msg,
                   type: 'warning'
                 })
@@ -179,14 +180,14 @@ export default {
             this.$request.addAgents(this.user).then((res) => {
               if (res.ret) {
                 this.$notify({
-                  title: '操作成功',
+                  title: this.$t('操作成功'),
                   message: res.tips,
                   type: 'success'
                 })
                 this.$router.push({ name: 'agent' })
               } else {
                 this.$notify({
-                  title: '操作失败',
+                  title: this.$t('操作失败'),
                   message: res.msg,
                   type: 'warning'
                 })
@@ -205,7 +206,7 @@ export default {
 @import '../../../styles/commonality.scss';
   .agent-add-container {
     min-height: 67vh;
-    background-color: $white;
+    background-color: $white !important;
     padding: 1em 3em;
     .title_box{
       text-align: right;
@@ -236,7 +237,7 @@ export default {
         margin-left: 135px;
         width: 33%;
         padding: 1.5em 0;
-        margin-top: 1.5em;
+        // margin-top: 1.5em;
         .el-button--primary {
           width:72%;
         }

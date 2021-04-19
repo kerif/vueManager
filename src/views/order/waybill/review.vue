@@ -1,77 +1,81 @@
 <template>
   <div class="review-container">
     <div class="receiverMSg">
-    <h4>客户信息</h4>
+    <h4>{{$t('客户信息')}}</h4>
     <el-row class="container-center" :gutter="20">
       <!-- 客户ID -->
       <el-col :span="9">
-        <span class="leftWidth">客户ID</span>
+        <span class="leftWidth">{{$t('客户ID')}}</span>
         <span>{{form.user_id}}</span>
       </el-col>
       <!-- 客户昵称 -->
         <el-col :span="9" :offset="1">
-         <span class="leftWidth">客户昵称</span>
+         <span class="leftWidth">{{$t('客户昵称')}}</span>
          <span>{{form.user_name}}</span>
       </el-col>
     </el-row>
     <el-row class="container-center" :gutter="20">
      <!-- 流水号 -->
       <el-col :span="9">
-        <span class="leftWidth">流水号</span>
+        <span class="leftWidth">{{$t('流水号')}}</span>
         <span>{{form.serial_no}}</span>
       </el-col>
       <!-- 提交时间 -->
         <el-col :span="9" :offset="1">
-         <span class="leftWidth">提交时间</span>
+         <span class="leftWidth">{{$t('提交时间')}}</span>
          <span>{{form.created_at}}</span>
       </el-col>
     </el-row>
     </div>
     <div class="pay-message receiverMSg">
-      <h4>支付信息</h4>
+      <h4>{{$t('支付信息')}}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
-          <p class="transfer-right">支付方式</p>
+          <p class="transfer-right">{{$t('支付方式')}}</p>
           <span>{{form.payment_type_name}}</span><br/>
-          <p class="transfer-right">转账支付账户</p>
+          <p class="transfer-right">{{$t('转账支付账户')}}</p>
           <span>{{form.transfer_account}}</span><br/>
-          <p class="transfer-right">{{'总金额' + this.localization.currency_unit}}</p>
+          <p class="transfer-right">{{$t('应付金额') + this.localization.currency_unit}}</p>
           <span>{{form.order_amount}}</span><br/>
           <p class="transfer-right">
-              {{'抵用券金额' + this.localization.currency_unit}}</p>
+              {{$t('抵用券金额') + this.localization.currency_unit}}</p>
           <span>{{form.coupon_amount}}</span><br/>
-          <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
-          <span>{{form.tran_amount}}</span><br/>
-          <p class="transfer-right">关联单号</p>
+          <p class="transfer-right">{{$t('支付金额') + this.localization.currency_unit}}
+          </p>
+          <span>{{form.tran_amount}}</span>
+          <span v-if="this.form.show_rate == true">
+            （{{this.form.currency_code}}&nbsp;{{this.form.currency_symbol}}&nbsp;{{this.form.rate_amount}}）
+          </span><br/>
+          <p class="transfer-right">{{$t('关联单号')}}</p>
           <span>{{form.order_number}}</span><br/>
-          <p class="transfer-right">备注</p>
+          <p class="transfer-right">{{$t('备注')}}</p>
           <span>{{form.remark}}</span><br/>
-          <p class="transfer-right">创建时间</p>
+          <p class="transfer-right">{{$t('创建时间')}}</p>
           <span>{{form.created_at}}</span>
         </el-col>
         <el-col :span="9" :offset="1">
-          <p>客户截图</p>
+          <p>{{$t('客户截图')}}</p>
           <span v-for="item in form.images"
           :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc=item, imgVisible=true">
-              <img :src="item" style="width: 150px; margin-right: 30px;">
+            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
+              <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px;">
           </span>
         </el-col>
       </el-row>
     </div>
     <div class="footer-btn" v-if="this.$route.query.state === 'review'">
-      <el-button type="danger" @click="reviewReject">审核拒绝</el-button>
-      <el-button type="primary" @click="reviewPass">审核通过</el-button>
+      <el-button type="danger" @click="reviewReject">{{$t('审核拒绝')}}</el-button>
+      <el-button type="primary" @click="reviewPass">{{$t('审核通过')}}</el-button>
     </div>
     <div class="pay-message receiverMSg" v-if="form.status === 1">
-      <h4>确认支付信息</h4>
+      <h4>{{$t('确认支付信息')}}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
           <p class="transfer-right">{{'支付金额' + this.localization.currency_unit}}</p>
           <span>{{form.confirm_amount}}</span><br/>
-          <p class="transfer-right">备注</p>
+          <p class="transfer-right">{{$t('备注')}}</p>
           <span>{{form.customer_remark}}</span><br/>
-          <p class="transfer-right">上传图片</p>
+          <p class="transfer-right">{{$t('上传图片')}}</p>
           <div class="left-img">
             <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true" style="cursor:pointer;">
           </div>
@@ -80,12 +84,12 @@
     </div>
     <!-- 审核拒绝信息 -->
     <div class="pay-message receiverMSg" v-if="form.status === 2">
-      <h4>审核拒绝信息</h4>
+      <h4>{{$t('审核拒绝信息')}}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
-          <p class="transfer-right">备注</p>
+          <p class="transfer-right">{{$t('备注')}}</p>
           <span>{{form.customer_remark}}</span><br/>
-          <p class="transfer-right">上传照片</p>
+          <p class="transfer-right">{{$t('上传照片')}}</p>
          <div class="left-img">
            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" v-for="(item, index) in form.customer_images" :key="index" style="cursor:pointer;"
            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
@@ -135,7 +139,7 @@ export default {
           this.localization = res.localization
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -152,7 +156,7 @@ export default {
           this.localization = res.localization
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -183,7 +187,9 @@ export default {
     margin-bottom: 20px;
   }
   .receiverMSg {
-    border-bottom: 1px #ccc solid;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #fff !important;
   }
   .leftWidth {
     display: inline-block;

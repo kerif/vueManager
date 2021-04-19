@@ -1,11 +1,12 @@
 <template>
-  <el-dialog :visible.sync="show" title="创建发货单" class="dialog-invoice" width="35%"
+  <el-dialog :visible.sync="show" :title="$t('创建发货单')" class="dialog-invoice" width="35%"
   @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
         <!-- 员工组中文名 -->
-            <el-form-item label="目的国" prop="country_id">
-                <el-select v-model="ruleForm.country_id" placeholder="请选择目的国">
+            <el-form-item :label="$t('目的地')" prop="country_id">
+                <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择目的地')"
+                filterable>
                 <el-option
                   v-for="item in country"
                   :key="item.id"
@@ -14,15 +15,30 @@
                 </el-option>
               </el-select>
             </el-form-item>
-        <!-- 用户组描述 -->
-        <el-form-item label="备注">
-          <el-input type="textarea" v-model="ruleForm.remark"
-          placeholder="请输入备注"></el-input>
-        </el-form-item>
+            <el-form-item :label="$t('仓库')" prop="warehouse_id">
+                <el-select v-model="ruleForm.warehouse_id" :placeholder="$t('请选择仓库')"
+                filterable>
+                <el-option
+                  v-for="item in warehouseData"
+                  :key="item.id"
+                  :label="item.warehouse_name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('名称')">
+              <el-input v-model="ruleForm.name"
+              :placeholder="$t('请输入名称，字数限制在五十个字内')"></el-input>
+            </el-form-item>
+          <!-- 用户组描述 -->
+          <el-form-item :label="$t('备注')">
+            <el-input type="textarea" v-model="ruleForm.remark"
+            :placeholder="$t('请输入备注')"></el-input>
+          </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">取消</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
+      <el-button @click="show = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -32,23 +48,33 @@ export default {
     return {
       ruleForm: {
         country_id: '',
+        warehouse_id: '',
+        name: '',
         remark: ''
       },
       country: [],
+      warehouseData: [],
       rules: {
         country_id: [
-          { required: true, message: '请输入目的国', trigger: 'blur' }
+          { required: true, message: this.$t('请输入目的地'), trigger: 'blur' }
         ]
       }
     }
   },
   created () {
     this.getCountry()
+    this.getWarehouse()
   },
   methods: {
     getCountry () {
       this.$request.getCountry().then(res => {
         this.country = res.data
+      })
+    },
+    // 获取仓库数据
+    getWarehouse () {
+      this.$request.getShipWarehouse().then(res => {
+        this.warehouseData = res.data
       })
     },
     confirm (formName) {
@@ -58,7 +84,7 @@ export default {
             if (res.ret) {
               this.$notify({
                 type: 'success',
-                title: '成功',
+                title: this.$t('成功'),
                 message: res.msg
               })
               this.show = false
@@ -78,19 +104,25 @@ export default {
     },
     clear () {
       this.ruleForm.country_id = ''
+      this.ruleForm.warehouse_id = ''
       this.ruleForm.remark = ''
+      this.ruleForm.name = ''
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .dialog-invoice {
   .el-input {
-    width: 300px !important;
+    // width: 300px !important;
     margin-left: 50px;
+    width: 250px !important;
+  }
+  .el-select {
+    width: 60%;
   }
   .el-textarea {
-    width: 300px !important;
+    width: 250px !important;
     margin-left: 50px;
   }
   .el-form-item__label {

@@ -4,7 +4,7 @@
     <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <div class="select-box">
-      <add-btn @click.native="addStaff">添加员工组</add-btn>
+      <add-btn @click.native="addStaff">{{$t('添加员工组')}}</add-btn>
     </div>
       <el-table
         class="data-list"
@@ -12,7 +12,8 @@
         border
         @selection-change="selectionChange"
         v-loading='tableLoading'
-        ref="table">
+        ref="table"
+        height="550">
       <el-table-column
         type="selection"
         width="55">
@@ -20,44 +21,51 @@
       <!-- 员工组中文名 -->
       <el-table-column
         prop="name_cn"
-        label="员工组中文名">
+        :label="$t('员工组中文名')">
       </el-table-column>
       <!-- 员工组英文名 -->
       <el-table-column
         prop="name_en"
-        label="员工组英文名">
+        :label="$t('员工组英文名')">
       </el-table-column>
       <!-- 成员数量 -->
       <el-table-column
         prop="admin_count"
-        label="成员数量">
+        :label="$t('成员数量')">
+      </el-table-column>
+      <!-- 所属仓库 -->
+      <el-table-column
+        prop="warehouse_name"
+        :label="$t('所属仓库')">
       </el-table-column>
       <!-- 操作 -->
       <el-table-column
-        label="操作">
+        :label="$t('操作')" width="290">
         <template slot-scope="scope">
           <!-- 编辑 -->
-        <el-button
-          class="btn-blue"
-          @click.stop="editStaff(scope.row.id)">编辑</el-button>
+        <el-button v-if="scope.row.permissions === 1" class="btn-blue" @click.stop="editStaff(scope.row.id)">{{$t('编辑')}}</el-button>
           <!-- 修改权限 -->
-        <el-button
-          class="btn-purple"
-          v-if="scope.row.permissions === 1"
+        <el-button class="btn-purple" v-if="scope.row.permissions === 1"
           @click.stop="changePre(scope.row.id)">
-          修改权限
+          {{$t('修改权限')}}
         </el-button>
         <!-- 成员 -->
-        <el-button @click.stop="member(scope.row.id)" class="btn-green">成员</el-button>
+        <el-button @click.stop="member(scope.row.id)" class="btn-green">{{$t('成员')}}</el-button>
+        <!-- 所属仓库 -->
+        <el-button class="btn-deep-blue" v-if="scope.row.permissions === 1" @click="warehouseChange(scope.row.id)">{{$t('所属仓库')}}</el-button>
+        <!-- 自提点权限 -->
+        <el-button class="btn-pink" v-if="scope.row.permissions === 1" @click="pickPiont(scope.row.id)">{{$t('自提点权限')}}</el-button>
       </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <!-- 删除 -->
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
+    <div class="bottom-sty">
+      <!-- 删除 -->
+      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+    </div>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -122,6 +130,18 @@ export default {
         this.getList()
       })
     },
+    // 修改所属仓库
+    warehouseChange (id) {
+      dialog({ type: 'warehouseTo', id: id }, () => {
+        this.getList()
+      })
+    },
+    // 自提点权限
+    pickPiont (id) {
+      dialog({ type: 'pickPoint', id: id }, () => {
+        this.getList()
+      })
+    },
     // 成员
     member (id) {
       dialog({ type: 'staffGroup', id: id })
@@ -136,9 +156,13 @@ export default {
     },
     // 删除
     deleteData () {
-      this.$confirm(`是否确认删除？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      console.log(this.deleteNum, 'this.deleteNum')
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择员工组'))
+      }
+      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
@@ -147,7 +171,7 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })

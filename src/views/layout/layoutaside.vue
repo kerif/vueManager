@@ -1,8 +1,11 @@
 <template>
   <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']">
-    <div class="aside-top">
-      <span class="app-name">集运</span>
-      <span>管理系统</span>
+    <div v-if="!isCollapse"  class="aside-top">
+      <span class="app-name">{{$t('集运')}}</span>
+      <span>{{$t('管理系统')}}</span>
+    </div>
+    <div v-else class="unTop">
+      <img src="../../assets/top.png">
     </div>
     <el-menu
       :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"
@@ -18,12 +21,12 @@
         :index="index + ''">
         <template slot="title">
           <i :class="['iconfont', 'icon-title', route.icon]"></i>
-          <span>{{ route.name }}</span>
+          <span>{{ $t(route.name) }}</span>
         </template>
         <el-menu-item-group v-for="(childRoute, childIndex) in route.children" :key="childIndex">
           <el-menu-item :index="childRoute.path"
             :key="childRoute.name" v-if="childRoute.level === 2" class="route-item"
-            @click="onRoute(route)">{{ childRoute.name }}</el-menu-item>
+            @click="onRoute(route)">{{ $t(childRoute.name) }}</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -67,15 +70,16 @@ export default {
 </script>
 <style lang="scss">
 .layout-aside {
-  width: 230px !important;
-  min-height: 100vh;
-  position: fixed;
+  width: 180px !important;
+  height: 100vh;
+  position: relative;
   top: 0;
   z-index: 99;
   background-color: #171B42;
-  transition: width .3s ease-in-out;
+  // transition: all 0.2s ease-in;
+  overflow-x: hidden;
   .aside-top {
-    width: 230px;
+    width: 180px;
     height: 60px;
     line-height: 60px;
     background-color: #3540A5;
@@ -83,27 +87,36 @@ export default {
     font-size: 18px;
     text-align: center;
   }
+  .unTop {
+    background-color: #3540A5;
+    text-align: center;
+    img {
+      height: 60px;
+      width: 61px;
+      padding-top: 5px;
+    }
+  }
   .app-name {
     font-size: 35px;
     font-weight: bold;
     margin-right: 5px;
   }
   .route-menu {
-    width: 230px;
+    // width: 180px;
     border: none;
     margin-top: 50px;
   }
   .route-item {
-    padding-left: 80px !important;
+    padding-left: 60px !important;
   }
   .el-menu-item-group__title {
     padding: 0;
   }
   .isCollapse {
-    width: 0 !important;
+    width: 50px !important;
   }
   .el-submenu__title {
-    padding-left: 40px !important;
+    padding-left: 20px !important;
   }
   .icon-title {
     font-size: 18px;
@@ -115,5 +128,8 @@ export default {
       background-color: #3540A5 !important;
     }
   }
+}
+.el-menu-item-group__title {
+  padding: 0;
 }
 </style>

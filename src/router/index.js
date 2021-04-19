@@ -10,9 +10,21 @@ const loadonDemand = (path) => {
 const Login = loadonDemand('login')
 const NotFound = loadonDemand('404')
 
+const Layout = loadonDemand('layout/layouttop')
+
 Vue.use(Router)
 
 const constantRouterMap = [
+  {
+    path: '/redirect',
+    component: Layout,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
+  },
   {
     path: '/login',
     name: 'login',

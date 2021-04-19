@@ -6,13 +6,16 @@ import Element from 'element-ui'
 import './styles/element-variable.scss'
 import request from './lib/request'
 import baseUrl from './lib/axios/baseApi'
+import convert from './utils/language'
 
 Vue.use(Element)
 Vue.config.productionTip = false
 store.commit('initToken')
+store.commit('initLanguageCode')
 
 Vue.prototype.$request = request
 Vue.prototype.$baseUrl = baseUrl
+Vue.prototype.$t = convert
 
 new Vue({
   router,

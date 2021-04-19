@@ -4,13 +4,14 @@
       type="daterange"
       v-model="date_value"
       @change="dateChange"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期">
+      :range-separator="$t('至')"
+      :start-placeholder="$t('开始日期')"
+      :end-placeholder="$t('结束日期')">
     </el-date-picker>
   </el-col>
 </template>
 <script>
+import $t from '../../utils/language'
 export default {
   props: {
     placeholder: {
@@ -24,7 +25,8 @@ export default {
   },
   data () {
     return {
-      date_arr: []
+      date_arr: [],
+      $t
     }
   },
   computed: {

@@ -3,40 +3,34 @@
     <layout-aside></layout-aside>
     <el-container direction="vertical" :class="['layout', isCollapse ? 'is-collapse' : '']">
       <layout-header></layout-header>
-      <div  :class="[isCollapse && 'isCollapses']" class="layout-nav">
-        <div class="back-box" @click="$router.go(-1)">
-          <span class="el-icon-back back-icon"></span>
-          <span class="back-text">返回</span>
-        </div>
-        <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
-          <el-breadcrumb-item v-for="(item, index) in pagePath.split(',')" :key="index">
-            {{ item }}
-          </el-breadcrumb-item>
-        </el-breadcrumb>
-      </div>
       <el-main :class="[isCollapse && 'isCollapses']">
-        <router-view></router-view>
+        <transition :css="false">
+          <keep-alive :include="cachedViews">
+            <router-view :key="key"></router-view>
+          </keep-alive>
+        </transition>
       </el-main>
-      <layout-footer></layout-footer>
     </el-container>
   </el-container>
 </template>
 <script>
 import LayoutAside from './layoutaside'
 import LayoutHeader from './layoutheader'
-import LayoutFooter from './layoutfooter'
 export default {
+  name: 'layoutContainer',
   components: {
     LayoutAside,
-    LayoutHeader,
-    LayoutFooter
+    LayoutHeader
   },
   computed: {
-    pagePath () {
-      return this.$store.state.pagePath
+    cachedViews () {
+      return this.$store.state.tagsView.cachedViews
     },
     isCollapse () {
       return this.$store.state.isCollapse
+    },
+    key () {
+      return this.$route.name
     }
   }
 }
@@ -44,60 +38,36 @@ export default {
 <style lang="scss">
 .layout-contaniner {
   .el-main {
-    left: 230px;
-    width: calc(100vw - 230px);
-    transition: all .3s ease-in;
+    padding: 0;
+    width: calc(100vw - 180px);
+    height: calc(100vh - 140px);
+    transition: all 0.2s ease-in;
     position: relative;
-    top: 60px;
+  }
+  .el-main > div {
+    background-color: #F5F5F5;
+    padding: 20px;
   }
   .isCollapses {
-    left: 0  !important;
-    width: 100vw  !important;
+    left: 0px !important;
+    width: calc(100vw - 60px) !important;
   }
   .layout-nav {
-    height: 60px;
-    padding: 0 20px;
-    width: calc(100vw - 230px);
+    padding: 15px 20px;
+    width: calc(100vw - 180px);
     box-sizing: border-box;
     position: relative;
-    top: 60px;
-    left: 230px;
-    transition: all .3s ease-in;
+    transition: all 0.2s ease-in;
     border: {
-      top: 1px solid #E8E9EB;
-      bottom: 1px solid #E8E9EB;
+      top: 1px solid #e8e9eb;
+      bottom: 1px solid #e8e9eb;
     }
     .breadcrumb {
-      line-height: 40px;
+      line-height: 60px;
     }
-    .back-box {
-      float: right;
-      color: #3540A5;
-      font-size: 14px;
-      line-height: 40px;
-      cursor: pointer;
-      // &:hover {
-      //   .back-text {
-      //     display: inline-block;
-      //   }
-      //   transition: all 3s ease-in;
-      // }
-    }
-    .back-icon {
-      font-size: 18px;
-      border: 1px solid #ECEDF0;
-      border-radius: 50%;
-      display: inline-block;
-      padding: 5px;
-      margin-top: 5px;
-      margin-right: 5px;
-    }
-    // .back-text {
-    //   display: none;
-    // }
   }
   .isCollapse {
-    width: 0 !important;
+    width: 60px !important;
   }
 }
 </style>

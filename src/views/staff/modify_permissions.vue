@@ -3,7 +3,7 @@
       <el-row>
         <el-col :span="12">
           <el-tree
-            :data="permissionMenu"
+            :data="ViewPermissionMenu"
             show-checkbox
             node-key="id"
             class="tree"
@@ -12,7 +12,7 @@
             :default-checked-keys="defaultChecked"
             :props="defaultProps">
           </el-tree>
-          <el-button class="save-btn" @click="confirmSubmit" type="primary">保存</el-button>
+          <el-button class="save-btn" @click="confirmSubmit" type="primary">{{$t('保存')}}</el-button>
          </el-col>
       </el-row>
     </div>
@@ -39,6 +39,21 @@ export default {
       this.getList()
     }
   },
+  computed: {
+    ViewPermissionMenu () {
+      return this.permissionMenu.map(item => {
+        return {
+          ...item,
+          child: item.child.map(item => ({ ...item, name: this.$t(item.name) })),
+          name: this.$t(item.name),
+          id: `${item.id}-1`
+        }
+      })
+    },
+    defaultChecked () {
+      return getCheckedChild(this.permissionMenu)
+    }
+  },
   methods: {
     getList () {
       this.$request.getPermissions(this.$route.params.id).then(res => {
@@ -47,10 +62,12 @@ export default {
           this.permissionMenu = res.data.map(item => {
             return {
               ...item,
+              child: item.child.map(item => ({ ...item, name: item.name })),
+              name: item.name,
               id: `${item.id}-1`
             }
           })
-          console.log(this.permissionMenu)
+          console.log(this.permissionMenu, 'permissionMenu')
         } else {
           this.$message.error(res.msg)
         }
@@ -62,7 +79,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           // this.$router.push({ name: 'staffgrouplist' })
@@ -85,12 +102,6 @@ export default {
           console.log(this.defaultShowNodes, 'this.defaultShowNodes')
         })
       }
-    }
-  },
-  computed: {
-    defaultChecked () {
-      console.log(getCheckedChild(this.permissionMenu))
-      return getCheckedChild(this.permissionMenu)
     }
   }
 }

@@ -10,9 +10,9 @@
       <div class="bullshit">
         <div class="bullshit__oops">Not Found 404</div>
         </div>
-        <div class="bullshit__headline">神说这个页面不存在......</div>
-        <div class="bullshit__info">请检查您输入的网址是否正确，<br>点击以下按钮返回主页</div>
-        <div @click="back" class="bullshit__return-home">返回首页</div>
+        <div class="bullshit__headline">{{$t('神说这个页面不存在')}}......</div>
+        <div class="bullshit__info">{{$t('请检查您输入的网址是否正确，')}}<br>{{$t('点击以下按钮返回主页')}}</div>
+        <div @click="back" class="bullshit__return-home">{{$t('返回首页')}}</div>
       </div>
     </div>
 </template>
@@ -126,7 +126,7 @@ export default {
         }
         70% {
           top: 130px;
-          left: 180px;
+          left: 60px;
           opacity: 1;
         }
         100% {
@@ -147,7 +147,7 @@ export default {
           opacity: 1;
         }
         80% {
-          top: 180px;
+          top: 60px;
           left: 340px;
           opacity: 1;
         }

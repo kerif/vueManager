@@ -1,19 +1,26 @@
 <template>
   <div class="agent-list-container">
       <div>
-      <search-group placeholder="请输入关键字" v-model="page_params.keyword"  @search="goSearch">
+      <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword"  @search="goSearch">
       </search-group>
     </div>
-    <div class="clear-box"><add-btn router="addAgent">添加代理</add-btn></div>
+    <add-btn router="addAgent" class="add-sty">{{$t('添加代理')}}</add-btn>
+    <add-btn router="agentTemplate">{{$t('计佣模版配置')}}</add-btn>
+    <div class="changeVou">
+      <el-button @click="withdraw">{{$t('提现说明')}}</el-button>
+    </div>
     <el-table class="data-list" border stripe :data="suggestList"
     v-loading="tableLoading"
-    @selection-change="selectionChange">
+    @selection-change="selectionChange" height="550">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column label="代理名称" prop="agent_name">
+      <el-table-column :label="$t('代理名称')">
+        <template slot-scope="scope">
+          <span>{{scope.row.user_id}}-{{scope.row.agent_name}}-</span>
+        </template>
       </el-table-column>
-      <el-table-column label="佣金分成%" prop="commission">
+      <el-table-column :label="$t('佣金分成%')" prop="commission">
       </el-table-column>
-      <el-table-column label="代理二维码" align="center">
+      <el-table-column :label="$t('代理二维码')" align="center">
         <template slot-scope="scope">
           <span style="cursor:pointer;"
             @click.stop="imgSrc=scope.row.qr_code, imgVisible=true">
@@ -21,29 +28,40 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" prop="created_at">
+      <el-table-column :label="$t('创建时间')" prop="created_at">
       </el-table-column>
-      <el-table-column label="下单/成交数">
+      <el-table-column :label="$t('下单/成交数')">
       <template slot-scope="scope">
         <span>{{scope.row.total_order}}/{{scope.row.deal_order}}</span>
       </template>
       </el-table-column>
-      <el-table-column label="是否启用" width="120">
+      <el-table-column :label="$t('是否启用')" width="120">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enabled"
             @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
-            active-text="开"
-            inactive-text="关"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
             active-color="#13ce66"
             inactive-color="gray">
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editAgent(scope.row.id)">修改</el-button>
-          <el-button class="btn-blue" @click="record(scope.row.id)">成交记录</el-button>
+          <!-- 修改 -->
+          <el-button class="btn-green" @click="editAgent(scope.row.id)">{{$t('修改')}}</el-button>
+          <!-- 成交记录 -->
+          <!-- 设置佣金 -->
+          <el-button class="btn-deep-purple" @click="setCommission(scope.row.id, scope.row.agent_name, scope.row.commission)">{{$t('设置佣金')}}</el-button>
+          <!-- <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button> -->
+           <el-badge :value="scope.row.settle_count > 0 ? scope.row.settle_count : ''" class="item record-sty">
+            <el-button class="btn-blue" @click="record(scope.row.id, scope.row.user_id)">{{$t('成交记录')}}</el-button>
+          </el-badge>
+          <!-- 提现申请 -->
+          <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
+            <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">{{$t('提现申请')}}</el-button>
+          </el-badge>
         </template>
       </el-table-column>
     </el-table>
@@ -52,6 +70,28 @@
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog">
       </div>
+    </el-dialog>
+    <!-- 提现说明弹窗 -->
+    <el-dialog :title="$t('提现说明')" :visible.sync="withdrawVisible" width="50%" class="withdraw-sty" @close="clear">
+      <el-form ref="form" :model="form" label-width="120px">
+        <el-form-item :label="$t('选择语言')">
+          <el-select v-model="form.language" placeholder="请选择" @change="changeLang">
+              <el-option
+                v-for="item in options"
+                :key="item.language_code"
+                :label="item.name"
+                :value="item.language_code">
+              </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('提现说明内容')">
+          <el-input v-model="form.content" type="textarea" :rows="4" :placeholder="$t('请输入内容')"></el-input>
+        </el-form-item>
+      </el-form>
+       <div slot="footer">
+      <el-button @click="withdrawVisible = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+    </div>
     </el-dialog>
   </div>
 </template>
@@ -72,7 +112,13 @@ export default {
       tableLoading: false,
       imgVisible: false,
       imgSrc: '',
-      deleteNum: []
+      deleteNum: [],
+      options: [],
+      withdrawVisible: false,
+      form: {
+        content: '',
+        language: ''
+      }
     }
   },
   name: 'agentList',
@@ -87,7 +133,6 @@ export default {
   },
   methods: {
     getList () {
-      console.log(this.page_params.keyword)
       this.tableLoading = true
       this.$request.getAgents({
         keyword: this.page_params.keyword,
@@ -102,7 +147,7 @@ export default {
           this.page_params.total = res.meta.total
         } else {
           this.$notify({
-            title: '操作失败',
+            title: this.$t('操作失败'),
             message: res.msg,
             type: 'warning'
           })
@@ -119,6 +164,13 @@ export default {
         }
       })
     },
+    // 提现申请
+    withdrawal (id) {
+      this.$router.push({ name: 'Withdrawal',
+        params: {
+          id: id
+        } })
+    },
     // 修改代理管理的开关
     changeTransfer (event, enabled, id) {
       console.log(typeof (event), '我是event')
@@ -127,7 +179,7 @@ export default {
         if (res.ret) {
           this.$notify({
             type: 'success',
-            title: '操作成功',
+            title: this.$t('操作成功'),
             message: res.msg
           })
           this.getList()
@@ -143,12 +195,59 @@ export default {
       this.deleteNum = selection.map(item => (item.id))
       console.log(this.deleteNum, 'this.deleteNum')
     },
+    // 获取提现说明
+    getWithdraw () {
+      this.$request.withdrawData().then(res => {
+        if (res.ret) {
+          this.form.content = res.data.content
+          this.form.language = res.data.language
+        }
+      })
+    },
+    // 切换语言
+    changeLang () {
+      this.$request.withdrawData({
+        lang: this.form.language
+      }).then(res => {
+        if (res.ret) {
+          this.form.content = res.data.content
+          this.form.language = res.data.language
+        }
+      })
+    },
+    // 获取语言列表
+    getLanguage () {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.options = res.data
+        }
+      })
+    },
+    // 提现说明 确认
+    confirm () {
+      this.$request.updateWithdrawData(this.form).then(res => {
+        if (res.ret) {
+          this.withdrawVisible = false
+        }
+      })
+    },
+    // 提现说明
+    withdraw () {
+      this.withdrawVisible = true
+      this.getLanguage()
+      this.getWithdraw()
+    },
+    clear () {
+      this.form.content = ''
+      this.form.language = ''
+    },
     // 成交记录
-    record (id) {
+    record (id, userId) {
       this.$router.push({
         name: 'record',
         query: {
-          id: id
+          id: id,
+          userId: userId
         }
       })
     },
@@ -179,11 +278,17 @@ export default {
         this.getList()
       }
       )
+    },
+    // 设置佣金
+    setCommission (id, agentName, commission) {
+      dialog({ type: 'commission', id: id, agentName: agentName, commission: commission }, () => {
+        this.getList()
+      })
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .img_box{
   text-align: center;
   .imgDialog{
@@ -192,5 +297,25 @@ export default {
 }
 .el-button {
   margin: 3px;
+}
+.record-sty {
+  margin-right: 8px;
+}
+.changeVou {
+  float: right;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
+.withdraw-sty {
+.el-dialog__header {
+  background-color: #0E102A;
+  }
+  .el-dialog__title {
+    color: #fff;
+    font-size: 14px;
+  }
+}
+.add-sty {
+  margin-left: 10px;
 }
 </style>

@@ -4,10 +4,10 @@
     <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
       <div class="select-box">
-        <search-select placeholder="请选择员工组" :selectArr="clientGroupList"
+        <search-select :placeholder="$t('请选择员工组')" :selectArr="clientGroupList"
         v-model="page_params.group" @search="onGroupChange">
       </search-select>
-        <add-btn router="staffadd">添加员工</add-btn>
+        <add-btn router="staffadd">{{$t('添加员工')}}</add-btn>
       </div>
       <el-table
         class="data-list"
@@ -15,14 +15,15 @@
         border
         ref="table"
         @selection-change="selectionChange"
-        v-loading="tableLoading">
+        v-loading="tableLoading"
+        height="550">
       <el-table-column
         type="selection"
         width="55">
       </el-table-column>
       <!-- 用户名 -->
       <el-table-column
-        label="用户名">
+        :label="$t('用户名')">
         <template slot-scope="scope">
         <span>{{scope.row.username}}</span>
         <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
@@ -31,54 +32,59 @@
       <!-- 姓名 -->
       <el-table-column
         prop="name"
-        label="姓名">
+        :label="$t('姓名')">
       </el-table-column>
       <!-- 邮箱 -->
       <el-table-column
         prop="email"
-        label="邮箱">
+        :label="$t('邮箱')">
       </el-table-column>
       <!-- 员工组 -->
       <el-table-column
         prop="admin_group.name_cn"
-        label="员工组">
+        :label="$t('员工组')">
       </el-table-column>
       <!-- 电话 -->
       <el-table-column
         prop="phone"
-        label="电话">
+        :label="$t('电话')">
       </el-table-column>
       <!-- 最后登录时间 -->
         <el-table-column
-        prop="created_at"
-        label="最后登录时间">
+        prop="last_login_at"
+        :label="$t('最后登录时间')">
       </el-table-column>
       <!-- 操作 -->
       <el-table-column
-        label="操作">
+        :label="$t('操作')">
         <template slot-scope="scope">
           <!-- 编辑 -->
         <el-button
-          class="btn-blue"
-          @click.stop="editInfo(scope.row.id)">编辑</el-button>
+          class="btn-main"
+          @click.stop="editInfo(scope.row.id)">{{$t('编辑')}}</el-button>
           <!-- 修改密码 -->
         <el-button
-          class="btn-purple"
+          class="btn-light-green"
           @click.stop="editPassword(scope.row.id)">
-          修改密码
+          {{$t('修改密码')}}
         </el-button>
       </template>
       </el-table-column>
-      <template slot="append">
+      <!-- <template slot="append">
         <div class="append-box">
-          <!-- 禁止登录 -->
-          <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">禁止登录</el-button>
-          <el-button size="small" class="btn-green" @click="forbidLogin(1)">允许登录</el-button>
-          <!-- 删除 -->
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
+          <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
+          <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
+    <div class="bottom-sty">
+      <!-- 禁止登录 -->
+      <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
+      <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
+      <!-- 删除 -->
+      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+    </div>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -168,9 +174,13 @@ export default {
     },
     // 删除
     deleteData () {
-      this.$confirm(`是否确认删除？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      console.log(this.deleteNum, 'this.deleteNum')
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择员工'))
+      }
+      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.deleteVip({
@@ -178,7 +188,7 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
@@ -194,6 +204,9 @@ export default {
     },
     // 禁止/允许登录
     forbidLogin (type) {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择员工'))
+      }
       console.log(type)
       if (type === 0) {
         this.$request.forbidUser({
@@ -201,14 +214,14 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -220,14 +233,14 @@ export default {
         }).then(res => {
           if (res.ret) {
             this.$notify({
-              title: '操作成功',
+              title: this.$t('操作成功'),
               message: res.msg,
               type: 'success'
             })
             this.getList()
           } else {
             this.$notify({
-              title: '操作失败',
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -264,6 +277,10 @@ export default {
   }
   .select-box {
     overflow: hidden;
+  }
+  .bottom-sty {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 }
 </style>
