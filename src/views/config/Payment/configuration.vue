@@ -1,1149 +1,168 @@
 <template>
-    <div class="payment-container">
-      <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
-        <!-- 支付配置 -->
-        <el-tab-pane :label="$t('支付配置')" name="1">
-          <!-- 微信支付 -->
-          <h4>{{$t('在线支付')}}</h4>
-          <el-table v-if="paymentData.length" :data="paymentData" v-loading="tableLoading" class="data-list"
-          border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column :label="$t('类型')" prop="name"></el-table-column>
-            <el-table-column :label="$t('是否启用')">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.enabled"
-                  @change="changeOnline($event, scope.row.type)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  active-color="#13ce66"
-                  inactive-color="gray">
-                </el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('配置')">
-              <template slot-scope="scope">
-                <el-button v-if="scope.row.type === 1 || scope.row.type === 2 || scope.row.type === 4 || scope.row.type === 5" class="btn-main" @click="configuration(scope.row.type, scope.row.name)">{{$t('配置')}}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- 转账支付 -->
-          <div class="select-box">
-          <h4>{{$t('转账支付')}}</h4>
-          <add-btn @click.native="addTransfer">{{$t('添加支付类型')}}</add-btn>
-        </div>
-          <el-table :data="transferData" v-loading="tableLoading" class="data-list"
-          border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column :label="$t('类型')" prop="name"></el-table-column>
-            <el-table-column :label="$t('是否启用')">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.enabled"
-                  @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  active-color="#13ce66"
-                  inactive-color="gray">
-                </el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-              <template slot-scope="scope">
-                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
-                <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')">
-              <template slot-scope="scope">
-                <el-button class="btn-dark-green" @click="editTransfer(scope.row.id)">{{$t('编辑')}}</el-button>
-                <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{$t('删除')}}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- 预设充值金额 -->
-          <div class="select-box">
-          <h4>{{$t('预设充值金额')}}</h4>
-          <add-btn @click.native="addRecharge">{{$t('新增')}}</add-btn>
-        </div>
-          <el-table :data="rechargeAmount" v-loading="tableLoading" class="data-list"
-          border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column :label="$t('金额')" prop="amount"></el-table-column>
-            <el-table-column :label="$t('操作')">
-              <template slot-scope="scope">
-                <el-button class="btn-light-red" @click="deleteRecharge(scope.row.id)">{{$t('删除')}}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <!-- 物流跟踪配置 -->
-      <el-tab-pane :label="$t('服务配置')" name="2">
-        <div class="logistics-container">
-          <div class="form-title">{{$t('快递100配置')}}</div>
-          <el-form :model="logisticsData" ref="ruleForm" class="demo-ruleForm"
-            label-position="left" label-width="150px">
-            <!-- Customer ID -->
-            <el-form-item label="Customer ID" prop="kd100_app_id">
-              <el-input v-model="logisticsData.kd100_app_id" :placeholder="$t('请输入Customer ID')" class="logistic-sty"></el-input>
+  <div class="configuration-container">
+    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
+      <el-tab-pane :label="$t('基础配置')" name="1"></el-tab-pane>
+      <el-tab-pane :label="$t('系统服务配置')" name="2"></el-tab-pane>
+      <el-tab-pane :label="$t('增值服务')" name="3"></el-tab-pane>
+      <el-tab-pane :label="$t('自定义配置')" name="4"></el-tab-pane>
+    </el-tabs>
+    <div class="main-sty">
+    <el-row :gutter="20">
+      <el-col :span="4">
+        <el-menu
+        default-active="activeIndex"
+        class="el-menu-vertical-demo"
+         @select="handleSelect">
+        <el-menu-item index="1">
+          {{$t('单位配置')}}
+        </el-menu-item>
+        <el-menu-item index="2">
+          {{$t('预报与入库')}}
+        </el-menu-item>
+        <el-menu-item index="3">
+          {{$t('支付配置')}}
+        </el-menu-item>
+        <el-menu-item index="4">
+          {{$t('汇率配置')}}
+        </el-menu-item>
+        <el-menu-item index="5">
+          {{$t('国家地区')}}
+        </el-menu-item>
+        <el-menu-item index="6">
+          {{$t('转运规则')}}
+        </el-menu-item>
+      </el-menu>
+      </el-col>
+      <el-col :span="13">
+        <div class="settings-container">
+          <el-form>
+          <!-- 重量单位： -->
+          <el-form-item :label="$t('重量单位：')">
+              <el-select v-model="weightName" :placeholder="$t('请选择')">
+                <el-option
+                v-for="item in weightList"
+                :key="item.id"
+                :value="item.name"
+                :label="item.name">
+                </el-option>
+              </el-select>
             </el-form-item>
-            <!-- 授权KEY -->
-            <el-form-item :label="$t('授权KEY')" prop="kd100_app_key">
-              <el-input v-model="logisticsData.kd100_app_key" :placeholder="$t('请输入授权KEY')" class="logistic-sty"></el-input>
-              <div class="test-btn">
-                <el-button class="btn-light-red" @click="testExpress">{{$t('测试')}}</el-button>
-              </div>
+            <!-- 货币单位： -->
+            <el-form-item :label="$t('货币单位：')">
+                <el-select v-model="currencyName" :placeholder="$t('请选择')">
+                  <el-option
+                  v-for="item in currencyList"
+                  :key="item.id"
+                  :value="item.name"
+                  :label="item.name">
+                  </el-option>
+                </el-select>
             </el-form-item>
-          <div class="form-title">{{$t('Tracking more配置')}}</div>
-          <el-form-item label="Appkey" prop="trackingmore_key">
-            <el-input v-model="logisticsData.trackingmore_key" :placeholder="$t('请输入AppSecret')" class="logistic-sty"></el-input>
-            <div class="test-btn">
-              <el-button class="btn-light-red" @click="testTracking">{{$t('测试')}}</el-button>
-            </div>
-          </el-form-item>
-          <div class="form-title">{{$t('邮箱发件信息配置')}}</div>
-          <el-form-item :label="$t('发件人邮件')" prop="from_address">
-            <el-input v-model="logisticsData.from_address" placeholder="请输入发件人邮件" class="logistic-sty"></el-input>
-          </el-form-item>
-            <el-form-item :label="$t('发件人名称')" prop="from_name">
-              <el-input v-model="logisticsData.from_name" :placeholder="$t('请输入发件人名称')" class="logistic-sty"></el-input>
+            <!-- 长度单位 -->
+            <el-form-item :label="$t('长度单位：')">
+                <el-select v-model="lengthName" :placeholder="$t('请选择')">
+                  <el-option
+                  v-for="(item, index) in lengthList"
+                  :key="index"
+                  :value="item.name"
+                  :label="item.name">
+                  </el-option>
+                </el-select>
             </el-form-item>
-            <el-form-item :label="$t('SMTP域名')" prop="host">
-              <el-input v-model="logisticsData.host" :v-html="$t('请输入SMTP域名')" class="logistic-sty"></el-input>
+            <el-form-item :label="$t('结算货币：')">
+              <el-select v-model="currency" :placeholder="$t('请选择')">
+                <el-option
+                v-for="item in rateList"
+                :key="item.id"
+                :value="item.code"
+                :label="item.name">
+                </el-option>
+              </el-select>
             </el-form-item>
-            <el-form-item :label="$t('SMTP端口')" prop="port">
-              <el-input v-model="logisticsData.port" :placeholder="$t('请输入SMTP端口')" class="logistic-sty"></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('发件人用户名')" prop="username">
-              <el-input v-model="logisticsData.username" placeholder="请输入发件人用户名" class="logistic-sty"></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('发件人密码')" prop="password">
-              <el-input type="password" v-model="logisticsData.password" :placeholder="$t('请输入发件人密码')" class="logistic-sty"></el-input>
-              <div class="test-btn">
-                <el-button class="btn-light-red" @click="testSmtp">{{$t('测试')}}</el-button>
-              </div>
-            </el-form-item>
-            <el-form-item :label="$t('加密方式')">
-              <el-radio-group v-model="logisticsData.encryption" class="logistic-sty">
-                <el-radio :label="0">{{$t('无')}}</el-radio>
-                <el-radio :label="1">{{$t('TLS加密')}}</el-radio>
-                <el-radio :label="2">{{$t('SSL加密')}}</el-radio>
+            <!-- 未入库丢包预警 -->
+            <el-form-item>
+              <span class="no-warehouse">{{$t('未入库丢包预警')}}</span>
+              <el-tooltip class="item" effect="dark" :content="$t('开启后，若预报包裹超过设定时间未入库，将会在包裹列表进行提示，表示包裹有丢失风险')" placement="top">
+              <span class="el-icon-question icon-question"></span>
+              </el-tooltip>
+              <el-radio-group v-model="basic.package_warning" @change="changeBasic" class="radio-sty">
+                <el-radio :label="5">{{$t('5天')}}</el-radio>
+                <el-radio :label="7">{{$t('7天')}}</el-radio>
+                <el-radio :label="10">{{$t('10天')}}</el-radio>
+                <el-radio :label="0">{{$t('不开启')}}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <!-- <el-form-item :label="$t('开启邮箱登录验证')">
-              <el-switch
-                v-model="logisticsData.validate_email"
-                :active-text="$t('开')"
-                :active-value="1"
-                :inactive-value="0"
-                :inactive-text="$t('关')"
-                active-color="#13ce66"
-                inactive-color="gray">
-              </el-switch>
-            </el-form-item> -->
-          <div class="form-title">{{$t('短信配置——聚合')}}</div>
-          <el-form-item label="Appkey" prop="juhe_key">
-            <el-input v-model="logisticsData.juhe_key" placeholder="请输入Appkey"
-            class="logistic-sty"></el-input>
-          </el-form-item>
-            <el-form-item :label="$t('发送验证码模板ID')" prop="juhe_tpl_id">
-              <el-input v-model="logisticsData.juhe_tpl_id" placeholder="请输入发送验证码模板ID" class="logistic-sty"></el-input>
-              <div class="test-btn">
-                <el-button class="btn-light-red" @click="testJuhe">{{$t('测试')}}</el-button>
-              </div>
+            <el-form-item :label="$t('物品属性：')">
+              <el-tag
+                :key="item.id"
+                v-for="item in dynamicTags"
+                closable
+                :disable-transitions="false"
+                @close="handleClose(item.id)">
+                {{item.cn_name}}
+              </el-tag>
+            <el-button class="btn-light-red" @click="addProps">{{$t('添加属性')}}</el-button>
+            <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onProps(item)">{{item.name}}</el-button>
             </el-form-item>
-            <!-- <el-form-item :label="$t('开启短信登录验证')">
+            <!-- 预报选择线路 -->
+          <!-- <el-form-item :label="$t('预报选择线路')">
+                <el-switch
+                  v-model="package_express_line"
+                  :active-text="$t('开')"
+                  :active-value="1"
+                  :inactive-value="0"
+                  :inactive-text="$t('关')"
+                  active-color="#13ce66"
+                  inactive-color="gray">
+                </el-switch>
+            </el-form-item> -->
+            <el-form-item :label="$t('入库是否必填尺寸')">
               <el-switch
-                v-model="logisticsData.validate_phone"
+                v-model="basic.size"
+                @change="changeBasic($event)"
                 :active-text="$t('开')"
+                :inactive-text="$t('关')"
                 :active-value="1"
                 :inactive-value="0"
-                :inactive-text="$t('关')"
                 active-color="#13ce66"
                 inactive-color="gray">
               </el-switch>
-            </el-form-item> -->
+            </el-form-item>
+            <el-form-item :label="$t('入库是否必填货位')">
+              <el-switch
+                v-model="basic.location"
+                @change="changeBasic($event)"
+                :active-text="$t('开')"
+                :inactive-text="$t('关')"
+                :active-value="1"
+                :inactive-value="0"
+                active-color="#13ce66"
+                inactive-color="gray">
+              </el-switch>
+            </el-form-item>
+          <el-button :loading="$store.state.btnLoading" class="save-btn" @click="saveSetting">{{$t('保存')}}</el-button>
           </el-form>
-          <div>
-            <el-button :loading="$store.state.btnLoading" class="save-btn" @click="confirmLogistic('ruleForm')">{{$t('保存')}}</el-button>
           </div>
-        </div>
-        </el-tab-pane>
-        <!-- 基础配置 -->
-        <el-tab-pane :label="$t('基础配置')" name="3">
-          <!-- 重量及货币配置 -->
-          <div class="settings-container">
-            <el-form>
-                <!-- 重量单位： -->
-                <el-form-item :label="$t('重量单位：')">
-                    <el-select v-model="weightName" :placeholder="$t('请选择')">
-                      <el-option
-                      v-for="item in weightList"
-                      :key="item.id"
-                      :value="item.name"
-                      :label="item.name">
-                      </el-option>
-                    </el-select>
-                </el-form-item>
-                <!-- 货币单位： -->
-                <el-form-item :label="$t('货币单位：')">
-                    <el-select v-model="currencyName" :placeholder="$t('请选择')">
-                      <el-option
-                      v-for="item in currencyList"
-                      :key="item.id"
-                      :value="item.name"
-                      :label="item.name">
-                      </el-option>
-                    </el-select>
-                </el-form-item>
-                <!-- 长度单位 -->
-                <el-form-item :label="$t('长度单位：')">
-                    <el-select v-model="lengthName" :placeholder="$t('请选择')">
-                      <el-option
-                      v-for="(item, index) in lengthList"
-                      :key="index"
-                      :value="item.name"
-                      :label="item.name">
-                      </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="$t('结算货币：')">
-                  <el-select v-model="currency" :placeholder="$t('请选择')">
-                    <el-option
-                    v-for="item in rateList"
-                    :key="item.id"
-                    :value="item.code"
-                    :label="item.name">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <!-- 未入库丢包预警 -->
-                <el-form-item>
-                  <span class="no-warehouse">{{$t('未入库丢包预警')}}</span>
-                  <el-tooltip class="item" effect="dark" :content="$t('开启后，若预报包裹超过设定时间未入库，将会在包裹列表进行提示，表示包裹有丢失风险')" placement="top">
-                  <span class="el-icon-question icon-question"></span>
-                  </el-tooltip>
-                  <el-radio-group v-model="basic.package_warning" @change="changeBasic" class="radio-sty">
-                    <el-radio :label="5">{{$t('5天')}}</el-radio>
-                    <el-radio :label="7">{{$t('7天')}}</el-radio>
-                    <el-radio :label="10">{{$t('10天')}}</el-radio>
-                    <el-radio :label="0">{{$t('不开启')}}</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item :label="$t('物品属性：')">
-                  <el-tag
-                    :key="item.id"
-                    v-for="item in dynamicTags"
-                    closable
-                    :disable-transitions="false"
-                    @close="handleClose(item.id)">
-                    {{item.cn_name}}
-                  </el-tag>
-                <el-button class="btn-light-red" @click="addProps">{{$t('添加属性')}}</el-button>
-                <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onProps(item)">{{item.name}}</el-button>
-                </el-form-item>
-                <!-- 预报选择线路 -->
-              <!-- <el-form-item :label="$t('预报选择线路')">
-                    <el-switch
-                      v-model="package_express_line"
-                      :active-text="$t('开')"
-                      :active-value="1"
-                      :inactive-value="0"
-                      :inactive-text="$t('关')"
-                      active-color="#13ce66"
-                      inactive-color="gray">
-                    </el-switch>
-                </el-form-item> -->
-                <el-form-item :label="$t('入库是否必填尺寸')">
-                  <el-switch
-                    v-model="basic.size"
-                    @change="changeBasic($event)"
-                    :active-text="$t('开')"
-                    :inactive-text="$t('关')"
-                    :active-value="1"
-                    :inactive-value="0"
-                    active-color="#13ce66"
-                    inactive-color="gray">
-                  </el-switch>
-                </el-form-item>
-                <el-form-item :label="$t('入库是否必填货位')">
-                  <el-switch
-                    v-model="basic.location"
-                    @change="changeBasic($event)"
-                    :active-text="$t('开')"
-                    :inactive-text="$t('关')"
-                    :active-value="1"
-                    :inactive-value="0"
-                    active-color="#13ce66"
-                    inactive-color="gray">
-                  </el-switch>
-                </el-form-item>
-              <el-button :loading="$store.state.btnLoading" class="save-btn" @click="saveSetting">{{$t('保存')}}</el-button>
-              </el-form>
-          </div>
-        </el-tab-pane>
-        <!-- 订单增值服务 -->
-        <el-tab-pane :label="$t('订单增值服务')" name="4">
-          <div class="select-box">
-            <add-btn @click.native="addService">{{$t('添加订单增值服务')}}</add-btn>
-          </div>
-            <el-table :data="valueData" v-loading="tableLoading" class="data-list"
-            border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column prop="name" :label="$t('增值服务名称')"></el-table-column>
-            <el-table-column prop="price" :label="'价格' + this.localization.currency_unit"></el-table-column>
-            <el-table-column prop="remark" :label="$t('备注')"></el-table-column>
-              <el-table-column :label="$t('是否启用')">
-                <template slot-scope="scope">
-                  <el-switch
-                    v-model="scope.row.enabled"
-                    @change="changeService($event, scope.row.id)"
-                    :active-text="$t('开')"
-                    :inactive-text="$t('关')"
-                    active-color="#13ce66"
-                    inactive-color="gray">
-                  </el-switch>
-                </template>
-              </el-table-column>
-          <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-            <template slot-scope="scope">
-              <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onService(scope.row, item)"></span>
-              <span v-else class="el-icon-plus icon-sty" @click="onService(scope.row, item)"></span>
-            </template>
-          </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button class="btn-dark-green" @click="editService(scope.row.id)">{{$t('编辑')}}</el-button>
-                  <el-button class="btn-light-red" @click="deleteService(scope.row.id)">{{$t('删除')}}</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-          <!-- 保险服务 -->
-          <div class="select-box">
-            <h4>{{$t('保险服务')}}</h4>&nbsp;&nbsp;&nbsp;
-              <!-- v-model="enabled" -->
-            <el-switch
-              v-model="insuranceEnabled"
-              @change="changeInsurance($event)"
-              :active-value="1"
-              :inactive-value="0"
-              :active-text="$t('开')"
-              :inactive-text="$t('关')"
-              active-color="#13ce66"
-              inactive-color="gray">
-          </el-switch>
-          <el-button @click="openLines('insurance')" v-if="insuranceEnabled === 1" class="openStyle">{{$t('开启线路')}}</el-button>
-          <el-button class="add-insurance" @click="goInsurance('insurance')">{{$t('保险说明')}}</el-button>
-          </div>
-          <el-table :data="insuranceData" v-loading="tableLoading" class="data-list" v-if="insuranceEnabled === 1"
-          border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column :label="$t('商品价值')+ this.localization.currency_unit" prop="divide_string"></el-table-column>
-            <el-table-column :label="$t('保价类型')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.insurance_type === 1">{{$t('比例')}}</span>
-                <span v-if="scope.row.insurance_type === 2">{{$t('固定金额')}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('保险金额')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.insurance_type === 1">
-                  {{scope.row.insurance_proportion}}%
-                </span>
-                <span v-if="scope.row.insurance_type === 2">
-                  {{localization.currency_unit}}{{scope.row.insurance_proportion}}
-                </span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('是否强制购买')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.is_force === 0">{{$t('否')}}</span>
-                <span v-if="scope.row.is_force === 1">{{$t('是')}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')">
-              <template slot-scope="scope">
-                <el-button class="btn-dark-green" @click="editInsurance(scope.row.id, scope.row.is_start)">{{$t('编辑')}}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- 关税服务 -->
-          <div class="select-box">
-            <h4>{{$t('关税服务')}}</h4>&nbsp;&nbsp;&nbsp;
-              <!-- v-model="enabled" -->
-            <el-switch
-              v-model="tariffEnabled"
-              @change="changeTariff($event)"
-              :active-value="1"
-              :inactive-value="0"
-              :active-text="$t('开')"
-              :inactive-text="$t('关')"
-              active-color="#13ce66"
-              inactive-color="gray">
-          </el-switch>
-          <el-button @click="openLines('tariff')" v-if="tariffEnabled === 1" class="openStyle">{{$t('开启线路')}}</el-button>
-          <div class="add-insurance">
-            <el-button @click="addTariff">{{$t('添加')}}</el-button>
-            <el-button @click="goInsurance('tariff')">{{$t('关税说明')}}</el-button>
-          </div>
-          </div>
-          <el-table :data="tariffData" v-loading="tableLoading" class="data-list" v-if="tariffEnabled === 1"
-          border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column :label="$t('商品价值')+ this.localization.currency_unit">
-              <template slot-scope="scope">
-                <span>>{{scope.row.threshold}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('收费类型')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.type === 1">{{$t('比例')}}</span>
-                <span v-if="scope.row.type === 2">{{$t('固定金额')}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('关税金额')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.type === 1">
-                  {{scope.row.amount}}%
-                </span>
-                <span v-if="scope.row.type === 2">
-                  {{localization.currency_unit}}{{scope.row.amount}}
-                </span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('是否强制购买')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.enforce === 0">{{$t('否')}}</span>
-                <span v-if="scope.row.enforce === 1">{{$t('是')}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')">
-              <template slot-scope="scope">
-                <!-- 编辑 -->
-                <el-button class="btn-dark-green" @click="editTariff(scope.row.id)">{{$t('编辑')}}</el-button>
-                <!-- 删除 -->
-                <el-button class="btn-light-red" @click="deleteTariff(scope.row.id)">{{$t('删除')}}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <!-- 包裹增值服务 -->
-        <el-tab-pane :label="$t('包裹增值服务')" name="5">
-          <div class="select-box">
-            <add-btn @click.native="addParcel">{{$t('添加包裹增值服务')}}</add-btn>
-          </div>
-            <el-table :data="parcelData" v-loading="tableLoading" class="data-list"
-            border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column prop="name" :label="$t('增值服务名称')"></el-table-column>
-            <el-table-column prop="price" :label="$t('价格') + this.localization.currency_unit"></el-table-column>
-            <el-table-column prop="remark" :label="$t('备注')"></el-table-column>
-              <el-table-column :label="$t('是否启用')">
-                <template slot-scope="scope">
-                  <el-switch
-                    v-model="scope.row.enabled"
-                    @change="changeParcel($event, scope.row.id)"
-                    :active-text="$t('开')"
-                    :inactive-text="$t('关')"
-                    active-color="#13ce66"
-                    inactive-color="gray">
-                  </el-switch>
-                </template>
-              </el-table-column>
-              <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-                <template slot-scope="scope">
-                  <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onPackage(scope.row, item)"></span>
-                  <span v-else class="el-icon-plus icon-sty" @click="onPackage(scope.row, item)"></span>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button class="btn-dark-green" @click="editParcel(scope.row.id)">{{$t('编辑')}}</el-button>
-                  <el-button class="btn-light-red" @click="deleteParcel(scope.row.id)">{{$t('删除')}}</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-        </el-tab-pane>
-        <!-- 其余配置 -->
-      <el-tab-pane :label="$t('PC端配置')" name="6">
-        <!-- 其余配置 -->
-      <div class="setOthers">
-        <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
-        label-width="150px" label-position="left">
-            <!-- 网站名称 -->
-            <el-form-item :label="$t('*网站名称')">
-              <el-input v-model="setForm.website_name">
-              </el-input>
-              <el-button class="btn-deep-purple others-btn" v-for="item in formatLangData" :key="item.id" @click="onPc(item)">{{item.name}}</el-button>
-            </el-form-item>
-            <!-- 网站链接 -->
-            <el-form-item class="url-sty">
-              <div slot="label">
-                <span>{{$t('*网站链接')}}</span>
-                <el-tooltip effect="dark" :content="$t('主要用于集运插件识别（非常重要,多个用英文逗号切分，例如http.www.baidu.com,http.www.google.com')" placement="top">
-                  <span class="el-icon-question icon-question"></span>
-                </el-tooltip>
-              </div>
-              <el-input v-model="setForm.pc_website_url" type="textarea" :autosize="{ minRows: 4, maxRows: 4}"
-              >
-              </el-input>
-            </el-form-item>
-            <!-- 网站ID -->
-            <el-form-item :label="$t('网站ID')">
-              <el-input v-model="setForm.app_id">
-              </el-input>
-            </el-form-item>
-             <el-form-item :label="$t('备案号')">
-              <el-input v-model="setForm.icp">
-              </el-input>
-            </el-form-item>
-            <el-form-item :label="$t('网站Secret')">
-              <el-input v-model="setForm.secret">
-              </el-input>
-            </el-form-item>
-            <el-form-item label="token">
-              <el-input v-model="setForm.token">
-              </el-input>
-            </el-form-item>
-            <el-form-item label="aes_key">
-              <el-input v-model="setForm.aes_key">
-              </el-input>
-            </el-form-item>
-            <el-form-item :label="$t('第三方登录')">
-            <el-popover
-              width="500"
-              placement="right"
-              v-model="visibleOauth">
-              <el-form ref="form" :model="oauthData" label-width="120px">
-                <el-form-item label="Google ID">
-                  <el-input v-model="oauthData.google_id"></el-input>
-                </el-form-item>
-                <el-form-item :label="$t('Google 密钥')">
-                  <el-input v-model="oauthData.google_secret"></el-input>
-                </el-form-item>
-                <el-form-item label="Line ID">
-                  <el-input v-model="oauthData.line_id"></el-input>
-                </el-form-item>
-                <el-form-item :label="$t('Line 密钥')">
-                  <el-input v-model="oauthData.line_secret"></el-input>
-                </el-form-item>
-                <el-form-item label="Facebook ID">
-                  <el-input v-model="oauthData.facebook_id"></el-input>
-                </el-form-item>
-                <el-form-item :label="$t('Facebook 密钥')">
-                  <el-input v-model="oauthData.facebook_secret"></el-input>
-                </el-form-item>
-              </el-form>
-              <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="visibleOauth = false">{{$t('取消')}}</el-button>
-                <el-button type="primary" size="mini" @click="saveOauth">{{$t('确定')}}</el-button>
-              </div>
-              <el-button slot="reference" @click="goOauth">{{$t('配置')}}</el-button>
-            </el-popover>
-            </el-form-item>
-            <el-form-item :label="$t('小程序码')" class="updateChe">
-                <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-                <span class="model-box"></span>
-                <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-                </span>
-                </span>
-                <el-upload
-                  v-show="baleImgList.length < 1"
-                  class="avatar-uploader"
-                  action=""
-                  list-type="picture-card"
-                  :http-request="uploadBaleImg"
-                  :show-file-list="false">
-                  <i class="el-icon-plus">
-                  </i>
-              </el-upload>
-            </el-form-item>
-            <!-- pc端客服二维码 -->
-            <el-form-item :label="$t('pc端客服二维码')" class="updateChe">
-                <span class="img-item" v-for="(item, index) in customerList" :key="index">
-                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-                <span class="model-box"></span>
-                <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
-                </span>
-                </span>
-              <el-upload
-                v-show="customerList.length < 1"
-                class="avatar-uploader"
-                action=""
-                list-type="picture-card"
-                :http-request="customerImg"
-                :show-file-list="false">
-                <i class="el-icon-plus">
-                </i>
-            </el-upload>
-            </el-form-item>
-            <!-- LOGO -->
-            <el-form-item label="LOGO" class="updateChe">
-                <span class="img-item" v-for="(item, index) in LogoImgList" :key="index">
-                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-                <span class="model-box"></span>
-                <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteLogo(index)"></i>
-                </span>
-                </span>
-                <el-upload
-                  v-show="LogoImgList.length < 1"
-                  class="avatar-uploader"
-                  action=""
-                  list-type="picture-card"
-                  :http-request="uploadLogo"
-                  :show-file-list="false">
-                  <i class="el-icon-plus">
-                  </i>
-              </el-upload>
-            </el-form-item>
-            <!-- 登录页背景图 -->
-            <el-form-item :label="$t('登录页背景图')" class="updateChe">
-                <span class="img-item" v-for="(item, index) in bgList" :key="index">
-                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-                <span class="model-box"></span>
-                <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteBg(index)"></i>
-                </span>
-                </span>
-              <el-upload
-                v-show="bgList.length < 1"
-                class="avatar-uploader"
-                action=""
-                list-type="picture-card"
-                :http-request="bgImg"
-                :show-file-list="false">
-                <i class="el-icon-plus">
-                </i>
-            </el-upload>
-            </el-form-item>
-            </el-form>
-          <el-button :loading="$store.state.btnLoading" class="save-btn" @click="editOthers">{{$t('保存')}}</el-button>
-        </div>
-        </el-tab-pane>
-        <!-- 订单增值服务 -->
-        <el-tab-pane :label="$t('商品分类管理')" name="7">
-          <div class="select-box">
-            <add-btn @click.native="addClassify">{{$t('添加商品分类')}}</add-btn>
-          </div>
-        <el-table :data="CategoriesList" stripe
-          border class="data-list"
-          @expand-change="onExpand"
-          v-loading="tableLoading" height="550">
-          <!-- 二级分类列表 -->
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-table :data="props.row.orders">
-                <!-- 二级分类名称 -->
-                <el-table-column :label="$t('二级分类名称')" prop="name"></el-table-column>
-                <!-- 是否显示 -->
-                <el-table-column :label="$t('是否显示')">
-                  <template slot-scope="scope">
-                    <el-switch
-                      v-model="scope.row.enabled"
-                      @change="changeShow($event, scope.row.id)"
-                      :active-text="$t('开')"
-                      :inactive-text="$t('关')"
-                      active-color="#13ce66"
-                      inactive-color="gray">
-                    </el-switch>
-                </template>
-                </el-table-column>
-                <!-- 是否开启风险提示 -->
-                <el-table-column :label="$t('是否开启风险提示')">
-                  <template slot-scope="scope">
-                    <el-switch
-                      v-model="scope.row.risk_warning_enabled"
-                      @change="changeRisk($event, scope.row.id)"
-                      :active-text="$t('开')"
-                      :inactive-text="$t('关')"
-                      active-color="#13ce66"
-                      inactive-color="gray">
-                    </el-switch>
-                  </template>
-                </el-table-column>
-                <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-                  <template slot-scope="scope">
-                    <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onCategories(scope.row, item)"></span>
-                    <span v-else class="el-icon-plus icon-sty" @click="onCategories(scope.row, item)"></span>
-                  </template>
-                </el-table-column>
-                <el-table-column :label="$t('操作')" width="300">
-                  <template slot-scope="scope">
-                    <!-- 编辑 -->
-                    <el-button class="btn-dark-green btn-margin" @click="editClassify(scope.row.id)">{{$t('编辑')}}</el-button>
-                    <!-- 风险提示 -->
-                    <el-button class="btn-main" @click="goSick(scope.row.id)">{{$t('风险提示')}}</el-button>
-                    <!-- 删除 -->
-                    <el-button @click="deleteCategories(scope.row.id)" class="btn-light-red">{{$t('删除')}}</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </template>
-          </el-table-column>
-            <!-- 一级分类列表 -->
-            <el-table-column type="index" width="50"></el-table-column>
-            <!-- 一级分类名称 -->
-            <el-table-column :label="$t('一级分类名称')" prop="name"></el-table-column>
-            <!-- 是否显示 -->
-            <el-table-column :label="$t('是否显示')">
-                <template slot-scope="scope">
-                  <el-switch
-                    v-model="scope.row.enabled"
-                    @change="changeShow($event, scope.row.id)"
-                    :active-text="$t('开')"
-                    :inactive-text="$t('关')"
-                    active-color="#13ce66"
-                    inactive-color="gray">
-                  </el-switch>
-                </template>
-            </el-table-column>
-            <!-- 是否开启风险提示 -->
-            <el-table-column :label="$t('是否开启风险提示')">
-                <template slot-scope="scope">
-                  <el-switch
-                    v-model="scope.row.risk_warning_enabled"
-                    @change="changeRisk($event, scope.row.id)"
-                    :active-text="$t('开')"
-                    :inactive-text="$t('关')"
-                    active-color="#13ce66"
-                    inactive-color="gray">
-                  </el-switch>
-                </template>
-            </el-table-column>
-            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-              <template slot-scope="scope">
-                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onCategories(scope.row, item)"></span>
-                <span v-else class="el-icon-plus icon-sty" @click="onCategories(scope.row, item)"></span>
-              </template>
-            </el-table-column>
-            <!-- 操作 -->
-            <el-table-column :label="$t('操作')" width="300">
-              <template slot-scope="scope">
-                <!-- 编辑 -->
-                <el-button class="btn-dark-green btn-margin" @click="editClassify(scope.row.id)">{{$t('编辑')}}</el-button>
-                <!-- 风险提示 -->
-                <el-button class="btn-main" @click="goSick(scope.row.id)">{{$t('风险提示')}}</el-button>
-                <!-- 删除 -->
-                <el-button class="btn-light-red btn-margin" @click="deleteCategories(scope.row.id)">{{$t('删除')}}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-        </el-tab-pane>
-        <!-- 邮件模版 -->
-        <el-tab-pane :label="$t('邮件模版')" name="8">
-          <div class="select-box">
-            <!-- <search-select :placeholder="$t('请选择')" :selectArr="emailType"
-            v-model="page_params.type" @search="onGroupChange">
-          </search-select> -->
-          <el-select v-model="page_params.type" @change="onGroupChange" clearable
-          :placeholder="$t('请选择')">
-            <el-option
-              v-for="item in emailType"
-              :key="item.id"
-              :value="item.id"
-              :label="item.name">
-            </el-option>
-          </el-select>
-          <add-btn router="emailAdd">{{$t('添加邮件模版')}}</add-btn>
-        </div>
-          <el-table :data="emailData" v-loading="tableLoading" class="data-list"
-          border stripe height="550">
-            <el-table-column type="index"></el-table-column>
-            <!-- 模版类型 -->
-            <el-table-column :label="$t('模版类型')" prop="type_name">
-            </el-table-column>
-            <!-- 邮件标题 -->
-            <el-table-column :label="$t('邮件标题')" prop="title"></el-table-column>
-            <el-table-column :label="$t('是否启用')">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.enabled"
-                  @change="changeEmail($event, scope.row.enabled, scope.row.id)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  active-color="#13ce66"
-                  inactive-color="gray">
-                </el-switch>
-              </template>
-            </el-table-column>
-            <!-- 创建时间 -->
-            <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
-            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-              <template slot-scope="scope">
-                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onEmail(scope.row, item)"></span>
-                <span v-else class="el-icon-plus icon-sty" @click="onEmail(scope.row, item)"></span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')" width="150">
-              <template slot-scope="scope">
-                <el-button class="btn-dark-green" @click="editEmail(scope.row.id)">{{$t('编辑')}}</el-button>
-                <el-button class="btn-light-red" @click="deleteEmail(scope.row.id)">{{$t('删除')}}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <!-- 发货快递公司 -->
-        <el-tab-pane :label="$t('发货快递公司')" name="9">
-          <div class="select-box">
-            <add-btn @click.native="addExpress">{{$t('添加')}}</add-btn>
-          </div>
-            <el-table :data="expressData" v-loading="tableLoading" class="data-list"
-            border stripe height="550">
-            <el-table-column type="index"></el-table-column>
-            <!-- 状态 -->
-            <el-table-column :label="$t('状态')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.status === false">{{$t('禁用')}}</span>
-                <span v-if="scope.row.status === true">{{$t('启用')}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="LOGO">
-              <template slot-scope="scope">
-                <span style="cursor:pointer;" v-if="scope.row.logo"
-                  @click.stop="imgSrc=scope.row.logo, imgVisible=true">
-                    <img :src="scope.row.logo" style="width:70px; height: 80px;">
-                </span>
-                <!-- <span v-else style="cursor:pointer;" @click.stop="imgSrc=scope.row.logo, imgVisible=true">
-                  <img :src="$baseUrl.IMAGE_URL + scope.row.logo" style="width:70px; height: 80px;">
-                </span> -->
-              </template>
-            </el-table-column>
-            <!-- 快递公司名称 -->
-            <el-table-column prop="name" :label="$t('快递公司名称')"></el-table-column>
-            <!-- 快递公司代码 -->
-             <el-table-column prop="code" :label="$t('快递公司代码')"></el-table-column>
-             <!-- 联系电话 -->
-             <el-table-column prop="contact_phone" :label="$t('联系电话')"></el-table-column>
-             <!-- 官网 -->
-            <el-table-column prop="website" :label="$t('官网')"></el-table-column>
-            <el-table-column :label="$t('是否启用')" width="120px">
-                <template slot-scope="scope">
-                  <el-switch
-                    v-model="scope.row.status"
-                    @change="changeExpress($event, scope.row.id)"
-                    :active-text="$t('开')"
-                    :inactive-text="$t('关')"
-                    active-color="#13ce66"
-                    inactive-color="gray">
-                  </el-switch>
-                </template>
-            </el-table-column>
-            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-            <template slot-scope="scope">
-              <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onExpress(scope.row, item)"></span>
-              <span v-else class="el-icon-plus icon-sty" @click="onExpress(scope.row, item)"></span>
-            </template>
-          </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button class="btn-dark-green" @click="editExpress(scope.row.id)" v-if="scope.row.is_default === 0">{{$t('编辑')}}</el-button>
-                  <el-button class="btn-light-red delete-btn" @click="deleteExpress(scope.row.id)" v-if="scope.row.is_default === 0">{{$t('删除')}}</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-        </el-tab-pane>
-        <!-- 单号规则 -->
-        <el-tab-pane :label="$t('单号规则')" name="10">
-          <el-table :data="rulesData" v-loading="tableLoading" class="data-list"
-            border stripe>
-            <el-table-column type="index"></el-table-column>
-            <!-- 状态 -->
-            <el-table-column :label="$t('项目名称')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.type === 1">{{$t('会员编号')}}</span>
-                <span v-if="scope.row.type === 2">{{$t('订单编号')}}</span>
-              </template>
-            </el-table-column>
-            <!-- 状态 -->
-            <el-table-column :label="$t('状态')">
-               <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.status"
-                  @change="changeRules($event, scope.row.status, scope.row.id)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  :active-value="1"
-                  :inactive-value="0"
-                  active-color="#13ce66"
-                  inactive-color="gray">
-                </el-switch>
-              </template>
-            </el-table-column>
-            <!-- 前缀字符 -->
-             <el-table-column prop="prefix" :label="$t('前缀字符')"></el-table-column>
-             <!-- 单号长度 -->
-             <el-table-column prop="length" :label="$t('单号长度')"></el-table-column>
-             <!-- 数字增值 -->
-            <el-table-column prop="system" :label="$t('数字增值')"></el-table-column>
-            <el-table-column :label="$t('操作')">
-              <template slot-scope="scope">
-                <!-- 编辑 -->
-                <el-button class="btn-dark-green" @click="editRules(scope.row.id, scope.row.type)">{{$t('编辑')}}</el-button>
-                <!-- 重新生成 -->
-                <el-button class="btn-light-red delete-btn" @click="regenerate(scope.row.id)" v-if="scope.row.type === 1">{{$t('重新生成')}}</el-button>
-              </template>
-              </el-table-column>
-            </el-table>
-            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-        </el-tab-pane>
-        <!-- 国家地区 -->
-        <el-tab-pane :label="$t('国家地区')" name="11">
-          <div class="select-box">
-            <add-btn @click.native="addCountry">{{$t('添加')}}</add-btn>
-          </div>
-          <el-table :data="countryData" v-loading="tableLoading" class="data-list country"
-            border stripe height="550">
-            <el-table-column width="100px" align="center">
-              <template >
-                <i class="el-icon-sort icon-fonts"></i>
-              </template>
-            </el-table-column>
-            <!-- 前缀字符 -->
-             <el-table-column prop="name" :label="$t('国家/地区')">
-             </el-table-column>
-               <!-- 状态 -->
-            <el-table-column :label="$t('状态')">
-               <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.enabled"
-                  @change="changeCountry($event, scope.row.enabled, scope.row.id)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  :active-value="1"
-                  :inactive-value="0"
-                  active-color="#13ce66"
-                  inactive-color="gray">
-                </el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')">
-              <template slot-scope="scope">
-                <!-- 删除 -->
-                <el-button class="btn-light-red" @click="deleteCountry(scope.row.id)">{{$t('删除')}}</el-button>
-              </template>
-              </el-table-column>
-            </el-table>
-            <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
-            <div class="sort-sty">*{{$t('拖拽行可以进行排序')}}
-              <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{$t('保存排序结果')}}</el-button>
-            </div>
-        </el-tab-pane>
-        <!-- 自定义轨迹类型 -->
-        <el-tab-pane :label="$t('自定义轨迹类型')" name="12">
-          <div class="select-box">
-          <h4>{{$t('系统物流类型')}}</h4>
-          <!-- <add-btn @click.native="addTransfer">{{$t('添加支付类型')}}</add-btn> -->
-        </div>
-          <el-table :data="systemData" v-loading="tableLoading" class="data-list"
-          border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column :label="$t('类型')" prop="name"></el-table-column>
-            <el-table-column :label="$t('是否启用')">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.status"
-                  @change="changeSystem($event, scope.row.status, scope.row.id)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  :active-value="1"
-                  :inactive-value="0"
-                  active-color="#13ce66"
-                  inactive-color="gray">
-                </el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('描述')" prop="context"
-            :show-overflow-tooltip="true" width="120"></el-table-column>
-            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-              <template slot-scope="scope">
-                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="trackingLang(scope.row, item)"></span>
-                <span v-else class="el-icon-plus icon-sty" @click="trackingLang(scope.row, item)"></span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')">
-              <template slot-scope="scope">
-                <el-button class="btn-dark-green" @click="editTracking(scope.row.id)">{{$t('编辑')}}</el-button>
-                <!-- <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{$t('删除')}}</el-button> -->
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- 自定义级别物流类型 -->
-          <div class="select-box">
-            <h4>{{$t('自定义物流类型')}}</h4>
-            <add-btn @click.native="addLogisticsType">{{$t('添加')}}</add-btn>
-          </div>
-          <el-table :data="TypeData" v-loading="tableLoading" class="data-list logistics-type"
-            border stripe>
-            <el-table-column width="100px" align="center">
-              <template >
-                <i class="el-icon-sort icon-fonts"></i>
-              </template>
-            </el-table-column>
-            <!-- 物流类型 -->
-             <el-table-column prop="context" :label="$t('物流信息')">
-             </el-table-column>
-             <!-- 是否启用 -->
-            <el-table-column :label="$t('是否启用')">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.status"
-                  @change="changeType($event, scope.row.status, scope.row.id)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  :active-value="1"
-                  :inactive-value="0"
-                  active-color="#13ce66"
-                  inactive-color="gray">
-                </el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-              <template slot-scope="scope">
-                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="TypeLang(scope.row, item)"></span>
-                <span v-else class="el-icon-plus icon-sty" @click="TypeLang(scope.row, item)"></span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')" width="160px">
-              <template slot-scope="scope">
-                <el-button class="btn-dark-green" @click="editLogisticsType(scope.row.id)">{{$t('编辑')}}</el-button>
-                <el-button class="btn-light-red" @click="deleteLogisticsType(scope.row.id)">{{$t('删除')}}</el-button>
-              </template>
-            </el-table-column>
-            </el-table>
-            <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
-            <div class="sort-sty">*{{$t('拖拽行可以进行排序')}}
-              <el-button @click="typeRowUpdate" class="btn-deep-purple save-sort">{{$t('保存排序结果')}}</el-button>
-            </div>
-        </el-tab-pane>
-        <!-- 汇率配置 -->
-        <el-tab-pane :label="$t('汇率配置')" name="13">
-          <div class="rate-top">
-            <div class="rate-left">
-              1&nbsp;{{$t('人民币')}}&nbsp;= <el-input v-model="rate" class="input-sty" :placeholder="$t('请输入')"></el-input>
-              {{currencyData.name}}
-            </div>
-            <el-button class="btn-dark-green" @click="saveRate">{{$t('保存')}}</el-button>
-            <el-button class="btn-blue-green" @click="autoGet">{{$t('自动获取')}}</el-button>
-          </div>
-            <el-table :data="ratesData" v-loading="tableLoading" class="data-list"
-            border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column prop="rate" :label="$t('汇率（当前币种:' + currencyData.name + '）')"></el-table-column>
-            <el-table-column :label="$t('是否生效')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.enabled === 1">{{$t('是')}}</span>
-                <span v-if="scope.row.enabled === 0">{{$t('否')}}</span>
-              </template>
-              </el-table-column>
-              <!-- 创建人 -->
-              <el-table-column :label="$t('创建人')" prop="operator"></el-table-column>
-              <!-- 创建时间 -->
-              <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button v-if="scope.row.enabled === 0" class="btn-dark-green" @click="changeRate(scope.row.id)">{{$t('生效')}}</el-button>
-                  <el-button class="btn-light-red" @click="deleteRate(scope.row.id)">{{$t('删除')}}</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-        </el-tab-pane>
-        <!-- 拼团配置 -->
-        <el-tab-pane :label="$t('拼团配置')" name="14" v-if="unShow">
-          <div class="rate-top">
-            <div class="rate-left">
-             {{$t(' 授权公开拼团团长')}}：
-            </div>
-            <el-button class="btn-blue-green" @click="groupAdd">{{$t('新增授权')}}</el-button>
-          </div>
-            <el-table :data="configurationData" v-loading="tableLoading" class="data-list"
-            border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column prop="id" :label="$t('客户ID')"></el-table-column>
-            <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
-              <!-- 创建人 -->
-              <el-table-column :label="$t('客户组')">
-                <template slot-scope="scope">
-                  <span>{{scope.row.user_group.name_cn}}</span>
-                </template>
-              </el-table-column>
-              <!-- 授权时间 -->
-              <el-table-column :label="$t('授权时间')" prop="created_at"></el-table-column>
-              <!-- 最后登录时间 -->
-              <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button class="btn-light-red" @click="deleteGroup(scope.row.id)">{{$t('删除')}}</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-        </el-tab-pane>
-      </el-tabs>
-      <el-dialog :visible.sync="imgVisible" size="small">
-      <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
-      </div>
-    </el-dialog>
-    <!-- 预设充值金额 -->
-    <el-dialog :visible.sync="rechargeDialog" width="30%" :title="$t('*预设充值金额')" @close="clear">
-      <el-input v-model="amount"></el-input>
-      <div slot="footer">
-        <el-button @click="rechargeDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="submitRecharge">{{$t('确定')}}</el-button>
-      </div>
-    </el-dialog>
-    <!-- 编辑系统物流类型 -->
-    <el-dialog :visible.sync="trackingDialog" width="30%" :title="$t('编辑')" @close="clearTracking">
-      <el-input v-model="context" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
-      <div slot="footer">
-        <el-button @click="trackingDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="saveTackingType">{{$t('确定')}}</el-button>
-      </div>
-    </el-dialog>
-    <!-- 自定义物流类型 -->
-    <el-dialog :visible.sync="expressDialog" width="30%" :title="this.typeId ? $t('编辑') : $t('新增')" @close="clearType">
-      <el-form :model="typeForm" ref="typeForm" class="demo-ruleForm">
-        <el-form-item :label="$t('物流信息')">
-          <el-input v-model="typeForm.context"></el-input>
-        </el-form-item>
-        </el-form>
-        <div slot="footer">
-        <el-button @click="expressDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="submitExpress">{{$t('确定')}}</el-button>
-      </div>
-    </el-dialog>
+      </el-col>
+    </el-row>
+    </div>
   </div>
 </template>
-
 <script>
 import Sortable from 'sortablejs'
-import NlePagination from '@/components/pagination'
-// import { SearchSelect } from '@/components/searchs'
-import { pagination } from '@/mixin'
+// import NlePagination from '@/components/pagination'
+// import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
-import AddBtn from '@/components/addBtn'
+// import AddBtn from '@/components/addBtn'
 export default {
   components: {
-    AddBtn,
-    NlePagination
-    // SearchSelect
+    // AddBtn,
+    // NlePagination
   },
-  mixins: [pagination],
+  // mixins: [pagination],
   data () {
     return {
+      activeIndex: '1',
       countrySendData: [],
       typeSendData: [],
       paymentData: [
@@ -1396,7 +415,16 @@ export default {
   mounted () {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
   },
+  computed: {
+    formatLangData () {
+      return this.languageData.filter(item => item.language_code !== 'zh_CN')
+    }
+  },
   methods: {
+    handleSelect (key) {
+      console.log(key, 'key')
+      console.log(this.activeIndex, 'activeIndex')
+    },
     handleEdit (val) {
       console.log(val)
       this.id = val.id // 这里就是当前拖动行的值，把需要的值赋值给你之前定义好的就可以了
@@ -3355,187 +2383,26 @@ export default {
         }
       })
     }
-  },
-  computed: {
-    formatLangData () {
-      return this.languageData.filter(item => item.language_code !== 'zh_CN')
-    }
   }
 }
 </script>
 
 <style lang="scss">
-.payment-container {
+.configuration-container {
   .tabLength {
-    //  width: 520px !important;
+    width: 500px;
   }
-  .logistics-container {
-    background-color: #fff !important;
-    padding: 20px;
-    // width: 35%;
-    .el-input__inner {
-      // width: 30%;
-    }
-  }
-  .save-btn {
-    color: #fff;
-    background-color: #3540A5;
+  .main-sty {
+    background-color: #fff;
   }
   .settings-container {
-     background-color: #fff !important;
      padding: 20px;
     .el-tag {
       margin-right: 8px;
     }
-  }
-  .select-box {
-    overflow: hidden;
-    h4 {
-      display: inline-block;
-    }
-  }
-  .setOthers {
-    background-color: #fff !important;
-    padding: 20px;
-    .el-input {
-      width: 50%;
-    }
-    .el-textarea__inner {
-      width: 30%;
-      background-color: #F5F5F5;
-    }
-    .goods-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 6px;
-    }
-    .updateChe {
-    .el-form-item__content {
-      margin-left: 0 !important;
-    }
-  }
-    .avatar-uploader {
-      display: inline-block;
-      vertical-align: top;
-      // margin-left: 50px;
-    }
-    .img-item {
-      display: inline-block;
-      border: 1px dashed #d9d9d9;
-      width: 148px;
-      height: 148px;
-      margin-right: 10px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      text-align: center;
-      position: relative;
-      box-sizing: border-box;
-      cursor: pointer;
-      &:hover {
-        .model-box, .operat-box {
-          opacity: 1;
-          transition: all .5s ease-in;
-        }
-      }
-    }
-    .model-box {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      left: 0;
-      opacity: 0;
-      background-color: rgba(0, 0, 0, .3);
-    }
-    .operat-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      i {
-        font-size: 20px;
-        color: #fff;
-        margin-right: 10px;
-      }
-    }
-  }
-  .btn-margin {
-    margin-bottom: 5px;
-  }
-  .icon-question {
-    margin-left: 5px;
-    font-size: 18px;
-    color: #67C23A;
-    position: relative;
-    top: 3px;
-  }
-  .form-title {
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-  .url-sty {
-    .el-textarea__inner {
-      width: 50%;
-    }
-  }
-  .test-btn {
-    display: inline-block;
-    margin-left: 20px;
-  }
-  .logistic-sty {
-    width: 50% !important;
-  }
-  .icon-sty {
-    cursor: pointer;
-    // padding-left: 20px;
-    font-weight: 700;
-    color: black;
-  }
-  .others-btn {
-    margin-left: 15px;
-  }
-  .img_box{
-    text-align: center;
-    .imgDialog{
-      width: 50%;
-    }
-  }
-  .delete-btn {
-    margin: 8px;
-  }
-  .country-sty {
-    text-align: center;
-  }
-  .sort-sty {
-    color: red;
-    font-size: 13px;
-  }
-  .add-insurance {
-    float: right;
-    margin-top: 17px;
-  }
-  .icon-fonts {
-    font-size: 28px;
-  }
-  .save-sort {
-    margin-left: 10px;
-  }
-  .rate-left {
-    display: inline-block;
-  }
-  .input-sty {
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 50%;
-  }
   .no-warehouse {
     color: #606266;
-  }
-  .radio-sty {
-    margin-left: 20px;
-  }
-  .openStyle {
-    margin-left: 10px;
+   }
   }
 }
 </style>

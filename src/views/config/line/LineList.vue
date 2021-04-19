@@ -360,6 +360,9 @@ export default {
       unShow: ''
     }
   },
+  activated () {
+    this.getList()
+  },
   created () {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
     console.log(this.unShow, 'this.unShow')

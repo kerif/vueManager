@@ -90,6 +90,8 @@ const sinceAddEdit = loadonDemand('config/point/sinceAddEdit')
 const commissionSet = loadonDemand('config/point/commission')
 // 配置 更多配置
 const PaymentManagement = loadonDemand('config/Payment/payment')
+// 配置 更多配置
+const configurationMore = loadonDemand('config/Payment/configuration')
 // 配置 更多配置 商品分类管理 风险提示
 const EditSick = loadonDemand('config/Payment/sickTips')
 // 更多配置 修改或新增邮件模版
@@ -1054,6 +1056,17 @@ export default [
             path: '/config/payment',
             name: 'payment',
             component: PaymentManagement,
+            id: 606,
+            meta: {
+              level: 2,
+              group: '配置',
+              name: '更多配置'
+            }
+          },
+          {
+            path: '/config/configuration-more',
+            name: 'configurationMore',
+            component: configurationMore,
             id: 606,
             meta: {
               level: 2,
