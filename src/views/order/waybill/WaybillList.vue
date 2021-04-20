@@ -909,9 +909,11 @@ export default {
     }
     if (this.$route.query.order_sn) {
       this.page_params.keyword = this.$route.query.order_sn
+      this.getList()
     }
     if (this.$route.query.agent) {
       this.agent_name = Number(this.$route.query.agent)
+      this.getList()
     }
     // 拣货日期筛选保留
     if (this.$route.query.pickTimes) {
