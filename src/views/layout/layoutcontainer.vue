@@ -30,7 +30,7 @@ export default {
       return this.$store.state.isCollapse
     },
     key () {
-      return this.$route.name
+      return this.$route.path
     }
   }
 }

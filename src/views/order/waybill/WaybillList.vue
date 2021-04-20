@@ -1,38 +1,20 @@
 <template>
   <div class="way-list-container">
     <el-tabs  v-model="activeName" class="tabLength" @tab-click="onTabChange">
-      <el-tab-pane :label="$t('全部') + '(' + 0 + ')'" name="0" v-if="!this.countData.all"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('全部') + '(' + this.countData.all + ')'" name="0"></el-tab-pane>
-      <!-- 待处理 -->
-      <el-tab-pane :label="$t('待处理') + '(' + 0 + ')'" name="1" v-if="!this.countData.pending"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('待处理') + '(' + this.countData.pending + ')'" name="1"></el-tab-pane>
-      <!-- 待支付 -->
-      <el-tab-pane :label="$t('待支付') + '(' + 0 + ')'" name="2" v-if="!this.countData.paid"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('待支付') + '(' + this.countData.paid + ')'" name="2"></el-tab-pane>
-      <!-- 待发货 -->
-      <el-tab-pane :label="$t('待发货') + '(' + 0 + ')'" name="3" v-if="!this.countData.delivered"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('待发货') + '(' + this.countData.delivered
-+ ')'" name="3"></el-tab-pane>
-      <!-- 已发货 -->
-      <el-tab-pane :label="$t('已发货') + '(' + 0 + ')'" name="4" v-if="!this.countData.shipped"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('已发货') + '(' + this.countData.shipped
-+ ')'" name="4"></el-tab-pane>
-      <!-- 已签收 -->
-      <el-tab-pane :label="$t('已签收') + '(' + 0 + ')'" name="5" v-if="!this.countData.received"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('已签收') + '(' + this.countData.received
-+ ')'" name="5"></el-tab-pane>
-      <!-- 作废订单 -->
-      <el-tab-pane :label="$t('作废订单') + '(' + 0 + ')'" name="19" v-if="!this.countData.invalid"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('作废订单') + '(' + this.countData.invalid
-+ ')'" name="19"></el-tab-pane>
+      <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
+      <el-tab-pane :label="`${$t('待处理')} (${countData.pending || 0})`" name="1"></el-tab-pane>
+      <el-tab-pane :label="`${$t('待支付')} (${countData.paid || 0})`" name="2"></el-tab-pane>
+      <el-tab-pane :label="`${$t('待发货')} (${countData.delivered || 0})`" name="3"></el-tab-pane>
+      <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
+      <el-tab-pane :label="`${$t('已签收')} (${countData.received || 0})`" name="5"></el-tab-pane>
+      <el-tab-pane :label="`${$t('作废订单')} (${countData.invalid || 0})`" name="19"></el-tab-pane>
   </el-tabs>
   <search-group :placeholder="$t('请输入')" v-model="page_params.keyword" @search="goMatch">
       <!-- <el-col :span="13"> -->
         <div class="changeTime">
           <!-- 创建 -->
             <el-date-picker
-            v-if="activeName === '1' || activeName === '2'|| activeName === '3'
-            || activeName === '4'"
+            v-if="['1', '2', '3', '4'].includes(activeName)"
             class="timeStyle"
             v-model="timeList"
             type="daterange"
@@ -45,7 +27,7 @@
           </el-date-picker>
           <!-- 拣货 -->
             <el-date-picker
-            v-if="activeName === '2' || activeName === '3'"
+            v-if="['2', '3'].includes(activeName)"
             class="timeStyle"
             v-model="pickingList"
             type="daterange"
@@ -72,7 +54,7 @@
       <!-- </el-col> -->
       <!-- <el-col :span="4"> -->
         <!-- 用户名 -->
-        <div class="chooseStatus customer-sty">
+        <div class="choose-status customer-sty">
           <el-select v-model="agent_name" @change="onAgentChange" clearable :placeholder="$t('代理筛选')">
             <el-option
               v-for="item in agentData"
@@ -83,7 +65,7 @@
           </el-select>
         </div>
         <!-- 支付方式 -->
-        <div class="chooseStatus customer-sty">
+        <div class="choose-status customer-sty">
           <el-select v-model="payment_type" @change="onPaymentChange" clearable :placeholder="$t('支付方式')">
             <el-option
               v-for="item in paymentData"
@@ -94,7 +76,7 @@
           </el-select>
         </div>
         <!-- 线路名称 -->
-        <div class="chooseStatus customer-sty">
+        <div class="choose-status customer-sty">
           <el-select v-model="express_line_id" @change="onExpressChange" clearable :placeholder="$t('线路名称')">
             <el-option
               v-for="item in lineData"
@@ -104,7 +86,7 @@
             </el-option>
           </el-select>
         </div>
-        <div class="chooseStatus">
+        <div class="choose-status">
           <el-select v-model="pay_delivery" @change="onDeliveryChange" clearable :placeholder="$t('货到付款')">
             <el-option
               v-for="item in deliveryData"
@@ -114,7 +96,7 @@
             </el-option>
           </el-select>
         </div>
-        <div class="import-list" v-if="activeName === '0' || activeName === '1'|| activeName === '2'|| activeName === '3'|| activeName === '4'|| activeName === '5'">
+        <div class="import-list" v-if="activeName !== '19'">
           <el-button @click="goFilter">{{$t('筛选')}}</el-button>
         </div>
         <div class="import-list">
@@ -502,7 +484,7 @@
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty" v-if="oderData.length && (activeName === '1' ||activeName === '3' || activeName === '2' || activeName === '4' || activeName === '5')">
+    <div class="bottom-sty" v-if="oderData.length && ['1','2','3','4','5'].includes(activeName)">
       <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{$t('一键批量打包')}}</el-button>
       <!-- 加入发货单 -->
       <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{$t('加入发货单')}}</el-button>
@@ -1091,67 +1073,30 @@ export default {
     },
     updatePackages () {
       console.log(this.paramsData, 'paramsData')
+      const params = { ...this.paramsData }
       if (this.uploadRadio === 1) {
-        this.$request.orderExport(this.paramsData).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.dialogPackages = false
-            this.getList()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
       } else if (this.uploadRadio === 2) {
-        this.$request.orderExport({
-          ...this.paramsData,
-          type: 1
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.dialogPackages = false
-            this.getList()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+        params.type = 1
       } else if (this.uploadRadio === 3) {
-        this.$request.orderExport({
-          ...this.paramsData,
-          type: 2
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.dialogPackages = false
-            this.getList()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+        params.type = 2
       }
+      this.$request.orderExport(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.dialogPackages = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     goMatch () {
       this.page_params.page = 1
@@ -1920,7 +1865,7 @@ export default {
     min-height: 300px;
     border-width: 0;
   }
-  .chooseStatus {
+  .choose-status {
     width: 150px;
     display: inline-block;
     .el-select {
