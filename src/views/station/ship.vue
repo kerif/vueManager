@@ -317,9 +317,11 @@ export default {
   activated () {
     if (this.$route.query.shipment_sn) {
       this.page_params.keyword = this.$route.query.shipment_sn
+      this.getList()
     }
     if (this.$route.query.status) {
       this.page_params.status = Number(this.$route.query.status)
+      this.getList()
     }
   },
   mounted () {

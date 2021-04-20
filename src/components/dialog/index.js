@@ -96,6 +96,7 @@ import payDetails from './payDetails.vue'
 import financeReview from './financeReview.vue'
 import openLine from './openLine.vue'
 import aboutCheck from './checkAbout.vue'
+import buyingService from './buyingService.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -192,6 +193,7 @@ const PayDetailsController = Vue.extend(payDetails)
 const FinanceReviewController = Vue.extend(financeReview)
 const OpenLineController = Vue.extend(openLine)
 const CheckAboutController = Vue.extend(aboutCheck)
+const BuyingServiceController = Vue.extend(buyingService)
 
 const mixin = {
   data () {
@@ -861,6 +863,13 @@ function initInstance (type) {
     // 关于我们
     case 'aboutCheck':
       instance = new CheckAboutController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 短信服务
+    case 'buyingService':
+      instance = new BuyingServiceController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
