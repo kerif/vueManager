@@ -893,7 +893,17 @@ export default {
   },
   created () {
     this.getCounts()
+    this.getAgentData()
+    this.getPaymentType()
+    this.getLineType()
+  },
+  mounted () {
+    this.getList()
+  },
+  activated () {
+    console.log('shipment router')
     if (this.$route.query.activeName) {
+      console.log(this.$route.query.activeName, 'this.$route.query.activeName')
       this.activeName = this.$route.query.activeName
       this.status = Number(this.$route.query.activeName)
     }
@@ -937,12 +947,6 @@ export default {
       this.page_params.handleQueryChange('createdTimes', `${this.begin_date} ${this.end_date}`)
       this.getList()
     }
-    this.getAgentData()
-    this.getPaymentType()
-    this.getLineType()
-  },
-  mounted () {
-    this.getList()
   },
   methods: {
     groupBuy (row) {
