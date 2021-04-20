@@ -190,6 +190,8 @@ export default {
     this.searchCountry()
     this.getProp()
     this.getWarehouseData()
+  },
+  activated () {
     if (this.$route.query.userId) {
       this.radio = 2
       this.textarea2 = this.$route.query.userId
@@ -206,8 +208,6 @@ export default {
           })
         }
       })
-      // this.search()
-      console.log(this.$route.query.userId, 'this.$route.query.userId')
     }
   },
   methods: {
