@@ -194,7 +194,7 @@ export default {
   activated () {
     if (this.$route.query.userId) {
       this.radio = 2
-      this.textarea2 = this.$route.query.userId
+      this.textarea2 = this.$route.query.userId.toString()
       this.$request.packs({
         user_id: this.$route.query.userId
       }).then(res => {
@@ -228,19 +228,15 @@ export default {
       })
     },
     search () {
-      console.log(this.prop_ids, 'prop_ids')
       if (this.radio === '') {
         return this.$message.error(this.$t('请选择按预报单号或会员ID查询'))
       } else if (this.textarea2 === '') {
         return this.$message.error(this.$t('请输入'))
       }
+      console.log(this.textarea2, '111')
+      console.log(typeof this.textarea2, 'type')
       this.expressNum = this.textarea2.split(/[(\r\n)\r\n]+/)
       this.userId = this.textarea2
-      // for (let i = 0; i < this.expressNum.length; i++) {
-      //   if (this.expressNum[i] === '') {
-      //     this.expressNum.remove(this.expressNum[i])
-      //   }
-      // }
       console.log(this.expressNum, 'this.expressNum')
       if (this.radio === 1) {
         this.$request.packs({
