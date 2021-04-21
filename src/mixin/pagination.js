@@ -1,5 +1,5 @@
 export default {
-  data () {
+  data() {
     return {
       page_params: {
         page: 1,
@@ -20,19 +20,19 @@ export default {
   // },
   methods: {
     // 分页
-    handleCurrentChange (pageId) {
+    handleCurrentChange(pageId) {
       this.page_params.page = pageId
       this.getList()
     },
     // 分页size
-    handleSizeChange (pageSize) {
+    handleSizeChange(pageSize) {
       this.page_params.page = 1
       this.handleQueryChange('page', this.page_params.page)
       this.page_params.size = pageSize
       this.getList()
     },
     // 搜索
-    goSearch (is) {
+    goSearch(is) {
       this.page_params.page = 1
       this.page_params.size = 10
       this.handleQueryChange('page', this.page_params.page)
@@ -40,7 +40,7 @@ export default {
       this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList(is)
     },
-    handleQueryChange (key, value) {
+    handleQueryChange(key, value) {
       const { name, params, query } = this.$route
       this.$router.replace({
         name,

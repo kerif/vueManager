@@ -20,54 +20,52 @@ export default new Vuex.Store({
     pagePath: '' // 路径列表
   },
   mutations: {
-    saveToken (state, data) {
+    saveToken(state, data) {
       state.token = data
       localStorage.setItem('TOKEN', data)
     },
-    initToken (state) {
+    initToken(state) {
       state.token = localStorage.getItem('TOKEN') || ''
       state.userName = localStorage.getItem('NAME') || ''
       state.groupMe = localStorage.getItem('me') || ''
     },
-    removeToken (state) {
+    removeToken(state) {
       state.token = ''
       localStorage.removeItem('TOKEN')
     },
-    savePagePath (state, data) {
+    savePagePath(state, data) {
       state.pagePath = data
     },
-    switchBtnLoading (state, data) {
+    switchBtnLoading(state, data) {
       state.btnLoading = data.status
     },
-    switchCollapse (state, isCollapse) {
+    switchCollapse(state, isCollapse) {
       state.isCollapse = isCollapse
     },
-    saveName (state, data) {
+    saveName(state, data) {
       state.userName = data
       localStorage.setItem('NAME', data)
     },
-    saveMe (state, data) {
+    saveMe(state, data) {
       state.groupMe = data
       console.log(state.groupMe, 'state.groupMe')
       localStorage.setItem('me', data)
       console.log(localStorage.setItem, 'localStorage.setItem')
     },
-    savePermissionStatus (state, data) {
+    savePermissionStatus(state, data) {
       state.isPermissionFilter = data
     },
-    saveFileterAfterRouterMap (state, data) {
+    saveFileterAfterRouterMap(state, data) {
       state.fileterAfterRouterMap = data.fileterAfterRouterMap
       state.isPermissionFilterArr = data.isPermissionFilterArr
     },
-    saveLanguageCode (state, data) {
+    saveLanguageCode(state, data) {
       state.languageCode = data
       localStorage.setItem('language', data)
     },
-    initLanguageCode (state) {
+    initLanguageCode(state) {
       state.languageCode = localStorage.getItem('language') || 'simple'
     }
   },
-  actions: {
-
-  }
+  actions: {}
 })

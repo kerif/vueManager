@@ -10,11 +10,13 @@ $form.defaults.timeout = 900000 // 响应时间
 $form.defaults.responseType = 'json'
 $form.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8' // 配置请求头
 $form.defaults.baseURL = baseApi.BASE_API_URL // 配置接口地址
-$form.defaults.transformRequest = [function (params) {
-  return qs.stringify(params)
-}]
+$form.defaults.transformRequest = [
+  function(params) {
+    return qs.stringify(params)
+  }
+]
 
-function interceptorsRequestSuccess (config) {
+function interceptorsRequestSuccess(config) {
   nprogress.start()
   // config.headers.Language = localStorage.getItem('locale') === 'en' ? 'en' : 'zh-CN'
   store.commit('switchBtnLoading', { status: true })
@@ -22,17 +24,17 @@ function interceptorsRequestSuccess (config) {
   return config
 }
 
-function interceptorsRequestError (error) {
+function interceptorsRequestError(error) {
   return Promise.reject(error)
 }
 
-function interceptorsResponseSuccess (response) {
+function interceptorsResponseSuccess(response) {
   nprogress.done()
   store.commit('switchBtnLoading', { status: false })
   return Promise.resolve(response.data)
 }
 
-function interceptorsResponseError (error) {
+function interceptorsResponseError(error) {
   let msg
   nprogress.done()
   store.commit('switchBtnLoading', { status: false })
@@ -64,9 +66,11 @@ let $json = $form.create({
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   },
-  transformRequest: [function (params) {
-    return JSON.stringify(params)
-  }]
+  transformRequest: [
+    function(params) {
+      return JSON.stringify(params)
+    }
+  ]
 })
 
 let $file = $form.create({
@@ -74,9 +78,11 @@ let $file = $form.create({
   headers: {
     'Content-Type': 'multipart/form-data;'
   },
-  transformRequest: [function (params) {
-    return params
-  }]
+  transformRequest: [
+    function(params) {
+      return params
+    }
+  ]
 })
 
 $file.interceptors.request.use(interceptorsRequestSuccess, interceptorsRequestError)
@@ -86,7 +92,8 @@ $json.interceptors.request.use(interceptorsRequestSuccess, interceptorsRequestEr
 $json.interceptors.response.use(interceptorsResponseSuccess, interceptorsResponseError)
 
 const axios = {}
-axios.install = function (Vue, options = {}) {
+// eslint-disable-next-line no-unused-vars
+axios.install = function(Vue, options = {}) {
   Vue.prototype.$http = $form
   Vue.prototype.$json = $json
   Vue.prototype.$baseUrl = baseApi

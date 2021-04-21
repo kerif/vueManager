@@ -1,81 +1,88 @@
 <template>
   <div class="packed-container">
     <div class="receiverMSg">
-      <h4>{{$t('收货人信息')}}</h4>
+      <h4>{{ $t('收货人信息') }}</h4>
       <el-row class="container-center" :gutter="20">
         <!-- 姓名 -->
         <el-col :span="7">
-          <span class="leftWidth">{{$t('姓名')}}</span>
-          <span>{{form.address && form.address.receiver_name}}</span>
+          <span class="leftWidth">{{ $t('姓名') }}</span>
+          <span>{{ form.address && form.address.receiver_name }}</span>
         </el-col>
         <!-- 手机/联系电话 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{$t('手机/联系电话')}}</span>
-          <span>{{form.address &&form.address.phone}}</span>
+          <span class="leftWidth">{{ $t('手机/联系电话') }}</span>
+          <span>{{ form.address && form.address.phone }}</span>
         </el-col>
         <!-- 国家/地区 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{$t('国家/地区')}}</span>
-          <span>{{form.address && form.address.country.cn_name}}</span>
+          <span class="leftWidth">{{ $t('国家/地区') }}</span>
+          <span>{{ form.address && form.address.country.cn_name }}</span>
         </el-col>
       </el-row>
       <el-row class="container-center" :gutter="20">
         <!-- 城市 -->
         <el-col :span="7">
-          <span class="leftWidth">{{$t('城市')}}</span>
-          <span>{{form.address && form.address.city}}</span>
+          <span class="leftWidth">{{ $t('城市') }}</span>
+          <span>{{ form.address && form.address.city }}</span>
         </el-col>
         <!-- 街道/门牌号 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{$t('街道门牌号')}}</span>
-          <span>{{form.address && form.address.street}}{{form.address && form.address.door_no}}</span>
+          <span class="leftWidth">{{ $t('街道门牌号') }}</span>
+          <span
+            >{{ form.address && form.address.street
+            }}{{ form.address && form.address.door_no }}</span
+          >
         </el-col>
         <!-- 邮编 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{$t('邮编')}}</span>
-          <span>{{form.address && form.address.postcode}}</span>
+          <span class="leftWidth">{{ $t('邮编') }}</span>
+          <span>{{ form.address && form.address.postcode }}</span>
         </el-col>
       </el-row>
     </div>
     <div class="receiverMSg">
-      <h4 class="all-group">{{$t('打包详情')}}</h4>
+      <h4 class="all-group">{{ $t('打包详情') }}</h4>
       <!-- <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
         <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
       </div> -->
       <div v-if="form.group_name !== ''" class="all-group all-sty">
-        <el-button class="btn-light-red">{{form.group_name}}</el-button>
-        <span class="group-sty" v-if="form.is_group_completed === 0">{{$t('拼团进行中')}}</span>
-        <span class="group-sty" v-if="form.is_group_completed === 1">{{$t('拼团已完成')}}</span>
+        <el-button class="btn-light-red">{{ form.group_name }}</el-button>
+        <span class="group-sty" v-if="form.is_group_completed === 0">{{ $t('拼团进行中') }}</span>
+        <span class="group-sty" v-if="form.is_group_completed === 1">{{ $t('拼团已完成') }}</span>
       </div>
       <el-row class="container-center" :gutter="20">
         <!-- 订单号 -->
         <el-col :span="7">
-          <span class="leftWidth">{{$t('订单号')}}</span>
-          <span>{{form.order_sn}}</span>
+          <span class="leftWidth">{{ $t('订单号') }}</span>
+          <span>{{ form.order_sn }}</span>
         </el-col>
         <!-- 线路名称 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{$t('线路名称')}}</span>
-          <span>{{form.express_line && form.express_line.cn_name}}---{{$t('限重')}}{{form.express_line && form.express_line.max_weight}}{{localization.weight_unit}}</span>
+          <span class="leftWidth">{{ $t('线路名称') }}</span>
+          <span
+            >{{ form.express_line && form.express_line.cn_name }}---{{ $t('限重')
+            }}{{ form.express_line && form.express_line.max_weight
+            }}{{ localization.weight_unit }}</span
+          >
         </el-col>
         <!-- 提交时间 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{$t('提交时间')}}</span>
-          <span>{{form.created_at}}</span>
+          <span class="leftWidth">{{ $t('提交时间') }}</span>
+          <span>{{ form.created_at }}</span>
         </el-col>
       </el-row>
       <!-- 客户ID -->
       <el-row class="container-center" :gutter="20">
         <el-col :span="7">
-          <span class="leftWidth">{{$t('客户ID')}}</span>
-          <span>{{form.user_id}}---{{form.user_name}}</span>
+          <span class="leftWidth">{{ $t('客户ID') }}</span>
+          <span>{{ form.user_id }}---{{ form.user_name }}</span>
         </el-col>
       </el-row>
     </div>
     <!-- 打包清单 -->
-    <h4>{{$t('包裹清单')}}</h4>
+    <h4>{{ $t('包裹清单') }}</h4>
     <div class="add-sty" v-if="this.$route.params.activeName === '1'">
-        <el-button class="btn-blue" @click="addPackages">{{$t('添加包裹')}}</el-button>
+      <el-button class="btn-blue" @click="addPackages">{{ $t('添加包裹') }}</el-button>
     </div>
     <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index" width="50"></el-table-column>
@@ -83,10 +90,13 @@
       <!-- 包裹编码 -->
       <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
       <el-table-column :label="$t('物品名称')" prop="package_name"></el-table-column>
-      <el-table-column :label="$t('物品价值') + this.localization.currency_unit" prop="package_value"></el-table-column>
+      <el-table-column
+        :label="$t('物品价值') + this.localization.currency_unit"
+        prop="package_value"
+      ></el-table-column>
       <el-table-column :label="$t('物品属性')">
         <template slot-scope="scope">
-          <span v-for="item in scope.row.props" :key="item.id">{{item.cn_name}}</span>
+          <span v-for="item in scope.row.props" :key="item.id">{{ item.cn_name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('代理')" prop="agent"></el-table-column>
@@ -96,58 +106,66 @@
           <span
             v-for="item in scope.row.item_pictures"
             :key="item.id"
-            style="cursor:pointer;"
-            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item.path, imgVisible=true"
+            style="cursor: pointer"
+            @click.stop=";(imgSrc = $baseUrl.IMAGE_URL + item.path), (imgVisible = true)"
           >
-            <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px;" />
+            <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px" />
           </span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
       <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName === '1'">
-          <template slot-scope="scope">
-            <el-button @click="packageDetails(scope.row.id)" class="btn-deep-purple">
-              {{$t('详情')}}
-            </el-button>
-            <el-button class="btn-light-red" @click="removePackage(scope.row.id, scope.row.express_num, scope.row.order_sn)">
-              {{$t('移除')}}
-            </el-button>
-          </template>
+        <template slot-scope="scope">
+          <el-button @click="packageDetails(scope.row.id)" class="btn-deep-purple">
+            {{ $t('详情') }}
+          </el-button>
+          <el-button
+            class="btn-light-red"
+            @click="removePackage(scope.row.id, scope.row.express_num, scope.row.order_sn)"
+          >
+            {{ $t('移除') }}
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
-    <h4>{{$t('商品清单')}}</h4>
-      <el-table :data="productData" class="data-list" border stripe
-       v-loading="tableLoading">
-        <el-table-column type="index" width="50"></el-table-column>
-        <!-- 物品名称 -->
-        <el-table-column :label="$t('物品名称')" prop="name"></el-table-column>
-        <!-- 数量 -->
-        <el-table-column :label="$t('数量')" prop="qty"></el-table-column>
-        <!-- 单价 -->
-        <el-table-column :label="$t('单价') + this.localization.currency_unit" prop="unit_price"></el-table-column>
-        <!-- 总价 -->
-        <el-table-column :label="$t('总价') + this.localization.currency_unit">
-          <template slot-scope="scope">
-            <span>{{scope.row.unit_price * scope.row.qty}}</span>
-          </template>
-        </el-table-column>
-        <!-- 材质 -->
-        <el-table-column :label="$t('材质')" prop="material"></el-table-column>
-        <!-- 状态 -->
-        <el-table-column :label="$t('状态')" prop="status_name"></el-table-column>
-        <!-- 图片 -->
-        <el-table-column :label="$t('图片')" prop="images" width="130">
-          <template slot-scope="scope">
-            <span v-for="item in scope.row.images"
-            :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc=$baseUrl.IMAGE_URL + item, imgVisible=true">
-            <img :src="$baseUrl.IMAGE_URL + item" style="width: 40px; margin-right: 5px;">
-            </span>
-          </template>
-        </el-table-column>
-        <!-- 所属包裹 -->
-        <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
-      </el-table>
+    <h4>{{ $t('商品清单') }}</h4>
+    <el-table :data="productData" class="data-list" border stripe v-loading="tableLoading">
+      <el-table-column type="index" width="50"></el-table-column>
+      <!-- 物品名称 -->
+      <el-table-column :label="$t('物品名称')" prop="name"></el-table-column>
+      <!-- 数量 -->
+      <el-table-column :label="$t('数量')" prop="qty"></el-table-column>
+      <!-- 单价 -->
+      <el-table-column
+        :label="$t('单价') + this.localization.currency_unit"
+        prop="unit_price"
+      ></el-table-column>
+      <!-- 总价 -->
+      <el-table-column :label="$t('总价') + this.localization.currency_unit">
+        <template slot-scope="scope">
+          <span>{{ scope.row.unit_price * scope.row.qty }}</span>
+        </template>
+      </el-table-column>
+      <!-- 材质 -->
+      <el-table-column :label="$t('材质')" prop="material"></el-table-column>
+      <!-- 状态 -->
+      <el-table-column :label="$t('状态')" prop="status_name"></el-table-column>
+      <!-- 图片 -->
+      <el-table-column :label="$t('图片')" prop="images" width="130">
+        <template slot-scope="scope">
+          <span
+            v-for="item in scope.row.images"
+            :key="item.id"
+            style="cursor: pointer"
+            @click.stop=";(imgSrc = $baseUrl.IMAGE_URL + item), (imgVisible = true)"
+          >
+            <img :src="$baseUrl.IMAGE_URL + item" style="width: 40px; margin-right: 5px" />
+          </span>
+        </template>
+      </el-table-column>
+      <!-- 所属包裹 -->
+      <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
+    </el-table>
     <div class="receiverMSg">
       <el-form
         ref="params"
@@ -166,7 +184,10 @@
           <!-- 留仓物品 -->
           <el-col :span="10" :offset="2" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('留仓物品')">
-              <el-input v-model="user.in_warehouse_item" :placeholder="$t('请输入留仓物品')"></el-input>
+              <el-input
+                v-model="user.in_warehouse_item"
+                :placeholder="$t('请输入留仓物品')"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -180,8 +201,13 @@
           </el-col>
           <el-col :span="10" :offset="2">
             <el-form-item :label="$t('更改仓库')" class="express">
-              <span class="change-line">{{warehouse.warehouse_name}}</span>
-              <el-button v-if="$route.params.parent == 0" class="btn-main change-btn" @click="changeWarehouse">{{$t('更改')}}</el-button>
+              <span class="change-line">{{ warehouse.warehouse_name }}</span>
+              <el-button
+                v-if="$route.params.parent == 0"
+                class="btn-main change-btn"
+                @click="changeWarehouse"
+                >{{ $t('更改') }}</el-button
+              >
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,16 +216,24 @@
           <el-col :span="11">
             <el-form-item :label="$t('出箱类型')">
               <el-radio-group v-model="user.box_type">
-                <el-radio :label="1">{{$t('单箱出库')}}</el-radio>
-                <el-radio :label="2">{{$t('多箱出库')}}</el-radio>
-              </el-radio-group>&nbsp;&nbsp;
-              <el-button @click="originalBox">{{$t('原箱出库')}}</el-button>
+                <el-radio :label="1">{{ $t('单箱出库') }}</el-radio>
+                <el-radio :label="2">{{ $t('多箱出库') }}</el-radio> </el-radio-group
+              >&nbsp;&nbsp;
+              <el-button @click="originalBox">{{ $t('原箱出库') }}</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="10" :offset="2">
             <el-form-item :label="$t('更改线路')" class="express">
-              <span class="change-line">{{express.CName}}---{{$t('限重')}}{{express.MaxWeight}}{{localization.weight_unit}}</span>
-              <el-button v-if="$route.params.parent == 0" class="btn-main change-btn" @click="changeLine">{{$t('更改')}}</el-button>
+              <span class="change-line"
+                >{{ express.CName }}---{{ $t('限重') }}{{ express.MaxWeight
+                }}{{ localization.weight_unit }}</span
+              >
+              <el-button
+                v-if="$route.params.parent == 0"
+                class="btn-main change-btn"
+                @click="changeLine"
+                >{{ $t('更改') }}</el-button
+              >
             </el-form-item>
           </el-col>
         </el-row>
@@ -208,7 +242,7 @@
           <el-col :span="11">
             <el-form-item :label="$t('*重量')" prop="weight">
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
-                <template slot="append">{{this.localization.weight_unit}}</template>
+                <template slot="append">{{ this.localization.weight_unit }}</template>
               </el-input>
             </el-form-item>
           </el-col>
@@ -237,12 +271,15 @@
           <el-form-item>
             <el-col :span="18">
               <div class="add-row">
-                <el-button @click="addRow" class="btn-deep-purple">{{$t('添加行')}}</el-button>
+                <el-button @click="addRow" class="btn-deep-purple">{{ $t('添加行') }}</el-button>
               </div>
               <el-table :data="user.box" style="width: 100%" border>
                 <el-table-column :label="$t('包裹实际重量') + this.localization.weight_unit">
                   <template slot-scope="scope">
-                    <el-input @change="_onTotalWeight(scope.row)" v-model="scope.row.weight"></el-input>
+                    <el-input
+                      @change="_onTotalWeight(scope.row)"
+                      v-model="scope.row.weight"
+                    ></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('长') + this.localization.length_unit">
@@ -252,18 +289,12 @@
                 </el-table-column>
                 <el-table-column :label="$t('宽') + this.localization.length_unit">
                   <template slot-scope="scope">
-                    <el-input
-                      v-model="scope.row.width"
-                      @blur="changeNum(scope)"
-                    ></el-input>
+                    <el-input v-model="scope.row.width" @blur="changeNum(scope)"></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('高') + this.localization.length_unit">
                   <template slot-scope="scope">
-                    <el-input
-                      v-model="scope.row.height"
-                      @blur="changeNum(scope)"
-                    ></el-input>
+                    <el-input v-model="scope.row.height" @blur="changeNum(scope)"></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('体积重量') + this.localization.weight_unit">
@@ -276,12 +307,13 @@
                     <el-button
                       @click.native.prevent="deleteRow(scope.$index, user.box)"
                       class="btn-light-red"
-                    >{{$t('移除')}}</el-button>
+                      >{{ $t('移除') }}</el-button
+                    >
                   </template>
                 </el-table-column>
               </el-table>
-              <p>{{$t('实际总重量')}}{{localization.weight_unit}}：{{TotalWeight}}</p>
-              <p>{{$t('体积总重量')}}{{localization.weight_unit}}：{{UnitTotalWeight}}</p>
+              <p>{{ $t('实际总重量') }}{{ localization.weight_unit }}：{{ TotalWeight }}</p>
+              <p>{{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}</p>
             </el-col>
           </el-form-item>
         </el-row>
@@ -307,7 +339,7 @@
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M')}}</div>
+              <div class="updateImg">{{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M') }}</div>
             </el-form-item>
           </el-col>
           <el-col :span="10" :offset="2">
@@ -331,7 +363,9 @@
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div>
+              <div class="updateImg">
+                {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
@@ -348,7 +382,7 @@
                 type="textarea"
                 :placeholder="$t('请输入备注')"
                 v-model="user.remark"
-                :autosize="{ minRows: 2, maxRows: 4}"
+                :autosize="{ minRows: 2, maxRows: 4 }"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -367,10 +401,10 @@
             <el-form-item :label="$t('增值服务')">
               <div v-for="item in updateProp" :key="item.id" class="service">
                 <div class="serviceLeft">
-                  <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
+                  <el-checkbox v-model="item.checked">{{ item.name }}</el-checkbox>
                 </div>
                 <div class="serviceRight">
-                  <span>{{localization.currency_unit}}</span>
+                  <span>{{ localization.currency_unit }}</span>
                   <el-input v-model="item.price" class="add-value-ipt"></el-input>
                 </div>
               </div>
@@ -382,11 +416,9 @@
     <!-- 保存 -->
     <el-row :gutter="20">
       <el-col :span="18">
-        <el-button
-          @click="savePacked"
-          type="primary"
-          :loading="$store.state.btnLoading"
-        >{{$t('保存')}}</el-button>
+        <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{
+          $t('保存')
+        }}</el-button>
       </el-col>
     </el-row>
     <el-dialog :visible.sync="imgVisible" size="small">
@@ -399,7 +431,7 @@
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       checked: false,
       form: {
@@ -449,7 +481,7 @@ export default {
       factor: ''
     }
   },
-  created () {
+  created() {
     console.log('我是打包')
     this.getPackage()
     this.getExpress()
@@ -458,7 +490,7 @@ export default {
   },
   methods: {
     // 获取多选框
-    getProp (arr) {
+    getProp(arr) {
       this.$request.getAdded().then(res => {
         if (res.ret) {
           let ids = res.data.map(item => item.id)
@@ -478,13 +510,13 @@ export default {
       })
     },
     // 新增包裹
-    addPackages () {
+    addPackages() {
       dialog({ type: 'addPackages', id: this.$route.params.id }, () => {
         this.getPackage()
       })
     },
     // 获取商品清单
-    getProduct () {
+    getProduct() {
       this.$request.packageDetails(this.$route.params.id).then(res => {
         if (res.ret) {
           this.productData = res.data
@@ -492,16 +524,22 @@ export default {
       })
     },
     // 包裹清单 详情
-    packageDetails (id) {
+    packageDetails(id) {
       this.$router.push({ name: 'oderDetails', params: { id: id } })
     },
     // 移除 包裹清单
-    removePackage (id, expressNum, orderSn) {
-      this.$confirm(this.$t(`该操作无法撤回，移除后的包裹将回到已入库状态，您是否确认将包裹（${expressNum}）从订单（${orderSn}）中移除？注：若该订单只有一个包裹，则该包裹移除后订单自动作废`), this.$t('提示'), {
-        confirmButtonText: this.$t('确定'),
-        cancelButtonText: this.$t('取消'),
-        type: 'warning'
-      }).then(() => {
+    removePackage(id, expressNum, orderSn) {
+      this.$confirm(
+        this.$t(
+          `该操作无法撤回，移除后的包裹将回到已入库状态，您是否确认将包裹（${expressNum}）从订单（${orderSn}）中移除？注：若该订单只有一个包裹，则该包裹移除后订单自动作废`
+        ),
+        this.$t('提示'),
+        {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.$request.removePackage(this.$route.params.id, id).then(res => {
           if (res.ret) {
             this.$notify({
@@ -522,7 +560,7 @@ export default {
       })
     },
     // 计算体积重量
-    changeNum (row = {}) {
+    changeNum(row = {}) {
       const { length, width, height } = row.row
       console.log(length, 'height')
       if (length && width && height) {
@@ -536,14 +574,28 @@ export default {
       }
     },
     // 计算实际总重量
-    _onTotalWeight (e, arr) {
-      this.TotalWeight = this.user.box.length === 1 ? this.user.box[0].weight : this.user.box.map(item => item.weight).reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
+    _onTotalWeight() {
+      this.TotalWeight =
+        this.user.box.length === 1
+          ? this.user.box[0].weight
+          : this.user.box
+              .map(item => item.weight)
+              .reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
     },
     // 计算体积总重量
-    unitVolume (arr) {
-      this.UnitTotalWeight = this.user.box.length === 1 ? Number(this.user.box[0].volume_weight).toFixed(3) : this.user.box.map(item => item.volume_weight).reduce((accumulator, currentValue) => (Number(accumulator) + Number(currentValue)).toFixed(3), 0)
+    unitVolume() {
+      this.UnitTotalWeight =
+        this.user.box.length === 1
+          ? Number(this.user.box[0].volume_weight).toFixed(3)
+          : this.user.box
+              .map(item => item.volume_weight)
+              .reduce(
+                (accumulator, currentValue) =>
+                  (Number(accumulator) + Number(currentValue)).toFixed(3),
+                0
+              )
     },
-    savePacked () {
+    savePacked() {
       this.user.services = this.updateProp
         .filter(item => item.checked)
         .map(item => {
@@ -563,27 +615,25 @@ export default {
           url: item.url
         }
       })
-      this.$request
-        .saveOrderPack(this.$route.params.id, this.user)
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            // this.$router.push({ name: 'wayBillList' })
-            this.$router.go(-1)
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          // this.$router.push({ name: 'wayBillList' })
+          this.$router.go(-1)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 新增行
-    addRow () {
+    addRow() {
       console.log(this.user.box, 'this.user.box')
       this.user.box.push({
         weight: '',
@@ -593,14 +643,14 @@ export default {
         volume_weight: ''
       })
     },
-    deleteRow (index, rows) {
+    deleteRow(index, rows) {
       rows.splice(index, 1)
       this._onTotalWeight()
       this.unitVolume()
       console.log(rows, 'rows')
     },
     // 更改仓库
-    changeWarehouse () {
+    changeWarehouse() {
       dialog({ type: 'lineChange', state: 'warehouse' }, data => {
         console.log(data, 'data')
         // this.warehouse.warehouse_id = data.id
@@ -609,7 +659,7 @@ export default {
       })
     },
     // 更改线路
-    changeLine () {
+    changeLine() {
       dialog({ type: 'lineChange', state: 'line', id: this.user.warehouse_id }, data => {
         console.log(data, 'data')
         this.express.CName = data.name
@@ -618,7 +668,7 @@ export default {
       })
     },
     // 原箱出库
-    originalBox () {
+    originalBox() {
       if (this.PackageData.length > 1) {
         this.user.box_type = 2
         this.user.box = this.PackageData.map(item => {
@@ -636,7 +686,7 @@ export default {
         this.user.height = this.PackageData[0].height
       }
     },
-    getPackage () {
+    getPackage() {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
@@ -656,7 +706,7 @@ export default {
       })
     },
     // 获取全部线路详情
-    getExpress () {
+    getExpress() {
       this.$request.getUsable(this.$route.params.id).then(res => {
         if (res.ret) {
           this.expressData = res.data
@@ -664,21 +714,21 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除图片
-    onDeleteImg (type, index) {
+    onDeleteImg(type, index) {
       if (type === 'bale') {
         this.baleImgList.splice(index, 1)
       } else if (type === 'goods') {
         this.goodsImgList.splice(index, 1)
       }
     },
-    beforeUploadImg (file) {
+    beforeUploadImg(file) {
       if (!/^image/.test(file.type)) {
         this.$message.info(this.$t('请上传图片类型文件'))
         return false
@@ -689,7 +739,7 @@ export default {
       return true
     },
     // 上传打包照片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -703,7 +753,7 @@ export default {
       })
     },
     // 上传物品照片
-    uploadGoodsImg (item) {
+    uploadGoodsImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -717,14 +767,14 @@ export default {
       })
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     }
   },
   computed: {
-    addServices () {
+    addServices() {
       if (!this.updateProp.length || !this.services.length) return []
       let arr = JSON.parse(JSON.stringify(this.updateProp))
       let ids = arr.map(item => item.id)
@@ -893,7 +943,7 @@ export default {
   .group-sty {
     padding-left: 20px;
     font-size: 14px;
-    color:#909399;
+    color: #909399;
   }
   .add-sty {
     text-align: right;
