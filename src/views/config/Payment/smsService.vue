@@ -4,14 +4,14 @@
     <el-row :gutter="20">
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="radio" :label="1">{{$t('系统内服务短信')}}</el-radio>
+          <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="2">{{$t('系统内服务短信')}}</el-radio>
           <div class="user-bottom">
             <div class="bottom-left">
               <p>
-              {{$t('大陆短信剩余次数')}}：<span class="count-sty">100000</span>
+              {{$t('大陆短信剩余次数')}}：<span class="count-sty">{{ruleForm.count}}</span>
               </p>
               <p>
-              {{$t('国际短信剩余次数')}}：<span class="count-sty">0</span>
+              {{$t('国际短信剩余次数')}}：<span class="count-sty">{{ruleForm.intl_count}}</span>
               </p>
             </div>
             <div class="bottom-right">
@@ -30,22 +30,22 @@
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="radio" :label="2">{{$t('第三方短信服务')}}</el-radio>
+          <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="1">{{$t('第三方短信服务')}}</el-radio>
           <div class="message-main">
             <span>{{$t('中国大陆短信服务——Appkey')}}：</span><br/>
-            <el-input class="input-sty"></el-input>
+            <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
             <el-button class="buy-sty">{{$t('测试')}}</el-button>
           </div>
           <div class="message-main">
-            <span>{{$t('中国大陆短信服务——Appkey')}}：</span><br/>
-            <el-input class="input-sty"></el-input>
+            <span>{{$t('国际短信服务——Appkey')}}：</span><br/>
+            <el-input class="input-sty" v-model="ruleForm.intl_app_key"></el-input>
             <el-button class="buy-sty">{{$t('测试')}}</el-button>
           </div>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="radio" :label="3">{{$t('不开启')}}</el-radio>
+          <el-radio class="system-sty" v-model="ruleForm.type" :label="0">{{$t('不开启')}}</el-radio>
           <div class="unopen-sty">
             <p>
             {{$t('暂不开启短信通知')}}
@@ -55,17 +55,19 @@
       </el-col>
     </el-row>
     <!-- 短信模版（系统内） -->
-    <div v-if="radio === 1">
+    <div v-if="ruleForm.type === 2">
       <h2 class="template-sty">{{$t('短信模版（系统内）')}}</h2>
       <el-button class="template-sty btn-green" @click="templateExample">{{$t('模版示例')}}</el-button>
       <div class="svs-template">
         <el-row :gutter="20">
-          <el-col :span="10">
-            <span>验证码</span>
-            <el-tooltip class="item code-sty" effect="dark" :content="$t('仅新增显示，方便审核收款与核对账目，不改变系统结算数据')" placement="top">
+          <el-col :span="10" v-for="item in smsData" :key="item.id">
+            <div class="tootip-sty">{{item.type_name}}
+            <el-tooltip class="item code-sty" effect="dark" :content="item.content" placement="top">
               <span class="el-icon-warning icon-info"></span>
             </el-tooltip>
+            </div>
             <el-switch
+              v-model="item.status"
               class="switch-sty"
               :active-text="$t('开')"
               :active-value="1"
@@ -78,73 +80,22 @@
         </el-row>
       </div>
     </div>
-    <div v-if="radio === 2">
+    <div v-if="ruleForm.type === 1">
       <h2 class="template-sty">{{$t('短信模版')}}</h2>
       <span>（{{$t('请输入第三方国内模版ID')}}）</span>
       <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
         <el-form :model="ruleForm" label-width="130px">
           <el-row>
-            <el-col :span="10">
-              <el-form-item :label="$t('发送验证码')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10" :offset="1">
-              <el-form-item :label="$t('未入库包裹预警')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="10">
-              <el-form-item :label="$t('订单支付成功')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10" :offset="1">
-              <el-form-item :label="$t('扣款成功')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="10">
-              <el-form-item :label="$t('订单已发货')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10" :offset="1">
-              <el-form-item :label="$t('充值成功')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="10">
-              <el-form-item :label="$t('包裹已入库')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10" :offset="1">
-              <el-form-item :label="$t('到达自提点')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="10">
-              <el-form-item :label="$t('订单提交成功')">
-                <el-input class="input-sty"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10" :offset="1">
-              <el-form-item :label="$t('自提点已签收/出库')">
-                <el-input class="input-sty"></el-input>
+            <el-col :span="10" v-for="item in customerData" :key="item.id">
+              <el-form-item :label="item.type_name">
+                <el-input class="input-sty" v-model="item.template_id"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
+        <div class="template-msg">{{$t('不填写或填写无效模版ID，默认为不发送该类型信息')}}<br>
+        {{$t('变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#')}}</div>
       </div>
     </div>
     <div class="save-btn">
@@ -168,19 +119,55 @@ export default {
   data () {
     return {
       validate_email: '',
-      ruleForm: {},
-      radio: 1,
+      ruleForm: {
+        type: 1,
+        app_key: '',
+        intl_app_key: '',
+        count: '',
+        intl_count: ''
+      },
+      radio: 2,
       dialogVisible: false,
-      templateData: []
+      templateData: [],
+      smsData: [],
+      customerData: []
     }
   },
   created () {
-    // this.getList()
+    this.getList()
   },
   methods: {
     getList () {
-      this.$request.getCoupons().then(res => {
+      this.$request.getSms().then(res => {
         this.ruleForm = res.data
+        this.changeType()
+      })
+    },
+    // 切换短信服务
+    changeType () {
+      this.smsData = []
+      this.customerData = []
+      console.log(this.ruleForm.type, 'type')
+      if (this.ruleForm.type === 2) {
+        this.getSms()
+      } else if (this.ruleForm.type === 1) {
+        this.getCustomer()
+      }
+    },
+    // 获取短信模版数据
+    getSms () {
+      this.$request.getSmsSystem().then(res => {
+        if (res.ret) {
+          this.smsData = res.data
+        }
+      })
+    },
+    // 获取第三方短信服务
+    getCustomer () {
+      this.$request.getCustomSystem().then(res => {
+        if (res.ret) {
+          this.customerData = res.data
+        }
       })
     },
     // 购买
@@ -258,7 +245,7 @@ export default {
     margin-top: 25px;
     .input-sty {
       margin-top: 5px;
-      width: 70%;
+      width: 60%;
       margin-right: 10px;
     }
   }
@@ -288,6 +275,15 @@ export default {
   }
   .switch-sty {
     margin-left: 40px;
+  }
+  .tootip-sty {
+    display: inline-block;
+    width: 160px;
+    margin-bottom: 20px;
+  }
+  .template-msg {
+    font-size: 14px;
+    color: #ccc;
   }
 }
 </style>

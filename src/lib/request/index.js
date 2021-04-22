@@ -1193,9 +1193,25 @@ exports.closeRate = (id) => {
 exports.getCurrency = () => {
   return $form.get('exchange-rates/currency')
 }
+// 更多配置 获取短信服务数据
+exports.getSms = () => {
+  return $form.get('api-services/sms')
+}
+// 更多配置 获取短信模版
+exports.getSmsSystem = () => {
+  return $form.get('api-services/sms/templates/system')
+}
+// 更多配置 获取第三方短信服务数据
+exports.getCustomSystem = () => {
+  return $form.get('api-services/sms/templates/custom')
+}
 // 更多配置 购买短信服务 获取数据
 exports.serviceType = (id) => {
   return $form.get(`api-services/${id}/products`)
+}
+// 获取支付二维码
+exports.productsImg = (id, params) => {
+  return $form.post(`api-services/${id}/ordering`, params)
 }
 // 系统物流类型 修改开关启用
 exports.closeSystem = (id, status) => {

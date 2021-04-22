@@ -3,7 +3,8 @@
     <p>{{$t('选择中国大陆短信套餐')}}：</p>
     <div>
       <el-row>
-        <el-col :span="5" class="set-meal" v-for="item in chinaData" :key="item.id" @click.native="chooseService(item)" :offset="1" :class="station.id === item.id ? 'selected' : ''">
+        <el-col :span="5" class="set-meal" v-for="item in chinaData" :key="item.id" @click.native="chooseService(item)"
+        :offset="1" :class="station.id === item.id ? 'selected' : ''">
           <el-badge :value="item.price > 0 ? `${localization.currency_unit}${item.price / item.count}/次` : ''" class="item">
             <span>{{item.name}}</span><br/>
             <span>{{localization.currency_unit}}{{item.price}}/{{item.count}}{{$t('次')}}</span>
@@ -14,38 +15,43 @@
     </div>
     <div class="count-sty">
       {{$t('购买数量')}}
-      <el-input-number class="add-counts" v-model="onceNum" @change="handleChange" :min="1" :max="100"></el-input-number>
-      <span>{{$t('套餐金额')}}：{{localization.currency_unit}}{{station.price}}</span>
+      <el-input-number class="add-counts" v-model="onceNum" @change="handleChange('china')" :min="1" :max="100"></el-input-number>
+      <span>{{$t('套餐金额')}}：{{localization.currency_unit}}{{packageAmount}}</span>
     </div>
     <div class="line"></div>
     <p>{{$t('选择国际短信套餐')}}：</p>
     <div>
       <el-row>
-        <el-col :span="5" class="set-meal" v-for="item in internationalData" :key="item.id" :offset="1">
+        <el-col :span="5" class="set-meal" v-for="item in internationalData" :key="item.id" :offset="1"
+        :class="secondData.id === item.id ? 'selected' : ''" @click.native="secondService(item)">
           <el-badge :value="item.price > 0 ? `${localization.currency_unit}${item.price / item.count}/次` : ''" class="item">
             <span>{{item.name}}</span><br/>
             <span>{{localization.currency_unit}}{{item.price}}/{{item.count}}{{$t('次')}}</span>
           </el-badge>
+          <i class="el-icon-check icon-check" v-show="secondData.id === item.id"></i>
         </el-col>
       </el-row>
     </div>
     <div class="count-sty">
       {{$t('购买数量')}}
-      <el-input-number class="add-counts" v-model="secondNum" @change="handleChange" :min="1" :max="100"></el-input-number>
-      <span>{{$t('套餐金额')}}：{{localization.currency_unit}}600</span>
+      <el-input-number class="add-counts" v-model="secondNum" @change="handleChange('international')" :min="1" :max="100"></el-input-number>
+      <span>{{$t('套餐金额')}}：{{localization.currency_unit}}{{secondAmount}}</span>
     </div>
     <div class="line"></div>
     <div class="bottom-main">
       <div class="payment-sty">
         <span>{{$t('应付金额')}}：</span>
-        <span class="fee-sty">{{localization.currency_unit}}120000</span>
+        <span class="fee-sty">{{localization.currency_unit}}{{packageAmount + secondAmount}}</span>
       </div>
-      <el-button class="btn-light-green">{{$t('微信支付')}}</el-button>
-      <el-button class="btn-light-green">{{$t('支付宝支付')}}</el-button>
+      <el-button class="btn-light-green" @click="getPay('wechat')">{{$t('微信支付')}}</el-button>
+      <el-button class="btn-light-green" @click="getPay('alipay')">{{$t('支付宝支付')}}</el-button>
     </div>
-    <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirmShip">{{$t('确定')}}</el-button>
+    <div>
+      <img :src="qrCode" class="qr-code">
+    </div>
+    <div slot="footer" v-if="qrCode">
+      <!-- <el-button @click="show = false">{{$t('取消')}}</el-button> -->
+      <el-button type="primary" @click="confirmPay">{{$t('我已支付')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -61,59 +67,91 @@ export default {
       localization: {},
       onceNum: '',
       secondNum: '',
-      station: {}
+      station: {},
+      secondData: {},
+      packageAmount: '',
+      secondAmount: '',
+      qrCode: ''
     }
   },
   methods: {
+    // 获取数据
     getService () {
       let type = this.state === 'sms' ? 'sms' : 'tracking'
       this.$request.serviceType(type).then(res => {
         if (res.ret) {
-          this.chinaData = res.data.china
+          this.chinaData = type === 'sms' ? res.data.china : res.data['51tracking']
           this.chinaData.unshift({ id: 0, name: '无需', price: 0, count: 0 })
           console.log(this.chinaData, 'this.chinaData')
-          this.internationalData = res.data.international
+          this.internationalData = type === 'sms' ? res.data.international : res.data.kd100
           this.internationalData.unshift({ id: 0, name: '无需', price: 0, count: 0 })
           this.localization = res.localization
         }
       })
     },
-    // 选中
+    // 选中中国大陆短信套餐
     chooseService (item) {
+      this.onceNum = 1
       console.log(item, 'item')
       this.station = item
+      this.packageAmount = item.price
     },
-    // 确认创建发货单
-    confirmShip (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$request.saveShip(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
-              this.innerVisible = false
-              this.show = true
-              // this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            // this.innerVisible = false
-          })
-        } else {
-          return false
+    // 选中国际短信套装
+    secondService (item) {
+      this.secondNum = 1
+      this.secondData = item
+      this.secondAmount = item.price
+    },
+    // 我已支付
+    confirmPay () {
+      this.show = false
+      this.success()
+    },
+    // 切换套餐
+    handleChange (value) {
+      console.log(value, 'value')
+      if (value === 'china') {
+        this.packageAmount = this.onceNum > 1 ? this.station.price * this.onceNum : this.station.price
+      } else {
+        this.secondAmount = this.secondNum > 1 ? this.secondData.price * this.secondNum : this.secondData.price
+      }
+    },
+    // 获取支付二维码
+    getPay (status) {
+      console.log(status, 'status')
+      console.log(this.station.id, 'station')
+      console.log(this.secondData.id, 'secondData')
+      console.log(this.onceNum, 'onceNum')
+      console.log(this.secondNum, 'secondNum')
+      if (!this.station.id && !this.secondData.id) {
+        return this.$message.error(this.$t('请选择套餐'))
+      }
+      let domestic = [{ id: this.station.id, qty: this.onceNum },
+        {
+          id: this.secondData.id, qty: this.secondNum
+        }]
+      // let foreign = [{ id: this.secondData.id, qty: this.secondNum }]
+      console.log(domestic, 'arrOne')
+      this.$request.productsImg(this.state, {
+        payment_method: status,
+        products: domestic
+      }).then(res => {
+        if (res.ret) {
+          this.qrCode = res.data.qr_code
+          console.log(res.data, 'data')
         }
       })
     },
-    handleChange (value) {
-      console.log(value)
-    },
     clear () {
+      this.chinaData = []
+      this.internationalData = []
+      this.station = {}
+      this.secondData = {}
+      this.packageAmount = ''
+      this.secondAmount = ''
+      this.qrCode = ''
+      this.onceNum = ''
+      this.secondNum = ''
     },
     init () {
       this.getService()
@@ -181,6 +219,9 @@ export default {
     font-size: 28px;
     bottom: 0;
     right: -10px;
+  }
+  .qr-code {
+    width: 200px;
   }
 }
 .el-select-dropdown__item.hover{

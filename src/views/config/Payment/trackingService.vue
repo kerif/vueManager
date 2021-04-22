@@ -81,7 +81,9 @@ export default {
     },
     // 购买
     buying () {
-      dialog({ type: 'buyingService', state: 'tracking' })
+      dialog({ type: 'buyingService', state: 'tracking' }, () => {
+        this.getList()
+      })
     },
     // 预警
     alertSms () {
@@ -150,7 +152,7 @@ export default {
     margin-top: 25px;
     .input-sty {
       margin-top: 5px;
-      width: 70%;
+      width: 60%;
       margin-right: 10px;
     }
     span {

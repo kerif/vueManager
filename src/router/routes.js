@@ -119,7 +119,7 @@ const ShipDetails = loadonDemand('station/shipDetails')
 // 拣货日志
 const Picking = loadonDemand('station/picking')
 // 仓库自提
-const warehouseSelf = loadonDemand('station/warehouseSelf')
+// const warehouseSelf = loadonDemand('station/warehouseSelf')
 // 仓库自提 订单详情
 const selfDetails = loadonDemand('station/warehouseDetails')
 // 自定义物流
@@ -714,17 +714,17 @@ export default [
               name: '拣货日志'
             }
           },
-          {
-            path: '/station/warehouseSelf',
-            name: 'warehouseSelf',
-            component: warehouseSelf,
-            id: 504,
-            meta: {
-              level: 2,
-              group: '货站',
-              name: '仓库自提'
-            }
-          },
+          // {
+          //   path: '/station/warehouseSelf',
+          //   name: 'warehouseSelf',
+          //   component: warehouseSelf,
+          //   id: 504,
+          //   meta: {
+          //     level: 2,
+          //     group: '货站',
+          //     name: '仓库自提'
+          //   }
+          // },
           {
             path: '/station/self/details/:id/:status',
             name: 'selfDetails',
