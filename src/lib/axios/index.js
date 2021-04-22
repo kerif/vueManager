@@ -11,7 +11,7 @@ $form.defaults.responseType = 'json'
 $form.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8' // 配置请求头
 $form.defaults.baseURL = baseApi.BASE_API_URL // 配置接口地址
 $form.defaults.transformRequest = [
-  function(params) {
+  function (params) {
     return qs.stringify(params)
   }
 ]
@@ -67,7 +67,7 @@ let $json = $form.create({
     'Content-Type': 'application/json;charset=UTF-8'
   },
   transformRequest: [
-    function(params) {
+    function (params) {
       return JSON.stringify(params)
     }
   ]
@@ -79,7 +79,7 @@ let $file = $form.create({
     'Content-Type': 'multipart/form-data;'
   },
   transformRequest: [
-    function(params) {
+    function (params) {
       return params
     }
   ]
@@ -93,7 +93,7 @@ $json.interceptors.response.use(interceptorsResponseSuccess, interceptorsRespons
 
 const axios = {}
 // eslint-disable-next-line no-unused-vars
-axios.install = function(Vue, options = {}) {
+axios.install = function (Vue, options = {}) {
   Vue.prototype.$http = $form
   Vue.prototype.$json = $json
   Vue.prototype.$baseUrl = baseApi

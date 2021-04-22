@@ -8,50 +8,56 @@
       label-width="80px"
     >
       <div>
-        <el-form-item label="时间" prop="time">
-          <el-select v-model="searchFieldData.time" clearable :placeholder="$t('请选择')">
+        <el-form-item label="时间" prop="date_type">
+          <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('请选择')">
             <el-option
-              v-for="item in timeList"
+              v-for="item in timeOptions"
               :key="item.id"
-              :value="item.user_id"
-              :label="item.agent_name"
+              :value="item.value"
+              :label="item.name"
             >
             </el-option>
           </el-select>
-          <el-date-picker
-            v-model="pickerTime"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :range-separator="$t('至')"
-            :start-placeholder="$t('开始日期')"
-            :end-placeholder="$t('结束日期')"
-          >
-          </el-date-picker>
+          <el-form-item prop="date">
+            <el-date-picker
+              v-model="searchFieldData.date"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              :range-separator="$t('至')"
+              :start-placeholder="$t('开始日期')"
+              :end-placeholder="$t('结束日期')"
+            >
+            </el-date-picker>
+          </el-form-item>
         </el-form-item>
-        <el-form-item label="价格区间" prop="time">
-          <el-select v-model="searchFieldData.time" clearable :placeholder="$t('请选择')">
+        <el-form-item label="价格区间" prop="value_type">
+          <el-select v-model="searchFieldData.value_type" clearable :placeholder="$t('请选择')">
             <el-option
-              v-for="item in timeList"
+              v-for="item in priceRangeOptions"
               :key="item.id"
-              :value="item.user_id"
-              :label="item.agent_name"
+              :value="item.value"
+              :label="item.name"
             >
             </el-option>
           </el-select>
-          <el-input
-            class="number"
-            :placeholder="$t('请输入起始价格')"
-            v-model="searchFieldData.start"
-            onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
-          ></el-input>
+          <el-form-item prop="value_begin">
+            <el-input
+              class="number"
+              :placeholder="$t('请输入起始价格')"
+              v-model="searchFieldData.value_begin"
+              onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
+            ></el-input
+          ></el-form-item>
           -
-          <el-input
-            class="number"
-            :placeholder="$t('请输入结束价格')"
-            v-model="searchFieldData.end"
-            onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
-          ></el-input>
+          <el-form-item prop="value_end">
+            <el-input
+              class="number"
+              :placeholder="$t('请输入结束价格')"
+              v-model="searchFieldData.value_end"
+              onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
+            ></el-input>
+          </el-form-item>
         </el-form-item>
         <div style="display: flex">
           <el-form-item label="线路名称" prop="express_line_id">
@@ -84,16 +90,21 @@
       </div>
       <div>
         <div style="display: flex">
-          <el-form-item label="收货国家/地区" prop="country" label-width="140px">
-            <el-cascader :options="countryOption"></el-cascader>
+          <el-form-item label="收货国家/地区" prop="countryArr" label-width="140px">
+            <el-cascader
+              :show-all-levels="false"
+              :props="countryProps"
+              v-model="searchFieldData.countryArr"
+              clearable
+            ></el-cascader>
           </el-form-item>
-          <el-form-item label="收货方式">
-            <el-select v-model="searchFieldData.time" clearable :placeholder="$t('请选择')">
+          <el-form-item label="收货方式" prop="receive_type">
+            <el-select v-model="searchFieldData.receive_type" clearable :placeholder="$t('请选择')">
               <el-option
-                v-for="item in timeList"
+                v-for="item in receiverOptions"
                 :key="item.id"
-                :value="item.user_id"
-                :label="item.agent_name"
+                :value="item.value"
+                :label="item.name"
               >
               </el-option>
             </el-select>
@@ -133,6 +144,8 @@
 </template>
 
 <script>
+import request from '../../../../lib/request'
+import { countryCallback } from '../../../../utils/index'
 export default {
   name: 'waybillListSearch',
   props: {
@@ -144,6 +157,22 @@ export default {
     return {
       timeList: [],
       pickerTime: [],
+      timeOptions: [
+        { value: 'created_at', name: '订单提交时间' },
+        { value: 'packed_at', name: '打包称重时间' },
+        { value: 'paid_at', name: '支付时间' },
+        { value: 'shipped_at', name: '打包时间' },
+        { value: 'signed_at', name: '签收时间' }
+      ],
+      priceRangeOptions: [
+        { value: 'actual_payment_fee', name: '订单提交时间' },
+        { value: 'actual_pay', name: '实际支付' },
+        { value: 'declare_value', name: '申报价值' }
+      ],
+      receiverOptions: [
+        { value: 1, name: '自提' },
+        { value: 2, name: '非自提' }
+      ],
       countryOption: [
         {
           value: 'usa',
@@ -190,6 +219,35 @@ export default {
           name: this.$t('审核拒绝')
         }
       ],
+      countryProps: {
+        lazy: true,
+        value: 'id',
+        label: 'name',
+        lazyLoad(node, resolve) {
+          const { level } = node
+          if (level === 0) {
+            request.getCountriesList().then(res => {
+              resolve(
+                res.data.map(item => ({
+                  name: item.name,
+                  id: item.id,
+                  leaf: item.areas_count > 0 ? '' : 'leaf'
+                }))
+              )
+            })
+          } else if (level === 1) {
+            request
+              .getCountriesSecondList({
+                country_id: node.value
+              })
+              .then(res => {
+                resolve(countryCallback(res.data))
+              })
+          } else {
+            resolve()
+          }
+        }
+      },
       agentData: [],
       paymentData: [],
       lineData: []
@@ -254,6 +312,9 @@ export default {
     }
     .number /deep/ .el-input__inner {
       text-align: center;
+    }
+    .el-form-item--mini.el-form-item {
+      margin-bottom: 10px;
     }
     /deep/ .el-input {
       max-width: 168px;

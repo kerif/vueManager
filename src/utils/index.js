@@ -56,3 +56,12 @@ function recArr(arr, ret) {
     }
   }
 }
+
+export const countryCallback = list => {
+  return list.map(item => ({
+    id: item.id,
+    name: item.name,
+    children: item.areas.length ? countryCallback(item.areas) : [],
+    leaf: item.areas.length ? '' : 'leaf'
+  }))
+}

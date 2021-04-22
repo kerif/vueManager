@@ -2595,6 +2595,18 @@ exports.locationDelete = (id, params) => {
 exports.getPickEcharts = params => {
   return $form.get('station-statistics', { params })
 }
+// 订单列表 获取国家地区（一级）
+exports.getCountriesList = () => {
+  return $form.get('countries/list')
+}
+// 订单列表 获取国家地区（剩余级）
+exports.getCountriesSecondList = params => {
+  return $form.get('countries/list', { params })
+}
+// 订单列表 获取表格字段
+exports.getOrderFieldList = () => {
+  return $form.get('/custom-columns')
+}
 
 // 地址解析
 exports.onGeocoder = params => {

@@ -358,10 +358,10 @@
     <!-- 费用详情 -->
     <div
       v-if="
-        this.$route.params.activeName === '2' ||
-          this.$route.params.activeName === '3' ||
-          this.$route.params.activeName === '4' ||
-          this.$route.params.activeName === '5'
+        $route.params.activeName === '2' ||
+        $route.params.activeName === '3' ||
+        $route.params.activeName === '4' ||
+        $route.params.activeName === '5'
       "
     >
       <h4>{{ $t('费用详情') }}</h4>
@@ -543,7 +543,7 @@
           this.$route.params.activeName === '3' ||
           this.$route.params.activeName === '4' ||
           this.$route.params.activeName === '5') &&
-          this.form.box_type === 2
+        this.form.box_type === 2
       "
     >
       <h4>{{ $t('多箱出库详情') }}</h4>
