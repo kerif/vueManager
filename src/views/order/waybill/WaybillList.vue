@@ -225,9 +225,9 @@
       <el-table-column :label="$t('操作')" width="116px" fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
-            <!-- <el-button type="primary" plain>
+            <el-button type="primary" plain>
               {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button> -->
+            </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item class="item-sty" @click.native="details(scope.row.id, activeName)">
                 <!-- 详情 -->

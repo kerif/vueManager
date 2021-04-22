@@ -94,6 +94,8 @@ const PaymentManagement = loadonDemand('config/Payment/payment')
 const configurationMore = loadonDemand('config/Payment/configuration')
 // 配置 更多配置 短信服务配置
 const smsServices = loadonDemand('config/Payment/smsService')
+// 配置 更多配置 物流查询服务
+const trackingService = loadonDemand('config/Payment/trackingService')
 // 配置 更多配置 商品分类管理 风险提示
 const EditSick = loadonDemand('config/Payment/sickTips')
 // 更多配置 修改或新增邮件模版
@@ -1085,6 +1087,17 @@ export default [
               level: 2,
               group: '配置',
               name: '短信服务'
+            }
+          },
+          {
+            path: '/config/tracking-services',
+            name: 'trackingService',
+            component: trackingService,
+            id: 606,
+            meta: {
+              level: 2,
+              group: '配置',
+              name: '物流查询服务'
             }
           },
           {

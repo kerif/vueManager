@@ -1,5 +1,5 @@
 <template>
-  <div class="new-user-container">
+  <div class="sms-service-container">
     <h2>{{$t('短信服务')}}</h2>
     <el-row :gutter="20">
       <el-col :span="7" class="user-left">
@@ -15,14 +15,14 @@
               </p>
             </div>
             <div class="bottom-right">
-              <el-button class="buy-sty">购买</el-button>
+              <el-button class="buy-sty" @click="buying">{{$t('购买')}}</el-button>
             </div>
           </div>
           <div class="details-sty">
             <i class="el-icon-s-order"></i>
             {{$t('详情')}}
           </div>
-          <div class="details-sty">
+          <div class="details-sty" @click="alertSms">
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
           </div>
@@ -30,7 +30,7 @@
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="radio" :label="1">{{$t('第三方短信服务')}}</el-radio>
+          <el-radio class="system-sty" v-model="radio" :label="2">{{$t('第三方短信服务')}}</el-radio>
           <div class="message-main">
             <span>{{$t('中国大陆短信服务——Appkey')}}：</span><br/>
             <el-input class="input-sty"></el-input>
@@ -45,7 +45,7 @@
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="radio" :label="1">{{$t('不开启')}}</el-radio>
+          <el-radio class="system-sty" v-model="radio" :label="3">{{$t('不开启')}}</el-radio>
           <div class="unopen-sty">
             <p>
             {{$t('暂不开启短信通知')}}
@@ -54,85 +54,124 @@
         </div>
       </el-col>
     </el-row>
-    <h2 class="template-sty">{{$t('短信模版（系统内）')}}</h2>
-    <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button>
-    <div class="svs-template">
-      <el-form :model="ruleForm" label-width="130px">
-        <el-row>
+    <!-- 短信模版（系统内） -->
+    <div v-if="radio === 1">
+      <h2 class="template-sty">{{$t('短信模版（系统内）')}}</h2>
+      <el-button class="template-sty btn-green" @click="templateExample">{{$t('模版示例')}}</el-button>
+      <div class="svs-template">
+        <el-row :gutter="20">
           <el-col :span="10">
-            <el-form-item :label="$t('发送验证码')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" :offset="1">
-            <el-form-item :label="$t('未入库包裹预警')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
+            <span>验证码</span>
+            <el-tooltip class="item code-sty" effect="dark" :content="$t('仅新增显示，方便审核收款与核对账目，不改变系统结算数据')" placement="top">
+              <span class="el-icon-warning icon-info"></span>
+            </el-tooltip>
+            <el-switch
+              class="switch-sty"
+              :active-text="$t('开')"
+              :active-value="1"
+              :inactive-value="0"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray">
+            </el-switch>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="10">
-            <el-form-item :label="$t('订单支付成功')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" :offset="1">
-            <el-form-item :label="$t('扣款成功')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="10">
-            <el-form-item :label="$t('订单已发货')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" :offset="1">
-            <el-form-item :label="$t('充值成功')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="10">
-            <el-form-item :label="$t('包裹已入库')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" :offset="1">
-            <el-form-item :label="$t('到达自提点')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="10">
-            <el-form-item :label="$t('订单提交成功')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" :offset="1">
-            <el-form-item :label="$t('自提点已签收/出库')">
-              <el-input class="input-sty"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+      </div>
+    </div>
+    <div v-if="radio === 2">
+      <h2 class="template-sty">{{$t('短信模版')}}</h2>
+      <span>（{{$t('请输入第三方国内模版ID')}}）</span>
+      <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
+      <div class="svs-template">
+        <el-form :model="ruleForm" label-width="130px">
+          <el-row>
+            <el-col :span="10">
+              <el-form-item :label="$t('发送验证码')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="1">
+              <el-form-item :label="$t('未入库包裹预警')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item :label="$t('订单支付成功')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="1">
+              <el-form-item :label="$t('扣款成功')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item :label="$t('订单已发货')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="1">
+              <el-form-item :label="$t('充值成功')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item :label="$t('包裹已入库')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="1">
+              <el-form-item :label="$t('到达自提点')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item :label="$t('订单提交成功')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="1">
+              <el-form-item :label="$t('自提点已签收/出库')">
+                <el-input class="input-sty"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
     </div>
     <div class="save-btn">
       <el-button type="primary">{{$t('保存')}}</el-button>
     </div>
+    <el-dialog
+      :title="$t('模版示例')"
+      :visible.sync="dialogVisible"
+      width="35%">
+      <el-table :data="templateData" border>
+        <el-table-column :label="$t('模版ID')"></el-table-column>
+        <el-table-column :label="$t('内容')"></el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data () {
     return {
       validate_email: '',
       ruleForm: {},
-      radio: 1
+      radio: 1,
+      dialogVisible: false,
+      templateData: []
     }
   },
   created () {
@@ -144,51 +183,23 @@ export default {
         this.ruleForm = res.data
       })
     },
-    changeOnline (type, val) {
-      console.log(type, 'type')
-      const status = val === 0 ? 0 : 1
-      this.$request.closeCoupons(type, status).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          // this.getWechat()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    // 购买
+    buying () {
+      dialog({ type: 'buyingService', state: 'sms' })
     },
-    // 新增
-    goAdd (type) {
-      if (type === 4) {
-        this.$router.push({ name: 'rebate', params: { type: type } })
-      } else {
-        this.$router.push({ name: 'addNew', params: { type: type } })
-      }
+    // 预警
+    alertSms () {
+      dialog({ type: 'alertSettings', state: 'sms' })
     },
-    // 管理
-    goMana (type) {
-      if (type === 1) { // 新用户送券
-        this.$router.push({ name: 'new', params: { type: type } })
-      } else if (type === 2) { // 邀请新人送券
-        this.$router.push({ name: 'invite', params: { type: type } })
-      } else if (type === 3) { // 被邀请人送券
-        this.$router.push({ name: 'invitees', params: { type: type } })
-      } else if (type === 4) { // 下单返券
-        this.$router.push({ name: 'rebates', params: { type: type } })
-      }
-      // this.$router.push({ name: 'managementNew', params: { type: type } })
+    // 模版示例
+    templateExample () {
+      this.dialogVisible = true
     }
   }
 }
 </script>
 <style lang="scss">
-.new-user-container {
+.sms-service-container {
   background-color: #F5F5F5 !important;
   padding: 20px;
   .new-top {
@@ -233,6 +244,7 @@ export default {
   .details-sty {
     display: inline-block;
     margin-right: 20px;
+    cursor: pointer;
   }
   .count-sty {
     color: red;
@@ -268,6 +280,14 @@ export default {
   .save-btn {
     margin-top: 20px;
     margin-left: 20px;
+  }
+  .code-sty {
+    padding-left: 5px;
+    color: #35B85A;
+    font-size: 18px;
+  }
+  .switch-sty {
+    margin-left: 40px;
   }
 }
 </style>

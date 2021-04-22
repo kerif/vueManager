@@ -97,6 +97,7 @@ import financeReview from './financeReview.vue'
 import openLine from './openLine.vue'
 import aboutCheck from './checkAbout.vue'
 import buyingService from './buyingService.vue'
+import alertSettings from './alertSettings.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -194,6 +195,7 @@ const FinanceReviewController = Vue.extend(financeReview)
 const OpenLineController = Vue.extend(openLine)
 const CheckAboutController = Vue.extend(aboutCheck)
 const BuyingServiceController = Vue.extend(buyingService)
+const AlertSettingsController = Vue.extend(alertSettings)
 
 const mixin = {
   data () {
@@ -870,6 +872,13 @@ function initInstance (type) {
     // 短信服务
     case 'buyingService':
       instance = new BuyingServiceController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 预警设置
+    case 'alertSettings':
+      instance = new AlertSettingsController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

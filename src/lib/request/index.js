@@ -1193,6 +1193,10 @@ exports.closeRate = (id) => {
 exports.getCurrency = () => {
   return $form.get('exchange-rates/currency')
 }
+// 更多配置 购买短信服务 获取数据
+exports.serviceType = (id) => {
+  return $form.get(`api-services/${id}/products`)
+}
 // 系统物流类型 修改开关启用
 exports.closeSystem = (id, status) => {
   return $form.put(`logistics-types/system/${id}/status/${status}`)
