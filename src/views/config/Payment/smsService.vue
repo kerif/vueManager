@@ -57,7 +57,7 @@
     <!-- 短信模版（系统内） -->
     <div v-if="ruleForm.type === 2">
       <h2 class="template-sty">{{$t('短信模版（系统内）')}}</h2>
-      <el-button class="template-sty btn-green" @click="templateExample">{{$t('模版示例')}}</el-button>
+      <!-- <el-button class="template-sty btn-green" @click="templateExample">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
         <el-row :gutter="20">
           <el-col :span="10" v-for="item in smsData" :key="item.id">
@@ -80,6 +80,7 @@
         </el-row>
       </div>
     </div>
+    <!-- 第三方短信服务 -->
     <div v-if="ruleForm.type === 1">
       <h2 class="template-sty">{{$t('短信模版')}}</h2>
       <span>（{{$t('请输入第三方国内模版ID')}}）</span>
@@ -99,7 +100,7 @@
       </div>
     </div>
     <div class="save-btn">
-      <el-button type="primary">{{$t('保存')}}</el-button>
+      <el-button type="primary" @click="saveTemplate">{{$t('保存')}}</el-button>
     </div>
     <el-dialog
       :title="$t('模版示例')"
@@ -143,6 +144,13 @@ export default {
         this.changeType()
       })
     },
+    // 获取第三方服务短信
+    getThird () {
+      this.$request.getSms().then(res => {
+        this.ruleForm = res.data
+        this.changeType()
+      })
+    },
     // 切换短信服务
     changeType () {
       this.smsData = []
@@ -181,6 +189,31 @@ export default {
     // 模版示例
     templateExample () {
       this.dialogVisible = true
+    },
+    // 保存
+    saveTemplate () {
+      console.log(this.smsData, 'this.smsData')
+      console.log(this.customerData, 'this.customerData')
+      this.$request.updateSmsSystem({
+        templates: this.ruleForm.type === 2 ? this.smsData : this.customerData,
+        type: this.ruleForm.type,
+        intl_app_key: this.ruleForm.intl_app_key,
+        app_key: this.ruleForm.app_key
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.changeType()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }

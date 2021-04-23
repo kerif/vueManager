@@ -1201,6 +1201,10 @@ exports.getSms = () => {
 exports.getSmsSystem = () => {
   return $form.get('api-services/sms/templates/system')
 }
+// 更多配置 更新短信服务
+exports.updateSmsSystem = (params) => {
+  return $json.put('api-services/sms', params)
+}
 // 更多配置 获取第三方短信服务数据
 exports.getCustomSystem = () => {
   return $form.get('api-services/sms/templates/custom')
