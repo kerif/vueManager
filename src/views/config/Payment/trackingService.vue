@@ -22,6 +22,10 @@
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
           </div>
+           <div class="details-sty" @click="purchase">
+            <i class="el-icon-s-order"></i>
+            {{$t('购买记录')}}
+          </div>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
@@ -88,6 +92,10 @@ export default {
     // 预警
     alertSms () {
       dialog({ type: 'alertSettings', state: 'tracking' })
+    },
+    // 购买记录
+    purchase () {
+      dialog({ type: 'purchaseHistory', state: 'tracking' })
     }
   }
 }

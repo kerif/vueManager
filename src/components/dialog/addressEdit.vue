@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('编辑客户') + this.userId + $t('的个人信息')" class="address-edit-dialog" @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('编辑客户') + this.userId + $t('的个人地址')" class="address-edit-dialog" @close="clear">
     <el-form label-width="80" :model="form">
     <el-row :gutter="20">
       <el-col :span="10">
@@ -24,6 +24,18 @@
         </el-form-item>
       </el-col>
     </el-row>
+    <el-row :gutter="20" v-if="form.is_cn_address == 1">
+      <el-col :span="10">
+       <el-form-item :label="$t('省份')">
+          <el-input v-model="form.province"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="10">
+        <el-form-item :label="$t('区')">
+          <el-input v-model="form.district"></el-input>
+        </el-form-item>
+      </el-col>
+      </el-row>
     <el-row :gutter="20">
       <el-col :span="10">
        <el-form-item :label="$t('微信号')">
@@ -102,6 +114,8 @@ export default {
         timezone: '',
         country_id: '',
         door_no: '',
+        province: '',
+        district: '',
         city: '',
         postcode: '',
         street: '',
@@ -127,7 +141,9 @@ export default {
           this.form.timezone = res.data.timezone
           this.form.country_id = res.data.country.id
           this.form.door_no = res.data.door_no
+          this.form.province = res.data.province
           this.form.city = res.data.city
+          this.form.district = res.data.district
           this.form.postcode = res.data.postcode
           this.form.street = res.data.street
           this.form.address = res.data.address

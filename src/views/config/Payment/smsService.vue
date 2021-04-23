@@ -18,13 +18,17 @@
               <el-button class="buy-sty" @click="buying">{{$t('购买')}}</el-button>
             </div>
           </div>
-          <div class="details-sty">
+          <div class="details-sty" @click="templateDetails">
             <i class="el-icon-s-order"></i>
             {{$t('详情')}}
           </div>
           <div class="details-sty" @click="alertSms">
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
+          </div>
+          <div class="details-sty" @click="purchase">
+            <i class="el-icon-s-order"></i>
+            {{$t('购买记录')}}
           </div>
         </div>
       </el-col>
@@ -102,21 +106,32 @@
     <div class="save-btn">
       <el-button type="primary" @click="saveTemplate">{{$t('保存')}}</el-button>
     </div>
-    <el-dialog
-      :title="$t('模版示例')"
+    <el-dialog class="details-dialog"
+      :title="$t('详情')"
       :visible.sync="dialogVisible"
-      width="35%">
+      width="55%">
       <el-table :data="templateData" border>
-        <el-table-column :label="$t('模版ID')"></el-table-column>
-        <el-table-column :label="$t('内容')"></el-table-column>
+        <el-table-column :label="$t('日期')"></el-table-column>
+        <el-table-column :label="$t('使用次数（中国大陆）')"></el-table-column>
+        <el-table-column :label="$t('使用次数（国际）')"></el-table-column>
+        <el-table-column :label="$t('剩余次数')"></el-table-column>
       </el-table>
+      <div class="dialog-bottom">
+        <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import dialog from '@/components/dialog'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   data () {
     return {
       validate_email: '',
@@ -186,8 +201,12 @@ export default {
     alertSms () {
       dialog({ type: 'alertSettings', state: 'sms' })
     },
-    // 模版示例
-    templateExample () {
+    // 购买记录
+    purchase () {
+      dialog({ type: 'purchaseHistory', state: 'sms' })
+    },
+    // 详情
+    templateDetails () {
       this.dialogVisible = true
     },
     // 保存
@@ -317,6 +336,17 @@ export default {
   .template-msg {
     font-size: 14px;
     color: #ccc;
+  }
+}
+.details-dialog {
+  .el-dialog__title {
+    color: #fff;
+  }
+  .el-dialog__header {
+    background-color: #0E102A;
+  }
+  .dialog-bottom {
+    margin-top: 20px;
   }
 }
 </style>
