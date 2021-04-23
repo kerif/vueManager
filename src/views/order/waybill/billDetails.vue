@@ -33,7 +33,7 @@
     </el-row>
     <el-row class="container-center" :gutter="20">
      <!-- 城市 -->
-      <el-col :span="7" v-if="form.is_cn_address === 1">
+      <el-col :span="7" v-if="form.address && form.address.is_cn_address == 1">
         <span class="leftWidth">{{$t('省/市/区')}}</span>
         <el-input class="cn-address-sty" v-if="form.address && unEdit === true" v-model="form.address.province"></el-input>
         <el-input class="cn-address-sty" v-if="form.address && unEdit === true" v-model="form.address.city"></el-input>
