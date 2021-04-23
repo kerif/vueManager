@@ -81,7 +81,7 @@ const agentTemplate = loadonDemand('config/agent/agentTemplate')
 // 成交记录
 const transactionRecord = loadonDemand('config/agent/record')
 // 配置 小程序配置
-const AppletConfiguration = loadonDemand('config/Applet/applet')
+// const AppletConfiguration = loadonDemand('config/Applet/applet')
 // 配置 自提点配置
 const SinceList = loadonDemand('config/point/since')
 // 配置 新增或编辑自提点
@@ -998,17 +998,17 @@ export default [
               parent: '/config/notice'
             }
           },
-          {
-            path: '/config/applet',
-            name: 'appletManagement',
-            component: AppletConfiguration,
-            id: 604,
-            meta: {
-              level: 2,
-              group: '配置',
-              name: '小程序配置'
-            }
-          },
+          // {
+          //   path: '/config/applet',
+          //   name: 'appletManagement',
+          //   component: AppletConfiguration,
+          //   id: 604,
+          //   meta: {
+          //     level: 2,
+          //     group: '配置',
+          //     name: '小程序配置'
+          //   }
+          // },
           {
             path: '/config/point',
             name: 'point',
