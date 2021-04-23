@@ -8,7 +8,7 @@
       label-width="80px"
     >
       <div>
-        <el-form-item label="时间" prop="date_type">
+        <el-form-item :label="$t('时间')" prop="date_type">
           <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('请选择')">
             <el-option
               v-for="item in timeOptions"
@@ -18,7 +18,7 @@
             >
             </el-option>
           </el-select>
-          <el-form-item prop="date">
+          <el-form-item prop="date" style="margin: 0">
             <el-date-picker
               v-model="searchFieldData.date"
               type="daterange"
@@ -31,7 +31,7 @@
             </el-date-picker>
           </el-form-item>
         </el-form-item>
-        <el-form-item label="价格区间" prop="value_type">
+        <el-form-item :label="$t('价格区间')" prop="value_type">
           <el-select v-model="searchFieldData.value_type" clearable :placeholder="$t('请选择')">
             <el-option
               v-for="item in priceRangeOptions"
@@ -60,7 +60,7 @@
           </el-form-item>
         </el-form-item>
         <div style="display: flex">
-          <el-form-item label="线路名称" prop="express_line_id">
+          <el-form-item :label="$t('线路名称')" prop="express_line_id">
             <el-select
               v-model="searchFieldData.express_line_id"
               clearable
@@ -75,7 +75,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="支付方式" prop="payment_type">
+          <el-form-item :label="$t('支付方式')" prop="payment_type">
             <el-select v-model="searchFieldData.payment_type" clearable :placeholder="$t('请选择')">
               <el-option
                 v-for="item in paymentData"
@@ -90,7 +90,7 @@
       </div>
       <div>
         <div style="display: flex">
-          <el-form-item label="收货国家/地区" prop="countryArr" label-width="140px">
+          <el-form-item :label="$t('收货国家/地区')" prop="countryArr" label-width="140px">
             <el-cascader
               :show-all-levels="false"
               :props="countryProps"
@@ -98,7 +98,7 @@
               clearable
             ></el-cascader>
           </el-form-item>
-          <el-form-item label="收货方式" prop="receive_type">
+          <el-form-item :label="$t('收货方式')" prop="receive_type">
             <el-select v-model="searchFieldData.receive_type" clearable :placeholder="$t('请选择')">
               <el-option
                 v-for="item in receiverOptions"
@@ -111,7 +111,7 @@
           </el-form-item>
         </div>
         <div style="display: flex">
-          <el-form-item label="支付状态" prop="pay_delivery" label-width="140px">
+          <el-form-item :label="$t('支付状态')" prop="pay_delivery" label-width="140px">
             <el-select v-model="searchFieldData.pay_delivery" clearable :placeholder="$t('请选择')">
               <el-option
                 v-for="item in paymentStatusData"
@@ -122,7 +122,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属代理" prop="agent">
+          <el-form-item :label="$t('所属代理')" prop="agent">
             <el-select v-model="searchFieldData.agent" clearable :placeholder="$t('请选择')">
               <el-option
                 v-for="item in agentData"
@@ -135,8 +135,8 @@
           </el-form-item>
         </div>
         <div class="submit">
-          <el-button type="primary" size="small" @click="submitForm">提交</el-button>
-          <el-button size="small" @click="resetForm">重置</el-button>
+          <el-button type="primary" size="small" @click="submitForm">{{ $t('搜索') }}</el-button>
+          <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
         </div>
       </div>
     </el-form>
@@ -317,7 +317,7 @@ export default {
       margin-bottom: 10px;
     }
     /deep/ .el-input {
-      max-width: 168px;
+      width: 168px;
     }
     /deep/ .el-form-item__content {
       display: flex;

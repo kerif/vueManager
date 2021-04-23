@@ -17,9 +17,13 @@ export default new Vuex.Store({
     btnLoading: false,
     isCollapse: false,
     languageCode: 'simple', // 默认简体中文
-    pagePath: '' // 路径列表
+    pagePath: '', // 路径列表
+    orderListFieldData: [] // 订单列表显示字段
   },
   mutations: {
+    updateOrderListFieldData(state, data) {
+      state.orderListFieldData = data
+    },
     saveToken(state, data) {
       state.token = data
       localStorage.setItem('TOKEN', data)
