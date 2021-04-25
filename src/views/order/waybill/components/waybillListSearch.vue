@@ -59,7 +59,7 @@
             ></el-input>
           </el-form-item>
         </el-form-item>
-        <div style="display: flex">
+        <div style="display: flex; height: 28px">
           <el-form-item :label="$t('线路名称')" prop="express_line_id">
             <el-select
               v-model="searchFieldData.express_line_id"
@@ -135,7 +135,9 @@
           </el-form-item>
         </div>
         <div class="submit">
-          <el-button type="primary" size="small" @click="submitForm">{{ $t('搜索') }}</el-button>
+          <el-button type="primary" plain size="small" @click="submitForm">{{
+            $t('搜索')
+          }}</el-button>
           <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
         </div>
       </div>
@@ -303,7 +305,11 @@ export default {
 .waybill-list-search {
   margin: 10px 0;
   .search-form {
+    background-color: #fff;
+    padding: 10px 0;
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
     .el-select,
     .el-cascader,
     .el-input,
@@ -315,6 +321,7 @@ export default {
     }
     .el-form-item--mini.el-form-item {
       margin-bottom: 10px;
+      height: 28px;
     }
     /deep/ .el-input {
       width: 168px;

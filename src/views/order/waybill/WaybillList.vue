@@ -9,68 +9,99 @@
       <el-tab-pane :label="`${$t('已签收')} (${countData.received || 0})`" name="5"></el-tab-pane>
       <el-tab-pane :label="`${$t('作废订单')} (${countData.invalid || 0})`" name="19"></el-tab-pane>
     </el-tabs>
-    <div class="header-search">
-      <el-input
-        class="header-keyword"
-        v-model="searchKeyword"
-        clearable
-        :placeholder="$t('请输入')"
-        size="medium"
-        @keyup.enter.native="goMatch"
-      >
-        <el-button
-          class="search-btn"
-          slot="append"
-          @click="goMatch"
-          :loading="$store.state.btnLoading"
-          icon="el-icon-search"
-        ></el-button>
-      </el-input>
-      <div class="filter">
-        <el-button @click="onFilterChange" type="text"
-          >展开筛选<i class="el-icon-arrow-down"></i
-        ></el-button>
-      </div>
-      <el-button @click="uploadList" size="small">{{ $t('导出清单') }}</el-button>
-    </div>
     <waybill-list-search
       v-show="hasFilterCondition"
       :searchFieldData="searchFieldData"
       v-on:submit="searchSubmit"
     ></waybill-list-search>
-    <div
-      class="bottom-sty"
-      v-if="oderData.length && ['1', '2', '3', '4', '5'].includes(activeName)"
-    >
-      <el-button class="btn-purple" v-if="activeName === '1'" @click="oneBatch">{{
-        $t('一键批量打包')
-      }}</el-button>
-      <el-button size="small" v-if="activeName === '3'" @click="addInvoice(selectIDs)">{{
-        $t('加入发货单')
-      }}</el-button>
-      <el-button
-        size="small"
-        @click="uploadInvoice(selectIDs)"
-        v-if="['3', '4', '5'].includes(activeName)"
-        >{{ $t('导出发票') }}</el-button
+    <div class="header-range">
+      <div
+        class="bottom-sty"
+        v-if="oderData.length && ['1', '2', '3', '4', '5'].includes(activeName)"
       >
-      <el-button size="small" @click="goNotify" v-if="activeName === '2' || activeName === '4'">{{
-        $t('批量发送通知')
-      }}</el-button>
-      <el-button size="small" v-if="activeName === '2'" @click="changeDelivery">{{
-        $t('批量改成货到付款')
-      }}</el-button>
-      <el-button size="small" @click="updateTracking" v-if="activeName === '4'">{{
-        $t('更新物流状态')
-      }}</el-button>
-      <el-button size="small" v-if="['3', '4', '5'].includes(activeName)" @click="payed"
-        >{{ $t('已付款') }}
-      </el-button>
-      <el-button size="small" v-if="activeName === '4'" @click="signed"
-        >{{ $t('已签收') }}
-      </el-button>
+        <el-button v-if="activeName === '1'" @click="oneBatch" size="small">{{
+          $t('一键批量打包')
+        }}</el-button>
+        <el-button
+          v-if="activeName === '3'"
+          size="small"
+          @click="addInvoice(selectIDs)"
+          style="margin-right: 10px"
+          >{{ $t('加入发货单') }}</el-button
+        >
+        <el-dropdown v-if="['2', '4'].includes(activeName)" style="margin-right: 10px">
+          <el-button size="small">{{ $t('发送通知') }}</el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-if="['2'].includes(activeName)" @click.native="orderUnpaidNotify">{{
+              $t('订单待支付通知')
+            }}</el-dropdown-item>
+            <el-dropdown-item v-if="['4'].includes(activeName)" @click.native="goNotify(3)">
+              {{ $t('已发货通知') }}
+            </el-dropdown-item>
+            <el-dropdown-item v-if="['4'].includes(activeName)" @click.native="goNotify(4)">
+              {{ $t('待取件通知') }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button v-if="activeName === '2'" size="small" @click="changeDelivery">{{
+          $t('改成货到付款')
+        }}</el-button>
+        <el-dropdown v-if="['3', '4'].includes(activeName)" style="margin-right: 10px">
+          <el-button size="small">{{ $t('更新物流') }}</el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-if="activeName === '4'" @click.native="updateTracking">{{
+              $t('更新物流状态')
+            }}</el-dropdown-item>
+            <el-dropdown-item
+              v-if="['3', '4'].includes(activeName)"
+              @click.native="batchEditCompany"
+            >
+              {{ $t('更新物流单号 - 二程') }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button v-if="['3', '4', '5'].includes(activeName)" size="small" @click="payed"
+          >{{ $t('改为已付款') }}
+        </el-button>
+        <el-button v-if="activeName === '4'" size="small" @click="signed"
+          >{{ $t('改为已签收') }}
+        </el-button>
+        <el-button
+          v-if="['3', '4', '5'].includes(activeName)"
+          size="small"
+          @click="uploadInvoice(selectIDs)"
+        >
+          {{ $t('导出发票') }}
+        </el-button>
+        <el-button @click="uploadList" size="small" type="success" plain>{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
+      <div class="header-search">
+        <el-input
+          class="header-keyword"
+          v-model="searchKeyword"
+          clearable
+          :placeholder="$t('请输入')"
+          size="medium"
+          @keyup.enter.native="goMatch"
+        >
+          <el-button
+            slot="append"
+            @click="goMatch"
+            :loading="$store.state.btnLoading"
+            icon="el-icon-search"
+          ></el-button>
+        </el-input>
+        <div class="filter">
+          <el-button @click="onFilterChange" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
+      </div>
     </div>
-    <div style="height: calc(100vh - 320px)">
+
+    <div style="height: calc(100vh - 300px)">
       <el-table
         row-key="id"
         class="data-list"
@@ -82,7 +113,7 @@
         highlight-current-row
         :data="oderData"
         @selection-change="onSelectChange"
-        height="calc(100vh - 330px)"
+        height="calc(100vh - 300px)"
         size="mini"
         :cell-style="{ padding: '0' }"
       >
@@ -117,7 +148,7 @@
                   <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
                   <router-link
                     v-if="scope.row.status === 12"
-                    class="chooseOrder"
+                    class="choose-order"
                     :to="`/order/review/?id=${scope.row.id}`"
                   >
                     {{ $t('审核拒绝') }}
@@ -226,7 +257,7 @@
                 v-if="['3', '4', '5'].includes(activeName)"
               >
                 <template slot-scope="scope">
-                  <span @click="goShip(scope.row.shipment_sn)" class="chooseOrder">{{
+                  <span @click="goShip(scope.row.shipment_sn)" class="choose-order">{{
                     scope.row.shipment_sn
                   }}</span>
                 </template>
@@ -344,7 +375,11 @@
         ></el-table-column>
         <el-table-column v-else type="index" width="50"></el-table-column>
         <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
-        <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
+        <el-table-column
+          :label="$t('用户名')"
+          prop="user_name"
+          show-overflow-tooltip
+        ></el-table-column>
         <el-table-column :label="$t('订单号')" width="180">
           <template slot-scope="scope">
             <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i>
@@ -358,7 +393,7 @@
             <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
             <router-link
               v-if="scope.row.status === 12"
-              class="chooseOrder"
+              class="choose-order"
               :to="`/order/review/?id=${scope.row.id}`"
             >
               {{ $t('审核拒绝') }}
@@ -443,7 +478,11 @@
           prop="coupon_amount"
         >
         </el-table-column>
-        <el-table-column :label="$t('所属代理')" prop="agent + agent_commission" width="100px">
+        <el-table-column
+          :label="$t('所属代理')"
+          prop="agent + agent_commission"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
             <span>{{ scope.row.agent }}</span>
             <span>({{ scope.row.agent_commission }}%)</span>
@@ -470,12 +509,12 @@
         </el-table-column>
         <el-table-column :label="$t('所属发货单')" v-if="['3', '4', '5'].includes(activeName)">
           <template slot-scope="scope">
-            <span @click="goShip(scope.row.shipment_sn)" class="chooseOrder">{{
+            <span @click="goShip(scope.row.shipment_sn)" class="choose-order">{{
               scope.row.shipment_sn
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')" fixed="right">
+        <el-table-column v-if="activeName !== '0'" :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-dropdown size="medium">
               <el-button type="text" size="mini">
@@ -559,12 +598,6 @@
                   {{ $t('日志') }}
                 </el-dropdown-item>
                 <el-dropdown-item
-                  v-if="activeName === '3' || activeName === '4'"
-                  @click.native="editCompany(scope.row.id)"
-                >
-                  {{ $t('修改物流信息') }}
-                </el-dropdown-item>
-                <el-dropdown-item
                   v-if="activeName === '4'"
                   @click.native="logistics(scope.row.id, scope.row.order_sn)"
                 >
@@ -589,16 +622,11 @@
             </el-dropdown>
           </template>
         </el-table-column>
-        <!-- <template slot="append">
-        <div style="margin: 5px 100px 5px 0">
-          <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-        </div>
-      </template> -->
       </el-table>
+      <div class="noDate" v-if="!oderData.length">{{ $t('暂无数据') }}</div>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
 
-    <div class="noDate" v-if="!oderData.length">{{ $t('暂无数据') }}</div>
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
       <div class="dialog-sty">
         <iframe class="iframe" :src="urlHtml"></iframe>
@@ -680,12 +708,7 @@
       </div>
     </el-dialog>
     <!-- 一键批量打包 -->
-    <el-dialog
-      :visible.sync="boxDialog"
-      :title="$t('一键批量打包')"
-      @close="batchClear"
-      width="80%"
-    >
+    <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" width="80%">
       <div class="add-box">
         <!-- 一键将预计重量改成实际重量 -->
         <el-tooltip
@@ -837,7 +860,7 @@
               style="cursor: pointer"
               @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${ele}`), (imgVisible = true)"
             >
-              <img :src="`${$baseUrl.IMAGE_URL}${ele}`" class="productImg" />
+              <img :src="`${$baseUrl.IMAGE_URL}${ele}`" class="product-img" />
             </span>
           </template>
         </el-table-column>
@@ -882,19 +905,11 @@ export default {
     return {
       timeList: [],
       uploadRadio: 1,
-      pickingList: [],
-      signList: [],
-      begin_date: '',
-      end_date: '',
-      packed_begin_date: '',
       packed_end_date: '',
-      updated_begin_date: '',
-      updated_end_date: '',
       activeName: '1',
       oderData: [],
       secondData: [],
       localization: {},
-      status: 1,
       selectIDs: [],
       agent_name: '',
       payment_type: '',
@@ -979,51 +994,10 @@ export default {
     this.getCounts()
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
-      // this.status = Number(this.$route.query.activeName) || '0'
     }
     if (this.$route.query.order_sn) {
       this.page_params.keyword = this.$route.query.order_sn
     }
-    // if (this.$route.query.agent) {
-    //   this.agent_name = Number(this.$route.query.agent)
-    // }
-    // // 拣货日期筛选保留
-    // if (this.$route.query.pickTimes) {
-    //   this.pickingList = this.$route.query.pickTimes.split(' ')
-    //   console.log(this.$route.query.pickTimes)
-    //   console.log(this.pickingList, 'this.pickingList ')
-    //   this.packed_begin_date = this.pickingList ? this.pickingList[0] : ''
-    //   this.packed_end_date = this.pickingList ? this.pickingList[1] : ''
-    //   this.page_params.page = 1
-    //   this.page_params.handleQueryChange('pickTimes', `${this.packed_begin_date} ${this.packed_end_date}`)
-    //   this.getList()
-    // }
-    // // 签收时间筛选保留
-    // if (this.$route.query.signTimes) {
-    //   this.signList = this.$route.query.signTimes.split(' ')
-    //   console.log(this.$route.query.signTimes)
-    //   console.log(this.signList, 'this.signList ')
-    //   this.updated_begin_date = this.signList ? this.signList[0] : ''
-    //   this.updated_end_date = this.signList ? this.signList[1] : ''
-    //   this.page_params.page = 1
-    //   this.page_params.handleQueryChange('signTimes', `${this.updated_begin_date} ${this.updated_end_date}`)
-    //   this.getList()
-    // }
-    // // 提交日期时间筛选保留
-    // // createdTimes
-    // if (this.$route.query.createdTimes) {
-    //   this.timeList = this.$route.query.createdTimes.split(' ')
-    //   console.log(this.$route.query.createdTimes)
-    //   console.log(this.timeList, 'this.timeList ')
-    //   this.begin_date = this.timeList ? this.timeList[0] : ''
-    //   this.end_date = this.timeList ? this.timeList[1] : ''
-    //   this.page_params.page = 1
-    //   this.page_params.handleQueryChange('createdTimes', `${this.begin_date} ${this.end_date}`)
-    //   this.getList()
-    // }
-    // this.getAgentData()
-    // this.getPaymentType()
-    // this.getLineType()
   },
   mounted() {
     this.getList()
@@ -1062,7 +1036,6 @@ export default {
     },
     getList() {
       this.tableLoading = true
-      this.selectIDs = []
       this.oderData = []
       const params = this.computedParams()
       this.$request.getOrder(params).then(res => {
@@ -1109,9 +1082,14 @@ export default {
           ...searchData,
           begin_date: searchData.date[0],
           end_date: searchData.date[1],
-          country_id: searchData.countryArr.length
-            ? searchData.countryArr[searchData.countryArr.length - 1]
-            : ''
+          country_id:
+            searchData.countryArr.length > 1
+              ? searchData.countryArr[0]
+              : searchData.countryArr[searchData.countryArr.length - 1],
+          area_id:
+            searchData.countryArr.length > 1
+              ? searchData.countryArr[searchData.countryArr.length - 1]
+              : ''
         }
       }
       return params
@@ -1244,6 +1222,7 @@ export default {
     },
     // 弹窗 管理
     goMore() {
+      this.trackDialog = false
       this.$router.push({
         name: 'payment',
         query: {
@@ -1333,51 +1312,62 @@ export default {
         }
       })
     },
-    // 批量发送通知
-    goNotify() {
+    orderUnpaidNotify() {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      if (this.activeName === '2') {
-        this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
-          confirmButtonText: this.$t('确定'),
-          cancelButtonText: this.$t('取消'),
-          type: 'warning'
-        }).then(() => {
-          this.$request
-            .sendingNotify({
-              ids: this.selectIDs,
-              // type: this.activeName === '2' ? 2 : 3
-              type: 2
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  title: this.$t('操作成功'),
-                  message: res.msg,
-                  type: 'success'
-                })
-                this.getList()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-            })
-        })
-      } else if (this.activeName === '4') {
-        dialog(
-          {
-            type: 'notifyOrder',
-            ids: this.selectIDs
-          },
-          () => {
-            this.getList()
-            this.selectIDs = []
-          }
-        )
+      this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request
+          .sendingNotify({
+            ids: this.selectIDs,
+            type: 2
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.$refs.table.clearSelection()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      })
+    },
+    // 批量发送通知
+    goNotify(type) {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
       }
+      this.$request
+        .sendingNotify({
+          ids: this.selectIDs,
+          type: type
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.$refs.table.clearSelection()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 打印标签
     getLabel(id) {
@@ -1472,26 +1462,6 @@ export default {
             })
           }
         })
-    },
-    // 创建时间
-    onTime(val) {
-      this.begin_date = val ? val[0] : ''
-      this.end_date = val ? val[1] : ''
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('createdTimes', `${this.begin_date} ${this.end_date}`)
-      this.getList()
-      this.getCounts()
-    },
-    // 签收时间
-    onSign(val) {
-      this.updated_begin_date = val ? val[0] : ''
-      this.updated_end_date = val ? val[1] : ''
-      this.page_params.page = 1
-      this.page_params.handleQueryChange(
-        'signTimes',
-        `${this.updated_begin_date} ${this.updated_end_date}`
-      )
-      this.getList()
     },
     // 打包
     packed(id, orderSN, parent, activeName) {
@@ -1602,7 +1572,7 @@ export default {
       dialog(
         {
           type: 'addCompany',
-          id: id,
+          id: [id],
           state: 'add'
         },
         () => {
@@ -1615,7 +1585,23 @@ export default {
       dialog(
         {
           type: 'addCompany',
-          id: id,
+          id: [id],
+          state: 'edit'
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    // 修改转运快递公司
+    batchEditCompany() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog(
+        {
+          type: 'addCompany',
+          id: this.selectIDs,
           state: 'edit'
         },
         () => {
@@ -1756,19 +1742,11 @@ export default {
     },
     // Tab Change
     onTabChange(tab) {
-      this.status = Number(tab.name)
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)
       this.page_params.handleQueryChange('activeName', tab.name)
       this.timeList = []
-      this.pickingList = []
-      this.signList = []
-      this.begin_date = ''
-      this.end_date = ''
-      this.packed_begin_date = ''
       this.packed_end_date = ''
-      this.updated_begin_date = ''
-      this.updated_end_date = ''
       this.getList()
       this.getCounts()
       this.selectIDs = []
@@ -1844,12 +1822,6 @@ export default {
       this.boxDialog = true
       this.getBatch()
     },
-    // 清除一键批量打包
-    batchClear() {
-      // this.except_dimension.length = 0
-      // this.except_dimension.width = 0
-      // this.except_dimension.height = 0
-    },
     // 获取批量打包数据
     getBatch() {
       this.$request
@@ -1923,15 +1895,22 @@ export default {
 
 <style lang="scss" scope>
 .way-list-container {
-  .header-search {
+  .header-range {
     display: flex;
-    .header-keyword {
-      max-width: 300px;
-    }
-    .filter {
-      margin: 0 20px;
+    align-items: center;
+    justify-content: space-between;
+    .header-search {
+      display: flex;
+      margin: 0 0 0 auto;
+      .header-keyword {
+        max-width: 300px;
+      }
+      .filter {
+        margin: 0 20px;
+      }
     }
   }
+
   .data-list {
     background-color: inherit;
   }
@@ -1952,14 +1931,11 @@ export default {
   .choose-status {
     width: 150px;
     display: inline-block;
-    .el-select {
-      // width: 100%;
-    }
   }
   .customer-sty {
     margin-right: 10px;
   }
-  .chooseOrder {
+  .choose-order {
     cursor: pointer;
     color: blue;
     text-decoration: underline;
@@ -1997,7 +1973,7 @@ export default {
   margin-bottom: 10px;
   margin-right: 5px;
 }
-.productImg {
+.product-img {
   width: 110px;
   height: 100px;
 }
@@ -2020,13 +1996,6 @@ export default {
 .item-sty {
   text-align: center;
   color: #5b60b4;
-}
-.table-fixed {
-  // height: 100% !important;
-  // width: 100%;
-  .el-table__fixed-right {
-    height: 100% !important; //设置高优先，以覆盖内联样式
-  }
 }
 .expand-table {
   width: 80%;
