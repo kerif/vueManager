@@ -1,6 +1,6 @@
 <template>
   <div class="order-list-container">
-    <el-tabs v-model="activeName" class="tabLength">
+    <el-tabs v-model="activeName" @tab-click="onTabChange" class="tab-length" stretch>
       <el-tab-pane :label="`${$t('全部')} (${countData.all || 0})`" name="0"></el-tab-pane>
       <el-tab-pane
         :label="`${$t('未入库')} (${countData.wait_in_storage || 0})`"
@@ -12,362 +12,321 @@
       <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
       <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
     </el-tabs>
-    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goMatch">
-      <div class="changeTime">
-        <!-- 提交时间 -->
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('提交开始日期')"
-          :end-placeholder="$t('提交结束日期')"
+    <order-list-search
+      v-show="hasFilterCondition"
+      :searchFieldData="searchFieldData"
+      v-on:submit="getList"
+    ></order-list-search>
+    <div class="header-range">
+      <div class="header-btns">
+        <el-button size="small" @click="deleteData" v-if="activeName === '1'">{{
+          $t('删除')
+        }}</el-button>
+        <el-button size="small" @click="discardPackage" v-if="['1', '2'].includes(activeName)">{{
+          $t('弃件')
+        }}</el-button>
+        <el-button size="small" @click="batchPackage" v-if="activeName === '2'">{{
+          $t('批量集包')
+        }}</el-button>
+        <el-button size="small" @click="goNotify" v-if="activeName === '2'">{{
+          $t('批量发送通知')
+        }}</el-button>
+        <el-button size="small" v-if="activeName === '6'" @click="restore">{{
+          $t('恢复')
+        }}</el-button>
+        <el-button size="small" v-if="activeName === '6'" @click="deleteDiscard">{{
+          $t('彻底删除')
+        }}</el-button>
+        <el-button v-if="activeName !== '6'" @click="importOrder" size="small">{{
+          $t('批量入库')
+        }}</el-button>
+        <el-button v-if="activeName !== '6'" @click="uploadList" size="small" type="success" plain>
+          {{ $t('导出清单') }}
+        </el-button>
+        <!-- <el-button v-if="activeName !== '6'" @click="goFilter" size="small">{{
+          $t('筛选')
+        }}</el-button> -->
+        <el-checkbox
+          v-if="['0', '1'].includes(activeName)"
+          class="dialog-sty"
+          v-model="is_warning"
+          @change="onWarning"
         >
-        </el-date-picker>
-        <!-- 称重时间 -->
-        <el-date-picker
-          v-if="activeName === '2'"
-          class="timeStyle"
-          v-model="storageList"
-          type="daterange"
-          @change="onStorage"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('称重开始日期')"
-          :end-placeholder="$t('称重结束日期')"
-        >
-        </el-date-picker>
+          {{ $t('包裹预警') }}
+        </el-checkbox>
       </div>
-      <div class="chooseStatus">
-        <el-select
-          v-model="agent_name"
-          @change="onAgentChange"
+      <div class="header-search">
+        <el-input
+          class="header-keyword"
+          v-model="searchFieldData.keyword"
           clearable
-          :placeholder="$t('请选择仓库')"
+          :placeholder="$t('请输入')"
+          size="medium"
+          @keyup.enter.native="goMatch"
         >
-          <el-option
-            v-for="item in agentData"
-            :key="item.id"
-            :value="item.id"
-            :label="item.warehouse_name"
-          >
-          </el-option>
-        </el-select>
-      </div>
-      <!-- 包裹预警 -->
-      <el-checkbox
-        v-if="activeName === '0' || activeName === '1'"
-        class="dialogSty"
-        v-model="is_warning"
-        @change="onWarning"
-        >{{ $t('包裹预警') }}</el-checkbox
-      >
-      <div
-        class="import-list"
-        v-if="
-          activeName === '0' ||
-          activeName === '1' ||
-          activeName === '2' ||
-          activeName === '3' ||
-          activeName === '4' ||
-          activeName === '5'
-        "
-      >
-        <el-button @click="uploadList(status)">{{ $t('导出清单') }}</el-button>
-        <el-button @click="importOrder">{{ $t('批量入库') }}</el-button>
-        <el-button @click="goFilter">{{ $t('筛选') }}</el-button>
-      </div>
-    </search-group>
-    <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
-    <!-- <el-select v-model="agent_name" @change="getList" clearable>
-      <el-option
-      v-for="item in agentData"
-      :key="item.id"
-      :value="item.user_id"
-      :label="item.agent_name">
-      </el-option>
-    </el-select> -->
-    <!-- </div> -->
-    <el-table
-      class="data-list"
-      border
-      stripe
-      v-if="oderData.length"
-      :data="oderData"
-      @selection-change="selectionChange"
-      v-loading="tableLoading"
-      height="550"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-        align="center"
-        v-if="activeName === '1' || activeName === '2' || activeName === '6'"
-      ></el-table-column>
-      <!-- 客户ID -->
-      <el-table-column :label="$t('客户ID')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
-        </template>
-      </el-table-column>
-      <!-- 快递单号 -->
-      <el-table-column :label="$t('快递单号')" prop="express_num"> </el-table-column>
-      <!-- 包裹编码 -->
-      <el-table-column :label="$t('包裹编码')" prop="code"> </el-table-column>
-      <el-table-column :label="$t('状态')" :width="activeName === '1' ? 160 : 90">
-        <!-- width="160" -->
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>
-          <span v-if="scope.row.status === 2">{{ $t('已入库') }}</span>
-          <span v-if="scope.row.status === 3 || scope.row.status === 4">{{ $t('已集包') }}</span>
-          <span v-if="scope.row.status === 5">{{ $t('已发货') }}</span>
-          <span v-if="scope.row.status === 6">{{ $t('已收货') }}</span>
-          <span class="warning-sty" v-if="activeName === '1' && scope.row.is_warning === 1"
-            >（{{ $t('丢包预警') }}）</span
-          >
-        </template>
-      </el-table-column>
-      <!-- 物品名称 -->
-      <el-table-column
-        :label="$t('物品名称')"
-        prop="package_name"
-        width="150"
-        :show-overflow-tooltip="true"
-      ></el-table-column>
-      <!-- 物品价值 -->
-      <el-table-column
-        :label="$t('物品价值') + this.localization.currency_unit"
-        prop="package_value"
-      ></el-table-column>
-      <el-table-column
-        :label="
-          $t('物品单价') + this.localization.currency_unit + '/' + this.localization.weight_unit
-        "
-        prop="unit_value"
-      ></el-table-column>
-      <!-- 物品属性 -->
-      <el-table-column :label="$t('物品属性')">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.props" :key="item.id">
-            {{ item.cn_name }}
-          </span>
-        </template>
-      </el-table-column>
-      <!-- 商品重量 -->
-      <el-table-column :label="$t('物品重量')" v-if="activeName === '2'">
-        <template slot-scope="scope">
-          <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>
-        </template>
-      </el-table-column>
-      <!-- 商品清单 -->
-      <!-- <el-table-column label="商品清单" prop="item_pictures" width="130" v-if="activeName === '1' || activeName === '2'">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.item_pictures"
-          :key="item.id" style="cursor:pointer;"
-          @click.stop="imgSrc=$baseUrl.IMAGE_URL + item.path, imgVisible=true">
-           <img :src="$baseUrl.IMAGE_URL + item.path" style="width: 40px; margin-right: 5px;">
-          </span>
-        </template>
-      </el-table-column> -->
-      <!-- 货位 -->
-      <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
-      <!-- 商品数量 -->
-      <el-table-column
-        :label="$t('商品数量')"
-        prop="qty"
-        v-if="activeName === '1' || activeName === '2'"
-      ></el-table-column>
-      <!-- 商品分类 -->
-      <el-table-column
-        :label="$t('商品分类')"
-        prop="categories"
-        v-if="activeName === '1' || activeName === '2'"
-      >
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.categories" :key="item.id">
-            {{ item.name_cn }}
-          </span>
-        </template>
-      </el-table-column>
-      <!-- 寄往国家 -->
-      <el-table-column :label="$t('寄往国家')" prop="destination_country.cn_name"></el-table-column>
-      <!-- 仓库 -->
-      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name"> </el-table-column>
-      <!-- 备注 -->
-      <el-table-column
-        :label="$t('备注')"
-        prop="remark"
-        v-if="activeName === '2'"
-      ></el-table-column>
-      <!-- 规格 -->
-      <el-table-column
-        :label="$t('规格(长宽高cm)')"
-        prop="dimension"
-        v-if="activeName === '2'"
-        width="120px"
-      ></el-table-column>
-      <!-- 存放货位 -->
-      <el-table-column :label="$t('存放货位')" v-if="activeName === '2'" width="120px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.location }}</span>
-          <span v-if="scope.row.location_suffix !== ''">_{{ scope.row.location_suffix }}</span>
-        </template>
-      </el-table-column>
-      <!-- 称重时间 -->
-      <el-table-column
-        :label="$t('入库时间')"
-        v-if="activeName === '2'"
-        prop="in_storage_at"
-      ></el-table-column>
-      <!-- 弃件时间 -->
-      <el-table-column
-        :label="$t('弃件时间')"
-        prop="invalid_at"
-        v-if="activeName === '3'"
-      ></el-table-column>
-      <!-- 提交时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="116px" fixed="right">
-        <template slot-scope="scope">
-          <el-dropdown>
-            <el-button type="primary" plain>
-              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty" @click.native="storage(scope.row.id)">
-                <!-- 入库 -->
-                <span v-if="activeName === '1' || scope.row.status === 1">{{ $t('入库') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="goExpress(scope.row.express_num)">
-                <!-- 单号追踪 -->
-                <span
-                  v-if="
-                    activeName === '1' ||
-                    activeName === '2' ||
-                    scope.row.status === 1 ||
-                    scope.row.status === 2
-                  "
-                  >{{ $t('单号追踪') }}</span
-                >
-              </el-dropdown-item>
-              <!-- 退回未入库 -->
-              <el-dropdown-item class="item-sty" @click.native="returnWarehouse(scope.row.id)">
-                <span v-if="activeName === '2'">{{ $t('退回未入库') }}</span>
-              </el-dropdown-item>
-              <!-- 入库日志 -->
-              <el-dropdown-item class="item-sty" @click.native="onLogs(scope.row.express_num)">
-                <span
-                  v-if="
-                    activeName === '2' ||
-                    activeName === '3' ||
-                    activeName === '4' ||
-                    activeName === '5' ||
-                    scope.row.status === 2 ||
-                    scope.row.status === 3 ||
-                    scope.row.status === 4 ||
-                    scope.row.status === 5 ||
-                    scope.row.status === 6
-                  "
-                  >{{ $t('入库日志') }}</span
-                >
-              </el-dropdown-item>
-              <!-- 详情 -->
-              <el-dropdown-item class="item-sty" @click.native="oderDetails(scope.row.id)">
-                <span
-                  v-if="
-                    activeName === '3' ||
-                    activeName === '4' ||
-                    activeName === '5' ||
-                    activeName === '6'
-                  "
-                  >{{ $t('详情') }}</span
-                >
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="editWarehoused(scope.row.id)">
-                <!-- 编辑 -->
-                <span v-if="activeName === '2' || scope.row.status === 2">{{ $t('编辑') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="fastClosing(scope.row.user_id)">
-                <!-- 快速合箱 -->
-                <span v-if="activeName === '2'">{{ $t('快速合箱') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="invalidLog(scope.row.id)">
-                <!-- 日志 -->
-                <span v-if="activeName === '6'">{{ $t('日志') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="getLabel(scope.row.id)">
-                <!-- 打印标签 -->
-                <span size="small" v-if="activeName === '2' || scope.row.status === 2">{{
-                  $t('打印标签')
-                }}</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </template>
-      </el-table-column>
-      <!-- <template slot="append" v-if="activeName === '1' || activeName === '2' || activeName === '6'">
-        <div class="append-box">
-          <el-button size="small" @click="deleteData"
-          v-if="activeName === '1'">{{$t('删除')}}</el-button>
-          <el-button size="small" @click="discardPackage"
-           v-if="this.activeName === '1' || this.activeName === '2'">{{$t('弃件')}}</el-button>
-           <el-button size="small" @click="batchPackage"
-           v-if="this.activeName === '2'">{{$t('批量集包')}}</el-button>
-           <el-button size="small" @click="goNotify"
-           v-if="this.activeName === '2'">{{$t('批量发送通知')}}</el-button>
-           <el-button size="small" v-if="activeName === '6'"
-           @click="restore">{{$t('恢复')}}</el-button>
-           <el-button size="small"
-            v-if="activeName === '6'" @click="deleteDiscard">{{$t('彻底删除')}}</el-button>
+          <el-button
+            slot="append"
+            @click="goMatch"
+            :loading="$store.state.btnLoading"
+            icon="el-icon-search"
+          ></el-button>
+        </el-input>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
         </div>
-      </template> -->
-    </el-table>
-    <div
-      class="bottom-sty"
-      v-if="oderData.length && (activeName === '1' || activeName === '2' || activeName === '6')"
-    >
-      <!-- 删除 -->
-      <el-button size="small" @click="deleteData" v-if="activeName === '1'">{{
-        $t('删除')
-      }}</el-button>
-      <!-- 弃件 -->
-      <el-button
-        size="small"
-        @click="discardPackage"
-        v-if="this.activeName === '1' || this.activeName === '2'"
-        >{{ $t('弃件') }}</el-button
+      </div>
+      <!-- <search-group
+        :placeholder="$t('请输入关键字')"
+        v-model="page_params.keyword"
+        @search="goMatch"
       >
-      <!-- 批量集包 -->
-      <el-button size="small" @click="batchPackage" v-if="this.activeName === '2'">{{
-        $t('批量集包')
-      }}</el-button>
-      <!-- 批量发送通知 -->
-      <el-button size="small" @click="goNotify" v-if="this.activeName === '2'">{{
-        $t('批量发送通知')
-      }}</el-button>
-      <!-- 恢复 -->
-      <el-button size="small" v-if="activeName === '6'" @click="restore">{{
-        $t('恢复')
-      }}</el-button>
-      <!-- 彻底删除 -->
-      <el-button size="small" v-if="activeName === '6'" @click="deleteDiscard">{{
-        $t('彻底删除')
-      }}</el-button>
+        <div class="changeTime">
+          <el-date-picker
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            @change="onTime"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('提交开始日期')"
+            :end-placeholder="$t('提交结束日期')"
+          >
+          </el-date-picker>
+          <el-date-picker
+            v-if="activeName === '2'"
+            class="timeStyle"
+            v-model="storageList"
+            type="daterange"
+            @change="onStorage"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('称重开始日期')"
+            :end-placeholder="$t('称重结束日期')"
+          >
+          </el-date-picker>
+        </div>
+        <div class="chooseStatus">
+          <el-select
+            v-model="agent_name"
+            @change="onAgentChange"
+            clearable
+            :placeholder="$t('请选择仓库')"
+          >
+            <el-option
+              v-for="item in agentData"
+              :key="item.id"
+              :value="item.id"
+              :label="item.warehouse_name"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </search-group> -->
     </div>
-    <div class="noDate" v-if="!oderData.length">{{ $t('暂无数据') }}</div>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        border
+        stripe
+        ref="table"
+        :data="oderData"
+        @selection-change="selectionChange"
+        v-loading="tableLoading"
+        height="calc(100vh - 270px)"
+        size="mini"
+        class="order-data-list"
+        :cell-style="{ padding: '0' }"
+      >
+        <el-table-column
+          :type="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
+          :key="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
+          width="55"
+          align="center"
+        ></el-table-column>
+        <el-table-column :label="$t('客户ID')" key="user_id">
+          <template slot-scope="scope">
+            <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('快递单号')" prop="express_num" key="express_num">
+        </el-table-column>
+        <el-table-column :label="$t('包裹编码')" prop="code" key="code"> </el-table-column>
+        <el-table-column :label="$t('状态')" key="status">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('已入库') }}</span>
+            <span v-if="scope.row.status === 3 || scope.row.status === 4">{{ $t('已集包') }}</span>
+            <span v-if="scope.row.status === 5">{{ $t('已发货') }}</span>
+            <span v-if="scope.row.status === 6">{{ $t('已收货') }}</span>
+            <span class="warning-sty" v-if="activeName === '1' && scope.row.is_warning === 1"
+              >（{{ $t('丢包预警') }}）</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('物品名称')"
+          prop="package_name"
+          key="package_name"
+          width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('物品价值') + localization.currency_unit"
+          prop="package_value"
+          key="package_value"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"
+          prop="unit_value"
+          key="unit_value"
+        ></el-table-column>
+        <el-table-column :label="$t('物品属性')" key="props">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.props" :key="item.id">
+              {{ item.cn_name }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('物品重量')" key="package_weight" v-if="activeName === '2'">
+          <template slot-scope="scope">
+            <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('商品数量')"
+          prop="qty"
+          key="qty"
+          v-if="['1', '2'].includes(activeName)"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('商品分类')"
+          prop="categories"
+          key="categories"
+          v-if="['1', '2'].includes(activeName)"
+        >
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.categories" :key="item.id">
+              {{ item.name_cn }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('寄往国家')"
+          prop="destination_country.cn_name"
+          key="destination_country.cn_name"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('仓库')"
+          prop="warehouse.warehouse_name"
+          key="warehouse.warehouse_name"
+        >
+        </el-table-column>
+        <el-table-column
+          :label="$t('备注')"
+          prop="remark"
+          key="remark"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('规格(长宽高cm)')"
+          prop="dimension"
+          key="dimension"
+          width="120px"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('存放货位')"
+          key="location"
+          width="120px"
+          v-if="activeName === '2'"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.location }}</span>
+            <span v-if="scope.row.location_suffix !== ''">_{{ scope.row.location_suffix }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('入库时间')"
+          prop="in_storage_at"
+          key="in_storage_at"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('弃件时间')"
+          prop="invalid_at"
+          key="invalid_at"
+          v-if="activeName === '3'"
+        ></el-table-column>
+        <el-table-column :label="$t('提交时间')" prop="created_at" key="created_at">
+        </el-table-column>
+        <el-table-column :label="$t('操作')" fixed="right" key="operator">
+          <template slot-scope="scope">
+            <el-dropdown size="medium">
+              <el-button type="text" size="mini">
+                {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="storage(scope.row.id)">
+                  <!-- 入库 -->
+                  <span v-if="activeName === '1' || scope.row.status === 1">{{ $t('入库') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="goExpress(scope.row.express_num)">
+                  <span
+                    v-if="['1', '2'].includes(activeName) && [1, 2].includes(scope.row.status)"
+                    >{{ $t('单号追踪') }}</span
+                  >
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="returnWarehouse(scope.row.id)">
+                  <span v-if="activeName === '2'">{{ $t('退回未入库') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="onLogs(scope.row.express_num)">
+                  <span
+                    v-if="
+                      ['2', '3', '4', '5'].includes(activeName) &&
+                      [2, 3, 4, 5, 6].includes(scope.row.status)
+                    "
+                    >{{ $t('入库日志') }}</span
+                  >
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="oderDetails(scope.row.id)">
+                  <span v-if="['3', '4', '5', '6'].includes(activeName)">{{ $t('详情') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="editWarehoused(scope.row.id)">
+                  <span v-if="activeName === '2' || scope.row.status === 2">{{ $t('编辑') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="fastClosing(scope.row.user_id)">
+                  <span v-if="activeName === '2'">{{ $t('快速合箱') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="invalidLog(scope.row.id)">
+                  <span v-if="activeName === '6'">{{ $t('日志') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="getLabel(scope.row.id)">
+                  <span size="small" v-if="activeName === '2' || scope.row.status === 2">{{
+                    $t('打印标签')
+                  }}</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
+      <nle-pagination
+        style="margin-top: 5px"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+      ></nle-pagination>
+    </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
-      <div class="dialogSty">
+      <div class="dialog-sty">
         <iframe class="iframe" :src="urlHtml"></iframe>
       </div>
       <div slot="footer">
@@ -376,7 +335,7 @@
       </div>
     </el-dialog>
     <!-- 筛选 -->
-    <el-dialog :title="$t('筛选')" :visible.sync="dialogFilter" width="40%" @close="clearFilter">
+    <el-dialog :title="$t('筛选')" :visible.sync="dialogFilter" width="40%">
       <div class="excel-date">
         <el-form ref="form" :model="filterForm">
           <el-form-item :label="$t('价格区间') + localization.currency_unit">
@@ -405,13 +364,15 @@
 </template>
 
 <script>
-import { SearchGroup } from '@/components/searchs'
+// import { SearchGroup } from '@/components/searchs'
+import OrderListSearch from './components/orderListSearch'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
-    SearchGroup,
+    // SearchGroup,
+    OrderListSearch,
     NlePagination
   },
   name: 'orderlist',
@@ -445,8 +406,24 @@ export default {
       filterForm: {
         start: '',
         end: ''
+      },
+      hasFilterCondition: false,
+      searchFieldData: {
+        begin_date: '',
+        end_date: '',
+        date_type: '',
+        date: [],
+        value_type: '',
+        value_begin: '',
+        value_end: '',
+        keyword: ''
       }
     }
+  },
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
   },
   methods: {
     // 获取订单统计数据
@@ -469,10 +446,6 @@ export default {
     goFilter() {
       this.dialogFilter = true
     },
-    clearFilter() {
-      // this.filterForm.start = ''
-      // this.filterForm.end = ''
-    },
     // 筛选
     createPrice() {
       if (!this.filterForm.start) {
@@ -487,11 +460,30 @@ export default {
     goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
-      this.handleQueryChange('page', this.page_params.page)
-      this.handleQueryChange('size', this.page_params.size)
-      this.handleQueryChange('keyword', this.page_params.keyword)
+      // this.handleQueryChange('page', this.page_params.page)
+      // this.handleQueryChange('size', this.page_params.size)
+      // this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
       this.getCounts()
+    },
+    computedParams() {
+      let params = {
+        page: this.page_params.page,
+        size: this.page_params.size,
+        status: this.activeName,
+        keyword: this.searchFieldData.keyword,
+        is_warning: this.is_warning === true ? 1 : ''
+      }
+      if (this.hasFilterCondition) {
+        const searchData = this.searchFieldData
+        params = {
+          ...params,
+          ...searchData,
+          begin_date: searchData.date[0],
+          end_date: searchData.date[1]
+        }
+      }
+      return params
     },
     getList() {
       if (this.activeName === '6') {
@@ -500,44 +492,51 @@ export default {
       console.log(this.is_warning, '我没有执行下一步')
       this.tableLoading = true
       this.oderData = []
-      let params = {
-        page: this.page_params.page,
-        size: this.page_params.size,
-        warehouse: this.agent_name,
-        status: this.status,
-        value_start: this.filterForm.start,
-        value_end: this.filterForm.end,
-        is_warning: this.is_warning === true ? 1 : ''
-      }
-      this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      // 已入库
-      if (this.activeName === '2') {
-        // 提交时间
-        this.begin_date && (params.begin_date = this.begin_date)
-        this.end_date && (params.end_date = this.end_date)
-        // 称重时间
-        this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
-        this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
-      } else {
-        // 未入库
-        this.begin_date && (params.begin_date = this.begin_date)
-        this.end_date && (params.end_date = this.end_date)
-      }
-      this.$request.getWarehouse(params).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.oderData = res.data
-          this.localization = res.localization
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      const params = this.computedParams()
+      // let params = {
+      //   page: this.page_params.page,
+      //   size: this.page_params.size,
+      //   warehouse: this.agent_name,
+      //   status: this.activeName,
+      //   value_start: this.filterForm.start,
+      //   value_end: this.filterForm.end,
+      //   is_warning: this.is_warning === true ? 1 : ''
+      // }
+      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // // 已入库
+      // if (this.activeName === '2') {
+      //   // 提交时间
+      //   this.begin_date && (params.begin_date = this.begin_date)
+      //   this.end_date && (params.end_date = this.end_date)
+      //   // 称重时间
+      //   this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
+      //   this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
+      // } else {
+      //   // 未入库
+      //   this.begin_date && (params.begin_date = this.begin_date)
+      //   this.end_date && (params.end_date = this.end_date)
+      // }
+      this.$request
+        .getWarehouse(params)
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.oderData = res.data
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+        .catch(() => (this.tableLoading = false))
     },
     importOrder() {
       this.$router.push({ name: 'ImportOrder' })
@@ -545,31 +544,35 @@ export default {
     getDiscard() {
       this.tableLoading = true
       this.oderData = []
-      let params = {
-        page: this.page_params.page,
-        size: this.page_params.size,
-        status: this.status,
-        warehouse: this.agent_name,
-        value_start: this.filterForm.start,
-        value_end: this.filterForm.end
-      }
-      this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      this.begin_date && (params.begin_date = this.begin_date)
-      this.end_date && (params.end_date = this.end_date)
-      this.$request.getWarehouse(params).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.oderData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      const params = this.computedParams()
+      // let params = {
+      //   page: this.page_params.page,
+      //   size: this.page_params.size,
+      //   status: this.status,
+      //   warehouse: this.agent_name,
+      //   value_start: this.filterForm.start,
+      //   value_end: this.filterForm.end
+      // }
+      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // this.begin_date && (params.begin_date = this.begin_date)
+      // this.end_date && (params.end_date = this.end_date)
+      this.$request
+        .getWarehouse(params)
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.oderData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+        .catch(() => (this.tableLoading = false))
     },
     storage(id) {
       this.$router.push({ name: 'editStorage', params: { id: id } })
@@ -585,7 +588,6 @@ export default {
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
-      console.log(this.deleteNum, 'this.deleteNum')
     },
     goExpress(expressNum) {
       console.log(expressNum)
@@ -601,7 +603,6 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteNum, '2222')
         this.$request
           .sendingNotify({
             ids: this.deleteNum,
@@ -614,6 +615,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
+              this.$refs.table.clearSelection()
               this.getList()
             } else {
               this.$message({
@@ -650,7 +652,6 @@ export default {
     },
     // 删除
     deleteData() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
@@ -659,7 +660,6 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteNum, '2222')
         this.$request
           .deletePackages({
             DELETE: this.deleteNum
@@ -671,6 +671,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
+              this.$refs.table.clearSelection()
               this.getList()
               this.getCounts()
             } else {
@@ -688,11 +689,11 @@ export default {
     },
     // 批量弃件
     discardPackage() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
       dialog({ type: 'discardList', deleteNum: this.deleteNum }, () => {
+        this.$refs.table.clearSelection()
         this.getList()
       })
     },
@@ -705,7 +706,6 @@ export default {
     },
     // 彻底删除
     deleteDiscard() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
@@ -714,7 +714,6 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteNum, '2222')
         this.$request
           .deleteDiscard({
             ids: this.deleteNum
@@ -726,6 +725,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
+              this.$refs.table.clearSelection()
               this.getList()
             } else {
               this.$message({
@@ -738,7 +738,6 @@ export default {
     },
     // 恢复被弃件的包裹
     restore() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
@@ -747,7 +746,6 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteNum, '2222')
         this.$request
           .restoreDiscard({
             ids: this.deleteNum
@@ -759,6 +757,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
+              this.$refs.table.clearSelection()
               this.getList()
             } else {
               this.$message({
@@ -776,13 +775,11 @@ export default {
       // this.getCounts()
     },
     onWarning() {
-      console.log(this.is_warning, 'his.is_warning')
       const warning = this.is_warning === 'true' ? 1 : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('is_warning', warning)
       this.getList()
       // this.getCounts()
-      // console.log(Number(this.is_warning), 'is_warning')
     },
     // 打印标签
     getLabel(id) {
@@ -828,29 +825,30 @@ export default {
       })
     },
     // 导出清单
-    uploadList(val) {
-      let params = {
-        status: val,
-        warehouse: this.agent_name,
-        // status: this.status,
-        value_start: this.filterForm.start,
-        value_end: this.filterForm.end,
-        is_warning: this.is_warning === true ? 1 : ''
-      }
-      this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      // 已入库
-      if (this.activeName === '2') {
-        // 提交时间
-        this.begin_date && (params.begin_date = this.begin_date)
-        this.end_date && (params.end_date = this.end_date)
-        // 称重时间
-        this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
-        this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
-      } else {
-        // 未入库
-        this.begin_date && (params.begin_date = this.begin_date)
-        this.end_date && (params.end_date = this.end_date)
-      }
+    uploadList() {
+      const params = this.computedParams()
+      // let params = {
+      //   status: val,
+      //   warehouse: this.agent_name,
+      //   // status: this.status,
+      //   value_start: this.filterForm.start,
+      //   value_end: this.filterForm.end,
+      //   is_warning: this.is_warning === true ? 1 : ''
+      // }
+      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // // 已入库
+      // if (this.activeName === '2') {
+      //   // 提交时间
+      //   this.begin_date && (params.begin_date = this.begin_date)
+      //   this.end_date && (params.end_date = this.end_date)
+      //   // 称重时间
+      //   this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
+      //   this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
+      // } else {
+      //   // 未入库
+      //   this.begin_date && (params.begin_date = this.begin_date)
+      //   this.end_date && (params.end_date = this.end_date)
+      // }
       this.$request.uploadPackage(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
@@ -905,6 +903,16 @@ export default {
     // 详情
     oderDetails(id) {
       this.$router.push({ name: 'oderDetails', params: { id: id } })
+    },
+    onTabChange() {
+      this.page_params.page = 1
+      // this.timeList = []
+      // this.begin_date = ''
+      // this.end_date = ''
+      // this.in_storage_end_date = ''
+      // this.in_storage_end_date = ''
+      // this.storageList = []
+      this.getList()
     }
   },
   created() {
@@ -914,99 +922,117 @@ export default {
   },
   watch: {
     // 监听tab组件参数
-    activeName(newValue) {
-      switch (newValue) {
-        case '0': // 全部
-          this.page_params.page = 1
-          this.status = 0
-          this.timeList = []
-          this.begin_date = ''
-          this.end_date = ''
-          this.in_storage_end_date = ''
-          this.in_storage_end_date = ''
-          this.storageList = []
-          this.getList()
-          break
-        case '1': // 未入库
-          this.page_params.page = 1
-          this.status = 1
-          this.timeList = []
-          this.begin_date = ''
-          this.end_date = ''
-          this.in_storage_end_date = ''
-          this.in_storage_end_date = ''
-          this.storageList = []
-          this.getList()
-          break
-        case '2': // 已入库
-          this.page_params.page = 1
-          this.status = 2
-          this.timeList = []
-          this.storageList = []
-          this.begin_date = ''
-          this.end_date = ''
-          this.in_storage_end_date = ''
-          this.in_storage_end_date = ''
-          this.getList()
-          break
-        case '3': // 已集包
-          this.page_params.page = 1
-          this.status = 3
-          this.timeList = []
-          this.begin_date = ''
-          this.end_date = ''
-          this.in_storage_end_date = ''
-          this.in_storage_end_date = ''
-          this.storageList = []
-          this.getList()
-          break
-        case '4': // 已发货
-          this.page_params.page = 1
-          this.status = 4
-          this.timeList = []
-          this.begin_date = ''
-          this.end_date = ''
-          this.in_storage_end_date = ''
-          this.in_storage_end_date = ''
-          this.storageList = []
-          this.getList()
-          break
-        case '5': // 已收货
-          this.page_params.page = 1
-          this.status = 5
-          this.timeList = []
-          this.begin_date = ''
-          this.end_date = ''
-          this.in_storage_end_date = ''
-          this.in_storage_end_date = ''
-          this.storageList = []
-          this.getList()
-          break
-        case '6':
-          this.page_params.page = 1
-          this.status = 19
-          // this.timeList = []
-          // this.storageList = []
-          // this.begin_date = ''
-          // this.end_date = ''
-          // this.in_storage_end_date = ''
-          // this.in_storage_end_date = ''
-          this.getList()
-      }
-      // this.getList()
-    }
+    // activeName(newValue) {
+    //   switch (newValue) {
+    //     case '0': // 全部
+    //       this.page_params.page = 1
+    //       this.status = 0
+    //       this.timeList = []
+    //       this.begin_date = ''
+    //       this.end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.storageList = []
+    //       this.getList()
+    //       break
+    //     case '1': // 未入库
+    //       this.page_params.page = 1
+    //       this.status = 1
+    //       this.timeList = []
+    //       this.begin_date = ''
+    //       this.end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.storageList = []
+    //       this.getList()
+    //       break
+    //     case '2': // 已入库
+    //       this.page_params.page = 1
+    //       this.status = 2
+    //       this.timeList = []
+    //       this.storageList = []
+    //       this.begin_date = ''
+    //       this.end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.getList()
+    //       break
+    //     case '3': // 已集包
+    //       this.page_params.page = 1
+    //       this.status = 3
+    //       this.timeList = []
+    //       this.begin_date = ''
+    //       this.end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.storageList = []
+    //       this.getList()
+    //       break
+    //     case '4': // 已发货
+    //       this.page_params.page = 1
+    //       this.status = 4
+    //       this.timeList = []
+    //       this.begin_date = ''
+    //       this.end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.storageList = []
+    //       this.getList()
+    //       break
+    //     case '5': // 已收货
+    //       this.page_params.page = 1
+    //       this.status = 5
+    //       this.timeList = []
+    //       this.begin_date = ''
+    //       this.end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.in_storage_end_date = ''
+    //       this.storageList = []
+    //       this.getList()
+    //       break
+    //     case '6':
+    //       this.page_params.page = 1
+    //       this.status = 19
+    //       // this.timeList = []
+    //       // this.storageList = []
+    //       // this.begin_date = ''
+    //       // this.end_date = ''
+    //       // this.in_storage_end_date = ''
+    //       // this.in_storage_end_date = ''
+    //       this.getList()
+    //   }
+    // }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .order-list-container {
-  .tabLength {
-    // width: 720px !important;
-    display: inline-block;
+  .header-range {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .header-btns {
+      margin-bottom: 10px;
+    }
+    .header-search {
+      display: flex;
+      margin: 0 0 0 auto;
+      .header-keyword {
+        max-width: 300px;
+      }
+      .filter {
+        margin: 0 20px;
+      }
+    }
+  }
+  .order-data-list {
+    background-color: inherit;
+  }
+  .tab-length {
+    width: 870px !important;
   }
   .agentRight {
-    // display: inline-block;
     float: right;
   }
   .changeTime {
@@ -1030,7 +1056,7 @@ export default {
   .operating-btn {
     margin-bottom: 5px;
   }
-  .dialogSty {
+  .dialog-sty {
     margin-left: 30px;
   }
   .iframe {
@@ -1041,13 +1067,9 @@ export default {
   .chooseStatus {
     width: 150px;
     display: inline-block;
-    .el-select {
-      // width: 100%;
-    }
   }
   .import-list {
     display: inline-block;
-    margin-left: 10px;
   }
   .excel-date {
     margin-top: 20px;
@@ -1057,10 +1079,6 @@ export default {
   }
   .warning-sty {
     color: red;
-  }
-  .bottom-sty {
-    margin-top: 20px;
-    margin-bottom: 10px;
   }
 }
 </style>

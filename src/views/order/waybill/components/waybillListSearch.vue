@@ -175,30 +175,6 @@ export default {
         { value: 1, name: '自提' },
         { value: 2, name: '非自提' }
       ],
-      countryOption: [
-        {
-          value: 'usa',
-          label: '美国'
-        },
-        {
-          value: 'can',
-          label: '加拿大'
-        },
-        {
-          value: 'hk',
-          label: '香港',
-          children: [
-            {
-              value: 'jiulong',
-              label: '九龙'
-            },
-            {
-              value: 'xinjie',
-              label: '新界'
-            }
-          ]
-        }
-      ],
       paymentStatusData: [
         {
           id: 1,

@@ -12,7 +12,7 @@
     <waybill-list-search
       v-show="hasFilterCondition"
       :searchFieldData="searchFieldData"
-      v-on:submit="searchSubmit"
+      v-on:submit="goMatch"
     ></waybill-list-search>
     <div class="header-range">
       <div
@@ -80,7 +80,7 @@
       <div class="header-search">
         <el-input
           class="header-keyword"
-          v-model="searchKeyword"
+          v-model="searchFieldData.keyword"
           clearable
           :placeholder="$t('请输入')"
           size="medium"
@@ -101,24 +101,24 @@
       </div>
     </div>
 
-    <div style="height: calc(100vh - 300px)">
+    <div style="height: calc(100vh - 270px)">
       <el-table
         row-key="id"
-        class="data-list"
+        class="waybill-data-list"
+        current-row-key="id"
         border
         stripe
         v-loading="tableLoading"
         ref="table"
-        v-if="oderData.length"
         highlight-current-row
         :data="oderData"
         @selection-change="onSelectChange"
-        height="calc(100vh - 300px)"
         size="mini"
+        height="calc(100vh - 270px)"
         :cell-style="{ padding: '0' }"
       >
         <!-- 二级分类列表 -->
-        <el-table-column class-name="expand-class" width="1" type="expand">
+        <el-table-column key="expand" class-name="expand-class" width="1" type="expand">
           <template slot-scope="props">
             <el-table :data="props.row.secondData" class="expand-table">
               <!-- 客户ID -->
@@ -368,19 +368,19 @@
           </template>
         </el-table-column>
         <el-table-column
-          type="selection"
           width="55"
           align="center"
-          v-if="['1', '2', '3', '4'].includes(activeName)"
+          :type="['1', '2', '3', '4'].includes(activeName) ? 'selection' : 'index'"
+          :key="['1', '2', '3', '4'].includes(activeName) ? 'selection' : 'index'"
         ></el-table-column>
-        <el-table-column v-else type="index" width="50"></el-table-column>
-        <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+        <el-table-column key="user_id" :label="$t('客户ID')" prop="user_id"></el-table-column>
         <el-table-column
           :label="$t('用户名')"
           prop="user_name"
+          key="user_name"
           show-overflow-tooltip
         ></el-table-column>
-        <el-table-column :label="$t('订单号')" width="180">
+        <el-table-column key="order_sn" :label="$t('订单号')" width="180">
           <template slot-scope="scope">
             <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i>
             <el-button @click="details(scope.row.id, activeName)" type="text">{{
@@ -388,7 +388,7 @@
             }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('审核状态')" v-if="activeName === '2'">
+        <el-table-column key="status" :label="$t('审核状态')" v-if="activeName === '2'">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
             <router-link
@@ -401,7 +401,80 @@
           </template>
         </el-table-column>
         <el-table-column
+          :label="$t('线路名称')"
+          key="express_line.cn_name"
+          prop="express_line.cn_name"
+          width="150"
+          show-overflow-tooltip
+        >
+        </el-table-column>
+        <el-table-column
+          :label="$t('收货人')"
+          prop="address.receiver_name"
+          key="address.receiver_name"
+        ></el-table-column>
+        <el-table-column
+          width="115"
+          :label="$t('收货国家/地区')"
+          prop="address.country_name"
+          key="address.country_name"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('包裹数')"
+          prop="package_count"
+          key="package_count"
+        ></el-table-column>
+        <el-table-column
+          width="98"
+          :label="
+            activeName === '1'
+              ? $t('预计重量') + localization.weight_unit
+              : $t('实际重量') + localization.weight_unit
+          "
+          :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"
+          :key="activeName === '1' ? 'except_weight' : 'actual_weight'"
+        ></el-table-column>
+        <!-- 详见产品图 -->
+        <el-table-column
+          width="88"
+          :label="
+            activeName === '1'
+              ? $t('预计费用') + localization.currency_unit
+              : $t('实际费用') + localization.currency_unit
+          "
+          :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"
+          :key="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"
+        ></el-table-column>
+        <el-table-column
+          width="88"
+          :label="$t('申报价值') + localization.currency_unit"
+          prop="declare_value"
+          key="declare_value"
+        ></el-table-column>
+        <el-table-column :label="$t('所属代理')" key="agent" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.agent }}</span>
+            <span>({{ scope.row.agent_commission }}%)</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('支付方式')"
+          key="payment_type_name"
+          v-if="['3', '4', '5'].includes(activeName)"
+        >
+          <template slot-scope="scope">
+            <div class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">
+              {{ scope.row.payment_type_name }}
+              <p v-if="scope.row.on_delivery_status === 2">({{ $t('已付款') }})</p>
+            </div>
+            <div v-else>
+              {{ scope.row.payment_type_name }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
           :label="$t('头程物流信息')"
+          key="logistics_company"
           v-if="['3', '4', '5', '6'].includes(activeName)"
           show-overflow-tooltip
         >
@@ -416,6 +489,7 @@
         <!-- 转运快递单号 -->
         <el-table-column
           :label="$t('二程物流信息')"
+          key="logistics_sn"
           v-if="['3', '4', '5', '6'].includes(activeName)"
           show-overflow-tooltip
         >
@@ -424,97 +498,46 @@
           </template>
         </el-table-column>
         <el-table-column
-          :label="$t('线路名称')"
-          prop="express_line.cn_name"
-          width="150"
-          show-overflow-tooltip
-        >
-        </el-table-column>
-        <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
-        <el-table-column
-          width="115"
-          :label="$t('收货国家/地区')"
-          prop="address.country_name"
-        ></el-table-column>
-        <el-table-column :label="$t('包裹数')" prop="package_count"></el-table-column>
-        <el-table-column
-          width="98"
-          :label="
-            activeName === '1'
-              ? $t('预计重量') + localization.weight_unit
-              : $t('实际重量') + localization.weight_unit
-          "
-          :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"
-        ></el-table-column>
-        <!-- 详见产品图 -->
-        <el-table-column
-          width="88"
-          :label="
-            activeName === '1'
-              ? $t('预计费用') + localization.currency_unit
-              : $t('实际费用') + localization.currency_unit
-          "
-          :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"
-        ></el-table-column>
-        <el-table-column
-          width="88"
-          :label="$t('申报价值') + localization.currency_unit"
-          prop="declare_value"
-        ></el-table-column>
-        <el-table-column :label="$t('支付方式')" v-if="['3', '4', '5'].includes(activeName)">
-          <template slot-scope="scope">
-            <div class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">
-              {{ scope.row.payment_type_name }}
-              <p v-if="scope.row.on_delivery_status === 2">({{ $t('已付款') }})</p>
-            </div>
-            <div v-else>
-              {{ scope.row.payment_type_name }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
           :label="$t('抵用券金额') + localization.currency_unit"
           v-if="['3', '4', '5'].includes(activeName)"
           prop="coupon_amount"
+          key="coupon_amount"
         >
-        </el-table-column>
-        <el-table-column
-          :label="$t('所属代理')"
-          prop="agent + agent_commission"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.agent }}</span>
-            <span>({{ scope.row.agent_commission }}%)</span>
-          </template>
         </el-table-column>
         <el-table-column
           width="155"
           :label="$t('提交时间')"
           prop="updated_at"
+          key="updated_at"
           v-if="['1', '2', '3', '4'].includes(activeName)"
         ></el-table-column>
         <el-table-column
           width="155"
           :label="$t('拣货时间')"
           prop="packed_at"
+          key="packed_at"
           v-if="['2', '3'].includes(activeName)"
         ></el-table-column>
         <el-table-column
           width="155"
           :label="$t('签收时间')"
           prop="signed_at"
+          key="signed_at"
           v-if="activeName === '5'"
         >
         </el-table-column>
-        <el-table-column :label="$t('所属发货单')" v-if="['3', '4', '5'].includes(activeName)">
+        <el-table-column
+          :label="$t('所属发货单')"
+          key="shipment_sn"
+          v-if="['3', '4', '5'].includes(activeName)"
+        >
           <template slot-scope="scope">
             <span @click="goShip(scope.row.shipment_sn)" class="choose-order">{{
               scope.row.shipment_sn
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="activeName !== '0'" :label="$t('操作')" fixed="right">
+        <el-table-column v-if="activeName !== '0'" key="operator" :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-dropdown size="medium">
               <el-button type="text" size="mini">
@@ -623,8 +646,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="noDate" v-if="!oderData.length">{{ $t('暂无数据') }}</div>
-      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      <nle-pagination
+        style="margin-top: 5px"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+      ></nle-pagination>
     </div>
 
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
@@ -982,27 +1008,39 @@ export default {
         value_end: '',
         receive_type: '',
         countryArr: [],
-        country_id: ''
+        country_id: '',
+        keyword: ''
       },
-      searchKeyword: '',
       hasFilterCondition: false
     }
   },
-  activated() {},
+  activated() {
+    this.initQuery()
+  },
   created() {
     this.getOrderFieldList()
     this.getCounts()
-    if (this.$route.query.activeName) {
-      this.activeName = this.$route.query.activeName
-    }
-    if (this.$route.query.order_sn) {
-      this.page_params.keyword = this.$route.query.order_sn
-    }
+    this.initQuery()
   },
   mounted() {
     this.getList()
   },
   methods: {
+    initQuery() {
+      if (this.$route.query.activeName) {
+        this.activeName = this.$route.query.activeName
+      }
+      if (this.$route.query.order_sn) {
+        this.searchFieldData.keyword = this.$route.query.order_sn
+        console.log(this.$route, 'route')
+        console.log(this.$router, 'router')
+        this.$router.replace({
+          path: this.$route.path,
+          query: { ...this.$route.query, order_sn: '' }
+        })
+        this.getList()
+      }
+    },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {
         this.orderFieldList = res.data
@@ -1038,31 +1076,37 @@ export default {
       this.tableLoading = true
       this.oderData = []
       const params = this.computedParams()
-      this.$request.getOrder(params).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          // 待发货列表的转运快递单号添加
-          res.data.forEach(item => {
-            item.disabled = true
-            item.copySN = item.logistics_sn
-          })
-          this.oderData = res.data.map(item => {
-            return {
-              ...item,
-              secondData: []
-            }
-          })
-          this.localization = res.localization
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .getOrder(params)
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            // 待发货列表的转运快递单号添加
+            res.data.forEach(item => {
+              item.disabled = true
+              item.copySN = item.logistics_sn
+            })
+            this.oderData = res.data.map(item => {
+              return {
+                ...item,
+                secondData: []
+              }
+            })
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+        .catch(() => (this.tableLoading = false))
     },
     // 导出清单
     uploadList() {
@@ -1073,7 +1117,7 @@ export default {
         page: this.page_params.page,
         size: this.page_params.size,
         status: this.activeName,
-        keyword: this.searchKeyword
+        keyword: this.searchFieldData.keyword
       }
       if (this.hasFilterCondition) {
         const searchData = this.searchFieldData
@@ -1911,7 +1955,7 @@ export default {
     }
   }
 
-  .data-list {
+  .waybill-data-list {
     background-color: inherit;
   }
   .tab-length {
