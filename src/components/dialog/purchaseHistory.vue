@@ -9,27 +9,39 @@
       </el-table-column>
       <!-- 日期 -->
       <el-table-column
-        prop="username"
+        prop="paid_at"
         :label="$t('日期')">
       </el-table-column>
       <!-- 中国大陆短信 -->
       <el-table-column
-        prop="name"
+        v-if="state === 'sms'"
+        prop="sms"
+        :label="$t('中国大陆短信')">
+      </el-table-column>
+      <el-table-column
+        v-else
+        prop="tracking_100"
+        :label="$t('快递100')">
+      </el-table-column>
+      <el-table-column
+        v-if="state === 'sms'"
+        prop="sms_intl"
         :label="$t('中国大陆短信')">
       </el-table-column>
       <!-- 国际短信 -->
-        <el-table-column
-        prop="email"
-        :label="$t('国际短信')">
+      <el-table-column
+        v-else
+        prop="tracking_51"
+        :label="$t('51Track')">
       </el-table-column>
       <!-- 支付价格 -->
         <el-table-column
-        prop="phone"
-        :label="$t('支付价格')">
+        prop="amount"
+        :label="$t('支付价格') + `${localization.currency_unit ? localization.currency_unit : ''}`">
       </el-table-column>
       <!-- 支付方式 -->
         <el-table-column
-        prop="phone"
+        prop="payment_method"
         :label="$t('支付方式')">
       </el-table-column>
     </el-table>
@@ -54,22 +66,25 @@ export default {
     return {
       tableData: [],
       pointList: [],
-      state: ''
+      state: '',
+      localization: {}
     }
   },
   methods: {
     getList () {
-      this.$request.getPickPoint(this.id, {
+      let state = this.state === 'sms' ? 'sms' : 'tracking'
+      this.$request.getHistory(state, {
         page: this.page_params.page,
         size: this.page_params.size
       }).then(res => {
-        this.tableData = res.data.map(item => ({ ...item, stations: item.stations.map(item => item.id) }))
-        this.page_params.page = res.meta.current_page
-        this.page_params.total = res.meta.total
+        this.tableData = res.data
+        // this.page_params.total = res.meta.total
+        this.localization = res.localization
+        console.log(this.localization, 'this.localization')
       })
     },
     init () {
-      // this.getList()
+      this.getList()
     },
     clear () {
       this.page_params.page = 1

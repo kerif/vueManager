@@ -127,6 +127,10 @@
               <el-dropdown-item class="item-sty" @click.native="goInvoice(scope.row.id)">
                 <span v-if="scope.row.status === 0">{{$t('发货')}}</span>
               </el-dropdown-item>
+              <!-- 编辑发货单 -->
+              <el-dropdown-item class="item-sty" @click.native="editInvoice(scope.row.id)">
+                <span v-if="scope.row.status === 0">{{$t('编辑发货单')}}</span>
+              </el-dropdown-item>
               <!-- 详情 -->
               <el-dropdown-item class="item-sty" @click.native="goDetails(scope.row.id, scope.row.status)">
                 <span>{{$t('详情')}}</span>
@@ -692,8 +696,15 @@ export default {
       console.log(status, '我是传过去的ID')
       this.$router.push({ name: 'wayBillList', query: { order_sn: orderSn, activeName: status.toString() } })
     },
+    // 创建发货单
     updateInvoice () {
-      dialog({ type: 'invoice' }, () => {
+      dialog({ type: 'invoice', state: 'add' }, () => {
+        this.getList()
+      })
+    },
+    // 编辑发货单
+    editInvoice (id) {
+      dialog({ type: 'invoice', state: 'edit', id: id }, () => {
         this.getList()
       })
     },

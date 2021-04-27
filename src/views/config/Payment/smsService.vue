@@ -110,11 +110,35 @@
       :title="$t('详情')"
       :visible.sync="dialogVisible"
       width="55%">
+      <div class="changeTime">
+        <!-- 提交时间 -->
+          <el-date-picker
+          class="timeStyle"
+          v-model="timeList"
+          type="daterange"
+          @change="onTime"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')">
+        </el-date-picker>
+      </div>
       <el-table :data="templateData" border>
-        <el-table-column :label="$t('日期')"></el-table-column>
-        <el-table-column :label="$t('使用次数（中国大陆）')"></el-table-column>
-        <el-table-column :label="$t('使用次数（国际）')"></el-table-column>
-        <el-table-column :label="$t('剩余次数')"></el-table-column>
+        <el-table-column :label="$t('发送时间')" prop="created_at"></el-table-column>
+        <el-table-column :label="$t('短信类型')" prop="sub_type_name"></el-table-column>
+        <el-table-column :label="$t('请求客户')">
+          <template slot-scope="scope">
+            <span>{{scope.row.user_id}}--{{scope.row.user_name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('请求号码')" prop="target"></el-table-column>
+        <el-table-column :label="$t('请求类型')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type === 1">{{$t('国内')}}</span>
+            <span v-if="scope.row.type === 2">{{$t('国际')}}</span>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="dialog-bottom">
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -146,14 +170,34 @@ export default {
       dialogVisible: false,
       templateData: [],
       smsData: [],
-      customerData: []
+      customerData: [],
+      begin_date: '',
+      end_date: '',
+      timeList: []
     }
   },
   created () {
-    this.getList()
+    this.getService()
+    this.timeList = this.timeDefault
+  },
+  computed: {
+    // 默认时间
+    timeDefault () {
+      let date = new Date()
+      // 通过时间戳计算
+      let defalutStartTime = date.getTime() - 7 * 24 * 3600 * 1000 // 转化为时间戳
+      let defalutEndTime = date.getTime()
+      let startDateNs = new Date(defalutStartTime)
+      let endDateNs = new Date(defalutEndTime)
+      // 月，日 不够10补0
+      defalutStartTime = startDateNs.getFullYear() + '-' + ((startDateNs.getMonth() + 1) >= 10 ? (startDateNs.getMonth() + 1) : '0' + (startDateNs.getMonth() + 1)) + '-' + (startDateNs.getDate() >= 10 ? startDateNs.getDate() : '0' + startDateNs.getDate())
+      defalutEndTime = endDateNs.getFullYear() + '-' + ((endDateNs.getMonth() + 1) >= 10 ? (endDateNs.getMonth() + 1) : '0' + (endDateNs.getMonth() + 1)) + '-' + (endDateNs.getDate() >= 10 ? endDateNs.getDate() : '0' + endDateNs.getDate())
+      return [defalutStartTime, defalutEndTime]
+    }
   },
   methods: {
-    getList () {
+    // 获取短信服务数据
+    getService () {
       this.$request.getSms().then(res => {
         this.ruleForm = res.data
         this.changeType()
@@ -208,6 +252,35 @@ export default {
     // 详情
     templateDetails () {
       this.dialogVisible = true
+      this.getList()
+      // smsRecord
+    },
+    // 获取详情
+    getList () {
+      this.begin_date = this.timeList[0]
+      this.end_date = this.timeList[1]
+      let params = {
+        page: this.page_params.page,
+        size: this.page_params.size
+      }
+      this.begin_date && (params.begin_date = this.begin_date)
+      this.end_date && (params.end_date = this.end_date)
+      this.$request.smsRecord(params).then(res => {
+        if (res.ret) {
+          this.templateData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        }
+      })
+    },
+    // 提交时间
+    onTime (val) {
+      this.begin_date = val ? val[0] : ''
+      console.log(this.begin_date, 'begin_date')
+      this.end_date = val ? val[1] : ''
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
+      this.getList()
     },
     // 保存
     saveTemplate () {
@@ -347,6 +420,9 @@ export default {
   }
   .dialog-bottom {
     margin-top: 20px;
+  }
+  .changeTime {
+    margin-bottom: 20px;
   }
 }
 </style>

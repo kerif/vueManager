@@ -476,6 +476,14 @@ exports.commissionDelete = (id) => {
 exports.saveShip = (params) => {
   return $form.post(`shipments`, params)
 }
+// 获取 单条发货单数据
+exports.getAloneShipDetails = (id) => {
+  return $form.get(`shipments/update-details/${id}`)
+}
+// 更新 单条发货单数据
+exports.editShip = (id, params) => {
+  return $form.put(`shipments/${id}`, params)
+}
 exports.getShipments = (id) => {
   return $form.put(`shipments/${id}/ship`)
 }
@@ -1196,6 +1204,18 @@ exports.getCurrency = () => {
 // 更多配置 获取短信服务数据
 exports.getSms = () => {
   return $form.get('api-services/sms')
+}
+// 更多配置 获取购买记录数据
+exports.getHistory = (id, params) => {
+  return $form.get(`api-services/${id}/orders`, { params })
+}
+// 更多配置 短信服务 获取详情
+exports.smsRecord = (params) => {
+  return $form.get(`api-services/sms/records`, { params })
+}
+// 更多配置 API与服务
+exports.moreService = () => {
+  return $form.get('api-services')
 }
 // 更多配置 获取短信模版
 exports.getSmsSystem = () => {

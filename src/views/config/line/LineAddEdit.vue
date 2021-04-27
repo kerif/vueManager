@@ -209,6 +209,18 @@
             </el-table>
           </el-col>
         </el-form-item>
+        <el-form-item>
+          <el-row :gutter="10">
+            <el-col :span="5">
+              <div>{{$t('*最小重量') + this.localization.weight_unit}}</div>
+              <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+            <el-col :span="5">
+              <div>{{$t('*最大重量') + this.localization.weight_unit}}</div>
+              <el-input v-model="form.max_weight" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
       </div>
       <!-- 首重 + 阶梯价格模式 -->
       <div v-if="form.mode === 3">

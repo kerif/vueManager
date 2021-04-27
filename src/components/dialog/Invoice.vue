@@ -1,9 +1,9 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('创建发货单')" class="dialog-invoice" width="35%"
+  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('创建发货单') : $t('编辑发货单')" class="dialog-invoice" width="35%"
   @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
     label-position="top">
-        <!-- 员工组中文名 -->
+        <!-- 目的地 -->
             <el-form-item :label="$t('目的地')" prop="country_id">
                 <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择目的地')"
                 filterable>
@@ -58,14 +58,19 @@ export default {
         country_id: [
           { required: true, message: this.$t('请输入目的地'), trigger: 'blur' }
         ]
-      }
+      },
+      id: '',
+      state: ''
     }
   },
-  created () {
-    this.getCountry()
-    this.getWarehouse()
-  },
   methods: {
+    getList () {
+      this.$request.getAloneShipDetails(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm = res.data
+        }
+      })
+    },
     getCountry () {
       this.$request.getCountry().then(res => {
         this.country = res.data
@@ -80,23 +85,43 @@ export default {
     confirm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$request.saveShip(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
+          if (this.state === 'add') { // 新增
+            this.$request.saveShip(this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+          } else { // 编辑
+            this.$request.editShip(this.id, this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+          }
         } else {
           return false
         }
@@ -107,6 +132,15 @@ export default {
       this.ruleForm.warehouse_id = ''
       this.ruleForm.remark = ''
       this.ruleForm.name = ''
+      this.state = ''
+      this.id = ''
+    },
+    init () {
+      this.getCountry()
+      this.getWarehouse()
+      if (this.state === 'edit') {
+        this.getList()
+      }
     }
   }
 }
