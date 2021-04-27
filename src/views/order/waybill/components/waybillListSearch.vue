@@ -14,7 +14,7 @@
               v-for="item in timeOptions"
               :key="item.id"
               :value="item.value"
-              :label="item.name"
+              :label="$t(item.name)"
             >
             </el-option>
           </el-select>
@@ -37,7 +37,7 @@
               v-for="item in priceRangeOptions"
               :key="item.id"
               :value="item.value"
-              :label="item.name"
+              :label="$t(item.name)"
             >
             </el-option>
           </el-select>
@@ -104,7 +104,7 @@
                 v-for="item in receiverOptions"
                 :key="item.id"
                 :value="item.value"
-                :label="item.name"
+                :label="$t(item.name)"
               >
               </el-option>
             </el-select>
@@ -167,7 +167,7 @@ export default {
         { value: 'signed_at', name: '签收时间' }
       ],
       priceRangeOptions: [
-        { value: 'actual_payment_fee', name: '订单提交时间' },
+        { value: 'actual_payment_fee', name: '应付总费用' },
         { value: 'actual_pay', name: '实际支付' },
         { value: 'declare_value', name: '申报价值' }
       ],
