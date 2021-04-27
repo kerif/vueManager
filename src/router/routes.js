@@ -1078,7 +1078,7 @@ export default [
               level: 3,
               group: '配置',
               name: '邮件通知配置',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1098,9 +1098,10 @@ export default [
             component: smsServices,
             id: 606,
             meta: {
-              level: 2,
+              level: 3,
               group: '配置',
-              name: '短信服务'
+              name: '短信服务',
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1109,9 +1110,10 @@ export default [
             component: trackingService,
             id: 606,
             meta: {
-              level: 2,
+              level: 3,
               group: '配置',
-              name: '物流查询服务'
+              name: '物流查询服务',
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1123,7 +1125,7 @@ export default [
               group: '配置',
               level: 3,
               name: '邮件模版的翻译内容',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1135,7 +1137,7 @@ export default [
               group: '配置',
               level: 3,
               name: '商品分类管理的翻译内容',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1147,7 +1149,7 @@ export default [
               level: 3,
               group: '配置',
               name: '风险提示',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1159,7 +1161,7 @@ export default [
               group: '配置',
               level: 3,
               name: '新增邮件模版',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1171,7 +1173,7 @@ export default [
               group: '配置',
               level: 3,
               name: '修改邮件模版',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           }
         ]

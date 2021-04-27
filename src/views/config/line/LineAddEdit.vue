@@ -213,11 +213,7 @@
           <el-row :gutter="10">
             <el-col :span="5">
               <div>{{$t('*最小重量') + this.localization.weight_unit}}</div>
-              <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-            <el-col :span="5">
-              <div>{{$t('*最大重量') + this.localization.weight_unit}}</div>
-              <el-input v-model="form.max_weight" :placeholder="$t('请输入内容')"></el-input>
+              <el-input v-model="form.multi_box_min_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
           </el-row>
         </el-form-item>
@@ -273,6 +269,14 @@
                 </el-table-column>
             </el-table>
           </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-row :gutter="10">
+            <el-col :span="5">
+              <div>{{$t('*最小重量') + this.localization.weight_unit}}</div>
+              <el-input v-model="form.multi_box_min_weight" :placeholder="$t('请输入内容')"></el-input>
+            </el-col>
+          </el-row>
         </el-form-item>
       </div>
       <!-- 包裹重量向上取值 -->
@@ -545,6 +549,7 @@ export default {
         icon: '',
         need_id_card: '',
         weight_rise: '',
+        multi_box_min_weight: '',
         multi_boxes_ceil: '',
         remark: '',
         clearance_code_remark: '',
@@ -623,6 +628,7 @@ export default {
         icon: '',
         need_id_card: '',
         weight_rise: '',
+        multi_box_min_weight: '',
         remark: '',
         clearance_code_remark: '',
         need_clearance_code: 0,

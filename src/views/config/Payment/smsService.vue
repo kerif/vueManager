@@ -22,10 +22,10 @@
             <i class="el-icon-s-order"></i>
             {{$t('详情')}}
           </div>
-          <div class="details-sty" @click="alertSms">
+          <!-- <div class="details-sty" @click="alertSms">
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
-          </div>
+          </div> -->
           <div class="details-sty" @click="purchase">
             <i class="el-icon-s-order"></i>
             {{$t('购买记录')}}

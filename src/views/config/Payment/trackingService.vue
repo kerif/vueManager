@@ -4,24 +4,24 @@
     <el-row :gutter="20">
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="radio" :label="1">{{$t('系统内服物流查询短信')}}</el-radio>
+          <el-radio class="system-sty" v-model="ruleForm.type" :label="2">{{$t('系统内服物流查询短信')}}</el-radio>
           <div class="user-bottom">
             <div class="bottom-left">
               <p>
-              {{$t('大陆短信剩余次数')}}：<span class="count-sty">100000</span>
+              {{$t('快递100查询剩余次数')}}：<span class="count-sty">{{ruleForm.kuaidi100_count}}</span>
               </p>
               <p>
-              {{$t('国际短信剩余次数')}}：<span class="count-sty">0</span>
+              {{$t('51Tracking查询剩余次数')}}：<span class="count-sty">{{ruleForm.tracking_count}}</span>
               </p>
             </div>
             <div class="bottom-right">
               <el-button class="buy-sty" @click="buying">{{$t('购买')}}</el-button>
             </div>
           </div>
-          <div class="details-sty" @click="alertSms">
+          <!-- <div class="details-sty" @click="alertSms">
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
-          </div>
+          </div> -->
            <div class="details-sty" @click="purchase">
             <i class="el-icon-s-order"></i>
             {{$t('购买记录')}}
@@ -30,26 +30,26 @@
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="radio" :label="2">{{$t('第三方物流查询服务')}}</el-radio>
+          <el-radio class="system-sty" v-model="ruleForm.type" :label="1">{{$t('第三方物流查询服务')}}</el-radio>
           <div class="message-main">
             <p>{{$t('快递100配置')}}</p>
             <span>{{$t('Customer ID')}}：</span><br/>
-            <el-input class="input-sty"></el-input><br/>
+            <el-input v-model="ruleForm.kuaidi100_customer_id" class="input-sty"></el-input><br/>
             <span>{{$t('授权KEY')}}：</span><br/>
-            <el-input class="input-sty"></el-input>
+            <el-input v-model="ruleForm.kuaidi100_key" class="input-sty"></el-input>
             <el-button class="buy-sty">{{$t('测试')}}</el-button>
           </div>
           <div class="message-main">
             <p>{{$t('Tracking more配置')}}</p>
             <span>{{$t('Appkey')}}：</span><br/>
-            <el-input class="input-sty"></el-input>
+            <el-input v-model="ruleForm.tracking_app_key" class="input-sty"></el-input>
             <el-button class="buy-sty">{{$t('测试')}}</el-button>
           </div>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="radio" :label="3">{{$t('不开启')}}</el-radio>
+          <el-radio class="system-sty" v-model="ruleForm.type" :label="0">{{$t('不开启')}}</el-radio>
           <div class="unopen-sty">
             <p>
             {{$t('暂不开启物流查询服务/定制API对接')}}
@@ -59,7 +59,7 @@
       </el-col>
     </el-row>
     <div class="save-btn">
-      <el-button type="primary">{{$t('保存')}}</el-button>
+      <el-button type="primary" @click="saveTemplate">{{$t('保存')}}</el-button>
     </div>
   </div>
 </template>
@@ -70,17 +70,50 @@ export default {
   data () {
     return {
       validate_email: '',
-      ruleForm: {},
+      ruleForm: {
+        type: 2,
+        tracking_app_key: '',
+        tracking_count: '',
+        kuaidi100_customer_id: '',
+        kuaidi100_key: '',
+        kuaidi100_count: ''
+      },
       radio: 1
     }
   },
   created () {
-    // this.getList()
+    this.getList()
   },
   methods: {
     getList () {
-      this.$request.getCoupons().then(res => {
-        this.ruleForm = res.data
+      this.$request.getTrackingData().then(res => {
+        this.ruleForm.type = res.data.type
+        this.ruleForm.tracking_app_key = res.data['51tracking_app_key']
+        this.ruleForm.tracking_count = res.data['51tracking_count']
+        this.ruleForm.kuaidi100_count = res.data.kuaidi100_count
+        this.ruleForm.kuaidi100_key = res.data.kuaidi100_key
+        this.ruleForm.kuaidi100_customer_id = res.data.kuaidi100_customer_id
+      })
+    },
+    saveTemplate () {
+      this.$request.updateTrackingSystem({
+        ...this.ruleForm,
+        '51tracking_app_key': this.ruleForm.tracking_app_key,
+        '51tracking_count': this.ruleForm.tracking_count
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     // 购买

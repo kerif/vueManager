@@ -1,5 +1,94 @@
 <template>
   <div class="mail-configure">
+    <div class="logistics-container">
+    <div class="form-title">{{ $t("邮箱发件信息配置") }}</div>
+      <el-form
+        :model="logisticsData"
+        ref="ruleForm"
+        class="ruleForm-sty"
+        label-position="left"
+        label-width="150px">
+        <el-row>
+          <el-col :span="10">
+            <el-form-item :label="$t('发件人邮件')" prop="from_address">
+              <el-input
+                v-model="logisticsData.from_address"
+                placeholder="请输入发件人邮件"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10" :offset="1">
+            <el-form-item :label="$t('发件人名称')" prop="from_name">
+              <el-input
+                v-model="logisticsData.from_name"
+                :placeholder="$t('请输入发件人名称')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="10">
+            <el-form-item :label="$t('SMTP域名')" prop="host">
+              <el-input
+                v-model="logisticsData.host"
+                :v-html="$t('请输入SMTP域名')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10" :offset="1">
+            <el-form-item :label="$t('SMTP端口')" prop="port">
+              <el-input
+                v-model="logisticsData.port"
+                :placeholder="$t('请输入SMTP端口')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="10">
+            <el-form-item :label="$t('发件人用户名')" prop="username">
+              <el-input
+                v-model="logisticsData.username"
+                placeholder="请输入发件人用户名"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10" :offset="1">
+            <el-form-item :label="$t('发件人密码')" prop="password">
+              <el-input class="logistic-sty"
+                type="password"
+                v-model="logisticsData.password"
+                :placeholder="$t('请输入发件人密码')"></el-input>
+              <div class="test-btn">
+                <el-button class="btn-light-red" @click="testSmtp">{{
+                  $t("测试")
+                }}</el-button>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="10">
+            <el-form-item :label="$t('加密方式')">
+              <el-radio-group
+                v-model="logisticsData.encryption">
+                <el-radio :label="0">{{ $t("无") }}</el-radio>
+                <el-radio :label="1">{{ $t("TLS加密") }}</el-radio>
+                <el-radio :label="2">{{ $t("SSL加密") }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10" :offset="1">
+            <el-button
+              :loading="$store.state.btnLoading"
+              class="save-btn"
+              @click="confirmLogistic('ruleForm')"
+              >{{ $t("保存") }}
+            </el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
     <div class="form-title">{{ $t("邮件配置") }}</div>
     <div class="select-box">
       <!-- <search-select :placeholder="$t('请选择')" :selectArr="emailType"
@@ -84,23 +173,14 @@
       </el-table-column>
     </el-table>
     <div class="logistics-container">
-      <div class="form-title">{{ $t("快递100配置") }}</div>
-      <el-form
-        :model="logisticsData"
-        ref="ruleForm"
-        class="demo-ruleForm"
-        label-position="left"
-        label-width="150px"
-      >
-        <!-- Customer ID -->
-        <el-form-item label="Customer ID" prop="kd100_app_id">
+      <!-- <div class="form-title">{{ $t("快递100配置") }}</div> -->
+        <!-- <el-form-item label="Customer ID" prop="kd100_app_id">
           <el-input
             v-model="logisticsData.kd100_app_id"
             :placeholder="$t('请输入Customer ID')"
             class="logistic-sty"
           ></el-input>
         </el-form-item>
-        <!-- 授权KEY -->
         <el-form-item :label="$t('授权KEY')" prop="kd100_app_key">
           <el-input
             v-model="logisticsData.kd100_app_key"
@@ -125,66 +205,7 @@
               $t("测试")
             }}</el-button>
           </div>
-        </el-form-item>
-        <div class="form-title">{{ $t("邮箱发件信息配置") }}</div>
-        <el-form-item :label="$t('发件人邮件')" prop="from_address">
-          <el-input
-            v-model="logisticsData.from_address"
-            placeholder="请输入发件人邮件"
-            class="logistic-sty"
-          ></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('发件人名称')" prop="from_name">
-          <el-input
-            v-model="logisticsData.from_name"
-            :placeholder="$t('请输入发件人名称')"
-            class="logistic-sty"
-          ></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('SMTP域名')" prop="host">
-          <el-input
-            v-model="logisticsData.host"
-            :v-html="$t('请输入SMTP域名')"
-            class="logistic-sty"
-          ></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('SMTP端口')" prop="port">
-          <el-input
-            v-model="logisticsData.port"
-            :placeholder="$t('请输入SMTP端口')"
-            class="logistic-sty"
-          ></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('发件人用户名')" prop="username">
-          <el-input
-            v-model="logisticsData.username"
-            placeholder="请输入发件人用户名"
-            class="logistic-sty"
-          ></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('发件人密码')" prop="password">
-          <el-input
-            type="password"
-            v-model="logisticsData.password"
-            :placeholder="$t('请输入发件人密码')"
-            class="logistic-sty"
-          ></el-input>
-          <div class="test-btn">
-            <el-button class="btn-light-red" @click="testSmtp">{{
-              $t("测试")
-            }}</el-button>
-          </div>
-        </el-form-item>
-        <el-form-item :label="$t('加密方式')">
-          <el-radio-group
-            v-model="logisticsData.encryption"
-            class="logistic-sty"
-          >
-            <el-radio :label="0">{{ $t("无") }}</el-radio>
-            <el-radio :label="1">{{ $t("TLS加密") }}</el-radio>
-            <el-radio :label="2">{{ $t("SSL加密") }}</el-radio>
-          </el-radio-group>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item :label="$t('开启邮箱登录验证')">
               <el-switch
                 v-model="logisticsData.validate_email"
@@ -196,7 +217,7 @@
                 inactive-color="gray">
               </el-switch>
             </el-form-item> -->
-        <div class="form-title">{{ $t("短信配置——聚合") }}</div>
+        <!-- <div class="form-title">{{ $t("短信配置——聚合") }}</div>
         <el-form-item label="Appkey" prop="juhe_key">
           <el-input
             v-model="logisticsData.juhe_key"
@@ -215,7 +236,7 @@
               $t("测试")
             }}</el-button>
           </div>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item :label="$t('开启短信登录验证')">
               <el-switch
                 v-model="logisticsData.validate_phone"
@@ -227,15 +248,6 @@
                 inactive-color="gray">
               </el-switch>
             </el-form-item> -->
-      </el-form>
-      <div>
-        <el-button
-          :loading="$store.state.btnLoading"
-          class="save-btn"
-          @click="confirmLogistic('ruleForm')"
-          >{{ $t("保存") }}</el-button
-        >
-      </div>
     </div>
   </div>
 </template>
@@ -551,7 +563,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .mail-configure {
-  background-color: #fff !important;
+  .ruleForm-sty {
+    background-color: #fff;
+    padding: 20px 20px 10px 20px;
+    margin-bottom: 20px;
+  }
   .save-btn {
     color: #fff;
     background-color: #3540A5;
@@ -559,6 +575,13 @@ export default {
   .form-title {
     font-weight: bold;
     margin-bottom: 15px;
+  }
+  .test-btn {
+    display: inline-block;
+    margin-left: 20px;
+  }
+  .logistic-sty {
+    width: 70% !important;
   }
 }
 </style>

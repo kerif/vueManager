@@ -44,7 +44,18 @@ export default {
       }
     }
   },
+  created () {
+    this.getValidate()
+  },
   methods: {
+    // 获取功能配置
+    getValidate () {
+      this.$request.getValidate().then(res => {
+        if (res.ret) {
+          this.validateList = res.data
+        }
+      })
+    },
     // 更新功能配置
     saveValidate () {
       this.$request.updateValidate(this.validateList).then(res => {

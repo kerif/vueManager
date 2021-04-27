@@ -1141,6 +1141,10 @@ exports.getInstructions = () => {
 exports.updateInstructions = (params) => {
   return $form.put('mini-program/instructions', params)
 }
+// 更多配置 获取API与服务
+exports.getApiService = () => {
+  return $form.get('api-services')
+}
 // 更多配置 获取微信配置是否启用
 exports.getPaymentOnline = () => {
   return $form.get(`payments/payment/status`)
@@ -1205,6 +1209,10 @@ exports.getCurrency = () => {
 exports.getSms = () => {
   return $form.get('api-services/sms')
 }
+// 更多配置 获取物流查询服务数据
+exports.getTrackingData = () => {
+  return $form.get('api-services/tracking')
+}
 // 更多配置 获取购买记录数据
 exports.getHistory = (id, params) => {
   return $form.get(`api-services/${id}/orders`, { params })
@@ -1224,6 +1232,10 @@ exports.getSmsSystem = () => {
 // 更多配置 更新短信服务
 exports.updateSmsSystem = (params) => {
   return $json.put('api-services/sms', params)
+}
+// 更多配置 更新物流查询服务
+exports.updateTrackingSystem = (params) => {
+  return $form.put('api-services/tracking', params)
 }
 // 更多配置 获取第三方短信服务数据
 exports.getCustomSystem = () => {
