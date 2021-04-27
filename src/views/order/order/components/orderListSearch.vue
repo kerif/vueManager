@@ -51,6 +51,17 @@
               onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
             ></el-input>
           </el-form-item>
+          <el-form-item prop="is_warning">
+            <!-- v-if="['0', '1'].includes(activeName)" -->
+            <el-checkbox
+              class="dialog-sty"
+              v-model="searchFieldData.is_warning"
+              :true-label="1"
+              :false-label="0"
+            >
+              {{ $t('包裹预警') }}
+            </el-checkbox>
+          </el-form-item>
         </el-form-item>
         <div style="display: flex; height: 28px; justify-content: space-between">
           <el-form-item :label="$t('仓库')" prop="warehouse">

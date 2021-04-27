@@ -37,23 +37,17 @@
         <el-button size="small" v-if="activeName === '6'" @click="deleteDiscard">{{
           $t('彻底删除')
         }}</el-button>
-        <el-button v-if="activeName !== '6'" @click="importOrder" size="small">{{
-          $t('批量入库')
-        }}</el-button>
+        <el-button
+          v-if="activeName !== '6'"
+          @click="importOrder"
+          size="small"
+          type="success"
+          plain
+          >{{ $t('批量入库') }}</el-button
+        >
         <el-button v-if="activeName !== '6'" @click="uploadList" size="small" type="success" plain>
           {{ $t('导出清单') }}
         </el-button>
-        <!-- <el-button v-if="activeName !== '6'" @click="goFilter" size="small">{{
-          $t('筛选')
-        }}</el-button> -->
-        <el-checkbox
-          v-if="['0', '1'].includes(activeName)"
-          class="dialog-sty"
-          v-model="is_warning"
-          @change="onWarning"
-        >
-          {{ $t('包裹预警') }}
-        </el-checkbox>
       </div>
       <div class="header-search">
         <el-input
@@ -77,55 +71,6 @@
           ></el-button>
         </div>
       </div>
-      <!-- <search-group
-        :placeholder="$t('请输入关键字')"
-        v-model="page_params.keyword"
-        @search="goMatch"
-      >
-        <div class="changeTime">
-          <el-date-picker
-            class="timeStyle"
-            v-model="timeList"
-            type="daterange"
-            @change="onTime"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :range-separator="$t('至')"
-            :start-placeholder="$t('提交开始日期')"
-            :end-placeholder="$t('提交结束日期')"
-          >
-          </el-date-picker>
-          <el-date-picker
-            v-if="activeName === '2'"
-            class="timeStyle"
-            v-model="storageList"
-            type="daterange"
-            @change="onStorage"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :range-separator="$t('至')"
-            :start-placeholder="$t('称重开始日期')"
-            :end-placeholder="$t('称重结束日期')"
-          >
-          </el-date-picker>
-        </div>
-        <div class="chooseStatus">
-          <el-select
-            v-model="agent_name"
-            @change="onAgentChange"
-            clearable
-            :placeholder="$t('请选择仓库')"
-          >
-            <el-option
-              v-for="item in agentData"
-              :key="item.id"
-              :value="item.id"
-              :label="item.warehouse_name"
-            >
-            </el-option>
-          </el-select>
-        </div>
-      </search-group> -->
     </div>
 
     <div style="height: calc(100vh - 270px)">
@@ -133,13 +78,12 @@
         border
         stripe
         ref="table"
-        :data="oderData"
+        :data="orderData"
         @selection-change="selectionChange"
         v-loading="tableLoading"
         height="calc(100vh - 270px)"
         size="mini"
         class="order-data-list"
-        :cell-style="{ padding: '0' }"
       >
         <el-table-column
           :type="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
@@ -147,12 +91,21 @@
           width="55"
           align="center"
         ></el-table-column>
-        <el-table-column :label="$t('客户ID')" key="user_id">
+        <el-table-column :label="$t('客户ID')" key="user_id" width="120" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('快递单号')" prop="express_num" key="express_num">
+        <el-table-column :label="$t('快递单号')" key="express_num" width="180">
+          <template slot-scope="scope">
+            <el-button
+              v-if="['3', '4', '5', '6'].includes(activeName)"
+              @click="oderDetails(scope.row.id)"
+              type="text"
+              >{{ scope.row.express_num }}</el-button
+            >
+            <span v-else>{{ scope.row.express_num }}</span>
+          </template>
         </el-table-column>
         <el-table-column :label="$t('包裹编码')" prop="code" key="code"> </el-table-column>
         <el-table-column :label="$t('状态')" key="status">
@@ -172,7 +125,7 @@
           prop="package_name"
           key="package_name"
           width="150"
-          :show-overflow-tooltip="true"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('物品价值') + localization.currency_unit"
@@ -183,6 +136,7 @@
           :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"
           prop="unit_value"
           key="unit_value"
+          min-width="100"
         ></el-table-column>
         <el-table-column :label="$t('物品属性')" key="props">
           <template slot-scope="scope">
@@ -251,17 +205,19 @@
         </el-table-column>
         <el-table-column
           :label="$t('入库时间')"
+          width="155"
           prop="in_storage_at"
           key="in_storage_at"
           v-if="activeName === '2'"
         ></el-table-column>
         <el-table-column
           :label="$t('弃件时间')"
+          width="155"
           prop="invalid_at"
           key="invalid_at"
           v-if="activeName === '3'"
         ></el-table-column>
-        <el-table-column :label="$t('提交时间')" prop="created_at" key="created_at">
+        <el-table-column :label="$t('提交时间')" prop="created_at" key="created_at" width="155">
         </el-table-column>
         <el-table-column :label="$t('操作')" fixed="right" key="operator">
           <template slot-scope="scope">
@@ -292,9 +248,6 @@
                     >{{ $t('入库日志') }}</span
                   >
                 </el-dropdown-item>
-                <el-dropdown-item @click.native="oderDetails(scope.row.id)">
-                  <span v-if="['3', '4', '5', '6'].includes(activeName)">{{ $t('详情') }}</span>
-                </el-dropdown-item>
                 <el-dropdown-item @click.native="editWarehoused(scope.row.id)">
                   <span v-if="activeName === '2' || scope.row.status === 2">{{ $t('编辑') }}</span>
                 </el-dropdown-item>
@@ -321,8 +274,8 @@
       ></nle-pagination>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
-      <div class="img_box">
-        <img :src="imgSrc" class="imgDialog" />
+      <div class="img-box">
+        <img :src="imgSrc" class="img-dialog" />
       </div>
     </el-dialog>
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
@@ -334,44 +287,16 @@
         <el-button type="primary" @click="updateLabel">{{ $t('下载') }}</el-button>
       </div>
     </el-dialog>
-    <!-- 筛选 -->
-    <el-dialog :title="$t('筛选')" :visible.sync="dialogFilter" width="40%">
-      <div class="excel-date">
-        <el-form ref="form" :model="filterForm">
-          <el-form-item :label="$t('价格区间') + localization.currency_unit">
-            <el-input
-              :placeholder="$t('请输入起始价格')"
-              v-model="filterForm.start"
-              class="input-sty"
-            ></el-input>
-            -
-            <el-input
-              :placeholder="$t('请输入结束价格')"
-              v-model="filterForm.end"
-              class="input-sty"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFilter = false" class="cancel-btn">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="createPrice" :loading="$store.state.btnLoading">{{
-          $t('确定')
-        }}</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-// import { SearchGroup } from '@/components/searchs'
 import OrderListSearch from './components/orderListSearch'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
-    // SearchGroup,
     OrderListSearch,
     NlePagination
   },
@@ -380,20 +305,9 @@ export default {
   data() {
     return {
       activeName: '',
-      oderData: [],
-      status: 1,
+      orderData: [],
       tableLoading: false,
-      agent_name: '',
-      is_warning: '',
-      agentData: [],
       localization: {},
-      ownerData: [],
-      storageList: [],
-      timeList: [],
-      in_storage_end_date: '',
-      in_storage_begin_date: '',
-      begin_date: '',
-      end_date: '',
       imgVisible: false,
       imgSrc: '',
       urlHtml: '',
@@ -402,11 +316,6 @@ export default {
       deleteNum: [],
       countData: {},
       urlExcel: '',
-      dialogFilter: false,
-      filterForm: {
-        start: '',
-        end: ''
-      },
       hasFilterCondition: false,
       searchFieldData: {
         begin_date: '',
@@ -416,7 +325,8 @@ export default {
         value_type: '',
         value_begin: '',
         value_end: '',
-        keyword: ''
+        keyword: '',
+        is_warning: 0
       }
     }
   },
@@ -424,6 +334,10 @@ export default {
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
+  },
+  mounted() {
+    this.getList()
+    this.getCounts()
   },
   methods: {
     // 获取订单统计数据
@@ -443,26 +357,9 @@ export default {
           }
         })
     },
-    goFilter() {
-      this.dialogFilter = true
-    },
-    // 筛选
-    createPrice() {
-      if (!this.filterForm.start) {
-        return this.$message.error(this.$t('请输入起始价格'))
-      } else if (!this.filterForm.end) {
-        return this.$message.error(this.$t('请输入结束价格'))
-      }
-      // this.handleQueryChange('value_start', this.filterForm.start)
-      this.getList()
-      this.dialogFilter = false
-    },
     goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
-      // this.handleQueryChange('page', this.page_params.page)
-      // this.handleQueryChange('size', this.page_params.size)
-      // this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
       this.getCounts()
     },
@@ -471,8 +368,7 @@ export default {
         page: this.page_params.page,
         size: this.page_params.size,
         status: this.activeName,
-        keyword: this.searchFieldData.keyword,
-        is_warning: this.is_warning === true ? 1 : ''
+        keyword: this.searchFieldData.keyword
       }
       if (this.hasFilterCondition) {
         const searchData = this.searchFieldData
@@ -489,39 +385,14 @@ export default {
       if (this.activeName === '6') {
         return this.getDiscard()
       }
-      console.log(this.is_warning, '我没有执行下一步')
       this.tableLoading = true
-      this.oderData = []
       const params = this.computedParams()
-      // let params = {
-      //   page: this.page_params.page,
-      //   size: this.page_params.size,
-      //   warehouse: this.agent_name,
-      //   status: this.activeName,
-      //   value_start: this.filterForm.start,
-      //   value_end: this.filterForm.end,
-      //   is_warning: this.is_warning === true ? 1 : ''
-      // }
-      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      // // 已入库
-      // if (this.activeName === '2') {
-      //   // 提交时间
-      //   this.begin_date && (params.begin_date = this.begin_date)
-      //   this.end_date && (params.end_date = this.end_date)
-      //   // 称重时间
-      //   this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
-      //   this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
-      // } else {
-      //   // 未入库
-      //   this.begin_date && (params.begin_date = this.begin_date)
-      //   this.end_date && (params.end_date = this.end_date)
-      // }
       this.$request
         .getWarehouse(params)
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
-            this.oderData = res.data
+            this.orderData = res.data
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
@@ -543,25 +414,13 @@ export default {
     },
     getDiscard() {
       this.tableLoading = true
-      this.oderData = []
       const params = this.computedParams()
-      // let params = {
-      //   page: this.page_params.page,
-      //   size: this.page_params.size,
-      //   status: this.status,
-      //   warehouse: this.agent_name,
-      //   value_start: this.filterForm.start,
-      //   value_end: this.filterForm.end
-      // }
-      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      // this.begin_date && (params.begin_date = this.begin_date)
-      // this.end_date && (params.end_date = this.end_date)
       this.$request
         .getWarehouse(params)
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
-            this.oderData = res.data
+            this.orderData = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           } else {
@@ -583,14 +442,12 @@ export default {
     },
     // 快速合箱
     fastClosing(userId) {
-      console.log(userId, 'userId')
       this.$router.push({ name: 'applyPackage', query: { userId: userId } })
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
     },
     goExpress(expressNum) {
-      console.log(expressNum)
       window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
     },
     // 批量发送通知
@@ -768,19 +625,6 @@ export default {
           })
       })
     },
-    onAgentChange() {
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('agent', this.agent_name)
-      this.getList()
-      // this.getCounts()
-    },
-    onWarning() {
-      const warning = this.is_warning === 'true' ? 1 : ''
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('is_warning', warning)
-      this.getList()
-      // this.getCounts()
-    },
     // 打印标签
     getLabel(id) {
       this.labelId = id
@@ -806,7 +650,6 @@ export default {
     // 确认下载标签
     updateLabel() {
       this.show = false
-      console.log(this.labelId, 'this.labelId')
       this.$request.updatePackagePdf(this.labelId).then(res => {
         if (res.ret) {
           window.open(res.data.url)
@@ -827,28 +670,6 @@ export default {
     // 导出清单
     uploadList() {
       const params = this.computedParams()
-      // let params = {
-      //   status: val,
-      //   warehouse: this.agent_name,
-      //   // status: this.status,
-      //   value_start: this.filterForm.start,
-      //   value_end: this.filterForm.end,
-      //   is_warning: this.is_warning === true ? 1 : ''
-      // }
-      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      // // 已入库
-      // if (this.activeName === '2') {
-      //   // 提交时间
-      //   this.begin_date && (params.begin_date = this.begin_date)
-      //   this.end_date && (params.end_date = this.end_date)
-      //   // 称重时间
-      //   this.in_storage_begin_date && (params.in_storage_begin_date = this.in_storage_begin_date)
-      //   this.in_storage_end_date && (params.in_storage_end_date = this.in_storage_end_date)
-      // } else {
-      //   // 未入库
-      //   this.begin_date && (params.begin_date = this.begin_date)
-      //   this.end_date && (params.end_date = this.end_date)
-      // }
       this.$request.uploadPackage(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
@@ -867,35 +688,6 @@ export default {
         }
       })
     },
-    // 获取代理列表
-    getAgentData() {
-      this.$request.getSimpleList().then(res => {
-        this.agentData = res.data
-      })
-    },
-    // 提交时间
-    onTime(val) {
-      this.begin_date = val ? val[0] : ''
-      this.end_date = val ? val[1] : ''
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
-      // if (this.activeName === '3') {
-      //   this.getDiscard()
-      // } else {
-      // }
-    },
-    // 称重时间
-    onStorage(val) {
-      this.in_storage_begin_date = val ? val[0] : ''
-      this.in_storage_end_date = val ? val[1] : ''
-      this.page_params.page = 1
-      this.page_params.handleQueryChange(
-        'times',
-        `${this.in_storage_begin_date} ${this.in_storage_end_date}`
-      )
-      this.getList()
-    },
     // 入库日志
     onLogs(expressNum) {
       this.$router.push({ name: 'pickingContainer', query: { keyword: expressNum } })
@@ -906,102 +698,8 @@ export default {
     },
     onTabChange() {
       this.page_params.page = 1
-      // this.timeList = []
-      // this.begin_date = ''
-      // this.end_date = ''
-      // this.in_storage_end_date = ''
-      // this.in_storage_end_date = ''
-      // this.storageList = []
       this.getList()
     }
-  },
-  created() {
-    this.getAgentData()
-    this.getList()
-    this.getCounts()
-  },
-  watch: {
-    // 监听tab组件参数
-    // activeName(newValue) {
-    //   switch (newValue) {
-    //     case '0': // 全部
-    //       this.page_params.page = 1
-    //       this.status = 0
-    //       this.timeList = []
-    //       this.begin_date = ''
-    //       this.end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.storageList = []
-    //       this.getList()
-    //       break
-    //     case '1': // 未入库
-    //       this.page_params.page = 1
-    //       this.status = 1
-    //       this.timeList = []
-    //       this.begin_date = ''
-    //       this.end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.storageList = []
-    //       this.getList()
-    //       break
-    //     case '2': // 已入库
-    //       this.page_params.page = 1
-    //       this.status = 2
-    //       this.timeList = []
-    //       this.storageList = []
-    //       this.begin_date = ''
-    //       this.end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.getList()
-    //       break
-    //     case '3': // 已集包
-    //       this.page_params.page = 1
-    //       this.status = 3
-    //       this.timeList = []
-    //       this.begin_date = ''
-    //       this.end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.storageList = []
-    //       this.getList()
-    //       break
-    //     case '4': // 已发货
-    //       this.page_params.page = 1
-    //       this.status = 4
-    //       this.timeList = []
-    //       this.begin_date = ''
-    //       this.end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.storageList = []
-    //       this.getList()
-    //       break
-    //     case '5': // 已收货
-    //       this.page_params.page = 1
-    //       this.status = 5
-    //       this.timeList = []
-    //       this.begin_date = ''
-    //       this.end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.in_storage_end_date = ''
-    //       this.storageList = []
-    //       this.getList()
-    //       break
-    //     case '6':
-    //       this.page_params.page = 1
-    //       this.status = 19
-    //       // this.timeList = []
-    //       // this.storageList = []
-    //       // this.begin_date = ''
-    //       // this.end_date = ''
-    //       // this.in_storage_end_date = ''
-    //       // this.in_storage_end_date = ''
-    //       this.getList()
-    //   }
-    // }
   }
 }
 </script>
@@ -1032,29 +730,11 @@ export default {
   .tab-length {
     width: 870px !important;
   }
-  .agentRight {
-    float: right;
-  }
-  .changeTime {
-    display: inline-block;
-    .timeStyle {
-      margin-right: 10px;
-      width: 276px !important;
-    }
-  }
-  .img_box {
+  .img-box {
     text-align: center;
-    .imgDialog {
+    .img-dialog {
       width: 50%;
     }
-  }
-  .chooseOrder {
-    cursor: pointer;
-    color: blue;
-    text-decoration: underline;
-  }
-  .operating-btn {
-    margin-bottom: 5px;
   }
   .dialog-sty {
     margin-left: 30px;
@@ -1066,9 +746,6 @@ export default {
   }
   .chooseStatus {
     width: 150px;
-    display: inline-block;
-  }
-  .import-list {
     display: inline-block;
   }
   .excel-date {

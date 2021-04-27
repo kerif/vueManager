@@ -15,10 +15,7 @@
       v-on:submit="goMatch"
     ></waybill-list-search>
     <div class="header-range">
-      <div
-        class="bottom-sty"
-        v-if="oderData.length && ['1', '2', '3', '4', '5'].includes(activeName)"
-      >
+      <div v-if="oderData.length && ['1', '2', '3', '4', '5'].includes(activeName)">
         <el-button v-if="activeName === '1'" @click="oneBatch" size="small">{{
           $t('一键批量打包')
         }}</el-button>
@@ -110,7 +107,6 @@
         stripe
         v-loading="tableLoading"
         ref="table"
-        highlight-current-row
         :data="oderData"
         @selection-change="onSelectChange"
         size="mini"
@@ -370,8 +366,8 @@
         <el-table-column
           width="55"
           align="center"
-          :type="['1', '2', '3', '4'].includes(activeName) ? 'selection' : 'index'"
-          :key="['1', '2', '3', '4'].includes(activeName) ? 'selection' : 'index'"
+          :type="['1', '2', '3', '4', '5'].includes(activeName) ? 'selection' : 'index'"
+          :key="['1', '2', '3', '4', '5'].includes(activeName) ? 'selection' : 'index'"
         ></el-table-column>
         <el-table-column key="user_id" :label="$t('客户ID')" prop="user_id"></el-table-column>
         <el-table-column
@@ -419,11 +415,8 @@
           prop="address.country_name"
           key="address.country_name"
         ></el-table-column>
-        <el-table-column
-          :label="$t('包裹数')"
-          prop="package_count"
-          key="package_count"
-        ></el-table-column>
+        <el-table-column :label="$t('包裹数')" prop="package_count" key="package_count">
+        </el-table-column>
         <el-table-column
           width="98"
           :label="
@@ -1074,7 +1067,6 @@ export default {
     },
     getList() {
       this.tableLoading = true
-      this.oderData = []
       const params = this.computedParams()
       this.$request
         .getOrder(params)
@@ -2005,9 +1997,6 @@ export default {
   }
   .packaged {
     color: green !important;
-  }
-  .bottom-sty {
-    margin: 10px 0;
   }
 }
 .dialog-input {
