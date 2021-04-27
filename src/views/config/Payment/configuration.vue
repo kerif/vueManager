@@ -173,6 +173,11 @@
           </el-row>
         </div>
       </el-tab-pane>
+      <el-tab-pane :label="$t('拼团配置')" name="5">
+        <div class="main-sty main-right">
+          <group-configure></group-configure>
+        </div>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -194,6 +199,7 @@ import Commodity from './commodity.vue'
 import ExpressCompany from './expressCompany.vue'
 import CustomTrack from './customTrack.vue'
 import LoginConfigure from './loginConfigure.vue'
+import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
     AppConfigure,
@@ -211,7 +217,8 @@ export default {
     Commodity,
     ExpressCompany,
     CustomTrack,
-    LoginConfigure
+    LoginConfigure,
+    GroupConfigure
   },
   mixins: [pagination],
   data () {
@@ -275,7 +282,7 @@ export default {
     background-color: #fff;
   }
   .main-right {
-    padding: 20px 0;
+    padding: 20px;
   }
   .add-insurance {
     float: right;

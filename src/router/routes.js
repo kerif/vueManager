@@ -89,7 +89,7 @@ const sinceAddEdit = loadonDemand('config/point/sinceAddEdit')
 // 配置 自提点配置 计佣方式配置
 const commissionSet = loadonDemand('config/point/commission')
 // 配置 更多配置
-const PaymentManagement = loadonDemand('config/Payment/payment')
+// const PaymentManagement = loadonDemand('config/Payment/payment')
 // 配置 更多配置
 const configurationMore = loadonDemand('config/Payment/configuration')
 // 配置 更多配置 短信服务配置
@@ -104,6 +104,8 @@ const AddEditEmail = loadonDemand('config/Payment/emailAddEdit')
 const emailLang = loadonDemand('config/Payment/emailLang')
 // 更多配置 商品分类模版 新增或修改语言
 const categoriesLang = loadonDemand('config/Payment/categoriesLang')
+// 更多配置 邮件配置
+const mailConfigure = loadonDemand('config/Payment/mailConfigure')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
 // 自提点 转运包裹管理
@@ -1056,15 +1058,27 @@ export default [
               parent: '/config/point'
             }
           },
+          // {
+          //   path: '/config/payment',
+          //   name: 'payment',
+          //   component: PaymentManagement,
+          //   id: 606,
+          //   meta: {
+          //     level: 2,
+          //     group: '配置',
+          //     name: '更多配置'
+          //   }
+          // },
           {
-            path: '/config/payment',
-            name: 'payment',
-            component: PaymentManagement,
+            path: '/config/mail-configure',
+            name: 'mailConfigur',
+            component: mailConfigure,
             id: 606,
             meta: {
-              level: 2,
+              level: 3,
               group: '配置',
-              name: '更多配置'
+              name: '邮件通知配置',
+              parent: '/config/payment'
             }
           },
           {

@@ -126,6 +126,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog :visible.sync="rechargeDialog" width="30%" :title="$t('*预设充值金额')" @close="clear">
+    <el-input v-model="amount"></el-input>
+    <div slot="footer">
+      <el-button @click="rechargeDialog = false">{{$t('取消')}}</el-button>
+      <el-button type="primary" @click="submitRecharge">{{$t('确定')}}</el-button>
+    </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -138,6 +145,7 @@ export default {
     return {
       languageData: [],
       tableLoading: false,
+      rechargeDialog: false,
       paymentData: [
         {
           enabled: true
@@ -148,6 +156,7 @@ export default {
           enabled: true
         }
       ],
+      amount: '',
       rechargeAmount: []
     }
   },
@@ -271,6 +280,24 @@ export default {
         }
       })
     },
+    deleteRecharge (id) {
+      this.$request.deleteRechargeAmount(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getRecharge()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 修改转账支付的开关
     changeTransfer (event, enabled, id) {
       console.log(typeof (event), '我是event')
@@ -303,6 +330,28 @@ export default {
     addRecharge () {
       this.rechargeDialog = true
     },
+    submitRecharge () {
+      if (!this.amount) {
+        return this.$message.error(this.$t('请输入预设充值金额'))
+      }
+      this.$request.updateRechargeAmount(this.amount).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.rechargeDialog = false
+          this.getRecharge()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 获取预设充值金额
     getRecharge () {
       this.tableLoading = true
@@ -317,6 +366,9 @@ export default {
           })
         }
       })
+    },
+    clear () {
+      this.amount = ''
     }
   }
 }
