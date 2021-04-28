@@ -23,10 +23,10 @@
           >{{ item.name }}</el-button
         >
       </el-form-item>
-      <el-form-item :label="$t('物品属性选择方式：')">
-        <el-radio-group class="radio-sty" @change="changeBasic">
-          <el-radio :label="5">{{ $t("单选") }}</el-radio>
-          <el-radio :label="7">{{ $t("多选") }}</el-radio>
+      <el-form-item :label="$t('物品属性选择方式')">
+        <el-radio-group v-model="basic.prop_type" class="radio-sty" @change="changeBasic">
+          <el-radio :label="1">{{ $t("单选") }}</el-radio>
+          <el-radio :label="0">{{ $t("多选") }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <!-- 未入库丢包预警 -->
@@ -56,7 +56,7 @@
         </el-radio-group>
       </el-form-item>
       <!-- 入库是否必填尺寸 -->
-      <el-form-item :label="$t('入库是否必填尺寸：')">
+      <el-form-item :label="$t('入库是否必填尺寸')">
         <el-switch
           v-model="basic.size"
           @change="changeBasic($event)"
@@ -70,7 +70,7 @@
         </el-switch>
       </el-form-item>
       <!-- 入库是否必填货位 -->
-      <el-form-item :label="$t('入库是否必填货位：')">
+      <el-form-item :label="$t('入库是否必填货位')">
         <el-switch
           v-model="basic.location"
           @change="changeBasic($event)"
@@ -124,11 +124,12 @@ export default {
         this.getProps()
       })
     },
-    changeBasic (val) {
+    changeBasic () {
       this.$request.updateBasic({
         size: this.basic.size,
         location: this.basic.location,
-        package_warning: this.basic.package_warning
+        package_warning: this.basic.package_warning,
+        prop_type: this.basic.prop_type
       }).then(res => {
         if (res.ret) {
           this.$notify({
@@ -156,24 +157,30 @@ export default {
       })
     },
     handleClose (id) {
-      console.log(id, 'id')
-      this.dynamicTags.splice(this.dynamicTags.indexOf(id), 1)
-      this.$request.deleteProps({
-        DELETE: [id]
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getProps()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
+      this.$confirm(this.$t('您真的要删除物品属性吗？会影响到系统内的包裹，请谨慎操作。'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        console.log(id, 'id')
+        this.dynamicTags.splice(this.dynamicTags.indexOf(id), 1)
+        this.$request.deleteProps({
+          DELETE: [id]
+        }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getProps()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     handleInputConfirm () {

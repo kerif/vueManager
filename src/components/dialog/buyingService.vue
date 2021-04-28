@@ -126,9 +126,9 @@ export default {
       if (!this.station.id && !this.secondData.id) {
         return this.$message.error(this.$t('请选择套餐'))
       }
-      let domestic = [{ id: this.station.id, qty: this.onceNum },
+      let domestic = [{ id: this.station.id, qty: this.station.id ? this.onceNum : '' },
         {
-          id: this.secondData.id, qty: this.secondNum
+          id: this.secondData.id, qty: this.secondData.id ? this.secondNum : ''
         }]
       // let foreign = [{ id: this.secondData.id, qty: this.secondNum }]
       console.log(domestic, 'arrOne')
@@ -184,6 +184,7 @@ export default {
     cursor: pointer;
     background-color: #e8eef4;
     padding: 10px;
+    margin-bottom: 10px;
   }
   .count-sty {
     margin-top: 20px;

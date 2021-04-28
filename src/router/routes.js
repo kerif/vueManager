@@ -89,7 +89,7 @@ const sinceAddEdit = loadonDemand('config/point/sinceAddEdit')
 // 配置 自提点配置 计佣方式配置
 const commissionSet = loadonDemand('config/point/commission')
 // 配置 更多配置
-// const PaymentManagement = loadonDemand('config/Payment/payment')
+const PaymentManagement = loadonDemand('config/Payment/payment')
 // 配置 更多配置
 const configurationMore = loadonDemand('config/Payment/configuration')
 // 配置 更多配置 短信服务配置
@@ -1058,17 +1058,17 @@ export default [
               parent: '/config/point'
             }
           },
-          // {
-          //   path: '/config/payment',
-          //   name: 'payment',
-          //   component: PaymentManagement,
-          //   id: 606,
-          //   meta: {
-          //     level: 2,
-          //     group: '配置',
-          //     name: '更多配置'
-          //   }
-          // },
+          {
+            path: '/config/payment',
+            name: 'payment',
+            component: PaymentManagement,
+            id: 606,
+            meta: {
+              level: 2,
+              group: '配置',
+              name: '更多配置'
+            }
+          },
           {
             path: '/config/mail-configure',
             name: 'mailConfigur',

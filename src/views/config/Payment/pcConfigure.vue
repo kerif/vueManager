@@ -246,6 +246,12 @@ export default {
         }
       })
     },
+    // 上传图片
+    onUpload (file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
+    },
     // pc端配置 第三方登录 获取数据
     goOauth () {
       // this.visibleOauth = true

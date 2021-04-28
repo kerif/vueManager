@@ -1,12 +1,12 @@
 <template>
   <div class="configuration-container">
-    <el-tabs v-model="activeName" class="tabLength">
+    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
       <el-tab-pane :label="$t('基础配置')" name="1">
         <div class="main-sty basic-configuration">
           <el-row :gutter="20">
             <el-col :span="4">
               <el-menu
-              default-active="1"
+              :default-active="secondTab1"
               class="el-menu-vertical-demo"
               @select="handleSelect1">
                 <el-menu-item-group>
@@ -63,7 +63,7 @@
           <el-row :gutter="20">
             <el-col :span="4">
               <el-menu
-              default-active="1"
+              :default-active="secondTab2"
               class="el-menu-vertical-demo"
               @select="handleSelect2">
                 <el-menu-item-group>
@@ -106,7 +106,7 @@
           <el-row :gutter="20">
             <el-col :span="4">
               <el-menu
-              default-active="1"
+              :default-active="secondTab3"
               class="el-menu-vertical-demo"
               @select="handleSelect3">
                 <el-menu-item-group>
@@ -135,7 +135,7 @@
           <el-row :gutter="20">
             <el-col :span="4">
               <el-menu
-              default-active="1"
+              :default-active="secondTab4"
               class="el-menu-vertical-demo"
               @select="handleSelect4">
                 <el-menu-item-group>
@@ -234,18 +234,44 @@ export default {
   mounted () {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
   },
+  created () {
+    if (this.$route.query.activeName) {
+      this.activeName = this.$route.query.activeName
+      this.secondTab1 = this.$route.query.secondTab1
+      this.secondTab2 = this.$route.query.secondTab2
+      console.log(typeof this.secondTab2, 'this.secondTab2')
+      this.secondTab3 = this.$route.query.secondTab3
+      this.secondTab4 = this.$route.query.secondTab4
+    }
+  },
   methods: {
+    onTabChange () {
+      this.page_params.handleQueryChange('activeName', this.activeName)
+      if (this.activeName === '1') {
+        this.page_params.handleQueryChange('secondTab1', this.secondTab1)
+      } else if (this.activeName === '2') {
+        this.page_params.handleQueryChange('secondTab2', this.secondTab2)
+      } else if (this.activeName === '3') {
+        this.page_params.handleQueryChange('secondTab3', this.secondTab3)
+      } else if (this.activeName === '4') {
+        this.page_params.handleQueryChange('secondTab4', this.secondTab4)
+      }
+    },
     handleSelect1 (key) {
       this.secondTab1 = key
+      this.page_params.handleQueryChange('secondTab1', this.secondTab1)
     },
     handleSelect2 (key) {
       this.secondTab2 = key
+      this.page_params.handleQueryChange('secondTab2', this.secondTab2)
     },
     handleSelect3 (key) {
       this.secondTab3 = key
+      this.page_params.handleQueryChange('secondTab3', this.secondTab3)
     },
     handleSelect4 (key) {
       this.secondTab4 = key
+      this.page_params.handleQueryChange('secondTab4', this.secondTab4)
     }
   }
 }
