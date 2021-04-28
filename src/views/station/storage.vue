@@ -1,56 +1,66 @@
 /* eslint-disable no-array-constructor */
 <template>
-    <div class="storage-container">
-      <el-row class="container-top">
+  <div class="storage-container">
+    <el-row class="container-top">
       <el-form ref="user" :model="user" label-width="140px" label-position="left">
-         <el-col :lg="12">
+        <el-col :lg="12">
           <!-- 重量 -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('*重量')" class="weight-style">
                 <el-input v-model="user.package_weight" :placeholder="$t('请输入重量')">
-                <template slot="append">{{this.localization.weight_unit}}</template>
+                  <template slot="append">{{ this.localization.weight_unit }}</template>
                 </el-input>
               </el-form-item>
             </el-col>
           </el-row>
-              <div class="line-center"></div>
+          <div class="line-center"></div>
           <!-- 快递单号 -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('*快递单号')">
-                <el-input v-model="user.express_num" :placeholder="$t('请输入快递单号')"
-                @blur="getNum(user.express_num)" :disabled="(!!this.$route.params.id && !hasStore)"></el-input>
+                <el-input
+                  v-model="user.express_num"
+                  :placeholder="$t('请输入快递单号')"
+                  @blur="getNum(user.express_num)"
+                  :disabled="!!this.$route.params.id && !hasStore"
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-        <!-- 寄往仓库 -->
-         <!-- :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" -->
+          <!-- 寄往仓库 -->
+          <!-- :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('*寄往仓库')">
-                <el-select v-model="user.warehouse_id" clearable
-                @change="getAreaData" :placeholder="$t('请选择')">
+                <el-select
+                  v-model="user.warehouse_id"
+                  clearable
+                  @change="getAreaData"
+                  :placeholder="$t('请选择')"
+                >
                   <el-option
                     v-for="item in agentData"
                     :key="item.id"
                     :value="item.id"
-                    :label="item.warehouse_name">
+                    :label="item.warehouse_name"
+                  >
                   </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
-           <!-- 客户id -->
+          <!-- 客户id -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('客户ID')" class="changeQuery">
-                  <el-autocomplete
+                <el-autocomplete
                   :fetch-suggestions="queryCNSearch"
                   @select="handleSelect"
                   :placeholder="$t('请输入客户ID，不填则默认无人认领包裹')"
                   v-model="user.user_id"
-                  :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''">
+                  :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
+                >
                 </el-autocomplete>
               </el-form-item>
             </el-col>
@@ -59,7 +69,10 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('物品名称')">
-                <el-input v-model="user.package_name" :placeholder="$t('请输入物品名称')"></el-input>
+                <el-input
+                  v-model="user.package_name"
+                  :placeholder="$t('请输入物品名称')"
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -71,11 +84,14 @@
               </el-form-item>
             </el-col>
           </el-row>
-        <!-- 物品总价值 -->
+          <!-- 物品总价值 -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('物品总价值') + this.localization.currency_unit">
-                <el-input v-model="user.package_value" :placeholder="$t('请输入物品总价值')"></el-input>
+                <el-input
+                  v-model="user.package_value"
+                  :placeholder="$t('请输入物品总价值')"
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -83,8 +99,12 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('备注')">
-                <el-input v-model="user.remark" :placeholder="$t('请输入备注')"
-                type="textarea" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+                <el-input
+                  v-model="user.remark"
+                  :placeholder="$t('请输入备注')"
+                  type="textarea"
+                  :autosize="{ minRows: 2, maxRows: 4 }"
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -93,7 +113,7 @@
             <el-col :span="18">
               <el-form-item prop="password_confirmation" class="updateChe" :label="$t('物品照片')">
                 <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
-                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
                   <span class="model-box"></span>
                   <span class="operat-box">
                     <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
@@ -108,47 +128,51 @@
                   :before-upload="beforeUploadImg"
                   :http-request="uploadGoodsImg"
                   :show-file-list="false"
-                  >
-                  <i class="el-icon-plus">
-                  </i>
-                  </el-upload>
-                  <div class="updateImg">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
+                >
+                  <i class="el-icon-plus"> </i>
+                </el-upload>
+                <div class="updateImg">
+                  {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 保存 -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item class="saveBtn">
-                <el-button @click="submitStorage" :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
+                <el-button @click="submitStorage" :loading="$store.state.btnLoading">{{
+                  $t('保存')
+                }}</el-button>
               </el-form-item>
             </el-col>
           </el-row>
-      </el-col>
-      <el-col :lg="12">
-        <!-- 服务 -->
-        <el-row :gutter="20">
-          <el-col>
-            <el-form-item :label="$t('服务')" class="service-style">
-              <el-checkbox-group v-model="user.chosen_services">
-                <el-checkbox v-for="item in updateService" :key="item.id" :label="item.id">{{item.name}}
-                </el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </el-col>
+        </el-col>
+        <el-col :lg="12">
+          <!-- 服务 -->
+          <el-row :gutter="20">
+            <el-col>
+              <el-form-item :label="$t('服务')" class="service-style">
+                <el-checkbox-group v-model="user.chosen_services">
+                  <el-checkbox v-for="item in updateService" :key="item.id" :label="item.id"
+                    >{{ item.name }}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </el-form-item>
+            </el-col>
           </el-row>
-            <div class="line-center"></div>
+          <div class="line-center"></div>
           <!-- 快递公司 -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('快递公司')">
-                <el-select v-model="user.express_company_id" clearable
-                 :placeholder="$t('请选择')">
+                <el-select v-model="user.express_company_id" clearable :placeholder="$t('请选择')">
                   <el-option
                     v-for="item in expressData"
                     :key="item.id"
                     :value="item.id"
-                    :label="item.name">
+                    :label="item.name"
+                  >
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -158,14 +182,19 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('寄往地区')">
-                  <el-select v-model="user.country_id"
-                   :disabled="this.user.warehouse_id === '' || this.shipNum != ''" clearable :placeholder="$t('请选择')">
-                    <el-option
-                      v-for="item in shipData"
-                      :key="item.id"
-                      :value="item.id"
-                      :label="item.name">
-                    </el-option>
+                <el-select
+                  v-model="user.country_id"
+                  :disabled="this.user.warehouse_id === '' || this.shipNum != ''"
+                  clearable
+                  :placeholder="$t('请选择')"
+                >
+                  <el-option
+                    v-for="item in shipData"
+                    :key="item.id"
+                    :value="item.id"
+                    :label="item.name"
+                  >
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -174,9 +203,21 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('尺寸')">
-                <el-input v-model="user.length"  class="sizeLength" :placeholder="$t('长') + this.localization.length_unit"></el-input>
-                <el-input v-model="user.width" class="sizeLength" :placeholder="$t('宽') + this.localization.length_unit"></el-input>
-                <el-input v-model="user.height"  class="sizeLength" :placeholder="$t('高') + this.localization.length_unit"></el-input>
+                <el-input
+                  v-model="user.length"
+                  class="sizeLength"
+                  :placeholder="$t('长') + this.localization.length_unit"
+                ></el-input>
+                <el-input
+                  v-model="user.width"
+                  class="sizeLength"
+                  :placeholder="$t('宽') + this.localization.length_unit"
+                ></el-input>
+                <el-input
+                  v-model="user.height"
+                  class="sizeLength"
+                  :placeholder="$t('高') + this.localization.length_unit"
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -200,25 +241,33 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item>
-              <div slot="label">
-                <span>{{$t('存放货位')}}</span>
-                <el-tooltip effect="dark" :content="$t('当您为仓库添加了货位，系统会自动分配货位，同时您也可以自定义填写货位')" placement="top">
-                  <span class="el-icon-question icon-question"></span>
-                </el-tooltip>
-              </div>
+                <div slot="label">
+                  <span>{{ $t('存放货位') }}</span>
+                  <el-tooltip
+                    effect="dark"
+                    :content="
+                      $t('当您为仓库添加了货位，系统会自动分配货位，同时您也可以自定义填写货位')
+                    "
+                    placement="top"
+                  >
+                    <span class="el-icon-question icon-question"></span>
+                  </el-tooltip>
+                </div>
                 <el-autocomplete
                   :disabled="this.user.warehouse_id === ''"
                   :fetch-suggestions="locationCNSearch"
                   ref="autocompleteRef"
                   @select="locationSelect"
                   :placeholder="$t('请输入存放货位')"
-                  v-model="user.location">
+                  v-model="user.location"
+                >
                 </el-autocomplete>
               </el-form-item>
             </el-col>
             <el-col :span="8" v-if="locationCode">
-              <p style="margin-top: 8px">{{$t('推荐货位')}}
-                <span>{{locationCode}}</span>
+              <p style="margin-top: 8px">
+                {{ $t('推荐货位') }}
+                <span>{{ locationCode }}</span>
               </p>
             </el-col>
           </el-row>
@@ -233,8 +282,12 @@
           <el-row :gutter="20" v-if="this.$route.params.id && this.user.express_line">
             <el-col :span="18">
               <el-form-item :label="$t('更改线路')" class="express">
-                  <span class="change-line">{{user.CName}}---{{$t('限重')}}{{user.MaxWeight}}KG</span>
-                  <el-button class="btn-main change-btn" @click="changeLine">{{$t('更改')}}</el-button>
+                <span class="change-line"
+                  >{{ user.CName }}---{{ $t('限重') }}{{ user.MaxWeight }}KG</span
+                >
+                <el-button class="btn-main change-btn" @click="changeLine">{{
+                  $t('更改')
+                }}</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -243,111 +296,122 @@
             <el-col :span="18">
               <el-form-item :label="$t('物品属性')" class="service-style">
                 <el-checkbox-group v-model="user.props">
-                  <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id">{{item.cn_name}}
+                  <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id"
+                    >{{ item.cn_name }}
                   </el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
             </el-col>
           </el-row>
-      </el-col>
-                    <!-- <el-form-item class="saveBtn"> -->
-              <!-- </el-form-item> -->
-    <!-- <div class="save-btn">
+        </el-col>
+        <!-- <el-form-item class="saveBtn"> -->
+        <!-- </el-form-item> -->
+        <!-- <div class="save-btn">
       <el-button @click="submitStorage" type="primary" :loading="$store.state.btnLoading">保存</el-button>
     </div> -->
-    </el-form>
-  </el-row>
-  <div class="noExpress" v-if="this.shipNum || this.$route.params.id">
-  <div class="select-box">
-      <h4>{{$t('商品清单')}}</h4>
-      <add-btn @click.native="addProduct" v-if="this.shipNum || this.$route.params.id">{{$t('添加商品清单')}}</add-btn>
-    </div>
-    <el-row :gutter="20" class="id-style">
-      <el-col :span="6">
-        <p class="upload-top">{{$t('原始上传清单：')}}</p>
-        <div v-if="user.item_pictures">
-          <div class="left-img" v-for="(item, index) in user.item_pictures" :key="index">
-            <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.path}`, imgVisible=true">
-              <img :src="`${$baseUrl.IMAGE_URL}${item.path}`" class="itemImg" >
-            </span>
-          </div>
-        </div>
-        <div v-else class="nullProduct">{{$t('无')}}</div>
-        <p>{{$t('原始商品数量：')}}<span class="remark-font">{{user.qty}}</span></p>
-        <p>{{$t('原始商品备注：')}}</p>
-        <p v-if="user.remark" class="remark-font">{{user.remark}}</p>
-        <p v-else class="noDate">{{$t('暂无数据')}}</p>
-      </el-col>
-      <el-col :span="18">
-        <el-table
-          :data="tableData"
-          border
-          v-loading="tableLoading"
-          class="data-list"
-          style="width: 100%">
-          <el-table-column type="index" width="50"></el-table-column>
-          <!-- 货品名称 -->
-          <el-table-column
-          prop="name"
-          :label="$t('货品名称')">
-          </el-table-column>
-          <!-- 材质 -->
-          <el-table-column
-          prop="material"
-          :label="$t('材质')">
-          </el-table-column>
-          <!-- 数量 -->
-          <el-table-column
-          prop="qty"
-          :label="$t('数量')">
-          </el-table-column>
-          <!-- 单价 -->
-          <el-table-column
-          prop="unit_price"
-          :label="$t('单价') + this.localization.currency_unit">
-          </el-table-column>
-          <!-- 总价 -->
-          <el-table-column
-          prop="total_price"
-          :label="$t('总价') + this.localization.currency_unit">
-          </el-table-column>
-          <!-- 状态 -->
-          <el-table-column
-          :label="$t('状态')">
-          <template slot-scope="scope">
-            <span v-if="scope.row.status === 0">{{$t('正常')}}</span>
-            <span v-if="scope.row.status === 1">{{$t('破损')}}</span>
-            <span v-if="scope.row.status === 2">{{$t('问题件')}}</span>
-          </template>
-          </el-table-column>
-          <!-- 图片 -->
-          <el-table-column :label="$t('图片')" prop="images" width="170">
-            <template slot-scope="scope">
-              <span v-for="(ele, index) in scope.row.images"
-              :key="index" style="cursor:pointer;"
-                @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele}`, imgVisible=true">
-                  <img :src="`${$baseUrl.IMAGE_URL}${ele}`" style="width: 40px; margin-right: 5px;">
-                </span>
-          </template>
-          </el-table-column>
-          <!-- 操作 -->
-          <el-table-column :label="$t('操作')" width="130">
-            <template slot-scope="scope">
-                <el-button class="btn-dark-green" @click="editProduct(scope.row.id)">{{$t('编辑')}}</el-button>
-                <el-button class="btn-light-red" @click="deleteProduct(scope.row.id)">{{$t('删除')}}</el-button>
-            </template>
-          </el-table-column>
-      </el-table>
-      </el-col>
+      </el-form>
     </el-row>
+    <div class="noExpress" v-if="this.shipNum || this.$route.params.id">
+      <div class="select-box">
+        <h4>{{ $t('商品清单') }}</h4>
+        <add-btn @click.native="addProduct" v-if="this.shipNum || this.$route.params.id">{{
+          $t('添加商品清单')
+        }}</add-btn>
+      </div>
+      <el-row :gutter="20" class="id-style">
+        <el-col :span="6">
+          <p class="upload-top">{{ $t('原始上传清单：') }}</p>
+          <div v-if="user.item_pictures">
+            <div class="left-img" v-for="(item, index) in user.item_pictures" :key="index">
+              <span
+                style="cursor: pointer"
+                @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item.path}`), (imgVisible = true)"
+              >
+                <img :src="`${$baseUrl.IMAGE_URL}${item.path}`" class="itemImg" />
+              </span>
+            </div>
+          </div>
+          <div v-else class="nullProduct">{{ $t('无') }}</div>
+          <p>
+            {{ $t('原始商品数量：') }}<span class="remark-font">{{ user.qty }}</span>
+          </p>
+          <p>{{ $t('原始商品备注：') }}</p>
+          <p v-if="user.remark" class="remark-font">{{ user.remark }}</p>
+          <p v-else class="noDate">{{ $t('暂无数据') }}</p>
+        </el-col>
+        <el-col :span="18">
+          <el-table
+            :data="tableData"
+            border
+            v-loading="tableLoading"
+            class="data-list"
+            style="width: 100%"
+          >
+            <el-table-column type="index" width="50"></el-table-column>
+            <!-- 货品名称 -->
+            <el-table-column prop="name" :label="$t('货品名称')"> </el-table-column>
+            <!-- 材质 -->
+            <el-table-column prop="material" :label="$t('材质')"> </el-table-column>
+            <!-- 数量 -->
+            <el-table-column prop="qty" :label="$t('数量')"> </el-table-column>
+            <!-- 单价 -->
+            <el-table-column
+              prop="unit_price"
+              :label="$t('单价') + this.localization.currency_unit"
+            >
+            </el-table-column>
+            <!-- 总价 -->
+            <el-table-column
+              prop="total_price"
+              :label="$t('总价') + this.localization.currency_unit"
+            >
+            </el-table-column>
+            <!-- 状态 -->
+            <el-table-column :label="$t('状态')">
+              <template slot-scope="scope">
+                <span v-if="scope.row.status === 0">{{ $t('正常') }}</span>
+                <span v-if="scope.row.status === 1">{{ $t('破损') }}</span>
+                <span v-if="scope.row.status === 2">{{ $t('问题件') }}</span>
+              </template>
+            </el-table-column>
+            <!-- 图片 -->
+            <el-table-column :label="$t('图片')" prop="images" width="170">
+              <template slot-scope="scope">
+                <span
+                  v-for="(ele, index) in scope.row.images"
+                  :key="index"
+                  style="cursor: pointer"
+                  @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${ele}`), (imgVisible = true)"
+                >
+                  <img
+                    :src="`${$baseUrl.IMAGE_URL}${ele}`"
+                    style="width: 40px; margin-right: 5px"
+                  />
+                </span>
+              </template>
+            </el-table-column>
+            <!-- 操作 -->
+            <el-table-column :label="$t('操作')" width="130">
+              <template slot-scope="scope">
+                <el-button class="btn-dark-green" @click="editProduct(scope.row.id)">{{
+                  $t('编辑')
+                }}</el-button>
+                <el-button class="btn-light-red" @click="deleteProduct(scope.row.id)">{{
+                  $t('删除')
+                }}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
     </div>
     <!-- <nle-pagination :pageParams="page_params"></nle-pagination> -->
-      <el-dialog :visible.sync="imgVisible" size="small">
+    <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
+        <img :src="imgSrc" class="imgDialog" />
       </div>
-     </el-dialog>
-    </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -361,7 +425,7 @@ export default {
     // NlePagination,
     AddBtn
   },
-  data () {
+  data() {
     return {
       user: {
         express_num: '',
@@ -409,7 +473,7 @@ export default {
       locationCode: ''
     }
   },
-  created () {
+  created() {
     this.getProp() // 获取物品属性
     this.getService() // 获取全部服务
     this.getAgentData()
@@ -428,19 +492,19 @@ export default {
   },
   methods: {
     // 获取全部物品属性
-    getProp () {
+    getProp() {
       this.$request.getProps().then(res => {
         this.updateProp = res.data
         this.localization = res.localization
       })
     },
     // 获取全部服务
-    getService () {
+    getService() {
       this.$request.getAllService().then(res => {
         this.updateService = res.data
       })
     },
-    getNum (num) {
+    getNum(num) {
       if (num) {
         console.log('num', num)
         this.expressNum = num
@@ -450,7 +514,7 @@ export default {
       }
     },
     // 通过快递单号获取id
-    getShipmentNum () {
+    getShipmentNum() {
       this.$request.getShipmentNum(this.expressNum).then(res => {
         if (res.ret) {
           this.shipNum = res.data.id
@@ -467,7 +531,7 @@ export default {
       })
     },
     // 获取可推荐货位
-    getAreaLocation () {
+    getAreaLocation() {
       this.locationCode = ''
       console.log(this.user.warehouse_id, 'ware')
       console.log(this.userId, 'this.userId')
@@ -480,7 +544,7 @@ export default {
       }
     },
     // 从包裹快速入库时获取整页数据
-    getList () {
+    getList() {
       let id
       if (this.$route.params.id) {
         id = this.$route.params.id
@@ -525,7 +589,7 @@ export default {
       })
     },
     // 获取商品列表数据
-    getPackageList () {
+    getPackageList() {
       let packageId
       if (this.$route.params.id) {
         packageId = this.$route.params.id
@@ -537,19 +601,19 @@ export default {
       })
     },
     // 获取代理列表
-    getAgentData () {
+    getAgentData() {
       this.$request.getSimpleWarehouse().then(res => {
         this.agentData = res.data
       })
     },
     // 获取快递公司数据
-    getExpressData () {
+    getExpressData() {
       this.$request.getExpressData().then(res => {
         this.expressData = res.data
       })
     },
     // 获取寄往地区数据
-    getAreaData (id) {
+    getAreaData(id) {
       if (id) {
         this.locationId = id
         this.user.location = ''
@@ -564,7 +628,7 @@ export default {
       }
     },
     // 更改线路
-    changeLine () {
+    changeLine() {
       dialog({ type: 'expressChange' }, data => {
         console.log(data, 'data')
         // this.$set(this.user, 'CName', data.cn_name)
@@ -574,51 +638,55 @@ export default {
         this.user.express_line_id = data.id
       })
     },
-    changeShip (e) {
+    changeShip(e) {
       console.log(e)
       this.$set(this.user, 'country_id', e)
       console.log(this.user.country_id, 'user.country_id')
     },
     // 通过仓库id拉取相对应的地区
-    updateAreaData () {
+    updateAreaData() {
       this.$request.getArea(this.areaId).then(res => {
         this.shipData = res.data
       })
     },
     // 添加商品清单
-    addProduct () {
+    addProduct() {
       let ProductId
       if (this.$route.params.id) {
         ProductId = this.$route.params.id
       } else {
         ProductId = this.shipNum
       }
-      dialog({ type: 'productList',
-        state: 'add',
-        id: ProductId,
-        currencyUnit: this.currencyUnit }, () => {
-        this.getPackageList()
-      })
+      dialog(
+        { type: 'productList', state: 'add', id: ProductId, currencyUnit: this.currencyUnit },
+        () => {
+          this.getPackageList()
+        }
+      )
     },
     // 编辑商品清单
-    editProduct (ele) {
+    editProduct(ele) {
       let ProductId
       if (this.$route.params.id) {
         ProductId = this.$route.params.id
       } else {
         ProductId = this.shipNum
       }
-      dialog({ type: 'productList',
-        state: 'edit',
-        id: ProductId,
-        ele: ele,
-        currencyUnit: this.currencyUnit
-      }, () => {
-        this.getPackageList()
-      })
+      dialog(
+        {
+          type: 'productList',
+          state: 'edit',
+          id: ProductId,
+          ele: ele,
+          currencyUnit: this.currencyUnit
+        },
+        () => {
+          this.getPackageList()
+        }
+      )
     },
     // 删除商品清单
-    deleteProduct (ele) {
+    deleteProduct(ele) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -643,7 +711,7 @@ export default {
       })
     },
     // 上传物品照片
-    uploadGoodsImg (item) {
+    uploadGoodsImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -654,24 +722,24 @@ export default {
       })
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除图片
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.goodsImgList.splice(index, 1)
     },
-    beforeUploadImg (file) {
-      if (!(/^image/.test(file.type))) {
+    beforeUploadImg(file) {
+      if (!/^image/.test(file.type)) {
         this.$message.info(this.$t('请上传图片类型文件'))
         return false
       } else if (file.size > 1024 * 1024 * 2) {
@@ -681,45 +749,50 @@ export default {
       return true
     },
     // 客户id
-    queryCNSearch (queryString, callback) {
+    queryCNSearch(queryString, callback) {
       console.log(this.user.user_id)
       var list = [{}]
-      this.$request.Automatic({
-        keyword: this.user.user_id.toString()
-      }).then(res => {
-        for (let i of res.data) {
-          // i.value = i.id
-          i.value = i.id + '---' + i.name
-        }
-        list = res.data
-        callback && callback(list)
-      })
+      this.$request
+        .Automatic({
+          keyword: this.user.user_id.toString()
+        })
+        .then(res => {
+          for (let i of res.data) {
+            // i.value = i.id
+            i.value = i.id + '---' + i.name
+          }
+          list = res.data
+          callback && callback(list)
+        })
     },
     // 货位搜索
-    locationCNSearch (queryString, callback) {
+    locationCNSearch(queryString, callback) {
       console.log(this.user.location, 'location')
       var list = [{}]
-      this.$request.AutoLocation(this.locationId, {
-        keyword: this.user.location
-      }).then(res => {
-        console.log(res.data, 'res data')
-        for (let i of res.data) {
-          i.value = i.code
-          // i.value = i.id + '---' + i.name
-        }
-        if (!this.user.location) {
-          this.user.location = res.data[0].code
-        }
-        list = res.data
-        callback && callback(list)
-      }).catch(() => {
-        console.log(callback, 'callback')
-        // eslint-disable-next-line no-array-constructor
-        callback && callback(new Array())
-      })
+      this.$request
+        .AutoLocation(this.locationId, {
+          keyword: this.user.location
+        })
+        .then(res => {
+          console.log(res.data, 'res data')
+          for (let i of res.data) {
+            i.value = i.code
+            // i.value = i.id + '---' + i.name
+          }
+          if (!this.user.location) {
+            this.user.location = res.data[0].code
+          }
+          list = res.data
+          callback && callback(list)
+        })
+        .catch(() => {
+          console.log(callback, 'callback')
+          // eslint-disable-next-line no-array-constructor
+          callback && callback(new Array())
+        })
     },
     // 客户id
-    handleSelect (item) {
+    handleSelect(item) {
       console.log(item)
       this.supplierId = item.id
       this.userId = item.id
@@ -727,14 +800,14 @@ export default {
       this.getAreaLocation()
     },
     // 货位
-    locationSelect (item) {
+    locationSelect(item) {
       // this.ruleForm.en_name = item.name
       console.log(item)
       // this.supplierId = item.id
       // this.supplierName = item.name
     },
     // 保存
-    submitStorage () {
+    submitStorage() {
       console.log(this.user.location, 'user.location')
       this.user.package_pictures = this.goodsImgList
       if (this.user.express_num === '') {
@@ -744,7 +817,8 @@ export default {
       } else if (this.user.warehouse_id === '') {
         return this.$message.error(this.$t('请选择仓库'))
       } else {
-        if (this.$route.params.id) { // 如果是从订单跳转过来
+        if (this.$route.params.id) {
+          // 如果是从订单跳转过来
           if (this.$route.params.state === 'editWarehouse') {
             this.tableLoading = true
             this.user.user_id = this.user.user_id.split('---')[0]
@@ -756,9 +830,12 @@ export default {
                   title: this.$t('操作成功'),
                   message: res.msg
                 })
-                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
-                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name = ''
-                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
+                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
+                  ''
+                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
+                  ''
+                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
+                  ''
                 this.goodsImgList = []
                 this.user.props = []
                 this.user.chosen_services = []
@@ -784,9 +861,12 @@ export default {
                   title: this.$t('操作成功'),
                   message: res.msg
                 })
-                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value = ''
-                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name = ''
-                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
+                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
+                  ''
+                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
+                  ''
+                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
+                  ''
                 this.goodsImgList = []
                 this.user.props = []
                 this.user.chosen_services = []
@@ -802,7 +882,8 @@ export default {
               }
             })
           }
-        } else { // 如果是添加
+        } else {
+          // 如果是添加
           this.tableLoading = true
           this.user.user_id = this.user.user_id.split('---')[0]
           console.log(this.user.user_id, 'this.user.user_id')
@@ -814,9 +895,11 @@ export default {
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.brand_name = ''
+              this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.brand_name =
+                ''
               this.user.user_id = this.user.warehouse_id = this.user.package_value = ''
-              this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code = ''
+              this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
+                ''
               this.goodsImgList = []
               this.user.props = []
               this.user.chosen_services = []
@@ -825,11 +908,15 @@ export default {
               this.shipNum = ''
               console.log(this.hasStore, 'this.hasStore')
             } else if (res.ret === 2) {
-              this.$confirm(this.$t('快递单号不存在或客户未预报，请确认是否入库'), this.$t('提示'), {
-                confirmButtonText: this.$t('确定'),
-                cancelButtonText: this.$t('取消'),
-                type: 'warning'
-              }).then(() => {
+              this.$confirm(
+                this.$t('快递单号不存在或客户未预报，请确认是否入库'),
+                this.$t('提示'),
+                {
+                  confirmButtonText: this.$t('确定'),
+                  cancelButtonText: this.$t('取消'),
+                  type: 'warning'
+                }
+              ).then(() => {
                 this.$request.addShipment(this.user).then(res => {
                   if (res.ret) {
                     this.$notify({
@@ -837,9 +924,11 @@ export default {
                       message: res.msg,
                       type: 'success'
                     })
-                    this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = this.user.brand_name = ''
+                    this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = this.user.brand_name =
+                      ''
                     this.user.user_id = this.user.warehouse_id = ''
-                    this.user.express_num = this.user.express_company_id = this.user.remark = this.user.number = this.user.qty = this.user.code = this.user.country_id = ''
+                    this.user.express_num = this.user.express_company_id = this.user.remark = this.user.number = this.user.qty = this.user.code = this.user.country_id =
+                      ''
                     this.user.props = []
                     this.goodsImgList = []
                     this.user.chosen_services = []
@@ -884,7 +973,7 @@ export default {
   }
   .saveBtn {
     .el-button {
-      background-color: #3540A5;
+      background-color: #3540a5;
       color: #fff;
       padding: 15px 35px;
     }
@@ -926,9 +1015,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -950,7 +1040,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .updateImg {
     margin-top: 10px;
@@ -981,9 +1071,9 @@ export default {
       margin-top: 40px;
     }
   }
-  .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }
@@ -1009,7 +1099,7 @@ export default {
   .icon-question {
     margin-left: 5px;
     font-size: 18px;
-    color: #67C23A;
+    color: #67c23a;
     position: relative;
     top: 3px;
   }

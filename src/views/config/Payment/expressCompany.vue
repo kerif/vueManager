@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="select-box">
-      <add-btn @click.native="addExpress">{{ $t("添加") }}</add-btn>
+      <add-btn @click.native="addExpress">{{ $t('添加') }}</add-btn>
     </div>
     <el-table
       :data="expressData"
@@ -15,8 +15,8 @@
       <!-- 状态 -->
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === false">{{ $t("禁用") }}</span>
-          <span v-if="scope.row.status === true">{{ $t("启用") }}</span>
+          <span v-if="scope.row.status === false">{{ $t('禁用') }}</span>
+          <span v-if="scope.row.status === true">{{ $t('启用') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="LOGO">
@@ -24,7 +24,7 @@
           <span
             style="cursor: pointer"
             v-if="scope.row.logo"
-            @click.stop="(imgSrc = scope.row.logo), (imgVisible = true)"
+            @click.stop=";(imgSrc = scope.row.logo), (imgVisible = true)"
           >
             <img :src="scope.row.logo" style="width: 70px; height: 80px" />
           </span>
@@ -34,20 +34,11 @@
         </template>
       </el-table-column>
       <!-- 快递公司名称 -->
-      <el-table-column
-        prop="name"
-        :label="$t('快递公司名称')"
-      ></el-table-column>
+      <el-table-column prop="name" :label="$t('快递公司名称')"></el-table-column>
       <!-- 快递公司代码 -->
-      <el-table-column
-        prop="code"
-        :label="$t('快递公司代码')"
-      ></el-table-column>
+      <el-table-column prop="code" :label="$t('快递公司代码')"></el-table-column>
       <!-- 联系电话 -->
-      <el-table-column
-        prop="contact_phone"
-        :label="$t('联系电话')"
-      ></el-table-column>
+      <el-table-column prop="contact_phone" :label="$t('联系电话')"></el-table-column>
       <!-- 官网 -->
       <el-table-column prop="website" :label="$t('官网')"></el-table-column>
       <el-table-column :label="$t('是否启用')" width="120px">
@@ -75,11 +66,7 @@
             class="el-icon-check icon-sty"
             @click="onExpress(scope.row, item)"
           ></span>
-          <span
-            v-else
-            class="el-icon-plus icon-sty"
-            @click="onExpress(scope.row, item)"
-          ></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onExpress(scope.row, item)"></span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')">
@@ -88,21 +75,18 @@
             class="btn-dark-green"
             @click="editExpress(scope.row.id)"
             v-if="scope.row.is_default === 0"
-            >{{ $t("编辑") }}</el-button
+            >{{ $t('编辑') }}</el-button
           >
           <el-button
             class="btn-light-red delete-btn"
             @click="deleteExpress(scope.row.id)"
             v-if="scope.row.is_default === 0"
-            >{{ $t("删除") }}</el-button
+            >{{ $t('删除') }}</el-button
           >
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-    ></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
@@ -117,7 +101,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       page_params: {
         type: ''
@@ -133,57 +117,59 @@ export default {
       imgVisible: false
     }
   },
-  created () {
+  created() {
     this.getExpress()
     this.getLanguageList()
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
   methods: {
     // 获取全部语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
         }
       })
     },
-    getList () {
+    getList() {
       this.getExpress()
     },
     // 获取发货快递公司
-    getExpress () {
+    getExpress() {
       this.tableLoading = true
-      this.$request.getExpressValue({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.expressData = res.data.map(item => ({ ...item, status: Boolean(item.status) }))
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          this.localization = res.localization
-          console.log(this.valueData, 'valueData')
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .getExpressValue({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.expressData = res.data.map(item => ({ ...item, status: Boolean(item.status) }))
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.localization = res.localization
+            console.log(this.valueData, 'valueData')
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 添加发货快递公司
-    addExpress () {
+    addExpress() {
       dialog({ type: 'expressEditAdd', state: 'add' }, () => {
         this.getExpress()
       })
     },
     // 发货快递公司 开关启用状态
-    changeExpress (event, id) {
+    changeExpress(event, id) {
       this.$request.closeExpress(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
@@ -201,7 +187,7 @@ export default {
       })
     },
     // 发货快递公司 修改语言
-    onExpress (line, lang) {
+    onExpress(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
@@ -209,13 +195,13 @@ export default {
         this.getExpress()
       })
     },
-    editExpress (id) {
+    editExpress(id) {
       dialog({ type: 'expressEditAdd', state: 'edit', id: id }, () => {
         this.getExpress()
       })
     },
     // 订单 删除 快递公司
-    deleteExpress (id) {
+    deleteExpress(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -241,7 +227,5 @@ export default {
     }
   }
 }
-
 </script>
-<style scoped>
-</style>
+<style scoped></style>

@@ -13,7 +13,7 @@ export default {
     params: Object
   },
   methods: {
-    clickMethod () {
+    clickMethod() {
       if (this.router) {
         if (this.params && this.params.add) {
           localStorage.setItem('add', 1)
@@ -27,7 +27,7 @@ export default {
 <style lang="scss">
 @import '@/styles/communalVariate.scss';
 .add-btn-container {
-  background-color: #3540A5;
+  background-color: #3540a5;
   border-radius: 6px;
   color: #fff;
   line-height: 40px;
@@ -48,7 +48,7 @@ export default {
   &:hover {
     color: #fff;
     background-color: $main-color;
-    transition: all .5s ease-in;
+    transition: all 0.5s ease-in;
   }
 }
 </style>

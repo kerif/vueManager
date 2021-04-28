@@ -1,32 +1,35 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.title + $t('的翻译内容')" class="dialog-video-lang" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="line.title + $t('的翻译内容')"
+    class="dialog-video-lang"
+    @close="clear"
+  >
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' +$t('信息')}}
-        </p>
+        {{ $t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息') }}
+      </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 标题 -->
-        <el-form-item :label="$t('标题')" prop="title">
-          <el-input v-model="ruleForm.title"
-          :placeholder="$t('请输入')"></el-input>
-          </el-form-item>
-          <!-- 介绍 -->
-        <el-form-item :label="$t('介绍')" prop="content">
-          <el-input v-model="ruleForm.content"
-          :placeholder="$t('请输入')"></el-input>
-          </el-form-item>
+      <!-- 标题 -->
+      <el-form-item :label="$t('标题')" prop="title">
+        <el-input v-model="ruleForm.title" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
+      <!-- 介绍 -->
+      <el-form-item :label="$t('介绍')" prop="content">
+        <el-input v-model="ruleForm.content" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         title: '',
@@ -35,12 +38,8 @@ export default {
       },
       state: '',
       rules: {
-        title: [
-          { required: true, message: this.$t('请输入标题'), trigger: 'blur' }
-        ],
-        content: [
-          { required: true, message: this.$t('请输入介绍'), trigger: 'blur' }
-        ]
+        title: [{ required: true, message: this.$t('请输入标题'), trigger: 'blur' }],
+        content: [{ required: true, message: this.$t('请输入介绍'), trigger: 'blur' }]
       },
       line: {
         id: '',
@@ -54,17 +53,19 @@ export default {
     }
   },
   methods: {
-    getLang () {
-      this.$request.videoLang(this.line.id, {
-        lang: this.ruleForm.language
-      }).then(res => {
-        this.ruleForm.title = res.data.title
-        this.ruleForm.content = res.data.content
-        console.log(this.ruleForm, 'this.ruleForm')
-      })
+    getLang() {
+      this.$request
+        .videoLang(this.line.id, {
+          lang: this.ruleForm.language
+        })
+        .then(res => {
+          this.ruleForm.title = res.data.title
+          this.ruleForm.content = res.data.content
+          console.log(this.ruleForm, 'this.ruleForm')
+        })
     },
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request.updateVideoLang(this.line.id, this.ruleForm).then(res => {
             if (res.ret) {
@@ -88,19 +89,19 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.ruleForm.title = ''
       this.ruleForm.content = ''
     },
-    cancelDialog (ruleForm) {
+    cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.show = false
     },
-    init () {
-      this.line = this.line
-      this.lang = this.lang
+    init() {
+      // this.line = this.line
+      // this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
-      this.transCode = this.transCode
+      // this.transCode = this.transCode
       console.log(this.line, 'line')
       // console.log(this.lang, 'lang')
       // console.log(this.transCode, 'this.transCode')
@@ -129,14 +130,14 @@ export default {
     margin-left: 210px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .lang-sty {
     line-height: 40px;

@@ -8,49 +8,66 @@
               v-for="item in statusList"
               :key="item.id"
               :value="item.id"
-              :label="item.name">
+              :label="item.name"
+            >
             </el-option>
           </el-select>
         </div>
         <div class="import-list">
-          <el-button @click="uploadList">{{$t('导出清单')}}</el-button>
+          <el-button @click="uploadList">{{ $t('导出清单') }}</el-button>
         </div>
       </search-group>
     </div>
     <!-- <div class="select-box">
     </div> -->
-    <el-table class="data-list" border stripe
+    <el-table
+      class="data-list"
+      border
+      stripe
       v-loading="tableLoading"
       :data="withdrawalList"
-       @selection-change="selectionChange">
+      @selection-change="selectionChange"
+    >
       <!-- <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column label="序号" type="index" :index="1" width="60"></el-table-column> -->
       <el-table-column type="index" width="55" align="center"></el-table-column>
-      <el-table-column :label="$t('流水号')" prop="serial_no">
-      </el-table-column>
+      <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
       <el-table-column :label="$t('代理ID')">
         <template slot-scope="scope">
-          <span>{{scope.row.user.id}}</span>
+          <span>{{ scope.row.user.id }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('代理昵称')">
         <template slot-scope="scope">
-          <span>{{scope.row.user.name}}</span>
+          <span>{{ scope.row.user.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('提现金额') + this.localization.currency_unit" prop="amount"></el-table-column>
+      <el-table-column
+        :label="$t('提现金额') + this.localization.currency_unit"
+        prop="amount"
+      ></el-table-column>
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{$t('待审核')}}</span>
-          <span v-if="scope.row.status === 1">{{$t('审核通过')}}</span>
-          <span v-if="scope.row.status === 2">{{$t('审核拒绝')}}</span>
+          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+          <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('申请时间')" prop="created_at"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status === 0" class="btn-green optionBtn" @click="inviteWithdrawal(scope.row.user.id,scope.row.id)">{{$t('审核')}}</el-button>
-          <el-button v-else class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.user.id,scope.row.id)">{{$t('详情')}}</el-button>
+          <el-button
+            v-if="scope.row.status === 0"
+            class="btn-green optionBtn"
+            @click="inviteWithdrawal(scope.row.user.id, scope.row.id)"
+            >{{ $t('审核') }}</el-button
+          >
+          <el-button
+            v-else
+            class="btn-deep-purple optionBtn"
+            @click="withdrawalDetail(scope.row.user.id, scope.row.id)"
+            >{{ $t('详情') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -63,7 +80,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   name: 'withdrawalList',
-  data () {
+  data() {
     return {
       withdrawalList: [],
       deleteNum: [],
@@ -95,67 +112,73 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  created () {
+  created() {
     if (this.$route.params.id) {
       // this.page_params.group = Number(this.$route.query.group)
       this.getList()
     }
   },
   methods: {
-    getList () {
+    getList() {
       console.log('page', JSON.stringify(this.page_params))
       this.tableLoading = true
-      this.$request.agentsWithdraws(this.$route.params.id, {
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size,
-        status: this.status
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.withdrawalList = res.data
-          this.localization = res.localization
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          console.log('back', JSON.stringify(this.page_params))
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .agentsWithdraws(this.$route.params.id, {
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size,
+          status: this.status
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.withdrawalList = res.data
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            console.log('back', JSON.stringify(this.page_params))
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 详情
-    withdrawalDetail (userId, id) {
-      this.$router.push({ name: 'wdDetail',
+    withdrawalDetail(userId, id) {
+      this.$router.push({
+        name: 'wdDetail',
         params: {
           userId: userId,
           id: id,
           status: 'detail'
-        } })
+        }
+      })
     },
     // 审核
-    inviteWithdrawal (userId, id) {
-      this.$router.push({ name: 'wdReviewDetail',
+    inviteWithdrawal(userId, id) {
+      this.$router.push({
+        name: 'wdReviewDetail',
         params: {
           userId: userId,
           id: id,
           state: 'review'
-        } })
+        }
+      })
     },
     // 状态筛选
-    onShipStatus () {
+    onShipStatus() {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 导出清单
-    uploadList () {
+    uploadList() {
       let params = {
         status: this.status
       }
@@ -185,7 +208,7 @@ export default {
 <style lang="scss">
 .withdrawal-list-container {
   .select-box {
-    overflow: hidden
+    overflow: hidden;
   }
   .el-icon-lock {
     color: red;

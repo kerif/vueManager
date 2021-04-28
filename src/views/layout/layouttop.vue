@@ -10,6 +10,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .layout-top {
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 </style>

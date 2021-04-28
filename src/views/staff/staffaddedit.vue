@@ -3,7 +3,7 @@
     <el-row class="client_detail">
       <!-- 基础信息 -->
       <el-form ref="params" :model="user" label-width="140px" label-position="left" :rules="rules">
-         <el-col :lg="12" class="baseInfo">
+        <el-col :lg="12" class="baseInfo">
           <!-- 用户名 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -16,7 +16,11 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="this.$t('密码')" prop="password" v-if="!this.$route.params.id">
-                <el-input v-model="user.password"  type="password" :placeholder="$t('请输入密码')"></el-input>
+                <el-input
+                  v-model="user.password"
+                  type="password"
+                  :placeholder="$t('请输入密码')"
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -29,7 +33,7 @@
             </el-col>
           </el-row>
           <!-- 员工组 -->
-           <el-row :gutter="20">
+          <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('员工组')" prop="group_id" class="employ">
                 <el-select v-model="user.group_id" :placeholder="$t('请选择员工组')" clearable>
@@ -37,15 +41,16 @@
                     v-for="item in employeeGroup"
                     :key="item.id"
                     :label="item.name_cn"
-                    :value="item.id">
+                    :value="item.id"
+                  >
                   </el-option>
                 </el-select>
-              <!-- </template> -->
+                <!-- </template> -->
               </el-form-item>
             </el-col>
           </el-row>
-      </el-col>
-      <el-col :lg="12" class="baseInfo">
+        </el-col>
+        <el-col :lg="12" class="baseInfo">
           <!-- 姓名 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -57,9 +62,16 @@
           <!-- 确认密码 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item :label="$t('确认密码')" prop="confirm_password"
-               v-if="!this.$route.params.id">
-                <el-input v-model="user.confirm_password" type="password" :placeholder="$t('请再次输入密码')"></el-input>
+              <el-form-item
+                :label="$t('确认密码')"
+                prop="confirm_password"
+                v-if="!this.$route.params.id"
+              >
+                <el-input
+                  v-model="user.confirm_password"
+                  type="password"
+                  :placeholder="$t('请再次输入密码')"
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -71,19 +83,19 @@
               </el-form-item>
             </el-col>
           </el-row>
-      </el-col>
+        </el-col>
       </el-form>
     </el-row>
     <div class="btn_box">
       <el-button type="primary" @click="update('params')" :loading="$store.state.btnLoading">
-        {{$t('保存')}}
-        </el-button>
-      </div>
+        {{ $t('保存') }}
+      </el-button>
+    </div>
   </div>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
@@ -96,20 +108,15 @@ export default {
     return {
       btn_loading: false,
       employeeGroup: [],
-      rules: { // 必填项校验
-        username: [
-          { required: true, message: this.$t('请输入用户名'), trigger: 'change' }
-        ],
-        name: [
-          { required: true, message: this.$t('请输入姓名'), trigger: 'change' }
-        ],
+      rules: {
+        // 必填项校验
+        username: [{ required: true, message: this.$t('请输入用户名'), trigger: 'change' }],
+        name: [{ required: true, message: this.$t('请输入姓名'), trigger: 'change' }],
         email: [
           { required: true, message: this.$t('请输入邮箱'), trigger: 'blur' },
           { type: 'email', message: this.$t('请输入正确的邮箱地址'), trigger: ['blur', 'change'] }
         ],
-        phone: [
-          { required: true, message: this.$t('请输入电话号码'), trigger: 'change' }
-        ],
+        phone: [{ required: true, message: this.$t('请输入电话号码'), trigger: 'change' }],
         password: [
           { required: true, message: this.$t('请输入密码'), trigger: 'blur' },
           { min: 8, max: 32, message: this.$t('长度在 8 到 20 个字符'), trigger: 'change' }
@@ -118,9 +125,7 @@ export default {
           { required: true, validator: validatePass2, trigger: 'blur' },
           { min: 8, max: 20, message: this.$t('长度在 8 到 20 个字符'), trigger: 'change' }
         ],
-        group: [
-          { required: true, message: this.$t('请输入员工组'), trigger: 'change' }
-        ]
+        group: [{ required: true, message: this.$t('请输入员工组'), trigger: 'change' }]
       },
       user: {
         username: '',
@@ -133,7 +138,7 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     if (this.$route.params.id) {
       // 编辑用户
       this.getInfo()
@@ -145,7 +150,7 @@ export default {
   name: 'staffAddContainer',
   methods: {
     // 获取数据
-    getInfo () {
+    getInfo() {
       this.$request.EditVip(this.$route.params.id).then(res => {
         if (res.ret) {
           this.user = res.data
@@ -158,18 +163,19 @@ export default {
       })
     },
     // 获取员工组数据
-    getVipGroup () {
+    getVipGroup() {
       this.$request.getVips().then(res => {
         this.employeeGroup = res.data
         // console.log(this.employeeGroup, 'this.employeeGroup')
       })
     },
     // 保存
-    update (formName) {
-      if (this.$route.params.id) { // 如果是编辑状态
-        this.$refs[formName].validate((valid) => {
+    update(formName) {
+      if (this.$route.params.id) {
+        // 如果是编辑状态
+        this.$refs[formName].validate(valid => {
           if (valid) {
-            this.$request.editAdmins(this.$route.params.id, this.user).then((res) => {
+            this.$request.editAdmins(this.$route.params.id, this.user).then(res => {
               if (res.ret) {
                 this.$notify({
                   title: this.$t('成功操作'),
@@ -190,10 +196,11 @@ export default {
             return false
           }
         })
-      } else { // 添加员工
-        this.$refs[formName].validate((valid) => {
+      } else {
+        // 添加员工
+        this.$refs[formName].validate(valid => {
           if (valid) {
-            this.$request.saveVip(this.user).then((res) => {
+            this.$request.saveVip(this.user).then(res => {
               if (res.ret) {
                 this.$notify({
                   title: this.$t('操作成功'),
@@ -220,48 +227,48 @@ export default {
 </script>
 <style lang="scss">
 @import '../../styles/commonality.scss';
-  .staff-add-container {
-    min-height: 67vh;
-    background-color: #fff !important;
-    padding: 1em 3em;
-    .title_box{
-      text-align: right;
-      line-height: 2.5em;
-    }
-    hr{
-      width: 100%;
-      border: none;
-      margin: 2em 0;
-    }
-    .phoneTips{
-      color:red;
-      display: inline-block;
-      vertical-align: middle;
-      margin-top: .8em;
-    }
-    .el-icon-circle-check{
-      display: inline-block;
-      margin-top: .8em;
-      color: $green;
-    }
-    .client_detail{
-      .Info{
-        padding: 1em 1.5em;
-      }
-    }
-    .btn_box{
-        margin-left: 135px;
-        width: 33%;
-        padding: 1.5em 0;
-        margin-top: 1.5em;
-        .el-button--primary {
-          width:72%;
-        }
-    }
-    .employ {
-      .el-select {
-        width: 100% !important;
-      }
+.staff-add-container {
+  min-height: 67vh;
+  background-color: #fff !important;
+  padding: 1em 3em;
+  .title_box {
+    text-align: right;
+    line-height: 2.5em;
+  }
+  hr {
+    width: 100%;
+    border: none;
+    margin: 2em 0;
+  }
+  .phoneTips {
+    color: red;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 0.8em;
+  }
+  .el-icon-circle-check {
+    display: inline-block;
+    margin-top: 0.8em;
+    color: $green;
+  }
+  .client_detail {
+    .Info {
+      padding: 1em 1.5em;
     }
   }
+  .btn_box {
+    margin-left: 135px;
+    width: 33%;
+    padding: 1.5em 0;
+    margin-top: 1.5em;
+    .el-button--primary {
+      width: 72%;
+    }
+  }
+  .employ {
+    .el-select {
+      width: 100% !important;
+    }
+  }
+}
 </style>

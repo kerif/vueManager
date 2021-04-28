@@ -6,104 +6,130 @@
           <i class="el-icon-chat-line-round icon-sty"></i>
         </div>
         <div>
-          <div>{{$t('短信服务')}}</div>
+          <div>{{ $t('短信服务') }}</div>
           <div style="margin-top: 10px">
-            <span class="system-sty service-sty" v-if="smsData.type === 2">{{$t('您当前正在使用系统内短信服务')}}</span>
-            <span class="third-sty service-sty" v-if="smsData.type === 1">{{$t('您当前正在使用第三方短信服务')}}</span>
-            <span class="no-sty service-sty" v-if="smsData.type === 0">{{$t('您当前未开启短信服务')}}</span>
+            <span class="system-sty service-sty" v-if="smsData.type === 2">{{
+              $t('您当前正在使用系统内短信服务')
+            }}</span>
+            <span class="third-sty service-sty" v-if="smsData.type === 1">{{
+              $t('您当前正在使用第三方短信服务')
+            }}</span>
+            <span class="no-sty service-sty" v-if="smsData.type === 0">{{
+              $t('您当前未开启短信服务')
+            }}</span>
           </div>
           <div v-if="smsData.type === 1" class="sms-sty">
             <div style="margin-bottom: 10px">
-              <span class="text-sty">{{$t('大陆短信服务')}}</span>
-              <i v-if="smsData.status && smsData.status.china === 1" class="el-icon-circle-check icon-china"></i>
+              <span class="text-sty">{{ $t('大陆短信服务') }}</span>
+              <i
+                v-if="smsData.status && smsData.status.china === 1"
+                class="el-icon-circle-check icon-china"
+              ></i>
               <i v-else class="el-icon-circle-close icon-int"></i>
             </div>
             <div>
-              <span class="text-sty">{{$t('国际短信服务')}}</span>
-              <i v-if="smsData.status && smsData.status.international === 1" class="el-icon-circle-check icon-china"></i>
+              <span class="text-sty">{{ $t('国际短信服务') }}</span>
+              <i
+                v-if="smsData.status && smsData.status.international === 1"
+                class="el-icon-circle-check icon-china"
+              ></i>
               <i class="el-icon-circle-close icon-int"></i>
             </div>
           </div>
           <div v-else-if="smsData.type === 2" class="sms-sty">
-            <div class="text-sty">{{$t('大陆短信剩余次数')}}：
+            <div class="text-sty">
+              {{ $t('大陆短信剩余次数') }}：
               <span class="no-sty">
-                {{smsData.count && smsData.count.china}}
+                {{ smsData.count && smsData.count.china }}
               </span>
             </div>
-            <div class="text-sty">{{$t('国际短信剩余次数')}}：
+            <div class="text-sty">
+              {{ $t('国际短信剩余次数') }}：
               <span class="no-sty">
-                {{smsData.count && smsData.count.international}}
+                {{ smsData.count && smsData.count.international }}
               </span>
             </div>
           </div>
         </div>
       </div>
       <div class="configureBtn">
-        <el-button type="primary" @click="goConfiguration('sms')">{{$t('配置')}}</el-button>
+        <el-button type="primary" @click="goConfiguration('sms')">{{ $t('配置') }}</el-button>
       </div>
     </div>
     <div class="item">
       <div class="item-top">
         <div>
-           <i class="el-icon-chat-line-round icon-sty"></i>
+          <i class="el-icon-chat-line-round icon-sty"></i>
         </div>
         <div>
-          <div>{{$t('物流查询服务')}}</div>
+          <div>{{ $t('物流查询服务') }}</div>
           <div>
-            <span class="system-sty service-sty" v-if="trackingData.type === 2">{{$t('您当前正在使用系统内物流查询')}}</span>
-            <span class="third-sty service-sty" v-if="trackingData.type === 1">{{$t('您当前正在使用第三方物流查询服务')}}</span>
-            <span class="no-sty service-sty" v-if="trackingData.type === 0">{{$t('您当前未开启物流查询')}}</span>
+            <span class="system-sty service-sty" v-if="trackingData.type === 2">{{
+              $t('您当前正在使用系统内物流查询')
+            }}</span>
+            <span class="third-sty service-sty" v-if="trackingData.type === 1">{{
+              $t('您当前正在使用第三方物流查询服务')
+            }}</span>
+            <span class="no-sty service-sty" v-if="trackingData.type === 0">{{
+              $t('您当前未开启物流查询')
+            }}</span>
           </div>
           <div v-if="trackingData.type === 1" class="sms-sty">
             <div style="margin-bottom: 10px">
-              <span class="text-sty">{{$t('快递100查询')}}</span>
-              <i v-if="trackingData.status && trackingData.status.kuaidi100 === 1" class="el-icon-circle-check icon-china"></i>
+              <span class="text-sty">{{ $t('快递100查询') }}</span>
+              <i
+                v-if="trackingData.status && trackingData.status.kuaidi100 === 1"
+                class="el-icon-circle-check icon-china"
+              ></i>
               <i v-else class="el-icon-circle-close icon-int"></i>
             </div>
             <div>
-              <span class="text-sty">{{$t('51Track查询')}}</span>
-              <i v-if="trackingData.status && trackingData.status['51tracking'] === 1" class="el-icon-circle-check icon-china"></i>
-              <i v-else class="el-icon-circle-close icon-int"></i></div>
+              <span class="text-sty">{{ $t('51Track查询') }}</span>
+              <i
+                v-if="trackingData.status && trackingData.status['51tracking'] === 1"
+                class="el-icon-circle-check icon-china"
+              ></i>
+              <i v-else class="el-icon-circle-close icon-int"></i>
+            </div>
           </div>
           <div v-else-if="trackingData.type === 2" class="sms-sty">
             <el-row>
-              <el-col :span="14" class="text-sty">{{$t('快递100剩余次数')}}：</el-col>
-              <el-col :span="6"><span class="no-sty">
-                  {{trackingData.count && trackingData.count.kuaidi100}}
+              <el-col :span="14" class="text-sty">{{ $t('快递100剩余次数') }}：</el-col>
+              <el-col :span="6"
+                ><span class="no-sty">
+                  {{ trackingData.count && trackingData.count.kuaidi100 }}
                 </span>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="14" class="text-sty">
-                {{$t('51Tracking剩余次数')}}：
-              </el-col>
+              <el-col :span="14" class="text-sty"> {{ $t('51Tracking剩余次数') }}： </el-col>
               <el-col :span="6">
-                 <span class="no-sty">
-                {{trackingData.count && trackingData.count['51tracking']}}
-              </span>
+                <span class="no-sty">
+                  {{ trackingData.count && trackingData.count['51tracking'] }}
+                </span>
               </el-col>
             </el-row>
           </div>
         </div>
       </div>
       <div class="configureBtn">
-        <el-button type="primary" @click="goConfiguration('tracking')">{{$t('配置')}}</el-button>
+        <el-button type="primary" @click="goConfiguration('tracking')">{{ $t('配置') }}</el-button>
       </div>
     </div>
     <div class="item">
       <div class="item-top">
         <div>
-           <i class="el-icon-chat-line-round icon-sty"></i>
+          <i class="el-icon-chat-line-round icon-sty"></i>
         </div>
         <div>
-          <div>{{$t('邮件通知')}}</div>
-          <div class="text-sty">{{$t('邮件配置')}}</div>
+          <div>{{ $t('邮件通知') }}</div>
+          <div class="text-sty">{{ $t('邮件配置') }}</div>
           <div></div>
           <div></div>
         </div>
       </div>
       <div class="configureBtn">
-        <el-button type="primary" @click="goConfiguration('email')">{{$t('配置')}}</el-button>
+        <el-button type="primary" @click="goConfiguration('email')">{{ $t('配置') }}</el-button>
       </div>
     </div>
   </div>
@@ -111,17 +137,17 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       smsData: {},
       trackingData: {}
     }
   },
-  created () {
+  created() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getApiService().then(res => {
         if (res.ret) {
           this.smsData = res.data.sms
@@ -130,7 +156,7 @@ export default {
         }
       })
     },
-    goConfiguration (status) {
+    goConfiguration(status) {
       if (status === 'sms') {
         this.$router.push({ name: 'smsServices' })
       } else if (status === 'tracking') {
@@ -141,7 +167,6 @@ export default {
     }
   }
 }
-
 </script>
 <style lang="scss" scoped>
 .api-configure {
@@ -178,7 +203,7 @@ export default {
     color: #15b23e;
   }
   .third-sty {
-    color: #3540A5;
+    color: #3540a5;
   }
   .no-sty {
     color: #df6062;

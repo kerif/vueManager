@@ -1,16 +1,13 @@
 <template>
   <div class="recording-container">
-      <el-table class="data-list" border stripe
-      v-loading="tableLoading"
-      :data="recordingData">
+    <el-table class="data-list" border stripe v-loading="tableLoading" :data="recordingData">
       <el-table-column type="index" width="55"></el-table-column>
       <!-- 券名称 -->
       <el-table-column :label="$t('券名称')" prop="coupon"></el-table-column>
       <!-- 券码 -->
       <el-table-column :label="$t('券码')" prop="coupon_code"></el-table-column>
       <!-- 金额 -->
-      <el-table-column :label="$t('金额')" prop="amount">
-      </el-table-column>
+      <el-table-column :label="$t('金额')" prop="amount"> </el-table-column>
       <!-- 投放对象 -->
       <el-table-column :label="$t('投放对象')" prop="user_id"></el-table-column>
       <!-- 使用时间 -->
@@ -34,36 +31,38 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       recordingData: [],
       tableLoading: false
     }
   },
-  created () {
+  created() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       this.recordingData = []
-      this.$request.userCoupons(this.$route.query.id, {
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.recordingData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .userCoupons(this.$route.query.id, {
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.recordingData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     }
   }
 }

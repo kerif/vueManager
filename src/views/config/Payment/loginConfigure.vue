@@ -28,28 +28,27 @@
         </el-switch>
       </el-form-item>
     </el-form>
-    <el-button class="save-btn" @click="saveValidate">{{
-      $t("保存")
-    }}</el-button>
+    <el-button class="save-btn" @click="saveValidate">{{ $t('保存') }}</el-button>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      validateList: { // 功能配置
+      validateList: {
+        // 功能配置
         validate_phone: '',
         validate_email: ''
       }
     }
   },
-  created () {
+  created() {
     this.getValidate()
   },
   methods: {
     // 获取功能配置
-    getValidate () {
+    getValidate() {
       this.$request.getValidate().then(res => {
         if (res.ret) {
           this.validateList = res.data
@@ -57,7 +56,7 @@ export default {
       })
     },
     // 更新功能配置
-    saveValidate () {
+    saveValidate() {
       this.$request.updateValidate(this.validateList).then(res => {
         if (res.ret) {
           this.$notify({
@@ -76,7 +75,5 @@ export default {
     }
   }
 }
-
 </script>
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,19 +1,20 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('关于我们')" class="check-we-dialog" @close="clear">
     <div class="us-sty">
-      <h3>【{{$t('仓库桌面端exe文件下载')}}】</h3>
-      <span>{{$t('下载地址')}}：</span><br/>
-      <span>http://des-update.nle-tech.com/jiyun/update.html</span><br/>
-      <h3>【{{$t('仓库管理App下载')}}】</h3><br/>
-      <span>{{$t('App Store 或 应用市场 搜索“包裹集运助手”')}}</span>
-      <span>IOS版本：https://apps.apple.com/cn/app/id1492557133</span><br/>
-      <span>Android版本：https://appgallery.huawei.com/#/app/C101931567</span><br/>
+      <h3>【{{ $t('仓库桌面端exe文件下载') }}】</h3>
+      <span>{{ $t('下载地址') }}：</span><br />
+      <span>http://des-update.nle-tech.com/jiyun/update.html</span><br />
+      <h3>【{{ $t('仓库管理App下载') }}】</h3>
+      <br />
+      <span>{{ $t('App Store 或 应用市场 搜索“包裹集运助手”') }}</span>
+      <span>IOS版本：https://apps.apple.com/cn/app/id1492557133</span><br />
+      <span>Android版本：https://appgallery.huawei.com/#/app/C101931567</span><br />
       <div class="img-container img-right">
-        <img class="img-sty" src="../../assets/ios.png"><br/>
+        <img class="img-sty" src="../../assets/ios.png" /><br />
         <span>IOS</span>
       </div>
       <div class="img-container">
-        <img class="img-sty" src="../../assets/android.png"><br/>
+        <img class="img-sty" src="../../assets/android.png" /><br />
         <span>Android</span>
       </div>
     </div>
@@ -21,7 +22,7 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         status: ''
@@ -30,22 +31,8 @@ export default {
     }
   },
   methods: {
-    getList () {
-      this.$request.aboutUs().then(res => {
-        if (res.ret) {
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
-    clear () {
-    },
-    init () {
-      this.getList()
-    }
+    clear() {},
+    init() {}
   }
 }
 </script>
@@ -62,14 +49,14 @@ export default {
     width: 100% !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .input-style {
     .el-input__inner {

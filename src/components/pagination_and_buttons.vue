@@ -1,13 +1,15 @@
 <template>
   <div class="pagination_and_buttons">
     <div class="buttons">
-      <el-button v-for="(item, index) in lists"
-      :key="index"
-      @click="item.method"
-      :loading="item.loading"
-      :disabled="item.disabled?item.disabled:false">
+      <el-button
+        v-for="(item, index) in lists"
+        :key="index"
+        @click="item.method"
+        :loading="item.loading"
+        :disabled="item.disabled ? item.disabled : false"
+      >
         <!-- {{item.name ? item.name : item.CName}} -->
-        {{item.name}}
+        {{ item.name }}
       </el-button>
     </div>
     <div class="pagination">
@@ -18,7 +20,8 @@
         :page-sizes="sizesList"
         :page-size="pageParams.size"
         layout="sizes, prev, pager, next, jumper, slot, ->, total"
-        :total="+pageParams.total">
+        :total="+pageParams.total"
+      >
       </el-pagination>
     </div>
   </div>
@@ -42,51 +45,53 @@ export default {
 }
 </script>
 <style lang="scss">
-.pagination_and_buttons{
+.pagination_and_buttons {
   padding: 20px 5px;
   background: #fff;
-  .pagination, .buttons {
+  .pagination,
+  .buttons {
     text-align: right;
   }
   .pagination {
     margin-top: 10px;
   }
-  .el-button+.el-button{
+  .el-button + .el-button {
     margin-left: 0;
   }
-  .el-button{
+  .el-button {
     color: #636f7a;
     border-color: #bfbfbf;
     padding: 8px 13px;
     font-size: 14px;
     text-align: center;
     margin-right: 5px;
-    &:hover{
+    &:hover {
       background-color: #d4d4d4;
       border: 1px solid #c4c4c4;
     }
-    &:focus{
+    &:focus {
       border-color: #bfbfbf;
     }
-    &:first-child{
+    &:first-child {
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
     }
-    &:last-child{
+    &:last-child {
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
     }
   }
-  .is-disabled{
-    &:focus, &:hover{
+  .is-disabled {
+    &:focus,
+    &:hover {
       color: #888;
     }
   }
-  .el-pagination{
-    .el-pagination__sizes{
+  .el-pagination {
+    .el-pagination__sizes {
       margin: 0 0 0 10px;
     }
-    .el-pagination__total{
+    .el-pagination__total {
       margin: 0 0 0 10px;
     }
   }

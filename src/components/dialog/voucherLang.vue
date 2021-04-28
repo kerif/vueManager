@@ -1,27 +1,31 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.name + $t('的翻译内容')" class="dialog-pay-lang" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="line.name + $t('的翻译内容')"
+    class="dialog-pay-lang"
+    @close="clear"
+  >
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息')}}
-        </p>
+        {{ $t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息') }}
+      </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 名称 -->
-        <el-form-item :label="$t('名称')" prop="name">
-          <el-input v-model="ruleForm.name"
-          :placeholder="$t('请输入')"></el-input>
-          </el-form-item>
+      <!-- 名称 -->
+      <el-form-item :label="$t('名称')" prop="name">
+        <el-input v-model="ruleForm.name" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         name: '',
@@ -29,9 +33,7 @@ export default {
       },
       state: '',
       rules: {
-        name: [
-          { required: true, message: this.$t('请输入名称'), trigger: 'blur' }
-        ]
+        name: [{ required: true, message: this.$t('请输入名称'), trigger: 'blur' }]
       },
       line: {
         id: '',
@@ -45,16 +47,18 @@ export default {
     }
   },
   methods: {
-    getLang () {
-      this.$request.voucherLang(this.line.id, {
-        lang: this.ruleForm.language
-      }).then(res => {
-        this.ruleForm.name = res.data.name
-        console.log(this.ruleForm, 'this.ruleForm')
-      })
+    getLang() {
+      this.$request
+        .voucherLang(this.line.id, {
+          lang: this.ruleForm.language
+        })
+        .then(res => {
+          this.ruleForm.name = res.data.name
+          console.log(this.ruleForm, 'this.ruleForm')
+        })
     },
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request.updateVoucherLang(this.line.id, this.ruleForm).then(res => {
             if (res.ret) {
@@ -78,18 +82,18 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.ruleForm.name = ''
     },
-    cancelDialog (ruleForm) {
+    cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.show = false
     },
-    init () {
-      this.line = this.line
-      this.lang = this.lang
+    init() {
+      // this.line = this.line
+      // this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
-      this.transCode = this.transCode
+      // this.transCode = this.transCode
       console.log(this.line, 'line')
       console.log(this.lang, 'lang')
       console.log(this.transCode, 'this.transCode')
@@ -118,14 +122,14 @@ export default {
     margin-left: 210px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .lang-sty {
     line-height: 40px;

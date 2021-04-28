@@ -1,24 +1,20 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('修改客户组')" class="dialog-vip-group" @close="clear">
-    <div>{{$t('客户组中文名*')}}</div>
+    <div>{{ $t('客户组中文名*') }}</div>
     <el-select v-model="user.name_cn" :placeholder="$t('请选择')">
-      <el-option
-      v-for="item in userList"
-      :key="item.id"
-      :value="item.id"
-      :label="item.name_cn">
+      <el-option v-for="item in userList" :key="item.id" :value="item.id" :label="item.name_cn">
       </el-option>
     </el-select>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       userList: [],
       user: {
@@ -27,12 +23,12 @@ export default {
     }
   },
   methods: {
-    getUser () {
+    getUser() {
       this.$request.getSimple().then(res => {
         this.userList = res.data
       })
     },
-    confirm () {
+    confirm() {
       this.$request.changeUserList(this.id, this.user.name_cn).then(res => {
         if (res.ret) {
           this.$notify({
@@ -51,10 +47,10 @@ export default {
         this.show = false
       })
     },
-    clear () {
+    clear() {
       this.user.name_cn = ''
     },
-    init () {
+    init() {
       this.getUser()
     }
   }
@@ -63,15 +59,15 @@ export default {
 <style lang="scss">
 .dialog-vip-group {
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

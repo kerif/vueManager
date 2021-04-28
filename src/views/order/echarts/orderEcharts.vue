@@ -2,12 +2,12 @@
   <div class="order-echarts-container">
     <div class="echarts-main">
       <div class="echarts-top">
-      <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
-        <el-option :value="1" :label="$t('今天')"></el-option>
-        <el-option :value="7" :label="$t('近7天')"></el-option>
-        <el-option :value="30" :label="$t('近30天')"></el-option>
-      </el-select>
-       <el-date-picker
+        <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
+          <el-option :value="1" :label="$t('今天')"></el-option>
+          <el-option :value="7" :label="$t('近7天')"></el-option>
+          <el-option :value="30" :label="$t('近30天')"></el-option>
+        </el-select>
+        <el-date-picker
           class="timeStyle"
           v-model="pickingList"
           type="daterange"
@@ -16,9 +16,10 @@
           value-format="yyyy-MM-dd"
           :range-separator="$t('至')"
           :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
+          :end-placeholder="$t('结束日期')"
+        >
         </el-date-picker>
-        <el-checkbox v-model="checked" class="select-sty">{{$t('对比')}}</el-checkbox>
+        <el-checkbox v-model="checked" class="select-sty">{{ $t('对比') }}</el-checkbox>
         <el-date-picker
           v-if="checked"
           class="timeStyle"
@@ -29,40 +30,55 @@
           value-format="yyyy-MM-dd"
           :range-separator="$t('至')"
           :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
+          :end-placeholder="$t('结束日期')"
+        >
         </el-date-picker>
-        </div>
-      <h3>{{$t('包裹概览')}}</h3>
+      </div>
+      <h3>{{ $t('包裹概览') }}</h3>
       <div class="package-main">
         <ul>
           <li v-for="(item, index) in pieData" :key="index" class="main-first">
             <div v-if="item.name === 'all'">
-              <p>{{$t('全部')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+              <p>{{ $t('全部') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'wait_storage'">
-              <p class="no-warehouse">{{$t('未入库')}}</p>
-              <p class="no-warehouse"><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'wait_storage'">
+              <p class="no-warehouse">{{ $t('未入库') }}</p>
+              <p class="no-warehouse">
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'already_storage'">
-              <p>{{$t('已入库')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'already_storage'">
+              <p>{{ $t('已入库') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'packed'">
-              <p>{{$t('已集包')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'packed'">
+              <p>{{ $t('已集包') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'shipped'">
-              <p>{{$t('已发货')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'shipped'">
+              <p>{{ $t('已发货') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'received'">
-              <p>{{$t('已收货')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'received'">
+              <p>{{ $t('已收货') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'invalid'">
-              <p class="no-warehouse">{{$t('弃件包裹')}}</p>
-              <p class="no-warehouse"><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'invalid'">
+              <p class="no-warehouse">{{ $t('弃件包裹') }}</p>
+              <p class="no-warehouse">
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
           </li>
         </ul>
@@ -73,37 +89,51 @@
       </div>
     </div>
     <div class="echarts-main order-main">
-      <h3>{{$t('订单概览')}}</h3>
+      <h3>{{ $t('订单概览') }}</h3>
       <div class="package-main">
         <ul>
           <li v-for="(item, index) in pieOrderData" :key="index" class="main-first">
             <div v-if="item.name === 'all'">
-              <p>{{$t('全部')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+              <p>{{ $t('全部') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'wait_pack'">
-              <p class="no-warehouse">{{$t('待处理')}}</p>
-              <p class="no-warehouse"><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'wait_pack'">
+              <p class="no-warehouse">{{ $t('待处理') }}</p>
+              <p class="no-warehouse">
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'wait_payment'">
-              <p>{{$t('待支付')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'wait_payment'">
+              <p>{{ $t('待支付') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'wait_shipped'">
-              <p class="no-warehouse">{{$t('待发货')}}</p>
-              <p  class="no-warehouse"><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'wait_shipped'">
+              <p class="no-warehouse">{{ $t('待发货') }}</p>
+              <p class="no-warehouse">
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'shipped'">
-              <p>{{$t('已发货')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'shipped'">
+              <p>{{ $t('已发货') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'received'">
-              <p>{{$t('已签收')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'received'">
+              <p>{{ $t('已签收') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'invalid'">
-              <p>{{$t('作废订单')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'invalid'">
+              <p>{{ $t('作废订单') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
           </li>
         </ul>
@@ -114,8 +144,17 @@
       </div>
     </div>
     <div class="echarts-bottom">
-      <h3>{{$t('包裹统计')}}</h3>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" min-height="100">
+      <h3>{{ $t('包裹统计') }}</h3>
+      <el-table
+        class="data-list"
+        border
+        stripe
+        v-loading="tableLoading"
+        :data="packageData"
+        show-summary
+        :summary-method="getSummaries"
+        min-height="100"
+      >
         <el-table-column :label="$t('时间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('未入库')" prop="wait_storage"></el-table-column>
@@ -128,7 +167,14 @@
     </div>
     <div class="echarts-bottom" v-if="unShow && checked">
       <!-- <h3>{{$t('包裹对比')}}</h3> -->
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" min-height="100">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        v-loading="tableLoading"
+        :data="packageCompare"
+        min-height="100"
+      >
         <!-- <el-table-column :label="$t('区间')" prop="days"></el-table-column>
        <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('未入库')" prop="wait_storage"></el-table-column>
@@ -148,8 +194,17 @@
       </el-table>
     </div>
     <div class="echarts-bottom">
-      <h3>{{$t('订单统计')}}</h3>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="oderData" min-height="100" show-summary :summary-method="getSummaries">
+      <h3>{{ $t('订单统计') }}</h3>
+      <el-table
+        class="data-list"
+        border
+        stripe
+        v-loading="tableLoading"
+        :data="oderData"
+        min-height="100"
+        show-summary
+        :summary-method="getSummaries"
+      >
         <el-table-column :label="$t('时间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('待处理')" prop="wait_pack"></el-table-column>
@@ -162,7 +217,14 @@
     </div>
     <div class="echarts-bottom" v-if="unShow && checked">
       <!-- <h3>{{$t('订单对比')}}</h3> -->
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="orderCompare" min-height="100">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        v-loading="tableLoading"
+        :data="orderCompare"
+        min-height="100"
+      >
         <!-- <el-table-column :label="$t('区间')" prop="days"></el-table-column>
         <el-table-column :label="$t('全部')" prop="total"></el-table-column>
         <el-table-column :label="$t('待处理')" prop="wait_pack"></el-table-column>
@@ -171,7 +233,7 @@
         <el-table-column :label="$t('已发货')" prop="shipped"></el-table-column>
         <el-table-column :label="$t('已签收')" prop="received"></el-table-column>
         <el-table-column :label="$t('弃件包裹')" prop="invalid"></el-table-column> -->
-         <el-table-column :label="$t('合计')" prop="days"></el-table-column>
+        <el-table-column :label="$t('合计')" prop="days"></el-table-column>
         <el-table-column prop="total"></el-table-column>
         <el-table-column prop="wait_pack"></el-table-column>
         <el-table-column prop="wait_payment"></el-table-column>
@@ -193,7 +255,7 @@ export default {
     // NlePagination
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       days: 7,
       pickingList: [],
@@ -221,7 +283,7 @@ export default {
       orderCompare: []
     }
   },
-  created () {
+  created() {
     this.getPie() // 包裹饼图数据
     this.getColumnar() // 包裹柱状数据
     this.getOrderPie() // 订单饼图数据
@@ -229,7 +291,7 @@ export default {
     this.packageList() // 包裹列表
     this.orderList() // 订单列表
   },
-  mounted () {
+  mounted() {
     // 包裹饼图
     this.myChart = echarts.init(document.getElementById('chartsFirst'))
     window.onresize = this.myChart.resize
@@ -249,7 +311,8 @@ export default {
       color: ['#cee5fe'],
       tooltip: {
         trigger: 'axis',
-        axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        axisPointer: {
+          // 坐标轴指示器，坐标轴触发有效
           type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
         }
       },
@@ -279,7 +342,8 @@ export default {
       color: ['#cee5fe'],
       tooltip: {
         trigger: 'axis',
-        axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        axisPointer: {
+          // 坐标轴指示器，坐标轴触发有效
           type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
         }
       },
@@ -293,7 +357,7 @@ export default {
   },
   methods: {
     // 包裹饼图数据
-    getPie () {
+    getPie() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -305,12 +369,12 @@ export default {
         if (res.ret) {
           this.pieData = res.data
           const obj = {
-            'wait_storage': '未入库',
-            'already_storage': '已入库',
-            'packed': '已集包',
-            'shipped': '已发货',
-            'received': '已收货',
-            'invalid': '弃件包裹'
+            wait_storage: '未入库',
+            already_storage: '已入库',
+            packed: '已集包',
+            shipped: '已发货',
+            received: '已收货',
+            invalid: '弃件包裹'
           }
           // let pieOrderList = res.data.map(item => {
           //   console.log(item, 'item')
@@ -319,14 +383,16 @@ export default {
           //     name: obj[item.name]
           //   }
           // })
-          let pieOrderList = res.data.filter(item => {
-            return item.name !== 'all'
-          }).map(item => {
-            return {
-              value: item.counts,
-              name: obj[item.name]
-            }
-          })
+          let pieOrderList = res.data
+            .filter(item => {
+              return item.name !== 'all'
+            })
+            .map(item => {
+              return {
+                value: item.counts,
+                name: obj[item.name]
+              }
+            })
           console.log(pieOrderList, 'pieOrderList')
           this.option.legend = {
             orient: 'vertical',
@@ -364,7 +430,7 @@ export default {
       })
     },
     // 包裹树状图
-    getColumnar () {
+    getColumnar() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -388,14 +454,17 @@ export default {
           this.packageOption.yAxis = [
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             }
           ]
@@ -412,7 +481,7 @@ export default {
       })
     },
     // 订单饼图数据
-    getOrderPie () {
+    getOrderPie() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -424,12 +493,12 @@ export default {
         if (res.ret) {
           this.pieOrderData = res.data
           const obj = {
-            'wait_pack': '待处理',
-            'wait_payment': '待支付',
-            'wait_shipped': '待发货',
-            'shipped': '已发货',
-            'received': '已签收',
-            'invalid': '作废订单'
+            wait_pack: '待处理',
+            wait_payment: '待支付',
+            wait_shipped: '待发货',
+            shipped: '已发货',
+            received: '已签收',
+            invalid: '作废订单'
           }
           // let pieList = res.data.map(item => {
           //   console.log(item, 'item')
@@ -438,14 +507,16 @@ export default {
           //     name: obj[item.name]
           //   }
           // })
-          let pieList = res.data.filter(item => {
-            return item.name !== 'all'
-          }).map(item => {
-            return {
-              value: item.counts,
-              name: obj[item.name]
-            }
-          })
+          let pieList = res.data
+            .filter(item => {
+              return item.name !== 'all'
+            })
+            .map(item => {
+              return {
+                value: item.counts,
+                name: obj[item.name]
+              }
+            })
           this.orderLeft.legend = {
             orient: 'vertical',
             left: 10,
@@ -482,7 +553,7 @@ export default {
       })
     },
     // 订单树状图
-    getOrderColumnar () {
+    getOrderColumnar() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -506,14 +577,17 @@ export default {
           this.orderRight.yAxis = [
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             }
           ]
@@ -530,7 +604,7 @@ export default {
       })
     },
     // 天数
-    getDatas () {
+    getDatas() {
       this.page_params.handleQueryChange('days', this.days)
       this.getPie()
       this.getColumnar()
@@ -540,7 +614,7 @@ export default {
       this.orderList()
     },
     // 时间
-    onPick (val) {
+    onPick(val) {
       this.begin = val ? val[0] : ''
       this.end = val ? val[1] : ''
       // this.page_params.page = 1
@@ -553,7 +627,7 @@ export default {
       this.orderList()
     },
     // 对比
-    onCompare (val) {
+    onCompare(val) {
       this.compare_begin = val ? val[0] : ''
       this.compare_end = val ? val[1] : ''
       // this.page_params.page = 1
@@ -562,7 +636,7 @@ export default {
       this.compareOrder()
     },
     // 包裹订单对比
-    comparePackage () {
+    comparePackage() {
       let params = {
         days: this.days
       }
@@ -578,7 +652,7 @@ export default {
       })
     },
     // 订单对比
-    compareOrder () {
+    compareOrder() {
       let params = {
         days: this.days
       }
@@ -594,7 +668,7 @@ export default {
       })
     },
     // 包裹列表
-    packageList () {
+    packageList() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -615,7 +689,7 @@ export default {
         }
       })
     },
-    getSummaries (param) {
+    getSummaries(param) {
       const { columns, data } = param
       const sums = []
       columns.forEach((column, index) => {
@@ -641,7 +715,7 @@ export default {
       return sums
     },
     // 订单列表
-    orderList () {
+    orderList() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -711,14 +785,14 @@ export default {
   .charts-content {
     margin-top: 60px;
   }
-  ul{
+  ul {
     margin: 0;
     padding: 0;
-    li{
-      list-style:none;
+    li {
+      list-style: none;
     }
   }
-   .main-first:last-child{
+  .main-first:last-child {
     border-right: none !important;
   }
 }

@@ -1,34 +1,47 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('添加物流信息1')" class="add-batch"
-  width="45%" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('添加物流信息1')"
+    class="add-batch"
+    width="45%"
+    @close="clear"
+  >
     <el-form ref="form" :model="company" label-width="160px">
-        <el-form-item :label="$t('*转运快递单号-头程：')">
-            <el-input v-model="company.sn" class="input-select"></el-input>
-            <el-button @click.native="goExpress" class="express-btn">{{$t('管理发货快递公司')}}</el-button>
-        </el-form-item>
-        <el-form-item :label="$t('*转运快递公司-头程：')">
-            <!-- <el-input v-model="company.company"></el-input> -->
-             <el-select v-model="company.company" clearable
-             allow-create default-first-option :placeholder="$t('请选择')">
-                <el-option
-                    v-for="item in companyList"
-                    :key="item.id"
-                    :value="item.code"
-                    :label="item.name">
-                </el-option>
-             </el-select>
-        </el-form-item>
+      <el-form-item :label="$t('*转运快递单号-头程：')">
+        <el-input v-model="company.sn" class="input-select"></el-input>
+        <el-button @click.native="goExpress" class="express-btn">{{
+          $t('管理发货快递公司')
+        }}</el-button>
+      </el-form-item>
+      <el-form-item :label="$t('*转运快递公司-头程：')">
+        <!-- <el-input v-model="company.company"></el-input> -->
+        <el-select
+          v-model="company.company"
+          clearable
+          allow-create
+          default-first-option
+          :placeholder="$t('请选择')"
+        >
+          <el-option
+            v-for="item in companyList"
+            :key="item.id"
+            :value="item.code"
+            :label="item.name"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       company: {
         sn: '',
@@ -40,7 +53,7 @@ export default {
   },
   methods: {
     // 根据转运快递单号的值拉取相对应的转运快递公司
-    getCompany () {
+    getCompany() {
       this.$request.shipmentCompanies().then(res => {
         if (res.ret) {
           if (res.data.length) {
@@ -53,7 +66,7 @@ export default {
       })
     },
     // 获取当前值
-    getInfo () {
+    getInfo() {
       this.$request.aloneShipmentsDetails(this.id).then(res => {
         if (res.ret) {
           this.company.sn = res.data.logistics_sn
@@ -61,44 +74,46 @@ export default {
         }
       })
     },
-    confirm () {
+    confirm() {
       // console.log(this.company.company, 'this.company.company')
       if (this.company.sn === '') {
         return this.$message.error(this.$t('请输入转运快递单号头程'))
       } else if (this.company.company === '') {
         return this.$message.error(this.$t('请输入转运快递公司头程'))
       }
-      this.$request.confirmExpress(this.id, {
-        logistics_sn: this.company.sn,
-        logistics_company: this.company.company
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('保存成功'),
-            message: res.msg,
-            type: 'success'
-          })
+      this.$request
+        .confirmExpress(this.id, {
+          logistics_sn: this.company.sn,
+          logistics_company: this.company.company
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('保存成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
           this.show = false
-          this.success()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-        this.show = false
-      })
+        })
     },
-    goExpress () {
+    goExpress() {
       this.show = false
       this.$router.push({ name: 'payment', query: { activeName: '9' } })
     },
-    clear () {
+    clear() {
       this.company.sn = ''
       this.company.company = ''
     },
-    init () {
+    init() {
       this.getCompany()
       this.getInfo()
       // this.company.sn = this.logistics_sn
@@ -113,14 +128,14 @@ export default {
     width: 40%;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .el-select {
     width: 40%;

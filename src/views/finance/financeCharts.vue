@@ -2,12 +2,12 @@
   <div class="finance-echarts-container">
     <div class="echarts-main">
       <div class="echarts-top">
-      <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
-        <el-option :value="1" :label="$t('今天')"></el-option>
-        <el-option :value="7" :label="$t('近7天')"></el-option>
-        <el-option :value="30" :label="$t('近30天')"></el-option>
-      </el-select>
-       <el-date-picker
+        <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
+          <el-option :value="1" :label="$t('今天')"></el-option>
+          <el-option :value="7" :label="$t('近7天')"></el-option>
+          <el-option :value="30" :label="$t('近30天')"></el-option>
+        </el-select>
+        <el-date-picker
           class="timeStyle"
           v-model="pickingList"
           type="daterange"
@@ -16,9 +16,10 @@
           value-format="yyyy-MM-dd"
           :range-separator="$t('至')"
           :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
+          :end-placeholder="$t('结束日期')"
+        >
         </el-date-picker>
-        <el-checkbox v-model="checked" class="select-sty">{{$t('对比')}}</el-checkbox>
+        <el-checkbox v-model="checked" class="select-sty">{{ $t('对比') }}</el-checkbox>
         <el-date-picker
           v-if="checked"
           class="timeStyle"
@@ -29,29 +30,39 @@
           value-format="yyyy-MM-dd"
           :range-separator="$t('至')"
           :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
+          :end-placeholder="$t('结束日期')"
+        >
         </el-date-picker>
-        </div>
+      </div>
       <div class="package-main">
         <ul>
           <li v-for="(item, index) in pieData" :key="index" class="total-first">
             <div v-if="item.name === 'total'">
-              <p>{{$t('总收入')}}
-                <span v-if="localization">{{localization.currency_unit}}</span>
+              <p>
+                {{ $t('总收入') }}
+                <span v-if="localization">{{ localization.currency_unit }}</span>
               </p>
-              <p class="no-warehouse"><strong>{{item.amount}}</strong></p>
+              <p class="no-warehouse">
+                <strong>{{ item.amount }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'payment'">
-              <p>{{$t('营业额')}}
-                <span v-if="localization">{{localization.currency_unit}}</span>
+            <div v-if="item.name === 'payment'">
+              <p>
+                {{ $t('营业额') }}
+                <span v-if="localization">{{ localization.currency_unit }}</span>
               </p>
-              <p><strong>{{item.amount}}</strong></p>
+              <p>
+                <strong>{{ item.amount }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'recharge'">
-              <p>{{$t('充值收入')}}
-                <span v-if="localization">{{localization.currency_unit}}</span>
+            <div v-if="item.name === 'recharge'">
+              <p>
+                {{ $t('充值收入') }}
+                <span v-if="localization">{{ localization.currency_unit }}</span>
               </p>
-              <p><strong>{{item.amount}}</strong></p>
+              <p>
+                <strong>{{ item.amount }}</strong>
+              </p>
             </div>
           </li>
         </ul>
@@ -62,7 +73,16 @@
     </div>
     <div class="echarts-bottom">
       <!-- <h3>{{$t('包裹列表')}}</h3> -->
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" show-summary :summary-method="getSummaries" min-height="100">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        v-loading="tableLoading"
+        :data="packageData"
+        show-summary
+        :summary-method="getSummaries"
+        min-height="100"
+      >
         <el-table-column :label="$t('时间')" prop="days"></el-table-column>
         <el-table-column :label="$t('应付金额')" prop="order_amount"></el-table-column>
         <el-table-column :label="$t('抵用券优惠')" prop="coupon_amount"></el-table-column>
@@ -71,7 +91,14 @@
       </el-table>
     </div>
     <div class="echarts-bottom" v-if="unShow && checked">
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare" min-height="100">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        v-loading="tableLoading"
+        :data="packageCompare"
+        min-height="100"
+      >
         <el-table-column :label="$t('总计')" prop="days"></el-table-column>
         <!-- <el-table-column :label="$t('应付金额')" prop="order_amount"></el-table-column> -->
         <el-table-column prop="order_amount"></el-table-column>
@@ -95,7 +122,7 @@ export default {
     // NlePagination
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       days: 7,
       pickingList: [],
@@ -122,12 +149,12 @@ export default {
       localization: {}
     }
   },
-  created () {
+  created() {
     this.getColumnar() // 包裹柱状数据
     this.packageList() // 包裹列表
     this.financeAmount() // 统计金额
   },
-  mounted () {
+  mounted() {
     // 树状图
     this.packageChart = echarts.init(document.getElementById('chartsSecond'))
     window.onresize = this.packageChart.resize
@@ -151,7 +178,7 @@ export default {
   },
   methods: {
     // 包裹树状图
-    getColumnar () {
+    getColumnar() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -187,38 +214,47 @@ export default {
               scale: true,
               name: '总收入(元)',
               min: 0,
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             },
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             },
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             }
           ]
@@ -268,14 +304,14 @@ export default {
       })
     },
     // 天数
-    getDatas () {
+    getDatas() {
       this.page_params.handleQueryChange('days', this.days)
       this.getColumnar()
       this.packageList()
       this.financeAmount()
     },
     // 获取金额统计
-    financeAmount () {
+    financeAmount() {
       let params = {
         days: this.days
       }
@@ -289,7 +325,7 @@ export default {
       })
     },
     // 总计
-    getSummaries (param) {
+    getSummaries(param) {
       const { columns, data } = param
       const sums = []
       columns.forEach((column, index) => {
@@ -319,7 +355,7 @@ export default {
       return sums
     },
     // 时间
-    onPick (val) {
+    onPick(val) {
       this.begin = val ? val[0] : ''
       this.end = val ? val[1] : ''
       // this.page_params.page = 1
@@ -329,7 +365,7 @@ export default {
       this.financeAmount()
     },
     // 对比
-    onCompare (val) {
+    onCompare(val) {
       this.compare_begin = val ? val[0] : ''
       this.compare_end = val ? val[1] : ''
       // this.page_params.page = 1
@@ -337,7 +373,7 @@ export default {
       this.getCompare()
     },
     // 对比数据
-    getCompare () {
+    getCompare() {
       let params = {
         days: this.days
       }
@@ -353,7 +389,7 @@ export default {
       })
     },
     // 包裹列表
-    packageList () {
+    packageList() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -424,14 +460,14 @@ export default {
     text-align: center;
     margin-top: 60px;
   }
-  ul{
+  ul {
     margin: 0;
     padding: 0;
-    li{
-      list-style:none;
+    li {
+      list-style: none;
     }
   }
-   .total-first:last-child{
+  .total-first:last-child {
     border-right: none !important;
   }
 }

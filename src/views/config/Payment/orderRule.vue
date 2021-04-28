@@ -1,18 +1,12 @@
 <template>
   <div>
-    <el-table
-      :data="rulesData"
-      v-loading="tableLoading"
-      class="data-list"
-      border
-      stripe
-    >
+    <el-table :data="rulesData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
       <!-- 状态 -->
       <el-table-column :label="$t('项目名称')">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 1">{{ $t("会员编号") }}</span>
-          <span v-if="scope.row.type === 2">{{ $t("订单编号") }}</span>
+          <span v-if="scope.row.type === 1">{{ $t('会员编号') }}</span>
+          <span v-if="scope.row.type === 2">{{ $t('订单编号') }}</span>
         </template>
       </el-table-column>
       <!-- 状态 -->
@@ -40,25 +34,20 @@
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
           <!-- 编辑 -->
-          <el-button
-            class="btn-dark-green"
-            @click="editRules(scope.row.id, scope.row.type)"
-            >{{ $t("编辑") }}</el-button
-          >
+          <el-button class="btn-dark-green" @click="editRules(scope.row.id, scope.row.type)">{{
+            $t('编辑')
+          }}</el-button>
           <!-- 重新生成 -->
           <el-button
             class="btn-light-red delete-btn"
             @click="regenerate(scope.row.id)"
             v-if="scope.row.type === 1"
-            >{{ $t("重新生成") }}</el-button
+            >{{ $t('重新生成') }}</el-button
           >
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-    ></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
@@ -71,7 +60,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       page_params: {
         type: ''
@@ -80,29 +69,31 @@ export default {
       rulesData: []
     }
   },
-  created () {
+  created() {
     this.page_params.page = 1
     this.getRules()
   },
   methods: {
-    getList () {
+    getList() {
       this.getRules()
     },
     // 获取单号规则数据
-    getRules () {
+    getRules() {
       this.tableLoading = true
-      this.$request.getRules({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.rulesData = res.data
-        }
-      })
+      this.$request
+        .getRules({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.rulesData = res.data
+          }
+        })
     },
     // 单号规则 开启或关闭
-    changeRules (event, enabled, id) {
+    changeRules(event, enabled, id) {
       this.$request.changeRules(id, event).then(res => {
         if (res.ret) {
           this.$notify({
@@ -119,17 +110,21 @@ export default {
         }
       })
     },
-    editRules (id, name) {
+    editRules(id, name) {
       dialog({ type: 'rulesEdit', id: id, name: name }, () => {
         this.getRules()
       })
     },
-    regenerate () {
-      this.$confirm(this.$t('确定要重新生成会员编号吗？原来的编号将会被重置，可能会部分影响到包裹订单出入库'), this.$t('重新生成'), {
-        confirmButtonText: this.$t('确定'),
-        cancelButtonText: this.$t('取消'),
-        type: 'warning'
-      }).then(() => {
+    regenerate() {
+      this.$confirm(
+        this.$t('确定要重新生成会员编号吗？原来的编号将会被重置，可能会部分影响到包裹订单出入库'),
+        this.$t('重新生成'),
+        {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.$request.goResetId().then(res => {
           if (res.ret) {
             this.$notify({
@@ -150,7 +145,5 @@ export default {
     }
   }
 }
-
 </script>
-<style scoped>
-</style>
+<style scoped></style>

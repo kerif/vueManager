@@ -2,45 +2,44 @@
   <div class="tracking-container">
     <div class="search-main">
       <div class="main-top">
-        <div class="number-sty">{{$t('单号查询')}}:</div>
+        <div class="number-sty">{{ $t('单号查询') }}:</div>
         <div class="search-sty">
           <el-select v-model="expressType" :placeholder="$t('请选择')">
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
+            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
         </div>
-         <el-input v-model="expressNumber" @keyup.enter.native="goExpress" class="input-sty">
+        <el-input v-model="expressNumber" @keyup.enter.native="goExpress" class="input-sty">
         </el-input>
-        <el-button @click.native="goExpress">{{$t('查询')}}</el-button>
-        <el-button @click.native="trackingMana">{{$t('管理自定义物流轨迹')}}</el-button>
+        <el-button @click.native="goExpress">{{ $t('查询') }}</el-button>
+        <el-button @click.native="trackingMana">{{ $t('管理自定义物流轨迹') }}</el-button>
       </div>
-        <div class="express-content" v-loading="$store.state.btnLoading">
-          <div v-if="TrackingData.length" class="line-sty">
-            <div class="content-top">
-              <div class="time">{{$t('时间')}}</div>
-              <div style="padding-left: 2em">{{$t('跟踪进度')}}</div>
-            </div>
-            <ul class="result-list">
-              <li :class="{'last-finish': index === 0}" v-for="(item, index) in TrackingData" :key="index">
-                <div class="time">{{ item.ftime }}</div>
-                <div class="dot">
-                  <span class="out-dot dot-box">
-                  </span>
-                  <span class="in-dot dot-box"></span>
-                </div>
-                <div class="text">{{ item.context }}</div>
-              </li>
-            </ul>
+      <div class="express-content" v-loading="$store.state.btnLoading">
+        <div v-if="TrackingData.length" class="line-sty">
+          <div class="content-top">
+            <div class="time">{{ $t('时间') }}</div>
+            <div style="padding-left: 2em">{{ $t('跟踪进度') }}</div>
           </div>
-          <div class="empty-box" v-else>
-            <img src="../../assets/empty.png">
-            <div>{{$t('暂无物流消息')}}</div>
-          </div>
+          <ul class="result-list">
+            <li
+              :class="{ 'last-finish': index === 0 }"
+              v-for="(item, index) in TrackingData"
+              :key="index"
+            >
+              <div class="time">{{ item.ftime }}</div>
+              <div class="dot">
+                <span class="out-dot dot-box"> </span>
+                <span class="in-dot dot-box"></span>
+              </div>
+              <div class="text">{{ item.context }}</div>
+            </li>
+          </ul>
         </div>
+        <div class="empty-box" v-else>
+          <img src="../../assets/empty.png" />
+          <div>{{ $t('暂无物流消息') }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +47,7 @@
 <script>
 export default {
   name: 'tracking',
-  data () {
+  data() {
     return {
       options: [
         {
@@ -66,7 +65,7 @@ export default {
       isEmpty: false
     }
   },
-  created () {
+  created() {
     console.log(this.$route.query, 'this.$route.query.orderSn')
     if (this.$route.query.orderSn) {
       this.expressNumber = this.$route.query.orderSn
@@ -74,53 +73,57 @@ export default {
     }
   },
   methods: {
-    goExpress () {
+    goExpress() {
       if (!this.expressNumber) {
         return this.$message.error(this.$t('请输入单号'))
       }
       console.log(this.expressNumber, 'expressNumber')
       if (this.expressType === 1) {
-        this.$request.goTracking({
-          order_sn: this.expressNumber
-        }).then(res => {
-          if (res.ret) {
-            this.TrackingData = res.data.data
-            if (!this.TrackingData.length) {
-              this.isEmpty = true
+        this.$request
+          .goTracking({
+            order_sn: this.expressNumber
+          })
+          .then(res => {
+            if (res.ret) {
+              this.TrackingData = res.data.data
+              if (!this.TrackingData.length) {
+                this.isEmpty = true
+              } else {
+                this.isEmpty = false
+              }
             } else {
-              this.isEmpty = false
+              this.TrackingData = []
+              this.isEmpty = true
             }
-          } else {
-            this.TrackingData = []
-            this.isEmpty = true
-          }
-        })
+          })
       } else if (this.expressType === 2) {
-        this.$request.goTracking({
-          track_no: this.expressNumber
-        }).then(res => {
-          if (res.ret) {
-            this.TrackingData = res.data.data
-            console.log(res.data.data, 'TrackingData')
-            if (!this.TrackingData.length) {
-              this.isEmpty = true
+        this.$request
+          .goTracking({
+            track_no: this.expressNumber
+          })
+          .then(res => {
+            if (res.ret) {
+              this.TrackingData = res.data.data
+              console.log(res.data.data, 'TrackingData')
+              if (!this.TrackingData.length) {
+                this.isEmpty = true
+              } else {
+                this.isEmpty = false
+              }
             } else {
-              this.isEmpty = false
+              // this.$notify({
+              //   title: this.$t('操作失败'),
+              //   message: res.msg,
+              //   type: 'warning'
+              // })
+              this.TrackingData = []
+              this.isEmpty = true
             }
-          } else {
-            // this.$notify({
-            //   title: this.$t('操作失败'),
-            //   message: res.msg,
-            //   type: 'warning'
-            // })
-            this.TrackingData = []
-            this.isEmpty = true
-          }
-        })
+          })
       }
     },
     // 管理自定义物流轨迹
-    trackingMana () {
+    trackingMana() {
       this.$router.push({ name: 'logistics' })
     }
   }
@@ -156,14 +159,14 @@ export default {
   .out-dot {
     width: 16px;
     height: 16px;
-    background-color: #BCBCBC;
+    background-color: #bcbcbc;
     opacity: 0.4;
     margin-top: 2px;
   }
   .in-dot {
     width: 10px;
     height: 10px;
-    background-color: #BCBCBC;
+    background-color: #bcbcbc;
     position: absolute;
     left: 3px;
     top: 5px;
@@ -188,7 +191,7 @@ export default {
           content: '';
           position: absolute;
           left: -8px;
-          border-left: 1px solid #A8B7BF;
+          border-left: 1px solid #a8b7bf;
           height: calc(100% + 10px);
           top: 20px;
         }
@@ -196,10 +199,10 @@ export default {
     }
     .last-finish {
       .out-dot {
-        background-color: #35A581;
+        background-color: #35a581;
       }
       .in-dot {
-        background-color: #35A581;
+        background-color: #35a581;
       }
     }
   }

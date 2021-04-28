@@ -200,7 +200,7 @@ const AlertSettingsController = Vue.extend(alertSettings)
 const PurchaseHistoryController = Vue.extend(purchaseHistory)
 
 const mixin = {
-  data () {
+  data() {
     return {
       show: false
     }
@@ -211,7 +211,7 @@ const mixin = {
 
 let instance
 
-function initInstance (type) {
+function initInstance(type) {
   switch (type) {
     case 'vipgroup':
       instance = new VipGroupController({
@@ -900,6 +900,7 @@ export default (props, callback) => {
     initInstance(props.type)
   }
   for (const key in props) {
+    // eslint-disable-next-line no-prototype-builtins
     if (props.hasOwnProperty(key)) {
       instance[key] = props[key]
     }
@@ -908,7 +909,7 @@ export default (props, callback) => {
   if (instance.init) {
     instance.init()
   }
-  instance.success = (data) => {
+  instance.success = data => {
     callback(data)
   }
   document.body.appendChild(instance.$el)

@@ -11,48 +11,70 @@
           value-format="yyyy-MM-dd"
           :range-separator="$t('至')"
           :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
-       </el-date-picker>
-      <el-select v-model="line" @change="onLineTypeChange" clearable :placeholder="$t('路线筛选')">
-        <el-option
-          v-for="item in linesChange"
-          :key="item.id"
-          :value="item.id"
-          :label="item.name">
-        </el-option>
-       </el-select>
-      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('支付类型')">
-        <el-option
-          v-for="item in voucherChange"
-          :key="item.id"
-          :value="item.id"
-          :label="item.name">
-        </el-option>
-       </el-select>
-      <el-select v-model="record" @change="onRecordTypeChange" clearable class="changeVou" :placeholder="$t('交易类型')">
-        <el-option
-          v-for="item in recordChange"
-          :key="item.id"
-          :value="item.id"
-          :label="item.name">
-        </el-option>
-       </el-select>
-        <el-button class="upload-sty" @click="uploadList">{{$t('导出Excel')}}</el-button>
+          :end-placeholder="$t('结束日期')"
+        >
+        </el-date-picker>
+        <el-select
+          v-model="line"
+          @change="onLineTypeChange"
+          clearable
+          :placeholder="$t('路线筛选')"
+        >
+          <el-option v-for="item in linesChange" :key="item.id" :value="item.id" :label="item.name">
+          </el-option>
+        </el-select>
+        <el-select
+          v-model="type"
+          @change="onVocherTypeChange"
+          clearable
+          class="changeVou"
+          :placeholder="$t('支付类型')"
+        >
+          <el-option
+            v-for="item in voucherChange"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          >
+          </el-option>
+        </el-select>
+        <el-select
+          v-model="record"
+          @change="onRecordTypeChange"
+          clearable
+          class="changeVou"
+          :placeholder="$t('交易类型')"
+        >
+          <el-option
+            v-for="item in recordChange"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          >
+          </el-option>
+        </el-select>
+        <el-button class="upload-sty" @click="uploadList">{{ $t('导出Excel') }}</el-button>
       </search-group>
     </div>
-    <el-table :data="transactionList" stripe border class="data-list"
-    v-loading="tableLoading" height="650">
+    <el-table
+      :data="transactionList"
+      stripe
+      border
+      class="data-list"
+      v-loading="tableLoading"
+      height="650"
+    >
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <!-- 类型 -->
       <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 1">{{$t('消费')}}</span>
-          <span v-if="scope.row.type === 2">{{$t('充值')}}</span>
-          <span v-if="scope.row.type === 3">{{$t('退款')}}</span>
-          <span v-if="scope.row.type === 4">{{$t('提现')}}</span>
-          <span v-if="scope.row.type === 5">{{$t('扣款')}}</span>
+          <span v-if="scope.row.type === 1">{{ $t('消费') }}</span>
+          <span v-if="scope.row.type === 2">{{ $t('充值') }}</span>
+          <span v-if="scope.row.type === 3">{{ $t('退款') }}</span>
+          <span v-if="scope.row.type === 4">{{ $t('提现') }}</span>
+          <span v-if="scope.row.type === 5">{{ $t('扣款') }}</span>
         </template>
       </el-table-column>
       <!-- 支付类型 -->
@@ -61,15 +83,23 @@
       <!-- <el-table-column label="支付方式">
       </el-table-column> -->
       <!-- 应付金额¥ -->
-      <el-table-column :label="$t('应付金额') + this.localization.currency_unit" prop="order_amount"></el-table-column>
+      <el-table-column
+        :label="$t('应付金额') + this.localization.currency_unit"
+        prop="order_amount"
+      ></el-table-column>
       <!-- 抵用券金额¥ -->
-      <el-table-column :label="$t('抵用券金额') + this.localization.currency_unit" prop="coupon_amount"></el-table-column>
+      <el-table-column
+        :label="$t('抵用券金额') + this.localization.currency_unit"
+        prop="coupon_amount"
+      ></el-table-column>
       <!-- 支付金额¥ -->
       <el-table-column :label="$t('支付金额') + this.localization.currency_unit">
         <template slot-scope="scope">
-          <span>{{scope.row.pay_amount}}</span>
+          <span>{{ scope.row.pay_amount }}</span>
           <span v-if="scope.row.show_rate == true">
-            （{{scope.row.currency_code}}&nbsp;{{scope.row.currency_symbol}}&nbsp;{{scope.row.rate_amount}}）
+            （{{ scope.row.currency_code }}&nbsp;{{ scope.row.currency_symbol }}&nbsp;{{
+              scope.row.rate_amount
+            }}）
           </span>
         </template>
       </el-table-column>
@@ -83,7 +113,13 @@
       <el-table-column :label="$t('支付时间')" prop="created_at"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-deep-purple" @click="details(scope.row.type, scope.row.id,scope.row.order_id, scope.row.payment_type)">{{$t('详情')}}</el-button>
+          <el-button
+            class="btn-deep-purple"
+            @click="
+              details(scope.row.type, scope.row.id, scope.row.order_id, scope.row.payment_type)
+            "
+            >{{ $t('详情') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -95,7 +131,7 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
-  data () {
+  data() {
     return {
       transactionList: [],
       localization: {},
@@ -117,7 +153,7 @@ export default {
     SearchGroup,
     NlePagination
   },
-  created () {
+  created() {
     if (this.$route.query.serial_number) {
       this.page_params.keyword = this.$route.query.serial_number
     }
@@ -127,14 +163,14 @@ export default {
       this.end_date = this.timeList[1]
     }
   },
-  mounted () {
+  mounted() {
     this.getList()
     this.getTypes()
     this.getRecord()
     this.getLines()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
@@ -162,7 +198,7 @@ export default {
         }
       })
     },
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -170,11 +206,17 @@ export default {
       this.getList()
     },
     // 详情
-    details (type, id, orderId, paymentType) {
+    details(type, id, orderId, paymentType) {
       console.log(type, 'paymentType')
       // type等于消费的时候 就要判断消费类型
       if (type === 1) {
-        if (paymentType === 0 || paymentType === 1 || paymentType === 6 || paymentType === 4 || paymentType === 7) {
+        if (
+          paymentType === 0 ||
+          paymentType === 1 ||
+          paymentType === 6 ||
+          paymentType === 4 ||
+          paymentType === 7
+        ) {
           console.log('我是微信')
           this.$router.push({ name: 'wechatPay', query: { id: id } })
         } else {
@@ -186,22 +228,22 @@ export default {
       }
     },
     // 选择不同类型优惠券
-    onVocherTypeChange () {
+    onVocherTypeChange() {
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },
     // 选择不同类型优惠券
-    onRecordTypeChange () {
+    onRecordTypeChange() {
       this.page_params.handleQueryChange('record', this.record)
       this.getList()
     },
     // 选择不同类型路线
-    onLineTypeChange () {
+    onLineTypeChange() {
       this.page_params.handleQueryChange('line', this.line)
       this.getList()
     },
     // 获取支付类型
-    getTypes () {
+    getTypes() {
       this.$request.getPaymentType().then(res => {
         if (res.ret) {
           this.voucherChange = res.data
@@ -215,7 +257,7 @@ export default {
       })
     },
     // 获取交易类型
-    getRecord () {
+    getRecord() {
       this.$request.getRecordType().then(res => {
         if (res.ret) {
           this.recordChange = res.data
@@ -229,7 +271,7 @@ export default {
       })
     },
     // 获取路线筛选
-    getLines () {
+    getLines() {
       this.$request.getSimpleLines().then(res => {
         if (res.ret) {
           this.linesChange = res.data
@@ -243,7 +285,7 @@ export default {
       })
     },
     // 导出Excel
-    uploadList (val) {
+    uploadList() {
       let params = {
         payment_type: this.type,
         express_line_id: this.line,

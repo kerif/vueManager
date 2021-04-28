@@ -1,14 +1,19 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('添加语言'): $t('编辑语言')" class="invoice-container" @close="clear">
-    <el-form :model="languageList" ref="ruleForm" class="demo-ruleForm"
-    label-width="130px">
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'add' ? $t('添加语言') : $t('编辑语言')"
+    class="invoice-container"
+    @close="clear"
+  >
+    <el-form :model="languageList" ref="ruleForm" class="demo-ruleForm" label-width="130px">
       <el-form-item :label="$t('*语言')">
         <el-select v-model="languageList.language_code" :placeholder="$t('请选择')">
           <el-option
-          v-for="item in language"
-          :key="item.language_code"
-          :value="item.language_code"
-          :label="item.name">
+            v-for="item in language"
+            :key="item.language_code"
+            :value="item.language_code"
+            :label="item.name"
+          >
           </el-option>
         </el-select>
       </el-form-item>
@@ -21,20 +26,21 @@
           :inactive-value="0"
           :inactive-text="$t('关')"
           active-color="#13ce66"
-          inactive-color="gray">
+          inactive-color="gray"
+        >
         </el-switch>
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       innerVisible: false,
       state: '',
@@ -46,19 +52,20 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.singleLg(this.id).then(res => {
         if (res.ret) {
           this.languageList = res.data
         }
       })
     },
-    confirm () {
+    confirm() {
       if (this.languageList.language_code === '') {
         return this.$message.error(this.$t('请选择语言'))
       }
       console.log(this.languageList, 'languageList')
-      if (this.id) { // 编辑语言
+      if (this.id) {
+        // 编辑语言
         this.$request.updateLg(this.id, this.languageList).then(res => {
           if (res.ret) {
             this.$notify({
@@ -72,7 +79,8 @@ export default {
             this.$message.error(res.msg)
           }
         })
-      } else { // 新增语言
+      } else {
+        // 新增语言
         this.$request.addLg(this.languageList).then(res => {
           if (res.ret) {
             this.$notify({
@@ -88,18 +96,18 @@ export default {
         })
       }
     },
-    getLanguage () {
+    getLanguage() {
       this.$request.getLanguageCan().then(res => {
         if (res.ret) {
           this.language = res.data
         }
       })
     },
-    clear () {
+    clear() {
       this.languageList.language_code = ''
     },
-    init () {
-      this.id = this.id
+    init() {
+      // this.id = this.id
       if (this.id) {
         this.getList()
       }
@@ -109,17 +117,17 @@ export default {
 }
 </script>
 <style lang="scss">
-.invoice-container{
+.invoice-container {
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .created-btn {
     margin-left: 5px;

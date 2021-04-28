@@ -1,42 +1,37 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('弃件包裹日志')" class="dialog-invalid-log"
-  @close="clear">
-    <el-table
-      :data="tableData"
-      border
-      style="width: 100%">
-      <el-table-column type="index">
-      </el-table-column>
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('弃件包裹日志')"
+    class="dialog-invalid-log"
+    @close="clear"
+  >
+    <el-table :data="tableData" border style="width: 100%">
+      <el-table-column type="index"> </el-table-column>
       <!-- 原始状态 -->
-      <el-table-column
-        :label="$t('原始状态')">
+      <el-table-column :label="$t('原始状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.origin_status === 1">{{$t('未入库')}}</span>
-          <span v-if="scope.row.origin_status === 2">{{$t('已入库')}}</span>
-          <span v-if="scope.row.origin_status === 3">{{$t('已集包')}}</span>
-          <span v-if="scope.row.origin_status === 4">{{$t('已发货')}}</span>
-          <span v-if="scope.row.origin_status === 5">{{$t('已收货')}}</span>
-          <span v-if="scope.row.origin_status === 19">{{$t('弃件包裹')}}</span>
+          <span v-if="scope.row.origin_status === 1">{{ $t('未入库') }}</span>
+          <span v-if="scope.row.origin_status === 2">{{ $t('已入库') }}</span>
+          <span v-if="scope.row.origin_status === 3">{{ $t('已集包') }}</span>
+          <span v-if="scope.row.origin_status === 4">{{ $t('已发货') }}</span>
+          <span v-if="scope.row.origin_status === 5">{{ $t('已收货') }}</span>
+          <span v-if="scope.row.origin_status === 19">{{ $t('弃件包裹') }}</span>
         </template>
       </el-table-column>
       <!-- 更新状态 -->
-      <el-table-column
-        :label="$t('更新状态')">
-          <template slot-scope="scope">
-          <span v-if="scope.row.new_status === 1">{{$t('未入库')}}</span>
-          <span v-if="scope.row.new_status === 2">{{$t('已入库')}}</span>
-          <span v-if="scope.row.new_status === 3">{{$t('已集包')}}</span>
-          <span v-if="scope.row.new_status === 4">{{$t('已发货')}}</span>
-          <span v-if="scope.row.new_status === 5">{{$t('已收货')}}</span>
-          <span v-if="scope.row.new_status === 19">{{$t('弃件包裹')}}</span>
+      <el-table-column :label="$t('更新状态')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.new_status === 1">{{ $t('未入库') }}</span>
+          <span v-if="scope.row.new_status === 2">{{ $t('已入库') }}</span>
+          <span v-if="scope.row.new_status === 3">{{ $t('已集包') }}</span>
+          <span v-if="scope.row.new_status === 4">{{ $t('已发货') }}</span>
+          <span v-if="scope.row.new_status === 5">{{ $t('已收货') }}</span>
+          <span v-if="scope.row.new_status === 19">{{ $t('弃件包裹') }}</span>
         </template>
       </el-table-column>
       <!-- 操作日志 -->
-        <el-table-column
-        prop="remark"
-        :label="$t('操作日志')">
-      </el-table-column>
-    <!-- 最后登录时间
+      <el-table-column prop="remark" :label="$t('操作日志')"> </el-table-column>
+      <!-- 最后登录时间
         <el-table-column
         prop="last_login_at"
         label="最后登录时间">
@@ -55,7 +50,7 @@
 // import NlePagination from '@/components/pagination'
 // import { pagination } from '@/mixin'
 export default {
-  data () {
+  data() {
     return {
       tableData: []
     }
@@ -65,7 +60,7 @@ export default {
   // },
   // mixins: [pagination],
   methods: {
-    getList () {
+    getList() {
       this.$request.getInvalidLog(this.id).then(res => {
         if (res.ret) {
           this.tableData = res.data
@@ -74,10 +69,10 @@ export default {
         }
       })
     },
-    init () {
+    init() {
       this.getList()
     },
-    clear () {
+    clear() {
       // this.page_params.page = 1
     }
   }
@@ -89,15 +84,15 @@ export default {
     margin-top: 10px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

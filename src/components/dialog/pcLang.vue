@@ -1,27 +1,31 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('网站名称的翻译内容')" class="dialog-pc-lang" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('网站名称的翻译内容')"
+    class="dialog-pc-lang"
+    @close="clear"
+  >
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息')}}
-        </p>
+        {{ $t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息') }}
+      </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 网站名称 -->
-        <el-form-item :label="$t('网站名称')" prop="website_name">
-          <el-input v-model="ruleForm.website_name"
-          :placeholder="$t('请输入')"></el-input>
-          </el-form-item>
+      <!-- 网站名称 -->
+      <el-form-item :label="$t('网站名称')" prop="website_name">
+        <el-input v-model="ruleForm.website_name" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         website_name: '',
@@ -29,9 +33,7 @@ export default {
         language: ''
       },
       rules: {
-        website_name: [
-          { required: true, message: this.$t('请输入网站名称'), trigger: 'blur' }
-        ]
+        website_name: [{ required: true, message: this.$t('请输入网站名称'), trigger: 'blur' }]
       },
       lang: {
         name: '',
@@ -41,15 +43,17 @@ export default {
     }
   },
   methods: {
-    getPc () {
-      this.$request.pcLang({
-        lang: this.ruleForm.language
-      }).then(res => {
-        this.ruleForm.website_name = res.data.website_name
-      })
+    getPc() {
+      this.$request
+        .pcLang({
+          lang: this.ruleForm.language
+        })
+        .then(res => {
+          this.ruleForm.website_name = res.data.website_name
+        })
     },
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request.updatePcLang(this.ruleForm).then(res => {
             if (res.ret) {
@@ -73,20 +77,20 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.ruleForm.website_name = ''
       this.ruleForm.name = ''
       this.$refs['ruleForm'].resetFields()
       this.$refs['ruleForm'].clearValidate()
     },
-    cancelDialog (ruleForm) {
+    cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.$refs[ruleForm].clearValidate()
       this.show = false
     },
-    init () {
+    init() {
       console.log(this.lang, 'lang')
-      this.lang = this.lang
+      // this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
       this.getPc()
     }
@@ -110,14 +114,14 @@ export default {
     margin-left: 250px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .lang-sty {
     line-height: 40px;

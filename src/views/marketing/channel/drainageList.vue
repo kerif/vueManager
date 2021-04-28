@@ -1,20 +1,24 @@
 <template>
   <div class="drainage-container">
-      <div class="poster-left">
-        <p class="left-name">{{$t('渠道名称')}}</p><span>{{ruleForm.channel_name}}</span><br/>
-        <p class="left-name">{{$t('创建日期')}}</p><span>{{ruleForm.created_at}}</span><br/>
-        <div class="code-font">{{$t('专属小程序码')}}</div>
-        <div class="left-bottom">
-          <!-- <img src="../../../assets/bale.png"> -->
-          <img :src="$baseUrl.IMAGE_URL + ruleForm.app_code" alt="" class="goods-img">
-        </div>
-        <div class="upload-btn">
-          <!-- <a :href="urlImg" download>xiazai</a> -->
-          <el-button type="primary" @click="uploadImg">{{$t('下载')}}</el-button>
-          <p class="share">{{$t('推荐将小程序码放在公众号或广告插图进行推广')}}</p>
-        </div>
+    <div class="poster-left">
+      <p class="left-name">{{ $t('渠道名称') }}</p>
+      <span>{{ ruleForm.channel_name }}</span
+      ><br />
+      <p class="left-name">{{ $t('创建日期') }}</p>
+      <span>{{ ruleForm.created_at }}</span
+      ><br />
+      <div class="code-font">{{ $t('专属小程序码') }}</div>
+      <div class="left-bottom">
+        <!-- <img src="../../../assets/bale.png"> -->
+        <img :src="$baseUrl.IMAGE_URL + ruleForm.app_code" alt="" class="goods-img" />
       </div>
-      <div class="poster-right">
+      <div class="upload-btn">
+        <!-- <a :href="urlImg" download>xiazai</a> -->
+        <el-button type="primary" @click="uploadImg">{{ $t('下载') }}</el-button>
+        <p class="share">{{ $t('推荐将小程序码放在公众号或广告插图进行推广') }}</p>
+      </div>
+    </div>
+    <div class="poster-right">
       <div>
         <search-group v-model="page_params.keyword" @search="goSearch">
           <el-date-picker
@@ -26,12 +30,12 @@
             value-format="yyyy-MM-dd"
             :range-separator="$t('至')"
             :start-placeholder="$t('开始日期')"
-            :end-placeholder="$t('结束日期')">
-        </el-date-picker>
+            :end-placeholder="$t('结束日期')"
+          >
+          </el-date-picker>
         </search-group>
       </div>
-      <el-table :data="transactionList" stripe border class="data-list"
-      v-loading="tableLoading">
+      <el-table :data="transactionList" stripe border class="data-list" v-loading="tableLoading">
         <el-table-column type="index" :index="1"></el-table-column>
         <!-- 统计日期 -->
         <el-table-column :label="$t('统计日期')" prop="days"></el-table-column>
@@ -62,7 +66,7 @@ export default {
     SearchGroup,
     NlePagination
   },
-  data () {
+  data() {
     return {
       timeList: [],
       transactionList: [],
@@ -74,12 +78,12 @@ export default {
       urlImg: ''
     }
   },
-  created () {
+  created() {
     this.getList()
     this.getDetails()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
@@ -106,7 +110,7 @@ export default {
       })
     },
     // 获取左侧详情数据
-    getDetails () {
+    getDetails() {
       this.$request.getAloneChannel(this.$route.params.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -115,7 +119,7 @@ export default {
         }
       })
     },
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -123,7 +127,7 @@ export default {
       this.getList()
     },
     // 下载小程序码
-    uploadImg () {
+    uploadImg() {
       window.open(this.urlImg, '_black')
       // const aLink = document.createElement('a')
       // aLink.download = '1.jpg'
@@ -139,7 +143,7 @@ export default {
 <style lang="scss">
 .drainage-container {
   .poster-left {
-    width:330px;
+    width: 330px;
     height: 580px;
     overflow: hidden;
     vertical-align: top;
@@ -148,7 +152,7 @@ export default {
     background-color: #fff;
     padding: 20px 30px;
     position: relative;
-    margin-right:40px;
+    margin-right: 40px;
     .left-top {
       img {
         width: 80px;
@@ -166,7 +170,7 @@ export default {
     vertical-align: top;
     display: inline-block;
     // background-color: #fff;
-    padding:15px;
+    padding: 15px;
     height: 616px;
     box-sizing: border-box;
   }

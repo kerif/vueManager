@@ -1,5 +1,5 @@
 <template>
-<div></div>
+  <div></div>
 </template>
 
 <script>
@@ -7,7 +7,7 @@ import dialog from '@/components/dialog'
 import Wangeditor from 'wangeditor'
 import baseApi from '@/lib/axios/baseApi'
 export default {
-  data () {
+  data() {
     return {
       activeName: '',
       appletForm: {
@@ -43,7 +43,8 @@ export default {
         comment_entrance_image: [],
         forecast_image: []
       },
-      backgroundList: { // 海报配置
+      backgroundList: {
+        // 海报配置
         display_user_avatar: 0,
         display_user_name: 0,
         display_share_info: 0,
@@ -51,7 +52,8 @@ export default {
         background_images: [],
         share_info: ''
       },
-      validateList: { // 功能配置
+      validateList: {
+        // 功能配置
         validate_phone: '',
         validate_email: ''
       },
@@ -62,29 +64,42 @@ export default {
       },
       editor: null,
       rules: {
-        app_id: [
-          { required: true, message: this.$t('请输入AppId'), trigger: 'change' }
-        ],
-        secret: [
-          { required: true, message: this.$t('请输入AppSecret'), trigger: 'change' }
-        ]
+        app_id: [{ required: true, message: this.$t('请输入AppId'), trigger: 'change' }],
+        secret: [{ required: true, message: this.$t('请输入AppSecret'), trigger: 'change' }]
       }
     }
   },
-  mounted () {
+  mounted() {
     this.editor = new Wangeditor('#editor')
-    this.editor.customConfig.menus = ['head', 'fontSize', 'fontName', 'bold', 'italic', 'underline', 'strikeThrough', 'foreColor', 'backColor', 'link', 'list', 'justify', 'quote', 'video', 'image', 'table']
-    this.editor.customConfig.onchange = (html) => {
+    this.editor.customConfig.menus = [
+      'head',
+      'fontSize',
+      'fontName',
+      'bold',
+      'italic',
+      'underline',
+      'strikeThrough',
+      'foreColor',
+      'backColor',
+      'link',
+      'list',
+      'justify',
+      'quote',
+      'video',
+      'image',
+      'table'
+    ]
+    this.editor.customConfig.onchange = html => {
       this.params.content = html
     }
     this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
     this.editor.customConfig.uploadImgParams = {}
     this.editor.customConfig.uploadImgHeaders = {
-      'Authorization': this.$store.state.token
+      Authorization: this.$store.state.token
     }
     this.editor.customConfig.uploadFileName = `images[${0}][file]`
     this.editor.customConfig.uploadImgHooks = {
-      customInsert: (insertImg, result, editor) => {
+      customInsert: (insertImg, result) => {
         console.log(result)
         if (result.ret === 1) {
           this.$message.success(this.$t('上传成功'))
@@ -97,12 +112,12 @@ export default {
     this.editor.create()
     console.log(this.editor, 'this.editor')
   },
-  created () {
+  created() {
     this.activeName = '1'
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       this.$request.getMini().then(res => {
         this.tableLoading = false
@@ -121,7 +136,7 @@ export default {
       })
     },
     // 获取语言列表
-    getLanguage () {
+    getLanguage() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.options = res.data
@@ -129,19 +144,21 @@ export default {
       })
     },
     // 切换语言
-    changeLang () {
-      this.$request.getTranshipment({
-        lang: this.params.language
-      }).then(res => {
-        if (res.ret) {
-          this.params.title = res.data.title
-          this.params.content = res.data.content
-          this.params.language = res.data.language
-          this.editor.txt.html(this.params.content)
-        }
-      })
+    changeLang() {
+      this.$request
+        .getTranshipment({
+          lang: this.params.language
+        })
+        .then(res => {
+          if (res.ret) {
+            this.params.title = res.data.title
+            this.params.content = res.data.content
+            this.params.language = res.data.language
+            this.editor.txt.html(this.params.content)
+          }
+        })
     },
-    getPick () {
+    getPick() {
       this.tableLoading = true
       this.$request.getTemplate().then(res => {
         this.tableLoading = false
@@ -161,18 +178,19 @@ export default {
         }
       })
     },
-    changeSize () {
+    changeSize() {
       if (this.backgroundList.avatar_size > 200) {
         this.backgroundList.avatar_size = 200
         this.$message.error(this.$t('二维码尺寸最大不能超过200px'))
       }
     },
     // 获取图片配置
-    getImg () {
+    getImg() {
       this.$request.getProgramImg().then(res => {
         this.setForm = res.data
         res.data.video_entrance_image && (this.baleImgList[0] = res.data.video_entrance_image)
-        res.data.comment_entrance_image && (this.evaluationImgList[0] = res.data.comment_entrance_image)
+        res.data.comment_entrance_image &&
+          (this.evaluationImgList[0] = res.data.comment_entrance_image)
         res.data.forecast_image && (this.customerList[0] = res.data.forecast_image)
         res.data.freight_image && (this.freightList[0] = res.data.freight_image)
         res.data.track_image && (this.logisticsList[0] = res.data.track_image)
@@ -188,14 +206,14 @@ export default {
       })
     },
     // 获取海报配置
-    getBackground () {
+    getBackground() {
       this.$request.getProgramShare().then(res => {
         this.backgroundList = res.data
         res.data.background_images && (this.backgroundImg = res.data.background_images)
       })
     },
     // 修改海报配置
-    updateBackground () {
+    updateBackground() {
       if (this.baleImgList) {
         this.backgroundList.background_images = this.backgroundImg
       } else {
@@ -223,7 +241,7 @@ export default {
       })
     },
     // 获取功能配置
-    getValidate () {
+    getValidate() {
       this.$request.getValidate().then(res => {
         if (res.ret) {
           this.validateList = res.data
@@ -231,7 +249,7 @@ export default {
       })
     },
     // 更新功能配置
-    saveValidate () {
+    saveValidate() {
       this.$request.updateValidate(this.validateList).then(res => {
         if (res.ret) {
           this.$notify({
@@ -248,8 +266,8 @@ export default {
         }
       })
     },
-    saveDev (formName) {
-      this.$refs[formName].validate((valid) => {
+    saveDev(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request.updateMini(this.appletForm).then(res => {
             if (res.ret) {
@@ -272,19 +290,19 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 预览小程序海报
-    previewBackground (image) {
+    previewBackground(image) {
       console.log(image, 'image')
       this.choosePoster = image
     },
     // 上传海报配置背景图像
-    uploadBgImg (item) {
+    uploadBgImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -295,7 +313,7 @@ export default {
       })
     },
     // 上传小程序首页视频图片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -306,7 +324,7 @@ export default {
       })
     },
     // 上传小程序首页评论入口图
-    uploadEvaluationImg (item) {
+    uploadEvaluationImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -317,7 +335,7 @@ export default {
       })
     },
     // 上传物流查询页面图
-    uploadTrack (item) {
+    uploadTrack(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -328,7 +346,7 @@ export default {
       })
     },
     // 上传支持与帮助中心图
-    uploadSupport (item) {
+    uploadSupport(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -339,7 +357,7 @@ export default {
       })
     },
     // 上传分享图
-    uploadShare (item) {
+    uploadShare(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -350,7 +368,7 @@ export default {
       })
     },
     // 上传首页
-    uploadIndex (item) {
+    uploadIndex(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -361,7 +379,7 @@ export default {
       })
     },
     // 上传视频区
-    uploadVideo (item) {
+    uploadVideo(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -372,7 +390,7 @@ export default {
       })
     },
     // 个人中心背景图片
-    uploadCenter (item) {
+    uploadCenter(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -383,7 +401,7 @@ export default {
       })
     },
     // 协议背景图片
-    uploadLicense (item) {
+    uploadLicense(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -394,7 +412,7 @@ export default {
       })
     },
     // 代理成功提示图
-    uploadApprove (item) {
+    uploadApprove(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -405,7 +423,7 @@ export default {
       })
     },
     // 仓库背景图
-    uploadWarehouse (item) {
+    uploadWarehouse(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -416,7 +434,7 @@ export default {
       })
     },
     // 上传评论区
-    uploadComment (item) {
+    uploadComment(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -427,7 +445,7 @@ export default {
       })
     },
     // 上传小程序预报页图
-    uploadCustomer (item) {
+    uploadCustomer(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -438,7 +456,7 @@ export default {
       })
     },
     // 上传小程序运费查询页图
-    uploadFreight (item) {
+    uploadFreight(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -449,76 +467,76 @@ export default {
       })
     },
     // 删除海报配置 背景图
-    onDeleteBg (index) {
+    onDeleteBg(index) {
       this.backgroundImg.splice(index, 1)
     },
     // 删除小程序首页视频入口图
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
     // 删除小程序首页评论入口图
-    onDeleteEva (index) {
+    onDeleteEva(index) {
       this.evaluationImgList.splice(index, 1)
     },
     // 删除物流查询页面
-    onDeleteTrack (index) {
+    onDeleteTrack(index) {
       this.logisticsList.splice(index, 1)
     },
     // 删除支持与帮助中心图
-    onDeleteSupport (index) {
+    onDeleteSupport(index) {
       this.supportList.splice(index, 1)
     },
     // 分享图
-    onDeleteShare (index) {
+    onDeleteShare(index) {
       this.shareList.splice(index, 1)
     },
     // 首页图
-    onDeleteIndex (index) {
+    onDeleteIndex(index) {
       this.indexList.splice(index, 1)
     },
     // 视频图
-    onDeleteVideo (index) {
+    onDeleteVideo(index) {
       this.videoList.splice(index, 1)
     },
     // 个人中心背景图
-    onDeleteCenter (index) {
+    onDeleteCenter(index) {
       this.centerList.splice(index, 1)
     },
     // 协议背景图片
-    onDeleteLicense (index) {
+    onDeleteLicense(index) {
       this.licenseList.splice(index, 1)
     },
     // 代理成功提示图
-    onDeleteApprove (index) {
+    onDeleteApprove(index) {
       this.approveList.splice(index, 1)
     },
     // 仓库背景图
-    onDeleteWarehouse (index) {
+    onDeleteWarehouse(index) {
       this.warehouseList.splice(index, 1)
     },
-    onDeleteComment (index) {
+    onDeleteComment(index) {
       this.commentList.splice(index, 1)
     },
     // 删除小程序预报页图
-    onDeleteCus (index) {
+    onDeleteCus(index) {
       this.customerList.splice(index, 1)
     },
     // 删除小程序运费查询页图
-    onDeleteFre (index) {
+    onDeleteFre(index) {
       this.freightList.splice(index, 1)
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
     // 添加转运快递单号
-    edit (row) {
+    edit(row) {
       row.disabled = !row.disabled
     },
     // 修改图片配置
-    editOthers () {
+    editOthers() {
       if (this.baleImgList[0]) {
         this.setForm.video_entrance_image = this.baleImgList[0]
       } else {
@@ -606,39 +624,41 @@ export default {
       })
     },
     // 取消
-    cancel (row) {
+    cancel(row) {
       row.template_id = row.copySN
       row.disabled = true
     },
     // 保存添加转运快递单号
-    saveLogistics (row) {
+    saveLogistics(row) {
       console.log(row, 'row')
       if (!row.template_id) {
         return this.$message.error(this.$t('请输入模版标示'))
       }
-      this.$request.updateTemplate({
-        type: row.type,
-        template_id: row.template_id
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('保存成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          row.copySN = row.template_id
-          row.disabled = true
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .updateTemplate({
+          type: row.type,
+          template_id: row.template_id
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('保存成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            row.copySN = row.template_id
+            row.disabled = true
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 获取如何下单
-    getHowOrder () {
+    getHowOrder() {
       this.$request.getTranshipment().then(res => {
         if (res.ret) {
           this.params.title = res.data.title
@@ -649,11 +669,11 @@ export default {
       })
     },
     // 判断是新增 还是 编辑
-    changeText () {
+    changeText() {
       this.$emit('input', this.editor.txt.html())
     },
     // 保存如何下单
-    saveHowOrder () {
+    saveHowOrder() {
       this.$request.updateTranshipment(this.params).then(res => {
         if (res.ret) {
           this.$notify({
@@ -670,7 +690,7 @@ export default {
         }
       })
     },
-    handleClick () {
+    handleClick() {
       if (this.activeName === '1') {
         this.getList()
       } else if (this.activeName === '2') {
@@ -692,7 +712,7 @@ export default {
 
 <style lang="scss">
 .applet-container {
-   .tabLength {
+  .tabLength {
     width: 560px !important;
     // width: 300px !important;
   }
@@ -701,7 +721,7 @@ export default {
     background-color: #fff !important;
   }
   .savaBtn {
-    background-color: #3540A5;
+    background-color: #3540a5;
     color: #fff;
     width: 100px;
   }
@@ -718,7 +738,7 @@ export default {
     }
     .el-textarea__inner {
       width: 30%;
-      background-color: #F5F5F5;
+      background-color: #f5f5f5;
     }
     .goods-img {
       width: 100%;
@@ -726,13 +746,13 @@ export default {
       border-radius: 6px;
     }
     .updateChe {
-    .el-form-item__content {
-      margin-left: 0 !important;
+      .el-form-item__content {
+        margin-left: 0 !important;
+      }
+      .el-form-item__label {
+        width: 500px !important;
+      }
     }
-    .el-form-item__label {
-      width: 500px !important;
-    }
-  }
     .avatar-uploader {
       display: inline-block;
       vertical-align: top;
@@ -750,9 +770,10 @@ export default {
       box-sizing: border-box;
       cursor: pointer;
       &:hover {
-        .model-box, .operat-box {
+        .model-box,
+        .operat-box {
           opacity: 1;
-          transition: all .5s ease-in;
+          transition: all 0.5s ease-in;
         }
       }
     }
@@ -762,7 +783,7 @@ export default {
       position: absolute;
       left: 0;
       opacity: 0;
-      background-color: rgba(0, 0, 0, .3);
+      background-color: rgba(0, 0, 0, 0.3);
     }
     .operat-box {
       position: absolute;
@@ -785,15 +806,15 @@ export default {
     }
     .el-textarea__inner {
       width: 30%;
-      background-color: #F5F5F5;
+      background-color: #f5f5f5;
     }
   }
-    .goods-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 6px;
-    }
-    .updateChe {
+  .goods-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+  .updateChe {
     .el-form-item__content {
       margin-left: 0 !important;
     }
@@ -801,53 +822,54 @@ export default {
       width: 500px !important;
     }
   }
-    .avatar-uploader {
-      display: inline-block;
-      vertical-align: top;
-      // margin-left: 50px;
+  .avatar-uploader {
+    display: inline-block;
+    vertical-align: top;
+    // margin-left: 50px;
+  }
+  .img-item {
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    width: 148px;
+    height: 148px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box,
+      .operat-box {
+        opacity: 1;
+        transition: all 0.5s ease-in;
+      }
     }
-    .img-item {
-      display: inline-block;
-      border: 1px dashed #d9d9d9;
-      width: 148px;
-      height: 148px;
+  }
+  .model-box {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    i {
+      font-size: 20px;
+      color: #fff;
       margin-right: 10px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      text-align: center;
-      position: relative;
-      box-sizing: border-box;
-      cursor: pointer;
-      &:hover {
-        .model-box, .operat-box {
-          opacity: 1;
-          transition: all .5s ease-in;
-        }
-      }
     }
-    .model-box {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      left: 0;
-      opacity: 0;
-      background-color: rgba(0, 0, 0, .3);
-    }
-    .operat-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      i {
-        font-size: 20px;
-        color: #fff;
-        margin-right: 10px;
-      }
-    }
+  }
   .save-btn {
     color: #fff;
-    background-color: #3540A5;
+    background-color: #3540a5;
   }
   .preview-btn {
     color: #fff;
@@ -861,7 +883,7 @@ export default {
     font-size: 12px;
   }
   .poster-left {
-    width:300px;
+    width: 300px;
     height: 580px;
     overflow: hidden;
     vertical-align: top;
@@ -870,7 +892,7 @@ export default {
     background-color: #fff;
     padding: 20px 10px;
     position: relative;
-    margin-right:40px;
+    margin-right: 40px;
     .left-top {
       img {
         width: 80px;
@@ -888,7 +910,7 @@ export default {
     vertical-align: top;
     display: inline-block;
     background-color: #fff;
-    padding:15px;
+    padding: 15px;
     height: 880px;
     box-sizing: border-box;
   }
@@ -923,15 +945,15 @@ export default {
     top: 0;
   }
   .Features-container {
-     background-color: #fff !important;
-     padding: 20px;
+    background-color: #fff !important;
+    padding: 20px;
   }
   .how-container {
-     background-color: #fff !important;
-     padding: 20px;
-     .w-e-text-container {
-       height: 600px !important;
-     }
+    background-color: #fff !important;
+    padding: 20px;
+    .w-e-text-container {
+      height: 600px !important;
+    }
   }
 }
 </style>

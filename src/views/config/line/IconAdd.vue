@@ -1,35 +1,50 @@
 <template>
   <div class="icon-container">
     <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-      </search-group>
-      </div>
-    <div class="select-box">
-      <add-btn @click.native="addIcon">{{$t('添加icon')}}</add-btn>
+      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
     </div>
-    <el-table :data="iconList" stripe border class="data-list"
-    v-loading="tableLoading"
-    @selection-change="selectionChange">
+    <div class="select-box">
+      <add-btn @click.native="addIcon">{{ $t('添加icon') }}</add-btn>
+    </div>
+    <el-table
+      :data="iconList"
+      stripe
+      border
+      class="data-list"
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+    >
       <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
       <el-table-column :label="$t('名称')" prop="name"></el-table-column>
       <el-table-column :label="$t('图标')">
         <template slot-scope="scope">
-          <div class="img-style"
-            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${scope.row.icon}`, imgVisible=true">
-              <img :src="`${$baseUrl.IMAGE_URL}${scope.row.icon}`" style="width: 100px;">
+          <div
+            class="img-style"
+            @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${scope.row.icon}`), (imgVisible = true)"
+          >
+            <img :src="`${$baseUrl.IMAGE_URL}${scope.row.icon}`" style="width: 100px" />
           </div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.is_default === 1">{{$t('默认')}}</span>
+          <span v-if="scope.row.is_default === 1">{{ $t('默认') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')" width="220">
         <template slot-scope="scope">
-          <el-button  v-if="scope.row.is_default === 0" class="btn-green" @click="setDefault(scope.row.id)">{{$t('设为默认')}}</el-button>
-          <el-button class="btn-deep-blue" @click="editIcon(scope.row.id)">{{$t('编辑')}}</el-button>
-          <el-button class="btn-light-red" @click="deleteIcon(scope.row.id)">{{$t('删除')}}</el-button>
+          <el-button
+            v-if="scope.row.is_default === 0"
+            class="btn-green"
+            @click="setDefault(scope.row.id)"
+            >{{ $t('设为默认') }}</el-button
+          >
+          <el-button class="btn-deep-blue" @click="editIcon(scope.row.id)">{{
+            $t('编辑')
+          }}</el-button>
+          <el-button class="btn-light-red" @click="deleteIcon(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -39,11 +54,11 @@
       </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-      <el-dialog :visible.sync="imgVisible" size="small">
+    <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
+        <img :src="imgSrc" class="imgDialog" />
       </div>
-     </el-dialog>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -60,7 +75,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       iconList: [],
       tableLoading: false,
@@ -69,46 +84,48 @@ export default {
       imgSrc: ''
     }
   },
-  created () {
+  created() {
     this.getList()
     localStorage.setItem('add', '')
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
-      this.$request.iconLines({
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.iconList = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .iconLines({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.iconList = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 跳转至添加icon
-    addIcon () {
+    addIcon() {
       dialog({ type: 'addIcon', state: 'add' }, () => {
         this.getList()
       })
     },
     // 编辑icon
-    editIcon (id) {
+    editIcon(id) {
       dialog({ type: 'addIcon', state: 'edit', id: id }, () => {
         this.getList()
       })
     },
     // 设置为默认
-    setDefault (id) {
+    setDefault(id) {
       this.$request.asDefault(id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -128,19 +145,20 @@ export default {
       })
     },
     // 修改仓库
-    editWarehouse (id) {
-      this.$router.push({ name: 'warehouseEdit',
+    editWarehouse(id) {
+      this.$router.push({
+        name: 'warehouseEdit',
         params: {
           id: id
-        } }
-      )
+        }
+      })
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除单条转账支付
-    deleteIcon (id) {
+    deleteIcon(id) {
       this.$confirm(this.$t('您真的要删除此路线吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -172,14 +190,14 @@ export default {
   .select-box {
     overflow: hidden;
   }
-  .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }
   .img-style {
-    cursor:pointer;
+    cursor: pointer;
     width: 80px;
     text-align: center;
   }

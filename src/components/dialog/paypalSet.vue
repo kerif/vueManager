@@ -1,28 +1,39 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('配置')" class="dialog-paypal" width="50%"
-  @close="clear">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
-    label-position="top">
-        <el-form-item :label="$t('沙盒模式')">
-          <el-select v-model="ruleForm.sandbox" :placeholder="$t('请选择')" clearable>
-            <el-option
-              v-for="item in positionData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Client ID" prop="client_id">
-            <el-input :placeholder="$t('请输入Client ID')" v-model="ruleForm.client_id"></el-input>
-        </el-form-item>
-        <el-form-item label="Secret">
-            <el-input :placeholder="$t('请输入Secret')" v-model="ruleForm.secret"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('账号')">
-            <el-input :placeholder="$t('请输入账号')" v-model="ruleForm.account"></el-input>
-        </el-form-item>
-        <!-- <el-form-item :label="$t('通信安全私钥证书')">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('配置')"
+    class="dialog-paypal"
+    width="50%"
+    @close="clear"
+  >
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="ruleForm"
+      class="demo-ruleForm"
+      label-position="top"
+    >
+      <el-form-item :label="$t('沙盒模式')">
+        <el-select v-model="ruleForm.sandbox" :placeholder="$t('请选择')" clearable>
+          <el-option
+            v-for="item in positionData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Client ID" prop="client_id">
+        <el-input :placeholder="$t('请输入Client ID')" v-model="ruleForm.client_id"></el-input>
+      </el-form-item>
+      <el-form-item label="Secret">
+        <el-input :placeholder="$t('请输入Secret')" v-model="ruleForm.secret"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('账号')">
+        <el-input :placeholder="$t('请输入账号')" v-model="ruleForm.account"></el-input>
+      </el-form-item>
+      <!-- <el-form-item :label="$t('通信安全私钥证书')">
             <el-input :placeholder="$t('请输入通信安全私钥证书')" v-model="ruleForm.key_path"></el-input>
             <el-upload
                 class="upload-demo"
@@ -34,14 +45,14 @@
         </el-form-item> -->
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       fileList: [],
       ruleForm: {
@@ -54,7 +65,8 @@ export default {
         {
           id: 0,
           name: '否'
-        }, {
+        },
+        {
           id: 1,
           name: '是'
         }
@@ -67,7 +79,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getPaypal().then(res => {
         if (res.ret) {
           this.ruleForm.sandbox = res.data.sandbox
@@ -77,8 +89,8 @@ export default {
         }
       })
     },
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           let params = { ...this.ruleForm }
           this.$request.updatePaypal(params).then(res => {
@@ -103,10 +115,10 @@ export default {
         }
       })
     },
-    handlePreview (file) {
+    handlePreview(file) {
       console.log(file)
     },
-    clear () {
+    clear() {
       this.ruleForm.client_id = ''
       this.ruleForm.secret = ''
       this.ruleForm.sandbox = ''
@@ -125,7 +137,7 @@ export default {
     //   params.append(`files[${0}][file]`, file)
     //   return this.$request.uploadCerts(params)
     // },
-    init () {
+    init() {
       this.getList()
     }
   }
@@ -134,8 +146,8 @@ export default {
 <style lang="scss">
 .dialog-paypal {
   .el-dialog__body {
-     padding: 30px 50px;
-    }
+    padding: 30px 50px;
+  }
   .el-form-item__label {
     width: 150px;
   }
@@ -155,15 +167,15 @@ export default {
     top: 5px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .banner-sty {
     width: 45% !important;

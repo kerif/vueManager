@@ -39,28 +39,20 @@
       </el-form-item>
       <el-form-item :label="$t('结算货币：')">
         <el-select v-model="currency" :placeholder="$t('请选择')">
-          <el-option
-            v-for="item in rateList"
-            :key="item.id"
-            :value="item.code"
-            :label="item.name"
-          >
+          <el-option v-for="item in rateList" :key="item.id" :value="item.code" :label="item.name">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-button
-        :loading="$store.state.btnLoading"
-        class="save-btn"
-        @click="saveSetting"
-        >{{ $t("保存") }}</el-button
-      >
+      <el-button :loading="$store.state.btnLoading" class="save-btn" @click="saveSetting">{{
+        $t('保存')
+      }}</el-button>
     </el-form>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       weightName: '',
       weightList: [],
@@ -72,14 +64,14 @@ export default {
       rateList: []
     }
   },
-  created () {
+  created() {
     this.confirmSetting()
     this.getAllCurrency()
     this.getSetting()
   },
   methods: {
     // 获取全部重量及货币配置
-    confirmSetting () {
+    confirmSetting() {
       this.$request.getLocalization().then(res => {
         this.weightList = res.data.weight
         this.currencyList = res.data.currency
@@ -87,7 +79,7 @@ export default {
       })
     },
     // 获取全部结算货币
-    getAllCurrency () {
+    getAllCurrency() {
       this.$request.getAllRate().then(res => {
         if (res.ret) {
           this.rateList = res.data
@@ -95,7 +87,7 @@ export default {
       })
     },
     // 获取当前选择的重量及货币配置
-    getSetting () {
+    getSetting() {
       this.$request.chooseLocalization().then(res => {
         if (res.ret) {
           this.currencyName = res.data.currency_name
@@ -107,41 +99,42 @@ export default {
       })
     },
     // 保存当前选择的重量及货币配置
-    saveSetting () {
+    saveSetting() {
       let weight = this.weightList.filter(item => item.name === this.weightName)
       let currency = this.currencyList.filter(item => item.name === this.currencyName)
       let length = this.lengthList.filter(item => item.name === this.lengthName)
-      this.$request.confirmLocalization({
-        weight_name: weight[0].name,
-        weight_symbol: weight[0].symbol,
-        currency_name: currency[0].name,
-        currency_symbol: currency[0].symbol,
-        length_name: length[0].name,
-        length_symbol: length[0].symbol,
-        currency: this.currency
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.activeName = '1'
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .confirmLocalization({
+          weight_name: weight[0].name,
+          weight_symbol: weight[0].symbol,
+          currency_name: currency[0].name,
+          currency_symbol: currency[0].symbol,
+          length_name: length[0].name,
+          length_symbol: length[0].symbol,
+          currency: this.currency
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.activeName = '1'
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     }
   }
 }
-
 </script>
 <style scoped>
 .save-btn {
   color: #fff;
-  background-color: #3540A5;
+  background-color: #3540a5;
 }
 </style>

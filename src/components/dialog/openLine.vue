@@ -1,16 +1,22 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'insurance' ? $t('分路线部分开启保险') : $t('分路线部分开启关税')" class="dialog-line-open"
-  @close="clear" width="55%">
-    <div class="top-sty">{{$t('勾选需开启该功能的路线')}}
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'insurance' ? $t('分路线部分开启保险') : $t('分路线部分开启关税')"
+    class="dialog-line-open"
+    @close="clear"
+    width="55%"
+  >
+    <div class="top-sty">
+      {{ $t('勾选需开启该功能的路线') }}
       <div v-for="item in lineData" :key="item.id" class="service">
         <div class="serviceLeft">
-          <el-checkbox v-model="item.enabled">{{item.name}}</el-checkbox>
+          <el-checkbox v-model="item.enabled">{{ item.name }}</el-checkbox>
         </div>
       </div>
     </div>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -18,7 +24,7 @@
 import { pagination } from '@/mixin'
 export default {
   mixins: [pagination],
-  data () {
+  data() {
     return {
       prop_ids: [],
       state: '',
@@ -26,7 +32,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       if (this.state === 'insurance') {
         this.getInsurance()
       } else {
@@ -34,98 +40,106 @@ export default {
       }
     },
     // 获取保险服务路线
-    getInsurance () {
-      this.$request.getInsuranceLine({
-        page: 1,
-        size: 99999
-      }).then(res => {
-        if (res.ret) {
-          let ids = this.lineData.map(item => item.id)
-          res.data.forEach(items => {
-            let enabled = !!items.enabled
-            if (ids.includes(items.id)) {
-              let ele = this.lineData.filter(item => item.id === items.id)[0]
-              if (ele) {
-                enabled = ele.enabled
+    getInsurance() {
+      this.$request
+        .getInsuranceLine({
+          page: 1,
+          size: 99999
+        })
+        .then(res => {
+          if (res.ret) {
+            let ids = this.lineData.map(item => item.id)
+            res.data.forEach(items => {
+              let enabled = !!items.enabled
+              if (ids.includes(items.id)) {
+                let ele = this.lineData.filter(item => item.id === items.id)[0]
+                if (ele) {
+                  enabled = ele.enabled
+                }
               }
-            }
-            items.enabled = enabled
-          })
-          this.lineData = res.data
-        }
-      })
+              items.enabled = enabled
+            })
+            this.lineData = res.data
+          }
+        })
     },
     // 获取关税服务路线
-    getTariff () {
-      this.$request.getTariffLine({
-        page: 1,
-        size: 99999
-      }).then(res => {
-        if (res.ret) {
-          let ids = this.lineData.map(item => item.id)
-          res.data.forEach(items => {
-            let enabled = !!items.enabled
-            if (ids.includes(items.id)) {
-              let ele = this.lineData.filter(item => item.id === items.id)[0]
-              if (ele) {
-                enabled = ele.enabled
+    getTariff() {
+      this.$request
+        .getTariffLine({
+          page: 1,
+          size: 99999
+        })
+        .then(res => {
+          if (res.ret) {
+            let ids = this.lineData.map(item => item.id)
+            res.data.forEach(items => {
+              let enabled = !!items.enabled
+              if (ids.includes(items.id)) {
+                let ele = this.lineData.filter(item => item.id === items.id)[0]
+                if (ele) {
+                  enabled = ele.enabled
+                }
               }
-            }
-            items.enabled = enabled
-          })
-          this.lineData = res.data
-        }
-      })
+              items.enabled = enabled
+            })
+            this.lineData = res.data
+          }
+        })
     },
-    confirm () {
+    confirm() {
       const ids = this.lineData.filter(item => item.enabled).map(item => item.id)
       console.log(ids, 'params')
       if (this.state === 'insurance') {
-        this.$request.updateInsuranceLine({
-          ids: ids
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
+        this.$request
+          .updateInsuranceLine({
+            ids: ids
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
       } else {
-        this.$request.updateTariffLine({
-          ids: ids
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
+        this.$request
+          .updateTariffLine({
+            ids: ids
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
       }
     },
-    init () {
+    init() {
       this.getList()
     },
-    clear () {
+    clear() {
       this.lineData = []
       this.page_params.page = 1
     }
@@ -138,18 +152,18 @@ export default {
     margin-top: 10px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .input-select {
     width: 30%;
     margin-right: 10px;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .commission-top {
     margin-left: 20px;

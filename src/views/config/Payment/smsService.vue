@@ -1,26 +1,30 @@
 <template>
   <div class="sms-service-container">
-    <h2>{{$t('短信服务')}}</h2>
+    <h2>{{ $t('短信服务') }}</h2>
     <el-row :gutter="20">
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="2">{{$t('系统内服务短信')}}</el-radio>
+          <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="2">{{
+            $t('系统内服务短信')
+          }}</el-radio>
           <div class="user-bottom">
             <div class="bottom-left">
               <p>
-              {{$t('大陆短信剩余次数')}}：<span class="count-sty">{{ruleForm.count}}</span>
+                {{ $t('大陆短信剩余次数') }}：<span class="count-sty">{{ ruleForm.count }}</span>
               </p>
               <p>
-              {{$t('国际短信剩余次数')}}：<span class="count-sty">{{ruleForm.intl_count}}</span>
+                {{ $t('国际短信剩余次数') }}：<span class="count-sty">{{
+                  ruleForm.intl_count
+                }}</span>
               </p>
             </div>
             <div class="bottom-right">
-              <el-button class="buy-sty" @click="buying">{{$t('购买')}}</el-button>
+              <el-button class="buy-sty" @click="buying">{{ $t('购买') }}</el-button>
             </div>
           </div>
           <div class="details-sty" @click="templateDetails">
             <i class="el-icon-s-order"></i>
-            {{$t('详情')}}
+            {{ $t('详情') }}
           </div>
           <!-- <div class="details-sty" @click="alertSms">
             <i class="el-icon-s-order"></i>
@@ -28,31 +32,35 @@
           </div> -->
           <div class="details-sty" @click="purchase">
             <i class="el-icon-s-order"></i>
-            {{$t('购买记录')}}
+            {{ $t('购买记录') }}
           </div>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="1">{{$t('第三方短信服务')}}</el-radio>
+          <el-radio class="system-sty" @change="changeType" v-model="ruleForm.type" :label="1">{{
+            $t('第三方短信服务')
+          }}</el-radio>
           <div class="message-main">
-            <span>{{$t('中国大陆短信服务——Appkey')}}：</span><br/>
+            <span>{{ $t('中国大陆短信服务——Appkey') }}：</span><br />
             <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
-            <el-button class="buy-sty">{{$t('测试')}}</el-button>
+            <el-button class="buy-sty">{{ $t('测试') }}</el-button>
           </div>
           <div class="message-main">
-            <span>{{$t('国际短信服务——Appkey')}}：</span><br/>
+            <span>{{ $t('国际短信服务——Appkey') }}：</span><br />
             <el-input class="input-sty" v-model="ruleForm.intl_app_key"></el-input>
-            <el-button class="buy-sty">{{$t('测试')}}</el-button>
+            <el-button class="buy-sty">{{ $t('测试') }}</el-button>
           </div>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="ruleForm.type" :label="0">{{$t('不开启')}}</el-radio>
+          <el-radio class="system-sty" v-model="ruleForm.type" :label="0">{{
+            $t('不开启')
+          }}</el-radio>
           <div class="unopen-sty">
             <p>
-            {{$t('暂不开启短信通知')}}
+              {{ $t('暂不开启短信通知') }}
             </p>
           </div>
         </div>
@@ -60,15 +68,21 @@
     </el-row>
     <!-- 短信模版（系统内） -->
     <div v-if="ruleForm.type === 2">
-      <h2 class="template-sty">{{$t('短信模版（系统内）')}}</h2>
+      <h2 class="template-sty">{{ $t('短信模版（系统内）') }}</h2>
       <!-- <el-button class="template-sty btn-green" @click="templateExample">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
         <el-row :gutter="20">
           <el-col :span="10" v-for="item in smsData" :key="item.id">
-            <div class="tootip-sty">{{item.type_name}}
-            <el-tooltip class="item code-sty" effect="dark" :content="item.content" placement="top">
-              <span class="el-icon-warning icon-info"></span>
-            </el-tooltip>
+            <div class="tootip-sty">
+              {{ item.type_name }}
+              <el-tooltip
+                class="item code-sty"
+                effect="dark"
+                :content="item.content"
+                placement="top"
+              >
+                <span class="el-icon-warning icon-info"></span>
+              </el-tooltip>
             </div>
             <el-switch
               v-model="item.status"
@@ -78,7 +92,8 @@
               :inactive-value="0"
               :inactive-text="$t('关')"
               active-color="#13ce66"
-              inactive-color="gray">
+              inactive-color="gray"
+            >
             </el-switch>
           </el-col>
         </el-row>
@@ -86,8 +101,8 @@
     </div>
     <!-- 第三方短信服务 -->
     <div v-if="ruleForm.type === 1">
-      <h2 class="template-sty">{{$t('短信模版')}}</h2>
-      <span>（{{$t('请输入第三方国内模版ID')}}）</span>
+      <h2 class="template-sty">{{ $t('短信模版') }}</h2>
+      <span>（{{ $t('请输入第三方国内模版ID') }}）</span>
       <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
         <el-form :model="ruleForm" label-width="130px">
@@ -99,20 +114,23 @@
             </el-col>
           </el-row>
         </el-form>
-        <div class="template-msg">{{$t('不填写或填写无效模版ID，默认为不发送该类型信息')}}<br>
-        {{$t('变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#')}}</div>
+        <div class="template-msg">
+          {{ $t('不填写或填写无效模版ID，默认为不发送该类型信息') }}<br />
+          {{
+            $t(
+              '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+            )
+          }}
+        </div>
       </div>
     </div>
     <div class="save-btn">
-      <el-button type="primary" @click="saveTemplate">{{$t('保存')}}</el-button>
+      <el-button type="primary" @click="saveTemplate">{{ $t('保存') }}</el-button>
     </div>
-    <el-dialog class="details-dialog"
-      :title="$t('详情')"
-      :visible.sync="dialogVisible"
-      width="55%">
+    <el-dialog class="details-dialog" :title="$t('详情')" :visible.sync="dialogVisible" width="55%">
       <div class="changeTime">
         <!-- 提交时间 -->
-          <el-date-picker
+        <el-date-picker
           class="timeStyle"
           v-model="timeList"
           type="daterange"
@@ -121,7 +139,8 @@
           value-format="yyyy-MM-dd"
           :range-separator="$t('至')"
           :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
+          :end-placeholder="$t('结束日期')"
+        >
         </el-date-picker>
       </div>
       <el-table :data="templateData" border>
@@ -129,14 +148,14 @@
         <el-table-column :label="$t('短信类型')" prop="sub_type_name"></el-table-column>
         <el-table-column :label="$t('请求客户')">
           <template slot-scope="scope">
-            <span>{{scope.row.user_id}}--{{scope.row.user_name}}</span>
+            <span>{{ scope.row.user_id }}--{{ scope.row.user_name }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('请求号码')" prop="target"></el-table-column>
         <el-table-column :label="$t('请求类型')">
           <template slot-scope="scope">
-            <span v-if="scope.row.type === 1">{{$t('国内')}}</span>
-            <span v-if="scope.row.type === 2">{{$t('国际')}}</span>
+            <span v-if="scope.row.type === 1">{{ $t('国内') }}</span>
+            <span v-if="scope.row.type === 2">{{ $t('国际') }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -156,7 +175,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       validate_email: '',
       ruleForm: {
@@ -176,13 +195,13 @@ export default {
       timeList: []
     }
   },
-  created () {
+  created() {
     this.getService()
     this.timeList = this.timeDefault
   },
   computed: {
     // 默认时间
-    timeDefault () {
+    timeDefault() {
       let date = new Date()
       // 通过时间戳计算
       let defalutStartTime = date.getTime() - 7 * 24 * 3600 * 1000 // 转化为时间戳
@@ -190,28 +209,42 @@ export default {
       let startDateNs = new Date(defalutStartTime)
       let endDateNs = new Date(defalutEndTime)
       // 月，日 不够10补0
-      defalutStartTime = startDateNs.getFullYear() + '-' + ((startDateNs.getMonth() + 1) >= 10 ? (startDateNs.getMonth() + 1) : '0' + (startDateNs.getMonth() + 1)) + '-' + (startDateNs.getDate() >= 10 ? startDateNs.getDate() : '0' + startDateNs.getDate())
-      defalutEndTime = endDateNs.getFullYear() + '-' + ((endDateNs.getMonth() + 1) >= 10 ? (endDateNs.getMonth() + 1) : '0' + (endDateNs.getMonth() + 1)) + '-' + (endDateNs.getDate() >= 10 ? endDateNs.getDate() : '0' + endDateNs.getDate())
+      defalutStartTime =
+        startDateNs.getFullYear() +
+        '-' +
+        (startDateNs.getMonth() + 1 >= 10
+          ? startDateNs.getMonth() + 1
+          : '0' + (startDateNs.getMonth() + 1)) +
+        '-' +
+        (startDateNs.getDate() >= 10 ? startDateNs.getDate() : '0' + startDateNs.getDate())
+      defalutEndTime =
+        endDateNs.getFullYear() +
+        '-' +
+        (endDateNs.getMonth() + 1 >= 10
+          ? endDateNs.getMonth() + 1
+          : '0' + (endDateNs.getMonth() + 1)) +
+        '-' +
+        (endDateNs.getDate() >= 10 ? endDateNs.getDate() : '0' + endDateNs.getDate())
       return [defalutStartTime, defalutEndTime]
     }
   },
   methods: {
     // 获取短信服务数据
-    getService () {
+    getService() {
       this.$request.getSms().then(res => {
         this.ruleForm = res.data
         this.changeType()
       })
     },
     // 获取第三方服务短信
-    getThird () {
+    getThird() {
       this.$request.getSms().then(res => {
         this.ruleForm = res.data
         this.changeType()
       })
     },
     // 切换短信服务
-    changeType () {
+    changeType() {
       this.smsData = []
       this.customerData = []
       console.log(this.ruleForm.type, 'type')
@@ -222,7 +255,7 @@ export default {
       }
     },
     // 获取短信模版数据
-    getSms () {
+    getSms() {
       this.$request.getSmsSystem().then(res => {
         if (res.ret) {
           this.smsData = res.data
@@ -230,7 +263,7 @@ export default {
       })
     },
     // 获取第三方短信服务
-    getCustomer () {
+    getCustomer() {
       this.$request.getCustomSystem().then(res => {
         if (res.ret) {
           this.customerData = res.data
@@ -238,25 +271,25 @@ export default {
       })
     },
     // 购买
-    buying () {
+    buying() {
       dialog({ type: 'buyingService', state: 'sms' })
     },
     // 预警
-    alertSms () {
+    alertSms() {
       dialog({ type: 'alertSettings', state: 'sms' })
     },
     // 购买记录
-    purchase () {
+    purchase() {
       dialog({ type: 'purchaseHistory', state: 'sms' })
     },
     // 详情
-    templateDetails () {
+    templateDetails() {
       this.dialogVisible = true
       this.getList()
       // smsRecord
     },
     // 获取详情
-    getList () {
+    getList() {
       this.begin_date = this.timeList[0]
       this.end_date = this.timeList[1]
       let params = {
@@ -274,7 +307,7 @@ export default {
       })
     },
     // 提交时间
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       console.log(this.begin_date, 'begin_date')
       this.end_date = val ? val[1] : ''
@@ -283,36 +316,38 @@ export default {
       this.getList()
     },
     // 保存
-    saveTemplate () {
+    saveTemplate() {
       console.log(this.smsData, 'this.smsData')
       console.log(this.customerData, 'this.customerData')
-      this.$request.updateSmsSystem({
-        templates: this.ruleForm.type === 2 ? this.smsData : this.customerData,
-        type: this.ruleForm.type,
-        intl_app_key: this.ruleForm.intl_app_key,
-        app_key: this.ruleForm.app_key
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.changeType()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .updateSmsSystem({
+          templates: this.ruleForm.type === 2 ? this.smsData : this.customerData,
+          type: this.ruleForm.type,
+          intl_app_key: this.ruleForm.intl_app_key,
+          app_key: this.ruleForm.app_key
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.changeType()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     }
   }
 }
 </script>
 <style lang="scss">
 .sms-service-container {
-  background-color: #F5F5F5 !important;
+  background-color: #f5f5f5 !important;
   padding: 20px;
   .new-top {
     margin-bottom: 10px;
@@ -350,8 +385,8 @@ export default {
     font-size: 12px;
   }
   .buy-sty {
-    color: #35B85A;
-    border-color: #35B85A;
+    color: #35b85a;
+    border-color: #35b85a;
   }
   .details-sty {
     display: inline-block;
@@ -395,7 +430,7 @@ export default {
   }
   .code-sty {
     padding-left: 5px;
-    color: #35B85A;
+    color: #35b85a;
     font-size: 18px;
   }
   .switch-sty {
@@ -416,7 +451,7 @@ export default {
     color: #fff;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .dialog-bottom {
     margin-top: 20px;

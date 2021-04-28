@@ -3,75 +3,150 @@
     <div class="add-btn-box">
       <el-row :gutter="10">
         <el-col :span="5">
-          <el-select :placeholder="$t('线路名称')" multiple filterable
-            collapse-tags v-model="query.lineName">
-            <el-option v-for="(item, index) in lineNameColumn" :key="index"
-              :label="item" :value="item"></el-option>
+          <el-select
+            :placeholder="$t('线路名称')"
+            multiple
+            filterable
+            collapse-tags
+            v-model="query.lineName"
+          >
+            <el-option
+              v-for="(item, index) in lineNameColumn"
+              :key="index"
+              :label="item"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="5">
-          <el-select :placeholder="$t('支持仓库')" v-model="query.warehouses" multiple
-            collapse-tags filterable>
-            <el-option v-for="(item, index) in warehousesColumn" :key="index"
-              :label="item" :value="item"></el-option>
+          <el-select
+            :placeholder="$t('支持仓库')"
+            v-model="query.warehouses"
+            multiple
+            collapse-tags
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in warehousesColumn"
+              :key="index"
+              :label="item"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="3">
           <el-select :placeholder="$t('是否启用')" v-model="query.enabled">
-            <el-option v-for="item in enableList" :key="item.value"
-              :label="item.label" :value="item.value"></el-option>
+            <el-option
+              v-for="item in enableList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="11">
-          <el-button type="success" @click="onHighSearch">{{ highSearch ? $t('取消高级搜索') : $t('高级搜索') }}</el-button>
-          <el-button type="primary" @click="onSearch">{{$t('搜索')}}</el-button>
-          <el-button type="primary" plain @click="onReset">{{$t('重置')}}</el-button>
-          <add-btn :params="{add: 1}" router="lineadd">{{$t('添加路线')}}</add-btn>
+          <el-button type="success" @click="onHighSearch">{{
+            highSearch ? $t('取消高级搜索') : $t('高级搜索')
+          }}</el-button>
+          <el-button type="primary" @click="onSearch">{{ $t('搜索') }}</el-button>
+          <el-button type="primary" plain @click="onReset">{{ $t('重置') }}</el-button>
+          <add-btn :params="{ add: 1 }" router="lineadd">{{ $t('添加路线') }}</add-btn>
         </el-col>
       </el-row>
-      <el-row :gutter="10" style="margin-top:15px" v-show="highSearch">
+      <el-row :gutter="10" style="margin-top: 15px" v-show="highSearch">
         <el-col :span="4">
-          <el-select :placeholder="$t('支持国家/地区')" v-model="query.countries" multiple
-            collapse-tags filterable>
-            <el-option v-for="(item, index) in countriesColumn" :key="index"
-              :label="item" :value="item"></el-option>
+          <el-select
+            :placeholder="$t('支持国家/地区')"
+            v-model="query.countries"
+            multiple
+            collapse-tags
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in countriesColumn"
+              :key="index"
+              :label="item"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select :placeholder="$t('参考时效')" v-model="query.referenceTime" multiple
-            collapse-tags filterable>
-            <el-option v-for="(item, index) in referenceTimeColumn" :key="index"
-              :label="item" :value="item"></el-option>
+          <el-select
+            :placeholder="$t('参考时效')"
+            v-model="query.referenceTime"
+            multiple
+            collapse-tags
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in referenceTimeColumn"
+              :key="index"
+              :label="item"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select :placeholder="$t('首重')" v-model="query.firstWeight" multiple
-            collapse-tags filterable>
-            <el-option v-for="(item, index) in firstWeightColumn" :key="index"
-              :label="item" :value="item"></el-option>
+          <el-select
+            :placeholder="$t('首重')"
+            v-model="query.firstWeight"
+            multiple
+            collapse-tags
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in firstWeightColumn"
+              :key="index"
+              :label="item"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select :placeholder="$t('首费')" v-model="query.firstMoney" multiple
-            collapse-tags filterable>
-            <el-option v-for="(item, index) in firstMoneyColumn" :key="index"
-              :label="item" :value="item"></el-option>
+          <el-select
+            :placeholder="$t('首费')"
+            v-model="query.firstMoney"
+            multiple
+            collapse-tags
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in firstMoneyColumn"
+              :key="index"
+              :label="item"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select :placeholder="$t('续费')" v-model="query.nextWeight" multiple
-            collapse-tags filterable>
-            <el-option v-for="(item, index) in nextWeightColumn" :key="index"
-              :label="item" :value="item"></el-option>
+          <el-select
+            :placeholder="$t('续费')"
+            v-model="query.nextWeight"
+            multiple
+            collapse-tags
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in nextWeightColumn"
+              :key="index"
+              :label="item"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-col>
       </el-row>
     </div>
-    <el-table stripe border class="data-list" :data="lineList"
-      v-loading="tableLoading" height="550">
+    <el-table
+      stripe
+      border
+      class="data-list"
+      :data="lineList"
+      v-loading="tableLoading"
+      height="550"
+    >
       <el-table-column type="expand">
         <template slot-scope="scope">
-          {{scope.row.remark || "无" }}
+          {{ scope.row.remark || '无' }}
         </template>
       </el-table-column>
       <!-- 线路名称 -->
@@ -80,7 +155,7 @@
       <el-table-column :label="$t('支持国家/地区')" :show-overflow-tooltip="true" width="150">
         <template slot-scope="scope">
           <span v-for="item in scope.row.countries" :key="item.id">
-            {{item.name}}
+            {{ item.name }}
           </span>
         </template>
       </el-table-column>
@@ -88,24 +163,42 @@
       <el-table-column :label="$t('支持仓库')">
         <template slot-scope="scope">
           <span v-for="item in scope.row.warehouses" :key="item.id">
-            {{item.warehouse_name}}
+            {{ item.warehouse_name }}
           </span>
         </template>
       </el-table-column>
       <!-- 参考时效 -->
       <el-table-column :label="$t('参考时效')" prop="reference_time"></el-table-column>
       <!-- 首重 -->
-      <el-table-column :label="$t('首重') + this.localization.weight_unit" prop="first_weight"></el-table-column>
+      <el-table-column
+        :label="$t('首重') + this.localization.weight_unit"
+        prop="first_weight"
+      ></el-table-column>
       <!-- 首费 -->
-      <el-table-column :label="$t('首费') + this.localization.currency_unit" prop="first_money"></el-table-column>
+      <el-table-column
+        :label="$t('首费') + this.localization.currency_unit"
+        prop="first_money"
+      ></el-table-column>
       <!-- 续重 -->
-      <el-table-column :label="$t('续重') + this.localization.weight_unit" prop="next_weight"></el-table-column>
+      <el-table-column
+        :label="$t('续重') + this.localization.weight_unit"
+        prop="next_weight"
+      ></el-table-column>
       <!-- 续费 -->
-      <el-table-column :label="$t('续费') + this.localization.currency_unit" prop="next_money"></el-table-column>
+      <el-table-column
+        :label="$t('续费') + this.localization.currency_unit"
+        prop="next_money"
+      ></el-table-column>
       <!-- 最大重量 -->
-      <el-table-column :label="$t('最大重量') + this.localization.weight_unit" prop="max_weight"></el-table-column>
+      <el-table-column
+        :label="$t('最大重量') + this.localization.weight_unit"
+        prop="max_weight"
+      ></el-table-column>
       <!-- 最小重量 -->
-      <el-table-column :label="$t('最小重量') + this.localization.weight_unit" prop="min_weight"></el-table-column>
+      <el-table-column
+        :label="$t('最小重量') + this.localization.weight_unit"
+        prop="min_weight"
+      ></el-table-column>
       <!-- 是否启用 -->
       <el-table-column :label="$t('是否启用')" width="120">
         <template slot-scope="scope">
@@ -115,43 +208,53 @@
             :active-text="$t('开')"
             :inactive-text="$t('关')"
             active-color="#13ce66"
-            inactive-color="gray">
+            inactive-color="gray"
+          >
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+      <el-table-column
+        :label="item.name"
+        v-for="item in formatLangData"
+        :key="item.id"
+        align="center"
+      >
         <template slot-scope="scope">
-          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span
+            v-if="scope.row['trans_' + item.language_code]"
+            class="el-icon-check icon-sty"
+            @click="onLang(scope.row, item)"
+          ></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="116px" fixed="right">
         <template slot-scope="scope">
-           <el-dropdown>
+          <el-dropdown>
             <el-button type="primary" plain>
-              {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
+              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item class="item-sty" @click.native="editLine(scope.row.id)">
-                <span>{{$t('修改')}}</span>
+                <span>{{ $t('修改') }}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="goOthers(scope.row.id)">
-                <span>{{$t('附加费用')}}</span>
+                <span>{{ $t('附加费用') }}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="Advanced(scope.row.id)">
-                <span>{{$t('高级配置')}}</span>
+                <span>{{ $t('高级配置') }}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="copyLine(scope.row.id)">
-                <span>{{$t('复制')}}</span>
+                <span>{{ $t('复制') }}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="groupSet(scope.row.id)">
-                <span v-show="unShow">{{$t('拼团配置')}}</span>
+                <span v-show="unShow">{{ $t('拼团配置') }}</span>
               </el-dropdown-item>
               <el-dropdown-item class="item-sty" @click.native="deleteLine(scope.row.id)">
-                <span>{{$t('删除')}}</span>
+                <span>{{ $t('删除') }}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
-           </el-dropdown>
+          </el-dropdown>
           <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
           <!-- 高级配置 -->
         </template>
@@ -162,7 +265,7 @@
       </template> -->
     </el-table>
     <div class="bottom-sty">
-      <el-button class="btn-main others-btn" @click="unloadShip">{{$t('导出清单')}}</el-button>
+      <el-button class="btn-main others-btn" @click="unloadShip">{{ $t('导出清单') }}</el-button>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <!-- 高级配置 -->
@@ -170,7 +273,8 @@
       class="add-company"
       :title="$t('高级设置')"
       :visible.sync="dialogVisible"
-      width="45%">
+      width="45%"
+    >
       <el-form ref="form" :model="company" label-width="120px">
         <!-- <el-form-item :label="$t('是否自提线路')">
            <el-select v-model="company.company" clearable filterable
@@ -195,39 +299,59 @@
             </el-switch>
           </el-form-item> -->
         <el-form-item class="label-sty">
-          <span>{{$t('线路下单类型')}}</span>
-          <el-tooltip class="item code-sty" effect="dark" :content="$t('标准模式：包裹入库并经客户提交后，还需仓库合箱打包，称量出库（计费）数据，再生成待支付订单；快速下单模式：包裹入库经客户提交，即生成待支付订单（每个包裹为独立订单），入库称量数据即为出库（计费）数据')" placement="top">
-          <span class="el-icon-question icon-info"></span>
+          <span>{{ $t('线路下单类型') }}</span>
+          <el-tooltip
+            class="item code-sty"
+            effect="dark"
+            :content="
+              $t(
+                '标准模式：包裹入库并经客户提交后，还需仓库合箱打包，称量出库（计费）数据，再生成待支付订单；快速下单模式：包裹入库经客户提交，即生成待支付订单（每个包裹为独立订单），入库称量数据即为出库（计费）数据'
+              )
+            "
+            placement="top"
+          >
+            <span class="el-icon-question icon-info"></span>
           </el-tooltip>
-          <el-radio v-model="company.order_mode" :label="0">{{$t('标准模式')}}</el-radio>
-          <el-radio v-model="company.order_mode" :label="1">{{$t('快速下单（无需合箱）')}}</el-radio>
+          <el-radio v-model="company.order_mode" :label="0">{{ $t('标准模式') }}</el-radio>
+          <el-radio v-model="company.order_mode" :label="1">{{
+            $t('快速下单（无需合箱）')
+          }}</el-radio>
         </el-form-item>
         <el-form-item :label="$t('线路送货方式')">
           <!-- <el-radio-group></el-radio-group> -->
           <!-- <el-radio></el-radio> -->
-          <el-radio v-model="company.is_delivery" :label="0">{{$t('仅送货上门')}}</el-radio>
-          <el-radio v-model="company.is_delivery" :label="1">{{$t('仅自提')}}</el-radio>
-          <el-radio v-model="company.is_delivery" :label="2">{{$t('送货上门与自提')}}</el-radio>
+          <el-radio v-model="company.is_delivery" :label="0">{{ $t('仅送货上门') }}</el-radio>
+          <el-radio v-model="company.is_delivery" :label="1">{{ $t('仅自提') }}</el-radio>
+          <el-radio v-model="company.is_delivery" :label="2">{{ $t('送货上门与自提') }}</el-radio>
         </el-form-item>
         <el-form-item :label="$t('默认自提点')">
-          <el-select v-model="company.default_pickup_station_id" clearable filterable
-          allow-create default-first-option :placeholder="$t('请选择')">
-            <el-option
-                v-for="item in pickList"
-                :key="item.id"
-                :value="item.id"
-                :label="item.name">
+          <el-select
+            v-model="company.default_pickup_station_id"
+            clearable
+            filterable
+            allow-create
+            default-first-option
+            :placeholder="$t('请选择')"
+          >
+            <el-option v-for="item in pickList" :key="item.id" :value="item.id" :label="item.name">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('落地配配置')">
-          <el-select v-model="company.express_company_id" clearable filterable
-          allow-create default-first-option :placeholder="$t('请选择')">
+          <el-select
+            v-model="company.express_company_id"
+            clearable
+            filterable
+            allow-create
+            default-first-option
+            :placeholder="$t('请选择')"
+          >
             <el-option
-                v-for="item in dockingList"
-                :key="item.id"
-                :value="item.id"
-                :label="item.name">
+              v-for="item in dockingList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+            >
             </el-option>
           </el-select>
         </el-form-item>
@@ -242,10 +366,10 @@
               inactive-color="gray">
             </el-switch>
         </el-form-item> -->
-        </el-form>
+      </el-form>
       <span slot="footer">
-        <el-button @click="dialogVisible = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="updateAuto">{{$t('确定')}}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="updateAuto">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
     <!-- 复制线路 -->
@@ -256,16 +380,12 @@
         </el-form-item>
       </el-form>
       <span slot="footer">
-        <el-button @click="copyDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="confirmCopy">{{$t('确定')}}</el-button>
+        <el-button @click="copyDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirmCopy">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
     <!-- 拼团配置 -->
-    <el-dialog
-      class="add-company"
-      :title="$t('拼团配置')"
-      :visible.sync="groupDialog"
-      width="45%">
+    <el-dialog class="add-company" :title="$t('拼团配置')" :visible.sync="groupDialog" width="45%">
       <el-form ref="form" :model="groupData" label-width="220px">
         <el-form-item :label="$t('是否拼团线路')">
           <el-switch
@@ -275,17 +395,18 @@
             :inactive-value="0"
             :inactive-text="$t('关')"
             active-color="#13ce66"
-            inactive-color="gray">
+            inactive-color="gray"
+          >
           </el-switch>
         </el-form-item>
-          <!-- 此线路门槛重量 -->
+        <!-- 此线路门槛重量 -->
         <el-form-item :label="$t('此线路门槛重量') + localization.weight_unit">
           <el-input class="input-sty" v-model="groupData.group_raise_threshold"></el-input>
         </el-form-item>
-        </el-form>
+      </el-form>
       <span slot="footer">
-        <el-button @click="groupDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="updateGroup">{{$t('确定')}}</el-button>
+        <el-button @click="groupDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="updateGroup">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -302,7 +423,7 @@ export default {
     AddBtn,
     NlePagination
   },
-  data () {
+  data() {
     return {
       lineList: [
         {
@@ -360,10 +481,10 @@ export default {
       unShow: ''
     }
   },
-  activated () {
+  activated() {
     this.getList()
   },
-  created () {
+  created() {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
     console.log(this.unShow, 'this.unShow')
     console.log(this.$route.query.size || 10, 'size')
@@ -414,12 +535,12 @@ export default {
     this.onSearch()
   },
   methods: {
-    clickDropDown (k, v) {
+    clickDropDown(k, v) {
       k(v)
       console.log(k, 'k')
       console.log(v, 'v')
     },
-    getList (query = '') {
+    getList(query = '') {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
@@ -448,23 +569,24 @@ export default {
       })
     },
     // 修改线路
-    editLine (id) {
+    editLine(id) {
       localStorage.setItem('add', '')
-      this.$router.push({ name: 'lineedit',
+      this.$router.push({
+        name: 'lineedit',
         params: {
           state: 'edit',
           id: id
-        } }
-      )
+        }
+      })
     },
     // 拼团配置
-    groupSet (id) {
+    groupSet(id) {
       this.groupId = id
       this.getGroup()
       this.groupDialog = true
     },
     // 获取 拼团配置数据
-    getGroup () {
+    getGroup() {
       this.$request.getGroupLine(this.groupId).then(res => {
         if (res.ret) {
           this.groupData.is_group = res.data.is_group
@@ -479,7 +601,7 @@ export default {
       })
     },
     // 删除
-    deleteLine (id) {
+    deleteLine(id) {
       this.$confirm(this.$t('该操作无法恢复，请确认该路线彻底弃用后再删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -504,7 +626,7 @@ export default {
       })
     },
     // 更新 拼团配置
-    updateGroup () {
+    updateGroup() {
       this.$request.updateGroupLine(this.groupId, this.groupData).then(res => {
         if (res.ret) {
           this.$notify({
@@ -524,45 +646,47 @@ export default {
       })
     },
     // 复制线路
-    copyLine (id) {
+    copyLine(id) {
       this.copyId = id
       this.copyDialog = true
     },
-    clear () {
+    clear() {
       this.copyId = ''
       this.copyData.name = ''
     },
     // 确定复制
-    confirmCopy () {
+    confirmCopy() {
       if (!this.copyData.name) {
         return this.$message.error(this.$t('请输入新线路名称'))
       }
-      this.$request.copyLine(this.copyId, {
-        name: this.copyData.name
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.copyDialog = false
-          this.getList()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .copyLine(this.copyId, {
+          name: this.copyData.name
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.copyDialog = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 额外收录信息
-    addFee (id) {
+    addFee(id) {
       dialog({ type: 'feeList', id: id })
     },
     // 获取高级配置
-    getSorting () {
+    getSorting() {
       this.$request.getExpressLine(this.advancedId).then(res => {
         if (res.ret) {
           this.company.is_delivery = res.data.is_delivery
@@ -574,7 +698,7 @@ export default {
       })
     },
     // 获取自提点数据
-    getPick () {
+    getPick() {
       this.$request.autoPick(this.advancedId).then(res => {
         if (res.ret) {
           this.pickList = res.data
@@ -582,7 +706,7 @@ export default {
       })
     },
     // 获取落地陪配置数据
-    getDocking () {
+    getDocking() {
       this.$request.dockingPick().then(res => {
         if (res.ret) {
           this.dockingList = res.data
@@ -590,7 +714,7 @@ export default {
       })
     },
     // 高级配置
-    Advanced (id) {
+    Advanced(id) {
       this.advancedId = id
       this.dialogVisible = true
       this.getSorting()
@@ -598,7 +722,7 @@ export default {
       this.getDocking()
     },
     // 导出清单
-    unloadShip (id) {
+    unloadShip(id) {
       this.$request.importLines(id).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
@@ -618,7 +742,7 @@ export default {
         }
       })
     },
-    goOthers (id) {
+    goOthers(id) {
       this.$router.push({
         name: 'othersCost',
         params: {
@@ -627,29 +751,31 @@ export default {
       })
     },
     // 更新 高级配置
-    updateAuto () {
-      this.$request.updateAutoPick(this.advancedId, {
-        ...this.company
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.dialogVisible = false
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    updateAuto() {
+      this.$request
+        .updateAutoPick(this.advancedId, {
+          ...this.company
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.dialogVisible = false
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 修改转账支付的开关
-    changeTransfer (event, enabled, id) {
-      console.log(typeof (event), '我是event')
+    changeTransfer(event, enabled, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.resetLines(id, Number(event)).then(res => {
         if (res.ret) {
@@ -668,7 +794,7 @@ export default {
       })
     },
     // 获取筛选条件某一列得列表
-    getColumnList (column = '', param) {
+    getColumnList(column = '', param) {
       let arr = column.split('.')
       this.$request.getLineColumnList(column).then(res => {
         if (res.ret) {
@@ -677,7 +803,7 @@ export default {
       })
     },
     // 获取支持语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
@@ -685,7 +811,7 @@ export default {
       })
     },
     // 高级搜索
-    onHighSearch () {
+    onHighSearch() {
       if (this.highSearch) {
         // 取消高级搜索
         this.query.countries = []
@@ -697,8 +823,9 @@ export default {
       this.highSearch = !this.highSearch
     },
     // 重置筛选条件
-    onReset () {
+    onReset() {
       for (const key in this.query) {
+        // eslint-disable-next-line no-prototype-builtins
         if (this.query.hasOwnProperty(key)) {
           if (key === 'enabled') {
             this.query[key] = ''
@@ -710,7 +837,7 @@ export default {
       this.getList()
     },
     // 修改语言
-    onLang (line, lang) {
+    onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
@@ -719,11 +846,12 @@ export default {
       })
     },
     // 搜索
-    onSearch () {
+    onSearch() {
       this.page_params.page = 1
       let arr = []
       for (const key in this.query) {
         let value = this.query[key]
+        // eslint-disable-next-line no-prototype-builtins
         if (this.query.hasOwnProperty(key) && key !== 'enabled' && value.length) {
           let param = ''
           switch (key) {
@@ -755,7 +883,7 @@ export default {
       console.log(arr.join('|'))
       this.getList(arr.join('|'))
     },
-    getSearchValue (key, value) {
+    getSearchValue(key, value) {
       return `${key}:${value.join(',')};asc`
     }
   },
@@ -784,15 +912,15 @@ export default {
     'query.warehouses': function (val) {
       this.handleQueryChange('warehouses', encodeURIComponent(val.join(',')))
     },
-    '.size': function (val) {
+    '.size': function () {
       this.handleQueryChange('size', this.page_params.size)
     },
-    highSearch (val) {
+    highSearch(val) {
       this.handleQueryChange('highSearch', ~~val)
     }
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   }

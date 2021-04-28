@@ -1,62 +1,72 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('审核并支付')" class="dialog-add-setting" width="55%"
-  @close="clear">
-    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
-    label-position="top">
-        <!-- 流水号 -->
-        <el-form-item :label="$t('流水号')">
-          <span>{{ruleForm.serial_no}}</span>
-        </el-form-item>
-        <!-- 结算自提点 -->
-        <el-form-item :label="$t('账单日期')">
-          <span>{{ruleForm.time}}</span>
-        </el-form-item>
-        <!-- 结算申请金额 -->
-        <el-form-item :label="$t('结算申请金额') + `${localization.currency_unit ? localization.currency_unit : ''}`">
-          <span>{{ruleForm.amount}}</span>
-        </el-form-item>
-        <!-- 确认金额 -->
-        <el-form-item :label="$t('确认金额') + `${localization.currency_unit ? localization.currency_unit : ''}`">
-          <el-input v-model="ruleForm.confirm_amount">
-          </el-input>
-        </el-form-item>
-        <!-- 支付方式 -->
-        <el-form-item :label="$t('支付方式')">
-          <el-input v-model="ruleForm.payment_method">
-          </el-input>
-        </el-form-item>
-        <!-- 支付截图 -->
-        <el-form-item :label="$t('支付截图')" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-            <span class="model-box"></span>
-            <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-            </span>
-            </span>
-            <el-upload
-              v-show="baleImgList.length < 3"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadBaleImg"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-       </el-form-item>
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('审核并支付')"
+    class="dialog-add-setting"
+    width="55%"
+    @close="clear"
+  >
+    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm" label-position="top">
+      <!-- 流水号 -->
+      <el-form-item :label="$t('流水号')">
+        <span>{{ ruleForm.serial_no }}</span>
+      </el-form-item>
+      <!-- 结算自提点 -->
+      <el-form-item :label="$t('账单日期')">
+        <span>{{ ruleForm.time }}</span>
+      </el-form-item>
+      <!-- 结算申请金额 -->
+      <el-form-item
+        :label="
+          $t('结算申请金额') + `${localization.currency_unit ? localization.currency_unit : ''}`
+        "
+      >
+        <span>{{ ruleForm.amount }}</span>
+      </el-form-item>
+      <!-- 确认金额 -->
+      <el-form-item
+        :label="$t('确认金额') + `${localization.currency_unit ? localization.currency_unit : ''}`"
+      >
+        <el-input v-model="ruleForm.confirm_amount"> </el-input>
+      </el-form-item>
+      <!-- 支付方式 -->
+      <el-form-item :label="$t('支付方式')">
+        <el-input v-model="ruleForm.payment_method"> </el-input>
+      </el-form-item>
+      <!-- 支付截图 -->
+      <el-form-item :label="$t('支付截图')" class="updateChe">
+        <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+          <span class="model-box"></span>
+          <span class="operat-box">
+            <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+            <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+          </span>
+        </span>
+        <el-upload
+          v-show="baleImgList.length < 3"
+          class="avatar-uploader"
+          action=""
+          list-type="picture-card"
+          :http-request="uploadBaleImg"
+          :show-file-list="false"
+        >
+          <i class="el-icon-plus"> </i>
+        </el-upload>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button :loading="$store.state.btnLoading" type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button :loading="$store.state.btnLoading" type="primary" @click="confirm">{{
+        $t('确定')
+      }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         confirm_amount: '',
@@ -75,7 +85,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.aloneRecordsDetails(this.id).then(res => {
         if (res.ret) {
           this.ruleForm.serial_no = res.data.serial_no
@@ -91,7 +101,7 @@ export default {
         }
       })
     },
-    confirm () {
+    confirm() {
       // console.log(this.ruleForm.show_rate, 'ruleForm.show_rate')
       if (this.baleImgList) {
         this.ruleForm.payment_images = this.baleImgList
@@ -124,7 +134,7 @@ export default {
       })
     },
     // 上传打包照片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         console.log(res)
@@ -141,30 +151,30 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除图片
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    clear () {
+    clear() {
       this.ruleForm.payment_method = ''
       this.ruleForm.confirm_amount = ''
       this.baleImgList = []
       this.ruleForm.payment_images = []
       this.id = ''
     },
-    init () {
+    init() {
       this.getList()
     }
   }
@@ -207,9 +217,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -219,7 +230,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;
@@ -239,15 +250,15 @@ export default {
     border-radius: 6px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .code-sty {
     padding-right: 10px;

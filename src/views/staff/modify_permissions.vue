@@ -1,28 +1,31 @@
 <template>
-    <div class="modify-permissions-container">
-      <el-row>
-        <el-col :span="12">
-          <el-tree
-            :data="ViewPermissionMenu"
-            show-checkbox
-            node-key="id"
-            class="tree"
-            ref="tree"
-            :default-expanded-keys="defaultShowNodes"
-            :default-checked-keys="defaultChecked"
-            :props="defaultProps">
-          </el-tree>
-          <el-button class="save-btn" @click="confirmSubmit" type="primary">{{$t('保存')}}</el-button>
-         </el-col>
-      </el-row>
-    </div>
+  <div class="modify-permissions-container">
+    <el-row>
+      <el-col :span="12">
+        <el-tree
+          :data="ViewPermissionMenu"
+          show-checkbox
+          node-key="id"
+          class="tree"
+          ref="tree"
+          :default-expanded-keys="defaultShowNodes"
+          :default-checked-keys="defaultChecked"
+          :props="defaultProps"
+        >
+        </el-tree>
+        <el-button class="save-btn" @click="confirmSubmit" type="primary">{{
+          $t('保存')
+        }}</el-button>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
 import { getCheckedChild } from '@/utils'
 export default {
   name: 'modifyPermissions',
-  data () {
+  data() {
     return {
       filterText: '',
       permissionMenu: [],
@@ -34,13 +37,13 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     if (this.$route.params.id) {
       this.getList()
     }
   },
   computed: {
-    ViewPermissionMenu () {
+    ViewPermissionMenu() {
       return this.permissionMenu.map(item => {
         return {
           ...item,
@@ -50,12 +53,12 @@ export default {
         }
       })
     },
-    defaultChecked () {
+    defaultChecked() {
       return getCheckedChild(this.permissionMenu)
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getPermissions(this.$route.params.id).then(res => {
         // this.permissionMenu = res.data
         if (res.ret) {
@@ -73,7 +76,7 @@ export default {
         }
       })
     },
-    confirmSubmit () {
+    confirmSubmit() {
       let permissions = this.$refs.tree.getCheckedKeys(true)
       this.$request.updatePermissions(this.$route.params.id, { permissions }).then(res => {
         if (res.ret) {
@@ -91,12 +94,12 @@ export default {
     }
   },
   watch: {
-    filterText (val) {
+    filterText(val) {
       console.log(val, 'val')
       this.$refs.tree.filter(val)
     },
     permissionMenu: {
-      handler () {
+      handler() {
         this.permissionMenu.forEach(item => {
           this.defaultShowNodes.push(item.id)
           console.log(this.defaultShowNodes, 'this.defaultShowNodes')

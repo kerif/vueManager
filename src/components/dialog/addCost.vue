@@ -1,32 +1,31 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('新增费用')" class="dialog-addCost"  @close="clear">
+  <el-dialog :visible.sync="show" :title="$t('新增费用')" class="dialog-addCost" @close="clear">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 费用名称 -->
-        <el-form-item :label="$t('费用名称')" prop="name">
-          <el-input v-model="ruleForm.name"
-          :placeholder="$t('请输入费用名称')"></el-input>
-          </el-form-item>
-        <!-- 员工组英文名
+      <!-- 费用名称 -->
+      <el-form-item :label="$t('费用名称')" prop="name">
+        <el-input v-model="ruleForm.name" :placeholder="$t('请输入费用名称')"></el-input>
+      </el-form-item>
+      <!-- 员工组英文名
           <el-form-item label="员工组英文名" prop="name_en">
           <el-input v-model="ruleForm.name_en"
           placeholder="请输入员工组英文名"></el-input>
           </el-form-item> -->
-        <!-- 用户组描述 -->
-          <!-- <el-form-item label="用户组描述">
+      <!-- 用户组描述 -->
+      <!-- <el-form-item label="用户组描述">
           <el-input type="textarea" v-model="ruleForm.description"
           :autosize="{ minRows: 2, maxRows: 4}"
           placeholder="请输入用户组描述"></el-input>
           </el-form-item> -->
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         name: ''
@@ -34,17 +33,13 @@ export default {
       staff: '',
       id: '',
       rules: {
-        name: [
-          { required: true, message: this.$t('请输入费用名称'), trigger: 'blur' }
-        ],
-        name_en: [
-          { required: true, message: this.$t('请输入员工组英文名'), trigger: 'blur' }
-        ]
+        name: [{ required: true, message: this.$t('请输入费用名称'), trigger: 'blur' }],
+        name_en: [{ required: true, message: this.$t('请输入员工组英文名'), trigger: 'blur' }]
       }
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.addLinesCost(this.ruleForm).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -57,8 +52,8 @@ export default {
         }
       })
     },
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request.addLinesCost(this.ruleForm).then(res => {
             if (res.ret) {
@@ -82,14 +77,14 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.ruleForm.name = ''
     },
-    cancelDialog (ruleForm) {
+    cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.show = false
     },
-    init () {
+    init() {
       if (this.id) {
         this.getList()
       }
@@ -114,15 +109,15 @@ export default {
     margin-left: 300px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

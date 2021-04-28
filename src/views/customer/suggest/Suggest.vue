@@ -1,37 +1,47 @@
 <template>
   <div class="suggest-list-container">
-    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
+    <search-group
+      :placeholder="$t('请输入关键字')"
+      v-model="page_params.keyword"
+      @search="goSearch"
+    >
       <div class="changeTime">
-      <!-- 提交时间 -->
+        <!-- 提交时间 -->
         <el-date-picker
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        :range-separator="$t('至')"
-        :start-placeholder="$t('提交开始日期')"
-        :end-placeholder="$t('提交结束日期')">
-      </el-date-picker>
-    </div>
+          class="timeStyle"
+          v-model="timeList"
+          type="daterange"
+          @change="onTime"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('提交开始日期')"
+          :end-placeholder="$t('提交结束日期')"
+        >
+        </el-date-picker>
+      </div>
       <div class="chooseStatus">
-        <el-select v-model="status" @change="onAgentChange" clearable
-        :placeholder="$t('请选择状态')">
-          <el-option
-            v-for="item in statusData"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name">
+        <el-select
+          v-model="status"
+          @change="onAgentChange"
+          clearable
+          :placeholder="$t('请选择状态')"
+        >
+          <el-option v-for="item in statusData" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
       </div>
     </search-group>
-    <el-table class="data-list" border stripe :data="suggestList"
-    v-loading="tableLoading" height="550">
-    <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column :label="$t('标题')" prop="title">
-      </el-table-column>
+    <el-table
+      class="data-list"
+      border
+      stripe
+      :data="suggestList"
+      v-loading="tableLoading"
+      height="550"
+    >
+      <el-table-column type="index" width="50"></el-table-column>
+      <el-table-column :label="$t('标题')" prop="title"> </el-table-column>
       <!-- <el-table-column label="内容" prop="content">
       </el-table-column> -->
       <!-- <el-table-column label="图片" prop="images">
@@ -45,45 +55,54 @@
       </el-table-column> -->
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-        <span v-if="scope.row.status == '1'">{{$t('未处理')}}</span>
-        <span v-if="scope.row.status == '2'">{{$t('已处理')}}</span>
+          <span v-if="scope.row.status == '1'">{{ $t('未处理') }}</span>
+          <span v-if="scope.row.status == '2'">{{ $t('已处理') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('客户ID')" prop="user_id">
-      </el-table-column>
-      <el-table-column :label="$t('创建时间')" prop="created_at">
-      </el-table-column>
+      <el-table-column :label="$t('客户ID')" prop="user_id"> </el-table-column>
+      <el-table-column :label="$t('创建时间')" prop="created_at"> </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="onChangeStatus(scope.row.id)">{{$t('详情')}}</el-button>
+          <el-button class="btn-green" @click="onChangeStatus(scope.row.id)">{{
+            $t('详情')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :visible.sync="show" :title="$t('修改状态')" class="change-status-dialog" @close="clear">
+    <el-dialog
+      :visible.sync="show"
+      :title="$t('修改状态')"
+      class="change-status-dialog"
+      @close="clear"
+    >
       <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm" label-width="70px">
-      <!-- 标题 -->
-      <el-form-item :label="$t('标题')" class="input-style">
-        <span>{{ruleForm.title}}</span>
-      </el-form-item>
-      <!-- 内容 -->
-      <el-form-item :label="$t('内容')" class="input-style">
-        <span>{{ruleForm.content}}</span>
-      </el-form-item>
-      <!-- 联系方式 -->
-      <el-form-item :label="$t('联系方式')" class="input-style">
-        {{ruleForm.contact}}
-      </el-form-item>
-      <!-- 附件 -->
-      <el-form-item :label="$t('附件')" class="updateChe">
-        <span v-for="item in ruleForm.images" :key="item.id" style="cursor:pointer;"
-            @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item.url}`, imgVisible=true">
-          <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px;">
-        </span>
+        <!-- 标题 -->
+        <el-form-item :label="$t('标题')" class="input-style">
+          <span>{{ ruleForm.title }}</span>
+        </el-form-item>
+        <!-- 内容 -->
+        <el-form-item :label="$t('内容')" class="input-style">
+          <span>{{ ruleForm.content }}</span>
+        </el-form-item>
+        <!-- 联系方式 -->
+        <el-form-item :label="$t('联系方式')" class="input-style">
+          {{ ruleForm.contact }}
+        </el-form-item>
+        <!-- 附件 -->
+        <el-form-item :label="$t('附件')" class="updateChe">
+          <span
+            v-for="item in ruleForm.images"
+            :key="item.id"
+            style="cursor: pointer"
+            @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item.url}`), (imgVisible = true)"
+          >
+            <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" style="width: 40px; margin-right: 5px" />
+          </span>
         </el-form-item>
         <!-- 创建时间 -->
         <el-form-item :label="$t('创建时间')" class="input-style">
-          <span>{{ruleForm.created_at}}</span>
+          <span>{{ ruleForm.created_at }}</span>
         </el-form-item>
         <!-- 更改状态 -->
         <el-form-item :label="$t('更改状态')">
@@ -92,17 +111,17 @@
             <el-option :label="$t('已处理')" :value="2"></el-option>
           </el-select>
         </el-form-item>
-        </el-form>
-        <el-dialog :visible.sync="imgVisible" modal-append-to-body width="30%">
+      </el-form>
+      <el-dialog :visible.sync="imgVisible" modal-append-to-body width="30%">
         <div class="img_box">
-          <img :src="imgSrc" class="imgDialog">
+          <img :src="imgSrc" class="imgDialog" />
         </div>
-        </el-dialog>
-        <div slot="footer">
-          <el-button @click="show = false">{{$t('取消')}}</el-button>
-          <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
-        </div>
-     </el-dialog>
+      </el-dialog>
+      <div slot="footer">
+        <el-button @click="show = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -111,7 +130,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 // import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       suggestList: [], // 表格数据
       tableLoading: false,
@@ -126,7 +145,8 @@ export default {
         {
           id: 1,
           name: this.$t('未处理')
-        }, {
+        },
+        {
           id: 2,
           name: this.$t('已处理')
         }
@@ -146,11 +166,11 @@ export default {
     NlePagination,
     SearchGroup
   },
-  mounted () {
+  mounted() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
@@ -176,7 +196,7 @@ export default {
         }
       })
     },
-    getDialog () {
+    getDialog() {
       this.$request.getSuggests(this.dialogId).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -189,7 +209,7 @@ export default {
         }
       })
     },
-    onChangeStatus (id) {
+    onChangeStatus(id) {
       // dialog({
       //   type: 'changestatus', id: id
       // }, () => {
@@ -200,15 +220,15 @@ export default {
       this.show = true
       this.getDialog()
     },
-    onAgentChange () {
+    onAgentChange() {
       this.page_params.page = 1
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
     },
-    clear () {
+    clear() {
       this.ruleForm.status = ''
     },
-    confirm () {
+    confirm() {
       this.$request.submitSuggest(this.dialogId, this.ruleForm).then(res => {
         if (res.ret) {
           this.$notify({
@@ -228,7 +248,7 @@ export default {
       })
     },
     // 提交时间
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -242,12 +262,12 @@ export default {
 // .imgDialog {
 //     width: 50% !important;
 //   }
-  .el-dialog__wrapper {
-    background: rgba(0,0,0, 0.3);
-  }
+.el-dialog__wrapper {
+  background: rgba(0, 0, 0, 0.3);
+}
 .suggest-list-container {
   .el-dialog__body {
-    .img_box{
+    .img_box {
       text-align: center;
       img {
         width: 300px !important;

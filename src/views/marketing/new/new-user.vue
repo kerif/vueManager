@@ -6,47 +6,61 @@
           <!-- 新用户送券 -->
           <div v-if="item.type === 1">
             <div class="top-img">
-              <img src="../../../assets/top-1.png">
+              <img src="../../../assets/top-1.png" />
               <p>
-                  <strong><span>{{$t('新用户送券')}}</span></strong>
-                </p>
+                <strong
+                  ><span>{{ $t('新用户送券') }}</span></strong
+                >
+              </p>
             </div>
-              <p class="font-sty">{{$t('用户注册即送券')}}</p>
+            <p class="font-sty">{{ $t('用户注册即送券') }}</p>
           </div>
           <!-- 邀请新人送券 -->
           <div v-if="item.type === 2">
             <div class="top-img">
-              <img src="../../../assets/top-2.png">
+              <img src="../../../assets/top-2.png" />
               <p>
-                  <strong><span>{{$t('邀请新人送券')}}</span></strong>
-                </p>
+                <strong
+                  ><span>{{ $t('邀请新人送券') }}</span></strong
+                >
+              </p>
             </div>
-            <p class="font-sty">{{$t('新人注册登录并完成一笔订单后，邀请人送券')}}</p>
+            <p class="font-sty">{{ $t('新人注册登录并完成一笔订单后，邀请人送券') }}</p>
           </div>
           <!-- 被邀请人送券 -->
           <div v-if="item.type === 3">
             <div class="top-img">
-              <img src="../../../assets/top-3.png">
+              <img src="../../../assets/top-3.png" />
               <p>
-                  <strong><span>{{$t('被邀请人送券')}}</span></strong>
-                </p>
+                <strong
+                  ><span>{{ $t('被邀请人送券') }}</span></strong
+                >
+              </p>
             </div>
-            <p class="font-sty">{{$t('新人通过老客户链接注册登录即可获券（与“新用户送券”同时享受）')}}</p>
+            <p class="font-sty">
+              {{ $t('新人通过老客户链接注册登录即可获券（与“新用户送券”同时享受）') }}
+            </p>
           </div>
           <!-- 下单返券 -->
           <div v-if="item.type === 4">
             <div class="top-img">
-              <img src="../../../assets/top-4.png">
+              <img src="../../../assets/top-4.png" />
               <p>
-                  <strong><span>{{$t('下单返券')}}</span></strong>
-                </p>
+                <strong
+                  ><span>{{ $t('下单返券') }}</span></strong
+                >
+              </p>
             </div>
-            <p class="font-sty">{{$t('客户订单支付成功后，即可返券')}}</p>
+            <p class="font-sty">{{ $t('客户订单支付成功后，即可返券') }}</p>
           </div>
           <div class="user-bottom">
             <div class="bottom-left">
-              <el-button class="btn-deep-blue" @click="goAdd(item.type)">{{$t('增加')}}</el-button>
-              <el-button class="btn-deep-purple" @click="goMana(item.type)">{{$t('管理')}}</el-button>
+              <el-button class="btn-deep-blue" @click="goAdd(item.type)">{{
+                $t('增加')
+              }}</el-button>
+              <el-button class="btn-deep-purple" @click="goMana(item.type)">{{
+                $t('管理')
+              }}</el-button>
             </div>
             <div class="bottom-right">
               <el-switch
@@ -58,7 +72,8 @@
                 :inactive-value="0"
                 :inactive-text="$t('关')"
                 active-color="#13ce66"
-                inactive-color="gray">
+                inactive-color="gray"
+              >
               </el-switch>
             </div>
           </div>
@@ -70,22 +85,22 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       validate_email: '',
       ruleForm: []
     }
   },
-  created () {
+  created() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getCoupons().then(res => {
         this.ruleForm = res.data
       })
     },
-    changeOnline (type, val) {
+    changeOnline(type, val) {
       console.log(type, 'type')
       const status = val === 0 ? 0 : 1
       this.$request.closeCoupons(type, status).then(res => {
@@ -105,7 +120,7 @@ export default {
       })
     },
     // 新增
-    goAdd (type) {
+    goAdd(type) {
       if (type === 4) {
         this.$router.push({ name: 'rebate', params: { type: type } })
       } else {
@@ -113,14 +128,18 @@ export default {
       }
     },
     // 管理
-    goMana (type) {
-      if (type === 1) { // 新用户送券
+    goMana(type) {
+      if (type === 1) {
+        // 新用户送券
         this.$router.push({ name: 'new', params: { type: type } })
-      } else if (type === 2) { // 邀请新人送券
+      } else if (type === 2) {
+        // 邀请新人送券
         this.$router.push({ name: 'invite', params: { type: type } })
-      } else if (type === 3) { // 被邀请人送券
+      } else if (type === 3) {
+        // 被邀请人送券
         this.$router.push({ name: 'invitees', params: { type: type } })
-      } else if (type === 4) { // 下单返券
+      } else if (type === 4) {
+        // 下单返券
         this.$router.push({ name: 'rebates', params: { type: type } })
       }
       // this.$router.push({ name: 'managementNew', params: { type: type } })
@@ -130,7 +149,7 @@ export default {
 </script>
 <style lang="scss">
 .new-user-container {
-  background-color: #F5F5F5 !important;
+  background-color: #f5f5f5 !important;
   padding: 20px;
   .new-top {
     margin-bottom: 10px;

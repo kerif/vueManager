@@ -1,18 +1,23 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('发送通知')" class="dialog-notify-order" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('发送通知')"
+    class="dialog-notify-order"
+    @close="clear"
+  >
     <el-radio-group v-model="radio">
-      <el-radio :label="3">{{$t('已发货通知')}}</el-radio>
-      <el-radio :label="4">{{$t('待取件通知')}}</el-radio>
+      <el-radio :label="3">{{ $t('已发货通知') }}</el-radio>
+      <el-radio :label="4">{{ $t('待取件通知') }}</el-radio>
     </el-radio-group>
     <div slot="footer">
-      <el-button @click="cancelDialog">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       radio: '',
       staff: '',
@@ -20,40 +25,42 @@ export default {
     }
   },
   methods: {
-    confirm () {
+    confirm() {
       if (!this.radio) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$request.sendingNotify({
-        ids: this.ids,
-        type: this.radio
-        // type: this.activeName === '2' ? 2 : 3
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
+      this.$request
+        .sendingNotify({
+          ids: this.ids,
+          type: this.radio
+          // type: this.activeName === '2' ? 2 : 3
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
           this.show = false
-          this.success()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-        this.show = false
-      })
+        })
     },
-    clear () {
+    clear() {
       this.radio = ''
       this.ids = []
     },
-    cancelDialog () {
+    cancelDialog() {
       this.show = false
     },
-    init () {
+    init() {
       console.log(this.ids, 'id')
     }
   }
@@ -76,15 +83,15 @@ export default {
     margin-left: 300px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

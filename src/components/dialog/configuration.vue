@@ -1,52 +1,68 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('配置')" class="dialog-config" width="50%"
-  @close="clear">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
-    label-position="top">
-        <!-- 员工组中文名 -->
-        <el-form-item :label="$t('小程序ID')" prop="app_id">
-            <el-input :placeholder="$t('请输入小程序ID')" v-model="ruleForm.app_id"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('商户号ID')">
-            <el-input :placeholder="$t('请输入商户号ID')" v-model="ruleForm.mch_id"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('商户KEY')">
-            <el-input :placeholder="$t('请输入商户KEY')" v-model="ruleForm.key">
-            </el-input>
-            <!--  <el-button class="btn-main chooseBtn">选择</el-button> -->
-        </el-form-item>
-        <el-form-item :label="$t('通信安全公钥证书')">
-            <el-input :placeholder="$t('请输入通信安全公钥证书')" v-model="ruleForm.cert_path"></el-input>
-            <el-upload
-                class="upload-demo"
-                action=""
-                :on-preview="handlePreview"
-                :http-request="uploadRsaFile"
-                >
-                <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
-            </el-upload>
-        </el-form-item>
-        <el-form-item :label="$t('通信安全私钥证书')">
-            <el-input :placeholder="$t('请输入通信安全私钥证书')" v-model="ruleForm.key_path"></el-input>
-            <el-upload
-                class="upload-demo"
-                action=""
-                :on-preview="handlePreview"
-                :http-request="uploadKeyFile">
-                <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
-            </el-upload>
-        </el-form-item>
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('配置')"
+    class="dialog-config"
+    width="50%"
+    @close="clear"
+  >
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="ruleForm"
+      class="demo-ruleForm"
+      label-position="top"
+    >
+      <!-- 员工组中文名 -->
+      <el-form-item :label="$t('小程序ID')" prop="app_id">
+        <el-input :placeholder="$t('请输入小程序ID')" v-model="ruleForm.app_id"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('商户号ID')">
+        <el-input :placeholder="$t('请输入商户号ID')" v-model="ruleForm.mch_id"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('商户KEY')">
+        <el-input :placeholder="$t('请输入商户KEY')" v-model="ruleForm.key"> </el-input>
+        <!--  <el-button class="btn-main chooseBtn">选择</el-button> -->
+      </el-form-item>
+      <el-form-item :label="$t('通信安全公钥证书')">
+        <el-input
+          :placeholder="$t('请输入通信安全公钥证书')"
+          v-model="ruleForm.cert_path"
+        ></el-input>
+        <el-upload
+          class="upload-demo"
+          action=""
+          :on-preview="handlePreview"
+          :http-request="uploadRsaFile"
+        >
+          <el-button size="small" class="btn-main chooseBtn">{{ $t('选择') }}</el-button>
+        </el-upload>
+      </el-form-item>
+      <el-form-item :label="$t('通信安全私钥证书')">
+        <el-input
+          :placeholder="$t('请输入通信安全私钥证书')"
+          v-model="ruleForm.key_path"
+        ></el-input>
+        <el-upload
+          class="upload-demo"
+          action=""
+          :on-preview="handlePreview"
+          :http-request="uploadKeyFile"
+        >
+          <el-button size="small" class="btn-main chooseBtn">{{ $t('选择') }}</el-button>
+        </el-upload>
+      </el-form-item>
     </el-form>
-    <p class="noticeAddress">{{$t('支付通知地址:')}}  {{ruleForm.notify_url}}</p>
+    <p class="noticeAddress">{{ $t('支付通知地址:') }} {{ ruleForm.notify_url }}</p>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       fileList: [],
       ruleForm: {
@@ -66,18 +82,19 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getWechat().then(res => {
         if (res.ret) {
           this.ruleForm = res.data
         }
       })
     },
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           let params = { ...this.ruleForm }
           for (const key in params) {
+            // eslint-disable-next-line no-prototype-builtins
             if (params.hasOwnProperty(key)) {
               if (!params[key]) delete params[key]
             }
@@ -104,15 +121,15 @@ export default {
         }
       })
     },
-    handlePreview (file) {
+    handlePreview(file) {
       console.log(file)
     },
-    clear () {
+    clear() {
       this.ruleForm.country_id = ''
       this.ruleForm.remark = ''
     },
     // 上传商户 key_path 文件
-    uploadKeyFile (file) {
+    uploadKeyFile(file) {
       this.onUpload(file.file).then(res => {
         if (res.ret) {
           this.ruleForm.key_path = res.data[0].path
@@ -120,19 +137,19 @@ export default {
       })
     },
     // 上传安全公钥文件
-    uploadRsaFile (file) {
+    uploadRsaFile(file) {
       this.onUpload(file.file).then(res => {
         if (res.ret) {
           this.ruleForm.cert_path = res.data[0].path
         }
       })
     },
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
       return this.$request.uploadCerts(params)
     },
-    init () {
+    init() {
       this.getList()
     }
   }
@@ -141,8 +158,8 @@ export default {
 <style lang="scss">
 .dialog-config {
   .el-dialog__body {
-     padding: 30px 50px;
-    }
+    padding: 30px 50px;
+  }
   .el-form-item__label {
     width: 150px;
   }
@@ -162,15 +179,15 @@ export default {
     top: 5px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

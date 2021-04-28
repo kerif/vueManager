@@ -12,135 +12,166 @@
     </el-tabs>
     <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goMatch">
       <div class="changeTime">
-      <!-- 发货时间 -->
+        <!-- 发货时间 -->
         <el-date-picker
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        :range-separator="$t('至')"
-        :start-placeholder="$t('开始日期')"
-        :end-placeholder="$t('结束日期')">
-      </el-date-picker>
-    </div>
-    <!-- <div class="import-list">
+          class="timeStyle"
+          v-model="timeList"
+          type="daterange"
+          @change="onTime"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')"
+        >
+        </el-date-picker>
+      </div>
+      <!-- <div class="import-list">
      <el-button @click="uploadList(status)">{{$t('导出清单')}}</el-button>
     </div> -->
-    <!-- 支付方式 -->
-     <div class="chooseStatus customer-sty">
-      <el-select v-model="payment_type" @change="onPaymentChange" clearable :placeholder="$t('支付方式')">
-          <el-option
-            v-for="item in paymentData"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name">
+      <!-- 支付方式 -->
+      <div class="chooseStatus customer-sty">
+        <el-select
+          v-model="payment_type"
+          @change="onPaymentChange"
+          clearable
+          :placeholder="$t('支付方式')"
+        >
+          <el-option v-for="item in paymentData" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
       </div>
-    <!-- 审核状态 -->
-     <div class="chooseStatus customer-sty">
-      <el-select v-model="status" @change="onStatusChange" clearable :placeholder="$t('审核状态')">
-          <el-option
-            v-for="item in statusData"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name">
+      <!-- 审核状态 -->
+      <div class="chooseStatus customer-sty">
+        <el-select
+          v-model="status"
+          @change="onStatusChange"
+          clearable
+          :placeholder="$t('审核状态')"
+        >
+          <el-option v-for="item in statusData" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
       </div>
     </search-group>
-    <el-table v-if="reviewData.length && this.activeName === '0'" class="data-list" border stripe
-      :data="reviewData" height="550"
-      v-loading="tableLoading">
+    <el-table
+      v-if="reviewData.length && this.activeName === '0'"
+      class="data-list"
+      border
+      stripe
+      :data="reviewData"
+      height="550"
+      v-loading="tableLoading"
+    >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')">
         <template slot-scope="scope">
-          <span>{{scope.row.user_id}}---{{scope.row.user_name}}</span>
+          <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
         </template>
       </el-table-column>
       <!-- 状态 -->
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{$t('待审核')}}</span>
-          <span v-if="scope.row.status === 1">{{$t('审核通过')}}</span>
-          <span v-if="scope.row.status === 2">{{$t('审核拒绝')}}</span>
+          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+          <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
         </template>
       </el-table-column>
       <!-- 支付类型 -->
-      <el-table-column :label="$t('支付类型')" prop="payment_type_name">
-      </el-table-column>
+      <el-table-column :label="$t('支付类型')" prop="payment_type_name"> </el-table-column>
       <!-- 关联单号 -->
-      <el-table-column :label="$t('关联单号')" prop="order_number">
-      </el-table-column>
+      <el-table-column :label="$t('关联单号')" prop="order_number"> </el-table-column>
       <!-- 流水号 -->
-      <el-table-column :label="$t('流水号')" prop="serial_no">
-      </el-table-column>
+      <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
       <!-- 应付金额 -->
-      <el-table-column :label="$t('应付金额') + `${localization.currency_unit ? localization.currency_unit : '' }`">
+      <el-table-column
+        :label="$t('应付金额') + `${localization.currency_unit ? localization.currency_unit : ''}`"
+      >
         <template slot-scope="scope">
-          <span>{{scope.row.order_amount - scope.row.coupon_amount}}</span>
+          <span>{{ scope.row.order_amount - scope.row.coupon_amount }}</span>
         </template>
       </el-table-column>
       <!-- 提交时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at">
-      </el-table-column>
+      <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status === 0" class="btn-dark-green" @click="goReceive(scope.row.id, 'pay')">{{$t('审核')}}</el-button>
-          <el-button v-if="scope.row.status === 1 || scope.row.status === 2" class="btn-purple btn-sty" @click="goReceive(scope.row.id, 'pay')">{{$t('详情')}}</el-button>
+          <el-button
+            v-if="scope.row.status === 0"
+            class="btn-dark-green"
+            @click="goReceive(scope.row.id, 'pay')"
+            >{{ $t('审核') }}</el-button
+          >
+          <el-button
+            v-if="scope.row.status === 1 || scope.row.status === 2"
+            class="btn-purple btn-sty"
+            @click="goReceive(scope.row.id, 'pay')"
+            >{{ $t('详情') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
-    <el-table v-if="oderData.length && this.activeName === '1'" class="data-list" border stripe
+    <el-table
+      v-if="oderData.length && this.activeName === '1'"
+      class="data-list"
+      border
+      stripe
       :data="oderData"
-      v-loading="tableLoading">
+      v-loading="tableLoading"
+    >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')">
         <template slot-scope="scope">
-          <span>{{scope.row.user.id}}---{{scope.row.user.name}}</span>
+          <span>{{ scope.row.user.id }}---{{ scope.row.user.name }}</span>
         </template>
       </el-table-column>
       <!-- 状态 -->
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{$t('待审核')}}</span>
-          <span v-if="scope.row.status === 1">{{$t('审核通过')}}</span>
-          <span v-if="scope.row.status === 2">{{$t('审核拒绝')}}</span>
+          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+          <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
         </template>
       </el-table-column>
       <!-- 支付类型 -->
-      <el-table-column :label="$t('支付类型')" prop="payment_method">
-      </el-table-column>
+      <el-table-column :label="$t('支付类型')" prop="payment_method"> </el-table-column>
       <!-- 关联单号 -->
-      <el-table-column :label="$t('关联单号')" prop="order_sn">
-      </el-table-column>
+      <el-table-column :label="$t('关联单号')" prop="order_sn"> </el-table-column>
       <!-- 流水号 -->
-      <el-table-column :label="$t('流水号')" prop="serial_no">
-      </el-table-column>
+      <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
       <!-- 应付金额 -->
-      <el-table-column :label="$t('应付金额') + `${localization.currency_unit ? localization.currency_unit : '' }`" prop="payment_amount">
+      <el-table-column
+        :label="$t('应付金额') + `${localization.currency_unit ? localization.currency_unit : ''}`"
+        prop="payment_amount"
+      >
       </el-table-column>
       <!-- 提交时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at">
-      </el-table-column>
+      <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status === 0" class="btn-dark-green" @click="goReceive(scope.row.id, 'refund')">{{$t('审核')}}</el-button>
-          <el-button v-if="scope.row.status === 1 || scope.row.status === 2" class="btn-purple btn-sty" @click="goReceive(scope.row.id, 'refund')">{{$t('详情')}}</el-button>
+          <el-button
+            v-if="scope.row.status === 0"
+            class="btn-dark-green"
+            @click="goReceive(scope.row.id, 'refund')"
+            >{{ $t('审核') }}</el-button
+          >
+          <el-button
+            v-if="scope.row.status === 1 || scope.row.status === 2"
+            class="btn-purple btn-sty"
+            @click="goReceive(scope.row.id, 'refund')"
+            >{{ $t('详情') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
-    <div class="noDate" v-else>{{$t('暂无数据')}}</div>
+    <div class="noDate" v-else>{{ $t('暂无数据') }}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
+        <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
   </div>
@@ -158,7 +189,7 @@ export default {
   },
   name: 'orderReview',
   mixins: [pagination],
-  data () {
+  data() {
     return {
       activeName: '',
       oderData: [], // 退款数据
@@ -199,21 +230,23 @@ export default {
   },
   methods: {
     // 获取自提点统计数据
-    getCounts () {
-      this.$request.stationsCounts({
-        keyword: this.page_params.keyword
-      }).then(res => {
-        if (res.ret) {
-          this.countData = res.data
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    getCounts() {
+      this.$request
+        .stationsCounts({
+          keyword: this.page_params.keyword
+        })
+        .then(res => {
+          if (res.ret) {
+            this.countData = res.data
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
-    goMatch () {
+    goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
       this.handleQueryChange('page', this.page_params.page)
@@ -222,7 +255,7 @@ export default {
       this.getList()
       // this.getCounts()
     },
-    getList () {
+    getList() {
       this.tableLoading = true
       this.reviewData = []
       this.oderData = []
@@ -270,12 +303,12 @@ export default {
         })
       }
     },
-    goExpress (orderSn) {
+    goExpress(orderSn) {
       console.log(orderSn, 'orderSn')
       this.$router.push({ name: 'tracking', query: { orderSn: orderSn } })
     },
     // 确认下载标签
-    updateLabel () {
+    updateLabel() {
       this.show = false
       console.log(this.labelId, 'this.labelId')
       this.$request.updatePackagePdf(this.labelId).then(res => {
@@ -296,16 +329,18 @@ export default {
       })
     },
     // 审核
-    goReceive (id, state) {
+    goReceive(id, state) {
       console.log(state, 'state')
-      this.$router.push({ name: 'reviewFinance',
+      this.$router.push({
+        name: 'reviewFinance',
         params: {
           id: id,
           state: state
-        } })
+        }
+      })
     },
     // 导出清单
-    uploadList (val) {
+    uploadList(val) {
       let params = {
         status: val,
         XStationId: this.transferId
@@ -334,7 +369,7 @@ export default {
       })
     },
     // 提交时间
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -342,7 +377,7 @@ export default {
       this.getList()
     },
     // 获取支付方式
-    getPayment () {
+    getPayment() {
       this.$request.financesPaymentsType().then(res => {
         if (res.ret) {
           this.paymentData = res.data
@@ -350,22 +385,22 @@ export default {
       })
     },
     // 选择支付方式
-    onPaymentChange () {
+    onPaymentChange() {
       this.page_params.handleQueryChange('payment_type', this.payment_type)
       this.getList()
     },
     // 选择审核方式
-    onStatusChange () {
+    onStatusChange() {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
     }
   },
-  created () {
+  created() {
     this.getPayment()
   },
   watch: {
     // 监听tab组件参数
-    activeName (newValue) {
+    activeName(newValue) {
       switch (newValue) {
         case '0': // 全部
           this.page_params.page = 1
@@ -409,15 +444,15 @@ export default {
       width: 276px !important;
     }
   }
- .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }
   .chooseOrder {
     cursor: pointer;
-    color:blue;
+    color: blue;
     text-decoration: underline;
   }
   .operating-btn {

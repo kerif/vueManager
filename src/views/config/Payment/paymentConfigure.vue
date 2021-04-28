@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 微信支付 -->
-    <h4>{{ $t("在线支付") }}</h4>
+    <h4>{{ $t('在线支付') }}</h4>
     <el-table
       v-if="paymentData.length"
       :data="paymentData"
@@ -36,23 +36,17 @@
             "
             class="btn-main"
             @click="configuration(scope.row.type, scope.row.name)"
-            >{{ $t("配置") }}</el-button
+            >{{ $t('配置') }}</el-button
           >
         </template>
       </el-table-column>
     </el-table>
     <!-- 转账支付 -->
     <div class="select-box">
-      <h4>{{ $t("转账支付") }}</h4>
-      <add-btn @click.native="addTransfer">{{ $t("添加支付类型") }}</add-btn>
+      <h4>{{ $t('转账支付') }}</h4>
+      <add-btn @click.native="addTransfer">{{ $t('添加支付类型') }}</add-btn>
     </div>
-    <el-table
-      :data="transferData"
-      v-loading="tableLoading"
-      class="data-list"
-      border
-      stripe
-    >
+    <el-table :data="transferData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
       <el-table-column :label="$t('类型')" prop="name"></el-table-column>
       <el-table-column :label="$t('是否启用')">
@@ -80,58 +74,47 @@
             class="el-icon-check icon-sty"
             @click="onLang(scope.row, item)"
           ></span>
-          <span
-            v-else
-            class="el-icon-plus icon-sty"
-            @click="onLang(scope.row, item)"
-          ></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')" width="140px">
         <template slot-scope="scope">
-          <el-button
-            class="btn-dark-green"
-            @click="editTransfer(scope.row.id)"
-            >{{ $t("编辑") }}</el-button
-          >
-          <el-button
-            class="btn-light-red"
-            @click="deleteTransfer(scope.row.id)"
-            >{{ $t("删除") }}</el-button
-          >
+          <el-button class="btn-dark-green" @click="editTransfer(scope.row.id)">{{
+            $t('编辑')
+          }}</el-button>
+          <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 预设充值金额 -->
     <div class="select-box">
-      <h4>{{ $t("预设充值金额") }}</h4>
-      <add-btn @click.native="addRecharge">{{ $t("新增") }}</add-btn>
+      <h4>{{ $t('预设充值金额') }}</h4>
+      <add-btn @click.native="addRecharge">{{ $t('新增') }}</add-btn>
     </div>
-    <el-table
-      :data="rechargeAmount"
-      v-loading="tableLoading"
-      class="data-list"
-      border
-      stripe
-    >
+    <el-table :data="rechargeAmount" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
       <el-table-column :label="$t('金额')" prop="amount"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button
-            class="btn-light-red"
-            @click="deleteRecharge(scope.row.id)"
-            >{{ $t("删除") }}</el-button
-          >
+          <el-button class="btn-light-red" @click="deleteRecharge(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="rechargeDialog" width="30%" :title="$t('*预设充值金额')" @close="clear">
-    <el-input v-model="amount"></el-input>
-    <div slot="footer">
-      <el-button @click="rechargeDialog = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="submitRecharge">{{$t('确定')}}</el-button>
-    </div>
+    <el-dialog
+      :visible.sync="rechargeDialog"
+      width="30%"
+      :title="$t('*预设充值金额')"
+      @close="clear"
+    >
+      <el-input v-model="amount"></el-input>
+      <div slot="footer">
+        <el-button @click="rechargeDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="submitRecharge">{{ $t('确定') }}</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -141,7 +124,7 @@ import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
 export default {
   components: { AddBtn },
-  data () {
+  data() {
     return {
       languageData: [],
       tableLoading: false,
@@ -160,26 +143,24 @@ export default {
       rechargeAmount: []
     }
   },
-  created () {
+  created() {
     this.getWechat()
     this.getPayment()
     this.getRecharge()
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
   methods: {
     //  支付配置 获取在线支付
-    getWechat () {
+    getWechat() {
       this.tableLoading = true
       this.$request.getPaymentOnline().then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.paymentData = res.data.map(item => ({ ...item,
-            enabled: Boolean(item
-              .enabled) }))
+          this.paymentData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
         } else {
           this.$message({
             message: res.msg,
@@ -189,7 +170,7 @@ export default {
       })
     },
     // 修改在线支付的开关
-    changeOnline (event, name) {
+    changeOnline(event, name) {
       console.log(name, 'name')
       this.$request.changePayment(Number(event), name).then(res => {
         if (res.ret) {
@@ -208,7 +189,7 @@ export default {
       })
     },
     // 支付配置
-    configuration (type, name) {
+    configuration(type) {
       if (type === 1) {
         dialog({ type: 'paypalSet' }, () => {
           this.getWechat()
@@ -228,20 +209,20 @@ export default {
       }
     },
     // 增加转账支付配置
-    addTransfer () {
+    addTransfer() {
       dialog({ type: 'addTransfer', state: 'add' }, () => {
         this.getPayment()
       })
     },
     // 编辑转账支付配置
-    editTransfer (id) {
+    editTransfer(id) {
       console.log(id, 'id')
       dialog({ type: 'addTransfer', state: 'edit', id: id }, () => {
         this.getPayment()
       })
     },
     // 删除单条转账支付
-    deleteTransfer (id) {
+    deleteTransfer(id) {
       this.$confirm(this.$t('您真的要删除转账支付吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -266,7 +247,7 @@ export default {
       })
     },
     // 获取转账支付
-    getPayment () {
+    getPayment() {
       this.tableLoading = true
       this.$request.getPayments().then(res => {
         this.tableLoading = false
@@ -280,7 +261,7 @@ export default {
         }
       })
     },
-    deleteRecharge (id) {
+    deleteRecharge(id) {
       this.$request.deleteRechargeAmount(id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -299,8 +280,8 @@ export default {
       })
     },
     // 修改转账支付的开关
-    changeTransfer (event, enabled, id) {
-      console.log(typeof (event), '我是event')
+    changeTransfer(event, enabled, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closePayments(id, Number(event)).then(res => {
         if (res.ret) {
@@ -319,7 +300,7 @@ export default {
       })
     },
     // 转账 修改语言
-    onLang (line, lang) {
+    onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       dialog({ type: 'payLang', line: line, lang: lang, transCode: this.transCode }, () => {
@@ -327,10 +308,10 @@ export default {
       })
     },
     // 新增 预设充值金额
-    addRecharge () {
+    addRecharge() {
       this.rechargeDialog = true
     },
-    submitRecharge () {
+    submitRecharge() {
       if (!this.amount) {
         return this.$message.error(this.$t('请输入预设充值金额'))
       }
@@ -353,7 +334,7 @@ export default {
       })
     },
     // 获取预设充值金额
-    getRecharge () {
+    getRecharge() {
       this.tableLoading = true
       this.$request.getRechargeAmount().then(res => {
         this.tableLoading = false
@@ -367,12 +348,10 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.amount = ''
     }
   }
 }
-
 </script>
-<style scoped>
-</style>
+<style scoped></style>

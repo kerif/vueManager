@@ -3,16 +3,17 @@ const _getType = function (value) {
   return Object.prototype.toString.call(value).slice(8).slice(0, -1).toLowerCase()
 }
 let clone = {
-  array (arr) {
+  array(arr) {
     let newArr = []
     for (let item of arr) {
       newArr.push(this[_getType(item)](item))
     }
     return newArr
   },
-  object (obj) {
+  object(obj) {
     let newObj = {}
     for (let [key, value] of Object.entries(obj)) {
+      // eslint-disable-next-line no-prototype-builtins
       if (obj.hasOwnProperty(key)) {
         newObj[key] = this[_getType(value)](value)
       }
@@ -28,11 +29,13 @@ for (let type of ['null', 'string', 'number', 'function', 'Promise', 'boolean'])
 // 多叉树遍历
 const multiTree = function (node, flag) {
   let stack = []
-  const pushStack = function (node) { // 将子节点加入栈
+  const pushStack = function (node) {
+    // 将子节点加入栈
     let children = node.children
     if (children && children.length) {
       for (let subNode of children) {
-        subNode.filter = function () { // 添加过滤函数
+        subNode.filter = function () {
+          // 添加过滤函数
           children.splice(children.indexOf(this), 1)
         }
         stack.push(subNode)

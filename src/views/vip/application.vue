@@ -1,15 +1,15 @@
 <template>
   <div class="application-list-container">
     <el-tabs v-model="activeName" class="tabLength">
-        <!-- 待审核 -->
-        <el-tab-pane :label="$t('待审核')" name="0"></el-tab-pane>
-        <!-- 审核拒绝 -->
-        <el-tab-pane :label="$t('审核拒绝')" name="2"></el-tab-pane>
+      <!-- 待审核 -->
+      <el-tab-pane :label="$t('待审核')" name="0"></el-tab-pane>
+      <!-- 审核拒绝 -->
+      <el-tab-pane :label="$t('审核拒绝')" name="2"></el-tab-pane>
     </el-tabs>
     <!-- <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
       <div class="changeTime"> -->
-      <!-- 提交时间 -->
-        <!-- <el-date-picker
+    <!-- 提交时间 -->
+    <!-- <el-date-picker
         class="timeStyle"
         v-model="timeList"
         type="daterange"
@@ -20,8 +20,8 @@
         start-placeholder="提交开始日期"
         end-placeholder="提交结束日期">
       </el-date-picker> -->
-      <!-- 称重时间 -->
-        <!-- <el-date-picker
+    <!-- 称重时间 -->
+    <!-- <el-date-picker
         v-if="activeName === '2'"
         class="timeStyle"
         v-model="storageList"
@@ -56,30 +56,34 @@
       </el-option>
     </el-select> -->
     <!-- </div> -->
-      <el-table v-if="oderData.length" class="data-list" border stripe
+    <el-table
+      v-if="oderData.length"
+      class="data-list"
+      border
+      stripe
       :data="oderData"
       @selection-change="selectionChange"
-      v-loading="tableLoading">
+      v-loading="tableLoading"
+    >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column :label="$t('客户ID')" prop="user_id">
-      </el-table-column>
+      <el-table-column :label="$t('客户ID')" prop="user_id"> </el-table-column>
       <!-- 客户昵称 -->
       <el-table-column :label="$t('客户昵称')">
         <template slot-scope="scope">
-          {{scope.row.info.name}}
+          {{ scope.row.info.name }}
         </template>
       </el-table-column>
       <!-- 邮箱 -->
       <el-table-column :label="$t('邮箱')">
         <template slot-scope="scope">
-          {{scope.row.info.email}}
+          {{ scope.row.info.email }}
         </template>
       </el-table-column>
       <!-- 电话 -->
       <el-table-column :label="$t('电话')">
         <template slot-scope="scope">
-          {{scope.row.info.phone}}
+          {{ scope.row.info.phone }}
         </template>
       </el-table-column>
       <!-- 状态 -->
@@ -93,11 +97,34 @@
       <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 审核拒绝 -->
-          <el-button class="btn-light-red operating-btn" v-if="activeName === '0'" @click="rejectProxy(scope.row.id)">{{$t('审核拒绝')}}</el-button>
+          <el-button
+            class="btn-light-red operating-btn"
+            v-if="activeName === '0'"
+            @click="rejectProxy(scope.row.id)"
+            >{{ $t('审核拒绝') }}</el-button
+          >
           <!-- 审核通过 -->
-          <el-button class="btn-main" v-if="activeName === '0'" @click="passedProxy(scope.row.id, scope.row.info.phone, scope.row.info.email, scope.row.info.name)">{{$t('审核通过')}}</el-button>
+          <el-button
+            class="btn-main"
+            v-if="activeName === '0'"
+            @click="
+              passedProxy(
+                scope.row.id,
+                scope.row.info.phone,
+                scope.row.info.email,
+                scope.row.info.name
+              )
+            "
+            >{{ $t('审核通过') }}</el-button
+          >
           <!-- 删除 -->
-          <el-button size="small" @click="deleteProxy(scope.row.id)" v-if="activeName ==='2'" class="btn-light-red">{{$t('删除')}}</el-button>
+          <el-button
+            size="small"
+            @click="deleteProxy(scope.row.id)"
+            v-if="activeName === '2'"
+            class="btn-light-red"
+            >{{ $t('删除') }}</el-button
+          >
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -106,7 +133,7 @@
         </div>
       </template> -->
     </el-table>
-    <div class="noDate" v-else>{{$t('暂无数据')}}</div>
+    <div class="noDate" v-else>{{ $t('暂无数据') }}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -123,7 +150,7 @@ export default {
   },
   name: 'applicationList',
   mixins: [pagination],
-  data () {
+  data() {
     return {
       activeName: '0',
       oderData: [],
@@ -141,7 +168,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       this.oderData = []
       let params = {
@@ -178,18 +205,18 @@ export default {
         }
       })
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 审核通过
-    passedProxy (id, phone, email, name) {
+    passedProxy(id, phone, email, name) {
       dialog({ type: 'passedList', id: id, phone: phone, email: email, name: name }, () => {
         this.getList()
       })
     },
     // 审核拒绝
-    rejectProxy (id) {
+    rejectProxy(id) {
       this.$confirm(this.$t('您真的要审核拒绝吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -213,7 +240,7 @@ export default {
       })
     },
     // 删除
-    deleteProxy (id) {
+    deleteProxy(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -238,7 +265,7 @@ export default {
       })
     },
     // 删除
-    deleteData () {
+    deleteData() {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
@@ -249,38 +276,40 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
-        this.$request.deletePackages({
-          DELETE: this.deleteNum
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .deletePackages({
+            DELETE: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       })
     },
-    onAgentChange () {
+    onAgentChange() {
       this.page_params.page = 1
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
     },
     // 获取代理列表
-    getAgentData () {
+    getAgentData() {
       this.$request.getSimpleList().then(res => {
         this.agentData = res.data
       })
     },
     // 提交时间
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -288,25 +317,28 @@ export default {
       this.getList()
     },
     // 称重时间
-    onStorage (val) {
+    onStorage(val) {
       this.in_storage_begin_date = val ? val[0] : ''
       this.in_storage_end_date = val ? val[1] : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.in_storage_begin_date} ${this.in_storage_end_date}`)
+      this.page_params.handleQueryChange(
+        'times',
+        `${this.in_storage_begin_date} ${this.in_storage_end_date}`
+      )
       this.getList()
     },
     // 入库日志
-    onLogs (expressNum) {
+    onLogs(expressNum) {
       this.$router.push({ name: 'pickingContainer', query: { keyword: expressNum } })
     }
   },
-  created () {
+  created() {
     // this.getAgentData()
     this.getList()
   },
   watch: {
     // 监听tab组件参数
-    activeName (newValue) {
+    activeName(newValue) {
       switch (newValue) {
         case '0': // 未入库
           this.page_params.page = 1
@@ -362,15 +394,15 @@ export default {
       width: 276px !important;
     }
   }
- .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }
   .chooseOrder {
     cursor: pointer;
-    color:blue;
+    color: blue;
     text-decoration: underline;
   }
   .operating-btn {

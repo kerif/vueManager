@@ -4,36 +4,36 @@
       <p class="title">用户手机号和邮箱需要是唯一</p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 用户手机号 -->
-        <el-form-item :label="$t('用户手机号')" prop="phone">
-          <el-input v-model="ruleForm.phone"
-          :placeholder="$t('请输入用户手机号')"></el-input>
-          </el-form-item>
-        <!-- 用户邮箱 -->
-          <el-form-item :label="$t('用户邮箱')" prop="email">
-          <el-input v-model="ruleForm.email"
-          :placeholder="$t('请输入用户邮箱')"></el-input>
-          </el-form-item>
-          <!-- 用户密码 -->
-        <el-form-item :label="$t('用户密码')" prop="password">
-          <el-input v-model="ruleForm.password" type="password"
-          :placeholder="$t('请输入用户密码')"></el-input>
-          </el-form-item>
-        <!-- 用户昵称 -->
-          <el-form-item :label="$t('用户昵称')" prop="name">
-          <el-input v-model="ruleForm.name"
-          :placeholder="$t('请输入用户昵称')"></el-input>
-          </el-form-item>
+      <!-- 用户手机号 -->
+      <el-form-item :label="$t('用户手机号')" prop="phone">
+        <el-input v-model="ruleForm.phone" :placeholder="$t('请输入用户手机号')"></el-input>
+      </el-form-item>
+      <!-- 用户邮箱 -->
+      <el-form-item :label="$t('用户邮箱')" prop="email">
+        <el-input v-model="ruleForm.email" :placeholder="$t('请输入用户邮箱')"></el-input>
+      </el-form-item>
+      <!-- 用户密码 -->
+      <el-form-item :label="$t('用户密码')" prop="password">
+        <el-input
+          v-model="ruleForm.password"
+          type="password"
+          :placeholder="$t('请输入用户密码')"
+        ></el-input>
+      </el-form-item>
+      <!-- 用户昵称 -->
+      <el-form-item :label="$t('用户昵称')" prop="name">
+        <el-input v-model="ruleForm.name" :placeholder="$t('请输入用户昵称')"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         email: '',
@@ -47,21 +47,15 @@ export default {
           { required: true, message: this.$t('请输入用户邮箱'), trigger: 'blur' },
           { type: 'email', message: this.$t('请输入正确的邮箱地址'), trigger: ['blur', 'change'] }
         ],
-        phone: [
-          { required: true, message: this.$t('请输入用户手机号'), trigger: 'blur' }
-        ],
-        name: [
-          { required: true, message: this.$t('请输入用户昵称'), trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: this.$t('请输入用户密码'), trigger: 'blur' }
-        ]
+        phone: [{ required: true, message: this.$t('请输入用户手机号'), trigger: 'blur' }],
+        name: [{ required: true, message: this.$t('请输入用户昵称'), trigger: 'blur' }],
+        password: [{ required: true, message: this.$t('请输入用户密码'), trigger: 'blur' }]
       }
     }
   },
   methods: {
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request.addVip(this.ruleForm).then(res => {
             if (res.ret) {
@@ -85,18 +79,17 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.ruleForm.email = ''
       this.ruleForm.phone = ''
       this.ruleForm.name = ''
       this.ruleForm.password = ''
     },
-    cancelDialog (ruleForm) {
+    cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.show = false
     },
-    init () {
-    }
+    init() {}
   }
 }
 </script>
@@ -117,14 +110,14 @@ export default {
     margin-left: 250px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .top-font {
     margin-left: 15%;

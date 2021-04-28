@@ -1,58 +1,100 @@
 <template>
-    <div class="payment-container">
-      <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
-        <!-- 支付配置 -->
-        <!-- 物流跟踪配置 -->
+  <div class="payment-container">
+    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
+      <!-- 支付配置 -->
+      <!-- 物流跟踪配置 -->
       <el-tab-pane :label="$t('服务配置')" name="2">
         <div class="logistics-container">
-          <div class="form-title">{{$t('快递100配置')}}</div>
-          <el-form :model="logisticsData" ref="ruleForm" class="demo-ruleForm"
-            label-position="left" label-width="150px">
+          <div class="form-title">{{ $t('快递100配置') }}</div>
+          <el-form
+            :model="logisticsData"
+            ref="ruleForm"
+            class="demo-ruleForm"
+            label-position="left"
+            label-width="150px"
+          >
             <!-- Customer ID -->
             <el-form-item label="Customer ID" prop="kd100_app_id">
-              <el-input v-model="logisticsData.kd100_app_id" :placeholder="$t('请输入Customer ID')" class="logistic-sty"></el-input>
+              <el-input
+                v-model="logisticsData.kd100_app_id"
+                :placeholder="$t('请输入Customer ID')"
+                class="logistic-sty"
+              ></el-input>
             </el-form-item>
             <!-- 授权KEY -->
             <el-form-item :label="$t('授权KEY')" prop="kd100_app_key">
-              <el-input v-model="logisticsData.kd100_app_key" :placeholder="$t('请输入授权KEY')" class="logistic-sty"></el-input>
+              <el-input
+                v-model="logisticsData.kd100_app_key"
+                :placeholder="$t('请输入授权KEY')"
+                class="logistic-sty"
+              ></el-input>
               <div class="test-btn">
-                <el-button class="btn-light-red" @click="testExpress">{{$t('测试')}}</el-button>
+                <el-button class="btn-light-red" @click="testExpress">{{ $t('测试') }}</el-button>
               </div>
             </el-form-item>
-          <div class="form-title">{{$t('Tracking more配置')}}</div>
-          <el-form-item label="Appkey" prop="trackingmore_key">
-            <el-input v-model="logisticsData.trackingmore_key" :placeholder="$t('请输入AppSecret')" class="logistic-sty"></el-input>
-            <div class="test-btn">
-              <el-button class="btn-light-red" @click="testTracking">{{$t('测试')}}</el-button>
-            </div>
-          </el-form-item>
-          <div class="form-title">{{$t('邮箱发件信息配置')}}</div>
-          <el-form-item :label="$t('发件人邮件')" prop="from_address">
-            <el-input v-model="logisticsData.from_address" placeholder="请输入发件人邮件" class="logistic-sty"></el-input>
-          </el-form-item>
+            <div class="form-title">{{ $t('Tracking more配置') }}</div>
+            <el-form-item label="Appkey" prop="trackingmore_key">
+              <el-input
+                v-model="logisticsData.trackingmore_key"
+                :placeholder="$t('请输入AppSecret')"
+                class="logistic-sty"
+              ></el-input>
+              <div class="test-btn">
+                <el-button class="btn-light-red" @click="testTracking">{{ $t('测试') }}</el-button>
+              </div>
+            </el-form-item>
+            <div class="form-title">{{ $t('邮箱发件信息配置') }}</div>
+            <el-form-item :label="$t('发件人邮件')" prop="from_address">
+              <el-input
+                v-model="logisticsData.from_address"
+                placeholder="请输入发件人邮件"
+                class="logistic-sty"
+              ></el-input>
+            </el-form-item>
             <el-form-item :label="$t('发件人名称')" prop="from_name">
-              <el-input v-model="logisticsData.from_name" :placeholder="$t('请输入发件人名称')" class="logistic-sty"></el-input>
+              <el-input
+                v-model="logisticsData.from_name"
+                :placeholder="$t('请输入发件人名称')"
+                class="logistic-sty"
+              ></el-input>
             </el-form-item>
             <el-form-item :label="$t('SMTP域名')" prop="host">
-              <el-input v-model="logisticsData.host" :v-html="$t('请输入SMTP域名')" class="logistic-sty"></el-input>
+              <el-input
+                v-model="logisticsData.host"
+                :v-html="$t('请输入SMTP域名')"
+                class="logistic-sty"
+              ></el-input>
             </el-form-item>
             <el-form-item :label="$t('SMTP端口')" prop="port">
-              <el-input v-model="logisticsData.port" :placeholder="$t('请输入SMTP端口')" class="logistic-sty"></el-input>
+              <el-input
+                v-model="logisticsData.port"
+                :placeholder="$t('请输入SMTP端口')"
+                class="logistic-sty"
+              ></el-input>
             </el-form-item>
             <el-form-item :label="$t('发件人用户名')" prop="username">
-              <el-input v-model="logisticsData.username" placeholder="请输入发件人用户名" class="logistic-sty"></el-input>
+              <el-input
+                v-model="logisticsData.username"
+                placeholder="请输入发件人用户名"
+                class="logistic-sty"
+              ></el-input>
             </el-form-item>
             <el-form-item :label="$t('发件人密码')" prop="password">
-              <el-input type="password" v-model="logisticsData.password" :placeholder="$t('请输入发件人密码')" class="logistic-sty"></el-input>
+              <el-input
+                type="password"
+                v-model="logisticsData.password"
+                :placeholder="$t('请输入发件人密码')"
+                class="logistic-sty"
+              ></el-input>
               <div class="test-btn">
-                <el-button class="btn-light-red" @click="testSmtp">{{$t('测试')}}</el-button>
+                <el-button class="btn-light-red" @click="testSmtp">{{ $t('测试') }}</el-button>
               </div>
             </el-form-item>
             <el-form-item :label="$t('加密方式')">
               <el-radio-group v-model="logisticsData.encryption" class="logistic-sty">
-                <el-radio :label="0">{{$t('无')}}</el-radio>
-                <el-radio :label="1">{{$t('TLS加密')}}</el-radio>
-                <el-radio :label="2">{{$t('SSL加密')}}</el-radio>
+                <el-radio :label="0">{{ $t('无') }}</el-radio>
+                <el-radio :label="1">{{ $t('TLS加密') }}</el-radio>
+                <el-radio :label="2">{{ $t('SSL加密') }}</el-radio>
               </el-radio-group>
             </el-form-item>
             <!-- <el-form-item :label="$t('开启邮箱登录验证')">
@@ -66,15 +108,22 @@
                 inactive-color="gray">
               </el-switch>
             </el-form-item> -->
-          <div class="form-title">{{$t('短信配置——聚合')}}</div>
-          <el-form-item label="Appkey" prop="juhe_key">
-            <el-input v-model="logisticsData.juhe_key" placeholder="请输入Appkey"
-            class="logistic-sty"></el-input>
-          </el-form-item>
+            <div class="form-title">{{ $t('短信配置——聚合') }}</div>
+            <el-form-item label="Appkey" prop="juhe_key">
+              <el-input
+                v-model="logisticsData.juhe_key"
+                placeholder="请输入Appkey"
+                class="logistic-sty"
+              ></el-input>
+            </el-form-item>
             <el-form-item :label="$t('发送验证码模板ID')" prop="juhe_tpl_id">
-              <el-input v-model="logisticsData.juhe_tpl_id" placeholder="请输入发送验证码模板ID" class="logistic-sty"></el-input>
+              <el-input
+                v-model="logisticsData.juhe_tpl_id"
+                placeholder="请输入发送验证码模板ID"
+                class="logistic-sty"
+              ></el-input>
               <div class="test-btn">
-                <el-button class="btn-light-red" @click="testJuhe">{{$t('测试')}}</el-button>
+                <el-button class="btn-light-red" @click="testJuhe">{{ $t('测试') }}</el-button>
               </div>
             </el-form-item>
             <!-- <el-form-item :label="$t('开启短信登录验证')">
@@ -90,138 +139,182 @@
             </el-form-item> -->
           </el-form>
           <div>
-            <el-button :loading="$store.state.btnLoading" class="save-btn" @click="confirmLogistic('ruleForm')">{{$t('保存')}}</el-button>
+            <el-button
+              :loading="$store.state.btnLoading"
+              class="save-btn"
+              @click="confirmLogistic('ruleForm')"
+              >{{ $t('保存') }}</el-button
+            >
           </div>
         </div>
-        </el-tab-pane>
-        <!-- 基础配置 -->
-        <!-- 订单增值服务 -->
-        <!-- 包裹增值服务 -->
-        <!-- 其余配置 -->
-        <!-- 订单增值服务 -->
-        <!-- 邮件模版 -->
-        <el-tab-pane :label="$t('邮件模版')" name="8">
-          <div class="select-box">
-            <!-- <search-select :placeholder="$t('请选择')" :selectArr="emailType"
+      </el-tab-pane>
+      <!-- 基础配置 -->
+      <!-- 订单增值服务 -->
+      <!-- 包裹增值服务 -->
+      <!-- 其余配置 -->
+      <!-- 订单增值服务 -->
+      <!-- 邮件模版 -->
+      <el-tab-pane :label="$t('邮件模版')" name="8">
+        <div class="select-box">
+          <!-- <search-select :placeholder="$t('请选择')" :selectArr="emailType"
             v-model="page_params.type" @search="onGroupChange">
           </search-select> -->
-          <el-select v-model="page_params.type" @change="onGroupChange" clearable
-          :placeholder="$t('请选择')">
-            <el-option
-              v-for="item in emailType"
-              :key="item.id"
-              :value="item.id"
-              :label="item.name">
+          <el-select
+            v-model="page_params.type"
+            @change="onGroupChange"
+            clearable
+            :placeholder="$t('请选择')"
+          >
+            <el-option v-for="item in emailType" :key="item.id" :value="item.id" :label="item.name">
             </el-option>
           </el-select>
-          <add-btn router="emailAdd">{{$t('添加邮件模版')}}</add-btn>
+          <add-btn router="emailAdd">{{ $t('添加邮件模版') }}</add-btn>
         </div>
-          <el-table :data="emailData" v-loading="tableLoading" class="data-list"
-          border stripe height="550">
-            <el-table-column type="index"></el-table-column>
-            <!-- 模版类型 -->
-            <el-table-column :label="$t('模版类型')" prop="type_name">
-            </el-table-column>
-            <!-- 邮件标题 -->
-            <el-table-column :label="$t('邮件标题')" prop="title"></el-table-column>
-            <el-table-column :label="$t('是否启用')">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.enabled"
-                  @change="changeEmail($event, scope.row.enabled, scope.row.id)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  active-color="#13ce66"
-                  inactive-color="gray">
-                </el-switch>
-              </template>
-            </el-table-column>
-            <!-- 创建时间 -->
-            <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
-            <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
-              <template slot-scope="scope">
-                <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onEmail(scope.row, item)"></span>
-                <span v-else class="el-icon-plus icon-sty" @click="onEmail(scope.row, item)"></span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')" width="150">
-              <template slot-scope="scope">
-                <el-button class="btn-dark-green" @click="editEmail(scope.row.id)">{{$t('编辑')}}</el-button>
-                <el-button class="btn-light-red" @click="deleteEmail(scope.row.id)">{{$t('删除')}}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <!-- 发货快递公司 -->
-        <!-- 单号规则 -->
-        <!-- 国家地区 -->
-        <!-- 自定义轨迹类型 -->
-        <!-- 汇率配置 -->
-        <!-- 拼团配置 -->
-        <el-tab-pane :label="$t('拼团配置')" name="14" v-if="unShow">
-          <div class="rate-top">
-            <div class="rate-left">
-             {{$t(' 授权公开拼团团长')}}：
-            </div>
-            <el-button class="btn-blue-green" @click="groupAdd">{{$t('新增授权')}}</el-button>
-          </div>
-            <el-table :data="configurationData" v-loading="tableLoading" class="data-list"
-            border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column prop="id" :label="$t('客户ID')"></el-table-column>
-            <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
-              <!-- 创建人 -->
-              <el-table-column :label="$t('客户组')">
-                <template slot-scope="scope">
-                  <span>{{scope.row.user_group.name_cn}}</span>
-                </template>
-              </el-table-column>
-              <!-- 授权时间 -->
-              <el-table-column :label="$t('授权时间')" prop="created_at"></el-table-column>
-              <!-- 最后登录时间 -->
-              <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button class="btn-light-red" @click="deleteGroup(scope.row.id)">{{$t('删除')}}</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-        </el-tab-pane>
-      </el-tabs>
-      <el-dialog :visible.sync="imgVisible" size="small">
+        <el-table
+          :data="emailData"
+          v-loading="tableLoading"
+          class="data-list"
+          border
+          stripe
+          height="550"
+        >
+          <el-table-column type="index"></el-table-column>
+          <!-- 模版类型 -->
+          <el-table-column :label="$t('模版类型')" prop="type_name"> </el-table-column>
+          <!-- 邮件标题 -->
+          <el-table-column :label="$t('邮件标题')" prop="title"></el-table-column>
+          <el-table-column :label="$t('是否启用')">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.enabled"
+                @change="changeEmail($event, scope.row.enabled, scope.row.id)"
+                :active-text="$t('开')"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray"
+              >
+              </el-switch>
+            </template>
+          </el-table-column>
+          <!-- 创建时间 -->
+          <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
+          <el-table-column
+            :label="item.name"
+            v-for="item in formatLangData"
+            :key="item.id"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <span
+                v-if="scope.row['trans_' + item.language_code]"
+                class="el-icon-check icon-sty"
+                @click="onEmail(scope.row, item)"
+              ></span>
+              <span v-else class="el-icon-plus icon-sty" @click="onEmail(scope.row, item)"></span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('操作')" width="150">
+            <template slot-scope="scope">
+              <el-button class="btn-dark-green" @click="editEmail(scope.row.id)">{{
+                $t('编辑')
+              }}</el-button>
+              <el-button class="btn-light-red" @click="deleteEmail(scope.row.id)">{{
+                $t('删除')
+              }}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <!-- 发货快递公司 -->
+      <!-- 单号规则 -->
+      <!-- 国家地区 -->
+      <!-- 自定义轨迹类型 -->
+      <!-- 汇率配置 -->
+      <!-- 拼团配置 -->
+      <el-tab-pane :label="$t('拼团配置')" name="14" v-if="unShow">
+        <div class="rate-top">
+          <div class="rate-left">{{ $t(' 授权公开拼团团长') }}：</div>
+          <el-button class="btn-blue-green" @click="groupAdd">{{ $t('新增授权') }}</el-button>
+        </div>
+        <el-table
+          :data="configurationData"
+          v-loading="tableLoading"
+          class="data-list"
+          border
+          stripe
+        >
+          <el-table-column type="index"></el-table-column>
+          <el-table-column prop="id" :label="$t('客户ID')"></el-table-column>
+          <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
+          <!-- 创建人 -->
+          <el-table-column :label="$t('客户组')">
+            <template slot-scope="scope">
+              <span>{{ scope.row.user_group.name_cn }}</span>
+            </template>
+          </el-table-column>
+          <!-- 授权时间 -->
+          <el-table-column :label="$t('授权时间')" prop="created_at"></el-table-column>
+          <!-- 最后登录时间 -->
+          <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
+          <el-table-column :label="$t('操作')">
+            <template slot-scope="scope">
+              <el-button class="btn-light-red" @click="deleteGroup(scope.row.id)">{{
+                $t('删除')
+              }}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </el-tab-pane>
+    </el-tabs>
+    <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
+        <img :src="imgSrc" class="imgDialog" />
       </div>
-      </el-dialog>
-      <!-- 预设充值金额 -->
-      <el-dialog :visible.sync="rechargeDialog" width="30%" :title="$t('*预设充值金额')" @close="clear">
+    </el-dialog>
+    <!-- 预设充值金额 -->
+    <el-dialog
+      :visible.sync="rechargeDialog"
+      width="30%"
+      :title="$t('*预设充值金额')"
+      @close="clear"
+    >
       <el-input v-model="amount"></el-input>
       <div slot="footer">
-        <el-button @click="rechargeDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="submitRecharge">{{$t('确定')}}</el-button>
+        <el-button @click="rechargeDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="submitRecharge">{{ $t('确定') }}</el-button>
       </div>
-      </el-dialog>
-      <!-- 编辑系统物流类型 -->
-      <el-dialog :visible.sync="trackingDialog" width="30%" :title="$t('编辑')" @close="clearTracking">
-      <el-input v-model="context" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+    </el-dialog>
+    <!-- 编辑系统物流类型 -->
+    <el-dialog
+      :visible.sync="trackingDialog"
+      width="30%"
+      :title="$t('编辑')"
+      @close="clearTracking"
+    >
+      <el-input v-model="context" type="textarea" :autosize="{ minRows: 2, maxRows: 4 }"></el-input>
       <div slot="footer">
-        <el-button @click="trackingDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="saveTackingType">{{$t('确定')}}</el-button>
+        <el-button @click="trackingDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="saveTackingType">{{ $t('确定') }}</el-button>
       </div>
-      </el-dialog>
-      <!-- 自定义物流类型 -->
-      <el-dialog :visible.sync="expressDialog" width="30%" :title="this.typeId ? $t('编辑') : $t('新增')" @close="clearType">
+    </el-dialog>
+    <!-- 自定义物流类型 -->
+    <el-dialog
+      :visible.sync="expressDialog"
+      width="30%"
+      :title="this.typeId ? $t('编辑') : $t('新增')"
+      @close="clearType"
+    >
       <el-form :model="typeForm" ref="typeForm" class="demo-ruleForm">
         <el-form-item :label="$t('物流信息')">
           <el-input v-model="typeForm.context"></el-input>
         </el-form-item>
-        </el-form>
-        <div slot="footer">
-        <el-button @click="expressDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="submitExpress">{{$t('确定')}}</el-button>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="expressDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="submitExpress">{{ $t('确定') }}</el-button>
       </div>
-      </el-dialog>
+    </el-dialog>
   </div>
 </template>
 
@@ -239,7 +332,7 @@ export default {
     // SearchSelect
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       countrySendData: [],
       typeSendData: [],
@@ -409,40 +502,24 @@ export default {
         kd100_app_key: [
           { required: true, message: this.$t('请输入授权key ID'), trigger: 'change' }
         ],
-        trackingmore_key: [
-          { required: true, message: this.$t('请输入Appkey'), trigger: 'change' }
-        ],
-        juhe_key: [
-          { required: true, message: this.$t('请输入Appkey'), trigger: 'change' }
-        ],
+        trackingmore_key: [{ required: true, message: this.$t('请输入Appkey'), trigger: 'change' }],
+        juhe_key: [{ required: true, message: this.$t('请输入Appkey'), trigger: 'change' }],
         juhe_tpl_id: [
           { required: true, message: this.$t('请输入发送验证码模板ID'), trigger: 'change' }
         ],
-        host: [
-          { required: true, message: this.$t('请输入SMTP域名'), trigger: 'change' }
-        ],
-        port: [
-          { required: true, message: this.$t('请输入SMTP端口'), trigger: 'change' }
-        ],
+        host: [{ required: true, message: this.$t('请输入SMTP域名'), trigger: 'change' }],
+        port: [{ required: true, message: this.$t('请输入SMTP端口'), trigger: 'change' }],
         // encryption: [
         //   { required: true, message: '请选择加密方式', trigger: 'change' }
         // ],
-        username: [
-          { required: true, message: this.$t('请输入发件人用户名'), trigger: 'change' }
-        ],
-        password: [
-          { required: true, message: this.$t('请输入发件人密码'), trigger: 'change' }
-        ],
-        from_address: [
-          { required: true, message: this.$t('请输入发件人邮件'), trigger: 'change' }
-        ],
-        from_name: [
-          { required: true, message: this.$t('请输入发件人名称'), trigger: 'change' }
-        ]
+        username: [{ required: true, message: this.$t('请输入发件人用户名'), trigger: 'change' }],
+        password: [{ required: true, message: this.$t('请输入发件人密码'), trigger: 'change' }],
+        from_address: [{ required: true, message: this.$t('请输入发件人邮件'), trigger: 'change' }],
+        from_name: [{ required: true, message: this.$t('请输入发件人名称'), trigger: 'change' }]
       }
     }
   },
-  created () {
+  created() {
     console.log('change')
     this.getLanguageList()
     if (this.$route.query.activeName) {
@@ -491,16 +568,16 @@ export default {
       this.getConfiguration()
     }
   },
-  mounted () {
+  mounted() {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
   },
   methods: {
-    handleEdit (val) {
+    handleEdit(val) {
       console.log(val)
       this.id = val.id // 这里就是当前拖动行的值，把需要的值赋值给你之前定义好的就可以了
     },
     // 国家地区 行拖拽
-    rowDrop () {
+    rowDrop() {
       const tbody = document.querySelector('.country tbody')
       console.log(tbody, 'tbody')
       Sortable.create(tbody, {
@@ -513,7 +590,7 @@ export default {
       })
     },
     // 确定拖拽 国家地区
-    rowUpdate () {
+    rowUpdate() {
       // eslint-disable-next-line camelcase
       const ids = this.countrySendData.map(({ id, name }, index) => ({ id, index, name }))
       console.log(ids)
@@ -535,7 +612,7 @@ export default {
       })
     },
     // 自定义物流 行拖拽
-    typeRowDrop () {
+    typeRowDrop() {
       const tbody = document.querySelector('.logistics-type tbody')
       console.log(tbody, 'tbody')
       Sortable.create(tbody, {
@@ -548,7 +625,7 @@ export default {
       })
     },
     // 确定拖拽 自定义物流
-    typeRowUpdate () {
+    typeRowUpdate() {
       const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
       console.log(ids)
       this.TypeData = []
@@ -569,7 +646,7 @@ export default {
       })
     },
     // 修改在线支付的开关
-    changeOnline (event, name) {
+    changeOnline(event, name) {
       console.log(name, 'name')
       this.$request.changePayment(Number(event), name).then(res => {
         if (res.ret) {
@@ -588,8 +665,8 @@ export default {
       })
     },
     // 修改转账支付的开关
-    changeTransfer (event, enabled, id) {
-      console.log(typeof (event), '我是event')
+    changeTransfer(event, enabled, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closePayments(id, Number(event)).then(res => {
         if (res.ret) {
@@ -608,7 +685,7 @@ export default {
       })
     },
     // 系统物流类型 开启或关闭
-    changeSystem (event, enabled, id) {
+    changeSystem(event, enabled, id) {
       this.$request.closeSystem(id, event).then(res => {
         if (res.ret) {
           this.$notify({
@@ -626,14 +703,14 @@ export default {
       })
     },
     // 基础配置 修改语言
-    onProps (item) {
+    onProps(item) {
       console.log(item, 'item')
       dialog({ type: 'propsLang', lang: item, dynamicTags: this.dynamicTags }, () => {
         this.getProps()
       })
     },
     // 保险服务 保险说明
-    goInsurance (val) {
+    goInsurance(val) {
       console.log(val, 'val')
       dialog({ type: 'explanationAdd', value: val }, () => {
         if (val === 'insurance') {
@@ -644,12 +721,12 @@ export default {
       })
     },
     // 保险服务 开启线路
-    openLines (val) {
+    openLines(val) {
       console.log(val, 'val')
       dialog({ type: 'openLine', state: val })
     },
     // pc端配置 修改语言
-    onPc (item) {
+    onPc(item) {
       // console.log(line, lang)
       // this.transCode = line['trans_' + lang.language_code]
       // line, lang: lang, transCode: this.transCode
@@ -659,7 +736,7 @@ export default {
       })
     },
     // 发货快递公司 修改语言
-    onExpress (line, lang) {
+    onExpress(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
@@ -668,7 +745,7 @@ export default {
       })
     },
     // 转账 修改语言
-    onLang (line, lang) {
+    onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       dialog({ type: 'payLang', line: line, lang: lang, transCode: this.transCode }, () => {
@@ -676,46 +753,68 @@ export default {
       })
     },
     // 订单增值服务 修改语言
-    onService (line, lang) {
+    onService(line, lang) {
       console.log(line, lang)
       this.serviceCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
-      dialog({ type: 'serviceLang', line: line, lang: lang, transCode: this.serviceCode, state: 'service' }, () => {
-        this.getValue()
-      })
+      dialog(
+        {
+          type: 'serviceLang',
+          line: line,
+          lang: lang,
+          transCode: this.serviceCode,
+          state: 'service'
+        },
+        () => {
+          this.getValue()
+        }
+      )
     },
     // 包裹增值服务 修改语言
-    onPackage (line, lang) {
+    onPackage(line, lang) {
       console.log(line, lang)
       this.packageCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
-      dialog({ type: 'serviceLang', line: line, lang: lang, transCode: this.packageCode, state: 'package' }, () => {
-        this.getValue()
-      })
+      dialog(
+        {
+          type: 'serviceLang',
+          line: line,
+          lang: lang,
+          transCode: this.packageCode,
+          state: 'package'
+        },
+        () => {
+          this.getValue()
+        }
+      )
     },
     // 邮件模版 修改语言
-    onEmail (line, lang) {
+    onEmail(line, lang) {
       this.emailCode = line['trans_' + lang.language_code]
-      this.$router.push({ name: 'emailLangAdd',
+      this.$router.push({
+        name: 'emailLangAdd',
         params: {
           line: JSON.stringify(line),
           lang: JSON.stringify(lang),
           transCode: this.emailCode
-        } })
+        }
+      })
     },
     // 商品分类管理 修改语言
-    onCategories (line, lang) {
+    onCategories(line, lang) {
       this.categoriesCode = line['trans_' + lang.language_code]
-      this.$router.push({ name: 'categoriesLangAdd',
+      this.$router.push({
+        name: 'categoriesLangAdd',
         params: {
           line: JSON.stringify(line),
           lang: JSON.stringify(lang),
           transCode: this.categoriesCode
-        } })
+        }
+      })
     },
     // 邮件模版 开启或关闭
-    changeEmail (event, enabled, id) {
-      console.log(typeof (event), '我是event')
+    changeEmail(event, enabled, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeEmail(id, Number(event)).then(res => {
         if (res.ret) {
@@ -734,7 +833,7 @@ export default {
       })
     },
     // 删除单条转账支付
-    deleteTransfer (id) {
+    deleteTransfer(id) {
       this.$confirm(this.$t('您真的要删除转账支付吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -759,18 +858,18 @@ export default {
       })
     },
     // 增加转账支付配置
-    addTransfer () {
+    addTransfer() {
       dialog({ type: 'addTransfer', state: 'add' }, () => {
         this.getPayment()
       })
     },
-    clear () {
+    clear() {
       this.amount = ''
     },
-    clearType () {
+    clearType() {
       this.typeForm.context = ''
     },
-    submitRecharge () {
+    submitRecharge() {
       if (!this.amount) {
         return this.$message.error(this.$t('请输入预设充值金额'))
       }
@@ -793,10 +892,10 @@ export default {
       })
     },
     // 新增 预设充值金额
-    addRecharge () {
+    addRecharge() {
       this.rechargeDialog = true
     },
-    deleteRecharge (id) {
+    deleteRecharge(id) {
       this.$request.deleteRechargeAmount(id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -815,7 +914,7 @@ export default {
       })
     },
     // 编辑邮件模版
-    editEmail (id) {
+    editEmail(id) {
       this.$router.push({
         name: 'emailEdit',
         params: {
@@ -824,7 +923,7 @@ export default {
       })
     },
     // 删除单条邮件模版
-    deleteEmail (id) {
+    deleteEmail(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -849,7 +948,7 @@ export default {
       })
     },
     // 删除国家地区
-    deleteCountry (id) {
+    deleteCountry(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -873,12 +972,16 @@ export default {
         })
       })
     },
-    regenerate () {
-      this.$confirm(this.$t('确定要重新生成会员编号吗？原来的编号将会被重置，可能会部分影响到包裹订单出入库'), this.$t('重新生成'), {
-        confirmButtonText: this.$t('确定'),
-        cancelButtonText: this.$t('取消'),
-        type: 'warning'
-      }).then(() => {
+    regenerate() {
+      this.$confirm(
+        this.$t('确定要重新生成会员编号吗？原来的编号将会被重置，可能会部分影响到包裹订单出入库'),
+        this.$t('重新生成'),
+        {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.$request.goResetId().then(res => {
           if (res.ret) {
             this.$notify({
@@ -898,32 +1001,43 @@ export default {
       })
     },
     // 编辑转账支付配置
-    editTransfer (id) {
+    editTransfer(id) {
       console.log(id, 'id')
       dialog({ type: 'addTransfer', state: 'edit', id: id }, () => {
         this.getPayment()
       })
     },
     // 编辑保险服务
-    editInsurance (id, start) {
+    editInsurance(id, start) {
       dialog({ type: 'insuranceEdit', id: id, start: start }, () => {
         this.getInsurance()
       })
     },
     // 关税服务 新增
-    addTariff (id) {
-      dialog({ type: 'tariffEditAdd', state: 'add', currencyUnit: this.localization.currency_unit }, () => {
-        this.getTariffData()
-      })
+    addTariff() {
+      dialog(
+        { type: 'tariffEditAdd', state: 'add', currencyUnit: this.localization.currency_unit },
+        () => {
+          this.getTariffData()
+        }
+      )
     },
     // 关税服务 编辑
-    editTariff (id) {
-      dialog({ type: 'tariffEditAdd', id: id, state: 'edit', currencyUnit: this.localization.currency_unit }, () => {
-        this.getTariffData()
-      })
+    editTariff(id) {
+      dialog(
+        {
+          type: 'tariffEditAdd',
+          id: id,
+          state: 'edit',
+          currencyUnit: this.localization.currency_unit
+        },
+        () => {
+          this.getTariffData()
+        }
+      )
     },
     // 关税服务 删除
-    deleteTariff (id) {
+    deleteTariff(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -948,30 +1062,30 @@ export default {
       })
     },
     // 订单 增加增值服务
-    addService () {
+    addService() {
       dialog({ type: 'addService', state: 'add', name: 'addService' }, () => {
         this.getList()
       })
     },
     // 添加发货快递公司
-    addExpress () {
+    addExpress() {
       dialog({ type: 'expressEditAdd', state: 'add' }, () => {
         this.getExpress()
       })
     },
-    editExpress (id) {
+    editExpress(id) {
       dialog({ type: 'expressEditAdd', state: 'edit', id: id }, () => {
         this.getExpress()
       })
     },
     // 订单 编辑增值服务
-    editService (id) {
+    editService(id) {
       dialog({ type: 'addService', state: 'edit', id: id, name: 'editService' }, () => {
         this.getList()
       })
     },
     // 订单 删除 增值服务
-    deleteService (id) {
+    deleteService(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -996,19 +1110,19 @@ export default {
       })
     },
     // 包裹 增加增值服务
-    addParcel () {
+    addParcel() {
       dialog({ type: 'addService', state: 'add', name: 'addParcel' }, () => {
         this.getList()
       })
     },
     // 包裹 编辑增值服务
-    editParcel (id) {
+    editParcel(id) {
       dialog({ type: 'addService', state: 'edit', id: id, name: 'editParcel' }, () => {
         this.getList()
       })
     },
     // 订单 删除 快递公司
-    deleteExpress (id) {
+    deleteExpress(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -1033,7 +1147,7 @@ export default {
       })
     },
     // 包裹 删除增值服务
-    deleteParcel (id) {
+    deleteParcel(id) {
       this.$confirm(this.$t('您真的要删除增值服务吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -1058,8 +1172,8 @@ export default {
       })
     },
     // 订单增值服务 开关启用状态
-    changeService (event, id) {
-      console.log(typeof (event), '我是event')
+    changeService(event, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeValue(id, Number(event)).then(res => {
         if (res.ret) {
@@ -1078,7 +1192,7 @@ export default {
       })
     },
     // 发货快递公司 开关启用状态
-    changeExpress (event, id) {
+    changeExpress(event, id) {
       this.$request.closeExpress(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
@@ -1096,8 +1210,8 @@ export default {
       })
     },
     // 包裹增值服务 开关启用状态
-    changeParcel (event, id) {
-      console.log(typeof (event), '我是event')
+    changeParcel(event, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeParcel(id, Number(event)).then(res => {
         if (res.ret) {
@@ -1116,7 +1230,7 @@ export default {
       })
     },
     // 删除单条商品分类
-    deleteCategories (id) {
+    deleteCategories(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -1140,34 +1254,37 @@ export default {
         })
       })
     },
-    handleClose (id) {
+    handleClose(id) {
       console.log(id, 'id')
       this.dynamicTags.splice(this.dynamicTags.indexOf(id), 1)
-      this.$request.deleteProps({
-        DELETE: [id]
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getProps()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .deleteProps({
+          DELETE: [id]
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getProps()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
-    showInput () {
+    showInput() {
       this.inputVisible = true
-      this.$nextTick(_ => {
+      // eslint-disable-next-line no-unused-vars
+      this.$nextTick(() => {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    handleInputConfirm () {
+    handleInputConfirm() {
       let inputValue = this.inputValue
       if (inputValue) {
         this.dynamicTags.push(inputValue)
@@ -1176,7 +1293,7 @@ export default {
       this.inputValue = ''
     },
     // 支付配置
-    configuration (type, name) {
+    configuration(type) {
       if (type === 1) {
         dialog({ type: 'paypalSet' }, () => {
           this.getWechat()
@@ -1196,7 +1313,7 @@ export default {
       }
     },
     // 获取物流跟踪配置
-    getLogisticsData () {
+    getLogisticsData() {
       this.$request.getLogistics().then(res => {
         if (res.ret && res.data) {
           this.logisticsData = res.data
@@ -1207,7 +1324,7 @@ export default {
       })
     },
     // 获取pc端配置
-    getOthers () {
+    getOthers() {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
         this.setForm.pc_website_url = res.data.pc_website_url.map(item => item.url).toString()
@@ -1218,7 +1335,7 @@ export default {
       })
     },
     // 修改pc端配置
-    editOthers () {
+    editOthers() {
       if (this.baleImgList[0]) {
         this.setForm.default_img = this.baleImgList[0]
       } else {
@@ -1243,24 +1360,26 @@ export default {
         return this.$message.error(this.$t('请输入网站名称'))
       }
       console.log(this.setForm.pc_website_url.split(','))
-      this.$request.editWebsite({ ...this.setForm, pc_website_url: this.setForm.pc_website_url.split(',') }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getOthers()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .editWebsite({ ...this.setForm, pc_website_url: this.setForm.pc_website_url.split(',') })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getOthers()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // pc端配置 第三方登录 获取数据
-    goOauth () {
+    goOauth() {
       // this.visibleOauth = true
       this.$request.getOauth().then(res => {
         if (res.ret) {
@@ -1269,7 +1388,7 @@ export default {
       })
     },
     // 更新第三方登录配置数据
-    saveOauth () {
+    saveOauth() {
       this.$request.updateOauth(this.oauthData).then(res => {
         if (res.ret) {
           this.$notify({
@@ -1287,35 +1406,37 @@ export default {
       })
     },
     // 物流跟踪配置确认
-    confirmLogistic (formName) {
+    confirmLogistic(formName) {
       console.log(this.logisticsData.encryption, 'this.logisticsData.encryption')
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$request.editLogistics({
-            ...this.logisticsData
-            // encryption: Number(this.logisticsData.encryption)
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
-              this.activeName = '1'
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
+          this.$request
+            .editLogistics({
+              ...this.logisticsData
+              // encryption: Number(this.logisticsData.encryption)
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.activeName = '1'
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+            })
         } else {
           return false
         }
       })
     },
     // 获取全部重量及货币配置
-    confirmSetting () {
+    confirmSetting() {
       this.$request.getLocalization().then(res => {
         this.weightList = res.data.weight
         this.currencyList = res.data.currency
@@ -1323,7 +1444,7 @@ export default {
       })
     },
     // 获取全部结算货币
-    getAllCurrency () {
+    getAllCurrency() {
       this.$request.getAllRate().then(res => {
         if (res.ret) {
           this.rateList = res.data
@@ -1331,7 +1452,7 @@ export default {
       })
     },
     // 获取当前选择的重量及货币配置
-    getSetting () {
+    getSetting() {
       this.$request.chooseLocalization().then(res => {
         if (res.ret) {
           this.currencyName = res.data.currency_name
@@ -1343,7 +1464,7 @@ export default {
       })
     },
     // 获取入库是否必填
-    getBasic () {
+    getBasic() {
       this.$request.getBasic().then(res => {
         if (res.ret) {
           this.basic.size = res.data.size
@@ -1352,59 +1473,63 @@ export default {
         }
       })
     },
-    changeBasic (val) {
-      this.$request.updateBasic({
-        size: this.basic.size,
-        location: this.basic.location,
-        package_warning: this.basic.package_warning
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getBasic()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    changeBasic() {
+      this.$request
+        .updateBasic({
+          size: this.basic.size,
+          location: this.basic.location,
+          package_warning: this.basic.package_warning
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getBasic()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 保存当前选择的重量及货币配置
-    saveSetting () {
+    saveSetting() {
       let weight = this.weightList.filter(item => item.name === this.weightName)
       let currency = this.currencyList.filter(item => item.name === this.currencyName)
       let length = this.lengthList.filter(item => item.name === this.lengthName)
-      this.$request.confirmLocalization({
-        weight_name: weight[0].name,
-        weight_symbol: weight[0].symbol,
-        currency_name: currency[0].name,
-        currency_symbol: currency[0].symbol,
-        length_name: length[0].name,
-        length_symbol: length[0].symbol,
-        package_express_line: this.package_express_line,
-        currency: this.currency
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.activeName = '1'
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .confirmLocalization({
+          weight_name: weight[0].name,
+          weight_symbol: weight[0].symbol,
+          currency_name: currency[0].name,
+          currency_symbol: currency[0].symbol,
+          length_name: length[0].name,
+          length_symbol: length[0].symbol,
+          package_express_line: this.package_express_line,
+          currency: this.currency
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.activeName = '1'
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 获取物品属性
-    getProps () {
+    getProps() {
       this.$request.getPackage().then(res => {
         if (res.ret) {
           this.dynamicTags = res.data
@@ -1417,20 +1542,18 @@ export default {
       })
     },
     // 添加属性
-    addProps () {
+    addProps() {
       dialog({ type: 'addPackage' }, () => {
         this.getProps()
       })
     },
     //  支付配置 获取在线支付
-    getWechat () {
+    getWechat() {
       this.tableLoading = true
       this.$request.getPaymentOnline().then(res => {
         this.tableLoading = false
         if (res.ret) {
-          this.paymentData = res.data.map(item => ({ ...item,
-            enabled: Boolean(item
-              .enabled) }))
+          this.paymentData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
         } else {
           this.$message({
             message: res.msg,
@@ -1440,7 +1563,7 @@ export default {
       })
     },
     // 获取转账支付
-    getPayment () {
+    getPayment() {
       this.tableLoading = true
       this.$request.getPayments().then(res => {
         this.tableLoading = false
@@ -1455,7 +1578,7 @@ export default {
       })
     },
     // 系统物流类型数据
-    getSystem () {
+    getSystem() {
       this.$request.getSetSystem().then(res => {
         if (res.ret) {
           this.systemData = res.data
@@ -1468,23 +1591,35 @@ export default {
       })
     },
     // 系统物流类型 修改语言
-    trackingLang (line, lang) {
+    trackingLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
-      dialog({ type: 'trackingLang', line: line, lang: lang, transCode: this.transCode, state: 'tracking' }, () => {
-        this.getSystem()
-      })
+      dialog(
+        {
+          type: 'trackingLang',
+          line: line,
+          lang: lang,
+          transCode: this.transCode,
+          state: 'tracking'
+        },
+        () => {
+          this.getSystem()
+        }
+      )
     },
     // 自定义物流类型 修改语言
-    TypeLang (line, lang) {
+    TypeLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
-      dialog({ type: 'trackingLang', line: line, lang: lang, transCode: this.transCode, state: 'type' }, () => {
-        this.getTypeData()
-      })
+      dialog(
+        { type: 'trackingLang', line: line, lang: lang, transCode: this.transCode, state: 'type' },
+        () => {
+          this.getTypeData()
+        }
+      )
     },
     // 获取预设充值金额
-    getRecharge () {
+    getRecharge() {
       this.tableLoading = true
       this.$request.getRechargeAmount().then(res => {
         this.tableLoading = false
@@ -1499,24 +1634,26 @@ export default {
       })
     },
     // 获取邮件模版
-    getEmail () {
+    getEmail() {
       this.tableLoading = true
-      this.$request.getEmail({
-        type: this.page_params.type
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.emailData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .getEmail({
+          type: this.page_params.type
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.emailData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 获取模版类型数据
-    getType () {
+    getType() {
       this.$request.emailType().then(res => {
         if (res.ret) {
           this.emailType = res.data
@@ -1529,13 +1666,13 @@ export default {
         // })
       })
     },
-    onGroupChange () {
+    onGroupChange() {
       this.page_params.handleQueryChange('type', this.page_params.type)
       this.getEmail()
     },
     // 商品分类管理 开启或关闭 是否显示
-    changeShow (event, id) {
-      console.log(typeof (event), '我是event')
+    changeShow(event, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeCategories(id, Number(event)).then(res => {
         if (res.ret) {
@@ -1554,8 +1691,8 @@ export default {
       })
     },
     // 商品分类管理 开启或关闭 风险提示
-    changeRisk (event, id) {
-      console.log(typeof (event), '我是event')
+    changeRisk(event, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeRisk(id, Number(event)).then(res => {
         if (res.ret) {
@@ -1574,25 +1711,27 @@ export default {
       })
     },
     // 修改风险提示
-    goSick (id) {
-      this.$router.push({ name: 'sickTips',
+    goSick(id) {
+      this.$router.push({
+        name: 'sickTips',
         params: {
           id: id
-        } })
+        }
+      })
     },
     // 添加商品分类
-    addClassify () {
+    addClassify() {
       dialog({ type: 'classifyGroup', state: 'add', id: '' }, () => {
         this.getList()
       })
     },
     // 编辑商品分类
-    editClassify (id) {
+    editClassify(id) {
       dialog({ type: 'classifyGroup', state: 'edit', id: id }, () => {
         this.getList()
       })
     },
-    getList () {
+    getList() {
       if (this.activeName === '4') {
         this.getValue()
         this.getInsurance()
@@ -1613,72 +1752,78 @@ export default {
       }
     },
     // 获取订单增值服务
-    getValue () {
+    getValue() {
       this.tableLoading = true
-      this.$request.getValue({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.valueData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          this.localization = res.localization
-          console.log(this.valueData, 'valueData')
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .getValue({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.valueData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.localization = res.localization
+            console.log(this.valueData, 'valueData')
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 获取汇率配置
-    getRate () {
-      this.$request.getRates({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        if (res.ret) {
-          this.ratesData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          this.localization = res.localization
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    getRate() {
+      this.$request
+        .getRates({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.ratesData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.localization = res.localization
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 获取拼团配置数据
-    getConfiguration () {
-      this.$request.getConfiguration({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        if (res.ret) {
-          this.configurationData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          this.localization = res.localization
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    getConfiguration() {
+      this.$request
+        .getConfiguration({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.configurationData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.localization = res.localization
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
-    groupAdd () {
+    groupAdd() {
       dialog({ type: 'groupAdd' }, () => {
         this.getConfiguration()
       })
     },
     // 拼团配置 删除
-    deleteGroup (id) {
+    deleteGroup(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -1703,7 +1848,7 @@ export default {
       })
     },
     // 获取当前结算货币
-    getCurrency () {
+    getCurrency() {
       this.$request.getCurrency().then(res => {
         if (res.ret) {
           this.currencyData = res.data
@@ -1716,7 +1861,7 @@ export default {
       })
     },
     // 自动获取
-    autoGet () {
+    autoGet() {
       this.$request.autoGet().then(res => {
         if (res.ret) {
           this.rate = res.data.rate
@@ -1729,7 +1874,7 @@ export default {
       })
     },
     // 汇率 删除
-    deleteRate (id) {
+    deleteRate(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -1754,7 +1899,7 @@ export default {
       })
     },
     // 汇率 开启或关闭
-    changeRate (id) {
+    changeRate(id) {
       this.$request.closeRate(id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -1772,32 +1917,34 @@ export default {
       })
     },
     // 新建汇率
-    saveRate () {
+    saveRate() {
       if (!this.rate) {
         return this.$message.error(this.$t('请输入汇率'))
       } else {
-        this.$request.saveRate({
-          rate: this.rate
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.getRate()
-            this.rate = ''
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .saveRate({
+            rate: this.rate
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.getRate()
+              this.rate = ''
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       }
     },
     // 更改保险服务的开关
-    changeInsurance (val) {
+    changeInsurance(val) {
       console.log(val, 'val')
       this.$request.changeInsurance(val).then(res => {
         if (res.ret) {
@@ -1816,7 +1963,7 @@ export default {
       })
     },
     // 获取保险服务
-    getInsurance () {
+    getInsurance() {
       this.tableLoading = true
       this.$request.getInsurance().then(res => {
         this.tableLoading = false
@@ -1827,7 +1974,7 @@ export default {
       })
     },
     // 获取关税服务开关状态
-    getTariffEnabled () {
+    getTariffEnabled() {
       this.$request.tariffEnabled().then(res => {
         if (res.ret) {
           this.tariffEnabled = res.data.status
@@ -1838,7 +1985,7 @@ export default {
       })
     },
     // 获取关税服务
-    getTariffData () {
+    getTariffData() {
       this.tableLoading = true
       this.$request.getTariff().then(res => {
         this.tableLoading = false
@@ -1848,7 +1995,7 @@ export default {
       })
     },
     // 更改关税服务的开关
-    changeTariff (val) {
+    changeTariff(val) {
       console.log(val, 'val')
       this.$request.changeTariff(val).then(res => {
         if (res.ret) {
@@ -1867,42 +2014,46 @@ export default {
       })
     },
     // 获取发货快递公司
-    getExpress () {
+    getExpress() {
       this.tableLoading = true
-      this.$request.getExpressValue({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.expressData = res.data.map(item => ({ ...item, status: Boolean(item.status) }))
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          this.localization = res.localization
-          console.log(this.valueData, 'valueData')
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .getExpressValue({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.expressData = res.data.map(item => ({ ...item, status: Boolean(item.status) }))
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.localization = res.localization
+            console.log(this.valueData, 'valueData')
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 获取单号规则数据
-    getRules () {
+    getRules() {
       this.tableLoading = true
-      this.$request.getRules({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.rulesData = res.data
-        }
-      })
+      this.$request
+        .getRules({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.rulesData = res.data
+          }
+        })
     },
     // 单号规则 开启或关闭
-    changeRules (event, enabled, id) {
+    changeRules(event, enabled, id) {
       this.$request.changeRules(id, event).then(res => {
         if (res.ret) {
           this.$notify({
@@ -1920,20 +2071,24 @@ export default {
       })
     },
     // 添加国家/地区
-    addCountry () {
+    addCountry() {
       dialog({ type: 'setCountry' }, () => {
         this.getCountryList()
       })
     },
     // 国家地区 开启或关闭
-    changeCountry (event, enabled, id) {
+    changeCountry(event, enabled, id) {
       console.log(event, 'event')
       if (event === 0) {
-        this.$confirm(this.$t('停止支持该国家后，再次开启时需重新添加支持仓库与路线'), this.$t('提示'), {
-          confirmButtonText: this.$t('确定'),
-          cancelButtonText: this.$t('取消'),
-          type: 'warning'
-        }).then(() => {
+        this.$confirm(
+          this.$t('停止支持该国家后，再次开启时需重新添加支持仓库与路线'),
+          this.$t('提示'),
+          {
+            confirmButtonText: this.$t('确定'),
+            cancelButtonText: this.$t('取消'),
+            type: 'warning'
+          }
+        ).then(() => {
           this.$request.closeCountryLocation(id, event).then(res => {
             if (res.ret) {
               this.$notify({
@@ -1969,7 +2124,7 @@ export default {
       }
     },
     // 系统物流类型 开启或关闭
-    changeType (event, enabled, id) {
+    changeType(event, enabled, id) {
       this.$request.closeType(id, event).then(res => {
         if (res.ret) {
           this.$notify({
@@ -1987,7 +2142,7 @@ export default {
       })
     },
     // 自定义物流系统列表
-    getTypeData () {
+    getTypeData() {
       this.$request.TypeData().then(res => {
         if (res.ret) {
           this.TypeData = res.data
@@ -2000,7 +2155,7 @@ export default {
       })
     },
     // 删除 自定义物流
-    deleteLogisticsType (id) {
+    deleteLogisticsType(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -2025,17 +2180,17 @@ export default {
       })
     },
     // 新增 自定义物流类型
-    addLogisticsType () {
+    addLogisticsType() {
       this.expressDialog = true
     },
     // 编辑 自定义物流类型
-    editLogisticsType (id) {
+    editLogisticsType(id) {
       this.typeId = id
       this.expressDialog = true
       this.getTypeDialog()
     },
     // 获取 单条自定义物流信息
-    getTypeDialog () {
+    getTypeDialog() {
       this.$request.getAloneType(this.typeId).then(res => {
         if (res.ret) {
           this.typeForm.context = res.data.context
@@ -2043,7 +2198,7 @@ export default {
       })
     },
     // 确定提交 自定义物流类型
-    submitExpress () {
+    submitExpress() {
       if (this.typeId) {
         this.$request.updateTypeData(this.typeId, this.typeForm).then(res => {
           if (res.ret) {
@@ -2083,17 +2238,17 @@ export default {
       }
     },
     // 编辑系统物流系统
-    editTracking (id) {
+    editTracking(id) {
       this.trackingId = id
       this.trackingDialog = true
       this.getTackingType()
     },
-    clearTracking () {
+    clearTracking() {
       this.trackingId = ''
       this.context = ''
     },
     // 获取单条物流类型
-    getTackingType () {
+    getTackingType() {
       this.$request.getAloneTracking(this.trackingId).then(res => {
         if (res.ret) {
           this.context = res.data.context
@@ -2101,29 +2256,31 @@ export default {
       })
     },
     // 更新 单条物流系统
-    saveTackingType () {
-      this.$request.updateAloneTracking(this.trackingId, {
-        context: this.context
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.trackingDialog = false
-          this.getSystem()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+    saveTackingType() {
+      this.$request
+        .updateAloneTracking(this.trackingId, {
+          context: this.context
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.trackingDialog = false
+            this.getSystem()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 获取国家/地区数据
-    getCountryList () {
+    getCountryList() {
       this.tableLoading = true
       this.$request.countryLocation().then(res => {
         this.tableLoading = false
@@ -2137,34 +2294,36 @@ export default {
         }
       })
     },
-    editRules (id, name) {
+    editRules(id, name) {
       dialog({ type: 'rulesEdit', id: id, name: name }, () => {
         this.getRules()
       })
     },
     // 获取包裹增值服务
-    getParcel () {
+    getParcel() {
       this.tableLoading = true
-      this.$request.getParcel({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.parcelData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          this.localization = res.localization
-          console.log(this.parcelData, 'parcelData')
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .getParcel({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.parcelData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.localization = res.localization
+            console.log(this.parcelData, 'parcelData')
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
-    onTabChange () {
+    onTabChange() {
       if (this.activeName === '1') {
         this.getWechat()
         this.getPayment()
@@ -2212,7 +2371,7 @@ export default {
       this.page_params.handleQueryChange('activeName', this.activeName)
     },
     // 上传打包照片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -2222,7 +2381,7 @@ export default {
         }
       })
     },
-    uploadLogo (item) {
+    uploadLogo(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -2233,7 +2392,7 @@ export default {
       })
     },
     // pc端客服二维码
-    customerImg (item) {
+    customerImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -2244,7 +2403,7 @@ export default {
       })
     },
     // 登录页背景图
-    bgImg (item) {
+    bgImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -2255,65 +2414,67 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除小程序码
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
     // 删除logo
-    onDeleteLogo (index) {
+    onDeleteLogo(index) {
       this.LogoImgList.splice(index, 1)
     },
     // 删除pc端二维码
-    onDeleteCus (index) {
+    onDeleteCus(index) {
       this.customerList.splice(index, 1)
     },
     // 删除登录页背景图
-    onDeleteBg (index) {
+    onDeleteBg(index) {
       this.bgList.splice(index, 1)
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
     // 获取商品分类管理列表
-    getCategories () {
+    getCategories() {
       this.tableLoading = true
-      this.$request.getCategories({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.CategoriesList = res.data.map(item => {
-            return {
-              ...item,
-              enabled: Boolean(item.enabled),
-              risk_warning_enabled: Boolean(item.risk_warning_enabled),
-              orders: []
-            }
-          })
-          this.localization = res.localization
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .getCategories({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.CategoriesList = res.data.map(item => {
+              return {
+                ...item,
+                enabled: Boolean(item.enabled),
+                risk_warning_enabled: Boolean(item.risk_warning_enabled),
+                orders: []
+              }
+            })
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 点开当前行，获取二级菜单数据
-    onExpand (row) {
+    onExpand(row) {
       // 如果当前货单已经获取了二级菜单数据，就不在获取
       if (row.orders.length) return
       let id = row.id
@@ -2330,56 +2491,60 @@ export default {
       })
     },
     // 检测快递100
-    testExpress () {
+    testExpress() {
       if (this.logisticsData.kd100_app_id === '') {
         return this.$message.error('请输入Customer ID')
       } else if (this.logisticsData.kd100_app_key === '') {
         return this.$message.error(this.$t('请输入授权KEY'))
       }
-      this.$request.verifyKd100({
-        kd100_app_id: this.logisticsData.kd100_app_id,
-        kd100_app_key: this.logisticsData.kd100_app_key
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .verifyKd100({
+          kd100_app_id: this.logisticsData.kd100_app_id,
+          kd100_app_key: this.logisticsData.kd100_app_key
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 检测Tracking more
-    testTracking () {
+    testTracking() {
       if (this.logisticsData.trackingmore_key === '') {
         return this.$message.error('请输入Customer ID')
       }
-      this.$request.verifyTrackingMore({
-        trackingmore_key: this.logisticsData.trackingmore_key
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .verifyTrackingMore({
+          trackingmore_key: this.logisticsData.trackingmore_key
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 检测邮件配置
-    testSmtp () {
+    testSmtp() {
       if (this.logisticsData.from_address === '') {
         return this.$message.error(this.$t('请输入发件人邮件'))
       } else if (this.logisticsData.from_name === '') {
@@ -2393,60 +2558,64 @@ export default {
       } else if (this.logisticsData.password === '') {
         return this.$message.error(this.$t('请输入发件人密码'))
       }
-      this.$request.verifySmtp({
-        host: this.logisticsData.host,
-        port: this.logisticsData.port,
-        encryption: this.logisticsData.encryption,
-        username: this.logisticsData.username,
-        validate_phone: this.logisticsData.validate_phone,
-        validate_email: this.logisticsData.validate_email,
-        password: this.logisticsData.password,
-        from_address: this.logisticsData.from_address,
-        from_name: this.logisticsData.from_name
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .verifySmtp({
+          host: this.logisticsData.host,
+          port: this.logisticsData.port,
+          encryption: this.logisticsData.encryption,
+          username: this.logisticsData.username,
+          validate_phone: this.logisticsData.validate_phone,
+          validate_email: this.logisticsData.validate_email,
+          password: this.logisticsData.password,
+          from_address: this.logisticsData.from_address,
+          from_name: this.logisticsData.from_name
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 检测Juhe
-    testJuhe () {
+    testJuhe() {
       if (this.logisticsData.juhe_key === '') {
         return this.$message.error('请输入Appkey')
       } else if (this.logisticsData.juhe_tpl_id === '') {
         return this.$message.error('请输入发送验证码模板ID')
       }
-      this.$request.verifyJuhe({
-        juhe_key: this.logisticsData.juhe_key,
-        juhe_tpl_id: this.logisticsData.juhe_tpl_id
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .verifyJuhe({
+          juhe_key: this.logisticsData.juhe_key,
+          juhe_tpl_id: this.logisticsData.juhe_tpl_id
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 获取全部语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
@@ -2455,7 +2624,7 @@ export default {
     }
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   }
@@ -2477,11 +2646,11 @@ export default {
   }
   .save-btn {
     color: #fff;
-    background-color: #3540A5;
+    background-color: #3540a5;
   }
   .settings-container {
-     background-color: #fff !important;
-     padding: 20px;
+    background-color: #fff !important;
+    padding: 20px;
     .el-tag {
       margin-right: 8px;
     }
@@ -2500,7 +2669,7 @@ export default {
     }
     .el-textarea__inner {
       width: 30%;
-      background-color: #F5F5F5;
+      background-color: #f5f5f5;
     }
     .goods-img {
       width: 100%;
@@ -2508,10 +2677,10 @@ export default {
       border-radius: 6px;
     }
     .updateChe {
-    .el-form-item__content {
-      margin-left: 0 !important;
+      .el-form-item__content {
+        margin-left: 0 !important;
+      }
     }
-  }
     .avatar-uploader {
       display: inline-block;
       vertical-align: top;
@@ -2530,9 +2699,10 @@ export default {
       box-sizing: border-box;
       cursor: pointer;
       &:hover {
-        .model-box, .operat-box {
+        .model-box,
+        .operat-box {
           opacity: 1;
-          transition: all .5s ease-in;
+          transition: all 0.5s ease-in;
         }
       }
     }
@@ -2542,7 +2712,7 @@ export default {
       position: absolute;
       left: 0;
       opacity: 0;
-      background-color: rgba(0, 0, 0, .3);
+      background-color: rgba(0, 0, 0, 0.3);
     }
     .operat-box {
       position: absolute;
@@ -2563,7 +2733,7 @@ export default {
   .icon-question {
     margin-left: 5px;
     font-size: 18px;
-    color: #67C23A;
+    color: #67c23a;
     position: relative;
     top: 3px;
   }
@@ -2592,9 +2762,9 @@ export default {
   .others-btn {
     margin-left: 15px;
   }
-  .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }
