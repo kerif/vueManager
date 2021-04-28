@@ -37,13 +37,13 @@
             <el-input v-model="ruleForm.kuaidi100_customer_id" class="input-sty"></el-input><br/>
             <span>{{$t('授权KEY')}}：</span><br/>
             <el-input v-model="ruleForm.kuaidi100_key" class="input-sty"></el-input>
-            <el-button class="buy-sty">{{$t('测试')}}</el-button>
+            <el-button class="buy-sty" @click="testExpress">{{$t('测试')}}</el-button>
           </div>
           <div class="message-main">
             <p>{{$t('Tracking more配置')}}</p>
             <span>{{$t('Appkey')}}：</span><br/>
             <el-input v-model="ruleForm.tracking_app_key" class="input-sty"></el-input>
-            <el-button class="buy-sty">{{$t('测试')}}</el-button>
+            <el-button class="buy-sty" @click="testTracking">{{$t('测试')}}</el-button>
           </div>
         </div>
       </el-col>
@@ -93,6 +93,55 @@ export default {
         this.ruleForm.kuaidi100_count = res.data.kuaidi100_count
         this.ruleForm.kuaidi100_key = res.data.kuaidi100_key
         this.ruleForm.kuaidi100_customer_id = res.data.kuaidi100_customer_id
+      })
+    },
+    // 检测快递100
+    testExpress () {
+      if (this.ruleForm.kuaidi100_customer_id === '') {
+        return this.$message.error('请输入Customer ID')
+      } else if (this.ruleForm.kuaidi100_key === '') {
+        return this.$message.error(this.$t('请输入授权KEY'))
+      }
+      this.$request.verifyKd100({
+        kd100_app_id: this.ruleForm.kuaidi100_customer_id,
+        kd100_app_key: this.ruleForm.kuaidi100_key
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 检测Tracking more
+    testTracking () {
+      if (this.ruleForm.tracking_app_key === '') {
+        return this.$message.error('请输入Tracking more的AppKey')
+      }
+      this.$request.verifyTrackingMore({
+        trackingmore_key: this.ruleForm.tracking_app_key
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     saveTemplate () {

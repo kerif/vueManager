@@ -1221,6 +1221,10 @@ exports.getHistory = (id, params) => {
 exports.smsRecord = (params) => {
   return $form.get(`api-services/sms/records`, { params })
 }
+// 更多配置 短信服务 测试第三方短信服务
+exports.verifyConfigs = (params) => {
+  return $form.post('configs/verify-juhe', params)
+}
 // 更多配置 API与服务
 exports.moreService = () => {
   return $form.get('api-services')

@@ -173,7 +173,7 @@
           </el-row>
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('拼团配置')" name="5">
+      <el-tab-pane :label="$t('拼团配置')" name="5" v-if="unShow">
         <div class="main-sty main-right">
           <group-configure></group-configure>
         </div>
@@ -227,8 +227,12 @@ export default {
       secondTab2: '1',
       secondTab3: '1',
       secondTab4: '1',
-      activeName: '1'
+      activeName: '1',
+      unShow: '' // 保存是否显示拼团配置
     }
+  },
+  mounted () {
+    this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
   },
   methods: {
     handleSelect1 (key) {

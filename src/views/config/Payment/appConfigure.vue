@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-configure-container">
     <el-row>
       <el-col :span="11">
         <div class="applet-left">
@@ -14,7 +14,6 @@
           >
             <el-form-item :label="$t('AppId(小程序ID)')" prop="app_id">
               <el-input
-                class="input-sty"
                 :placeholder="$t('请输入AppId')"
                 v-model="appletForm.app_id"
               ></el-input>
@@ -261,12 +260,14 @@ export default {
 }
 
 </script>
-<style scoped>
-.applet-left {
-  background-color: #fff !important;
-}
-.save-btn {
-  color: #fff;
-  background-color: #3540A5;
+<style lang="scss" scoped>
+.app-configure-container {
+  .applet-left {
+    background-color: #fff !important;
+  }
+  .save-btn {
+    color: #fff;
+    background-color: #3540A5;
+  }
 }
 </style>

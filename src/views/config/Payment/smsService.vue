@@ -38,12 +38,12 @@
           <div class="message-main">
             <span>{{$t('中国大陆短信服务——Appkey')}}：</span><br/>
             <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
-            <el-button class="buy-sty">{{$t('测试')}}</el-button>
+            <el-button class="buy-sty" @click="test('china')">{{$t('测试')}}</el-button>
           </div>
           <div class="message-main">
             <span>{{$t('国际短信服务——Appkey')}}：</span><br/>
             <el-input class="input-sty" v-model="ruleForm.intl_app_key"></el-input>
-            <el-button class="buy-sty">{{$t('测试')}}</el-button>
+            <el-button class="buy-sty" @click="test('inl')">{{$t('测试')}}</el-button>
           </div>
         </div>
       </el-col>
@@ -208,6 +208,26 @@ export default {
       this.$request.getSms().then(res => {
         this.ruleForm = res.data
         this.changeType()
+      })
+    },
+    // 测试
+    test (status) {
+      this.$request.verifyConfigs({
+        juhe_key: status === 'china' ? this.ruleForm.app_key : this.ruleForm.intl_app_key,
+        is_intl: status === 'china' ? 0 : 1
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     // 切换短信服务
