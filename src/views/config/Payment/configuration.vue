@@ -4,7 +4,7 @@
       <el-tab-pane :label="$t('基础配置')" name="1">
         <div class="main-sty basic-configuration">
           <el-row :gutter="20">
-            <el-col :span="4">
+            <el-col :span="3">
               <el-menu
               :default-active="secondTab1"
               class="el-menu-vertical-demo"
@@ -61,7 +61,7 @@
       <el-tab-pane :label="$t('系统服务配置')" name="2">
         <div class="main-sty">
           <el-row :gutter="20">
-            <el-col :span="4">
+            <el-col :span="3">
               <el-menu
               :default-active="secondTab2"
               class="el-menu-vertical-demo"
@@ -104,7 +104,7 @@
       <el-tab-pane :label="$t('增值服务')" name="3">
         <div class="main-sty">
           <el-row :gutter="20">
-            <el-col :span="4">
+            <el-col :span="3">
               <el-menu
               :default-active="secondTab3"
               class="el-menu-vertical-demo"
@@ -133,7 +133,7 @@
       <el-tab-pane :label="$t('自定义配置')" name="4">
         <div class="main-sty">
           <el-row :gutter="20">
-            <el-col :span="4">
+            <el-col :span="3">
               <el-menu
               :default-active="secondTab4"
               class="el-menu-vertical-demo"

@@ -1,6 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" :title="state === 'sms' ? $t('购买短信服务') : $t('购买物流查询服务')" class="buying-container" @close="clear">
-    <p>{{$t('选择中国大陆短信套餐')}}：</p>
+    <p v-if="state === 'sms'">{{$t('选择中国大陆短信套餐')}}：</p>
+    <p v-else>{{$t('快递100查询套餐')}}：</p>
     <div>
       <el-row>
         <el-col :span="5" class="set-meal" v-for="item in chinaData" :key="item.id" @click.native="chooseService(item)"
@@ -19,7 +20,8 @@
       <span>{{$t('套餐金额')}}：{{localization.currency_unit}}{{packageAmount}}</span>
     </div>
     <div class="line"></div>
-    <p>{{$t('选择国际短信套餐')}}：</p>
+    <p v-if="state === 'sms'">{{$t('选择国际短信套餐')}}：</p>
+    <p v-else>{{$t('51Track国际物流查询套餐')}}：</p>
     <div>
       <el-row>
         <el-col :span="5" class="set-meal" v-for="item in internationalData" :key="item.id" :offset="1"
@@ -43,8 +45,10 @@
         <span>{{$t('应付金额')}}：</span>
         <span class="fee-sty">{{localization.currency_unit}}{{packageAmount + secondAmount}}</span>
       </div>
-      <el-button class="btn-light-green" @click="getPay('wechat')">{{$t('微信支付')}}</el-button>
-      <el-button class="btn-light-green" @click="getPay('alipay')">{{$t('支付宝支付')}}</el-button>
+      <div v-if="packageAmount > 0 || secondAmount > 0">
+        <el-button class="btn-light-green" @click="getPay('wechat')">{{$t('微信支付')}}</el-button>
+        <el-button class="btn-light-green" @click="getPay('alipay')">{{$t('支付宝支付')}}</el-button>
+      </div>
     </div>
     <div>
       <img :src="qrCode" class="qr-code">
@@ -118,14 +122,6 @@ export default {
     },
     // 获取支付二维码
     getPay (status) {
-      console.log(status, 'status')
-      console.log(this.station.id, 'station')
-      console.log(this.secondData.id, 'secondData')
-      console.log(this.onceNum, 'onceNum')
-      console.log(this.secondNum, 'secondNum')
-      if (!this.station.id && !this.secondData.id) {
-        return this.$message.error(this.$t('请选择套餐'))
-      }
       let domestic = [{ id: this.station.id, qty: this.station.id ? this.onceNum : '' },
         {
           id: this.secondData.id, qty: this.secondData.id ? this.secondNum : ''
