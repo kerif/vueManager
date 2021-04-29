@@ -26,7 +26,7 @@
       <el-table-column
         v-if="state === 'sms'"
         prop="sms_intl"
-        :label="$t('中国大陆短信')">
+        :label="$t('国际短信')">
       </el-table-column>
       <!-- 国际短信 -->
       <el-table-column
