@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" :title="state === 'sms' ? $t('购买短信服务') : $t('购买物流查询服务')" class="buying-container" @close="clear">
     <p v-if="state === 'sms'">{{$t('选择中国大陆短信套餐')}}：</p>
-    <p v-else>{{$t('快递100查询套餐')}}：</p>
+    <p v-else>{{$t('51Track国际物流查询套餐')}}：</p>
     <div>
       <el-row>
         <el-col :span="5" class="set-meal" v-for="item in chinaData" :key="item.id" @click.native="chooseService(item)"
@@ -21,7 +21,7 @@
     </div>
     <div class="line"></div>
     <p v-if="state === 'sms'">{{$t('选择国际短信套餐')}}：</p>
-    <p v-else>{{$t('51Track国际物流查询套餐')}}：</p>
+    <p v-else>{{$t('快递100查询套餐')}}：</p>
     <div>
       <el-row>
         <el-col :span="5" class="set-meal" v-for="item in internationalData" :key="item.id" :offset="1"
