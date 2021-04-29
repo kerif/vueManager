@@ -151,8 +151,8 @@ exports.getGroup = (id) => {
   return $form.get(`admin-groups/${id}`)
 }
 // 获取员工组自提点权限数据
-exports.getPickPoint = (id) => {
-  return $form.get(`admin-groups/${id}/members`)
+exports.getPickPoint = (id, params) => {
+  return $form.get(`admin-groups/${id}/members`, { params })
 }
 // 员工组自提点权限 获取自提点列表
 exports.stationList = () => {
