@@ -19,9 +19,9 @@
       <add-btn router="commissionSet">{{$t('计佣方式配置')}}</add-btn>
       <add-btn router="pointAdd">{{$t('添加')}}</add-btn>
     </div>
-    <div v-if="status === 1">
+    <div v-if="status === 1" style="height: calc(100vh - 270px)">
     <el-table :data="logisticsList" stripe border class="data-list"
-    v-loading="tableLoading" height="550"
+    v-loading="tableLoading" height="calc(100vh - 330px)" ref="table"
     @selection-change="selectionChange">
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
@@ -381,6 +381,7 @@ export default {
 </script>
 <style lang="scss" scope>
 .since-container {
+  background-color: #f5f5f5 !important;
   .select-box {
     overflow: hidden;
   }

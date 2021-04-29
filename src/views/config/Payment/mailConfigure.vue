@@ -110,17 +110,19 @@
       </el-select>
       <add-btn router="emailAdd">{{ $t("添加邮件模版") }}</add-btn>
     </div>
+    <div class="email-sty">
     <el-table
       :data="emailData"
       v-loading="tableLoading"
       class="data-list"
       border
+      ref="table"
       stripe
-      height="550"
+      height="calc(100vh - 310px)"
     >
       <el-table-column type="index"></el-table-column>
       <!-- 模版类型 -->
-      <el-table-column :label="$t('模版类型')" prop="type_name">
+      <el-table-column :label="$t('模版类型1')" prop="type_name">
       </el-table-column>
       <!-- 邮件标题 -->
       <el-table-column :label="$t('邮件标题')" prop="title"></el-table-column>
@@ -172,11 +174,12 @@
         </template>
       </el-table-column>
     </el-table>
+    </div>
     <div class="logistics-container">
       <!-- <div class="form-title">{{ $t("快递100配置") }}</div> -->
         <!-- <el-form-item label="Customer ID" prop="kd100_app_id">
           <el-input
-            v-model="logisticsData.kd100_app_id"
+            v-model="logistics Data.kd100_app_id"
             :placeholder="$t('请输入Customer ID')"
             class="logistic-sty"
           ></el-input>
@@ -297,6 +300,11 @@ export default {
     this.getEmail()
     this.getType()
   },
+  activated () {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
+  },
   computed: {
     formatLangData () {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
@@ -332,6 +340,9 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           this.emailData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$message({
             message: res.msg,
@@ -582,6 +593,10 @@ export default {
   }
   .logistic-sty {
     width: 70% !important;
+  }
+  .email-sty {
+    height: calc(100vh - 310px);
+    background-color: #f5f5f5 !important
   }
 }
 </style>

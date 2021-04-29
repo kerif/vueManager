@@ -43,11 +43,14 @@
           <add-btn @click.native="updateInvoice">{{$t('创建发货单')}}</add-btn>
         </div>
     </search-group>
+  <div style="height: calc(100vh - 330px)">
   <el-table :data="tableShip" stripe
     border class="data-list"
     @expand-change="onExpand"
+    ref="table"
     @selection-change="selectionChange"
-    v-loading="tableLoading" height="550">
+    height="calc(100vh - 330px)"
+    v-loading="tableLoading">
     <!-- <el-table-column type="expand">
       <template slot-scope="props">
         <el-table :data="props.row.orders">
@@ -168,6 +171,7 @@
         </div>
       </template> -->
     </el-table>
+  </div>
     <div class="bottom-sty">
       <el-button size="small" @click="updateTracking">{{$t('更新物流状态')}}</el-button>
         <el-button size="small" @click="deleteData">{{$t('导出清单')}}</el-button>
@@ -327,6 +331,9 @@ export default {
       this.page_params.status = Number(this.$route.query.status)
       this.getList()
     }
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
   },
   mounted () {
     this.getList()
@@ -355,6 +362,9 @@ export default {
               ...item,
               orders: []
             }
+          })
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
           })
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
@@ -753,6 +763,7 @@ export default {
 </script>
 <style lang="scss">
 .ship-container {
+  background-color: #f5f5f5;
   .select-box {
     display: inline-block;
     overflow: hidden;

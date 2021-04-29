@@ -67,10 +67,11 @@
         </el-col>
       </el-row>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 360px)">
     <el-table stripe border class="data-list" :data="lineList"
       v-loading="tableLoading"
-      height="calc(100vh - 270px)"
+      ref="table"
+      height="calc(100vh - 360px)"
       :cell-style="{ padding: '0' }">
       <el-table-column type="expand">
         <template slot-scope="scope">
@@ -366,6 +367,9 @@ export default {
   },
   activated () {
     this.getList()
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
   },
   created () {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
@@ -418,11 +422,6 @@ export default {
     this.onSearch()
   },
   methods: {
-    clickDropDown (k, v) {
-      k(v)
-      console.log(k, 'k')
-      console.log(v, 'v')
-    },
     getList (query = '') {
       this.tableLoading = true
       let params = {
@@ -442,6 +441,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -804,6 +806,7 @@ export default {
 </script>
 <style lang="scss">
 .line-list-container {
+  background-color: #f5f5f5 !important;
   .add-btn-box {
     overflow: hidden;
   }
