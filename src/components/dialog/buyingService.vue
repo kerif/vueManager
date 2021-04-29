@@ -40,12 +40,12 @@
       <span>{{$t('套餐金额')}}：{{localization.currency_unit}}{{secondAmount}}</span>
     </div>
     <div class="line"></div>
-    <div class="bottom-main">
+    <div class="bottom-main" v-if="packageAmount > 0 || secondAmount > 0">
       <div class="payment-sty">
         <span>{{$t('应付金额')}}：</span>
         <span class="fee-sty">{{localization.currency_unit}}{{packageAmount + secondAmount}}</span>
       </div>
-      <div v-if="packageAmount > 0 || secondAmount > 0">
+      <div>
         <el-button class="btn-light-green" @click="getPay('wechat')">{{$t('微信支付')}}</el-button>
         <el-button class="btn-light-green" @click="getPay('alipay')">{{$t('支付宝支付')}}</el-button>
       </div>

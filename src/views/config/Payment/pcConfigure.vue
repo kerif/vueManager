@@ -1,5 +1,5 @@
 <template>
-  <div class="setOthers">
+  <div class="setOthers-container">
     <el-form
       :model="setForm"
       ref="setForm"
@@ -154,7 +154,7 @@
             <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
             <i class="el-icon-delete" @click="onDeleteLogo(index)"></i>
           </span>
-        </span>
+        </span><br/>
         <el-upload
           v-show="LogoImgList.length < 1"
           class="avatar-uploader"
@@ -165,6 +165,7 @@
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
+      <div style="color: gray; margin-left: 140px;">LOGO{{$t('建议尺寸')}}：90px*20px</div>
       </el-form-item>
       <!-- 登录页背景图 -->
       <el-form-item :label="$t('登录页背景图')" class="updateChe">
@@ -409,9 +410,16 @@ export default {
 }
 
 </script>
-<style scoped>
-.save-btn {
-  color: #fff;
-  background-color: #3540A5;
+<style lang="scss">
+.setOthers-container {
+  .save-btn {
+    color: #fff;
+    background-color: #3540A5;
+  }
+  .updateChe {
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
+  }
 }
 </style>
