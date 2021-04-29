@@ -67,8 +67,11 @@
         </el-col>
       </el-row>
     </div>
+    <div style="height: calc(100vh - 270px)">
     <el-table stripe border class="data-list" :data="lineList"
-      v-loading="tableLoading" height="550">
+      v-loading="tableLoading"
+      height="calc(100vh - 270px)"
+      :cell-style="{ padding: '0' }">
       <el-table-column type="expand">
         <template slot-scope="scope">
           {{scope.row.remark || "无" }}
@@ -161,6 +164,7 @@
         </div>
       </template> -->
     </el-table>
+    </div>
     <div class="bottom-sty">
       <el-button class="btn-main others-btn" @click="unloadShip">{{$t('导出清单')}}</el-button>
     </div>
