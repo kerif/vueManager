@@ -18,18 +18,20 @@
               <el-button class="buy-sty" @click="buying">{{$t('购买')}}</el-button>
             </div>
           </div>
-          <div class="details-sty" @click="templateDetails">
+          <!-- <div class="details-sty" @mouseenter="templateDetails">
             <i class="el-icon-s-order"></i>
             {{$t('详情')}}
-          </div>
+          </div> -->
           <!-- <div class="details-sty" @click="alertSms">
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
           </div> -->
-          <div class="details-sty" @click="purchase">
+          <!-- <div class="details-sty" @mouseenter="purchase">
             <i class="el-icon-s-order"></i>
             {{$t('购买记录')}}
-          </div>
+          </div> -->
+          <el-button @click="templateDetails" class="btn-main">{{$t('详情')}}</el-button>
+          <el-button @click="purchase" class="btn-main">{{$t('购买记录')}}</el-button>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">

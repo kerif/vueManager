@@ -22,10 +22,11 @@
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
           </div> -->
-           <div class="details-sty" @click="purchase">
+           <!-- <div class="details-sty" @click="purchase">
             <i class="el-icon-s-order"></i>
             {{$t('购买记录')}}
-          </div>
+          </div> -->
+          <el-button @click="purchase" class="btn-main">{{$t('购买记录')}}</el-button>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
