@@ -93,6 +93,7 @@ export default {
         }
       }
     }
+    this.editor.customConfig.zIndex = 500
     this.editor.customConfig.showLinkImg = true
     this.editor.create()
     console.log(this.editor, 'this.editor')
