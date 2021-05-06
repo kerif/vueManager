@@ -3,102 +3,104 @@
     <div class="select-box">
       <add-btn @click.native="addExpress">{{ $t("添加") }}</add-btn>
     </div>
-    <el-table
-      :data="expressData"
-      v-loading="tableLoading"
-      class="data-list"
-      border
-      stripe
-      height="550"
-    >
-      <el-table-column type="index"></el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === false">{{ $t("禁用") }}</span>
-          <span v-if="scope.row.status === true">{{ $t("启用") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="LOGO">
-        <template slot-scope="scope">
-          <span
-            style="cursor: pointer"
-            v-if="scope.row.logo"
-            @click.stop="(imgSrc = scope.row.logo), (imgVisible = true)"
-          >
-            <img :src="scope.row.logo" style="width: 70px; height: 80px" />
-          </span>
-          <!-- <span v-else style="cursor:pointer;" @click.stop="imgSrc=scope.row.logo, imgVisible=true">
-                  <img :src="$baseUrl.IMAGE_URL + scope.row.logo" style="width:70px; height: 80px;">
-                </span> -->
-        </template>
-      </el-table-column>
-      <!-- 快递公司名称 -->
-      <el-table-column
-        prop="name"
-        :label="$t('快递公司名称')"
-      ></el-table-column>
-      <!-- 快递公司代码 -->
-      <el-table-column
-        prop="code"
-        :label="$t('快递公司代码')"
-      ></el-table-column>
-      <!-- 联系电话 -->
-      <el-table-column
-        prop="contact_phone"
-        :label="$t('联系电话')"
-      ></el-table-column>
-      <!-- 官网 -->
-      <el-table-column prop="website" :label="$t('官网')"></el-table-column>
-      <el-table-column :label="$t('是否启用')" width="120px">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.status"
-            @change="changeExpress($event, scope.row.id)"
-            :active-text="$t('开')"
-            :inactive-text="$t('关')"
-            active-color="#13ce66"
-            inactive-color="gray"
-          >
-          </el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div style="height: calc(100vh - 360px)">
+      <el-table
+        :data="expressData"
+        v-loading="tableLoading"
+        class="data-list"
+        border
+        stripe
+        height="calc(100vh - 380px)"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onExpress(scope.row, item)"
-          ></span>
-          <span
-            v-else
-            class="el-icon-plus icon-sty"
-            @click="onExpress(scope.row, item)"
-          ></span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button
-            class="btn-dark-green"
-            @click="editExpress(scope.row.id)"
-            v-if="scope.row.is_default === 0"
-            >{{ $t("编辑") }}</el-button
-          >
-          <el-button
-            class="btn-light-red delete-btn"
-            @click="deleteExpress(scope.row.id)"
-            v-if="scope.row.is_default === 0"
-            >{{ $t("删除") }}</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column type="index"></el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === false">{{ $t("禁用") }}</span>
+            <span v-if="scope.row.status === true">{{ $t("启用") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="LOGO">
+          <template slot-scope="scope">
+            <span
+              style="cursor: pointer"
+              v-if="scope.row.logo"
+              @click.stop="(imgSrc = scope.row.logo), (imgVisible = true)"
+            >
+              <img :src="scope.row.logo" style="width: 70px; height: 80px" />
+            </span>
+            <!-- <span v-else style="cursor:pointer;" @click.stop="imgSrc=scope.row.logo, imgVisible=true">
+                    <img :src="$baseUrl.IMAGE_URL + scope.row.logo" style="width:70px; height: 80px;">
+                  </span> -->
+          </template>
+        </el-table-column>
+        <!-- 快递公司名称 -->
+        <el-table-column
+          prop="name"
+          :label="$t('快递公司名称')"
+        ></el-table-column>
+        <!-- 快递公司代码 -->
+        <el-table-column
+          prop="code"
+          :label="$t('快递公司代码')"
+        ></el-table-column>
+        <!-- 联系电话 -->
+        <el-table-column
+          prop="contact_phone"
+          :label="$t('联系电话')"
+        ></el-table-column>
+        <!-- 官网 -->
+        <el-table-column prop="website" :label="$t('官网')"></el-table-column>
+        <el-table-column :label="$t('是否启用')" width="120px">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.status"
+              @change="changeExpress($event, scope.row.id)"
+              :active-text="$t('开')"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onExpress(scope.row, item)"
+            ></span>
+            <span
+              v-else
+              class="el-icon-plus icon-sty"
+              @click="onExpress(scope.row, item)"
+            ></span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button
+              class="btn-dark-green"
+              @click="editExpress(scope.row.id)"
+              v-if="scope.row.is_default === 0"
+              >{{ $t("编辑") }}</el-button
+            >
+            <el-button
+              class="btn-light-red delete-btn"
+              @click="deleteExpress(scope.row.id)"
+              v-if="scope.row.is_default === 0"
+              >{{ $t("删除") }}</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <nle-pagination
       :pageParams="page_params"
       :notNeedInitQuery="false"

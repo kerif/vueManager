@@ -202,13 +202,7 @@ export default {
     getService () {
       this.$request.getSms().then(res => {
         this.ruleForm = res.data
-        this.changeType()
-      })
-    },
-    // 获取第三方服务短信
-    getThird () {
-      this.$request.getSms().then(res => {
-        this.ruleForm = res.data
+        console.log(this.ruleForm, 'this.ruleForm')
         this.changeType()
       })
     },
@@ -321,6 +315,7 @@ export default {
             message: res.msg
           })
           this.changeType()
+          this.getService()
         } else {
           this.$message({
             message: res.msg,
