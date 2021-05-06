@@ -97,7 +97,8 @@ export default {
       basic: {
         size: '',
         location: '',
-        package_warning: 0
+        package_warning: 0,
+        prop_type: 0
       }
     }
   },
@@ -153,6 +154,8 @@ export default {
           this.basic.size = res.data.size
           this.basic.location = res.data.location
           this.basic.package_warning = res.data.package_warning
+          this.basic.prop_type = res.data.prop_type
+          console.log(typeof this.basic.prop_type, 'this.basic.prop_type')
         }
       })
     },
