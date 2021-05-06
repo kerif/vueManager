@@ -136,134 +136,138 @@
         </el-col>
       </el-row>
     </div>
-    <el-table
-      stripe
-      border
-      class="data-list"
-      :data="lineList"
-      v-loading="tableLoading"
-      height="550"
-    >
-      <el-table-column type="expand">
-        <template slot-scope="scope">
-          {{ scope.row.remark || '无' }}
-        </template>
-      </el-table-column>
-      <!-- 线路名称 -->
-      <el-table-column :label="$t('线路名称')" prop="name"></el-table-column>
-      <!-- 支持国家/地区 -->
-      <el-table-column :label="$t('支持国家/地区')" :show-overflow-tooltip="true" width="150">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.countries" :key="item.id">
-            {{ item.name }}
-          </span>
-        </template>
-      </el-table-column>
-      <!-- 支持仓库 -->
-      <el-table-column :label="$t('支持仓库')">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.warehouses" :key="item.id">
-            {{ item.warehouse_name }}
-          </span>
-        </template>
-      </el-table-column>
-      <!-- 参考时效 -->
-      <el-table-column :label="$t('参考时效')" prop="reference_time"></el-table-column>
-      <!-- 首重 -->
-      <el-table-column
-        :label="$t('首重') + this.localization.weight_unit"
-        prop="first_weight"
-      ></el-table-column>
-      <!-- 首费 -->
-      <el-table-column
-        :label="$t('首费') + this.localization.currency_unit"
-        prop="first_money"
-      ></el-table-column>
-      <!-- 续重 -->
-      <el-table-column
-        :label="$t('续重') + this.localization.weight_unit"
-        prop="next_weight"
-      ></el-table-column>
-      <!-- 续费 -->
-      <el-table-column
-        :label="$t('续费') + this.localization.currency_unit"
-        prop="next_money"
-      ></el-table-column>
-      <!-- 最大重量 -->
-      <el-table-column
-        :label="$t('最大重量') + this.localization.weight_unit"
-        prop="max_weight"
-      ></el-table-column>
-      <!-- 最小重量 -->
-      <el-table-column
-        :label="$t('最小重量') + this.localization.weight_unit"
-        prop="min_weight"
-      ></el-table-column>
-      <!-- 是否启用 -->
-      <el-table-column :label="$t('是否启用')" width="120">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.enabled"
-            @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
-            :active-text="$t('开')"
-            :inactive-text="$t('关')"
-            active-color="#13ce66"
-            inactive-color="gray"
-          >
-          </el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div style="height: calc(100vh - 360px)">
+      <el-table
+        stripe
+        border
+        class="data-list"
+        :data="lineList"
+        v-loading="tableLoading"
+        ref="table"
+        height="calc(100vh - 360px)"
+        :cell-style="{ padding: '0' }"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onLang(scope.row, item)"
-          ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="116px" fixed="right">
-        <template slot-scope="scope">
-          <el-dropdown>
-            <el-button type="primary" plain>
-              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="item-sty" @click.native="editLine(scope.row.id)">
-                <span>{{ $t('修改') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="goOthers(scope.row.id)">
-                <span>{{ $t('附加费用') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="Advanced(scope.row.id)">
-                <span>{{ $t('高级配置') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="copyLine(scope.row.id)">
-                <span>{{ $t('复制') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="groupSet(scope.row.id)">
-                <span v-show="unShow">{{ $t('拼团配置') }}</span>
-              </el-dropdown-item>
-              <el-dropdown-item class="item-sty" @click.native="deleteLine(scope.row.id)">
-                <span>{{ $t('删除') }}</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
-          <!-- 高级配置 -->
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
+        <el-table-column type="expand">
+          <template slot-scope="scope">
+            {{ scope.row.remark || '无' }}
+          </template>
+        </el-table-column>
+        <!-- 线路名称 -->
+        <el-table-column :label="$t('线路名称')" prop="name"></el-table-column>
+        <!-- 支持国家/地区 -->
+        <el-table-column :label="$t('支持国家/地区')" :show-overflow-tooltip="true" width="150">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.countries" :key="item.id">
+              {{ item.name }}
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 支持仓库 -->
+        <el-table-column :label="$t('支持仓库')">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.warehouses" :key="item.id">
+              {{ item.warehouse_name }}
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 参考时效 -->
+        <el-table-column :label="$t('参考时效')" prop="reference_time"></el-table-column>
+        <!-- 首重 -->
+        <el-table-column
+          :label="$t('首重') + this.localization.weight_unit"
+          prop="first_weight"
+        ></el-table-column>
+        <!-- 首费 -->
+        <el-table-column
+          :label="$t('首费') + this.localization.currency_unit"
+          prop="first_money"
+        ></el-table-column>
+        <!-- 续重 -->
+        <el-table-column
+          :label="$t('续重') + this.localization.weight_unit"
+          prop="next_weight"
+        ></el-table-column>
+        <!-- 续费 -->
+        <el-table-column
+          :label="$t('续费') + this.localization.currency_unit"
+          prop="next_money"
+        ></el-table-column>
+        <!-- 最大重量 -->
+        <el-table-column
+          :label="$t('最大重量') + this.localization.weight_unit"
+          prop="max_weight"
+        ></el-table-column>
+        <!-- 最小重量 -->
+        <el-table-column
+          :label="$t('最小重量') + this.localization.weight_unit"
+          prop="min_weight"
+        ></el-table-column>
+        <!-- 是否启用 -->
+        <el-table-column :label="$t('是否启用')" width="120">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.enabled"
+              @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+              :active-text="$t('开')"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onLang(scope.row, item)"
+            ></span>
+            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="116px" fixed="right">
+          <template slot-scope="scope">
+            <el-dropdown>
+              <el-button type="primary" plain>
+                {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item class="item-sty" @click.native="editLine(scope.row.id)">
+                  <span>{{ $t('修改') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item class="item-sty" @click.native="goOthers(scope.row.id)">
+                  <span>{{ $t('附加费用') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item class="item-sty" @click.native="Advanced(scope.row.id)">
+                  <span>{{ $t('高级配置') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item class="item-sty" @click.native="copyLine(scope.row.id)">
+                  <span>{{ $t('复制') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item class="item-sty" @click.native="groupSet(scope.row.id)">
+                  <span v-show="unShow">{{ $t('拼团配置') }}</span>
+                </el-dropdown-item>
+                <el-dropdown-item class="item-sty" @click.native="deleteLine(scope.row.id)">
+                  <span>{{ $t('删除') }}</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <!-- <el-button class="btn-purple others-btn" @click="addFee(scope.row.id)">额外收录信息</el-button> -->
+            <!-- 高级配置 -->
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
         </div>
       </template> -->
-    </el-table>
+      </el-table>
+    </div>
     <div class="bottom-sty">
       <el-button class="btn-main others-btn" @click="unloadShip">{{ $t('导出清单') }}</el-button>
     </div>
@@ -483,6 +487,9 @@ export default {
   },
   activated() {
     this.getList()
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
   },
   created() {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
@@ -535,11 +542,6 @@ export default {
     this.onSearch()
   },
   methods: {
-    clickDropDown(k, v) {
-      k(v)
-      console.log(k, 'k')
-      console.log(v, 'v')
-    },
     getList(query = '') {
       this.tableLoading = true
       let params = {
@@ -559,6 +561,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -928,6 +933,7 @@ export default {
 </script>
 <style lang="scss">
 .line-list-container {
+  background-color: #f5f5f5 !important;
   .add-btn-box {
     overflow: hidden;
   }

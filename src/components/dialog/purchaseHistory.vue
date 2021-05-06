@@ -14,7 +14,7 @@
       <el-table-column v-if="state === 'sms'" prop="sms" :label="$t('中国大陆短信')">
       </el-table-column>
       <el-table-column v-else prop="tracking_100" :label="$t('快递100')"> </el-table-column>
-      <el-table-column v-if="state === 'sms'" prop="sms_intl" :label="$t('中国大陆短信')">
+      <el-table-column v-if="state === 'sms'" prop="sms_intl" :label="$t('国际短信')">
       </el-table-column>
       <!-- 国际短信 -->
       <el-table-column v-else prop="tracking_51" :label="$t('51Track')"> </el-table-column>

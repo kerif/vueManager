@@ -23,91 +23,96 @@
       <el-tab-pane :label="$t('已失效')" name="4"></el-tab-pane>
       <!-- v-if="oderData.length" -->
     </el-tabs>
-    <el-table
-      class="data-list"
-      border
-      stripe
-      v-loading="tableLoading"
-      height="550"
-      :data="voucherData"
-      @selection-change="onSelectChange"
-    >
-      <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
-      <el-table-column type="index" width="50"></el-table-column>
-      <!-- 优惠券名称 -->
-      <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
-      <!-- 类型 -->
-      <el-table-column :label="$t('类型')" prop="type"></el-table-column>
-      <!-- 金额 -->
-      <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
-      </el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')" prop="status">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 1">{{ $t('未开始') }}</span>
-          <span v-if="scope.row.status === 2">{{ $t('进行中') }}</span>
-          <span v-if="scope.row.status === 3">{{ $t('已失效') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 使用范围 -->
-      <el-table-column :label="$t('使用范围')" width="150" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.usable_lines" :key="item.id"> {{ item.name }}&nbsp; </span>
-        </template>
-      </el-table-column>
-      <!-- 最低消费金额 -->
-      <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
-      <!-- 失效时间 -->
-      <el-table-column :label="$t('失效时间')" prop="expired_at"></el-table-column>
-      <!-- 投放数量 -->
-      <el-table-column :label="$t('投放数量')" prop="total_count"></el-table-column>
-      <!-- 使用数量 -->
-      <el-table-column :label="$t('使用数量')" prop="used_count"></el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div style="height: calc(100vh - 340px)">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        v-loading="tableLoading"
+        height="calc(100vh - 360px)"
+        ref="table"
+        :data="voucherData"
+        @selection-change="onSelectChange"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onLang(scope.row, item)"
-          ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-        </template>
-      </el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="200px" fixed="right">
-        <template slot-scope="scope">
-          <!-- 投放 -->
-          <el-button
-            class="btn-purple detailsBtn"
-            v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2"
-            @click="serving(scope.row.id)"
-            >{{ $t('投放') }}</el-button
-          >
-          <!-- 作废 -->
-          <el-button
-            class="btn-deep-blue detailsBtn"
-            v-if="
-              (activeName === '1' || activeName === '2' || activeName === '3') &&
-              scope.row.status !== 3
-            "
-            @click="obsolete(scope.row.id)"
-            >{{ $t('作废') }}</el-button
-          >
-          <!-- 记录 -->
-          <el-button
-            size="small"
-            class="btn-dark-green detailsBtn"
-            @click="recoding(scope.row.id)"
-            >{{ $t('记录') }}</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+        <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
+        <el-table-column type="index" width="50"></el-table-column>
+        <!-- 优惠券名称 -->
+        <el-table-column :label="$t('优惠券名称')" prop="name"></el-table-column>
+        <!-- 类型 -->
+        <el-table-column :label="$t('类型')" prop="type"></el-table-column>
+        <!-- 金额 -->
+        <el-table-column :label="$t('金额') + this.localization.currency_unit" prop="amount">
+        </el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')" prop="status">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 1">{{ $t('未开始') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('进行中') }}</span>
+            <span v-if="scope.row.status === 3">{{ $t('已失效') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 使用范围 -->
+        <el-table-column :label="$t('使用范围')" width="150" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.usable_lines" :key="item.id">
+              {{ item.name }}&nbsp;
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 最低消费金额 -->
+        <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
+        <!-- 失效时间 -->
+        <el-table-column :label="$t('失效时间')" prop="expired_at"></el-table-column>
+        <!-- 投放数量 -->
+        <el-table-column :label="$t('投放数量')" prop="total_count"></el-table-column>
+        <!-- 使用数量 -->
+        <el-table-column :label="$t('使用数量')" prop="used_count"></el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onLang(scope.row, item)"
+            ></span>
+            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          </template>
+        </el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="200px" fixed="right">
+          <template slot-scope="scope">
+            <!-- 投放 -->
+            <el-button
+              class="btn-purple detailsBtn"
+              v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2"
+              @click="serving(scope.row.id)"
+              >{{ $t('投放') }}</el-button
+            >
+            <!-- 作废 -->
+            <el-button
+              class="btn-deep-blue detailsBtn"
+              v-if="
+                (activeName === '1' || activeName === '2' || activeName === '3') &&
+                scope.row.status !== 3
+              "
+              @click="obsolete(scope.row.id)"
+              >{{ $t('作废') }}</el-button
+            >
+            <!-- 记录 -->
+            <el-button
+              size="small"
+              class="btn-dark-green detailsBtn"
+              @click="recoding(scope.row.id)"
+              >{{ $t('记录') }}</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <!-- <div class="noDate" v-else>暂无数据</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog
@@ -188,6 +193,11 @@ export default {
     // if (this.$route.query.type === '2') {
     // }
   },
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
+  },
   mounted() {
     this.getList()
     this.getLanguageList()
@@ -222,6 +232,9 @@ export default {
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$notify({
               title: this.$t('操作失败'),

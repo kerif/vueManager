@@ -151,8 +151,8 @@ exports.getGroup = id => {
   return $form.get(`admin-groups/${id}`)
 }
 // 获取员工组自提点权限数据
-exports.getPickPoint = id => {
-  return $form.get(`admin-groups/${id}/members`)
+exports.getPickPoint = (id, params) => {
+  return $form.get(`admin-groups/${id}/members`, { params })
 }
 // 员工组自提点权限 获取自提点列表
 exports.stationList = () => {
@@ -1222,6 +1222,10 @@ exports.getHistory = (id, params) => {
 // 更多配置 短信服务 获取详情
 exports.smsRecord = params => {
   return $form.get(`api-services/sms/records`, { params })
+}
+// 更多配置 短信服务 测试第三方短信服务
+exports.verifyConfigs = params => {
+  return $form.post('configs/verify-juhe', params)
 }
 // 更多配置 API与服务
 exports.moreService = () => {

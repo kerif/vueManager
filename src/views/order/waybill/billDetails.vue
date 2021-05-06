@@ -7,26 +7,26 @@
           v-if="this.$route.params.activeName === '1' || this.$route.params.activeName === '2'"
           class="change-sty msg-sty btn-deep-purple"
           @click="changeReceive"
+          >{{ $t('更换收货人信息') }}</el-button
         >
-          {{ $t('更换收货人信息') }}
-        </el-button>
-        <el-button v-if="unEdit === false" class="btn-deep-blue change-sty msg-sty" @click="goEdit">
-          {{ $t('编辑') }}
-        </el-button>
+        <el-button
+          v-if="unEdit === false"
+          class="btn-deep-blue change-sty msg-sty"
+          @click="goEdit"
+          >{{ $t('编辑') }}</el-button
+        >
         <el-button
           v-if="unEdit === true"
           class="btn-dark-green change-sty msg-sty"
           @click="saveMsg"
+          >{{ $t('保存') }}</el-button
         >
-          {{ $t('保存') }}
-        </el-button>
         <el-button
           v-if="unEdit === true"
           class="btn-light-red change-sty msg-sty"
           @click="cancelMsg"
+          >{{ $t('取消') }}</el-button
         >
-          {{ $t('取消') }}
-        </el-button>
         <el-form ref="form" :model="form" label-width="100px" label-position="right">
           <!-- <el-form-item :label="$t('姓名')"></el-form-item> -->
           <el-row class="container-center" :gutter="20">
@@ -78,7 +78,29 @@
           </el-row>
           <el-row class="container-center" :gutter="20">
             <!-- 城市 -->
-            <el-col :span="7">
+            <el-col :span="7" v-if="form.address && form.address.is_cn_address == 1">
+              <span class="leftWidth">{{ $t('省/市/区') }}</span>
+              <el-input
+                class="cn-address-sty"
+                v-if="form.address && unEdit === true"
+                v-model="form.address.province"
+              ></el-input>
+              <el-input
+                class="cn-address-sty"
+                v-if="form.address && unEdit === true"
+                v-model="form.address.city"
+              ></el-input>
+              <el-input
+                class="cn-address-sty"
+                v-if="form.address && unEdit === true"
+                v-model="form.address.district"
+              ></el-input>
+              <span v-if="unEdit === false"
+                >{{ form.address && form.address.province }}{{ form.address && form.address.city
+                }}{{ form.address && form.address.district }}</span
+              >
+            </el-col>
+            <el-col :span="7" v-else>
               <span class="leftWidth">{{ $t('城市') }}</span>
               <el-input
                 class="input-sty"
@@ -193,8 +215,9 @@
               ></el-input>
               <span v-if="unEdit === false">{{ form.id_card }}</span>
             </el-col>
+            <!-- 个人通关码 -->
             <el-col :span="7" :offset="1" v-if="form.personal_code">
-              <span class="leftWidth">{{ $t('身份证号码') }}</span>
+              <span class="leftWidth">{{ $t('个人通关码') }}</span>
               <el-input
                 class="input-sty"
                 v-if="form && unEdit === true"

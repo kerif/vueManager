@@ -45,7 +45,8 @@
       <span>{{ $t('套餐金额') }}：{{ localization.currency_unit }}{{ packageAmount }}</span>
     </div>
     <div class="line"></div>
-    <p>{{ $t('选择国际短信套餐') }}：</p>
+    <p v-if="state === 'sms'">{{ $t('选择国际短信套餐') }}：</p>
+    <p v-else>{{ $t('快递100查询套餐') }}：</p>
     <div>
       <el-row>
         <el-col
@@ -85,17 +86,21 @@
       <span>{{ $t('套餐金额') }}：{{ localization.currency_unit }}{{ secondAmount }}</span>
     </div>
     <div class="line"></div>
-    <div class="bottom-main">
+    <div class="bottom-main" v-if="packageAmount > 0 || secondAmount > 0">
       <div class="payment-sty">
         <span>{{ $t('应付金额') }}：</span>
         <span class="fee-sty"
           >{{ localization.currency_unit }}{{ packageAmount + secondAmount }}</span
         >
       </div>
-      <el-button class="btn-light-green" @click="getPay('wechat')">{{ $t('微信支付') }}</el-button>
-      <el-button class="btn-light-green" @click="getPay('alipay')">{{
-        $t('支付宝支付')
-      }}</el-button>
+      <div>
+        <el-button class="btn-light-green" @click="getPay('wechat')">{{
+          $t('微信支付')
+        }}</el-button>
+        <el-button class="btn-light-green" @click="getPay('alipay')">{{
+          $t('支付宝支付')
+        }}</el-button>
+      </div>
     </div>
     <div>
       <img :src="qrCode" class="qr-code" />
@@ -171,19 +176,11 @@ export default {
     },
     // 获取支付二维码
     getPay(status) {
-      console.log(status, 'status')
-      console.log(this.station.id, 'station')
-      console.log(this.secondData.id, 'secondData')
-      console.log(this.onceNum, 'onceNum')
-      console.log(this.secondNum, 'secondNum')
-      if (!this.station.id && !this.secondData.id) {
-        return this.$message.error(this.$t('请选择套餐'))
-      }
       let domestic = [
-        { id: this.station.id, qty: this.onceNum },
+        { id: this.station.id, qty: this.station.id ? this.onceNum : '' },
         {
           id: this.secondData.id,
-          qty: this.secondNum
+          qty: this.secondData.id ? this.secondNum : ''
         }
       ]
       // let foreign = [{ id: this.secondData.id, qty: this.secondNum }]
@@ -242,6 +239,7 @@ export default {
     cursor: pointer;
     background-color: #e8eef4;
     padding: 10px;
+    margin-bottom: 10px;
   }
   .count-sty {
     margin-top: 20px;

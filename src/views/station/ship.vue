@@ -49,17 +49,19 @@
         <add-btn @click.native="updateInvoice">{{ $t('创建发货单') }}</add-btn>
       </div>
     </search-group>
-    <el-table
-      :data="tableShip"
-      stripe
-      border
-      class="data-list"
-      @expand-change="onExpand"
-      @selection-change="selectionChange"
-      v-loading="tableLoading"
-      height="550"
-    >
-      <!-- <el-table-column type="expand">
+    <div style="height: calc(100vh - 330px)">
+      <el-table
+        :data="tableShip"
+        stripe
+        border
+        class="data-list"
+        @expand-change="onExpand"
+        ref="table"
+        @selection-change="selectionChange"
+        height="calc(100vh - 330px)"
+        v-loading="tableLoading"
+      >
+        <!-- <el-table-column type="expand">
       <template slot-scope="props">
         <el-table :data="props.row.orders">
           <el-table-column label="客户ID" prop="user_id"></el-table-column>
@@ -87,115 +89,116 @@
         </el-table>
       </template>
     </el-table-column> -->
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <!-- 发货单号 -->
-      <el-table-column :label="$t('发货单号')" prop="sn"></el-table-column>
-      <!-- 创建时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at"></el-table-column>
-      <!-- 发货时间 -->
-      <el-table-column :label="$t('发货时间')" prop="shipped_at"></el-table-column>
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <!-- 发货单号 -->
+        <el-table-column :label="$t('发货单号')" prop="sn"></el-table-column>
+        <!-- 创建时间 -->
+        <el-table-column :label="$t('提交时间')" prop="created_at"></el-table-column>
+        <!-- 发货时间 -->
+        <el-table-column :label="$t('发货时间')" prop="shipped_at"></el-table-column>
 
-      <el-table-column :label="$t('转运快递单号-头程')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
-        </template>
-      </el-table-column>
-      <!-- 发出站点 -->
-      <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
-      <!-- 目的地 -->
-      <el-table-column :label="$t('目的地')" prop="destination_country"></el-table-column>
-      <!-- 发货单名称 -->
-      <el-table-column :label="$t('发货单名称')" prop="name"></el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')" prop="status_name">
-        <!-- <template slot-scope="scope">
+        <el-table-column :label="$t('转运快递单号-头程')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
+          </template>
+        </el-table-column>
+        <!-- 发出站点 -->
+        <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
+        <!-- 目的地 -->
+        <el-table-column :label="$t('目的地')" prop="destination_country"></el-table-column>
+        <!-- 发货单名称 -->
+        <el-table-column :label="$t('发货单名称')" prop="name"></el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')" prop="status_name">
+          <!-- <template slot-scope="scope">
           <span v-if="scope.row.status === 0">{{$t('未发货')}}</span>
           <span v-else>{{$t('已发货')}}</span>
         </template> -->
-      </el-table-column>
-      <!-- 箱数 -->
-      <el-table-column :label="$t('订单数')" prop="box_count"></el-table-column>
-      <el-table-column :label="$t('出库箱数')" prop="order_boxes_count"></el-table-column>
-      <!-- 重量 -->
-      <el-table-column
-        :label="$t('重量') + this.localization.weight_unit"
-        prop="weight"
-      ></el-table-column>
-      <!-- 价值 -->
-      <el-table-column
-        :label="$t('价值') + this.localization.currency_unit"
-        prop="value"
-      ></el-table-column>
-      <!-- 物品属性 -->
-      <el-table-column :label="$t('物品属性')" prop="props"></el-table-column>
-      <!-- 备注 -->
-      <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="116px" fixed="right">
-        <template slot-scope="scope">
-          <!-- 导出清单 -->
-          <!-- <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button> -->
-          <el-dropdown>
-            <el-button type="primary" plain>
-              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <!-- 发货 -->
-              <el-dropdown-item class="item-sty" @click.native="goInvoice(scope.row.id)">
-                <span v-if="scope.row.status === 0">{{ $t('发货') }}</span>
-              </el-dropdown-item>
-              <!-- 编辑发货单 -->
-              <el-dropdown-item class="item-sty" @click.native="editInvoice(scope.row.id)">
-                <span v-if="scope.row.status === 0">{{ $t('编辑发货单') }}</span>
-              </el-dropdown-item>
-              <!-- 详情 -->
-              <el-dropdown-item
-                class="item-sty"
-                @click.native="goDetails(scope.row.id, scope.row.status)"
-              >
-                <span>{{ $t('详情') }}</span>
-              </el-dropdown-item>
-              <!-- 删除 -->
-              <el-dropdown-item class="item-sty" @click.native="deleteShip(scope.row.id)">
-                <span v-if="scope.row.box_count === 0">{{ $t('删除') }}</span>
-              </el-dropdown-item>
-              <!-- 加入发货单 -->
-              <el-dropdown-item class="item-sty" @click.native="addShip(scope.row.id)">
-                <span v-if="scope.row.status === 0">{{ $t('加入发货单') }}</span>
-              </el-dropdown-item>
-              <!-- 取消发货 -->
-              <el-dropdown-item class="item-sty" @click.native="cancelShip(scope.row.id)">
-                <span v-if="scope.row.status === 1">{{ $t('取消发货') }}</span>
-              </el-dropdown-item>
-              <!-- 轨迹 -->
-              <el-dropdown-item
-                class="item-sty"
-                @click.native="logistics(scope.row.id, scope.row.sn)"
-              >
-                <span>{{ $t('轨迹') }}</span>
-              </el-dropdown-item>
-              <!-- 批量更新单号 -->
-              <!-- <el-dropdown-item class="item-sty" @click.native="batchNum(scope.row.id, scope.row.sn)">
+        </el-table-column>
+        <!-- 箱数 -->
+        <el-table-column :label="$t('订单数')" prop="box_count"></el-table-column>
+        <el-table-column :label="$t('出库箱数')" prop="order_boxes_count"></el-table-column>
+        <!-- 重量 -->
+        <el-table-column
+          :label="$t('重量') + this.localization.weight_unit"
+          prop="weight"
+        ></el-table-column>
+        <!-- 价值 -->
+        <el-table-column
+          :label="$t('价值') + this.localization.currency_unit"
+          prop="value"
+        ></el-table-column>
+        <!-- 物品属性 -->
+        <el-table-column :label="$t('物品属性')" prop="props"></el-table-column>
+        <!-- 备注 -->
+        <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="116px" fixed="right">
+          <template slot-scope="scope">
+            <!-- 导出清单 -->
+            <!-- <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button> -->
+            <el-dropdown>
+              <el-button type="primary" plain>
+                {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <!-- 发货 -->
+                <el-dropdown-item class="item-sty" @click.native="goInvoice(scope.row.id)">
+                  <span v-if="scope.row.status === 0">{{ $t('发货') }}</span>
+                </el-dropdown-item>
+                <!-- 编辑发货单 -->
+                <el-dropdown-item class="item-sty" @click.native="editInvoice(scope.row.id)">
+                  <span v-if="scope.row.status === 0">{{ $t('编辑发货单') }}</span>
+                </el-dropdown-item>
+                <!-- 详情 -->
+                <el-dropdown-item
+                  class="item-sty"
+                  @click.native="goDetails(scope.row.id, scope.row.status)"
+                >
+                  <span>{{ $t('详情') }}</span>
+                </el-dropdown-item>
+                <!-- 删除 -->
+                <el-dropdown-item class="item-sty" @click.native="deleteShip(scope.row.id)">
+                  <span v-if="scope.row.box_count === 0">{{ $t('删除') }}</span>
+                </el-dropdown-item>
+                <!-- 加入发货单 -->
+                <el-dropdown-item class="item-sty" @click.native="addShip(scope.row.id)">
+                  <span v-if="scope.row.status === 0">{{ $t('加入发货单') }}</span>
+                </el-dropdown-item>
+                <!-- 取消发货 -->
+                <el-dropdown-item class="item-sty" @click.native="cancelShip(scope.row.id)">
+                  <span v-if="scope.row.status === 1">{{ $t('取消发货') }}</span>
+                </el-dropdown-item>
+                <!-- 轨迹 -->
+                <el-dropdown-item
+                  class="item-sty"
+                  @click.native="logistics(scope.row.id, scope.row.sn)"
+                >
+                  <span>{{ $t('轨迹') }}</span>
+                </el-dropdown-item>
+                <!-- 批量更新单号 -->
+                <!-- <el-dropdown-item class="item-sty" @click.native="batchNum(scope.row.id, scope.row.sn)">
                 <span>{{$t('批量更新单号')}}</span>
               </el-dropdown-item> -->
-              <!-- 添加物流信息 -->
-              <el-dropdown-item
-                class="item-sty"
-                @click.native="
-                  addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)
-                "
-              >
-                <span>{{ $t('添加物流信息') }}</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
+                <!-- 添加物流信息 -->
+                <el-dropdown-item
+                  class="item-sty"
+                  @click.native="
+                    addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)
+                  "
+                >
+                  <span>{{ $t('添加物流信息') }}</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
         </div>
       </template> -->
-    </el-table>
+      </el-table>
+    </div>
     <div class="bottom-sty">
       <el-button size="small" @click="updateTracking">{{ $t('更新物流状态') }}</el-button>
       <el-button size="small" @click="deleteData">{{ $t('导出清单') }}</el-button>
@@ -358,6 +361,9 @@ export default {
       this.page_params.status = Number(this.$route.query.status)
       this.getList()
     }
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
   },
   mounted() {
     this.getList()
@@ -386,6 +392,9 @@ export default {
               ...item,
               orders: []
             }
+          })
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
           })
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
@@ -808,6 +817,7 @@ export default {
 </script>
 <style lang="scss">
 .ship-container {
+  background-color: #f5f5f5;
   .select-box {
     display: inline-block;
     overflow: hidden;

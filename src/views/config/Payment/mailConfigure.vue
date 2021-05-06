@@ -99,65 +99,68 @@
       </el-select>
       <add-btn router="emailAdd">{{ $t('添加邮件模版') }}</add-btn>
     </div>
-    <el-table
-      :data="emailData"
-      v-loading="tableLoading"
-      class="data-list"
-      border
-      stripe
-      height="550"
-    >
-      <el-table-column type="index"></el-table-column>
-      <!-- 模版类型 -->
-      <el-table-column :label="$t('模版类型')" prop="type_name"> </el-table-column>
-      <!-- 邮件标题 -->
-      <el-table-column :label="$t('邮件标题')" prop="title"></el-table-column>
-      <el-table-column :label="$t('是否启用')">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.enabled"
-            @change="changeEmail($event, scope.row.enabled, scope.row.id)"
-            :active-text="$t('开')"
-            :inactive-text="$t('关')"
-            active-color="#13ce66"
-            inactive-color="gray"
-          >
-          </el-switch>
-        </template>
-      </el-table-column>
-      <!-- 创建时间 -->
-      <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div class="email-sty">
+      <el-table
+        :data="emailData"
+        v-loading="tableLoading"
+        class="data-list"
+        border
+        ref="table"
+        stripe
+        height="calc(100vh - 310px)"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onEmail(scope.row, item)"
-          ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onEmail(scope.row, item)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('操作')" width="150">
-        <template slot-scope="scope">
-          <el-button class="btn-dark-green" @click="editEmail(scope.row.id)">{{
-            $t('编辑')
-          }}</el-button>
-          <el-button class="btn-light-red" @click="deleteEmail(scope.row.id)">{{
-            $t('删除')
-          }}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column type="index"></el-table-column>
+        <!-- 模版类型 -->
+        <el-table-column :label="$t('模版类型1')" prop="type_name"> </el-table-column>
+        <!-- 邮件标题 -->
+        <el-table-column :label="$t('邮件标题')" prop="title"></el-table-column>
+        <el-table-column :label="$t('是否启用')">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.enabled"
+              @change="changeEmail($event, scope.row.enabled, scope.row.id)"
+              :active-text="$t('开')"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <!-- 创建时间 -->
+        <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onEmail(scope.row, item)"
+            ></span>
+            <span v-else class="el-icon-plus icon-sty" @click="onEmail(scope.row, item)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')" width="150">
+          <template slot-scope="scope">
+            <el-button class="btn-dark-green" @click="editEmail(scope.row.id)">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button class="btn-light-red" @click="deleteEmail(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <div class="logistics-container">
       <!-- <div class="form-title">{{ $t("快递100配置") }}</div> -->
       <!-- <el-form-item label="Customer ID" prop="kd100_app_id">
           <el-input
-            v-model="logisticsData.kd100_app_id"
+            v-model="logistics Data.kd100_app_id"
             :placeholder="$t('请输入Customer ID')"
             class="logistic-sty"
           ></el-input>
@@ -278,6 +281,11 @@ export default {
     this.getEmail()
     this.getType()
   },
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
+  },
   computed: {
     formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
@@ -315,6 +323,9 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.emailData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$message({
               message: res.msg,
@@ -576,6 +587,10 @@ export default {
   }
   .logistic-sty {
     width: 70% !important;
+  }
+  .email-sty {
+    height: calc(100vh - 310px);
+    background-color: #f5f5f5 !important;
   }
 }
 </style>

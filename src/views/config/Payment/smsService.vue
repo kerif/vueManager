@@ -22,18 +22,20 @@
               <el-button class="buy-sty" @click="buying">{{ $t('购买') }}</el-button>
             </div>
           </div>
-          <div class="details-sty" @click="templateDetails">
+          <!-- <div class="details-sty" @mouseenter="templateDetails">
             <i class="el-icon-s-order"></i>
-            {{ $t('详情') }}
-          </div>
+            {{$t('详情')}}
+          </div> -->
           <!-- <div class="details-sty" @click="alertSms">
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
           </div> -->
-          <div class="details-sty" @click="purchase">
+          <!-- <div class="details-sty" @mouseenter="purchase">
             <i class="el-icon-s-order"></i>
-            {{ $t('购买记录') }}
-          </div>
+            {{$t('购买记录')}}
+          </div> -->
+          <el-button @click="templateDetails" class="btn-main">{{ $t('详情') }}</el-button>
+          <el-button @click="purchase" class="btn-main">{{ $t('购买记录') }}</el-button>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
@@ -44,12 +46,12 @@
           <div class="message-main">
             <span>{{ $t('中国大陆短信服务——Appkey') }}：</span><br />
             <el-input class="input-sty" v-model="ruleForm.app_key"></el-input>
-            <el-button class="buy-sty">{{ $t('测试') }}</el-button>
+            <el-button class="buy-sty" @click="test('china')">{{ $t('测试') }}</el-button>
           </div>
           <div class="message-main">
             <span>{{ $t('国际短信服务——Appkey') }}：</span><br />
             <el-input class="input-sty" v-model="ruleForm.intl_app_key"></el-input>
-            <el-button class="buy-sty">{{ $t('测试') }}</el-button>
+            <el-button class="buy-sty" @click="test('inl')">{{ $t('测试') }}</el-button>
           </div>
         </div>
       </el-col>
@@ -243,6 +245,28 @@ export default {
         this.changeType()
       })
     },
+    // 测试
+    test(status) {
+      this.$request
+        .verifyConfigs({
+          juhe_key: status === 'china' ? this.ruleForm.app_key : this.ruleForm.intl_app_key,
+          is_intl: status === 'china' ? 0 : 1
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+    },
     // 切换短信服务
     changeType() {
       this.smsData = []
@@ -374,8 +398,6 @@ export default {
     .bottom-right {
       // display: inline-block;
       float: right;
-    }
-    .switch-sty {
     }
   }
   .user-left {

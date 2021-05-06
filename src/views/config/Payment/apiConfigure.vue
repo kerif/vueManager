@@ -2,11 +2,11 @@
   <div class="api-configure">
     <div class="item">
       <div class="item-top">
-        <div>
+        <div style="text-align: center">
           <i class="el-icon-chat-line-round icon-sty"></i>
         </div>
         <div>
-          <div>{{ $t('短信服务') }}</div>
+          <div class="sms-top">{{ $t('短信服务') }}</div>
           <div style="margin-top: 10px">
             <span class="system-sty service-sty" v-if="smsData.type === 2">{{
               $t('您当前正在使用系统内短信服务')
@@ -58,12 +58,12 @@
     </div>
     <div class="item">
       <div class="item-top">
-        <div>
+        <div style="text-align: center">
           <i class="el-icon-chat-line-round icon-sty"></i>
         </div>
         <div>
-          <div>{{ $t('物流查询服务') }}</div>
-          <div>
+          <div class="sms-top">{{ $t('物流查询服务') }}</div>
+          <div style="margin-top: 10px">
             <span class="system-sty service-sty" v-if="trackingData.type === 2">{{
               $t('您当前正在使用系统内物流查询')
             }}</span>
@@ -118,12 +118,12 @@
     </div>
     <div class="item">
       <div class="item-top">
-        <div>
+        <div style="text-align: center">
           <i class="el-icon-chat-line-round icon-sty"></i>
         </div>
         <div>
-          <div>{{ $t('邮件通知') }}</div>
-          <div class="text-sty">{{ $t('邮件配置') }}</div>
+          <div class="sms-top">{{ $t('邮件通知') }}</div>
+          <div class="text-sty" style="margin-top: 10px">{{ $t('邮件配置') }}</div>
           <div></div>
           <div></div>
         </div>
@@ -177,7 +177,8 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    border: 1px solid #000;
+    border: 1px solid #f5f5f5;
+    border-radius: 10px;
     .item-top {
       display: grid;
       grid-template-columns: 1fr 3fr;
@@ -222,6 +223,10 @@ export default {
     color: #df6062;
     padding-left: 10px;
     vertical-align: middle;
+  }
+  .sms-top {
+    font-size: 19px;
+    font-weight: 900;
   }
 }
 </style>
