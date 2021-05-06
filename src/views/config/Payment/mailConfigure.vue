@@ -118,7 +118,7 @@
       border
       ref="table"
       stripe
-      height="calc(100vh - 310px)"
+      height="calc(100vh - 330px)"
     >
       <el-table-column type="index"></el-table-column>
       <!-- 模版类型 -->
@@ -175,6 +175,10 @@
       </el-table-column>
     </el-table>
     </div>
+    <nle-pagination
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
     <div class="logistics-container">
       <!-- <div class="form-title">{{ $t("快递100配置") }}</div> -->
         <!-- <el-form-item label="Customer ID" prop="kd100_app_id">
@@ -256,11 +260,13 @@
 </template>
 
 <script>
+import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 export default {
   components: {
-    AddBtn
+    AddBtn,
+    NlePagination
   },
   mixins: [pagination],
   data () {
@@ -335,7 +341,9 @@ export default {
     getEmail () {
       this.tableLoading = true
       this.$request.getEmail({
-        type: this.page_params.type
+        type: this.page_params.type,
+        page: this.page_params.page,
+        size: this.page_params.size
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
@@ -343,6 +351,8 @@ export default {
           this.$nextTick(() => {
             this.$refs.table.doLayout()
           })
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
         } else {
           this.$message({
             message: res.msg,

@@ -21,7 +21,7 @@
             <div>
               <span class="text-sty">{{$t('国际短信服务')}}</span>
               <i v-if="smsData.status && smsData.status.international === 1" class="el-icon-circle-check icon-china"></i>
-              <i class="el-icon-circle-close icon-int"></i>
+              <i v-else class="el-icon-circle-close icon-int"></i>
             </div>
           </div>
           <div v-else-if="smsData.type === 2" class="sms-sty">
