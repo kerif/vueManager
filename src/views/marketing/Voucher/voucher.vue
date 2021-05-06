@@ -24,8 +24,10 @@
         <el-tab-pane :label="$t('已失效')" name="4"></el-tab-pane>
       <!-- v-if="oderData.length" -->
     </el-tabs>
+    <div style="height: calc(100vh - 340px)">
       <el-table class="data-list" border stripe
-      v-loading="tableLoading" height="550"
+      v-loading="tableLoading" height="calc(100vh - 360px)"
+      ref="table"
       :data="voucherData" @selection-change="onSelectChange">
       <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
       <el-table-column type="index" width="50"></el-table-column>
@@ -79,7 +81,8 @@
            @click="recoding(scope.row.id)">{{$t('记录')}}</el-button>
         </template>
       </el-table-column>
-    </el-table>
+      </el-table>
+    </div>
     <!-- <div class="noDate" v-else>暂无数据</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="show" :title="$t('请选择')" class="change-status-dialog dialog-container" width="35%" @close="clear">
@@ -151,6 +154,11 @@ export default {
 
     }
   },
+  activated () {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
+  },
   mounted () {
     this.getList()
     this.getLanguageList()
@@ -183,6 +191,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
