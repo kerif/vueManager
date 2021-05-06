@@ -21,7 +21,7 @@
       <!-- 网站链接 -->
       <el-form-item class="url-sty">
         <div slot="label">
-          <span>{{ $t("*网站链接") }}</span>
+          <span>{{ $t("网站链接") }}</span>
           <el-tooltip
             effect="dark"
             :content="
@@ -36,6 +36,28 @@
         </div>
         <el-input
           v-model="setForm.pc_website_url"
+          type="textarea"
+          :autosize="{ minRows: 4, maxRows: 4 }"
+        >
+        </el-input>
+      </el-form-item>
+      <el-form-item class="url-sty">
+        <div slot="label">
+          <span>{{ $t("H5链接") }}</span>
+          <el-tooltip
+            effect="dark"
+            :content="
+              $t(
+                '主要用于集运插件识别（非常重要,多个用英文逗号切分，例如http.www.baidu.com,http.www.google.com'
+              )
+            "
+            placement="top"
+          >
+            <span class="el-icon-question icon-question"></span>
+          </el-tooltip>
+        </div>
+        <el-input
+          v-model="setForm.h5_website_url"
           type="textarea"
           :autosize="{ minRows: 4, maxRows: 4 }"
         >
@@ -208,6 +230,7 @@ export default {
         default_img: [],
         customer_qr_code: [],
         pc_website_url: '',
+        h5_website_url: '',
         secret: '',
         app_id: '',
         icp: '',
@@ -292,6 +315,7 @@ export default {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
         this.setForm.pc_website_url = res.data.pc_website_url.map(item => item.url).toString()
+        this.setForm.h5_website_url = res.data.h5_website_url
         res.data.default_img && (this.baleImgList[0] = res.data.default_img)
         res.data.customer_qr_code && (this.customerList[0] = res.data.customer_qr_code)
         res.data.logo_image && (this.LogoImgList[0] = res.data.logo_image)
