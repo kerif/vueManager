@@ -303,7 +303,7 @@ export default {
   created () {
     this.getLanguageList()
     this.getLogisticsData()
-    this.getEmail()
+    this.getList()
     this.getType()
   },
   activated () {
@@ -327,7 +327,7 @@ export default {
     },
     onGroupChange () {
       this.page_params.handleQueryChange('type', this.page_params.type)
-      this.getEmail()
+      this.getList()
     },
     // 获取模版类型数据
     getType () {
@@ -338,7 +338,7 @@ export default {
       })
     },
     // 获取邮件模版
-    getEmail () {
+    getList () {
       this.tableLoading = true
       this.$request.getEmail({
         type: this.page_params.type,
@@ -370,7 +370,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.getEmail()
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -412,7 +412,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getEmail()
+            this.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
