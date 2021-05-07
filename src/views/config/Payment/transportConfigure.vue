@@ -76,7 +76,8 @@ export default {
         if (result.ret === 1) {
           this.$message.success(this.$t('上传成功'))
           let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
-          insertImg(url)
+          // insertImg(url)
+          editor.cmd.do('insertHTML', `<div class='img-wrap'><img class='add-img' style="max-width:100%;" src=${url} alt=''></div>`)
         }
       }
     }
