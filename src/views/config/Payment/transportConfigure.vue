@@ -69,7 +69,6 @@ export default {
     this.editor.customConfig.uploadImgHeaders = {
       'Authorization': this.$store.state.token
     }
-    this.editor.customConfig.zIndex = 500
     this.editor.customConfig.uploadFileName = `images[${0}][file]`
     this.editor.customConfig.uploadImgHooks = {
       customInsert: (insertImg, result, editor) => {
