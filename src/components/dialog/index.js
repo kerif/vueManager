@@ -96,6 +96,9 @@ import payDetails from './payDetails.vue'
 import financeReview from './financeReview.vue'
 import openLine from './openLine.vue'
 import aboutCheck from './checkAbout.vue'
+import buyingService from './buyingService.vue'
+import alertSettings from './alertSettings.vue'
+import purchaseHistory from './purchaseHistory.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -192,6 +195,9 @@ const PayDetailsController = Vue.extend(payDetails)
 const FinanceReviewController = Vue.extend(financeReview)
 const OpenLineController = Vue.extend(openLine)
 const CheckAboutController = Vue.extend(aboutCheck)
+const BuyingServiceController = Vue.extend(buyingService)
+const AlertSettingsController = Vue.extend(alertSettings)
+const PurchaseHistoryController = Vue.extend(purchaseHistory)
 
 const mixin = {
   data () {
@@ -865,10 +871,30 @@ function initInstance (type) {
         mixins: [mixin]
       })
       break
+    // 短信服务
+    case 'buyingService':
+      instance = new BuyingServiceController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 预警设置
+    case 'alertSettings':
+      instance = new AlertSettingsController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 配置 短信服务 购买记录
+    case 'purchaseHistory':
+      instance = new PurchaseHistoryController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
   }
   instance.constrctType = type
 }
-
 export default (props, callback) => {
   if (!instance || instance.constrctType !== props.type) {
     initInstance(props.type)

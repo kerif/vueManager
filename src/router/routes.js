@@ -81,7 +81,7 @@ const agentTemplate = loadonDemand('config/agent/agentTemplate')
 // 成交记录
 const transactionRecord = loadonDemand('config/agent/record')
 // 配置 小程序配置
-const AppletConfiguration = loadonDemand('config/Applet/applet')
+// const AppletConfiguration = loadonDemand('config/Applet/applet')
 // 配置 自提点配置
 const SinceList = loadonDemand('config/point/since')
 // 配置 新增或编辑自提点
@@ -89,7 +89,13 @@ const sinceAddEdit = loadonDemand('config/point/sinceAddEdit')
 // 配置 自提点配置 计佣方式配置
 const commissionSet = loadonDemand('config/point/commission')
 // 配置 更多配置
-const PaymentManagement = loadonDemand('config/Payment/payment')
+// const PaymentManagement = loadonDemand('config/Payment/payment')
+// 配置 更多配置
+const configurationMore = loadonDemand('config/Payment/configuration')
+// 配置 更多配置 短信服务配置
+const smsServices = loadonDemand('config/Payment/smsService')
+// 配置 更多配置 物流查询服务
+const trackingService = loadonDemand('config/Payment/trackingService')
 // 配置 更多配置 商品分类管理 风险提示
 const EditSick = loadonDemand('config/Payment/sickTips')
 // 更多配置 修改或新增邮件模版
@@ -98,6 +104,8 @@ const AddEditEmail = loadonDemand('config/Payment/emailAddEdit')
 const emailLang = loadonDemand('config/Payment/emailLang')
 // 更多配置 商品分类模版 新增或修改语言
 const categoriesLang = loadonDemand('config/Payment/categoriesLang')
+// 更多配置 邮件配置
+const mailConfigure = loadonDemand('config/Payment/mailConfigure')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
 // 自提点 转运包裹管理
@@ -113,7 +121,7 @@ const ShipDetails = loadonDemand('station/shipDetails')
 // 拣货日志
 const Picking = loadonDemand('station/picking')
 // 仓库自提
-const warehouseSelf = loadonDemand('station/warehouseSelf')
+// const warehouseSelf = loadonDemand('station/warehouseSelf')
 // 仓库自提 订单详情
 const selfDetails = loadonDemand('station/warehouseDetails')
 // 自定义物流
@@ -708,17 +716,17 @@ export default [
               name: '拣货日志'
             }
           },
-          {
-            path: '/station/warehouseSelf',
-            name: 'warehouseSelf',
-            component: warehouseSelf,
-            id: 504,
-            meta: {
-              level: 2,
-              group: '货站',
-              name: '仓库自提'
-            }
-          },
+          // {
+          //   path: '/station/warehouseSelf',
+          //   name: 'warehouseSelf',
+          //   component: warehouseSelf,
+          //   id: 504,
+          //   meta: {
+          //     level: 2,
+          //     group: '货站',
+          //     name: '仓库自提'
+          //   }
+          // },
           {
             path: '/station/self/details/:id/:status',
             name: 'selfDetails',
@@ -992,17 +1000,17 @@ export default [
               parent: '/config/notice'
             }
           },
-          {
-            path: '/config/applet',
-            name: 'appletManagement',
-            component: AppletConfiguration,
-            id: 604,
-            meta: {
-              level: 2,
-              group: '配置',
-              name: '小程序配置'
-            }
-          },
+          // {
+          //   path: '/config/applet',
+          //   name: 'appletManagement',
+          //   component: AppletConfiguration,
+          //   id: 604,
+          //   meta: {
+          //     level: 2,
+          //     group: '配置',
+          //     name: '小程序配置'
+          //   }
+          // },
           {
             path: '/config/point',
             name: 'point',
@@ -1050,15 +1058,62 @@ export default [
               parent: '/config/point'
             }
           },
+          // {
+          //   path: '/config/payment',
+          //   name: 'payment',
+          //   component: PaymentManagement,
+          //   id: 606,
+          //   meta: {
+          //     level: 2,
+          //     group: '配置',
+          //     name: '更多配置'
+          //   }
+          // },
           {
-            path: '/config/payment',
-            name: 'payment',
-            component: PaymentManagement,
+            path: '/config/mail-configure',
+            name: 'mailConfigur',
+            component: mailConfigure,
+            id: 606,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '邮件通知配置',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/configuration-more',
+            name: 'configurationMore',
+            component: configurationMore,
             id: 606,
             meta: {
               level: 2,
               group: '配置',
               name: '更多配置'
+            }
+          },
+          {
+            path: '/config/sms-services',
+            name: 'smsServices',
+            component: smsServices,
+            id: 606,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '短信服务',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/tracking-services',
+            name: 'trackingService',
+            component: trackingService,
+            id: 606,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '物流查询服务',
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1070,7 +1125,7 @@ export default [
               group: '配置',
               level: 3,
               name: '邮件模版的翻译内容',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1082,7 +1137,7 @@ export default [
               group: '配置',
               level: 3,
               name: '商品分类管理的翻译内容',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1094,7 +1149,7 @@ export default [
               level: 3,
               group: '配置',
               name: '风险提示',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1106,7 +1161,7 @@ export default [
               group: '配置',
               level: 3,
               name: '新增邮件模版',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           },
           {
@@ -1118,7 +1173,7 @@ export default [
               group: '配置',
               level: 3,
               name: '修改邮件模版',
-              parent: '/config/payment'
+              parent: '/config/configuration-more'
             }
           }
         ]

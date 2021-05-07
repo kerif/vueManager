@@ -65,6 +65,7 @@ export default {
         }
       }
     }
+    this.editor.customConfig.zIndex = 500
     this.editor.customConfig.showLinkImg = true
     this.editor.create()
     console.log(this.editor, 'this.editor')
@@ -97,7 +98,8 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.push({ name: 'noticelist' })
+            // this.$router.push({ name: 'noticelist' })
+            this.$router.go(-1)
           } else {
             this.$message({
               message: res.msg,
@@ -113,11 +115,11 @@ export default {
               message: res.tips,
               type: 'success'
             })
-            this.$router.push({ name: 'payment',
-              query: {
-                activeName: '7'
-              } })
-            // this.$router.go(-1)
+            // this.$router.push({ name: 'payment',
+            //   query: {
+            //     activeName: '7'
+            //   } })
+            this.$router.go(-1)
           } else {
             this.$notify({
               title: this.$t('操作失败'),

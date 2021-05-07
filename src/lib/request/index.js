@@ -476,6 +476,14 @@ exports.commissionDelete = (id) => {
 exports.saveShip = (params) => {
   return $form.post(`shipments`, params)
 }
+// 获取 单条发货单数据
+exports.getAloneShipDetails = (id) => {
+  return $form.get(`shipments/update-details/${id}`)
+}
+// 更新 单条发货单数据
+exports.editShip = (id, params) => {
+  return $form.put(`shipments/${id}`, params)
+}
 exports.getShipments = (id) => {
   return $form.put(`shipments/${id}/ship`)
 }
@@ -1133,6 +1141,10 @@ exports.getInstructions = () => {
 exports.updateInstructions = (params) => {
   return $form.put('mini-program/instructions', params)
 }
+// 更多配置 获取API与服务
+exports.getApiService = () => {
+  return $form.get('api-services')
+}
 // 更多配置 获取微信配置是否启用
 exports.getPaymentOnline = () => {
   return $form.get(`payments/payment/status`)
@@ -1192,6 +1204,54 @@ exports.closeRate = (id) => {
 // 更多配置 获取当前结算货币
 exports.getCurrency = () => {
   return $form.get('exchange-rates/currency')
+}
+// 更多配置 获取短信服务数据
+exports.getSms = () => {
+  return $form.get('api-services/sms')
+}
+// 更多配置 获取物流查询服务数据
+exports.getTrackingData = () => {
+  return $form.get('api-services/tracking')
+}
+// 更多配置 获取购买记录数据
+exports.getHistory = (id, params) => {
+  return $form.get(`api-services/${id}/orders`, { params })
+}
+// 更多配置 短信服务 获取详情
+exports.smsRecord = (params) => {
+  return $form.get(`api-services/sms/records`, { params })
+}
+// 更多配置 短信服务 测试第三方短信服务
+exports.verifyConfigs = (params) => {
+  return $form.post('configs/verify-juhe', params)
+}
+// 更多配置 API与服务
+exports.moreService = () => {
+  return $form.get('api-services')
+}
+// 更多配置 获取短信模版
+exports.getSmsSystem = () => {
+  return $form.get('api-services/sms/templates/system')
+}
+// 更多配置 更新短信服务
+exports.updateSmsSystem = (params) => {
+  return $json.put('api-services/sms', params)
+}
+// 更多配置 更新物流查询服务
+exports.updateTrackingSystem = (params) => {
+  return $form.put('api-services/tracking', params)
+}
+// 更多配置 获取第三方短信服务数据
+exports.getCustomSystem = () => {
+  return $form.get('api-services/sms/templates/custom')
+}
+// 更多配置 购买短信服务 获取数据
+exports.serviceType = (id) => {
+  return $form.get(`api-services/${id}/products`)
+}
+// 获取支付二维码
+exports.productsImg = (id, params) => {
+  return $form.post(`api-services/${id}/ordering`, params)
 }
 // 系统物流类型 修改开关启用
 exports.closeSystem = (id, status) => {

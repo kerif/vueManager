@@ -13,9 +13,10 @@
           </el-option>
         </el-select>
       </div>
+    <div style="height: calc(100vh - 270px)">
     <el-table class="data-list" stripe border :data="noticeList"
-    @selection-change="selectionChange"
-    v-loading="tableLoading" height="550">
+    @selection-change="selectionChange" ref="table"
+    v-loading="tableLoading" height="calc(100vh - 330px)">
       <el-table-column type="selection"></el-table-column>
       <el-table-column :label="$t('标题')" prop="title"></el-table-column>
       <el-table-column :label="$t('类型')" prop="type">
@@ -47,6 +48,7 @@
         </div>
       </template> -->
     </el-table>
+    </div>
     <div class="bottom-sty">
       <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
     </div>
@@ -93,6 +95,9 @@ export default {
           this.noticeList = res.data
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作成功'),
@@ -172,6 +177,11 @@ export default {
         } })
     }
   },
+  activated () {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
+  },
   computed: {
     formatLangData () {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
@@ -182,6 +192,7 @@ export default {
 
 <style lang="scss">
 .notice-list-container {
+  background-color: #f5f5f5 !important;
   .icon-sty {
     cursor: pointer;
     // padding-left: 20px;

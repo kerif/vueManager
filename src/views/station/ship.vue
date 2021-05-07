@@ -43,11 +43,14 @@
           <add-btn @click.native="updateInvoice">{{$t('创建发货单')}}</add-btn>
         </div>
     </search-group>
+  <div style="height: calc(100vh - 330px)">
   <el-table :data="tableShip" stripe
     border class="data-list"
     @expand-change="onExpand"
+    ref="table"
     @selection-change="selectionChange"
-    v-loading="tableLoading" height="550">
+    height="calc(100vh - 330px)"
+    v-loading="tableLoading">
     <!-- <el-table-column type="expand">
       <template slot-scope="props">
         <el-table :data="props.row.orders">
@@ -127,6 +130,10 @@
               <el-dropdown-item class="item-sty" @click.native="goInvoice(scope.row.id)">
                 <span v-if="scope.row.status === 0">{{$t('发货')}}</span>
               </el-dropdown-item>
+              <!-- 编辑发货单 -->
+              <el-dropdown-item class="item-sty" @click.native="editInvoice(scope.row.id)">
+                <span v-if="scope.row.status === 0">{{$t('编辑发货单')}}</span>
+              </el-dropdown-item>
               <!-- 详情 -->
               <el-dropdown-item class="item-sty" @click.native="goDetails(scope.row.id, scope.row.status)">
                 <span>{{$t('详情')}}</span>
@@ -164,6 +171,7 @@
         </div>
       </template> -->
     </el-table>
+  </div>
     <div class="bottom-sty">
       <el-button size="small" @click="updateTracking">{{$t('更新物流状态')}}</el-button>
         <el-button size="small" @click="deleteData">{{$t('导出清单')}}</el-button>
@@ -323,6 +331,9 @@ export default {
       this.page_params.status = Number(this.$route.query.status)
       this.getList()
     }
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
   },
   mounted () {
     this.getList()
@@ -351,6 +362,9 @@ export default {
               ...item,
               orders: []
             }
+          })
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
           })
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
@@ -692,8 +706,15 @@ export default {
       console.log(status, '我是传过去的ID')
       this.$router.push({ name: 'wayBillList', query: { order_sn: orderSn, activeName: status.toString() } })
     },
+    // 创建发货单
     updateInvoice () {
-      dialog({ type: 'invoice' }, () => {
+      dialog({ type: 'invoice', state: 'add' }, () => {
+        this.getList()
+      })
+    },
+    // 编辑发货单
+    editInvoice (id) {
+      dialog({ type: 'invoice', state: 'edit', id: id }, () => {
         this.getList()
       })
     },
@@ -742,6 +763,7 @@ export default {
 </script>
 <style lang="scss">
 .ship-container {
+  background-color: #f5f5f5;
   .select-box {
     display: inline-block;
     overflow: hidden;
