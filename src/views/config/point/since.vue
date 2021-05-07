@@ -27,7 +27,7 @@
       <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
       <el-table-column :label="$t('所属国家/地区')">
         <template slot-scope="scope">
-          <span>{{scope.row.country.name}}</span>
+          <span>{{scope.row.country && scope.row.country.name}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('详细地址')" prop="address"></el-table-column>
@@ -86,26 +86,24 @@
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
     <div v-if="status === 2" class="second-sty">
-      <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick">
+      <el-tree :data="treeData" :props="defaultProps"
+        node-key="id"
+       @node-click="handleNodeClick">
       </el-tree>
       <el-table :data="treesList" stripe border class="data-list"
       v-loading="tableLoading">
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('详细地址')" prop="address"></el-table-column>
+        <el-table-column :label="$t('详细地址')">
+          <template slot-scope="scope">
+            <span>{{scope.row.address}}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('联系电话')" prop="contact_info"></el-table-column>
         <el-table-column :label="$t('联系人')" prop="contactor"></el-table-column>
-        <!-- <el-table-column :label="$t('支持线路')">
-          <template slot-scope="scope">
-            <div class="check-sty" @click="checkLines(scope.row.id, scope.row.name)">{{scope.row.expressLines_count}}</div>
-          </template>
-        </el-table-column> -->
-        <!-- 计佣方式 -->
         <el-table-column :label="$t('操作')" width="150px">
           <template slot-scope="scope">
-            <!-- 编辑 -->
             <el-button class="btn-green" @click="editSelf(scope.row.id, scope.row.logistics_sn)">{{$t('编辑')}}</el-button>
-            <!-- 删除 -->
             <el-button class="btn-light-red" @click="deleteSelf(scope.row.id)">{{$t('删除')}}</el-button>
           </template>
         </el-table-column>
@@ -272,13 +270,6 @@ export default {
               ))
             }
           })
-          // this.treesList = this.treeData.map(item => {
-          //   return {
-          //     stations: item.stations
-          //   }
-          // })
-          console.log(this.treeData, 'treeData')
-          console.log(this.treesList, 'treesList')
         }
       })
     },
@@ -289,8 +280,21 @@ export default {
       }
     },
     handleNodeClick (data) {
-      console.log(data, 'data')
-      this.treesList = data.stations
+      console.log('dat', data)
+      this.treesList = data.stations || []
+      // if (data && data.stations) {
+      //   this.treesList = data.stations.map(item => {
+      //     return {
+      //       id: item.id,
+      //       name: item.name,
+      //       address: item.address,
+      //       contact_info: item.contact_info,
+      //       contactor: item.contactor
+      //     }
+      //   })
+      // }
+      // this.treesList = []
+      console.log(this.treesList, 'treesList')
     },
     // 查看支持线路
     checkLines (id, name) {

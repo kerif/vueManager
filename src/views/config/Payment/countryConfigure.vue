@@ -1,57 +1,190 @@
 <template>
-  <div>
-    <div class="select-box">
-      <add-btn @click.native="addCountry">{{ $t("添加") }}</add-btn>
-    </div>
-    <el-table
-      :data="countryData"
-      v-loading="tableLoading"
-      class="data-list country"
-      border
-      stripe
-      height="550"
-    >
-      <el-table-column width="100px" align="center">
-        <template>
-          <i class="el-icon-sort icon-fonts"></i>
-        </template>
-      </el-table-column>
-      <!-- 前缀字符 -->
-      <el-table-column prop="name" :label="$t('国家/地区')"> </el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.enabled"
-            @change="changeCountry($event, scope.row.enabled, scope.row.id)"
-            :active-text="$t('开')"
-            :inactive-text="$t('关')"
-            :active-value="1"
-            :inactive-value="0"
-            active-color="#13ce66"
-            inactive-color="gray"
-          >
-          </el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <!-- 删除 -->
-          <el-button
-            class="btn-light-red"
-            @click="deleteCountry(scope.row.id)"
-            >{{ $t("删除") }}</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
-    <div class="sort-sty">
-      *{{ $t("拖拽行可以进行排序") }}
-      <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{
-        $t("保存排序结果")
-      }}</el-button>
-    </div>
+  <div class="country-configuare-container">
+    <el-row :gutter="20">
+      <el-col :span="7">
+        <div class="select-box">
+          <add-btn @click.native="addCountry">{{ $t("添加国家") }}</add-btn>
+        </div>
+        <el-table
+          :data="countryData"
+          v-loading="tableLoading"
+          class="data-list country"
+          border
+          stripe
+          height="550"
+        >
+          <el-table-column width="40px" align="center">
+            <template>
+              <i class="el-icon-sort icon-fonts"></i>
+            </template>
+          </el-table-column>
+          <!-- 前缀字符 -->
+          <el-table-column prop="name" :label="$t('国家/地区')"> </el-table-column>
+          <!-- 状态 -->
+          <!-- <el-table-column :label="$t('状态')">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.enabled"
+                @change="changeCountry($event, scope.row.enabled, scope.row.id)"
+                :active-text="$t('开')"
+                :inactive-text="$t('关')"
+                :active-value="1"
+                :inactive-value="0"
+                active-color="#13ce66"
+                inactive-color="gray"
+              >
+              </el-switch>
+            </template>
+          </el-table-column> -->
+          <el-table-column :label="$t('操作')">
+            <template slot-scope="scope">
+              <!-- 删除 -->
+              <el-button
+                class="btn-light-red"
+                @click="deleteCountry(scope.row.id)"
+                >{{ $t("删除") }}</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
+        <div class="sort-sty">
+          *{{ $t("拖拽行可以进行排序") }}
+          <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{
+            $t("保存排序结果")
+          }}</el-button>
+        </div>
+      </el-col>
+      <el-col :span="17">
+        <div class="tips-sty">提示：系统仅支持三级区域，对上一级地址操作启用/关闭，或删除时，对下级所有区域生效</div>
+        <el-table
+          :data="currentCountryList"
+          stripe
+          border
+          class="data-list"
+          @expand-change="onExpand"
+          v-loading="tableLoading"
+          height="550"
+        >
+          <!-- 二级分类列表 -->
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-table :data="props.row.orders">
+                <!-- 二级分类名称 -->
+                <el-table-column
+                  :label="$t('二级分类名称')"
+                  prop="name"
+                ></el-table-column>
+                <!-- 是否显示 -->
+                <el-table-column :label="$t('是否显示')">
+                  <template slot-scope="scope">
+                    <el-switch
+                      v-model="scope.row.enabled"
+                      @change="changeShow($event, scope.row.id)"
+                      :active-text="$t('开')"
+                      :inactive-text="$t('关')"
+                      active-color="#13ce66"
+                      inactive-color="gray"
+                    >
+                    </el-switch>
+                  </template>
+                </el-table-column>
+                <!-- 是否开启风险提示 -->
+                <el-table-column :label="$t('是否开启风险提示')">
+                  <template slot-scope="scope">
+                    <el-switch
+                      v-model="scope.row.risk_warning_enabled"
+                      @change="changeRisk($event, scope.row.id)"
+                      :active-text="$t('开')"
+                      :inactive-text="$t('关')"
+                      active-color="#13ce66"
+                      inactive-color="gray"
+                    >
+                    </el-switch>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('操作')" width="300">
+                  <template slot-scope="scope">
+                    <!-- 编辑 -->
+                    <el-button
+                      class="btn-dark-green btn-margin"
+                      @click="editClassify(scope.row.id)"
+                      >{{ $t("编辑") }}</el-button
+                    >
+                    <!-- 风险提示 -->
+                    <el-button class="btn-main" @click="goSick(scope.row.id)">{{
+                      $t("风险提示")
+                    }}</el-button>
+                    <!-- 删除 -->
+                    <el-button
+                      @click="deleteCategories(scope.row.id)"
+                      class="btn-light-red"
+                      >{{ $t("删除") }}</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </template>
+          </el-table-column>
+          <!-- 一级分类列表 -->
+          <el-table-column type="index" width="50"></el-table-column>
+          <!-- 一级分类名称 -->
+          <el-table-column
+            :label="$t('一级分类名称')"
+            prop="name"
+          ></el-table-column>
+          <!-- 是否显示 -->
+          <el-table-column :label="$t('是否显示')">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.enabled"
+                @change="changeShow($event, scope.row.id)"
+                :active-text="$t('开')"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray"
+              >
+              </el-switch>
+            </template>
+          </el-table-column>
+          <!-- 是否开启风险提示 -->
+          <el-table-column :label="$t('是否开启风险提示')">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.risk_warning_enabled"
+                @change="changeRisk($event, scope.row.id)"
+                :active-text="$t('开')"
+                :inactive-text="$t('关')"
+                active-color="#13ce66"
+                inactive-color="gray"
+              >
+              </el-switch>
+            </template>
+          </el-table-column>
+          <!-- 操作 -->
+          <el-table-column :label="$t('操作')" width="300">
+            <template slot-scope="scope">
+              <!-- 编辑 -->
+              <el-button
+                class="btn-dark-green btn-margin"
+                @click="editClassify(scope.row.id)"
+                >{{ $t("编辑") }}</el-button
+              >
+              <!-- 风险提示 -->
+              <el-button class="btn-main" @click="goSick(scope.row.id)">{{
+                $t("风险提示")
+              }}</el-button>
+              <!-- 删除 -->
+              <el-button
+                class="btn-light-red btn-margin"
+                @click="deleteCategories(scope.row.id)"
+                >{{ $t("删除") }}</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -67,7 +200,8 @@ export default {
     return {
       countryData: [],
       countrySendData: [],
-      tableLoading: false
+      tableLoading: false,
+      currentCountryList: []
     }
   },
   created () {
@@ -197,10 +331,129 @@ export default {
           this.countrySendData.splice(newIndex, 0, oldItem)
         }
       })
+    },
+    // 点开当前行，获取二级菜单数据
+    onExpand (row) {
+      // 如果当前货单已经获取了二级菜单数据，就不在获取
+      if (row.orders.length) return
+      let id = row.id
+      this.$request.getSecondCategories(id).then(res => {
+        if (res.ret) {
+          row.orders = res.data.map(item => {
+            return {
+              ...item,
+              enabled: Boolean(item.enabled),
+              risk_warning_enabled: Boolean(item.risk_warning_enabled)
+            }
+          })
+        }
+      })
+    },
+    // 获取商品分类管理列表
+    getCategories () {
+      this.tableLoading = true
+      this.$request.getCategories({
+        page: this.page_params.page,
+        size: this.page_params.size
+      }).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.currentCountryList = res.data.map(item => {
+            return {
+              ...item,
+              enabled: Boolean(item.enabled),
+              risk_warning_enabled: Boolean(item.risk_warning_enabled),
+              orders: []
+            }
+          })
+          this.localization = res.localization
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 商品分类管理 开启或关闭 是否显示
+    changeShow (event, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.closeCategories(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 商品分类管理 开启或关闭 风险提示
+    changeRisk (event, id) {
+      console.log(typeof (event), '我是event')
+      console.log(event, 'event')
+      this.$request.closeRisk(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 删除单条商品分类
+    deleteCategories (id) {
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteCategories(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     }
   }
 }
 
 </script>
-<style scoped>
+<style lang="scss">
+.country-configuare-container {
+  .tips-sty {
+    font-size: 14px;
+    background-color: #d1d0d0;
+    line-height: 40px;
+    padding-left: 20px;
+  }
+}
 </style>
