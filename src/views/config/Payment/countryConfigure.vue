@@ -56,8 +56,9 @@
         </div>
       </el-col>
       <el-col :span="17">
-        <div class="tips-sty">提示：系统仅支持三级区域，对上一级地址操作启用/关闭，或删除时，对下级所有区域生效</div>
+        <div class="tips-sty">{{$t('提示：系统仅支持三级区域，对上一级地址操作启用/关闭，或删除时，对下级所有区域生效')}}</div>
         <el-table
+          @selection-change="selectionChange"
           :data="currentCountryList"
           stripe
           border
@@ -69,32 +70,19 @@
           <!-- 二级分类列表 -->
           <el-table-column type="expand">
             <template slot-scope="props">
-              <el-table :data="props.row.orders">
+              <el-table :data="props.row.orders" @selection-change="secondChange">
+                <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <!-- 二级分类名称 -->
                 <el-table-column
-                  :label="$t('二级分类名称')"
+                  :label="$t('三级区域')"
                   prop="name"
                 ></el-table-column>
                 <!-- 是否显示 -->
-                <el-table-column :label="$t('是否显示')">
+                <el-table-column :label="$t('是否启用')">
                   <template slot-scope="scope">
                     <el-switch
                       v-model="scope.row.enabled"
                       @change="changeShow($event, scope.row.id)"
-                      :active-text="$t('开')"
-                      :inactive-text="$t('关')"
-                      active-color="#13ce66"
-                      inactive-color="gray"
-                    >
-                    </el-switch>
-                  </template>
-                </el-table-column>
-                <!-- 是否开启风险提示 -->
-                <el-table-column :label="$t('是否开启风险提示')">
-                  <template slot-scope="scope">
-                    <el-switch
-                      v-model="scope.row.risk_warning_enabled"
-                      @change="changeRisk($event, scope.row.id)"
                       :active-text="$t('开')"
                       :inactive-text="$t('关')"
                       active-color="#13ce66"
@@ -111,10 +99,6 @@
                       @click="editClassify(scope.row.id)"
                       >{{ $t("编辑") }}</el-button
                     >
-                    <!-- 风险提示 -->
-                    <el-button class="btn-main" @click="goSick(scope.row.id)">{{
-                      $t("风险提示")
-                    }}</el-button>
                     <!-- 删除 -->
                     <el-button
                       @click="deleteCategories(scope.row.id)"
@@ -127,32 +111,18 @@
             </template>
           </el-table-column>
           <!-- 一级分类列表 -->
-          <el-table-column type="index" width="50"></el-table-column>
+          <el-table-column type="selection" width="55" align="center"></el-table-column>
           <!-- 一级分类名称 -->
           <el-table-column
-            :label="$t('一级分类名称')"
+            :label="$t('二级区域')"
             prop="name"
           ></el-table-column>
           <!-- 是否显示 -->
-          <el-table-column :label="$t('是否显示')">
+          <el-table-column :label="$t('是否启用')">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.enabled"
                 @change="changeShow($event, scope.row.id)"
-                :active-text="$t('开')"
-                :inactive-text="$t('关')"
-                active-color="#13ce66"
-                inactive-color="gray"
-              >
-              </el-switch>
-            </template>
-          </el-table-column>
-          <!-- 是否开启风险提示 -->
-          <el-table-column :label="$t('是否开启风险提示')">
-            <template slot-scope="scope">
-              <el-switch
-                v-model="scope.row.risk_warning_enabled"
-                @change="changeRisk($event, scope.row.id)"
                 :active-text="$t('开')"
                 :inactive-text="$t('关')"
                 active-color="#13ce66"
@@ -170,10 +140,6 @@
                 @click="editClassify(scope.row.id)"
                 >{{ $t("编辑") }}</el-button
               >
-              <!-- 风险提示 -->
-              <el-button class="btn-main" @click="goSick(scope.row.id)">{{
-                $t("风险提示")
-              }}</el-button>
               <!-- 删除 -->
               <el-button
                 class="btn-light-red btn-margin"
@@ -201,11 +167,14 @@ export default {
       countryData: [],
       countrySendData: [],
       tableLoading: false,
-      currentCountryList: []
+      currentCountryList: [],
+      deleteNum: [],
+      secondNum: []
     }
   },
   created () {
     this.getCountryList()
+    this.getCategories()
   },
   methods: {
     // 获取国家/地区数据
@@ -332,6 +301,17 @@ export default {
         }
       })
     },
+    // 一级选择框
+    selectionChange (selection) {
+      this.deleteNum = selection.map(item => (item.id))
+      console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 二级选择框
+    secondChange (selection) {
+      console.log(selection, 'selection')
+      this.secondNum = selection.map(item => (item.id))
+      console.log(this.secondNum, 'this.secondNum')
+    },
     // 点开当前行，获取二级菜单数据
     onExpand (row) {
       // 如果当前货单已经获取了二级菜单数据，就不在获取
@@ -353,8 +333,8 @@ export default {
     getCategories () {
       this.tableLoading = true
       this.$request.getCategories({
-        page: this.page_params.page,
-        size: this.page_params.size
+        // page: this.page_params.page,
+        // size: this.page_params.size
       }).then(res => {
         this.tableLoading = false
         if (res.ret) {
@@ -367,8 +347,8 @@ export default {
             }
           })
           this.localization = res.localization
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
+          // this.page_params.page = res.meta.current_page
+          // this.page_params.total = res.meta.total
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -383,26 +363,6 @@ export default {
       console.log(typeof (event), '我是event')
       console.log(event, 'event')
       this.$request.closeCategories(id, Number(event)).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
-    // 商品分类管理 开启或关闭 风险提示
-    changeRisk (event, id) {
-      console.log(typeof (event), '我是event')
-      console.log(event, 'event')
-      this.$request.closeRisk(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
