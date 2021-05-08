@@ -365,6 +365,7 @@
         <!-- 详见产品图 -->
         <el-table-column :label="activeName === '1' ? $t('预计费用') + localization.currency_unit : $t('实际费用') + localization.currency_unit" :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"></el-table-column>
         <el-table-column :label="$t('申报价值') + localization.currency_unit" prop="declare_value"></el-table-column>
+        <el-table-column v-if="activeName !== '3'" :label="$t('计费重量') + localization.weight_unit" prop="payment_weight"></el-table-column>
         <!-- 支付方式 -->
         <el-table-column :label="$t('支付方式')" v-if="activeName === '3'|| activeName === '4' || activeName === '5'">
           <template slot-scope="scope">

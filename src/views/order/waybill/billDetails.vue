@@ -205,6 +205,7 @@
    v-loading="tableLoading">
       <!-- 预计重量kg -->
       <el-table-column :label="$t('预计重量') + this.localization.weight_unit" prop="except_weight"></el-table-column>
+      <el-table-column :label="$t('计费重量') + this.localization.weight_unit" prop="payment_weight"></el-table-column>
       <!-- 称重重量kg -->
       <el-table-column :label="$t('称重重量') + this.localization.weight_unit" prop="pack_weight"></el-table-column>
       <!-- 体积重量 -->
