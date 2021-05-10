@@ -188,6 +188,11 @@ export default {
           //   item.copySN = item.logistics_sn
           // })
           this.voucherData = res.data
+          setTimeout(() => {
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          }, 300)
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total

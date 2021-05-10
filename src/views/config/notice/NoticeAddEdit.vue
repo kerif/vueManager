@@ -91,7 +91,7 @@ export default {
           this.$message.success(this.$t('上传成功'))
           let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
           // insertImg(url)
-          editor.cmd.do('insertHTML', `<div class='img-wrap'><img class='add-img' src=${url} alt=''></div>`)
+          editor.cmd.do('insertHTML', `<div class='img-wrap'><img class='add-img' style="max-width: 100%" src=${url} alt=''></div>`)
         }
       }
     }
