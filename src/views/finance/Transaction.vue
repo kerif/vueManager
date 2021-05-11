@@ -1,60 +1,61 @@
 <template>
   <div class="transaction-list-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')"
-        >
-        </el-date-picker>
-        <el-select
-          v-model="line"
-          @change="onLineTypeChange"
-          clearable
-          :placeholder="$t('路线筛选')"
-        >
-          <el-option v-for="item in linesChange" :key="item.id" :value="item.id" :label="item.name">
-          </el-option>
-        </el-select>
-        <el-select
-          v-model="type"
-          @change="onVocherTypeChange"
-          clearable
-          class="changeVou"
-          :placeholder="$t('支付类型')"
-        >
-          <el-option
-            v-for="item in voucherChange"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name"
-          >
-          </el-option>
-        </el-select>
-        <el-select
-          v-model="record"
-          @change="onRecordTypeChange"
-          clearable
-          class="changeVou"
-          :placeholder="$t('交易类型')"
-        >
-          <el-option
-            v-for="item in recordChange"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name"
-          >
-          </el-option>
-        </el-select>
-        <el-button class="upload-sty" @click="uploadList">{{ $t('导出Excel') }}</el-button>
-      </search-group>
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <el-date-picker
+        size="mini"
+        class="timeStyle"
+        v-model="timeList"
+        type="daterange"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <el-select v-model="line" size="mini" clearable :placeholder="$t('路线筛选')">
+        <el-option v-for="item in linesChange" :key="item.id" :value="item.id" :label="item.name">
+        </el-option>
+      </el-select>
+      <el-select
+        v-model="type"
+        size="mini"
+        clearable
+        class="changeVou"
+        :placeholder="$t('支付类型')"
+      >
+        <el-option v-for="item in voucherChange" :key="item.id" :value="item.id" :label="item.name">
+        </el-option>
+      </el-select>
+      <el-select
+        v-model="record"
+        size="mini"
+        clearable
+        class="changeVou"
+        :placeholder="$t('交易类型')"
+      >
+        <el-option v-for="item in recordChange" :key="item.id" :value="item.id" :label="item.name">
+        </el-option>
+      </el-select>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
+    </div>
+    <div class="searchGroup">
+      <el-button type="success" plain size="small" class="searchGroup-btn-r" @click="uploadList">{{
+        $t('导出清单')
+      }}</el-button>
+      <div class="searcg-l">
+        <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
+      </div>
     </div>
     <el-table
       :data="transactionList"
@@ -144,7 +145,8 @@ export default {
       record: '',
       voucherChange: [],
       recordChange: [],
-      linesChange: []
+      linesChange: [],
+      hasFilterCondition: false
     }
   },
   mixins: [pagination],
@@ -310,6 +312,19 @@ export default {
           })
         }
       })
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.line = ''
+      this.type = ''
+      this.record = ''
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime()
+      this.onLineTypeChange()
+      this.onVocherTypeChange()
     }
   }
 }
@@ -324,7 +339,60 @@ export default {
     width: 276px !important;
   }
   .upload-sty {
-    margin-left: 10px;
+    // margin-left: 10px;
+  }
+  .searchGroup {
+    // padding: 10px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+    .search-group {
+      width: 22.5%;
+    }
+    .searcg-l {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      .filter {
+        margin-left: 10px;
+      }
+    }
+    .searchGroup-btn-r {
+      align-self: flex-start;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  .order-list-search {
+    font-size: 14px;
+    background: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    overflow: hidden;
+    .changeTime {
+      display: inline-block;
+      margin-right: 20px;
+      .timeStyle {
+        margin-right: 10px;
+        width: 276px !important;
+      }
+      .shipments {
+        display: inline-block;
+      }
+    }
+    .chooseStatus {
+      // width: 150px;
+      display: inline-block;
+    }
+    .submit {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 10px;
+    }
   }
 }
 </style>

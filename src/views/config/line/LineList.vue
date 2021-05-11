@@ -1,138 +1,148 @@
 <template>
   <div class="line-list-container">
     <div class="add-btn-box">
-      <el-row :gutter="10">
-        <el-col :span="5">
-          <el-select
-            :placeholder="$t('线路名称')"
-            multiple
-            filterable
-            collapse-tags
-            v-model="query.lineName"
-          >
-            <el-option
-              v-for="(item, index) in lineNameColumn"
-              :key="index"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="5">
-          <el-select
-            :placeholder="$t('支持仓库')"
-            v-model="query.warehouses"
-            multiple
-            collapse-tags
-            filterable
-          >
-            <el-option
-              v-for="(item, index) in warehousesColumn"
-              :key="index"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select :placeholder="$t('是否启用')" v-model="query.enabled">
-            <el-option
-              v-for="item in enableList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="11">
-          <el-button type="success" @click="onHighSearch">{{
-            highSearch ? $t('取消高级搜索') : $t('高级搜索')
+      <div class="add-btn-t" v-show="highSearch">
+        <div class="add-btns">
+          <div class="add-btns-l">
+            <el-select
+              size="mini"
+              :placeholder="$t('支持国家/地区')"
+              v-model="query.countries"
+              multiple
+              collapse-tags
+              filterable
+            >
+              <el-option
+                v-for="(item, index) in countriesColumn"
+                :key="index"
+                :label="item"
+                :value="item"
+              ></el-option>
+            </el-select>
+            <el-select
+              size="mini"
+              :placeholder="$t('参考时效')"
+              v-model="query.referenceTime"
+              multiple
+              collapse-tags
+              filterable
+            >
+              <el-option
+                v-for="(item, index) in referenceTimeColumn"
+                :key="index"
+                :label="item"
+                :value="item"
+              ></el-option>
+            </el-select>
+            <el-select
+              size="mini"
+              :placeholder="$t('首重')"
+              v-model="query.firstWeight"
+              multiple
+              collapse-tags
+              filterable
+            >
+              <el-option
+                v-for="(item, index) in firstWeightColumn"
+                :key="index"
+                :label="item"
+                :value="item"
+              ></el-option>
+            </el-select>
+            <el-select
+              size="mini"
+              :placeholder="$t('首费')"
+              v-model="query.firstMoney"
+              multiple
+              collapse-tags
+              filterable
+            >
+              <el-option
+                v-for="(item, index) in firstMoneyColumn"
+                :key="index"
+                :label="item"
+                :value="item"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="add-btns-r">
+            <el-select
+              size="mini"
+              :placeholder="$t('续费')"
+              v-model="query.nextWeight"
+              multiple
+              collapse-tags
+              filterable
+            >
+              <el-option
+                v-for="(item, index) in nextWeightColumn"
+                :key="index"
+                :label="item"
+                :value="item"
+              ></el-option>
+            </el-select>
+            <el-select
+              size="mini"
+              :placeholder="$t('线路名称')"
+              multiple
+              filterable
+              collapse-tags
+              v-model="query.lineName"
+            >
+              <el-option
+                v-for="(item, index) in lineNameColumn"
+                :key="index"
+                :label="item"
+                :value="item"
+              ></el-option>
+            </el-select>
+            <el-select
+              size="mini"
+              :placeholder="$t('支持仓库')"
+              v-model="query.warehouses"
+              multiple
+              collapse-tags
+              filterable
+            >
+              <el-option
+                v-for="(item, index) in warehousesColumn"
+                :key="index"
+                :label="item"
+                :value="item"
+              ></el-option>
+            </el-select>
+            <el-select size="mini" :placeholder="$t('是否启用')" v-model="query.enabled">
+              <el-option
+                v-for="item in enableList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="btn-bty">
+          <el-button type="primary" plain @click="onReset" size="small" style="margin-left: 10px">{{
+            $t('重置')
           }}</el-button>
-          <el-button type="primary" @click="onSearch">{{ $t('搜索') }}</el-button>
-          <el-button type="primary" plain @click="onReset">{{ $t('重置') }}</el-button>
-          <add-btn :params="{ add: 1 }" router="lineadd">{{ $t('添加路线') }}</add-btn>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10" style="margin-top: 15px" v-show="highSearch">
-        <el-col :span="4">
-          <el-select
-            :placeholder="$t('支持国家/地区')"
-            v-model="query.countries"
-            multiple
-            collapse-tags
-            filterable
-          >
-            <el-option
-              v-for="(item, index) in countriesColumn"
-              :key="index"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="4">
-          <el-select
-            :placeholder="$t('参考时效')"
-            v-model="query.referenceTime"
-            multiple
-            collapse-tags
-            filterable
-          >
-            <el-option
-              v-for="(item, index) in referenceTimeColumn"
-              :key="index"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="4">
-          <el-select
-            :placeholder="$t('首重')"
-            v-model="query.firstWeight"
-            multiple
-            collapse-tags
-            filterable
-          >
-            <el-option
-              v-for="(item, index) in firstWeightColumn"
-              :key="index"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="4">
-          <el-select
-            :placeholder="$t('首费')"
-            v-model="query.firstMoney"
-            multiple
-            collapse-tags
-            filterable
-          >
-            <el-option
-              v-for="(item, index) in firstMoneyColumn"
-              :key="index"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="4">
-          <el-select
-            :placeholder="$t('续费')"
-            v-model="query.nextWeight"
-            multiple
-            collapse-tags
-            filterable
-          >
-            <el-option
-              v-for="(item, index) in nextWeightColumn"
-              :key="index"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
+          <el-button type="primary" @click="onSearch" size="small">{{ $t('搜索') }}</el-button>
+        </div>
+      </div>
+      <el-row :gutter="10">
+        <el-col :span="24" class="add-btn-l">
+          <el-button size="small" type="success" plain @click="unloadShip">{{
+            $t('导出清单')
+          }}</el-button>
+          <div class="add-btn-center">
+            <add-btn :params="{ add: 1 }" router="lineadd" style="margin-right: 10px">{{
+              $t('添加路线')
+            }}</add-btn>
+            <div class="filter">
+              <el-button @click="onHighSearch" type="text"
+                >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+              ></el-button>
+            </div>
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -268,9 +278,8 @@
       </template> -->
       </el-table>
     </div>
-    <div class="bottom-sty">
-      <el-button class="btn-main others-btn" @click="unloadShip">{{ $t('导出清单') }}</el-button>
-    </div>
+    <!--    <div class="bottom-sty">
+    </div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <!-- 高级配置 -->
     <el-dialog
@@ -936,9 +945,45 @@ export default {
   background-color: #f5f5f5 !important;
   .add-btn-box {
     overflow: hidden;
-  }
-  .others-btn {
-    margin-bottom: 5px;
+    .add-btn-r {
+      background: #fff;
+      padding-left: 10px;
+      .el-col {
+        padding-bottom: 10px;
+      }
+    }
+    .btn-bty button {
+      float: right;
+    }
+    .add-btn-l {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      .add-btn-center {
+        display: flex;
+        align-items: center;
+        .filter {
+          margin: 0 10px;
+        }
+      }
+    }
+    .add-btn-t {
+      overflow: hidden;
+      background: #fff;
+      padding: 10px;
+      .el-select {
+        margin-bottom: 10px;
+      }
+      .add-btns .el-select {
+        margin-right: 10px;
+      }
+      /*
+      .add-btns-r {
+        display: flex;
+        justify-content: space-around;
+      } */
+    }
   }
   .icon-sty {
     cursor: pointer;

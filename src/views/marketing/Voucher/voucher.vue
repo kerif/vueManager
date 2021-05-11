@@ -1,17 +1,5 @@
 <template>
   <div class="voucher-container">
-    <search-group
-      :placeholder="$t('请输入关键字')"
-      v-model="page_params.keyword"
-      @search="goSearch"
-    ></search-group>
-    <add-btn router="addVoucher">{{ $t('添加') }}</add-btn>
-    <div class="changeVou">
-      <el-select v-model="type" @change="onVocherTypeChange" clearable :placeholder="$t('请选择')">
-        <el-option v-for="item in voucherChange" :key="item.id" :value="item.id" :label="item.name">
-        </el-option>
-      </el-select>
-    </div>
     <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
       <!-- 全部 -->
       <el-tab-pane :label="$t('全部')" name="1"></el-tab-pane>
@@ -23,6 +11,32 @@
       <el-tab-pane :label="$t('已失效')" name="4"></el-tab-pane>
       <!-- v-if="oderData.length" -->
     </el-tabs>
+    <div class="" style="overflow: hidden">
+      <add-btn router="addVoucher">{{ $t('添加') }}</add-btn>
+      <div class="changeVou">
+        <el-select
+          v-model="type"
+          @change="onVocherTypeChange"
+          clearable
+          :placeholder="$t('请选择')"
+        >
+          <el-option
+            v-for="item in voucherChange"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="searchGroup">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        ></search-group>
+      </div>
+    </div>
     <div style="height: calc(100vh - 340px)">
       <el-table
         class="data-list"
@@ -425,6 +439,10 @@ export default {
 
 <style lang="scss">
 .voucher-container {
+  .searchGroup {
+    width: 21.2%;
+    float: right;
+  }
   .tabLength {
     width: 350px !important;
   }
@@ -433,9 +451,9 @@ export default {
   }
   .changeVou {
     float: right;
-    margin-right: 10px;
+    margin: 0 10px;
     .el-input {
-      width: 98%;
+      width: 100%;
     }
   }
 }

@@ -1,10 +1,20 @@
 <template>
   <div class="warehouse-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-    </div>
-    <div class="select-box">
-      <add-btn router="warehouseAdd">{{ $t('添加仓库') }}</add-btn>
+    <div class="headerList">
+      <div class="sort-sty">
+        *{{ $t('拖拽行可以进行排序') }}
+        <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{
+          $t('保存排序结果')
+        }}</el-button>
+      </div>
+      <div class="header-right">
+        <div class="searchGroup">
+          <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+        </div>
+        <div class="select-box">
+          <add-btn router="warehouseAdd">{{ $t('添加仓库') }}</add-btn>
+        </div>
+      </div>
     </div>
     <el-table
       :data="vipGroupList"
@@ -96,12 +106,6 @@
         </div>
       </template> -->
     </el-table>
-    <div class="sort-sty">
-      *{{ $t('拖拽行可以进行排序') }}
-      <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{
-        $t('保存排序结果')
-      }}</el-button>
-    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -300,6 +304,19 @@ export default {
 </script>
 <style lang="scss">
 .warehouse-container {
+  .headerList {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .searchGroup {
+      width: 27.1%;
+    }
+    .header-right {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
   .select-box {
     overflow: hidden;
   }

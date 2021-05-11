@@ -1,37 +1,54 @@
 <template>
   <div class="suggest-list-container">
-    <search-group
-      :placeholder="$t('请输入关键字')"
-      v-model="page_params.keyword"
-      @search="goSearch"
-    >
-      <div class="changeTime">
-        <!-- 提交时间 -->
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('提交开始日期')"
-          :end-placeholder="$t('提交结束日期')"
-        >
-        </el-date-picker>
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <div>
+        <div class="changeTime">
+          <!-- 提交时间 -->
+          <el-date-picker
+            size="mini"
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('提交开始日期')"
+            :end-placeholder="$t('提交结束日期')"
+          >
+          </el-date-picker>
+        </div>
+        <div class="chooseStatus">
+          <el-select size="mini" v-model="status" clearable :placeholder="$t('请选择状态')">
+            <el-option
+              v-for="item in statusData"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+            >
+            </el-option>
+          </el-select>
+        </div>
       </div>
-      <div class="chooseStatus">
-        <el-select
-          v-model="status"
-          @change="onAgentChange"
-          clearable
-          :placeholder="$t('请选择状态')"
-        >
-          <el-option v-for="item in statusData" :key="item.id" :value="item.id" :label="item.name">
-          </el-option>
-        </el-select>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
       </div>
-    </search-group>
+    </div>
+    <div class="searchGroup">
+      <search-group
+        :placeholder="$t('请输入关键字')"
+        v-model="page_params.keyword"
+        @search="goSearch"
+      >
+      </search-group>
+      <div class="filter">
+        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+          >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+        ></el-button>
+      </div>
+    </div>
     <el-table
       class="data-list"
       border
@@ -141,6 +158,7 @@ export default {
       end_date: '',
       status: '',
       show: false,
+      hasFilterCondition: false,
       statusData: [
         {
           id: 1,
@@ -254,6 +272,16 @@ export default {
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.status = ''
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime()
+      this.onAgentChange()
     }
   }
 }
@@ -286,6 +314,40 @@ export default {
     .timeStyle {
       margin-right: 10px;
       width: 276px !important;
+    }
+  }
+  .searchGroup {
+    display: flex;
+    justify-content: flex-end;
+    .search-group {
+      width: 21.5%;
+      margin-right: 10px;
+    }
+  }
+  .order-list-search {
+    font-size: 14px;
+    background: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    overflow: hidden;
+    .changeTime {
+      display: inline-block;
+      margin-right: 20px;
+      .timeStyle {
+        margin-right: 10px;
+        width: 276px !important;
+      }
+      .shipments {
+        display: inline-block;
+      }
+    }
+    .chooseStatus {
+      // width: 150px;
+      display: inline-block;
+    }
+    .submit {
+      float: right;
+      margin-top: 10px;
     }
   }
 }

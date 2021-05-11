@@ -1,7 +1,13 @@
 <template>
   <div class="public-list-container">
-    <div>
+    <div class="searchGroup">
+      <div class="bottom-sty">
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+      </div>
       <search-group v-model="page_params.keyword" @search="goSearch">
+        <div class="clear-box">
+          <add-btn router="addPublic">{{ $t('新增公告') }}</add-btn>
+        </div>
         <el-date-picker
           class="timeStyle"
           v-model="timeList"
@@ -23,9 +29,6 @@
         </el-option>
        </el-select> -->
       </search-group>
-      <div class="clear-box">
-        <add-btn router="addPublic">{{ $t('新增公告') }}</add-btn>
-      </div>
     </div>
     <el-table
       :data="transactionList"
@@ -70,9 +73,6 @@
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty">
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{ $t('删除') }}</el-button>
-    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -238,16 +238,37 @@ export default {
 </script>
 <style lang="scss">
 .public-list-container {
+  .searchGroup {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    .search-group {
+      // width: 90%;
+      // float: right;
+      flex: 1;
+    }
+    .el-date-editor {
+      float: right;
+    }
+    .pull-right {
+      width: 22.5%;
+      float: right;
+    }
+    .clear-box {
+      float: right;
+    }
+  }
   .changeVou {
     margin-left: 20px;
   }
   .timeStyle {
-    margin-right: 10px;
+    margin: 0 10px;
     width: 276px !important;
   }
   .bottom-sty {
-    margin-top: 20px;
-    margin-bottom: 10px;
+    // margin-top: 20px;
+    // margin-bottom: 10px;
+    float: left;
   }
 }
 </style>

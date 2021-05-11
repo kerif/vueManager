@@ -1,6 +1,6 @@
 <template>
   <div class="self-settlement-container">
-    <div>
+    <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch">
         <!-- <el-date-picker
           class="timeStyle"
@@ -36,6 +36,7 @@
     </div> -->
       </search-group>
     </div>
+    <div class="clear"></div>
     <!-- <div class="select-box">
       <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
     </div> -->
@@ -247,6 +248,13 @@ export default {
 </script>
 <style lang="scss">
 .self-settlement-container {
+  .searchGroup {
+    width: 21.5%;
+    float: right;
+  }
+  .clear {
+    clear: both;
+  }
   .changeVou {
     margin-left: 20px;
   }

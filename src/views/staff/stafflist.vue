@@ -1,17 +1,26 @@
 <template>
   <div class="staff-list-container list-main">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
-    </div>
     <div class="select-box">
-      <search-select
-        :placeholder="$t('请选择员工组')"
-        :selectArr="clientGroupList"
-        v-model="page_params.group"
-        @search="onGroupChange"
-      >
-      </search-select>
-      <add-btn router="staffadd">{{ $t('添加员工') }}</add-btn>
+      <div class="bottom-sty">
+        <!-- 禁止登录 -->
+        <el-button size="small" @click="forbidLogin(0)">{{ $t('禁止登录') }}</el-button>
+        <el-button size="small" @click="forbidLogin(1)">{{ $t('允许登录') }}</el-button>
+        <!-- 删除 -->
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+      </div>
+      <div class="headerList">
+        <div class="searchGroup">
+          <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+        </div>
+        <search-select
+          :placeholder="$t('请选择员工组')"
+          :selectArr="clientGroupList"
+          v-model="page_params.group"
+          @search="onGroupChange"
+        >
+        </search-select>
+        <add-btn router="staffadd">{{ $t('添加员工') }}</add-btn>
+      </div>
     </div>
     <el-table
       class="data-list"
@@ -61,17 +70,6 @@
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty">
-      <!-- 禁止登录 -->
-      <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{
-        $t('禁止登录')
-      }}</el-button>
-      <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{
-        $t('允许登录')
-      }}</el-button>
-      <!-- 删除 -->
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{ $t('删除') }}</el-button>
-    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -268,15 +266,39 @@ export default {
 </script>
 <style lang="scss" scoped>
 .staff-list-container {
+  .headerList {
+    // display: flex;
+    // justify-content: flex-start;
+    // overflow: hidden;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    .searchGroup {
+      width: 22.2%;
+      margin-right: 10px;
+      // margin-right: 10px;
+    }
+    .el-col {
+      margin-right: 10px;
+    }
+  }
   .el-button {
     margin-bottom: 8px;
   }
   .select-box {
+    // margin-top: 5px;
     overflow: hidden;
+    display: flex;
+    justify-content: space-between;
   }
   .bottom-sty {
-    margin-top: 20px;
-    margin-bottom: 10px;
+    button {
+      margin-bottom: 0;
+    }
+    display: flex;
+    align-items: center;
+    // margin-top: 20px;
+    // margin-bottom: 10px;
   }
 }
 </style>

@@ -1,10 +1,19 @@
 <template>
   <div class="vipgroup-list-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-    </div>
-    <div class="select-box">
-      <add-btn @click.native="addVip">{{ $t('添加客户组') }}</add-btn>
+    <div class="btn-flex">
+      <div class="search">
+        <search-group
+          paddingBottom="0"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        ></search-group>
+        <div class="bottom-sty">
+          <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+        </div>
+      </div>
+      <div class="select-box">
+        <add-btn @click.native="addVip">{{ $t('添加客户组') }}</add-btn>
+      </div>
     </div>
     <el-table
       :data="vipGroupList"
@@ -33,9 +42,6 @@
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty">
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{ $t('删除') }}</el-button>
-    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -155,10 +161,29 @@ export default {
 .vipgroup-list-container {
   .select-box {
     overflow: hidden;
+    display: inline-block;
+    float: right;
+    margin-left: 10px;
   }
-  .bottom-sty {
-    margin-top: 20px;
-    margin-bottom: 10px;
+  .btn-flex {
+    // width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+  }
+  .search {
+    width: 12.5%;
+    overflow: hidden;
+    float: left;
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-items: center;
+    .bottom-sty {
+      // margin-top: 20px;
+      // margin-bottom: 10px;
+    }
   }
 }
 </style>

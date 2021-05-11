@@ -1,8 +1,9 @@
 <template>
   <div class="vip-address-container">
-    <div>
+    <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
+    <div class="clear"></div>
     <el-table
       border
       stripe
@@ -85,3 +86,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+.searchGroup {
+  width: 21.5%;
+  float: right;
+}
+.clear {
+  clear: both;
+}
+</style>

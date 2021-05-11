@@ -1,54 +1,92 @@
 <template>
   <div class="ship-container">
-    <search-group
-      :placeholder="$t('请输入关键字')"
-      v-model="page_params.keyword"
-      @search="goSearch"
-    >
-      <div class="changeTime">
-        <!-- 提交 -->
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('提交开始日期')"
-          :end-placeholder="$t('提交结束日期')"
-        >
-        </el-date-picker>
-        <!-- 发货 -->
-        <el-date-picker
-          class="timeStyle"
-          v-model="shipmentList"
-          type="daterange"
-          @change="onShipment"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('发货开始日期')"
-          :end-placeholder="$t('发货结束日期')"
-        >
-        </el-date-picker>
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <div>
+        <div class="changeTime">
+          <!-- 提交 -->
+          <el-date-picker
+            size="mini"
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('提交开始日期')"
+            :end-placeholder="$t('提交结束日期')"
+          >
+          </el-date-picker>
+          <!-- 发货 -->
+          <el-date-picker
+            size="mini"
+            class="timeStyle"
+            v-model="shipmentList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('发货开始日期')"
+            :end-placeholder="$t('发货结束日期')"
+          >
+          </el-date-picker>
+        </div>
+        <!-- <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus" v-model="page_params.status"></search-select> -->
+        <div class="chooseStatus">
+          <el-select size="mini" v-model="page_params.status" clearable :placeholder="$t('请选择')">
+            <el-option
+              v-for="item in statusList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+            >
+            </el-option>
+          </el-select>
+        </div>
       </div>
-      <!-- <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus" v-model="page_params.status"></search-select> -->
-      <div class="chooseStatus">
-        <el-select
-          v-model="page_params.status"
-          @change="onShipStatus"
-          clearable
-          :placeholder="$t('请选择')"
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
+    </div>
+    <div class="searchGroup">
+      <div class="bottom-sty">
+        <el-button size="small" @click="updateTracking">{{ $t('更新物流状态') }}</el-button>
+        <!-- 批量发送通知 -->
+        <el-dropdown @command="dropdown">
+          <el-button size="small" @click="goNotify">{{ $t('批量发送通知') }}</el-button>
+          <el-dropdown-menu>
+            <el-dropdown-item command="3">{{ $t('已发货通知') }}</el-dropdown-item>
+            <el-dropdown-item command="4">{{ $t('待取件通知') }}</el-dropdown-item>
+          </el-dropdown-menu>
+          <!-- <el-radio-group v-model="radio">
+            <el-radio :label="3">{{ $t('已发货通知') }}</el-radio>
+            <el-radio :label="4">{{ $t('待取件通知') }}</el-radio>
+          </el-radio-group> -->
+        </el-dropdown>
+        <el-button size="small" @click="batchNum">{{ $t('批量更新单号-二程') }}</el-button>
+        <el-button size="small" type="success" plain @click="deleteData">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
+      <div class="search-l">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
         >
-          <el-option v-for="item in statusList" :key="item.id" :value="item.id" :label="item.name">
-          </el-option>
-        </el-select>
+        </search-group>
+        <div class="select-box">
+          <add-btn @click.native="updateInvoice">{{ $t('创建发货单') }}</add-btn>
+        </div>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
       </div>
-      <div class="select-box">
-        <add-btn @click.native="updateInvoice">{{ $t('创建发货单') }}</add-btn>
-      </div>
-    </search-group>
+    </div>
     <div style="height: calc(100vh - 330px)">
       <el-table
         :data="tableShip"
@@ -199,13 +237,6 @@
       </template> -->
       </el-table>
     </div>
-    <div class="bottom-sty">
-      <el-button size="small" @click="updateTracking">{{ $t('更新物流状态') }}</el-button>
-      <el-button size="small" @click="deleteData">{{ $t('导出清单') }}</el-button>
-      <!-- 批量发送通知 -->
-      <el-button size="small" @click="goNotify">{{ $t('批量发送通知') }}</el-button>
-      <el-button size="small" @click="batchNum">{{ $t('批量更新单号-二程') }}</el-button>
-    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
       <el-form label-position="top" :model="form" ref="form">
@@ -348,7 +379,9 @@ export default {
       batchDialog: false,
       // batchId: '',
       urlName: '',
-      fileList: []
+      fileList: [],
+      hasFilterCondition: false,
+      radio: ''
     }
   },
   created() {},
@@ -811,6 +844,45 @@ export default {
     onShipStatus() {
       this.page_params.handleQueryChange('status', this.page_params.status)
       this.getList()
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.shipmentList = []
+      this.page_params.status = ''
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime()
+      this.onShipment()
+      this.onShipStatus()
+    },
+    dropdown(command) {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$request
+        .sendingNotify({
+          ids: this.deleteNum,
+          type: command
+          // type: this.activeName === '2' ? 2 : 3
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      // console.log(command)
     }
   }
 }
@@ -854,8 +926,46 @@ export default {
     color: red;
   }
   .bottom-sty {
-    margin-top: 20px;
-    margin-bottom: 10px;
+    // margin-top: 20px;
+    // margin-bottom: 10px;
+    .el-dropdown {
+      margin: 0 10px;
+    }
+  }
+  .searchGroup {
+    display: flex;
+    // justify-content: space-between;
+    align-items: center;
+    .filter {
+      margin-left: 10px;
+    }
+    .search-group {
+      width: 32.3%;
+    }
+    .search-l {
+      display: flex;
+      justify-content: flex-end;
+      flex: 1;
+      padding-right: 10px;
+    }
+  }
+}
+.order-list-search {
+  font-size: 14px;
+  background: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  overflow: hidden;
+  .changeTime {
+    display: inline-block;
+  }
+  .chooseStatus {
+    // width: 150px;
+    display: inline-block;
+  }
+  .submit {
+    float: right;
+    margin-top: 10px;
   }
 }
 </style>

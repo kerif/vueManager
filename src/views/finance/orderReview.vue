@@ -10,14 +10,14 @@
       <!-- <el-tab-pane :label="$t('退款审核') + '(' + 0 + ')'" name="1" v-if="!this.countData.received"></el-tab-pane>
       <el-tab-pane v-else :label="$t('退款审核') + '(' + this.countData.received + ')'" name="1"></el-tab-pane> -->
     </el-tabs>
-    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goMatch">
+    <div class="order-list-search" v-show="hasFilterCondition">
       <div class="changeTime">
         <!-- 发货时间 -->
         <el-date-picker
+          size="mini"
           class="timeStyle"
           v-model="timeList"
           type="daterange"
-          @change="onTime"
           format="yyyy-MM-dd"
           value-format="yyyy-MM-dd"
           :range-separator="$t('至')"
@@ -31,29 +31,38 @@
     </div> -->
       <!-- 支付方式 -->
       <div class="chooseStatus customer-sty">
-        <el-select
-          v-model="payment_type"
-          @change="onPaymentChange"
-          clearable
-          :placeholder="$t('支付方式')"
-        >
+        <el-select size="mini" v-model="payment_type" clearable :placeholder="$t('支付方式')">
           <el-option v-for="item in paymentData" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
       </div>
       <!-- 审核状态 -->
       <div class="chooseStatus customer-sty">
-        <el-select
-          v-model="status"
-          @change="onStatusChange"
-          clearable
-          :placeholder="$t('审核状态')"
-        >
+        <el-select size="mini" v-model="status" clearable :placeholder="$t('审核状态')">
           <el-option v-for="item in statusData" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
       </div>
-    </search-group>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
+    </div>
+    <div class="searchGroup">
+      <search-group
+        :placeholder="$t('请输入关键字')"
+        v-model="page_params.keyword"
+        @search="goMatch"
+      >
+      </search-group>
+      <div class="filter">
+        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+          >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+        ></el-button>
+      </div>
+    </div>
     <el-table
       v-if="reviewData.length && this.activeName === '0'"
       class="data-list"
@@ -212,6 +221,7 @@ export default {
       paymentData: [],
       payment_type: '',
       status: '',
+      hasFilterCondition: false,
       statusData: [
         {
           id: 0,
@@ -393,6 +403,18 @@ export default {
     onStatusChange() {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.payment_type = ''
+      this.status = ''
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime()
+      this.onPaymentChange()
+      this.onStatusChange()
     }
   },
   created() {
@@ -523,6 +545,42 @@ export default {
   }
   .customer-sty {
     margin-right: 10px;
+  }
+  .searchGroup {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .filter {
+      margin-left: 10px;
+    }
+  }
+  .order-list-search {
+    font-size: 14px;
+    background: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    overflow: hidden;
+    .changeTime {
+      display: inline-block;
+      .timeStyle {
+        margin-right: 10px;
+        width: 276px !important;
+      }
+      .shipments {
+        display: inline-block;
+      }
+    }
+    .chooseStatus {
+      // width: 150px;
+      display: inline-block;
+    }
+    .submit {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 10px;
+    }
   }
 }
 </style>

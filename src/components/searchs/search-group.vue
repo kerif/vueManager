@@ -41,6 +41,7 @@ export default {
   name: 'SearchGroup',
   methods: {
     Enter() {
+      console.log(15523)
       this.$emit('search')
     },
     updateValue(val) {
@@ -52,8 +53,10 @@ export default {
 <style lang="scss">
 .search-group {
   // line-height: 4em;
+  // padding-bottom: 15px;
   .pull-right {
     float: right;
+    width: 100%;
   }
   .search-btn {
     color: #fff;
@@ -62,7 +65,6 @@ export default {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }
-  padding-bottom: 15px;
   .el-input-group__append,
   .el-input-group__prepend {
     background-color: #fff;

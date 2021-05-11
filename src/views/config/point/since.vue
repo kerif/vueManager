@@ -1,23 +1,17 @@
 <template>
   <div class="since-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-        <div class="chooseStatus">
-          <el-select v-model="status" @change="changeStatus" clearable :placeholder="$t('请选择')">
-            <el-option
-              v-for="item in statusList"
-              :key="item.id"
-              :value="item.id"
-              :label="item.name"
-            >
-            </el-option>
-          </el-select>
-        </div>
-      </search-group>
-    </div>
-    <div class="select-box">
-      <add-btn router="commissionSet">{{ $t('计佣方式配置') }}</add-btn>
-      <add-btn router="pointAdd">{{ $t('添加') }}</add-btn>
+    <div class="headerList">
+      <div class="select-box">
+        <add-btn router="pointAdd">{{ $t('添加') }}</add-btn>
+        <add-btn router="commissionSet">{{ $t('计佣方式配置') }}</add-btn>
+      </div>
+      <div class="chooseStatus">
+        <el-select v-model="status" @change="changeStatus" clearable :placeholder="$t('请选择')">
+          <el-option v-for="item in statusList" :key="item.id" :value="item.id" :label="item.name">
+          </el-option>
+        </el-select>
+      </div>
+      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
     </div>
     <div v-if="status === 1" style="height: calc(100vh - 270px)">
       <el-table
@@ -398,8 +392,19 @@ export default {
 <style lang="scss" scope>
 .since-container {
   background-color: #f5f5f5 !important;
+  .headerList {
+    overflow: hidden;
+  }
+  .search-group {
+    float: right;
+  }
+  .chooseStatus {
+    float: right;
+    margin-left: 8px;
+  }
   .select-box {
     overflow: hidden;
+    float: right;
   }
   .country-box {
     overflow: hidden;

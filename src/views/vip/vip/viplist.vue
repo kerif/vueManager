@@ -1,18 +1,28 @@
 <template>
   <div class="vip-list-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
+    <div class="bottom-sty">
+      <div>
+        <el-button size="small" @click="forbidLogin(0)">{{ $t('禁止登录') }}</el-button>
+        <el-button size="small" @click="forbidLogin(1)">{{ $t('允许登录') }}</el-button>
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+        <div class="import-list">
+          <el-button size="small" type="success" plain @click="uploadList">{{
+            $t('导出清单')
+          }}</el-button>
+        </div>
+      </div>
+      <div class="addUser">
+        <div class="searchGroup">
+          <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+        </div>
         <search-select
           :selectArr="clientGroupList"
           v-model="page_params.group"
           @search="onGroupChange"
         >
         </search-select>
-        <div class="import-list">
-          <el-button @click="uploadList">{{ $t('导出Excel') }}</el-button>
-          <el-button @click="addUser">{{ $t('添加用户') }}</el-button>
-        </div>
-      </search-group>
+        <add-btn @click="addUser">{{ $t('添加员工组') }}</add-btn>
+      </div>
     </div>
     <!-- <div class="select-box">
     </div> -->
@@ -92,15 +102,6 @@
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty">
-      <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{
-        $t('禁止登录')
-      }}</el-button>
-      <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{
-        $t('允许登录')
-      }}</el-button>
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{ $t('删除') }}</el-button>
-    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -109,6 +110,7 @@ import { SearchSelect, SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
+import AddBtn from '@/components/addBtn'
 export default {
   name: 'viplist',
   data() {
@@ -319,13 +321,22 @@ export default {
   components: {
     SearchSelect,
     SearchGroup,
-    NlePagination
+    NlePagination,
+    AddBtn
   }
 }
 </script>
 
 <style lang="scss">
 .vip-list-container {
+  .btnList:after {
+    content: '';
+    height: 0;
+    line-height: 0;
+    display: block;
+    visibility: hidden;
+    clear: both;
+  }
   .select-box {
     overflow: hidden;
   }
@@ -340,9 +351,27 @@ export default {
     margin-left: 10px;
     // text-align: right;
   }
+  .addUser {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+    .searchGroup {
+      // width: 29.42%;
+      // float: left;
+      margin-right: 10px;
+    }
+  }
+  .addUser > .add-btn-container {
+    margin-left: 10px;
+  }
   .bottom-sty {
-    margin-top: 20px;
+    width: 100%;
+    // margin-top: 20px;
     margin-bottom: 10px;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 </style>

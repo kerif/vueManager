@@ -1,10 +1,14 @@
 <template>
   <div class="staff-group-container list-main">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
-    </div>
     <div class="select-box">
-      <add-btn @click.native="addStaff">{{ $t('添加员工组') }}</add-btn>
+      <div class="bottom-sty">
+        <!-- 删除 -->
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+      </div>
+      <div class="searchGroup">
+        <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+        <add-btn @click.native="addStaff">{{ $t('添加员工组') }}</add-btn>
+      </div>
     </div>
     <el-table
       class="data-list"
@@ -67,10 +71,6 @@
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty">
-      <!-- 删除 -->
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{ $t('删除') }}</el-button>
-    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -224,6 +224,26 @@ export default {
   }
   .select-box {
     overflow: hidden;
+    // margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    .bottom-sty {
+      display: flex;
+      align-items: center;
+      button {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .searchGroup {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-end;
+    .search-group {
+      margin-right: 10px;
+      width: 22.3%;
+    }
   }
 }
 </style>

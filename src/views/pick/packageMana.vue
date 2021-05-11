@@ -102,23 +102,44 @@
         name="2"
       ></el-tab-pane>
     </el-tabs>
-    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goMatch">
-      <div class="changeTime">
-        <!-- 发货时间 -->
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('发货开始日期')"
-          :end-placeholder="$t('发货结束日期')"
+    <div class="searchGroup">
+      <div class="import-list">
+        <el-button v-if="activeName === '0'" size="small" @click="BatchReceipt">
+          {{ $t('批量收货') }}</el-button
         >
-        </el-date-picker>
-        <!-- 称重时间 -->
-        <!-- <el-date-picker
+        <el-button v-if="activeName === '1'" size="small" @click="batchSign">{{
+          $t('批量签收')
+        }}</el-button>
+        <el-button v-if="activeName === '1'" size="small" @click="bacthDelivery">{{
+          $t('批量出库')
+        }}</el-button>
+        <el-button size="small" type="success" plain @click="uploadList(status)">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
+      <div class="search-l">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goMatch"
+        >
+        </search-group>
+        <div class="changeTime">
+          <!-- 发货时间 -->
+          <el-date-picker
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            @change="onTime"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('发货开始日期')"
+            :end-placeholder="$t('发货结束日期')"
+          >
+          </el-date-picker>
+          <!-- 称重时间 -->
+          <!-- <el-date-picker
         v-if="activeName === '2'"
         class="timeStyle"
         v-model="storageList"
@@ -130,11 +151,9 @@
         :start-placeholder="$t('称重开始日期')"
         :end-placeholder="$t('称重结束日期')">
       </el-date-picker> -->
+        </div>
       </div>
-      <div class="import-list">
-        <el-button @click="uploadList(status)">{{ $t('导出清单') }}</el-button>
-      </div>
-    </search-group>
+    </div>
     <el-table
       v-if="oderData.length"
       class="data-list"
@@ -224,7 +243,7 @@
           >
         </template>
       </el-table-column>
-      <template slot="append" v-if="activeName === '0' || activeName === '1'">
+      <!-- <template slot="append" v-if="activeName === '0' || activeName === '1'">
         <div class="append-box">
           <el-button v-if="activeName === '0'" size="small" @click="BatchReceipt">{{
             $t('批量收货')
@@ -236,7 +255,7 @@
             $t('批量出库')
           }}</el-button>
         </div>
-      </template>
+      </template> -->
     </el-table>
     <div class="noDate" v-else>{{ $t('暂无数据') }}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -821,6 +840,19 @@ export default {
   .auto-sty {
     display: inline-block;
     margin-right: 20px;
+  }
+  .searchGroup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .search-l {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+      .search-group {
+        margin-right: 10px;
+      }
+    }
   }
 }
 </style>

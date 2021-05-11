@@ -1,10 +1,15 @@
 <template>
   <div class="single-page-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-    </div>
-    <div class="select-box">
-      <add-btn router="addSingle">{{ $t('添加') }}</add-btn>
+    <div class="headerList">
+      <div class="bottom-sty">
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+      </div>
+      <div class="select-box">
+        <add-btn router="addSingle">{{ $t('添加') }}</add-btn>
+      </div>
+      <div class="searchGroup">
+        <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+      </div>
     </div>
     <el-table
       :data="rechargeList"
@@ -49,9 +54,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="bottom-sty">
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{ $t('删除') }}</el-button>
-    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -224,6 +226,27 @@ export default {
 </script>
 <style lang="scss">
 .single-page-container {
+  .headerList {
+    overflow: hidden;
+    position: relative;
+    .searchGroup {
+      width: 21.5%;
+      float: right;
+    }
+    .select-box {
+      overflow: hidden;
+      float: right;
+      margin-left: 10px;
+    }
+    .bottom-sty {
+      // margin-top: 20px;
+      // margin-bottom: 10px;
+      float: left;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
   .changeVou {
     margin-left: 20px;
   }
@@ -235,13 +258,6 @@ export default {
     margin-left: 10px;
     width: 150px;
     display: inline-block;
-  }
-  .select-box {
-    overflow: hidden;
-  }
-  .bottom-sty {
-    margin-top: 20px;
-    margin-bottom: 10px;
   }
 }
 </style>

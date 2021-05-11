@@ -1,12 +1,14 @@
 <template>
   <div class="string-container">
-    <search-group
-      :placeholder="$t('请输入关键字')"
-      v-model="page_params.keyword"
-      @search="goSearch"
-    ></search-group>
-    <div class="select-box">
-      <add-btn @click.native="addString">{{ $t('添加') }}</add-btn>
+    <div class="headerList">
+      <div class="select-box">
+        <add-btn @click.native="addString">{{ $t('添加') }}</add-btn>
+      </div>
+      <search-group
+        :placeholder="$t('请输入关键字')"
+        v-model="page_params.keyword"
+        @search="goSearch"
+      ></search-group>
     </div>
     <el-table
       :data="transferData"
@@ -199,8 +201,17 @@ export default {
 
 <style lang="scss">
 .string-container {
-  .select-box {
+  .headerList {
     overflow: hidden;
+    .search-group {
+      width: 21.5%;
+      float: right;
+    }
+    .select-box {
+      overflow: hidden;
+      float: right;
+      margin-left: 10px;
+    }
   }
 }
 </style>

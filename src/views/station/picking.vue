@@ -1,10 +1,13 @@
 <template>
   <div class="picking-list-container">
-    <search-group
-      :placeholder="$t('请输入关键字')"
-      v-model="page_params.keyword"
-      @search="goSearch"
-    ></search-group>
+    <div class="searchGroup">
+      <search-group
+        :placeholder="$t('请输入关键字')"
+        v-model="page_params.keyword"
+        @search="goSearch"
+      ></search-group>
+    </div>
+    <div class="clear"></div>
     <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
       <!-- 入库日志 -->
       <el-tab-pane :label="$t('入库日志')" name="1"></el-tab-pane>
@@ -214,6 +217,13 @@ export default {
     .imgDialog {
       width: 50%;
     }
+  }
+  .searchGroup {
+    width: 21.5%;
+    float: right;
+  }
+  .clear {
+    clear: both;
   }
 }
 </style>

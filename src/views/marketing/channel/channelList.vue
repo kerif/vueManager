@@ -1,10 +1,10 @@
 <template>
   <div class="channel-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-    </div>
     <div class="select-box">
       <add-btn router="addChannel">{{ $t('添加') }}</add-btn>
+      <div class="searchGroup">
+        <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+      </div>
     </div>
     <el-table
       :data="vipGroupList"
@@ -198,6 +198,12 @@ export default {
 </script>
 <style lang="scss">
 .channel-container {
+  overflow: hidden;
+  .searchGroup {
+    width: 21.2%;
+    float: right;
+    margin-left: 10px;
+  }
   .select-box {
     overflow: hidden;
   }

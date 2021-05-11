@@ -12,23 +12,27 @@
       <!-- 下单排行榜 -->
       <el-tab-pane :label="$t('下单排行榜')" name="5"></el-tab-pane>
     </el-tabs>
-    <!-- <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"> -->
-    <div class="changeTime">
-      <!-- 创建 -->
-      <el-date-picker
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        :range-separator="$t('至')"
-        :start-placeholder="$t('提交开始日期')"
-        :end-placeholder="$t('提交结束日期')"
-      >
-      </el-date-picker>
+    <div class="headerList">
+      <el-button size="small" type="success" plain @click="uploadList">{{
+        $t('导出清单')
+      }}</el-button>
+      <!-- <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch"> -->
+      <div class="changeTime">
+        <!-- 创建 -->
+        <el-date-picker
+          class="timeStyle"
+          v-model="timeList"
+          type="daterange"
+          @change="onTime"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('提交开始日期')"
+          :end-placeholder="$t('提交结束日期')"
+        >
+        </el-date-picker>
+      </div>
     </div>
-    <el-button @click="uploadList">{{ $t('导出清单') }}</el-button>
     <!-- </search-group> -->
     <el-table
       class="data-list"
@@ -499,12 +503,18 @@ export default {
     color: blue;
     text-decoration: underline;
   }
-  .changeTime {
-    display: inline-block;
-    // width: 70%;
-    .timeStyle {
-      margin-right: 10px;
-      width: 276px !important;
+  .headerList {
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .changeTime {
+      display: inline-block;
+      // width: 70%;
+      .timeStyle {
+        // margin-right: 10px;
+        width: 276px !important;
+      }
     }
   }
 }

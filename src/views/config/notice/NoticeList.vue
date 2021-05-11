@@ -1,11 +1,22 @@
 <template>
   <div class="notice-list-container">
-    <add-btn router="noticeadd">{{ $t('添加') }} </add-btn>
-    <div class="changeVou">
-      <el-select v-model="type" @change="onVocherTypeChange" clearable :placeholder="$t('请选择')">
-        <el-option v-for="item in updateProp" :key="item.id" :value="item.id" :label="item.name">
-        </el-option>
-      </el-select>
+    <div class="headerList">
+      <div class="bottom-sty">
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+      </div>
+      <add-btn router="noticeadd">{{ $t('添加') }} </add-btn>
+      <div class="changeVou">
+        <el-select
+          v-model="type"
+          @change="onVocherTypeChange"
+          clearable
+          :placeholder="$t('请选择')"
+        >
+          <el-option v-for="item in updateProp" :key="item.id" :value="item.id" :label="item.name">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="clear"></div>
     </div>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -60,9 +71,6 @@
         </div>
       </template> -->
       </el-table>
-    </div>
-    <div class="bottom-sty">
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{ $t('删除') }}</el-button>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
@@ -217,17 +225,26 @@ export default {
     font-weight: 700;
     color: black;
   }
-  .changeVou {
-    float: right;
-    margin-right: 10px;
-    margin-bottom: 15px;
-    .el-input {
-      width: 98%;
+  .headerList {
+    position: relative;
+    .changeVou {
+      float: right;
+      margin-right: 10px;
+      // margin-bottom: 15px;
+      .el-input {
+        width: 98%;
+      }
     }
-  }
-  .bottom-sty {
-    margin-top: 20px;
-    margin-bottom: 10px;
+    .bottom-sty {
+      display: inline-block;
+      vertical-align: middle;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .clear {
+      clear: both;
+    }
   }
 }
 </style>

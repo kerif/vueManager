@@ -1,53 +1,53 @@
 <template>
   <div class="recharge-list-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')"
-        >
-        </el-date-picker>
-        <!-- 充值方式 -->
-        <el-select
-          v-model="type"
-          @change="onVocherTypeChange"
-          clearable
-          class="changeVou"
-          :placeholder="$t('请选择')"
-        >
-          <el-option
-            v-for="item in voucherChange"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name"
-          >
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <el-date-picker
+        size="mini"
+        class="timeStyle"
+        v-model="timeList"
+        type="daterange"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <!-- 充值方式 -->
+      <el-select size="mini" v-model="type" clearable class="changeVou" :placeholder="$t('请选择')">
+        <el-option v-for="item in voucherChange" :key="item.id" :value="item.id" :label="item.name">
+        </el-option>
+      </el-select>
+      <!-- 状态 -->
+      <div class="chooseStatus">
+        <el-select v-model="status" size="mini" clearable :placeholder="$t('请选择')">
+          <el-option v-for="item in statusList" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
-        <!-- 状态 -->
-        <div class="chooseStatus">
-          <el-select v-model="status" @change="onShipStatus" clearable :placeholder="$t('请选择')">
-            <el-option
-              v-for="item in statusList"
-              :key="item.id"
-              :value="item.id"
-              :label="item.name"
-            >
-            </el-option>
-          </el-select>
+      </div>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
+    </div>
+    <div class="searchGroup">
+      <el-button class="upload-sty" size="small" type="success" plain @click="uploadList">{{
+        $t('导出清单')
+      }}</el-button>
+      <div class="search-l">
+        <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
         </div>
-      </search-group>
+        <add-btn @click.native="addVip">{{ $t('添加') }}</add-btn>
+      </div>
     </div>
-    <div class="select-box">
-      <add-btn @click.native="addVip">{{ $t('添加') }}</add-btn>
-      <el-button class="upload-sty" @click="uploadList">{{ $t('导出清单') }}</el-button>
-    </div>
+    <!--     <div class="select-box">
+    </div> -->
     <el-table
       :data="rechargeList"
       stripe
@@ -133,6 +133,7 @@ export default {
       type: '',
       voucherChange: [],
       status: '',
+      hasFilterCondition: false,
       statusList: [
         {
           id: 0,
@@ -290,6 +291,18 @@ export default {
       dialog({ type: 'rechargeAdd' }, () => {
         this.getList()
       })
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.type = ''
+      this.status = ''
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime()
+      this.onVocherTypeChange()
+      this.onShipStatus()
     }
   }
 }
@@ -314,6 +327,48 @@ export default {
   .upload-sty {
     float: right;
     margin-right: 10px;
+  }
+  .searchGroup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .search-l {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .filter {
+        margin: 0 10px;
+      }
+    }
+  }
+  .order-list-search {
+    font-size: 14px;
+    background: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    overflow: hidden;
+    .changeTime {
+      display: inline-block;
+      margin-right: 20px;
+      .timeStyle {
+        margin-right: 10px;
+        width: 276px !important;
+      }
+      .shipments {
+        display: inline-block;
+      }
+    }
+    .chooseStatus {
+      // width: 150px;
+      display: inline-block;
+    }
+    .submit {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 10px;
+    }
   }
 }
 </style>

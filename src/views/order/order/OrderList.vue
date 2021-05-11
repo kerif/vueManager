@@ -37,14 +37,9 @@
         <el-button size="small" v-if="activeName === '6'" @click="deleteDiscard">{{
           $t('彻底删除')
         }}</el-button>
-        <el-button
-          v-if="activeName !== '6'"
-          @click="importOrder"
-          size="small"
-          type="success"
-          plain
-          >{{ $t('批量入库') }}</el-button
-        >
+        <el-button v-if="activeName !== '6'" @click="importOrder" size="small" plain>{{
+          $t('批量入库')
+        }}</el-button>
         <el-button v-if="activeName !== '6'" @click="uploadList" size="small" type="success" plain>
           {{ $t('导出清单') }}
         </el-button>
@@ -709,13 +704,17 @@ export default {
   .header-range {
     display: flex;
     align-items: center;
+    // flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1px;
     .header-btns {
-      margin-bottom: 10px;
+      // margin-bottom: 10px;
     }
     .header-search {
       display: flex;
-      margin: 0 0 0 auto;
+      align-items: center;
+      // margin: 0 0 0 auto;
       .header-keyword {
         max-width: 300px;
       }

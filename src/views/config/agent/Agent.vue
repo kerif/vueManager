@@ -1,17 +1,19 @@
 <template>
   <div class="agent-list-container">
-    <div>
-      <search-group
-        :placeholder="$t('请输入关键字')"
-        v-model="page_params.keyword"
-        @search="goSearch"
-      >
-      </search-group>
-    </div>
-    <add-btn router="addAgent" class="add-sty">{{ $t('添加代理') }}</add-btn>
-    <add-btn router="agentTemplate">{{ $t('计佣模版配置') }}</add-btn>
-    <div class="changeVou">
-      <el-button @click="withdraw">{{ $t('提现说明') }}</el-button>
+    <div class="btn">
+      <add-btn router="addAgent" class="add-sty">{{ $t('添加代理') }}</add-btn>
+      <add-btn router="agentTemplate">{{ $t('计佣模版配置') }}</add-btn>
+      <div class="changeVou">
+        <el-button @click="withdraw">{{ $t('提现说明') }}</el-button>
+      </div>
+      <div class="search">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        >
+        </search-group>
+      </div>
     </div>
     <el-table
       class="data-list"
@@ -341,13 +343,24 @@ export default {
 .el-button {
   margin: 3px;
 }
+.btn {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+.search {
+  width: 21.5%;
+  float: right;
+}
 .record-sty {
   margin-right: 8px;
 }
 .changeVou {
   float: right;
-  margin-right: 10px;
-  margin-bottom: 15px;
+  margin-right: 7px;
+  margin-left: 5px;
+  // margin-bottom: 15px;
 }
 .withdraw-sty {
   .el-dialog__header {

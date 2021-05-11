@@ -1,46 +1,64 @@
 <template>
   <div class="no-owner-container">
-    <search-group
-      :placeholder="$t('请输入关键字')"
-      v-model="page_params.keyword"
-      @search="goSearch"
-    >
-      <div class="changeTime">
-        <!-- 提交时间 -->
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('提交开始日期')"
-          :end-placeholder="$t('提交结束日期')"
-        >
-        </el-date-picker>
-      </div>
-      <div class="chooseStatus">
-        <el-select
-          v-model="agent_name"
-          @change="onAgentChange"
-          clearable
-          :placeholder="$t('请选择仓库')"
-        >
-          <el-option
-            v-for="item in agentData"
-            :key="item.id"
-            :value="item.id"
-            :label="item.warehouse_name"
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <div>
+        <div class="changeTime">
+          <el-date-picker
+            size="mini"
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('提交开始日期')"
+            :end-placeholder="$t('提交结束日期')"
           >
-          </el-option>
-        </el-select>
+          </el-date-picker>
+        </div>
+        <div class="chooseStatus">
+          <el-select v-model="agent_name" size="mini" clearable :placeholder="$t('请选择仓库')">
+            <el-option
+              v-for="item in agentData"
+              :key="item.id"
+              :value="item.id"
+              :label="item.warehouse_name"
+            >
+            </el-option>
+          </el-select>
+        </div>
       </div>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
+    </div>
+    <div class="headerList">
       <div class="import-list">
-        <el-button @click="uploadList">{{ $t('导出清单') }}</el-button>
-        <el-button @click="claimList">{{ $t('认领记录') }}</el-button>
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+        <el-button size="small" @click="claimList">{{ $t('认领记录') }}</el-button>
+        <el-button type="success" plain size="small" @click="uploadList">{{
+          $t('导出清单')
+        }}</el-button>
       </div>
-    </search-group>
+      <div class="headr-r">
+        <div class="searchGroup">
+          <search-group
+            :placeholder="$t('请输入关键字')"
+            v-model="page_params.keyword"
+            @search="goSearch"
+          >
+          </search-group>
+        </div>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
+      </div>
+    </div>
     <el-table
       class="data-list"
       border
@@ -50,6 +68,7 @@
       v-loading="tableLoading"
       height="550"
     >
+      <!-- height="550" -->
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')">
@@ -116,9 +135,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="bottom-sty">
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{ $t('删除') }}</el-button>
-    </div>
     <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
@@ -168,7 +184,8 @@ export default {
       urlHtml: '',
       show: false,
       labelId: '',
-      imgSrc: ''
+      imgSrc: '',
+      hasFilterCondition: false
     }
   },
   methods: {
@@ -347,6 +364,16 @@ export default {
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
+    },
+    // 重置筛选
+    resetForm() {
+      this.timeList = []
+      this.agent_name = ''
+    },
+    // 搜索
+    submitForm() {
+      this.onTime()
+      this.onAgentChange()
     }
   },
   created() {
@@ -357,11 +384,31 @@ export default {
 </script>
 
 <style lang="scss">
+.data-list {
+  max-height: calc(100vh - 200px);
+  overflow: auto;
+}
 .no-owner-container {
   .tabLength {
     width: 300px !important;
     display: inline-block;
   }
+  .headerList {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .headr-r {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .searchGroup {
+        width: 25%;
+        margin-right: 10px;
+      }
+    }
+  }
+
   .agentRight {
     // display: inline-block;
     float: right;
@@ -396,7 +443,7 @@ export default {
     border-width: 0;
   }
   .chooseStatus {
-    width: 150px;
+    // width: 150px;
     display: inline-block;
     .el-select {
       // width: 100%;
@@ -409,6 +456,32 @@ export default {
   .bottom-sty {
     margin-top: 20px;
     margin-bottom: 10px;
+  }
+}
+.order-list-search {
+  font-size: 14px;
+  background: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  overflow: hidden;
+  .changeTime {
+    display: inline-block;
+    margin-right: 20px;
+    .timeStyle {
+      margin-right: 10px;
+      width: 276px !important;
+    }
+    .shipments {
+      display: inline-block;
+    }
+  }
+  .chooseStatus {
+    // width: 150px;
+    display: inline-block;
+  }
+  .submit {
+    float: right;
+    margin-top: 10px;
   }
 }
 </style>
