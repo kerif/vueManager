@@ -1578,6 +1578,30 @@ exports.closeCountryLocation = (id, status) => {
 exports.countryLocationIndex = (params) => {
   return $form.put('countries/sort-indexes', params)
 }
+// 更多配置 国家地区 获取二三级区域数据
+exports.superiorArea = (id) => {
+  return $form.get(`countries/${id}/areas`)
+}
+// 国家地区 删除 二三级国家区域
+exports.deleteLOwLevel = (params) => {
+  return $form.put('countries/areas/batch-delete', params)
+}
+// 国家地区 开启或关闭 二三级国家
+exports.changeLowLeverCountry = (id, status) => {
+  return $form.put(`countries/areas/${id}/status/${status}`)
+}
+// 国家地区 新建二三级区域
+exports.newAreas = (params) => {
+  return $form.post('countries/areas', params)
+}
+// 国家地区 获取 二三级区域 详情
+exports.detailsAreas = (id) => {
+  return $form.get(`countries/areas/${id}`)
+}
+// 国家地区 更新 二三级区域 详情
+exports.updateDetailsAreas = (id, params) => {
+  return $form.put(`countries/areas/${id}`, params)
+}
 // 订单增值服务 语言详情
 exports.serviceLang = (id, params) => {
   return $form.get(`value-added-services/${id}`, { params })
@@ -1881,6 +1905,10 @@ exports.getCoupons = () => {
 // 营销管理 新用户福利 开启或关闭
 exports.closeCoupons = (type, status) => {
   return $form.put(`new-user-coupons/type/${type}/status/${status}`)
+}
+// 营销管理 用户福利 开启或关闭 两券共享
+exports.closeUnique = (type, status) => {
+  return $form.put(`new-user-coupons/type/${type}/unique/${status}`)
 }
 // 营销管理 修改新用户福利
 exports.editCoupons = (params) => {

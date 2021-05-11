@@ -255,7 +255,9 @@ export default {
     },
     // 购买
     buying () {
-      dialog({ type: 'buyingService', state: 'sms' })
+      dialog({ type: 'buyingService', state: 'sms' }, () => {
+        this.getService()
+      })
     },
     // 预警
     alertSms () {

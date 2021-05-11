@@ -99,6 +99,7 @@ import aboutCheck from './checkAbout.vue'
 import buyingService from './buyingService.vue'
 import alertSettings from './alertSettings.vue'
 import purchaseHistory from './purchaseHistory.vue'
+import superiorAddEdit from './superiorAddEdit.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -198,6 +199,7 @@ const CheckAboutController = Vue.extend(aboutCheck)
 const BuyingServiceController = Vue.extend(buyingService)
 const AlertSettingsController = Vue.extend(alertSettings)
 const PurchaseHistoryController = Vue.extend(purchaseHistory)
+const SuperiorAddEditController = Vue.extend(superiorAddEdit)
 
 const mixin = {
   data () {
@@ -888,6 +890,13 @@ function initInstance (type) {
     // 配置 短信服务 购买记录
     case 'purchaseHistory':
       instance = new PurchaseHistoryController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 配置 更多配置 编辑 新增国家二三级
+    case 'superiorAddEdit':
+      instance = new SuperiorAddEditController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

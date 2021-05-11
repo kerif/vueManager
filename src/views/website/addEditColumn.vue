@@ -53,7 +53,7 @@
         </el-select>
     </el-form-item>
     <!-- 文章类型 -->
-    <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1">
+    <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1 || ruleForm.type === 4">
       <el-select v-model="ruleForm.article_type" :placeholder="$t('文章类型')">
           <el-option
             v-for="item in articleType"
@@ -99,7 +99,7 @@ export default {
       columnType: [
         {
           id: 1,
-          name: this.$t('文章')
+          name: this.$t('单篇文章')
         },
         {
           id: 2,
@@ -108,6 +108,10 @@ export default {
         {
           id: 3,
           name: this.$t('单页')
+        },
+        {
+          id: 4,
+          name: this.$t('多篇文章')
         }
       ],
       articleType: [],

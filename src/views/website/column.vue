@@ -16,9 +16,10 @@
             <!-- 类型 -->
             <el-table-column :label="$t('类型')">
               <template slot-scope="scope">
-                <span v-if="scope.row.type === 1">{{$t('文章')}}</span>
+                <span v-if="scope.row.type === 1">{{$t('单篇文章')}}</span>
                 <span v-if="scope.row.type === 2">{{$t('链接')}}</span>
-                <span v-if="scope.row.type === 3">{{$t('首页')}}</span>
+                <span v-if="scope.row.type === 3">{{$t('单页')}}</span>
+                <span v-if="scope.row.type === 4">{{$t('多篇文章')}}</span>
               </template>
             </el-table-column>
             <!-- 排序 -->

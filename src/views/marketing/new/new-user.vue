@@ -61,6 +61,13 @@
                 inactive-color="gray">
               </el-switch>
             </div>
+            <div v-if="item.type === 3" class="coupon-sty">
+              <!-- <el-checkbox v-model="ruleForm.some_with_name">{{$t('与“新用户送券”同时开启时，仅享受“被邀请人券”；不勾选则两券共享。')}}</el-checkbox> -->
+              <el-checkbox @change="changeUnique(item.type)" v-model="isUnique">{{$t('关闭两券共享')}}</el-checkbox>
+              <el-tooltip class="item code-sty" effect="dark" :content="$t('与“新用户送券”同时开启时，仅享受“被邀请人券”；不勾选则两券共享。')" placement="top">
+              <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
           </div>
         </div>
       </el-col>
@@ -73,7 +80,8 @@ export default {
   data () {
     return {
       validate_email: '',
-      ruleForm: []
+      ruleForm: [],
+      isUnique: ''
     }
   },
   created () {
@@ -83,8 +91,17 @@ export default {
     getList () {
       this.$request.getCoupons().then(res => {
         this.ruleForm = res.data
+        res.data.forEach(item => {
+          if (item.type === 3) {
+            console.log(11)
+            this.isUnique = Boolean(item.is_unique)
+            // return Boolean(item.is_unique)
+          }
+        })
+        console.log(this.isUnique, 'isUnique')
       })
     },
+    // 开启或关闭
     changeOnline (type, val) {
       console.log(type, 'type')
       const status = val === 0 ? 0 : 1
@@ -95,7 +112,28 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          // this.getWechat()
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 开启或关闭 两券共享
+    changeUnique (type) {
+      console.log(this.isUnique, 'val')
+      const status = Number(this.isUnique) === 0 ? 0 : 1
+      console.log(status, 'status')
+      this.$request.closeUnique(type, status).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -165,6 +203,18 @@ export default {
   }
   .font-sty {
     font-size: 12px;
+  }
+  .coupon-sty {
+    // margin-top: 5px;
+    // display: inline-block;
+    clear: both;
+    .el-checkbox {
+      margin-left: 0 !important;
+    }
+  }
+  .code-sty {
+    padding-left: 5px;
+    color: green;
   }
 }
 </style>

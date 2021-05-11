@@ -48,7 +48,7 @@
               <exchange-configure></exchange-configure>
             </el-col>
             <!-- 国家地区 -->
-            <el-col :span="19" v-if="secondTab1 === '5'" class="main-right">
+            <el-col :span="20" v-if="secondTab1 === '5'" class="main-right">
               <country-configure></country-configure>
             </el-col>
             <!-- 转运规则 -->
