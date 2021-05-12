@@ -285,6 +285,12 @@ export default {
               })
             }
           })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+          this.getCountryList()
         })
       } else {
         this.$request.closeCountryLocation(id, event).then(res => {
