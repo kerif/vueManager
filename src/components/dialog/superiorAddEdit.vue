@@ -76,7 +76,8 @@ export default {
         code: '',
         api_code: '',
         some_with_name: ''
-      }
+      },
+      countryId: ''
     }
   },
   methods: {
@@ -84,7 +85,8 @@ export default {
     getString () {
       this.$request.getString().then(res => {
         if (res.ret) {
-          this.stringData = res.data
+          this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
+          console.log(this.stringData, 'this.stringData')
           if (this.id) {
             this.getList()
           }
@@ -115,6 +117,10 @@ export default {
       this.$request.countryLocation().then(res => {
         if (res.ret) {
           this.country = res.data
+          if (this.state === 'add') {
+            this.ruleForm.country_id = this.countryId
+            this.getAreas()
+          }
         }
       })
     },

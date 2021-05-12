@@ -418,7 +418,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.getCountryList()
+          this.goDeatils(this.countryName, this.countryId)
         } else {
           this.$message({
             message: res.msg,
@@ -457,6 +457,9 @@ export default {
     },
     // 批量删除
     batchDelete () {
+      if (this.deleteNum.length === 0 && this.secondNum.length === 0) {
+        return this.$message.error(this.$t('请选择'))
+      }
       const ids = this.secondNum.concat(this.deleteNum)
       console.log(ids, 'ids')
       this.$confirm(this.$t('您是否确认批量删除？如果是批量删除二级地址的话，该分级下所有的三级地址也会删除'), this.$t('提示'), {
@@ -484,7 +487,7 @@ export default {
     },
     // 新增二三级国家
     addLowLevelCountry () {
-      dialog({ type: 'superiorAddEdit', state: 'add' }, () => {
+      dialog({ type: 'superiorAddEdit', state: 'add', countryId: this.countryId }, () => {
         this.goDeatils(this.countryName, this.countryId)
       })
     },
