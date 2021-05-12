@@ -15,7 +15,10 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item :label="$t('区域')">
+    <el-form-item>
+      <div>{{$t('区域')}}
+        <span class="tips-sty">{{$t('添加二级区域不要选择此项')}}</span>
+      </div>
       <el-select v-model="ruleForm.parent_id" :placeholder="$t('请选择区域')"
         filterable :disabled="!ruleForm.country_id">
         <el-option
@@ -237,6 +240,7 @@ export default {
       this.country = []
       this.childData = []
       this.state = ''
+      this.id = ''
     },
     init () {
       this.getString()
@@ -277,7 +281,8 @@ export default {
   }
   .tips-sty {
     margin-left: 40px;
-    color: gray;
+    color: red;
+    font-size: 12px;
   }
 }
 </style>
