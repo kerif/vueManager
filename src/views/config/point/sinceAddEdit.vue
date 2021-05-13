@@ -31,6 +31,7 @@
             <el-col :span="5" v-show="newWarehouseList.length !== 0 && form.country_id">
             <el-cascader
               filterable
+              :props="{ checkStrictly: true }"
               :key="keyValue"
               class="country-select"
               :disabled="!!this.$route.params.id && !hasStore"
