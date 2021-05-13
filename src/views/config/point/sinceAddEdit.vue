@@ -378,14 +378,10 @@ export default {
         this.form.opening_hours = res.data.opening_hours
         this.form.edit_notice_jurisdiction = res.data.edit_notice_jurisdiction
         if (res.data.area_id) {
-          this.areaData = [res.data.area_id, res.data.sub_area_id]
-          // this.$set(this.areaData, 0, res.data.area_id)
-          // this.$set(this.areaData, 1, res.data.sub_area_id)
-          // console.log(this.areaData, '2222')
-          this.form.area_id = res.data.area_id
-          console.log(this.form.area_id, 'this.form.area_id')
-          this.form.sub_area_id = res.data.sub_area_id
-          console.log(this.form.sub_area_id, 'this.form.sub_area_id')
+          this.areaData = res.data.sub_area_id ? [res.data.area_id, res.data.sub_area_id] : [res.data.area_id]
+          console.log(this.areaData, '111')
+          this.form.area_id = res.data.area_id || ''
+          this.form.sub_area_id = res.data.sub_area_id || ''
         }
         if (res.data.lat) {
           this.lat = res.data.lat
