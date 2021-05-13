@@ -20,7 +20,7 @@
         <span class="tips-sty">{{$t('添加二级区域不要选择此项')}}</span>
       </div>
       <el-select v-model="ruleForm.parent_id" :placeholder="$t('请选择区域')"
-        filterable :disabled="!ruleForm.country_id">
+        filterable :disabled="!ruleForm.country_id" clearable>
         <el-option
           v-for="item in childData"
           :key="item.id"

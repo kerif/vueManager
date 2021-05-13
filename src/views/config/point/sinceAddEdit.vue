@@ -21,16 +21,17 @@
               class="country-select"
               :placeholder="$t('请选择')">
               <el-option
-                v-for="item in warehouseList"
+                v-for="item in countryList"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
           </el-col>
-            <el-col :span="5" v-if="newWarehouseList.length !== 0 && form.country_id">
+            <el-col :span="5" v-show="newWarehouseList.length !== 0 && form.country_id">
             <el-cascader
               filterable
+              :key="keyValue"
               class="country-select"
               :disabled="!!this.$route.params.id && !hasStore"
               v-model="areaData"
@@ -47,7 +48,7 @@
               class="country-select"
               :placeholder="$t('请选择')">
               <el-option
-                v-for="item in warehouseList"
+                v-for="item in countryList"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id">
@@ -91,12 +92,12 @@
           <el-col :span="10">
             <el-input v-model="form.address" :placeholder="$t('请输入')"></el-input>
           </el-col>
-          <el-col :span="5" v-if="form.area_id">
+          <el-col :span="5" v-if="form.area_id && (form.country_id === this.timezoneId)">
             <el-button type="primary" plain @click="onShowLocation">{{$t('地图选点')}}</el-button>
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item v-show="form.area_id">
+      <el-form-item v-show="form.area_id && (form.country_id === this.timezoneId)">
         <el-row :gutter="20">
           <el-col :span="5">
             <div>{{$t('经度')}}</div>
@@ -254,7 +255,7 @@ export default {
         maxTime: '',
         symbol: '工作日'
       },
-      warehouseList: [], // 获取全部仓库
+      countryList: [], // 获取全部国家
       newWarehouseList: [],
       typeList: [],
       localization: {},
@@ -280,7 +281,9 @@ export default {
       announcementData: {
         opening_hours: '',
         announcement: ''
-      }
+      },
+      keyValue: 0,
+      timezoneId: ''
     }
   },
   created () {
@@ -375,8 +378,13 @@ export default {
         this.form.edit_notice_jurisdiction = res.data.edit_notice_jurisdiction
         if (res.data.area_id) {
           this.areaData = [res.data.area_id, res.data.sub_area_id]
+          // this.$set(this.areaData, 0, res.data.area_id)
+          // this.$set(this.areaData, 1, res.data.sub_area_id)
+          // console.log(this.areaData, '2222')
           this.form.area_id = res.data.area_id
+          console.log(this.form.area_id, 'this.form.area_id')
           this.form.sub_area_id = res.data.sub_area_id
+          console.log(this.form.sub_area_id, 'this.form.sub_area_id')
         }
         if (res.data.lat) {
           this.lat = res.data.lat
@@ -409,9 +417,11 @@ export default {
     },
     // 切换国家
     changeCountry () {
+      console.log(this.form.country_id, 'form.country_id')
       this.areaData = []
+      ++this.keyValue
       this.form.expressLines = []
-      const selectList = this.warehouseList.find(item => item.value === this.form.country_id)
+      const selectList = this.countryList.find(item => item.value === this.form.country_id)
       this.newWarehouseList = selectList ? selectList.children : []
       console.log(this.areas, 'this.areas')
     },
@@ -435,7 +445,7 @@ export default {
     // 获取所属国家地区
     getWarehouse () {
       this.$request.countryLocation().then(res => {
-        this.warehouseList = res.data.map(item => {
+        this.countryList = res.data.map(item => {
           return {
             value: item.id,
             label: item.name,
@@ -453,21 +463,32 @@ export default {
             })
           }
         })
-        const mapWarehouseList = res.data.find(item => item.areas.length) || { areas: [] }
-        console.log(mapWarehouseList, 'mapWarehouseList')
-        this.newWarehouseList = mapWarehouseList.areas.map(item => {
-          return {
-            value: item.id,
-            label: item.name,
-            children: item.areas.map(item => {
-              return {
-                value: item.id,
-                label: item.name
-              }
-            })
+        res.data.forEach(item => {
+          if (item.timezone === '0852') {
+            console.log(item.timezone, item.id, 'timezone')
+            this.timezoneId = item.id
           }
         })
-        // this.warehouseList = res.data
+        if (this.$route.params.id) {
+          const selectList = this.countryList.find(item => item.value === this.form.country_id)
+          console.log(selectList, 'selectList')
+          this.newWarehouseList = selectList ? selectList.children : []
+        } else {
+          const mapWarehouseList = res.data.find(item => item.areas.length) || { areas: [] }
+          console.log(mapWarehouseList, 'mapWarehouseList')
+          this.newWarehouseList = mapWarehouseList.areas.map(item => {
+            return {
+              value: item.id,
+              label: item.name,
+              children: item.areas.map(item => {
+                return {
+                  value: item.id,
+                  label: item.name
+                }
+              })
+            }
+          })
+        }
         console.log(this.newWarehouseList, 'this.newWarehouseList')
       })
     },
@@ -520,12 +541,9 @@ export default {
     deleteRow (index, rows) {
       rows.splice(index, 1)
     },
-    handleChange (value) {
-      // this.form.country_id = this.areaData[0]
+    handleChange () {
       this.form.area_id = this.areaData[0]
       this.form.sub_area_id = this.areaData[1]
-      // console.log(this.form.area_id, 'form.area_id')
-      // console.log(this.form.sub_area_id, 'form.sub_area_id')
     },
     getCity () {},
     getArea () {},
