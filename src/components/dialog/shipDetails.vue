@@ -39,10 +39,11 @@
       <el-table-column :label="$t('线路名称')" prop="express_line.cn_name"></el-table-column>
       <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
       <el-table-column :label="$t('收货国家/地区')" prop="address.country_name"></el-table-column>
-      <el-table-column :label="$t('包裹数与件数')"></el-table-column>
-      <template slot-scope="scope">
-        <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
-      </template>
+      <el-table-column :label="$t('包裹数与件数')">
+        <template slot-scope="scope">
+          <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('出库箱数')" prop="boxes_count"></el-table-column>
       <el-table-column
         :label="$t('实际重量') + localization.weight_unit"
