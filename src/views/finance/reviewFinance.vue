@@ -159,6 +159,9 @@
       <h4>{{ $t('审核拒绝信息') }}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
+          <p class="transfer-right">{{ $t('审核人员') }}</p>
+          <span>{{ form.operator }}</span
+          ><br />
           <p class="transfer-right">{{ $t('备注') }}</p>
           <span>{{ form.customer_remark }}</span
           ><br />
@@ -216,6 +219,9 @@
       <h4>{{ $t('审核拒绝信息') }}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
+          <p class="transfer-right">{{ $t('审核人员') }}</p>
+          <span>{{ form.operator }}</span
+          ><br />
           <p class="transfer-right">{{ $t('备注') }}</p>
           <span>{{ form.remark }}</span
           ><br />

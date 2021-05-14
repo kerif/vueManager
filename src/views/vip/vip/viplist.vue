@@ -145,7 +145,7 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          status: this.page_params.group
+          user_group_id: this.page_params.group
         })
         .then(res => {
           this.tableLoading = false
