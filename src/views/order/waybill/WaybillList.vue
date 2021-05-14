@@ -97,7 +97,8 @@
         </div>
       </div>
     </div>
-
+    <!-- :cell-style="{ padding: '0' }"
+ size="mini" -->
     <div style="height: calc(100vh - 270px)">
       <el-table
         row-key="id"
@@ -109,9 +110,7 @@
         ref="table"
         :data="oderData"
         @selection-change="onSelectChange"
-        size="mini"
         height="calc(100vh - 270px)"
-        :cell-style="{ padding: '0' }"
       >
         <!-- 二级分类列表 -->
         <el-table-column key="expand" class-name="expand-class" width="1" type="expand">

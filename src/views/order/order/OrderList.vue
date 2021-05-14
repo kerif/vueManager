@@ -77,7 +77,6 @@
         @selection-change="selectionChange"
         v-loading="tableLoading"
         height="calc(100vh - 270px)"
-        size="mini"
         class="order-data-list"
       >
         <el-table-column
