@@ -376,7 +376,7 @@ export default {
       this.onAgentChange()
     }
   },
-  created() {
+  activated() {
     this.getAgentData()
     this.getList()
   }

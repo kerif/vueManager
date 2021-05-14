@@ -325,14 +325,13 @@ export default {
     }
   },
   activated() {
+    this.getList()
+    this.getCounts()
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
   },
-  mounted() {
-    this.getList()
-    this.getCounts()
-  },
+  mounted() {},
   methods: {
     // 获取订单统计数据
     getCounts() {
@@ -369,8 +368,8 @@ export default {
         params = {
           ...params,
           ...searchData,
-          begin_date: searchData.date[0],
-          end_date: searchData.date[1]
+          begin_date: searchData.date ? searchData.date[0] : '',
+          end_date: searchData.date ? searchData.date[1] : ''
         }
       }
       return params

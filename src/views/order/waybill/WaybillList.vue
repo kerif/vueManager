@@ -1021,15 +1021,14 @@ export default {
   },
   activated() {
     this.initQuery()
+    this.getList()
   },
   created() {
     this.getOrderFieldList()
     this.getCounts()
     this.initQuery()
   },
-  mounted() {
-    this.getList()
-  },
+  mounted() {},
   methods: {
     initQuery() {
       if (this.$route.query.activeName) {
@@ -1128,8 +1127,8 @@ export default {
         params = {
           ...params,
           ...searchData,
-          begin_date: searchData.date[0],
-          end_date: searchData.date[1],
+          begin_date: searchData.date ? searchData.date[0] : '',
+          end_date: searchData.date ? searchData.date[1] : '',
           country_id:
             searchData.countryArr.length > 1
               ? searchData.countryArr[0]
