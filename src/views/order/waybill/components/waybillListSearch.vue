@@ -1,15 +1,9 @@
 <template>
   <div class="waybill-list-search">
-    <el-form
-      class="search-form"
-      :model="searchFieldData"
-      ref="searchForm"
-      size="mini"
-      label-width="80px"
-    >
+    <el-form class="search-form" :model="searchFieldData" ref="searchForm" size="mini">
       <div>
-        <el-form-item :label="$t('时间')" prop="date_type">
-          <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('请选择')">
+        <el-form-item prop="date_type">
+          <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('时间')">
             <el-option
               v-for="item in timeOptions"
               :key="item.id"
@@ -31,8 +25,8 @@
             </el-date-picker>
           </el-form-item>
         </el-form-item>
-        <el-form-item :label="$t('价格区间')" prop="value_type">
-          <el-select v-model="searchFieldData.value_type" clearable :placeholder="$t('请选择')">
+        <el-form-item prop="value_type">
+          <el-select v-model="searchFieldData.value_type" clearable :placeholder="$t('价格区间')">
             <el-option
               v-for="item in priceRangeOptions"
               :key="item.id"
@@ -60,11 +54,11 @@
           </el-form-item>
         </el-form-item>
         <div style="display: flex; height: 28px">
-          <el-form-item :label="$t('线路名称')" prop="express_line_id">
+          <el-form-item prop="express_line_id">
             <el-select
               v-model="searchFieldData.express_line_id"
               clearable
-              :placeholder="$t('请选择')"
+              :placeholder="$t('线路名称')"
             >
               <el-option
                 v-for="item in lineData"
@@ -75,8 +69,12 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('支付方式')" prop="payment_type">
-            <el-select v-model="searchFieldData.payment_type" clearable :placeholder="$t('请选择')">
+          <el-form-item prop="payment_type">
+            <el-select
+              v-model="searchFieldData.payment_type"
+              clearable
+              :placeholder="$t('支付方式')"
+            >
               <el-option
                 v-for="item in paymentData"
                 :key="item.id"
@@ -90,16 +88,21 @@
       </div>
       <div>
         <div style="display: flex">
-          <el-form-item :label="$t('收货国家/地区')" prop="countryArr" label-width="140px">
+          <el-form-item prop="countryArr">
             <el-cascader
+              :placeholder="$t('收货国家/地区')"
               :show-all-levels="false"
               :props="countryProps"
               v-model="searchFieldData.countryArr"
               clearable
             ></el-cascader>
           </el-form-item>
-          <el-form-item :label="$t('收货方式')" prop="receive_type">
-            <el-select v-model="searchFieldData.receive_type" clearable :placeholder="$t('请选择')">
+          <el-form-item prop="receive_type">
+            <el-select
+              v-model="searchFieldData.receive_type"
+              clearable
+              :placeholder="$t('收货方式')"
+            >
               <el-option
                 v-for="item in receiverOptions"
                 :key="item.id"
@@ -111,8 +114,12 @@
           </el-form-item>
         </div>
         <div style="display: flex">
-          <el-form-item :label="$t('支付状态')" prop="pay_delivery" label-width="140px">
-            <el-select v-model="searchFieldData.pay_delivery" clearable :placeholder="$t('请选择')">
+          <el-form-item prop="pay_delivery">
+            <el-select
+              v-model="searchFieldData.pay_delivery"
+              clearable
+              :placeholder="$t('支付状态')"
+            >
               <el-option
                 v-for="item in paymentStatusData"
                 :key="item.id"
@@ -122,8 +129,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('所属代理')" prop="agent">
-            <el-select v-model="searchFieldData.agent" clearable :placeholder="$t('请选择')">
+          <el-form-item prop="agent">
+            <el-select v-model="searchFieldData.agent" clearable :placeholder="$t('所属代理')">
               <el-option
                 v-for="item in agentData"
                 :key="item.id"
@@ -285,7 +292,7 @@ export default {
     padding: 10px 0;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
+    // align-items: center;
     .el-select,
     .el-cascader,
     .el-input,
@@ -293,7 +300,7 @@ export default {
       margin: 0 5px;
     }
     .number ::v-deep .el-input__inner {
-      text-align: center;
+      // text-align: center;
     }
     .el-form-item--mini.el-form-item {
       margin-bottom: 10px;

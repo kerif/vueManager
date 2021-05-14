@@ -3,12 +3,8 @@
     <el-tabs v-model="activeName" class="tabLength">
       <!-- 支付审核 -->
       <el-tab-pane :label="$t('支付审核')" name="0"></el-tab-pane>
-      <!-- <el-tab-pane :label="$t('支付审核') + '(' + 0 + ')'" name="0" v-if="!this.countData.wait_receive"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('支付审核') + '(' + this.countData.wait_receive + ')'" name="0"></el-tab-pane> -->
       <!-- 退款审核 -->
       <el-tab-pane :label="$t('退款审核')" name="1"></el-tab-pane>
-      <!-- <el-tab-pane :label="$t('退款审核') + '(' + 0 + ')'" name="1" v-if="!this.countData.received"></el-tab-pane>
-      <el-tab-pane v-else :label="$t('退款审核') + '(' + this.countData.received + ')'" name="1"></el-tab-pane> -->
     </el-tabs>
     <div class="order-list-search" v-show="hasFilterCondition">
       <div class="changeTime">
@@ -384,7 +380,7 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      // this.getList()
     },
     // 获取支付方式
     getPayment() {
@@ -397,7 +393,7 @@ export default {
     // 选择支付方式
     onPaymentChange() {
       this.page_params.handleQueryChange('payment_type', this.payment_type)
-      this.getList()
+      // this.getList()
     },
     // 选择审核方式
     onStatusChange() {
@@ -412,7 +408,7 @@ export default {
     },
     // 提交表单
     submitForm() {
-      this.onTime()
+      this.onTime(this.timeList)
       this.onPaymentChange()
       this.onStatusChange()
     }

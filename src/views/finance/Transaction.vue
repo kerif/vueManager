@@ -205,7 +205,7 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      // this.getList()
     },
     // 详情
     details(type, id, orderId, paymentType) {
@@ -232,7 +232,7 @@ export default {
     // 选择不同类型优惠券
     onVocherTypeChange() {
       this.page_params.handleQueryChange('type', this.type)
-      this.getList()
+      // this.getList()
     },
     // 选择不同类型优惠券
     onRecordTypeChange() {
@@ -322,7 +322,7 @@ export default {
     },
     // 提交表单
     submitForm() {
-      this.onTime()
+      this.onTime(this.timeList)
       this.onLineTypeChange()
       this.onVocherTypeChange()
     }

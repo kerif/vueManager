@@ -209,7 +209,7 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      // this.getList()
     },
     // 取消或设置精选
     resetRecommend(id, status) {
@@ -245,7 +245,7 @@ export default {
     },
     // 提交表单
     submitForm() {
-      this.onTime()
+      this.onTime(this.timeList)
       this.onShipStatus()
     }
   },

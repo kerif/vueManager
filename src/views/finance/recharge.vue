@@ -249,12 +249,12 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      // this.getList()
     },
     // 状态筛选
     onShipStatus() {
       this.page_params.handleQueryChange('status', this.status)
-      this.getList()
+      // this.getList()
     },
     // 跳转到审核
     details(id, orderId, paymentType) {
@@ -300,7 +300,7 @@ export default {
     },
     // 提交表单
     submitForm() {
-      this.onTime()
+      this.onTime(this.timeList)
       this.onVocherTypeChange()
       this.onShipStatus()
     }

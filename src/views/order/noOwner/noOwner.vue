@@ -363,7 +363,7 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      // this.getList()
     },
     // 重置筛选
     resetForm() {
@@ -372,7 +372,7 @@ export default {
     },
     // 搜索
     submitForm() {
-      this.onTime()
+      this.onTime(this.timeList)
       this.onAgentChange()
     }
   },

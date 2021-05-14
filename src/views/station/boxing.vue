@@ -62,7 +62,11 @@
                 v-loading="tableLoading"
               >
                 <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
-                <el-table-column :label="$t('选择包裹数')" prop="package_count"></el-table-column>
+                <el-table-column :label="$t('选择包裹数与件数')">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.package_count }}（{{ scope.row.numer }}）</span>
+                  </template>
+                </el-table-column>
                 <el-table-column :label="$t('默认收货信息')">
                   <template slot-scope="scope">
                     <span>{{ scope.row.address && scope.row.address.receiver_name }}</span

@@ -178,7 +178,11 @@
                 :label="$t('收货国家/地区')"
                 prop="address.country_name"
               ></el-table-column>
-              <el-table-column :label="$t('包裹数')" prop="package_count"></el-table-column>
+              <el-table-column :label="$t('包裹数与件数')">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
+                </template>
+              </el-table-column>
               <el-table-column
                 :label="
                   activeName === '1'

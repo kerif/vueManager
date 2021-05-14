@@ -746,7 +746,7 @@ export default {
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      // this.getList()
     },
     // 发货时间
     // 创建时间
@@ -758,7 +758,7 @@ export default {
         'times',
         `${this.shipped_begin_date} ${this.shipped_end_date}`
       )
-      this.getList()
+      // this.getList()
     },
     // 删除发货单
     deleteShip(id) {
@@ -853,8 +853,9 @@ export default {
     },
     // 提交表单
     submitForm() {
-      this.onTime()
-      this.onShipment()
+      console.log('111')
+      this.onTime(this.timeList)
+      this.onShipment(this.shipmentList)
       this.onShipStatus()
     },
     dropdown(command) {

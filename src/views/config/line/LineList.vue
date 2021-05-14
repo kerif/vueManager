@@ -68,7 +68,7 @@
           <div class="add-btns-r">
             <el-select
               size="mini"
-              :placeholder="$t('续费')"
+              :placeholder="$t('续重')"
               v-model="query.nextWeight"
               multiple
               collapse-tags
@@ -146,7 +146,7 @@
         </el-col>
       </el-row>
     </div>
-    <div style="height: calc(100vh - 360px)">
+    <div style="height: calc(100vh - 350px)">
       <el-table
         stripe
         border
@@ -155,7 +155,6 @@
         v-loading="tableLoading"
         ref="table"
         height="calc(100vh - 360px)"
-        :cell-style="{ padding: '0' }"
       >
         <el-table-column type="expand">
           <template slot-scope="scope">
@@ -496,9 +495,9 @@ export default {
   },
   activated() {
     this.getList()
-    this.$nextTick(() => {
-      this.$refs.table.doLayout()
-    })
+    // this.$nextTick(() => {
+    //   this.$refs.table.doLayout()
+    // })
   },
   created() {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0

@@ -128,6 +128,9 @@
       <h4>{{ $t('审核通过信息') }}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
+          <p class="transfer-right">{{ '审核人员' }}</p>
+          <span>{{ form.operator }}</span
+          ><br />
           <p class="transfer-right">{{ '确认支付金额' + this.localization.currency_unit }}</p>
           <span>{{ form.confirm_amount }}</span
           ><br />
@@ -181,6 +184,9 @@
       <h4>{{ $t('审核通过信息') }}</h4>
       <el-row :gutter="20">
         <el-col :span="9">
+          <p class="transfer-right">{{ '审核人员' }}</p>
+          <span>{{ form.operator }}</span
+          ><br />
           <p class="transfer-right">{{ '确认支付金额' + this.localization.currency_unit }}</p>
           <span>{{ form.confirm_amount }}</span
           ><br />
