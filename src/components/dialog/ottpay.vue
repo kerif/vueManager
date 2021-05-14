@@ -1,19 +1,29 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('配置')" class="dialog-alipay" width="50%"
-  @close="clear">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm"
-    label-position="top">
-        <!-- 员工组中文名 -->
-        <el-form-item :label="$t('商户号')">
-            <el-input :placeholder="$t('请输入商户号')" v-model="ruleForm.merchant_id"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('操作员号')">
-            <el-input :placeholder="$t('请输入操作员号')" v-model="ruleForm.operator_id"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('签名密钥')">
-            <el-input :placeholder="$t('请输入签名密钥')" v-model="ruleForm.sign_key"></el-input>
-        </el-form-item>
-        <!-- <el-form-item :label="$t('支付宝公钥证书')">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('配置')"
+    class="dialog-alipay"
+    width="50%"
+    @close="clear"
+  >
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="ruleForm"
+      class="demo-ruleForm"
+      label-position="top"
+    >
+      <!-- 员工组中文名 -->
+      <el-form-item :label="$t('商户号')">
+        <el-input :placeholder="$t('请输入商户号')" v-model="ruleForm.merchant_id"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('操作员号')">
+        <el-input :placeholder="$t('请输入操作员号')" v-model="ruleForm.operator_id"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('签名密钥')">
+        <el-input :placeholder="$t('请输入签名密钥')" v-model="ruleForm.sign_key"></el-input>
+      </el-form-item>
+      <!-- <el-form-item :label="$t('支付宝公钥证书')">
             <el-input :placeholder="$t('请输入支付宝公钥证书')" v-model="ruleForm.ali_public_key"></el-input>
             <el-upload
                 class="upload-demo"
@@ -24,7 +34,7 @@
                 <el-button size="small" class="btn-main chooseBtn">{{$t('选择')}}</el-button>
             </el-upload>
         </el-form-item> -->
-        <!-- <el-form-item :label="$t('支付宝私钥证书')">
+      <!-- <el-form-item :label="$t('支付宝私钥证书')">
             <el-input :placeholder="$t('请输入支付宝私钥证书')" v-model="ruleForm.private_key"></el-input>
             <el-upload
                 class="upload-demo"
@@ -37,14 +47,14 @@
     </el-form>
     <!-- <p class="noticeAddress">{{$t('支付通知地址:')}}  {{ruleForm.alipay_root_cert}}</p> -->
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       fileList: [],
       ruleForm: {
@@ -61,14 +71,14 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getOttPay().then(res => {
         if (res.ret) {
           this.ruleForm = res.data
         }
       })
     },
-    confirm () {
+    confirm() {
       let params = { ...this.ruleForm }
       // for (const key in params) {
       //   if (params.hasOwnProperty(key)) {
@@ -93,15 +103,15 @@ export default {
         this.show = false
       })
     },
-    handlePreview (file) {
+    handlePreview(file) {
       console.log(file)
     },
-    clear () {
+    clear() {
       this.ruleForm.country_id = ''
       this.ruleForm.remark = ''
     },
     // 上传商户 key_path 文件
-    uploadKeyFile (file) {
+    uploadKeyFile(file) {
       this.onUpload(file.file).then(res => {
         if (res.ret) {
           this.ruleForm.private_key = res.data[0].path
@@ -109,19 +119,19 @@ export default {
       })
     },
     // 上传安全公钥文件
-    uploadRsaFile (file) {
+    uploadRsaFile(file) {
       this.onUpload(file.file).then(res => {
         if (res.ret) {
           this.ruleForm.ali_public_key = res.data[0].path
         }
       })
     },
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
       return this.$request.uploadCerts(params)
     },
-    init () {
+    init() {
       this.getList()
     }
   }
@@ -130,8 +140,8 @@ export default {
 <style lang="scss">
 .dialog-alipay {
   .el-dialog__body {
-     padding: 30px 50px;
-    }
+    padding: 30px 50px;
+  }
   .el-form-item__label {
     width: 150px;
   }
@@ -151,15 +161,15 @@ export default {
     top: 5px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

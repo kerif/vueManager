@@ -7,25 +7,41 @@
     <div class="select-box">
       <add-btn router="addSingle">{{$t('添加')}}</add-btn>
     </div> -->
-    <el-table :data="blockList" stripe border class="data-list"
-    v-loading="tableLoading" @selection-change="selectionChange" height="550">
+    <el-table
+      :data="blockList"
+      stripe
+      border
+      class="data-list"
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+      height="550"
+    >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 区块名 -->
-      <el-table-column :label="$t('区块名')" prop="name">
-      </el-table-column>
+      <el-table-column :label="$t('区块名')" prop="name"> </el-table-column>
       <!-- 说明 -->
-      <el-table-column :label="$t('说明')" prop="description">
-      </el-table-column>
-      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+      <el-table-column :label="$t('说明')" prop="description"> </el-table-column>
+      <el-table-column
+        :label="item.name"
+        v-for="item in formatLangData"
+        :key="item.id"
+        align="center"
+      >
         <template slot-scope="scope">
-          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span
+            v-if="scope.row['trans_' + item.language_code]"
+            class="el-icon-check icon-sty"
+            @click="onLang(scope.row, item)"
+          ></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-deep-purple optionBtn" @click="editBlock(scope.row.id)">{{$t('编辑')}}</el-button>
+          <el-button class="btn-deep-purple optionBtn" @click="editBlock(scope.row.id)">{{
+            $t('编辑')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -39,7 +55,7 @@
 // import { pagination } from '@/mixin'
 // import AddBtn from '@/components/addBtn'
 export default {
-  data () {
+  data() {
     return {
       blockList: [],
       localization: {},
@@ -75,11 +91,11 @@ export default {
     // AddBtn
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
-  created () {
+  created() {
     this.getList()
     this.getLanguageList()
     // if (this.$route.query.serial_number) {
@@ -93,14 +109,14 @@ export default {
   },
   methods: {
     // 获取支持语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
         }
       })
     },
-    getList () {
+    getList() {
       this.tableLoading = true
       // let params = {
       //   page: this.page_params.page,
@@ -124,22 +140,24 @@ export default {
         }
       })
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 修改语言
-    onLang (line, lang) {
+    onLang(line, lang) {
       this.transCode = line['trans_' + lang.language_code]
-      this.$router.push({ name: 'pageLang',
+      this.$router.push({
+        name: 'pageLang',
         params: {
           line: JSON.stringify(line),
           lang: JSON.stringify(lang),
           transCode: this.transCode
-        } })
+        }
+      })
     },
     // 删除
-    deleteData () {
+    deleteData() {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
@@ -150,31 +168,35 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
-        this.$request.deletePage({
-          ids: this.deleteNum
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .deletePage({
+            ids: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       })
     },
     // 详情
-    editBlock (id) {
-      this.$router.push({ name: 'blockEdit',
+    editBlock(id) {
+      this.$router.push({
+        name: 'blockEdit',
         params: {
           id: id
-        } })
+        }
+      })
     }
   }
 }

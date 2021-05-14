@@ -1,34 +1,38 @@
 <template>
   <div class="add-edit-column">
-  <el-form label-position="top" class="voucher-form" :model="ruleForm" ref="ruleForm">
-    <!-- 上级栏目 -->
-    <el-form-item :label="$t('上级栏目')" v-if="this.$route.params.state === 'second'">
+    <el-form label-position="top" class="voucher-form" :model="ruleForm" ref="ruleForm">
+      <!-- 上级栏目 -->
+      <el-form-item :label="$t('上级栏目')" v-if="this.$route.params.state === 'second'">
         <el-select v-model="ruleForm.parent_id" :placeholder="$t('上级栏目')">
-          <el-option
-            v-for="item in options"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
-    </el-form-item>
-    <!-- 排序 -->
-    <el-form-item :label="$t('排序')">
-      <el-input class="input-sty" :placeholder="$t('请输入排序')" v-model="ruleForm.sort_index"></el-input>
-    </el-form-item>
-    <!-- 栏目名称 -->
-    <el-form-item :label="'*' + $t('栏目名称')">
-      <el-input class="input-sty" :placeholder="$t('请输入栏目名称')" v-model="ruleForm.name"></el-input>
-    </el-form-item>
-    <!-- 栏目图片 -->
-    <el-form-item :label="$t('栏目图片')" class="updateChe">
-      <span class="img-item" v-for="(item, index) in customerList" :key="index">
-        <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-        <span class="model-box"></span>
-        <span class="operat-box">
-          <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-          <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
-        </span>
+      </el-form-item>
+      <!-- 排序 -->
+      <el-form-item :label="$t('排序')">
+        <el-input
+          class="input-sty"
+          :placeholder="$t('请输入排序')"
+          v-model="ruleForm.sort_index"
+        ></el-input>
+      </el-form-item>
+      <!-- 栏目名称 -->
+      <el-form-item :label="'*' + $t('栏目名称')">
+        <el-input
+          class="input-sty"
+          :placeholder="$t('请输入栏目名称')"
+          v-model="ruleForm.name"
+        ></el-input>
+      </el-form-item>
+      <!-- 栏目图片 -->
+      <el-form-item :label="$t('栏目图片')" class="updateChe">
+        <span class="img-item" v-for="(item, index) in customerList" :key="index">
+          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+          <span class="model-box"></span>
+          <span class="operat-box">
+            <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+            <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+          </span>
         </span>
         <el-upload
           v-show="customerList.length < 1"
@@ -36,55 +40,55 @@
           action=""
           list-type="picture-card"
           :http-request="customerImg"
-          :show-file-list="false">
-          <i class="el-icon-plus">
-          </i>
-      </el-upload>
-    </el-form-item>
-    <el-form-item :label="$t('栏目类型')">
-      <el-select v-model="ruleForm.type" :placeholder="$t('栏目类型')"
-      @change="clearType">
-          <el-option
-            v-for="item in columnType"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
+          :show-file-list="false"
+        >
+          <i class="el-icon-plus"> </i>
+        </el-upload>
+      </el-form-item>
+      <el-form-item :label="$t('栏目类型')">
+        <el-select v-model="ruleForm.type" :placeholder="$t('栏目类型')" @change="clearType">
+          <el-option v-for="item in columnType" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
-    </el-form-item>
-    <!-- 文章类型 -->
-    <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1 || ruleForm.type === 4">
-      <el-select v-model="ruleForm.article_type" :placeholder="$t('文章类型')">
-          <el-option
-            v-for="item in articleType"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
+      </el-form-item>
+      <!-- 文章类型 -->
+      <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1 || ruleForm.type === 4">
+        <el-select v-model="ruleForm.article_type" :placeholder="$t('文章类型')">
+          <el-option v-for="item in articleType" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
-    </el-form-item>
-    <el-form-item :label="$t('标题列表')" v-if="ruleForm.type === 1 || ruleForm.type === 3">
-      <el-button class="btn-deep-blue" @click="chooseLine">{{$t('选择标题')}}</el-button>
-        <p>{{ruleForm.title}}</p>
+      </el-form-item>
+      <el-form-item :label="$t('标题列表')" v-if="ruleForm.type === 1 || ruleForm.type === 3">
+        <el-button class="btn-deep-blue" @click="chooseLine">{{ $t('选择标题') }}</el-button>
+        <p>{{ ruleForm.title }}</p>
         <!-- <div class="display-line" v-if="this.lineName">
         </div> -->
-    </el-form-item>
-    <!-- 栏目URL -->
-    <el-form-item :label="$t('栏目URL')" v-if="ruleForm.type === 2">
-      <el-input class="input-sty" :placeholder="$t('请输入栏目URL')" v-model="ruleForm.value"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" class="save-btn" @click="submit"
-      :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
       </el-form-item>
-  </el-form>
+      <!-- 栏目URL -->
+      <el-form-item :label="$t('栏目URL')" v-if="ruleForm.type === 2">
+        <el-input
+          class="input-sty"
+          :placeholder="$t('请输入栏目URL')"
+          v-model="ruleForm.value"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          type="primary"
+          class="save-btn"
+          @click="submit"
+          :loading="$store.state.btnLoading"
+          >{{ $t('保存') }}</el-button
+        >
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       options: [],
       ruleForm: {
@@ -120,7 +124,7 @@ export default {
       customerList: []
     }
   },
-  created () {
+  created() {
     this.getArticle()
     if (this.$route.params.id) {
       this.getList()
@@ -133,7 +137,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getAloneWebsites(this.$route.params.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -147,7 +151,7 @@ export default {
       })
     },
     // 获取上级栏目数据
-    getParent () {
+    getParent() {
       this.$request.parentData().then(res => {
         if (res.ret) {
           this.options = res.data
@@ -160,7 +164,7 @@ export default {
       })
     },
     // 获取文章类型数据
-    getArticle () {
+    getArticle() {
       this.$request.articleData().then(res => {
         if (res.ret) {
           this.articleType = res.data
@@ -173,11 +177,11 @@ export default {
       })
     },
     // 切换栏目类型清楚数据
-    clearType () {
+    clearType() {
       this.ruleForm.article_type = ''
     },
     // 选择标题
-    chooseLine () {
+    chooseLine() {
       if (this.ruleForm.type === 1 && !this.ruleForm.article_type) {
         return this.$message.error(this.$t('请选择文章类型'))
       }
@@ -185,14 +189,14 @@ export default {
       //   return this.$message.error(this.$t('请选择文章类型'))
       // }
       if (this.ruleForm.type === 1) {
-        dialog({ type: 'columnChoose', id: this.ruleForm.article_type, state: 'article' }, (data) => {
+        dialog({ type: 'columnChoose', id: this.ruleForm.article_type, state: 'article' }, data => {
           // console.log(data, '我是路线data')
           this.ruleForm.title = data.title
           console.log(this.lineName, 'this.lineName ')
           this.ruleForm.value = data.id
         })
       } else if (this.ruleForm.type === 3) {
-        dialog({ type: 'columnChoose', state: 'page' }, (data) => {
+        dialog({ type: 'columnChoose', state: 'page' }, data => {
           // console.log(data, '我是路线data')
           this.ruleForm.title = data.title
           console.log(this.lineName, 'this.lineName ')
@@ -201,17 +205,17 @@ export default {
       }
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除pc端二维码
-    onDeleteCus (index) {
+    onDeleteCus(index) {
       this.customerList.splice(index, 1)
     },
-    customerImg (item) {
+    customerImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -222,13 +226,13 @@ export default {
       })
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
     // 保存
-    submit () {
+    submit() {
       if (this.customerList[0]) {
         this.ruleForm.image = this.customerList[0]
       } else {
@@ -240,7 +244,8 @@ export default {
       // if (!this.customerList[0]) {
       //   return this.$message.error(this.$t('请上传pc端客户二维码'))
       // }
-      if (this.$route.params.id) { // 编辑
+      if (this.$route.params.id) {
+        // 编辑
         this.$request.editArticle(this.$route.params.id, this.ruleForm).then(res => {
           if (res.ret) {
             this.$notify({
@@ -256,7 +261,8 @@ export default {
             })
           }
         })
-      } else { // 新建
+      } else {
+        // 新建
         this.$request.addArticle(this.ruleForm).then(res => {
           if (res.ret) {
             this.$notify({
@@ -315,10 +321,10 @@ export default {
     border-radius: 6px;
   }
   .updateChe {
-  .el-form-item__content {
-    margin-left: 0 !important;
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
   }
-}
   .avatar-uploader {
     display: inline-block;
     vertical-align: top;
@@ -337,9 +343,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -349,7 +356,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;

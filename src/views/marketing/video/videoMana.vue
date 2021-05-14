@@ -1,15 +1,19 @@
 <template>
   <div class="video-list-container">
     <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-      </search-group>
-      </div>
-    <div class="select-box">
-      <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
+      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
     </div>
-    <el-table :data="videoList" stripe border class="data-list"
-    v-loading="tableLoading"
-    @selection-change="selectionChange">
+    <div class="select-box">
+      <add-btn @click.native="addVip">{{ $t('添加') }}</add-btn>
+    </div>
+    <el-table
+      :data="videoList"
+      stripe
+      border
+      class="data-list"
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+    >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('标题')" prop="title"></el-table-column>
       <el-table-column :label="$t('内容介绍')" prop="content"></el-table-column>
@@ -21,40 +25,48 @@
             :active-text="$t('开')"
             :inactive-text="$t('关')"
             active-color="#13ce66"
-            inactive-color="gray">
+            inactive-color="gray"
+          >
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column :label="$t('创建时间')" prop="created_at"></el-table-column>
-      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+      <el-table-column
+        :label="item.name"
+        v-for="item in formatLangData"
+        :key="item.id"
+        align="center"
+      >
         <template slot-scope="scope">
-          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span
+            v-if="scope.row['trans_' + item.language_code]"
+            class="el-icon-check icon-sty"
+            @click="onLang(scope.row, item)"
+          ></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
           <!-- 修改 -->
-          <el-button class="btn-green" @click="editVip(scope.row.id)">{{$t('修改')}}</el-button>
+          <el-button class="btn-green" @click="editVip(scope.row.id)">{{ $t('修改') }}</el-button>
           <!-- 预览 -->
-          <el-button class="btn-main" @click="Preview(scope.row.video)">{{$t('预览')}}</el-button>
+          <el-button class="btn-main" @click="Preview(scope.row.video)">{{ $t('预览') }}</el-button>
         </template>
       </el-table-column>
       <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">{{
+            $t('删除')
+          }}</el-button>
         </div>
       </template>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog
-      :title="$t('预览')"
-      :visible.sync="videoVisible"
-      :before-close="close"
-      width="60%">
+    <el-dialog :title="$t('预览')" :visible.sync="videoVisible" :before-close="close" width="60%">
       <video-player
         v-if="playerOptions.sources.length"
-        class='video-player vjs-custom-skin'
+        class="video-player vjs-custom-skin"
         ref="videoPlayer"
         :playsinline="true"
         :options="playerOptions"
@@ -80,7 +92,7 @@ export default {
     VideoPlayer
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       videoList: [
         {
@@ -114,40 +126,42 @@ export default {
       transCode: ''
     }
   },
-  mounted () {
+  mounted() {
     this.getList()
     this.getLanguageList()
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
-      this.$request.getVideoList({
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.videoList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
-          // this.videoList = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .getVideoList({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.videoList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+            // this.videoList = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
-    changeShow (event, id) {
-      console.log(typeof (event), '我是event')
+    changeShow(event, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeVideo(id, Number(event)).then(res => {
         if (res.ret) {
@@ -165,39 +179,39 @@ export default {
         }
       })
     },
-    close () {
+    close() {
       this.playerOptions.sources = []
       this.videoVisible = false
     },
     // 用户组分类选择值加载
-    goSearchType (val) {
+    goSearchType(val) {
       this.page_params.page = 1
       this.page_params.name_cn = val
       this.getList()
     },
     // 添加视频
-    addVip () {
+    addVip() {
       dialog({ type: 'videoList', state: 'add' }, () => {
         this.getList()
       })
     },
     // 修改资料
-    editVip (id) {
+    editVip(id) {
       console.log(id, 'id')
       dialog({ type: 'videoList', id: id, state: 'edit' }, () => {
         this.getList()
       })
     },
     // 预览
-    Preview (video) {
+    Preview(video) {
       this.videoVisible = true
       this.playerOptions.sources = [{ src: videoUrl + video }]
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
     },
     // 删除
-    deleteData () {
+    deleteData() {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
@@ -207,27 +221,29 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.videoDelete({
-          DELETE: this.deleteNum
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .videoDelete({
+            DELETE: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       })
     },
     // 获取全部语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
@@ -235,7 +251,7 @@ export default {
       })
     },
     // 转账 修改语言
-    onLang (line, lang) {
+    onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])

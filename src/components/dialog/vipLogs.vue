@@ -1,23 +1,25 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('操作日志')" class="dialog-logs-list"
-  @close="clear">
-    <h4>{{$t('操作日志')}}</h4>
-    <el-table :data="operatorData"
-      border
-      style="width: 100%">
+  <el-dialog :visible.sync="show" :title="$t('操作日志')" class="dialog-logs-list" @close="clear">
+    <h4>{{ $t('操作日志') }}</h4>
+    <el-table :data="operatorData" border style="width: 100%">
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 操作 -->
-      <el-table-column :label="$t('操作')" prop="log" :show-overflow-tooltip="true" width="400"></el-table-column>
+      <el-table-column
+        :label="$t('操作')"
+        prop="log"
+        :show-overflow-tooltip="true"
+        width="400"
+      ></el-table-column>
       <!-- 时间 -->
       <el-table-column :label="$t('时间')" prop="created_at"></el-table-column>
-      </el-table>
+    </el-table>
   </el-dialog>
 </template>
 <script>
 // import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
-  data () {
+  data() {
     return {
       operatorData: [],
       imgVisible: false,
@@ -30,7 +32,7 @@ export default {
   // },
   mixins: [pagination],
   methods: {
-    getList () {
+    getList() {
       this.$request.getVipLogs(this.id).then(res => {
         if (res.ret) {
           this.operatorData = res.data
@@ -40,10 +42,10 @@ export default {
         }
       })
     },
-    init () {
+    init() {
       this.getList()
     },
-    clear () {
+    clear() {
       this.page_params.page = 1
       this.id = ''
     }
@@ -56,18 +58,18 @@ export default {
     margin-top: 10px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
- .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }

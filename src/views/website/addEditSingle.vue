@@ -4,7 +4,9 @@
       <!-- 标题 -->
       <el-form-item :label="$t('*标题')">
         <el-row>
-          <el-col :span="10"><el-input :placeholder="$t('公告标题不超过30个字')" v-model="params.title"></el-input></el-col>
+          <el-col :span="10"
+            ><el-input :placeholder="$t('公告标题不超过30个字')" v-model="params.title"></el-input
+          ></el-col>
         </el-row>
       </el-form-item>
       <!-- 单页详情 -->
@@ -12,18 +14,25 @@
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>
-            </el-col>
+          </el-col>
         </el-row>
       </el-form-item>
       <el-form-item :label="$t('*标签')">
         <el-row>
-          <el-col :span="10"><el-input :placeholder="$t('请输入标签')" v-model="params.tags"></el-input></el-col>
+          <el-col :span="10"
+            ><el-input :placeholder="$t('请输入标签')" v-model="params.tags"></el-input
+          ></el-col>
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="save-btn" @click="saveNotice"
-        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
-        </el-form-item>
+        <el-button
+          type="primary"
+          class="save-btn"
+          @click="saveNotice"
+          :loading="$store.state.btnLoading"
+          >{{ $t('保存') }}</el-button
+        >
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -31,7 +40,7 @@
 import Wangeditor from 'wangeditor'
 import baseApi from '@/lib/axios/baseApi'
 export default {
-  data () {
+  data() {
     return {
       params: {
         title: '',
@@ -41,20 +50,37 @@ export default {
       editor: null
     }
   },
-  mounted () {
+  mounted() {
     this.editor = new Wangeditor('#editor')
-    this.editor.customConfig.menus = ['head', 'fontSize', 'fontName', 'bold', 'italic', 'underline', 'strikeThrough', 'foreColor', 'backColor', 'link', 'list', 'justify', 'quote', 'video', 'image', 'table']
-    this.editor.customConfig.onchange = (html) => {
+    this.editor.customConfig.menus = [
+      'head',
+      'fontSize',
+      'fontName',
+      'bold',
+      'italic',
+      'underline',
+      'strikeThrough',
+      'foreColor',
+      'backColor',
+      'link',
+      'list',
+      'justify',
+      'quote',
+      'video',
+      'image',
+      'table'
+    ]
+    this.editor.customConfig.onchange = html => {
       this.params.content = html
     }
     this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
     this.editor.customConfig.uploadImgParams = {}
     this.editor.customConfig.uploadImgHeaders = {
-      'Authorization': this.$store.state.token
+      Authorization: this.$store.state.token
     }
     this.editor.customConfig.uploadFileName = `images[${0}][file]`
     this.editor.customConfig.uploadImgHooks = {
-      customInsert: (insertImg, result, editor) => {
+      customInsert: (insertImg, result) => {
         console.log(result)
         if (result.ret === 1) {
           this.$message.success(this.$t('上传成功'))
@@ -68,13 +94,13 @@ export default {
     this.editor.create()
     console.log(this.editor, 'this.editor')
   },
-  created () {
+  created() {
     if (this.$route.params.id) {
       this.getList()
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.singlePageData(this.$route.params.id).then(res => {
         if (res.ret) {
           this.params.title = res.data.title
@@ -85,17 +111,18 @@ export default {
       })
     },
     // 判断是新增 还是 编辑
-    changeText () {
+    changeText() {
       this.$emit('input', this.editor.txt.html())
     },
-    saveNotice () {
+    saveNotice() {
       console.log(this.params.content, 'content')
       if (!this.params.title) {
         return this.$message.error(this.$t('请输入标题'))
       } else if (!this.params.tags) {
         return this.$message.error(this.$t('请输入标签'))
       }
-      if (!this.$route.params.id) { // 如果是新增状态
+      if (!this.$route.params.id) {
+        // 如果是新增状态
         this.$request.singlePageAdd(this.params).then(res => {
           if (res.ret) {
             this.$notify({
@@ -111,7 +138,8 @@ export default {
             })
           }
         })
-      } else { // 如果是编辑状态
+      } else {
+        // 如果是编辑状态
         this.$request.singlePageEdit(this.$route.params.id, this.params).then(res => {
           if (res.ret) {
             this.$notify({

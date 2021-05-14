@@ -5,21 +5,29 @@
       </search-group>
       </div> -->
     <div class="select-box">
-      <add-btn @click.native="addCommission">{{$t('添加')}}</add-btn>
+      <add-btn @click.native="addCommission">{{ $t('添加') }}</add-btn>
     </div>
-    <el-table :data="rulesList" stripe border class="data-list"
-    v-loading="tableLoading"
-    @selection-change="selectionChange">
+    <el-table
+      :data="rulesList"
+      stripe
+      border
+      class="data-list"
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+    >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('模版名称')" prop="name"></el-table-column>
-      <el-table-column :label="$t('应用数量')" prop="count">
-      </el-table-column>
+      <el-table-column :label="$t('应用数量')" prop="count"> </el-table-column>
       <el-table-column :label="$t('操作')" width="150px">
         <template slot-scope="scope">
           <!-- 编辑 -->
-          <el-button class="btn-green" @click="editCommission(scope.row.id)">{{$t('编辑')}}</el-button>
+          <el-button class="btn-green" @click="editCommission(scope.row.id)">{{
+            $t('编辑')
+          }}</el-button>
           <!-- 删除 -->
-          <el-button class="btn-light-red" @click="deleteSelf(scope.row.id)">{{$t('删除')}}</el-button>
+          <el-button class="btn-light-red" @click="deleteSelf(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -30,69 +38,60 @@
     </el-table>
     <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
     <!-- 配置计佣模版 -->
-    <el-dialog :title="$t('配置计佣模版')" :visible.sync="withdrawVisible" width="70%" class="withdraw-sty" @close="clear">
+    <el-dialog
+      :title="$t('配置计佣模版')"
+      :visible.sync="withdrawVisible"
+      width="70%"
+      class="withdraw-sty"
+      @close="clear"
+    >
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item :label="$t('分成方式')">
           <el-select class="select-sty" v-model="form.type" :placeholder="$t('请选择')" clearable>
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
+            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('默认佣金')">
           <el-input v-model="form.value" class="input-sty"></el-input>&nbsp;
-          <span v-if="form.type === 1">%/{{$t('单')}}</span>
-          <span v-if="form.type === 2">¥/{{$t('单')}}</span>
+          <span v-if="form.type === 1">%/{{ $t('单') }}</span>
+          <span v-if="form.type === 2">¥/{{ $t('单') }}</span>
           <span v-if="form.type === 3">¥/KG</span>
         </el-form-item>
         <el-form-item :label="$t('模版名称')">
           <el-input v-model="form.name" class="input-sty"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="form.mode">{{$t('按比例计佣时，仅计算实际运费佣金（不包含增值费用、保险费用、抵用券等）')}}</el-checkbox>
+          <el-checkbox v-model="form.mode">{{
+            $t('按比例计佣时，仅计算实际运费佣金（不包含增值费用、保险费用、抵用券等）')
+          }}</el-checkbox>
         </el-form-item>
       </el-form>
-      <el-table
-      :data="tableData"
-      border
-      style="width: 100%">
-      <el-table-column type="index">
-      </el-table-column>
-      <!-- 用户名 -->
-      <el-table-column
-        prop="name"
-        :label="$t('线路名称')">
-      </el-table-column>
-      <!-- 姓名 -->
-      <el-table-column
-        :label="$t('分成方式')">
-        <template slot-scope="scope">
-          <el-select v-model="scope.row.type" :placeholder="$t('请选择')" clearable>
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </template>
-      </el-table-column>
-      <!-- 值 -->
-        <el-table-column
-        :label="$t('值')">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.value"></el-input>
-        </template>
-      </el-table-column>
-    </el-table>
+      <el-table :data="tableData" border style="width: 100%">
+        <el-table-column type="index"> </el-table-column>
+        <!-- 用户名 -->
+        <el-table-column prop="name" :label="$t('线路名称')"> </el-table-column>
+        <!-- 姓名 -->
+        <el-table-column :label="$t('分成方式')">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.type" :placeholder="$t('请选择')" clearable>
+              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <!-- 值 -->
+        <el-table-column :label="$t('值')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.value"></el-input>
+          </template>
+        </el-table-column>
+      </el-table>
       <div slot="footer">
-      <el-button @click="this.withdrawVisible = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm(form, tableData)">{{$t('确定')}}</el-button>
-    </div>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        <el-button @click="this.withdrawVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm(form, tableData)">{{ $t('确定') }}</el-button>
+      </div>
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </el-dialog>
   </div>
 </template>
@@ -110,7 +109,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       rulesList: [],
       tableLoading: false,
@@ -154,34 +153,36 @@ export default {
       ]
     }
   },
-  created () {
+  created() {
     this.getRules()
   },
   methods: {
-    getRules () {
+    getRules() {
       this.tableLoading = true
-      this.$request.agentTemplate({
-        // keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.rulesList = res.data
-          this.localization = res.localization
-          // this.page_params.page = res.meta.current_page
-          // this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .agentTemplate({
+          // keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.rulesList = res.data
+            this.localization = res.localization
+            // this.page_params.page = res.meta.current_page
+            // this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 添加计佣方式
-    addCommission () {
+    addCommission() {
       this.withdrawVisible = true
       this.getList()
       // this.$request.commissionData(0, {
@@ -196,28 +197,30 @@ export default {
       // })
     },
     // 编辑 计佣方式
-    editCommission (id) {
+    editCommission(id) {
       this.setId = id
       this.withdrawVisible = true
       this.getList()
       this.getWithdraw()
     },
     // 获取列表数据
-    getList () {
+    getList() {
       console.log(this.setId, 'this.setId')
-      this.$request.commissionData(`${this.setId ? this.setId : 0}`, {
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        if (res.ret) {
-          this.tableData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        }
-      })
+      this.$request
+        .commissionData(`${this.setId ? this.setId : 0}`, {
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
     },
     // 获取模版数据
-    getWithdraw () {
+    getWithdraw() {
       console.log('我是form')
       this.$request.commissionSet(this.setId).then(res => {
         if (res.ret) {
@@ -228,14 +231,14 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.setId = ''
       this.form.name = ''
       this.form.mode = ''
       this.form.type = ''
       this.form.value = ''
     },
-    confirm (form, tableData) {
+    confirm(form, tableData) {
       let arr = tableData.map(item => {
         return {
           express_line_id: item.express_line_id,
@@ -244,61 +247,65 @@ export default {
         }
       })
       if (this.setId) {
-        this.$request.commissionUpdate(this.setId, {
-          name: this.form.name,
-          value: this.form.value,
-          type: this.form.type,
-          mode: Number(this.form.mode),
-          rules: arr
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.withdrawVisible = false
-            this.getRules()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          // this.withdrawVisible = false
-        })
+        this.$request
+          .commissionUpdate(this.setId, {
+            name: this.form.name,
+            value: this.form.value,
+            type: this.form.type,
+            mode: Number(this.form.mode),
+            rules: arr
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.withdrawVisible = false
+              this.getRules()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            // this.withdrawVisible = false
+          })
       } else {
-        this.$request.commissionAdd({
-          name: this.form.name,
-          value: this.form.value,
-          type: this.form.type,
-          mode: Number(this.form.mode),
-          rules: arr
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.withdrawVisible = false
-            this.getRules()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          // this.withdrawVisible = false
-        })
+        this.$request
+          .commissionAdd({
+            name: this.form.name,
+            value: this.form.value,
+            type: this.form.type,
+            mode: Number(this.form.mode),
+            rules: arr
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.withdrawVisible = false
+              this.getRules()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            // this.withdrawVisible = false
+          })
       }
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除单条转账支付
-    deleteSelf (id) {
+    deleteSelf(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -323,17 +330,17 @@ export default {
       })
     },
     // 新增行
-    addRow () {
+    addRow() {
       console.log(this.details, 'this.details')
       this.details.push({
         created_at: '',
         content: ''
       })
     },
-    deleteRow (index, rows) {
+    deleteRow(index, rows) {
       rows.splice(index, 1)
     },
-    getTrack () {
+    getTrack() {
       this.$request.getTracking(this.trackId).then(res => {
         if (res.ret) {
           this.details = res.data
@@ -341,15 +348,17 @@ export default {
       })
     },
     // 轨迹
-    addTrack () {
-      this.$request.updateTracking(this.trackId, {
-        details: this.details
-      }).then(res => {
-        if (res.ret) {
-          this.trackDialog = false
-          this.getRules()
-        }
-      })
+    addTrack() {
+      this.$request
+        .updateTracking(this.trackId, {
+          details: this.details
+        })
+        .then(res => {
+          if (res.ret) {
+            this.trackDialog = false
+            this.getRules()
+          }
+        })
     }
   }
 }
@@ -388,8 +397,8 @@ export default {
     display: inline-block;
   }
   .withdraw-sty {
-  .el-dialog__header {
-    background-color: #0E102A;
+    .el-dialog__header {
+      background-color: #0e102a;
     }
     .el-dialog__title {
       color: #fff;
@@ -400,7 +409,7 @@ export default {
     width: 40%;
   }
   .select-sty {
-    width: 41%
+    width: 41%;
   }
 }
 </style>

@@ -1,39 +1,51 @@
 <template>
   <div class="agent-list-container">
-      <div>
-      <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword"  @search="goSearch">
-      </search-group>
+    <div class="btn">
+      <add-btn router="addAgent" class="add-sty">{{ $t('添加代理') }}</add-btn>
+      <add-btn router="agentTemplate">{{ $t('计佣模版配置') }}</add-btn>
+      <div class="changeVou">
+        <el-button @click="withdraw">{{ $t('提现说明') }}</el-button>
+      </div>
+      <div class="search">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        >
+        </search-group>
+      </div>
     </div>
-    <add-btn router="addAgent" class="add-sty">{{$t('添加代理')}}</add-btn>
-    <add-btn router="agentTemplate">{{$t('计佣模版配置')}}</add-btn>
-    <div class="changeVou">
-      <el-button @click="withdraw">{{$t('提现说明')}}</el-button>
-    </div>
-    <el-table class="data-list" border stripe :data="suggestList"
-    v-loading="tableLoading"
-    @selection-change="selectionChange" height="550">
+    <el-table
+      class="data-list"
+      border
+      stripe
+      :data="suggestList"
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+      height="550"
+    >
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('代理名称')">
         <template slot-scope="scope">
-          <span>{{scope.row.user_id}}-{{scope.row.agent_name}}-</span>
+          <span>{{ scope.row.user_id }}-{{ scope.row.agent_name }}-</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('佣金分成%')" prop="commission">
-      </el-table-column>
+      <el-table-column :label="$t('佣金分成%')" prop="commission"> </el-table-column>
       <el-table-column :label="$t('代理二维码')" align="center">
         <template slot-scope="scope">
-          <span style="cursor:pointer;"
-            @click.stop="imgSrc=scope.row.qr_code, imgVisible=true">
-              <img :src="scope.row.qr_code" style="width: 100px;">
+          <span
+            style="cursor: pointer"
+            @click.stop=";(imgSrc = scope.row.qr_code), (imgVisible = true)"
+          >
+            <img :src="scope.row.qr_code" style="width: 100px" />
           </span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('创建时间')" prop="created_at">
-      </el-table-column>
+      <el-table-column :label="$t('创建时间')" prop="created_at"> </el-table-column>
       <el-table-column :label="$t('下单/成交数')">
-      <template slot-scope="scope">
-        <span>{{scope.row.total_order}}/{{scope.row.deal_order}}</span>
-      </template>
+        <template slot-scope="scope">
+          <span>{{ scope.row.total_order }}/{{ scope.row.deal_order }}</span>
+        </template>
       </el-table-column>
       <el-table-column :label="$t('是否启用')" width="120">
         <template slot-scope="scope">
@@ -43,55 +55,79 @@
             :active-text="$t('开')"
             :inactive-text="$t('关')"
             active-color="#13ce66"
-            inactive-color="gray">
+            inactive-color="gray"
+          >
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <!-- 修改 -->
-          <el-button class="btn-green" @click="editAgent(scope.row.id)">{{$t('修改')}}</el-button>
+          <el-button class="btn-green" @click="editAgent(scope.row.id)">{{ $t('修改') }}</el-button>
           <!-- 成交记录 -->
           <!-- 设置佣金 -->
-          <el-button class="btn-deep-purple" @click="setCommission(scope.row.id, scope.row.agent_name, scope.row.commission)">{{$t('设置佣金')}}</el-button>
+          <el-button
+            class="btn-deep-purple"
+            @click="setCommission(scope.row.id, scope.row.agent_name, scope.row.commission)"
+            >{{ $t('设置佣金') }}</el-button
+          >
           <!-- <el-button class="btn-blue" @click="record(scope.row.id)">{{$t('成交记录')}}</el-button> -->
-           <el-badge :value="scope.row.settle_count > 0 ? scope.row.settle_count : ''" class="item record-sty">
-            <el-button class="btn-blue" @click="record(scope.row.id, scope.row.user_id)">{{$t('成交记录')}}</el-button>
+          <el-badge
+            :value="scope.row.settle_count > 0 ? scope.row.settle_count : ''"
+            class="item record-sty"
+          >
+            <el-button class="btn-blue" @click="record(scope.row.id, scope.row.user_id)">{{
+              $t('成交记录')
+            }}</el-button>
           </el-badge>
           <!-- 提现申请 -->
           <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
-            <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">{{$t('提现申请')}}</el-button>
+            <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">{{
+              $t('提现申请')
+            }}</el-button>
           </el-badge>
         </template>
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-      <el-dialog :visible.sync="imgVisible" size="small">
+    <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
+        <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
     <!-- 提现说明弹窗 -->
-    <el-dialog :title="$t('提现说明')" :visible.sync="withdrawVisible" width="50%" class="withdraw-sty" @close="clear">
+    <el-dialog
+      :title="$t('提现说明')"
+      :visible.sync="withdrawVisible"
+      width="50%"
+      class="withdraw-sty"
+      @close="clear"
+    >
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item :label="$t('选择语言')">
           <el-select v-model="form.language" placeholder="请选择" @change="changeLang">
-              <el-option
-                v-for="item in options"
-                :key="item.language_code"
-                :label="item.name"
-                :value="item.language_code">
-              </el-option>
-            </el-select>
+            <el-option
+              v-for="item in options"
+              :key="item.language_code"
+              :label="item.name"
+              :value="item.language_code"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item :label="$t('提现说明内容')">
-          <el-input v-model="form.content" type="textarea" :rows="4" :placeholder="$t('请输入内容')"></el-input>
+          <el-input
+            v-model="form.content"
+            type="textarea"
+            :rows="4"
+            :placeholder="$t('请输入内容')"
+          ></el-input>
         </el-form-item>
       </el-form>
-       <div slot="footer">
-      <el-button @click="withdrawVisible = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
-    </div>
+      <div slot="footer">
+        <el-button @click="withdrawVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -102,7 +138,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       suggestList: [
         {
@@ -128,34 +164,36 @@ export default {
     SearchGroup,
     AddBtn
   },
-  mounted () {
+  mounted() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
-      this.$request.getAgents({
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.suggestList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
-          // this.suggestList = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .getAgents({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.suggestList = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+            // this.suggestList = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 修改代理
-    editAgent (id) {
+    editAgent(id) {
       console.log(id, 'id')
       this.$router.push({
         name: 'editAgent',
@@ -165,15 +203,17 @@ export default {
       })
     },
     // 提现申请
-    withdrawal (id) {
-      this.$router.push({ name: 'Withdrawal',
+    withdrawal(id) {
+      this.$router.push({
+        name: 'Withdrawal',
         params: {
           id: id
-        } })
+        }
+      })
     },
     // 修改代理管理的开关
-    changeTransfer (event, enabled, id) {
-      console.log(typeof (event), '我是event')
+    changeTransfer(event, enabled, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.resetAgents(id, Number(event)).then(res => {
         if (res.ret) {
@@ -191,12 +231,12 @@ export default {
         }
       })
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 获取提现说明
-    getWithdraw () {
+    getWithdraw() {
       this.$request.withdrawData().then(res => {
         if (res.ret) {
           this.form.content = res.data.content
@@ -205,18 +245,20 @@ export default {
       })
     },
     // 切换语言
-    changeLang () {
-      this.$request.withdrawData({
-        lang: this.form.language
-      }).then(res => {
-        if (res.ret) {
-          this.form.content = res.data.content
-          this.form.language = res.data.language
-        }
-      })
+    changeLang() {
+      this.$request
+        .withdrawData({
+          lang: this.form.language
+        })
+        .then(res => {
+          if (res.ret) {
+            this.form.content = res.data.content
+            this.form.language = res.data.language
+          }
+        })
     },
     // 获取语言列表
-    getLanguage () {
+    getLanguage() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.options = res.data
@@ -224,7 +266,7 @@ export default {
       })
     },
     // 提现说明 确认
-    confirm () {
+    confirm() {
       this.$request.updateWithdrawData(this.form).then(res => {
         if (res.ret) {
           this.withdrawVisible = false
@@ -232,17 +274,17 @@ export default {
       })
     },
     // 提现说明
-    withdraw () {
+    withdraw() {
       this.withdrawVisible = true
       this.getLanguage()
       this.getWithdraw()
     },
-    clear () {
+    clear() {
       this.form.content = ''
       this.form.language = ''
     },
     // 成交记录
-    record (id, userId) {
+    record(id, userId) {
       this.$router.push({
         name: 'record',
         query: {
@@ -252,7 +294,7 @@ export default {
       })
     },
     // 删除
-    deleteData () {
+    deleteData() {
       // this.$request.deleteVip({
       //   DELETE: this.deleteNum
       // }).then(res => {
@@ -271,16 +313,19 @@ export default {
       //   }
       // })
     },
-    onChangeStatus (id) {
-      dialog({
-        type: 'changestatus', id: id
-      }, () => {
-        this.getList()
-      }
+    onChangeStatus(id) {
+      dialog(
+        {
+          type: 'changestatus',
+          id: id
+        },
+        () => {
+          this.getList()
+        }
       )
     },
     // 设置佣金
-    setCommission (id, agentName, commission) {
+    setCommission(id, agentName, commission) {
       dialog({ type: 'commission', id: id, agentName: agentName, commission: commission }, () => {
         this.getList()
       })
@@ -289,26 +334,37 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-.img_box{
+.img_box {
   text-align: center;
-  .imgDialog{
+  .imgDialog {
     width: 50%;
   }
 }
 .el-button {
   margin: 3px;
 }
+.btn {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+.search {
+  width: 21.5%;
+  float: right;
+}
 .record-sty {
   margin-right: 8px;
 }
 .changeVou {
   float: right;
-  margin-right: 10px;
-  margin-bottom: 15px;
+  margin-right: 7px;
+  margin-left: 5px;
+  // margin-bottom: 15px;
 }
 .withdraw-sty {
-.el-dialog__header {
-  background-color: #0E102A;
+  .el-dialog__header {
+    background-color: #0e102a;
   }
   .el-dialog__title {
     color: #fff;

@@ -3,21 +3,23 @@
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息')}}
-        </p>
+        {{ $t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息') }}
+      </p>
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
       <el-form-item :label="$t('*分类名称')">
         <el-row>
           <el-col :span="10">
-            <el-input :placeholder="$t('请输入内容')" v-model="params.name"></el-input></el-col>
+            <el-input :placeholder="$t('请输入内容')" v-model="params.name"></el-input
+          ></el-col>
         </el-row>
       </el-form-item>
       <!-- 邮件标题 -->
       <el-form-item :label="$t('*标题')">
         <el-row>
           <el-col :span="10">
-            <el-input :placeholder="$t('请输入内容')" v-model="params.risk_warning_title"></el-input></el-col>
+            <el-input :placeholder="$t('请输入内容')" v-model="params.risk_warning_title"></el-input
+          ></el-col>
         </el-row>
       </el-form-item>
       <!-- 邮件内容 -->
@@ -25,13 +27,18 @@
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.risk_warning_content" @input="changeText"></div>
-            </el-col>
+          </el-col>
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="save-btn" @click="saveNotice()"
-        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
-        </el-form-item>
+        <el-button
+          type="primary"
+          class="save-btn"
+          @click="saveNotice()"
+          :loading="$store.state.btnLoading"
+          >{{ $t('保存') }}</el-button
+        >
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -39,7 +46,7 @@
 import Wangeditor from 'wangeditor'
 import baseApi from '@/lib/axios/baseApi'
 export default {
-  data () {
+  data() {
     return {
       params: {
         name: '',
@@ -59,20 +66,37 @@ export default {
       transCode: ''
     }
   },
-  mounted () {
+  mounted() {
     this.editor = new Wangeditor('#editor')
-    this.editor.customConfig.menus = ['head', 'fontSize', 'fontName', 'bold', 'italic', 'underline', 'strikeThrough', 'foreColor', 'backColor', 'link', 'list', 'justify', 'quote', 'video', 'image', 'table']
-    this.editor.customConfig.onchange = (html) => {
+    this.editor.customConfig.menus = [
+      'head',
+      'fontSize',
+      'fontName',
+      'bold',
+      'italic',
+      'underline',
+      'strikeThrough',
+      'foreColor',
+      'backColor',
+      'link',
+      'list',
+      'justify',
+      'quote',
+      'video',
+      'image',
+      'table'
+    ]
+    this.editor.customConfig.onchange = html => {
       this.params.risk_warning_content = html
     }
     this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
     this.editor.customConfig.uploadImgParams = {}
     this.editor.customConfig.uploadImgHeaders = {
-      'Authorization': this.$store.state.token
+      Authorization: this.$store.state.token
     }
     this.editor.customConfig.uploadFileName = `images[${0}][file]`
     this.editor.customConfig.uploadImgHooks = {
-      customInsert: (insertImg, result, editor) => {
+      customInsert: (insertImg, result) => {
         console.log(result)
         if (result.ret === 1) {
           this.$message.success(this.$t('上传成功'))
@@ -85,7 +109,7 @@ export default {
     this.editor.create()
     console.log(this.editor, 'this.editor')
   },
-  created () {
+  created() {
     // console.log(JSON.parse(this.$route.params.line), 'line')
     // console.log(JSON.parse(this.$route.params.lang), 'lang')
     // console.log(this.$route.params.transCode, 'transCode')
@@ -93,29 +117,31 @@ export default {
     this.lang = JSON.parse(this.$route.params.lang)
     this.transCode = this.$route.params.transCode
     this.params.language = this.lang.language_code
-    console.log(typeof (this.transCode), ' this.$route.params.transCode')
+    console.log(typeof this.transCode, ' this.$route.params.transCode')
     if (this.transCode === 1) {
       this.getList()
     }
   },
   methods: {
-    getList () {
-      this.$request.categoriesLang(this.line.id, {
-        lang: this.params.language
-      }).then(res => {
-        if (res.ret) {
-          this.params.name = res.data.name
-          this.params.risk_warning_title = res.data.risk_warning_title
-          this.params.risk_warning_content = res.data.risk_warning_content
-          this.editor.txt.html(this.params.risk_warning_content)
-        }
-      })
+    getList() {
+      this.$request
+        .categoriesLang(this.line.id, {
+          lang: this.params.language
+        })
+        .then(res => {
+          if (res.ret) {
+            this.params.name = res.data.name
+            this.params.risk_warning_title = res.data.risk_warning_title
+            this.params.risk_warning_content = res.data.risk_warning_content
+            this.editor.txt.html(this.params.risk_warning_content)
+          }
+        })
     },
     // 判断是新增 还是 编辑
-    changeText () {
+    changeText() {
       this.$emit('input', this.editor.txt.html())
     },
-    saveNotice () {
+    saveNotice() {
       if (this.params.name === '') {
         return this.$message.error(this.$t('请输入一级分类名称'))
       } else if (this.params.risk_warning_title === '') {

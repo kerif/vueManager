@@ -1,13 +1,17 @@
 <template>
   <div class="management-new-container">
     <!-- <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group> -->
-      <div class="add-sty">
-        <add-btn @click.native="goAdd">{{$t('添加')}}</add-btn>
-      </div>
-      <el-table class="data-list" border stripe
+    <div class="add-sty">
+      <add-btn @click.native="goAdd">{{ $t('添加') }}</add-btn>
+    </div>
+    <el-table
+      class="data-list"
+      border
+      stripe
       v-loading="tableLoading"
       @selection-change="selectionChange"
-      :data="voucherData">
+      :data="voucherData"
+    >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 优惠券名称 -->
@@ -27,9 +31,18 @@
       <el-table-column :label="$t('最低消费金额')" prop="threshold"></el-table-column>
       <!-- 失效时间 -->
       <el-table-column :label="$t('有效时长')" prop="days"></el-table-column>
-      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+      <el-table-column
+        :label="item.name"
+        v-for="item in formatLangData"
+        :key="item.id"
+        align="center"
+      >
         <template slot-scope="scope">
-          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span
+            v-if="scope.row['trans_' + item.language_code]"
+            class="el-icon-check icon-sty"
+            @click="onLang(scope.row, item)"
+          ></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
@@ -37,13 +50,19 @@
       <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
           <!-- 记录 -->
-          <el-button size="small" class="btn-dark-green detailsBtn"
-           @click="recoding(scope.row.id)">{{$t('记录')}}</el-button>
+          <el-button
+            size="small"
+            class="btn-dark-green detailsBtn"
+            @click="recoding(scope.row.id)"
+            >{{ $t('记录') }}</el-button
+          >
         </template>
       </el-table-column>
-       <template slot="append">
+      <template slot="append">
         <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
+          <el-button size="small" class="btn-light-red" @click="deleteData">{{
+            $t('删除')
+          }}</el-button>
         </div>
       </template>
     </el-table>
@@ -65,22 +84,26 @@ export default {
   },
   mixins: [pagination],
   name: 'voucherList',
-  data () {
+  data() {
     return {
       activeName: '1',
       voucherData: [],
       status: '',
       type: '1',
-      voucherChange: [{
-        id: '2',
-        name: this.$t('新用户福利券')
-      }, {
-        id: '1',
-        name: this.$t('抵用券')
-      }, {
-        id: '',
-        name: this.$t('全部')
-      }],
+      voucherChange: [
+        {
+          id: '2',
+          name: this.$t('新用户福利券')
+        },
+        {
+          id: '1',
+          name: this.$t('抵用券')
+        },
+        {
+          id: '',
+          name: this.$t('全部')
+        }
+      ],
       show: false,
       selectIDs: [],
       localization: {},
@@ -93,7 +116,7 @@ export default {
       deleteNum: []
     }
   },
-  created () {
+  created() {
     // if (this.$route.query.activeName) {
     //   this.activeName = this.$route.query.activeName
     //   this.status = Number(this.activeName) === 0 ? '' : Number(this.activeName) - 1
@@ -106,56 +129,58 @@ export default {
       console.log(this.$route.params.type, 'this.$route.params.type')
     }
     console.log(this.$route.params.type, 'type')
-    console.log(typeof (this.$route.params.type), 'type')
+    console.log(typeof this.$route.params.type, 'type')
   },
-  activated () {
+  activated() {
     console.log(1111)
     // this.getList()
     // this.getLanguageList()
   },
-  mounted () {
+  mounted() {
     this.getList()
     this.getLanguageList()
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       this.voucherData = []
-      this.$request.newManaList(this.$route.params.type, {
-        // keyword: this.page_params.keyword,
-        // page: this.page_params.page,
-        // size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.voucherData = res.data
-          this.localization = res.localization
-          // this.page_params.page = res.meta.current_page
-          // this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .newManaList(this.$route.params.type, {
+          // keyword: this.page_params.keyword,
+          // page: this.page_params.page,
+          // size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.voucherData = res.data
+            this.localization = res.localization
+            // this.page_params.page = res.meta.current_page
+            // this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 记录
-    recoding (id) {
+    recoding(id) {
       this.$router.push({ name: 'voucher', query: { type: '2', id: id } })
     },
     // 删除
-    deleteData () {
+    deleteData() {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
@@ -165,79 +190,85 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.newDelete({
-          ids: this.deleteNum
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .newDelete({
+            ids: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       })
     },
     // 获取全部语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
         }
       })
     },
-    goAdd () {
+    goAdd() {
       if (this.$route.params.type === 4) {
         this.$router.push({ name: 'rebate', params: { type: this.$route.params.type } })
       } else {
         this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
       }
     },
-    onSelectChange (selection) {
+    onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)
     },
     // 添加转运快递单号
-    edit (row) {
+    edit(row) {
       row.disabled = !row.disabled
     },
     // 取消
-    cancel (row) {
+    cancel(row) {
       row.logistics_sn = row.copySN
       row.disabled = true
     },
     // 保存添加转运快递单号
-    saveLogistics (row) {
+    saveLogistics(row) {
       if (!row.logistics_sn) {
         return this.$message.info(this.$t('请输入转运快递单号'))
       }
-      this.$request.updateLogistics([{
-        id: row.id,
-        sn: row.logistics_sn
-      }]).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('保存成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          row.disabled = true
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .updateLogistics([
+          {
+            id: row.id,
+            sn: row.logistics_sn
+          }
+        ])
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('保存成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            row.disabled = true
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // tab change
-    onTabChange (tab) {
+    onTabChange(tab) {
       switch (tab.name) {
         case '1': // 全部
           this.status = ''
@@ -258,12 +289,12 @@ export default {
       this.getList()
     },
     // 选择不同类型优惠券
-    onVocherTypeChange () {
+    onVocherTypeChange() {
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },
     // 转账 修改语言
-    onLang (line, lang) {
+    onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
@@ -273,7 +304,7 @@ export default {
     }
   },
   watch: {
-    '$route.path': (value, oldValue) => {
+    '$route.path': () => {
       this.getList()
       this.getLanguageList()
     }

@@ -2,12 +2,12 @@
   <div class="customer-echarts-container">
     <div class="echarts-main">
       <div class="echarts-top">
-      <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
-        <el-option :value="1" :label="$t('今天')"></el-option>
-        <el-option :value="7" :label="$t('近7天')"></el-option>
-        <el-option :value="30" :label="$t('近30天')"></el-option>
-      </el-select>
-       <el-date-picker
+        <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
+          <el-option :value="1" :label="$t('今天')"></el-option>
+          <el-option :value="7" :label="$t('近7天')"></el-option>
+          <el-option :value="30" :label="$t('近30天')"></el-option>
+        </el-select>
+        <el-date-picker
           class="timeStyle"
           v-model="pickingList"
           type="daterange"
@@ -16,27 +16,31 @@
           value-format="yyyy-MM-dd"
           :range-separator="$t('至')"
           :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
+          :end-placeholder="$t('结束日期')"
+        >
         </el-date-picker>
-        </div>
+      </div>
       <div class="package-main">
-        <h3>{{$t('新增客户概览')}}</h3>
+        <h3>{{ $t('新增客户概览') }}</h3>
         <ul>
           <li v-for="(item, index) in pieData" :key="index" class="total-first">
             <div v-if="item.name === 'new-user'">
-              <p>{{$t('新增客户数')}}
+              <p>{{ $t('新增客户数') }}</p>
+              <p>
+                <strong>{{ item.amount }}</strong>
               </p>
-              <p><strong>{{item.amount}}</strong></p>
             </div>
-              <div v-if="item.name === 'new-user-package'">
-              <p>{{$t('新增客户预报量')}}
+            <div v-if="item.name === 'new-user-package'">
+              <p>{{ $t('新增客户预报量') }}</p>
+              <p>
+                <strong>{{ item.amount }}</strong>
               </p>
-              <p><strong>{{item.amount}}</strong></p>
             </div>
-              <div v-if="item.name === 'turnover-rate'">
-              <p class="no-warehouse">{{$t('转化率(%)')}}
+            <div v-if="item.name === 'turnover-rate'">
+              <p class="no-warehouse">{{ $t('转化率(%)') }}</p>
+              <p class="no-warehouse">
+                <strong>{{ item.amount }}</strong>
               </p>
-              <p class="no-warehouse"><strong>{{item.amount}}</strong></p>
             </div>
           </li>
         </ul>
@@ -47,28 +51,32 @@
     </div>
     <div class="echarts-main order-main">
       <div class="package-main">
-        <h3>{{$t('代理概览')}}</h3>
+        <h3>{{ $t('代理概览') }}</h3>
         <ul>
           <li v-for="(item, index) in proxyData" :key="index" class="total-first">
             <div v-if="item.name === 'agent-count'">
-              <p>{{$t('代理数')}}
+              <p>{{ $t('代理数') }}</p>
+              <p>
+                <strong>{{ item.amount }}</strong>
               </p>
-              <p><strong>{{item.amount}}</strong></p>
             </div>
-              <div v-if="item.name === 'order-count'">
-              <p>{{$t('下单成交数')}}
+            <div v-if="item.name === 'order-count'">
+              <p>{{ $t('下单成交数') }}</p>
+              <p>
+                <strong>{{ item.amount }}</strong>
               </p>
-              <p><strong>{{item.amount}}</strong></p>
             </div>
             <div v-if="item.name === 'order-amount'">
-              <p class="no-warehouse">{{$t('成交金额')}}
+              <p class="no-warehouse">{{ $t('成交金额') }}</p>
+              <p class="no-warehouse">
+                <strong>{{ item.amount }}</strong>
               </p>
-              <p class="no-warehouse"><strong>{{item.amount}}</strong></p>
             </div>
             <div v-if="item.name === 'commission'">
-              <p class="no-warehouse">{{$t('佣金')}}
+              <p class="no-warehouse">{{ $t('佣金') }}</p>
+              <p class="no-warehouse">
+                <strong>{{ item.amount }}</strong>
               </p>
-              <p class="no-warehouse"><strong>{{item.amount}}</strong></p>
             </div>
           </li>
         </ul>
@@ -78,7 +86,7 @@
       </div>
     </div>
     <div class="echarts-bottom">
-      <h3>{{$t('新增客户下单排行榜')}}</h3>
+      <h3>{{ $t('新增客户下单排行榜') }}</h3>
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData">
         <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
         <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
@@ -90,7 +98,7 @@
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
     <div class="echarts-bottom">
-      <h3>{{$t('代理邀请客户成交金额排行榜')}}</h3>
+      <h3>{{ $t('代理邀请客户成交金额排行榜') }}</h3>
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare">
         <el-table-column :label="$t('代理名称')" prop="agent_name"></el-table-column>
         <el-table-column :label="$t('佣金分成%')" prop="rate"></el-table-column>
@@ -109,7 +117,8 @@
           :page-sizes="[10, 20, 30]"
           :page-size="page_proxy.size"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="page_proxy.total">
+          :total="page_proxy.total"
+        >
         </el-pagination>
       </div>
       <!-- <nle-pagination :pageParams="page_proxy" :notNeedInitQuery="false"></nle-pagination> -->
@@ -126,7 +135,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       days: 7,
       pickingList: [],
@@ -163,7 +172,7 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.getColumnar() // 客户柱状数据
     this.proxyColumnar() // 代理柱状数据
     this.packageList() // 客户列表
@@ -171,7 +180,7 @@ export default {
     this.financeAmount() // 统计金额
     this.proxyAmount() // 代理统计
   },
-  mounted () {
+  mounted() {
     // 新增客户树状图
     this.packageChart = echarts.init(document.getElementById('chartsSecond'))
     window.onresize = this.packageChart.resize
@@ -215,7 +224,7 @@ export default {
   },
   methods: {
     // 客户树状图
-    getColumnar () {
+    getColumnar() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -251,17 +260,20 @@ export default {
               name: '新增客户数(个)',
               min: 0,
               boundaryGap: true,
-              max (value) {
+              max(value) {
                 return Math.ceil(value.max / 5) * 5
               },
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             },
             {
@@ -270,38 +282,47 @@ export default {
               name: '转化率(%)',
               min: 0,
               boundaryGap: true,
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             },
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             },
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             }
           ]
@@ -339,7 +360,7 @@ export default {
       })
     },
     // 代理树状图
-    proxyColumnar () {
+    proxyColumnar() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -379,19 +400,22 @@ export default {
               scale: true,
               name: '邀请客户成交订单数(个)',
               min: 0,
-              max (value) {
+              max(value) {
                 return Math.ceil(value.max / 5) * 5
               },
               boundaryGap: true,
               splitNumber: 5,
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             },
             {
@@ -403,38 +427,47 @@ export default {
               max: maxValue,
               interval: amountInterval,
               boundaryGap: true,
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             },
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             },
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             }
           ]
@@ -472,7 +505,7 @@ export default {
       })
     },
     // 天数
-    getDatas () {
+    getDatas() {
       this.page_params.handleQueryChange('days', this.days)
       this.page_proxy.handleQueryChange('days', this.days)
       this.getColumnar()
@@ -482,11 +515,11 @@ export default {
       this.financeAmount()
       this.proxyAmount()
     },
-    getList () {
+    getList() {
       this.packageList()
     },
     // 获取新增客户统计
-    financeAmount () {
+    financeAmount() {
       let params = {
         days: this.days
       }
@@ -499,7 +532,7 @@ export default {
         }
       })
     },
-    proxyAmount () {
+    proxyAmount() {
       let params = {
         days: this.days
       }
@@ -512,17 +545,17 @@ export default {
         }
       })
     },
-    proxySizeChange (pageSize) {
+    proxySizeChange(pageSize) {
       this.page_proxy.page = 1
       this.page_proxy.size = pageSize
       this.getCompare()
     },
     // 分页
-    proxyCurrentChange (pageId) {
+    proxyCurrentChange(pageId) {
       this.page_proxy.page = pageId
       this.getCompare()
     },
-    proxyQueryChange (key, value) {
+    proxyQueryChange(key, value) {
       const { name, params, query } = this.$route
       this.$router.replace({
         name,
@@ -534,7 +567,7 @@ export default {
       })
     },
     // 时间
-    onPick (val) {
+    onPick(val) {
       console.log(val, 'val')
       this.begin = val ? val[0] : ''
       this.end = val ? val[1] : ''
@@ -550,7 +583,7 @@ export default {
       this.proxyAmount()
     },
     // 代理数据
-    getCompare () {
+    getCompare() {
       let params = {
         page: this.page_proxy.page,
         size: this.page_proxy.size,
@@ -567,7 +600,7 @@ export default {
       })
     },
     // 客户列表
-    packageList () {
+    packageList() {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
@@ -638,25 +671,26 @@ export default {
     text-align: center;
     margin-top: 60px;
   }
-  ul{
+  ul {
     margin: 0;
     padding: 0;
-    li{
-      list-style:none;
+    li {
+      list-style: none;
     }
   }
-   .total-first:last-child{
+  .total-first:last-child {
     border-right: none !important;
   }
   .proxy-sty {
     text-align: right;
-    .btn-prev, .btn-next {
+    .btn-prev,
+    .btn-next {
       padding: 0 10px !important;
     }
     .el-pagination.is-background .el-pager li:not(.disabled).active {
       background-color: #f5f5f5;
       color: black;
-      border: 1px solid #3540A5;
+      border: 1px solid #3540a5;
     }
   }
 }

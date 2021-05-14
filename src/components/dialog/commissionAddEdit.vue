@@ -1,6 +1,11 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增') : $t('编辑')"
-  class="edit-commission-dialog" @close="clear" width="85%">
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'add' ? $t('新增') : $t('编辑')"
+    class="edit-commission-dialog"
+    @close="clear"
+    width="85%"
+  >
     <el-form :model="form">
       <el-row :gutter="20">
         <el-col :span="13">
@@ -13,26 +18,28 @@
         <el-col :span="13">
           <el-form-item :label="$t('计佣方式')" class="label-sty">
             <el-select
-             clearable
-             @change="changeType"
+              clearable
+              @change="changeType"
               v-model="form.type"
               class="country-select"
-              :placeholder="$t('请选择')">
-              <el-option
-                v-for="item in options"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
+              :placeholder="$t('请选择')"
+            >
+              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item class="label-sty">
-            <el-tooltip class="item code-sty" effect="dark" :content="$t('勾选时，如一个订单为多箱发货，则以每箱计佣；不勾选时，则每个订单计佣')" placement="top">
-            <span class="el-icon-question icon-info"></span>
+            <el-tooltip
+              class="item code-sty"
+              effect="dark"
+              :content="$t('勾选时，如一个订单为多箱发货，则以每箱计佣；不勾选时，则每个订单计佣')"
+              placement="top"
+            >
+              <span class="el-icon-question icon-info"></span>
             </el-tooltip>
-            <el-checkbox v-model="form.multi_boxes">{{$t('开启多箱计佣')}}</el-checkbox>
+            <el-checkbox v-model="form.multi_boxes">{{ $t('开启多箱计佣') }}</el-checkbox>
           </el-form-item>
         </el-col>
       </el-row>
@@ -50,12 +57,14 @@
               clearable
               v-model="form.weight_type"
               class="country-select"
-              :placeholder="$t('请选择')">
+              :placeholder="$t('请选择')"
+            >
               <el-option
                 v-for="item in weightData"
                 :key="item.id"
                 :label="item.name"
-                :value="item.id">
+                :value="item.id"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -79,15 +88,15 @@
       </el-row>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="submit">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 // import countryList from '@/lib/country'
 export default {
-  data () {
+  data() {
     return {
       form: {
         name: '',
@@ -136,7 +145,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getPickDetails(this.id).then(res => {
         if (res.ret) {
           this.form = res.data
@@ -144,7 +153,7 @@ export default {
         }
       })
     },
-    changeType () {
+    changeType() {
       if (this.form.type === 1) {
         this.form.weight_type = ''
         this.form.first_weight = ''
@@ -155,55 +164,59 @@ export default {
         this.form.amount = ''
       }
     },
-    submit () {
+    submit() {
       if (this.form.type === 1 && !this.form.amount) {
         return this.$message.error(this.$t('请输入订单佣金数额'))
       }
       if (this.state === 'add') {
-        this.$request.addPickRules({
-          ...this.form,
-          multi_boxes: Number(this.form.multi_boxes)
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
+        this.$request
+          .addPickRules({
+            ...this.form,
+            multi_boxes: Number(this.form.multi_boxes)
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
       } else if (this.state === 'edit') {
-        this.$request.updatePickRules(this.id, {
-          ...this.form,
-          multi_boxes: Number(this.form.multi_boxes)
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
+        this.$request
+          .updatePickRules(this.id, {
+            ...this.form,
+            multi_boxes: Number(this.form.multi_boxes)
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
       }
     },
-    clear () {
+    clear() {
       this.form.name = ''
       this.form.amount = ''
       this.form.weight_type = ''
@@ -214,7 +227,7 @@ export default {
       this.form.next_money = ''
       this.form.type = ''
     },
-    init () {
+    init() {
       if (this.state === 'edit') {
         this.getList()
       }
@@ -228,15 +241,15 @@ export default {
 }
 .edit-commission-dialog {
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .country-select {
     // width: 40%;

@@ -1,72 +1,53 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'invite' ? $t('邀请记录') : $t('卡券包')" class="dialog-invite" width="70%" @close="clear">
-    <el-table v-if="state === 'invite'"
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'invite' ? $t('邀请记录') : $t('卡券包')"
+    class="dialog-invite"
+    width="70%"
+    @close="clear"
+  >
+    <el-table
+      v-if="state === 'invite'"
       class="data-list"
       :data="tableData"
       border
-      style="width: 100%">
-      <el-table-column type="index">
-      </el-table-column>
+      style="width: 100%"
+    >
+      <el-table-column type="index"> </el-table-column>
       <!-- 客户ID -->
-      <el-table-column
-        prop="id"
-        :label="$t('客户ID')">
-      </el-table-column>
+      <el-table-column prop="id" :label="$t('客户ID')"> </el-table-column>
       <!-- 客户昵称 -->
-        <el-table-column
-        prop="name"
-        :label="$t('客户昵称')">
-      </el-table-column>
-        <el-table-column
-        prop="created_at"
-        :label="$t('注册时间')">
-      </el-table-column>
+      <el-table-column prop="name" :label="$t('客户昵称')"> </el-table-column>
+      <el-table-column prop="created_at" :label="$t('注册时间')"> </el-table-column>
       <!-- 最后登录时间 -->
-        <el-table-column
-        prop="last_login_at"
-        :label="$t('最后登录时间')">
-      </el-table-column>
+      <el-table-column prop="last_login_at" :label="$t('最后登录时间')"> </el-table-column>
     </el-table>
     <!-- 卡券包 -->
     <el-table v-else class="data-list" :data="tableData" border style="width: 100%">
-        <el-table-column type="index">
-        </el-table-column>
-        <el-table-column
-        prop="name"
-        :label="$t('券名称')">
-      </el-table-column>
-        <el-table-column
-        prop="code"
-        :label="$t('券码')">
-      </el-table-column>
-        <el-table-column
-        prop="amount"
-        :label="$t('金额')">
-      </el-table-column>
-        <el-table-column
-        prop="status"
-        :label="$t('状态')">
-        </el-table-column>
-        <el-table-column
-        prop="created_at"
-        :label="$t('发放时间')">
-      </el-table-column>
-      <el-table-column
-        prop="used_at"
-        :label="$t('使用时间')">
-      </el-table-column>
+      <el-table-column type="index"> </el-table-column>
+      <el-table-column prop="name" :label="$t('券名称')"> </el-table-column>
+      <el-table-column prop="code" :label="$t('券码')"> </el-table-column>
+      <el-table-column prop="amount" :label="$t('金额')"> </el-table-column>
+      <el-table-column prop="status" :label="$t('状态')"> </el-table-column>
+      <el-table-column prop="created_at" :label="$t('发放时间')"> </el-table-column>
+      <el-table-column prop="used_at" :label="$t('使用时间')"> </el-table-column>
       <el-table-column label="操作">
-      <template slot-scope="scope">
-        <!-- 作废 -->
-        <el-button class="btn-light-red" v-if="scope.row.usable === true" @click="failCoupon(scope.row.id)">{{$t('作废')}}</el-button>
-      </template>
+        <template slot-scope="scope">
+          <!-- 作废 -->
+          <el-button
+            class="btn-light-red"
+            v-if="scope.row.usable === true"
+            @click="failCoupon(scope.row.id)"
+            >{{ $t('作废') }}</el-button
+          >
+        </template>
       </el-table-column>
     </el-table>
     <!-- <div slot="footer">
       <el-button @click="show = false">取消</el-button>
       <el-button type="primary" @click="confirm('ruleForm')">确定</el-button>
     </div> -->
-     <nle-pagination :pageParams="page_params"></nle-pagination>
+    <nle-pagination :pageParams="page_params"></nle-pagination>
   </el-dialog>
 </template>
 <script>
@@ -77,7 +58,7 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       tableData: [],
       state: '',
@@ -85,7 +66,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       let method = this.state === 'invite' ? 'invitations' : 'voucherUser'
       this.$request[method](this.id, {
         page: this.page_params.page,
@@ -99,7 +80,7 @@ export default {
       })
     },
     // 作废优惠券
-    failCoupon (id) {
+    failCoupon(id) {
       this.show = false
       this.$confirm(this.$t('确定要作废优惠券吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
@@ -124,27 +105,27 @@ export default {
         })
       })
     },
-    init () {
+    init() {
       this.getList()
     },
-    clear () {
+    clear() {
       this.page_params.page = 1
     }
   }
 }
 </script>
 <style lang="scss">
-.dialog-invite{
+.dialog-invite {
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

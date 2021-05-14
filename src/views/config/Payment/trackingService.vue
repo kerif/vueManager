@@ -1,66 +1,76 @@
 <template>
   <div class="tracking-service-container">
-    <h2>{{$t('物流查询服务')}}</h2>
+    <h2>{{ $t('物流查询服务') }}</h2>
     <el-row :gutter="20">
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="ruleForm.type" :label="2">{{$t('系统内服物流查询短信')}}</el-radio>
+          <el-radio class="system-sty" v-model="ruleForm.type" :label="2">{{
+            $t('系统内服物流查询短信')
+          }}</el-radio>
           <div class="user-bottom">
             <div class="bottom-left">
               <p>
-              {{$t('快递100查询剩余次数')}}：<span class="count-sty">{{ruleForm.kuaidi100_count}}</span>
+                {{ $t('快递100查询剩余次数') }}：<span class="count-sty">{{
+                  ruleForm.kuaidi100_count
+                }}</span>
               </p>
               <p>
-              {{$t('51Tracking查询剩余次数')}}：<span class="count-sty">{{ruleForm.tracking_count}}</span>
+                {{ $t('51Tracking查询剩余次数') }}：<span class="count-sty">{{
+                  ruleForm.tracking_count
+                }}</span>
               </p>
             </div>
             <div class="bottom-right">
-              <el-button class="buy-sty" @click="buying">{{$t('购买')}}</el-button>
+              <el-button class="buy-sty" @click="buying">{{ $t('购买') }}</el-button>
             </div>
           </div>
           <!-- <div class="details-sty" @click="alertSms">
             <i class="el-icon-s-order"></i>
             {{$t('预警')}}
           </div> -->
-           <!-- <div class="details-sty" @click="purchase">
+          <!-- <div class="details-sty" @click="purchase">
             <i class="el-icon-s-order"></i>
             {{$t('购买记录')}}
           </div> -->
-          <el-button @click="purchase" class="btn-main">{{$t('购买记录')}}</el-button>
+          <el-button @click="purchase" class="btn-main">{{ $t('购买记录') }}</el-button>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="ruleForm.type" :label="1">{{$t('第三方物流查询服务')}}</el-radio>
+          <el-radio class="system-sty" v-model="ruleForm.type" :label="1">{{
+            $t('第三方物流查询服务')
+          }}</el-radio>
           <div class="message-main">
-            <p>{{$t('快递100配置')}}</p>
-            <span>{{$t('Customer ID')}}：</span><br/>
-            <el-input v-model="ruleForm.kuaidi100_customer_id" class="input-sty"></el-input><br/>
-            <span>{{$t('授权KEY')}}：</span><br/>
+            <p>{{ $t('快递100配置') }}</p>
+            <span>{{ $t('Customer ID') }}：</span><br />
+            <el-input v-model="ruleForm.kuaidi100_customer_id" class="input-sty"></el-input><br />
+            <span>{{ $t('授权KEY') }}：</span><br />
             <el-input v-model="ruleForm.kuaidi100_key" class="input-sty"></el-input>
-            <el-button class="buy-sty" @click="testExpress">{{$t('测试')}}</el-button>
+            <el-button class="buy-sty" @click="testExpress">{{ $t('测试') }}</el-button>
           </div>
           <div class="message-main">
-            <p>{{$t('Tracking more配置')}}</p>
-            <span>{{$t('Appkey')}}：</span><br/>
+            <p>{{ $t('Tracking more配置') }}</p>
+            <span>{{ $t('Appkey') }}：</span><br />
             <el-input v-model="ruleForm.tracking_app_key" class="input-sty"></el-input>
-            <el-button class="buy-sty" @click="testTracking">{{$t('测试')}}</el-button>
+            <el-button class="buy-sty" @click="testTracking">{{ $t('测试') }}</el-button>
           </div>
         </div>
       </el-col>
       <el-col :span="7" class="user-left">
         <div class="new-top">
-          <el-radio class="system-sty" v-model="ruleForm.type" :label="0">{{$t('不开启')}}</el-radio>
+          <el-radio class="system-sty" v-model="ruleForm.type" :label="0">{{
+            $t('不开启')
+          }}</el-radio>
           <div class="unopen-sty">
             <p>
-            {{$t('暂不开启物流查询服务/定制API对接')}}
+              {{ $t('暂不开启物流查询服务/定制API对接') }}
             </p>
           </div>
         </div>
       </el-col>
     </el-row>
     <div class="save-btn">
-      <el-button type="primary" @click="saveTemplate">{{$t('保存')}}</el-button>
+      <el-button type="primary" @click="saveTemplate">{{ $t('保存') }}</el-button>
     </div>
   </div>
 </template>
@@ -68,7 +78,7 @@
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       validate_email: '',
       ruleForm: {
@@ -82,11 +92,11 @@ export default {
       radio: 1
     }
   },
-  created () {
+  created() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getTrackingData().then(res => {
         this.ruleForm.type = res.data.type
         this.ruleForm.tracking_app_key = res.data['51tracking_app_key']
@@ -97,87 +107,93 @@ export default {
       })
     },
     // 检测快递100
-    testExpress () {
+    testExpress() {
       if (this.ruleForm.kuaidi100_customer_id === '') {
         return this.$message.error('请输入Customer ID')
       } else if (this.ruleForm.kuaidi100_key === '') {
         return this.$message.error(this.$t('请输入授权KEY'))
       }
-      this.$request.verifyKd100({
-        kd100_app_id: this.ruleForm.kuaidi100_customer_id,
-        kd100_app_key: this.ruleForm.kuaidi100_key
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .verifyKd100({
+          kd100_app_id: this.ruleForm.kuaidi100_customer_id,
+          kd100_app_key: this.ruleForm.kuaidi100_key
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 检测Tracking more
-    testTracking () {
+    testTracking() {
       if (this.ruleForm.tracking_app_key === '') {
         return this.$message.error('请输入Tracking more的AppKey')
       }
-      this.$request.verifyTrackingMore({
-        trackingmore_key: this.ruleForm.tracking_app_key
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .verifyTrackingMore({
+          trackingmore_key: this.ruleForm.tracking_app_key
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
-    saveTemplate () {
-      this.$request.updateTrackingSystem({
-        ...this.ruleForm,
-        '51tracking_app_key': this.ruleForm.tracking_app_key,
-        '51tracking_count': this.ruleForm.tracking_count
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    saveTemplate() {
+      this.$request
+        .updateTrackingSystem({
+          ...this.ruleForm,
+          '51tracking_app_key': this.ruleForm.tracking_app_key,
+          '51tracking_count': this.ruleForm.tracking_count
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 购买
-    buying () {
+    buying() {
       dialog({ type: 'buyingService', state: 'tracking' }, () => {
         this.getList()
       })
     },
     // 预警
-    alertSms () {
+    alertSms() {
       dialog({ type: 'alertSettings', state: 'tracking' })
     },
     // 购买记录
-    purchase () {
+    purchase() {
       dialog({ type: 'purchaseHistory', state: 'tracking' })
     }
   }
@@ -185,7 +201,7 @@ export default {
 </script>
 <style lang="scss">
 .tracking-service-container {
-  background-color: #F5F5F5 !important;
+  background-color: #f5f5f5 !important;
   padding: 20px;
   .new-top {
     margin-bottom: 10px;
@@ -206,14 +222,10 @@ export default {
     margin-bottom: 40px;
     overflow: hidden;
     .bottom-left {
-      // display: inline-block;
       float: left;
     }
     .bottom-right {
-      // display: inline-block;
       float: right;
-    }
-    .switch-sty {
     }
   }
   .user-left {
@@ -223,8 +235,8 @@ export default {
     font-size: 12px;
   }
   .buy-sty {
-    color: #35B85A;
-    border-color: #35B85A;
+    color: #35b85a;
+    border-color: #35b85a;
   }
   .details-sty {
     display: inline-block;
@@ -271,7 +283,7 @@ export default {
   }
   .code-sty {
     padding-left: 5px;
-    color: #35B85A;
+    color: #35b85a;
     font-size: 18px;
   }
   .switch-sty {

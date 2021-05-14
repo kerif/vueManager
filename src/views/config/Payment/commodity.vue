@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="select-box">
-      <add-btn @click.native="addClassify">{{ $t("添加商品分类") }}</add-btn>
+      <add-btn @click.native="addClassify">{{ $t('添加商品分类') }}</add-btn>
     </div>
     <el-table
       :data="CategoriesList"
@@ -17,10 +17,7 @@
         <template slot-scope="props">
           <el-table :data="props.row.orders">
             <!-- 二级分类名称 -->
-            <el-table-column
-              :label="$t('二级分类名称')"
-              prop="name"
-            ></el-table-column>
+            <el-table-column :label="$t('二级分类名称')" prop="name"></el-table-column>
             <!-- 是否显示 -->
             <el-table-column :label="$t('是否显示')">
               <template slot-scope="scope">
@@ -71,21 +68,17 @@
             <el-table-column :label="$t('操作')" width="300">
               <template slot-scope="scope">
                 <!-- 编辑 -->
-                <el-button
-                  class="btn-dark-green btn-margin"
-                  @click="editClassify(scope.row.id)"
-                  >{{ $t("编辑") }}</el-button
-                >
+                <el-button class="btn-dark-green btn-margin" @click="editClassify(scope.row.id)">{{
+                  $t('编辑')
+                }}</el-button>
                 <!-- 风险提示 -->
                 <el-button class="btn-main" @click="goSick(scope.row.id)">{{
-                  $t("风险提示")
+                  $t('风险提示')
                 }}</el-button>
                 <!-- 删除 -->
-                <el-button
-                  @click="deleteCategories(scope.row.id)"
-                  class="btn-light-red"
-                  >{{ $t("删除") }}</el-button
-                >
+                <el-button @click="deleteCategories(scope.row.id)" class="btn-light-red">{{
+                  $t('删除')
+                }}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -94,10 +87,7 @@
       <!-- 一级分类列表 -->
       <el-table-column type="index" width="50"></el-table-column>
       <!-- 一级分类名称 -->
-      <el-table-column
-        :label="$t('一级分类名称')"
-        prop="name"
-      ></el-table-column>
+      <el-table-column :label="$t('一级分类名称')" prop="name"></el-table-column>
       <!-- 是否显示 -->
       <el-table-column :label="$t('是否显示')">
         <template slot-scope="scope">
@@ -138,39 +128,26 @@
             class="el-icon-check icon-sty"
             @click="onCategories(scope.row, item)"
           ></span>
-          <span
-            v-else
-            class="el-icon-plus icon-sty"
-            @click="onCategories(scope.row, item)"
-          ></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onCategories(scope.row, item)"></span>
         </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="300">
         <template slot-scope="scope">
           <!-- 编辑 -->
-          <el-button
-            class="btn-dark-green btn-margin"
-            @click="editClassify(scope.row.id)"
-            >{{ $t("编辑") }}</el-button
-          >
-          <!-- 风险提示 -->
-          <el-button class="btn-main" @click="goSick(scope.row.id)">{{
-            $t("风险提示")
+          <el-button class="btn-dark-green btn-margin" @click="editClassify(scope.row.id)">{{
+            $t('编辑')
           }}</el-button>
+          <!-- 风险提示 -->
+          <el-button class="btn-main" @click="goSick(scope.row.id)">{{ $t('风险提示') }}</el-button>
           <!-- 删除 -->
-          <el-button
-            class="btn-light-red btn-margin"
-            @click="deleteCategories(scope.row.id)"
-            >{{ $t("删除") }}</el-button
-          >
+          <el-button class="btn-light-red btn-margin" @click="deleteCategories(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-    ></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
@@ -185,7 +162,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       tableLoading: false,
       languageData: [],
@@ -200,21 +177,21 @@ export default {
       ]
     }
   },
-  created () {
+  created() {
     this.page_params.page = 1
     this.getCategories()
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.getCategories()
     },
     // 点开当前行，获取二级菜单数据
-    onExpand (row) {
+    onExpand(row) {
       // 如果当前货单已经获取了二级菜单数据，就不在获取
       if (row.orders.length) return
       let id = row.id
@@ -231,43 +208,45 @@ export default {
       })
     },
     // 获取商品分类管理列表
-    getCategories () {
+    getCategories() {
       this.tableLoading = true
-      this.$request.getCategories({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.CategoriesList = res.data.map(item => {
-            return {
-              ...item,
-              enabled: Boolean(item.enabled),
-              risk_warning_enabled: Boolean(item.risk_warning_enabled),
-              orders: []
-            }
-          })
-          this.localization = res.localization
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .getCategories({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.CategoriesList = res.data.map(item => {
+              return {
+                ...item,
+                enabled: Boolean(item.enabled),
+                risk_warning_enabled: Boolean(item.risk_warning_enabled),
+                orders: []
+              }
+            })
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 添加商品分类
-    addClassify () {
+    addClassify() {
       dialog({ type: 'classifyGroup', state: 'add', id: '' }, () => {
         this.getList()
       })
     },
     // 商品分类管理 开启或关闭 是否显示
-    changeShow (event, id) {
-      console.log(typeof (event), '我是event')
+    changeShow(event, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeCategories(id, Number(event)).then(res => {
         if (res.ret) {
@@ -286,8 +265,8 @@ export default {
       })
     },
     // 商品分类管理 开启或关闭 风险提示
-    changeRisk (event, id) {
-      console.log(typeof (event), '我是event')
+    changeRisk(event, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeRisk(id, Number(event)).then(res => {
         if (res.ret) {
@@ -306,30 +285,34 @@ export default {
       })
     },
     // 商品分类管理 修改语言
-    onCategories (line, lang) {
+    onCategories(line, lang) {
       this.categoriesCode = line['trans_' + lang.language_code]
-      this.$router.push({ name: 'categoriesLangAdd',
+      this.$router.push({
+        name: 'categoriesLangAdd',
         params: {
           line: JSON.stringify(line),
           lang: JSON.stringify(lang),
           transCode: this.categoriesCode
-        } })
+        }
+      })
     },
     // 编辑商品分类
-    editClassify (id) {
+    editClassify(id) {
       dialog({ type: 'classifyGroup', state: 'edit', id: id }, () => {
         this.getList()
       })
     },
     // 修改风险提示
-    goSick (id) {
-      this.$router.push({ name: 'sickTips',
+    goSick(id) {
+      this.$router.push({
+        name: 'sickTips',
         params: {
           id: id
-        } })
+        }
+      })
     },
     // 删除单条商品分类
-    deleteCategories (id) {
+    deleteCategories(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -355,7 +338,5 @@ export default {
     }
   }
 }
-
 </script>
-<style scoped>
-</style>
+<style scoped></style>

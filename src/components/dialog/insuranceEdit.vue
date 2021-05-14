@@ -1,61 +1,76 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('修改保险服务')" class="dialog-edit-insurance" width="35%"
-  @close="clear">
-    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
-    label-position="top">
-        <!-- 商品价值 -->
-        <el-form-item :label="$t('*商品价值') + this.localization.currency_unit + $t('小于')" class="input-sty price-sty" v-if="this.start === 0">
-          <el-input v-model="ruleForm.start" disabled>
-          </el-input>
-        </el-form-item>
-        <el-form-item :label="$t('*商品价值') + this.localization.currency_unit + $t('大于')" class="input-sty price-sty" v-else>
-          <el-input v-model="ruleForm.start">
-          </el-input>
-        </el-form-item>
-        <!-- 保价类型 -->
-        <el-form-item :label="$t('*保价类型')">
-          <el-select v-model="ruleForm.insurance_type" clearable :placeholder="$t('请选择')">
-              <el-option
-                v-for="item in options"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-        </el-form-item>
-        <!-- 保险金额 -->
-        <el-form-item :label="(this.ruleForm.insurance_type === 1 ? '比例': $t('*保险金额'))+ (this.ruleForm.insurance_type === 1 ? '%': this.localization.currency_unit)" class="input-sty">
-          <el-input v-model="ruleForm.insurance_proportion">
-          </el-input>
-        </el-form-item>
-        <!-- 是否强制购买 -->
-        <el-form-item :label="$t('是否强制购买')">
-          <el-switch
-            v-model="ruleForm.is_force"
-            :active-text="$t('开')"
-            :active-value="1"
-            :inactive-value="0"
-            :inactive-text="$t('关')"
-            active-color="#13ce66"
-            inactive-color="gray">
-          </el-switch>
-        </el-form-item>
-        <!-- 备注 -->
-        <el-form-item :label="$t('备注')" class="input-sty">
-          <el-input type="textarea" v-model="ruleForm.remark"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          :placeholder="$t('请输入备注')"></el-input>
-        </el-form-item>
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('修改保险服务')"
+    class="dialog-edit-insurance"
+    width="35%"
+    @close="clear"
+  >
+    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm" label-position="top">
+      <!-- 商品价值 -->
+      <el-form-item
+        :label="$t('*商品价值') + this.localization.currency_unit + $t('小于')"
+        class="input-sty price-sty"
+        v-if="this.start === 0"
+      >
+        <el-input v-model="ruleForm.start" disabled> </el-input>
+      </el-form-item>
+      <el-form-item
+        :label="$t('*商品价值') + this.localization.currency_unit + $t('大于')"
+        class="input-sty price-sty"
+        v-else
+      >
+        <el-input v-model="ruleForm.start"> </el-input>
+      </el-form-item>
+      <!-- 保价类型 -->
+      <el-form-item :label="$t('*保价类型')">
+        <el-select v-model="ruleForm.insurance_type" clearable :placeholder="$t('请选择')">
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 保险金额 -->
+      <el-form-item
+        :label="
+          (this.ruleForm.insurance_type === 1 ? '比例' : $t('*保险金额')) +
+          (this.ruleForm.insurance_type === 1 ? '%' : this.localization.currency_unit)
+        "
+        class="input-sty"
+      >
+        <el-input v-model="ruleForm.insurance_proportion"> </el-input>
+      </el-form-item>
+      <!-- 是否强制购买 -->
+      <el-form-item :label="$t('是否强制购买')">
+        <el-switch
+          v-model="ruleForm.is_force"
+          :active-text="$t('开')"
+          :active-value="1"
+          :inactive-value="0"
+          :inactive-text="$t('关')"
+          active-color="#13ce66"
+          inactive-color="gray"
+        >
+        </el-switch>
+      </el-form-item>
+      <!-- 备注 -->
+      <el-form-item :label="$t('备注')" class="input-sty">
+        <el-input
+          type="textarea"
+          v-model="ruleForm.remark"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          :placeholder="$t('请输入备注')"
+        ></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         insurance_proportion: '',
@@ -80,7 +95,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getSingleInsurance(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -93,7 +108,7 @@ export default {
         }
       })
     },
-    confirm () {
+    confirm() {
       if (!this.ruleForm.start) {
         return this.$message.error(this.$t('请输入商品价值'))
       } else if (!this.ruleForm.insurance_type) {
@@ -101,34 +116,36 @@ export default {
       } else if (!this.ruleForm.insurance_proportion) {
         return this.$message.error(this.$t('请输入保险金额'))
       }
-      this.$request.updateInsurance(this.id, {
-        ...this.ruleForm,
-        start: this.start === 0 ? 0 : this.ruleForm.start
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('成功'),
-            message: res.msg
-          })
+      this.$request
+        .updateInsurance(this.id, {
+          ...this.ruleForm,
+          start: this.start === 0 ? 0 : this.ruleForm.start
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('成功'),
+              message: res.msg
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
           this.show = false
-          this.success()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-        this.show = false
-      })
+        })
     },
-    clear () {
+    clear() {
       this.ruleForm.name = ''
       this.ruleForm.remark = ''
     },
-    init () {
-      this.start = this.start
-      console.log(this.start, 'start')
+    init() {
+      // this.start = this.start
+      // console.log(this.start, 'start')
       this.getList()
     }
   }
@@ -171,9 +188,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -183,7 +201,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;
@@ -203,14 +221,14 @@ export default {
     border-radius: 6px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .price-sty {
     .el-form-item__label {

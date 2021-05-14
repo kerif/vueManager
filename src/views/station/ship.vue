@@ -1,57 +1,105 @@
 <template>
   <div class="ship-container">
-    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
-      <div class="changeTime">
-        <!-- 提交 -->
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <div>
+        <div class="changeTime">
+          <!-- 提交 -->
           <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('提交开始日期')"
-          :end-placeholder="$t('提交结束日期')">
-        </el-date-picker>
-        <!-- 发货 -->
+            size="mini"
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('提交开始日期')"
+            :end-placeholder="$t('提交结束日期')"
+          >
+          </el-date-picker>
+          <!-- 发货 -->
           <el-date-picker
-          class="timeStyle"
-          v-model="shipmentList"
-          type="daterange"
-          @change="onShipment"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('发货开始日期')"
-          :end-placeholder="$t('发货结束日期')">
-        </el-date-picker>
-      </div>
+            size="mini"
+            class="timeStyle"
+            v-model="shipmentList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('发货开始日期')"
+            :end-placeholder="$t('发货结束日期')"
+          >
+          </el-date-picker>
+        </div>
         <!-- <search-select placeholder="状态" :selectArr="statusList" @search="onShipStatus" v-model="page_params.status"></search-select> -->
         <div class="chooseStatus">
-          <el-select v-model="page_params.status" @change="onShipStatus" clearable
-          :placeholder="$t('请选择')">
+          <el-select size="mini" v-model="page_params.status" clearable :placeholder="$t('请选择')">
             <el-option
               v-for="item in statusList"
               :key="item.id"
               :value="item.id"
-              :label="item.name">
+              :label="item.name"
+            >
             </el-option>
           </el-select>
         </div>
+      </div>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
+    </div>
+    <div class="searchGroup">
+      <div class="bottom-sty">
+        <el-button size="small" @click="updateTracking">{{ $t('更新物流状态') }}</el-button>
+        <!-- 批量发送通知 -->
+        <el-dropdown @command="dropdown">
+          <el-button size="small" @click="goNotify">{{ $t('批量发送通知') }}</el-button>
+          <el-dropdown-menu>
+            <el-dropdown-item command="3">{{ $t('已发货通知') }}</el-dropdown-item>
+            <el-dropdown-item command="4">{{ $t('待取件通知') }}</el-dropdown-item>
+          </el-dropdown-menu>
+          <!-- <el-radio-group v-model="radio">
+            <el-radio :label="3">{{ $t('已发货通知') }}</el-radio>
+            <el-radio :label="4">{{ $t('待取件通知') }}</el-radio>
+          </el-radio-group> -->
+        </el-dropdown>
+        <el-button size="small" @click="batchNum">{{ $t('批量更新单号-二程') }}</el-button>
+        <el-button size="small" type="success" plain @click="deleteData">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
+      <div class="search-l">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        >
+        </search-group>
         <div class="select-box">
-          <add-btn @click.native="updateInvoice">{{$t('创建发货单')}}</add-btn>
+          <add-btn @click.native="updateInvoice">{{ $t('创建发货单') }}</add-btn>
         </div>
-    </search-group>
-  <div style="height: calc(100vh - 330px)">
-  <el-table :data="tableShip" stripe
-    border class="data-list"
-    @expand-change="onExpand"
-    ref="table"
-    @selection-change="selectionChange"
-    height="calc(100vh - 330px)"
-    v-loading="tableLoading">
-    <!-- <el-table-column type="expand">
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
+      </div>
+    </div>
+    <div style="height: calc(100vh - 330px)">
+      <el-table
+        :data="tableShip"
+        stripe
+        border
+        class="data-list"
+        @expand-change="onExpand"
+        ref="table"
+        @selection-change="selectionChange"
+        height="calc(100vh - 330px)"
+        v-loading="tableLoading"
+      >
+        <!-- <el-table-column type="expand">
       <template slot-scope="props">
         <el-table :data="props.row.orders">
           <el-table-column label="客户ID" prop="user_id"></el-table-column>
@@ -79,105 +127,115 @@
         </el-table>
       </template>
     </el-table-column> -->
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <!-- 发货单号 -->
-      <el-table-column :label="$t('发货单号')" prop="sn"></el-table-column>
-      <!-- 创建时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at"></el-table-column>
-      <!-- 发货时间 -->
-      <el-table-column :label="$t('发货时间')" prop="shipped_at"></el-table-column>
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <!-- 发货单号 -->
+        <el-table-column :label="$t('发货单号')" prop="sn"></el-table-column>
+        <!-- 创建时间 -->
+        <el-table-column :label="$t('提交时间')" prop="created_at"></el-table-column>
+        <!-- 发货时间 -->
+        <el-table-column :label="$t('发货时间')" prop="shipped_at"></el-table-column>
 
-      <el-table-column :label="$t('转运快递单号-头程')">
-        <template slot-scope="scope">
-          <span>{{scope.row.logistics_company}}&nbsp;{{scope.row.logistics_sn}}</span>
-        </template>
-      </el-table-column>
-      <!-- 发出站点 -->
-      <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
-      <!-- 目的地 -->
-      <el-table-column :label="$t('目的地')" prop="destination_country"></el-table-column>
-      <!-- 发货单名称 -->
-      <el-table-column :label="$t('发货单名称')" prop="name"></el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')" prop="status_name">
-        <!-- <template slot-scope="scope">
+        <el-table-column :label="$t('转运快递单号-头程')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
+          </template>
+        </el-table-column>
+        <!-- 发出站点 -->
+        <!-- <el-table-column label="发出站点" prop="source_station"></el-table-column> -->
+        <!-- 目的地 -->
+        <el-table-column :label="$t('目的地')" prop="destination_country"></el-table-column>
+        <!-- 发货单名称 -->
+        <el-table-column :label="$t('发货单名称')" prop="name"></el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')" prop="status_name">
+          <!-- <template slot-scope="scope">
           <span v-if="scope.row.status === 0">{{$t('未发货')}}</span>
           <span v-else>{{$t('已发货')}}</span>
         </template> -->
-      </el-table-column>
-      <!-- 箱数 -->
-      <el-table-column :label="$t('订单数')" prop="box_count"></el-table-column>
-      <el-table-column :label="$t('出库箱数')" prop="order_boxes_count"></el-table-column>
-      <!-- 重量 -->
-      <el-table-column :label="$t('重量') + this.localization.weight_unit" prop="weight"></el-table-column>
-      <!-- 价值 -->
-      <el-table-column :label="$t('价值') + this.localization.currency_unit" prop="value"></el-table-column>
-      <!-- 物品属性 -->
-      <el-table-column :label="$t('物品属性')" prop="props"></el-table-column>
-      <!-- 备注 -->
-      <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="116px" fixed="right">
-        <template slot-scope="scope">
-          <!-- 导出清单 -->
-          <!-- <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button> -->
-          <el-dropdown>
-            <el-button type="primary" plain>
-              {{$t('操作')}}<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <!-- 发货 -->
-              <el-dropdown-item class="item-sty" @click.native="goInvoice(scope.row.id)">
-                <span v-if="scope.row.status === 0">{{$t('发货')}}</span>
-              </el-dropdown-item>
-              <!-- 编辑发货单 -->
-              <el-dropdown-item class="item-sty" @click.native="editInvoice(scope.row.id)">
-                <span v-if="scope.row.status === 0">{{$t('编辑发货单')}}</span>
-              </el-dropdown-item>
-              <!-- 详情 -->
-              <el-dropdown-item class="item-sty" @click.native="goDetails(scope.row.id, scope.row.status)">
-                <span>{{$t('详情')}}</span>
-              </el-dropdown-item>
-              <!-- 删除 -->
-              <el-dropdown-item class="item-sty" @click.native="deleteShip(scope.row.id)">
-                <span v-if="scope.row.box_count === 0">{{$t('删除')}}</span>
-              </el-dropdown-item>
-              <!-- 加入发货单 -->
-              <el-dropdown-item class="item-sty" @click.native="addShip(scope.row.id)">
-                <span v-if="scope.row.status === 0">{{$t('加入发货单')}}</span>
-              </el-dropdown-item>
-              <!-- 取消发货 -->
-              <el-dropdown-item class="item-sty" @click.native="cancelShip(scope.row.id)">
-                <span v-if="scope.row.status === 1">{{$t('取消发货')}}</span>
-              </el-dropdown-item>
-              <!-- 轨迹 -->
-              <el-dropdown-item class="item-sty" @click.native="logistics(scope.row.id, scope.row.sn)">
-                <span>{{$t('轨迹')}}</span>
-              </el-dropdown-item>
-              <!-- 批量更新单号 -->
-              <!-- <el-dropdown-item class="item-sty" @click.native="batchNum(scope.row.id, scope.row.sn)">
+        </el-table-column>
+        <!-- 箱数 -->
+        <el-table-column :label="$t('订单数')" prop="box_count"></el-table-column>
+        <el-table-column :label="$t('出库箱数')" prop="order_boxes_count"></el-table-column>
+        <!-- 重量 -->
+        <el-table-column
+          :label="$t('重量') + this.localization.weight_unit"
+          prop="weight"
+        ></el-table-column>
+        <!-- 价值 -->
+        <el-table-column
+          :label="$t('价值') + this.localization.currency_unit"
+          prop="value"
+        ></el-table-column>
+        <!-- 物品属性 -->
+        <el-table-column :label="$t('物品属性')" prop="props"></el-table-column>
+        <!-- 备注 -->
+        <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="116px" fixed="right">
+          <template slot-scope="scope">
+            <!-- 导出清单 -->
+            <!-- <el-button class="btn-main btn-margin" @click="unloadShip(scope.row.id)">导出清单</el-button> -->
+            <el-dropdown>
+              <el-button type="primary" plain>
+                {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <!-- 发货 -->
+                <el-dropdown-item class="item-sty" @click.native="goInvoice(scope.row.id)">
+                  <span v-if="scope.row.status === 0">{{ $t('发货') }}</span>
+                </el-dropdown-item>
+                <!-- 编辑发货单 -->
+                <el-dropdown-item class="item-sty" @click.native="editInvoice(scope.row.id)">
+                  <span v-if="scope.row.status === 0">{{ $t('编辑发货单') }}</span>
+                </el-dropdown-item>
+                <!-- 详情 -->
+                <el-dropdown-item
+                  class="item-sty"
+                  @click.native="goDetails(scope.row.id, scope.row.status)"
+                >
+                  <span>{{ $t('详情') }}</span>
+                </el-dropdown-item>
+                <!-- 删除 -->
+                <el-dropdown-item class="item-sty" @click.native="deleteShip(scope.row.id)">
+                  <span v-if="scope.row.box_count === 0">{{ $t('删除') }}</span>
+                </el-dropdown-item>
+                <!-- 加入发货单 -->
+                <el-dropdown-item class="item-sty" @click.native="addShip(scope.row.id)">
+                  <span v-if="scope.row.status === 0">{{ $t('加入发货单') }}</span>
+                </el-dropdown-item>
+                <!-- 取消发货 -->
+                <el-dropdown-item class="item-sty" @click.native="cancelShip(scope.row.id)">
+                  <span v-if="scope.row.status === 1">{{ $t('取消发货') }}</span>
+                </el-dropdown-item>
+                <!-- 轨迹 -->
+                <el-dropdown-item
+                  class="item-sty"
+                  @click.native="logistics(scope.row.id, scope.row.sn)"
+                >
+                  <span>{{ $t('轨迹') }}</span>
+                </el-dropdown-item>
+                <!-- 批量更新单号 -->
+                <!-- <el-dropdown-item class="item-sty" @click.native="batchNum(scope.row.id, scope.row.sn)">
                 <span>{{$t('批量更新单号')}}</span>
               </el-dropdown-item> -->
-              <!-- 添加物流信息 -->
-              <el-dropdown-item class="item-sty" @click.native="addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)">
-                <span>{{$t('添加物流信息')}}</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
+                <!-- 添加物流信息 -->
+                <el-dropdown-item
+                  class="item-sty"
+                  @click.native="
+                    addCompany(scope.row.id, scope.row.logistics_sn, scope.row.logistics_company)
+                  "
+                >
+                  <span>{{ $t('添加物流信息') }}</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
         </div>
       </template> -->
-    </el-table>
-  </div>
-    <div class="bottom-sty">
-      <el-button size="small" @click="updateTracking">{{$t('更新物流状态')}}</el-button>
-        <el-button size="small" @click="deleteData">{{$t('导出清单')}}</el-button>
-        <!-- 批量发送通知 -->
-        <el-button size="small" @click="goNotify">{{$t('批量发送通知')}}</el-button>
-        <el-button size="small" @click="batchNum">{{$t('批量更新单号-二程')}}</el-button>
+      </el-table>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
@@ -187,27 +245,22 @@
             v-model="form.logistics_type_id"
             filterable
             class="country-select"
-            :placeholder="$t('请选择')">
-              <el-option
-                v-for="item in modeData"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-            <el-button class="type-sty" @click="goMore">{{$t('管理')}}</el-button>
-          </el-form-item>
-        </el-form>
+            :placeholder="$t('请选择')"
+          >
+            <el-option v-for="item in modeData" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+          <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
+        </el-form-item>
+      </el-form>
       <div slot="footer">
-        <el-button @click="trackDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="changeStatus">{{$t('确定')}}</el-button>
+        <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="changeStatus">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
     <!-- 轨迹 -->
     <el-dialog :visible.sync="showDialog" width="45%" :title="$t('更新物流状态')" @close="clearSn">
-      <div class="table-sty">
-        {{$t('发货单号：')}}{{this.tableSn}}
-      </div>
+      <div class="table-sty">{{ $t('发货单号：') }}{{ this.tableSn }}</div>
       <el-table :data="tableData" stripe border style="width: 100%">
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column :label="$t('物流轨迹')" prop="context"></el-table-column>
@@ -215,51 +268,60 @@
         <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button class="btn-light-red" @click="deleteTable(scope.row.id)">{{$t('删除')}}</el-button>
+            <el-button class="btn-light-red" @click="deleteTable(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-dialog>
     <!-- 批量更新单号 -->
-    <el-dialog :visible.sync="batchDialog" width="45%" :title="$t('批量更新单号')" @close="clearBatch">
+    <el-dialog
+      :visible.sync="batchDialog"
+      width="45%"
+      :title="$t('批量更新单号')"
+      @close="clearBatch"
+    >
       <el-form>
-      <!-- 公告标题 -->
-      <el-form-item :label="$t('发货单号')">
-        <span v-for="(item, index) in orderNum" :key="index">
-          {{item}}
-        </span><br/>
-      </el-form-item>
-      <el-form-item :label="$t('模版下载')">
-        <el-row>
-          <el-col :span="10">
-            <el-button @click="uploadList">
-              {{$t('模版下载')}}</el-button><br/>
-            <span class="batch-sty">1，{{$t('请先下载指定的模版')}}</span><br/>
-            <span class="batch-sty">2，{{$t('根据模版内容填充物流信息')}}</span><br/>
-            <span class="batch-sty">3，{{$t('上传')}}</span><br/>
+        <!-- 公告标题 -->
+        <el-form-item :label="$t('发货单号')">
+          <span v-for="(item, index) in orderNum" :key="index"> {{ item }} </span><br />
+        </el-form-item>
+        <el-form-item :label="$t('模版下载')">
+          <el-row>
+            <el-col :span="10">
+              <el-button @click="uploadList"> {{ $t('模版下载') }}</el-button
+              ><br />
+              <span class="batch-sty">1，{{ $t('请先下载指定的模版') }}</span
+              ><br />
+              <span class="batch-sty">2，{{ $t('根据模版内容填充物流信息') }}</span
+              ><br />
+              <span class="batch-sty">3，{{ $t('上传') }}</span
+              ><br />
             </el-col>
-        </el-row>
-      </el-form-item>
-       <el-form-item :label="$t('模版上传')">
-        <el-row>
-          <el-col :span="20">
-            <el-upload
-              class="upload-demo"
-              action=""
-              :limit="1"
-              :on-remove="onFileRemove"
-              :file-list="fileList"
-              :http-request="uploadBaleImg">
-              <el-button size="small" type="primary">{{$t('请选择要上传的文件')}}</el-button>
-              <!-- <div slot="tip" class="el-upload__tip">{{$t('支持格式：.doc .docx .pdf，单个文件不能超过3MB')}}</div> -->
-            </el-upload>
-          </el-col>
-        </el-row>
-      </el-form-item>
+          </el-row>
+        </el-form-item>
+        <el-form-item :label="$t('模版上传')">
+          <el-row>
+            <el-col :span="20">
+              <el-upload
+                class="upload-demo"
+                action=""
+                :limit="1"
+                :on-remove="onFileRemove"
+                :file-list="fileList"
+                :http-request="uploadBaleImg"
+              >
+                <el-button size="small" type="primary">{{ $t('请选择要上传的文件') }}</el-button>
+                <!-- <div slot="tip" class="el-upload__tip">{{$t('支持格式：.doc .docx .pdf，单个文件不能超过3MB')}}</div> -->
+              </el-upload>
+            </el-col>
+          </el-row>
+        </el-form-item>
       </el-form>
-       <div slot="footer">
-        <el-button @click="batchDialog = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="confirmBatch">{{$t('确定')}}</el-button>
+      <div slot="footer">
+        <el-button @click="batchDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirmBatch">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -278,7 +340,7 @@ export default {
   },
   mixins: [pagination],
   name: 'shipContainer',
-  data () {
+  data() {
     return {
       tableShip: [], // 表格数据
       localization: {},
@@ -317,12 +379,13 @@ export default {
       batchDialog: false,
       // batchId: '',
       urlName: '',
-      fileList: []
+      fileList: [],
+      hasFilterCondition: false,
+      radio: ''
     }
   },
-  created () {
-  },
-  activated () {
+  created() {},
+  activated() {
     if (this.$route.query.shipment_sn) {
       this.page_params.keyword = this.$route.query.shipment_sn
       this.getList()
@@ -335,11 +398,11 @@ export default {
       this.$refs.table.doLayout()
     })
   },
-  mounted () {
+  mounted() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
@@ -379,29 +442,31 @@ export default {
       })
     },
     // 下载excel
-    uploadList () {
-      this.$request.uploadBatch({
-        ids: this.deleteNum
-      }).then(res => {
-        if (res.ret) {
-          this.urlExcel = res.data.url
-          // window.location.href = this.urlExcel
-          window.open(this.urlExcel)
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+    uploadList() {
+      this.$request
+        .uploadBatch({
+          ids: this.deleteNum
+        })
+        .then(res => {
+          if (res.ret) {
+            this.urlExcel = res.data.url
+            // window.location.href = this.urlExcel
+            window.open(this.urlExcel)
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -419,43 +484,45 @@ export default {
       })
     },
     // 确认 批量更新单号
-    confirmBatch () {
-      this.$request.updateBatch({
-        ids: this.deleteNum,
-        name: this.urlName
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.batchDialog = false
-          this.getList()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+    confirmBatch() {
+      this.$request
+        .updateBatch({
+          ids: this.deleteNum,
+          name: this.urlName
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.batchDialog = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
       return this.$request.uploadFiles(params)
     },
     // 文件删除
-    onFileRemove (file, fileList) {
+    onFileRemove(file, fileList) {
       this.fileList = fileList
     },
-    clearBatch () {
+    clearBatch() {
       // this.batchId = ''
       this.fileList = []
     },
     // 跳转至详情
-    goDetails (id, status) {
+    goDetails(id, status) {
       console.log(id, '我是传过去id')
       console.log(status, '我是传过去的status')
       dialog({ type: 'shipDetails', id: id, status: status }, () => {
@@ -463,49 +530,61 @@ export default {
       })
     },
     // 获取全部物流状态
-    getType () {
+    getType() {
       this.$request.getShipStatus().then(res => {
         if (res.ret) {
           this.modeData = res.data
         }
       })
     },
-    addCompany (id, logisticsSn, logisticsCompany) {
+    addCompany(id, logisticsSn, logisticsCompany) {
       console.log(id, 'id')
       console.log(logisticsSn, 'logisticsSn')
-      dialog({ type: 'batchExpress', id: id, logistics_sn: logisticsSn, logistics_company: logisticsCompany }, () => {
-        this.getList()
-      })
+      dialog(
+        {
+          type: 'batchExpress',
+          id: id,
+          logistics_sn: logisticsSn,
+          logistics_company: logisticsCompany
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 弹窗 管理
-    goMore () {
-      this.$router.push({ name: 'payment',
+    goMore() {
+      this.$router.push({
+        name: 'payment',
         query: {
           activeName: '12'
-        } })
-    },
-    // 更改物流状态
-    changeStatus () {
-      this.$request.changeShipStatus({
-        logistics_type_id: this.form.logistics_type_id,
-        shipment_ids: this.deleteNum
-      }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.trackDialog = false
-          this.getList()
-          this.deleteNum = []
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
         }
       })
+    },
+    // 更改物流状态
+    changeStatus() {
+      this.$request
+        .changeShipStatus({
+          logistics_type_id: this.form.logistics_type_id,
+          shipment_ids: this.deleteNum
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.trackDialog = false
+            this.getList()
+            this.deleteNum = []
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 导出清单
     // unloadShip (id) {
@@ -527,20 +606,20 @@ export default {
     //     }
     //   })
     // },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
-      this.orderNum = selection.map(item => (item.sn))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
+      this.orderNum = selection.map(item => item.sn)
       console.log(this.deleteNum, 'this.deleteNum')
     },
-    clear () {
+    clear() {
       this.form.logistics_type_id = ''
     },
-    clearSn () {
+    clearSn() {
       this.tableSn = ''
       this.tableId = ''
     },
     // 更新物流状态
-    updateTracking () {
+    updateTracking() {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -548,7 +627,7 @@ export default {
       this.getType()
     },
     // 导出清单
-    deleteData () {
+    deleteData() {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
@@ -558,29 +637,31 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.uploadExcel({
-          shipment_ids: this.deleteNum
-        }).then(res => {
-          if (res.ret) {
-            this.urlExcel = res.data.url
-            window.open(this.urlExcel)
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .uploadExcel({
+            shipment_ids: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.urlExcel = res.data.url
+              window.open(this.urlExcel)
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       })
     },
     // 批量发送通知
-    goNotify () {
+    goNotify() {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -589,34 +670,34 @@ export default {
         this.deleteNum = []
       })
     },
-    batchNum () {
+    batchNum() {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
       this.batchDialog = true
     },
     // 跳至加入发货单
-    addShip (id) {
+    addShip(id) {
       dialog({ type: 'joinShip', id: id }, () => {
         this.getList()
       })
     },
     // 轨迹
-    logistics (id, sn) {
+    logistics(id, sn) {
       this.tableId = id
       this.tableSn = sn
       this.showDialog = true
       this.getAlone()
     },
     // 获取单条轨迹
-    getAlone () {
+    getAlone() {
       this.$request.getAloneShip(this.tableId).then(res => {
         if (res.ret) {
           this.tableData = res.data
         }
       })
     },
-    deleteTable (id) {
+    deleteTable(id) {
       this.$request.deleteShipTable(this.tableId, id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -635,7 +716,7 @@ export default {
       })
     },
     // 取消发货
-    cancelShip (id) {
+    cancelShip(id) {
       this.$confirm(this.$t('您真的要取消发货吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -660,7 +741,7 @@ export default {
       })
     },
     // 创建时间
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -669,15 +750,18 @@ export default {
     },
     // 发货时间
     // 创建时间
-    onShipment (val) {
+    onShipment(val) {
       this.shipped_begin_date = val ? val[0] : ''
       this.shipped_end_date = val ? val[1] : ''
       this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.shipped_begin_date} ${this.shipped_end_date}`)
+      this.page_params.handleQueryChange(
+        'times',
+        `${this.shipped_begin_date} ${this.shipped_end_date}`
+      )
       this.getList()
     },
     // 删除发货单
-    deleteShip (id) {
+    deleteShip(id) {
       this.$confirm(this.$t('您真的要删除发货单吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -702,23 +786,26 @@ export default {
       })
     },
     // 跳转至订单 运单
-    goOrder (orderSn, status) {
+    goOrder(orderSn, status) {
       console.log(status, '我是传过去的ID')
-      this.$router.push({ name: 'wayBillList', query: { order_sn: orderSn, activeName: status.toString() } })
+      this.$router.push({
+        name: 'wayBillList',
+        query: { order_sn: orderSn, activeName: status.toString() }
+      })
     },
     // 创建发货单
-    updateInvoice () {
+    updateInvoice() {
       dialog({ type: 'invoice', state: 'add' }, () => {
         this.getList()
       })
     },
     // 编辑发货单
-    editInvoice (id) {
+    editInvoice(id) {
       dialog({ type: 'invoice', state: 'edit', id: id }, () => {
         this.getList()
       })
     },
-    goInvoice (id) {
+    goInvoice(id) {
       this.$confirm(this.$t('您真的要发货吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -743,7 +830,7 @@ export default {
       })
     },
     // 点开当前行，获取二级菜单数据
-    onExpand (row) {
+    onExpand(row) {
       // 如果当前货单已经获取了二级菜单数据，就不在获取
       if (row.orders.length) return
       let id = row.id
@@ -754,9 +841,48 @@ export default {
       })
     },
     // 发货状态选择
-    onShipStatus () {
+    onShipStatus() {
       this.page_params.handleQueryChange('status', this.page_params.status)
       this.getList()
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.shipmentList = []
+      this.page_params.status = ''
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime()
+      this.onShipment()
+      this.onShipStatus()
+    },
+    dropdown(command) {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.$request
+        .sendingNotify({
+          ids: this.deleteNum,
+          type: command
+          // type: this.activeName === '2' ? 2 : 3
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      // console.log(command)
     }
   }
 }
@@ -800,8 +926,46 @@ export default {
     color: red;
   }
   .bottom-sty {
-    margin-top: 20px;
-    margin-bottom: 10px;
+    // margin-top: 20px;
+    // margin-bottom: 10px;
+    .el-dropdown {
+      margin: 0 10px;
+    }
+  }
+  .searchGroup {
+    display: flex;
+    // justify-content: space-between;
+    align-items: center;
+    .filter {
+      margin-left: 10px;
+    }
+    .search-group {
+      width: 32.3%;
+    }
+    .search-l {
+      display: flex;
+      justify-content: flex-end;
+      flex: 1;
+      padding-right: 10px;
+    }
+  }
+}
+.order-list-search {
+  font-size: 14px;
+  background: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  overflow: hidden;
+  .changeTime {
+    display: inline-block;
+  }
+  .chooseStatus {
+    // width: 150px;
+    display: inline-block;
+  }
+  .submit {
+    float: right;
+    margin-top: 10px;
   }
 }
 </style>

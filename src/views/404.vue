@@ -2,30 +2,32 @@
   <div class="http-404">
     <div class="box-404">
       <div class="pic-404">
-        <img class="pic-404__parent" src="../assets/404.png" alt="404">
-        <img class="pic-404__child left" src="../assets/404_cloud.png" alt="404">
-        <img class="pic-404__child mid" src="../assets/404_cloud.png" alt="404">
-        <img class="pic-404__child right" src="../assets/404_cloud.png" alt="404">
+        <img class="pic-404__parent" src="../assets/404.png" alt="404" />
+        <img class="pic-404__child left" src="../assets/404_cloud.png" alt="404" />
+        <img class="pic-404__child mid" src="../assets/404_cloud.png" alt="404" />
+        <img class="pic-404__child right" src="../assets/404_cloud.png" alt="404" />
       </div>
       <div class="bullshit">
         <div class="bullshit__oops">Not Found 404</div>
-        </div>
-        <div class="bullshit__headline">{{$t('神说这个页面不存在')}}......</div>
-        <div class="bullshit__info">{{$t('请检查您输入的网址是否正确，')}}<br>{{$t('点击以下按钮返回主页')}}</div>
-        <div @click="back" class="bullshit__return-home">{{$t('返回首页')}}</div>
       </div>
+      <div class="bullshit__headline">{{ $t('神说这个页面不存在') }}......</div>
+      <div class="bullshit__info">
+        {{ $t('请检查您输入的网址是否正确，') }}<br />{{ $t('点击以下按钮返回主页') }}
+      </div>
+      <div @click="back" class="bullshit__return-home">{{ $t('返回首页') }}</div>
     </div>
+  </div>
 </template>
 <script>
 export default {
   name: 'NotFound',
   computed: {
-    isPermissionFilterArr () {
+    isPermissionFilterArr() {
       return this.$store.state.isPermissionFilterArr
     }
   },
   methods: {
-    back () {
+    back() {
       // 101 为首页跳转页面的权限id
       if (!this.isPermissionFilterArr.includes(101)) {
         this.$router.push({ name: 'reset-password' })

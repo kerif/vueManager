@@ -6,12 +6,13 @@
         <el-row>
           <el-col :span="10">
             <el-autocomplete
-            :fetch-suggestions="queryCNSearch"
-            @select="handleSelect"
-            :placeholder="$t('请输入客户ID')"
-            v-model="ruleForm.user_id">
-          </el-autocomplete>
-            </el-col>
+              :fetch-suggestions="queryCNSearch"
+              @select="handleSelect"
+              :placeholder="$t('请输入客户ID')"
+              v-model="ruleForm.user_id"
+            >
+            </el-autocomplete>
+          </el-col>
         </el-row>
       </el-form-item>
       <!-- 扣款金额 -->
@@ -19,7 +20,7 @@
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.amount"></el-input>
-            </el-col>
+          </el-col>
         </el-row>
       </el-form-item>
       <!-- 相关订单 -->
@@ -27,48 +28,59 @@
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.order_sn"></el-input>
-            </el-col>
+          </el-col>
         </el-row>
       </el-form-item>
       <!-- 扣款备注 -->
       <el-form-item :label="$t('扣款备注')" prop="remark">
         <el-row>
           <el-col :span="10">
-            <el-input :placeholder="$t('请输入内容')" type="textarea"
-            :autosize="{ minRows: 4, maxRows: 4}" v-model="ruleForm.remark"></el-input>
-            </el-col>
+            <el-input
+              :placeholder="$t('请输入内容')"
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 4 }"
+              v-model="ruleForm.remark"
+            ></el-input>
+          </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item  class="updateChe" :label="$t('物品照片')">
-          <el-row>
-            <el-col :span="16">
-              <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-                <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-                <span class="model-box"></span>
-                <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-                </span>
-                </span>
-              <el-upload
-                v-show="baleImgList.length < 3"
-                class="avatar-uploader"
-                action=""
-                list-type="picture-card"
-                :before-upload="beforeUploadImg"
-                :http-request="uploadBaleImg"
-                :show-file-list="false">
-                <i class="el-icon-plus">
-                </i>
-            </el-upload><br/>
-            <span class="suggest-btn">{{$t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')}}</span>
-            </el-col>
-          </el-row>
+      <el-form-item class="updateChe" :label="$t('物品照片')">
+        <el-row>
+          <el-col :span="16">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+              <span class="model-box"></span>
+              <span class="operat-box">
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              </span>
+            </span>
+            <el-upload
+              v-show="baleImgList.length < 3"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :before-upload="beforeUploadImg"
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
+            >
+              <i class="el-icon-plus"> </i> </el-upload
+            ><br />
+            <span class="suggest-btn">{{
+              $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张')
+            }}</span>
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="save-btn" @click="submit"
-        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
-        </el-form-item>
+        <el-button
+          type="primary"
+          class="save-btn"
+          @click="submit"
+          :loading="$store.state.btnLoading"
+          >{{ $t('保存') }}</el-button
+        >
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -76,7 +88,7 @@
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         user_id: '',
@@ -89,7 +101,7 @@ export default {
       localization: {}
     }
   },
-  created () {
+  created() {
     this.getCountry()
   },
   methods: {
@@ -102,21 +114,23 @@ export default {
     //   })
     // },
     // 客户id
-    queryCNSearch (queryString, callback) {
+    queryCNSearch(queryString, callback) {
       console.log(this.ruleForm.user_id)
       var list = [{}]
-      this.$request.AutoDeductions({
-        keyword: this.ruleForm.user_id.toString()
-      }).then(res => {
-        for (let i of res.data) {
-          // i.value = i.id
-          i.value = i.id + '---' + i.name
-        }
-        list = res.data
-        callback(list)
-      })
+      this.$request
+        .AutoDeductions({
+          keyword: this.ruleForm.user_id.toString()
+        })
+        .then(res => {
+          for (let i of res.data) {
+            // i.value = i.id
+            i.value = i.id + '---' + i.name
+          }
+          list = res.data
+          callback(list)
+        })
     },
-    submit () {
+    submit() {
       if (this.ruleForm.user_id === '') {
         return this.$message.error(this.$t('请输入客户'))
       } else if (this.ruleForm.amount === '') {
@@ -145,18 +159,18 @@ export default {
       })
     },
     // 客户id
-    handleSelect (item) {
+    handleSelect(item) {
       console.log(item)
       this.supplierId = item.id
       this.supplierName = item.name
     },
     // 获取支持国家数据
-    getCountry () {
+    getCountry() {
       this.$request.getSettlement().then(res => {
         this.localization = res.localization
       })
     },
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -166,8 +180,8 @@ export default {
         }
       })
     },
-    beforeUploadImg (file) {
-      if (!(/^image/.test(file.type))) {
+    beforeUploadImg(file) {
+      if (!/^image/.test(file.type)) {
         this.$message.info(this.$t('请上传图片类型文件'))
         return false
       } else if (file.size > 1024 * 1024 * 2) {
@@ -177,15 +191,15 @@ export default {
       return true
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
@@ -221,24 +235,24 @@ export default {
     width: 100%;
   }
   .el-tag.el-tag--info {
-    border-color: #3540A5;
-    color: #3540A5;
+    border-color: #3540a5;
+    color: #3540a5;
     background-color: #fff;
   }
   .el-tag.el-tag--info .el-tag__close {
-    color: #3540A5;
+    color: #3540a5;
     background-color: #fff;
   }
   .country-btn {
     margin-left: 15px;
     .el-button--primary {
-      background-color: #EAECF5;
-      border-color: #EAECF5;
-      color: #3540A5;
+      background-color: #eaecf5;
+      border-color: #eaecf5;
+      color: #3540a5;
     }
   }
   .icon-info {
-    color: #74B34F;
+    color: #74b34f;
     font-size: 18px;
     margin-left: 5px;
     position: relative;
@@ -246,7 +260,7 @@ export default {
     cursor: pointer;
   }
   .address-sty {
-    color:#606266;
+    color: #606266;
   }
   .changeQuery {
     .el-autocomplete {
@@ -283,9 +297,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -295,7 +310,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;

@@ -1,94 +1,123 @@
 <template>
   <div class="evaluation-management-container">
-    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
-      <div class="changeTime">
-      <!-- 提交时间 -->
-        <el-date-picker
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        :range-separator="$t('至')"
-        :start-placeholder="$t('提交开始日期')"
-        :end-placeholder="$t('提交结束日期')">
-      </el-date-picker>
+    <div class="order-list-search" v-if="hasFilterCondition">
+      <div>
+        <div class="changeTime">
+          <!-- 提交时间 -->
+          <el-date-picker
+            size="mini"
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('提交开始日期')"
+            :end-placeholder="$t('提交结束日期')"
+          >
+          </el-date-picker>
+        </div>
+        <!-- 是否精选 -->
+        <div class="chooseStatus">
+          <el-select size="mini" v-model="is_recommend" clearable :placeholder="$t('请选择')">
+            <el-option
+              v-for="item in statusList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
     </div>
-    <!-- 是否精选 -->
-    <div class="chooseStatus">
-      <el-select v-model="is_recommend" @change="onShipStatus" clearable
-      :placeholder="$t('请选择')">
-        <el-option
-          v-for="item in statusList"
-          :key="item.id"
-          :value="item.id"
-          :label="item.name">
-        </el-option>
-      </el-select>
+    <div class="searchGroup">
+      <search-group
+        :placeholder="$t('请输入关键字')"
+        v-model="page_params.keyword"
+        @search="goSearch"
+      >
+      </search-group>
+      <div class="filter">
+        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+          >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+        ></el-button>
+      </div>
     </div>
-    </search-group>
     <div v-if="evaluationData.length">
       <ul>
-        <li v-for="(item, index) in evaluationData"
-        :key="index" class="evaluation-list">
-        <div class="order-num">{{$t('订单号：')}}{{item.order}}</div>
-        <el-row :gutter="20">
-          <!-- 头像 -->
-          <el-col :span="2">
-            <div class="list-img">
-              <img :src="item.user.avatar">
-            </div>
-          </el-col>
-          <el-col :span="16" :offset="1">
-            <div class="list-font">
-              <span>{{item.user.id}}---{{item.user.name}}</span>&nbsp;&nbsp;
-              <span class="font-order">{{item.created_at}}</span>
-              <!-- 评价 -->
-              <div class="list-evaluation" v-if="item.content">
-                {{item.content}}
+        <li v-for="(item, index) in evaluationData" :key="index" class="evaluation-list">
+          <div class="order-num">{{ $t('订单号：') }}{{ item.order }}</div>
+          <el-row :gutter="20">
+            <!-- 头像 -->
+            <el-col :span="2">
+              <div class="list-img">
+                <img :src="item.user.avatar" />
               </div>
-              <div v-else class="noDate">
-                {{$t('暂无数据')}}
+            </el-col>
+            <el-col :span="16" :offset="1">
+              <div class="list-font">
+                <span>{{ item.user.id }}---{{ item.user.name }}</span
+                >&nbsp;&nbsp;
+                <span class="font-order">{{ item.created_at }}</span>
+                <!-- 评价 -->
+                <div class="list-evaluation" v-if="item.content">
+                  {{ item.content }}
+                </div>
+                <div v-else class="noDate">
+                  {{ $t('暂无数据') }}
+                </div>
+                <div class="left-img" v-for="(ele, index) in item.images" :key="index">
+                  <span
+                    style="cursor: pointer"
+                    @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${ele}`), (imgVisible = true)"
+                  >
+                    <img :src="`${$baseUrl.IMAGE_URL}${ele}`" class="productImg" />
+                  </span>
+                </div>
+                <div class="location-sty">
+                  <i class="el-icon-map-location"></i><span>{{ item.country }}</span>
+                </div>
               </div>
-              <div class="left-img" v-for="(ele, index) in item.images" :key="index">
-                <span style="cursor:pointer;" @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${ele}`, imgVisible=true">
-                  <img :src="`${$baseUrl.IMAGE_URL}${ele}`" class="productImg" >
+            </el-col>
+            <el-col :span="4" :offset="1">
+              <!-- 星级 -->
+              <el-rate v-model="item.score" disabled> </el-rate>
+              <!-- 精选 -->
+              <div class="featured" v-if="item.is_recommend === 1">
+                <span class="featured-font">
+                  {{ $t('精选') }}
                 </span>
               </div>
-              <div class="location-sty">
-                <i class="el-icon-map-location"></i><span>{{item.country}}</span>
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="4" :offset="1">
-            <!-- 星级 -->
-            <el-rate
-              v-model="item.score"
-              disabled>
-            </el-rate>
-            <!-- 精选 -->
-            <div class="featured" v-if="item.is_recommend === 1">
-              <span class="featured-font">
-              {{$t('精选')}}
-              </span>
-            </div>
-          </el-col>
-      </el-row>
-      <div class="bottom-btn">
-        <el-button class="btn-light-red" v-if="item.is_recommend === 1" @click="resetRecommend(item.id, 0)">{{$t('取消精选')}}</el-button>
-        <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">{{$t('设为精选')}}</el-button>
-      </div>
+            </el-col>
+          </el-row>
+          <div class="bottom-btn">
+            <el-button
+              class="btn-light-red"
+              v-if="item.is_recommend === 1"
+              @click="resetRecommend(item.id, 0)"
+              >{{ $t('取消精选') }}</el-button
+            >
+            <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">{{
+              $t('设为精选')
+            }}</el-button>
+          </div>
         </li>
       </ul>
     </div>
     <div v-else class="noDate">
-      {{$t('暂无数据')}}
+      {{ $t('暂无数据') }}
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
+        <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
   </div>
@@ -104,7 +133,7 @@ export default {
   },
   name: 'evaluationList',
   mixins: [pagination],
-  data () {
+  data() {
     return {
       tableLoading: false,
       is_recommend: '', // 是否精选
@@ -121,6 +150,7 @@ export default {
       labelId: '',
       form: {},
       value: 2,
+      hasFilterCondition: false,
       statusList: [
         {
           id: 0,
@@ -134,7 +164,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       this.evaluationData = []
       let params = {
@@ -163,18 +193,18 @@ export default {
       })
     },
     // 精选状态选择
-    onShipStatus () {
+    onShipStatus() {
       this.page_params.handleQueryChange('status', this.is_recommend)
       this.getList()
     },
     // 获取代理列表
-    getAgentData () {
+    getAgentData() {
       this.$request.getSimpleList().then(res => {
         this.agentData = res.data
       })
     },
     // 提交时间
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -182,7 +212,7 @@ export default {
       this.getList()
     },
     // 取消或设置精选
-    resetRecommend (id, status) {
+    resetRecommend(id, status) {
       console.log(id, 'im id')
       console.log(status, 'im status')
       this.$confirm(this.$t('您真的要执行此操作吗？'), this.$t('提示'), {
@@ -207,9 +237,19 @@ export default {
           }
         })
       })
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.is_recommend = ''
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime()
+      this.onShipStatus()
     }
   },
-  created () {
+  created() {
     // this.getAgentData()
     this.getList()
   }
@@ -229,15 +269,15 @@ export default {
       width: 276px !important;
     }
   }
- .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }
   .chooseOrder {
     cursor: pointer;
-    color:blue;
+    color: blue;
     text-decoration: underline;
   }
   .operating-btn {
@@ -256,7 +296,7 @@ export default {
     display: inline-block;
   }
   ul {
-    list-style:none;
+    list-style: none;
     padding: 0;
     margin-top: 0;
     .el-row {
@@ -269,7 +309,7 @@ export default {
     background-color: #fff !important;
     width: 100%;
     padding-bottom: 10px;
-    border: 1px solid #EBEEF5;
+    border: 1px solid #ebeef5;
     margin-bottom: 10px;
     .list-img {
       width: 80px;
@@ -309,7 +349,7 @@ export default {
     }
   }
   .order-num {
-    border-bottom: 1px solid #EBEEF5;
+    border-bottom: 1px solid #ebeef5;
     padding-bottom: 10px;
     padding-left: 15px;
     padding-top: 10px;
@@ -342,10 +382,48 @@ export default {
     }
   }
   .bottom-btn {
-    border-top: 1px solid #EBEEF5;
+    border-top: 1px solid #ebeef5;
     padding-top: 10px;
     text-align: right;
     padding-right: 20px;
+  }
+  .searchGroup {
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+    .search-group {
+      // flex: 1;
+      width: 21.5%;
+      margin-right: 10px;
+    }
+  }
+  .order-list-search {
+    font-size: 14px;
+    background: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    overflow: hidden;
+    .changeTime {
+      display: inline-block;
+      margin-right: 20px;
+      .timeStyle {
+        margin-right: 10px;
+        width: 276px !important;
+      }
+      .shipments {
+        display: inline-block;
+      }
+    }
+    .chooseStatus {
+      // width: 150px;
+      display: inline-block;
+    }
+    .submit {
+      float: right;
+      margin-top: 10px;
+    }
   }
 }
 </style>

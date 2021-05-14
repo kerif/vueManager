@@ -1,12 +1,18 @@
 <template>
   <div class="channel-addEdit-container">
-    <el-form label-position="top" class="warehouse-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+    <el-form
+      label-position="top"
+      class="warehouse-form"
+      :model="ruleForm"
+      :rules="rules"
+      ref="ruleForm"
+    >
       <!-- 渠道名称 -->
       <el-form-item :label="$t('渠道名称')" prop="channel_name">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.channel_name"></el-input>
-            </el-col>
+          </el-col>
         </el-row>
       </el-form-item>
       <!-- 渠道单价 -->
@@ -14,46 +20,52 @@
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.channel_price"></el-input>
-            </el-col>
+          </el-col>
         </el-row>
       </el-form-item>
       <!-- 结算方式 -->
       <el-form-item prop="settlement_method" :label="$t('结算方式')">
-          <el-col :span="10">
-            <el-select
-              clearable
-              v-model="ruleForm.settlement_method"
-              class="country-select"
-              :placeholder="$t('请选择结算方式')">
-              <el-option
-                v-for="item in options"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </el-col>
+        <el-col :span="10">
+          <el-select
+            clearable
+            v-model="ruleForm.settlement_method"
+            class="country-select"
+            :placeholder="$t('请选择结算方式')"
+          >
+            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-col>
       </el-form-item>
       <!-- 备注 -->
       <el-form-item :label="$t('备注')" prop="remark">
         <el-row>
           <el-col :span="10">
-            <el-input :placeholder="$t('请输入内容')" type="textarea"
-            :autosize="{ minRows: 4, maxRows: 4}" v-model="ruleForm.remark"></el-input>
-            </el-col>
+            <el-input
+              :placeholder="$t('请输入内容')"
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 4 }"
+              v-model="ruleForm.remark"
+            ></el-input>
+          </el-col>
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="save-btn" @click="submit('ruleForm')"
-        :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
-        </el-form-item>
+        <el-button
+          type="primary"
+          class="save-btn"
+          @click="submit('ruleForm')"
+          :loading="$store.state.btnLoading"
+          >{{ $t('保存') }}</el-button
+        >
+      </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         remark: '',
@@ -64,26 +76,22 @@ export default {
       options: [],
       localization: {},
       rules: {
-        channel_name: [
-          { required: true, message: this.$t('请输入渠道名称'), trigger: 'blur' }
-        ],
-        channel_price: [
-          { required: true, message: this.$t('请输入渠道单价'), trigger: 'blur' }
-        ],
+        channel_name: [{ required: true, message: this.$t('请输入渠道名称'), trigger: 'blur' }],
+        channel_price: [{ required: true, message: this.$t('请输入渠道单价'), trigger: 'blur' }],
         settlement_method: [
           { required: true, message: this.$t('请选择结算方式'), trigger: 'change' }
         ]
       }
     }
   },
-  created () {
+  created() {
     this.getCountry()
     if (this.$route.params.id) {
       this.getList()
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getAloneChannel(this.$route.params.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -91,13 +99,13 @@ export default {
       })
     },
     // 获取支持国家数据
-    getCountry () {
+    getCountry() {
       this.$request.getSettlement().then(res => {
         this.options = res.data
         this.localization = res.localization
       })
     },
-    submit (formName) {
+    submit(formName) {
       // 编辑状态
       if (this.$route.params.id) {
         this.$request.updateChannel(this.$route.params.id, this.ruleForm).then(res => {
@@ -115,8 +123,9 @@ export default {
             })
           }
         })
-      } else { // 新建
-        this.$refs[formName].validate((valid) => {
+      } else {
+        // 新建
+        this.$refs[formName].validate(valid => {
           if (valid) {
             this.$request.addChannel(this.ruleForm).then(res => {
               if (res.ret) {
@@ -169,24 +178,24 @@ export default {
     width: 100%;
   }
   .el-tag.el-tag--info {
-    border-color: #3540A5;
-    color: #3540A5;
+    border-color: #3540a5;
+    color: #3540a5;
     background-color: #fff;
   }
   .el-tag.el-tag--info .el-tag__close {
-    color: #3540A5;
+    color: #3540a5;
     background-color: #fff;
   }
   .country-btn {
     margin-left: 15px;
     .el-button--primary {
-      background-color: #EAECF5;
-      border-color: #EAECF5;
-      color: #3540A5;
+      background-color: #eaecf5;
+      border-color: #eaecf5;
+      color: #3540a5;
     }
   }
   .icon-info {
-    color: #74B34F;
+    color: #74b34f;
     font-size: 18px;
     margin-left: 5px;
     position: relative;
@@ -194,7 +203,7 @@ export default {
     cursor: pointer;
   }
   .address-sty {
-    color:#606266;
+    color: #606266;
   }
 }
 </style>

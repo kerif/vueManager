@@ -1,56 +1,66 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-review" width="35%"
-  @close="clear">
-    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm"
-    label-position="top">
-        <!-- 支付金额 -->
-        <el-form-item :label="$t('*支付金额')" v-if="state === 'pass'">
-          <el-input v-model="ruleForm.pay_amount" :disabled="!!this.$route.query.id">
-            <template slot="append">{{this.localization.currency_unit}}</template>
-          </el-input>
-        </el-form-item>
-        <!-- 备注 -->
-        <el-form-item :label="$t('备注')" v-if="state === 'pass'">
-            <el-input type="textarea" v-model="ruleForm.customer_remark"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            :placeholder="$t('请输入备注')"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('*备注')" v-if="state === 'reject'">
-            <el-input type="textarea" v-model="ruleForm.customer_remark"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            :placeholder="$t('请输入备注')"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('上传照片')" class="updateChe">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-            <span class="model-box"></span>
-            <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-            </span>
-            </span>
-          <el-upload
-            v-show="baleImgList.length < 3"
-            class="avatar-uploader"
-            action=""
-            list-type="picture-card"
-            :http-request="uploadBaleImg"
-            :show-file-list="false">
-            <i class="el-icon-plus">
-            </i>
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('审核')"
+    class="dialog-review"
+    width="35%"
+    @close="clear"
+  >
+    <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm" label-position="top">
+      <!-- 支付金额 -->
+      <el-form-item :label="$t('*支付金额')" v-if="state === 'pass'">
+        <el-input v-model="ruleForm.pay_amount" :disabled="!!this.$route.query.id">
+          <template slot="append">{{ this.localization.currency_unit }}</template>
+        </el-input>
+      </el-form-item>
+      <!-- 备注 -->
+      <el-form-item :label="$t('备注')" v-if="state === 'pass'">
+        <el-input
+          type="textarea"
+          v-model="ruleForm.customer_remark"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          :placeholder="$t('请输入备注')"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('*备注')" v-if="state === 'reject'">
+        <el-input
+          type="textarea"
+          v-model="ruleForm.customer_remark"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          :placeholder="$t('请输入备注')"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('上传照片')" class="updateChe">
+        <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+          <span class="model-box"></span>
+          <span class="operat-box">
+            <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+            <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+          </span>
+        </span>
+        <el-upload
+          v-show="baleImgList.length < 3"
+          class="avatar-uploader"
+          action=""
+          list-type="picture-card"
+          :http-request="uploadBaleImg"
+          :show-file-list="false"
+        >
+          <i class="el-icon-plus"> </i>
         </el-upload>
-    </el-form-item>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         pay_amount: '',
@@ -66,13 +76,13 @@ export default {
     }
   },
   methods: {
-    getCountry () {
+    getCountry() {
       this.$request.getCountry().then(res => {
         this.country = res.data
         this.localization = res.localization
       })
     },
-    confirm () {
+    confirm() {
       console.log(this.state, 'this.state')
       this.ruleForm.customer_images = this.baleImgList
       if (this.state === 'pass' && !this.ruleForm.pay_amount && this.ruleForm.pay_amount !== 0) {
@@ -119,54 +129,59 @@ export default {
             this.show = false
           })
         }
-      } else { // 代理管理审核
+      } else {
+        // 代理管理审核
         if (this.state === 'pass') {
-          this.$request.agentPassed(this.userId, this.id, {
-            confirm_amount: this.ruleForm.pay_amount,
-            ...this.ruleForm
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
+          this.$request
+            .agentPassed(this.userId, this.id, {
+              confirm_amount: this.ruleForm.pay_amount,
+              ...this.ruleForm
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
         } else {
-          this.$request.agentReject(this.userId, this.id, {
-            confirm_amount: this.ruleForm.pay_amount,
-            ...this.ruleForm
-          }).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
+          this.$request
+            .agentReject(this.userId, this.id, {
+              confirm_amount: this.ruleForm.pay_amount,
+              ...this.ruleForm
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
         }
       }
     },
     // 上传打包照片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -177,23 +192,23 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除图片
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    clear () {
+    clear() {
       this.$refs['ruleForm'].resetFields()
       this.$refs['ruleForm'].clearValidate()
       this.ruleForm.pay_amount = ''
@@ -201,7 +216,7 @@ export default {
       this.baleImgList = []
       this.ruleForm.customer_images = []
     },
-    init () {
+    init() {
       console.log(this.tranAmount, 'this.tranAmount')
       console.log(this.userId, 'userId')
       if (this.state === 'pass' && this.$route.query.id) {
@@ -251,9 +266,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -263,7 +279,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;
@@ -283,15 +299,15 @@ export default {
     border-radius: 6px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

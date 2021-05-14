@@ -1,25 +1,38 @@
 <template>
   <div class="first-column-container">
-  <el-form label-position="top" class="voucher-form" :model="ruleForm" ref="ruleForm">
-    <!-- 排序 -->
-    <el-form-item :label="$t('排序')">
-      <el-input class="input-sty" :placeholder="$t('请输入排序')" v-model="ruleForm.sort_index"></el-input>
-    </el-form-item>
-    <!-- 栏目名称 -->
-    <el-form-item :label="'*' + $t('栏目名称')">
-      <el-input class="input-sty" :placeholder="$t('请输入栏目名称')" v-model="ruleForm.name"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" class="save-btn" @click="submit"
-      :loading="$store.state.btnLoading">{{$t('保存')}}</el-button>
+    <el-form label-position="top" class="voucher-form" :model="ruleForm" ref="ruleForm">
+      <!-- 排序 -->
+      <el-form-item :label="$t('排序')">
+        <el-input
+          class="input-sty"
+          :placeholder="$t('请输入排序')"
+          v-model="ruleForm.sort_index"
+        ></el-input>
       </el-form-item>
-  </el-form>
+      <!-- 栏目名称 -->
+      <el-form-item :label="'*' + $t('栏目名称')">
+        <el-input
+          class="input-sty"
+          :placeholder="$t('请输入栏目名称')"
+          v-model="ruleForm.name"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          type="primary"
+          class="save-btn"
+          @click="submit"
+          :loading="$store.state.btnLoading"
+          >{{ $t('保存') }}</el-button
+        >
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         name: '',
@@ -27,13 +40,13 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     if (this.$route.params.id) {
       this.getList()
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getAloneWebsites(this.$route.params.id).then(res => {
         if (res.ret) {
           this.ruleForm.name = res.data.name
@@ -47,7 +60,7 @@ export default {
       })
     },
     // 保存
-    submit () {
+    submit() {
       if (!this.ruleForm.name) {
         return this.$message.error(this.$t('请输入栏目名称'))
       }
@@ -111,10 +124,10 @@ export default {
     border-radius: 6px;
   }
   .updateChe {
-  .el-form-item__content {
-    margin-left: 0 !important;
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
   }
-}
   .avatar-uploader {
     display: inline-block;
     vertical-align: top;
@@ -133,9 +146,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -145,7 +159,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;

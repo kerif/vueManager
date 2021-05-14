@@ -1,10 +1,9 @@
 <template>
   <div class="language-container">
     <div class="select-box">
-      <add-btn @click.native="addTransfer">{{$t('添加语言')}}</add-btn>
+      <add-btn @click.native="addTransfer">{{ $t('添加语言') }}</add-btn>
     </div>
-    <el-table :data="transferData" v-loading="tableLoading" class="data-list"
-    border stripe>
+    <el-table :data="transferData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
       <!-- 语言 -->
       <el-table-column :label="$t('语言')" prop="name"></el-table-column>
@@ -13,8 +12,8 @@
       <!-- 是否默认 -->
       <el-table-column :label="$t('是否默认')">
         <template slot-scope="scope">
-          <span v-if="scope.row.is_default === 1">{{$t('是')}}</span>
-          <span v-else>{{$t('否')}}</span>
+          <span v-if="scope.row.is_default === 1">{{ $t('是') }}</span>
+          <span v-else>{{ $t('否') }}</span>
         </template>
       </el-table-column>
       <!-- 是否启用 -->
@@ -26,17 +25,27 @@
             :active-text="$t('开')"
             :inactive-text="$t('关')"
             active-color="#13ce66"
-            inactive-color="gray">
+            inactive-color="gray"
+          >
           </el-switch>
         </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="230">
         <template slot-scope="scope">
-          <el-button class="btn-dark-green" @click="editTransfer(scope.row.id)">{{$t('编辑')}}</el-button>
-          <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{$t('删除')}}</el-button>
+          <el-button class="btn-dark-green" @click="editTransfer(scope.row.id)">{{
+            $t('编辑')
+          }}</el-button>
+          <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
           <!-- 设为默认 -->
-          <el-button v-if="scope.row.is_default === 0" class="btn-deep-purple" @click="setDefault(scope.row.id)">{{$t('设为默认')}}</el-button>
+          <el-button
+            v-if="scope.row.is_default === 0"
+            class="btn-deep-purple"
+            @click="setDefault(scope.row.id)"
+            >{{ $t('设为默认') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -50,7 +59,7 @@ export default {
   components: {
     AddBtn
   },
-  data () {
+  data() {
     return {
       transferData: [
         {
@@ -59,12 +68,12 @@ export default {
       ]
     }
   },
-  created () {
+  created() {
     this.getList()
   },
   methods: {
     // 获取转账支付
-    getList () {
+    getList() {
       this.tableLoading = true
       this.$request.getLanguageList().then(res => {
         this.tableLoading = false
@@ -79,7 +88,7 @@ export default {
       })
     },
     // 设为默认
-    setDefault (id) {
+    setDefault(id) {
       this.$confirm(this.$t('您真的要设为默认吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -104,8 +113,8 @@ export default {
       })
     },
     // 修改是否启用的开关
-    changeEnabled (event, enabled, id) {
-      console.log(typeof (event), '我是event')
+    changeEnabled(event, enabled, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.changeLg(id, Number(event)).then(res => {
         if (res.ret) {
@@ -124,20 +133,20 @@ export default {
       })
     },
     // 增加语言
-    addTransfer () {
+    addTransfer() {
       dialog({ type: 'languageEdit', state: 'add' }, () => {
         this.getList()
       })
     },
     // 编辑语言
-    editTransfer (id) {
+    editTransfer(id) {
       console.log(id, 'id')
       dialog({ type: 'languageEdit', state: 'edit', id: id }, () => {
         this.getList()
       })
     },
     // 删除语言
-    deleteTransfer (id) {
+    deleteTransfer(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),

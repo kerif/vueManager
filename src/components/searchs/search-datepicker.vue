@@ -1,12 +1,13 @@
 <template>
   <el-col :lg="6" :md="12">
-      <el-date-picker
+    <el-date-picker
       type="daterange"
       v-model="date_value"
       @change="dateChange"
       :range-separator="$t('至')"
       :start-placeholder="$t('开始日期')"
-      :end-placeholder="$t('结束日期')">
+      :end-placeholder="$t('结束日期')"
+    >
     </el-date-picker>
   </el-col>
 </template>
@@ -18,12 +19,12 @@ export default {
       type: String
     }
   },
-  created () {
+  created() {
     if (this.$store.state.search_flag) {
       this.date_value = []
     }
   },
-  data () {
+  data() {
     return {
       date_arr: [],
       $t
@@ -32,31 +33,35 @@ export default {
   computed: {
     pickerOptions: function () {
       return {
-        shortcuts: [{
-          text: this.$t('latestWeek'),
-          onClick (picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
+        shortcuts: [
+          {
+            text: this.$t('latestWeek'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: this.$t('latestMonth'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: this.$t('latestThreeMonth'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
           }
-        }, {
-          text: this.$t('latestMonth'),
-          onClick (picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: this.$t('latestThreeMonth'),
-          onClick (picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
-          }
-        }]
+        ]
       }
     },
     date_value: {
@@ -79,10 +84,10 @@ export default {
     }
   },
   methods: {
-    dateChange (date) {
+    dateChange() {
       this.$parent.$parent.$emit('search')
     },
-    getNowFormatDate (date) {
+    getNowFormatDate(date) {
       let day = new Date(date)
       let Year = 0
       let Month = 0

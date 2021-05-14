@@ -143,7 +143,7 @@ const ImportOrder = loadonDemand('order/order/importOrder')
 // 订单 无人认领包裹
 const noOwner = loadonDemand('order/noOwner/noOwner')
 // 订单 运单列表
-const WaybillList = loadonDemand('order/waybill/WaybillList')
+const WaybillList = loadonDemand('order/waybill/waybillList')
 // 订单 运单详情
 const Billdetails = loadonDemand('order/waybill/billDetails')
 // 订单 运单打包

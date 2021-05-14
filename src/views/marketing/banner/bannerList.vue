@@ -1,53 +1,75 @@
 <template>
   <div class="banner-container">
     <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-      </search-group>
-      </div>
-    <div class="select-box">
-      <add-btn @click.native="addBanner">{{$t('添加广告图')}}</add-btn>
+      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
     </div>
-    <el-table :data="vipGroupList" stripe border class="data-list"
-    v-loading="tableLoading"
-    @selection-change="selectionChange">
+    <div class="select-box">
+      <add-btn @click.native="addBanner">{{ $t('添加广告图') }}</add-btn>
+    </div>
+    <el-table
+      :data="vipGroupList"
+      stripe
+      border
+      class="data-list"
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+    >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 名称 -->
       <el-table-column :label="$t('名称')" prop="picture_name"></el-table-column>
       <!-- 位置 -->
-      <el-table-column :label="$t('位置')" prop="picture_path" :show-overflow-tooltip="true" width="200"></el-table-column>
+      <el-table-column
+        :label="$t('位置')"
+        prop="picture_path"
+        :show-overflow-tooltip="true"
+        width="200"
+      ></el-table-column>
       <!-- 应用 -->
       <el-table-column :label="$t('应用')">
         <template slot-scope="scope">
-          <span v-if="scope.row.source === 1">{{$t('小程序')}}</span>
-          <span v-if="scope.row.source === 2">{{$t('pc端')}}</span>
-          <span v-if="scope.row.source === 3">{{$t('H5')}}</span>
+          <span v-if="scope.row.source === 1">{{ $t('小程序') }}</span>
+          <span v-if="scope.row.source === 2">{{ $t('pc端') }}</span>
+          <span v-if="scope.row.source === 3">{{ $t('H5') }}</span>
         </template>
       </el-table-column>
       <!-- 类型 -->
       <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 1">{{$t('轮播图')}}</span>
+          <span v-if="scope.row.type === 1">{{ $t('轮播图') }}</span>
         </template>
       </el-table-column>
       <!-- 连接方式 -->
       <el-table-column :label="$t('连接方式')">
         <template slot-scope="scope">
-          <span v-if="scope.row.link_type === 1">{{$t('应用内跳转')}}</span>
-          <span v-if="scope.row.link_type === 2">{{$t('外部url')}}</span>
+          <span v-if="scope.row.link_type === 1">{{ $t('应用内跳转') }}</span>
+          <span v-if="scope.row.link_type === 2">{{ $t('外部url') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+      <el-table-column
+        :label="item.name"
+        v-for="item in formatLangData"
+        :key="item.id"
+        align="center"
+      >
         <template slot-scope="scope">
-          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span
+            v-if="scope.row['trans_' + item.language_code]"
+            class="el-icon-check icon-sty"
+            @click="onLang(scope.row, item)"
+          ></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')" width="260">
         <template slot-scope="scope">
           <!-- 修改仓库 -->
-          <el-button class="btn-green" @click="editBanner(scope.row.id)">{{$t('修改')}}</el-button>
+          <el-button class="btn-green" @click="editBanner(scope.row.id)">{{
+            $t('修改')
+          }}</el-button>
           <!-- 删除 -->
-          <el-button class="btn-light-red" @click="deleteBanner(scope.row.id)">{{$t('删除')}}</el-button>
+          <el-button class="btn-light-red" @click="deleteBanner(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -73,7 +95,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       vipGroupList: [],
       tableLoading: false,
@@ -82,46 +104,48 @@ export default {
       transCode: ''
     }
   },
-  created () {
+  created() {
     this.getList()
     this.getLanguageList() // 获取支持语言
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
-      this.$request.getBanner({
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.vipGroupList = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .getBanner({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.vipGroupList = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 修改仓库
-    editBanner (id) {
+    editBanner(id) {
       dialog({ type: 'bannerList', state: 'edit', id: id }, () => {
         this.getList()
       })
     },
     // 新增 广告图
-    addBanner () {
+    addBanner() {
       dialog({ type: 'bannerList', state: 'add' }, () => {
         this.getList()
       })
     },
     // 获取支持语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
@@ -129,20 +153,21 @@ export default {
       })
     },
     // 仓位管理
-    positionAdd (id, warehouseName) {
-      this.$router.push({ name: 'position',
+    positionAdd(id, warehouseName) {
+      this.$router.push({
+        name: 'position',
         params: {
           id: id,
           warehouseName: warehouseName
-        } }
-      )
+        }
+      })
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除单条转账支付
-    deleteBanner (id) {
+    deleteBanner(id) {
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -167,7 +192,7 @@ export default {
       })
     },
     // 修改语言
-    onLang (line, lang) {
+    onLang(line, lang) {
       this.transCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
       dialog({ type: 'bannerLang', line: line, lang: lang, transCode: this.transCode }, () => {
@@ -176,7 +201,7 @@ export default {
     }
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   }

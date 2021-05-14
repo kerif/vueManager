@@ -1,29 +1,34 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('更改线路')" class="dialog-change-line" width="35%"
-  @close="clear">
-    <el-form :model="user" ref="user" class="demo-ruleForm"
-    label-position="top">
-        <!-- 员工组中文名 -->
-            <el-form-item>
-              <el-select v-model="user.express_line_id" clearable :placeholder="$t('请选择')">
-                <el-option
-                v-for="item in expressData"
-                :key="item.id"
-                :value="item.id"
-                :label="`${item.name}---${$t('限重')}${item.max_weight}` + localization.weight_unit">
-                </el-option>
-              </el-select>
-            </el-form-item>
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('更改线路')"
+    class="dialog-change-line"
+    width="35%"
+    @close="clear"
+  >
+    <el-form :model="user" ref="user" class="demo-ruleForm" label-position="top">
+      <!-- 员工组中文名 -->
+      <el-form-item>
+        <el-select v-model="user.express_line_id" clearable :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in expressData"
+            :key="item.id"
+            :value="item.id"
+            :label="`${item.name}---${$t('限重')}${item.max_weight}` + localization.weight_unit"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('user')">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('user')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       user: {
         express_line_id: '',
@@ -36,7 +41,7 @@ export default {
   },
   methods: {
     // 获取全部线路详情
-    getExpress () {
+    getExpress() {
       this.$request.getExpressLines(this.$route.params.id).then(res => {
         if (res.ret) {
           this.expressData = res.data
@@ -44,7 +49,7 @@ export default {
         }
       })
     },
-    confirm () {
+    confirm() {
       if (this.user.express_line_id === '') {
         return this.$message.error(this.$t('请选择线路'))
       } else {
@@ -53,10 +58,10 @@ export default {
         this.show = false
       }
     },
-    clear () {
+    clear() {
       this.user.express_line_id = ''
     },
-    init () {
+    init() {
       this.getExpress()
     }
   }
@@ -79,14 +84,14 @@ export default {
     margin-left: 100px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

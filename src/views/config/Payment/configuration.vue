@@ -6,27 +6,28 @@
           <el-row :gutter="20">
             <el-col :span="3">
               <el-menu
-              :default-active="secondTab1"
-              class="el-menu-vertical-demo"
-              @select="handleSelect1">
+                :default-active="secondTab1"
+                class="el-menu-vertical-demo"
+                @select="handleSelect1"
+              >
                 <el-menu-item-group>
                   <el-menu-item index="1">
-                    {{$t('单位配置')}}
+                    {{ $t('单位配置') }}
                   </el-menu-item>
                   <el-menu-item index="2">
-                    {{$t('预报与入库')}}
+                    {{ $t('预报与入库') }}
                   </el-menu-item>
                   <el-menu-item index="3">
-                    {{$t('支付配置')}}
+                    {{ $t('支付配置') }}
                   </el-menu-item>
                   <el-menu-item index="4">
-                    {{$t('汇率配置')}}
+                    {{ $t('汇率配置') }}
                   </el-menu-item>
                   <el-menu-item index="5">
-                    {{$t('国家地区')}}
+                    {{ $t('国家地区') }}
                   </el-menu-item>
                   <el-menu-item index="6">
-                    {{$t('转运规则')}}
+                    {{ $t('转运规则') }}
                   </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
@@ -63,22 +64,23 @@
           <el-row :gutter="20">
             <el-col :span="3">
               <el-menu
-              :default-active="secondTab2"
-              class="el-menu-vertical-demo"
-              @select="handleSelect2">
+                :default-active="secondTab2"
+                class="el-menu-vertical-demo"
+                @select="handleSelect2"
+              >
                 <el-menu-item-group>
-                   <el-menu-item index="1">
-                     {{$t('小程序配置')}}
-                   </el-menu-item>
-                   <el-menu-item index="2">
-                     {{$t('PC端配置')}}
-                   </el-menu-item>
-                   <el-menu-item index="3">
-                     {{$t('API与服务*')}}
-                   </el-menu-item>
-                   <el-menu-item index="4">
-                     {{$t('客户登录配置')}}
-                   </el-menu-item>
+                  <el-menu-item index="1">
+                    {{ $t('小程序配置') }}
+                  </el-menu-item>
+                  <el-menu-item index="2">
+                    {{ $t('PC端配置') }}
+                  </el-menu-item>
+                  <el-menu-item index="3">
+                    {{ $t('API与服务*') }}
+                  </el-menu-item>
+                  <el-menu-item index="4">
+                    {{ $t('客户登录配置') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -106,16 +108,17 @@
           <el-row :gutter="20">
             <el-col :span="3">
               <el-menu
-              :default-active="secondTab3"
-              class="el-menu-vertical-demo"
-              @select="handleSelect3">
+                :default-active="secondTab3"
+                class="el-menu-vertical-demo"
+                @select="handleSelect3"
+              >
                 <el-menu-item-group>
-                   <el-menu-item index="1">
-                     {{$t('订单增值服务')}}
-                   </el-menu-item>
-                   <el-menu-item index="2">
-                     {{$t('包裹增值服务')}}
-                   </el-menu-item>
+                  <el-menu-item index="1">
+                    {{ $t('订单增值服务') }}
+                  </el-menu-item>
+                  <el-menu-item index="2">
+                    {{ $t('包裹增值服务') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -135,22 +138,23 @@
           <el-row :gutter="20">
             <el-col :span="3">
               <el-menu
-              :default-active="secondTab4"
-              class="el-menu-vertical-demo"
-              @select="handleSelect4">
+                :default-active="secondTab4"
+                class="el-menu-vertical-demo"
+                @select="handleSelect4"
+              >
                 <el-menu-item-group>
-                   <el-menu-item index="1">
-                     {{$t('单号规则')}}
-                   </el-menu-item>
-                   <el-menu-item index="2">
-                     {{$t('商品分类管理')}}
-                   </el-menu-item>
-                   <el-menu-item index="3">
-                     {{$t('发货快递公司')}}
-                   </el-menu-item>
-                   <el-menu-item index="4">
-                     {{$t('自定义轨迹类型')}}
-                   </el-menu-item>
+                  <el-menu-item index="1">
+                    {{ $t('单号规则') }}
+                  </el-menu-item>
+                  <el-menu-item index="2">
+                    {{ $t('商品分类管理') }}
+                  </el-menu-item>
+                  <el-menu-item index="3">
+                    {{ $t('发货快递公司') }}
+                  </el-menu-item>
+                  <el-menu-item index="4">
+                    {{ $t('自定义轨迹类型') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -221,7 +225,7 @@ export default {
     GroupConfigure
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       secondTab1: '1',
       secondTab2: '1',
@@ -231,10 +235,10 @@ export default {
       unShow: '' // 保存是否显示拼团配置
     }
   },
-  mounted () {
+  mounted() {
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
   },
-  created () {
+  created() {
     if (this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
       this.secondTab1 = this.$route.query.secondTab1
@@ -245,7 +249,7 @@ export default {
     }
   },
   methods: {
-    onTabChange () {
+    onTabChange() {
       this.page_params.handleQueryChange('activeName', this.activeName)
       if (this.activeName === '1') {
         this.page_params.handleQueryChange('secondTab1', this.secondTab1)
@@ -257,19 +261,19 @@ export default {
         this.page_params.handleQueryChange('secondTab4', this.secondTab4)
       }
     },
-    handleSelect1 (key) {
+    handleSelect1(key) {
       this.secondTab1 = key
       this.page_params.handleQueryChange('secondTab1', this.secondTab1)
     },
-    handleSelect2 (key) {
+    handleSelect2(key) {
       this.secondTab2 = key
       this.page_params.handleQueryChange('secondTab2', this.secondTab2)
     },
-    handleSelect3 (key) {
+    handleSelect3(key) {
       this.secondTab3 = key
       this.page_params.handleQueryChange('secondTab3', this.secondTab3)
     },
-    handleSelect4 (key) {
+    handleSelect4(key) {
       this.secondTab4 = key
       this.page_params.handleQueryChange('secondTab4', this.secondTab4)
     }
@@ -281,25 +285,25 @@ export default {
 .configuration-container {
   .save-btn {
     color: #fff;
-    background-color: #3540A5;
+    background-color: #3540a5;
   }
   .el-menu-vertical-demo {
     .el-menu-item {
       position: relative;
     }
     .is-active {
-    color: #2597fc !important;
-    background-color: #fff;
+      color: #2597fc !important;
+      background-color: #fff;
     }
     .is-active::after {
-    content: '';
-    display: block;
-    position: absolute;
-    height: 35px;
-    width: 1px;
-    background-color: #1790fc;
-    top: 12px;
-    left: 10px;
+      content: '';
+      display: block;
+      position: absolute;
+      height: 35px;
+      width: 1px;
+      background-color: #1790fc;
+      top: 12px;
+      left: 10px;
     }
   }
   .select-box {
@@ -325,7 +329,7 @@ export default {
   .icon-question {
     margin-left: 5px;
     font-size: 18px;
-    color: #67C23A;
+    color: #67c23a;
     position: relative;
     top: 3px;
   }
@@ -335,11 +339,11 @@ export default {
     .rate-top {
       .rate-left {
         display: inline-block;
-          .input-sty {
-            margin-left: 10px;
-            margin-right: 10px;
-            width: 50%;
-          }
+        .input-sty {
+          margin-left: 10px;
+          margin-right: 10px;
+          width: 50%;
+        }
       }
     }
   }
@@ -349,13 +353,13 @@ export default {
     padding: 20px;
   }
   .settings-container {
-     padding: 20px;
+    padding: 20px;
     .el-tag {
       margin-right: 8px;
     }
-  .no-warehouse {
-    color: #606266;
-   }
+    .no-warehouse {
+      color: #606266;
+    }
   }
 }
 </style>

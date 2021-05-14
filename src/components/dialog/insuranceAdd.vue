@@ -1,25 +1,37 @@
 <template>
-  <el-dialog :visible.sync="show" :title="value == 'insurance' ? $t('保险说明') : $t('关税说明')" class="dialog-addCost"  @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="value == 'insurance' ? $t('保险说明') : $t('关税说明')"
+    class="dialog-addCost"
+    @close="clear"
+  >
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <el-form-item :label="$t('中文')" prop="cn">
-        <el-input v-model="ruleForm.cn" type="textarea"
-        :placeholder="$t('请输入')" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('英文')" prop="en">
-        <el-input type="textarea" v-model="ruleForm.en"
-        :autosize="{ minRows: 2, maxRows: 4}"
-        :placeholder="$t('请输入')"></el-input>
-        </el-form-item>
+      <el-form-item :label="$t('中文')" prop="cn">
+        <el-input
+          v-model="ruleForm.cn"
+          type="textarea"
+          :placeholder="$t('请输入')"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+        ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('英文')" prop="en">
+        <el-input
+          type="textarea"
+          v-model="ruleForm.en"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         name: ''
@@ -28,17 +40,13 @@ export default {
       id: '',
       value: '',
       rules: {
-        cn: [
-          { required: true, message: this.$t('请输入中文'), trigger: 'blur' }
-        ],
-        en: [
-          { required: true, message: this.$t('请输入英文'), trigger: 'blur' }
-        ]
+        cn: [{ required: true, message: this.$t('请输入中文'), trigger: 'blur' }],
+        en: [{ required: true, message: this.$t('请输入英文'), trigger: 'blur' }]
       }
     }
   },
   methods: {
-    getList () {
+    getList() {
       if (this.value === 'insurance') {
         this.$request.getExplanation().then(res => {
           if (res.ret) {
@@ -65,8 +73,8 @@ export default {
         })
       }
     },
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.value === 'insurance') {
             this.$request.updateExplanation(this.ruleForm).then(res => {
@@ -110,15 +118,15 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.ruleForm.cn = ''
       this.ruleForm.en = ''
     },
-    cancelDialog (ruleForm) {
+    cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.show = false
     },
-    init () {
+    init() {
       this.getList()
     }
   }
@@ -141,15 +149,15 @@ export default {
     margin-left: 300px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

@@ -1,72 +1,77 @@
 <template>
   <div class="staff-group-container list-main">
-    <div>
-    <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
-    </div>
     <div class="select-box">
-      <add-btn @click.native="addStaff">{{$t('添加员工组')}}</add-btn>
+      <div class="bottom-sty">
+        <!-- 删除 -->
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+      </div>
+      <div class="searchGroup">
+        <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+        <add-btn @click.native="addStaff">{{ $t('添加员工组') }}</add-btn>
+      </div>
     </div>
-      <el-table
-        class="data-list"
-        :data="staff_group_list"
-        border
-        @selection-change="selectionChange"
-        v-loading='tableLoading'
-        ref="table"
-        height="550">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
+    <el-table
+      class="data-list"
+      :data="staff_group_list"
+      border
+      @selection-change="selectionChange"
+      v-loading="tableLoading"
+      ref="table"
+      height="550"
+    >
+      <el-table-column type="selection" width="55"> </el-table-column>
       <!-- 员工组中文名 -->
-      <el-table-column
-        prop="name_cn"
-        :label="$t('员工组中文名')">
-      </el-table-column>
+      <el-table-column prop="name_cn" :label="$t('员工组中文名')"> </el-table-column>
       <!-- 员工组英文名 -->
-      <el-table-column
-        prop="name_en"
-        :label="$t('员工组英文名')">
-      </el-table-column>
+      <el-table-column prop="name_en" :label="$t('员工组英文名')"> </el-table-column>
       <!-- 成员数量 -->
-      <el-table-column
-        prop="admin_count"
-        :label="$t('成员数量')">
-      </el-table-column>
+      <el-table-column prop="admin_count" :label="$t('成员数量')"> </el-table-column>
       <!-- 所属仓库 -->
-      <el-table-column
-        prop="warehouse_name"
-        :label="$t('所属仓库')">
-      </el-table-column>
+      <el-table-column prop="warehouse_name" :label="$t('所属仓库')"> </el-table-column>
       <!-- 操作 -->
-      <el-table-column
-        :label="$t('操作')" width="290">
+      <el-table-column :label="$t('操作')" width="290">
         <template slot-scope="scope">
           <!-- 编辑 -->
-        <el-button v-if="scope.row.permissions === 1" class="btn-blue" @click.stop="editStaff(scope.row.id)">{{$t('编辑')}}</el-button>
+          <el-button
+            v-if="scope.row.permissions === 1"
+            class="btn-blue"
+            @click.stop="editStaff(scope.row.id)"
+            >{{ $t('编辑') }}</el-button
+          >
           <!-- 修改权限 -->
-        <el-button class="btn-purple" v-if="scope.row.permissions === 1"
-          @click.stop="changePre(scope.row.id)">
-          {{$t('修改权限')}}
-        </el-button>
-        <!-- 成员 -->
-        <el-button @click.stop="member(scope.row.id)" class="btn-green">{{$t('成员')}}</el-button>
-        <!-- 所属仓库 -->
-        <el-button class="btn-deep-blue" v-if="scope.row.permissions === 1" @click="warehouseChange(scope.row.id)">{{$t('所属仓库')}}</el-button>
-        <!-- 自提点权限 -->
-        <el-button class="btn-pink" v-if="scope.row.permissions === 1" @click="pickPiont(scope.row.id)">{{$t('自提点权限')}}</el-button>
-      </template>
+          <el-button
+            class="btn-purple"
+            v-if="scope.row.permissions === 1"
+            @click.stop="changePre(scope.row.id)"
+          >
+            {{ $t('修改权限') }}
+          </el-button>
+          <!-- 成员 -->
+          <el-button @click.stop="member(scope.row.id)" class="btn-green">{{
+            $t('成员')
+          }}</el-button>
+          <!-- 所属仓库 -->
+          <el-button
+            class="btn-deep-blue"
+            v-if="scope.row.permissions === 1"
+            @click="warehouseChange(scope.row.id)"
+            >{{ $t('所属仓库') }}</el-button
+          >
+          <!-- 自提点权限 -->
+          <el-button
+            class="btn-pink"
+            v-if="scope.row.permissions === 1"
+            @click="pickPiont(scope.row.id)"
+            >{{ $t('自提点权限') }}</el-button
+          >
+        </template>
       </el-table-column>
       <!-- <template slot="append">
         <div class="append-box">
         </div>
       </template> -->
     </el-table>
-    <div class="bottom-sty">
-      <!-- 删除 -->
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
-    </div>
-      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 <script>
@@ -83,34 +88,36 @@ export default {
     NlePagination
   },
   name: 'staffGroupList',
-  data () {
+  data() {
     return {
       staff_group_list: [],
       tableLoading: false,
       normal: 1
     }
   },
-  mounted () {
+  mounted() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
-      this.$request.getVipGroup({
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.staff_group_list = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        }
-      })
+      this.$request
+        .getVipGroup({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.staff_group_list = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
     },
     // 编辑
-    editInfo (id) {
+    editInfo(id) {
       this.$router.push({
         name: 'VIPGroupInfoEdit',
         query: {
@@ -119,43 +126,45 @@ export default {
       })
     },
     // 添加员工组
-    addStaff () {
+    addStaff() {
       dialog({ type: 'addStaff', staff: 'add' }, () => {
         this.getList()
       })
     },
     // 编辑
-    editStaff (id) {
+    editStaff(id) {
       dialog({ type: 'addStaff', id: id, staff: 'edit' }, () => {
         this.getList()
       })
     },
     // 修改所属仓库
-    warehouseChange (id) {
+    warehouseChange(id) {
       dialog({ type: 'warehouseTo', id: id }, () => {
         this.getList()
       })
     },
     // 自提点权限
-    pickPiont (id) {
+    pickPiont(id) {
       dialog({ type: 'pickPoint', id: id }, () => {
         this.getList()
       })
     },
     // 成员
-    member (id) {
+    member(id) {
       dialog({ type: 'staffGroup', id: id })
     },
     // 修改权限
-    changePre (id) {
+    changePre(id) {
       console.log(id, 'id')
-      this.$router.push({ name: 'modifyPermissions',
+      this.$router.push({
+        name: 'modifyPermissions',
         params: {
           id: id
-        } })
+        }
+      })
     },
     // 删除
-    deleteData () {
+    deleteData() {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择员工组'))
@@ -166,33 +175,35 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
-        this.$request.deleteGroup({
-          DELETE: this.deleteNum
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .deleteGroup({
+            DELETE: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       })
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     }
   },
   watch: {
     // 监听已选择的行
-    selection (newValue) {
+    selection(newValue) {
       if (newValue.length) {
         console.log(newValue)
         if (newValue.every(item => item.normal === 1)) {
@@ -213,6 +224,26 @@ export default {
   }
   .select-box {
     overflow: hidden;
+    // margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    .bottom-sty {
+      display: flex;
+      align-items: center;
+      button {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .searchGroup {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-end;
+    .search-group {
+      margin-right: 10px;
+      width: 22.3%;
+    }
   }
 }
 </style>

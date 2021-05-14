@@ -1,32 +1,38 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'edit' ? $t('修改客户组') : $t('添加客户组')" class="dialog-vip" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'edit' ? $t('修改客户组') : $t('添加客户组')"
+    class="dialog-vip"
+    @close="clear"
+  >
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <!-- 员工组中文名 -->
-        <el-form-item :label="$t('客户组中文名')" prop="name_cn">
-          <el-input v-model="ruleForm.name_cn"
-          :placeholder="$t('请输入客户组中文名')"></el-input>
-          </el-form-item>
-        <!-- 员工组英文名 -->
-          <el-form-item :label="$t('客户组英文名')" prop="name_en">
-          <el-input v-model="ruleForm.name_en"
-          :placeholder="$t('请输入客户组英文名')"></el-input>
-          </el-form-item>
-        <!-- 用户组描述 -->
-          <el-form-item :label="$t('客户组描述')">
-          <el-input type="textarea" v-model="ruleForm.description"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          :placeholder="$t('请输入客户组描述')"></el-input>
-          </el-form-item>
+      <!-- 员工组中文名 -->
+      <el-form-item :label="$t('客户组中文名')" prop="name_cn">
+        <el-input v-model="ruleForm.name_cn" :placeholder="$t('请输入客户组中文名')"></el-input>
+      </el-form-item>
+      <!-- 员工组英文名 -->
+      <el-form-item :label="$t('客户组英文名')" prop="name_en">
+        <el-input v-model="ruleForm.name_en" :placeholder="$t('请输入客户组英文名')"></el-input>
+      </el-form-item>
+      <!-- 用户组描述 -->
+      <el-form-item :label="$t('客户组描述')">
+        <el-input
+          type="textarea"
+          v-model="ruleForm.description"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          :placeholder="$t('请输入客户组描述')"
+        ></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         name_cn: '',
@@ -35,20 +41,17 @@ export default {
       },
       state: '',
       rules: {
-        name_cn: [
-          { required: true, message: this.$t('请输入客户组中文名'), trigger: 'blur' }
-        ],
-        name_en: [
-          { required: true, message: this.$t('请输入客户组英文名'), trigger: 'blur' }
-        ]
+        name_cn: [{ required: true, message: this.$t('请输入客户组中文名'), trigger: 'blur' }],
+        name_en: [{ required: true, message: this.$t('请输入客户组英文名'), trigger: 'blur' }]
       }
     }
   },
   methods: {
-    confirm (formName) {
-      this.$refs[formName].validate((valid) => {
+    confirm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
-          if (this.id) { // 如果是编辑状态
+          if (this.id) {
+            // 如果是编辑状态
             this.$request.editUserGroup(this.id, this.ruleForm).then(res => {
               if (res.ret) {
                 this.$notify({
@@ -66,7 +69,8 @@ export default {
               }
               this.show = false
             })
-          } else { // 如果是添加状态
+          } else {
+            // 如果是添加状态
             this.$request.addUserGroup(this.ruleForm).then(res => {
               if (res.ret) {
                 this.$notify({
@@ -90,18 +94,18 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.ruleForm.name_cn = ''
       this.ruleForm.name_en = ''
       this.ruleForm.description = ''
       this.name_cn = ''
       this.name_en = ''
     },
-    cancelDialog (ruleForm) {
+    cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.show = false
     },
-    init () {
+    init() {
       if (this.id) {
         this.ruleForm.name_cn = this.name_cn
         this.ruleForm.name_en = this.name_en
@@ -127,15 +131,15 @@ export default {
     margin-left: 250px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

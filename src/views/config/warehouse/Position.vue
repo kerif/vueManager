@@ -5,13 +5,18 @@
       </search-group>
       </div> -->
     <div class="select-box">
-      <add-btn @click.native="addLocation">{{$t('新增货位')}}</add-btn>
+      <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
     </div>
-    <el-table :data="positionList" stripe border class="data-list positions-type"
-    v-loading="tableLoading"
-    @selection-change="selectionChange">
+    <el-table
+      :data="positionList"
+      stripe
+      border
+      class="data-list positions-type"
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+    >
       <el-table-column width="100px" align="center">
-        <template >
+        <template>
           <i class="el-icon-sort icon-fonts"></i>
         </template>
       </el-table-column>
@@ -30,14 +35,19 @@
             :active-value="0"
             :inactive-value="1"
             active-color="#13ce66"
-            inactive-color="gray">
+            inactive-color="gray"
+          >
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')" width="200">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editLocation(scope.row.id)">{{$t('修改货位')}}</el-button>
-          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{$t('删除')}}</el-button>
+          <el-button class="btn-green" @click="editLocation(scope.row.id)">{{
+            $t('修改货位')
+          }}</el-button>
+          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -47,9 +57,14 @@
       </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <div class="sort-sty">*{{$t('拖拽行可以进行排序')}}
-      <el-button @click="typeRowUpdate" class="btn-deep-purple save-sort">{{$t('保存排序结果')}}</el-button>
-      <el-button @click="autoRow" class="btn-pink save-sort">{{$t('按区域编号自动排序')}}</el-button>
+    <div class="sort-sty">
+      *{{ $t('拖拽行可以进行排序') }}
+      <el-button @click="typeRowUpdate" class="btn-deep-purple save-sort">{{
+        $t('保存排序结果')
+      }}</el-button>
+      <el-button @click="autoRow" class="btn-pink save-sort">{{
+        $t('按区域编号自动排序')
+      }}</el-button>
     </div>
   </div>
 </template>
@@ -68,7 +83,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       positionList: [],
       typeSendData: [],
@@ -76,44 +91,46 @@ export default {
       deleteNum: []
     }
   },
-  created () {
+  created() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
-      this.$request.locationArea(this.$route.params.id, {
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.positionList = res.data
-          this.typeSendData = [...res.data]
-          this.$nextTick(() => {
-            this.typeRowDrop()
-          })
-          // this.positionList = res.data.map(item => {
-          //   let arr = item.support_countries.map(item => item.cn_name)
-          //   return {
-          //     ...item,
-          //     countries: arr.join(' ')
-          //   }
-          // })
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .locationArea(this.$route.params.id, {
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.positionList = res.data
+            this.typeSendData = [...res.data]
+            this.$nextTick(() => {
+              this.typeRowDrop()
+            })
+            // this.positionList = res.data.map(item => {
+            //   let arr = item.support_countries.map(item => item.cn_name)
+            //   return {
+            //     ...item,
+            //     countries: arr.join(' ')
+            //   }
+            // })
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 自定义物流 行拖拽
-    typeRowDrop () {
+    typeRowDrop() {
       const tbody = document.querySelector('.positions-type tbody')
       console.log(tbody, 'tbody')
       Sortable.create(tbody, {
@@ -126,7 +143,7 @@ export default {
       })
     },
     // 确定拖拽
-    typeRowUpdate () {
+    typeRowUpdate() {
       const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
       console.log(ids)
       this.positionList = []
@@ -147,7 +164,7 @@ export default {
       })
     },
     // 按区域编号自动排序
-    autoRow () {
+    autoRow() {
       this.$confirm(this.$t('您是否确认按区域编号自动排序'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -171,16 +188,17 @@ export default {
       })
     },
     // 修改仓库
-    editWarehouse (id) {
-      this.$router.push({ name: 'warehouseEdit',
+    editWarehouse(id) {
+      this.$router.push({
+        name: 'warehouseEdit',
         params: {
           id: id
-        } }
-      )
+        }
+      })
     },
     // 修改开关
-    changeTransfer (event, enabled, id) {
-      console.log(typeof (event), '我是event')
+    changeTransfer(event, enabled, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.updateLocks(id, Number(event)).then(res => {
         if (res.ret) {
@@ -199,30 +217,40 @@ export default {
       })
     },
     // 新增货位
-    addLocation () {
-      dialog({ type: 'locationList',
-        state: 'add',
-        id: this.$route.params.id,
-        warehouseName: this.$route.params.warehouseName }, () => {
-        this.getList()
-      })
+    addLocation() {
+      dialog(
+        {
+          type: 'locationList',
+          state: 'add',
+          id: this.$route.params.id,
+          warehouseName: this.$route.params.warehouseName
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 编辑货位
-    editLocation (areaId) {
-      dialog({ type: 'locationList',
-        state: 'edit',
-        id: this.$route.params.id,
-        areaId: areaId,
-        warehouseName: this.$route.params.warehouseName }, () => {
-        this.getList()
-      })
+    editLocation(areaId) {
+      dialog(
+        {
+          type: 'locationList',
+          state: 'edit',
+          id: this.$route.params.id,
+          areaId: areaId,
+          warehouseName: this.$route.params.warehouseName
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除单条转账支付
-    deleteWarehouse (areaId) {
+    deleteWarehouse(areaId) {
       this.$confirm(this.$t('您真的要删除此货位吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),

@@ -4,15 +4,17 @@
       <el-col :span="7" class="user-left">
         <div class="new-top">
           <div class="top-img">
-            <img src="../../assets/carousel.png">
+            <img src="../../assets/carousel.png" />
             <p>
-              <strong><span>{{$t('小程序/H5轮播图管理')}}</span></strong>
-              </p>
+              <strong
+                ><span>{{ $t('小程序/H5轮播图管理') }}</span></strong
+              >
+            </p>
           </div>
           <div class="user-bottom">
             <div class="bottom-left">
               <!-- <el-button class="btn-deep-blue" @click="goAdd(item.type)">{{$t('增加')}}</el-button> -->
-              <el-button class="btn-deep-purple" @click="goBanner">{{$t('管理')}}</el-button>
+              <el-button class="btn-deep-purple" @click="goBanner">{{ $t('管理') }}</el-button>
             </div>
             <!-- <div class="bottom-right">
               <el-switch
@@ -33,14 +35,16 @@
       <el-col :span="7" class="user-left">
         <div class="new-top">
           <div class="top-img">
-            <img src="../../assets/poster.png">
+            <img src="../../assets/poster.png" />
             <p>
-              <strong><span>{{$t('小程序/H5海报管理')}}</span></strong>
-              </p>
+              <strong
+                ><span>{{ $t('小程序/H5海报管理') }}</span></strong
+              >
+            </p>
           </div>
           <div class="user-bottom">
             <div class="bottom-left">
-              <el-button class="btn-deep-purple" @click="goPoster">{{$t('管理')}}</el-button>
+              <el-button class="btn-deep-purple" @click="goPoster">{{ $t('管理') }}</el-button>
             </div>
           </div>
         </div>
@@ -48,14 +52,16 @@
       <el-col :span="7" class="user-left">
         <div class="new-top">
           <div class="top-img">
-            <img src="../../assets/advertising.png">
+            <img src="../../assets/advertising.png" />
             <p>
-              <strong><span>{{$t('小程序/H5页面广告管理')}}</span></strong>
-              </p>
+              <strong
+                ><span>{{ $t('小程序/H5页面广告管理') }}</span></strong
+              >
+            </p>
           </div>
           <div class="user-bottom">
             <div class="bottom-left">
-              <el-button class="btn-deep-purple" @click="goImage">{{$t('管理')}}</el-button>
+              <el-button class="btn-deep-purple" @click="goImage">{{ $t('管理') }}</el-button>
             </div>
           </div>
         </div>
@@ -66,18 +72,17 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       validate_email: ''
     }
   },
-  created () {
+  created() {
     this.getList()
   },
   methods: {
-    getList () {
-    },
-    changeOnline (type, val) {
+    getList() {},
+    changeOnline(type, val) {
       console.log(type, 'type')
       const status = val === 0 ? 0 : 1
       this.$request.closeCoupons(type, status).then(res => {
@@ -97,15 +102,15 @@ export default {
       })
     },
     // 轮播图管理
-    goBanner () {
+    goBanner() {
       this.$router.push({ name: 'bannerList' })
     },
     // 海报管理
-    goPoster () {
+    goPoster() {
       this.$router.push({ name: 'poster' })
     },
     // 新增
-    goAdd (type) {
+    goAdd(type) {
       if (type === 4) {
         this.$router.push({ name: 'rebate', params: { type: type } })
       } else {
@@ -113,7 +118,7 @@ export default {
       }
     },
     // 页面广告管理
-    goImage () {
+    goImage() {
       this.$router.push({ name: 'imageSet' })
     }
   }
@@ -121,7 +126,7 @@ export default {
 </script>
 <style lang="scss">
 .advertising-container {
-  background-color: #F5F5F5 !important;
+  background-color: #f5f5f5 !important;
   padding: 20px;
   .new-top {
     margin-bottom: 10px;

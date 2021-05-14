@@ -4,14 +4,14 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{$t('*自提点名称')}}</div>
+            <div>{{ $t('*自提点名称') }}</div>
             <el-input :placeholder="$t('请输入内容')" v-model="form.name"></el-input>
           </el-col>
         </el-row>
       </el-form-item>
       <el-form-item>
         <el-row :gutter="20">
-          <div>{{$t('*所属国家/地区')}}</div>
+          <div>{{ $t('*所属国家/地区') }}</div>
           <el-col :span="5">
             <el-select
               v-model="form.country_id"
@@ -19,16 +19,18 @@
               filterable
               :disabled="!!this.$route.params.id && !hasStore"
               class="country-select"
-              :placeholder="$t('请选择')">
+              :placeholder="$t('请选择')"
+            >
               <el-option
                 v-for="item in countryList"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value">
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-col>
-            <el-col :span="5" v-show="newWarehouseList.length !== 0 && form.country_id">
+          <el-col :span="5" v-show="newWarehouseList.length !== 0 && form.country_id">
             <el-cascader
               filterable
               :props="{ checkStrictly: true }"
@@ -37,7 +39,8 @@
               :disabled="!!this.$route.params.id && !hasStore"
               v-model="areaData"
               :options="newWarehouseList"
-              @change="handleChange">
+              @change="handleChange"
+            >
             </el-cascader>
           </el-col>
           <!-- <el-col :span="5">
@@ -88,35 +91,37 @@
       </el-form-item>
       <!-- 详细地址 -->
       <el-form-item>
-        <div>{{$t('*详细地址')}}</div>
+        <div>{{ $t('*详细地址') }}</div>
         <el-row :gutter="20">
           <el-col :span="10">
             <el-input v-model="form.address" :placeholder="$t('请输入')"></el-input>
           </el-col>
-          <el-col :span="5" v-if="form.area_id && (form.country_id === this.timezoneId)">
-            <el-button type="primary" plain @click="onShowLocation">{{$t('地图选点')}}</el-button>
+          <el-col :span="5" v-if="form.area_id && form.country_id === this.timezoneId">
+            <el-button type="primary" plain @click="onShowLocation">{{ $t('地图选点') }}</el-button>
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item v-show="form.area_id && (form.country_id === this.timezoneId)">
+      <el-form-item v-show="form.area_id && form.country_id === this.timezoneId">
         <el-row :gutter="20">
           <el-col :span="5">
-            <div>{{$t('经度')}}</div>
+            <div>{{ $t('经度') }}</div>
             <el-input v-model="lng" disabled></el-input>
           </el-col>
           <el-col :span="5">
-            <div>{{$t('纬度')}}</div>
+            <div>{{ $t('纬度') }}</div>
             <el-input v-model="lat" disabled></el-input>
           </el-col>
           <el-col :span="5">
-            <el-button type="primary" plain class="clear-btn" @click="onClearMap">{{$t('清除')}}</el-button>
+            <el-button type="primary" plain class="clear-btn" @click="onClearMap">{{
+              $t('清除')
+            }}</el-button>
           </el-col>
         </el-row>
         <div id="map" class="map-box"></div>
       </el-form-item>
       <!-- 联系人 -->
       <el-form-item>
-        <div>{{$t('*联系人')}}</div>
+        <div>{{ $t('*联系人') }}</div>
         <el-row>
           <el-col :span="10">
             <el-input v-model="form.contactor" :placeholder="$t('请输入')"></el-input>
@@ -125,7 +130,7 @@
       </el-form-item>
       <!-- 联系电话 -->
       <el-form-item>
-        <div>{{$t('*联系电话')}}</div>
+        <div>{{ $t('*联系电话') }}</div>
         <el-row>
           <el-col :span="10">
             <el-input v-model="form.contact_info" :placeholder="$t('请输入')"></el-input>
@@ -134,47 +139,53 @@
       </el-form-item>
       <div>
         <el-form-item>
-          <div>{{$t('支持线路')}}</div>
+          <div>{{ $t('支持线路') }}</div>
           <el-col :span="16">
-          <div class="add-row">
-            <el-button @click="addRow" class="btn-deep-purple">{{$t('新增')}}</el-button>
-          </div>
+            <div class="add-row">
+              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+            </div>
             <el-table :data="form.expressLines" style="width: 100%" border>
-               <el-table-column :label="$t('线路名称')">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.name}}</span>
-                  </template>
-                  </el-table-column>
-                  <el-table-column :label="$t('操作')">
-                    <template slot-scope="scope">
-                      <el-button @click.native.prevent="deleteRow(scope.$index, form.expressLines)" class="btn-light-red">{{$t('移除')}}</el-button>
-                  </template>
-                </el-table-column>
+              <el-table-column :label="$t('线路名称')">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.name }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('操作')">
+                <template slot-scope="scope">
+                  <el-button
+                    @click.native.prevent="deleteRow(scope.$index, form.expressLines)"
+                    class="btn-light-red"
+                    >{{ $t('移除') }}</el-button
+                  >
+                </template>
+              </el-table-column>
             </el-table>
           </el-col>
         </el-form-item>
       </div>
       <el-form-item>
-        <div>{{$t('计佣方式')}}</div>
+        <div>{{ $t('计佣方式') }}</div>
         <el-row>
           <el-col :span="10">
             <el-select
-             clearable
+              clearable
               v-model="form.rule_id"
               class="country-select"
-              :placeholder="$t('请选择')">
+              :placeholder="$t('请选择')"
+            >
               <el-option
                 v-for="item in rulesData"
                 :key="item.id"
                 :label="item.name"
-                :value="item.id">
+                :value="item.id"
+              >
               </el-option>
             </el-select>
           </el-col>
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-button @click="editSet" class="notice-sty">{{$t('公告设置')}}</el-button>
+        <el-button @click="editSet" class="notice-sty">{{ $t('公告设置') }}</el-button>
         <el-switch
           v-model="form.edit_notice_jurisdiction"
           :active-text="$t('允许自提点页面编辑公告')"
@@ -182,15 +193,22 @@
           :inactive-value="0"
           :inactive-text="$t('')"
           active-color="#13ce66"
-          inactive-color="gray">
+          inactive-color="gray"
+        >
         </el-switch>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="sava-btn" :loading="$store.state.btnLoading" @click="saveLine">{{$t('保存')}}</el-button>
+        <el-button
+          type="primary"
+          class="sava-btn"
+          :loading="$store.state.btnLoading"
+          @click="saveLine"
+          >{{ $t('保存') }}</el-button
+        >
       </el-form-item>
     </el-form>
     <el-dialog :visible.sync="lineVisible" size="small" @close="clear">
-      <div class="line-sty">{{$t('支持线路')}}</div>
+      <div class="line-sty">{{ $t('支持线路') }}</div>
       <el-row>
         <el-col :span="16">
           <el-select
@@ -198,43 +216,56 @@
             multiple
             filterable
             class="country-select"
-            :placeholder="$t('请选择')">
-            <el-option
-              v-for="item in lineData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
+            :placeholder="$t('请选择')"
+          >
+            <el-option v-for="item in lineData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
         </el-col>
       </el-row>
       <div slot="footer">
-      <el-button @click="lineVisible = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirmLines">{{$t('确定')}}</el-button>
-    </div>
-  </el-dialog>
+        <el-button @click="lineVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirmLines">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
     <!-- 公告设置 -->
-  <el-dialog close="clearAnnouncement" :visible.sync="announcementDailog" :title="$t('自提点公告设置')" class="props-dialog" width="45%">
-      <span>{{$t('营业时间')}}</span>
-      <el-input v-model="announcementData.opening_hours"
-      type="textarea" :rows="4" :placeholder="$t('例：周一至周六 08:00 ～ 20:00')">
+    <el-dialog
+      close="clearAnnouncement"
+      :visible.sync="announcementDailog"
+      :title="$t('自提点公告设置')"
+      class="props-dialog"
+      width="45%"
+    >
+      <span>{{ $t('营业时间') }}</span>
+      <el-input
+        v-model="announcementData.opening_hours"
+        type="textarea"
+        :rows="4"
+        :placeholder="$t('例：周一至周六 08:00 ～ 20:00')"
+      >
       </el-input>
-      <span>{{$t('公告')}}</span>
-      <el-input v-model="announcementData.announcement"
-      type="textarea" :rows="4" :placeholder="$t('例：本自提点免费保存两日，逾期收费2¥/日。重量限制：40KG。长度限制：180CM')">
+      <span>{{ $t('公告') }}</span>
+      <el-input
+        v-model="announcementData.announcement"
+        type="textarea"
+        :rows="4"
+        :placeholder="
+          $t('例：本自提点免费保存两日，逾期收费2¥/日。重量限制：40KG。长度限制：180CM')
+        "
+      >
       </el-input>
       <div slot="footer">
-      <el-button @click="announcementDailog = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="updateAnnoucement">{{$t('确定')}}</el-button>
+        <el-button @click="announcementDailog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="updateAnnoucement">{{ $t('确定') }}</el-button>
       </div>
-  </el-dialog>
+    </el-dialog>
   </div>
 </template>
 <script>
 import TMap from 'TMap'
 import { jsonp } from 'vue-jsonp'
 export default {
-  data () {
+  data() {
     return {
       form: {
         name: '',
@@ -287,11 +318,11 @@ export default {
       timezoneId: ''
     }
   },
-  created () {
+  created() {
     this.getWarehouse()
     this.getRules()
   },
-  mounted () {
+  mounted() {
     this.initMap()
     if (this.$route.params.id) {
       this.getList()
@@ -299,7 +330,7 @@ export default {
   },
   methods: {
     // 初始化地图信息
-    initMap () {
+    initMap() {
       let point = new TMap.LatLng(22.307387, 114.187179)
       const map = new TMap.Map(document.getElementById('map'), {
         center: point,
@@ -310,7 +341,7 @@ export default {
       TMap.event.addListener(this.map, 'click', this.onPoint)
     },
     // 选取地图上的点
-    onPoint (e) {
+    onPoint(e) {
       this.lng = e.latLng.lng
       this.lat = e.latLng.lat
       if (!this.marker) {
@@ -323,13 +354,13 @@ export default {
       }
     },
     // 清除地址选点
-    onClearMap () {
+    onClearMap() {
       this.lat = ''
       this.lng = ''
       this.marker.setPosition(null)
     },
     // 根据客户填写地址标点
-    onShowLocation () {
+    onShowLocation() {
       let topArea = ''
       let subArea = ''
       if (this.areaData && this.areaData.length) {
@@ -349,26 +380,28 @@ export default {
         address,
         key: 'ZMOBZ-QDU3P-XGMDH-L7IB2-JWWUO-X5BPG',
         output: 'jsonp'
-      }).then(res => {
-        this.lng = res.result.location.lng
-        this.lat = res.result.location.lat
-        let point = new TMap.LatLng(this.lat, this.lng)
-        if (!this.marker) {
-          this.marker = new TMap.Marker({
-            position: point,
-            map: this.map
-          })
-        } else {
-          this.marker.setPosition(point)
-        }
-        this.map.panTo(point)
-        this.map.setZoom(13)
-      }).catch(err => {
-        console.log('error', err)
       })
+        .then(res => {
+          this.lng = res.result.location.lng
+          this.lat = res.result.location.lat
+          let point = new TMap.LatLng(this.lat, this.lng)
+          if (!this.marker) {
+            this.marker = new TMap.Marker({
+              position: point,
+              map: this.map
+            })
+          } else {
+            this.marker.setPosition(point)
+          }
+          this.map.panTo(point)
+          this.map.setZoom(13)
+        })
+        .catch(err => {
+          console.log('error', err)
+        })
     },
     // 编辑时拉取的数据
-    getList () {
+    getList() {
       this.$request.getOneSelf(this.$route.params.id).then(res => {
         // const warehouses = res.data.warehouses.map(item => item.id)
         // this.form = res.data
@@ -378,7 +411,9 @@ export default {
         this.form.opening_hours = res.data.opening_hours
         this.form.edit_notice_jurisdiction = res.data.edit_notice_jurisdiction
         if (res.data.area_id) {
-          this.areaData = res.data.sub_area_id ? [res.data.area_id, res.data.sub_area_id] : [res.data.area_id]
+          this.areaData = res.data.sub_area_id
+            ? [res.data.area_id, res.data.sub_area_id]
+            : [res.data.area_id]
           console.log(this.areaData, '111')
           this.form.area_id = res.data.area_id || ''
           this.form.sub_area_id = res.data.sub_area_id || ''
@@ -413,7 +448,7 @@ export default {
       })
     },
     // 切换国家
-    changeCountry () {
+    changeCountry() {
       console.log(this.form.country_id, 'form.country_id')
       this.areaData = []
       ++this.keyValue
@@ -422,25 +457,25 @@ export default {
       this.newWarehouseList = selectList ? selectList.children : []
       console.log(this.areas, 'this.areas')
     },
-    editSet () {
+    editSet() {
       this.announcementDailog = true
       this.announcementData.opening_hours = this.form.opening_hours
       this.announcementData.announcement = this.form.announcement
     },
     // 更新 公告设置
-    updateAnnoucement () {
+    updateAnnoucement() {
       console.log(this.announcementData, 'announcementData')
       this.form.opening_hours = this.announcementData.opening_hours
       this.form.announcement = this.announcementData.announcement
       this.announcementDailog = false
       console.log(this.form, 'this.form')
     },
-    clearAnnouncement () {
+    clearAnnouncement() {
       this.announcementData.opening_hours = ''
       this.announcementData.announcement = ''
     },
     // 获取所属国家地区
-    getWarehouse () {
+    getWarehouse() {
       this.$request.countryLocation().then(res => {
         this.countryList = res.data.map(item => {
           return {
@@ -490,16 +525,18 @@ export default {
       })
     },
     // 获取支持线路弹窗数据
-    getLines () {
-      this.$request.getStations({
-        country_id: this.countryId
-      }).then(res => {
-        this.lineData = res.data
-        console.log(this.lineData, 'lineData')
-      })
+    getLines() {
+      this.$request
+        .getStations({
+          country_id: this.countryId
+        })
+        .then(res => {
+          this.lineData = res.data
+          console.log(this.lineData, 'lineData')
+        })
     },
     // 获取计佣方式
-    getRules () {
+    getRules() {
       this.$request.pickRules().then(res => {
         if (res.ret) {
           this.rulesData = res.data
@@ -511,18 +548,18 @@ export default {
         }
       })
     },
-    confirmLines () {
+    confirmLines() {
       this.lineVisible = false
       console.log(this.lineIds, 'lineIds')
       this.form.expressLines = this.lineData.filter(item => {
         return this.lineIds.includes(item.id)
       })
     },
-    clear () {
+    clear() {
       this.lineIds = []
     },
     // 新增行
-    addRow () {
+    addRow() {
       if (this.form.country_id) {
         this.lineVisible = true
         this.countryId = this.form.country_id
@@ -535,16 +572,16 @@ export default {
       //   id: ''
       // })
     },
-    deleteRow (index, rows) {
+    deleteRow(index, rows) {
       rows.splice(index, 1)
     },
-    handleChange () {
+    handleChange() {
       this.form.area_id = this.areaData[0]
       this.form.sub_area_id = this.areaData[1]
     },
-    getCity () {},
-    getArea () {},
-    saveLine () {
+    getCity() {},
+    getArea() {},
+    saveLine() {
       if (!this.form.name) {
         return this.$message.error(this.$t('请输入自提点名称'))
       } else if (!this.form.country_id) {
@@ -556,48 +593,54 @@ export default {
       } else if (!this.form.contactor) {
         return this.$message.error(this.$t('请输入联系人'))
       }
-      if (this.$route.params.id) { // 编辑状态
-        this.$request.updateOneSelf(this.$route.params.id, {
-          ...this.form,
-          lon: this.lng,
-          lat: this.lat
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.hasStore = true
-            this.$router.go(-1)
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
-      } else { // 新建状态
-        this.$request.addSelf({
-          ...this.form,
-          lon: this.lng,
-          lat: this.lat
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.hasStore = true
-            this.$router.go(-1)
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      if (this.$route.params.id) {
+        // 编辑状态
+        this.$request
+          .updateOneSelf(this.$route.params.id, {
+            ...this.form,
+            lon: this.lng,
+            lat: this.lat
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.hasStore = true
+              this.$router.go(-1)
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        // 新建状态
+        this.$request
+          .addSelf({
+            ...this.form,
+            lon: this.lng,
+            lat: this.lat
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.hasStore = true
+              this.$router.go(-1)
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       }
     }
   }
@@ -621,7 +664,7 @@ export default {
     min-width: 100px;
   }
   .icon-info {
-    color: #74B34F;
+    color: #74b34f;
     font-size: 18px;
     margin-left: 5px;
     position: relative;
@@ -642,18 +685,18 @@ export default {
   .country-btn {
     margin-top: 40px;
     .el-button--primary {
-      background-color: #EAECF5;
-      border-color: #EAECF5;
-      color: #3540A5;
+      background-color: #eaecf5;
+      border-color: #eaecf5;
+      color: #3540a5;
     }
   }
   .el-tag.el-tag--info {
-    border-color: #3540A5;
-    color: #3540A5;
+    border-color: #3540a5;
+    color: #3540a5;
     background-color: #fff;
   }
   .el-tag.el-tag--info .el-tag__close {
-    color: #3540A5;
+    color: #3540a5;
     background-color: #fff;
   }
   .icon-img {
@@ -662,9 +705,9 @@ export default {
       width: 100%;
     }
   }
-  .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }

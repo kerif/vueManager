@@ -1,79 +1,121 @@
 <template>
   <div class="no-owner-container">
-    <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch">
-      <div class="changeTime">
-      <!-- 提交时间 -->
-        <el-date-picker
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        :range-separator="$t('至')"
-        :start-placeholder="$t('提交开始日期')"
-        :end-placeholder="$t('提交结束日期')">
-      </el-date-picker>
-    </div>
-      <div class="chooseStatus">
-        <el-select v-model="agent_name" @change="onAgentChange" clearable
-        :placeholder="$t('请选择仓库')">
-          <el-option
-            v-for="item in agentData"
-            :key="item.id"
-            :value="item.id"
-            :label="item.warehouse_name">
-          </el-option>
-        </el-select>
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <div>
+        <div class="changeTime">
+          <el-date-picker
+            size="mini"
+            class="timeStyle"
+            v-model="timeList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('提交开始日期')"
+            :end-placeholder="$t('提交结束日期')"
+          >
+          </el-date-picker>
+        </div>
+        <div class="chooseStatus">
+          <el-select v-model="agent_name" size="mini" clearable :placeholder="$t('请选择仓库')">
+            <el-option
+              v-for="item in agentData"
+              :key="item.id"
+              :value="item.id"
+              :label="item.warehouse_name"
+            >
+            </el-option>
+          </el-select>
+        </div>
       </div>
-    <div class="import-list">
-     <el-button @click="uploadList">{{$t('导出清单')}}</el-button>
-     <el-button @click="claimList">{{$t('认领记录')}}</el-button>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
     </div>
-    </search-group>
-    <el-table class="data-list" border stripe
+    <div class="headerList">
+      <div class="import-list">
+        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+        <el-button size="small" @click="claimList">{{ $t('认领记录') }}</el-button>
+        <el-button type="success" plain size="small" @click="uploadList">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
+      <div class="headr-r">
+        <div class="searchGroup">
+          <search-group
+            :placeholder="$t('请输入关键字')"
+            v-model="page_params.keyword"
+            @search="goSearch"
+          >
+          </search-group>
+        </div>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
+      </div>
+    </div>
+    <el-table
+      class="data-list"
+      border
+      stripe
       :data="ownerData"
       @selection-change="selectionChange"
-      v-loading="tableLoading" height="550">
+      v-loading="tableLoading"
+      height="550"
+    >
+      <!-- height="550" -->
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')">
         <template slot-scope="scope">
-          <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{scope.row.express_num}}</span>
+          <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{
+            scope.row.express_num
+          }}</span>
         </template>
       </el-table-column>
       <!-- 包裹编码 -->
       <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
       <!-- 物品价值 -->
-      <el-table-column :label="$t('包裹重量') + this.localization.weight_unit" prop="package_weight"></el-table-column>
+      <el-table-column
+        :label="$t('包裹重量') + this.localization.weight_unit"
+        prop="package_weight"
+      ></el-table-column>
       <!-- 物品属性 -->
       <el-table-column :label="$t('物品属性')">
         <template slot-scope="scope">
           <span v-for="item in scope.row.props" :key="item.id">
-            {{item.cn_name}}
+            {{ item.cn_name }}
           </span>
         </template>
       </el-table-column>
       <!-- 货位 -->
       <!-- <el-table-column label="货位" prop="location"></el-table-column> -->
       <!-- 规格 -->
-      <el-table-column :label="$t('规格')+ this.localization.length_unit" prop="dimension"
-      width="120px"></el-table-column>
+      <el-table-column
+        :label="$t('规格') + this.localization.length_unit"
+        prop="dimension"
+        width="120px"
+      ></el-table-column>
       <!-- 提交时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at">
-      </el-table-column>
+      <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
       <!-- 仓库 -->
-      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name">
-      </el-table-column>
-      <el-table-column :label="$t('货位')" prop="location">
-      </el-table-column>
+      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name"> </el-table-column>
+      <el-table-column :label="$t('货位')" prop="location"> </el-table-column>
       <!-- 包裹图片 -->
       <el-table-column :label="$t('包裹图片')" prop="package_pictures" width="150">
         <template slot-scope="scope">
-          <span v-for="(item, index) in scope.row.package_pictures"
-          :key="index" style="cursor:pointer;"
-          @click.stop="imgSrc=`${$baseUrl.IMAGE_URL}${item}`, imgVisible=true">
-           <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 40px; margin-right: 5px;">
+          <span
+            v-for="(item, index) in scope.row.package_pictures"
+            :key="index"
+            style="cursor: pointer"
+            @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
+          >
+            <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 40px; margin-right: 5px" />
           </span>
         </template>
       </el-table-column>
@@ -83,29 +125,30 @@
       </template> -->
       <el-table-column :label="$t('操作')" width="220">
         <template slot-scope="scope">
-         <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{$t('打印标签')}}</el-button>
-         <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">{{$t('认领')}}</el-button>
-         <!-- <el-button class="btn-deep-purple">详细</el-button> -->
+          <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
+            $t('打印标签')
+          }}</el-button>
+          <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">{{
+            $t('认领')
+          }}</el-button>
+          <!-- <el-button class="btn-deep-purple">详细</el-button> -->
         </template>
       </el-table-column>
     </el-table>
-    <div class="bottom-sty">
-      <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
-    </div>
     <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-      <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
-        <div class="dialogSty">
-          <iframe class="iframe" :src="urlHtml"></iframe>
-        </div>
+    <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
+      <div class="dialogSty">
+        <iframe class="iframe" :src="urlHtml"></iframe>
+      </div>
       <div slot="footer">
-        <el-button @click="show = false">{{$t('取消')}}</el-button>
-        <el-button type="primary" @click="updateLabel">{{$t('下载')}}</el-button>
+        <el-button @click="show = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="updateLabel">{{ $t('下载') }}</el-button>
       </div>
     </el-dialog>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
-        <img :src="imgSrc" class="imgDialog">
+        <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
   </div>
@@ -123,7 +166,7 @@ export default {
   },
   name: 'noOwner',
   mixins: [pagination],
-  data () {
+  data() {
     return {
       tableLoading: false,
       agent_name: '',
@@ -141,7 +184,8 @@ export default {
       urlHtml: '',
       show: false,
       labelId: '',
-      imgSrc: ''
+      imgSrc: '',
+      hasFilterCondition: false
     }
   },
   methods: {
@@ -149,16 +193,16 @@ export default {
     //   console.log(warehouseName, 'warehouseName')
     //   this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId, user_name: userName, warehouse_id: warehouseName }, query: { props: JSON.stringify(props) } })
     // },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
-    goExpress (expressNum) {
+    goExpress(expressNum) {
       console.log(expressNum)
       window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
     },
     // 删除
-    deleteData () {
+    deleteData() {
       console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
@@ -169,32 +213,34 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(this.deleteNum, '2222')
-        this.$request.deleteNoOwner({
-          DELETE: this.deleteNum
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .deleteNoOwner({
+            DELETE: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       })
     },
-    onAgentChange () {
+    onAgentChange() {
       this.page_params.page = 1
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
     },
     // 打印标签
-    getLabel (id) {
+    getLabel(id) {
       this.labelId = id
       this.show = true
       this.$request.checkPackageLabel(id).then(res => {
@@ -216,11 +262,11 @@ export default {
       })
     },
     // 认领记录
-    claimList () {
+    claimList() {
       dialog({ type: 'claimRecord' })
     },
     // 导出清单
-    uploadList () {
+    uploadList() {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
@@ -250,7 +296,7 @@ export default {
       })
     },
     // 确认下载标签
-    updateLabel () {
+    updateLabel() {
       this.show = false
       console.log(this.labelId, 'this.labelId')
       this.$request.updatePackagePdf(this.labelId).then(res => {
@@ -271,7 +317,7 @@ export default {
       })
     },
     // 获取无人认领列表
-    getList () {
+    getList() {
       this.tableLoading = true
       this.ownerData = []
       let params = {
@@ -300,27 +346,37 @@ export default {
       })
     },
     // 认领包裹
-    goClaim (id) {
+    goClaim(id) {
       dialog({ type: 'claim', id: id }, () => {
         this.getList()
       })
     },
     // 获取代理列表
-    getAgentData () {
+    getAgentData() {
       this.$request.getSimpleList().then(res => {
         this.agentData = res.data
       })
     },
     // 提交时间
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
+    },
+    // 重置筛选
+    resetForm() {
+      this.timeList = []
+      this.agent_name = ''
+    },
+    // 搜索
+    submitForm() {
+      this.onTime()
+      this.onAgentChange()
     }
   },
-  created () {
+  created() {
     this.getAgentData()
     this.getList()
   }
@@ -328,11 +384,31 @@ export default {
 </script>
 
 <style lang="scss">
+.data-list {
+  max-height: calc(100vh - 200px);
+  overflow: auto;
+}
 .no-owner-container {
   .tabLength {
     width: 300px !important;
     display: inline-block;
   }
+  .headerList {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .headr-r {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .searchGroup {
+        width: 25%;
+        margin-right: 10px;
+      }
+    }
+  }
+
   .agentRight {
     // display: inline-block;
     float: right;
@@ -344,15 +420,15 @@ export default {
       width: 276px !important;
     }
   }
- .img_box{
+  .img_box {
     text-align: center;
-    .imgDialog{
+    .imgDialog {
       width: 50%;
     }
   }
   .chooseOrder {
     cursor: pointer;
-    color:blue;
+    color: blue;
     text-decoration: underline;
   }
   .operating-btn {
@@ -367,7 +443,7 @@ export default {
     border-width: 0;
   }
   .chooseStatus {
-    width: 150px;
+    // width: 150px;
     display: inline-block;
     .el-select {
       // width: 100%;
@@ -380,6 +456,32 @@ export default {
   .bottom-sty {
     margin-top: 20px;
     margin-bottom: 10px;
+  }
+}
+.order-list-search {
+  font-size: 14px;
+  background: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  overflow: hidden;
+  .changeTime {
+    display: inline-block;
+    margin-right: 20px;
+    .timeStyle {
+      margin-right: 10px;
+      width: 276px !important;
+    }
+    .shipments {
+      display: inline-block;
+    }
+  }
+  .chooseStatus {
+    // width: 150px;
+    display: inline-block;
+  }
+  .submit {
+    float: right;
+    margin-top: 10px;
   }
 }
 </style>

@@ -1,11 +1,10 @@
 <template>
   <div class="image-set-container">
     <div class="setOthers">
-      <el-form :model="setForm" ref="setForm" class="demo-ruleForm"
-      label-position="top">
-      <el-row :gutter="20">
-        <!-- 小程序首页视频入口图 -->
-        <!-- <el-col :span="8">
+      <el-form :model="setForm" ref="setForm" class="demo-ruleForm" label-position="top">
+        <el-row :gutter="20">
+          <!-- 小程序首页视频入口图 -->
+          <!-- <el-col :span="8">
         <div class="new-top">
           <el-form-item class="updateChe">
             <span class="img-item" v-for="(item, index) in baleImgList.slice(0, 1)" :key="index">
@@ -36,7 +35,7 @@
         </div>
         </el-col> -->
           <!-- 小程序首页评论入口图 -->
-        <!-- <el-col :span="8">
+          <!-- <el-col :span="8">
           <div class="new-top">
           <el-form-item class="updateChe">
               <span class="img-item" v-for="(item, index) in evaluationImgList" :key="index">
@@ -67,215 +66,215 @@
           </div>
         </el-col> -->
           <!-- 小程序预报页图 -->
-        <el-col :span="8">
-          <div class="new-top">
-          <el-form-item class="updateChe">
-              <span class="img-item" v-for="(item, index) in customerList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="customerList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadCustomer"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          </el-form-item>
-          <p class="font-sty">{{$t('小程序预报页图')}}</p>
-          <div class="user-bottom">
-            <!-- <div class="bottom-left">
+          <el-col :span="8">
+            <div class="new-top">
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in customerList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteCus(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="customerList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadCustomer"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i>
+                </el-upload>
+              </el-form-item>
+              <p class="font-sty">{{ $t('小程序预报页图') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
               <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
             </div> -->
-            <div class="bottom-right">
-              <span class="suggest-btn">{{$t('建议尺寸：355px*160px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：355px*160px') }}</span>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
-        </el-col>
-      <!-- 代理成功提示图 -->
-        <el-col :span="8">
-          <div class="new-top">
-          <el-form-item class="updateChe">
-              <span class="img-item" v-for="(item, index) in approveList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteApprove(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="approveList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadApprove"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload><br/>
-          </el-form-item>
-          <p class="font-sty">{{$t('代理成功提示图')}}</p>
-          <div class="user-bottom">
-              <!-- <div class="bottom-left">
+          </el-col>
+          <!-- 代理成功提示图 -->
+          <el-col :span="8">
+            <div class="new-top">
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in approveList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteApprove(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="approveList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadApprove"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('代理成功提示图') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
                 <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
               </div> -->
-              <div class="bottom-right">
-                <span class="suggest-btn">{{$t('建议尺寸：612px*542px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：612px*542px') }}</span>
+                </div>
               </div>
-          </div>
-          </div>
-        </el-col>
-      <!-- 仓库背景图 -->
-        <el-col :span="8">
-          <div class="new-top">
-          <el-form-item  class="updateChe">
-              <span class="img-item" v-for="(item, index) in warehouseList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteWarehouse(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="warehouseList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadWarehouse"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload><br/>
-          </el-form-item>
-          <p class="font-sty">{{$t('仓库背景图')}}</p>
-          <div class="user-bottom">
-              <!-- <div class="bottom-left">
+            </div>
+          </el-col>
+          <!-- 仓库背景图 -->
+          <el-col :span="8">
+            <div class="new-top">
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in warehouseList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteWarehouse(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="warehouseList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadWarehouse"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('仓库背景图') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
                 <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
               </div> -->
-              <div class="bottom-right">
-                <span class="suggest-btn">{{$t('建议尺寸：612px*542px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：612px*542px') }}</span>
+                </div>
               </div>
-          </div>
-          </div>
-        </el-col>
+            </div>
+          </el-col>
         </el-row>
-      <el-row :gutter="20">
-        <!-- 小程序运费查询页图 -->
-        <el-col :span="8">
-          <div class="new-top">
-          <el-form-item class="updateChe">
-              <span class="img-item" v-for="(item, index) in freightList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteFre(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="freightList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadFreight"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload><br/>
-          </el-form-item>
-          <p class="font-sty">{{$t('小程序运费查询页图')}}</p>
-          <div class="user-bottom">
-            <!-- <div class="bottom-left">
+        <el-row :gutter="20">
+          <!-- 小程序运费查询页图 -->
+          <el-col :span="8">
+            <div class="new-top">
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in freightList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteFre(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="freightList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadFreight"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('小程序运费查询页图') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
               <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
             </div> -->
-            <div class="bottom-right">
-              <span class="suggest-btn">{{$t('建议尺寸：355px*160px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：355px*160px') }}</span>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="new-top">
-          <!-- 物流查询页图” -->
-          <el-form-item class="updateChe">
-              <span class="img-item" v-for="(item, index) in logisticsList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteTrack(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="logisticsList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadTrack"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          </el-form-item>
-          <p class="font-sty">{{$t('物流查询页图')}}</p>
-          <div class="user-bottom">
-            <!-- <div class="bottom-left">
+          </el-col>
+          <el-col :span="8">
+            <div class="new-top">
+              <!-- 物流查询页图” -->
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in logisticsList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteTrack(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="logisticsList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadTrack"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i>
+                </el-upload>
+              </el-form-item>
+              <p class="font-sty">{{ $t('物流查询页图') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
               <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
             </div> -->
-            <div class="bottom-right">
-              <span class="suggest-btn">{{$t('建议尺寸：355px*160px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：355px*160px') }}</span>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
-        </el-col>
-        <el-col :span="8">
-        <!-- 支持与帮助中心 -->
-          <div class="new-top">
-          <el-form-item class="updateChe">
-            <span class="img-item" v-for="(item, index) in supportList" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-            <span class="model-box"></span>
-            <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                <i class="el-icon-delete" @click="onDeleteSupport(index)"></i>
-            </span>
-            </span>
-            <el-upload
-              v-show="supportList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadSupport"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          </el-form-item>
-          <p class="font-sty">{{$t('支持与帮助中心')}}</p>
-          <div class="user-bottom">
-            <!-- <div class="bottom-left">
+          </el-col>
+          <el-col :span="8">
+            <!-- 支持与帮助中心 -->
+            <div class="new-top">
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in supportList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteSupport(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="supportList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadSupport"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i>
+                </el-upload>
+              </el-form-item>
+              <p class="font-sty">{{ $t('支持与帮助中心') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
               <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
             </div> -->
-            <div class="bottom-right">
-              <span class="suggest-btn">{{$t('建议尺寸：355px*160px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：355px*160px') }}</span>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <!-- 分享页 -->
-        <!-- <el-col :span="8">
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <!-- 分享页 -->
+          <!-- <el-col :span="8">
           <div class="new-top">
           <el-form-item class="updateChe">
               <span class="img-item" v-for="(item, index) in shareList" :key="index">
@@ -305,76 +304,76 @@
           </div>
           </div>
         </el-col> -->
-        <!-- 协议背景图片 -->
-        <el-col :span="8">
-          <div class="new-top">
-          <el-form-item class="updateChe">
-              <span class="img-item" v-for="(item, index) in licenseList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteLicense(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="licenseList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadLicense"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          </el-form-item>
-          <p class="font-sty">{{$t('协议背景图片')}}</p>
-          <div class="user-bottom">
-              <!-- <div class="bottom-left">
+          <!-- 协议背景图片 -->
+          <el-col :span="8">
+            <div class="new-top">
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in licenseList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteLicense(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="licenseList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadLicense"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i>
+                </el-upload>
+              </el-form-item>
+              <p class="font-sty">{{ $t('协议背景图片') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
                 <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
               </div> -->
-              <div class="bottom-right">
-                <span class="suggest-btn">{{$t('建议尺寸：710px*120px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：710px*120px') }}</span>
+                </div>
               </div>
-          </div>
-          </div>
-        </el-col>
-        <!-- 首页 -->
-        <el-col :span="8">
-          <div class="new-top">
-          <el-form-item class="updateChe">
-            <span class="img-item" v-for="(item, index) in indexList" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-            <span class="model-box"></span>
-            <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                <i class="el-icon-delete" @click="onDeleteIndex(index)"></i>
-            </span>
-            </span>
-            <el-upload
-              v-show="indexList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadIndex"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          </el-form-item>
-          <p class="font-sty">{{$t('H5登录/注册页')}}</p>
-          <div class="user-bottom">
-            <!-- <div class="bottom-left">
+            </div>
+          </el-col>
+          <!-- 首页 -->
+          <el-col :span="8">
+            <div class="new-top">
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in indexList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteIndex(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="indexList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadIndex"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i>
+                </el-upload>
+              </el-form-item>
+              <p class="font-sty">{{ $t('H5登录/注册页') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
               <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
             </div> -->
-            <div class="bottom-right">
-              <span class="suggest-btn">{{$t('建议尺寸：355px*160px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：355px*160px') }}</span>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
-        </el-col>
-        <!-- 视频区 -->
-        <!-- <el-col :span="8">
+          </el-col>
+          <!-- 视频区 -->
+          <!-- <el-col :span="8">
           <div class="new-top">
             <el-form-item class="updateChe">
               <span class="img-item" v-for="(item, index) in videoList" :key="index">
@@ -404,81 +403,80 @@
           </div>
           </div>
         </el-col> -->
-        <!-- 评论区 -->
-        <el-col :span="8">
-          <div class="new-top">
-          <el-form-item class="updateChe">
-              <span class="img-item" v-for="(item, index) in commentList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteComment(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="commentList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadComment"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          </el-form-item>
-          <p class="font-sty">{{$t('评论区')}}</p>
-          <div class="user-bottom">
-              <!-- <div class="bottom-left">
+          <!-- 评论区 -->
+          <el-col :span="8">
+            <div class="new-top">
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in commentList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteComment(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="commentList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadComment"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i>
+                </el-upload>
+              </el-form-item>
+              <p class="font-sty">{{ $t('评论区') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
                 <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
               </div> -->
-              <div class="bottom-right">
-                <span class="suggest-btn">{{$t('建议尺寸：355px*160px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：355px*160px') }}</span>
+                </div>
               </div>
-          </div>
-          </div>
-        </el-col>
+            </div>
+          </el-col>
         </el-row>
-      <el-row :gutter="20">
-      <el-col :span="8">
-        <div class="new-top">
-        <!-- 个人中心背景图片 -->
-          <el-form-item class="updateChe">
-              <span class="img-item" v-for="(item, index) in centerList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteCenter(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="centerList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadCenter"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload><br/>
-          </el-form-item>
-         <p class="font-sty">{{$t('个人中心背景图片')}}</p>
-          <div class="user-bottom">
-              <!-- <div class="bottom-left">
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <div class="new-top">
+              <!-- 个人中心背景图片 -->
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in centerList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteCenter(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="centerList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadCenter"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('个人中心背景图片') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
                 <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
               </div> -->
-              <div class="bottom-right">
-                <span class="suggest-btn">{{$t('建议尺寸：750px*480px')}}</span>
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：750px*480px') }}</span>
+                </div>
               </div>
-          </div>
-          </div>
-        </el-col>
+            </div>
+          </el-col>
         </el-row>
-      <el-row :gutter="20">
-      </el-row>
-    </el-form>
-    <el-button class="save-btn" @click="editOthers">{{$t('保存')}}</el-button>
+        <el-row :gutter="20"> </el-row>
+      </el-form>
+      <el-button class="save-btn" @click="editOthers">{{ $t('保存') }}</el-button>
     </div>
   </div>
 </template>
@@ -486,7 +484,7 @@
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       tableLoading: false,
       baleImgList: [], // 小程序首页视频入口图
@@ -514,16 +512,17 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.getImg()
   },
   methods: {
     // 获取图片配置
-    getImg () {
+    getImg() {
       this.$request.getProgramImg().then(res => {
         this.setForm = res.data
         res.data.video_entrance_image && (this.baleImgList[0] = res.data.video_entrance_image)
-        res.data.comment_entrance_image && (this.evaluationImgList[0] = res.data.comment_entrance_image)
+        res.data.comment_entrance_image &&
+          (this.evaluationImgList[0] = res.data.comment_entrance_image)
         res.data.forecast_image && (this.customerList[0] = res.data.forecast_image)
         res.data.freight_image && (this.freightList[0] = res.data.freight_image)
         res.data.track_image && (this.logisticsList[0] = res.data.track_image)
@@ -539,19 +538,19 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 预览小程序海报
-    previewBackground (image) {
+    previewBackground(image) {
       console.log(image, 'image')
       this.choosePoster = image
     },
     // 上传海报配置背景图像
-    uploadBgImg (item) {
+    uploadBgImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -562,7 +561,7 @@ export default {
       })
     },
     // 上传小程序首页视频图片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -573,7 +572,7 @@ export default {
       })
     },
     // 上传小程序首页评论入口图
-    uploadEvaluationImg (item) {
+    uploadEvaluationImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -584,7 +583,7 @@ export default {
       })
     },
     // 上传物流查询页面图
-    uploadTrack (item) {
+    uploadTrack(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -595,7 +594,7 @@ export default {
       })
     },
     // 上传支持与帮助中心图
-    uploadSupport (item) {
+    uploadSupport(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -606,7 +605,7 @@ export default {
       })
     },
     // 上传分享图
-    uploadShare (item) {
+    uploadShare(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -617,7 +616,7 @@ export default {
       })
     },
     // 上传首页
-    uploadIndex (item) {
+    uploadIndex(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -628,7 +627,7 @@ export default {
       })
     },
     // 上传视频区
-    uploadVideo (item) {
+    uploadVideo(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -639,7 +638,7 @@ export default {
       })
     },
     // 个人中心背景图片
-    uploadCenter (item) {
+    uploadCenter(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -650,7 +649,7 @@ export default {
       })
     },
     // 协议背景图片
-    uploadLicense (item) {
+    uploadLicense(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -661,7 +660,7 @@ export default {
       })
     },
     // 代理成功提示图
-    uploadApprove (item) {
+    uploadApprove(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -672,7 +671,7 @@ export default {
       })
     },
     // 仓库背景图
-    uploadWarehouse (item) {
+    uploadWarehouse(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -683,7 +682,7 @@ export default {
       })
     },
     // 上传评论区
-    uploadComment (item) {
+    uploadComment(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -694,7 +693,7 @@ export default {
       })
     },
     // 上传小程序预报页图
-    uploadCustomer (item) {
+    uploadCustomer(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -705,7 +704,7 @@ export default {
       })
     },
     // 上传小程序运费查询页图
-    uploadFreight (item) {
+    uploadFreight(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -716,72 +715,72 @@ export default {
       })
     },
     // 删除海报配置 背景图
-    onDeleteBg (index) {
+    onDeleteBg(index) {
       this.backgroundImg.splice(index, 1)
     },
     // 删除小程序首页视频入口图
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
     // 删除小程序首页评论入口图
-    onDeleteEva (index) {
+    onDeleteEva(index) {
       this.evaluationImgList.splice(index, 1)
     },
     // 删除物流查询页面
-    onDeleteTrack (index) {
+    onDeleteTrack(index) {
       this.logisticsList.splice(index, 1)
     },
     // 删除支持与帮助中心图
-    onDeleteSupport (index) {
+    onDeleteSupport(index) {
       this.supportList.splice(index, 1)
     },
     // 分享图
-    onDeleteShare (index) {
+    onDeleteShare(index) {
       this.shareList.splice(index, 1)
     },
     // 首页图
-    onDeleteIndex (index) {
+    onDeleteIndex(index) {
       this.indexList.splice(index, 1)
     },
     // 视频图
-    onDeleteVideo (index) {
+    onDeleteVideo(index) {
       this.videoList.splice(index, 1)
     },
     // 个人中心背景图
-    onDeleteCenter (index) {
+    onDeleteCenter(index) {
       this.centerList.splice(index, 1)
     },
     // 协议背景图片
-    onDeleteLicense (index) {
+    onDeleteLicense(index) {
       this.licenseList.splice(index, 1)
     },
     // 代理成功提示图
-    onDeleteApprove (index) {
+    onDeleteApprove(index) {
       this.approveList.splice(index, 1)
     },
     // 仓库背景图
-    onDeleteWarehouse (index) {
+    onDeleteWarehouse(index) {
       this.warehouseList.splice(index, 1)
     },
-    onDeleteComment (index) {
+    onDeleteComment(index) {
       this.commentList.splice(index, 1)
     },
     // 删除小程序预报页图
-    onDeleteCus (index) {
+    onDeleteCus(index) {
       this.customerList.splice(index, 1)
     },
     // 删除小程序运费查询页图
-    onDeleteFre (index) {
+    onDeleteFre(index) {
       this.freightList.splice(index, 1)
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
     // 修改图片配置
-    editOthers () {
+    editOthers() {
       if (this.baleImgList[0]) {
         this.setForm.video_entrance_image = this.baleImgList[0]
       } else {
@@ -874,7 +873,7 @@ export default {
 
 <style lang="scss">
 .image-set-container {
-   .tabLength {
+  .tabLength {
     // width: 560px !important;
     width: 500px !important;
   }
@@ -885,15 +884,15 @@ export default {
     }
     .el-textarea__inner {
       width: 30%;
-      background-color: #F5F5F5;
+      background-color: #f5f5f5;
     }
   }
-    .goods-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 6px;
-    }
-    .updateChe {
+  .goods-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+  .updateChe {
     .el-form-item__content {
       margin-left: 0 !important;
     }
@@ -901,53 +900,54 @@ export default {
       width: 500px !important;
     }
   }
-    .avatar-uploader {
-      display: inline-block;
-      vertical-align: top;
-      // margin-left: 50px;
+  .avatar-uploader {
+    display: inline-block;
+    vertical-align: top;
+    // margin-left: 50px;
+  }
+  .img-item {
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    // width: 300px;
+    height: 148px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box,
+      .operat-box {
+        opacity: 1;
+        transition: all 0.5s ease-in;
+      }
     }
-    .img-item {
-      display: inline-block;
-      border: 1px dashed #d9d9d9;
-      // width: 300px;
-      height: 148px;
+  }
+  .model-box {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    i {
+      font-size: 20px;
+      color: #fff;
       margin-right: 10px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      text-align: center;
-      position: relative;
-      box-sizing: border-box;
-      cursor: pointer;
-      &:hover {
-        .model-box, .operat-box {
-          opacity: 1;
-          transition: all .5s ease-in;
-        }
-      }
     }
-    .model-box {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      left: 0;
-      opacity: 0;
-      background-color: rgba(0, 0, 0, .3);
-    }
-    .operat-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      i {
-        font-size: 20px;
-        color: #fff;
-        margin-right: 10px;
-      }
-    }
+  }
   .save-btn {
     color: #fff;
-    background-color: #3540A5;
+    background-color: #3540a5;
   }
   .suggest-btn {
     color: gray;

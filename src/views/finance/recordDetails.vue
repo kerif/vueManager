@@ -4,32 +4,43 @@
       <search-group v-model="page_params.keyword" @search="goSearch">
       </search-group>
     </div> -->
-    <h2>{{this.$route.params.name}}{{$t('结算记录')}}</h2>
-    <el-table :data="rechargeList" stripe border class="data-list"
-    v-loading="tableLoading">
+    <h2>{{ this.$route.params.name }}{{ $t('结算记录') }}</h2>
+    <el-table :data="rechargeList" stripe border class="data-list" v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 时间 -->
       <el-table-column :label="$t('时间')" prop="time"></el-table-column>
       <!-- 完成订单数 -->
-      <el-table-column :label="$t('完成订单数')" prop="order_count">
-      </el-table-column>
+      <el-table-column :label="$t('完成订单数')" prop="order_count"> </el-table-column>
       <!-- 佣金总数 -->
-      <el-table-column :label="$t('佣金金额') + this.localization.currency_unit" prop="amount"> </el-table-column>
+      <el-table-column :label="$t('佣金金额') + this.localization.currency_unit" prop="amount">
+      </el-table-column>
       <!-- 结算状态 -->
       <el-table-column :label="$t('结算状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{$t('未结算')}}</span>
-          <span v-if="scope.row.status === 1">{{$t('待提交')}}</span>
-          <span v-if="scope.row.status === 2">{{$t('审核中')}}</span>
-          <span v-if="scope.row.status === 3">{{$t('已完成')}}</span>
+          <span v-if="scope.row.status === 0">{{ $t('未结算') }}</span>
+          <span v-if="scope.row.status === 1">{{ $t('待提交') }}</span>
+          <span v-if="scope.row.status === 2">{{ $t('审核中') }}</span>
+          <span v-if="scope.row.status === 3">{{ $t('已完成') }}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-green optionBtn" @click="goDetails(scope.row.id)">{{$t('明细')}}</el-button>
-          <el-button  v-if="scope.row.status === 2" class="btn-light-red optionBtn" @click="reviewPay(scope.row.id)">{{$t('审核并支付')}}</el-button>
-          <el-button v-if="scope.row.status === 3" class="btn-deep-purple optionBtn" @click="payDetails(scope.row.id)">{{$t('查看支付详情')}}</el-button>
+          <el-button class="btn-green optionBtn" @click="goDetails(scope.row.id)">{{
+            $t('明细')
+          }}</el-button>
+          <el-button
+            v-if="scope.row.status === 2"
+            class="btn-light-red optionBtn"
+            @click="reviewPay(scope.row.id)"
+            >{{ $t('审核并支付') }}</el-button
+          >
+          <el-button
+            v-if="scope.row.status === 3"
+            class="btn-deep-purple optionBtn"
+            @click="payDetails(scope.row.id)"
+            >{{ $t('查看支付详情') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -43,7 +54,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 // import AddBtn from '@/components/addBtn'
 export default {
-  data () {
+  data() {
     return {
       rechargeList: [],
       localization: {},
@@ -77,7 +88,7 @@ export default {
     NlePagination
     // AddBtn
   },
-  created () {
+  created() {
     this.getList()
     // this.getTypes()
     // if (this.$route.query.serial_number) {
@@ -90,7 +101,7 @@ export default {
     // }
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
@@ -118,28 +129,30 @@ export default {
       })
     },
     // 详情
-    withdrawalDetail (id) {
-      this.$router.push({ name: 'rechargeDetails',
+    withdrawalDetail(id) {
+      this.$router.push({
+        name: 'rechargeDetails',
         params: {
           id: id
-        } })
+        }
+      })
     },
     // 审核并支付
-    reviewPay (id) {
+    reviewPay(id) {
       dialog({ type: 'selfReview', id: id }, () => {
         this.getList()
       })
     },
     // 查看支付详情
-    payDetails (id) {
+    payDetails(id) {
       // XStationId
       dialog({ type: 'payDetails', id: id, state: 'pay' })
     },
-    goDetails (id) {
+    goDetails(id) {
       // settlementDetails
       dialog({ type: 'settlementDetails', state: 'pay', id: id, XStationId: this.$route.params.id })
     },
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -147,12 +160,12 @@ export default {
       this.getList()
     },
     // 状态筛选
-    onShipStatus () {
+    onShipStatus() {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
     },
     // 跳转到审核
-    details (id, orderId, paymentType) {
+    details(id, orderId, paymentType) {
       console.log(paymentType, 'paymentType')
       console.log(orderId, 'orderId')
       if (paymentType === 0) {
@@ -164,12 +177,12 @@ export default {
       }
     },
     // 选择不同类型优惠券
-    onVocherTypeChange () {
+    onVocherTypeChange() {
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },
     // 获取下拉框
-    getTypes () {
+    getTypes() {
       this.$request.getRechargeType().then(res => {
         if (res.ret) {
           this.voucherChange = res.data
@@ -182,7 +195,7 @@ export default {
         }
       })
     },
-    addVip () {
+    addVip() {
       dialog({ type: 'rechargeAdd' }, () => {
         this.getList()
       })

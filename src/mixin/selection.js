@@ -3,7 +3,7 @@
 // @row-click="rowClick"
 // ref="table"
 export default {
-  data () {
+  data() {
     return {
       selection: [], // 选中的数据
       format_selection: [], // 格式化后的选中数据
@@ -13,23 +13,23 @@ export default {
     }
   },
   methods: {
-  // 勾选复选框
-    selectionChange (selection) {
+    // 勾选复选框
+    selectionChange(selection) {
       this.selection = selection
       this.void_disabled = !selection.length
     },
     // 点击行自动勾选复选框
-    rowClick (row) {
+    rowClick(row) {
       this.$refs.table.toggleRowSelection(row)
     },
     // 反选
-    antiSelection () {
+    antiSelection() {
       this.$refs.table.data.forEach(row => {
         this.$refs.table.toggleRowSelection(row)
       })
     },
     // 格式化选择框数据
-    formatData (attr) {
+    formatData(attr) {
       this.format_selection = []
       console.log(this.selection)
       this.selection.forEach(item => {
@@ -37,18 +37,19 @@ export default {
       })
     },
     // 删除确认框
-    deleteSelection () {
+    deleteSelection() {
       this.$confirm(this.$t('confirmToDelete') + '?', this.$t('tips'), {
         confirmButtonText: this.$t('confirm'),
         cancelButtonText: this.$t('cancel'),
         type: 'warning'
-      }).then(() => {
-        this.deleteData()
-      }).catch(() => {
       })
+        .then(() => {
+          this.deleteData()
+        })
+        .catch(() => {})
     },
     // 成功提示
-    successMsg (res) {
+    successMsg(res) {
       this.$notify({
         title: this.$t('success'),
         message: res.tips,

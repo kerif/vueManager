@@ -1,22 +1,18 @@
 <template>
   <div class="pick-echarts-container">
     <div class="echarts-main">
-      <h3 class="auto-sty">{{$t('自提点信息')}}</h3>
-        <el-select @change="changePick" v-model="XStationId" clearable placeholder="请选择">
-          <el-option
-            v-for="item in options"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
-          </el-option>
-        </el-select>
-      <div class="echarts-top">
-      <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
-        <el-option :value="1" :label="$t('今天')"></el-option>
-        <el-option :value="7" :label="$t('近7天')"></el-option>
-        <el-option :value="30" :label="$t('近30天')"></el-option>
+      <h3 class="auto-sty">{{ $t('自提点信息') }}</h3>
+      <el-select @change="changePick" v-model="XStationId" clearable placeholder="请选择">
+        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+        </el-option>
       </el-select>
-       <!-- <el-date-picker
+      <div class="echarts-top">
+        <el-select v-model="days" @change="getDatas" :placeholder="$t('请选择')" class="select-sty">
+          <el-option :value="1" :label="$t('今天')"></el-option>
+          <el-option :value="7" :label="$t('近7天')"></el-option>
+          <el-option :value="30" :label="$t('近30天')"></el-option>
+        </el-select>
+        <!-- <el-date-picker
           class="timeStyle"
           v-model="pickingList"
           type="daterange"
@@ -40,30 +36,40 @@
           :start-placeholder="$t('开始日期')"
           :end-placeholder="$t('结束日期')">
         </el-date-picker> -->
-        </div>
-      <h3>{{$t('订单概览')}}</h3>
+      </div>
+      <h3>{{ $t('订单概览') }}</h3>
       <div class="package-main">
         <ul>
           <li v-for="(item, index) in pieData" :key="index" class="main-first">
             <div v-if="item.name === 'all'">
-              <p>{{$t('全部')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+              <p>{{ $t('全部') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
             <div v-if="item.name === 'wait_receive'">
-              <p>{{$t('未到自提点')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+              <p>{{ $t('未到自提点') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'received'">
-              <p>{{$t('已到自提点')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'received'">
+              <p>{{ $t('已到自提点') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'signed'">
-              <p>{{$t('客户签收')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'signed'">
+              <p>{{ $t('客户签收') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
-              <div v-if="item.name === 'shipped'">
-              <p>{{$t('已出库')}}</p>
-              <p><strong>{{item.counts}}</strong></p>
+            <div v-if="item.name === 'shipped'">
+              <p>{{ $t('已出库') }}</p>
+              <p>
+                <strong>{{ item.counts }}</strong>
+              </p>
             </div>
           </li>
         </ul>
@@ -115,42 +121,68 @@
       </div>
     </div> -->
     <div class="echarts-bottom">
-      <h3>{{$t('佣金报表')}}</h3>
+      <h3>{{ $t('佣金报表') }}</h3>
       <el-date-picker
-          class="timeStyle"
-          v-model="pickingList"
-          type="daterange"
-          @change="onPick"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
-        </el-date-picker>
-        <el-select clearable v-model="status" @change="changeStatus" :placeholder="$t('请选择')" class="select-sty">
+        class="timeStyle"
+        v-model="pickingList"
+        type="daterange"
+        @change="onPick"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <el-select
+        clearable
+        v-model="status"
+        @change="changeStatus"
+        :placeholder="$t('请选择')"
+        class="select-sty"
+      >
         <el-option :value="0" :label="$t('未结算')"></el-option>
         <el-option :value="1" :label="$t('待提交')"></el-option>
         <el-option :value="2" :label="$t('审核中')"></el-option>
         <el-option :value="3" :label="$t('已完成')"></el-option>
       </el-select>
-      <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageData" min-height="100">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        v-loading="tableLoading"
+        :data="packageData"
+        min-height="100"
+      >
         <el-table-column :label="$t('时间')" prop="time"></el-table-column>
         <el-table-column :label="$t('完成订单数')" prop="order_count"></el-table-column>
         <el-table-column :label="$t('佣金总数')" prop="amount"></el-table-column>
         <el-table-column :label="$t('结算状态')">
           <template slot-scope="scope">
-            <span v-if="scope.row.status === 0">{{$t('未结算')}}</span>
-            <span v-if="scope.row.status === 1">{{$t('待提交')}}</span>
-            <span v-if="scope.row.status === 2">{{$t('审核中')}}</span>
-            <span v-if="scope.row.status === 3">{{$t('已完成')}}</span>
+            <span v-if="scope.row.status === 0">{{ $t('未结算') }}</span>
+            <span v-if="scope.row.status === 1">{{ $t('待提交') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('审核中') }}</span>
+            <span v-if="scope.row.status === 3">{{ $t('已完成') }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button class="btn-purple" @click="goDetails(scope.row.id)">{{$t('明细')}}</el-button>
-            <el-button v-if="scope.row.status === 1" class="btn-blue-green" @click="sumbitSettlement(scope.row.id)">{{$t('提交结算')}}</el-button>
+            <el-button class="btn-purple" @click="goDetails(scope.row.id)">{{
+              $t('明细')
+            }}</el-button>
+            <el-button
+              v-if="scope.row.status === 1"
+              class="btn-blue-green"
+              @click="sumbitSettlement(scope.row.id)"
+              >{{ $t('提交结算') }}</el-button
+            >
             <!-- v-if="scope.row.status === 3" -->
-            <el-button v-if="scope.row.status === 3" class="btn-light-green" @click="payDetails(scope.row.id)">{{$t('支付详情')}}</el-button>
+            <el-button
+              v-if="scope.row.status === 3"
+              class="btn-light-green"
+              @click="payDetails(scope.row.id)"
+              >{{ $t('支付详情') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -168,7 +200,7 @@ export default {
     // NlePagination
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       days: 7,
       pickingList: [],
@@ -200,7 +232,7 @@ export default {
       status: ''
     }
   },
-  created () {
+  created() {
     this.pickData()
     // this.getPie() // 包裹饼图数据
     // this.getColumnar() // 包裹柱状数据
@@ -209,7 +241,7 @@ export default {
     // this.packageList() // 包裹列表
     // this.orderList() // 订单列表
   },
-  mounted () {
+  mounted() {
     // 包裹饼图
     this.myChart = echarts.init(document.getElementById('chartsFirst'))
     window.onresize = this.myChart.resize
@@ -229,7 +261,8 @@ export default {
       color: ['#cee5fe'],
       tooltip: {
         trigger: 'axis',
-        axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        axisPointer: {
+          // 坐标轴指示器，坐标轴触发有效
           type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
         }
       },
@@ -273,7 +306,7 @@ export default {
   },
   methods: {
     // 获取自提点数据
-    pickData () {
+    pickData() {
       this.$request.packagePick().then(res => {
         if (res.ret) {
           this.options = res.data
@@ -287,7 +320,7 @@ export default {
       })
     },
     // 切换自提点时
-    changePick () {
+    changePick() {
       // this.transferId = this.XStationId ? this.XStationId : this.transferId
       console.log(this.transferId, 'this.transferId')
       if (this.XStationId) {
@@ -297,7 +330,7 @@ export default {
       }
     },
     // 包裹饼图数据
-    getPie () {
+    getPie() {
       let params = {
         XStationId: this.transferId,
         // page: this.page_params.page,
@@ -310,10 +343,10 @@ export default {
         if (res.ret) {
           this.pieData = res.data.graph
           const obj = {
-            'wait_receive': '未到自提点',
-            'received': '已到自提点',
-            'signed': '客户签收',
-            'shipped': '已出库'
+            wait_receive: '未到自提点',
+            received: '已到自提点',
+            signed: '客户签收',
+            shipped: '已出库'
           }
           // let pieOrderList = res.data.filter(item => {
           //   return item.name !== 'all'
@@ -323,14 +356,16 @@ export default {
           //     name: obj[item.name]
           //   }
           // })
-          let pieOrderList = res.data.graph.filter(item => {
-            return item.name !== 'all'
-          }).map(item => {
-            return {
-              value: item.counts,
-              name: obj[item.name]
-            }
-          })
+          let pieOrderList = res.data.graph
+            .filter(item => {
+              return item.name !== 'all'
+            })
+            .map(item => {
+              return {
+                value: item.counts,
+                name: obj[item.name]
+              }
+            })
           // let pieOrderList = res.data.graph.map(item => {
           //   return {
           //     value: item.counts,
@@ -384,14 +419,17 @@ export default {
           this.packageOption.yAxis = [
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             }
           ]
@@ -407,22 +445,8 @@ export default {
         }
       })
     },
-    // 包裹树状图
-    getColumnar () {
-      let params = {
-        // page: this.page_params.page,
-        // size: this.page_params.size,
-        days: this.days
-      }
-      this.begin && (params.begin = this.begin)
-      this.end && (params.end = this.end)
-      this.$request.getColumnar(params).then(res => {
-        if (res.ret) {
-        }
-      })
-    },
     // 订单饼图数据
-    getOrderPie () {
+    getOrderPie() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -434,12 +458,12 @@ export default {
         if (res.ret) {
           this.pieOrderData = res.data
           const obj = {
-            'wait_pack': '待处理',
-            'wait_payment': '待支付',
-            'wait_shipped': '待发货',
-            'shipped': '已发货',
-            'received': '已签收',
-            'invalid': '作废订单'
+            wait_pack: '待处理',
+            wait_payment: '待支付',
+            wait_shipped: '待发货',
+            shipped: '已发货',
+            received: '已签收',
+            invalid: '作废订单'
           }
           // let pieList = res.data.map(item => {
           //   console.log(item, 'item')
@@ -448,14 +472,16 @@ export default {
           //     name: obj[item.name]
           //   }
           // })
-          let pieList = res.data.filter(item => {
-            return item.name !== 'all'
-          }).map(item => {
-            return {
-              value: item.counts,
-              name: obj[item.name]
-            }
-          })
+          let pieList = res.data
+            .filter(item => {
+              return item.name !== 'all'
+            })
+            .map(item => {
+              return {
+                value: item.counts,
+                name: obj[item.name]
+              }
+            })
           this.orderLeft.legend = {
             orient: 'vertical',
             left: 10,
@@ -492,7 +518,7 @@ export default {
       })
     },
     // 订单树状图
-    getOrderColumnar () {
+    getOrderColumnar() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -516,14 +542,17 @@ export default {
           this.orderRight.yAxis = [
             {
               type: 'value',
-              'axisLine': { // y轴
-                'show': false
+              axisLine: {
+                // y轴
+                show: false
               },
-              'axisTick': { // y轴刻度线
-                'show': false
+              axisTick: {
+                // y轴刻度线
+                show: false
               },
-              'splitLine': { // 网格线
-                'show': true
+              splitLine: {
+                // 网格线
+                show: true
               }
             }
           ]
@@ -540,7 +569,7 @@ export default {
       })
     },
     // 天数
-    getDatas () {
+    getDatas() {
       this.page_params.handleQueryChange('days', this.days)
       this.getPie()
       // this.getColumnar()
@@ -550,7 +579,7 @@ export default {
       // this.orderList()
     },
     // 时间
-    onPick (val) {
+    onPick(val) {
       this.begin = val ? val[0] : ''
       this.end = val ? val[1] : ''
       // this.page_params.page = 1
@@ -563,7 +592,7 @@ export default {
       // this.orderList()
     },
     // 对比
-    onCompare (val) {
+    onCompare(val) {
       this.compare_begin = val ? val[0] : ''
       this.compare_end = val ? val[1] : ''
       // this.page_params.page = 1
@@ -571,12 +600,12 @@ export default {
       this.comparePackage()
     },
     // 佣金报表 筛选
-    changeStatus () {
+    changeStatus() {
       this.page_params.handleQueryChange('status', this.status)
       this.packageList()
     },
     // 佣金报表数据
-    packageList () {
+    packageList() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -624,7 +653,7 @@ export default {
     //   return sums
     // },
     // 订单列表
-    orderList () {
+    orderList() {
       let params = {
         // page: this.page_params.page,
         // size: this.page_params.size,
@@ -646,38 +675,40 @@ export default {
       })
     },
     // 佣金明细
-    goDetails (id) {
+    goDetails(id) {
       dialog({ type: 'settlementDetails', state: 'pick', id: id, XStationId: this.transferId })
     },
     // 提交结算
-    sumbitSettlement (id) {
+    sumbitSettlement(id) {
       this.$confirm(this.$t('您是否已确认佣金，申请结算吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.updateSettlement(id, {
-          XStationId: this.transferId
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.packageList()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+        this.$request
+          .updateSettlement(id, {
+            XStationId: this.transferId
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.packageList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
       })
     },
     // 支付详情
-    payDetails (id) {
+    payDetails(id) {
       dialog({ type: 'payDetails', id: id, state: 'pick', XStationId: this.transferId })
     }
   }
@@ -731,14 +762,14 @@ export default {
   .charts-content {
     margin-top: 60px;
   }
-  ul{
+  ul {
     margin: 0;
     padding: 0;
-    li{
-      list-style:none;
+    li {
+      list-style: none;
     }
   }
-   .main-first:last-child{
+  .main-first:last-child {
     border-right: none !important;
   }
   .auto-sty {

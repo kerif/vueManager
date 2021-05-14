@@ -1,49 +1,53 @@
 <template>
-  <el-dialog :visible.sync="show" :title="line.picture_name + $t('的翻译内容')" class="dialog-banner-lang" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="line.picture_name + $t('的翻译内容')"
+    class="dialog-banner-lang"
+    @close="clear"
+  >
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{$t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息')}}
-        </p>
+        {{ $t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息') }}
+      </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
       <!-- 名称 -->
       <el-form-item :label="$t('名称')" prop="picture_name">
-        <el-input v-model="ruleForm.picture_name"
-        :placeholder="$t('请输入')"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('*广告图')">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-            <span class="model-box"></span>
-            <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-            </span>
-            </span>
-            <el-upload
-              v-show="baleImgList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadBaleImg"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload>
-          <p class="px-sty">{{$t('建议尺寸：355px * 160px')}}</p>
-        </el-form-item>
+        <el-input v-model="ruleForm.picture_name" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('*广告图')">
+        <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+          <span class="model-box"></span>
+          <span class="operat-box">
+            <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+            <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+          </span>
+        </span>
+        <el-upload
+          v-show="baleImgList.length < 1"
+          class="avatar-uploader"
+          action=""
+          list-type="picture-card"
+          :http-request="uploadBaleImg"
+          :show-file-list="false"
+        >
+          <i class="el-icon-plus"> </i>
+        </el-upload>
+        <p class="px-sty">{{ $t('建议尺寸：355px * 160px') }}</p>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="cancelDialog('ruleForm')">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         picture_name: '',
@@ -53,9 +57,7 @@ export default {
       state: '',
       baleImgList: [],
       rules: {
-        picture_name: [
-          { required: true, message: this.$t('请输入名称'), trigger: 'blur' }
-        ]
+        picture_name: [{ required: true, message: this.$t('请输入名称'), trigger: 'blur' }]
       },
       line: {
         id: '',
@@ -69,22 +71,24 @@ export default {
     }
   },
   methods: {
-    getLang () {
-      this.$request.bannerLang(this.line.id, {
-        lang: this.ruleForm.language
-      }).then(res => {
-        this.ruleForm.picture_name = res.data.picture_name
-        res.data.picture_path && (this.baleImgList[0] = res.data.picture_path)
-        console.log(this.ruleForm, 'this.ruleForm')
-      })
+    getLang() {
+      this.$request
+        .bannerLang(this.line.id, {
+          lang: this.ruleForm.language
+        })
+        .then(res => {
+          this.ruleForm.picture_name = res.data.picture_name
+          res.data.picture_path && (this.baleImgList[0] = res.data.picture_path)
+          console.log(this.ruleForm, 'this.ruleForm')
+        })
     },
-    confirm (formName) {
+    confirm(formName) {
       if (this.baleImgList[0]) {
         this.ruleForm.picture_path = this.baleImgList[0]
       } else {
         return this.$message.error(this.$t('请上传广告图'))
       }
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.$request.updateBannerLang(this.line.id, this.ruleForm).then(res => {
             if (res.ret) {
@@ -109,7 +113,7 @@ export default {
       })
     },
     // 上传打包照片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         console.log(res)
@@ -126,40 +130,40 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除图片
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    clear () {
+    clear() {
       this.ruleForm.picture_name = ''
       this.baleImgList = []
     },
-    cancelDialog (ruleForm) {
+    cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.baleImgList = []
       this.show = false
     },
-    init () {
-      this.line = this.line
-      this.lang = this.lang
+    init() {
+      // this.line = this.line
+      // this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
-      this.transCode = this.transCode
-      console.log(this.line, 'line')
-      console.log(this.lang, 'lang')
-      console.log(this.transCode, 'this.transCode')
-      console.log(this.ruleForm.language, 'this.ruleForm.language')
+      // this.transCode = this.transCode
+      // console.log(this.line, 'line')
+      // console.log(this.lang, 'lang')
+      // console.log(this.transCode, 'this.transCode')
+      // console.log(this.ruleForm.language, 'this.ruleForm.language')
       if (this.transCode === 1) {
         this.getLang()
       }
@@ -184,14 +188,14 @@ export default {
     margin-left: 210px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .lang-sty {
     line-height: 40px;
@@ -229,9 +233,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -241,7 +246,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;
@@ -261,7 +266,7 @@ export default {
     border-radius: 6px;
   }
   .px-sty {
-    margin-left:200px;
+    margin-left: 200px;
     color: #ccc;
   }
 }

@@ -1,21 +1,27 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('额外收录信息')" class="dialog-fee" width="35%"
-  @close="clear">
-    <el-form :model="feeList" ref="ruleForm" class="demo-ruleForm"
-    label-position="top">
-        <!-- 显示名称 -->
-        <el-form-item :label="$t('显示名称')">
-          <el-input v-model="feeList.extra_remark_name">
-          </el-input>
-        </el-form-item>
-        <!-- 说明 -->
-        <el-form-item :label="$t('说明')">
-            <el-input type="textarea" v-model="feeList.extra_remark_instruction"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            :placeholder="$t('请输入备注')"></el-input>
-        </el-form-item>
-    <!-- 是否显示 -->
-    <el-form-item :label="$t('*是否启用')">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('额外收录信息')"
+    class="dialog-fee"
+    width="35%"
+    @close="clear"
+  >
+    <el-form :model="feeList" ref="ruleForm" class="demo-ruleForm" label-position="top">
+      <!-- 显示名称 -->
+      <el-form-item :label="$t('显示名称')">
+        <el-input v-model="feeList.extra_remark_name"> </el-input>
+      </el-form-item>
+      <!-- 说明 -->
+      <el-form-item :label="$t('说明')">
+        <el-input
+          type="textarea"
+          v-model="feeList.extra_remark_instruction"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          :placeholder="$t('请输入备注')"
+        ></el-input>
+      </el-form-item>
+      <!-- 是否显示 -->
+      <el-form-item :label="$t('*是否启用')">
         <el-switch
           v-model="feeList.extra_remark_enabled"
           :active-text="$t('开')"
@@ -23,19 +29,20 @@
           :inactive-value="0"
           :inactive-text="$t('关')"
           active-color="#13ce66"
-          inactive-color="gray">
+          inactive-color="gray"
+        >
         </el-switch>
-    </el-form-item>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       feeList: {
         extra_remark_name: '', // 名称
@@ -45,12 +52,12 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getFee(this.id).then(res => {
         this.feeList = res.data
       })
     },
-    confirm (formName) {
+    confirm() {
       console.log(Number(this.feeList.extra_remark_enabled), 'extra_remark_enabled')
       this.$request.updateFee(this.id, this.feeList).then(res => {
         if (res.ret) {
@@ -66,12 +73,12 @@ export default {
         }
       })
     },
-    clear () {
+    clear() {
       this.feeList.extra_remark_name = ''
       this.feeList.extra_remark_instruction = ''
       this.feeList.extra_remark_enabled = ''
     },
-    init () {
+    init() {
       this.getList()
     }
   }
@@ -89,15 +96,15 @@ export default {
     width: 70%;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
 }
 </style>

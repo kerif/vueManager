@@ -1,20 +1,11 @@
 <template>
   <div>
     <div class="select-box">
-      <add-btn @click.native="addParcel">{{ $t("添加包裹增值服务") }}</add-btn>
+      <add-btn @click.native="addParcel">{{ $t('添加包裹增值服务') }}</add-btn>
     </div>
-    <el-table
-      :data="parcelData"
-      v-loading="tableLoading"
-      class="data-list"
-      border
-      stripe
-    >
+    <el-table :data="parcelData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
-      <el-table-column
-        prop="name"
-        :label="$t('增值服务名称')"
-      ></el-table-column>
+      <el-table-column prop="name" :label="$t('增值服务名称')"></el-table-column>
       <el-table-column
         prop="price"
         :label="$t('价格') + this.localization.currency_unit"
@@ -45,30 +36,21 @@
             class="el-icon-check icon-sty"
             @click="onPackage(scope.row, item)"
           ></span>
-          <span
-            v-else
-            class="el-icon-plus icon-sty"
-            @click="onPackage(scope.row, item)"
-          ></span>
+          <span v-else class="el-icon-plus icon-sty" @click="onPackage(scope.row, item)"></span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')" width="140px">
         <template slot-scope="scope">
           <el-button class="btn-dark-green" @click="editParcel(scope.row.id)">{{
-            $t("编辑")
+            $t('编辑')
           }}</el-button>
-          <el-button
-            class="btn-light-red"
-            @click="deleteParcel(scope.row.id)"
-            >{{ $t("删除") }}</el-button
-          >
+          <el-button class="btn-light-red" @click="deleteParcel(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-    ></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
@@ -83,7 +65,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       tableLoading: false,
       localization: {},
@@ -98,49 +80,51 @@ export default {
       ]
     }
   },
-  created () {
+  created() {
     this.getParcel()
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.getParcel()
     },
     // 包裹 增加增值服务
-    addParcel () {
+    addParcel() {
       dialog({ type: 'addService', state: 'add', name: 'addParcel' }, () => {
         this.getList()
       })
     },
     // 获取包裹增值服务
-    getParcel () {
+    getParcel() {
       this.tableLoading = true
-      this.$request.getParcel({
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.parcelData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-          this.localization = res.localization
-          console.log(this.parcelData, 'parcelData')
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .getParcel({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.parcelData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.localization = res.localization
+            console.log(this.parcelData, 'parcelData')
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 包裹增值服务 开关启用状态
-    changeParcel (event, id) {
-      console.log(typeof (event), '我是event')
+    changeParcel(event, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.closeParcel(id, Number(event)).then(res => {
         if (res.ret) {
@@ -159,22 +143,31 @@ export default {
       })
     },
     // 包裹增值服务 修改语言
-    onPackage (line, lang) {
+    onPackage(line, lang) {
       console.log(line, lang)
       this.packageCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
-      dialog({ type: 'serviceLang', line: line, lang: lang, transCode: this.packageCode, state: 'package' }, () => {
-        this.getValue()
-      })
+      dialog(
+        {
+          type: 'serviceLang',
+          line: line,
+          lang: lang,
+          transCode: this.packageCode,
+          state: 'package'
+        },
+        () => {
+          this.getValue()
+        }
+      )
     },
     // 包裹 编辑增值服务
-    editParcel (id) {
+    editParcel(id) {
       dialog({ type: 'addService', state: 'edit', id: id, name: 'editParcel' }, () => {
         this.getList()
       })
     },
     // 包裹 删除增值服务
-    deleteParcel (id) {
+    deleteParcel(id) {
       this.$confirm(this.$t('您真的要删除增值服务吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -200,7 +193,5 @@ export default {
     }
   }
 }
-
 </script>
-<style scoped>
-</style>
+<style scoped></style>

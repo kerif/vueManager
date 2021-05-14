@@ -21,7 +21,7 @@
       <!-- 网站链接 -->
       <el-form-item class="url-sty">
         <div slot="label">
-          <span>{{ $t("网站链接") }}</span>
+          <span>{{ $t('网站链接') }}</span>
           <el-tooltip
             effect="dark"
             :content="
@@ -43,7 +43,7 @@
       </el-form-item>
       <el-form-item class="url-sty">
         <div slot="label">
-          <span>{{ $t("H5链接") }}</span>
+          <span>{{ $t('H5链接') }}</span>
           <el-tooltip
             effect="dark"
             :content="
@@ -103,23 +103,15 @@
           </el-form>
           <div style="text-align: right; margin: 0">
             <el-button size="mini" type="text" @click="visibleOauth = false">{{
-              $t("取消")
+              $t('取消')
             }}</el-button>
-            <el-button type="primary" size="mini" @click="saveOauth">{{
-              $t("确定")
-            }}</el-button>
+            <el-button type="primary" size="mini" @click="saveOauth">{{ $t('确定') }}</el-button>
           </div>
-          <el-button slot="reference" @click="goOauth">{{
-            $t("配置")
-          }}</el-button>
+          <el-button slot="reference" @click="goOauth">{{ $t('配置') }}</el-button>
         </el-popover>
       </el-form-item>
       <el-form-item :label="$t('小程序码')" class="updateChe">
-        <span
-          class="img-item"
-          v-for="(item, index) in baleImgList"
-          :key="index"
-        >
+        <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
           <span class="model-box"></span>
           <span class="operat-box">
@@ -140,11 +132,7 @@
       </el-form-item>
       <!-- pc端客服二维码 -->
       <el-form-item :label="$t('pc端客服二维码')" class="updateChe">
-        <span
-          class="img-item"
-          v-for="(item, index) in customerList"
-          :key="index"
-        >
+        <span class="img-item" v-for="(item, index) in customerList" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
           <span class="model-box"></span>
           <span class="operat-box">
@@ -165,18 +153,14 @@
       </el-form-item>
       <!-- LOGO -->
       <el-form-item label="LOGO" class="updateChe">
-        <span
-          class="img-item"
-          v-for="(item, index) in LogoImgList"
-          :key="index"
-        >
+        <span class="img-item" v-for="(item, index) in LogoImgList" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
           <span class="model-box"></span>
           <span class="operat-box">
             <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
             <i class="el-icon-delete" @click="onDeleteLogo(index)"></i>
-          </span>
-        </span><br/>
+          </span> </span
+        ><br />
         <el-upload
           v-show="LogoImgList.length < 1"
           class="avatar-uploader"
@@ -187,7 +171,7 @@
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
-      <div style="color: gray; margin-left: 140px;">LOGO{{$t('建议尺寸')}}：90px*20px</div>
+        <div style="color: gray; margin-left: 140px">LOGO{{ $t('建议尺寸') }}：90px*20px</div>
       </el-form-item>
       <!-- 登录页背景图 -->
       <el-form-item :label="$t('登录页背景图')" class="updateChe">
@@ -211,19 +195,16 @@
         </el-upload>
       </el-form-item>
     </el-form>
-    <el-button
-      :loading="$store.state.btnLoading"
-      class="save-btn"
-      @click="editOthers"
-      >{{ $t("保存") }}</el-button
-    >
+    <el-button :loading="$store.state.btnLoading" class="save-btn" @click="editOthers">{{
+      $t('保存')
+    }}</el-button>
   </div>
 </template>
 
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       setForm: {
         website_name: '',
@@ -253,17 +234,17 @@ export default {
       languageData: []
     }
   },
-  created () {
+  created() {
     this.getOthers()
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   },
   methods: {
     // 获取全部语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
@@ -271,13 +252,13 @@ export default {
       })
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
     // pc端配置 第三方登录 获取数据
-    goOauth () {
+    goOauth() {
       // this.visibleOauth = true
       this.$request.getOauth().then(res => {
         if (res.ret) {
@@ -286,14 +267,14 @@ export default {
       })
     },
     // pc端配置 修改语言
-    onPc (item) {
+    onPc(item) {
       console.log(item, 'item')
       dialog({ type: 'pcLang', lang: item }, () => {
         this.getOthers()
       })
     },
     // 更新第三方登录配置数据
-    saveOauth () {
+    saveOauth() {
       this.$request.updateOauth(this.oauthData).then(res => {
         if (res.ret) {
           this.$notify({
@@ -311,7 +292,7 @@ export default {
       })
     },
     // 获取pc端配置
-    getOthers () {
+    getOthers() {
       this.$request.getWebsite().then(res => {
         this.setForm = res.data
         this.setForm.pc_website_url = res.data.pc_website_url.map(item => item.url).toString()
@@ -323,7 +304,7 @@ export default {
       })
     },
     // 修改pc端配置
-    editOthers () {
+    editOthers() {
       if (this.baleImgList[0]) {
         this.setForm.default_img = this.baleImgList[0]
       } else {
@@ -348,24 +329,26 @@ export default {
         return this.$message.error(this.$t('请输入网站名称'))
       }
       console.log(this.setForm.pc_website_url.split(','))
-      this.$request.editWebsite({ ...this.setForm, pc_website_url: this.setForm.pc_website_url.split(',') }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getOthers()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$request
+        .editWebsite({ ...this.setForm, pc_website_url: this.setForm.pc_website_url.split(',') })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getOthers()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     // 上传打包照片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -376,18 +359,18 @@ export default {
       })
     },
     // 删除小程序码
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // pc端客服二维码
-    customerImg (item) {
+    customerImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -398,10 +381,10 @@ export default {
       })
     },
     // 删除pc端二维码
-    onDeleteCus (index) {
+    onDeleteCus(index) {
       this.customerList.splice(index, 1)
     },
-    uploadLogo (item) {
+    uploadLogo(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -412,15 +395,15 @@ export default {
       })
     },
     // 删除logo
-    onDeleteLogo (index) {
+    onDeleteLogo(index) {
       this.LogoImgList.splice(index, 1)
     },
     // 删除登录页背景图
-    onDeleteBg (index) {
+    onDeleteBg(index) {
       this.bgList.splice(index, 1)
     },
     // 登录页背景图
-    bgImg (item) {
+    bgImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -432,13 +415,12 @@ export default {
     }
   }
 }
-
 </script>
 <style lang="scss">
 .setOthers-container {
   .save-btn {
     color: #fff;
-    background-color: #3540A5;
+    background-color: #3540a5;
   }
   .updateChe {
     .el-form-item__content {

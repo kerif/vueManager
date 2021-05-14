@@ -1,14 +1,14 @@
 <template>
   <div class="system-notice-container">
     <div class="system-content">
-    <div class="system-title">
-      <p>{{noticeData.title}}</p>
+      <div class="system-title">
+        <p>{{ noticeData.title }}</p>
       </div>
       <div>
         <p v-html="noticeData.content"></p>
       </div>
       <div class="system-bottom">
-        <p>{{$t('发布时间')}}：{{noticeData.updated_at}}</p>
+        <p>{{ $t('发布时间') }}：{{ noticeData.updated_at }}</p>
       </div>
     </div>
   </div>
@@ -16,18 +16,18 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       noticeData: {}
     }
   },
-  created () {
+  created() {
     if (this.$route.params.id) {
       this.getList()
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getSystemNotice(this.$route.params.id).then(res => {
         if (res.ret) {
           this.noticeData = res.data

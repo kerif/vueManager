@@ -1,116 +1,156 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'edit' ? $t('修改广告图') : $t('添加广告图')" class="dialog-banner" @close="clear" width="85%">
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'edit' ? $t('修改广告图') : $t('添加广告图')"
+    class="dialog-banner"
+    @close="clear"
+    width="85%"
+  >
     <el-row :gutter="20">
       <el-col :span="12">
         <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
-            <!-- 广告图名称 -->
-            <el-form-item :label="$t('*广告图名称')">
-              <el-input v-model="ruleForm.picture_name"
-              :placeholder="$t('请输入广告图名称')" class="banner-sty"></el-input>
-              </el-form-item>
-            <!-- 显示位置 -->
-              <el-form-item :label="$t('*显示位置')">
-                <el-select v-model="ruleForm.position" :placeholder="$t('请选择显示位置')" clearable
-                 class="banner-sty">
-                  <el-option
-                    v-for="item in positionData"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <!-- 所属应用 -->
-              <el-form-item :label="$t('*所属应用')">
-                <el-select v-model="ruleForm.source" :placeholder="$t('请选择所属应用')" clearable
-                 class="banner-sty">
-                  <el-option
-                    v-for="item in sourceData"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <!-- 广告类型 -->
-              <el-form-item :label="$t('*广告类型')">
-                <el-select v-model="ruleForm.type" :placeholder="$t('请选择广告类型')" clearable
-                 class="banner-sty">
-                  <el-option
-                    v-for="item in typeData"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <!-- 跳转方式 -->
-              <el-form-item :label="$t('*跳转方式')">
-                <el-select v-model="ruleForm.link_type" :placeholder="$t('请选择跳转方式')" clearable class="banner-sty" @change="getType">
-                  <el-option
-                    v-for="item in linkData"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            <!-- 内部跳转 -->
-            <el-form-item :label="$t('内部跳转')" v-if="this.ruleForm.link_type === 1">
-              <el-select v-model="linkPath" :placeholder="$t('请选择内部跳转')" clearable @change="changePath"
-                class="banner-sty">
-                <el-option
-                  v-for="item in pathData"
-                  :key="item.link_type"
-                  :label="item.name"
-                  :value="item.link_path">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <!-- 内部跳转时 可编辑url -->
-            <el-form-item :label="$t('*内部url')" v-if="this.ruleForm.link_type === 1">
-              <el-input v-model="ruleForm.link_path" class="banner-sty"></el-input>
-            </el-form-item>
-            <!-- 外部url -->
-            <el-form-item :label="$t('*外部url')" v-if="this.ruleForm.link_type === 2">
-              <el-input v-model="ruleForm.link_path"
-                :placeholder="$t('请输入外部url')" class="banner-sty"></el-input>
-              </el-form-item>
+          <!-- 广告图名称 -->
+          <el-form-item :label="$t('*广告图名称')">
+            <el-input
+              v-model="ruleForm.picture_name"
+              :placeholder="$t('请输入广告图名称')"
+              class="banner-sty"
+            ></el-input>
+          </el-form-item>
+          <!-- 显示位置 -->
+          <el-form-item :label="$t('*显示位置')">
+            <el-select
+              v-model="ruleForm.position"
+              :placeholder="$t('请选择显示位置')"
+              clearable
+              class="banner-sty"
+            >
+              <el-option
+                v-for="item in positionData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 所属应用 -->
+          <el-form-item :label="$t('*所属应用')">
+            <el-select
+              v-model="ruleForm.source"
+              :placeholder="$t('请选择所属应用')"
+              clearable
+              class="banner-sty"
+            >
+              <el-option
+                v-for="item in sourceData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 广告类型 -->
+          <el-form-item :label="$t('*广告类型')">
+            <el-select
+              v-model="ruleForm.type"
+              :placeholder="$t('请选择广告类型')"
+              clearable
+              class="banner-sty"
+            >
+              <el-option
+                v-for="item in typeData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 跳转方式 -->
+          <el-form-item :label="$t('*跳转方式')">
+            <el-select
+              v-model="ruleForm.link_type"
+              :placeholder="$t('请选择跳转方式')"
+              clearable
+              class="banner-sty"
+              @change="getType"
+            >
+              <el-option
+                v-for="item in linkData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 内部跳转 -->
+          <el-form-item :label="$t('内部跳转')" v-if="this.ruleForm.link_type === 1">
+            <el-select
+              v-model="linkPath"
+              :placeholder="$t('请选择内部跳转')"
+              clearable
+              @change="changePath"
+              class="banner-sty"
+            >
+              <el-option
+                v-for="item in pathData"
+                :key="item.link_type"
+                :label="item.name"
+                :value="item.link_path"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 内部跳转时 可编辑url -->
+          <el-form-item :label="$t('*内部url')" v-if="this.ruleForm.link_type === 1">
+            <el-input v-model="ruleForm.link_path" class="banner-sty"></el-input>
+          </el-form-item>
+          <!-- 外部url -->
+          <el-form-item :label="$t('*外部url')" v-if="this.ruleForm.link_type === 2">
+            <el-input
+              v-model="ruleForm.link_path"
+              :placeholder="$t('请输入外部url')"
+              class="banner-sty"
+            ></el-input>
+          </el-form-item>
         </el-form>
       </el-col>
       <el-col :span="8">
-        <p>{{$t('*上传广告图')}}</p>
-          <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
+        <p>{{ $t('*上传广告图') }}</p>
+        <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
           <span class="model-box"></span>
           <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+            <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+            <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
           </span>
-          </span>
-          <el-upload
-            v-show="baleImgList.length < 1"
-            class="avatar-uploader"
-            action=""
-            list-type="picture-card"
-            :http-request="uploadBaleImg"
-            :show-file-list="false">
-            <i class="el-icon-plus">
-            </i>
+        </span>
+        <el-upload
+          v-show="baleImgList.length < 1"
+          class="avatar-uploader"
+          action=""
+          list-type="picture-card"
+          :http-request="uploadBaleImg"
+          :show-file-list="false"
+        >
+          <i class="el-icon-plus"> </i>
         </el-upload>
-        <p class="px-sty">{{$t('建议尺寸：355px * 160px')}}</p>
+        <p class="px-sty">{{ $t('建议尺寸：355px * 160px') }}</p>
       </el-col>
     </el-row>
     <div slot="footer">
-      <el-button @click="cancelDialog">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="cancelDialog">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import dialog from '@/components/dialog'
 export default {
-  data () {
+  data() {
     return {
       ruleForm: {
         picture_name: '',
@@ -133,7 +173,7 @@ export default {
   },
   methods: {
     // 获取全部下拉框数据
-    getLeftData () {
+    getLeftData() {
       this.$request.getLeftData().then(res => {
         this.positionData = res.data.position
         this.sourceData = res.data.applications
@@ -146,29 +186,31 @@ export default {
         // console.log(this.employeeGroup, 'this.employeeGroup')
       })
     },
-    getType () {
+    getType() {
       console.log(this.ruleForm.link_type, 'ruleForm.link_type')
       console.log(this.ruleForm, 'ruleForm')
       this.linkPath = ''
       this.ruleForm.link_path = ''
     },
     // 获取详情
-    getList () {
+    getList() {
       this.$request.aloneBanner(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
-          this.linkPath = this.pathData.find(item => item.link_path === res.data.link_path) ? res.data.link_path : ''
+          this.linkPath = this.pathData.find(item => item.link_path === res.data.link_path)
+            ? res.data.link_path
+            : ''
           console.log(this.link_)
           console.log(this.ruleForm, 'this.ruleForm')
           res.data.picture_path && (this.baleImgList[0] = res.data.picture_path)
         }
       })
     },
-    changePath () {
+    changePath() {
       console.log(this.linkPath, 'ruleForm.link_path')
       this.ruleForm.link_path = this.linkPath
     },
-    confirm (formName) {
+    confirm() {
       if (this.baleImgList[0]) {
         this.ruleForm.picture_path = this.baleImgList[0]
       } else {
@@ -190,7 +232,8 @@ export default {
       } else if (this.ruleForm.link_type === 2 && this.ruleForm.link_path === '') {
         return this.$message.error(this.$t('请输入外部url'))
       }
-      if (this.id) { // 如果是编辑状态
+      if (this.id) {
+        // 如果是编辑状态
         this.$request.updateBanner(this.id, this.ruleForm).then(res => {
           if (res.ret) {
             this.$notify({
@@ -208,7 +251,8 @@ export default {
           }
           this.show = false
         })
-      } else { // 如果是添加状态
+      } else {
+        // 如果是添加状态
         // if (this.ruleForm.link_type === 1 && this.ruleForm.link_path === '') {
         //   return this.$message.error('请选择内部跳转')
         // } else if (this.ruleForm.link_type === 2 && this.ruleForm.link_path === '') {
@@ -234,7 +278,7 @@ export default {
       }
     },
     // 上传打包照片
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         console.log(res)
@@ -251,23 +295,23 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除图片
-    onDeleteImg (index) {
+    onDeleteImg(index) {
       this.baleImgList.splice(index, 1)
     },
     // 上传图片
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    clear () {
+    clear() {
       this.ruleForm.picture_name = ''
       this.ruleForm.position = ''
       this.ruleForm.source = ''
@@ -279,7 +323,7 @@ export default {
       this.state = ''
       this.id = ''
     },
-    cancelDialog () {
+    cancelDialog() {
       this.ruleForm.picture_name = ''
       this.ruleForm.position = ''
       this.ruleForm.source = ''
@@ -292,7 +336,7 @@ export default {
       this.baleImgList = []
       this.show = false
     },
-    init () {
+    init() {
       this.getLeftData()
     }
   }
@@ -311,14 +355,14 @@ export default {
     margin-left: 250px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .avatar-uploader {
     display: inline-block;
@@ -338,9 +382,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -350,7 +395,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;
@@ -370,7 +415,7 @@ export default {
     border-radius: 6px;
   }
   .px-sty {
-    margin-left:40px;
+    margin-left: 40px;
     color: #ccc;
   }
 }

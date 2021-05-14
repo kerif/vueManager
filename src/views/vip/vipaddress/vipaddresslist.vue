@@ -1,11 +1,17 @@
 <template>
   <div class="vip-address-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"
-      ></search-group>
+    <div class="searchGroup">
+      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
-    <el-table border stripe :data="addressList" class="data-list"
-    v-loading="tableLoading" height="550">
+    <div class="clear"></div>
+    <el-table
+      border
+      stripe
+      :data="addressList"
+      class="data-list"
+      v-loading="tableLoading"
+      height="550"
+    >
       <el-table-column type="index" :index="1"></el-table-column>
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
@@ -17,7 +23,9 @@
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.user_id)">{{$t('修改')}}</el-button>
+          <el-button class="btn-green" @click="editVip(scope.row.id, scope.row.user_id)">{{
+            $t('修改')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -31,7 +39,7 @@ import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   name: 'vipaddress',
-  data () {
+  data() {
     return {
       addressList: [],
       tableLoading: false
@@ -42,33 +50,35 @@ export default {
     NlePagination
   },
   mixins: [pagination],
-  mounted () {
+  mounted() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
-      this.$request.getUserAddress({
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.addressList = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .getUserAddress({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.addressList = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 修改资料
-    editVip (id, userId) {
+    editVip(id, userId) {
       dialog({ type: 'addressEdit', id: id, userId: userId }, () => {
         this.getList()
       })
@@ -76,3 +86,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+.searchGroup {
+  width: 21.5%;
+  float: right;
+}
+.clear {
+  clear: both;
+}
+</style>

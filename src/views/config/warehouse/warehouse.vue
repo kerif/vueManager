@@ -1,17 +1,31 @@
 <template>
   <div class="warehouse-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-      </search-group>
+    <div class="headerList">
+      <div class="sort-sty">
+        *{{ $t('拖拽行可以进行排序') }}
+        <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{
+          $t('保存排序结果')
+        }}</el-button>
       </div>
-    <div class="select-box">
-      <add-btn router="warehouseAdd">{{$t('添加仓库')}}</add-btn>
+      <div class="header-right">
+        <div class="searchGroup">
+          <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+        </div>
+        <div class="select-box">
+          <add-btn router="warehouseAdd">{{ $t('添加仓库') }}</add-btn>
+        </div>
+      </div>
     </div>
-    <el-table :data="vipGroupList" stripe border class="data-list country"
-    v-loading="tableLoading"
-    @selection-change="selectionChange">
+    <el-table
+      :data="vipGroupList"
+      stripe
+      border
+      class="data-list country"
+      v-loading="tableLoading"
+      @selection-change="selectionChange"
+    >
       <el-table-column width="100px" align="center">
-        <template >
+        <template>
           <i class="el-icon-sort icon-fonts"></i>
         </template>
       </el-table-column>
@@ -19,18 +33,25 @@
       <el-table-column :label="$t('仓库名字')" prop="warehouse_name"></el-table-column>
       <el-table-column :label="$t('自动货位功能')">
         <template slot-scope="scope">
-          <span v-if="scope.row.auto_location === 0">{{$t('关闭')}}</span>
-          <span v-if="scope.row.auto_location === 1">{{$t('开启')}}</span>
+          <span v-if="scope.row.auto_location === 0">{{ $t('关闭') }}</span>
+          <span v-if="scope.row.auto_location === 1">{{ $t('开启') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('收件人姓名')" prop="receiver_name"></el-table-column>
       <el-table-column :label="$t('打印面单地址')" prop="short_address"></el-table-column>
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
       <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
-      <el-table-column :label="$t('地址')" prop="address" :show-overflow-tooltip="true" width="150"></el-table-column>
+      <el-table-column
+        :label="$t('地址')"
+        prop="address"
+        :show-overflow-tooltip="true"
+        width="150"
+      ></el-table-column>
       <el-table-column :label="$t('支持国家')" :show-overflow-tooltip="true" width="150">
         <template slot-scope="scope">
-          <span v-for="item in scope.row.support_countries" :key="item.id">{{item.name}}&nbsp;</span>
+          <span v-for="item in scope.row.support_countries" :key="item.id"
+            >{{ item.name }}&nbsp;</span
+          >
         </template>
       </el-table-column>
       <!-- 是否启用 -->
@@ -44,21 +65,39 @@
             :active-value="1"
             :inactive-value="0"
             active-color="#13ce66"
-            inactive-color="gray">
+            inactive-color="gray"
+          >
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column :label="item.name" v-for="item in formatLangData" :key="item.id" align="center">
+      <el-table-column
+        :label="item.name"
+        v-for="item in formatLangData"
+        :key="item.id"
+        align="center"
+      >
         <template slot-scope="scope">
-          <span v-if="scope.row['trans_' + item.language_code]" class="el-icon-check icon-sty" @click="onLang(scope.row, item)"></span>
+          <span
+            v-if="scope.row['trans_' + item.language_code]"
+            class="el-icon-check icon-sty"
+            @click="onLang(scope.row, item)"
+          ></span>
           <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('操作')" width="260">
         <template slot-scope="scope">
-          <el-button class="btn-green" @click="editWarehouse(scope.row.id)">{{$t('修改仓库')}}</el-button>
-          <el-button class="btn-deep-purple" @click="positionAdd(scope.row.id, scope.row.warehouse_name)">{{$t('仓位管理')}}</el-button>
-          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{$t('删除')}}</el-button>
+          <el-button class="btn-green" @click="editWarehouse(scope.row.id)">{{
+            $t('修改仓库')
+          }}</el-button>
+          <el-button
+            class="btn-deep-purple"
+            @click="positionAdd(scope.row.id, scope.row.warehouse_name)"
+            >{{ $t('仓位管理') }}</el-button
+          >
+          <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -67,9 +106,6 @@
         </div>
       </template> -->
     </el-table>
-     <div class="sort-sty">*{{$t('拖拽行可以进行排序')}}
-       <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{$t('保存排序结果')}}</el-button>
-      </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -88,7 +124,7 @@ export default {
     AddBtn
   },
   mixins: [pagination],
-  data () {
+  data() {
     return {
       vipGroupList: [],
       tableLoading: false,
@@ -98,47 +134,49 @@ export default {
       countrySendData: []
     }
   },
-  created () {
+  created() {
     this.getList()
     this.getLanguageList() // 获取支持语言
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
-      this.$request.getWarehouseAddress({
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size
-      }).then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          // this.vipGroupList = res.data.map(item => {
-          //   let arr = item.support_countries.map(item => item.name)
-          //   return {
-          //     ...item,
-          //     enabled: Boolean(item.enabled),
-          //     countries: arr.join(' ')
-          //   }
-          // })
-          this.vipGroupList = res.data
-          this.countrySendData = [...res.data]
-          this.$nextTick(() => {
-            this.rowDrop()
-          })
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .getWarehouseAddress({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            // this.vipGroupList = res.data.map(item => {
+            //   let arr = item.support_countries.map(item => item.name)
+            //   return {
+            //     ...item,
+            //     enabled: Boolean(item.enabled),
+            //     countries: arr.join(' ')
+            //   }
+            // })
+            this.vipGroupList = res.data
+            this.countrySendData = [...res.data]
+            this.$nextTick(() => {
+              this.rowDrop()
+            })
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 修改开关
-    changeTransfer (event, enabled, id) {
-      console.log(typeof (event), '我是event')
+    changeTransfer(event, enabled, id) {
+      console.log(typeof event, '我是event')
       console.log(event, 'event')
       this.$request.warehouseEnabled(id, Number(event)).then(res => {
         if (res.ret) {
@@ -157,15 +195,16 @@ export default {
       })
     },
     // 修改仓库
-    editWarehouse (id) {
-      this.$router.push({ name: 'warehouseEdit',
+    editWarehouse(id) {
+      this.$router.push({
+        name: 'warehouseEdit',
         params: {
           id: id
-        } }
-      )
+        }
+      })
     },
     // 获取支持语言
-    getLanguageList () {
+    getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
@@ -173,20 +212,21 @@ export default {
       })
     },
     // 仓位管理
-    positionAdd (id, warehouseName) {
-      this.$router.push({ name: 'position',
+    positionAdd(id, warehouseName) {
+      this.$router.push({
+        name: 'position',
         params: {
           id: id,
           warehouseName: warehouseName
-        } }
-      )
+        }
+      })
     },
-    selectionChange (selection) {
-      this.deleteNum = selection.map(item => (item.id))
+    selectionChange(selection) {
+      this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除
-    deleteWarehouse (id) {
+    deleteWarehouse(id) {
       this.$confirm(this.$t('您真的要删除此仓库吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -211,7 +251,7 @@ export default {
       })
     },
     // 修改语言
-    onLang (line, lang) {
+    onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       // console.log(line['trans_' + lang.language_code])
@@ -220,7 +260,7 @@ export default {
       })
     },
     // 国家地区 行拖拽
-    rowDrop () {
+    rowDrop() {
       const tbody = document.querySelector('.country tbody')
       console.log(tbody, 'tbody')
       Sortable.create(tbody, {
@@ -233,7 +273,7 @@ export default {
       })
     },
     // 确定拖拽 国家地区
-    rowUpdate () {
+    rowUpdate() {
       // eslint-disable-next-line camelcase
       const ids = this.countrySendData.map(({ id, name }, index) => ({ id, index, name }))
       console.log(ids)
@@ -256,7 +296,7 @@ export default {
     }
   },
   computed: {
-    formatLangData () {
+    formatLangData() {
       return this.languageData.filter(item => item.language_code !== 'zh_CN')
     }
   }
@@ -264,6 +304,19 @@ export default {
 </script>
 <style lang="scss">
 .warehouse-container {
+  .headerList {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .searchGroup {
+      width: 27.1%;
+    }
+    .header-right {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
   .select-box {
     overflow: hidden;
   }

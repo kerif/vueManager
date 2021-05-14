@@ -1,52 +1,54 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('编辑客户') + this.userId + $t('的个人地址')" class="address-edit-dialog" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('编辑客户') + this.userId + $t('的个人地址')"
+    class="address-edit-dialog"
+    @close="clear"
+  >
     <el-form label-width="80" :model="form">
-    <el-row :gutter="20">
-      <el-col :span="10">
-         <el-form-item :label="'*' + $t('收件人')">
-          <el-input v-model="form.receiver_name"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="10">
-        <el-form-item :label="'*' + $t('国家/地区')">
-          <el-select
-            v-model="form.country_id"
-            filterable
-            class="country-select"
-            :placeholder="$t('请选择国家/地区')">
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" v-if="form.is_cn_address == 1">
-      <el-col :span="10">
-       <el-form-item :label="$t('省份')">
-          <el-input v-model="form.province"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="10">
-        <el-form-item :label="$t('区')">
-          <el-input v-model="form.district"></el-input>
-        </el-form-item>
-      </el-col>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item :label="'*' + $t('收件人')">
+            <el-input v-model="form.receiver_name"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="'*' + $t('国家/地区')">
+            <el-select
+              v-model="form.country_id"
+              filterable
+              class="country-select"
+              :placeholder="$t('请选择国家/地区')"
+            >
+              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
       </el-row>
-    <el-row :gutter="20">
-      <el-col :span="10">
-       <el-form-item :label="$t('微信号')">
-          <el-input v-model="form.wechat_id"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="10">
-        <el-form-item :label="$t('城市')">
-          <el-input v-model="form.city"></el-input>
-        </el-form-item>
-      </el-col>
+      <el-row :gutter="20" v-if="form.is_cn_address == 1">
+        <el-col :span="10">
+          <el-form-item :label="$t('省份')">
+            <el-input v-model="form.province"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="$t('区')">
+            <el-input v-model="form.district"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item :label="$t('微信号')">
+            <el-input v-model="form.wechat_id"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="$t('城市')">
+            <el-input v-model="form.city"></el-input>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="10">
@@ -98,15 +100,15 @@
       </el-row>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="submit">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 // import countryList from '@/lib/country'
 export default {
-  data () {
+  data() {
     return {
       form: {
         receiver_name: '',
@@ -132,7 +134,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.singleAddress(this.id).then(res => {
         if (res.ret) {
           this.form = res.data
@@ -154,7 +156,7 @@ export default {
         }
       })
     },
-    submit () {
+    submit() {
       if (this.form.country_id === '') {
         return this.$message.error(this.$t('请选择国家/地区'))
       } else if (this.form.receiver_name === '') {
@@ -180,7 +182,7 @@ export default {
       })
     },
     // 获取支持国家数据
-    searchCountry () {
+    searchCountry() {
       console.log('111')
       this.$request.countryLocation().then(res => {
         if (res.ret) {
@@ -193,9 +195,8 @@ export default {
         }
       })
     },
-    clear () {
-    },
-    init () {
+    clear() {},
+    init() {
       this.getList()
       this.searchCountry()
     }
@@ -208,15 +209,15 @@ export default {
 }
 .address-edit-dialog {
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .country-select {
     width: 100%;

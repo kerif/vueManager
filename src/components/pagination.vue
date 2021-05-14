@@ -10,7 +10,8 @@
       :page-sizes="[10, 20, 30, 50, 100, 200, 300]"
       :page-size="pageParams.size"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="pageParams.total">
+      :total="pageParams.total"
+    >
     </el-pagination>
   </div>
 </template>
@@ -25,15 +26,16 @@ export default {
       default: true
     }
   },
-  created () {
+  created() {
     this.init()
   },
   methods: {
-    init () {
+    init() {
       if (this.notNeedInitQuery) return
       const { query } = this.$route
       const keys = Object.keys(query)
       keys.forEach(key => {
+        // eslint-disable-next-line no-prototype-builtins
         if (this.pageParams.hasOwnProperty(key)) {
           if (key === 'page' || key === 'size') {
             this.pageParams[key] = Number(query[key])
@@ -43,15 +45,15 @@ export default {
         }
       })
     },
-    handlePageSizeChange (key, value) {
+    handlePageSizeChange(key, value) {
       if (this.notNeedInitQuery) return
       this.pageParams.handleQueryChange(key, value)
     },
-    handleSizeChange (size) {
+    handleSizeChange(size) {
       this.handlePageSizeChange('size', size)
       this.pageParams.handleSizeChange(size)
     },
-    handleCurrentChange (page) {
+    handleCurrentChange(page) {
       this.handlePageSizeChange('page', page)
       this.pageParams.handleCurrentChange(page)
     }
@@ -61,13 +63,14 @@ export default {
 <style lang="scss">
 .pagination-container {
   text-align: right;
-  .btn-prev, .btn-next {
+  .btn-prev,
+  .btn-next {
     padding: 0 10px !important;
   }
   .el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: #f5f5f5;
     color: black;
-    border: 1px solid #3540A5;
+    border: 1px solid #3540a5;
   }
 }
 </style>

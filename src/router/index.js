@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import interception from './interception'
 
-const loadonDemand = (path) => {
+const loadonDemand = path => {
   return () => import(/* webpackChunkName: "chunk" */ `@/views/${path}`)
 }
 

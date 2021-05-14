@@ -1,6 +1,6 @@
 import $t from './language'
 
-export const formatWeek = (value) => {
+export const formatWeek = value => {
   if (!value) return
   let date = new Date(value)
   let week = ''
@@ -31,25 +31,37 @@ export const formatWeek = (value) => {
   return `${value[1]}-${value[2]}${week}`
 }
 
-export const formatMonth = (value) => {
+export const formatMonth = value => {
   if (!value) return
   let month = value.split('-')[1]
   return `${month.replace(/^0/, '')}月`
 }
 
-export const getCheckedChild = (arr) => {
+export const getCheckedChild = arr => {
   let ret = []
   recArr(arr, ret)
   return ret
 }
 
-function recArr (arr, ret) {
+function recArr(arr, ret) {
   for (let i = 0; i < arr.length; i++) {
     const element = arr[i]
     if (element.child) {
-      recArr(element.child.map(item => ({ ...item, name: $t(item.name) })), ret)
+      recArr(
+        element.child.map(item => ({ ...item, name: $t(item.name) })),
+        ret
+      )
     } else if (element.enabled) {
       ret.push(element.id)
     }
   }
+}
+
+export const countryCallback = list => {
+  return list.map(item => ({
+    id: item.id,
+    name: item.name,
+    children: item.areas.length ? countryCallback(item.areas) : [],
+    leaf: item.areas.length ? '' : 'leaf'
+  }))
 }

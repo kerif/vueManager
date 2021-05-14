@@ -23,14 +23,14 @@ export default {
     LayoutHeader
   },
   computed: {
-    cachedViews () {
+    cachedViews() {
       return this.$store.state.tagsView.cachedViews
     },
-    isCollapse () {
+    isCollapse() {
       return this.$store.state.isCollapse
     },
-    key () {
-      return this.$route.name
+    key() {
+      return this.$route.path
     }
   }
 }
@@ -45,7 +45,7 @@ export default {
     position: relative;
   }
   .el-main > div {
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     padding: 20px;
   }
   .isCollapses {
@@ -53,7 +53,7 @@ export default {
     width: calc(100vw - 60px) !important;
   }
   .layout-nav {
-    padding: 15px 20px;
+    padding: 5px 20px;
     width: calc(100vw - 180px);
     box-sizing: border-box;
     position: relative;

@@ -1,60 +1,74 @@
 <template>
   <div class="recharge-list-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-        <el-date-picker
-          class="timeStyle"
-          v-model="timeList"
-          type="daterange"
-          @change="onTime"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd"
-          :range-separator="$t('至')"
-          :start-placeholder="$t('开始日期')"
-          :end-placeholder="$t('结束日期')">
-       </el-date-picker>
-       <!-- 充值方式 -->
-      <el-select v-model="type" @change="onVocherTypeChange" clearable class="changeVou" :placeholder="$t('请选择')">
-        <el-option
-          v-for="item in voucherChange"
-          :key="item.id"
-          :value="item.id"
-          :label="item.name">
+    <div class="order-list-search" v-show="hasFilterCondition">
+      <el-date-picker
+        size="mini"
+        class="timeStyle"
+        v-model="timeList"
+        type="daterange"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <!-- 充值方式 -->
+      <el-select size="mini" v-model="type" clearable class="changeVou" :placeholder="$t('请选择')">
+        <el-option v-for="item in voucherChange" :key="item.id" :value="item.id" :label="item.name">
         </el-option>
-       </el-select>
-       <!-- 状态 -->
-        <div class="chooseStatus">
-        <el-select v-model="status" @change="onShipStatus" clearable
-        :placeholder="$t('请选择')">
-          <el-option
-            v-for="item in statusList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.name">
+      </el-select>
+      <!-- 状态 -->
+      <div class="chooseStatus">
+        <el-select v-model="status" size="mini" clearable :placeholder="$t('请选择')">
+          <el-option v-for="item in statusList" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
+      </div>
+      <div class="submit">
+        <el-button type="primary" plain size="small" @click="submitForm">{{
+          $t('搜索')
+        }}</el-button>
+        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+      </div>
     </div>
-      </search-group>
+    <div class="searchGroup">
+      <el-button class="upload-sty" size="small" type="success" plain @click="uploadList">{{
+        $t('导出清单')
+      }}</el-button>
+      <div class="search-l">
+        <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
+        <add-btn @click.native="addVip">{{ $t('添加') }}</add-btn>
+      </div>
     </div>
-    <div class="select-box">
-      <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
-      <el-button class="upload-sty" @click="uploadList">{{$t('导出清单')}}</el-button>
-    </div>
-    <el-table :data="rechargeList" stripe border class="data-list"
-    v-loading="tableLoading" height="550">
+    <!--     <div class="select-box">
+    </div> -->
+    <el-table
+      :data="rechargeList"
+      stripe
+      border
+      class="data-list"
+      v-loading="tableLoading"
+      height="550"
+    >
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')">
         <template slot-scope="scope">
-          {{scope.row.user.id}}
+          {{ scope.row.user.id }}
         </template>
       </el-table-column>
       <!-- 状态 -->
       <el-table-column :label="$t('状态')">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{$t('待审核')}}</span>
-          <span v-if="scope.row.status === 1">{{$t('审核通过')}}</span>
-          <span v-if="scope.row.status === 2">{{$t('审核拒绝')}}</span>
+          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+          <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
         </template>
       </el-table-column>
       <!-- 充值方式 -->
@@ -63,9 +77,15 @@
       <!-- <el-table-column label="支付方式">
       </el-table-column> -->
       <!-- 支付金额 -->
-      <el-table-column :label="$t('支付金额') + this.localization.currency_unit" prop="amount"></el-table-column>
+      <el-table-column
+        :label="$t('支付金额') + this.localization.currency_unit"
+        prop="amount"
+      ></el-table-column>
       <!-- 确认金额 -->
-      <el-table-column :label="$t('确认金额') + this.localization.currency_unit" prop="confirm_amount"></el-table-column>
+      <el-table-column
+        :label="$t('确认金额') + this.localization.currency_unit"
+        prop="confirm_amount"
+      ></el-table-column>
       <!-- 第三方流水号 -->
       <el-table-column :label="$t('流水号')" prop="serial_no"></el-table-column>
       <!-- 支付时间 -->
@@ -77,8 +97,18 @@
       <!-- 操作 -->
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status === 0" class="btn-green optionBtn" @click="inviteWithdrawal(scope.row.id)">{{$t('审核')}}</el-button>
-          <el-button v-else class="btn-deep-purple optionBtn" @click="withdrawalDetail(scope.row.id)">{{$t('详情')}}</el-button>
+          <el-button
+            v-if="scope.row.status === 0"
+            class="btn-green optionBtn"
+            @click="inviteWithdrawal(scope.row.id)"
+            >{{ $t('审核') }}</el-button
+          >
+          <el-button
+            v-else
+            class="btn-deep-purple optionBtn"
+            @click="withdrawalDetail(scope.row.id)"
+            >{{ $t('详情') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -92,7 +122,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import AddBtn from '@/components/addBtn'
 export default {
-  data () {
+  data() {
     return {
       rechargeList: [],
       localization: {},
@@ -103,6 +133,7 @@ export default {
       type: '',
       voucherChange: [],
       status: '',
+      hasFilterCondition: false,
       statusList: [
         {
           id: 0,
@@ -126,7 +157,7 @@ export default {
     NlePagination,
     AddBtn
   },
-  created () {
+  created() {
     this.getList()
     this.getTypes()
     if (this.$route.query.serial_number) {
@@ -139,7 +170,7 @@ export default {
     }
   },
   methods: {
-    getList () {
+    getList() {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
@@ -167,7 +198,7 @@ export default {
       })
     },
     // 导出
-    uploadList () {
+    uploadList() {
       let params = {
         payment_type: this.type,
         status: this.status
@@ -195,21 +226,25 @@ export default {
       })
     },
     // 详情
-    withdrawalDetail (id) {
-      this.$router.push({ name: 'rechargeDetails',
+    withdrawalDetail(id) {
+      this.$router.push({
+        name: 'rechargeDetails',
         params: {
           id: id
-        } })
+        }
+      })
     },
     // 审核
-    inviteWithdrawal (id) {
-      this.$router.push({ name: 'rechargeReview',
+    inviteWithdrawal(id) {
+      this.$router.push({
+        name: 'rechargeReview',
         params: {
           id: id,
           state: 'review'
-        } })
+        }
+      })
     },
-    onTime (val) {
+    onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
       this.page_params.page = 1
@@ -217,12 +252,12 @@ export default {
       this.getList()
     },
     // 状态筛选
-    onShipStatus () {
+    onShipStatus() {
       this.page_params.handleQueryChange('status', this.status)
       this.getList()
     },
     // 跳转到审核
-    details (id, orderId, paymentType) {
+    details(id, orderId, paymentType) {
       console.log(paymentType, 'paymentType')
       console.log(orderId, 'orderId')
       if (paymentType === 0) {
@@ -234,12 +269,12 @@ export default {
       }
     },
     // 选择不同类型优惠券
-    onVocherTypeChange () {
+    onVocherTypeChange() {
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },
     // 获取下拉框
-    getTypes () {
+    getTypes() {
       this.$request.getRechargeType().then(res => {
         if (res.ret) {
           this.voucherChange = res.data
@@ -252,10 +287,22 @@ export default {
         }
       })
     },
-    addVip () {
+    addVip() {
       dialog({ type: 'rechargeAdd' }, () => {
         this.getList()
       })
+    },
+    // 重置表单
+    resetForm() {
+      this.timeList = []
+      this.type = ''
+      this.status = ''
+    },
+    // 提交表单
+    submitForm() {
+      this.onTime()
+      this.onVocherTypeChange()
+      this.onShipStatus()
     }
   }
 }
@@ -280,6 +327,48 @@ export default {
   .upload-sty {
     float: right;
     margin-right: 10px;
+  }
+  .searchGroup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .search-l {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .filter {
+        margin: 0 10px;
+      }
+    }
+  }
+  .order-list-search {
+    font-size: 14px;
+    background: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    overflow: hidden;
+    .changeTime {
+      display: inline-block;
+      margin-right: 20px;
+      .timeStyle {
+        margin-right: 10px;
+        width: 276px !important;
+      }
+      .shipments {
+        display: inline-block;
+      }
+    }
+    .chooseStatus {
+      // width: 150px;
+      display: inline-block;
+    }
+    .submit {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 10px;
+    }
   }
 }
 </style>

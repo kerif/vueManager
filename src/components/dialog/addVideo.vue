@@ -1,67 +1,86 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增') : $t('修改')" class="dialog-add-setting" width="35%"
-  @close="clear">
-    <el-form :model="video" ref="ruleForm" class="demo-ruleForm"
-    label-position="top" :rules="rules">
-        <!-- 标题 -->
-        <el-form-item :label="$t('标题')" prop="title">
-          <el-input v-model="video.title">
-          </el-input>
-        </el-form-item>
-        <!-- 介绍 -->
-        <el-form-item :label="$t('介绍')" prop="content">
-            <el-input type="textarea" v-model="video.content"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            :placeholder="$t('请输入备注')"></el-input>
-        </el-form-item>
-        <!-- 封面 -->
-        <el-form-item :label="$t('封面')" class="updateChe" prop="cover">
-            <span class="img-item" v-if="video.cover">
-            <img :src="$baseUrl.IMAGE_URL + video.cover" alt="" class="goods-img">
-            <span class="model-box"></span>
-            <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(video.cover)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg"></i>
-            </span>
-            </span>
-          <el-upload
-            v-show="!video.cover"
-            class="avatar-uploader"
-            action=""
-            list-type="picture-card"
-            :http-request="uploadBaleImg"
-            :show-file-list="false">
-            <i class="el-icon-plus">
-            </i>
-        </el-upload>
-        <div class="updateImg">{{$t('仅支持jpg, 宽度 300px、高度 225px')}}</div>
-    </el-form-item>
-    <!-- 视频 -->
-    <el-form-item class="updateChe" :label="$t('视频')" prop="video">
-      <img src="../../assets/gb.png" @click="video.video = ''" v-if="video.video" class="closed" />
-      <video-player
-        class='video-player vjs-custom-skin'
-        ref="videoPlayer" v-if="video.video"
-        :playsinline="true"
-        :options="playerOptions"
-      />
-      <el-upload
-        v-else
-        class="avatar-uploader"
-        list-type="picture-card"
-        action=""
-        :before-upload="beforeUploadVideo"
-        :http-request="uploadVideo"
-        :show-file-list="false"
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'add' ? $t('新增') : $t('修改')"
+    class="dialog-add-setting"
+    width="35%"
+    @close="clear"
+  >
+    <el-form
+      :model="video"
+      ref="ruleForm"
+      class="demo-ruleForm"
+      label-position="top"
+      :rules="rules"
+    >
+      <!-- 标题 -->
+      <el-form-item :label="$t('标题')" prop="title">
+        <el-input v-model="video.title"> </el-input>
+      </el-form-item>
+      <!-- 介绍 -->
+      <el-form-item :label="$t('介绍')" prop="content">
+        <el-input
+          type="textarea"
+          v-model="video.content"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          :placeholder="$t('请输入备注')"
+        ></el-input>
+      </el-form-item>
+      <!-- 封面 -->
+      <el-form-item :label="$t('封面')" class="updateChe" prop="cover">
+        <span class="img-item" v-if="video.cover">
+          <img :src="$baseUrl.IMAGE_URL + video.cover" alt="" class="goods-img" />
+          <span class="model-box"></span>
+          <span class="operat-box">
+            <i class="el-icon-zoom-in" @click="onPreview(video.cover)"></i>
+            <i class="el-icon-delete" @click="onDeleteImg"></i>
+          </span>
+        </span>
+        <el-upload
+          v-show="!video.cover"
+          class="avatar-uploader"
+          action=""
+          list-type="picture-card"
+          :http-request="uploadBaleImg"
+          :show-file-list="false"
         >
-        <i class="el-icon-plus">
-        </i>
-      </el-upload>
-      <div class="updateImg">{{$t('仅支持mp4, 视频最佳比例为：3：2 比例， 大小不超过30M')}}</div>
-      <el-progress :percentage="videoPrecentage" v-show="videoShow"></el-progress>
-    </el-form-item>
-    <!-- 是否显示 -->
-    <el-form-item :label="$t('是否显示')" prop="enabled">
+          <i class="el-icon-plus"> </i>
+        </el-upload>
+        <div class="updateImg">{{ $t('仅支持jpg, 宽度 300px、高度 225px') }}</div>
+      </el-form-item>
+      <!-- 视频 -->
+      <el-form-item class="updateChe" :label="$t('视频')" prop="video">
+        <img
+          src="../../assets/gb.png"
+          @click="video.video = ''"
+          v-if="video.video"
+          class="closed"
+        />
+        <video-player
+          class="video-player vjs-custom-skin"
+          ref="videoPlayer"
+          v-if="video.video"
+          :playsinline="true"
+          :options="playerOptions"
+        />
+        <el-upload
+          v-else
+          class="avatar-uploader"
+          list-type="picture-card"
+          action=""
+          :before-upload="beforeUploadVideo"
+          :http-request="uploadVideo"
+          :show-file-list="false"
+        >
+          <i class="el-icon-plus"> </i>
+        </el-upload>
+        <div class="updateImg">
+          {{ $t('仅支持mp4, 视频最佳比例为：3：2 比例， 大小不超过30M') }}
+        </div>
+        <el-progress :percentage="videoPrecentage" v-show="videoShow"></el-progress>
+      </el-form-item>
+      <!-- 是否显示 -->
+      <el-form-item :label="$t('是否显示')" prop="enabled">
         <el-switch
           v-model="video.enabled"
           :active-text="$t('开')"
@@ -69,13 +88,14 @@
           :inactive-value="0"
           :inactive-text="$t('关')"
           active-color="#13ce66"
-          inactive-color="gray">
+          inactive-color="gray"
+        >
         </el-switch>
-    </el-form-item>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -86,7 +106,7 @@ import { videoPlayer as VideoPlayer } from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 const videoUrl = 'https://storage.haiouoms.com/'
 export default {
-  data () {
+  data() {
     return {
       uploadToken: '',
       qnConfig: {
@@ -102,21 +122,11 @@ export default {
       },
       state: '',
       rules: {
-        title: [
-          { required: true, message: this.$t('请输入标题'), trigger: 'blur' }
-        ],
-        content: [
-          { required: true, message: this.$t('请输入内容'), trigger: 'blur' }
-        ],
-        cover: [
-          { required: true, message: this.$t('请输入封面'), trigger: 'blur' }
-        ],
-        video: [
-          { required: true, message: this.$t('请上传视频'), trigger: 'blur' }
-        ],
-        enabled: [
-          { required: true, message: this.$t('请选择是否显示'), trigger: 'blur' }
-        ]
+        title: [{ required: true, message: this.$t('请输入标题'), trigger: 'blur' }],
+        content: [{ required: true, message: this.$t('请输入内容'), trigger: 'blur' }],
+        cover: [{ required: true, message: this.$t('请输入封面'), trigger: 'blur' }],
+        video: [{ required: true, message: this.$t('请上传视频'), trigger: 'blur' }],
+        enabled: [{ required: true, message: this.$t('请选择是否显示'), trigger: 'blur' }]
       },
       tranAmount: '',
       playerOptions: {
@@ -147,14 +157,14 @@ export default {
     VideoPlayer
   },
   methods: {
-    getList () {
+    getList() {
       this.$request.getSingleVideo(this.id).then(res => {
         this.video = res.data
         this.playerOptions.sources = [{ src: videoUrl + res.data.video }]
       })
     },
-    beforeUploadImg (file) {
-      if (!(/^image/.test(file.type))) {
+    beforeUploadImg(file) {
+      if (!/^image/.test(file.type)) {
         this.$message.info(this.$t('请上传图片类型文件'))
         return false
       } else if (file.size > 1024 * 1024 * 2) {
@@ -163,56 +173,62 @@ export default {
       }
       return true
     },
-    confirm (formName) {
+    confirm(formName) {
       console.log(Number(this.video.enabled), 'enabled')
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
-          if (this.id) { // 编辑视频
-            this.$request.editVideo(this.id, {
-              ...this.video,
-              enabled: this.video.enabled
-            }).then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message.error(res.msg)
-              }
-            })
-          } else { // 新增视频
-            this.$request.addVideo({
-              ...this.video,
-              enabled: this.video.enabled
-            }).then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message.error(res.msg)
-              }
-            })
+          if (this.id) {
+            // 编辑视频
+            this.$request
+              .editVideo(this.id, {
+                ...this.video,
+                enabled: this.video.enabled
+              })
+              .then(res => {
+                if (res.ret) {
+                  this.$notify({
+                    type: 'success',
+                    title: this.$t('操作成功'),
+                    message: res.msg
+                  })
+                  this.show = false
+                  this.success()
+                } else {
+                  this.$message.error(res.msg)
+                }
+              })
+          } else {
+            // 新增视频
+            this.$request
+              .addVideo({
+                ...this.video,
+                enabled: this.video.enabled
+              })
+              .then(res => {
+                if (res.ret) {
+                  this.$notify({
+                    type: 'success',
+                    title: this.$t('操作成功'),
+                    message: res.msg
+                  })
+                  this.show = false
+                  this.success()
+                } else {
+                  this.$message.error(res.msg)
+                }
+              })
           }
         } else {
           return false
         }
       })
     },
-    clear () {
+    clear() {
       this.$refs['ruleForm'].resetFields()
       this.$refs['ruleForm'].clearValidate()
     },
     // 上传视频
-    uploadBaleImg (item) {
+    uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
@@ -227,23 +243,23 @@ export default {
       })
     },
     // 预览图片
-    onPreview (image) {
+    onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
     // 删除图片
-    onDeleteImg (type, index) {
+    onDeleteImg() {
       this.video.cover = ''
     },
     // 上传封面
-    onUpload (file) {
+    onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    init () {
+    init() {
       console.log(this.id, '我是接受id')
       if (this.state === 'edit') {
         this.getList()
@@ -251,7 +267,7 @@ export default {
       this.getUploadToken()
     },
     // 获取视频上传临时 token
-    getUploadToken () {
+    getUploadToken() {
       this.$request.getVideoUploadToken().then(res => {
         if (res.ret) {
           this.uploadToken = res.data
@@ -259,9 +275,9 @@ export default {
       })
     },
     // 上传视频之前判断视频格式
-    beforeUploadVideo (item) {
+    beforeUploadVideo(item) {
       console.log(this.conver(item.size))
-      if (!(/video\/mp4/.test(item.type))) {
+      if (!/video\/mp4/.test(item.type)) {
         this.$message.error(this.$t('请上传 mp4 格式的视频'))
         return false
       } else if (!this.conver(item.size)) {
@@ -270,13 +286,13 @@ export default {
       }
       return true
     },
-    conver (limit) {
+    conver(limit) {
       const size = (limit / (1024 * 1024)).toFixed(2)
       console.log(size, 'size')
       return size <= 30
     },
     // 上传视频
-    uploadVideo (video) {
+    uploadVideo(video) {
       const self = this
       let file = video.file
       let fileName = this.getVideoName() + file.name
@@ -294,16 +310,16 @@ export default {
       // 开始上传
       this.videoShow = true
       observable.subscribe({
-        next (res) {
+        next(res) {
           let precentage = Number.parseInt(res.total.percent)
           self.videoPrecentage = precentage
         },
-        error () {
+        error() {
           self.$message.error(this.$t('上传失败'))
           self.videoShow = false
           self.videoPrecentage = 0
         },
-        complete (res) {
+        complete(res) {
           self.videoShow = false
           self.videoPrecentage = 0
           if (res.status) {
@@ -314,7 +330,7 @@ export default {
       })
     },
     // 根据当前时间戳进行 base64 编码再与原文件名拼接生成文件资源名
-    getVideoName () {
+    getVideoName() {
       let time = new Date().getTime()
       if (window.btoa) {
         return window.btoa(time.toString())
@@ -375,9 +391,10 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
     &:hover {
-      .model-box, .operat-box {
+      .model-box,
+      .operat-box {
         opacity: 1;
-        transition: all .5s ease-in;
+        transition: all 0.5s ease-in;
       }
     }
   }
@@ -387,7 +404,7 @@ export default {
     position: absolute;
     left: 0;
     opacity: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   .operat-box {
     position: absolute;
@@ -407,15 +424,15 @@ export default {
     border-radius: 6px;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .updateImg {
     margin-top: 10px;
