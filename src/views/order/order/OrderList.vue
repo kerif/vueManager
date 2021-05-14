@@ -10,7 +10,7 @@
       <el-tab-pane :label="`${$t('已集包')} (${countData.packed || 0})`" name="3"></el-tab-pane>
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
-      <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
+      <el-tab-pane :label="$t('弃件包裹')" name="19"></el-tab-pane>
     </el-tabs>
     <order-list-search
       v-show="hasFilterCondition"
@@ -213,10 +213,10 @@
         ></el-table-column>
         <el-table-column :label="$t('提交时间')" prop="created_at" key="created_at" width="155">
         </el-table-column>
-        <el-table-column :label="$t('操作')" fixed="right" key="operator">
+        <el-table-column :label="$t('操作')" fixed="right" key="operator" width="116px">
           <template slot-scope="scope">
-            <el-dropdown size="medium">
-              <el-button type="text" size="mini">
+            <el-dropdown>
+              <el-button type="primary" plain>
                 {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">

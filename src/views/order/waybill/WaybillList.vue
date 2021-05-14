@@ -533,10 +533,16 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="activeName !== '0'" key="operator" :label="$t('操作')" fixed="right">
+        <el-table-column
+          v-if="activeName !== '0'"
+          key="operator"
+          :label="$t('操作')"
+          fixed="right"
+          width="116px"
+        >
           <template slot-scope="scope">
-            <el-dropdown size="medium">
-              <el-button type="text" size="mini">
+            <el-dropdown>
+              <el-button type="primary" plain>
                 {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
