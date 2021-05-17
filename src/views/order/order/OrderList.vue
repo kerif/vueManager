@@ -10,7 +10,7 @@
       <el-tab-pane :label="`${$t('已集包')} (${countData.packed || 0})`" name="3"></el-tab-pane>
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
-      <el-tab-pane :label="$t('弃件包裹')" name="19"></el-tab-pane>
+      <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
     </el-tabs>
     <order-list-search
       v-show="hasFilterCondition"
@@ -236,7 +236,7 @@
                 <el-dropdown-item @click.native="onLogs(scope.row.express_num)">
                   <span
                     v-if="
-                      ['2', '3', '4', '5'].includes(activeName) &&
+                      ['0', '2', '3', '4', '5'].includes(activeName) &&
                       [2, 3, 4, 5, 6].includes(scope.row.status)
                     "
                     >{{ $t('入库日志') }}</span
@@ -360,7 +360,7 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        status: this.activeName,
+        status: this.activeName === '6' ? 19 : this.activeName,
         keyword: this.searchFieldData.keyword
       }
       if (this.hasFilterCondition) {

@@ -1,21 +1,22 @@
 <template>
   <div class="block-container">
-    <!-- <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-      </search-group>
+    <div>
+      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
     </div>
-    <div class="select-box">
+    <!-- <div class="select-box">
       <add-btn router="addSingle">{{$t('添加')}}</add-btn>
     </div> -->
     <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
-      <!-- 全部 -->
-      <el-tab-pane :label="$t('全部')" name="院"></el-tab-pane>
-      <!-- 未开始 -->
-      <el-tab-pane :label="$t('未开始')" name="2"></el-tab-pane>
-      <!-- 进行中 -->
-      <el-tab-pane :label="$t('进行中')" name="3"></el-tab-pane>
-      <!-- 已失效 -->
-      <el-tab-pane :label="$t('已失效')" name="4"></el-tab-pane>
+      <!-- 原版官网 -->
+      <el-tab-pane :label="$t('原版官网')" name="5"></el-tab-pane>
+      <!-- 网站 -->
+      <el-tab-pane :label="$t('网站')" name="1"></el-tab-pane>
+      <!-- 首页 -->
+      <el-tab-pane :label="$t('首页')" name="2"></el-tab-pane>
+      <!-- 底栏 -->
+      <el-tab-pane :label="$t('底栏')" name="3"></el-tab-pane>
+      <!-- 关于我们 -->
+      <el-tab-pane :label="$t('关于我们')" name="4"></el-tab-pane>
     </el-tabs>
     <el-table
       :data="blockList"
@@ -24,13 +25,13 @@
       class="data-list"
       v-loading="tableLoading"
       @selection-change="selectionChange"
-      height="550"
+      height="calc(100vh - 270px)"
     >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 区块名 -->
       <el-table-column :label="$t('区块名')" prop="name"> </el-table-column>
       <!-- 说明 -->
-      <el-table-column :label="$t('说明')" prop="description"> </el-table-column>
+      <el-table-column :label="$t('区块说明')" prop="description"> </el-table-column>
       <el-table-column
         :label="item.name"
         v-for="item in formatLangData"
@@ -60,7 +61,7 @@
 </template>
 <script>
 // import dialog from '@/components/dialog'
-// import { SearchGroup } from '@/components/searchs'
+import { SearchGroup } from '@/components/searchs'
 // import NlePagination from '@/components/pagination'
 // import { pagination } from '@/mixin'
 // import AddBtn from '@/components/addBtn'
@@ -97,7 +98,7 @@ export default {
   // mixins: [pagination],
   name: 'blockList',
   components: {
-    // SearchGroup,
+    SearchGroup
     // NlePagination,
     // AddBtn
   },
@@ -211,21 +212,24 @@ export default {
     },
     onTabChange(tab) {
       switch (tab.name) {
-        case '1': // 全部
-          this.status = ''
+        case '5':
+          this.status = 5
           break
-        case '2': // 未开始
+        case '1':
           this.status = 1
           break
-        case '3': // 进行中
+        case '2':
           this.status = 2
           break
-        case '4': // 已失效
+        case '3':
           this.status = 3
           break
+        case '4':
+          this.status = 4
+          break
       }
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('page', 1)
+      // this.page_params.page = 1
+      // this.page_params.handleQueryChange('page', 1)
       this.page_params.handleQueryChange('activeName', tab.name)
       this.getList()
     }
@@ -235,7 +239,7 @@ export default {
 <style lang="scss">
 .block-container {
   .tabLength {
-    width: 350px !important;
+    width: 450px !important;
   }
   .changeVou {
     margin-left: 20px;
