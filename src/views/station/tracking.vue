@@ -65,7 +65,8 @@ export default {
       isEmpty: false
     }
   },
-  created() {
+  created() {},
+  activated() {
     console.log(this.$route.query, 'this.$route.query.orderSn')
     if (this.$route.query.orderSn) {
       this.expressNumber = this.$route.query.orderSn
