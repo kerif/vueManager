@@ -64,6 +64,7 @@
       class="data-list"
       border
       stripe
+      ref="table"
       :data="reviewData"
       height="550"
       v-loading="tableLoading"
@@ -121,6 +122,7 @@
       v-if="oderData.length && this.activeName === '1'"
       class="data-list"
       border
+      ref="table"
       stripe
       :data="oderData"
       v-loading="tableLoading"
@@ -283,6 +285,11 @@ export default {
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            setTimeout(() => {
+              this.$nextTick(() => {
+                this.$refs.table.doLayout()
+              })
+            }, 300)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -299,6 +306,11 @@ export default {
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            setTimeout(() => {
+              this.$nextTick(() => {
+                this.$refs.table.doLayout()
+              })
+            }, 300)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -415,6 +427,11 @@ export default {
   },
   created() {
     this.getPayment()
+  },
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
   },
   watch: {
     // 监听tab组件参数
