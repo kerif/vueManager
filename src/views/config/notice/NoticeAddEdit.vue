@@ -118,7 +118,7 @@ export default {
           // insertImg(url)
           editor.cmd.do(
             'insertHTML',
-            `<div class='img-wrap'><img class='add-img' src=${url} alt=''></div>`
+            `<div class='img-wrap'><img class='add-img' style="max-width:100%;" src=${url} alt=''></div>`
           )
         }
       }

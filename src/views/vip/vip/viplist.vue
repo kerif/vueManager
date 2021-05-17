@@ -30,10 +30,11 @@
       class="data-list"
       border
       stripe
+      ref="table"
       v-loading="tableLoading"
       :data="vipList"
       @selection-change="selectionChange"
-      height="650"
+      height="calc(100vh - 270px)"
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column :label="$t('序号')" type="index" :index="1" width="60"></el-table-column>
@@ -136,6 +137,11 @@ export default {
   mounted() {
     this.getList()
   },
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
+  },
   methods: {
     getList() {
       console.log('page', JSON.stringify(this.page_params))
@@ -154,6 +160,11 @@ export default {
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            setTimeout(() => {
+              this.$nextTick(() => {
+                this.$refs.table.doLayout()
+              })
+            }, 300)
             console.log('back', JSON.stringify(this.page_params))
           } else {
             this.$notify({
