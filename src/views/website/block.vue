@@ -7,6 +7,16 @@
     <div class="select-box">
       <add-btn router="addSingle">{{$t('添加')}}</add-btn>
     </div> -->
+    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
+      <!-- 全部 -->
+      <el-tab-pane :label="$t('全部')" name="院"></el-tab-pane>
+      <!-- 未开始 -->
+      <el-tab-pane :label="$t('未开始')" name="2"></el-tab-pane>
+      <!-- 进行中 -->
+      <el-tab-pane :label="$t('进行中')" name="3"></el-tab-pane>
+      <!-- 已失效 -->
+      <el-tab-pane :label="$t('已失效')" name="4"></el-tab-pane>
+    </el-tabs>
     <el-table
       :data="blockList"
       stripe
@@ -58,6 +68,7 @@ export default {
   data() {
     return {
       blockList: [],
+      activeName: '1',
       localization: {},
       tableLoading: false,
       timeList: [],
@@ -197,12 +208,35 @@ export default {
           id: id
         }
       })
+    },
+    onTabChange(tab) {
+      switch (tab.name) {
+        case '1': // 全部
+          this.status = ''
+          break
+        case '2': // 未开始
+          this.status = 1
+          break
+        case '3': // 进行中
+          this.status = 2
+          break
+        case '4': // 已失效
+          this.status = 3
+          break
+      }
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('page', 1)
+      this.page_params.handleQueryChange('activeName', tab.name)
+      this.getList()
     }
   }
 }
 </script>
 <style lang="scss">
 .block-container {
+  .tabLength {
+    width: 350px !important;
+  }
   .changeVou {
     margin-left: 20px;
   }
