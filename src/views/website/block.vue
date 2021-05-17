@@ -1,8 +1,5 @@
 <template>
   <div class="block-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-    </div>
     <!-- <div class="select-box">
       <add-btn router="addSingle">{{$t('添加')}}</add-btn>
     </div> -->
@@ -18,6 +15,21 @@
       <!-- 关于我们 -->
       <el-tab-pane :label="$t('关于我们')" name="4"></el-tab-pane>
     </el-tabs>
+    <div class="headerList">
+      <div class="import-list">
+        <el-button size="small">{{ $t('区块说明') }}</el-button>
+      </div>
+      <div class="headr-r">
+        <div class="searchGroup">
+          <search-group
+            :placeholder="$t('请输入关键字')"
+            v-model="keyword"
+            @keyup.enter.native="getList"
+            @click="getList"
+          ></search-group>
+        </div>
+      </div>
+    </div>
     <el-table
       :data="blockList"
       stripe
@@ -29,7 +41,8 @@
     >
       <el-table-column type="index" width="55" align="center"></el-table-column>
       <!-- 区块名 -->
-      <el-table-column :label="$t('区块名')" prop="name"> </el-table-column>
+      <el-table-column v-if="activeName === '5'" :label="$t('区块名')" prop="name">
+      </el-table-column>
       <!-- 说明 -->
       <el-table-column :label="$t('区块说明')" prop="description"> </el-table-column>
       <el-table-column
@@ -50,9 +63,23 @@
       <!-- 操作 -->
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button class="btn-deep-purple optionBtn" @click="editBlock(scope.row.id)">{{
+          <el-button
+            v-if="activeName === '5'"
+            class="btn-deep-purple optionBtn"
+            @click="editBlock(scope.row.id)"
+            >{{ $t('编辑') }}</el-button
+          >
+          <el-button v-if="scope.row.type === 1 && activeName !== '5'" class="btn-green">{{
             $t('编辑')
           }}</el-button>
+          <el-button v-if="scope.row.type === 2" class="btn-yellow">{{ $t('编辑图片') }}</el-button>
+          <el-button v-if="scope.row.type === 3" class="btn-blue-green">{{
+            $t('编辑颜色')
+          }}</el-button>
+          <el-button v-if="scope.row.type === 4" class="btn-deep-blue">{{
+            $t('编辑位置')
+          }}</el-button>
+          <el-button v-if="scope.row.type === 5" class="btn-pink">{{ $t('编辑链接') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -69,13 +96,14 @@ export default {
   data() {
     return {
       blockList: [],
-      activeName: '1',
+      activeName: '5',
       localization: {},
       tableLoading: false,
       timeList: [],
       begin_date: '',
       end_date: '',
       type: '',
+      keyword: '',
       section: '',
       deleteNum: [],
       languageData: [],
@@ -128,21 +156,19 @@ export default {
         }
       })
     },
+    goSearch() {},
     getList() {
+      this.blockList = []
       this.tableLoading = true
-      // let params = {
-      //   page: this.page_params.page,
-      //   size: this.page_params.size,
-      //   section: this.section
-      // }
-      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      this.$request.getBlocks().then(res => {
+      let params = {
+        part: this.activeName,
+        keyword: this.keyword
+      }
+      this.$request.getBlocks(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
           this.blockList = res.data
           this.localization = res.localization
-          // this.page_params.page = res.meta.current_page
-          // this.page_params.total = res.meta.total
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -230,7 +256,7 @@ export default {
       }
       // this.page_params.page = 1
       // this.page_params.handleQueryChange('page', 1)
-      this.page_params.handleQueryChange('activeName', tab.name)
+      // this.page_params.handleQueryChange('activeName', tab.name)
       this.getList()
     }
   }
@@ -255,6 +281,21 @@ export default {
   }
   .select-box {
     overflow: hidden;
+  }
+  .headerList {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .headr-r {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .searchGroup {
+        width: 25%;
+        margin-right: 10px;
+      }
+    }
   }
 }
 </style>

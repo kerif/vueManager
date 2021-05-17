@@ -1581,11 +1581,11 @@ exports.countryLocationIndex = params => {
   return $form.put('countries/sort-indexes', params)
 }
 // 更多配置 国家地区 获取二三级区域数据
-exports.superiorArea = (id) => {
+exports.superiorArea = id => {
   return $form.get(`countries/${id}/areas`)
 }
 // 国家地区 删除 二三级国家区域
-exports.deleteLOwLevel = (params) => {
+exports.deleteLOwLevel = params => {
   return $form.put('countries/areas/batch-delete', params)
 }
 // 国家地区 开启或关闭 二三级国家
@@ -1593,11 +1593,11 @@ exports.changeLowLeverCountry = (id, status) => {
   return $form.put(`countries/areas/${id}/status/${status}`)
 }
 // 国家地区 新建二三级区域
-exports.newAreas = (params) => {
+exports.newAreas = params => {
   return $form.post('countries/areas', params)
 }
 // 国家地区 获取 二三级区域 详情
-exports.detailsAreas = (id) => {
+exports.detailsAreas = id => {
   return $form.get(`countries/areas/${id}`)
 }
 // 国家地区 更新 二三级区域 详情
@@ -2531,8 +2531,8 @@ exports.updatePageLang = (id, params) => {
   return $form.put(`website-pages/${id}/translate-data`, params)
 }
 // 官网管理 区块管理 列表
-exports.getBlocks = () => {
-  return $form.get('website-blocks')
+exports.getBlocks = params => {
+  return $form.get('website-blocks', { params })
 }
 // 官网管理 区块管理 获取详细
 exports.getBlocksDetails = id => {
