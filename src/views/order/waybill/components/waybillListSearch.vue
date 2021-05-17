@@ -170,7 +170,7 @@ export default {
         { value: 'created_at', name: '订单提交时间' },
         { value: 'packed_at', name: '打包称重时间' },
         { value: 'paid_at', name: '支付时间' },
-        { value: 'shipped_at', name: '打包时间' },
+        { value: 'shipped_at', name: '发货时间' },
         { value: 'signed_at', name: '签收时间' }
       ],
       priceRangeOptions: [
