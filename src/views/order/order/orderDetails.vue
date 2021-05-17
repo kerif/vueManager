@@ -18,9 +18,9 @@
             </el-col>
             <!-- 包裹状态 -->
             <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{ $t('包裹状态') }}</span>
-              <span v-if="form.status === 3">{{ $t('已集包') }}</span
-              >&nbsp; <span v-if="form.status === 4 || form.status === 5">{{ $t('已发货') }}</span
+              <span class="leftWidth">{{ $t('包裹状态1') }}</span>
+              <span v-if="form.status === 3 || form.status === 4">{{ $t('已集包') }}</span
+              >&nbsp; <span v-if="form.status === 5">{{ $t('已发货') }}</span
               >&nbsp; <span v-if="form.status === 6">{{ $t('已收货') }}</span
               >&nbsp; <span v-if="form.status === 19">{{ $t('弃件') }}</span
               >&nbsp;
