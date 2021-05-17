@@ -26,6 +26,7 @@
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
+        <el-table-column :label="$t('自提点编号')" prop="code"></el-table-column>
         <el-table-column :label="$t('所属国家/地区')">
           <template slot-scope="scope">
             <span>{{ scope.row.country.name }}</span>
