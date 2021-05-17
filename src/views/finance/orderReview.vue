@@ -174,7 +174,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="noDate" v-else>{{ $t('暂无数据') }}</div>
+    <!-- <div class="noDate" v-else>{{ $t('暂无数据') }}</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
