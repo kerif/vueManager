@@ -236,7 +236,7 @@
                 <el-dropdown-item @click.native="onLogs(scope.row.express_num)">
                   <span
                     v-if="
-                      ['2', '3', '4', '5'].includes(activeName) &&
+                      ['0', '2', '3', '4', '5'].includes(activeName) &&
                       [2, 3, 4, 5, 6].includes(scope.row.status)
                     "
                     >{{ $t('入库日志') }}</span
