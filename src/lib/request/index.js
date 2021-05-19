@@ -388,6 +388,14 @@ exports.uploadRecharge = params => {
 exports.commissionsPick = params => {
   return $form.get('station-commissions', { params })
 }
+// 财务 自提点佣金结算 导出
+exports.uploadCommissions = params => {
+  return $form.get('station-commissions/export', { params })
+}
+// 财务 自提点佣金结算 导出 结算记录
+exports.uploadRecordsCommissions = (id, params) => {
+  return $form.get(`station-commissions/${id}/records/export`, { params })
+}
 // 财务 自提点佣金结算 结算记录
 exports.commissionsRecords = (id, params) => {
   return $form.get(`station-commissions/${id}/records`, { params })
@@ -2541,6 +2549,10 @@ exports.getBlocksDetails = id => {
 // 官网管理 区块管理 更新
 exports.updateBlocksDetails = (id, params) => {
   return $json.put(`website-blocks/${id}`, params)
+}
+// 官网管理 区块管理 更新编辑
+exports.updateBlocks = (id, params) => {
+  return $form.put(`website-blocks/${id}`, params)
 }
 // 区块管理 更新语言配置
 exports.updateBlockLang = (id, params) => {

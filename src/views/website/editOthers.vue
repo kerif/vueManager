@@ -210,32 +210,55 @@ export default {
       } else {
         this.params.image = []
       }
-      this.$request
-        .updateBlocksDetails(this.$route.params.id, {
-          image: this.params.image,
-          content: {
-            color1: this.params.color1,
-            color2: this.params.color2,
-            lat: this.params.lat,
-            lon: this.params.lon
-          }
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.tips,
-              type: 'success'
-            })
-            this.$router.go(-1)
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      if (this.type === 'image') {
+        this.$request
+          .updateBlocks(this.$route.params.id, {
+            content: this.params.image
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.tips,
+                type: 'success'
+              })
+              this.$router.go(-1)
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .updateBlocksDetails(this.$route.params.id, {
+            content: {
+              image: this.params.image,
+              color1: this.params.color1,
+              color2: this.params.color2,
+              lat: this.params.lat,
+              lon: this.params.lon
+            }
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.tips,
+                type: 'success'
+              })
+              this.$router.go(-1)
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      }
     }
   }
 }

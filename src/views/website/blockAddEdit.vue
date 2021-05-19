@@ -128,7 +128,7 @@ export default {
       if (!this.params.description) {
         return this.$message.error(this.$t('请输入标签'))
       }
-      this.$request.updateBlocksDetails(this.$route.params.id, this.params).then(res => {
+      this.$request.updateBlocks(this.$route.params.id, this.params).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),

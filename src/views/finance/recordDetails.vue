@@ -4,7 +4,23 @@
       <search-group v-model="page_params.keyword" @search="goSearch">
       </search-group>
     </div> -->
-    <h2>{{ this.$route.params.name }}{{ $t('结算记录') }}</h2>
+    <h2 style="display: inline-block">{{ this.$route.params.name }}{{ $t('结算记录') }}</h2>
+    <el-popover placement="right" class="timeStyle" v-model="visible">
+      <el-date-picker
+        v-model="timeList"
+        type="daterange"
+        @change="onTime"
+        format="yyyy-MM"
+        value-format="yyyy-MM"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <el-button slot="reference" class="upload-sty" size="small" type="success" plain>{{
+        $t('导出清单')
+      }}</el-button>
+    </el-popover>
     <el-table :data="rechargeList" stripe border class="data-list" v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 时间 -->
@@ -60,6 +76,7 @@ export default {
       localization: {},
       tableLoading: false,
       timeList: [],
+      visible: false,
       begin_date: '',
       end_date: '',
       type: '',
@@ -155,9 +172,31 @@ export default {
     onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      this.$request
+        .uploadRecordsCommissions(this.$route.params.id, {
+          begin_at: this.begin_date,
+          end_at: this.end_date
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+            this.visible = false
+            this.begin_date = ''
+            this.end_date = ''
+            this.timeList = []
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 状态筛选
     onShipStatus() {
@@ -219,6 +258,10 @@ export default {
   }
   .select-box {
     overflow: hidden;
+  }
+  .timeStyle {
+    margin-left: 10px;
+    width: 276px !important;
   }
 }
 </style>
