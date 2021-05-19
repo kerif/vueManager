@@ -9,11 +9,11 @@
         </el-row>
       </el-form-item>
       <!-- 编辑图片 -->
-      <el-form-item class="updateChe" v-if="type === 'image'">
-        <div v-if="activeName == 1">{{ $t('网站LOGO') }}</div>
+      <el-form-item :label="内容" class="updateChe" v-if="type === 'image'">
+        <!-- <div v-if="activeName == 1">{{ $t('网站LOGO') }}</div>
         <div v-if="activeName == 2">{{ $t('首页背景图') }}</div>
         <div v-if="activeName == 3">{{ $t('图片模块') }}</div>
-        <div v-if="activeName == 4">{{ $t('图片模块') }}</div>
+        <div v-if="activeName == 4">{{ $t('图片模块') }}</div> -->
         <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
           <span class="model-box"></span>
@@ -32,14 +32,6 @@
         >
           <i class="el-icon-plus"> </i> </el-upload
         ><br />
-        <span v-if="activeName == 1">{{ $t('只能上传jpg/png格式文件，建议尺寸：90px*20px') }}</span>
-        <span v-if="activeName == 2">{{
-          $t('只能上传jpg/png格式文件，建议尺寸：1920px*760px')
-        }}</span>
-        <span v-if="activeName == 3">{{ $t('图片建议尺寸1:1') }}</span>
-        <span v-if="activeName == 4">{{
-          $t('只能上传jpg/png格式文件，建议尺寸：300px*220px')
-        }}</span>
       </el-form-item>
       <!-- 编辑颜色1 -->
       <el-form-item :label="$t('主色调1')" class="updateChe" v-if="type === 'color'">
