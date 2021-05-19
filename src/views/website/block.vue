@@ -40,9 +40,6 @@
       height="calc(100vh - 270px)"
     >
       <el-table-column type="index" width="55" align="center"></el-table-column>
-      <!-- 区块名 -->
-      <el-table-column v-if="activeName === '5'" :label="$t('区块名')" prop="name">
-      </el-table-column>
       <!-- 说明 -->
       <el-table-column :label="$t('区块说明')" prop="description"> </el-table-column>
       <el-table-column
