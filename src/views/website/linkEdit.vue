@@ -18,7 +18,7 @@
       <el-form-item label="链接模块名称">
         <el-row>
           <el-col :span="10">
-            <el-input :placeholder="$t('请输入内容')" v-model="block_name"></el-input
+            <el-input :placeholder="$t('请输入内容')" v-model="content"></el-input
           ></el-col>
         </el-row>
       </el-form-item>
@@ -27,6 +27,7 @@
       </div>
       <el-table stripe border class="data-list" v-loading="tableLoading" :data="links">
         <el-table-column type="index" width="55" align="center"></el-table-column>
+        <el-table-column :label="$t('名称')" prop="name"></el-table-column>
         <el-table-column :label="$t('类型')">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('单页链接') }}</span>
@@ -41,7 +42,7 @@
             <el-button class="btn-deep-purple optionBtn" @click="editBlock(scope.row.id)">{{
               $t('编辑')
             }}</el-button>
-            <el-button class="btn-orangey-red optionBtn" @click="editBlock(scope.row.id)">{{
+            <el-button class="btn-light-red optionBtn" @click="deleteLink(scope.row.id)">{{
               $t('删除')
             }}</el-button>
           </template>
@@ -51,7 +52,7 @@
         <el-button
           type="primary"
           class="save-btn"
-          @click="saveNotice()"
+          @click="saveNotice"
           :loading="$store.state.btnLoading"
           >{{ $t('保存') }}</el-button
         >
@@ -66,7 +67,7 @@ export default {
   data() {
     return {
       description: '',
-      block_name: '',
+      content: '',
       links: [],
       tableLoading: false
     }
@@ -77,16 +78,50 @@ export default {
   created() {
     if (this.$route.params.id) {
       this.getList()
+      this.getLinkName()
     }
   },
   methods: {
     getList() {
       this.$request.websiteLink(this.$route.params.id).then(res => {
         if (res.ret) {
-          this.description = res.data.description
-          this.block_name = res.data.block_name
+          // this.description = res.data.description
+          // this.block_name = res.data.block_name
           this.links = res.data.links
         }
+      })
+    },
+    getLinkName() {
+      this.$request.getBlocksDetails(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.description = res.data.description
+          this.content = res.data.content
+        }
+      })
+    },
+    // 删除
+    deleteLink(id) {
+      this.$confirm(this.$t('您是否确认批量删除？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteLink(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 编辑链接
@@ -98,14 +133,14 @@ export default {
     },
     // 新增 链接
     addBlock() {
-      dialog({ type: 'linkAddEdit', state: 'add' }, () => {
+      dialog({ type: 'linkAddEdit', state: 'add', id: this.$route.params.id }, () => {
         this.getList()
       })
     },
     saveNotice() {
       this.$request
-        .updateWebsiteLink(this.$route.params.id, {
-          name: this.block_name
+        .updateBlocksDetails(this.$route.params.id, {
+          content: this.content
         })
         .then(res => {
           if (res.ret) {

@@ -2550,11 +2550,22 @@ exports.updateBlockLang = (id, params) => {
 exports.websiteLink = id => {
   return $form.get(`website-blocks/${id}/links`)
 }
-// 区块管理 更新 编辑链接数据
-exports.updateWebsiteLink = (id, params) => {
-  return $form.put(`website-blocks/${id}/links`, params)
+// 区块管理 获取 编辑链接详细
+exports.linkDetails = id => {
+  return $form.get(`website-blocks/links/${id}`)
 }
-
+// 区块管理 获取 更新 链接详细
+exports.updateLinkDetails = (id, params) => {
+  return $form.put(`website-blocks/links/${id}`, params)
+}
+// 区块管理 链接 删除
+exports.deleteLink = id => {
+  return $form.delete(`website-blocks/links/${id}`)
+}
+// 区块管理 获取 新建 链接
+exports.newLinkDetails = (id, params) => {
+  return $form.post(`website-blocks/${id}/links`, params)
+}
 // 区块管理 获取语言单条详细
 exports.blockLang = (id, params) => {
   return $form.get(`website-blocks/${id}`, { params })

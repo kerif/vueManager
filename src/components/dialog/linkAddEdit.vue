@@ -6,43 +6,101 @@
     @close="clear"
   >
     <el-form label-position="top" class="voucher-form" :model="ruleForm" ref="ruleForm">
-      <!-- 排序 -->
-      <el-form-item :label="$t('排序')">
-        <el-input
-          class="input-sty"
-          :placeholder="$t('请输入排序')"
-          v-model="ruleForm.sort_index"
-        ></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('链接类型')">
-        <el-select v-model="ruleForm.type" :placeholder="$t('链接类型')" @change="clearType">
-          <el-option v-for="item in columnType" :key="item.id" :label="item.name" :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <!-- 文章类型 -->
-      <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1">
-        <el-select
-          v-model="ruleForm.article_type"
-          :placeholder="$t('文章类型')"
-          @change="changeType"
-        >
-          <el-option v-for="item in articleType" :key="item.id" :label="item.name" :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <!-- 名称 -->
+          <el-form-item :label="$t('名称')">
+            <el-input :placeholder="$t('请输入名称')" v-model="ruleForm.linkName"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="$t('排序')">
+            <el-input :placeholder="$t('请输入排序')" v-model="ruleForm.sort_index"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item :label="$t('链接类型')">
+            <el-select v-model="ruleForm.type" :placeholder="$t('链接类型')" @change="clearType">
+              <el-option
+                v-for="item in columnType"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <!-- 文章类型 -->
+          <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1">
+            <el-select
+              v-model="ruleForm.article_type"
+              :placeholder="$t('文章类型')"
+              @change="changeType"
+            >
+              <el-option
+                v-for="item in articleType"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 栏目URL -->
+          <el-form-item :label="$t('URL')" v-if="ruleForm.type === 2">
+            <el-input
+              class="input-sty"
+              :placeholder="$t('请输入URL')"
+              v-model="ruleForm.value"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-form-item :label="$t('标题列表')" v-if="ruleForm.type === 1 || ruleForm.type === 3">
         <el-button class="btn-deep-blue" @click="chooseLine">{{ $t('选择标题') }}</el-button>
         <p>{{ ruleForm.title }}</p>
         <!-- <div class="display-line" v-if="this.lineName">
         </div> -->
       </el-form-item>
-      <!-- 栏目URL -->
-      <el-form-item :label="$t('栏目URL')" v-if="ruleForm.type === 2">
+      <el-row :gutter="20" v-if="ruleForm.type === 4">
+        <el-col :span="10">
+          <el-select v-model="onceType" :placeholder="$t('一级栏目')" @change="changecolumn">
+            <el-option
+              v-for="item in columnData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="10">
+          <el-select
+            v-model="secondType"
+            :placeholder="$t('二级栏目')"
+            :disabled="onceType === '' ? true : false"
+          >
+            <el-option
+              v-for="item in secondColumn"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-form-item v-for="item in stringData" :key="item.id" :label="item.name">
         <el-input
+          v-model="item.value"
+          type="textarea"
           class="input-sty"
-          :placeholder="$t('请输入栏目URL')"
-          v-model="ruleForm.value"
+          :rows="2"
+          :placeholder="$t('请输入内容')"
         ></el-input>
       </el-form-item>
     </el-form>
@@ -55,7 +113,6 @@
       :visible.sync="innerVisible"
       :title="$t('选择标题')"
       class="dialog-choose-title"
-      @close="clearTitle"
       width="60%"
       append-to-body
     >
@@ -97,9 +154,9 @@ export default {
         sn: ''
       },
       ruleForm: {
+        linkName: '',
         article_type: '',
         value: '',
-        parent_id: '',
         sort_index: '',
         title: ''
       },
@@ -126,22 +183,120 @@ export default {
       user: {},
       tableData: [],
       keyword: '',
-      articleType: []
+      articleType: [],
+      stringData: [],
+      columnData: [],
+      secondColumn: [],
+      onceType: '',
+      secondType: '',
+      columnId: ''
     }
   },
   components: {
     NlePagination
   },
   mixins: [pagination],
+  // computed: {
+  //   formatLangData() {
+  //     return this.stringData.filter(item => item.language_code !== 'zh_CN')
+  //   }
+  // },
   methods: {
+    // 获取全部支持语言
+    getString() {
+      this.$request.getString().then(res => {
+        if (res.ret) {
+          this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
+          console.log(this.stringData, '11111')
+          if (this.state === 'edit') {
+            this.getDetails()
+          }
+        }
+      })
+    },
+    // 获取详细数据
+    getDetails() {
+      this.$request.linkDetails(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm.article_type = res.data.article_type
+          this.ruleForm.linkName = res.data.name
+          this.ruleForm.value = res.data.value
+          this.ruleForm.sort_index = res.data.sort_index
+          this.ruleForm.title = res.data.title
+          this.stringData = this.stringData.map(item => {
+            const value = res.data.name_translations[item.language_code]
+            console.log(value, 'value')
+            return {
+              ...item,
+              value
+            }
+          })
+          console.log(this.stringData, 'this.stringData')
+        }
+      })
+    },
+    // 获取一级栏目
+    getColumn() {
+      this.$request.getWebsites().then(res => {
+        if (res.ret) {
+          this.columnData = res.data
+        }
+      })
+    },
+    // 获取二级栏目
+    getSecondColumn() {
+      this.$request.getSecondWebsites(this.onceType).then(res => {
+        if (res.ret) {
+          this.secondColumn = res.data
+        }
+      })
+    },
+    changecolumn() {
+      this.secondType = ''
+      if (this.onceType) {
+        this.getSecondColumn()
+      }
+    },
     // 切换栏目类型清除数据
     clearType() {
       this.ruleForm.article_type = ''
+      this.onceType = ''
+      this.secondType = ''
+      if (this.ruleForm.type === 4) {
+        this.getColumn()
+      }
     },
-    getName(val) {
-      console.log(val)
+    confirmShip() {
+      let translation = {}
+      this.stringData.forEach(item => {
+        translation[item.language_code] = item.value
+      })
+      console.log(translation, 'translation')
+      let method = this.state === 'add' ? 'newLinkDetails' : 'updateLinkDetails'
+      this.$request[method](this.id, {
+        ...this.ruleForm,
+        article_type: this.secondType ? this.secondType : this.onceType,
+        value: this.secondType ? this.secondType : this.onceType,
+        name: this.ruleForm.linkName,
+        name_translations: translation
+      }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        this.show = false
+      })
     },
-    confirmShip() {},
     getList() {
       if (this.ruleForm.type === 1) {
         this.getTitle()
@@ -214,24 +369,6 @@ export default {
       this.innerVisible = true
       this.show = false
       this.getList()
-      // if (!this.ruleForm.article_type) {
-      //   return this.$message.error(this.$t('请选择文章类型'))
-      // }
-      if (this.ruleForm.type === 1) {
-        // console.log(data, '我是路线data')
-        // this.ruleForm.title = data.title
-        console.log(this.lineName, 'this.lineName ')
-        // this.ruleForm.value = data.id
-        // dialog({ type: 'columnChoose', id: this.ruleForm.article_type, state: 'article' }, data => {
-        // })
-      } else if (this.ruleForm.type === 3) {
-        // dialog({ type: 'columnChoose', state: 'page' }, data => {
-        //   // console.log(data, '我是路线data')
-        // })
-        // this.ruleForm.title = data.title
-        // console.log(this.lineName, 'this.lineName ')
-        // this.ruleForm.value = data.id
-      }
     },
     // 创建发货单 取消
     returnShip() {
@@ -261,32 +398,17 @@ export default {
       this.ruleForm.title = this.user.title
       // console.log(this.lineName, 'this.lineName ')
       this.ruleForm.value = this.user.id
-      // this.$request.updateShipment(this.id, this.invoice.sn).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       type: 'success',
-      //       title: '操作成功',
-      //       message: res.msg
-      //     })
-      //     this.show = false
-      //     this.success()
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      //   this.show = false
-      // })
     },
     clear() {
-      this.ruleForm.warehouse_id = ''
-      this.ruleForm.name = ''
-      this.ruleForm.remark = ''
-      this.invoice.sn = ''
+      this.ruleForm.linkName = ''
+      this.ruleForm.article_type = ''
+      this.ruleForm.value = ''
+      this.invoice.sort_index = ''
+      this.invoice.title = ''
     },
     init() {
       this.getArticle()
+      this.getString()
     }
   }
 }
