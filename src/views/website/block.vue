@@ -96,6 +96,12 @@
           <el-button v-if="scope.row.type === 5" class="btn-pink" @click="editLink(scope.row.id)">{{
             $t('编辑链接')
           }}</el-button>
+          <el-button
+            @click="editString(scope.row.id)"
+            class="btn-deep-purple optionBtn"
+            v-if="[6, 7, 8].includes(scope.row.type) && activeName !== '5'"
+            >{{ $t('编辑') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -276,6 +282,15 @@ export default {
     editLink(id) {
       this.$router.push({
         name: 'editLink',
+        params: {
+          id
+        }
+      })
+    },
+    // 编辑字符串
+    editString(id) {
+      this.$router.push({
+        name: 'editString',
         params: {
           id
         }

@@ -9,11 +9,7 @@
         </el-row>
       </el-form-item>
       <!-- 编辑图片 -->
-      <el-form-item :label="内容" class="updateChe" v-if="type === 'image'">
-        <!-- <div v-if="activeName == 1">{{ $t('网站LOGO') }}</div>
-        <div v-if="activeName == 2">{{ $t('首页背景图') }}</div>
-        <div v-if="activeName == 3">{{ $t('图片模块') }}</div>
-        <div v-if="activeName == 4">{{ $t('图片模块') }}</div> -->
+      <el-form-item :label="$t('内容')" class="updateChe" v-if="type === 'image'">
         <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
           <span class="model-box"></span>
@@ -93,7 +89,7 @@ export default {
     return {
       description: '',
       params: {
-        image: [],
+        image: '',
         color1: null,
         color2: null,
         lon: '', // 经度
@@ -200,7 +196,7 @@ export default {
       if (this.baleImgList[0]) {
         this.params.image = this.baleImgList[0]
       } else {
-        this.params.image = []
+        this.params.image = ''
       }
       if (this.type === 'image') {
         this.$request

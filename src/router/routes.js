@@ -222,6 +222,8 @@ const blockLang = loadonDemand('website/blockLang')
 const editOthersBlocks = loadonDemand('website/editOthers')
 // 区块管理 编辑链接
 const editLink = loadonDemand('website/linkEdit')
+// 区块管理 编辑字符串
+const editString = loadonDemand('website/editString')
 // 官网管理 区块管理
 const blockManagement = loadonDemand('website/block')
 // 区块管理 编辑
@@ -1794,7 +1796,7 @@ export default [
             }
           },
           {
-            path: '/website/block',
+            path: '/website/block/:activeName',
             name: 'block',
             component: blockManagement,
             id: 1103,
@@ -1861,6 +1863,18 @@ export default [
               group: '官网管理',
               level: 3,
               name: '编辑链接',
+              parent: '/website/block'
+            }
+          },
+          {
+            path: '/website/block/editString/:id',
+            component: editString,
+            name: 'editString',
+            id: 1103,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '编辑',
               parent: '/website/block'
             }
           }
