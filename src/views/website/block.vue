@@ -157,9 +157,9 @@ export default {
   created() {
     this.getList()
     this.getLanguageList()
-    // if (this.$route.query.serial_number) {
-    //   this.page_params.keyword = this.$route.query.serial_number
-    // }
+    if (this.$route.query.active) {
+      this.activeName = this.$route.query.active
+    }
     // if (this.$route.query.times) {
     //   this.timeList = this.$route.query.times.split(' ')
     //   this.begin_date = this.timeList[0]
@@ -294,6 +294,7 @@ export default {
       })
     },
     onTabChange(tab) {
+      this.$router.push({ path: this.$route.path, query: { active: tab.name } })
       switch (tab.name) {
         case '5':
           this.status = 5

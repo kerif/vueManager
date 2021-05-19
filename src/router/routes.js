@@ -1796,7 +1796,7 @@ export default [
             }
           },
           {
-            path: '/website/block/:activeName',
+            path: '/website/block',
             name: 'block',
             component: blockManagement,
             id: 1103,
