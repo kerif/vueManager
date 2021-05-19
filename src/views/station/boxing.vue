@@ -64,7 +64,7 @@
                 <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
                 <el-table-column :label="$t('选择包裹数与件数')">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.package_count }}（{{ scope.row.numer }}）</span>
+                    <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('默认收货信息')">
