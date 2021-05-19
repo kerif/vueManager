@@ -66,20 +66,36 @@
           <el-button
             v-if="activeName === '5'"
             class="btn-deep-purple optionBtn"
-            @click="editBlock(scope.row.id)"
+            @click="editBlock(scope.row.id, 'origin')"
             >{{ $t('编辑') }}</el-button
           >
-          <el-button v-if="scope.row.type === 1 && activeName !== '5'" class="btn-green">{{
-            $t('编辑')
+          <el-button
+            @click="editBlock(scope.row.id, 'others')"
+            v-if="scope.row.type === 1 && activeName !== '5'"
+            class="btn-green"
+            >{{ $t('编辑') }}</el-button
+          >
+          <el-button
+            v-if="scope.row.type === 2"
+            class="btn-yellow"
+            @click="editFeatures(scope.row.id, 'image')"
+            >{{ $t('编辑图片') }}</el-button
+          >
+          <el-button
+            v-if="scope.row.type === 3"
+            class="btn-blue-green"
+            @click="editFeatures(scope.row.id, 'color')"
+            >{{ $t('编辑颜色') }}</el-button
+          >
+          <el-button
+            v-if="scope.row.type === 4"
+            class="btn-deep-blue"
+            @click="editFeatures(scope.row.id, 'location')"
+            >{{ $t('编辑位置') }}</el-button
+          >
+          <el-button v-if="scope.row.type === 5" class="btn-pink" @click="editLink(scope.row.id)">{{
+            $t('编辑链接')
           }}</el-button>
-          <el-button v-if="scope.row.type === 2" class="btn-yellow">{{ $t('编辑图片') }}</el-button>
-          <el-button v-if="scope.row.type === 3" class="btn-blue-green">{{
-            $t('编辑颜色')
-          }}</el-button>
-          <el-button v-if="scope.row.type === 4" class="btn-deep-blue">{{
-            $t('编辑位置')
-          }}</el-button>
-          <el-button v-if="scope.row.type === 5" class="btn-pink">{{ $t('编辑链接') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -184,13 +200,18 @@ export default {
     },
     // 修改语言
     onLang(line, lang) {
+      console.log(this.activeName, 'aci')
+      const status = this.activeName === '5' ? 'origin' : 'others'
       this.transCode = line['trans_' + lang.language_code]
       this.$router.push({
-        name: 'pageLang',
+        name: 'blockLang',
         params: {
           line: JSON.stringify(line),
           lang: JSON.stringify(lang),
           transCode: this.transCode
+        },
+        query: {
+          status
         }
       })
     },
@@ -228,11 +249,35 @@ export default {
       })
     },
     // 详情
-    editBlock(id) {
+    editBlock(id, status) {
       this.$router.push({
         name: 'blockEdit',
         params: {
-          id: id
+          id,
+          status
+        }
+      })
+    },
+    // 编辑图片、位置、颜色
+    editFeatures(id, type) {
+      const activeName = this.activeName
+      this.$router.push({
+        name: 'editOthersBlocks',
+        params: {
+          id,
+          type
+        },
+        query: {
+          activeName
+        }
+      })
+    },
+    // 编辑链接
+    editLink(id) {
+      this.$router.push({
+        name: 'editLink',
+        params: {
+          id
         }
       })
     },

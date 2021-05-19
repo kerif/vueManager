@@ -216,10 +216,18 @@ const singlePage = loadonDemand('website/singlePage')
 const addEditSingle = loadonDemand('website/addEditSingle')
 // 单页管理 多语言修改
 const pageLang = loadonDemand('website/pageLang')
+// 区块管理 多语言修改
+const blockLang = loadonDemand('website/blockLang')
+// 区块管理 编辑图片、颜色、位置
+const editOthersBlocks = loadonDemand('website/editOthers')
+// 区块管理 编辑链接
+const editLink = loadonDemand('website/linkEdit')
 // 官网管理 区块管理
 const blockManagement = loadonDemand('website/block')
 // 区块管理 编辑
 const blockEdit = loadonDemand('website/blockAddEdit')
+// 区块管理 编辑
+const otherWebsite = loadonDemand('website/otherWebsite')
 export default [
   {
     path: '/',
@@ -1797,7 +1805,7 @@ export default [
             }
           },
           {
-            path: '/website/block/edit/:id',
+            path: '/website/block/edit/:id/:status',
             name: 'blockEdit',
             component: blockEdit,
             id: 1103,
@@ -1805,6 +1813,54 @@ export default [
               level: 3,
               group: '官网管理',
               name: '编辑区块',
+              parent: '/website/block'
+            }
+          },
+          {
+            path: '/website/block/edit/:id',
+            name: 'otherWebsiteEdit',
+            component: otherWebsite,
+            id: 1103,
+            meta: {
+              level: 3,
+              group: '官网管理',
+              name: '编辑',
+              parent: '/website/block'
+            }
+          },
+          {
+            path: '/website/block/lang/add/:line/:lang/:transCode',
+            component: blockLang,
+            name: 'blockLang',
+            id: 1103,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '区块管理的翻译内容',
+              parent: '/website/block'
+            }
+          },
+          {
+            path: '/website/block/editOthers/:id/:type',
+            component: editOthersBlocks,
+            name: 'editOthersBlocks',
+            id: 1103,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '编辑',
+              parent: '/website/block'
+            }
+          },
+          {
+            path: '/website/block/editLink/:id',
+            component: editLink,
+            name: 'editLink',
+            id: 1103,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '编辑链接',
               parent: '/website/block'
             }
           }

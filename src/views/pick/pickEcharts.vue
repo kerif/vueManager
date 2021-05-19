@@ -183,6 +183,9 @@
               @click="payDetails(scope.row.id)"
               >{{ $t('支付详情') }}</el-button
             >
+            <el-button class="btn-yellow" @click="uploadList(scope.row.id)">{{
+              $t('导出清单')
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -603,6 +606,32 @@ export default {
     changeStatus() {
       this.page_params.handleQueryChange('status', this.status)
       this.packageList()
+    },
+    // 导出
+    uploadList(id) {
+      let params = {
+        status: this.status
+      }
+      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      this.begin && (params.begin = this.begin)
+      this.end && (params.end = this.end)
+      this.$request.uploadCommission(id, params).then(res => {
+        if (res.ret) {
+          // this.urlExcel = res.data.url
+          // window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 佣金报表数据
     packageList() {

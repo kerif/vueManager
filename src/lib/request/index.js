@@ -2540,7 +2540,24 @@ exports.getBlocksDetails = id => {
 }
 // 官网管理 区块管理 更新
 exports.updateBlocksDetails = (id, params) => {
-  return $form.put(`website-blocks/${id}`, params)
+  return $json.put(`website-blocks/${id}`, params)
+}
+// 区块管理 更新语言配置
+exports.updateBlockLang = (id, params) => {
+  return $form.put(`website-blocks/${id}/translate-data`, params)
+}
+// 区块管理 获取 编辑链接数据
+exports.websiteLink = id => {
+  return $form.get(`website-blocks/${id}/links`)
+}
+// 区块管理 更新 编辑链接数据
+exports.updateWebsiteLink = (id, params) => {
+  return $form.put(`website-blocks/${id}/links`, params)
+}
+
+// 区块管理 获取语言单条详细
+exports.blockLang = (id, params) => {
+  return $form.get(`website-blocks/${id}`, { params })
 }
 
 // 注册验证码
@@ -2582,6 +2599,10 @@ exports.packagePick = () => {
 // 自提点 自提点概览 获取佣金报表
 exports.commissionRecords = params => {
   return $form.get('station-statistics/commission-records', { params })
+}
+// 自提点 自提点概览 佣金报表 导出
+exports.uploadCommission = (id, params) => {
+  return $form.get(`station-statistics/commission-records/${id}/export`, { params })
 }
 // 自提点 自提点概览 佣金报表 确认提交
 exports.updateSettlement = (id, params) => {

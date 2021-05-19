@@ -176,7 +176,7 @@ export default {
         }
       })
     },
-    // 切换栏目类型清楚数据
+    // 切换栏目类型清除数据
     clearType() {
       this.ruleForm.article_type = ''
     },
