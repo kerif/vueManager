@@ -2466,6 +2466,10 @@ exports.finishOrder = id => {
 exports.getWebsites = params => {
   return $form.get('website-sections', { params })
 }
+// 栏目管理 开启或关闭
+exports.changeWebsites = (id, status) => {
+  return $form.put(`website-sections/${id}/status/${status}`)
+}
 // 官网管理 栏目管理 获取单条详情
 exports.getAloneWebsites = id => {
   return $form.get(`website-sections/${id}`)

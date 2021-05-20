@@ -1713,7 +1713,7 @@ export default [
             }
           },
           {
-            path: '/website/column/edit/:id',
+            path: '/website/column/edit/:id/:fixed',
             name: 'editColumn',
             component: addEditWebsite,
             id: 1101,

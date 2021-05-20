@@ -158,7 +158,8 @@ export default {
         article_type: '',
         value: '',
         sort_index: '',
-        title: ''
+        title: '',
+        type: ''
       },
       columnType: [
         {
@@ -220,19 +221,19 @@ export default {
         if (res.ret) {
           this.ruleForm.article_type = res.data.article_type
           this.ruleForm.linkName = res.data.name
-          this.ruleForm.value = res.data.value
+          this.ruleForm.value = Number(res.data.value)
+          console.log(typeof this.ruleForm.value, 'value')
           this.ruleForm.sort_index = res.data.sort_index
           this.ruleForm.title = res.data.title
           this.ruleForm.type = res.data.type
+          console.log(typeof res.data.type, 'type1111')
           this.stringData = this.stringData.map(item => {
             const value = res.data.name_translations[item.language_code]
-            console.log(value, 'value')
             return {
               ...item,
               value
             }
           })
-          console.log(this.stringData, 'this.stringData')
         }
       })
     },
@@ -260,6 +261,7 @@ export default {
     },
     // 切换栏目类型清除数据
     clearType() {
+      console.log(this.ruleForm.type, 'ruleForm.type')
       this.ruleForm.article_type = ''
       this.onceType = ''
       this.secondType = ''
@@ -268,6 +270,7 @@ export default {
       }
     },
     confirmShip() {
+      console.log(this.ruleForm.value, '提交的value')
       let translation = {}
       this.stringData.forEach(item => {
         translation[item.language_code] = item.value
@@ -277,7 +280,12 @@ export default {
       this.$request[method](this.id, {
         ...this.ruleForm,
         article_type: this.secondType ? this.secondType : this.onceType,
-        value: this.secondType ? this.secondType : this.onceType,
+        value:
+          this.ruleForm.type === 4
+            ? this.secondType
+              ? this.secondType
+              : this.onceType
+            : this.ruleForm.value,
         name: this.ruleForm.linkName,
         name_translations: translation
       }).then(res => {
@@ -407,6 +415,8 @@ export default {
       this.ruleForm.sort_index = ''
       this.ruleForm.title = ''
       this.user = {}
+      this.state = ''
+      this.ruleForm.type = ''
     },
     init() {
       this.getArticle()

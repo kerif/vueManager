@@ -144,7 +144,7 @@
           <!-- 品牌 -->
           <el-col :span="7">
             <span class="leftWidth">{{ $t('品牌') }}</span>
-            <span>{{ form.created_at }}</span>
+            <span>{{ form.brand_name }}</span>
           </el-col>
           <!-- 物品总价值 -->
           <el-col :span="7" :offset="1">
