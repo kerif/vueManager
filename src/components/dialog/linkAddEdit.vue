@@ -33,9 +33,9 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="10" v-if="ruleForm.type === 1">
           <!-- 文章类型 -->
-          <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1">
+          <el-form-item :label="$t('文章类型')">
             <el-select
               v-model="ruleForm.article_type"
               :placeholder="$t('文章类型')"
@@ -50,13 +50,11 @@
               </el-option>
             </el-select>
           </el-form-item>
+        </el-col>
+        <el-col :span="10" v-if="ruleForm.type === 2">
           <!-- 栏目URL -->
-          <el-form-item :label="$t('URL')" v-if="ruleForm.type === 2">
-            <el-input
-              class="input-sty"
-              :placeholder="$t('请输入URL')"
-              v-model="ruleForm.value"
-            ></el-input>
+          <el-form-item :label="$t('URL')">
+            <el-input :placeholder="$t('请输入URL')" v-model="ruleForm.value"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
