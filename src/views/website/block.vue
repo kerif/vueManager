@@ -155,11 +155,12 @@ export default {
     }
   },
   created() {
-    this.getList()
-    this.getLanguageList()
     if (this.$route.query.active) {
       this.activeName = this.$route.query.active
+      console.log(this.activeName, '1111')
     }
+    this.getList()
+    this.getLanguageList()
     // if (this.$route.query.times) {
     //   this.timeList = this.$route.query.times.split(' ')
     //   this.begin_date = this.timeList[0]
@@ -177,6 +178,7 @@ export default {
     },
     goSearch() {},
     getList() {
+      console.log(this.activeName, '我在传值')
       this.blockList = []
       this.tableLoading = true
       let params = {

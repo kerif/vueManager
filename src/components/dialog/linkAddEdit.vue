@@ -223,6 +223,7 @@ export default {
           this.ruleForm.value = res.data.value
           this.ruleForm.sort_index = res.data.sort_index
           this.ruleForm.title = res.data.title
+          this.ruleForm.type = res.data.type
           this.stringData = this.stringData.map(item => {
             const value = res.data.name_translations[item.language_code]
             console.log(value, 'value')
@@ -367,7 +368,7 @@ export default {
         return this.$message.error(this.$t('请选择文章类型'))
       }
       this.innerVisible = true
-      this.show = false
+      // this.show = false
       this.getList()
     },
     // 创建发货单 取消
@@ -403,8 +404,9 @@ export default {
       this.ruleForm.linkName = ''
       this.ruleForm.article_type = ''
       this.ruleForm.value = ''
-      this.invoice.sort_index = ''
-      this.invoice.title = ''
+      this.ruleForm.sort_index = ''
+      this.ruleForm.title = ''
+      this.user = {}
     },
     init() {
       this.getArticle()

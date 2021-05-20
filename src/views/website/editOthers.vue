@@ -28,6 +28,7 @@
         >
           <i class="el-icon-plus"> </i> </el-upload
         ><br />
+        <span>{{ $t('建议尺寸') }}&nbsp;{{ size }}</span>
       </el-form-item>
       <!-- 编辑颜色1 -->
       <el-form-item :label="$t('主色调1')" class="updateChe" v-if="type === 'color'">
@@ -88,6 +89,7 @@ export default {
   data() {
     return {
       description: '',
+      size: '',
       params: {
         image: '',
         color1: null,
@@ -150,6 +152,7 @@ export default {
       this.$request.getBlocksDetails(this.$route.params.id).then(res => {
         if (res.ret) {
           this.description = res.data.description
+          this.size = res.data.size
           res.data.content && (this.baleImgList[0] = res.data.content)
           this.params.lon = res.data.content && res.data.content.lon
           this.params.lat = res.data.content && res.data.content.lat
