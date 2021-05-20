@@ -219,7 +219,7 @@ export default {
         if (res.ret) {
           this.ruleForm.article_type = res.data.article_type
           this.ruleForm.linkName = res.data.name
-          this.ruleForm.value = Number(res.data.value)
+          this.ruleForm.value = res.data.type === 2 ? res.data.value : Number(res.data.value)
           console.log(typeof this.ruleForm.value, 'value')
           this.ruleForm.sort_index = res.data.sort_index
           this.ruleForm.title = res.data.title

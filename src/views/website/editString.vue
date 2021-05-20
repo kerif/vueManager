@@ -124,7 +124,7 @@ export default {
           content: {
             image: this.form.image,
             content1: this.form.content1,
-            content2: this.form.content2
+            content2: this.form.content2 ? this.form.content2 : ''
           }
         })
         .then(res => {

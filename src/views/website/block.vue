@@ -17,7 +17,7 @@
     </el-tabs>
     <div class="headerList">
       <div class="import-list">
-        <el-button size="small">{{ $t('区块说明') }}</el-button>
+        <el-button size="small" @click="blockDescription">{{ $t('区块说明') }}</el-button>
       </div>
       <div class="headr-r">
         <div class="searchGroup">
@@ -176,7 +176,16 @@ export default {
         }
       })
     },
-    goSearch() {},
+    blockDescription() {
+      const href = `${this.$baseUrl.IMAGE_URL}block-explain`
+      console.log(href, 'href')
+      // window.open(href)
+      // this.$request.blockExplain().then(res => {
+      //   if (res.ret) {
+      //     console.log(res, 'res')
+      //   }
+      // })
+    },
     getList() {
       console.log(this.activeName, '我在传值')
       this.blockList = []
