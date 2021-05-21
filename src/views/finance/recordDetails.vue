@@ -5,7 +5,7 @@
       </search-group>
     </div> -->
     <h2 style="display: inline-block">{{ this.$route.params.name }}{{ $t('结算记录') }}</h2>
-    <el-popover placement="right" class="timeStyle" v-model="visible">
+    <!-- <el-popover placement="right" class="timeStyle" v-model="visible">
       <el-date-picker
         v-model="timeList"
         type="daterange"
@@ -20,7 +20,7 @@
       <el-button slot="reference" class="upload-sty" size="small" type="success" plain>{{
         $t('导出清单')
       }}</el-button>
-    </el-popover>
+    </el-popover> -->
     <el-table :data="rechargeList" stripe border class="data-list" v-loading="tableLoading">
       <el-table-column type="index" :index="1"></el-table-column>
       <!-- 时间 -->
