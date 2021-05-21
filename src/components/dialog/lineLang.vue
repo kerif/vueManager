@@ -81,10 +81,9 @@ export default {
         if (valid) {
           this.$request.updateLineLang(this.line.id, this.ruleForm).then(res => {
             if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$message('操作成功'),
-                message: res.msg
+              this.$message({
+                message: res.msg,
+                type: 'success'
               })
               this.show = false
               this.success()
