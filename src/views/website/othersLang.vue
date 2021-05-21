@@ -1,5 +1,11 @@
 <template>
-  <div class="edit-string-container">
+  <div class="edit-others-lang">
+    <div class="lang-sty">
+      <p>
+        <span class="el-icon-warning icon-info"></span>
+        {{ $t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息') }}
+      </p>
+    </div>
     <el-form label-position="top">
       <el-form-item :label="$t('字符串1')">
         <el-row>
@@ -57,30 +63,47 @@ export default {
       form: {
         image: '',
         content1: '',
-        content2: ''
+        content2: '',
+        language: ''
       },
       baleImgList: [],
       type: '',
-      size: ''
+      size: '',
+      line: {
+        id: '',
+        name: ''
+      },
+      lang: {
+        name: '',
+        language_code: ''
+      },
+      transCode: ''
     }
   },
   created() {
-    if (this.$route.params.id) {
+    this.line = JSON.parse(this.$route.params.line)
+    this.lang = JSON.parse(this.$route.params.lang)
+    this.transCode = this.$route.params.transCode
+    this.form.language = this.lang.language_code
+    this.type = this.$route.query.type
+    if (this.transCode === 1) {
       this.getList()
-      this.type = this.$route.params.type
     }
   },
   methods: {
     getList() {
-      this.$request.getBlocksDetails(this.$route.params.id).then(res => {
-        if (res.ret) {
-          this.type = res.data.type
-          this.size = res.data.size
-          res.data.content.image && (this.baleImgList[0] = res.data.content.image)
-          this.form.content1 = res.data.content.content1
-          this.form.content2 = res.data.content.content2
-        }
-      })
+      this.$request
+        .blockLang(this.line.id, {
+          lang: this.form.language
+        })
+        .then(res => {
+          if (res.ret) {
+            this.size = res.data.size
+            res.data.content.image && (this.baleImgList[0] = res.data.content.image)
+            this.form.content1 = res.data.content.content1
+            this.form.content2 = res.data.content.content2
+          }
+        })
     },
     // 预览图片
     onPreview(image) {
@@ -123,12 +146,13 @@ export default {
         this.form.image = ''
       }
       this.$request
-        .updateBlocksDetails(this.$route.params.id, {
+        .updateBlockLang(this.line.id, {
           content: {
             image: this.form.image,
             content1: this.form.content1,
             content2: this.form.content2 ? this.form.content2 : ''
-          }
+          },
+          language: this.form.language
         })
         .then(res => {
           if (res.ret) {
@@ -152,8 +176,17 @@ export default {
 </script>
 
 <style lang="scss">
-.edit-string-container {
+.edit-others-lang {
   background-color: #fff !important;
+  .lang-sty {
+    line-height: 40px;
+    color: #e6a344;
+    // margin-left: 80px;
+    width: 66%;
+    p {
+      background-color: #fdf6ed;
+    }
+  }
   .input-sty {
     width: 50%;
   }

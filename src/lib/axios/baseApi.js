@@ -25,7 +25,7 @@ switch (hostName) {
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
       BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
       IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com',
-      BLOCK_URL: 'https://dev-api.haiouoms.com/block-explain'
+      BLOCK_URL: 'https://api-jiyun-v2.haiouoms/block-explain'
     }
     break
   // v2 正式服
@@ -33,7 +33,7 @@ switch (hostName) {
     baseUrl = {
       BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
       IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com',
-      BLOCK_URL: 'https://dev-api.haiouoms.com/block-explain'
+      BLOCK_URL: 'https://api-jiyun-v2.haiouoms.com/block-explain'
     }
     break
   // v2 国内正式服
@@ -41,7 +41,7 @@ switch (hostName) {
     baseUrl = {
       BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
       IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com',
-      BLOCK_URL: 'https://dev-api.haiouoms.com/block-explain'
+      BLOCK_URL: 'https://api-jiyun-v2.haiouoms.com/block-explain'
     }
     break
   // 测试服
@@ -49,7 +49,7 @@ switch (hostName) {
     baseUrl = {
       BASE_API_URL: 'https://jiyun-test-api-v2.nle-tech.com/api/admin',
       IMAGE_URL: 'https://jiyun-test-api-v2.nle-tech.com',
-      BLOCK_URL: 'https://dev-api.haiouoms.com/block-explain'
+      BLOCK_URL: 'https://jiyun-test-api-v2.nle-tech.com/block-explain'
     }
     break
   default:

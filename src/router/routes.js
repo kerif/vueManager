@@ -218,6 +218,8 @@ const addEditSingle = loadonDemand('website/addEditSingle')
 const pageLang = loadonDemand('website/pageLang')
 // 区块管理 多语言修改
 const blockLang = loadonDemand('website/blockLang')
+// 区块管理 其余的语言修改
+const blockOthersLang = loadonDemand('website/othersLang')
 // 区块管理 编辑图片、颜色、位置
 const editOthersBlocks = loadonDemand('website/editOthers')
 // 区块管理 编辑链接
@@ -1834,6 +1836,18 @@ export default [
             path: '/website/block/lang/add/:line/:lang/:transCode',
             component: blockLang,
             name: 'blockLang',
+            id: 1103,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '区块管理的翻译内容',
+              parent: '/website/block'
+            }
+          },
+          {
+            path: '/website/block/others/lang/add/:line/:lang/:transCode',
+            component: blockOthersLang,
+            name: 'blockOthersLang',
             id: 1103,
             meta: {
               group: '官网管理',

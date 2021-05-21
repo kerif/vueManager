@@ -52,9 +52,13 @@
           <span
             v-if="scope.row['trans_' + item.language_code]"
             class="el-icon-check icon-sty"
-            @click="onLang(scope.row, item)"
+            @click="onLang(scope.row, item, scope.row.type)"
           ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          <span
+            v-else
+            class="el-icon-plus icon-sty"
+            @click="onLang(scope.row, item, scope.row.type)"
+          ></span>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -213,21 +217,35 @@ export default {
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 修改语言
-    onLang(line, lang) {
-      console.log(this.activeName, 'aci')
-      const status = this.activeName === '5' ? 'origin' : 'others'
-      this.transCode = line['trans_' + lang.language_code]
-      this.$router.push({
-        name: 'blockLang',
-        params: {
-          line: JSON.stringify(line),
-          lang: JSON.stringify(lang),
-          transCode: this.transCode
-        },
-        query: {
-          status
-        }
-      })
+    onLang(line, lang, type) {
+      if (type === 6 || type === 7 || type === 8) {
+        this.transCode = line['trans_' + lang.language_code]
+        this.$router.push({
+          name: 'blockOthersLang',
+          params: {
+            line: JSON.stringify(line),
+            lang: JSON.stringify(lang),
+            transCode: this.transCode
+          },
+          query: {
+            type
+          }
+        })
+      } else {
+        const status = this.activeName === '5' ? 'origin' : 'others'
+        this.transCode = line['trans_' + lang.language_code]
+        this.$router.push({
+          name: 'blockLang',
+          params: {
+            line: JSON.stringify(line),
+            lang: JSON.stringify(lang),
+            transCode: this.transCode
+          },
+          query: {
+            status
+          }
+        })
+      }
     },
     // 删除
     deleteData() {
