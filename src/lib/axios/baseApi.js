@@ -12,7 +12,8 @@ switch (hostName) {
   case 'dev-admin.haiouoms.com':
     baseUrl = {
       BASE_API_URL: 'https://dev-api.haiouoms.com/api/admin',
-      IMAGE_URL: 'https://dev-api.haiouoms.com'
+      IMAGE_URL: 'https://dev-api.haiouoms.com',
+      BLOCK_URL: 'https://dev-api.haiouoms/block-explain'
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     break
@@ -23,28 +24,32 @@ switch (hostName) {
       // IMAGE_URL: 'https://api-jiyun.haiouoms.com'
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
       BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
-      IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com'
+      IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com',
+      BLOCK_URL: 'https://dev-api.haiouoms/block-explain'
     }
     break
   // v2 正式服
   case 'jiyun-v2.haiouoms.com':
     baseUrl = {
       BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
-      IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com'
+      IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com',
+      BLOCK_URL: 'https://dev-api.haiouoms/block-explain'
     }
     break
   // v2 国内正式服
   case 'jiyun-cn.haiouoms.com':
     baseUrl = {
       BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
-      IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com'
+      IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com',
+      BLOCK_URL: 'https://dev-api.haiouoms/block-explain'
     }
     break
   // 测试服
   case 'jiyun-test-admin-v2.nle-tech.com':
     baseUrl = {
       BASE_API_URL: 'https://jiyun-test-api-v2.nle-tech.com/api/admin',
-      IMAGE_URL: 'https://jiyun-test-api-v2.nle-tech.com'
+      IMAGE_URL: 'https://jiyun-test-api-v2.nle-tech.com',
+      BLOCK_URL: 'https://dev-api.haiouoms/block-explain'
     }
     break
   default:
@@ -54,7 +59,8 @@ switch (hostName) {
     // }
     baseUrl = {
       BASE_API_URL: 'https://dev-api.haiouoms.com/api/admin',
-      IMAGE_URL: 'https://dev-api.haiouoms.com'
+      IMAGE_URL: 'https://dev-api.haiouoms.com',
+      BLOCK_URL: 'https://dev-api.haiouoms/block-explain'
       // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
     }
     // baseUrl = {

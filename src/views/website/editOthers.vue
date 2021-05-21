@@ -99,7 +99,9 @@ export default {
       },
       type: '',
       baleImgList: [],
-      activeName: ''
+      activeName: '',
+      map: null,
+      marker: null
     }
   },
   created() {
@@ -129,6 +131,7 @@ export default {
       TMap.event.addListener(this.map, 'click', this.onPoint)
     }, // 选取地图上的点
     onPoint(e) {
+      console.log(e.latLng)
       console.log(e, 'eeee')
       this.params.lon = e.latLng.lng
       console.log(this.params.lon, 'params.lon')
@@ -154,10 +157,27 @@ export default {
           this.description = res.data.description
           this.size = res.data.size
           res.data.content && (this.baleImgList[0] = res.data.content)
-          this.params.lon = res.data.content && res.data.content.lon
-          this.params.lat = res.data.content && res.data.content.lat
           this.params.color1 = res.data.content && res.data.content.color1
           this.params.color2 = res.data.content && res.data.content.color2
+          if (res.data.content && res.data.content.lon) {
+            this.params.lat = res.data.content && res.data.content.lat
+            this.params.lon = res.data.content && res.data.content.lon
+            const point = new TMap.LatLng(this.params.lat, this.params.lon)
+            if (!this.marker) {
+              console.log('非marker')
+              console.log(this.params.lat, this.params.lon)
+              this.marker = new TMap.Marker({
+                position: point,
+                map: this.map
+              })
+            } else {
+              console.log('marker')
+              this.marker.setPosition(new TMap.LatLng(this.params.lat, this.params.lon))
+            }
+            this.$nextTick(() => {
+              this.map.panTo(point)
+            })
+          }
         }
       })
     },

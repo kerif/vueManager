@@ -177,9 +177,9 @@ export default {
       })
     },
     blockDescription() {
-      const href = `${this.$baseUrl.IMAGE_URL}block-explain`
+      const href = `${this.$baseUrl.BLOCK_URL}`
       console.log(href, 'href')
-      // window.open(href)
+      window.open(href)
       // this.$request.blockExplain().then(res => {
       //   if (res.ret) {
       //     console.log(res, 'res')
