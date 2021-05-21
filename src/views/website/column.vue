@@ -307,7 +307,7 @@ export default {
           row.orders = res.data.map(item => {
             return {
               ...item,
-              enabled: Boolean(item.enabled),
+              // enabled: Boolean(item.enabled),
               risk_warning_enabled: Boolean(item.risk_warning_enabled)
             }
           })
