@@ -37,7 +37,7 @@
       class="data-list"
       v-loading="tableLoading"
       ref="table"
-      height="calc(100vh - 270px)"
+      height="calc(100vh - 360px)"
       @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
