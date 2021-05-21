@@ -36,7 +36,8 @@
       border
       class="data-list"
       v-loading="tableLoading"
-      height="450"
+      ref="table"
+      height="calc(100vh - 270px)"
       @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -104,6 +105,11 @@ export default {
     NlePagination,
     AddBtn
   },
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
+  },
   created() {
     this.getList()
     this.getLanguageList()
@@ -138,6 +144,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
