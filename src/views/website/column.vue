@@ -28,6 +28,22 @@
             </el-table-column>
             <!-- 排序 -->
             <el-table-column :label="$t('排序')" prop="sort_index"> </el-table-column>
+            <!-- 状态 -->
+            <el-table-column :label="$t('状态')">
+              <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.enabled"
+                  @change="changeRules($event, scope.row.enabled, scope.row.id)"
+                  :active-text="$t('开')"
+                  :inactive-text="$t('关')"
+                  :active-value="1"
+                  :inactive-value="0"
+                  active-color="#13ce66"
+                  inactive-color="gray"
+                >
+                </el-switch>
+              </template>
+            </el-table-column>
             <el-table-column
               :label="item.name"
               v-for="item in formatLangData"
@@ -69,7 +85,24 @@
         <template slot-scope="scope">
           <span v-if="scope.row.type === 1">{{ $t('文章') }}</span>
           <span v-if="scope.row.type === 2">{{ $t('链接') }}</span>
-          <span v-if="scope.row.type === 3">{{ $t('首页') }}</span>
+          <span v-if="scope.row.type === 3">{{ $t('单页') }}</span>
+          <span v-if="scope.row.type === 4">{{ $t('文章列表') }}</span>
+        </template>
+      </el-table-column>
+      <!-- 状态 -->
+      <el-table-column :label="$t('状态')">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.enabled"
+            @change="changeRules($event, scope.row.enabled, scope.row.id)"
+            :active-text="$t('开')"
+            :inactive-text="$t('关')"
+            :active-value="1"
+            :inactive-value="0"
+            active-color="#13ce66"
+            inactive-color="gray"
+          >
+          </el-switch>
         </template>
       </el-table-column>
       <!-- 排序 -->
@@ -95,17 +128,23 @@
           <!-- 编辑 -->
           <el-button
             class="btn-dark-green btn-margin"
-            @click="editColumn(scope.row.id, scope.row.has_children)"
+            @click="editColumn(scope.row.id, scope.row.has_children, scope.row.is_fixed)"
             >{{ $t('编辑') }}</el-button
           >
           <!-- 风险提示 -->
-          <el-button class="btn-main" @click="addSecond(scope.row.id)">{{
-            $t('新增子栏目')
-          }}</el-button>
+          <el-button
+            v-if="scope.row.is_fixed !== 1"
+            class="btn-main"
+            @click="addSecond(scope.row.id)"
+            >{{ $t('新增子栏目') }}</el-button
+          >
           <!-- 删除 -->
-          <el-button class="btn-light-red btn-margin" @click="deleteData(scope.row.id)">{{
-            $t('删除')
-          }}</el-button>
+          <el-button
+            v-if="scope.row.is_fixed !== 1"
+            class="btn-light-red btn-margin"
+            @click="deleteData(scope.row.id)"
+            >{{ $t('删除') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -173,16 +212,34 @@ export default {
         })
     },
     // 编辑
-    editColumn(id, children) {
+    editColumn(id, children, fixed) {
       if (children === 1) {
         // 当存在子栏目时
         this.$router.push({ name: 'editFirstWeb', params: { id: id } })
       } else {
         this.$router.push({
           name: 'editColumn',
-          params: { id: id, children: children, state: 'first' }
+          params: { id: id, children: children, state: 'first', fixed: fixed }
         })
       }
+    },
+    // 开启或关闭
+    changeRules(event, enabled, id) {
+      this.$request.changeWebsites(id, event).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 新增子栏目
     addSecond(id) {

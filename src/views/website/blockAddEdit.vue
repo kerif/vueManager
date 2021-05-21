@@ -2,22 +2,29 @@
   <div class="block-edit-container">
     <el-form label-position="top">
       <!-- 标题 -->
-      <el-form-item :label="$t('区块名')">
+      <el-form-item :label="$t('区块名')" v-if="this.status === 'origin'">
         <el-row>
           <el-col :span="10"
             ><span>{{ params.name }}</span></el-col
           >
         </el-row>
       </el-form-item>
-      <el-form-item :label="$t('*标签')">
+      <el-form-item :label="$t('*标签')" v-if="this.status === 'origin'">
         <el-row>
           <el-col :span="10"
             ><el-input :placeholder="$t('请输入标签')" v-model="params.description"></el-input
           ></el-col>
         </el-row>
       </el-form-item>
+      <el-form-item :label="$t('区块说明')" v-if="this.status === 'others'">
+        <el-row>
+          <el-col :span="10">
+            <span>{{ params.description }}</span>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 区块详情 -->
-      <el-form-item :label="$t('*区块详情')">
+      <el-form-item :label="this.status === 'origin' ? $t('区块详情') : $t('内容')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>
@@ -47,7 +54,8 @@ export default {
         content: '',
         description: ''
       },
-      editor: null
+      editor: null,
+      status: ''
     }
   },
   mounted() {
@@ -97,6 +105,8 @@ export default {
   created() {
     if (this.$route.params.id) {
       this.getList()
+      this.status = this.$route.params.status
+      console.log(this.status, 'status')
     }
   },
   methods: {
@@ -118,7 +128,7 @@ export default {
       if (!this.params.description) {
         return this.$message.error(this.$t('请输入标签'))
       }
-      this.$request.updateBlocksDetails(this.$route.params.id, this.params).then(res => {
+      this.$request.updateBlocks(this.$route.params.id, this.params).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),

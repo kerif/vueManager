@@ -1,5 +1,22 @@
 <template>
   <div class="self-settlement-container">
+    <!-- <el-popover placement="right" width="400" v-model="visible">
+      <el-date-picker
+        class="timeStyle"
+        v-model="timeList"
+        type="daterange"
+        @change="onTime"
+        format="yyyy-MM"
+        value-format="yyyy-MM"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <el-button slot="reference" class="upload-sty" size="small" type="success" plain>{{
+        $t('导出清单')
+      }}</el-button>
+    </el-popover> -->
     <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch">
         <!-- <el-date-picker
@@ -113,6 +130,7 @@ export default {
       end_date: '',
       type: '',
       voucherChange: [],
+      visible: false,
       status: '',
       statusList: [
         {
@@ -198,9 +216,35 @@ export default {
     onTime(val) {
       this.begin_date = val ? val[0] : ''
       this.end_date = val ? val[1] : ''
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      this.getList()
+      // this.page_params.keyword && (params.keyword = this.page_params.keyword)
+      // // 已入库
+      // this.begin_date && (params.begin_date = this.begin_date)
+      // this.end_date && (params.end_date = this.end_date)
+      this.$request
+        .uploadCommissions({
+          begin_at: this.begin_date,
+          end_at: this.end_date
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.visible = false
+            this.begin_date = ''
+            this.end_date = ''
+            this.timeList = []
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 状态筛选
     onShipStatus() {
@@ -269,6 +313,10 @@ export default {
   }
   .select-box {
     overflow: hidden;
+  }
+  .top-button {
+    text-align: right;
+    margin-top: 10px;
   }
 }
 </style>

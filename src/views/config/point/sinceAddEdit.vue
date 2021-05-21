@@ -5,7 +5,15 @@
         <el-row>
           <el-col :span="10">
             <div>{{ $t('*自提点名称') }}</div>
-            <el-input :placeholder="$t('请输入内容')" v-model="form.name"></el-input>
+            <el-input :placeholder="$t('请输入自提点名称')" v-model="form.name"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
+        <el-row>
+          <el-col :span="10">
+            <div>{{ $t('自提点编号') }}</div>
+            <el-input :placeholder="$t('请输入自提点编号')" v-model="form.code"></el-input>
           </el-col>
         </el-row>
       </el-form-item>
@@ -269,6 +277,7 @@ export default {
     return {
       form: {
         name: '',
+        code: '',
         country_id: '',
         area_id: '',
         sub_area_id: '',
@@ -407,6 +416,7 @@ export default {
         // this.form = res.data
         this.form.country_id = res.data.country_id
         this.form.name = res.data.name
+        this.form.code = res.data.code
         this.form.announcement = res.data.announcement
         this.form.opening_hours = res.data.opening_hours
         this.form.edit_notice_jurisdiction = res.data.edit_notice_jurisdiction

@@ -100,6 +100,7 @@ import buyingService from './buyingService.vue'
 import alertSettings from './alertSettings.vue'
 import purchaseHistory from './purchaseHistory.vue'
 import superiorAddEdit from './superiorAddEdit.vue'
+import linkAddEdit from './linkAddEdit.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -200,6 +201,7 @@ const BuyingServiceController = Vue.extend(buyingService)
 const AlertSettingsController = Vue.extend(alertSettings)
 const PurchaseHistoryController = Vue.extend(purchaseHistory)
 const SuperiorAddEditController = Vue.extend(superiorAddEdit)
+const LinkAddEditController = Vue.extend(linkAddEdit)
 
 const mixin = {
   data() {
@@ -897,6 +899,13 @@ function initInstance(type) {
     // 配置 更多配置 编辑 新增国家二三级
     case 'superiorAddEdit':
       instance = new SuperiorAddEditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 区块管理 编辑 新增 链接
+    case 'linkAddEdit':
+      instance = new LinkAddEditController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

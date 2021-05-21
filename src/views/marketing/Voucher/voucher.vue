@@ -9,7 +9,6 @@
       <el-tab-pane :label="$t('进行中')" name="3"></el-tab-pane>
       <!-- 已失效 -->
       <el-tab-pane :label="$t('已失效')" name="4"></el-tab-pane>
-      <!-- v-if="oderData.length" -->
     </el-tabs>
     <div class="" style="overflow: hidden">
       <add-btn router="addVoucher">{{ $t('添加') }}</add-btn>

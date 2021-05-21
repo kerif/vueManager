@@ -388,6 +388,14 @@ exports.uploadRecharge = params => {
 exports.commissionsPick = params => {
   return $form.get('station-commissions', { params })
 }
+// 财务 自提点佣金结算 导出
+exports.uploadCommissions = params => {
+  return $form.get('station-commissions/export', { params })
+}
+// 财务 自提点佣金结算 导出 结算记录
+exports.uploadRecordsCommissions = (id, params) => {
+  return $form.get(`station-commissions/${id}/records/export`, { params })
+}
 // 财务 自提点佣金结算 结算记录
 exports.commissionsRecords = (id, params) => {
   return $form.get(`station-commissions/${id}/records`, { params })
@@ -1581,11 +1589,11 @@ exports.countryLocationIndex = params => {
   return $form.put('countries/sort-indexes', params)
 }
 // 更多配置 国家地区 获取二三级区域数据
-exports.superiorArea = (id) => {
+exports.superiorArea = id => {
   return $form.get(`countries/${id}/areas`)
 }
 // 国家地区 删除 二三级国家区域
-exports.deleteLOwLevel = (params) => {
+exports.deleteLOwLevel = params => {
   return $form.put('countries/areas/batch-delete', params)
 }
 // 国家地区 开启或关闭 二三级国家
@@ -1593,11 +1601,11 @@ exports.changeLowLeverCountry = (id, status) => {
   return $form.put(`countries/areas/${id}/status/${status}`)
 }
 // 国家地区 新建二三级区域
-exports.newAreas = (params) => {
+exports.newAreas = params => {
   return $form.post('countries/areas', params)
 }
 // 国家地区 获取 二三级区域 详情
-exports.detailsAreas = (id) => {
+exports.detailsAreas = id => {
   return $form.get(`countries/areas/${id}`)
 }
 // 国家地区 更新 二三级区域 详情
@@ -2458,6 +2466,10 @@ exports.finishOrder = id => {
 exports.getWebsites = params => {
   return $form.get('website-sections', { params })
 }
+// 栏目管理 开启或关闭
+exports.changeWebsites = (id, status) => {
+  return $form.put(`website-sections/${id}/status/${status}`)
+}
 // 官网管理 栏目管理 获取单条详情
 exports.getAloneWebsites = id => {
   return $form.get(`website-sections/${id}`)
@@ -2531,8 +2543,8 @@ exports.updatePageLang = (id, params) => {
   return $form.put(`website-pages/${id}/translate-data`, params)
 }
 // 官网管理 区块管理 列表
-exports.getBlocks = () => {
-  return $form.get('website-blocks')
+exports.getBlocks = params => {
+  return $form.get('website-blocks', { params })
 }
 // 官网管理 区块管理 获取详细
 exports.getBlocksDetails = id => {
@@ -2540,7 +2552,39 @@ exports.getBlocksDetails = id => {
 }
 // 官网管理 区块管理 更新
 exports.updateBlocksDetails = (id, params) => {
+  return $json.put(`website-blocks/${id}`, params)
+}
+// 官网管理 区块管理 更新编辑
+exports.updateBlocks = (id, params) => {
   return $form.put(`website-blocks/${id}`, params)
+}
+// 区块管理 更新语言配置
+exports.updateBlockLang = (id, params) => {
+  return $form.put(`website-blocks/${id}/translate-data`, params)
+}
+// 区块管理 获取 编辑链接数据
+exports.websiteLink = id => {
+  return $form.get(`website-blocks/${id}/links`)
+}
+// 区块管理 获取 编辑链接详细
+exports.linkDetails = id => {
+  return $form.get(`website-blocks/links/${id}`)
+}
+// 区块管理 获取 更新 链接详细
+exports.updateLinkDetails = (id, params) => {
+  return $form.put(`website-blocks/links/${id}`, params)
+}
+// 区块管理 链接 删除
+exports.deleteLink = id => {
+  return $form.delete(`website-blocks/links/${id}`)
+}
+// 区块管理 获取 新建 链接
+exports.newLinkDetails = (id, params) => {
+  return $form.post(`website-blocks/${id}/links`, params)
+}
+// 区块管理 获取语言单条详细
+exports.blockLang = (id, params) => {
+  return $form.get(`website-blocks/${id}`, { params })
 }
 
 // 注册验证码
@@ -2582,6 +2626,10 @@ exports.packagePick = () => {
 // 自提点 自提点概览 获取佣金报表
 exports.commissionRecords = params => {
   return $form.get('station-statistics/commission-records', { params })
+}
+// 自提点 自提点概览 佣金报表 导出
+exports.uploadCommission = (id, params) => {
+  return $form.get(`station-statistics/commission-records/${id}/export`, { params })
 }
 // 自提点 自提点概览 佣金报表 确认提交
 exports.updateSettlement = (id, params) => {

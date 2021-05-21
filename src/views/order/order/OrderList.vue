@@ -202,15 +202,8 @@
           width="155"
           prop="in_storage_at"
           key="in_storage_at"
-          v-if="activeName === '2'"
+          v-if="activeName === '2' || activeName === '3'"
         ></el-table-column>
-        <!-- <el-table-column
-          :label="$t('弃件时间')"
-          width="155"
-          prop="invalid_at"
-          key="invalid_at"
-          v-if="activeName === '3'"
-        ></el-table-column> -->
         <el-table-column :label="$t('提交时间')" prop="created_at" key="created_at" width="155">
         </el-table-column>
         <el-table-column :label="$t('操作')" fixed="right" key="operator" width="116px">
@@ -344,7 +337,7 @@ export default {
     getCounts() {
       this.$request
         .getOrderCounts({
-          keyword: this.page_params.keyword
+          keyword: this.searchFieldData.keyword
         })
         .then(res => {
           if (res.ret) {

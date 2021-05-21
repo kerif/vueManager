@@ -25,7 +25,6 @@
         <el-radio v-model="user.source" :label="2">{{ $t('API') }}</el-radio>
       </el-form-item>
       <el-form-item v-for="item in stringData" :key="item.id" :label="item.name">
-        <!-- <span></span> -->
         <el-input
           v-model="item.value"
           type="textarea"

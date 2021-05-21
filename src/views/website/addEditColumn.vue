@@ -12,6 +12,7 @@
       <el-form-item :label="$t('排序')">
         <el-input
           class="input-sty"
+          :disabled="fixed === 1 ? true : false"
           :placeholder="$t('请输入排序')"
           v-model="ruleForm.sort_index"
         ></el-input>
@@ -46,7 +47,12 @@
         </el-upload>
       </el-form-item>
       <el-form-item :label="$t('栏目类型')">
-        <el-select v-model="ruleForm.type" :placeholder="$t('栏目类型')" @change="clearType">
+        <el-select
+          v-model="ruleForm.type"
+          :placeholder="$t('栏目类型')"
+          @change="clearType"
+          :disabled="fixed === 1 ? true : false"
+        >
           <el-option v-for="item in columnType" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
@@ -128,6 +134,8 @@ export default {
     this.getArticle()
     if (this.$route.params.id) {
       this.getList()
+      this.fixed = this.$route.params.fixed
+      console.log(this.fixed, 'this.fixed')
     }
     if (this.$route.params.state === 'second') {
       this.getParent()
@@ -176,7 +184,7 @@ export default {
         }
       })
     },
-    // 切换栏目类型清楚数据
+    // 切换栏目类型清除数据
     clearType() {
       this.ruleForm.article_type = ''
     },
