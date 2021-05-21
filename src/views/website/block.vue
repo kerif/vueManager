@@ -77,26 +77,29 @@
             >{{ $t('编辑') }}</el-button
           >
           <el-button
-            v-if="scope.row.type === 2"
+            v-if="scope.row.type === 2 && activeName !== '5'"
             class="btn-yellow"
             @click="editFeatures(scope.row.id, 'image')"
             >{{ $t('编辑图片') }}</el-button
           >
           <el-button
-            v-if="scope.row.type === 3"
+            v-if="scope.row.type === 3 && activeName !== '5'"
             class="btn-blue-green"
             @click="editFeatures(scope.row.id, 'color')"
             >{{ $t('编辑颜色') }}</el-button
           >
           <el-button
-            v-if="scope.row.type === 4"
+            v-if="scope.row.type === 4 && activeName !== '5'"
             class="btn-deep-blue"
             @click="editFeatures(scope.row.id, 'location')"
             >{{ $t('编辑位置') }}</el-button
           >
-          <el-button v-if="scope.row.type === 5" class="btn-pink" @click="editLink(scope.row.id)">{{
-            $t('编辑链接')
-          }}</el-button>
+          <el-button
+            v-if="scope.row.type === 5 && activeName !== '5'"
+            class="btn-pink"
+            @click="editLink(scope.row.id)"
+            >{{ $t('编辑链接') }}</el-button
+          >
           <el-button
             @click="editString(scope.row.id)"
             class="btn-deep-purple optionBtn"
