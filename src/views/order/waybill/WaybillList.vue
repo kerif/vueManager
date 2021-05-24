@@ -1274,7 +1274,7 @@ export default {
     goMore() {
       this.trackDialog = false
       this.$router.push({
-        name: 'payment',
+        name: 'mailConfigur',
         query: {
           activeName: '12'
         }

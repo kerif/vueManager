@@ -107,7 +107,7 @@ export default {
     },
     goExpress() {
       this.show = false
-      this.$router.push({ name: 'payment', query: { activeName: '9' } })
+      this.$router.push({ name: 'mailConfigur', query: { activeName: '9' } })
     },
     clear() {
       this.company.sn = ''

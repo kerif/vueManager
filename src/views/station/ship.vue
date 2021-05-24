@@ -555,7 +555,7 @@ export default {
     // 弹窗 管理
     goMore() {
       this.$router.push({
-        name: 'payment',
+        name: 'mailConfigur',
         query: {
           activeName: '12'
         }
