@@ -1039,14 +1039,12 @@ export default {
       }
       if (this.$route.query.order_sn) {
         this.searchFieldData.keyword = this.$route.query.order_sn
-        console.log(this.$route, 'route')
-        console.log(this.$router, 'router')
         this.$router.replace({
           path: this.$route.path,
           query: { ...this.$route.query, order_sn: '' }
         })
-        this.getList()
       }
+      this.getList()
     },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {

@@ -1,62 +1,77 @@
 <template>
-  <el-dialog :visible.sync="show" :title="state === 'add' ? $t('新增') : $t('编辑')" class="dialog-superior-addEdit" width="50%"
-  @close="clear">
-    <el-form :model="ruleForm" ref="user" class="demo-ruleForm"
-    label-position="top">
-    <!-- 字符串 -->
-    <el-form-item :label="$t('*国家')">
-      <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')"
-        filterable @change="changeCountry">
-        <el-option
-          v-for="item in country"
-          :key="item.id"
-          :label="item.cn_name"
-          :value="item.id">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item>
-      <div>{{$t('区域')}}
-        <span class="tips-sty">{{$t('添加二级区域不要选择此项')}}</span>
-      </div>
-      <el-select v-model="ruleForm.parent_id" :placeholder="$t('请选择区域')"
-        filterable :disabled="!ruleForm.country_id" clearable>
-        <el-option
-          v-for="item in childData"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item :label="$t('*中文名称')">
-       <el-input v-model="ruleForm.name" class="input-sty"></el-input>
-    </el-form-item>
-    <el-form-item :label="$t('*邮编')">
-       <el-input v-model="ruleForm.postcode" class="input-sty"></el-input>
-    </el-form-item>
-    <el-form-item :label="$t('区域代码')">
-       <el-input v-model="ruleForm.code" class="input-sty"></el-input>
-    </el-form-item>
-    <el-form-item :label="$t('API值')">
-       <el-input v-model="ruleForm.api_code" class="input-sty"></el-input>
-       <el-checkbox v-model="ruleForm.some_with_name" style="margin-left: 20px">{{$t('与中文名称相同')}}</el-checkbox>
-      <div class="tips-sty">{{$t('主要用于第三方API的需要，如果不清楚请默认填写与中文一致')}}</div>
-    </el-form-item>
-    <el-form-item v-for="item in stringData" :key="item.id" :label="item.name">
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'add' ? $t('新增') : $t('编辑')"
+    class="dialog-superior-addEdit"
+    width="50%"
+    @close="clear"
+  >
+    <el-form :model="ruleForm" ref="user" class="demo-ruleForm" label-position="top">
+      <!-- 字符串 -->
+      <el-form-item :label="$t('*国家')">
+        <el-select
+          v-model="ruleForm.country_id"
+          :placeholder="$t('请选择国家')"
+          filterable
+          @change="changeCountry"
+        >
+          <el-option v-for="item in country" :key="item.id" :label="item.cn_name" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <div>
+          {{ $t('区域') }}
+          <span class="tips-sty">{{ $t('添加二级区域不要选择此项') }}</span>
+        </div>
+        <el-select
+          v-model="ruleForm.parent_id"
+          :placeholder="$t('请选择区域')"
+          filterable
+          :disabled="!ruleForm.country_id"
+          clearable
+        >
+          <el-option v-for="item in childData" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('*中文名称')">
+        <el-input v-model="ruleForm.name" class="input-sty"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('*邮编')">
+        <el-input v-model="ruleForm.postcode" class="input-sty"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('区域代码')">
+        <el-input v-model="ruleForm.code" class="input-sty"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('API值')">
+        <el-input v-model="ruleForm.api_code" class="input-sty"></el-input>
+        <el-checkbox v-model="ruleForm.some_with_name" style="margin-left: 20px">{{
+          $t('与中文名称相同')
+        }}</el-checkbox>
+        <div class="tips-sty">
+          {{ $t('主要用于第三方API的需要，如果不清楚请默认填写与中文一致') }}
+        </div>
+      </el-form-item>
+      <el-form-item v-for="item in stringData" :key="item.id" :label="item.name">
         <!-- <span></span> -->
-        <el-input v-model="item.value" type="textarea" :rows="2" :placeholder="$t('请输入内容')"></el-input>
-    </el-form-item>
+        <el-input
+          v-model="item.value"
+          type="textarea"
+          :rows="2"
+          :placeholder="$t('请输入内容')"
+        ></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{$t('取消')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('确定')}}</el-button>
+      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       user: {
         key: '',
@@ -85,7 +100,7 @@ export default {
   },
   methods: {
     // 获取全部支持语言
-    getString () {
+    getString() {
       this.$request.getString().then(res => {
         if (res.ret) {
           this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
@@ -116,7 +131,7 @@ export default {
     //   }
     // })
     // 获取国家数据
-    getCountry () {
+    getCountry() {
       this.$request.countryLocation().then(res => {
         if (res.ret) {
           this.country = res.data
@@ -128,7 +143,7 @@ export default {
       })
     },
     // 切换国家
-    changeCountry () {
+    changeCountry() {
       this.ruleForm.parent_id = ''
       this.childData = []
       if (this.ruleForm.country_id) {
@@ -136,7 +151,7 @@ export default {
       }
     },
     // 获取区域数据
-    getAreas () {
+    getAreas() {
       this.$request.superiorArea(this.ruleForm.country_id).then(res => {
         if (res.ret) {
           this.childData = res.data
@@ -144,7 +159,7 @@ export default {
       })
     },
     // 获取详细
-    getList () {
+    getList() {
       this.$request.detailsAreas(this.id).then(res => {
         if (res.ret) {
           this.ruleForm = res.data
@@ -168,7 +183,7 @@ export default {
         }
       })
     },
-    confirm () {
+    confirm() {
       if (!this.ruleForm.country_id) {
         return this.$message.error(this.$t('国家不能为空'))
       } else if (!this.ruleForm.name) {
@@ -181,54 +196,58 @@ export default {
         translation[item.language_code] = item.value
       })
       if (this.state === 'add') {
-        this.$request.newAreas({
-          ...this.ruleForm,
-          name_translations: translation,
-          some_with_name: Number(this.ruleForm.some_with_name)
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
+        this.$request
+          .newAreas({
+            ...this.ruleForm,
+            name_translations: translation,
+            some_with_name: Number(this.ruleForm.some_with_name)
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
       } else {
-        this.$request.updateDetailsAreas(this.id, {
-          ...this.ruleForm,
-          name_translations: translation,
-          some_with_name: Number(this.ruleForm.some_with_name)
-        }).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
+        this.$request
+          .updateDetailsAreas(this.id, {
+            ...this.ruleForm,
+            name_translations: translation,
+            some_with_name: Number(this.ruleForm.some_with_name)
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
       }
       console.log(translation, 'translation')
       // let method = this.state === 'add' ? 'newAreas' : 'updateString'
     },
-    clear () {
+    clear() {
       this.ruleForm.country_id = ''
       this.ruleForm.parent_id = ''
       this.ruleForm.name = ''
@@ -242,7 +261,7 @@ export default {
       this.state = ''
       this.id = ''
     },
-    init () {
+    init() {
       this.getString()
       this.getCountry()
       console.log(this.state, 'sate')
@@ -267,14 +286,14 @@ export default {
     margin-left: 100px !important;
   }
   .el-dialog__header {
-    background-color: #0E102A;
+    background-color: #0e102a;
   }
   .el-dialog__title {
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
   .el-dialog__close {
-    color: #FFF;
+    color: #fff;
   }
   .input-sty {
     width: 350px !important;
