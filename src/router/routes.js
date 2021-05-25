@@ -232,6 +232,8 @@ const blockManagement = loadonDemand('website/block')
 const blockEdit = loadonDemand('website/blockAddEdit')
 // 区块管理 编辑
 const otherWebsite = loadonDemand('website/otherWebsite')
+// 区块管理 编辑语言
+const urlLangEdit = loadonDemand('website/urlLang')
 export default [
   {
     path: '/',
@@ -1836,6 +1838,18 @@ export default [
             path: '/website/block/lang/add/:line/:lang/:transCode',
             component: blockLang,
             name: 'blockLang',
+            id: 1103,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '区块管理的翻译内容',
+              parent: '/website/block'
+            }
+          },
+          {
+            path: '/website/url/block/lang/add/:line/:lang/:transCode',
+            component: urlLangEdit,
+            name: 'urlLangEdit',
             id: 1103,
             meta: {
               group: '官网管理',

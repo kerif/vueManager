@@ -234,6 +234,20 @@ export default {
             type
           }
         })
+      } else if (type === 2 || type === 5) {
+        console.log('1111')
+        this.transCode = line['trans_' + lang.language_code]
+        this.$router.push({
+          name: 'urlLangEdit',
+          params: {
+            line: JSON.stringify(line),
+            lang: JSON.stringify(lang),
+            transCode: this.transCode
+          },
+          query: {
+            type
+          }
+        })
       } else {
         const status = this.activeName === '5' ? 'origin' : 'others'
         this.transCode = line['trans_' + lang.language_code]
