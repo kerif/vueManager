@@ -379,6 +379,10 @@ export default {
   activated() {
     this.getAgentData()
     this.getList()
+  },
+  created() {
+    this.getAgentData()
+    this.getList()
   }
 }
 </script>
