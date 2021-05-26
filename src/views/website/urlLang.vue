@@ -164,9 +164,7 @@ export default {
       } else {
         this.$request
           .updateBlockLang(this.line.id, {
-            content: {
-              content: this.form.content ? this.form.content : ''
-            },
+            content: this.form.content ? this.form.content : '',
             language: this.form.language
           })
           .then(res => {
