@@ -73,12 +73,15 @@
                     {{ $t('小程序配置') }}
                   </el-menu-item>
                   <el-menu-item index="2">
-                    {{ $t('PC端配置') }}
+                    {{ $t('公众号配置') }}
                   </el-menu-item>
                   <el-menu-item index="3">
-                    {{ $t('API与服务*') }}
+                    {{ $t('PC端配置') }}
                   </el-menu-item>
                   <el-menu-item index="4">
+                    {{ $t('API与服务*') }}
+                  </el-menu-item>
+                  <el-menu-item index="5">
                     {{ $t('客户登录配置') }}
                   </el-menu-item>
                 </el-menu-item-group>
@@ -88,16 +91,20 @@
             <el-col :span="19" v-if="secondTab2 === '1'" class="main-right">
               <app-configure></app-configure>
             </el-col>
-            <!-- PC端配置 -->
+            <!-- 公众号配置 -->
             <el-col :span="19" v-if="secondTab2 === '2'" class="main-right">
+              <public-configura></public-configura>
+            </el-col>
+            <!-- PC端配置 -->
+            <el-col :span="19" v-if="secondTab2 === '3'" class="main-right">
               <pc-configure></pc-configure>
             </el-col>
             <!-- API与服务 -->
-            <el-col :span="19" v-if="secondTab2 === '3'" class="main-right">
+            <el-col :span="19" v-if="secondTab2 === '4'" class="main-right">
               <api-configure></api-configure>
             </el-col>
             <!-- 客户登录配置 -->
-            <el-col :span="19" v-if="secondTab2 === '4'" class="main-right">
+            <el-col :span="19" v-if="secondTab2 === '5'" class="main-right">
               <login-configure></login-configure>
             </el-col>
           </el-row>
@@ -190,6 +197,7 @@ import AppConfigure from './appConfigure'
 import { pagination } from '@/mixin'
 import PcConfigure from './pcConfigure.vue'
 import ApiConfigure from './apiConfigure.vue'
+import PublicConfigura from './publicConfigura'
 import UnitConfigure from './unitConfigure.vue'
 import ForecastConfigure from './forecastConfigure.vue'
 import PaymentConfigure from './paymentConfigure.vue'
@@ -209,6 +217,7 @@ export default {
     AppConfigure,
     PcConfigure,
     ApiConfigure,
+    PublicConfigura,
     UnitConfigure,
     ForecastConfigure,
     PaymentConfigure,

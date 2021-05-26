@@ -989,6 +989,14 @@ exports.changeProgramImg = params => {
 exports.getProgramShare = () => {
   return $form.get('mini-program/share-page-info')
 }
+// 公众号配置 获取
+exports.getWechatOa = () => {
+  return $form.get('wechat-oa-config')
+}
+// 公众号配置 更新
+exports.updateWechatOa = params => {
+  return $form.put('wechat-oa-config', params)
+}
 // 更新海报配置
 exports.updateProgramShare = params => {
   return $form.put('mini-program/share-page-info', params)
