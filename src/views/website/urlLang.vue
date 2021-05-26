@@ -94,8 +94,7 @@ export default {
             this.size = res.data.size
             res.data.content && (this.baleImgList[0] = res.data.content)
             this.$set(this.baleImgList, 0, res.data.content)
-            console.log(this.baleImgList, 'this.baleImgList')
-            this.form.content = res.data.content.content
+            this.form.content = res.data.content
           }
         })
     },
