@@ -92,7 +92,9 @@ export default {
         .then(res => {
           if (res.ret) {
             this.size = res.data.size
-            // res.data.content.image && (this.baleImgList[0] = res.data.content.image)
+            res.data.content && (this.baleImgList[0] = res.data.content)
+            this.$set(this.baleImgList, [0], res.data.content)
+            console.log(this.baleImgList, 'this.baleImgList')
             this.form.content = res.data.content.content
           }
         })
@@ -137,30 +139,53 @@ export default {
       } else {
         this.form.image = ''
       }
-      this.$request
-        .updateBlockLang(this.line.id, {
-          content: {
-            image: this.form.image,
-            content: this.form.content ? this.form.content : ''
-          },
-          language: this.form.language
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.tips,
-              type: 'success'
-            })
-            this.$router.go(-1)
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      if (this.type === 2) {
+        this.$request
+          .updateBlockLang(this.line.id, {
+            content: this.form.image,
+            language: this.form.language
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.tips,
+                type: 'success'
+              })
+              this.$router.go(-1)
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .updateBlockLang(this.line.id, {
+            content: {
+              content: this.form.content ? this.form.content : ''
+            },
+            language: this.form.language
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.tips,
+                type: 'success'
+              })
+              this.$router.go(-1)
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      }
     }
   }
 }
