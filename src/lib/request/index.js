@@ -30,6 +30,10 @@ exports.deleteLines = id => {
 exports.addPackageProps = params => {
   return $form.post('package-props', params)
 }
+// 配置 路线 更新物品属性
+exports.updatePackageProps = (id, params) => {
+  return $form.put(`package-props/${id}`, params)
+}
 // 获取高级配置
 // exports.getSorting = (id) => {
 //   return $form.get(`orders/${id}/re-sorting`)
@@ -1390,6 +1394,10 @@ exports.propsLang = params => {
 // 物品属性 添加或修改语言
 exports.updatePropsLang = params => {
   return $form.put(`package-props/translate-data`, params)
+}
+// 物品属性 确认拖拽
+exports.sortProps = params => {
+  return $form.put('package-props/sort', params)
 }
 // 添加新属性
 exports.addPackage = params => {

@@ -5,7 +5,7 @@
       <el-col :span="7" class="user-left">
         <div class="new-top">
           <el-radio class="system-sty" v-model="ruleForm.type" :label="2">{{
-            $t('系统内服物流查询短信')
+            $t('系统内物流查询服务')
           }}</el-radio>
           <div class="user-bottom">
             <div class="bottom-left">

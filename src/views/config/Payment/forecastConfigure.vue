@@ -2,20 +2,31 @@
   <div class="settings-container">
     <el-form>
       <!-- 物品属性 -->
-      <el-form-item :label="$t('物品属性：')">
-        <el-tag
-          :key="item.id"
-          v-for="item in dynamicTags"
-          closable
-          :disable-transitions="false"
-          @close="handleClose(item.id)"
+      <el-form-item>
+        <div style="text-align: right">
+          <el-button class="btn-light-red" @click="addProps">{{ $t('添加属性') }}</el-button>
+        </div>
+        <el-table
+          :data="dynamicTags"
+          v-loading="tableLoading"
+          class="data-list positions-type"
+          border
+          stripe
         >
-          {{ item.cn_name }}
-        </el-tag>
-        <el-table :data="propsData" v-loading="tableLoading" class="data-list" border stripe>
           <el-table-column width="100px" align="center">
             <template>
               <i class="el-icon-sort icon-fonts"></i>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('属性名称')" prop="name"></el-table-column>
+          <el-table-column :label="$t('操作')" width="200">
+            <template slot-scope="scope">
+              <el-button class="btn-dark-green" @click="editProps(scope.row.id, scope.row.name)">{{
+                $t('编辑')
+              }}</el-button>
+              <el-button class="btn-light-red" @click="handleClose(scope.row.id)">{{
+                $t('删除')
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -26,7 +37,6 @@
             $t('保存排序结果')
           }}</el-button>
         </div>
-        <el-button class="btn-light-red" @click="addProps">{{ $t('添加属性') }}</el-button>
         <el-button
           class="btn-deep-purple others-btn"
           v-for="item in formatLangData"
@@ -103,6 +113,7 @@ export default {
       dynamicTags: [],
       tableLoading: false,
       propsData: [],
+      typeSendData: [],
       basic: {
         size: '',
         location: '',
@@ -130,7 +141,13 @@ export default {
     },
     // 添加属性
     addProps() {
-      dialog({ type: 'addPackage' }, () => {
+      dialog({ type: 'addPackage', state: 'add' }, () => {
+        this.getProps()
+      })
+    },
+    // 编辑属性
+    editProps(id, name) {
+      dialog({ type: 'addPackage', id: id, name: name, state: 'edit' }, () => {
         this.getProps()
       })
     },
@@ -151,15 +168,15 @@ export default {
     typeRowUpdate() {
       const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
       console.log(ids)
-      this.positionList = []
-      this.$request.positionsSort(this.$route.params.id, ids).then(res => {
+      this.dynamicTags = []
+      this.$request.sortProps(ids).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.getList()
+          this.getProps()
         } else {
           this.$message({
             message: res.msg,
@@ -212,8 +229,8 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        console.log(id, 'id')
-        this.dynamicTags.splice(this.dynamicTags.indexOf(id), 1)
+        // console.log(id, 'id')
+        // this.dynamicTags.splice(this.dynamicTags.indexOf(id), 1)
         this.$request
           .deleteProps({
             DELETE: [id]
@@ -235,19 +252,15 @@ export default {
           })
       })
     },
-    handleInputConfirm() {
-      let inputValue = this.inputValue
-      if (inputValue) {
-        this.dynamicTags.push(inputValue)
-      }
-      this.inputVisible = false
-      this.inputValue = ''
-    },
     // 获取物品属性
     getProps() {
       this.$request.getPackage().then(res => {
         if (res.ret) {
           this.dynamicTags = res.data
+          this.typeSendData = [...res.data]
+          this.$nextTick(() => {
+            this.typeRowDrop()
+          })
         } else {
           this.$message({
             message: res.msg,
