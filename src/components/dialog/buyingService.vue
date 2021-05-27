@@ -5,7 +5,8 @@
     class="buying-container"
     @close="clear"
   >
-    <p>{{ $t('选择中国大陆短信套餐') }}：</p>
+    <p v-if="state === 'sms'">{{ $t('选择中国大陆短信套餐') }}：</p>
+    <p v-else>{{ $t('51Tracking查询套餐') }}：</p>
     <div>
       <el-row>
         <el-col
@@ -209,6 +210,7 @@ export default {
       this.secondNum = ''
     },
     init() {
+      console.log(this.state, 'state')
       this.getService()
     }
   }
