@@ -13,8 +13,8 @@
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
       <!-- 物品属性 -->
-      <el-form-item :label="item.cn_name" v-for="item in dynamicTags" :key="item.id">
-        <el-input v-model="item.name" :placeholder="$t('请输入')"></el-input>
+      <el-form-item prop="name" :label="line.name">
+        <el-input v-model="ruleForm.name" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -38,6 +38,10 @@ export default {
         name: '',
         language_code: ''
       },
+      line: {
+        id: '',
+        name: ''
+      },
       transCode: '',
       dynamicTags: []
     }
@@ -45,54 +49,47 @@ export default {
   methods: {
     getProps() {
       this.$request
-        .propsLang({
+        .propsLang(this.line.id, {
           lang: this.ruleForm.language
         })
         .then(res => {
-          // this.ruleForm.name = res.data.name
-          const props = {}
-          res.data.forEach(item => {
-            props[item.id] = item.name
-          })
-          console.log('props', props)
-          this.dynamicTags.forEach(item => {
-            item.name = props[item.id]
-          })
-          console.log(this.ruleForm, 'this.ruleForm')
+          this.ruleForm.name = res.data.name
+          // const props = {}
+          // res.data.forEach(item => {
+          //   props[item.id] = item.name
+          // })
+          // console.log('props', props)
+          // this.dynamicTags.forEach(item => {
+          //   item.name = props[item.id]
+          // })
         })
     },
     confirm() {
-      const props = this.dynamicTags.map(item => {
-        return {
-          id: item.id,
-          name: item.name
-        }
-      })
-      this.$request
-        .updatePropsLang({
-          language: this.ruleForm.language,
-          props
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
+      // const props = this.dynamicTags.map(item => {
+      //   return {
+      //     id: item.id,
+      //     name: item.name
+      //   }
+      // })
+      this.$request.updatePropsLang(this.line.id, this.ruleForm).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
           this.show = false
-        })
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        this.show = false
+      })
     },
     clear() {
-      this.ruleForm.website_name = ''
       this.ruleForm.name = ''
       this.$refs['ruleForm'].resetFields()
       this.$refs['ruleForm'].clearValidate()
@@ -104,11 +101,12 @@ export default {
     },
     init() {
       console.log(this.lang, 'lang')
+      console.log(this.line, 'line')
       // this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
-      this.getProps()
-      // this.dynamicTags = this.dynamicTags
-      console.log(this.dynamicTags, 'dynamicTags')
+      if (this.transCode === 1) {
+        this.getProps()
+      }
     }
   }
 }

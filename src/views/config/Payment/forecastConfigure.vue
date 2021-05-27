@@ -19,6 +19,21 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('属性名称')" prop="name"></el-table-column>
+          <el-table-column
+            :label="item.name"
+            v-for="item in formatLangData"
+            :key="item.id"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <span
+                v-if="scope.row['trans_' + item.language_code]"
+                class="el-icon-check icon-sty"
+                @click="onProps(scope.row, item)"
+              ></span>
+              <span v-else class="el-icon-plus icon-sty" @click="onProps(scope.row, item)"></span>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('操作')" width="200">
             <template slot-scope="scope">
               <el-button class="btn-dark-green" @click="editProps(scope.row.id, scope.row.name)">{{
@@ -37,13 +52,13 @@
             $t('保存排序结果')
           }}</el-button>
         </div>
-        <el-button
+        <!-- <el-button
           class="btn-deep-purple others-btn"
           v-for="item in formatLangData"
           :key="item.id"
           @click="onProps(item)"
-          >{{ item.name }}</el-button
-        >
+          >{{ item.name }}111</el-button
+        > -->
       </el-form-item>
       <el-form-item :label="$t('物品属性选择方式')">
         <el-radio-group v-model="basic.prop_type" class="radio-sty" @change="changeBasic">
@@ -125,6 +140,7 @@ export default {
   created() {
     this.getProps()
     this.getBasic()
+    this.getLanguageList()
   },
   computed: {
     formatLangData() {
@@ -132,10 +148,18 @@ export default {
     }
   },
   methods: {
+    // 获取支持语言
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    },
     // 基础配置 修改语言
-    onProps(item) {
-      console.log(item, 'item')
-      dialog({ type: 'propsLang', lang: item, dynamicTags: this.dynamicTags }, () => {
+    onProps(line, lang) {
+      this.transCode = line['trans_' + lang.language_code]
+      dialog({ type: 'propsLang', line: line, lang: lang, transCode: this.transCode }, () => {
         this.getProps()
       })
     },

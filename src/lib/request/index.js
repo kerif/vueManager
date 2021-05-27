@@ -1392,8 +1392,8 @@ exports.propsLang = params => {
   return $form.get(`package-props`, { params })
 }
 // 物品属性 添加或修改语言
-exports.updatePropsLang = params => {
-  return $form.put(`package-props/translate-data`, params)
+exports.updatePropsLang = (id, params) => {
+  return $form.put(`package-props/${id}/translate-data`, params)
 }
 // 物品属性 确认拖拽
 exports.sortProps = params => {
