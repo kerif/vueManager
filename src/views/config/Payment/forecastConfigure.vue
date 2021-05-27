@@ -12,6 +12,20 @@
         >
           {{ item.cn_name }}
         </el-tag>
+        <el-table :data="propsData" v-loading="tableLoading" class="data-list" border stripe>
+          <el-table-column width="100px" align="center">
+            <template>
+              <i class="el-icon-sort icon-fonts"></i>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
+        <div class="sort-sty">
+          *{{ $t('拖拽行可以进行排序') }}
+          <el-button @click="typeRowUpdate" class="btn-deep-purple save-sort">{{
+            $t('保存排序结果')
+          }}</el-button>
+        </div>
         <el-button class="btn-light-red" @click="addProps">{{ $t('添加属性') }}</el-button>
         <el-button
           class="btn-deep-purple others-btn"
@@ -81,11 +95,14 @@
 
 <script>
 import dialog from '@/components/dialog'
+import Sortable from 'sortablejs'
 export default {
   data() {
     return {
       languageData: [],
       dynamicTags: [],
+      tableLoading: false,
+      propsData: [],
       basic: {
         size: '',
         location: '',
@@ -115,6 +132,40 @@ export default {
     addProps() {
       dialog({ type: 'addPackage' }, () => {
         this.getProps()
+      })
+    },
+    // 自定义物流 行拖拽
+    typeRowDrop() {
+      const tbody = document.querySelector('.positions-type tbody')
+      console.log(tbody, 'tbody')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          if (oldIndex === newIndex) return false
+          console.log(oldIndex, newIndex)
+          const oldItem = this.typeSendData.splice(oldIndex, 1)[0]
+          this.typeSendData.splice(newIndex, 0, oldItem)
+        }
+      })
+    },
+    // 确定拖拽
+    typeRowUpdate() {
+      const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
+      console.log(ids)
+      this.positionList = []
+      this.$request.positionsSort(this.$route.params.id, ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     changeBasic() {
