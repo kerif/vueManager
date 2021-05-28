@@ -104,7 +104,7 @@
     <!-- 第三方短信服务 -->
     <div v-if="ruleForm.type === 1">
       <h2 class="template-sty">{{ $t('短信模版') }}</h2>
-      <span>（{{ $t('请输入第三方国内模版ID') }}）</span>
+      <span>（{{ $t('请输入第三方模版ID') }}）</span>
       <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
         <el-form :model="ruleForm" label-width="130px">
