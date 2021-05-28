@@ -240,6 +240,7 @@ export default {
           this.basic.size = res.data.size
           this.basic.location = res.data.location
           this.basic.package_warning = res.data.package_warning
+          this.basic.prop_type = res.data.prop_type
         }
       })
     },
