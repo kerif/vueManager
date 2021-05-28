@@ -347,6 +347,7 @@ export default {
     saveTemplate() {
       console.log(this.smsData, 'this.smsData')
       console.log(this.customerData, 'this.customerData')
+      console.log(typeof this.customerData, 'this.customerData')
       this.$request
         .updateSmsSystem({
           templates: this.ruleForm.type === 2 ? this.smsData : this.customerData,

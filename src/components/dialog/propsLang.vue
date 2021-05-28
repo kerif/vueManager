@@ -48,21 +48,17 @@ export default {
   },
   methods: {
     getProps() {
-      this.$request
-        .propsLang(this.line.id, {
-          lang: this.ruleForm.language
-        })
-        .then(res => {
-          this.ruleForm.name = res.data.name
-          // const props = {}
-          // res.data.forEach(item => {
-          //   props[item.id] = item.name
-          // })
-          // console.log('props', props)
-          // this.dynamicTags.forEach(item => {
-          //   item.name = props[item.id]
-          // })
-        })
+      this.$request.propsAloneLang(this.line.id).then(res => {
+        this.ruleForm.name = res.data.name
+        // const props = {}
+        // res.data.forEach(item => {
+        //   props[item.id] = item.name
+        // })
+        // console.log('props', props)
+        // this.dynamicTags.forEach(item => {
+        //   item.name = props[item.id]
+        // })
+      })
     },
     confirm() {
       // const props = this.dynamicTags.map(item => {
