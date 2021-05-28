@@ -1392,8 +1392,8 @@ exports.propsLang = params => {
   return $form.get(`package-props`, { params })
 }
 // 物品属性 获取单条语言详情
-exports.propsAloneLang = id => {
-  return $form.get(`package-props/${id}`)
+exports.propsAloneLang = (id, params) => {
+  return $form.get(`package-props/${id}`, { params })
 }
 // 物品属性 添加或修改语言
 exports.updatePropsLang = (id, params) => {
