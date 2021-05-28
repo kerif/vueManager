@@ -419,17 +419,13 @@
             <el-input v-model="form.factor" :placeholder="$t('请输入内容')"></el-input>
           </el-col>
           <!-- 计重模式 -->
-          <el-col :span="5">
+          <el-col :span="10">
             <div>
               <span>{{ $t('计重模式') }}</span>
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="
-                  $t(
-                    '计费重量计算方式：1、全抛：实际重量与体积重量两者取大。2、半抛（实际重量+体积重量）/2'
-                  )
-                "
+                :content="$t('勾选表示按实际重量和体积重量两者取大计算')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -437,7 +433,7 @@
             </div>
             <el-checkbox v-model="form.has_factor">{{ $t('考虑体积重') }}</el-checkbox>
           </el-col>
-          <el-col :span="5" v-if="form.has_factor">
+          <!-- <el-col :span="5" v-if="form.has_factor">
             <div>{{ $t('是否半抛计费重量') }}</div>
             <el-switch
               v-model="form.is_avg_weight"
@@ -449,7 +445,7 @@
               inactive-color="gray"
             >
             </el-switch>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form-item>
       <el-form-item>
@@ -681,7 +677,6 @@ export default {
         max_weight: '',
         factor: '',
         has_factor: '',
-        is_avg_weight: 0,
         is_unique: '',
         min_weight: '',
         reference_time: '',
@@ -761,7 +756,6 @@ export default {
         max_weight: '',
         factor: '',
         has_factor: '',
-        is_avg_weight: 0,
         is_unique: '',
         min_weight: '',
         reference_time: '',
@@ -800,7 +794,6 @@ export default {
         this.form.countries = res.data.countries.map(item => item.id)
         this.form.warehouses = res.data.warehouses.map(item => item.id)
         this.form.has_factor = Boolean(res.data.has_factor)
-        this.form.is_avg_weight = res.data.is_avg_weight
         this.form.is_unique = Boolean(res.data.is_unique)
         this.supportWarehouse(warehouses)
       })
