@@ -159,8 +159,8 @@
           <span class="operat-box">
             <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
             <i class="el-icon-delete" @click="onDeleteLogo(index)"></i>
-          </span> </span
-        ><br />
+          </span>
+        </span>
         <el-upload
           v-show="LogoImgList.length < 1"
           class="avatar-uploader"

@@ -15,21 +15,21 @@
         </el-row>
       </el-form-item>
       <!-- 邮件标题 -->
-      <el-form-item :label="$t('*标题')">
+      <!-- <el-form-item :label="$t('*标题')">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="params.risk_warning_title"></el-input
           ></el-col>
         </el-row>
-      </el-form-item>
+      </el-form-item> -->
       <!-- 邮件内容 -->
-      <el-form-item :label="$t('*内容')">
+      <!-- <el-form-item :label="$t('*内容')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.risk_warning_content" @input="changeText"></div>
           </el-col>
         </el-row>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button
           type="primary"
@@ -50,8 +50,8 @@ export default {
     return {
       params: {
         name: '',
-        risk_warning_title: '',
-        risk_warning_content: '',
+        // risk_warning_title: '',
+        // risk_warning_content: '',
         language: ''
       },
       editor: null,

@@ -38,6 +38,11 @@
           <span v-if="scope.row.type === 5">{{ $t('恢复') }}</span>
         </template>
       </el-table-column>
+      <el-table-column
+        :label="$t('操作货位')"
+        v-if="activeName === '1'"
+        prop="location"
+      ></el-table-column>
       <!-- 快递单号 -->
       <el-table-column
         :label="$t('快递单号')"

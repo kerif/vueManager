@@ -112,6 +112,7 @@
             <el-col :span="10" v-for="item in customerData" :key="item.id">
               <el-form-item :label="item.type_name">
                 <el-input class="input-sty" v-model="item.template_id"></el-input>
+                <el-input class="input-sty" v-model="item.intl_template_id"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -447,7 +448,7 @@ export default {
     padding: 20px;
     margin-left: 20px;
     .input-sty {
-      width: 60%;
+      width: 50%;
     }
   }
   .save-btn {
