@@ -504,6 +504,7 @@ export default {
             let index = ids.indexOf(item.service_id)
             if (index !== -1) {
               this.updateProp[index].checked = true
+              this.updateProp[index].price = item.price
             }
           })
         }
