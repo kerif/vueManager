@@ -113,6 +113,7 @@ export default {
       this.ruleForm.name_cn = ''
       this.ruleForm.name_en = ''
       this.ruleForm.description = ''
+      this.id = ''
     },
     cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
