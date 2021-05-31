@@ -1,6 +1,6 @@
 <template>
   <div class="self-settlement-container">
-    <!-- <el-popover placement="right" width="400" v-model="visible">
+    <el-popover placement="right" width="400" v-model="visible">
       <el-date-picker
         class="timeStyle"
         v-model="timeList"
@@ -16,7 +16,7 @@
       <el-button slot="reference" class="upload-sty" size="small" type="success" plain>{{
         $t('导出清单')
       }}</el-button>
-    </el-popover> -->
+    </el-popover>
     <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch">
         <!-- <el-date-picker
