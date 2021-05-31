@@ -92,6 +92,38 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item>
+            <div>
+              <span class="address-sty">{{ $t('免费仓储期(天)') }}</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="$t('仓储期按自然日计算，称重当日为仓储第一天')"
+                placement="top"
+              >
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+            <el-input-number
+              style="margin-top: 10px"
+              v-model="ruleForm.free_store_days"
+              :min="0"
+              :max="100"
+            ></el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item
+            :label="`${$t('超期收费')}${
+              localization.currency_unit ? localization.currency_unit : ''
+            }`"
+          >
+            <el-input style="width: 40%" v-model="ruleForm.store_fee"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-form-item
         :label="$t('温馨提示（主要提醒客户需要注意的事项，在客户端仓库地址页面显示）')"
         prop="tips"
@@ -150,11 +182,14 @@ export default {
         short_address: '',
         address: '',
         tips: '',
+        store_fee: '',
         auto_location: 0,
+        free_store_days: 0,
         ignore_lon_lat: 0,
         support_countries: ''
       },
       options: [],
+      localization: {},
       rules: {
         warehouse_name: [{ required: true, message: this.$t('请输入仓库名称'), trigger: 'blur' }],
         receiver_name: [{ required: true, message: this.$t('请输入收件人姓名'), trigger: 'blur' }],
@@ -198,6 +233,7 @@ export default {
     getCountry() {
       this.$request.getEnabledCountry().then(res => {
         this.options = res.data
+        this.localization = res.localization
       })
     },
     submit(formName) {
