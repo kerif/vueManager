@@ -21,7 +21,7 @@
           @search="onGroupChange"
         >
         </search-select>
-        <add-btn @click="addUser">{{ $t('添加员工组') }}</add-btn>
+        <add-btn @click.native="addUser">{{ $t('添加员工组') }}</add-btn>
       </div>
     </div>
     <!-- <div class="select-box">
