@@ -108,6 +108,7 @@ export default {
     init() {
       if (this.id) {
         this.ruleForm.name_cn = this.name_cn
+        this.ruleForm.description = this.description
         this.ruleForm.name_en = this.name_en
       }
     }
