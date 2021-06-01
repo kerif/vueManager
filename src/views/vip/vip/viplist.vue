@@ -21,7 +21,7 @@
           @search="onGroupChange"
         >
         </search-select>
-        <add-btn @click.native="addUser">{{ $t('添加员工组') }}</add-btn>
+        <add-btn @click.native="addUser">{{ $t('添加客户') }}</add-btn>
       </div>
     </div>
     <!-- <div class="select-box">
@@ -138,6 +138,7 @@ export default {
     this.getList()
   },
   activated() {
+    this.getList()
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
