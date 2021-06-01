@@ -108,6 +108,7 @@
         stripe
         v-loading="tableLoading"
         ref="table"
+        @expand-change="exChange"
         :data="oderData"
         @selection-change="onSelectChange"
         height="calc(100vh - 270px)"
@@ -962,6 +963,7 @@ export default {
         logistics_type_id: ''
       },
       showDialog: false,
+      expands: [],
       tableData: [],
       tableId: '',
       tableSn: '',
@@ -1023,10 +1025,16 @@ export default {
     }
   },
   activated() {
+    console.log('activated')
     this.initQuery()
-    this.getList()
+    // this.getList()
+    if (this.expands.length) {
+      console.log(this.expands, 'this.expands get')
+      // this.groupBuy()
+    }
   },
   created() {
+    console.log('created')
     this.getOrderFieldList()
     this.getCounts()
     this.initQuery()
@@ -1061,10 +1069,13 @@ export default {
     searchSubmit() {
       this.getList()
     },
-    groupBuy(row) {
+    groupBuy(row, flag = true) {
       // 如果当前货单已经获取了二级菜单数据，就不在获取
-      this.toogleExpand(row)
+      if (flag) {
+        this.toogleExpand(row)
+      }
       if (row.secondData.length) return
+      // console.log('fs', row.secondData)
       let id = row.id
       this.$request.orderSecond(id).then(res => {
         if (res.ret) {
@@ -1089,6 +1100,9 @@ export default {
             res.data.forEach(item => {
               item.disabled = true
               item.copySN = item.logistics_sn
+              if (this.expands.includes(item.id)) {
+                this.groupBuy(item, false)
+              }
             })
             this.oderData = res.data.map(item => {
               return {
@@ -1536,6 +1550,12 @@ export default {
     },
     onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)
+    },
+    exChange(row, expandedRows) {
+      console.log(expandedRows, 'expandedRows')
+      this.expands = expandedRows.map(item => item.id)
+      // this.expands.push(...expandedRows.map(item => item.id))
+      console.log(this.expands, 'this.expands')
     },
     // 完成支付
     finishPay(id) {
