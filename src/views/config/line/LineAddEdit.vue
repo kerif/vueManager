@@ -433,7 +433,7 @@
             </div>
             <el-checkbox v-model="form.has_factor">{{ $t('考虑体积重') }}</el-checkbox>
           </el-col>
-          <el-col :span="5" v-if="form.has_factor">
+          <!-- <el-col :span="5" v-if="form.has_factor">
             <div>{{ $t('是否半抛计费重量') }}</div>
             <el-switch
               v-model="form.is_avg_weight"
@@ -445,7 +445,7 @@
               inactive-color="gray"
             >
             </el-switch>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form-item>
       <el-form-item>
