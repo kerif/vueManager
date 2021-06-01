@@ -27,11 +27,14 @@
       <el-table-column :label="$t('客户组中文名')" prop="name_cn"></el-table-column>
       <el-table-column :label="$t('客户组英文名')" prop="name_en"></el-table-column>
       <el-table-column :label="$t('成员数量')" prop="user_count"></el-table-column>
+      <el-table-column :label="$t('客户组描述')" prop="description"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
           <el-button
             class="btn-green"
-            @click="editVip(scope.row.id, scope.row.name_cn, scope.row.name_en)"
+            @click="
+              editVip(scope.row.id, scope.row.name_cn, scope.row.name_en, scope.row.description)
+            "
             >{{ $t('修改资料') }}</el-button
           >
           <el-button class="btn-main" @click="member(scope.row.id)">{{ $t('成员') }}</el-button>
@@ -106,10 +109,20 @@ export default {
       })
     },
     // 修改资料
-    editVip(id, nameCn, nameEn) {
-      dialog({ type: 'editVip', id: id, name_cn: nameCn, name_en: nameEn, state: 'edit' }, () => {
-        this.getList()
-      })
+    editVip(id, nameCn, nameEn, description) {
+      dialog(
+        {
+          type: 'editVip',
+          id: id,
+          name_cn: nameCn,
+          name_en: nameEn,
+          description: description,
+          state: 'edit'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 成员
     member(id) {
