@@ -6,11 +6,12 @@
     <el-table
       :data="CategoriesList"
       stripe
+      ref="table"
       border
       class="data-list"
       @expand-change="onExpand"
       v-loading="tableLoading"
-      height="550"
+      height="calc(100vh - 360px)"
     >
       <!-- 二级分类列表 -->
       <el-table-column type="expand">
@@ -177,9 +178,15 @@ export default {
       ]
     }
   },
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.table.doLayout()
+    })
+  },
   created() {
     this.page_params.page = 1
     this.getCategories()
+    this.getLanguageList() // 获取支持语言
   },
   computed: {
     formatLangData() {
@@ -189,6 +196,14 @@ export default {
   methods: {
     getList() {
       this.getCategories()
+    },
+    // 获取支持语言
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
     },
     // 点开当前行，获取二级菜单数据
     onExpand(row) {
@@ -226,6 +241,11 @@ export default {
                 orders: []
               }
             })
+            setTimeout(() => {
+              this.$nextTick(() => {
+                this.$refs.table.doLayout()
+              })
+            }, 300)
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
