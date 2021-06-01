@@ -2,24 +2,63 @@
   <div class="settings-container">
     <el-form>
       <!-- 物品属性 -->
-      <el-form-item :label="$t('物品属性：')">
-        <el-tag
-          :key="item.id"
-          v-for="item in dynamicTags"
-          closable
-          :disable-transitions="false"
-          @close="handleClose(item.id)"
+      <el-form-item>
+        <div style="text-align: right">
+          <el-button class="btn-light-red" @click="addProps">{{ $t('添加属性') }}</el-button>
+        </div>
+        <el-table
+          :data="dynamicTags"
+          v-loading="tableLoading"
+          class="data-list positions-type"
+          border
+          stripe
         >
-          {{ item.cn_name }}
-        </el-tag>
-        <el-button class="btn-light-red" @click="addProps">{{ $t('添加属性') }}</el-button>
-        <el-button
+          <el-table-column width="100px" align="center">
+            <template>
+              <i class="el-icon-sort icon-fonts"></i>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('属性名称')" prop="name"></el-table-column>
+          <el-table-column
+            :label="item.name"
+            v-for="item in formatLangData"
+            :key="item.id"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <span
+                v-if="scope.row['trans_' + item.language_code]"
+                class="el-icon-check icon-sty"
+                @click="onProps(scope.row, item)"
+              ></span>
+              <span v-else class="el-icon-plus icon-sty" @click="onProps(scope.row, item)"></span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('操作')" width="200">
+            <template slot-scope="scope">
+              <el-button class="btn-dark-green" @click="editProps(scope.row.id, scope.row.name)">{{
+                $t('编辑')
+              }}</el-button>
+              <el-button class="btn-light-red" @click="handleClose(scope.row.id)">{{
+                $t('删除')
+              }}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
+        <div class="sort-sty">
+          *{{ $t('拖拽行可以进行排序') }}
+          <el-button @click="typeRowUpdate" class="btn-deep-purple save-sort">{{
+            $t('保存排序结果')
+          }}</el-button>
+        </div>
+        <!-- <el-button
           class="btn-deep-purple others-btn"
           v-for="item in formatLangData"
           :key="item.id"
           @click="onProps(item)"
-          >{{ item.name }}</el-button
-        >
+          >{{ item.name }}111</el-button
+        > -->
       </el-form-item>
       <el-form-item :label="$t('物品属性选择方式')">
         <el-radio-group v-model="basic.prop_type" class="radio-sty" @change="changeBasic">
@@ -81,11 +120,15 @@
 
 <script>
 import dialog from '@/components/dialog'
+import Sortable from 'sortablejs'
 export default {
   data() {
     return {
       languageData: [],
       dynamicTags: [],
+      tableLoading: false,
+      propsData: [],
+      typeSendData: [],
       basic: {
         size: '',
         location: '',
@@ -97,6 +140,7 @@ export default {
   created() {
     this.getProps()
     this.getBasic()
+    this.getLanguageList()
   },
   computed: {
     formatLangData() {
@@ -104,17 +148,65 @@ export default {
     }
   },
   methods: {
+    // 获取支持语言
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    },
     // 基础配置 修改语言
-    onProps(item) {
-      console.log(item, 'item')
-      dialog({ type: 'propsLang', lang: item, dynamicTags: this.dynamicTags }, () => {
+    onProps(line, lang) {
+      this.transCode = line['trans_' + lang.language_code]
+      dialog({ type: 'propsLang', line: line, lang: lang, transCode: this.transCode }, () => {
         this.getProps()
       })
     },
     // 添加属性
     addProps() {
-      dialog({ type: 'addPackage' }, () => {
+      dialog({ type: 'addPackage', state: 'add' }, () => {
         this.getProps()
+      })
+    },
+    // 编辑属性
+    editProps(id, name) {
+      dialog({ type: 'addPackage', id: id, name: name, state: 'edit' }, () => {
+        this.getProps()
+      })
+    },
+    // 自定义物流 行拖拽
+    typeRowDrop() {
+      const tbody = document.querySelector('.positions-type tbody')
+      console.log(tbody, 'tbody')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          if (oldIndex === newIndex) return false
+          console.log(oldIndex, newIndex)
+          const oldItem = this.typeSendData.splice(oldIndex, 1)[0]
+          this.typeSendData.splice(newIndex, 0, oldItem)
+        }
+      })
+    },
+    // 确定拖拽
+    typeRowUpdate() {
+      const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
+      console.log(ids)
+      this.dynamicTags = []
+      this.$request.sortProps(ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getProps()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     changeBasic() {
@@ -148,6 +240,7 @@ export default {
           this.basic.size = res.data.size
           this.basic.location = res.data.location
           this.basic.package_warning = res.data.package_warning
+          this.basic.prop_type = res.data.prop_type
         }
       })
     },
@@ -161,8 +254,8 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        console.log(id, 'id')
-        this.dynamicTags.splice(this.dynamicTags.indexOf(id), 1)
+        // console.log(id, 'id')
+        // this.dynamicTags.splice(this.dynamicTags.indexOf(id), 1)
         this.$request
           .deleteProps({
             DELETE: [id]
@@ -184,19 +277,15 @@ export default {
           })
       })
     },
-    handleInputConfirm() {
-      let inputValue = this.inputValue
-      if (inputValue) {
-        this.dynamicTags.push(inputValue)
-      }
-      this.inputVisible = false
-      this.inputValue = ''
-    },
     // 获取物品属性
     getProps() {
       this.$request.getPackage().then(res => {
         if (res.ret) {
           this.dynamicTags = res.data
+          this.typeSendData = [...res.data]
+          this.$nextTick(() => {
+            this.typeRowDrop()
+          })
         } else {
           this.$message({
             message: res.msg,
