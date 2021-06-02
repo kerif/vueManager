@@ -183,9 +183,9 @@
               @click="payDetails(scope.row.id)"
               >{{ $t('支付详情') }}</el-button
             >
-            <!-- <el-button class="btn-yellow" @click="uploadList(scope.row.id)">{{
+            <el-button class="btn-yellow" @click="uploadList(scope.row.id)">{{
               $t('导出清单')
-            }}</el-button> -->
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>

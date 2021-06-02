@@ -104,7 +104,7 @@
     <!-- 第三方短信服务 -->
     <div v-if="ruleForm.type === 1">
       <h2 class="template-sty">{{ $t('短信模版') }}</h2>
-      <span>（{{ $t('请输入第三方国内模版ID') }}）</span>
+      <span>（{{ $t('请输入第三方模版ID') }}）</span>
       <!-- <el-button class="template-sty btn-green">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
         <el-form :model="ruleForm" label-width="130px">
@@ -112,6 +112,7 @@
             <el-col :span="10" v-for="item in customerData" :key="item.id">
               <el-form-item :label="item.type_name">
                 <el-input class="input-sty" v-model="item.template_id"></el-input>
+                <el-input class="input-sty" v-model="item.intl_template_id"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -346,6 +347,7 @@ export default {
     saveTemplate() {
       console.log(this.smsData, 'this.smsData')
       console.log(this.customerData, 'this.customerData')
+      console.log(typeof this.customerData, 'this.customerData')
       this.$request
         .updateSmsSystem({
           templates: this.ruleForm.type === 2 ? this.smsData : this.customerData,
@@ -447,7 +449,7 @@ export default {
     padding: 20px;
     margin-left: 20px;
     .input-sty {
-      width: 60%;
+      width: 50%;
     }
   }
   .save-btn {

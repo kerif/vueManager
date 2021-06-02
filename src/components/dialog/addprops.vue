@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="$t('添加物品属性')"
+    :title="state === 'edit' ? $t('编辑物品属性') : $t('添加物品属性')"
     class="props-dialog"
     width="35%"
     @close="clear"
@@ -23,37 +23,72 @@ export default {
     return {
       ruleForm: {
         cn_name: ''
-      }
+      },
+      id: '',
+      name: '',
+      state: ''
     }
   },
   methods: {
     clear() {
       this.ruleForm.cn_name = ''
+      this.id = ''
+      this.name = ''
+      this.state = ''
+    },
+    init() {
+      if (this.id) {
+        this.ruleForm.cn_name = this.name
+      }
     },
     confirm() {
       if (!this.ruleForm.cn_name) return this.$message.error(this.$t('请输入属性名称'))
       console.log(this.ruleForm.cn_name, 'this.ruleForm.cn_name')
-      this.$request
-        .addPackageProps({
-          cn_name: this.ruleForm.cn_name
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
+      if (this.state === 'edit') {
+        this.$request
+          .updatePackageProps(this.id, {
+            cn_name: this.ruleForm.cn_name
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
             this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-          this.show = false
-        })
+          })
+      } else {
+        this.$request
+          .addPackageProps({
+            cn_name: this.ruleForm.cn_name
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+            this.show = false
+          })
+      }
     }
   }
 }

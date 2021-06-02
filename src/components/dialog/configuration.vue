@@ -13,16 +13,18 @@
       class="demo-ruleForm"
       label-position="top"
     >
-      <!-- 员工组中文名 -->
+      <!-- 小程序ID -->
       <el-form-item :label="$t('小程序ID')" prop="app_id">
         <el-input :placeholder="$t('请输入小程序ID')" v-model="ruleForm.app_id"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('公众号ID')" prop="oa_app_id">
+        <el-input :placeholder="$t('请输入公众号ID')" v-model="ruleForm.oa_app_id"></el-input>
       </el-form-item>
       <el-form-item :label="$t('商户号ID')">
         <el-input :placeholder="$t('请输入商户号ID')" v-model="ruleForm.mch_id"></el-input>
       </el-form-item>
       <el-form-item :label="$t('商户KEY')">
         <el-input :placeholder="$t('请输入商户KEY')" v-model="ruleForm.key"> </el-input>
-        <!--  <el-button class="btn-main chooseBtn">选择</el-button> -->
       </el-form-item>
       <el-form-item :label="$t('通信安全公钥证书')">
         <el-input
@@ -67,6 +69,7 @@ export default {
       fileList: [],
       ruleForm: {
         app_id: '',
+        oa_app_id: '',
         mch_id: '',
         key: '',
         cert_path: '',

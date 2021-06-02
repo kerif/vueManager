@@ -1,8 +1,8 @@
 <template>
   <div class="logistics-container">
-    <div>
+    <el-col :span="40">
       <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-    </div>
+    </el-col>
     <div class="select-box">
       <add-btn router="importLogistics">{{ $t('导入数据') }}</add-btn>
     </div>

@@ -30,6 +30,10 @@ exports.deleteLines = id => {
 exports.addPackageProps = params => {
   return $form.post('package-props', params)
 }
+// 配置 路线 更新物品属性
+exports.updatePackageProps = (id, params) => {
+  return $form.put(`package-props/${id}`, params)
+}
 // 获取高级配置
 // exports.getSorting = (id) => {
 //   return $form.get(`orders/${id}/re-sorting`)
@@ -989,6 +993,14 @@ exports.changeProgramImg = params => {
 exports.getProgramShare = () => {
   return $form.get('mini-program/share-page-info')
 }
+// 公众号配置 获取
+exports.getWechatOa = () => {
+  return $form.get('wechat-oa-config')
+}
+// 公众号配置 更新
+exports.updateWechatOa = params => {
+  return $form.put('wechat-oa-config', params)
+}
 // 更新海报配置
 exports.updateProgramShare = params => {
   return $form.put('mini-program/share-page-info', params)
@@ -1379,9 +1391,17 @@ exports.getPackage = () => {
 exports.propsLang = params => {
   return $form.get(`package-props`, { params })
 }
+// 物品属性 获取单条语言详情
+exports.propsAloneLang = (id, params) => {
+  return $form.get(`package-props/${id}`, { params })
+}
 // 物品属性 添加或修改语言
-exports.updatePropsLang = params => {
-  return $form.put(`package-props/translate-data`, params)
+exports.updatePropsLang = (id, params) => {
+  return $form.put(`package-props/${id}/translate-data`, params)
+}
+// 物品属性 确认拖拽
+exports.sortProps = params => {
+  return $form.put('package-props/sort', params)
 }
 // 添加新属性
 exports.addPackage = params => {

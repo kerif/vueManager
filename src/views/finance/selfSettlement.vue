@@ -1,6 +1,6 @@
 <template>
   <div class="self-settlement-container">
-    <!-- <el-popover placement="right" width="400" v-model="visible">
+    <el-popover placement="right" width="400" v-model="visible">
       <el-date-picker
         class="timeStyle"
         v-model="timeList"
@@ -16,7 +16,7 @@
       <el-button slot="reference" class="upload-sty" size="small" type="success" plain>{{
         $t('导出清单')
       }}</el-button>
-    </el-popover> -->
+    </el-popover>
     <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch">
         <!-- <el-date-picker
@@ -78,7 +78,7 @@
       <el-table-column :label="$t('计佣方式')" prop="rule.name"></el-table-column>
       <!-- 计佣金额 -->
       <el-table-column :label="$t('计佣金额')">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.rule">
           <span v-if="scope.row.rule.type === 1"
             >{{ localization.currency_unit ? localization.currency_unit : ''
             }}{{ scope.row.rule.amount }}</span
@@ -86,14 +86,12 @@
           <div v-if="scope.row.rule.type === 2">
             <span
               >{{ $t('首重') }}：{{ localization.currency_unit ? localization.currency_unit : ''
-              }}{{ scope.row.rule && scope.row.rule.first_money }}/{{
-                scope.row.rule && scope.row.rule.first_weight
+              }}{{ scope.row.rule.first_money }}/{{ scope.row.rule.first_weight
               }}{{ localization.weight_unit ? localization.weight_unit : '' }}</span
             ><br />
             <span
               >{{ $t('续重') }}：{{ localization.currency_unit ? localization.currency_unit : ''
-              }}{{ scope.row.rule && scope.row.rule.next_money }}/{{
-                scope.row.rule && scope.row.rule.next_weight
+              }}{{ scope.row.rule.next_money }}/{{ scope.row.rule.next_weight
               }}{{ localization.weight_unit ? localization.weight_unit : '' }}</span
             >
           </div>
