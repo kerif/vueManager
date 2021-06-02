@@ -266,7 +266,7 @@ export default {
     }
   }
   .input-sty {
-    // width: 40%;
+    width: 40%;
   }
 }
 </style>
