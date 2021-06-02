@@ -434,7 +434,17 @@
             <el-checkbox v-model="form.has_factor">{{ $t('考虑体积重') }}</el-checkbox>
           </el-col>
           <el-col :span="5" v-if="form.has_factor">
-            <div>{{ $t('是否半抛计费重量') }}</div>
+            <div>
+              <span>{{ $t('是否半抛计费重量') }}</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="$t('全抛为体积重与实重比大，半抛为（体积重+实重)/2')"
+                placement="top"
+              >
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
             <el-switch
               v-model="form.is_avg_weight"
               :active-text="$t('半抛')"
