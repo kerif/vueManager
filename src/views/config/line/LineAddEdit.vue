@@ -425,7 +425,11 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('勾选表示按实际重量和体积重量两者取大计算')"
+                :content="
+                  $t(
+                    '计费重量计算方式：1、全抛：实际重量与体积重量两者取大。2、半抛：（实际重量+体积重量）/2'
+                  )
+                "
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
