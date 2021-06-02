@@ -92,7 +92,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <!-- <el-row :gutter="20">
+      <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item>
             <div>
@@ -123,7 +123,7 @@
             <el-input style="width: 40%" v-model="ruleForm.store_fee"></el-input>
           </el-form-item>
         </el-col>
-      </el-row> -->
+      </el-row>
       <el-form-item
         :label="$t('温馨提示（主要提醒客户需要注意的事项，在客户端仓库地址页面显示）')"
         prop="tips"
