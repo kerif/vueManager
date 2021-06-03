@@ -260,7 +260,7 @@ export default {
       })
     },
     // 国家地区 开启或关闭
-    changeCountry(event, id) {
+    changeCountry(event, enabled, id) {
       console.log(event, 'event')
       if (event === 0) {
         this.$confirm(
