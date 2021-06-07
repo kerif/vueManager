@@ -18,11 +18,11 @@
           </el-date-picker>
         </div>
         <div class="chooseStatus">
-          <el-select size="mini" v-model="page_params.user_id" clearable :placeholder="$t('代理')">
+          <el-select size="mini" v-model="page_params.agent_id" clearable :placeholder="$t('代理')">
             <el-option
               v-for="item in agentList"
-              :key="item.id"
-              :value="item.id"
+              :key="item.user_id"
+              :value="item.user_id"
               :label="item.agent_name"
             >
             </el-option>
@@ -132,7 +132,7 @@ export default {
       urlExcel: '',
       checked: '',
       page_params: {
-        user_id: ''
+        agent_id: ''
       },
       agentList: [],
       trackDialog: false,
@@ -179,7 +179,7 @@ export default {
         page: this.page_params.page,
         size: this.page_params.size,
         agent: this.agent_name,
-        user_id: this.page_params.user_id
+        agent_id: this.page_params.agent_id
       }
       this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 提交时间
@@ -347,13 +347,13 @@ export default {
     },
     // 发货状态选择
     onShipStatus() {
-      this.page_params.handleQueryChange('user_id', this.page_params.user_id)
+      this.page_params.handleQueryChange('agent_id', this.page_params.agent_id)
       this.getList()
     },
     // 重置表单
     resetForm() {
       this.timeList = []
-      this.page_params.user_id = ''
+      this.page_params.agent_id = ''
     },
     // 提交表单
     submitForm() {
