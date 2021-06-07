@@ -501,7 +501,7 @@ export default [
             path: '/vip/sleepReminder',
             name: 'sleepReminder',
             component: sleepReminder,
-            id: 305,
+            id: 307,
             meta: {
               level: 2,
               group: '客户',
