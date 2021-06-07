@@ -242,7 +242,7 @@
               <!-- 提交时间 -->
               <el-table-column
                 :label="$t('提交时间')"
-                prop="updated_at"
+                prop="created_at"
                 v-if="['1', '2', '3', '4'].includes(activeName)"
               ></el-table-column>
               <el-table-column
