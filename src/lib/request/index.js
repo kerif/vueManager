@@ -694,6 +694,22 @@ exports.singleAddress = id => {
 exports.updateSingleAddress = (id, params) => {
   return $form.put(`user-addresses/${id}`, params)
 }
+// 沉睡提醒
+exports.getAsleep = params => {
+  return $form.get('asleep-users', { params })
+}
+// 获取沉睡设置
+exports.getSleepRules = params => {
+  return $form.get('asleep-users/rule', params)
+}
+// 更新沉睡设置
+exports.updateSleepRules = params => {
+  return $form.put('asleep-users/rule', params)
+}
+// 唤醒 批量
+exports.batchWake = params => {
+  return $form.post('asleep-users/notify', params)
+}
 // 客户 删除
 exports.deleteUser = ids => {
   return $form.put('users/batch-delete', ids)
@@ -1967,6 +1983,10 @@ exports.updateNewLang = (id, params) => {
 // 营销管理 抵用券管理
 exports.getCouponList = params => {
   return $form.get('coupons', { params })
+}
+// 营销管理 抵用券管理 详情
+exports.getCouponDetails = id => {
+  return $form.get(`coupons/${id}`)
 }
 // 营销管理 下单返券
 exports.rebateList = () => {

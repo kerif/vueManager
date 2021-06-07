@@ -122,6 +122,16 @@
               @click="recoding(scope.row.id)"
               >{{ $t('记录') }}</el-button
             >
+            <el-button
+              size="small"
+              v-if="
+                (activeName === '1' || activeName === '2' || activeName === '3') &&
+                scope.row.share_status !== 0
+              "
+              class="btn-pink detailsBtn"
+              @click="share(scope.row.id)"
+              >{{ $t('分享') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -144,6 +154,22 @@
       <div slot="footer">
         <el-button @click="show = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 分享 -->
+    <el-dialog
+      :visible.sync="shareDialog"
+      :title="$t('分享')"
+      class="change-status-dialog dialog-container"
+      width="35%"
+      @close="shareClear"
+    >
+      <span class="img-item">
+        <img :src="`${$baseUrl.IMAGE_URL}${imgShare}`" alt="" class="goods-img" />
+      </span>
+      <div slot="footer">
+        <!-- <el-button @click="show = false">{{ $t('取消') }}</el-button> -->
+        <el-button type="primary" @click="uploadCode">{{ $t('下载二维码') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -184,6 +210,7 @@ export default {
         }
       ],
       show: false,
+      shareDialog: false,
       selectIDs: [],
       servingId: '',
       localization: {},
@@ -192,7 +219,8 @@ export default {
       transCode: '',
       ruleForm: {
         status: []
-      }
+      },
+      imgShare: ''
     }
   },
   created() {
@@ -265,6 +293,20 @@ export default {
     // 记录
     recoding(id) {
       this.$router.push({ name: 'notes', query: { id: id } })
+    },
+    // 分享
+    share(id) {
+      this.shareDialog = true
+      this.$request.getCouponDetails(id).then(res => {
+        if (res.ret) {
+          this.imgShare = res.data.share_qr_code
+        }
+      })
+    },
+    shareClear() {},
+    // 下载二维码
+    uploadCode() {
+      window.open(`${this.$baseUrl.IMAGE_URL}${this.imgShare}`)
     },
     // 作废
     obsolete(id) {
@@ -458,6 +500,26 @@ export default {
     margin: 0 10px;
     .el-input {
       width: 100%;
+    }
+  }
+  .img-item {
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    width: 148px;
+    height: 148px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box,
+      .operat-box {
+        opacity: 1;
+        transition: all 0.5s ease-in;
+      }
     }
   }
 }

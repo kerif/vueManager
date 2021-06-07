@@ -22,6 +22,8 @@ const VipList = loadonDemand('vip/vip/viplist')
 const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
 // 客户 代理申请管理
 const application = loadonDemand('vip/application')
+// 沉睡提醒
+const sleepReminder = loadonDemand('vip/sleepReminder')
 // 客户 客户概览
 const customerEcharts = loadonDemand('vip/customer/echarts')
 // 客户地址
@@ -493,6 +495,17 @@ export default [
               level: 2,
               group: '客户',
               name: '代理申请管理'
+            }
+          },
+          {
+            path: '/vip/sleepReminder',
+            name: 'sleepReminder',
+            component: sleepReminder,
+            id: 305,
+            meta: {
+              level: 2,
+              group: '客户',
+              name: '沉睡提醒'
             }
           },
           {
