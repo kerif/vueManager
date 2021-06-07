@@ -505,7 +505,7 @@ export default [
             meta: {
               level: 2,
               group: '客户',
-              name: '沉睡提醒'
+              name: '沉睡提醒beta版'
             }
           },
           {
