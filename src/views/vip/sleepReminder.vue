@@ -72,7 +72,7 @@
         <el-table-column :label="$t('代理')" prop="invitor"></el-table-column>
         <el-table-column :label="$t('未登录（天）')" prop="not_login_days"></el-table-column>
         <el-table-column :label="$t('未下单（天）')" prop="not_order_days"></el-table-column>
-        <el-table-column :label="$t('最后下单时间')" prop="last_login_at"></el-table-column>
+        <el-table-column :label="$t('最后下单时间')" prop="created_at"></el-table-column>
         <el-table-column :label="$t('登录时间')" prop="last_login_at"></el-table-column>
         <el-table-column :label="$t('最近唤醒时间')" prop="wakeup_time"></el-table-column>
         <!-- 操作 -->
@@ -101,7 +101,7 @@
       </div>
       <div class="sleep-tips">{{ $t('不填写或填写数值为0，代表不启用该条件') }}</div>
       <div slot="footer">
-        <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
+        <el-button @click="sleepDialog = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="changeSleep">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>

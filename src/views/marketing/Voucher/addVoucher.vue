@@ -50,13 +50,13 @@
           </p>
         </div>
       </div>
-      <el-form-item :label="$t('优惠券类型')" prop="scope">
+      <!-- <el-form-item :label="$t('优惠券类型')" prop="scope">
         <el-radio-group v-model="ruleForm.is_shared">
           <el-radio :label="0">{{ $t('普通抵用券') }}</el-radio>
           <el-radio :label="1">{{ $t('用户抢券') }}</el-radio>
         </el-radio-group>
-      </el-form-item>
-      <div v-if="ruleForm.is_shared === 1">
+      </el-form-item> -->
+      <!-- <div v-if="ruleForm.is_shared === 1">
         <el-form-item :label="$t('抢券开始时间')">
           <el-date-picker
             :picker-options="pickerOptions"
@@ -95,7 +95,7 @@
             <el-radio :label="0">{{ $t('否') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-      </div>
+      </div> -->
       <el-form-item>
         <el-button
           type="primary"

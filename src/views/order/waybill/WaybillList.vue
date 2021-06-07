@@ -506,11 +506,16 @@
         </el-table-column>
         <el-table-column
           width="155"
-          :label="$t('提交时间')"
+          :label="timeLabel"
           prop="updated_at"
           key="updated_at"
           v-if="['1', '2', '3', '4'].includes(activeName)"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <span v-if="activeName === '4'">{{ scope.row.shipped_at }}</span>
+            <span v-else>{{ scope.row.updated_at }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           width="155"
           :label="$t('拣货时间')"
@@ -1957,6 +1962,17 @@ export default {
     },
     clearPayment() {
       this.payment_mode = ''
+    }
+  },
+  computed: {
+    timeLabel() {
+      let label = this.$t('提交时间')
+      if (this.activeName === '3') {
+        label = this.$t('支付时间')
+      } else if (this.activeName === '4') {
+        label = this.$t('发货时间')
+      }
+      return label
     }
   }
 }
