@@ -242,7 +242,7 @@
               <!-- 提交时间 -->
               <el-table-column
                 :label="$t('提交时间')"
-                prop="updated_at"
+                prop="created_at"
                 v-if="['1', '2', '3', '4'].includes(activeName)"
               ></el-table-column>
               <el-table-column
@@ -506,11 +506,16 @@
         </el-table-column>
         <el-table-column
           width="155"
-          :label="$t('提交时间')"
+          :label="timeLabel"
           prop="updated_at"
           key="updated_at"
           v-if="['1', '2', '3', '4'].includes(activeName)"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <span v-if="activeName === '4'">{{ scope.row.shipped_at }}</span>
+            <span v-else>{{ scope.row.updated_at }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           width="155"
           :label="$t('拣货时间')"
@@ -611,7 +616,9 @@
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="
-                    (activeName === '2' || scope.row.on_delivery_status === 1) &&
+                    (activeName === '2' ||
+                      scope.row.on_delivery_status === 1 ||
+                      scope.row.on_delivery_status === 12) &&
                     scope.row.is_parent === 0
                   "
                   @click.native="
@@ -1957,6 +1964,17 @@ export default {
     },
     clearPayment() {
       this.payment_mode = ''
+    }
+  },
+  computed: {
+    timeLabel() {
+      let label = this.$t('提交时间')
+      if (this.activeName === '3') {
+        label = this.$t('支付时间')
+      } else if (this.activeName === '4') {
+        label = this.$t('发货时间')
+      }
+      return label
     }
   }
 }

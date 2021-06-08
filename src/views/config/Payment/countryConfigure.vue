@@ -233,9 +233,6 @@ export default {
     },
     // 删除国家地区
     deleteCountry(ids) {
-      if (!ids.length) {
-        return this.$message.error(this.$t('请选择'))
-      }
       this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -260,7 +257,7 @@ export default {
       })
     },
     // 国家地区 开启或关闭
-    changeCountry(event, id) {
+    changeCountry(event, enabled, id) {
       console.log(event, 'event')
       if (event === 0) {
         this.$confirm(

@@ -118,7 +118,7 @@
           <el-form-item
             :label="`${$t('超期收费')}${
               localization.currency_unit ? localization.currency_unit : ''
-            }`"
+            }/${$t('天')}`"
           >
             <el-input style="width: 40%" v-model="ruleForm.store_fee"></el-input>
           </el-form-item>

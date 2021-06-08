@@ -419,13 +419,17 @@
             <el-input v-model="form.factor" :placeholder="$t('请输入内容')"></el-input>
           </el-col>
           <!-- 计重模式 -->
-          <el-col :span="5">
+          <el-col :span="3">
             <div>
               <span>{{ $t('计重模式') }}</span>
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('勾选表示按实际重量和体积重量两者取大计算')"
+                :content="
+                  $t(
+                    '计费重量计算方式：1、全抛：实际重量与体积重量两者取大。2、半抛：（实际重量+体积重量）/2'
+                  )
+                "
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -434,17 +438,7 @@
             <el-checkbox v-model="form.has_factor">{{ $t('考虑体积重') }}</el-checkbox>
           </el-col>
           <el-col :span="5" v-if="form.has_factor">
-            <div>
-              <span>{{ $t('是否半抛计费重量') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('全抛为体积重与实重比大，半抛为（体积重+实重)/2')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
-            </div>
+            <div style="margin-top: 38px"></div>
             <el-switch
               v-model="form.is_avg_weight"
               :active-text="$t('半抛')"

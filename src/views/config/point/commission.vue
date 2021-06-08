@@ -1,8 +1,8 @@
 <template>
   <div class="commission-container">
-    <div>
+    <el-col :span="4">
       <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-    </div>
+    </el-col>
     <div class="select-box">
       <add-btn @click.native="addCommission">{{ $t('添加') }}</add-btn>
     </div>
