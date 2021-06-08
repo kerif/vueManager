@@ -57,23 +57,14 @@
         </el-radio-group>
       </el-form-item>
       <div v-if="ruleForm.is_shared === 1">
-        <el-form-item :label="$t('抢券开始时间')">
+        <el-form-item :label="$t('抢券时间')">
           <el-date-picker
             :picker-options="pickerOptions"
-            value-format="yyyy-MM-dd"
-            v-model="ruleForm.share_begin_at"
-            type="date"
-            :placeholder="$t('抢券开始时间')"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item :label="$t('抢券结束时间')">
-          <el-date-picker
-            :picker-options="pickerOptions"
-            value-format="yyyy-MM-dd"
-            v-model="ruleForm.share_end_at"
-            type="date"
-            :placeholder="$t('抢券结束时间')"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            v-model="timeList"
+            type="datetimerange"
+            start-placeholder="抢券开始时间"
+            end-placeholder="抢券结束时间"
           >
           </el-date-picker>
         </el-form-item>
@@ -130,6 +121,7 @@ export default {
         ignore_launch_count: 0
       },
       lineName: [], // 保存获取到的路线
+      timeList: [],
       rules: {
         name: [{ required: true, message: this.$t('请输入名称'), trigger: 'blur' }],
         amount: [{ required: true, message: this.$t('请输入金额'), trigger: 'blur' }],
@@ -164,22 +156,28 @@ export default {
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$request.addCoupons(this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
-              this.getList()
-              this.$router.push({ name: 'voucher' })
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
+          this.$request
+            .addCoupons({
+              ...this.ruleForm,
+              share_begin_at: this.timeList[0],
+              share_end_at: this.timeList[1]
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.getList()
+                this.$router.push({ name: 'voucher' })
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+            })
         } else {
           return false
         }

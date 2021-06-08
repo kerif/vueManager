@@ -10,7 +10,7 @@
       <!-- 已失效 -->
       <el-tab-pane :label="$t('已失效')" name="4"></el-tab-pane>
     </el-tabs>
-    <div class="" style="overflow: hidden">
+    <div style="overflow: hidden">
       <add-btn router="addVoucher">{{ $t('添加') }}</add-btn>
       <div class="changeVou">
         <el-select
@@ -194,7 +194,7 @@ export default {
       activeName: '1',
       voucherData: [],
       status: '',
-      type: '1',
+      type: '',
       voucherChange: [
         {
           id: '2',

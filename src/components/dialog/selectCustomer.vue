@@ -2,6 +2,7 @@
   <el-dialog
     :visible.sync="show"
     :title="$t('选择客户')"
+    width="80%"
     class="dialog-selectCustomer"
     @close="clear"
   >
