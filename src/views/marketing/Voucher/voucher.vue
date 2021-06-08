@@ -202,7 +202,7 @@ export default {
         },
         {
           id: '1',
-          name: this.$t('抵用券')
+          name: this.$t('普通抵用券')
         },
         {
           id: '',
@@ -210,7 +210,7 @@ export default {
         },
         {
           id: '3',
-          name: this.$t('用户分享券')
+          name: this.$t('用户抢券')
         }
       ],
       show: false,

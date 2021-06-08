@@ -616,7 +616,9 @@
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="
-                    (activeName === '2' || scope.row.on_delivery_status === 1) &&
+                    (activeName === '2' ||
+                      scope.row.on_delivery_status === 1 ||
+                      scope.row.on_delivery_status === 12) &&
                     scope.row.is_parent === 0
                   "
                   @click.native="
