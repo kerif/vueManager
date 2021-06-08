@@ -122,7 +122,7 @@
               @click="recoding(scope.row.id)"
               >{{ $t('记录') }}</el-button
             >
-            <!-- <el-button
+            <el-button
               size="small"
               v-if="
                 (activeName === '1' || activeName === '2' || activeName === '3') &&
@@ -131,7 +131,7 @@
               class="btn-pink detailsBtn"
               @click="share(scope.row.id)"
               >{{ $t('分享') }}</el-button
-            > -->
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -207,6 +207,10 @@ export default {
         {
           id: '',
           name: this.$t('全部')
+        },
+        {
+          id: '3',
+          name: this.$t('用户分享券')
         }
       ],
       show: false,
