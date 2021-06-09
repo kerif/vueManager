@@ -70,12 +70,12 @@
           v-model="ruleForm.refund_method"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('备注')">
+      <el-form-item :label="$t('作废原因')">
         <el-input
           type="textarea"
           v-model="ruleForm.invalid_reason"
           :autosize="{ minRows: 2, maxRows: 4 }"
-          :placeholder="$t('请输入')"
+          :placeholder="$t('请输入作废原因')"
         ></el-input>
       </el-form-item>
       <el-form-item :label="$t('备注截图')" class="updateChe">

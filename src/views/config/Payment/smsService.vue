@@ -76,14 +76,16 @@
         <el-row :gutter="20">
           <el-col :span="10" v-for="item in smsData" :key="item.id">
             <div class="tootip-sty">
-              {{ item.type_name }}
+              <div style="width: 130px; display: inline-block">
+                {{ item.type_name }}
+              </div>
               <el-tooltip
                 class="item code-sty"
                 effect="dark"
                 :content="item.content"
                 placement="top"
               >
-                <span class="el-icon-warning icon-info"></span>
+                <span class="el-icon-warning"></span>
               </el-tooltip>
             </div>
             <el-switch
@@ -117,13 +119,19 @@
             </el-col>
           </el-row>
         </el-form>
-        <div class="template-msg">
-          {{ $t('不填写或填写无效模版ID，默认为不发送该类型信息') }}<br />
-          {{
-            $t(
-              '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
-            )
-          }}
+        <div class="template-main">
+          <div class="template-icon">
+            <i class="el-icon-warning code-sty"></i>
+          </div>
+          <div class="template-msg">
+            {{ $t('不填写或填写无效模版ID，默认为不发送该类型信息') }}<br />
+            {{
+              $t(
+                '变量说明：包裹单号#package#；订单号#order#；充值/扣款金额#amount#；自提点名称#warehouse#'
+              )
+            }}<br />
+            {{ $t('自提点名称#warehouse；作废原因#reason_of_invalidation#') }}
+          </div>
         </div>
       </div>
     </div>
@@ -469,9 +477,18 @@ export default {
     width: 160px;
     margin-bottom: 20px;
   }
-  .template-msg {
-    font-size: 14px;
-    color: #ccc;
+  .template-main {
+    .template-icon {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    .template-msg {
+      display: inline-block;
+      font-size: 14px;
+      color: #ccc;
+      vertical-align: middle;
+    }
   }
 }
 .details-dialog {
