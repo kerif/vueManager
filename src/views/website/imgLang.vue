@@ -27,7 +27,7 @@
         >
           <i class="el-icon-plus"> </i> </el-upload
         ><br />
-        <span>{{ $t('建议尺寸') }}&nbsp;{{ size }}</span>
+        <span>{{ $t('建议尺寸') }}&nbsp;1600px*480px</span>
       </el-form-item>
       <!-- 编辑图片 -->
       <el-form-item :label="$t('图片二')" class="updateChe">
@@ -49,7 +49,7 @@
         >
           <i class="el-icon-plus"> </i> </el-upload
         ><br />
-        <span>{{ $t('建议尺寸') }}&nbsp;{{ size }}</span>
+        <span>{{ $t('建议尺寸') }}&nbsp;480px*1080px</span>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -76,7 +76,6 @@ export default {
       baleImgList: [],
       secondImgList: [],
       type: '',
-      size: '',
       line: {
         id: '',
         name: ''
@@ -107,7 +106,6 @@ export default {
         })
         .then(res => {
           if (res.ret) {
-            this.size = res.data.size
             res.data.content.image1 && this.$set(this.baleImgList, 0, res.data.content.image1)
             res.data.content.image2 && this.$set(this.secondImgList, 0, res.data.content.image2)
           }

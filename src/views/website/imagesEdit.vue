@@ -21,7 +21,7 @@
         >
           <i class="el-icon-plus"> </i> </el-upload
         ><br />
-        <span>{{ $t('建议尺寸') }}&nbsp;{{ size }}</span>
+        <span>{{ $t('建议尺寸') }}&nbsp;1600px*480px</span>
       </el-form-item>
       <el-form-item :label="$t('图片二')" class="updateChe">
         <span class="img-item" v-for="(item, index) in secondImgList" :key="index">
@@ -42,7 +42,7 @@
         >
           <i class="el-icon-plus"> </i> </el-upload
         ><br />
-        <span>{{ $t('建议尺寸') }}&nbsp;{{ size }}</span>
+        <span>{{ $t('建议尺寸') }}&nbsp;480px*1080px</span>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -87,7 +87,6 @@ export default {
     getList() {
       this.$request.getBlocksDetails(this.$route.params.id).then(res => {
         if (res.ret) {
-          this.size = res.data.size
           console.log(res.data.content.image1, 'res.data.content.image1')
           if (res.data.content) {
             res.data.content.image1 && this.$set(this.baleImgList, 0, res.data.content.image1)
