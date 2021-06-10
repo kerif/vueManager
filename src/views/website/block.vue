@@ -77,6 +77,12 @@
             >{{ $t('编辑') }}</el-button
           >
           <el-button
+            @click="editImages(scope.row.id)"
+            v-if="scope.row.type === 9 && activeName !== '5'"
+            class="btn-green"
+            >{{ $t('编辑') }}</el-button
+          >
+          <el-button
             v-if="scope.row.type === 2 && activeName !== '5'"
             class="btn-yellow"
             @click="editFeatures(scope.row.id, 'image')"
@@ -248,6 +254,19 @@ export default {
             type
           }
         })
+      } else if (type === 9) {
+        this.transCode = line['trans_' + lang.language_code]
+        this.$router.push({
+          name: 'imgLangEdit',
+          params: {
+            line: JSON.stringify(line),
+            lang: JSON.stringify(lang),
+            transCode: this.transCode
+          },
+          query: {
+            type
+          }
+        })
       } else {
         const status = this.activeName === '5' ? 'origin' : 'others'
         this.transCode = line['trans_' + lang.language_code]
@@ -304,6 +323,19 @@ export default {
         params: {
           id,
           status
+        }
+      })
+    },
+    // 编辑图片
+    editImages(id) {
+      const activeName = this.activeName
+      this.$router.push({
+        name: 'editImages',
+        params: {
+          id
+        },
+        query: {
+          activeName
         }
       })
     },

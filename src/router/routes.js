@@ -224,6 +224,8 @@ const blockLang = loadonDemand('website/blockLang')
 const blockOthersLang = loadonDemand('website/othersLang')
 // 区块管理 编辑图片、颜色、位置
 const editOthersBlocks = loadonDemand('website/editOthers')
+// 区块管理 编辑两张图片
+const editImages = loadonDemand('website/imagesEdit')
 // 区块管理 编辑链接
 const editLink = loadonDemand('website/linkEdit')
 // 区块管理 编辑字符串
@@ -236,6 +238,8 @@ const blockEdit = loadonDemand('website/blockAddEdit')
 const otherWebsite = loadonDemand('website/otherWebsite')
 // 区块管理 编辑语言
 const urlLangEdit = loadonDemand('website/urlLang')
+// 区块管理 图片编辑语言
+const imgLangEdit = loadonDemand('website/imgLang')
 export default [
   {
     path: '/',
@@ -505,7 +509,7 @@ export default [
             meta: {
               level: 2,
               group: '客户',
-              name: '沉睡提醒beta版'
+              name: '客户预警beta版'
             }
           },
           {
@@ -1872,6 +1876,18 @@ export default [
             }
           },
           {
+            path: '/website/url/block/img/edit/:line/:lang/:transCode',
+            component: imgLangEdit,
+            name: 'imgLangEdit',
+            id: 1103,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '区块管理的翻译内容',
+              parent: '/website/block'
+            }
+          },
+          {
             path: '/website/block/others/lang/add/:line/:lang/:transCode',
             component: blockOthersLang,
             name: 'blockOthersLang',
@@ -1887,6 +1903,18 @@ export default [
             path: '/website/block/editOthers/:id/:type',
             component: editOthersBlocks,
             name: 'editOthersBlocks',
+            id: 1103,
+            meta: {
+              group: '官网管理',
+              level: 3,
+              name: '编辑',
+              parent: '/website/block'
+            }
+          },
+          {
+            path: '/website/block/editOthers/:id',
+            component: editImages,
+            name: 'editImages',
             id: 1103,
             meta: {
               group: '官网管理',

@@ -1648,6 +1648,10 @@ exports.detailsAreas = id => {
 exports.updateDetailsAreas = (id, params) => {
   return $form.put(`countries/areas/${id}`, params)
 }
+// 国家地区 获取地域通知列表数据
+exports.getRegional = () => {
+  return $form.get('countries/area-notifications')
+}
 // 订单增值服务 语言详情
 exports.serviceLang = (id, params) => {
   return $form.get(`value-added-services/${id}`, { params })
