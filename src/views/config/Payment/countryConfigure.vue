@@ -76,8 +76,10 @@
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
           <div class="top-right">
+            <el-button class="btn-dark-green" @click="regionalMana">{{
+              $t('地域通知管理')
+            }}</el-button>
             <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
-            <!-- <el-button class="btn-dark-green">{{$t('批量导入')}}</el-button> -->
             <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
           </div>
           <!-- @expand-change="onExpand" -->
@@ -173,6 +175,48 @@
         </div>
       </el-col>
     </el-row>
+    <el-dialog :title="$t('地域通知管理')" :visible.sync="outerVisible">
+      <div style="margin-bottom: 20px; overflow: hidden">
+        <el-col :span="21">
+          <div class="tips-main">
+            <i class="el-icon-warning code-sty"></i>
+            {{ $t('添加通知信息后，客户在下单选择该地区的地址时，会弹出对应提示') }}
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <el-button class="btn-blue">{{ $t('添加') }}</el-button>
+        </el-col>
+      </div>
+      <el-table :data="regionalData" stripe border class="data-list" v-loading="tableLoading">
+        <el-table-column type="index" width="50"> </el-table-column>
+        <el-table-column :label="$t('区域')">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.areas" :key="item.id">{{ item.name }}&nbsp;</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button @click="editRegional(scope.row.id)" class="btn-dark-green">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button @click="deleteRegional(scope.row.id)" class="btn-light-red">{{
+              $t('删除')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      <el-dialog width="30%" title="内层 Dialog" :visible.sync="innerVisible" append-to-body>
+        <div slot="footer">
+          <el-button>{{ $t('取消') }}</el-button>
+          <el-button type="primary">{{ $t('确定') }}</el-button>
+        </div>
+      </el-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="outerVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="innerVisible = true">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -180,10 +224,14 @@
 import AddBtn from '@/components/addBtn'
 import dialog from '@/components/dialog'
 import Sortable from 'sortablejs'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   components: {
-    AddBtn
+    AddBtn,
+    NlePagination
   },
+  mixins: [pagination],
   data() {
     return {
       countryData: [],
@@ -194,7 +242,10 @@ export default {
       secondNum: [],
       enabled: 0,
       countryId: '',
-      countryName: ''
+      countryName: '',
+      outerVisible: false,
+      innerVisible: false,
+      regionalData: []
     }
   },
   created() {
@@ -514,6 +565,31 @@ export default {
       dialog({ type: 'superiorAddEdit', id: id, state: 'edit' }, () => {
         this.goDeatils(this.countryName, this.countryId)
       })
+    },
+    // 地域通知管理
+    regionalMana() {
+      this.outerVisible = true
+      this.getRegional()
+    },
+    // 获取地域数据
+    getRegional() {
+      this.tableLoading = true
+      this.$request.getRegional().then(res => {
+        if (res.ret) {
+          this.tableLoading = false
+          this.regionalData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        }
+      })
+    },
+    // 编辑地域
+    editRegional(id) {
+      id
+    },
+    // 删除地域
+    deleteRegional(id) {
+      id
     }
   }
 }
@@ -539,6 +615,17 @@ export default {
   .top-right {
     display: inline-block;
     float: right;
+  }
+  .code-sty {
+    padding-left: 5px;
+    color: #35b85a;
+    font-size: 18px;
+  }
+  .tips-main {
+    display: inline-block;
+    background-color: #f5f5f5;
+    line-height: 30px;
+    padding-right: 20px;
   }
 }
 </style>

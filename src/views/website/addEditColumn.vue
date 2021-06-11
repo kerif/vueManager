@@ -241,6 +241,7 @@ export default {
     },
     // 保存
     submit() {
+      console.log(this.ruleForm.article_type, 'article_type')
       if (this.customerList[0]) {
         this.ruleForm.image = this.customerList[0]
       } else {

@@ -13,6 +13,12 @@
       <el-form-item :label="`AppSecret${$t('密钥')}`">
         <el-input v-model="setForm.secret"> </el-input>
       </el-form-item>
+      <el-form-item label="token">
+        <el-input v-model="setForm.token"> </el-input>
+      </el-form-item>
+      <el-form-item label="aes_key">
+        <el-input v-model="setForm.aes_key"> </el-input>
+      </el-form-item>
       <el-form-item :label="$t('公众号二维码')" class="updateChe">
         <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
@@ -48,6 +54,8 @@ export default {
       setForm: {
         image: '',
         secret: '',
+        token: '',
+        aes_key: '',
         app_id: ''
       },
       visibleOauth: false,
@@ -69,6 +77,8 @@ export default {
       this.$request.getWechatOa().then(res => {
         this.setForm.app_id = res.data.app_id
         this.setForm.secret = res.data.secret
+        this.setForm.token = res.data.token
+        this.setForm.aes_key = res.data.aes_key
         res.data.image && (this.baleImgList[0] = res.data.image)
         // this.$set(this.baleImgList, 0, res.data.image)
       })
