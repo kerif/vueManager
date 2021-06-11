@@ -2000,6 +2000,7 @@ export default {
 
   .waybill-data-list {
     background-color: inherit;
+    overflow-y: auto !important;
   }
   .tab-length {
     width: 870px !important;
