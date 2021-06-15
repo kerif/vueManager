@@ -1069,6 +1069,7 @@ export default {
     toogleExpand(row) {
       let $table = this.$refs.table
       $table.toggleRowExpansion(row)
+      console.log('toogleExpand')
     },
     onFilterChange() {
       this.hasFilterCondition = !this.hasFilterCondition
@@ -1077,12 +1078,14 @@ export default {
       this.getList()
     },
     groupBuy(row, flag = true) {
+      console.log('我进来groupby')
       // 如果当前货单已经获取了二级菜单数据，就不在获取
       if (flag) {
+        console.log(flag, 'flag')
         this.toogleExpand(row)
       }
+      console.log('fs', row.secondData.length)
       if (row.secondData.length) return
-      // console.log('fs', row.secondData)
       let id = row.id
       this.$request.orderSecond(id).then(res => {
         if (res.ret) {
@@ -1104,17 +1107,19 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             // 待发货列表的转运快递单号添加
-            res.data.forEach(item => {
-              item.disabled = true
-              item.copySN = item.logistics_sn
-              if (this.expands.includes(item.id)) {
-                this.groupBuy(item, false)
-              }
-            })
             this.oderData = res.data.map(item => {
+              console.log('111')
               return {
                 ...item,
                 secondData: []
+              }
+            })
+            this.oderData.forEach(item => {
+              item.disabled = true
+              item.copySN = item.logistics_sn
+              if (this.expands.includes(item.id)) {
+                console.log('我在二级')
+                this.groupBuy(item, false)
               }
             })
             this.localization = res.localization
