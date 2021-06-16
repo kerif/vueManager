@@ -598,6 +598,12 @@
         ></el-table-column>
       </el-table>
     </div>
+    <div class="bale-left packed-details">
+      <span>{{ $t('仓库备注') }}</span>
+      <span>
+        {{ form.remark }}
+      </span>
+    </div>
     <div class="bale">
       <div class="bale-left">
         <span>{{ $t('打包照片') }}</span>

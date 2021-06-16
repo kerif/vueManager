@@ -509,7 +509,7 @@ export default [
             meta: {
               level: 2,
               group: '客户',
-              name: '客户预警beta版'
+              name: '未活跃提醒'
             }
           },
           {

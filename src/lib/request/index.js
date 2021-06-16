@@ -529,6 +529,10 @@ exports.recipeAddress = params => {
 exports.confirmChangeAddress = params => {
   return $json.post('package-packs/user-specific-address', params)
 }
+// 包裹快速合箱 提示
+exports.getNotify = params => {
+  return $form.get(`area-notifications`, { params })
+}
 // 包裹快速合箱 按预报批次集包
 exports.groupBy = params => {
   return $form.get('package-packs/packages-group-by-batch', { params })
@@ -1651,6 +1655,22 @@ exports.updateDetailsAreas = (id, params) => {
 // 国家地区 获取地域通知列表数据
 exports.getRegional = () => {
   return $form.get('countries/area-notifications')
+}
+// 国家地区 地域通知管理 新增
+exports.newNotifi = params => {
+  return $form.post('countries/area-notifications', params)
+}
+// 国家地区 地域通知管理 新增
+exports.getNotifi = id => {
+  return $form.get(`countries/area-notifications/${id}`)
+}
+// 国家地区 地域通知管理 新增
+exports.deleteNotifi = id => {
+  return $form.delete(`countries/area-notifications/${id}`)
+}
+// 国家地区 地域通知管理 更新
+exports.updateNotifi = (id, params) => {
+  return $form.put(`countries/area-notifications/${id}`, params)
 }
 // 订单增值服务 语言详情
 exports.serviceLang = (id, params) => {
