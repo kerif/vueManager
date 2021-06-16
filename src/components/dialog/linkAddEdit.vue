@@ -224,6 +224,12 @@ export default {
           this.ruleForm.sort_index = res.data.sort_index
           this.ruleForm.title = res.data.title
           this.ruleForm.type = res.data.type
+          if (res.data.type === 4) {
+            this.onceType = res.data.article_type
+            this.secondType = Number(res.data.value)
+            this.getColumn()
+            this.getSecondColumn()
+          }
           console.log(typeof res.data.type, 'type1111')
           this.stringData = this.stringData.map(item => {
             const value = res.data.name_translations[item.language_code]
@@ -277,12 +283,7 @@ export default {
       let method = this.state === 'add' ? 'newLinkDetails' : 'updateLinkDetails'
       this.$request[method](this.id, {
         ...this.ruleForm,
-        article_type:
-          this.ruleForm.type === 4
-            ? this.secondType
-              ? this.secondType
-              : this.onceType
-            : this.ruleForm.article_type,
+        article_type: this.ruleForm.type === 4 ? this.onceType : this.ruleForm.article_type,
         value:
           this.ruleForm.type === 4
             ? this.secondType
