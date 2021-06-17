@@ -18,17 +18,10 @@
           :offset="1"
           :class="station.id === item.id ? 'selected' : ''"
         >
-          <el-badge
-            :value="
-              item.price > 0 ? `${localization.currency_unit}${item.price / item.count}/次` : ''
-            "
-            class="item"
-          >
+          <el-badge :value="item.price > 0 ? `RMB${item.price / item.count}/次` : ''" class="item">
             <span>{{ item.name }}</span
             ><br />
-            <span
-              >{{ localization.currency_unit }}{{ item.price }}/{{ item.count }}{{ $t('次') }}</span
-            >
+            <span>RMB{{ item.price }}/{{ item.count }}{{ $t('次') }}</span>
           </el-badge>
           <i class="el-icon-check icon-check" v-show="station.id === item.id"></i>
         </el-col>
@@ -43,7 +36,7 @@
         :min="1"
         :max="100"
       ></el-input-number>
-      <span>{{ $t('套餐金额') }}：{{ localization.currency_unit }}{{ packageAmount }}</span>
+      <span>{{ $t('套餐金额') }}：RMB{{ packageAmount }}</span>
     </div>
     <div class="line"></div>
     <p v-if="state === 'sms'">{{ $t('选择国际短信套餐') }}：</p>
@@ -59,17 +52,10 @@
           :class="secondData.id === item.id ? 'selected' : ''"
           @click.native="secondService(item)"
         >
-          <el-badge
-            :value="
-              item.price > 0 ? `${localization.currency_unit}${item.price / item.count}/次` : ''
-            "
-            class="item"
-          >
+          <el-badge :value="item.price > 0 ? `RMB${item.price / item.count}/次` : ''" class="item">
             <span>{{ item.name }}</span
             ><br />
-            <span
-              >{{ localization.currency_unit }}{{ item.price }}/{{ item.count }}{{ $t('次') }}</span
-            >
+            <span>RMB{{ item.price }}/{{ item.count }}{{ $t('次') }}</span>
           </el-badge>
           <i class="el-icon-check icon-check" v-show="secondData.id === item.id"></i>
         </el-col>
@@ -84,15 +70,13 @@
         :min="1"
         :max="100"
       ></el-input-number>
-      <span>{{ $t('套餐金额') }}：{{ localization.currency_unit }}{{ secondAmount }}</span>
+      <span>{{ $t('套餐金额') }}：RMB{{ secondAmount }}</span>
     </div>
     <div class="line"></div>
     <div class="bottom-main" v-if="packageAmount > 0 || secondAmount > 0">
       <div class="payment-sty">
         <span>{{ $t('应付金额') }}：</span>
-        <span class="fee-sty"
-          >{{ localization.currency_unit }}{{ packageAmount + secondAmount }}</span
-        >
+        <span class="fee-sty">RMB{{ packageAmount + secondAmount }}</span>
       </div>
       <div>
         <el-button class="btn-light-green" @click="getPay('wechat')">{{
