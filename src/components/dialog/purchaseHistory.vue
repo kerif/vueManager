@@ -19,11 +19,7 @@
       <!-- 国际短信 -->
       <el-table-column v-else prop="tracking_51" :label="$t('51Track')"> </el-table-column>
       <!-- 支付价格 -->
-      <el-table-column
-        prop="amount"
-        :label="$t('支付价格') + `${localization.currency_unit ? localization.currency_unit : ''}`"
-      >
-      </el-table-column>
+      <el-table-column prop="amount" :label="$t('支付价格') + 'RMB'"> </el-table-column>
       <!-- 支付方式 -->
       <el-table-column prop="payment_method" :label="$t('支付方式')"> </el-table-column>
     </el-table>
