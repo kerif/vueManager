@@ -6,25 +6,25 @@ export const formatWeek = value => {
   let week = ''
   switch (date.getDay()) {
     case 0:
-      week = '周日'
+      week = $t('周日')
       break
     case 1:
-      week = '周一'
+      week = $t('周一')
       break
     case 2:
-      week = '周二'
+      week = $t('周二')
       break
     case 3:
-      week = '周三'
+      week = $t('周三')
       break
     case 4:
-      week = '周四'
+      week = $t('周四')
       break
     case 5:
-      week = '周五'
+      week = $t('周五')
       break
     case 6:
-      week = '周六'
+      week = $t('周六')
       break
   }
   value = value.split('-')
@@ -34,7 +34,7 @@ export const formatWeek = value => {
 export const formatMonth = value => {
   if (!value) return
   let month = value.split('-')[1]
-  return `${month.replace(/^0/, '')}月`
+  return `${month.replace(/^0/, '')}${$t('月')}`
 }
 
 export const getCheckedChild = arr => {

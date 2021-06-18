@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('新增用户')" class="dialog-vip-add" @close="clear">
     <div class="top-font">
-      <p class="title">用户手机号和邮箱需要是唯一</p>
+      <p class="title">{{ $t('用户手机号和邮箱需要是唯一') }}</p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
       <!-- 用户手机号 -->

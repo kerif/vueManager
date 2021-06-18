@@ -187,9 +187,11 @@
       </div>
       <el-table :data="regionalData" stripe border class="data-list" v-loading="tableLoading">
         <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column :label="$t('区域')">
+        <el-table-column :label="$t('区域')" :show-overflow-tooltip="true" width="150">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.areas" :key="item.id">{{ item.name }}&nbsp;</span>
+            <span v-for="item in scope.row.areas" :key="item.id">
+              {{ item.country_name }}&nbsp;{{ item.parent_name }}&nbsp;{{ item.name }}&nbsp;
+            </span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('操作')">
@@ -724,6 +726,9 @@ export default {
     clearAres() {
       this.state = ''
       this.areasId = ''
+      this.form.area_ids = []
+      this.form.content = ''
+      this.stringData = []
     },
     // 新增区域
     newCountry() {

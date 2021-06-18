@@ -369,12 +369,12 @@ export default {
         if (res.ret) {
           this.pieData = res.data
           const obj = {
-            wait_storage: '未入库',
-            already_storage: '已入库',
-            packed: '已集包',
-            shipped: '已发货',
-            received: '已收货',
-            invalid: '弃件包裹'
+            wait_storage: this.$t('未入库'),
+            already_storage: this.$t('已入库'),
+            packed: this.$t('已集包'),
+            shipped: this.$t('已发货'),
+            received: this.$t('已收货'),
+            invalid: this.$t('弃件包裹')
           }
           // let pieOrderList = res.data.map(item => {
           //   console.log(item, 'item')
@@ -397,7 +397,14 @@ export default {
           this.option.legend = {
             orient: 'vertical',
             left: 10,
-            data: ['未入库', '已入库', '已集包', '已发货', '已收货', '弃件包裹']
+            data: [
+              this.$t('未入库'),
+              this.$t('已入库'),
+              this.$t('已集包'),
+              this.$t('已发货'),
+              this.$t('已收货'),
+              this.$t('弃件包裹')
+            ]
           }
           this.option.series = [
             {
@@ -493,12 +500,12 @@ export default {
         if (res.ret) {
           this.pieOrderData = res.data
           const obj = {
-            wait_pack: '待处理',
-            wait_payment: '待支付',
-            wait_shipped: '待发货',
-            shipped: '已发货',
-            received: '已签收',
-            invalid: '作废订单'
+            wait_pack: this.$t('待处理'),
+            wait_payment: this.$t('待支付'),
+            wait_shipped: this.$t('待发货'),
+            shipped: this.$t('已发货'),
+            received: this.$t('已签收'),
+            invalid: this.$t('作废订单')
           }
           // let pieList = res.data.map(item => {
           //   console.log(item, 'item')
@@ -520,7 +527,14 @@ export default {
           this.orderLeft.legend = {
             orient: 'vertical',
             left: 10,
-            data: ['待处理', '待支付', '待发货', '已发货', '已签收', '作废订单']
+            data: [
+              this.$t('待处理'),
+              this.$t('待支付'),
+              this.$t('待发货'),
+              this.$t('已发货'),
+              this.$t('已签收'),
+              this.$t('作废订单')
+            ]
           }
           this.orderLeft.series = [
             {

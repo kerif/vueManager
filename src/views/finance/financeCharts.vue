@@ -170,7 +170,7 @@ export default {
         }
       },
       legend: {
-        data: ['总收入', '充值收入', '营业额'],
+        data: [this.$t('总收入'), this.$t('充值收入'), this.$t('营业额')],
         left: '200',
         top: 'bottom'
       }
@@ -260,7 +260,7 @@ export default {
           ]
           this.packageOption.series = [
             {
-              name: '总收入',
+              name: this.$t('总收入'),
               type: 'bar',
               data: totalData,
               itemStyle: {
@@ -273,7 +273,7 @@ export default {
               }
             },
             {
-              name: '充值收入',
+              name: this.$t('充值收入'),
               type: 'line',
               data: rechargeData,
               itemStyle: {
@@ -286,7 +286,7 @@ export default {
               }
             },
             {
-              name: '营业额',
+              name: this.$t('营业额'),
               type: 'line',
               data: paymentData,
               itemStyle: {

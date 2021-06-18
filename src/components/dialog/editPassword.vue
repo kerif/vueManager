@@ -7,7 +7,6 @@
           <p>{{ $t('用户名') }}</p>
           <p>&nbsp;&nbsp;{{ ruleForm.username }}</p>
         </el-col>
-        邮箱
         <el-col :span="7" :offset="2">
           <p>{{ $t('邮箱') }}</p>
           <p>&nbsp;&nbsp;{{ ruleForm.email }}</p>
