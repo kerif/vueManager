@@ -191,7 +191,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 客服备注 -->
         <el-row :gutter="20">
           <!-- 货位 -->
           <el-col :span="11" v-if="$route.params.parent == 0">
@@ -377,7 +376,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="10" :offset="2">
-            <el-form-item :label="$t('客服备注')" class="customer">
+            <el-form-item :label="$t('仓库备注')" class="customer">
               <el-input
                 type="textarea"
                 :placeholder="$t('请输入备注')"

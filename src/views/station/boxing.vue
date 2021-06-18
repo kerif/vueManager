@@ -506,6 +506,12 @@
         <el-button type="primary" @click="realPick">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <!-- 提示 -->
+    <el-dialog :visible.sync="tipsDialog" :title="$t('提示')" @close="tipsClear">
+      <div v-for="(item, index) in tipsContent" :key="index">
+        <span>{{ item }}</span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -581,7 +587,10 @@ export default {
       counts: '',
       clientId: '',
       addressData: [],
-      changeUpdate: 1
+      changeUpdate: 1,
+      tipsDialog: false,
+      tipsContent: [],
+      addressIds: []
     }
   },
   created() {
@@ -679,13 +688,31 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.addressList = res.data
-            console.log(this.addressList, 'this.addressList')
-          } else {
-            this.$notify({
-              title: this.$t('获取失败'),
-              message: res.msg,
-              type: 'warning'
+            res.data.map(item => {
+              if (item.address) {
+                this.addressIds = item.address.sub_area_id
+                  ? [item.address.sub_area_id]
+                  : [item.address.area_id]
+                console.log(this.addressIds, 'this.addressIds')
+                this.getTips()
+              }
             })
+          }
+        })
+    },
+    // 获取提示
+    getTips() {
+      this.$request
+        .getNotify({
+          ids: this.addressIds
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tipsContent = res.data.content
+            if (this.tipsContent.length) {
+              this.tipsDialog = true
+            }
+            console.log(res.data, 'data')
           }
         })
     },
@@ -743,6 +770,15 @@ export default {
           })
           this.boxDialog = false
           this.addressList = res.data
+          res.data.map(item => {
+            if (item.address) {
+              this.addressIds = item.address.sub_area_id
+                ? [item.address.sub_area_id]
+                : [item.address.area_id]
+              console.log(this.addressIds, 'this.addressIds')
+              this.getTips()
+            }
+          })
           // this.getRecipeAddress() // 重新拉取收件地址
         } else {
           this.$notify({
@@ -1068,6 +1104,7 @@ export default {
       this.chooseId = ''
       this.user = {}
     },
+    tipsClear() {},
     // 收件地址弹窗
     clearAddress() {
       // this.clientId = ''

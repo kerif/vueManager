@@ -3,6 +3,7 @@
     <el-row :gutter="20">
       <el-col :span="10">
         <div class="select-box">
+          <el-button @click="regionalMana">{{ $t('地域通知管理') }}</el-button>
           <add-btn @click.native="addCountry">{{ $t('添加国家') }}</add-btn>
         </div>
         <el-table
@@ -76,9 +77,6 @@
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
           <div class="top-right">
-            <el-button class="btn-dark-green" @click="regionalMana">{{
-              $t('地域通知管理')
-            }}</el-button>
             <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
             <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
           </div>
@@ -184,7 +182,7 @@
           </div>
         </el-col>
         <el-col :span="3">
-          <el-button class="btn-blue">{{ $t('添加') }}</el-button>
+          <el-button class="btn-blue" @click="addRegional">{{ $t('添加') }}</el-button>
         </el-col>
       </div>
       <el-table :data="regionalData" stripe border class="data-list" v-loading="tableLoading">
@@ -206,10 +204,41 @@
         </el-table-column>
       </el-table>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-      <el-dialog width="30%" title="内层 Dialog" :visible.sync="innerVisible" append-to-body>
+      <el-dialog
+        class="innnerClass"
+        width="45%"
+        :title="state === 'add' ? $t('新增') : $t('编辑')"
+        :visible.sync="innerVisible"
+        append-to-body
+        @close="clearAres"
+      >
+        <el-form :model="form" ref="form" label-width="100px">
+          <el-form-item :label="$t('选择区域')">
+            <el-cascader
+              @change="chooseAres"
+              v-model="form.area_ids"
+              :options="options"
+              :props="props"
+              collapse-tags
+              clearable
+            ></el-cascader>
+          </el-form-item>
+          <el-form-item :label="$t('提示内容')">
+            <el-input v-model="form.content" class="input-sty"></el-input>
+          </el-form-item>
+          <el-form-item v-for="item in stringData" :key="item.id" :label="item.name">
+            <el-input
+              v-model="item.value"
+              type="textarea"
+              class="input-sty"
+              :rows="2"
+              :placeholder="$t('请输入内容')"
+            ></el-input>
+          </el-form-item>
+        </el-form>
         <div slot="footer">
-          <el-button>{{ $t('取消') }}</el-button>
-          <el-button type="primary">{{ $t('确定') }}</el-button>
+          <el-button @click="cancelNew">{{ $t('取消') }}</el-button>
+          <el-button type="primary" @click="newCountry">{{ $t('确定') }}</el-button>
         </div>
       </el-dialog>
       <div slot="footer" class="dialog-footer">
@@ -245,7 +274,18 @@ export default {
       countryName: '',
       outerVisible: false,
       innerVisible: false,
-      regionalData: []
+      regionalData: [],
+      props: { multiple: true, emitPath: false },
+      options: [],
+      stringData: [],
+      areasDisabled: false,
+      form: {
+        area_ids: [],
+        content: '',
+        content_translations: {}
+      },
+      state: '',
+      areasId: ''
     }
   },
   created() {
@@ -585,11 +625,149 @@ export default {
     },
     // 编辑地域
     editRegional(id) {
-      id
+      this.areasId = id
+      this.state = 'edit'
+      this.innerVisible = true
+      this.outerVisible = false
+      this.getString()
+      this.getAllCountries()
+      this.getDetails()
+    },
+    // 获取详情
+    getDetails() {
+      this.$request.getNotifi(this.areasId).then(res => {
+        if (res.ret) {
+          this.form.area_ids = res.data.areas.map(item => item.id)
+          console.log(this.form.area_ids, 'this.form.area_ids')
+          this.form.content = res.data.content
+          this.stringData = this.stringData.map(item => {
+            const value = res.data.content_translations[item.language_code]
+            return {
+              ...item,
+              value
+            }
+          })
+        }
+      })
     },
     // 删除地域
     deleteRegional(id) {
-      id
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteNotifi(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getRegional()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    // 获取全部支持语言
+    getString() {
+      this.$request.getString().then(res => {
+        if (res.ret) {
+          this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
+          console.log(this.stringData, '11111')
+        }
+      })
+    },
+    // 添加区域
+    addRegional() {
+      this.state = 'add'
+      this.innerVisible = true
+      this.getString()
+      this.getAllCountries()
+    },
+    // 获取多级区域数据
+    getAllCountries() {
+      this.$request.getCountry().then(res => {
+        if (res.ret) {
+          console.log(res.data, 'daa')
+          this.options = res.data.map(item => {
+            return {
+              value: item.id,
+              label: item.name,
+              disabled: !item.areas.length ? true : false,
+              children: item.areas.map(item => {
+                return {
+                  value: item.id,
+                  label: item.name,
+                  children: item.areas.map(item => {
+                    return {
+                      value: item.id,
+                      label: item.name
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }
+      })
+    },
+    chooseAres() {
+      console.log(this.form.area_ids, 'form.area_ids')
+    },
+    clearAres() {
+      this.state = ''
+      this.areasId = ''
+    },
+    // 新增区域
+    newCountry() {
+      let translation = {}
+      this.stringData.forEach(item => {
+        translation[item.language_code] = item.value
+      })
+      if (this.state === 'add') {
+        this.$request
+          .newNotifi({
+            area_ids: this.form.area_ids,
+            content: this.form.content,
+            content_translations: translation
+          })
+          .then(res => {
+            if (res.ret) {
+              this.innerVisible = false
+              this.outerVisible = true
+              this.getRegional()
+            }
+          })
+      } else {
+        this.$request
+          .updateNotifi(this.areasId, {
+            area_ids: this.form.area_ids,
+            content: this.form.content,
+            content_translations: translation
+          })
+          .then(res => {
+            if (res.ret) {
+              this.innerVisible = false
+              this.outerVisible = true
+              this.getRegional()
+            }
+          })
+      }
+    },
+    // 取消新增
+    cancelNew() {
+      this.form.area_ids = []
+      this.form.content = ''
+      this.form.content_translations = {}
+      this.innerVisible = false
+      this.outerVisible = true
     }
   }
 }
@@ -626,6 +804,11 @@ export default {
     background-color: #f5f5f5;
     line-height: 30px;
     padding-right: 20px;
+  }
+}
+.innnerClass {
+  .input-sty {
+    width: 60% !important;
   }
 }
 </style>
