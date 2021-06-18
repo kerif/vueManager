@@ -633,7 +633,7 @@ export default {
       this.outerVisible = false
       this.getString()
       this.getAllCountries()
-      this.getDetails()
+      // this.getDetails()
     },
     // 获取详情
     getDetails() {
@@ -682,7 +682,9 @@ export default {
       this.$request.getString().then(res => {
         if (res.ret) {
           this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
-          console.log(this.stringData, '11111')
+          if (this.state === 'edit') {
+            this.getDetails()
+          }
         }
       })
     },
@@ -729,6 +731,7 @@ export default {
       this.form.area_ids = []
       this.form.content = ''
       this.stringData = []
+      this.form.content_translations = {}
     },
     // 新增区域
     newCountry() {
