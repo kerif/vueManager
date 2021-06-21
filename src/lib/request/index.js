@@ -1653,8 +1653,8 @@ exports.updateDetailsAreas = (id, params) => {
   return $form.put(`countries/areas/${id}`, params)
 }
 // 国家地区 获取地域通知列表数据
-exports.getRegional = () => {
-  return $form.get('countries/area-notifications')
+exports.getRegional = params => {
+  return $form.get('countries/area-notifications', { params })
 }
 // 国家地区 地域通知管理 新增
 exports.newNotifi = params => {

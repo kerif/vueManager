@@ -186,8 +186,8 @@
         </el-col>
       </div>
       <el-table :data="regionalData" stripe border class="data-list" v-loading="tableLoading">
-        <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column :label="$t('区域')" :show-overflow-tooltip="true" width="150">
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column :label="$t('区域')" :show-overflow-tooltip="true" width="350">
           <template slot-scope="scope">
             <span v-for="item in scope.row.areas" :key="item.id">
               {{ item.country_name }}&nbsp;{{ item.parent_name }}&nbsp;{{ item.name }}&nbsp;
@@ -243,10 +243,10 @@
           <el-button type="primary" @click="newCountry">{{ $t('确定') }}</el-button>
         </div>
       </el-dialog>
-      <div slot="footer" class="dialog-footer">
+      <!-- <div slot="footer" class="dialog-footer">
         <el-button @click="outerVisible = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="innerVisible = true">{{ $t('确定') }}</el-button>
-      </div>
+      </div> -->
     </el-dialog>
   </div>
 </template>
@@ -611,19 +611,24 @@ export default {
     // 地域通知管理
     regionalMana() {
       this.outerVisible = true
-      this.getRegional()
+      this.getList()
     },
     // 获取地域数据
-    getRegional() {
+    getList() {
       this.tableLoading = true
-      this.$request.getRegional().then(res => {
-        if (res.ret) {
-          this.tableLoading = false
-          this.regionalData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        }
-      })
+      this.$request
+        .getRegional({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableLoading = false
+            this.regionalData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
     },
     // 编辑地域
     editRegional(id) {
@@ -666,7 +671,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getRegional()
+            this.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -750,7 +755,7 @@ export default {
             if (res.ret) {
               this.innerVisible = false
               this.outerVisible = true
-              this.getRegional()
+              this.getList()
             }
           })
       } else {
@@ -764,7 +769,7 @@ export default {
             if (res.ret) {
               this.innerVisible = false
               this.outerVisible = true
-              this.getRegional()
+              this.getList()
             }
           })
       }
