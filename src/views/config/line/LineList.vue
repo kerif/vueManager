@@ -550,7 +550,7 @@ export default {
     this.onSearch()
   },
   methods: {
-    getList(query = '') {
+    getList() {
       this.tableLoading = true
       let params = {
         page: this.page_params.page,
@@ -559,9 +559,40 @@ export default {
       if (typeof this.query.enabled === 'number') {
         params.enabled = this.query.enabled
       }
-      if (query) {
-        params.queries = query
+      let arr = []
+      for (const key in this.query) {
+        let value = this.query[key]
+        // eslint-disable-next-line no-prototype-builtins
+        if (this.query.hasOwnProperty(key) && key !== 'enabled' && value.length) {
+          let param = ''
+          switch (key) {
+            case 'lineName':
+              param = 'name'
+              break
+            case 'warehouses':
+              param = 'warehouses.warehouse_name'
+              break
+            case 'referenceTime':
+              param = 'reference_time'
+              break
+            case 'countries':
+              param = 'countries.name'
+              break
+            case 'firstWeight':
+              param = 'first_weight'
+              break
+            case 'firstMoney':
+              param = 'first_money'
+              break
+            case 'nextWeight':
+              param = 'next_weight'
+              break
+          }
+          arr.push(this.getSearchValue(param, value))
+        }
       }
+      params.queries = arr.join('|')
+      console.log(this.page_params, 'this.page_params')
       this.$request.getLines(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
@@ -861,40 +892,7 @@ export default {
     // 搜索
     onSearch() {
       this.page_params.page = 1
-      let arr = []
-      for (const key in this.query) {
-        let value = this.query[key]
-        // eslint-disable-next-line no-prototype-builtins
-        if (this.query.hasOwnProperty(key) && key !== 'enabled' && value.length) {
-          let param = ''
-          switch (key) {
-            case 'lineName':
-              param = 'name'
-              break
-            case 'warehouses':
-              param = 'warehouses.warehouse_name'
-              break
-            case 'referenceTime':
-              param = 'reference_time'
-              break
-            case 'countries':
-              param = 'countries.name'
-              break
-            case 'firstWeight':
-              param = 'first_weight'
-              break
-            case 'firstMoney':
-              param = 'first_money'
-              break
-            case 'nextWeight':
-              param = 'next_weight'
-              break
-          }
-          arr.push(this.getSearchValue(param, value))
-        }
-      }
-      console.log(arr.join('|'))
-      this.getList(arr.join('|'))
+      this.getList()
     },
     getSearchValue(key, value) {
       return `${key}:${value.join(',')};asc`

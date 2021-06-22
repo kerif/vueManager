@@ -714,12 +714,15 @@ export default {
                 return {
                   value: item.id,
                   label: item.name,
-                  children: item.areas.map(item => {
-                    return {
-                      value: item.id,
-                      label: item.name
-                    }
-                  })
+                  children:
+                    item.areas < 1
+                      ? undefined
+                      : item.areas.map(item => {
+                          return {
+                            value: item.id,
+                            label: item.name
+                          }
+                        })
                 }
               })
             }
@@ -756,6 +759,12 @@ export default {
               this.innerVisible = false
               this.outerVisible = true
               this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
             }
           })
       } else {
@@ -770,6 +779,12 @@ export default {
               this.innerVisible = false
               this.outerVisible = true
               this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
             }
           })
       }
