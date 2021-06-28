@@ -38,11 +38,16 @@
       <el-table-column :label="$t('拼团订单号')" prop="sn"></el-table-column>
       <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
-          <span v-if="scope.row.is_public === 1">{{ $t('公告') }}</span>
+          <span v-if="scope.row.is_public === 1">{{ $t('公开') }}</span>
           <span v-if="scope.row.is_public === 0">{{ $t('私人') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('拼团名称')" prop="name"></el-table-column>
+      <el-table-column :label="$t('拼团路线')">
+        <template slot-scope="scope">
+          <span>{{ scope.row.express_line && scope.row.express_line.name }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('目的国家')" prop="country"></el-table-column>
       <el-table-column :label="$t('提货方式')">
         <template slot-scope="scope" v-if="scope.row.station">

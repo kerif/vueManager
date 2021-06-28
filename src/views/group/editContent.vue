@@ -11,7 +11,7 @@
       <el-form-item :label="$t('*内容详情')">
         <el-row>
           <el-col :span="20">
-            <div id="editor" :value="params.description" @input="changeText"></div>
+            <div id="editor" :value="params.content" @input="changeText"></div>
           </el-col>
         </el-row>
       </el-form-item>
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       params: {
-        description: '',
+        content: '',
         language: ''
       },
       editor: null,
@@ -70,7 +70,7 @@ export default {
       'table'
     ]
     this.editor.customConfig.onchange = html => {
-      this.params.description = html
+      this.params.content = html
     }
     this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
     this.editor.customConfig.uploadImgParams = {}
@@ -110,15 +110,13 @@ export default {
   methods: {
     getList() {
       this.$request
-        .pageLang(this.line.id, {
+        .getContentTranslate(this.line.id, {
           lang: this.params.language
         })
         .then(res => {
           if (res.ret) {
-            this.params.title = res.data.title
-            this.params.description = res.data.description
-            this.params.tags = res.data.tags
-            this.editor.txt.html(this.params.description)
+            this.params.content = res.data.content
+            this.editor.txt.html(this.params.content)
           }
         })
     },
@@ -126,8 +124,8 @@ export default {
     getDetails() {
       this.$request.getContentDetails(this.$route.query.id).then(res => {
         if (res.ret) {
-          this.params.description = res.data.description
-          this.editor.txt.html(this.params.description)
+          this.params.content = res.data.content
+          this.editor.txt.html(this.params.content)
         }
       })
     },
@@ -136,28 +134,34 @@ export default {
       this.$emit('input', this.editor.txt.html())
     },
     saveContent() {
-      if (this.params.description === '') {
+      if (this.params.content === '') {
         return this.$message.error(this.$t('请输入内容'))
       }
+      // 编辑数据
       if (this.$route.query.id) {
-        this.$request.updatePageLang(this.line.id, this.params).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.tips,
-              type: 'success'
-            })
-            this.$router.go(-1)
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+        this.$request
+          .updateContentDetails(this.$route.query.id, {
+            content: this.params.content
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.tips,
+                type: 'success'
+              })
+              this.$router.go(-1)
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
       } else {
-        this.$request.updatePageLang(this.line.id, this.params).then(res => {
+        // 编辑多语言
+        this.$request.updateContentTranslate(this.line.id, this.params).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),

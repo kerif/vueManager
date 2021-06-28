@@ -2112,9 +2112,21 @@ exports.updateGlobal = params => {
 exports.getContent = params => {
   return $form.get(`group-buying-content`, params)
 }
-// 拼团配置 获取内容管理编辑数据
+// 拼团配置 获取 内容管理数据详情
 exports.getContentDetails = id => {
   return $form.get(`group-buying-content/${id}`)
+}
+// 拼团配置 获取 多语言 内容管理数据详情
+exports.getContentTranslate = (id, params) => {
+  return $form.get(`group-buying-content/${id}`, { params })
+}
+// 拼团配置 更新 内容管理数据
+exports.updateContentDetails = (id, params) => {
+  return $form.put(`group-buying-content/${id}`, params)
+}
+// 拼团配置 更新 内容管理多语言
+exports.updateContentTranslate = (id, params) => {
+  return $form.put(`group-buying-content/${id}/translate-data`, params)
 }
 // 视频管理 获取单条视频详细
 exports.getSingleVideo = id => {
