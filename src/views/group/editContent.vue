@@ -1,6 +1,6 @@
 <template>
   <div class="edit-content-container">
-    <div class="lang-sty">
+    <div class="lang-sty" v-if="lang.name">
       <p>
         <span class="el-icon-warning icon-info"></span>
         {{ $t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息') }}
@@ -8,10 +8,10 @@
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
       <!-- 单页详情 -->
-      <el-form-item :label="$t('*单页详情')">
+      <el-form-item :label="$t('*内容详情')">
         <el-row>
           <el-col :span="20">
-            <div id="editor" :value="params.content" @input="changeText"></div>
+            <div id="editor" :value="params.description" @input="changeText"></div>
           </el-col>
         </el-row>
       </el-form-item>
@@ -19,7 +19,7 @@
         <el-button
           type="primary"
           class="save-btn"
-          @click="saveNotice()"
+          @click="saveContent"
           :loading="$store.state.btnLoading"
           >{{ $t('保存') }}</el-button
         >
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       params: {
-        content: '',
+        description: '',
         language: ''
       },
       editor: null,
@@ -70,7 +70,7 @@ export default {
       'table'
     ]
     this.editor.customConfig.onchange = html => {
-      this.params.content = html
+      this.params.description = html
     }
     this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
     this.editor.customConfig.uploadImgParams = {}
@@ -94,16 +94,17 @@ export default {
     console.log(this.editor, 'this.editor')
   },
   created() {
-    // console.log(JSON.parse(this.$route.params.line), 'line')
-    // console.log(JSON.parse(this.$route.params.lang), 'lang')
-    // console.log(this.$route.params.transCode, 'transCode')
-    this.line = JSON.parse(this.$route.params.line)
-    this.lang = JSON.parse(this.$route.params.lang)
-    this.transCode = this.$route.params.transCode
-    this.params.language = this.lang.language_code
-    console.log(typeof this.transCode, ' this.$route.params.transCode')
-    if (this.transCode === 1) {
-      this.getList()
+    // 如果是编辑语言
+    if (this.$route.params.lang) {
+      this.line = JSON.parse(this.$route.params.line)
+      this.lang = JSON.parse(this.$route.params.lang)
+      this.transCode = this.$route.params.transCode
+      this.params.language = this.lang.language_code
+      if (this.transCode === 1) {
+        this.getList()
+      }
+    } else {
+      this.getDetails()
     }
   },
   methods: {
@@ -115,38 +116,64 @@ export default {
         .then(res => {
           if (res.ret) {
             this.params.title = res.data.title
-            this.params.content = res.data.content
+            this.params.description = res.data.description
             this.params.tags = res.data.tags
-            this.editor.txt.html(this.params.content)
+            this.editor.txt.html(this.params.description)
           }
         })
+    },
+    // 编辑的时候 获取详细
+    getDetails() {
+      this.$request.getContentDetails(this.$route.query.id).then(res => {
+        if (res.ret) {
+          this.params.description = res.data.description
+          this.editor.txt.html(this.params.description)
+        }
+      })
     },
     // 判断是新增 还是 编辑
     changeText() {
       this.$emit('input', this.editor.txt.html())
     },
-    saveNotice() {
-      if (this.params.title === '') {
-        return this.$message.error(this.$t('请输入标题'))
-      } else if (this.params.content === '') {
+    saveContent() {
+      if (this.params.description === '') {
         return this.$message.error(this.$t('请输入内容'))
       }
-      this.$request.updatePageLang(this.line.id, this.params).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.tips,
-            type: 'success'
-          })
-          this.$router.go(-1)
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      if (this.$route.query.id) {
+        this.$request.updatePageLang(this.line.id, this.params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.tips,
+              type: 'success'
+            })
+            this.$router.go(-1)
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$request.updatePageLang(this.line.id, this.params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.tips,
+              type: 'success'
+            })
+            this.$router.go(-1)
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     }
   }
 }

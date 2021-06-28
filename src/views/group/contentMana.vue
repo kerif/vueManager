@@ -13,7 +13,7 @@
       height="calc(100vh - 360px)"
     >
       <el-table-column type="index" :index="1"></el-table-column>
-      <el-table-column :label="$t('提示信息')" prop="user_id"></el-table-column>
+      <el-table-column :label="$t('提示信息')" prop="description"></el-table-column>
       <el-table-column
         :label="item.name"
         v-for="item in formatLangData"
@@ -66,7 +66,7 @@ export default {
     getList() {
       this.tableLoading = true
       this.$request
-        .getUserAddress({
+        .getContent({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size

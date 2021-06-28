@@ -2108,6 +2108,14 @@ exports.getGlobal = () => {
 exports.updateGlobal = params => {
   return $form.put('group-buying-config/global', params)
 }
+// 拼团配置 获取内容管理
+exports.getContent = params => {
+  return $form.get(`group-buying-content`, params)
+}
+// 拼团配置 获取内容管理编辑数据
+exports.getContentDetails = id => {
+  return $form.get(`group-buying-content/${id}`)
+}
 // 视频管理 获取单条视频详细
 exports.getSingleVideo = id => {
   return $form.get(`videos/${id}`)
