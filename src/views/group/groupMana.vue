@@ -180,7 +180,7 @@
         :min="1"
         :max="100"
       ></el-input-number>
-      小时
+      天
       <div slot="footer">
         <el-button @click="dialogDays = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="submitTimes">{{ $t('确定') }}</el-button>
@@ -280,7 +280,7 @@ export default {
     // 延长拼团时间
     submitTimes() {
       if (this.days < 0) {
-        return this.$message.error(this.$t('请输入正确时间'))
+        return this.$message.error(this.$t('请输入正确天数'))
       }
       this.$request
         .proLong(this.proId, {
