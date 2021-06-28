@@ -1,14 +1,17 @@
 <template>
-  <div>
+  <div class="group-config-container">
     <div class="rate-top">
-      <div class="rate-left">{{ $t(' 授权公开拼团团长') }}：</div>
-      <el-button class="btn-blue-green" @click="groupAdd">{{ $t('新增授权') }}</el-button>
+      <div class="rate-left">{{ $t('公开拼团团长') }}：</div>
+      <div class="searchGroup">
+        <el-button class="rate-left middle-sty" @click="groupAdd">{{ $t('新增授权') }}</el-button>
+        <search-group class="rate-left" v-model="page_params.keyword" @search="goSearch">
+        </search-group>
+      </div>
     </div>
     <el-table :data="configurationData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
       <el-table-column prop="id" :label="$t('客户ID')"></el-table-column>
       <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
-      <!-- 创建人 -->
       <el-table-column :label="$t('客户组')">
         <template slot-scope="scope">
           <span>{{ scope.row.user_group.name_cn }}</span>
@@ -34,9 +37,11 @@
 import { pagination } from '@/mixin'
 import NlePagination from '@/components/pagination'
 import dialog from '@/components/dialog'
+import { SearchGroup } from '@/components/searchs'
 export default {
   components: {
-    NlePagination
+    NlePagination,
+    SearchGroup
   },
   data() {
     return {
@@ -46,15 +51,12 @@ export default {
   },
   mixins: [pagination],
   created() {
-    this.getConfiguration()
+    this.getList()
   },
   methods: {
     getList() {
-      this.getConfiguration()
-    },
-    getConfiguration() {
       this.$request
-        .getConfiguration({
+        .getLeader({
           page: this.page_params.page,
           size: this.page_params.size
         })
@@ -74,7 +76,7 @@ export default {
     },
     groupAdd() {
       dialog({ type: 'groupAdd' }, () => {
-        this.getConfiguration()
+        this.getList()
       })
     },
     // 拼团配置 删除
@@ -91,7 +93,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getConfiguration()
+            this.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -105,8 +107,20 @@ export default {
   }
 }
 </script>
-<style scoped>
-.rate-top {
-  display: flex;
+<style lang="scss" scoped>
+.group-config-container {
+  .rate-top {
+    overflow: hidden;
+  }
+  .rate-left {
+    display: inline-block;
+  }
+  .searchGroup {
+    margin-right: 10px;
+    float: right;
+  }
+  .middle-sty {
+    vertical-align: top;
+  }
 }
 </style>

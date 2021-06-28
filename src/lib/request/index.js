@@ -1221,11 +1221,11 @@ exports.getConfiguration = params => {
 }
 // 更多配置 新增 拼团配置
 exports.addConfiguration = params => {
-  return $form.post('group-buying/user-config', params)
+  return $form.post('group-buying-user', params)
 }
 // 更多配置 拼团配置 删除
 exports.deleteConfiguration = id => {
-  return $form.delete(`group-buying/user-config/${id}`)
+  return $form.delete(`group-buying-user/${id}`)
 }
 // 更多配置 拼团配置 获取单条客户信息
 exports.getUserDetails = id => {
@@ -2043,6 +2043,70 @@ exports.updateVoucherLang = (id, params) => {
 // 营销管理 获取视频列表
 exports.getVideoList = () => {
   return $form.get('videos')
+}
+// 拼团管理 列表
+exports.groupList = () => {
+  return $form.get('group-buying')
+}
+// 拼团管理 参团详情
+exports.groupDetails = id => {
+  return $form.get(`group-buying/${id}`)
+}
+// 拼团管理 更新团单信息
+exports.updateGroupDetails = (id, params) => {
+  return $form.put(`group-buying/${id}`, params)
+}
+// 拼团 可用地址
+exports.buyingAddress = id => {
+  return $form.get(`group-buying/user-addresses/${id}`)
+}
+// 拼团管理 移除拼团
+exports.removeGroup = (id, userId) => {
+  return $form.put(`group-buying/${id}/remove-member/${userId}`)
+}
+// 拼团管理 延长拼团时间
+exports.proLong = (id, params) => {
+  return $form.put(`group-buying/${id}/prolong`, params)
+}
+// 拼团管理 提交拼团
+exports.submitGroup = id => {
+  return $form.put(`group-buying/${id}/end`)
+}
+// 拼团管理 取消拼团
+exports.cancelGroup = id => {
+  return $form.put(`group-buying/${id}/cancel`)
+}
+// 拼团管理 团长管理列表
+exports.getLeader = params => {
+  return $form.get('group-buying-user', { params })
+}
+// 拼团管理 获取自提点地址
+exports.buyingStation = id => {
+  return $form.get(`group-buying/stations/${id}`)
+}
+// 拼团配置 获取数据
+exports.getBuying = () => {
+  return $form.get('group-buying-config/express-line')
+}
+// 拼团配置 获取数据 开启或关闭
+exports.closeBuying = (id, status) => {
+  return $form.put(`group-buying-config/express-line/${id}/status/${status}`)
+}
+// 拼团配置 获取拼团配置
+exports.lineBuying = id => {
+  return $form.get(`group-buying-config/express-line/${id}`)
+}
+// 拼团配置 更新拼团配置
+exports.updateLineBuying = (id, params) => {
+  return $form.put(`group-buying-config/express-line/${id}`, params)
+}
+// 拼团配置 其他配置
+exports.getGlobal = () => {
+  return $form.get('group-buying-config/global')
+}
+// 拼团配置 更新 其他配置
+exports.updateGlobal = params => {
+  return $form.put('group-buying-config/global', params)
 }
 // 视频管理 获取单条视频详细
 exports.getSingleVideo = id => {

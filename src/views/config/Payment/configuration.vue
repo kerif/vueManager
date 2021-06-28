@@ -184,11 +184,11 @@
           </el-row>
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('拼团配置')" name="5" v-if="unShow">
+      <!-- <el-tab-pane :label="$t('拼团配置')" name="5" v-if="unShow">
         <div class="main-sty main-right">
           <group-configure></group-configure>
         </div>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -211,7 +211,7 @@ import Commodity from './commodity.vue'
 import ExpressCompany from './expressCompany.vue'
 import CustomTrack from './customTrack.vue'
 import LoginConfigure from './loginConfigure.vue'
-import GroupConfigure from './groupConfigure.vue'
+// import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
     AppConfigure,
@@ -230,8 +230,8 @@ export default {
     Commodity,
     ExpressCompany,
     CustomTrack,
-    LoginConfigure,
-    GroupConfigure
+    LoginConfigure
+    // GroupConfigure
   },
   mixins: [pagination],
   data() {

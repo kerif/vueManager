@@ -101,6 +101,7 @@ import alertSettings from './alertSettings.vue'
 import purchaseHistory from './purchaseHistory.vue'
 import superiorAddEdit from './superiorAddEdit.vue'
 import linkAddEdit from './linkAddEdit.vue'
+import groupChange from './groupChange.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -202,6 +203,7 @@ const AlertSettingsController = Vue.extend(alertSettings)
 const PurchaseHistoryController = Vue.extend(purchaseHistory)
 const SuperiorAddEditController = Vue.extend(superiorAddEdit)
 const LinkAddEditController = Vue.extend(linkAddEdit)
+const GroupChangeController = Vue.extend(groupChange)
 
 const mixin = {
   data() {
@@ -906,6 +908,13 @@ function initInstance(type) {
     // 区块管理 编辑 新增 链接
     case 'linkAddEdit':
       instance = new LinkAddEditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 拼团管理 修改拼团信息
+    case 'groupChange':
+      instance = new GroupChangeController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

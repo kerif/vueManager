@@ -240,6 +240,16 @@ const otherWebsite = loadonDemand('website/otherWebsite')
 const urlLangEdit = loadonDemand('website/urlLang')
 // 区块管理 图片编辑语言
 const imgLangEdit = loadonDemand('website/imgLang')
+// 拼团管理
+const groupMana = loadonDemand('group/groupMana')
+// 团长管理
+const leaderMana = loadonDemand('group/groupConfigure')
+// 拼团配置
+const groupSet = loadonDemand('group/groupSet')
+// 内容管理
+const contentMana = loadonDemand('group/contentMana')
+// 内容编辑
+const editContent = loadonDemand('group/editContent')
 export default [
   {
     path: '/',
@@ -1598,6 +1608,70 @@ export default [
         ]
       },
       {
+        path: 'group',
+        component: LayoutContainer,
+        icon: 'icon-gongzuotai',
+        id: 1300,
+        children: [
+          {
+            path: '/group/groupList',
+            name: 'groupMana',
+            component: groupMana,
+            id: 1301,
+            meta: {
+              level: 2,
+              group: '拼团管理',
+              name: '拼团管理'
+            }
+          },
+          {
+            path: '/group/leaderList',
+            name: 'leaderMana',
+            component: leaderMana,
+            id: 1302,
+            meta: {
+              level: 2,
+              group: '拼团管理',
+              name: '团长管理'
+            }
+          },
+          {
+            path: '/group/groupSet',
+            name: 'groupSet',
+            component: groupSet,
+            id: 1303,
+            meta: {
+              level: 2,
+              group: '拼团管理',
+              name: '拼团配置'
+            }
+          },
+          {
+            path: '/group/contentMana',
+            name: 'contentMana',
+            component: contentMana,
+            id: 1304,
+            meta: {
+              level: 2,
+              group: '拼团管理',
+              name: '内容管理'
+            }
+          },
+          {
+            path: '/group/contentMana/edit',
+            name: 'editContent',
+            component: editContent,
+            id: 1304,
+            meta: {
+              level: 3,
+              group: '拼团管理',
+              name: '编辑内容',
+              parent: '/group/contentMana'
+            }
+          }
+        ]
+      },
+      {
         path: 'customer',
         component: LayoutContainer,
         icon: 'icon-kefu',
@@ -1677,7 +1751,7 @@ export default [
       {
         path: 'language',
         component: LayoutContainer,
-        icon: 'icon-B',
+        icon: 'icon-yuyanshixunzhongxin',
         id: 1000,
         children: [
           {
@@ -1707,7 +1781,7 @@ export default [
       {
         path: 'website',
         component: LayoutContainer,
-        icon: 'icon-diannao',
+        icon: 'icon-shuju',
         id: 1100,
         children: [
           {
