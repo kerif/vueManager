@@ -2045,8 +2045,8 @@ exports.getVideoList = () => {
   return $form.get('videos')
 }
 // 拼团管理 列表
-exports.groupList = () => {
-  return $form.get('group-buying')
+exports.groupList = params => {
+  return $form.get('group-buying', { params })
 }
 // 拼团管理 参团详情
 exports.groupDetails = id => {
@@ -2110,7 +2110,7 @@ exports.updateGlobal = params => {
 }
 // 拼团配置 获取内容管理
 exports.getContent = params => {
-  return $form.get(`group-buying-content`, params)
+  return $form.get(`group-buying-content`, { params })
 }
 // 拼团配置 获取 内容管理数据详情
 exports.getContentDetails = id => {
