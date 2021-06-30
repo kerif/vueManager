@@ -193,7 +193,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="11">
+      <el-col :span="6">
         <!-- 运费查询 -->
         <div class="main-item right-item">
           <div>{{ $t('运费查询') }}</div>
@@ -688,10 +688,8 @@ export default {
     top: 12px;
   }
   .panel-box {
+    border: 1px solid #e8e9eb;
     margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    height: 450px;
   }
   .show-box {
     padding: 30px 20px;
@@ -932,7 +930,7 @@ export default {
     height: 109px;
     padding-left: 10px;
     .input-button {
-      width: 65%;
+      width: 55%;
     }
     .order-main {
       position: relative;
