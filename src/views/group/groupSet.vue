@@ -86,9 +86,9 @@
         }}
       </div>
       <div class="weight-sty">{{ $t('门槛重量') }}</div>
-      <el-input v-model="group_raise_factor"></el-input>
-      <div class="weight-sty">{{ $t('未达门槛重量计费系数') }}</div>
       <el-input v-model="group_raise_threshold"></el-input>
+      <div class="weight-sty">{{ $t('未达门槛重量计费系数') }}</div>
+      <el-input v-model="group_raise_factor"></el-input>
       <div slot="footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitGroup">确 定</el-button>

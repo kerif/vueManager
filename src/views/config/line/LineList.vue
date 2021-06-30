@@ -259,9 +259,9 @@
                 <el-dropdown-item class="item-sty" @click.native="copyLine(scope.row.id)">
                   <span>{{ $t('复制') }}</span>
                 </el-dropdown-item>
-                <el-dropdown-item class="item-sty" @click.native="groupSet(scope.row.id)">
+                <!-- <el-dropdown-item class="item-sty" @click.native="groupSet(scope.row.id)">
                   <span v-show="unShow">{{ $t('拼团配置') }}</span>
-                </el-dropdown-item>
+                </el-dropdown-item> -->
                 <el-dropdown-item class="item-sty" @click.native="deleteLine(scope.row.id)">
                   <span>{{ $t('删除') }}</span>
                 </el-dropdown-item>

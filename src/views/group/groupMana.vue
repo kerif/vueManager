@@ -50,10 +50,11 @@
       </el-table-column>
       <el-table-column :label="$t('目的国家')" prop="country"></el-table-column>
       <el-table-column :label="$t('提货方式')">
-        <template slot-scope="scope" v-if="scope.row.station">
-          <span v-if="scope.row.station.name"
-            >{{ $t('自提') }}（{{ scope.row.station.name }}）</span
+        <template slot-scope="scope">
+          <span v-if="scope.row.station"
+            >{{ $t('自提') }}（{{ scope.row.station && scope.row.station.name }}）</span
           >
+          <span v-else>{{ $t('送货上门') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('收件人')" prop="address.receiver_name"></el-table-column>

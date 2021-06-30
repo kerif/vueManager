@@ -36,7 +36,7 @@
         </div>
       </div>
       <el-form-item :label="$t('收货方式')">
-        <el-radio-group v-model="groupData.is_delivery">
+        <el-radio-group v-model="groupData.is_delivery" @change="changeRadio">
           <el-radio :label="0">{{ $t('送货上门') }}</el-radio>
           <el-radio :label="1">{{ $t('自提收货') }}</el-radio>
         </el-radio-group>
@@ -200,6 +200,9 @@ export default {
       console.log(this.group, 'this.group')
       this.innerVisible = false
     },
+    changeRadio() {
+      console.log(this.groupData.is_delivery, 'groupData.is_delivery')
+    },
     // 获取拼团信息
     getDetails() {
       this.$request.groupDetails(this.id).then(res => {
@@ -234,7 +237,7 @@ export default {
           mode: this.groupData.mode,
           is_delivery: this.groupData.is_delivery,
           address_id: this.groupData.address_id,
-          station_id: this.groupData.station_id
+          station_id: this.groupData.is_delivery === 0 ? '' : this.groupData.station_id
         })
         .then(res => {
           if (res.ret) {
