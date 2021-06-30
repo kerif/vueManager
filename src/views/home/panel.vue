@@ -1,87 +1,171 @@
 <template>
   <div class="panel-container">
-    <el-row :gutter="20">
-      <el-col :span="18">
-        <el-row :gutter="0" class="main-item">
-          <el-col :span="24" class="main-top">
+    <!-- 本月统计数据 -->
+    <el-row>
+      <el-col :span="6">
+        <div class="addCustomer add-line blue-sty" @click="goToOtherPage(301, 'viplist')">
+          <div class="box-header">
             <el-row>
-              <el-col :span="6">
-                <div class="addCustomer add-line blue-sty" @click="goToOtherPage(301, 'viplist')">
-                  <div class="box-header">
-                    <div>{{ $t('当月新增客户') }}</div>
-                    <div class="bold-box">{{ user.current_month }}</div>
-                  </div>
-                  <div class="box-footer">
-                    <span>{{ $t('总用户') }}</span>
-                    <span class="count">{{ user.total }}</span>
-                  </div>
-                </div>
+              <el-col :span="20">
+                <div>{{ $t('当月新增客户') }}</div>
+                <div class="bold-box">{{ user.current_month }}</div>
               </el-col>
-              <el-col :span="6">
-                <div
-                  class="addCustomer add-line yellow-sty"
-                  @click="goToOtherPage(402, 'wayBillList')"
-                >
-                  <div class="box-header">
-                    <div>{{ $t('当月新增订单') }}</div>
-                    <div class="bold-box">{{ order.current_month }}</div>
-                  </div>
-                  <div class="box-footer">
-                    <span>{{ $t('总运单') }}</span>
-                    <span class="count">{{ order.total }}</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div
-                  class="addCustomer add-line green-sty"
-                  @click="goToOtherPage(401, 'orderlist')"
-                >
-                  <div class="box-header">
-                    <div>{{ $t('当月预报包裹') }}</div>
-                    <div class="bold-box">{{ packages.current_month }}</div>
-                  </div>
-                  <div class="box-footer">
-                    <span>{{ $t('总包裹量') }}</span>
-                    <span class="count">{{ packages.total }}</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div class="addCustomer light-blue" @click="goToOtherPage(502, 'shipContainer')">
-                  <div class="box-header">
-                    <div>{{ $t('当月新增发货单') }}</div>
-                    <div class="bold-box">{{ shipment.current_month }}</div>
-                  </div>
-                  <div class="box-footer">
-                    <span>{{ $t('总发货单') }}</span>
-                    <span class="count">{{ shipment.total }}</span>
-                  </div>
+              <el-col :span="4">
+                <div class="icon-sty">
+                  <i class="iconfont icon-gerenzhongxin icons-first"></i>
                 </div>
               </el-col>
             </el-row>
-          </el-col>
-          <!-- <el-col :span="6" class="panel-right">
-          <div class="waitMsg">{{$t('待处理消息')}}</div>
-          <ul>
-            <li @click="goToOtherPage(401, 'orderlist')">
-              {{$t('未入库包裹')}}
-              <div class="msg-right">{{ waitInStorage }}</div>
-              </li>
-            <li @click="goToOtherPage(402, 'wayBillList')">
-              {{$t('待拣货包裹')}}
-              <div class="msg-right">{{ waitPack }}</div>
-              </li>
-            <li @click="goToOtherPage(402, 'wayBillList', {activeName: '2'})">
-              {{$t('未支付包裹')}}
-              <div class="msg-right">{{ upaid }}</div>
-              </li>
-          </ul>
-        </el-col> -->
-        </el-row>
+          </div>
+          <div class="box-footer">
+            <span>{{ $t('总用户') }}</span>
+            <span class="count">{{ user.total }}</span>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div class="addCustomer add-line yellow-sty" @click="goToOtherPage(401, 'orderlist')">
+          <div class="box-header">
+            <el-row :gutter="20">
+              <el-col :span="20">
+                <div>{{ $t('本月预报包裹') }}</div>
+                <div class="bold-box">{{ packages.current_month }}</div>
+              </el-col>
+              <el-col :span="4">
+                <div class="icon-packages">
+                  <i class="iconfont icon-hezi icons"></i>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="box-footer">
+            <span>{{ $t('总包裹量') }}</span>
+            <span class="count">{{ packages.total }}</span>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div class="addCustomer add-line green-sty" @click="goToOtherPage(402, 'wayBillList')">
+          <div class="box-header">
+            <el-row :gutter="20">
+              <el-col :span="20">
+                <div>{{ $t('本月新增订单') }}</div>
+                <div class="bold-box">{{ order.current_month }}</div>
+              </el-col>
+              <el-col :span="4">
+                <div class="icon-order">
+                  <i class="iconfont icon-ziliao icons-second"></i>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="box-footer">
+            <span>{{ $t('总运单') }}</span>
+            <span class="count">{{ order.total }}</span>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div class="addCustomer light-blue" @click="goToOtherPage(502, 'shipContainer')">
+          <div class="box-header">
+            <el-row :gutter="20">
+              <el-col :span="20">
+                <div>{{ $t('系统开放线路') }}</div>
+                <div class="bold-box">{{ expressCount }}</div>
+              </el-col>
+              <el-col :span="4">
+                <div class="icon-express">
+                  <i class="iconfont icon-ditu icons-third"></i>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="box-footer">
+            <span>{{ $t('支持收货地址') }}</span>
+            <span class="count">{{ shipment.total }}</span>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <div style="margin-top: 10px">
+      <el-row :gutter="20">
+        <el-col :span="12" style="padding-right: 5px">
+          <div class="wait-content">
+            <div>
+              <div class="wait-sty">
+                <i class="iconfont icon-icon_rukou"></i>
+                <span class="wait-font">{{ $t('待入库包裹') }}</span>
+              </div>
+              <span class="number">{{ count.package_wait_in_storage }}</span>
+            </div>
+            <div>
+              <div class="wait-sty">
+                <i class="iconfont icon-huowudui"></i>
+                <span class="wait-font">{{ $t('待打包订单') }}</span>
+              </div>
+              <span class="number">{{ count.order_wait_pick }}</span>
+            </div>
+            <div>
+              <div class="wait-sty">
+                <i class="iconfont icon-huowudui"></i>
+                <span class="wait-font">{{ $t('待发货订单') }}</span>
+              </div>
+              <span class="number">{{ count.order_wait_ship }}</span>
+            </div>
+            <div>
+              <div class="wait-sty">
+                <i class="iconfont icon-huowudui"></i>
+                <span class="wait-font">{{ $t('待审核付款') }}</span>
+              </div>
+              <span class="number">{{ count.order_wait_audit }}</span>
+            </div>
+            <div>
+              <div style="margin-bottom: 5px">
+                <i class="iconfont icon-huowudui"></i>
+                <span class="wait-font">{{ $t('待处理投诉') }}</span>
+              </div>
+              <span class="number">{{ count.suggestion_wait_deal }}</span>
+            </div>
+            <!-- package_wait_in_storage
+          order_wait_pick
+          order_wait_ship
+          order_wait_audit
+          suggestion_wait_deal -->
+          </div>
+        </el-col>
+        <el-col :span="12" style="padding-left: 0">
+          <div class="order-search">
+            <div class="order-main">
+              <div class="search-sty">
+                <el-select v-model="expressType" :placeholder="$t('请选择')">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
+              <el-input
+                class="input-button"
+                v-if="expressType"
+                v-model="expressNumber"
+                @keyup.enter.native="goExpress"
+              >
+                <el-button type="primary" slot="append" @click.native="goExpress">{{
+                  $t('物流查询')
+                }}</el-button>
+              </el-input>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <el-row :gutter="20">
+      <el-col :span="18">
         <!-- 面板数据 -->
         <div class="panel-box main-item">
-          <div class="waitMsg">{{ $t('数据统计') }}</div>
           <div class="show-box">
             <div class="show-list">
               <span class="package-text">{{
@@ -109,7 +193,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="11">
         <!-- 运费查询 -->
         <div class="main-item right-item">
           <div>{{ $t('运费查询') }}</div>
@@ -253,7 +337,8 @@ export default {
       ],
       expressType: 1,
       expressNumber: '',
-      expressCount: ''
+      expressCount: '',
+      count: {}
       // systemData: []
     }
   },
@@ -315,6 +400,7 @@ export default {
     getNumbers() {
       this.$request.getIndexNumber().then(res => {
         if (res.ret) {
+          this.count = res.data
           this.user = res.data.user
           this.shipment = res.data.shipment
           this.packages = res.data.package
@@ -526,16 +612,16 @@ export default {
     margin-right: 5px;
   }
   .blue-sty {
-    background-color: #e5e6fd;
+    background-color: #d6f5e3;
   }
   .yellow-sty {
-    background-color: #fff0d2;
+    background-color: #ffeae0;
   }
   .green-sty {
-    background-color: #e3f1fc;
+    background-color: #e2eaff;
   }
   .light-blue {
-    background-color: #c3e8d4;
+    background-color: #dfe2ff;
   }
   .panel-right {
     box-sizing: border-box;
@@ -589,6 +675,7 @@ export default {
   }
   .box-header {
     border-bottom: 1px solid #ccc;
+    padding-top: 5px;
   }
   .bold-box {
     padding-top: 10px;
@@ -601,8 +688,10 @@ export default {
     top: 12px;
   }
   .panel-box {
-    border: 1px solid #e8e9eb;
     margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    height: 450px;
   }
   .show-box {
     padding: 30px 20px;
@@ -702,6 +791,7 @@ export default {
   }
   .search-sty {
     margin-bottom: 20px;
+    display: inline-block;
   }
   .express-dialog-container {
     .dot-box {
@@ -779,6 +869,75 @@ export default {
   }
   .about-sty {
     cursor: pointer;
+  }
+  .icon-sty,
+  .icon-packages,
+  .icon-order,
+  .icon-express {
+    position: relative;
+    top: 10px;
+    text-align: center;
+    border-radius: 50%;
+  }
+  .icon-sty {
+    border: 1px solid #d6f5e3;
+    background-color: #c5e7d3;
+  }
+  .icon-packages {
+    border: 1px solid #ffeae0;
+    background-color: #ffba98;
+  }
+  .icon-order {
+    border: 1px solid #b3c7ff;
+    background-color: #e2eaff;
+  }
+  .icon-express {
+    border: 1px solid #dfe2ff;
+    background-color: #9fa7f5;
+  }
+  .icons-third {
+    color: #c0c5ee !important;
+  }
+  .icons-second {
+    color: #8e98f1 !important;
+  }
+  .icons-first {
+    color: #69a482 !important;
+  }
+  .icons {
+    color: #ffa072 !important;
+  }
+  .wait-content {
+    padding: 30px 20px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(5, 1fr);
+    color: #8b8b8b;
+    background-color: #fff;
+    .wait-sty {
+      border-right: 1px solid#E8E9EB;
+      padding-right: 10px;
+      margin-bottom: 5px;
+    }
+    .number {
+      color: #2c2c2c;
+      font-weight: bold;
+    }
+    .wait-font {
+      font-size: 14px;
+    }
+  }
+  .order-search {
+    background-color: #fff;
+    height: 109px;
+    padding-left: 10px;
+    .input-button {
+      width: 65%;
+    }
+    .order-main {
+      position: relative;
+      top: 30px;
+    }
   }
 }
 </style>

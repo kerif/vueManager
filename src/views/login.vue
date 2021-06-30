@@ -22,7 +22,7 @@
               <el-form-item>
                 <el-input
                   prefix-icon="el-icon-user"
-                  :placeholder="$t('请输入邮箱或手机号')"
+                  :placeholder="$t('请输入邮箱')"
                   v-model="userInfo.username"
                 ></el-input>
               </el-form-item>

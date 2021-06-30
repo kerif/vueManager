@@ -41,17 +41,19 @@
           <el-radio :label="1">{{ $t('自提收货') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <span style="margin-left: 30px">{{ $t('选择自提点') }}</span
-      ><br />
-      <div class="main-sty">
-        <div class="address-sty address-left">
-          <span>{{ groupData.station && groupData.station.name }}</span
-          >&nbsp;<br />
-        </div>
-        <div class="address-sty address-right">
-          <el-button class="btn-green" @click="changeAddress('pickup')">{{
-            $t('选择自提点')
-          }}</el-button>
+      <div v-if="groupData.is_delivery === 1">
+        <span style="margin-left: 30px">{{ $t('选择自提点') }}</span
+        ><br />
+        <div class="main-sty">
+          <div class="address-sty address-left">
+            <span>{{ stationName }}</span
+            >&nbsp;<br />
+          </div>
+          <div class="address-sty address-right">
+            <el-button class="btn-green" @click="changeAddress('pickup')">{{
+              $t('选择自提点')
+            }}</el-button>
+          </div>
         </div>
       </div>
     </el-form>
@@ -130,8 +132,8 @@ export default {
     return {
       tableData: [],
       groupData: {
-        is_delivery: '',
-        mode: '',
+        is_delivery: 0,
+        mode: 0,
         address_id: '',
         station_id: ''
       },
@@ -148,7 +150,8 @@ export default {
       chooseId: 0,
       group: {},
       radio: '',
-      stationData: []
+      stationData: [],
+      stationName: ''
     }
   },
   components: {
@@ -191,7 +194,7 @@ export default {
         this.groupData.address.address = this.group.address
         this.groupData.address_id = this.group.id
       } else {
-        this.groupData.station.name = this.group.name
+        this.stationName = this.group.name
         this.groupData.station_id = this.group.id
       }
       console.log(this.group, 'this.group')
@@ -208,6 +211,7 @@ export default {
           }
           if (res.data.station) {
             this.groupData.station_id = res.data.station.id
+            this.stationName = res.data.station.name
           }
           this.groupData.mode = res.data.mode
           this.groupData.is_delivery = res.data.is_delivery
@@ -228,7 +232,7 @@ export default {
       this.$request
         .updateGroupDetails(this.id, {
           mode: this.groupData.mode,
-          is_delivery: this.groupData.mode,
+          is_delivery: this.groupData.is_delivery,
           address_id: this.groupData.address_id,
           station_id: this.groupData.station_id
         })
@@ -239,10 +243,6 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            // this.location.column = ''
-            // this.location.row = ''
-            // this.qty = ''
-            // this.location.number = ''
             this.show = false
             this.success()
           } else {

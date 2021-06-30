@@ -58,7 +58,8 @@ export default {
       this.$request
         .getLeader({
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          keyword: this.page_params.keyword
         })
         .then(res => {
           if (res.ret) {
