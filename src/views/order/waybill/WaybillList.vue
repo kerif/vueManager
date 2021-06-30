@@ -70,6 +70,8 @@
         >
           {{ $t('导出发票') }}
         </el-button>
+      </div>
+      <div v-if="oderData.length && ['0', '1', '2', '3', '4', '5'].includes(activeName)">
         <el-button @click="uploadList" size="small" type="success" plain>{{
           $t('导出清单')
         }}</el-button>
@@ -123,8 +125,13 @@
               <!-- 订单号 -->
               <el-table-column :label="$t('订单号')">
                 <template slot-scope="scope">
-                  <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i>
+                  <!-- <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i> -->
                   <span>{{ scope.row.order_sn }}</span>
+                  <img
+                    class="group-sty"
+                    v-if="scope.row.is_parent === 1"
+                    src="../../../assets/group.jpg"
+                  />
                 </template>
               </el-table-column>
               <el-table-column :label="$t('打包状态')">
@@ -382,10 +389,15 @@
         ></el-table-column>
         <el-table-column key="order_sn" :label="$t('订单号')" width="180">
           <template slot-scope="scope">
-            <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i>
+            <!-- <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i> -->
             <el-button @click="details(scope.row.id, activeName)" type="text">{{
               scope.row.order_sn
             }}</el-button>
+            <img
+              class="group-sty"
+              v-if="scope.row.is_parent === 1"
+              src="../../../assets/group.jpg"
+            />
           </template>
         </el-table-column>
         <el-table-column key="status" :label="$t('审核状态')" v-if="activeName === '2'">
@@ -616,10 +628,11 @@
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="
-                    (activeName === '2' ||
+                    ((activeName === '2' ||
                       scope.row.on_delivery_status === 1 ||
                       scope.row.on_delivery_status === 12) &&
-                    scope.row.is_parent === 0
+                      scope.row.is_parent === 0) ||
+                    (scope.row.is_parent === 1 && scope.row.group_mode)
                   "
                   @click.native="
                     changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)
@@ -2046,8 +2059,9 @@ export default {
     color: red;
   }
   .group-sty {
-    color: #ff4b3d;
-    margin-right: 5px;
+    // color: #ff4b3d;
+    // margin-right: 5px;
+    width: 20px;
   }
   .no-package {
     color: red !important;

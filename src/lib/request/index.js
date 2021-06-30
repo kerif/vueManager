@@ -2085,8 +2085,8 @@ exports.buyingStation = id => {
   return $form.get(`group-buying/stations/${id}`)
 }
 // 拼团配置 获取数据
-exports.getBuying = () => {
-  return $form.get('group-buying-config/express-line')
+exports.getBuying = params => {
+  return $form.get('group-buying-config/express-line', { params })
 }
 // 拼团配置 获取数据 开启或关闭
 exports.closeBuying = (id, status) => {
