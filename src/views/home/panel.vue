@@ -133,7 +133,7 @@
           suggestion_wait_deal -->
           </div>
         </el-col>
-        <el-col :span="12" style="padding-left: 0">
+        <el-col :span="12">
           <div class="order-search">
             <div class="order-main">
               <div class="search-sty">
@@ -162,8 +162,8 @@
         </el-col>
       </el-row>
     </div>
-    <el-row :gutter="20">
-      <el-col :span="18">
+    <el-row :gutter="20" class="package-chart" type="flex">
+      <el-col :span="13" style="height: 100%">
         <!-- 面板数据 -->
         <div class="panel-box main-item">
           <div class="show-box">
@@ -193,39 +193,127 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="6">
-        <!-- 运费查询 -->
-        <div class="main-item right-item">
-          <div>{{ $t('运费查询') }}</div>
-          <div>
-            {{ $t('您现在系统开始了') }}
-            <span class="express-sty">{{ expressCount }}</span>
-            {{ $t('条线路') }}
+      <el-col :span="11" style="height: 100%">
+        <div class="package-main">
+          <h3>订单概览</h3>
+          <ul>
+            <li v-for="(item, index) in pieData" :key="index" class="main-first">
+              <div v-if="item.name === 'all'">
+                <p>{{ $t('全部') }}</p>
+                <p>
+                  <strong>{{ item.counts }}</strong>
+                </p>
+              </div>
+              <div v-if="item.name === 'wait_storage'">
+                <p class="no-warehouse">{{ $t('未入库') }}</p>
+                <p class="no-warehouse">
+                  <strong>{{ item.counts }}</strong>
+                </p>
+              </div>
+              <div v-if="item.name === 'already_storage'">
+                <p>{{ $t('已入库') }}</p>
+                <p>
+                  <strong>{{ item.counts }}</strong>
+                </p>
+              </div>
+              <div v-if="item.name === 'packed'">
+                <p>{{ $t('已集包') }}</p>
+                <p>
+                  <strong>{{ item.counts }}</strong>
+                </p>
+              </div>
+              <div v-if="item.name === 'shipped'">
+                <p>{{ $t('已发货') }}</p>
+                <p>
+                  <strong>{{ item.counts }}</strong>
+                </p>
+              </div>
+              <div v-if="item.name === 'received'">
+                <p>{{ $t('已收货') }}</p>
+                <p>
+                  <strong>{{ item.counts }}</strong>
+                </p>
+              </div>
+              <div v-if="item.name === 'invalid'">
+                <p class="no-warehouse">{{ $t('弃件包裹') }}</p>
+                <p class="no-warehouse">
+                  <strong>{{ item.counts }}</strong>
+                </p>
+              </div>
+            </li>
+          </ul>
+          <div class="charts-content">
+            <div class="charts-left" id="chartsFirst"></div>
           </div>
-          <el-button type="primary" @click="goFreight">{{ $t('查询运费') }}</el-button>
         </div>
-        <!-- 物流查询 -->
-        <div class="main-item right-item">
-          <div>{{ $t('查询物流') }}</div>
-          <div class="search-sty">
-            <el-select v-model="expressType" :placeholder="$t('请选择')">
-              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-              </el-option>
-            </el-select>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" class="bottom">
+      <el-col :span="8">
+        <div class="process">
+          <span class="title">操作流程</span>
+          <div class="process-content">
+            <div>
+              <img src="../../assets/1.png" alt="" />
+              <p>包裹预报</p>
+            </div>
+            <span class="line"></span>
+            <div>
+              <img src="../../assets/2.png" alt="" />
+              <p>包裹入库</p>
+            </div>
+            <span class="line"></span>
+            <div>
+              <img src="../../assets/4.png" alt="" />
+              <p>订单打包</p>
+            </div>
+            <span class="line"></span>
+            <div>
+              <img src="../../assets/5.png" alt="" />
+              <p>订单发货</p>
+            </div>
           </div>
-          <el-input v-if="expressType" v-model="expressNumber" @keyup.enter.native="goExpress">
-            <el-button slot="append" icon="el-icon-search" @click.native="goExpress"></el-button>
-          </el-input>
         </div>
-        <!-- 系统通知 -->
-        <div class="main-item right-item">
-          <div>{{ $t('系统通知') }}</div>
-          <div v-for="item in systemData" :key="item.id" class="system-sty">
-            <span class="check-sty" @click="checkSystem(item.id)">{{ item.title }}</span>
+      </el-col>
+      <el-col :span="5">
+        <div class="other">
+          <div class="process-content user-actions">
+            <div>
+              <img src="../../assets/用户福利.png" alt="" />
+              <p>用户福利</p>
+            </div>
+            <div>
+              <img src="../../assets/公告管理.png" alt="" />
+              <p>公告管理</p>
+            </div>
           </div>
         </div>
-        <div class="about-sty" @click="checkAbout">
-          <el-button class="we-sty">{{ $t('客户端下载') }}</el-button>
+      </el-col>
+      <el-col :span="4">
+        <div class="help-center">
+          <span class="title">帮助中心</span>
+          <div class="process-content">
+            <div>
+              <img src="../../assets/操作手册.png" alt="" />
+              <p>操作手册</p>
+            </div>
+            <div>
+              <img src="../../assets/软件下载.png" alt="" />
+              <p>软件下载</p>
+            </div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="7">
+        <div class="system">
+          <span class="title">系统通知</span>
+          <div class="system-notice">
+            <ul class="notice">
+              <li>2020-03-19版本更新日志</li>
+              <li>2020-03-19版本更新日志</li>
+              <li>2020-03-19版本更新日志</li>
+            </ul>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -318,11 +406,17 @@ export default {
       myChart: '',
       status: 2,
       option: '',
+      cakeOption: '',
       showTips: false,
       updateProp: [],
       types: [],
       moreTips: '',
       items: [],
+      cakeChart: '',
+      pieData: [],
+      days: 7,
+      begin: '',
+      end: '',
       trackingVisible: false,
       TrackingData: [],
       options: [
@@ -347,6 +441,7 @@ export default {
     this.getDatas()
     this.getStatus() // 获取是否显示弹窗
     this.getSystem()
+    this.getPie()
   },
   mounted() {
     this.myChart = echarts.init(document.getElementById('echarts'))
@@ -384,6 +479,17 @@ export default {
       color: ['#E5E7FB'],
       textStyle: {
         fontWeight: 'bold'
+      }
+    }
+    // 包裹饼图
+    this.cakeChart = echarts.init(document.getElementById('chartsFirst'))
+    window.onresize = this.cakeChart.resize
+    this.cakeOption = {
+      backgroundColor: '#ffffff',
+      color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
       }
     }
   },
@@ -485,6 +591,71 @@ export default {
             this.myChart.setOption(this.option)
           }
         })
+    },
+    // 包裹饼图数据
+    getPie() {
+      let params = {
+        days: this.days
+      }
+      this.begin && (params.begin = this.begin)
+      this.end && (params.end = this.end)
+      this.$request.getPie(params).then(res => {
+        if (res.ret) {
+          this.pieData = res.data
+          const obj = {
+            wait_storage: this.$t('未入库'),
+            already_storage: this.$t('已入库'),
+            packed: this.$t('已集包'),
+            shipped: this.$t('已发货'),
+            received: this.$t('已收货'),
+            invalid: this.$t('弃件包裹')
+          }
+          let pieOrderList = res.data
+            .filter(item => {
+              return item.name !== 'all'
+            })
+            .map(item => {
+              return {
+                value: item.counts,
+                name: obj[item.name]
+              }
+            })
+          this.cakeOption.legend = {
+            orient: 'vertical',
+            left: 10,
+            data: [
+              this.$t('未入库'),
+              this.$t('已入库'),
+              this.$t('已集包'),
+              this.$t('已发货'),
+              this.$t('已收货'),
+              this.$t('弃件包裹')
+            ]
+          }
+          this.cakeOption.series = [
+            {
+              name: '包裹概览',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              label: {
+                formatter: ' {d}% '
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              },
+              labelLine: {
+                show: true
+              },
+              data: pieOrderList
+            }
+          ]
+          this.cakeChart.setOption(this.cakeOption)
+        }
+      })
     },
     goToOtherPage(permissionNumber, routerName, query = {}) {
       if (!this.isPermissionFilterArr.includes(permissionNumber)) {
@@ -689,7 +860,6 @@ export default {
   }
   .panel-box {
     border: 1px solid #e8e9eb;
-    margin-top: 20px;
   }
   .show-box {
     padding: 30px 20px;
@@ -935,6 +1105,78 @@ export default {
     .order-main {
       position: relative;
       top: 30px;
+    }
+  }
+  .package-chart {
+    margin-top: 20px;
+  }
+  .package-main {
+    padding: 30px 20px;
+    background-color: #fff;
+    ul {
+      display: flex;
+      justify-content: space-between;
+      padding: 0;
+      list-style: none;
+      li {
+        padding: 0 20px;
+        text-align: center;
+        border-right: 1px solid #e8e9eb;
+        p {
+          font-size: 14px;
+        }
+      }
+      li:last-child {
+        border-right: none;
+      }
+    }
+    .charts-left {
+      display: inline-block;
+      width: 100%;
+      height: 300px;
+    }
+  }
+  .bottom {
+    margin-top: 20px;
+    .process,
+    .other,
+    .help-center,
+    .system {
+      padding: 20px;
+      height: 150px;
+      background-color: #fff;
+      .title {
+        font-size: 16px;
+        font-weight: bold;
+      }
+      .process-content {
+        padding: 5px 0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        .line {
+          width: 25px;
+          height: 2px;
+          background-color: #e5e7fb;
+        }
+      }
+      .system-notice {
+        padding: 5px 0;
+        background-color: #fff;
+        .notice {
+          margin: 0;
+          padding: 0;
+          li {
+            padding: 10px;
+            list-style: none;
+            font-size: 14px;
+            border-bottom: 1px solid #f6f6f6;
+          }
+        }
+      }
+      .user-actions {
+        padding-top: 25px;
+      }
     }
   }
 }
