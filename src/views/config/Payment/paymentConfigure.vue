@@ -147,6 +147,7 @@ export default {
     this.getWechat()
     this.getPayment()
     this.getRecharge()
+    this.getLanguageList()
   },
   computed: {
     formatLangData() {
@@ -166,6 +167,14 @@ export default {
             message: res.msg,
             type: 'error'
           })
+        }
+      })
+    },
+    // 获取支持语言
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
         }
       })
     },

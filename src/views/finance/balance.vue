@@ -16,7 +16,9 @@
         </el-row>
       </el-form-item>
       <!-- 扣款金额 -->
-      <el-form-item :label="$t('*扣款金额') + localization.currency_unit">
+      <el-form-item
+        :label="$t('*扣款金额') + `${localization.currency_unit ? localization.currency_unit : ''}`"
+      >
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="ruleForm.amount"></el-input>
@@ -102,7 +104,7 @@ export default {
     }
   },
   created() {
-    this.getCountry()
+    this.getMe()
   },
   methods: {
     // getList () {
@@ -164,9 +166,8 @@ export default {
       this.supplierId = item.id
       this.supplierName = item.name
     },
-    // 获取支持国家数据
-    getCountry() {
-      this.$request.getSettlement().then(res => {
+    getMe() {
+      this.$request.getMe().then(res => {
         this.localization = res.localization
       })
     },
