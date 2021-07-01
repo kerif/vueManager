@@ -263,6 +263,11 @@ export default {
     clear() {
       this.id = ''
       this.addressData = []
+      this.stationName = ''
+      this.groupData.is_delivery = 0
+      this.groupData.address_id = 0
+      this.groupData.mode = 0
+      this.groupData.station_id = 0
     }
   }
 }

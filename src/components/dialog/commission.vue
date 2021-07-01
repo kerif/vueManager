@@ -33,7 +33,10 @@
         }}</el-checkbox>
       </el-form-item>
       <el-form-item :label="$t('默认佣金')" v-if="ruleForm.template_id === 0">
-        <el-input v-model="ruleForm.commission" class="input-select"></el-input>%
+        <el-input v-model="ruleForm.commission" class="input-select"></el-input>
+        <span v-if="ruleForm.type === 1">%/{{ $t('单') }}</span>
+        <span v-if="ruleForm.type === 2">¥/{{ $t('单') }}</span>
+        <span v-if="ruleForm.type === 3">¥/KG</span>
       </el-form-item>
     </el-form>
     <el-table v-if="ruleForm.template_id === 0" :data="tableData" border style="width: 100%">
@@ -151,6 +154,7 @@ export default {
           commission: this.ruleForm.commission,
           template_id: this.ruleForm.template_id,
           mode: Number(this.ruleForm.mode),
+          type: this.ruleForm.type,
           rules: arr
         })
         .then(res => {

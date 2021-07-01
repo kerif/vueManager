@@ -66,8 +66,8 @@
         </div>
       </el-col>
       <el-col :span="6">
-        <div class="addCustomer light-blue" @click="goToOtherPage(502, 'shipContainer')">
-          <div class="box-header">
+        <div class="addCustomer light-blue">
+          <div class="box-header" @click="$router.push({ name: 'linelist' })">
             <el-row :gutter="20">
               <el-col :span="20">
                 <div>{{ $t('系统开放线路') }}</div>
@@ -80,7 +80,7 @@
               </el-col>
             </el-row>
           </div>
-          <div class="box-footer">
+          <div class="box-footer" @click="goToOtherPage(502, 'shipContainer')">
             <span>{{ $t('支持收货地址') }}</span>
             <span class="count">{{ shipment.total }}</span>
           </div>
@@ -178,7 +178,7 @@
                 <el-option :value="4" :label="$t('全年')"></el-option>
               </el-select>
             </div>
-            <div class="echarts" id="echarts"></div>
+            <div class="echarts" id="myChart"></div>
             <div class="type-list">
               <div :class="['type-item', status === 2 ? 'select' : '']" @click="onStatus(2)">
                 {{ $t('已入库包裹') }}
@@ -448,46 +448,52 @@ export default {
     this.getPie()
   },
   mounted() {
-    this.myChart = echarts.init(document.getElementById('echarts'))
-    window.onresize = this.myChart.resize
+    this.myChart = echarts.init(document.getElementById('myChart'))
+    // window.onresize = this.myChart.resize
     this.option = {
-      legend: {
-        left: 0,
-        width: '100%'
-      },
+      // legend: {
+      //   left: 0,
+      //   width: '100%'
+      // },
       // 提示框
       tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#6a7985'
-          }
-        }
+        trigger: 'axis'
+        // axisPointer: {
+        //   type: 'cross',
+        //   label: {
+        //     backgroundColor: '#6a7985'
+        //   }
+        // }
       },
-      toolbox: {
-        show: false
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
+      // toolbox: {
+      //   show: false
+      // },
+      // grid: {
+      //   left: '3%',
+      //   right: '4%',
+      //   bottom: '3%',
+      //   containLabel: true
+      // },
       yAxis: [
         {
           type: 'value',
-          minInterval: 1
+          // minInterval: 1
+          boundaryGap: [0, '30%'],
+          splitLine: {
+            lineStyle: {
+              type: 'dashed' // y轴分割线类型
+            }
+          }
         }
-      ],
-      color: ['#E5E7FB'],
-      textStyle: {
-        fontWeight: 'bold'
-      }
+      ]
+      // color: ['#E5E7FB'],
+      // textStyle: {
+      //   fontWeight: 'bold'
+      // }
     }
     // 包裹饼图
     this.cakeChart = echarts.init(document.getElementById('chartsFirst'))
-    window.onresize = this.cakeChart.resize
+    // window.onresize = this.cakeChart.resize
     this.cakeOption = {
       backgroundColor: '#ffffff',
       color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
@@ -496,6 +502,10 @@ export default {
         formatter: '{a} <br/>{b}: {c} ({d}%)'
       }
     }
+    window.addEventListener('resize', () => {
+      this.myChart.resize()
+      this.cakeChart.resize()
+    })
   },
   computed: {
     isPermissionFilterArr() {
@@ -577,19 +587,26 @@ export default {
               {
                 type: 'line',
                 stack: this.$t('总量'),
-                areaStyle: {},
+                symbol: 'none',
+                // areaStyle: {},
                 smooth: true,
                 data: yData,
                 lineStyle: {
-                  normal: {
-                    color: '#9FA4D5'
-                  }
+                  color: '#223CC5',
+                  width: 3
+                  // normal: {
+                  // }
                 },
-                itemStyle: {
+                areaStyle: {
                   normal: {
-                    borderColor: '#9FA4D5'
+                    color: '#DFE2FF'
                   }
                 }
+                // itemStyle: {
+                //   normal: {
+                //     borderColor: '#9FA4D5'
+                //   }
+                // }
               }
             ]
             this.myChart.setOption(this.option)
@@ -883,8 +900,8 @@ export default {
   }
   .type-list {
     display: inline-block;
-    margin-left: 30px;
-    position: relative;
+    // margin-left: 30px;
+    position: absolute;
     bottom: 100px;
   }
   .type-item {
