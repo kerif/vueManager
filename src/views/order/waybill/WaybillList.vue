@@ -134,7 +134,7 @@
                   />
                 </template>
               </el-table-column>
-              <el-table-column :label="$t('打包状态')">
+              <el-table-column :label="$t('打包状态')" v-if="activeName === '1'">
                 <template slot-scope="scope">
                   <div class="no-package" v-if="scope.row.group_buying_status === 0">
                     {{ $t('未打包') }}
@@ -632,7 +632,7 @@
                       scope.row.on_delivery_status === 1 ||
                       scope.row.on_delivery_status === 12) &&
                       scope.row.is_parent === 0) ||
-                    (scope.row.is_parent === 1 && scope.row.group_mode)
+                    (activeName === '2' && scope.row.is_parent === 1 && scope.row.group_mode)
                   "
                   @click.native="
                     changePrice(scope.row.id, scope.row.order_sn, scope.row.actual_payment_fee)

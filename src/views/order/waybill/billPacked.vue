@@ -39,6 +39,13 @@
           <span>{{ form.address && form.address.postcode }}</span>
         </el-col>
       </el-row>
+      <el-row class="container-center" :gutter="20">
+        <!-- 收货自提点 -->
+        <el-col :span="7">
+          <span class="leftWidth">{{ $t('收货自提点') }}</span>
+          <span>{{ form.station_name }}</span>
+        </el-col>
+      </el-row>
     </div>
     <div class="receiverMSg">
       <h4 class="all-group">{{ $t('打包详情') }}</h4>

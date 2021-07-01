@@ -278,13 +278,13 @@
       <el-col :span="5">
         <div class="other">
           <div class="process-content user-actions">
-            <div>
+            <div @click="$router.push({ name: 'newUser' })" style="cursor: pointer">
               <img src="../../assets/用户福利.png" alt="" />
-              <p>用户福利</p>
+              <p>{{ $t('用户福利') }}</p>
             </div>
-            <div>
+            <div @click="$router.push({ name: 'Public' })" style="cursor: pointer">
               <img src="../../assets/公告管理.png" alt="" />
-              <p>公告管理</p>
+              <p>{{ $t('公告管理') }}</p>
             </div>
           </div>
         </div>
@@ -309,9 +309,13 @@
           <span class="title">系统通知</span>
           <div class="system-notice">
             <ul class="notice">
-              <li>2020-03-19版本更新日志</li>
-              <li>2020-03-19版本更新日志</li>
-              <li>2020-03-19版本更新日志</li>
+              <li
+                @click="$router.push({ name: 'systemNotice', params: { id: item.id } })"
+                v-for="item in items"
+                :key="item.id"
+              >
+                {{ item.title }}
+              </li>
             </ul>
           </div>
         </div>
@@ -1145,6 +1149,7 @@ export default {
       padding: 20px;
       height: 150px;
       background-color: #fff;
+      overflow: auto;
       .title {
         font-size: 16px;
         font-weight: bold;
@@ -1158,6 +1163,8 @@ export default {
           width: 25px;
           height: 2px;
           background-color: #e5e7fb;
+          position: relative;
+          bottom: 25px;
         }
       }
       .system-notice {
