@@ -22,55 +22,57 @@
         <add-btn router="staffadd">{{ $t('添加员工') }}</add-btn>
       </div>
     </div>
-    <el-table
-      class="data-list"
-      :data="staff_list"
-      border
-      ref="table"
-      @selection-change="selectionChange"
-      v-loading="tableLoading"
-      height="550"
-    >
-      <el-table-column type="selection" width="55"> </el-table-column>
-      <!-- 用户名 -->
-      <el-table-column :label="$t('用户名')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.username }}</span>
-          <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
-        </template>
-      </el-table-column>
-      <!-- 姓名 -->
-      <el-table-column prop="name" :label="$t('姓名')"> </el-table-column>
-      <!-- 邮箱 -->
-      <el-table-column prop="email" :label="$t('邮箱')"> </el-table-column>
-      <!-- 员工组 -->
-      <el-table-column prop="admin_group.name_cn" :label="$t('员工组')"> </el-table-column>
-      <!-- 电话 -->
-      <el-table-column prop="phone" :label="$t('电话')"> </el-table-column>
-      <!-- 最后登录时间 -->
-      <el-table-column prop="last_login_at" :label="$t('最后登录时间')"> </el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <!-- 编辑 -->
-          <el-button class="btn-main" @click.stop="editInfo(scope.row.id)">{{
-            $t('编辑')
-          }}</el-button>
-          <!-- 修改密码 -->
-          <el-button class="btn-light-green" @click.stop="editPassword(scope.row.id)">
-            {{ $t('修改密码') }}
-          </el-button>
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        class="data-list"
+        :data="staff_list"
+        border
+        ref="table"
+        @selection-change="selectionChange"
+        v-loading="tableLoading"
+        height="calc(100vh - 270px)"
+      >
+        <el-table-column type="selection" width="55"> </el-table-column>
+        <!-- 用户名 -->
+        <el-table-column :label="$t('用户名')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.username }}</span>
+            <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
+          </template>
+        </el-table-column>
+        <!-- 姓名 -->
+        <el-table-column prop="name" :label="$t('姓名')"> </el-table-column>
+        <!-- 邮箱 -->
+        <el-table-column prop="email" :label="$t('邮箱')"> </el-table-column>
+        <!-- 员工组 -->
+        <el-table-column prop="admin_group.name_cn" :label="$t('员工组')"> </el-table-column>
+        <!-- 电话 -->
+        <el-table-column prop="phone" :label="$t('电话')"> </el-table-column>
+        <!-- 最后登录时间 -->
+        <el-table-column prop="last_login_at" :label="$t('最后登录时间')"> </el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <!-- 编辑 -->
+            <el-button class="btn-main" @click.stop="editInfo(scope.row.id)">{{
+              $t('编辑')
+            }}</el-button>
+            <!-- 修改密码 -->
+            <el-button class="btn-light-green" @click.stop="editPassword(scope.row.id)">
+              {{ $t('修改密码') }}
+            </el-button>
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
           <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
           <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
           <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
         </div>
       </template> -->
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </el-table>
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -125,6 +127,9 @@ export default {
             this.staff_list = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           }
         })
         .finally(() => {
