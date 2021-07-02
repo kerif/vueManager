@@ -377,6 +377,12 @@
           <!-- <span v-for="item in scope.row.packages" :key="item.id">{{item.express_num}}</span> -->
         </template>
       </el-table-column>
+      <el-table-column :label="$t('出库类型')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.box_type === 1">{{ $t('单箱出库') }}</span>
+          <span v-if="scope.row.box_type === 2">{{ $t('多箱出库') }}</span>
+        </template>
+      </el-table-column>
       <!-- 货位 -->
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
       <!-- 备注 -->
@@ -730,7 +736,8 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.tableLoading = false
         this.form = res.data
-        this.oderData = [res.data.details]
+        this.oderData = [{ ...res.data.details, box_type: res.data.box_type }]
+        console.log(this.oderData, 'this.oderData')
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization

@@ -1,171 +1,87 @@
 <template>
   <div class="panel-container">
-    <!-- 本月统计数据 -->
-    <el-row>
-      <el-col :span="6">
-        <div class="addCustomer add-line blue-sty" @click="goToOtherPage(301, 'viplist')">
-          <div class="box-header">
+    <el-row :gutter="20">
+      <el-col :span="18">
+        <el-row :gutter="0" class="main-item">
+          <el-col :span="24" class="main-top">
             <el-row>
-              <el-col :span="20">
-                <div>{{ $t('当月新增客户') }}</div>
-                <div class="bold-box">{{ user.current_month }}</div>
+              <el-col :span="6">
+                <div class="addCustomer add-line blue-sty" @click="goToOtherPage(301, 'viplist')">
+                  <div class="box-header">
+                    <div>{{ $t('当月新增客户') }}</div>
+                    <div class="bold-box">{{ user.current_month }}</div>
+                  </div>
+                  <div class="box-footer">
+                    <span>{{ $t('总用户') }}</span>
+                    <span class="count">{{ user.total }}</span>
+                  </div>
+                </div>
               </el-col>
-              <el-col :span="4">
-                <div class="icon-sty">
-                  <i class="iconfont icon-gerenzhongxin icons-first"></i>
+              <el-col :span="6">
+                <div
+                  class="addCustomer add-line yellow-sty"
+                  @click="goToOtherPage(402, 'wayBillList')"
+                >
+                  <div class="box-header">
+                    <div>{{ $t('当月新增订单') }}</div>
+                    <div class="bold-box">{{ order.current_month }}</div>
+                  </div>
+                  <div class="box-footer">
+                    <span>{{ $t('总运单') }}</span>
+                    <span class="count">{{ order.total }}</span>
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div
+                  class="addCustomer add-line green-sty"
+                  @click="goToOtherPage(401, 'orderlist')"
+                >
+                  <div class="box-header">
+                    <div>{{ $t('当月预报包裹') }}</div>
+                    <div class="bold-box">{{ packages.current_month }}</div>
+                  </div>
+                  <div class="box-footer">
+                    <span>{{ $t('总包裹量') }}</span>
+                    <span class="count">{{ packages.total }}</span>
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="addCustomer light-blue" @click="goToOtherPage(502, 'shipContainer')">
+                  <div class="box-header">
+                    <div>{{ $t('当月新增发货单') }}</div>
+                    <div class="bold-box">{{ shipment.current_month }}</div>
+                  </div>
+                  <div class="box-footer">
+                    <span>{{ $t('总发货单') }}</span>
+                    <span class="count">{{ shipment.total }}</span>
+                  </div>
                 </div>
               </el-col>
             </el-row>
-          </div>
-          <div class="box-footer">
-            <span>{{ $t('总用户') }}</span>
-            <span class="count">{{ user.total }}</span>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="addCustomer add-line yellow-sty" @click="goToOtherPage(401, 'orderlist')">
-          <div class="box-header">
-            <el-row :gutter="20">
-              <el-col :span="20">
-                <div>{{ $t('本月预报包裹') }}</div>
-                <div class="bold-box">{{ packages.current_month }}</div>
-              </el-col>
-              <el-col :span="4">
-                <div class="icon-packages">
-                  <i class="iconfont icon-hezi icons"></i>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-          <div class="box-footer">
-            <span>{{ $t('总包裹量') }}</span>
-            <span class="count">{{ packages.total }}</span>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="addCustomer add-line green-sty" @click="goToOtherPage(402, 'wayBillList')">
-          <div class="box-header">
-            <el-row :gutter="20">
-              <el-col :span="20">
-                <div>{{ $t('本月新增订单') }}</div>
-                <div class="bold-box">{{ order.current_month }}</div>
-              </el-col>
-              <el-col :span="4">
-                <div class="icon-order">
-                  <i class="iconfont icon-ziliao icons-second"></i>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-          <div class="box-footer">
-            <span>{{ $t('总运单') }}</span>
-            <span class="count">{{ order.total }}</span>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="addCustomer light-blue">
-          <div class="box-header" @click="$router.push({ name: 'linelist' })">
-            <el-row :gutter="20">
-              <el-col :span="20">
-                <div>{{ $t('系统开放线路') }}</div>
-                <div class="bold-box">{{ expressCount }}</div>
-              </el-col>
-              <el-col :span="4">
-                <div class="icon-express">
-                  <i class="iconfont icon-ditu icons-third"></i>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-          <div class="box-footer" @click="goToOtherPage(502, 'shipContainer')">
-            <span>{{ $t('支持收货地址') }}</span>
-            <span class="count">{{ shipment.total }}</span>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
-    <div style="margin-top: 10px">
-      <el-row :gutter="20">
-        <el-col :span="12" style="padding-right: 5px">
-          <div class="wait-content">
-            <div>
-              <div class="wait-sty">
-                <i class="iconfont icon-icon_rukou"></i>
-                <span class="wait-font">{{ $t('待入库包裹') }}</span>
-              </div>
-              <span class="number">{{ count.package_wait_in_storage }}</span>
-            </div>
-            <div>
-              <div class="wait-sty">
-                <i class="iconfont icon-huowudui"></i>
-                <span class="wait-font">{{ $t('待打包订单') }}</span>
-              </div>
-              <span class="number">{{ count.order_wait_pick }}</span>
-            </div>
-            <div>
-              <div class="wait-sty">
-                <i class="iconfont icon-huowudui"></i>
-                <span class="wait-font">{{ $t('待发货订单') }}</span>
-              </div>
-              <span class="number">{{ count.order_wait_ship }}</span>
-            </div>
-            <div>
-              <div class="wait-sty">
-                <i class="iconfont icon-huowudui"></i>
-                <span class="wait-font">{{ $t('待审核付款') }}</span>
-              </div>
-              <span class="number">{{ count.order_wait_audit }}</span>
-            </div>
-            <div>
-              <div style="margin-bottom: 5px">
-                <i class="iconfont icon-huowudui"></i>
-                <span class="wait-font">{{ $t('待处理投诉') }}</span>
-              </div>
-              <span class="number">{{ count.suggestion_wait_deal }}</span>
-            </div>
-            <!-- package_wait_in_storage
-          order_wait_pick
-          order_wait_ship
-          order_wait_audit
-          suggestion_wait_deal -->
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div class="order-search">
-            <div class="order-main">
-              <div class="search-sty">
-                <el-select v-model="expressType" :placeholder="$t('请选择')">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  >
-                  </el-option>
-                </el-select>
-              </div>
-              <el-input
-                class="input-button"
-                v-if="expressType"
-                v-model="expressNumber"
-                @keyup.enter.native="goExpress"
-              >
-                <el-button type="primary" slot="append" @click.native="goExpress">{{
-                  $t('物流查询')
-                }}</el-button>
-              </el-input>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-    <el-row :gutter="20" class="package-chart" type="flex">
-      <el-col :span="13" style="height: 100%">
+          </el-col>
+          <!-- <el-col :span="6" class="panel-right">
+          <div class="waitMsg">{{$t('待处理消息')}}</div>
+          <ul>
+            <li @click="goToOtherPage(401, 'orderlist')">
+              {{$t('未入库包裹')}}
+              <div class="msg-right">{{ waitInStorage }}</div>
+              </li>
+            <li @click="goToOtherPage(402, 'wayBillList')">
+              {{$t('待拣货包裹')}}
+              <div class="msg-right">{{ waitPack }}</div>
+              </li>
+            <li @click="goToOtherPage(402, 'wayBillList', {activeName: '2'})">
+              {{$t('未支付包裹')}}
+              <div class="msg-right">{{ upaid }}</div>
+              </li>
+          </ul>
+        </el-col> -->
+        </el-row>
         <!-- 面板数据 -->
         <div class="panel-box main-item">
+          <div class="waitMsg">{{ $t('数据统计') }}</div>
           <div class="show-box">
             <div class="show-list">
               <span class="package-text">{{
@@ -178,7 +94,7 @@
                 <el-option :value="4" :label="$t('全年')"></el-option>
               </el-select>
             </div>
-            <div class="echarts" id="myChart"></div>
+            <div class="echarts" id="echarts"></div>
             <div class="type-list">
               <div :class="['type-item', status === 2 ? 'select' : '']" @click="onStatus(2)">
                 {{ $t('已入库包裹') }}
@@ -193,131 +109,39 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="11" style="height: 100%">
-        <div class="package-main">
-          <h3>订单概览</h3>
-          <ul>
-            <li v-for="(item, index) in pieData" :key="index" class="main-first">
-              <div v-if="item.name === 'all'">
-                <p>{{ $t('全部') }}</p>
-                <p>
-                  <strong>{{ item.counts }}</strong>
-                </p>
-              </div>
-              <div v-if="item.name === 'wait_storage'">
-                <p class="no-warehouse">{{ $t('未入库') }}</p>
-                <p class="no-warehouse">
-                  <strong>{{ item.counts }}</strong>
-                </p>
-              </div>
-              <div v-if="item.name === 'already_storage'">
-                <p>{{ $t('已入库') }}</p>
-                <p>
-                  <strong>{{ item.counts }}</strong>
-                </p>
-              </div>
-              <div v-if="item.name === 'packed'">
-                <p>{{ $t('已集包') }}</p>
-                <p>
-                  <strong>{{ item.counts }}</strong>
-                </p>
-              </div>
-              <div v-if="item.name === 'shipped'">
-                <p>{{ $t('已发货') }}</p>
-                <p>
-                  <strong>{{ item.counts }}</strong>
-                </p>
-              </div>
-              <div v-if="item.name === 'received'">
-                <p>{{ $t('已收货') }}</p>
-                <p>
-                  <strong>{{ item.counts }}</strong>
-                </p>
-              </div>
-              <div v-if="item.name === 'invalid'">
-                <p class="no-warehouse">{{ $t('弃件包裹') }}</p>
-                <p class="no-warehouse">
-                  <strong>{{ item.counts }}</strong>
-                </p>
-              </div>
-            </li>
-          </ul>
-          <div class="charts-content">
-            <div class="charts-left" id="chartsFirst"></div>
+      <el-col :span="6">
+        <!-- 运费查询 -->
+        <div class="main-item right-item">
+          <div>{{ $t('运费查询') }}</div>
+          <div>
+            {{ $t('您现在系统开始了') }}
+            <span class="express-sty">{{ expressCount }}</span>
+            {{ $t('条线路') }}
+          </div>
+          <el-button type="primary" @click="goFreight">{{ $t('查询运费') }}</el-button>
+        </div>
+        <!-- 物流查询 -->
+        <div class="main-item right-item">
+          <div>{{ $t('查询物流') }}</div>
+          <div class="search-sty">
+            <el-select v-model="expressType" :placeholder="$t('请选择')">
+              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+          <el-input v-if="expressType" v-model="expressNumber" @keyup.enter.native="goExpress">
+            <el-button slot="append" icon="el-icon-search" @click.native="goExpress"></el-button>
+          </el-input>
+        </div>
+        <!-- 系统通知 -->
+        <div class="main-item right-item">
+          <div>{{ $t('系统通知') }}</div>
+          <div v-for="item in systemData" :key="item.id" class="system-sty">
+            <span class="check-sty" @click="checkSystem(item.id)">{{ item.title }}</span>
           </div>
         </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" class="bottom">
-      <el-col :span="8">
-        <div class="process">
-          <span class="title">操作流程</span>
-          <div class="process-content">
-            <div>
-              <img src="../../assets/1.png" alt="" />
-              <p>包裹预报</p>
-            </div>
-            <span class="line"></span>
-            <div>
-              <img src="../../assets/2.png" alt="" />
-              <p>包裹入库</p>
-            </div>
-            <span class="line"></span>
-            <div>
-              <img src="../../assets/4.png" alt="" />
-              <p>订单打包</p>
-            </div>
-            <span class="line"></span>
-            <div>
-              <img src="../../assets/5.png" alt="" />
-              <p>订单发货</p>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="5">
-        <div class="other">
-          <div class="process-content user-actions">
-            <div @click="$router.push({ name: 'newUser' })" style="cursor: pointer">
-              <img src="../../assets/用户福利.png" alt="" />
-              <p>{{ $t('用户福利') }}</p>
-            </div>
-            <div @click="$router.push({ name: 'Public' })" style="cursor: pointer">
-              <img src="../../assets/公告管理.png" alt="" />
-              <p>{{ $t('公告管理') }}</p>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="4">
-        <div class="help-center">
-          <span class="title">帮助中心</span>
-          <div class="process-content">
-            <div>
-              <img src="../../assets/操作手册.png" alt="" />
-              <p>操作手册</p>
-            </div>
-            <div>
-              <img src="../../assets/软件下载.png" alt="" />
-              <p>软件下载</p>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="7">
-        <div class="system">
-          <span class="title">系统通知</span>
-          <div class="system-notice">
-            <ul class="notice">
-              <li
-                @click="$router.push({ name: 'systemNotice', params: { id: item.id } })"
-                v-for="item in items"
-                :key="item.id"
-              >
-                {{ item.title }}
-              </li>
-            </ul>
-          </div>
+        <div class="about-sty" @click="checkAbout">
+          <el-button class="we-sty">{{ $t('客户端下载') }}</el-button>
         </div>
       </el-col>
     </el-row>
@@ -410,17 +234,11 @@ export default {
       myChart: '',
       status: 2,
       option: '',
-      cakeOption: '',
       showTips: false,
       updateProp: [],
       types: [],
       moreTips: '',
       items: [],
-      cakeChart: '',
-      pieData: [],
-      days: 7,
-      begin: '',
-      end: '',
       trackingVisible: false,
       TrackingData: [],
       options: [
@@ -435,8 +253,7 @@ export default {
       ],
       expressType: 1,
       expressNumber: '',
-      expressCount: '',
-      count: {}
+      expressCount: ''
       // systemData: []
     }
   },
@@ -445,67 +262,45 @@ export default {
     this.getDatas()
     this.getStatus() // 获取是否显示弹窗
     this.getSystem()
-    this.getPie()
   },
   mounted() {
-    this.myChart = echarts.init(document.getElementById('myChart'))
-    // window.onresize = this.myChart.resize
+    this.myChart = echarts.init(document.getElementById('echarts'))
+    window.onresize = this.myChart.resize
     this.option = {
-      // legend: {
-      //   left: 0,
-      //   width: '100%'
-      // },
+      legend: {
+        left: 0,
+        width: '100%'
+      },
       // 提示框
       tooltip: {
-        trigger: 'axis'
-        // axisPointer: {
-        //   type: 'cross',
-        //   label: {
-        //     backgroundColor: '#6a7985'
-        //   }
-        // }
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        }
       },
-      // toolbox: {
-      //   show: false
-      // },
-      // grid: {
-      //   left: '3%',
-      //   right: '4%',
-      //   bottom: '3%',
-      //   containLabel: true
-      // },
+      toolbox: {
+        show: false
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
       yAxis: [
         {
           type: 'value',
-          // minInterval: 1
-          boundaryGap: [0, '30%'],
-          splitLine: {
-            lineStyle: {
-              type: 'dashed' // y轴分割线类型
-            }
-          }
+          minInterval: 1
         }
-      ]
-      // color: ['#E5E7FB'],
-      // textStyle: {
-      //   fontWeight: 'bold'
-      // }
-    }
-    // 包裹饼图
-    this.cakeChart = echarts.init(document.getElementById('chartsFirst'))
-    // window.onresize = this.cakeChart.resize
-    this.cakeOption = {
-      backgroundColor: '#ffffff',
-      color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
+      ],
+      color: ['#E5E7FB'],
+      textStyle: {
+        fontWeight: 'bold'
       }
     }
-    window.addEventListener('resize', () => {
-      this.myChart.resize()
-      this.cakeChart.resize()
-    })
   },
   computed: {
     isPermissionFilterArr() {
@@ -520,7 +315,6 @@ export default {
     getNumbers() {
       this.$request.getIndexNumber().then(res => {
         if (res.ret) {
-          this.count = res.data
           this.user = res.data.user
           this.shipment = res.data.shipment
           this.packages = res.data.package
@@ -587,96 +381,24 @@ export default {
               {
                 type: 'line',
                 stack: this.$t('总量'),
-                symbol: 'none',
-                // areaStyle: {},
+                areaStyle: {},
                 smooth: true,
                 data: yData,
                 lineStyle: {
-                  color: '#223CC5',
-                  width: 3
-                  // normal: {
-                  // }
-                },
-                areaStyle: {
                   normal: {
-                    color: '#DFE2FF'
+                    color: '#9FA4D5'
+                  }
+                },
+                itemStyle: {
+                  normal: {
+                    borderColor: '#9FA4D5'
                   }
                 }
-                // itemStyle: {
-                //   normal: {
-                //     borderColor: '#9FA4D5'
-                //   }
-                // }
               }
             ]
             this.myChart.setOption(this.option)
           }
         })
-    },
-    // 包裹饼图数据
-    getPie() {
-      let params = {
-        days: this.days
-      }
-      this.begin && (params.begin = this.begin)
-      this.end && (params.end = this.end)
-      this.$request.getPie(params).then(res => {
-        if (res.ret) {
-          this.pieData = res.data
-          const obj = {
-            wait_storage: this.$t('未入库'),
-            already_storage: this.$t('已入库'),
-            packed: this.$t('已集包'),
-            shipped: this.$t('已发货'),
-            received: this.$t('已收货'),
-            invalid: this.$t('弃件包裹')
-          }
-          let pieOrderList = res.data
-            .filter(item => {
-              return item.name !== 'all'
-            })
-            .map(item => {
-              return {
-                value: item.counts,
-                name: obj[item.name]
-              }
-            })
-          this.cakeOption.legend = {
-            orient: 'vertical',
-            left: 10,
-            data: [
-              this.$t('未入库'),
-              this.$t('已入库'),
-              this.$t('已集包'),
-              this.$t('已发货'),
-              this.$t('已收货'),
-              this.$t('弃件包裹')
-            ]
-          }
-          this.cakeOption.series = [
-            {
-              name: '包裹概览',
-              type: 'pie',
-              radius: ['50%', '70%'],
-              label: {
-                formatter: ' {d}% '
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              },
-              labelLine: {
-                show: true
-              },
-              data: pieOrderList
-            }
-          ]
-          this.cakeChart.setOption(this.cakeOption)
-        }
-      })
     },
     goToOtherPage(permissionNumber, routerName, query = {}) {
       if (!this.isPermissionFilterArr.includes(permissionNumber)) {
@@ -804,16 +526,16 @@ export default {
     margin-right: 5px;
   }
   .blue-sty {
-    background-color: #d6f5e3;
+    background-color: #e5e6fd;
   }
   .yellow-sty {
-    background-color: #ffeae0;
+    background-color: #fff0d2;
   }
   .green-sty {
-    background-color: #e2eaff;
+    background-color: #e3f1fc;
   }
   .light-blue {
-    background-color: #dfe2ff;
+    background-color: #c3e8d4;
   }
   .panel-right {
     box-sizing: border-box;
@@ -867,7 +589,6 @@ export default {
   }
   .box-header {
     border-bottom: 1px solid #ccc;
-    padding-top: 5px;
   }
   .bold-box {
     padding-top: 10px;
@@ -881,6 +602,7 @@ export default {
   }
   .panel-box {
     border: 1px solid #e8e9eb;
+    margin-top: 20px;
   }
   .show-box {
     padding: 30px 20px;
@@ -900,8 +622,8 @@ export default {
   }
   .type-list {
     display: inline-block;
-    // margin-left: 30px;
-    position: absolute;
+    margin-left: 30px;
+    position: relative;
     bottom: 100px;
   }
   .type-item {
@@ -980,7 +702,6 @@ export default {
   }
   .search-sty {
     margin-bottom: 20px;
-    display: inline-block;
   }
   .express-dialog-container {
     .dot-box {
@@ -1058,150 +779,6 @@ export default {
   }
   .about-sty {
     cursor: pointer;
-  }
-  .icon-sty,
-  .icon-packages,
-  .icon-order,
-  .icon-express {
-    position: relative;
-    top: 10px;
-    text-align: center;
-    border-radius: 50%;
-  }
-  .icon-sty {
-    border: 1px solid #d6f5e3;
-    background-color: #c5e7d3;
-  }
-  .icon-packages {
-    border: 1px solid #ffeae0;
-    background-color: #ffba98;
-  }
-  .icon-order {
-    border: 1px solid #b3c7ff;
-    background-color: #e2eaff;
-  }
-  .icon-express {
-    border: 1px solid #dfe2ff;
-    background-color: #9fa7f5;
-  }
-  .icons-third {
-    color: #c0c5ee !important;
-  }
-  .icons-second {
-    color: #8e98f1 !important;
-  }
-  .icons-first {
-    color: #69a482 !important;
-  }
-  .icons {
-    color: #ffa072 !important;
-  }
-  .wait-content {
-    padding: 30px 20px;
-    display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(5, 1fr);
-    color: #8b8b8b;
-    background-color: #fff;
-    .wait-sty {
-      border-right: 1px solid#E8E9EB;
-      padding-right: 10px;
-      margin-bottom: 5px;
-    }
-    .number {
-      color: #2c2c2c;
-      font-weight: bold;
-    }
-    .wait-font {
-      font-size: 14px;
-    }
-  }
-  .order-search {
-    background-color: #fff;
-    height: 109px;
-    padding-left: 10px;
-    .input-button {
-      width: 55%;
-    }
-    .order-main {
-      position: relative;
-      top: 30px;
-    }
-  }
-  .package-chart {
-    margin-top: 20px;
-  }
-  .package-main {
-    padding: 30px 20px;
-    background-color: #fff;
-    ul {
-      display: flex;
-      justify-content: space-between;
-      padding: 0;
-      list-style: none;
-      li {
-        padding: 0 20px;
-        text-align: center;
-        border-right: 1px solid #e8e9eb;
-        p {
-          font-size: 14px;
-        }
-      }
-      li:last-child {
-        border-right: none;
-      }
-    }
-    .charts-left {
-      display: inline-block;
-      width: 100%;
-      height: 300px;
-    }
-  }
-  .bottom {
-    margin-top: 20px;
-    .process,
-    .other,
-    .help-center,
-    .system {
-      padding: 20px;
-      height: 150px;
-      background-color: #fff;
-      overflow: auto;
-      .title {
-        font-size: 16px;
-        font-weight: bold;
-      }
-      .process-content {
-        padding: 5px 0;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        .line {
-          width: 25px;
-          height: 2px;
-          background-color: #e5e7fb;
-          position: relative;
-          bottom: 25px;
-        }
-      }
-      .system-notice {
-        padding: 5px 0;
-        background-color: #fff;
-        .notice {
-          margin: 0;
-          padding: 0;
-          li {
-            padding: 10px;
-            list-style: none;
-            font-size: 14px;
-            border-bottom: 1px solid #f6f6f6;
-          }
-        }
-      }
-      .user-actions {
-        padding-top: 25px;
-      }
-    }
   }
 }
 </style>
