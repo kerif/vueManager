@@ -207,7 +207,14 @@
       </el-col>
       <el-col :span="11" style="height: 100%">
         <div class="package-main">
-          <h3>订单概览</h3>
+          <div class="show-list">
+            <span class="package-text">{{ $t('订单概览') }}</span>
+            <el-select v-model="days" @change="getPie" :placeholder="$t('请选择')">
+              <el-option :value="1" :label="$t('今天')"></el-option>
+              <el-option :value="7" :label="$t('近7天')"></el-option>
+              <el-option :value="30" :label="$t('近30天')"></el-option>
+            </el-select>
+          </div>
           <ul>
             <li v-for="(item, index) in pieData" :key="index" class="main-first">
               <div v-if="item.name === 'all'">
@@ -322,6 +329,7 @@
           <div class="system-notice">
             <ul class="notice">
               <li
+                style="cursor: pointer"
                 @click="$router.push({ name: 'systemNotice', params: { id: item.id } })"
                 v-for="item in items"
                 :key="item.id"
