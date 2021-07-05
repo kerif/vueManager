@@ -2,12 +2,12 @@
   <div class="panel-container">
     <!-- 本月统计数据 -->
     <el-row>
-      <el-col :span="6">
+      <el-col :span="6" style="padding-right: 5px">
         <div class="addCustomer add-line blue-sty" @click="goToOtherPage(301, 'viplist')">
-          <div class="box-header">
+          <div class="box-header box-user">
             <el-row>
               <el-col :span="20">
-                <div>{{ $t('当月新增客户') }}</div>
+                <div>{{ $t('本月新增客户') }}</div>
                 <div class="bold-box">{{ user.current_month }}</div>
               </el-col>
               <el-col :span="4">
@@ -18,14 +18,14 @@
             </el-row>
           </div>
           <div class="box-footer">
-            <span>{{ $t('总用户') }}</span>
-            <span class="count">{{ user.total }}</span>
+            <div class="user-count user-left">{{ $t('总用户') }}</div>
+            <div class="count user-count user-right">{{ user.total }}</div>
           </div>
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" style="padding-right: 5px">
         <div class="addCustomer add-line yellow-sty" @click="goToOtherPage(401, 'orderlist')">
-          <div class="box-header">
+          <div class="box-header box-package">
             <el-row :gutter="20">
               <el-col :span="20">
                 <div>{{ $t('本月预报包裹') }}</div>
@@ -39,14 +39,14 @@
             </el-row>
           </div>
           <div class="box-footer">
-            <span>{{ $t('总包裹量') }}</span>
-            <span class="count">{{ packages.total }}</span>
+            <span class="package-count user-left">{{ $t('总包裹量') }}</span>
+            <span class="count package-count user-right">{{ packages.total }}</span>
           </div>
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" style="padding-right: 5px">
         <div class="addCustomer add-line green-sty" @click="goToOtherPage(402, 'wayBillList')">
-          <div class="box-header">
+          <div class="box-header box-order">
             <el-row :gutter="20">
               <el-col :span="20">
                 <div>{{ $t('本月新增订单') }}</div>
@@ -60,14 +60,14 @@
             </el-row>
           </div>
           <div class="box-footer">
-            <span>{{ $t('总运单') }}</span>
-            <span class="count">{{ order.total }}</span>
+            <div class="total-sty user-left">{{ $t('总运单') }}</div>
+            <div class="count total-sty user-right">{{ order.total }}</div>
           </div>
         </div>
       </el-col>
       <el-col :span="6">
         <div class="addCustomer light-blue">
-          <div class="box-header" @click="$router.push({ name: 'linelist' })">
+          <div class="box-header box-open" @click="$router.push({ name: 'linelist' })">
             <el-row :gutter="20">
               <el-col :span="20">
                 <div>{{ $t('系统开放线路') }}</div>
@@ -81,8 +81,8 @@
             </el-row>
           </div>
           <div class="box-footer" @click="goToOtherPage(502, 'shipContainer')">
-            <span>{{ $t('支持收货地址') }}</span>
-            <span class="count">{{ shipment.total }}</span>
+            <div class="open-sty user-left">{{ $t('支持收货地址') }}</div>
+            <div class="count open-sty user-right">{{ shipment.total }}</div>
           </div>
         </div>
       </el-col>
@@ -145,7 +145,7 @@
           suggestion_wait_deal -->
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" style="padding-left: 5px">
           <div class="order-search">
             <div class="order-main">
               <div class="search-sty">
@@ -165,9 +165,12 @@
                 v-model="expressNumber"
                 @keyup.enter.native="goExpress"
               >
-                <el-button type="primary" slot="append" @click.native="goExpress">{{
-                  $t('物流查询')
-                }}</el-button>
+                <el-button
+                  style="color: #ccc; background-color: #3540a5; border-radius: 0"
+                  slot="append"
+                  @click.native="goExpress"
+                  >{{ $t('物流查询') }}</el-button
+                >
               </el-input>
             </div>
           </div>
@@ -224,8 +227,8 @@
                 </p>
               </div>
               <div v-if="item.name === 'wait_pack'">
-                <p class="no-warehouse">{{ $t('待处理') }}</p>
-                <p class="no-warehouse">
+                <p class="no-warehouse warning-sty">{{ $t('待处理') }}</p>
+                <p class="no-warehouse warning-sty">
                   <strong>{{ item.counts }}</strong>
                 </p>
               </div>
@@ -236,8 +239,8 @@
                 </p>
               </div>
               <div v-if="item.name === 'wait_shipped'">
-                <p class="no-warehouse">{{ $t('待发货') }}</p>
-                <p class="no-warehouse">
+                <p class="no-warehouse warning-sty">{{ $t('待发货') }}</p>
+                <p class="no-warehouse warning-sty">
                   <strong>{{ item.counts }}</strong>
                 </p>
               </div>
@@ -972,6 +975,24 @@ export default {
   .count {
     padding-left: 20px;
   }
+  .user-count {
+    color: #69a482;
+  }
+  .user-left {
+    float: left;
+  }
+  .user-right {
+    float: right;
+  }
+  .package-count {
+    color: #ef8b5b;
+  }
+  .total-sty {
+    color: #8e98f1;
+  }
+  .open-sty {
+    color: #828cea;
+  }
   .waitMsg {
     background-color: #3540a5;
     color: #ccc;
@@ -1014,9 +1035,21 @@ export default {
   .box-footer {
     padding: 0 10px;
     line-height: 35px;
+    overflow: hidden;
+  }
+  .box-user {
+    border-bottom: 1px solid #bee6cf;
+  }
+  .box-package {
+    border-bottom: 1px solid #fccfb9;
+  }
+  .box-order {
+    border-bottom: 1px solid #cad5f4;
+  }
+  .box-open {
+    border-bottom: 1px solid #c9cdf2;
   }
   .box-header {
-    border-bottom: 1px solid #ccc;
     padding-top: 5px;
   }
   .bold-box {
@@ -1039,6 +1072,7 @@ export default {
     // width: 80%;
     text-align: right;
     line-height: 40px;
+    margin-bottom: 30px;
   }
   .package-text {
     float: left;
@@ -1294,7 +1328,7 @@ export default {
     margin-top: 10px;
   }
   .package-main {
-    padding: 43px 20px;
+    padding: 30px 20px;
     background-color: #fff;
     ul {
       display: flex;
@@ -1401,6 +1435,12 @@ export default {
   }
   .boxShadow {
     border: 2px solid #30359a;
+  }
+  .warning-sty {
+    color: #e55f51;
+  }
+  .charts-content {
+    margin-top: 59px;
   }
 }
 @media screen and (max-width: 1359px) {
