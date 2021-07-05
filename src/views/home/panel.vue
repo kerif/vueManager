@@ -413,7 +413,7 @@
             <i class="iconfont icon-diannaofuben desktop-sty"></i>
             <!-- <img src="../../assets/book.jpg" /> -->
           </div>
-          <div>
+          <div style="margin-top: 10px">
             <i class="iconfont icon-xiazai upload-sty"></i>
           </div>
         </div>
@@ -421,8 +421,8 @@
       </div>
       <div
         class="book-sty"
-        @click="changeSoftware(item)"
-        @mouseover="changeSty($event)"
+        @click="uploadAndroid"
+        @mouseover="changeApp($event)"
         @mouseleave="removeSty($event)"
       >
         <p>{{ $t('集运系统运营APP（安卓版）') }}</p>
@@ -431,15 +431,15 @@
             <i class="iconfont icon-anzhuo anzhuo-sty"></i>
             <!-- <img src="../../assets/book.jpg" /> -->
           </div>
-          <div>
+          <div style="margin-top: 10px">
             <i class="iconfont icon-xiazai upload-sty"></i>
           </div>
         </div>
-        <span>{{ $t('扫码下载') }}</span>
+        <span>{{ $t('前往下载') }}</span>
       </div>
       <div
         class="book-sty"
-        @click="changeSoftware(item)"
+        @click="uploadIos"
         @mouseover="changeSty($event)"
         @mouseleave="removeSty($event)"
       >
@@ -449,11 +449,11 @@
             <i class="iconfont icon-pingguo ios-sty"></i>
             <!-- <img src="../../assets/book.jpg" /> -->
           </div>
-          <div>
+          <div style="margin-top: 10px">
             <i class="iconfont icon-xiazai upload-sty"></i>
           </div>
         </div>
-        <span>{{ $t('扫码下载') }}</span>
+        <span>{{ $t('前往下载') }}</span>
       </div>
     </el-dialog>
   </div>
@@ -896,6 +896,17 @@ export default {
     uploadDesktop() {
       let url = 'http://des-update.nle-tech.com/jiyun/update.html'
       window.open(url)
+    },
+    uploadAndroid() {
+      let url = 'https://appgallery.huawei.com/#/app/C101931567'
+      window.open(url)
+    },
+    uploadIos() {
+      let url = 'https://apps.apple.com/cn/app/id1492557133'
+      window.open(url)
+    },
+    changeApp($event) {
+      $event.currentTarget.className = 'book-sty boxShadow'
     },
     changeSoftware(status) {
       console.log(status, 'status')
