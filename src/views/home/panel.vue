@@ -91,35 +91,47 @@
       <el-row :gutter="20">
         <el-col :span="12" style="padding-right: 5px">
           <div class="wait-content">
-            <div>
+            <div
+              style="cursor: pointer"
+              @click="$router.push({ name: 'orderlist', query: { activeName: '1' } })"
+            >
               <div class="wait-sty">
                 <i class="iconfont icon-icon_rukou"></i>
                 <span class="wait-font">{{ $t('待入库包裹') }}</span>
               </div>
               <span class="number">{{ count.package_wait_in_storage }}</span>
             </div>
-            <div>
+            <div
+              style="cursor: pointer"
+              @click="$router.push({ name: 'wayBillList', query: { activeName: '1' } })"
+            >
               <div class="wait-sty">
                 <i class="iconfont icon-huowudui"></i>
                 <span class="wait-font">{{ $t('待打包订单') }}</span>
               </div>
               <span class="number">{{ count.order_wait_pick }}</span>
             </div>
-            <div>
+            <div
+              style="cursor: pointer"
+              @click="$router.push({ name: 'wayBillList', query: { activeName: '3' } })"
+            >
               <div class="wait-sty">
                 <i class="iconfont icon-huowudui"></i>
                 <span class="wait-font">{{ $t('待发货订单') }}</span>
               </div>
               <span class="number">{{ count.order_wait_ship }}</span>
             </div>
-            <div>
+            <div
+              style="cursor: pointer"
+              @click="$router.push({ name: 'orderReview', query: { activeName: '0' } })"
+            >
               <div class="wait-sty">
                 <i class="iconfont icon-huowudui"></i>
                 <span class="wait-font">{{ $t('待审核付款') }}</span>
               </div>
               <span class="number">{{ count.order_wait_audit }}</span>
             </div>
-            <div>
+            <div style="cursor: pointer" @click="$router.push({ name: 'suggestlist' })">
               <div style="margin-bottom: 5px">
                 <i class="iconfont icon-huowudui"></i>
                 <span class="wait-font">{{ $t('待处理投诉') }}</span>

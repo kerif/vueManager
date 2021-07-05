@@ -426,6 +426,9 @@ export default {
     }
   },
   created() {
+    if (this.$route.query.activeName) {
+      this.activeName = this.$route.query.activeName
+    }
     this.getPayment()
   },
   activated() {

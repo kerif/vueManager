@@ -330,6 +330,9 @@ export default {
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
+    if (this.$route.query.activeName) {
+      this.activeName = this.$route.query.activeName
+    }
   },
   mounted() {},
   methods: {
