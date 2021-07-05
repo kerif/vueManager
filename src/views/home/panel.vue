@@ -7,8 +7,8 @@
           <div class="box-header box-user">
             <el-row>
               <el-col :span="20">
-                <div>{{ $t('本月新增客户') }}</div>
-                <div class="bold-box">{{ user.current_month }}</div>
+                <div class="user-count">{{ $t('本月新增客户') }}</div>
+                <div class="bold-box user-count">{{ user.current_month }}</div>
               </el-col>
               <el-col :span="4">
                 <div class="icon-sty">
@@ -28,8 +28,8 @@
           <div class="box-header box-package">
             <el-row :gutter="20">
               <el-col :span="20">
-                <div>{{ $t('本月预报包裹') }}</div>
-                <div class="bold-box">{{ packages.current_month }}</div>
+                <div class="package-count">{{ $t('本月预报包裹') }}</div>
+                <div class="bold-box package-count">{{ packages.current_month }}</div>
               </el-col>
               <el-col :span="4" class="over-sty">
                 <div class="icon-packages">
@@ -49,8 +49,8 @@
           <div class="box-header box-order">
             <el-row :gutter="20">
               <el-col :span="20">
-                <div>{{ $t('本月新增订单') }}</div>
-                <div class="bold-box">{{ order.current_month }}</div>
+                <div class="total-sty">{{ $t('本月新增订单') }}</div>
+                <div class="bold-box total-sty">{{ order.current_month }}</div>
               </el-col>
               <el-col :span="4" class="over-sty">
                 <div class="icon-order">
@@ -70,8 +70,8 @@
           <div class="box-header box-open" @click="$router.push({ name: 'linelist' })">
             <el-row :gutter="20">
               <el-col :span="20">
-                <div>{{ $t('系统开放线路') }}</div>
-                <div class="bold-box">{{ expressCount }}</div>
+                <div class="open-sty">{{ $t('系统开放线路') }}</div>
+                <div class="bold-box open-sty">{{ expressCount }}</div>
               </el-col>
               <el-col :span="4" class="over-sty">
                 <div class="icon-express">
