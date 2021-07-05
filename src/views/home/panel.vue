@@ -31,7 +31,7 @@
                 <div>{{ $t('本月预报包裹') }}</div>
                 <div class="bold-box">{{ packages.current_month }}</div>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="over-sty">
                 <div class="icon-packages">
                   <i class="iconfont icon-hezi icons"></i>
                 </div>
@@ -52,7 +52,7 @@
                 <div>{{ $t('本月新增订单') }}</div>
                 <div class="bold-box">{{ order.current_month }}</div>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="over-sty">
                 <div class="icon-order">
                   <i class="iconfont icon-ziliao icons-second"></i>
                 </div>
@@ -73,7 +73,7 @@
                 <div>{{ $t('系统开放线路') }}</div>
                 <div class="bold-box">{{ expressCount }}</div>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="over-sty">
                 <div class="icon-express">
                   <i class="iconfont icon-ditu icons-third"></i>
                 </div>
@@ -175,7 +175,7 @@
       </el-row>
     </div>
     <el-row :gutter="20" class="package-chart" type="flex">
-      <el-col :span="13" style="height: 100%">
+      <el-col :span="13" style="height: 100%; padding-right: 0 !important">
         <!-- 面板数据 -->
         <div class="panel-box main-item">
           <div class="show-box">
@@ -1036,12 +1036,13 @@ export default {
     padding: 30px 20px;
   }
   .show-list {
-    width: 80%;
+    // width: 80%;
     text-align: right;
     line-height: 40px;
   }
   .package-text {
     float: left;
+    font-weight: 700;
   }
   .echarts {
     width: 80%;
@@ -1217,6 +1218,8 @@ export default {
     top: 10px;
     text-align: center;
     border-radius: 50%;
+    width: 35px;
+    height: 35px;
   }
   .icon-sty {
     border: 1px solid #d6f5e3;
@@ -1236,15 +1239,23 @@ export default {
   }
   .icons-third {
     color: #c0c5ee !important;
+    font-size: 25px !important;
   }
   .icons-second {
     color: #8e98f1 !important;
+    font-size: 25px !important;
   }
   .icons-first {
     color: #69a482 !important;
+    font-size: 25px !important;
+  }
+  .over-sty {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
   .icons {
     color: #ffa072 !important;
+    font-size: 25px !important;
   }
   .wait-content {
     padding: 30px 20px;
@@ -1261,6 +1272,7 @@ export default {
     .number {
       color: #2c2c2c;
       font-weight: bold;
+      font-size: 20px;
     }
     .wait-font {
       font-size: 14px;
@@ -1268,7 +1280,7 @@ export default {
   }
   .order-search {
     background-color: #fff;
-    height: 109px;
+    height: 114px;
     padding-left: 10px;
     .input-button {
       width: 55%;
@@ -1279,10 +1291,10 @@ export default {
     }
   }
   .package-chart {
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .package-main {
-    padding: 40px 20px;
+    padding: 43px 20px;
     background-color: #fff;
     ul {
       display: flex;
@@ -1391,9 +1403,9 @@ export default {
     border: 2px solid #30359a;
   }
 }
-@media screen and (max-width: 1370px) {
+@media screen and (max-width: 1359px) {
   .order-search {
-    height: 131px !important;
+    height: 135px !important;
   }
 }
 @media screen and (max-width: 1596px) {
