@@ -918,7 +918,7 @@ export default {
       window.open(url)
     },
     uploadAndroid() {
-      let url = 'https://appgallery.huawei.com/#/app/C101931567'
+      let url = 'https://jiyun-app-1302976036.cos.ap-hongkong.myqcloud.com/app-release-latest.apk'
       window.open(url)
     },
     uploadIos() {
