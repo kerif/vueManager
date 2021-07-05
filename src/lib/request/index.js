@@ -2284,6 +2284,10 @@ exports.getIndexData = params => $form.get('statistics/index-log', { params })
 exports.getGuides = () => {
   return $form.get('user-guides')
 }
+// 首页 控制面板 获取操作手册数据
+exports.optionsManual = () => {
+  return $form.get('app/documents')
+}
 // 查询物流弹窗
 exports.goTracking = params => {
   return $form.get('tracking', { params })

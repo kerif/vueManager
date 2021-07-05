@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1496251",
+      "name": "苹果",
+      "font_class": "pingguo",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "1496252",
+      "name": "安卓",
+      "font_class": "anzhuo",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "16271645",
+      "name": "电脑 2",
+      "font_class": "diannaofuben",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "17735020",
+      "name": "下载",
+      "font_class": "xiazai",
+      "unicode": "e86f",
+      "unicode_decimal": 59503
+    },
+    {
       "icon_id": "3279361",
       "name": "客户档案",
       "font_class": "gaiicon-",
