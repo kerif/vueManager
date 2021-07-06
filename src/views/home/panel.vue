@@ -434,7 +434,6 @@
         <div>
           <div>
             <i class="iconfont icon-diannaofuben desktop-sty"></i>
-            <!-- <img src="../../assets/book.jpg" /> -->
           </div>
           <div style="margin-top: 10px">
             <i class="iconfont icon-xiazai upload-sty"></i>
@@ -450,7 +449,7 @@
       >
         <p>{{ $t('集运系统运营APP（安卓版）') }}</p>
         <div>
-          <div>
+          <div @mouseover="getImg('android')">
             <i class="iconfont icon-anzhuo anzhuo-sty"></i>
             <!-- <img src="../../assets/book.jpg" /> -->
           </div>
@@ -468,7 +467,7 @@
       >
         <p>{{ $t('集运系统运营APP（iOS版）') }}</p>
         <div>
-          <div>
+          <div @mouseover="getImg('ios')">
             <i class="iconfont icon-pingguo ios-sty"></i>
             <!-- <img src="../../assets/book.jpg" /> -->
           </div>
@@ -478,6 +477,19 @@
         </div>
         <span>{{ $t('前往下载') }}</span>
       </div>
+      <el-dialog
+        width="30%"
+        :title="
+          uplodaStatus === 'ios' ? $t('集运系统运营APP（iOS版）') : $t('集运系统运营APP（安卓版）')
+        "
+        :visible.sync="innerVisible"
+        append-to-body
+      >
+        <div style="text-align: center">
+          <img v-if="uplodaStatus === 'ios'" src="../../assets/ios.png" />
+          <img v-else src="../../assets/android.png" />
+        </div>
+      </el-dialog>
     </el-dialog>
   </div>
 </template>
@@ -543,7 +555,9 @@ export default {
       optionStatus: '',
       helpData: [],
       optionsHelp: {},
-      appVisible: false
+      appVisible: false,
+      innerVisible: false,
+      uplodaStatus: ''
       // systemData: []
     }
   },
@@ -930,6 +944,11 @@ export default {
     },
     changeApp($event) {
       $event.currentTarget.className = 'book-sty boxShadow'
+    },
+    getImg(status) {
+      this.uplodaStatus = status
+      console.log(this.uplodaStatus, 'this.uplodaStatus')
+      this.innerVisible = true
     },
     changeSoftware(status) {
       console.log(status, 'status')
