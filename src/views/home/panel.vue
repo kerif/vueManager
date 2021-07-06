@@ -410,7 +410,7 @@
         @mouseover="changeSty($event)"
         @mouseleave="removeSty($event)"
       >
-        <div>
+        <div style="padding-top: 10px">
           <div>
             <img src="../../assets/book.jpg" />
           </div>
@@ -1408,6 +1408,7 @@ export default {
   .book-sty {
     display: inline-block;
     width: 25%;
+    border: 2px solid #fff;
     // box-shadow: 3px 3px 3px 3px #f5f5f5;
     text-align: center;
     // padding-top: 40px;
