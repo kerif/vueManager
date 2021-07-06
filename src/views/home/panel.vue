@@ -81,7 +81,7 @@
             </el-row>
           </div>
           <div class="box-footer" @click="goToOtherPage(502, 'shipContainer')">
-            <div class="open-sty user-left">{{ $t('支持收货地址') }}</div>
+            <div class="open-sty user-left">{{ $t('总发货单数') }}</div>
             <div class="count open-sty user-right">{{ shipment.total }}</div>
           </div>
         </div>
