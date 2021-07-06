@@ -60,7 +60,7 @@
             </el-row>
           </div>
           <div class="box-footer">
-            <div class="total-sty user-left">{{ $t('总运单') }}</div>
+            <div class="total-sty user-left">{{ $t('总订单') }}</div>
             <div class="count total-sty user-right">{{ order.total }}</div>
           </div>
         </div>
@@ -89,14 +89,14 @@
     </el-row>
     <div style="margin-top: 10px">
       <el-row :gutter="20">
-        <el-col :span="12" style="padding-right: 5px">
+        <el-col :span="12">
           <div class="wait-content">
             <div
               style="cursor: pointer"
               @click="$router.push({ name: 'orderlist', query: { activeName: '1' } })"
             >
               <div class="wait-sty">
-                <i class="iconfont icon-icon_rukou"></i>
+                <i class="iconfont icon-icon_rukou icon-weight"></i>
                 <span class="wait-font">{{ $t('待入库包裹') }}</span>
               </div>
               <span class="number">{{ count.package_wait_in_storage }}</span>
@@ -106,7 +106,7 @@
               @click="$router.push({ name: 'wayBillList', query: { activeName: '1' } })"
             >
               <div class="wait-sty">
-                <i class="iconfont icon-huowudui"></i>
+                <i class="iconfont icon-huowudui icon-weight"></i>
                 <span class="wait-font">{{ $t('待打包订单') }}</span>
               </div>
               <span class="number">{{ count.order_wait_pick }}</span>
@@ -116,7 +116,7 @@
               @click="$router.push({ name: 'wayBillList', query: { activeName: '3' } })"
             >
               <div class="wait-sty">
-                <i class="iconfont icon-huowudui"></i>
+                <i class="iconfont icon-icon_fabu icon-weight"></i>
                 <span class="wait-font">{{ $t('待发货订单') }}</span>
               </div>
               <span class="number">{{ count.order_wait_ship }}</span>
@@ -126,14 +126,14 @@
               @click="$router.push({ name: 'orderReview', query: { activeName: '0' } })"
             >
               <div class="wait-sty">
-                <i class="iconfont icon-huowudui"></i>
+                <i class="iconfont icon-tianshenpi icon-weight"></i>
                 <span class="wait-font">{{ $t('待审核付款') }}</span>
               </div>
               <span class="number">{{ count.order_wait_audit }}</span>
             </div>
             <div style="cursor: pointer" @click="$router.push({ name: 'suggestlist' })">
               <div style="margin-bottom: 5px">
-                <i class="iconfont icon-huowudui"></i>
+                <i class="iconfont icon-kefu icon-weight"></i>
                 <span class="wait-font">{{ $t('待处理投诉') }}</span>
               </div>
               <span class="number">{{ count.suggestion_wait_deal }}</span>
@@ -145,7 +145,7 @@
           suggestion_wait_deal -->
           </div>
         </el-col>
-        <el-col :span="12" style="padding-left: 5px">
+        <el-col :span="12" style="padding-left: 1px">
           <div class="order-search">
             <div class="order-main">
               <div class="search-sty">
@@ -273,31 +273,31 @@
     <el-row :gutter="20" class="bottom">
       <el-col :span="8">
         <div class="process">
-          <span class="title">操作流程</span>
+          <span class="title">{{ $t('操作流程') }}</span>
           <div class="process-content">
             <div>
               <img src="../../assets/1.png" alt="" />
-              <p>包裹预报</p>
+              <p>{{ $t('包裹预报') }}</p>
             </div>
             <span class="line"></span>
             <div>
               <img src="../../assets/2.png" alt="" />
-              <p>包裹入库</p>
+              <p>{{ $t('包裹入库') }}</p>
             </div>
             <span class="line"></span>
             <div>
               <img src="../../assets/4.png" alt="" />
-              <p>订单打包</p>
+              <p>{{ $t('订单打包') }}</p>
             </div>
             <span class="line"></span>
             <div>
               <img src="../../assets/5.png" alt="" />
-              <p>订单发货</p>
+              <p>{{ $t('订单发货') }}</p>
             </div>
           </div>
         </div>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="5" class="other-sty">
         <div class="other">
           <div class="process-content user-actions">
             <div @click="$router.push({ name: 'newUser' })" style="cursor: pointer">
@@ -313,7 +313,7 @@
       </el-col>
       <el-col :span="4">
         <div class="help-center">
-          <span class="title">帮助中心</span>
+          <span class="title">{{ $t('帮助中心') }}</span>
           <div class="process-content">
             <div @click="goManual('help')" style="cursor: pointer">
               <img src="../../assets/操作手册.png" alt="" />
@@ -326,9 +326,9 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="7">
+      <el-col :span="7" style="padding-left: 0 !important">
         <div class="system">
-          <span class="title">系统通知</span>
+          <span class="title">{{ $t('系统通知') }}</span>
           <div class="system-notice">
             <ul class="notice">
               <li
@@ -1063,7 +1063,7 @@ export default {
     top: 12px;
   }
   .panel-box {
-    border: 1px solid #e8e9eb;
+    // border: 1px solid #e8e9eb;
   }
   .show-box {
     padding: 30px 20px;
@@ -1079,7 +1079,7 @@ export default {
     font-weight: 700;
   }
   .echarts {
-    width: 80%;
+    width: 85%;
     height: 440px;
     display: inline-block;
   }
@@ -1309,7 +1309,13 @@ export default {
       font-size: 20px;
     }
     .wait-font {
-      font-size: 14px;
+      font-size: 13px;
+      padding-left: 5px;
+      color: #8b8b8b;
+    }
+    .icon-weight,
+    .wait-font {
+      font-weight: 700;
     }
   }
   .order-search {
@@ -1441,6 +1447,10 @@ export default {
   }
   .charts-content {
     margin-top: 59px;
+  }
+  .other-sty {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 }
 @media screen and (max-width: 1359px) {
