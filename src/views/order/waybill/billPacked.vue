@@ -45,6 +45,14 @@
           <span class="leftWidth">{{ $t('收货自提点') }}</span>
           <span>{{ form.station_name }}</span>
         </el-col>
+        <el-col :span="7" :offset="1">
+          <span class="leftWidth">{{ $t('微信号') }}</span>
+          <span>{{ form.address && form.address.wechat_id }}</span>
+        </el-col>
+        <el-col :span="7" :offset="1">
+          <span class="leftWidth">{{ $t('个人通关码') }}</span>
+          <span>{{ form.personal_code }}</span>
+        </el-col>
       </el-row>
     </div>
     <div class="receiverMSg">
