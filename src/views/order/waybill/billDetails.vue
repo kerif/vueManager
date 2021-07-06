@@ -189,6 +189,16 @@
               <!-- <el-input class="input-sty" v-model="form.address.wechat_id"></el-input> -->
               <span>{{ form.station_name }}</span>
             </el-col>
+            <!-- 个人通关码 -->
+            <el-col :span="7" :offset="1" v-if="form.personal_code">
+              <span class="leftWidth">{{ $t('个人通关码') }}</span>
+              <el-input
+                class="input-sty"
+                v-if="form && unEdit === true"
+                v-model="form.personal_code"
+              ></el-input>
+              <span v-if="unEdit === false">{{ form.personal_code }}</span>
+            </el-col>
           </el-row>
           <el-row
             class="container-center"
@@ -214,16 +224,6 @@
                 v-model="form.id_card"
               ></el-input>
               <span v-if="unEdit === false">{{ form.id_card }}</span>
-            </el-col>
-            <!-- 个人通关码 -->
-            <el-col :span="7" :offset="1" v-if="form.personal_code">
-              <span class="leftWidth">{{ $t('个人通关码') }}</span>
-              <el-input
-                class="input-sty"
-                v-if="form && unEdit === true"
-                v-model="form.personal_code"
-              ></el-input>
-              <span v-if="unEdit === false">{{ form.personal_code }}</span>
             </el-col>
           </el-row>
         </el-form>
