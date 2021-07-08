@@ -99,7 +99,9 @@
                 <i class="iconfont icon-icon_rukou icon-weight"></i>
                 <span class="wait-font">{{ $t('待入库包裹') }}</span>
               </div>
-              <span class="number">{{ count.package_wait_in_storage }}</span>
+              <span class="number">{{
+                count.package_wait_in_storage ? count.package_wait_in_storage : 0
+              }}</span>
             </div>
             <div
               style="cursor: pointer"
@@ -109,7 +111,7 @@
                 <i class="iconfont icon-huowudui icon-weight"></i>
                 <span class="wait-font">{{ $t('待打包订单') }}</span>
               </div>
-              <span class="number">{{ count.order_wait_pick }}</span>
+              <span class="number">{{ count.order_wait_pick ? count.order_wait_pick : 0 }}</span>
             </div>
             <div
               style="cursor: pointer"
@@ -119,7 +121,7 @@
                 <i class="iconfont icon-icon_fabu icon-weight"></i>
                 <span class="wait-font">{{ $t('待发货订单') }}</span>
               </div>
-              <span class="number">{{ count.order_wait_ship }}</span>
+              <span class="number">{{ count.order_wait_ship ? count.order_wait_ship : 0 }}</span>
             </div>
             <div
               style="cursor: pointer"
@@ -129,14 +131,16 @@
                 <i class="iconfont icon-tianshenpi icon-weight"></i>
                 <span class="wait-font">{{ $t('待审核付款') }}</span>
               </div>
-              <span class="number">{{ count.order_wait_audit }}</span>
+              <span class="number">{{ count.order_wait_audit ? count.order_wait_audit : 0 }}</span>
             </div>
             <div style="cursor: pointer" @click="$router.push({ name: 'suggestlist' })">
               <div style="margin-bottom: 5px">
                 <i class="iconfont icon-kefu icon-weight"></i>
                 <span class="wait-font">{{ $t('待处理投诉') }}</span>
               </div>
-              <span class="number">{{ count.suggestion_wait_deal }}</span>
+              <span class="number">{{
+                count.suggestion_wait_deal ? count.suggestion_wait_deal : 0
+              }}</span>
             </div>
             <!-- package_wait_in_storage
           order_wait_pick

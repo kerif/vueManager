@@ -1125,7 +1125,6 @@ export default {
           if (res.ret) {
             // 待发货列表的转运快递单号添加
             this.oderData = res.data.map(item => {
-              console.log('111')
               return {
                 ...item,
                 secondData: []
@@ -1135,7 +1134,7 @@ export default {
               item.disabled = true
               item.copySN = item.logistics_sn
               if (this.expands.includes(item.id)) {
-                console.log('我在二级')
+                // console.log('我在二级')
                 this.groupBuy(item, false)
               }
             })
