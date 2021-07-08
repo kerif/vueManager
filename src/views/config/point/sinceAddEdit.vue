@@ -145,6 +145,44 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item>
+        <!-- <div>{{ $t('*联系电话') }}</div> -->
+        <div>
+          <span>{{ $t('自提点规则') }}</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="$t('申请集包时如超过限制条件，则无法选择该自提点。不填写则不启用')"
+            placement="top"
+          >
+            <span class="el-icon-question icon-info"></span>
+          </el-tooltip>
+        </div>
+        <div style="margin-bottom: 10px">
+          {{ $t('单箱限长')
+          }}<el-input
+            class="input-sty"
+            v-model="form.limit_length"
+            :placeholder="`${localization.length_unit ? localization.length_unit : ''}`"
+          ></el-input>
+        </div>
+        <div style="margin-bottom: 10px">
+          {{ $t('单箱限重')
+          }}<el-input
+            class="input-sty"
+            v-model="form.limit_one_weight"
+            :placeholder="`${localization.weight_unit ? localization.weight_unit : ''}`"
+          ></el-input>
+        </div>
+        <div>
+          {{ $t('整票限重')
+          }}<el-input
+            class="input-sty"
+            v-model="form.limit_many_weight"
+            :placeholder="`${localization.weight_unit ? localization.weight_unit : ''}`"
+          ></el-input>
+        </div>
+      </el-form-item>
       <div>
         <el-form-item>
           <div>{{ $t('支持线路') }}</div>
@@ -283,6 +321,9 @@ export default {
         sub_area_id: '',
         address: '',
         contact_info: '',
+        limit_many_weight: '',
+        limit_length: '',
+        limit_one_weight: '',
         edit_notice_jurisdiction: 0,
         rule_id: '',
         contactor: '',
@@ -448,6 +489,9 @@ export default {
           this.form.rule_id = res.data.rule.id
         }
         this.form.contact_info = res.data.contact_info
+        this.form.limit_one_weight = res.data.limit_one_weight
+        this.form.limit_many_weight = res.data.limit_many_weight
+        this.form.limit_length = res.data.limit_length
         this.form.expressLines = res.data.expressLines.map(item => {
           return {
             name: item.name,
@@ -550,6 +594,7 @@ export default {
       this.$request.pickRules().then(res => {
         if (res.ret) {
           this.rulesData = res.data
+          this.localization = res.localization
         } else {
           this.$message({
             message: res.msg,
@@ -730,6 +775,10 @@ export default {
   }
   .notice-sty {
     margin-right: 20px;
+  }
+  .input-sty {
+    margin-left: 10px;
+    width: 10% !important;
   }
 }
 </style>

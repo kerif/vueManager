@@ -10,6 +10,12 @@
       <el-form-item :label="$t('代理名称')">
         <span>{{ agentName }}</span>
       </el-form-item>
+      <el-form-item :label="$t('分成方式')">
+        <el-select class="select-sty" v-model="ruleForm.type" :placeholder="$t('请选择')" clearable>
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item :label="$t('佣金模版')">
         <el-select v-model="ruleForm.template_id" placeholder="请选择">
           <el-option
@@ -81,8 +87,8 @@ export default {
       ruleForm: {
         commission: '',
         template_id: '',
-        mode: ''
-        // type: ''
+        mode: '',
+        type: ''
       },
       templateData: [],
       options: [
@@ -137,7 +143,7 @@ export default {
           this.ruleForm.mode = Boolean(res.data.mode)
           this.ruleForm.commission = res.data.commission
           this.ruleForm.template_id = res.data.template_id
-          // this.ruleForm.type = res.data.type
+          this.ruleForm.type = res.data.type
         }
       })
     },
@@ -154,7 +160,7 @@ export default {
           commission: this.ruleForm.commission,
           template_id: this.ruleForm.template_id,
           mode: Number(this.ruleForm.mode),
-          // type: this.ruleForm.type,
+          type: this.ruleForm.type,
           rules: arr
         })
         .then(res => {
@@ -187,6 +193,7 @@ export default {
       this.ruleForm.commission = ''
       this.ruleForm.template_id = ''
       this.ruleForm.mode = ''
+      this.ruleForm.type = ''
     }
   }
 }

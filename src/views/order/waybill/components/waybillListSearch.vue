@@ -2,6 +2,18 @@
   <div class="waybill-list-search">
     <el-form class="search-form" :model="searchFieldData" ref="searchForm" size="mini">
       <div>
+        <div style="display: flex">
+          <el-form-item prop="order_sn">
+            <el-input
+              v-model="searchFieldData.order_sn"
+              :autosize="{ minRows: 4, maxRows: 5 }"
+              type="textarea"
+              :placeholder="$t('请输入订单号搜索，多个单号请用回车区分')"
+            ></el-input>
+          </el-form-item>
+        </div>
+      </div>
+      <div>
         <el-form-item prop="date_type">
           <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('时间')">
             <el-option

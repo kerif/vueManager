@@ -15,7 +15,7 @@
     <order-list-search
       v-show="hasFilterCondition"
       :searchFieldData="searchFieldData"
-      v-on:submit="getList"
+      v-on:submit="goMatch"
     ></order-list-search>
     <div class="header-range">
       <div class="header-btns">
@@ -308,6 +308,7 @@ export default {
         begin_date: '',
         end_date: '',
         date_type: '',
+        express_num: '',
         date: [],
         value_type: '',
         value_begin: '',
@@ -338,6 +339,7 @@ export default {
   methods: {
     // 获取订单统计数据
     getCounts() {
+      console.log('111')
       this.$request
         .getOrderCounts({
           keyword: this.searchFieldData.keyword
@@ -371,6 +373,7 @@ export default {
         params = {
           ...params,
           ...searchData,
+          express_num: searchData.express_num.split(/[(\r\n)\r\n]+/),
           begin_date: searchData.date ? searchData.date[0] : '',
           end_date: searchData.date ? searchData.date[1] : ''
         }

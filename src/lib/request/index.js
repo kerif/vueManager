@@ -669,7 +669,7 @@ exports.updateLineLang = (id, params) => {
   return $form.put(`express-lines/${id}/translate-data`, params)
 }
 exports.saveEditLine = (id, params) => {
-  return $form.put(`express-lines/${id}`, params)
+  return $json.put(`express-lines/${id}`, params)
 }
 exports.updateLines = params => {
   return $form.post('express-lines', params)

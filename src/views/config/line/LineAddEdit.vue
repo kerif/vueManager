@@ -439,7 +439,7 @@
           </el-col>
           <el-col :span="5" v-if="form.has_factor">
             <div style="margin-top: 38px"></div>
-            <el-switch
+            <!-- <el-switch
               v-model="form.is_avg_weight"
               :active-text="$t('半抛')"
               :active-value="1"
@@ -448,7 +448,8 @@
               active-color="#13ce66"
               inactive-color="gray"
             >
-            </el-switch>
+            </el-switch> -->
+            <el-button @click="set">{{ $t('配置') }}</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -660,6 +661,84 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="setVisible" :title="$t('抛货配置')">
+      <el-form></el-form>
+    </el-dialog>
+    <!-- 计重配置 -->
+    <el-dialog title="抛货配置" :visible.sync="dialogVisible" width="55%">
+      <el-form ref="throwFrom" :model="throwFrom" label-width="20px">
+        <el-form-item>
+          <div>
+            <span>{{ $t('抛货方式') }}</span>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="$t('全抛：实际重量与体积重量两者取大。半抛：（实际重量+体积重量）/2')"
+              placement="top"
+            >
+              <span class="el-icon-question icon-info"></span>
+            </el-tooltip>
+          </div>
+          <el-switch
+            v-model="throwFrom.is_avg_weight"
+            :active-text="$t('半抛')"
+            :active-value="1"
+            :inactive-value="0"
+            :inactive-text="$t('全抛')"
+            active-color="#13ce66"
+            inactive-color="gray"
+          >
+          </el-switch>
+        </el-form-item>
+        <el-form-item>
+          <div>
+            <span>{{ $t('免抛条件') }}</span>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="$t('在满足免抛条件情况下，不考虑体积重，仅以实重计费')"
+              placement="top"
+            >
+              <span class="el-icon-question icon-info"></span>
+            </el-tooltip>
+          </div>
+          <el-row :gutter="20">
+            <el-col :span="1">
+              <el-checkbox v-model="throwFrom.checked"></el-checkbox>
+            </el-col>
+            <el-col :span="6">
+              <el-select v-model="throwFrom.type" :placeholder="$t('数据')">
+                <el-option
+                  v-for="item in paramsOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="6">
+              <el-select v-model="throwFrom.condition" :placeholder="$t('条件')">
+                <el-option
+                  v-for="item in conditionOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="5">
+              <el-input v-model="throwFrom.value" :placeholder="$t('请输入限制数值')"></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -668,6 +747,7 @@ export default {
   name: 'lineAddEdit',
   data() {
     return {
+      // is_avg_weight: 0,
       form: {
         name: '',
         warehouses: '',
@@ -681,7 +761,6 @@ export default {
         max_weight: '',
         factor: '',
         has_factor: '',
-        is_avg_weight: 0,
         is_unique: '',
         min_weight: '',
         reference_time: '',
@@ -741,7 +820,48 @@ export default {
       imgVisible: false,
       imgSrc: '',
       icon: {},
-      itemArr: {}
+      itemArr: {},
+      setVisible: false,
+      dialogVisible: false,
+      throwFrom: {
+        is_avg_weight: 0,
+        type: '',
+        value: '',
+        checked: '',
+        condition: ''
+      },
+      paramsOptions: [
+        {
+          id: 1,
+          name: this.$t('所有边长')
+        },
+        {
+          id: 2,
+          name: this.$t('单边长度')
+        },
+        {
+          id: 3,
+          name: this.$t('三边之和')
+        }
+      ],
+      conditionOptions: [
+        {
+          id: '>',
+          name: this.$t('大于')
+        },
+        {
+          id: '>=',
+          name: this.$t('大于等于')
+        },
+        {
+          id: '<',
+          name: this.$t('小于')
+        },
+        {
+          id: '<=',
+          name: this.$t('小于等于')
+        }
+      ]
     }
   },
   created() {
@@ -761,7 +881,7 @@ export default {
         max_weight: '',
         factor: '',
         has_factor: '',
-        is_avg_weight: 0,
+        // is_avg_weight: 0,
         is_unique: '',
         min_weight: '',
         reference_time: '',
@@ -800,7 +920,14 @@ export default {
         this.form.countries = res.data.countries.map(item => item.id)
         this.form.warehouses = res.data.warehouses.map(item => item.id)
         this.form.has_factor = Boolean(res.data.has_factor)
-        this.form.is_avg_weight = res.data.is_avg_weight
+        // this.form.is_avg_weight = res.data.is_avg_weight
+        this.throwFrom.is_avg_weight = res.data.is_avg_weight
+        if (res.data.no_throw_condition) {
+          this.throwFrom.type = res.data.no_throw_condition.type
+          this.throwFrom.value = res.data.no_throw_condition.value
+          this.throwFrom.checked = Boolean(res.data.no_throw_condition.checked)
+          this.throwFrom.condition = res.data.no_throw_condition.condition
+        }
         this.form.is_unique = Boolean(res.data.is_unique)
         this.supportWarehouse(warehouses)
       })
@@ -829,6 +956,16 @@ export default {
       dialog({ type: 'addPackage' }, () => {
         this.getProp()
       })
+    },
+    // 配置
+    set() {
+      this.dialogVisible = true
+      // if (this.$route.params.id && this.form.no_throw_condition) {
+      // }
+    },
+    confirm() {
+      this.dialogVisible = false
+      console.log(this.throwFrom, 'throwFrom')
     },
     // 获取多选框
     getProp() {
@@ -920,6 +1057,13 @@ export default {
         this.$request
           .saveEditLine(this.$route.params.id, {
             ...this.form,
+            no_throw_condition: {
+              type: this.throwFrom.type,
+              value: Number(this.throwFrom.value),
+              checked: Number(this.throwFrom.checked),
+              condition: this.throwFrom.condition
+            },
+            is_avg_weight: this.throwFrom.is_avg_weight,
             // price_grade: this.itemArr,
             has_factor: Number(this.form.has_factor),
             is_unique: Number(this.form.is_unique)
@@ -945,6 +1089,13 @@ export default {
         this.$request
           .updateLines({
             ...this.form,
+            no_throw_condition: {
+              type: this.throwFrom.type,
+              value: Number(this.throwFrom.value),
+              checked: Number(this.throwFrom.checked),
+              condition: this.throwFrom.condition
+            },
+            is_avg_weight: this.throwFrom.is_avg_weight,
             has_factor: Number(this.form.has_factor),
             is_unique: Number(this.form.is_unique)
           })

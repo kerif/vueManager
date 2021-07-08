@@ -8,6 +8,18 @@
       label-width="80px"
     >
       <div>
+        <div style="display: flex">
+          <el-form-item prop="express_num">
+            <el-input
+              v-model="searchFieldData.express_num"
+              :autosize="{ minRows: 4, maxRows: 5 }"
+              type="textarea"
+              :placeholder="$t('请输入快递单号搜索，多个单号请用回车区分')"
+            ></el-input>
+          </el-form-item>
+        </div>
+      </div>
+      <div>
         <el-form-item :label="$t('时间')" prop="date_type">
           <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('请选择')">
             <el-option
@@ -161,7 +173,7 @@ export default {
     padding: 10px 0;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
+    // align-items: center;
     .el-select,
     .el-cascader,
     .el-input,

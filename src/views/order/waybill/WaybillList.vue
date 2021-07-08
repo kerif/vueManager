@@ -71,7 +71,10 @@
           {{ $t('导出发票') }}
         </el-button>
       </div>
-      <div v-if="oderData.length && ['0', '1', '2', '3', '4', '5'].includes(activeName)">
+      <div
+        style="margin-left: 5px"
+        v-if="oderData.length && ['0', '1', '2', '3', '4', '5'].includes(activeName)"
+      >
         <el-button @click="uploadList" size="small" type="success" plain>{{
           $t('导出清单')
         }}</el-button>
@@ -1029,6 +1032,7 @@ export default {
         end_date: '',
         pay_delivery: '',
         date_type: '',
+        order_sn: '',
         date: [],
         value_type: '',
         value_begin: '',
@@ -1169,6 +1173,7 @@ export default {
           ...searchData,
           begin_date: searchData.date ? searchData.date[0] : '',
           end_date: searchData.date ? searchData.date[1] : '',
+          order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
           country_id:
             searchData.countryArr.length > 1
               ? searchData.countryArr[0]

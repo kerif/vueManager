@@ -473,6 +473,40 @@
               </div>
             </div>
           </el-col>
+          <el-col :span="8">
+            <div class="new-top">
+              <!-- 拼团背景图片 -->
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in groupList" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteGroup(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="groupList.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadGroup"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('拼团背景图片') }}</p>
+              <div class="user-bottom">
+                <!-- <div class="bottom-left">
+                <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
+              </div> -->
+                <div class="bottom-right">
+                  <span class="suggest-btn">{{ $t('建议尺寸：355px*160px') }}</span>
+                </div>
+              </div>
+            </div>
+          </el-col>
         </el-row>
         <el-row :gutter="20"> </el-row>
       </el-form>
@@ -498,6 +532,7 @@ export default {
       videoList: [], // 视频区
       commentList: [], // 评论区
       centerList: [], // 个人中心背景
+      groupList: [], // 拼团背景图片
       licenseList: [], // 协议背景图
       approveList: [], // 增加代理成功提示
       warehouseList: [], // 仓库背景图
@@ -532,6 +567,7 @@ export default {
         res.data.video_image && (this.videoList[0] = res.data.video_image)
         res.data.comment_image && (this.commentList[0] = res.data.comment_image)
         res.data.user_center_image && (this.centerList[0] = res.data.user_center_image)
+        res.data.group_buying_image && (this.groupList[0] = res.data.group_buying_image)
         res.data.license_image && (this.licenseList[0] = res.data.license_image)
         res.data.agent_approve_image && (this.approveList[0] = res.data.agent_approve_image)
         res.data.warehouse_image && (this.warehouseList[0] = res.data.warehouse_image)
@@ -648,6 +684,17 @@ export default {
         }
       })
     },
+    // 拼团背景图片
+    uploadGroup(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.groupList.push(item.path)
+          })
+        }
+      })
+    },
     // 协议背景图片
     uploadLicense(item) {
       let file = item.file
@@ -750,6 +797,10 @@ export default {
     onDeleteCenter(index) {
       this.centerList.splice(index, 1)
     },
+    // 拼团背景图片
+    onDeleteGroup(index) {
+      this.groupList.splice(index, 1)
+    },
     // 协议背景图片
     onDeleteLicense(index) {
       this.licenseList.splice(index, 1)
@@ -835,6 +886,11 @@ export default {
         this.setForm.user_center_image = this.centerList[0]
       } else {
         this.setForm.user_center_image = []
+      }
+      if (this.groupList[0]) {
+        this.setForm.group_buying_image = this.groupList[0]
+      } else {
+        this.setForm.group_buying_image = []
       }
       if (this.licenseList[0]) {
         this.setForm.license_image = this.licenseList[0]
