@@ -213,7 +213,7 @@
               <el-input v-model="user.location" :placeholder="$t('请输入货位')"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="10" :offset="2">
+          <el-col :span="10" :offset="$route.params.parent == 0 ? 2 : 0">
             <el-form-item :label="$t('更改仓库')" class="express">
               <span class="change-line">{{ warehouse.warehouse_name }}</span>
               <el-button
@@ -227,7 +227,7 @@
         </el-row>
         <!-- 出箱类型 -->
         <el-row :gutter="20">
-          <el-col :span="11">
+          <el-col :span="11" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('出箱类型')">
               <el-radio-group v-model="user.box_type">
                 <el-radio :label="1">{{ $t('单箱出库') }}</el-radio>
@@ -236,7 +236,7 @@
               <el-button @click="originalBox">{{ $t('原箱出库') }}</el-button>
             </el-form-item>
           </el-col>
-          <el-col :span="10" :offset="2">
+          <el-col :span="10" :offset="$route.params.parent == 0 ? 2 : 0">
             <el-form-item :label="$t('更改线路')" class="express">
               <span class="change-line"
                 >{{ express.CName }}---{{ $t('限重') }}{{ express.MaxWeight
@@ -258,10 +258,13 @@
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
                 <template slot="append">{{ this.localization.weight_unit }}</template>
               </el-input>
+              <span style="color: #ff5557; font-size: 13px">{{
+                $t('该重量仅用于判断本团购单的价格档位')
+              }}</span>
             </el-form-item>
           </el-col>
           <!-- 尺寸 -->
-          <el-col :span="10" :offset="2">
+          <el-col :span="10" :offset="2" v-if="$route.params.parent == 0">
             <el-form-item :label="$t('*尺寸')">
               <el-input
                 v-model="user.length"
@@ -332,7 +335,7 @@
           </el-form-item>
         </el-row>
         <!-- 上传打包照片 -->
-        <el-row :gutter="20">
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
           <el-col :span="11">
             <el-form-item :label="$t('上传打包照片')" class="updateChe">
               <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
@@ -390,7 +393,7 @@
               <el-input v-model="user.tariff_fee" :placeholder="$t('请输入')"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="10" :offset="2">
+          <el-col :span="10" :offset="$route.params.parent == 0 ? 2 : 0">
             <el-form-item :label="$t('仓库备注')" class="customer">
               <el-input
                 type="textarea"
