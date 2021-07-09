@@ -1054,6 +1054,9 @@ export default {
       }
       if (this.$route.params.id) {
         // 编辑状态
+        if (this.form.mode !== 2) {
+          delete this.form.price_grade
+        }
         this.$request
           .saveEditLine(this.$route.params.id, {
             ...this.form,
@@ -1085,6 +1088,9 @@ export default {
             }
           })
       } else {
+        if (this.form.mode !== 2) {
+          delete this.form.price_grade
+        }
         // 新建状态
         this.$request
           .updateLines({
