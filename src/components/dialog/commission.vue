@@ -21,7 +21,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('分成方式')">
+      <el-form-item :label="$t('分成方式')" v-if="ruleForm.template_id === 0">
         <el-select class="select-sty" v-model="ruleForm.type" :placeholder="$t('请选择')" clearable>
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
@@ -160,7 +160,7 @@ export default {
           commission: this.ruleForm.commission,
           template_id: this.ruleForm.template_id,
           mode: Number(this.ruleForm.mode),
-          type: this.ruleForm.type,
+          type: this.ruleForm.template_id === 0 ? this.ruleForm.type : '',
           rules: arr
         })
         .then(res => {
