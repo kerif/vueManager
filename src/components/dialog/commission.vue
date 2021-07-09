@@ -10,12 +10,6 @@
       <el-form-item :label="$t('代理名称')">
         <span>{{ agentName }}</span>
       </el-form-item>
-      <el-form-item :label="$t('分成方式')">
-        <el-select class="select-sty" v-model="ruleForm.type" :placeholder="$t('请选择')" clearable>
-          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item :label="$t('佣金模版')">
         <el-select v-model="ruleForm.template_id" placeholder="请选择">
           <el-option
@@ -24,6 +18,12 @@
             :label="item.name"
             :value="item.id"
           >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('分成方式')">
+        <el-select class="select-sty" v-model="ruleForm.type" :placeholder="$t('请选择')" clearable>
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>

@@ -2010,6 +2010,7 @@ export default {
     justify-content: space-between;
     .header-search {
       display: flex;
+      align-items: center;
       margin: 0 0 0 auto;
       .header-keyword {
         max-width: 300px;
