@@ -30,51 +30,57 @@
        </el-select> -->
       </search-group>
     </div>
-    <el-table
-      :data="transactionList"
-      stripe
-      border
-      class="data-list"
-      v-loading="tableLoading"
-      ref="table"
-      height="calc(100vh - 360px)"
-      @selection-change="selectionChange"
-    >
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <!-- 公告标题 -->
-      <el-table-column :label="$t('公告标题')" prop="title"></el-table-column>
-      <!-- 发布人员 -->
-      <el-table-column :label="$t('发布人员')" prop="operator"> </el-table-column>
-      <!-- 发布时间 -->
-      <el-table-column :label="$t('发布时间')" prop="created_at"> </el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div style="height: calc(100vh - 270px">
+      <el-table
+        :data="transactionList"
+        stripe
+        border
+        class="data-list"
+        v-loading="tableLoading"
+        ref="table"
+        height="calc(100vh - 270px)"
+        @selection-change="selectionChange"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onLang(scope.row, item)"
-          ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button class="btn-deep-purple" @click="details(scope.row.id)">{{
-            $t('详情')
-          }}</el-button>
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <!-- 公告标题 -->
+        <el-table-column :label="$t('公告标题')" prop="title"></el-table-column>
+        <!-- 发布人员 -->
+        <el-table-column :label="$t('发布人员')" prop="operator"> </el-table-column>
+        <!-- 发布时间 -->
+        <el-table-column :label="$t('发布时间')" prop="created_at"> </el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onLang(scope.row, item)"
+            ></span>
+            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-deep-purple" @click="details(scope.row.id)">{{
+              $t('详情')
+            }}</el-button>
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
         </div>
       </template> -->
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 <script>

@@ -22,7 +22,10 @@ body {
   margin: 15px 0;
   background-color: #f5f5f5 !important;
 }
-
+.waybill-data-list {
+  background-color: inherit;
+  overflow-y: auto !important;
+}
 .noDate {
   margin: 20px 0;
   text-align: center;

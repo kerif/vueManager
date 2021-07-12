@@ -4,40 +4,46 @@
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <div class="clear"></div>
-    <el-table
-      border
-      stripe
-      :data="addressList"
-      ref="table"
-      class="data-list"
-      height="calc(100vh - 360px)"
-    >
-      <el-table-column type="index" :index="1"></el-table-column>
-      <el-table-column :label="$t('提示信息')" prop="description"></el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        border
+        stripe
+        :data="addressList"
+        ref="table"
+        class="data-list"
+        height="calc(100vh - 270px)"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onLang(scope.row, item)"
-          ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button class="btn-green" @click="editContent(scope.row.id)">{{
-            $t('编辑')
-          }}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        <el-table-column type="index" :index="1"></el-table-column>
+        <el-table-column :label="$t('提示信息')" prop="description"></el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onLang(scope.row, item)"
+            ></span>
+            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-green" @click="editContent(scope.row.id)">{{
+              $t('编辑')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 <script>

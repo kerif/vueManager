@@ -1,84 +1,92 @@
 <template>
   <div class="banner-container">
     <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
     <div class="select-box">
       <add-btn @click.native="addBanner">{{ $t('添加广告图') }}</add-btn>
     </div>
-    <el-table
-      :data="vipGroupList"
-      stripe
-      border
-      class="data-list"
-      v-loading="tableLoading"
-      @selection-change="selectionChange"
-    >
-      <el-table-column type="index" width="55" align="center"></el-table-column>
-      <!-- 名称 -->
-      <el-table-column :label="$t('名称')" prop="picture_name"></el-table-column>
-      <!-- 位置 -->
-      <el-table-column
-        :label="$t('位置')"
-        prop="picture_path"
-        :show-overflow-tooltip="true"
-        width="200"
-      ></el-table-column>
-      <!-- 应用 -->
-      <el-table-column :label="$t('应用')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.source === 1">{{ $t('小程序') }}</span>
-          <span v-if="scope.row.source === 2">{{ $t('pc端') }}</span>
-          <span v-if="scope.row.source === 3">{{ $t('H5') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 类型 -->
-      <el-table-column :label="$t('类型')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.type === 1">{{ $t('轮播图') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 连接方式 -->
-      <el-table-column :label="$t('连接方式')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.link_type === 1">{{ $t('应用内跳转') }}</span>
-          <span v-if="scope.row.link_type === 2">{{ $t('外部url') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        :data="vipGroupList"
+        stripe
+        height="calc(100vh - 270px)"
+        ref="table"
+        border
+        class="data-list"
+        v-loading="tableLoading"
+        @selection-change="selectionChange"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onLang(scope.row, item)"
-          ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('操作')" width="260">
-        <template slot-scope="scope">
-          <!-- 修改仓库 -->
-          <el-button class="btn-green" @click="editBanner(scope.row.id)">{{
-            $t('修改')
-          }}</el-button>
-          <!-- 删除 -->
-          <el-button class="btn-light-red" @click="deleteBanner(scope.row.id)">{{
-            $t('删除')
-          }}</el-button>
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
+        <el-table-column type="index" width="55" align="center"></el-table-column>
+        <!-- 名称 -->
+        <el-table-column :label="$t('名称')" prop="picture_name"></el-table-column>
+        <!-- 位置 -->
+        <el-table-column
+          :label="$t('位置')"
+          prop="picture_path"
+          :show-overflow-tooltip="true"
+          width="200"
+        ></el-table-column>
+        <!-- 应用 -->
+        <el-table-column :label="$t('应用')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.source === 1">{{ $t('小程序') }}</span>
+            <span v-if="scope.row.source === 2">{{ $t('pc端') }}</span>
+            <span v-if="scope.row.source === 3">{{ $t('H5') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 类型 -->
+        <el-table-column :label="$t('类型')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type === 1">{{ $t('轮播图') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 连接方式 -->
+        <el-table-column :label="$t('连接方式')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.link_type === 1">{{ $t('应用内跳转') }}</span>
+            <span v-if="scope.row.link_type === 2">{{ $t('外部url') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onLang(scope.row, item)"
+            ></span>
+            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')" width="260">
+          <template slot-scope="scope">
+            <!-- 修改仓库 -->
+            <el-button class="btn-green" @click="editBanner(scope.row.id)">{{
+              $t('修改')
+            }}</el-button>
+            <!-- 删除 -->
+            <el-button class="btn-light-red" @click="deleteBanner(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
           <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
       </template> -->
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 <script>
@@ -123,6 +131,9 @@ export default {
             this.vipGroupList = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -225,6 +236,10 @@ export default {
     // padding-left: 20px;
     font-weight: 700;
     color: black;
+  }
+  .search-group .pull-right {
+    margin-bottom: 5px;
+    width: 25% !important;
   }
 }
 </style>

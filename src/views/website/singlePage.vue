@@ -11,50 +11,58 @@
         <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
       </div>
     </div>
-    <el-table
-      :data="rechargeList"
-      stripe
-      border
-      class="data-list"
-      v-loading="tableLoading"
-      @selection-change="selectionChange"
-    >
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <!-- 标题 -->
-      <el-table-column :label="$t('标题')" prop="title"> </el-table-column>
-      <!-- 栏目 -->
-      <el-table-column :label="$t('栏目')" prop="section.name"> </el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div style="height: calc(100vh - 270px">
+      <el-table
+        :data="rechargeList"
+        stripe
+        border
+        height="calc(100vh - 270px)"
+        ref="table"
+        class="data-list"
+        v-loading="tableLoading"
+        @selection-change="selectionChange"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onLang(scope.row, item)"
-          ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-        </template>
-      </el-table-column>
-      <!-- 创建日期 -->
-      <el-table-column :label="$t('创建日期')" prop="created_at"> </el-table-column>
-      <!-- <template slot="append">
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <!-- 标题 -->
+        <el-table-column :label="$t('标题')" prop="title"> </el-table-column>
+        <!-- 栏目 -->
+        <el-table-column :label="$t('栏目')" prop="section.name"> </el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onLang(scope.row, item)"
+            ></span>
+            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          </template>
+        </el-table-column>
+        <!-- 创建日期 -->
+        <el-table-column :label="$t('创建日期')" prop="created_at"> </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
         </div>
       </template> -->
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button class="btn-deep-purple optionBtn" @click="editSingle(scope.row.id)">{{
-            $t('编辑')
-          }}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-deep-purple optionBtn" @click="editSingle(scope.row.id)">{{
+              $t('编辑')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 <script>
@@ -142,6 +150,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

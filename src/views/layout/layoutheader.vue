@@ -6,6 +6,14 @@
           :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
           style="font-size: 24px"
         ></i>
+        <el-select v-model="isSimple" style="margin-left: 25px">
+          <el-option
+            v-for="item in language"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </div>
       <!-- <el-switch
       v-model="isSimple"
@@ -14,6 +22,7 @@
       inactive-color="#13ce66" /> -->
       <!-- <el-button class="upload-btn">{{$t('下载管理')}}</el-button> -->
       <!-- <div>关于我们</div> -->
+      <i class="iconfont icon-bianji upload-icon"></i>
       <el-popover placement="top" width="600" trigger="click">
         <el-table :data="gridData">
           <el-table-column>
@@ -41,14 +50,6 @@
           $t('下载管理')
         }}</el-button>
       </el-popover>
-      <el-select v-model="isSimple">
-        <el-option
-          v-for="item in language"
-          :key="item.id"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
       <!-- <span class="user-box" @click="checkUser">{{ $store.state.userName }}</span> -->
       <el-popover class="user-box" placement="bottom" trigger="click" width="250">
         <p>{{ $t('公司') }}：{{ form.company_name }}</p>
@@ -197,6 +198,10 @@ export default {
   .user-box {
     cursor: pointer;
     margin: 0 30px;
+    margin-right: 10px !important;
+    .el-button {
+      border: none;
+    }
   }
   .logout-icon {
     font-size: 20px;
@@ -210,13 +215,14 @@ export default {
   }
   .transfer-left {
     float: left;
-    margin-top: 10px;
+    // margin-top: 10px;
     display: flex;
     align-items: center;
     cursor: pointer;
   }
   .upload-btn {
     margin-right: 10px;
+    border: none;
   }
   .name-sty {
     width: 70px !important;
@@ -232,6 +238,9 @@ export default {
       color: #fff;
       font-size: 14px;
     }
+  }
+  .upload-icon {
+    margin-right: 10px;
   }
 }
 </style>

@@ -57,58 +57,65 @@
     <!-- <div class="select-box">
       <add-btn @click.native="addVip">{{$t('添加')}}</add-btn>
     </div> -->
-    <el-table
-      :data="rechargeList"
-      stripe
-      border
-      class="data-list"
-      v-loading="tableLoading"
-      height="550"
-    >
-      <el-table-column type="index" :index="1"></el-table-column>
-      <!-- 自提点名称 -->
-      <el-table-column :label="$t('自提点名称')" prop="name"> </el-table-column>
-      <!-- 所属国家/地区 -->
-      <el-table-column :label="$t('所属国家/地区')" prop="country_name"> </el-table-column>
-      <!-- 联系人 -->
-      <el-table-column :label="$t('联系人')" prop="contactor"> </el-table-column>
-      <!-- 联系电话 -->
-      <el-table-column :label="$t('联系电话')" prop="contact_info"></el-table-column>
-      <!-- 计佣方式 -->
-      <el-table-column :label="$t('计佣方式')" prop="rule.name"></el-table-column>
-      <!-- 计佣金额 -->
-      <el-table-column :label="$t('计佣金额')">
-        <template slot-scope="scope" v-if="scope.row.rule">
-          <span v-if="scope.row.rule.type === 1"
-            >{{ localization.currency_unit ? localization.currency_unit : ''
-            }}{{ scope.row.rule.amount }}</span
-          >
-          <div v-if="scope.row.rule.type === 2">
-            <span
-              >{{ $t('首重') }}：{{ localization.currency_unit ? localization.currency_unit : ''
-              }}{{ scope.row.rule.first_money }}/{{ scope.row.rule.first_weight
-              }}{{ localization.weight_unit ? localization.weight_unit : '' }}</span
-            ><br />
-            <span
-              >{{ $t('续重') }}：{{ localization.currency_unit ? localization.currency_unit : ''
-              }}{{ scope.row.rule.next_money }}/{{ scope.row.rule.next_weight
-              }}{{ localization.weight_unit ? localization.weight_unit : '' }}</span
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        :data="rechargeList"
+        stripe
+        border
+        class="data-list"
+        v-loading="tableLoading"
+        ref="table"
+        height="calc(100vh - 270px)"
+      >
+        <el-table-column type="index" :index="1"></el-table-column>
+        <!-- 自提点名称 -->
+        <el-table-column :label="$t('自提点名称')" prop="name"> </el-table-column>
+        <!-- 所属国家/地区 -->
+        <el-table-column :label="$t('所属国家/地区')" prop="country_name"> </el-table-column>
+        <!-- 联系人 -->
+        <el-table-column :label="$t('联系人')" prop="contactor"> </el-table-column>
+        <!-- 联系电话 -->
+        <el-table-column :label="$t('联系电话')" prop="contact_info"></el-table-column>
+        <!-- 计佣方式 -->
+        <el-table-column :label="$t('计佣方式')" prop="rule.name"></el-table-column>
+        <!-- 计佣金额 -->
+        <el-table-column :label="$t('计佣金额')">
+          <template slot-scope="scope" v-if="scope.row.rule">
+            <span v-if="scope.row.rule.type === 1"
+              >{{ localization.currency_unit ? localization.currency_unit : ''
+              }}{{ scope.row.rule.amount }}</span
             >
-          </div>
-        </template>
-      </el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button
-            class="btn-green optionBtn"
-            @click="recordDetails(scope.row.id, scope.row.name)"
-            >{{ $t('结算记录') }}</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+            <div v-if="scope.row.rule.type === 2">
+              <span
+                >{{ $t('首重') }}：{{ localization.currency_unit ? localization.currency_unit : ''
+                }}{{ scope.row.rule.first_money }}/{{ scope.row.rule.first_weight
+                }}{{ localization.weight_unit ? localization.weight_unit : '' }}</span
+              ><br />
+              <span
+                >{{ $t('续重') }}：{{ localization.currency_unit ? localization.currency_unit : ''
+                }}{{ scope.row.rule.next_money }}/{{ scope.row.rule.next_weight
+                }}{{ localization.weight_unit ? localization.weight_unit : '' }}</span
+              >
+            </div>
+          </template>
+        </el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button
+              class="btn-green optionBtn"
+              @click="recordDetails(scope.row.id, scope.row.name)"
+              >{{ $t('结算记录') }}</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 <script>
@@ -173,6 +180,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

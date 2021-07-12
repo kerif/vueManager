@@ -6,64 +6,72 @@
         <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
       </div>
     </div>
-    <el-table
-      :data="vipGroupList"
-      stripe
-      border
-      class="data-list"
-      v-loading="tableLoading"
-      @selection-change="selectionChange"
-    >
-      <el-table-column type="index" width="55" align="center"></el-table-column>
-      <!-- 渠道号 -->
-      <el-table-column :label="$t('渠道号')" prop="id"></el-table-column>
-      <!-- 渠道中文名 -->
-      <el-table-column :label="$t('渠道中文名')" prop="channel_name"></el-table-column>
-      <!-- 结算方式 -->
-      <el-table-column :label="$t('结算方式')">
-        <template slot-scope="scope">
-          <!-- 注册个数 -->
-          <span v-if="scope.row.settlement_method === 1">{{ $t('注册个数') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 渠道单价 -->
-      <el-table-column
-        :label="$t('渠道单价') + localization.currency_unit"
-        prop="channel_price"
-      ></el-table-column>
-      <!-- 备注 -->
-      <el-table-column
-        :label="$t('备注')"
-        prop="remark"
-        :show-overflow-tooltip="true"
-        width="150"
-      ></el-table-column>
-      <!-- 创建日期 -->
-      <el-table-column :label="$t('创建日期')" prop="created_at"></el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="260">
-        <template slot-scope="scope">
-          <!-- 修改 -->
-          <el-button class="btn-green" @click="editChannel(scope.row.id)">{{
-            $t('修改')
-          }}</el-button>
-          <!-- 删除 -->
-          <el-button class="btn-light-red" @click="deleteChannel(scope.row.id)">{{
-            $t('删除')
-          }}</el-button>
-          <!-- 引流列表 -->
-          <el-button class="btn-deep-purple" @click="drainage(scope.row.id)">{{
-            $t('引流列表')
-          }}</el-button>
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        :data="vipGroupList"
+        stripe
+        border
+        height="calc(100vh - 270px)"
+        class="data-list"
+        ref="table"
+        v-loading="tableLoading"
+        @selection-change="selectionChange"
+      >
+        <el-table-column type="index" width="55" align="center"></el-table-column>
+        <!-- 渠道号 -->
+        <el-table-column :label="$t('渠道号')" prop="id"></el-table-column>
+        <!-- 渠道中文名 -->
+        <el-table-column :label="$t('渠道中文名')" prop="channel_name"></el-table-column>
+        <!-- 结算方式 -->
+        <el-table-column :label="$t('结算方式')">
+          <template slot-scope="scope">
+            <!-- 注册个数 -->
+            <span v-if="scope.row.settlement_method === 1">{{ $t('注册个数') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 渠道单价 -->
+        <el-table-column
+          :label="$t('渠道单价') + localization.currency_unit"
+          prop="channel_price"
+        ></el-table-column>
+        <!-- 备注 -->
+        <el-table-column
+          :label="$t('备注')"
+          prop="remark"
+          :show-overflow-tooltip="true"
+          width="150"
+        ></el-table-column>
+        <!-- 创建日期 -->
+        <el-table-column :label="$t('创建日期')" prop="created_at"></el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="260">
+          <template slot-scope="scope">
+            <!-- 修改 -->
+            <el-button class="btn-green" @click="editChannel(scope.row.id)">{{
+              $t('修改')
+            }}</el-button>
+            <!-- 删除 -->
+            <el-button class="btn-light-red" @click="deleteChannel(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
+            <!-- 引流列表 -->
+            <el-button class="btn-deep-purple" @click="drainage(scope.row.id)">{{
+              $t('引流列表')
+            }}</el-button>
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
           <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
         </div>
       </template> -->
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 <script>
@@ -113,6 +121,9 @@ export default {
             // })
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$notify({
               title: this.$t('操作失败'),

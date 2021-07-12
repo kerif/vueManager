@@ -146,7 +146,7 @@
         </el-col>
       </el-row>
     </div>
-    <div style="height: calc(100vh - 350px)">
+    <div style="height: calc(100vh - 270px)">
       <el-table
         stripe
         border
@@ -154,7 +154,7 @@
         :data="lineList"
         v-loading="tableLoading"
         ref="table"
-        height="calc(100vh - 360px)"
+        height="calc(100vh - 270px)"
       >
         <el-table-column type="expand">
           <template slot-scope="scope">
@@ -279,7 +279,11 @@
     </div>
     <!--    <div class="bottom-sty">
     </div> -->
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
     <!-- 高级配置 -->
     <el-dialog
       class="add-company"
@@ -884,7 +888,6 @@ export default {
     onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
-      // console.log(line['trans_' + lang.language_code])
       dialog({ type: 'lineLang', line: line, lang: lang, transCode: this.transCode }, () => {
         this.getList()
       })

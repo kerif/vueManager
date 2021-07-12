@@ -49,19 +49,21 @@
         ></el-button>
       </div>
     </div>
-    <el-table
-      class="data-list"
-      border
-      stripe
-      :data="suggestList"
-      v-loading="tableLoading"
-      height="550"
-    >
-      <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column :label="$t('标题')" prop="title"> </el-table-column>
-      <!-- <el-table-column label="内容" prop="content">
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        :data="suggestList"
+        v-loading="tableLoading"
+        ref="table"
+        height="calc(100vh - 270px)"
+      >
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column :label="$t('标题')" prop="title"> </el-table-column>
+        <!-- <el-table-column label="内容" prop="content">
       </el-table-column> -->
-      <!-- <el-table-column label="图片" prop="images">
+        <!-- <el-table-column label="图片" prop="images">
         <template slot-scope="scope">
           <span v-for="item in scope.row.images"
           :key="item.id" style="cursor:pointer;"
@@ -70,23 +72,28 @@
           </span>
        </template>
       </el-table-column> -->
-      <el-table-column :label="$t('状态')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status == '1'">{{ $t('未处理') }}</span>
-          <span v-if="scope.row.status == '2'">{{ $t('已处理') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('客户ID')" prop="user_id"> </el-table-column>
-      <el-table-column :label="$t('创建时间')" prop="created_at"> </el-table-column>
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button class="btn-green" @click="onChangeStatus(scope.row.id)">{{
-            $t('详情')
-          }}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        <el-table-column :label="$t('状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status == '1'">{{ $t('未处理') }}</span>
+            <span v-if="scope.row.status == '2'">{{ $t('已处理') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('客户ID')" prop="user_id"> </el-table-column>
+        <el-table-column :label="$t('创建时间')" prop="created_at"> </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-green" @click="onChangeStatus(scope.row.id)">{{
+              $t('详情')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
     <el-dialog
       :visible.sync="show"
       :title="$t('修改状态')"
@@ -205,6 +212,9 @@ export default {
           this.suggestList = res.data
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

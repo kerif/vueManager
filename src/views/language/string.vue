@@ -10,32 +10,34 @@
         @search="goSearch"
       ></search-group>
     </div>
-    <el-table
-      :data="transferData"
-      v-loading="tableLoading"
-      class="data-list"
-      border
-      stripe
-      height="450"
-    >
-      <el-table-column type="index"></el-table-column>
-      <!-- 语言 -->
-      <el-table-column :label="$t('字符串')" prop="key"></el-table-column>
-      <el-table-column :label="$t('分组')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.source === 1">{{ $t('PC端') }}</span>
-          <span v-if="scope.row.source === 2">{{ $t('API') }}</span>
-          <span v-if="scope.row.source === 3">{{ $t('小程序') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 区域 -->
-      <el-table-column :label="$t('简体中文')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.translation && scope.row.translation.zh_CN }}</span>
-        </template>
-      </el-table-column>
-      <!-- 是否启用 -->
-      <!-- <el-table-column :label="$t('是否启用')">
+    <div style="height: calc(100vh - 270px">
+      <el-table
+        :data="transferData"
+        v-loading="tableLoading"
+        class="data-list"
+        border
+        stripe
+        height="calc(100vh - 270px)"
+        ref="table"
+      >
+        <el-table-column type="index"></el-table-column>
+        <!-- 语言 -->
+        <el-table-column :label="$t('字符串')" prop="key"></el-table-column>
+        <el-table-column :label="$t('分组')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.source === 1">{{ $t('PC端') }}</span>
+            <span v-if="scope.row.source === 2">{{ $t('API') }}</span>
+            <span v-if="scope.row.source === 3">{{ $t('小程序') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 区域 -->
+        <el-table-column :label="$t('简体中文')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.translation && scope.row.translation.zh_CN }}</span>
+          </template>
+        </el-table-column>
+        <!-- 是否启用 -->
+        <!-- <el-table-column :label="$t('是否启用')">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enabled"
@@ -47,19 +49,24 @@
           </el-switch>
         </template>
       </el-table-column> -->
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="230">
-        <template slot-scope="scope">
-          <el-button class="btn-dark-green" @click="editString(scope.row.id)">{{
-            $t('编辑')
-          }}</el-button>
-          <!-- <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{$t('删除')}}</el-button> -->
-          <!-- 设为默认 -->
-          <!-- <el-button v-if="scope.row.is_default === 0" class="btn-deep-purple" @click="setDefault(scope.row.id)">{{$t('设为默认')}}</el-button> -->
-        </template>
-      </el-table-column>
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="230">
+          <template slot-scope="scope">
+            <el-button class="btn-dark-green" @click="editString(scope.row.id)">{{
+              $t('编辑')
+            }}</el-button>
+            <!-- <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{$t('删除')}}</el-button> -->
+            <!-- 设为默认 -->
+            <!-- <el-button v-if="scope.row.is_default === 0" class="btn-deep-purple" @click="setDefault(scope.row.id)">{{$t('设为默认')}}</el-button> -->
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 
@@ -104,6 +111,9 @@ export default {
           this.transferData = res.data.map(item => ({ ...item, enabled: Boolean(item.enabled) }))
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$message({
             message: res.msg,

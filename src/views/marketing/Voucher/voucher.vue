@@ -36,13 +36,13 @@
         ></search-group>
       </div>
     </div>
-    <div style="height: calc(100vh - 340px)">
+    <div style="height: calc(100vh - 270px)">
       <el-table
         class="data-list"
         border
         stripe
         v-loading="tableLoading"
-        height="calc(100vh - 360px)"
+        height="calc(100vh - 270px)"
         ref="table"
         :data="voucherData"
         @selection-change="onSelectChange"
@@ -137,7 +137,11 @@
       </el-table>
     </div>
     <!-- <div class="noDate" v-else>暂无数据</div> -->
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
     <el-dialog
       :visible.sync="show"
       :title="$t('请选择')"

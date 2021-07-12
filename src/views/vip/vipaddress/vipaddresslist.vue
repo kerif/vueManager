@@ -7,10 +7,11 @@
     <el-table
       border
       stripe
+      ref="table"
       :data="addressList"
       class="data-list"
       v-loading="tableLoading"
-      height="550"
+      height="calc(100vh - 275px)"
     >
       <el-table-column type="index" :index="1"></el-table-column>
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
@@ -68,6 +69,9 @@ export default {
             this.addressList = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$notify({
               title: this.$t('操作失败'),

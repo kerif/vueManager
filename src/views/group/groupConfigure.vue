@@ -8,7 +8,15 @@
         </search-group>
       </div>
     </div>
-    <el-table :data="configurationData" v-loading="tableLoading" class="data-list" border stripe>
+    <el-table
+      :data="configurationData"
+      height="calc(100vh - 270px)"
+      v-loading="tableLoading"
+      ref="table"
+      class="data-list"
+      border
+      stripe
+    >
       <el-table-column type="index"></el-table-column>
       <el-table-column prop="id" :label="$t('客户ID')"></el-table-column>
       <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
@@ -67,6 +75,9 @@ export default {
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
             this.localization = res.localization
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$message({
               message: res.msg,

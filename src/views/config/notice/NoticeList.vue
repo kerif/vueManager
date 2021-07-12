@@ -27,7 +27,7 @@
         @selection-change="selectionChange"
         ref="table"
         v-loading="tableLoading"
-        height="calc(100vh - 330px)"
+        height="calc(100vh - 270px)"
       >
         <el-table-column type="selection"></el-table-column>
         <el-table-column :label="$t('标题')" prop="title"></el-table-column>
@@ -72,7 +72,11 @@
       </template> -->
       </el-table>
     </div>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 <script>

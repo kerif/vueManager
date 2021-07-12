@@ -48,71 +48,78 @@
     </div>
     <!--     <div class="select-box">
     </div> -->
-    <el-table
-      :data="rechargeList"
-      stripe
-      border
-      class="data-list"
-      v-loading="tableLoading"
-      height="550"
-    >
-      <el-table-column type="index" :index="1"></el-table-column>
-      <!-- 客户ID -->
-      <el-table-column :label="$t('客户ID')">
-        <template slot-scope="scope">
-          {{ scope.row.user.id }}
-        </template>
-      </el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
-          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
-          <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 充值方式 -->
-      <el-table-column :label="$t('充值方式')" prop="payment_type_name"> </el-table-column>
-      <!-- 支付方式 -->
-      <!-- <el-table-column label="支付方式">
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        :data="rechargeList"
+        stripe
+        border
+        class="data-list"
+        v-loading="tableLoading"
+        ref="table"
+        height="calc(100vh - 270px)"
+      >
+        <el-table-column type="index" :index="1"></el-table-column>
+        <!-- 客户ID -->
+        <el-table-column :label="$t('客户ID')">
+          <template slot-scope="scope">
+            {{ scope.row.user.id }}
+          </template>
+        </el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+            <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 充值方式 -->
+        <el-table-column :label="$t('充值方式')" prop="payment_type_name"> </el-table-column>
+        <!-- 支付方式 -->
+        <!-- <el-table-column label="支付方式">
       </el-table-column> -->
-      <!-- 支付金额 -->
-      <el-table-column
-        :label="$t('支付金额') + this.localization.currency_unit"
-        prop="amount"
-      ></el-table-column>
-      <!-- 确认金额 -->
-      <el-table-column
-        :label="$t('确认金额') + this.localization.currency_unit"
-        prop="confirm_amount"
-      ></el-table-column>
-      <!-- 第三方流水号 -->
-      <el-table-column :label="$t('流水号')" prop="serial_no"></el-table-column>
-      <!-- 支付时间 -->
-      <el-table-column :label="$t('支付时间')" prop="created_at"></el-table-column>
-      <!-- 审核时间 -->
-      <el-table-column :label="$t('审核时间')" prop="updated_at"></el-table-column>
-      <!-- 处理人 -->
-      <el-table-column :label="$t('处理人')" prop="operator"></el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.status === 0"
-            class="btn-green optionBtn"
-            @click="inviteWithdrawal(scope.row.id)"
-            >{{ $t('审核') }}</el-button
-          >
-          <el-button
-            v-else
-            class="btn-deep-purple optionBtn"
-            @click="withdrawalDetail(scope.row.id)"
-            >{{ $t('详情') }}</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        <!-- 支付金额 -->
+        <el-table-column
+          :label="$t('支付金额') + this.localization.currency_unit"
+          prop="amount"
+        ></el-table-column>
+        <!-- 确认金额 -->
+        <el-table-column
+          :label="$t('确认金额') + this.localization.currency_unit"
+          prop="confirm_amount"
+        ></el-table-column>
+        <!-- 第三方流水号 -->
+        <el-table-column :label="$t('流水号')" prop="serial_no"></el-table-column>
+        <!-- 支付时间 -->
+        <el-table-column :label="$t('支付时间')" prop="created_at"></el-table-column>
+        <!-- 审核时间 -->
+        <el-table-column :label="$t('审核时间')" prop="updated_at"></el-table-column>
+        <!-- 处理人 -->
+        <el-table-column :label="$t('处理人')" prop="operator"></el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.status === 0"
+              class="btn-green optionBtn"
+              @click="inviteWithdrawal(scope.row.id)"
+              >{{ $t('审核') }}</el-button
+            >
+            <el-button
+              v-else
+              class="btn-deep-purple optionBtn"
+              @click="withdrawalDetail(scope.row.id)"
+              >{{ $t('详情') }}</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 <script>
@@ -188,6 +195,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

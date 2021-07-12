@@ -20,7 +20,7 @@
         border
         class="data-list"
         v-loading="tableLoading"
-        height="calc(100vh - 330px)"
+        height="calc(100vh - 270px)"
         ref="table"
         @selection-change="selectionChange"
       >
@@ -93,8 +93,12 @@
         </div>
       </template> -->
       </el-table>
-      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
     <div v-if="status === 2" class="second-sty">
       <el-tree :data="treeData" :props="defaultProps" node-key="id" @node-click="handleNodeClick">
       </el-tree>
@@ -205,6 +209,9 @@ export default {
             this.logisticsList = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$notify({
               title: this.$t('操作失败'),

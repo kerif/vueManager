@@ -19,10 +19,11 @@
       class="data-list"
       border
       stripe
+      ref="table"
       :data="suggestList"
       v-loading="tableLoading"
       @selection-change="selectionChange"
-      height="550"
+      height="calc(100vh - 275px)"
     >
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('代理名称')">
@@ -183,6 +184,9 @@ export default {
             // this.suggestList = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$notify({
               title: this.$t('操作失败'),

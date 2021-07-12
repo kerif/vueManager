@@ -66,7 +66,8 @@
       :data="ownerData"
       @selection-change="selectionChange"
       v-loading="tableLoading"
-      height="550"
+      height="calc(100vh - 275px)"
+      ref="table"
     >
       <!-- height="550" -->
       <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -336,6 +337,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

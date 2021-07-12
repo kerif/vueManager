@@ -34,173 +34,181 @@
       </div>
     </div>
     <!-- </search-group> -->
-    <el-table
-      class="data-list"
-      border
-      stripe
-      v-if="oderData.length"
-      v-loading="tableLoading"
-      :data="oderData"
-    >
-      <el-table-column type="index" width="50"></el-table-column>
-      <!-- 统计日期 -->
-      <el-table-column
-        :label="$t('统计日期')"
-        v-if="activeName === '1' || activeName === '2' || activeName === '3'"
-        prop="days"
-      ></el-table-column>
-      <!-- 注册用户 -->
-      <el-table-column
-        :label="$t('注册用户')"
-        v-if="activeName === '1'"
-        prop="count"
-      ></el-table-column>
-      <!-- 邮箱激活 -->
-      <el-table-column
-        :label="$t('邮箱激活')"
-        v-if="activeName === '1'"
-        prop="email_count"
-      ></el-table-column>
-      <!-- 手机号激活 -->
-      <el-table-column
-        :label="$t('手机号激活')"
-        v-if="activeName === '1'"
-        prop="phone_count"
-      ></el-table-column>
-      <!-- 预报量 -->
-      <el-table-column
-        :label="$t('预报量')"
-        v-if="activeName === '1'"
-        prop="package_count"
-      ></el-table-column>
-      <!-- 转化率% -->
-      <el-table-column
-        :label="$t('转化率%')"
-        v-if="activeName === '1'"
-        prop="conversion_ratio"
-      ></el-table-column>
-      <!-- 包裹预报 -->
-      <el-table-column
-        :label="$t('包裹预报')"
-        prop="package_created"
-        v-if="activeName === '2'"
-      ></el-table-column>
-      <!-- 包裹入库 -->
-      <el-table-column
-        :label="$t('包裹入库')"
-        prop="package_in_storage"
-        v-if="activeName === '2'"
-      ></el-table-column>
-      <!-- 订单提交 -->
-      <!-- <el-table-column label="订单提交" prop="user_id" v-if="activeName === '2'"></el-table-column> -->
-      <!-- 订单打包 -->
-      <el-table-column
-        :label="$t('订单打包')"
-        prop="order_packed"
-        v-if="activeName === '2'"
-      ></el-table-column>
-      <!-- 订单支付 -->
-      <el-table-column
-        :label="$t('订单支付')"
-        prop="order_paid"
-        v-if="activeName === '2'"
-      ></el-table-column>
-      <!-- 支付金额 -->
-      <el-table-column
-        :label="$t('支付金额')"
-        prop="order_pay_amount"
-        v-if="activeName === '2'"
-      ></el-table-column>
-      <!-- 订单发货 -->
-      <el-table-column
-        :label="$t('订单发货')"
-        prop="order_shipped"
-        v-if="activeName === '2'"
-      ></el-table-column>
-      <!-- 转账支付 -->
-      <el-table-column
-        :label="$t('转账支付')"
-        v-if="activeName === '3'"
-        prop="transfer_amount"
-      ></el-table-column>
-      <!-- 微信支付 -->
-      <el-table-column
-        :label="$t('微信支付')"
-        v-if="activeName === '3'"
-        prop="wechat_amount"
-      ></el-table-column>
-      <!-- 剩余支付 -->
-      <el-table-column
-        :label="$t('余额支付')"
-        v-if="activeName === '3'"
-        prop="balance_amount"
-      ></el-table-column>
-      <!-- 佣金金额提现 -->
-      <el-table-column
-        :label="$t('佣金金额提现')"
-        v-if="activeName === '3'"
-        prop="agent_balance_amount"
-      ></el-table-column>
-      <!-- 佣金第三方提现 -->
-      <el-table-column
-        :label="$t('注册统计')"
-        v-if="activeName === '3'"
-        prop="agent_third_amount"
-      ></el-table-column>
-      <!-- 客户昵称 -->
-      <el-table-column
-        :label="$t('客户昵称')"
-        prop="name"
-        v-if="activeName === '4' || activeName === '5'"
-      ></el-table-column>
-      <!-- 客户组 -->
-      <el-table-column
-        :label="$t('客户组')"
-        v-if="activeName === '4' || activeName === '5'"
-        prop="user_group.name"
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        class="data-list"
+        border
+        height="calc(100vh - 270px)"
+        ref="table"
+        stripe
+        v-if="oderData.length"
+        v-loading="tableLoading"
+        :data="oderData"
       >
-        <!-- <template slot-scope="scope"> -->
-        <!-- <span v-for="item in scope.row.user_group" :key="item.id">
+        <el-table-column type="index" width="50"></el-table-column>
+        <!-- 统计日期 -->
+        <el-table-column
+          :label="$t('统计日期')"
+          v-if="activeName === '1' || activeName === '2' || activeName === '3'"
+          prop="days"
+        ></el-table-column>
+        <!-- 注册用户 -->
+        <el-table-column
+          :label="$t('注册用户')"
+          v-if="activeName === '1'"
+          prop="count"
+        ></el-table-column>
+        <!-- 邮箱激活 -->
+        <el-table-column
+          :label="$t('邮箱激活')"
+          v-if="activeName === '1'"
+          prop="email_count"
+        ></el-table-column>
+        <!-- 手机号激活 -->
+        <el-table-column
+          :label="$t('手机号激活')"
+          v-if="activeName === '1'"
+          prop="phone_count"
+        ></el-table-column>
+        <!-- 预报量 -->
+        <el-table-column
+          :label="$t('预报量')"
+          v-if="activeName === '1'"
+          prop="package_count"
+        ></el-table-column>
+        <!-- 转化率% -->
+        <el-table-column
+          :label="$t('转化率%')"
+          v-if="activeName === '1'"
+          prop="conversion_ratio"
+        ></el-table-column>
+        <!-- 包裹预报 -->
+        <el-table-column
+          :label="$t('包裹预报')"
+          prop="package_created"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <!-- 包裹入库 -->
+        <el-table-column
+          :label="$t('包裹入库')"
+          prop="package_in_storage"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <!-- 订单提交 -->
+        <!-- <el-table-column label="订单提交" prop="user_id" v-if="activeName === '2'"></el-table-column> -->
+        <!-- 订单打包 -->
+        <el-table-column
+          :label="$t('订单打包')"
+          prop="order_packed"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <!-- 订单支付 -->
+        <el-table-column
+          :label="$t('订单支付')"
+          prop="order_paid"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <!-- 支付金额 -->
+        <el-table-column
+          :label="$t('支付金额')"
+          prop="order_pay_amount"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <!-- 订单发货 -->
+        <el-table-column
+          :label="$t('订单发货')"
+          prop="order_shipped"
+          v-if="activeName === '2'"
+        ></el-table-column>
+        <!-- 转账支付 -->
+        <el-table-column
+          :label="$t('转账支付')"
+          v-if="activeName === '3'"
+          prop="transfer_amount"
+        ></el-table-column>
+        <!-- 微信支付 -->
+        <el-table-column
+          :label="$t('微信支付')"
+          v-if="activeName === '3'"
+          prop="wechat_amount"
+        ></el-table-column>
+        <!-- 剩余支付 -->
+        <el-table-column
+          :label="$t('余额支付')"
+          v-if="activeName === '3'"
+          prop="balance_amount"
+        ></el-table-column>
+        <!-- 佣金金额提现 -->
+        <el-table-column
+          :label="$t('佣金金额提现')"
+          v-if="activeName === '3'"
+          prop="agent_balance_amount"
+        ></el-table-column>
+        <!-- 佣金第三方提现 -->
+        <el-table-column
+          :label="$t('注册统计')"
+          v-if="activeName === '3'"
+          prop="agent_third_amount"
+        ></el-table-column>
+        <!-- 客户昵称 -->
+        <el-table-column
+          :label="$t('客户昵称')"
+          prop="name"
+          v-if="activeName === '4' || activeName === '5'"
+        ></el-table-column>
+        <!-- 客户组 -->
+        <el-table-column
+          :label="$t('客户组')"
+          v-if="activeName === '4' || activeName === '5'"
+          prop="user_group.name"
+        >
+          <!-- <template slot-scope="scope"> -->
+          <!-- <span v-for="item in scope.row.user_group" :key="item.id">
             {{item.name}}
           </span>
         </template>
         <span>{{user_group.name}}</span> -->
-      </el-table-column>
-      <!-- 成交数量 -->
-      <el-table-column
-        :label="$t('成交数量')"
-        v-if="activeName === '5'"
-        prop="orders_count"
-      ></el-table-column>
-      <!-- 邀请人数 -->
-      <el-table-column
-        :label="$t('邀请人数')"
-        v-if="activeName === '4'"
-        prop="invite_user_count"
-      ></el-table-column>
-      <!-- 注册日期 -->
-      <el-table-column
-        :label="$t('注册日期')"
-        v-if="activeName === '4' || activeName === '5'"
-        prop="created_at"
-      ></el-table-column>
-      <!-- 最后登录日期 -->
-      <el-table-column
-        :label="$t('最后登录日期')"
-        v-if="activeName === '4' || activeName === '5'"
-        prop="last_login_at"
-      ></el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" v-if="activeName === '4'">
-        <template slot-scope="scope">
-          <el-button class="btn-deep-purple" @click="invite(scope.row.id)">{{
-            $t('邀请记录')
-          }}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="noDate" v-else>{{ $t('暂无数据') }}</div>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        </el-table-column>
+        <!-- 成交数量 -->
+        <el-table-column
+          :label="$t('成交数量')"
+          v-if="activeName === '5'"
+          prop="orders_count"
+        ></el-table-column>
+        <!-- 邀请人数 -->
+        <el-table-column
+          :label="$t('邀请人数')"
+          v-if="activeName === '4'"
+          prop="invite_user_count"
+        ></el-table-column>
+        <!-- 注册日期 -->
+        <el-table-column
+          :label="$t('注册日期')"
+          v-if="activeName === '4' || activeName === '5'"
+          prop="created_at"
+        ></el-table-column>
+        <!-- 最后登录日期 -->
+        <el-table-column
+          :label="$t('最后登录日期')"
+          v-if="activeName === '4' || activeName === '5'"
+          prop="last_login_at"
+        ></el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" v-if="activeName === '4'">
+          <template slot-scope="scope">
+            <el-button class="btn-deep-purple" @click="invite(scope.row.id)">{{
+              $t('邀请记录')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="noDate" v-else>{{ $t('暂无数据') }}</div>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 
@@ -302,6 +310,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -364,6 +375,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -394,6 +408,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -424,6 +441,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -454,6 +474,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

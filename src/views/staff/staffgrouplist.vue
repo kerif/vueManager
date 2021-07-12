@@ -10,67 +10,69 @@
         <add-btn @click.native="addStaff">{{ $t('添加员工组') }}</add-btn>
       </div>
     </div>
-    <el-table
-      class="data-list"
-      :data="staff_group_list"
-      border
-      @selection-change="selectionChange"
-      v-loading="tableLoading"
-      ref="table"
-      height="550"
-    >
-      <el-table-column type="selection" width="55"> </el-table-column>
-      <!-- 员工组中文名 -->
-      <el-table-column prop="name_cn" :label="$t('员工组中文名')"> </el-table-column>
-      <!-- 员工组英文名 -->
-      <el-table-column prop="name_en" :label="$t('员工组英文名')"> </el-table-column>
-      <!-- 成员数量 -->
-      <el-table-column prop="admin_count" :label="$t('成员数量')"> </el-table-column>
-      <!-- 所属仓库 -->
-      <el-table-column prop="warehouse_name" :label="$t('所属仓库')"> </el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="290">
-        <template slot-scope="scope">
-          <!-- 编辑 -->
-          <el-button
-            v-if="scope.row.permissions === 1"
-            class="btn-blue"
-            @click.stop="editStaff(scope.row.id)"
-            >{{ $t('编辑') }}</el-button
-          >
-          <!-- 修改权限 -->
-          <el-button
-            class="btn-purple"
-            v-if="scope.row.permissions === 1"
-            @click.stop="changePre(scope.row.id)"
-          >
-            {{ $t('修改权限') }}
-          </el-button>
-          <!-- 成员 -->
-          <el-button @click.stop="member(scope.row.id)" class="btn-green">{{
-            $t('成员')
-          }}</el-button>
-          <!-- 所属仓库 -->
-          <el-button
-            class="btn-deep-blue"
-            v-if="scope.row.permissions === 1"
-            @click="warehouseChange(scope.row.id)"
-            >{{ $t('所属仓库') }}</el-button
-          >
-          <!-- 自提点权限 -->
-          <el-button
-            class="btn-pink"
-            v-if="scope.row.permissions === 1"
-            @click="pickPiont(scope.row.id)"
-            >{{ $t('自提点权限') }}</el-button
-          >
-        </template>
-      </el-table-column>
-      <!-- <template slot="append">
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        class="data-list"
+        :data="staff_group_list"
+        border
+        @selection-change="selectionChange"
+        v-loading="tableLoading"
+        ref="table"
+        height="calc(100vh - 275px)"
+      >
+        <el-table-column type="selection" width="55"> </el-table-column>
+        <!-- 员工组中文名 -->
+        <el-table-column prop="name_cn" :label="$t('员工组中文名')"> </el-table-column>
+        <!-- 员工组英文名 -->
+        <el-table-column prop="name_en" :label="$t('员工组英文名')"> </el-table-column>
+        <!-- 成员数量 -->
+        <el-table-column prop="admin_count" :label="$t('成员数量')"> </el-table-column>
+        <!-- 所属仓库 -->
+        <el-table-column prop="warehouse_name" :label="$t('所属仓库')"> </el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="290">
+          <template slot-scope="scope">
+            <!-- 编辑 -->
+            <el-button
+              v-if="scope.row.permissions === 1"
+              class="btn-blue"
+              @click.stop="editStaff(scope.row.id)"
+              >{{ $t('编辑') }}</el-button
+            >
+            <!-- 修改权限 -->
+            <el-button
+              class="btn-purple"
+              v-if="scope.row.permissions === 1"
+              @click.stop="changePre(scope.row.id)"
+            >
+              {{ $t('修改权限') }}
+            </el-button>
+            <!-- 成员 -->
+            <el-button @click.stop="member(scope.row.id)" class="btn-green">{{
+              $t('成员')
+            }}</el-button>
+            <!-- 所属仓库 -->
+            <el-button
+              class="btn-deep-blue"
+              v-if="scope.row.permissions === 1"
+              @click="warehouseChange(scope.row.id)"
+              >{{ $t('所属仓库') }}</el-button
+            >
+            <!-- 自提点权限 -->
+            <el-button
+              class="btn-pink"
+              v-if="scope.row.permissions === 1"
+              @click="pickPiont(scope.row.id)"
+              >{{ $t('自提点权限') }}</el-button
+            >
+          </template>
+        </el-table-column>
+        <!-- <template slot="append">
         <div class="append-box">
         </div>
       </template> -->
-    </el-table>
+      </el-table>
+    </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -113,6 +115,9 @@ export default {
             this.staff_group_list = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           }
         })
     },

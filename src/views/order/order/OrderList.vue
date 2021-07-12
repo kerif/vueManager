@@ -67,7 +67,6 @@
         </div>
       </div>
     </div>
-
     <div style="height: calc(100vh - 270px)">
       <el-table
         border

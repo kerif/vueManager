@@ -87,7 +87,7 @@
         </div>
       </div>
     </div>
-    <div style="height: calc(100vh - 330px)">
+    <div style="height: calc(100vh - 270px)">
       <el-table
         :data="tableShip"
         stripe
@@ -96,7 +96,7 @@
         @expand-change="onExpand"
         ref="table"
         @selection-change="selectionChange"
-        height="calc(100vh - 330px)"
+        height="calc(100vh - 270px)"
         v-loading="tableLoading"
       >
         <!-- <el-table-column type="expand">
@@ -237,7 +237,11 @@
       </template> -->
       </el-table>
     </div>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
     <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
       <el-form label-position="top" :model="form" ref="form">
         <el-form-item :label="$t('物流状态')">

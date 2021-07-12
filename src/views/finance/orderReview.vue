@@ -59,123 +59,134 @@
         ></el-button>
       </div>
     </div>
-    <el-table
-      v-if="reviewData.length && this.activeName === '0'"
-      class="data-list"
-      border
-      stripe
-      ref="table"
-      :data="reviewData"
-      height="550"
-      v-loading="tableLoading"
-    >
-      <el-table-column type="index" width="55" align="center"></el-table-column>
-      <!-- 客户ID -->
-      <el-table-column :label="$t('客户ID')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
-        </template>
-      </el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
-          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
-          <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 支付类型 -->
-      <el-table-column :label="$t('支付类型')" prop="payment_type_name"> </el-table-column>
-      <!-- 关联单号 -->
-      <el-table-column :label="$t('关联单号')" prop="order_number"> </el-table-column>
-      <!-- 流水号 -->
-      <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
-      <!-- 应付金额 -->
-      <el-table-column
-        :label="$t('应付金额') + `${localization.currency_unit ? localization.currency_unit : ''}`"
+    <div style="height: calc(100vh - 270px)">
+      <el-table
+        v-if="reviewData.length && this.activeName === '0'"
+        class="data-list"
+        border
+        stripe
+        ref="reviewTable"
+        :data="reviewData"
+        height="calc(100vh - 270px)"
+        v-loading="tableLoading"
       >
-        <template slot-scope="scope">
-          <span>{{ scope.row.order_amount - scope.row.coupon_amount }}</span>
-        </template>
-      </el-table-column>
-      <!-- 提交时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="160px" fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.status === 0"
-            class="btn-dark-green"
-            @click="goReceive(scope.row.id, 'pay')"
-            >{{ $t('审核') }}</el-button
-          >
-          <el-button
-            v-if="scope.row.status === 1 || scope.row.status === 2"
-            class="btn-purple btn-sty"
-            @click="goReceive(scope.row.id, 'pay')"
-            >{{ $t('详情') }}</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-table
-      v-if="oderData.length && this.activeName === '1'"
-      class="data-list"
-      border
-      ref="table"
-      stripe
-      :data="oderData"
-      v-loading="tableLoading"
-    >
-      <el-table-column type="index" width="55" align="center"></el-table-column>
-      <!-- 客户ID -->
-      <el-table-column :label="$t('客户ID')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.user.id }}---{{ scope.row.user.name }}</span>
-        </template>
-      </el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
-          <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
-          <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 支付类型 -->
-      <el-table-column :label="$t('支付类型')" prop="payment_method"> </el-table-column>
-      <!-- 关联单号 -->
-      <el-table-column :label="$t('关联单号')" prop="order_sn"> </el-table-column>
-      <!-- 流水号 -->
-      <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
-      <!-- 应付金额 -->
-      <el-table-column
-        :label="$t('应付金额') + `${localization.currency_unit ? localization.currency_unit : ''}`"
-        prop="payment_amount"
+        <el-table-column type="index" width="55" align="center"></el-table-column>
+        <!-- 客户ID -->
+        <el-table-column :label="$t('客户ID')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
+          </template>
+        </el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+            <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 支付类型 -->
+        <el-table-column :label="$t('支付类型')" prop="payment_type_name"> </el-table-column>
+        <!-- 关联单号 -->
+        <el-table-column :label="$t('关联单号')" prop="order_number"> </el-table-column>
+        <!-- 流水号 -->
+        <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
+        <!-- 应付金额 -->
+        <el-table-column
+          :label="
+            $t('应付金额') + `${localization.currency_unit ? localization.currency_unit : ''}`
+          "
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.order_amount - scope.row.coupon_amount }}</span>
+          </template>
+        </el-table-column>
+        <!-- 提交时间 -->
+        <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="160px" fixed="right">
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.status === 0"
+              class="btn-dark-green"
+              @click="goReceive(scope.row.id, 'pay')"
+              >{{ $t('审核') }}</el-button
+            >
+            <el-button
+              v-if="scope.row.status === 1 || scope.row.status === 2"
+              class="btn-purple btn-sty"
+              @click="goReceive(scope.row.id, 'pay')"
+              >{{ $t('详情') }}</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-table
+        v-if="oderData.length && this.activeName === '1'"
+        class="data-list"
+        border
+        ref="orderTable"
+        height="calc(100vh - 270px)"
+        stripe
+        :data="oderData"
+        v-loading="tableLoading"
       >
-      </el-table-column>
-      <!-- 提交时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="160px" fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.status === 0"
-            class="btn-dark-green"
-            @click="goReceive(scope.row.id, 'refund')"
-            >{{ $t('审核') }}</el-button
-          >
-          <el-button
-            v-if="scope.row.status === 1 || scope.row.status === 2"
-            class="btn-purple btn-sty"
-            @click="goReceive(scope.row.id, 'refund')"
-            >{{ $t('详情') }}</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column type="index" width="55" align="center"></el-table-column>
+        <!-- 客户ID -->
+        <el-table-column :label="$t('客户ID')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.user.id }}---{{ scope.row.user.name }}</span>
+          </template>
+        </el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">{{ $t('待审核') }}</span>
+            <span v-if="scope.row.status === 1">{{ $t('审核通过') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('审核拒绝') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 支付类型 -->
+        <el-table-column :label="$t('支付类型')" prop="payment_method"> </el-table-column>
+        <!-- 关联单号 -->
+        <el-table-column :label="$t('关联单号')" prop="order_sn"> </el-table-column>
+        <!-- 流水号 -->
+        <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
+        <!-- 应付金额 -->
+        <el-table-column
+          :label="
+            $t('应付金额') + `${localization.currency_unit ? localization.currency_unit : ''}`
+          "
+          prop="payment_amount"
+        >
+        </el-table-column>
+        <!-- 提交时间 -->
+        <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="160px" fixed="right">
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.status === 0"
+              class="btn-dark-green"
+              @click="goReceive(scope.row.id, 'refund')"
+              >{{ $t('审核') }}</el-button
+            >
+            <el-button
+              v-if="scope.row.status === 1 || scope.row.status === 2"
+              class="btn-purple btn-sty"
+              @click="goReceive(scope.row.id, 'refund')"
+              >{{ $t('详情') }}</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <!-- <div class="noDate" v-else>{{ $t('暂无数据') }}</div> -->
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog" />
@@ -287,7 +298,7 @@ export default {
             this.page_params.total = res.meta.total
             setTimeout(() => {
               this.$nextTick(() => {
-                this.$refs.table.doLayout()
+                this.$refs.reviewTable.doLayout()
               })
             }, 300)
           } else {
@@ -308,7 +319,7 @@ export default {
             this.page_params.total = res.meta.total
             setTimeout(() => {
               this.$nextTick(() => {
-                this.$refs.table.doLayout()
+                this.$refs.orderTable.doLayout()
               })
             }, 300)
           } else {

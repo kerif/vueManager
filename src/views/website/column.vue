@@ -3,152 +3,164 @@
     <div class="select-box">
       <add-btn router="addColumn">{{ $t('新增') }}</add-btn>
     </div>
-    <el-table
-      :data="columnList"
-      stripe
-      border
-      class="data-list"
-      @expand-change="onExpand"
-      v-loading="tableLoading"
-    >
-      <!-- 二级分类列表 -->
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-table :data="props.row.orders">
-            <!-- 子栏目名称 -->
-            <el-table-column :label="$t('子栏目名称')" prop="name"></el-table-column>
-            <!-- 类型 -->
-            <el-table-column :label="$t('类型')">
-              <template slot-scope="scope">
-                <span v-if="scope.row.type === 1">{{ $t('单篇文章') }}</span>
-                <span v-if="scope.row.type === 2">{{ $t('链接') }}</span>
-                <span v-if="scope.row.type === 3">{{ $t('单页') }}</span>
-                <span v-if="scope.row.type === 4">{{ $t('多篇文章') }}</span>
-              </template>
-            </el-table-column>
-            <!-- 排序 -->
-            <el-table-column :label="$t('排序')" prop="sort_index"> </el-table-column>
-            <!-- 状态 -->
-            <el-table-column :label="$t('状态')">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.enabled"
-                  @change="changeRules($event, scope.row.enabled, scope.row.id)"
-                  :active-text="$t('开')"
-                  :inactive-text="$t('关')"
-                  :active-value="1"
-                  :inactive-value="0"
-                  active-color="#13ce66"
-                  inactive-color="gray"
-                >
-                </el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column
-              :label="item.name"
-              v-for="item in formatLangData"
-              :key="item.id"
-              align="center"
-            >
-              <template slot-scope="scope">
-                <span
-                  v-if="scope.row['trans_' + item.language_code]"
-                  class="el-icon-check icon-sty"
-                  @click="onLang(scope.row, item)"
-                ></span>
-                <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('操作')" width="300">
-              <template slot-scope="scope">
-                <!-- 编辑 -->
-                <el-button
-                  class="btn-dark-green btn-margin"
-                  @click="editSecondColumn(scope.row.id)"
-                  >{{ $t('编辑') }}</el-button
-                >
-                <!-- 删除 -->
-                <el-button @click="deleteData(scope.row.id)" class="btn-light-red">{{
-                  $t('删除')
-                }}</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </template>
-      </el-table-column>
-      <!-- 一级分类列表 -->
-      <el-table-column type="index" width="50"></el-table-column>
-      <!-- 栏目名称 -->
-      <el-table-column :label="$t('栏目名称')" prop="name"></el-table-column>
-      <!-- 类型 -->
-      <el-table-column :label="$t('类型')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.type === 1">{{ $t('文章') }}</span>
-          <span v-if="scope.row.type === 2">{{ $t('链接') }}</span>
-          <span v-if="scope.row.type === 3">{{ $t('单页') }}</span>
-          <span v-if="scope.row.type === 4">{{ $t('文章列表') }}</span>
-        </template>
-      </el-table-column>
-      <!-- 状态 -->
-      <el-table-column :label="$t('状态')">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.enabled"
-            @change="changeRules($event, scope.row.enabled, scope.row.id)"
-            :active-text="$t('开')"
-            :inactive-text="$t('关')"
-            :active-value="1"
-            :inactive-value="0"
-            active-color="#13ce66"
-            inactive-color="gray"
-          >
-          </el-switch>
-        </template>
-      </el-table-column>
-      <!-- 排序 -->
-      <el-table-column :label="$t('排序')" prop="sort_index"></el-table-column>
-      <el-table-column
-        :label="item.name"
-        v-for="item in formatLangData"
-        :key="item.id"
-        align="center"
+    <div style="height: calc(100vh - 270px">
+      <el-table
+        :data="columnList"
+        stripe
+        border
+        class="data-list"
+        height="calc(100vh - 270px)"
+        ref="table"
+        @expand-change="onExpand"
+        v-loading="tableLoading"
       >
-        <template slot-scope="scope">
-          <span
-            v-if="scope.row['trans_' + item.language_code]"
-            class="el-icon-check icon-sty"
-            @click="onLang(scope.row, item)"
-          ></span>
-          <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-        </template>
-      </el-table-column>
-      <!-- 操作 -->
-      <el-table-column :label="$t('操作')" width="300">
-        <template slot-scope="scope">
-          <!-- 编辑 -->
-          <el-button
-            class="btn-dark-green btn-margin"
-            @click="editColumn(scope.row.id, scope.row.has_children, scope.row.is_fixed)"
-            >{{ $t('编辑') }}</el-button
-          >
-          <!-- 风险提示 -->
-          <el-button
-            v-if="scope.row.is_fixed !== 1"
-            class="btn-main"
-            @click="addSecond(scope.row.id)"
-            >{{ $t('新增子栏目') }}</el-button
-          >
-          <!-- 删除 -->
-          <el-button
-            v-if="scope.row.is_fixed !== 1"
-            class="btn-light-red btn-margin"
-            @click="deleteData(scope.row.id)"
-            >{{ $t('删除') }}</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+        <!-- 二级分类列表 -->
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-table :data="props.row.orders">
+              <!-- 子栏目名称 -->
+              <el-table-column :label="$t('子栏目名称')" prop="name"></el-table-column>
+              <!-- 类型 -->
+              <el-table-column :label="$t('类型')">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.type === 1">{{ $t('单篇文章') }}</span>
+                  <span v-if="scope.row.type === 2">{{ $t('链接') }}</span>
+                  <span v-if="scope.row.type === 3">{{ $t('单页') }}</span>
+                  <span v-if="scope.row.type === 4">{{ $t('多篇文章') }}</span>
+                </template>
+              </el-table-column>
+              <!-- 排序 -->
+              <el-table-column :label="$t('排序')" prop="sort_index"> </el-table-column>
+              <!-- 状态 -->
+              <el-table-column :label="$t('状态')">
+                <template slot-scope="scope">
+                  <el-switch
+                    v-model="scope.row.enabled"
+                    @change="changeRules($event, scope.row.enabled, scope.row.id)"
+                    :active-text="$t('开')"
+                    :inactive-text="$t('关')"
+                    :active-value="1"
+                    :inactive-value="0"
+                    active-color="#13ce66"
+                    inactive-color="gray"
+                  >
+                  </el-switch>
+                </template>
+              </el-table-column>
+              <el-table-column
+                :label="item.name"
+                v-for="item in formatLangData"
+                :key="item.id"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <span
+                    v-if="scope.row['trans_' + item.language_code]"
+                    class="el-icon-check icon-sty"
+                    @click="onLang(scope.row, item)"
+                  ></span>
+                  <span
+                    v-else
+                    class="el-icon-plus icon-sty"
+                    @click="onLang(scope.row, item)"
+                  ></span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('操作')" width="300">
+                <template slot-scope="scope">
+                  <!-- 编辑 -->
+                  <el-button
+                    class="btn-dark-green btn-margin"
+                    @click="editSecondColumn(scope.row.id)"
+                    >{{ $t('编辑') }}</el-button
+                  >
+                  <!-- 删除 -->
+                  <el-button @click="deleteData(scope.row.id)" class="btn-light-red">{{
+                    $t('删除')
+                  }}</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </template>
+        </el-table-column>
+        <!-- 一级分类列表 -->
+        <el-table-column type="index" width="50"></el-table-column>
+        <!-- 栏目名称 -->
+        <el-table-column :label="$t('栏目名称')" prop="name"></el-table-column>
+        <!-- 类型 -->
+        <el-table-column :label="$t('类型')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type === 1">{{ $t('文章') }}</span>
+            <span v-if="scope.row.type === 2">{{ $t('链接') }}</span>
+            <span v-if="scope.row.type === 3">{{ $t('单页') }}</span>
+            <span v-if="scope.row.type === 4">{{ $t('文章列表') }}</span>
+          </template>
+        </el-table-column>
+        <!-- 状态 -->
+        <el-table-column :label="$t('状态')">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.enabled"
+              @change="changeRules($event, scope.row.enabled, scope.row.id)"
+              :active-text="$t('开')"
+              :inactive-text="$t('关')"
+              :active-value="1"
+              :inactive-value="0"
+              active-color="#13ce66"
+              inactive-color="gray"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <!-- 排序 -->
+        <el-table-column :label="$t('排序')" prop="sort_index"></el-table-column>
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onLang(scope.row, item)"
+            ></span>
+            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+          </template>
+        </el-table-column>
+        <!-- 操作 -->
+        <el-table-column :label="$t('操作')" width="300">
+          <template slot-scope="scope">
+            <!-- 编辑 -->
+            <el-button
+              class="btn-dark-green btn-margin"
+              @click="editColumn(scope.row.id, scope.row.has_children, scope.row.is_fixed)"
+              >{{ $t('编辑') }}</el-button
+            >
+            <!-- 风险提示 -->
+            <el-button
+              v-if="scope.row.is_fixed !== 1"
+              class="btn-main"
+              @click="addSecond(scope.row.id)"
+              >{{ $t('新增子栏目') }}</el-button
+            >
+            <!-- 删除 -->
+            <el-button
+              v-if="scope.row.is_fixed !== 1"
+              class="btn-light-red btn-margin"
+              @click="deleteData(scope.row.id)"
+              >{{ $t('删除') }}</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 
@@ -202,6 +214,9 @@ export default {
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
           } else {
             this.$notify({
               title: this.$t('操作失败'),
