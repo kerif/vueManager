@@ -98,7 +98,7 @@
       <div class="weight-sty">{{ $t('未达门槛重量计费系数') }}</div>
       <el-input v-model="group_raise_factor"></el-input>
       <el-checkbox style="margin-top: 10px" v-model="is_ignore_warehouse">{{
-        $t('取消仓库限制')
+        $t('开启仓库限制')
       }}</el-checkbox>
       <el-tooltip
         class="item"

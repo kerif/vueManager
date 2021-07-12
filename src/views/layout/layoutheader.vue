@@ -22,7 +22,6 @@
       inactive-color="#13ce66" /> -->
       <!-- <el-button class="upload-btn">{{$t('下载管理')}}</el-button> -->
       <!-- <div>关于我们</div> -->
-      <i class="iconfont icon-bianji"></i>
       <el-popover placement="top" width="600" trigger="click">
         <el-table :data="gridData">
           <el-table-column>
@@ -46,9 +45,9 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button class="upload-btn" slot="reference" @click="uploadManagenent">{{
-          $t('下载管理')
-        }}</el-button>
+        <el-button class="upload-btn" slot="reference" @click="uploadManagenent"
+          >{{ $t('下载管理') }} <i class="iconfont icon-bianji upload-icon"></i
+        ></el-button>
       </el-popover>
       <!-- <span class="user-box" @click="checkUser">{{ $store.state.userName }}</span> -->
       <el-popover class="user-box" placement="bottom" trigger="click" width="250">
@@ -222,6 +221,8 @@ export default {
   }
   .upload-btn {
     margin-right: 10px;
+    padding-right: 0;
+    padding-left: 30px;
     border: none;
   }
   .name-sty {
@@ -240,7 +241,8 @@ export default {
     }
   }
   .upload-icon {
-    margin-right: 10px;
+    position: relative;
+    right: 80px;
   }
 }
 </style>

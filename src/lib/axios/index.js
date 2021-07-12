@@ -19,6 +19,7 @@ $form.defaults.transformRequest = [
 function interceptorsRequestSuccess(config) {
   nprogress.start()
   // config.headers.Language = localStorage.getItem('locale') === 'en' ? 'en' : 'zh-CN'
+  config.headers.language = localStorage.getItem('language') === 'simple' ? 'zh_CN' : 'zh_TW'
   store.commit('switchBtnLoading', { status: true })
   store.state.token && (config.headers.Authorization = store.state.token)
   return config
