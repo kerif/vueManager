@@ -411,6 +411,11 @@
               <el-input v-model="user.insurance_fee" :placeholder="$t('请输入')"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="10" :offset="$route.params.parent == 0 ? 2 : 0">
+            <el-form-item :label="$t('客户备注') + localization.currency_unit">
+              <span>{{ user.vip_remark }}</span>
+            </el-form-item>
+          </el-col>
         </el-row>
         <!-- 增值服务 -->
         <el-row :gutter="20" v-if="$route.params.parent == 0">
