@@ -258,7 +258,7 @@
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
                 <template slot="append">{{ this.localization.weight_unit }}</template>
               </el-input>
-              <span style="color: #ff5557; font-size: 13px">{{
+              <span style="color: #ff5557; font-size: 13px" v-if="$route.params.parent == 1">{{
                 $t('该重量仅用于判断本团购单的价格档位')
               }}</span>
             </el-form-item>

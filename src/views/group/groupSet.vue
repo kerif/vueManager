@@ -78,18 +78,40 @@
       width="45%"
       @close="clearDialog"
     >
-      <el-checkbox v-model="group_raise">{{ $t('设置门槛重量') }}</el-checkbox>
-      <div style="background-color: #f5f5f5; font-size: 13px; padding: 5px">
-        {{
+      <el-checkbox style="margin-right: 0px" v-model="group_raise">{{
+        $t('设置门槛重量')
+      }}</el-checkbox>
+      <el-tooltip
+        class="item"
+        effect="dark"
+        :content="
           $t(
             '开启门槛重量时，如某一团员提交包裹重量未达到门槛重量，则按照（拼团单价*系数）计算运费'
           )
-        }}
-      </div>
+        "
+        placement="top"
+      >
+        <span class="el-icon-question icon-info"></span>
+      </el-tooltip>
       <div class="weight-sty">{{ $t('门槛重量') }}</div>
       <el-input v-model="group_raise_threshold"></el-input>
       <div class="weight-sty">{{ $t('未达门槛重量计费系数') }}</div>
       <el-input v-model="group_raise_factor"></el-input>
+      <el-checkbox style="margin-top: 10px" v-model="is_ignore_warehouse">{{
+        $t('取消仓库限制')
+      }}</el-checkbox>
+      <el-tooltip
+        class="item"
+        effect="dark"
+        :content="
+          $t(
+            '取消仓库限制时，支持不同仓库包裹加入参与同一拼团订单；不开启则限制加入拼团的包裹必须为团长设置的仓库包裹'
+          )
+        "
+        placement="top"
+      >
+        <span class="el-icon-question icon-info"></span>
+      </el-tooltip>
       <div slot="footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitGroup">确 定</el-button>
@@ -112,6 +134,7 @@ export default {
       checked: '',
       groupId: '',
       group_raise: 0,
+      is_ignore_warehouse: 0,
       group_raise_factor: '',
       group_raise_threshold: '',
       mode: 0
@@ -162,6 +185,7 @@ export default {
       this.$request.lineBuying(this.groupId).then(res => {
         if (res.ret) {
           this.group_raise = Boolean(res.data.group_raise)
+          this.is_ignore_warehouse = Boolean(res.data.is_ignore_warehouse)
           this.group_raise_factor = res.data.group_raise_factor
           this.group_raise_threshold = res.data.group_raise_threshold
         } else {
@@ -178,6 +202,7 @@ export default {
       this.$request
         .updateLineBuying(this.groupId, {
           group_raise: Number(this.group_raise),
+          is_ignore_warehouse: Number(this.is_ignore_warehouse),
           group_raise_factor: this.group_raise_factor,
           group_raise_threshold: this.group_raise_threshold
         })
@@ -221,6 +246,7 @@ export default {
     },
     clearDialog() {
       this.group_raise = ''
+      this.is_ignore_warehouse = ''
       this.group_raise_factor = ''
       this.group_raise_threshold = ''
       this.groupId = ''
@@ -320,6 +346,14 @@ export default {
   }
   .weight-sty {
     margin-top: 10px;
+  }
+  .icon-info {
+    color: #74b34f;
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+    cursor: pointer;
   }
 }
 </style>
