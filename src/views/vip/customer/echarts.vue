@@ -196,7 +196,7 @@ export default {
         }
       },
       legend: {
-        data: ['转化率', '新增客户数'],
+        data: [this.$t('转化率'), this.$t('新增客户数')],
         left: '200',
         top: 'bottom'
       }
@@ -216,7 +216,7 @@ export default {
         }
       },
       legend: {
-        data: ['邀请客户成交订单数', '邀请客户成交金额'],
+        data: [this.$t('邀请客户成交订单数'), this.$t('邀请客户成交金额')],
         left: '200',
         top: 'bottom'
       }
@@ -257,7 +257,7 @@ export default {
             {
               type: 'value',
               scale: true,
-              name: '新增客户数(个)',
+              name: this.$t('新增客户数(个)'),
               min: 0,
               boundaryGap: true,
               max(value) {
@@ -279,7 +279,7 @@ export default {
             {
               type: 'value',
               scale: true,
-              name: '转化率(%)',
+              name: this.$t('转化率(%)'),
               min: 0,
               boundaryGap: true,
               axisLine: {
@@ -328,7 +328,7 @@ export default {
           ]
           this.packageOption.series = [
             {
-              name: '新增客户数',
+              name: this.$t('新增客户数'),
               type: 'bar',
               data: createdData,
               itemStyle: {
@@ -341,7 +341,7 @@ export default {
               }
             },
             {
-              name: '转化率',
+              name: this.$t('转化率'),
               type: 'line',
               data: changeData,
               yAxisIndex: 1,
@@ -398,7 +398,7 @@ export default {
             {
               type: 'value',
               scale: true,
-              name: '邀请客户成交订单数(个)',
+              name: this.$t('邀请客户成交订单数(个)'),
               min: 0,
               max(value) {
                 return Math.ceil(value.max / 5) * 5
@@ -421,7 +421,7 @@ export default {
             {
               type: 'value',
               scale: true,
-              name: '成交金额(元)',
+              name: this.$t('成交金额(元)'),
               splitNumber: 5,
               min: 0,
               max: maxValue,
@@ -473,7 +473,7 @@ export default {
           ]
           this.proxyOption.series = [
             {
-              name: '邀请客户成交订单数',
+              name: this.$t('邀请客户成交订单数'),
               type: 'bar',
               data: countsData,
               itemStyle: {
@@ -486,7 +486,7 @@ export default {
               }
             },
             {
-              name: '邀请客户成交金额',
+              name: this.$t('邀请客户成交金额'),
               type: 'line',
               data: amountsData,
               yAxisIndex: 1,

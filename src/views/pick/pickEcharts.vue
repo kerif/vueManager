@@ -346,10 +346,10 @@ export default {
         if (res.ret) {
           this.pieData = res.data.graph
           const obj = {
-            wait_receive: '未到自提点',
-            received: '已到自提点',
-            signed: '客户签收',
-            shipped: '已出库'
+            wait_receive: this.$t('未到自提点'),
+            received: this.$t('已到自提点'),
+            signed: this.$t('客户签收'),
+            shipped: this.$t('已出库')
           }
           // let pieOrderList = res.data.filter(item => {
           //   return item.name !== 'all'
@@ -379,11 +379,16 @@ export default {
           this.option.legend = {
             orient: 'vertical',
             left: 10,
-            data: ['未到自提点', '已到自提点', '客户签收', '已出库']
+            data: [
+              this.$t('未到自提点'),
+              this.$t('已到自提点'),
+              this.$t('客户签收'),
+              this.$t('已出库')
+            ]
           }
           this.option.series = [
             {
-              name: '包裹概览',
+              name: this.$t('包裹概览'),
               type: 'pie',
               radius: ['50%', '70%'],
               label: {
@@ -438,7 +443,7 @@ export default {
           ]
           this.packageOption.series = [
             {
-              name: '新增包裹数',
+              name: this.$t('新增包裹数'),
               type: 'bar',
               barWidth: '60%',
               data: yData
@@ -461,12 +466,12 @@ export default {
         if (res.ret) {
           this.pieOrderData = res.data
           const obj = {
-            wait_pack: '待处理',
-            wait_payment: '待支付',
-            wait_shipped: '待发货',
-            shipped: '已发货',
-            received: '已签收',
-            invalid: '作废订单'
+            wait_pack: this.$t('待处理'),
+            wait_payment: this.$t('待支付'),
+            wait_shipped: this.$t('待发货'),
+            shipped: this.$t('已发货'),
+            received: this.$t('已签收'),
+            invalid: this.$t('作废订单')
           }
           // let pieList = res.data.map(item => {
           //   console.log(item, 'item')
@@ -488,11 +493,18 @@ export default {
           this.orderLeft.legend = {
             orient: 'vertical',
             left: 10,
-            data: ['待处理', '待支付', '待发货', '已发货', '已签收', '作废订单']
+            data: [
+              this.$t('待处理'),
+              this.$t('待支付'),
+              this.$t('待发货'),
+              this.$t('已发货'),
+              this.$t('已签收'),
+              this.$t('作废订单')
+            ]
           }
           this.orderLeft.series = [
             {
-              name: '包裹概览',
+              name: this.$t('包裹概览'),
               type: 'pie',
               radius: ['50%', '70%'],
               label: {
@@ -561,7 +573,7 @@ export default {
           ]
           this.orderRight.series = [
             {
-              name: '新增订单数',
+              name: this.$t('新增订单数'),
               type: 'bar',
               barWidth: '60%',
               data: yData

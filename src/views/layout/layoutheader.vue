@@ -22,7 +22,7 @@
       inactive-color="#13ce66" /> -->
       <!-- <el-button class="upload-btn">{{$t('下载管理')}}</el-button> -->
       <!-- <div>关于我们</div> -->
-      <i class="iconfont icon-bianji upload-icon"></i>
+      <i class="iconfont icon-bianji"></i>
       <el-popover placement="top" width="600" trigger="click">
         <el-table :data="gridData">
           <el-table-column>
