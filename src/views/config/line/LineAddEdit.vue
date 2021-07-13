@@ -1054,7 +1054,7 @@ export default {
       }
       if (this.$route.params.id) {
         // 编辑状态
-        if (this.form.mode !== 2) {
+        if (this.form.mode === 1) {
           delete this.form.price_grade
         }
         this.$request
