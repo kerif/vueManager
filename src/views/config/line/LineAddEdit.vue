@@ -1088,7 +1088,7 @@ export default {
             }
           })
       } else {
-        if (this.form.mode !== 2) {
+        if (this.form.mode === 1) {
           delete this.form.price_grade
         }
         // 新建状态
