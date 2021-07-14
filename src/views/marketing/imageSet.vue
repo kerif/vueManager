@@ -554,23 +554,25 @@ export default {
     // 获取图片配置
     getImg() {
       this.$request.getProgramImg().then(res => {
-        this.setForm = res.data
-        res.data.video_entrance_image && (this.baleImgList[0] = res.data.video_entrance_image)
-        res.data.comment_entrance_image &&
-          (this.evaluationImgList[0] = res.data.comment_entrance_image)
-        res.data.forecast_image && (this.customerList[0] = res.data.forecast_image)
-        res.data.freight_image && (this.freightList[0] = res.data.freight_image)
-        res.data.track_image && (this.logisticsList[0] = res.data.track_image)
-        res.data.support_image && (this.supportList[0] = res.data.support_image)
-        res.data.share_image && (this.shareList[0] = res.data.share_image)
-        res.data.index_image && (this.indexList[0] = res.data.index_image)
-        res.data.video_image && (this.videoList[0] = res.data.video_image)
-        res.data.comment_image && (this.commentList[0] = res.data.comment_image)
-        res.data.user_center_image && (this.centerList[0] = res.data.user_center_image)
-        res.data.group_buying_image && (this.groupList[0] = res.data.group_buying_image)
-        res.data.license_image && (this.licenseList[0] = res.data.license_image)
-        res.data.agent_approve_image && (this.approveList[0] = res.data.agent_approve_image)
-        res.data.warehouse_image && (this.warehouseList[0] = res.data.warehouse_image)
+        if (res.data) {
+          this.setForm = res.data
+          res.data.video_entrance_image && (this.baleImgList[0] = res.data.video_entrance_image)
+          res.data.comment_entrance_image &&
+            (this.evaluationImgList[0] = res.data.comment_entrance_image)
+          res.data.forecast_image && (this.customerList[0] = res.data.forecast_image)
+          res.data.freight_image && (this.freightList[0] = res.data.freight_image)
+          res.data.track_image && (this.logisticsList[0] = res.data.track_image)
+          res.data.support_image && (this.supportList[0] = res.data.support_image)
+          res.data.share_image && (this.shareList[0] = res.data.share_image)
+          res.data.index_image && (this.indexList[0] = res.data.index_image)
+          res.data.video_image && (this.videoList[0] = res.data.video_image)
+          res.data.comment_image && (this.commentList[0] = res.data.comment_image)
+          res.data.user_center_image && (this.centerList[0] = res.data.user_center_image)
+          res.data.group_buying_image && (this.groupList[0] = res.data.group_buying_image)
+          res.data.license_image && (this.licenseList[0] = res.data.license_image)
+          res.data.agent_approve_image && (this.approveList[0] = res.data.agent_approve_image)
+          res.data.warehouse_image && (this.warehouseList[0] = res.data.warehouse_image)
+        }
       })
     },
     // 预览图片

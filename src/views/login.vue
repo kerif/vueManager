@@ -23,7 +23,7 @@
                 <el-input
                   prefix-icon="el-icon-user"
                   :placeholder="$t('请输入邮箱')"
-                  v-model="userInfo.username"
+                  v-model.trim="userInfo.username"
                 ></el-input>
               </el-form-item>
               <el-form-item>
@@ -31,7 +31,7 @@
                   type="password"
                   :placeholder="$t('请输入密码')"
                   prefix-icon="el-icon-unlock"
-                  v-model="userInfo.password"
+                  v-model.trim="userInfo.password"
                   @keyup.native.enter="onLogin"
                 ></el-input>
               </el-form-item>
