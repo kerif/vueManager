@@ -97,7 +97,7 @@
       <el-input v-model="group_raise_threshold"></el-input>
       <div class="weight-sty">{{ $t('未达门槛重量计费系数') }}</div>
       <el-input v-model="group_raise_factor"></el-input>
-      <el-checkbox style="margin-top: 10px" v-model="is_ignore_warehouse">{{
+      <!-- <el-checkbox style="margin-top: 10px" v-model="is_ignore_warehouse">{{
         $t('开启仓库限制')
       }}</el-checkbox>
       <el-tooltip
@@ -111,7 +111,7 @@
         placement="top"
       >
         <span class="el-icon-question icon-info"></span>
-      </el-tooltip>
+      </el-tooltip> -->
       <div slot="footer">
         <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="submitGroup">{{ $t('确定') }}</el-button>
@@ -134,7 +134,7 @@ export default {
       checked: '',
       groupId: '',
       group_raise: 0,
-      is_ignore_warehouse: 0,
+      // is_ignore_warehouse: 0,
       group_raise_factor: '',
       group_raise_threshold: '',
       mode: 0
@@ -185,7 +185,7 @@ export default {
       this.$request.lineBuying(this.groupId).then(res => {
         if (res.ret) {
           this.group_raise = Boolean(res.data.group_raise)
-          this.is_ignore_warehouse = Boolean(res.data.is_ignore_warehouse)
+          // this.is_ignore_warehouse = Boolean(res.data.is_ignore_warehouse)
           this.group_raise_factor = res.data.group_raise_factor
           this.group_raise_threshold = res.data.group_raise_threshold
         } else {
@@ -202,7 +202,7 @@ export default {
       this.$request
         .updateLineBuying(this.groupId, {
           group_raise: Number(this.group_raise),
-          is_ignore_warehouse: Number(this.is_ignore_warehouse),
+          // is_ignore_warehouse: Number(this.is_ignore_warehouse),
           group_raise_factor: this.group_raise_factor,
           group_raise_threshold: this.group_raise_threshold
         })
@@ -246,7 +246,7 @@ export default {
     },
     clearDialog() {
       this.group_raise = ''
-      this.is_ignore_warehouse = ''
+      // this.is_ignore_warehouse = ''
       this.group_raise_factor = ''
       this.group_raise_threshold = ''
       this.groupId = ''
