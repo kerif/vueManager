@@ -86,24 +86,58 @@
               <el-dropdown-item class="item-sty" @click.native="getLogs(scope.row.id)">
                 <span>{{ $t('操作日志') }}</span>
               </el-dropdown-item>
+              <!-- 客户合并 -->
+              <el-dropdown-item
+                class="item-sty"
+                @click.native="customerMerger(scope.row.id, scope.row.name)"
+              >
+                <span>{{ $t('客户合并') }}</span>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <!-- <el-button class="btn-main optionBtn" @click="onUpdateGroup(scope.row.id)">{{$t('修改客户组')}}</el-button> -->
-          <!-- <el-button class="btn-dark-green optionBtn" @click="invite(scope.row.id)">{{$t('邀请记录')}}</el-button> -->
-          <!-- <el-button class="btn-purple optionBtn" @click="voucher(scope.row.id)">{{$t('券包')}}</el-button> -->
-          <!-- <el-button class="btn-yellow optionBtn" @click="checkInfo(scope.row.id, scope.row.name)">{{$t('个人信息')}}</el-button> -->
-          <!-- <el-button class="btn-blue-green optionBtn" @click="getLogs(scope.row.id)">{{$t('操作日志')}}</el-button> -->
         </template>
       </el-table-column>
-      <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
-          <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
-        </div>
-      </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :title="$t('客户合并')" :visible.sync="dialogVisible" width="50%">
+      <div>
+        <p>{{ $t('当前客户ID') }}</p>
+        <p>{{ customerId }}&nbsp;---&nbsp;{{ customerName }}</p>
+        <p>*{{ $t('请输入合并目标客户ID') }}</p>
+        <!-- <el-input style="width: 40%" v-model="targetID"></el-input> -->
+        <el-autocomplete
+          :fetch-suggestions="queryCNSearch"
+          @select="handleSelect"
+          :placeholder="$t('请输入客户ID')"
+          v-model="target"
+        >
+        </el-autocomplete>
+      </div>
+      <div style="margin-top: 40px">
+        <span>{{ $t('合并规则：') }}</span> <br />
+        <span>1、{{ $t('合并客户ID时，保留当前客户ID下所有信息；') }}</span
+        ><br />
+        <span
+          >2、{{
+            $t(
+              '合并目标客户的【余额、订单、包裹、收件地址、佣金、代理客户、交易记录、充值记录】合并至当前客户ID，其他信息清空；'
+            )
+          }}</span
+        >
+        <br />
+        <span
+          >3、{{
+            $t(
+              '目标客户ID合并后即作废，绑定的手机号、邮箱、微信也自动解除绑定，可用于重新绑定其他客户ID。'
+            )
+          }}</span
+        >
+      </div>
+      <div slot="footer">
+        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="mergeConfirm">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -124,7 +158,12 @@ export default {
       page_params: {
         group: ''
       },
-      urlExcel: ''
+      urlExcel: '',
+      dialogVisible: false,
+      customerId: '',
+      customerName: '',
+      targetID: '',
+      target: ''
     }
   },
   mixins: [pagination],
@@ -261,6 +300,58 @@ export default {
     voucher(id) {
       dialog({ type: 'inviteList', state: 'voucher', id }, () => {
         this.getList()
+      })
+    },
+    // 合并客户
+    customerMerger(id, name) {
+      this.customerId = id
+      this.customerName = name
+      this.dialogVisible = true
+    },
+    // 客户id
+    queryCNSearch(queryString, callback) {
+      console.log(this.target)
+      var list = [{}]
+      this.$request
+        .Automatic({
+          keyword: this.target.toString()
+        })
+        .then(res => {
+          for (let i of res.data) {
+            // i.value = i.id
+            i.value = i.id + '---' + i.name
+          }
+          list = res.data
+          callback && callback(list)
+        })
+    },
+    // 客户id
+    handleSelect(item) {
+      console.log(item)
+    },
+    //确定合并
+    mergeConfirm() {
+      if (!this.target) {
+        return this.$message.error(this.$t('请输入目标客户ID'))
+      }
+      this.targetID = this.target.split('---')[0]
+      this.$request.mergeCustomer(this.customerId, this.targetID).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.dialogVisible = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+          this.dialogVisible = false
+        }
       })
     },
     // 添加用户
