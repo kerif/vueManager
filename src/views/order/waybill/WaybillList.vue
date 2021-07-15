@@ -390,12 +390,14 @@
           key="user_name"
           show-overflow-tooltip
         ></el-table-column>
-        <el-table-column key="order_sn" :label="$t('订单号')" width="180">
+        <el-table-column key="order_sn" :label="$t('订单号')" width="200">
           <template slot-scope="scope">
-            <!-- <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i> -->
             <el-button @click="details(scope.row.id, activeName)" type="text">{{
               scope.row.order_sn
             }}</el-button>
+            <div :title="$t('复制单号')" class="copy-sty" @click="copyNumber(scope.row.order_sn)">
+              <i class="el-icon-copy-document"></i>
+            </div>
             <img
               class="group-sty"
               v-if="scope.row.is_parent === 1"
@@ -1861,6 +1863,17 @@ export default {
         }
       )
     },
+    copyNumber(orderSn) {
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', orderSn)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
+    },
     // 批量更改支付方式
     goCreated() {
       this.innerVisible = true
@@ -2073,6 +2086,11 @@ export default {
   }
   .packaged {
     color: green !important;
+  }
+  .copy-sty {
+    display: inline-block;
+    margin-left: 5px;
+    cursor: pointer;
   }
 }
 .dialog-input {
