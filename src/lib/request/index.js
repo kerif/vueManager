@@ -201,6 +201,10 @@ exports.customerForbid = ids => {
 exports.noUsers = params => {
   return $form.get(`users/agent-search`, { params })
 }
+// 客户 合并客户
+exports.mergeCustomer = (id, targetId) => {
+  return $form.put(`users/merge/${id}/target/${targetId}`)
+}
 // 客户允许登录
 exports.customerLogin = ids => {
   return $form.put('users/allow-login', ids)
