@@ -2008,6 +2008,10 @@ exports.newLang = (id, params) => {
 exports.updateNewLang = (id, params) => {
   return $form.put(`new-user-coupons/${id}/translate-data`, params)
 }
+// 转账支付 新用户福利 管理 获取语言
+exports.getNewLang = (id, params) => {
+  return $form.get(`new-user-coupons/${id}/translate-data`, { params })
+}
 // 营销管理 抵用券管理
 exports.getCouponList = params => {
   return $form.get('coupons', { params })

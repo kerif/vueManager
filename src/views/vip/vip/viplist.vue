@@ -87,12 +87,12 @@
                 <span>{{ $t('操作日志') }}</span>
               </el-dropdown-item>
               <!-- 客户合并 -->
-              <el-dropdown-item
+              <!-- <el-dropdown-item
                 class="item-sty"
                 @click.native="customerMerger(scope.row.id, scope.row.name)"
               >
                 <span>{{ $t('客户合并') }}</span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
         </template>
