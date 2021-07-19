@@ -1,0 +1,39 @@
+<template>
+  <div class="system">
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="等级配置" name="first">
+        <grade />
+      </el-tab-pane>
+      <el-tab-pane label="收支规则" name="second">
+        <rules />
+      </el-tab-pane>
+      <el-tab-pane label="收支记录" name="third">
+        <record />
+      </el-tab-pane>
+    </el-tabs>
+  </div>
+</template>
+
+<script>
+import Record from './record.vue'
+import Grade from './grade.vue'
+import Rules from './rules.vue'
+export default {
+  name: 'system',
+  components: {
+    Grade,
+    Rules,
+    Record
+  },
+  data() {
+    return {
+      activeName: 'first'
+    }
+  }
+}
+</script>
+<style scoped>
+.system {
+  background-color: #fff;
+}
+</style>

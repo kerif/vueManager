@@ -160,6 +160,14 @@ const Freight = loadonDemand('order/freight/freight')
 const freightDetail = loadonDemand('order/freight/freightDetail')
 // 订单 包裹订单概览
 const orderEcharts = loadonDemand('order/echarts/orderEcharts')
+// 营销管理 会员体制
+const System = loadonDemand('marketing/member/system')
+// 营销管理 等级配置
+const Grade = loadonDemand('marketing/member/grade')
+// 营销管理 收支规则
+const Rules = loadonDemand('marketing/member/rules')
+// 营销管理 收支记录
+const Record = loadonDemand('marketing/member/record')
 // 营销管理 用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
 // 营销管理 用户福利 新增
@@ -1371,6 +1379,53 @@ export default [
         icon: 'icon-ico_yuce',
         id: 800,
         children: [
+          {
+            path: '/marketing/member',
+            name: 'system',
+            component: System,
+            id: 801,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '会员体系'
+            }
+          },
+          {
+            path: '/marketing/member/grade',
+            name: 'grade',
+            component: Grade,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '等级配置',
+              parent: '/marketing/member'
+            }
+          },
+          {
+            path: '/marketing/member/rules',
+            name: 'rules',
+            component: Rules,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '收支规则',
+              parent: '/marketing/member'
+            }
+          },
+          {
+            path: '/marketing/member/record',
+            name: 'record',
+            component: Record,
+            id: 801,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '收支记录',
+              parent: '/marketing/member'
+            }
+          },
           {
             path: '/marketing/new',
             name: 'newUser',
