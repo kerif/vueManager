@@ -52,6 +52,12 @@ const selfSettlement = loadonDemand('finance/selfSettlement')
 const recordDetails = loadonDemand('finance/recordDetails')
 // 配置 路线列表
 const LineList = loadonDemand('config/line/LineList')
+// 新路线
+const Line = loadonDemand('config/line/Line')
+// 渠道
+const channelLine = loadonDemand('config/line/channel')
+// 渠道 新增
+const channelLineAdd = loadonDemand('config/line/channelSet')
 // 配置 添加、修改路线
 const LineAddEdit = loadonDemand('config/line/LineAddEdit')
 // 配置 路线 其余费用
@@ -897,6 +903,53 @@ export default [
               group: '配置',
               level: 2,
               name: '路线'
+            }
+          },
+          {
+            path: '/config/line',
+            name: 'Line',
+            component: Line,
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 2,
+              name: '路线2'
+            }
+          },
+          {
+            path: '/config/line/channel/:id',
+            name: 'channelLine',
+            component: channelLine,
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '渠道',
+              parent: '/config/line'
+            }
+          },
+          {
+            path: '/config/line/channel/add',
+            name: 'channelLineAdd',
+            component: channelLineAdd,
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '新增',
+              parent: '/config/line'
+            }
+          },
+          {
+            path: '/config/line/channel/edit/:id',
+            name: 'channelLineEdit',
+            component: channelLineAdd,
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '编辑',
+              parent: '/config/line'
             }
           },
           {
