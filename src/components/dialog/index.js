@@ -102,6 +102,8 @@ import purchaseHistory from './purchaseHistory.vue'
 import superiorAddEdit from './superiorAddEdit.vue'
 import linkAddEdit from './linkAddEdit.vue'
 import groupChange from './groupChange.vue'
+import LingLang from './lingLangEdit.vue'
+import partitionAddEdit from './partitionAddEdit.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -204,6 +206,8 @@ const PurchaseHistoryController = Vue.extend(purchaseHistory)
 const SuperiorAddEditController = Vue.extend(superiorAddEdit)
 const LinkAddEditController = Vue.extend(linkAddEdit)
 const GroupChangeController = Vue.extend(groupChange)
+const LineLangAddEdit = Vue.extend(LingLang)
+const PartitionAEController = Vue.extend(partitionAddEdit)
 
 const mixin = {
   data() {
@@ -915,6 +919,20 @@ function initInstance(type) {
     // 拼团管理 修改拼团信息
     case 'groupChange':
       instance = new GroupChangeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 路线 新路线 编辑多语言
+    case 'LingLang':
+      instance = new LineLangAddEdit({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 分区 编辑与新增
+    case 'partitionAddEdit':
+      instance = new PartitionAEController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

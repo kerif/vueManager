@@ -1,19 +1,19 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="line.name + $t('的翻译内容')"
-    class="dialog-new-lang"
+    :title="state === 'new' ? $t('添加路线') : line.name + $t('的翻译内容')"
+    class="dialog-line-lang"
     @close="clear"
   >
-    <div class="lang-sty">
+    <div class="lang-sty" v-if="state === 'translate'">
       <p>
         <span class="el-icon-warning icon-info"></span>
         {{ $t('请注意以下内容请输入对应的') + '【' + this.lang.name + '】' + $t('信息') }}
       </p>
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-      <!-- 名称 -->
-      <el-form-item :label="$t('名称')" prop="name">
+      <!-- 仓库名称 -->
+      <el-form-item :label="$t('路线名称')" prop="name">
         <el-input v-model="ruleForm.name" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
     </el-form>
@@ -28,12 +28,11 @@ export default {
   data() {
     return {
       ruleForm: {
-        name: '',
-        language: ''
+        name: ''
       },
       state: '',
       rules: {
-        name: [{ required: true, message: this.$t('请输入名称'), trigger: 'blur' }]
+        name: [{ required: true, message: this.$t('请输入路线名称'), trigger: 'blur' }]
       },
       line: {
         id: '',
@@ -49,34 +48,57 @@ export default {
   methods: {
     getLang() {
       this.$request
-        .getNewLang(this.line.id, {
+        .lineGroupLang(this.line.id, {
           lang: this.ruleForm.language
         })
         .then(res => {
           this.ruleForm.name = res.data.name
-          console.log(this.ruleForm, 'this.ruleForm')
         })
     },
     confirm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$request.updateNewLang(this.line.id, this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
+          if (this.state === 'new') {
+            this.$request
+              .newGroupLang({
+                name: this.ruleForm.name
               })
+              .then(res => {
+                if (res.ret) {
+                  this.$notify({
+                    type: 'success',
+                    title: this.$t('操作成功'),
+                    message: res.msg
+                  })
+                  this.show = false
+                  this.success()
+                } else {
+                  this.$message({
+                    message: res.msg,
+                    type: 'error'
+                  })
+                }
+                this.show = false
+              })
+          } else {
+            this.$request.updateLineGroupLang(this.line.id, this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+          }
         } else {
           return false
         }
@@ -84,21 +106,21 @@ export default {
     },
     clear() {
       this.ruleForm.name = ''
+      this.ruleForm.language = ''
+      // this.line.id = ''
+      // this.line.name = ''
+      this.state = ''
     },
     cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.show = false
     },
     init() {
-      // this.line = this.line
-      // this.lang = this.lang
-      this.ruleForm.language = this.lang.language_code
-      // this.transCode = this.transCode
-      console.log(this.line, 'line')
-      console.log(this.lang, 'lang')
-      console.log(this.transCode, 'this.transCode')
-      console.log(this.ruleForm.language, 'this.ruleForm.language')
-      if (this.transCode === 1) {
+      console.log(this.state, 'state')
+      if (this.state === 'translate') {
+        this.ruleForm.language = this.lang.language_code
+      }
+      if (this.state === 'translate' && this.transCode === 1) {
         this.getLang()
       }
     }
@@ -106,7 +128,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.dialog-new-lang {
+.dialog-line-lang {
   .el-input {
     width: 40% !important;
     margin-left: 50px;
@@ -116,10 +138,10 @@ export default {
     margin-left: 50px;
   }
   .el-form-item__label {
-    width: 150px;
+    width: 200px;
   }
   .el-form-item__error {
-    margin-left: 210px !important;
+    margin-left: 250px !important;
   }
   .el-dialog__header {
     background-color: #0e102a;

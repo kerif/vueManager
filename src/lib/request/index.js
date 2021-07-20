@@ -114,6 +114,58 @@ exports.updateIcon = (id, params) => {
 exports.getAllIcon = () => {
   return $form.get('express-lines/simple-icon-list')
 }
+// 配置 新路线 获取数据
+exports.getLineGroup = params => {
+  return $form.get('express-lines/groups', { params })
+}
+// 配置 新路线 新建
+exports.newGroupLang = params => {
+  return $form.post('express-lines/groups', params)
+}
+// 配置 新路线 开启或关闭
+exports.lineGroupEnabled = (id, status) => {
+  return $form.put(`express-lines/groups/${id}/status/${status}`)
+}
+// 配置 新路线 获取语言单条详细
+exports.lineGroupLang = (id, params) => {
+  return $form.get(`express-lines/groups/${id}`, { params })
+}
+// 配置 新路线 更新语言配置
+exports.updateLineGroupLang = (id, params) => {
+  return $form.put(`express-lines/groups/${id}/translate-data`, params)
+}
+// 配置 新路线 复制路线
+exports.copyGroupLine = (id, params) => {
+  return $form.post(`express-lines/groups/${id}/copy`, params)
+}
+// 配置 新路线 删除路线
+exports.deleteLineGroup = id => {
+  return $form.delete(`express-lines/groups/${id}`)
+}
+// 配置 新路线 分区列表
+exports.getRegions = (id, params) => {
+  return $form.get(`express-lines/${id}/regions`, { params })
+}
+// 配置 新路线 分区列表 开启或关闭
+exports.regionsEnabled = (id, regionsId, status) => {
+  return $form.put(`express-lines/${id}/regions/${regionsId}/status/${status}`)
+}
+// 配置 新路线 分区列表 详细
+exports.getRegionDetails = (id, regionId) => {
+  return $form.get(`express-lines/${id}/regions/${regionId}`)
+}
+// 配置 新路线 分区列表 更新
+exports.updateRegionDetails = (id, regionId, params) => {
+  return $form.put(`express-lines/${id}/regions/${regionId}`, params)
+}
+// 配置 新路线 分区列表 删除
+exports.regionsDelete = (id, regionId) => {
+  return $form.delete(`express-lines/${id}/regions/${regionId}`)
+}
+// 配置 新路线 新增
+exports.newRegions = (id, params) => {
+  return $form.post(`express-lines/${id}/regions`, params)
+}
 exports.getStaff = params => {
   return $form.get('admins', { params })
 }
