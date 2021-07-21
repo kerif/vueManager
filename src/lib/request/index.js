@@ -166,6 +166,26 @@ exports.regionsDelete = (id, regionId) => {
 exports.newRegions = (id, params) => {
   return $form.post(`express-lines/${id}/regions`, params)
 }
+// 配置 新路线 增值服务 获取列表
+exports.getServicesList = (id, params) => {
+  return $form.get(`express-lines/${id}/services`, params)
+}
+// 配置 新路线 增值服务 获取详细
+exports.getServicesDetails = (id, serviceId, params) => {
+  return $form.get(`express-lines/${id}/services/${serviceId}`, params)
+}
+// 配置 新路线 增值服务 修改
+exports.updateServices = (id, serviceId, params) => {
+  return $form.put(`express-lines/${id}/services/${serviceId}`, params)
+}
+// 配置 新路线 增值服务 新增
+exports.addServices = (id, params) => {
+  return $form.post(`express-lines/${id}/services`, params)
+}
+// 配置 新路线 增值服务 删除
+exports.deleteServices = (id, serviceId, params) => {
+  return $form.delete(`express-lines/${id}/services/${serviceId}`, params)
+}
 exports.getStaff = params => {
   return $form.get('admins', { params })
 }
