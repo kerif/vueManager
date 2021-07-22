@@ -125,12 +125,12 @@ export default {
       this.$request.getRegionDetails(this.$route.params.id, this.id).then(res => {
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
-        this.areaData = res.data.areas.map(item => [
-          item.country_id,
-          item.area_id,
-          item.sub_area_id
-        ])
-        console.log(this.areaData, 'this.areaData')
+        if (res.data.areas) {
+          this.tableData[0].areaData = res.data.areas.map(item =>
+            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
+          )
+        }
+        console.log(this.tableData, 'this.areaData')
       })
     },
     chooseAres(area) {
@@ -143,9 +143,8 @@ export default {
     },
     // 获取多级区域数据
     getAllCountries() {
-      this.$request.getCountry().then(res => {
+      this.$request.regionCountry(this.$route.params.id).then(res => {
         if (res.ret) {
-          console.log(res.data, 'daa')
           this.options = res.data.map(item => {
             return {
               value: item.id,

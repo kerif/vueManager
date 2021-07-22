@@ -42,6 +42,10 @@ exports.updatePackageProps = (id, params) => {
 exports.resetLines = (id, status) => {
   return $form.put(`express-lines/${id}/status/${status}`)
 }
+// 配置 路线 是否推荐 开启或关闭
+exports.resetRecommend = (id, status) => {
+  return $form.put(`express-lines/${id}/recommend/${status}`)
+}
 // 配置 路线 导出清单
 exports.importLines = () => {
   return $form.get(`express-lines/excel-export-all`)
@@ -122,6 +126,10 @@ exports.getLineGroup = params => {
 exports.newGroupLang = params => {
   return $form.post('express-lines/groups', params)
 }
+// 配置 新路线 面单对接
+exports.updateDocking = (id, params) => {
+  return $form.put(`express-lines/${id}/docking-config`, params)
+}
 // 配置 新路线 开启或关闭
 exports.lineGroupEnabled = (id, status) => {
   return $form.put(`express-lines/groups/${id}/status/${status}`)
@@ -146,6 +154,14 @@ exports.deleteLineGroup = id => {
 exports.getRegions = (id, params) => {
   return $form.get(`express-lines/${id}/regions`, { params })
 }
+// 新路线 分区列表 获取语言详细
+exports.regionLangDetails = (id, regionId, params) => {
+  return $form.get(`express-lines/${id}/regions/${regionId}`, { params })
+}
+// 新路线 分区列表 更改语言详情
+exports.updateRegionsLang = (id, regionId, params) => {
+  return $form.put(`express-lines/${id}/regions/${regionId}/translate-data`, params)
+}
 // 配置 新路线 分区列表 开启或关闭
 exports.regionsEnabled = (id, regionsId, status) => {
   return $form.put(`express-lines/${id}/regions/${regionsId}/status/${status}`)
@@ -165,6 +181,30 @@ exports.regionsDelete = (id, regionId) => {
 // 配置 新路线 新增
 exports.newRegions = (id, params) => {
   return $form.post(`express-lines/${id}/regions`, params)
+}
+// 新路线 基础信息 获取
+exports.configBasic = id => {
+  return $form.get(`express-lines/${id}/basic-config`)
+}
+// 新路线 基础信息 新建
+exports.newConfigBasic = params => {
+  return $form.post('express-lines/basic-config', params)
+}
+// 新路线 基础信息 更新
+exports.updateConfigBasic = (id, params) => {
+  return $form.put(`express-lines/${id}/basic-config`, params)
+}
+// 新路线 计费设置 获取
+exports.getBillingConfig = id => {
+  return $form.get(`express-lines/${id}/billing-config`)
+}
+// 新路线 计费设置 更新
+exports.updateBillingConfig = (id, params) => {
+  return $form.put(`express-lines/${id}/billing-config`, params)
+}
+// 新路线 分区 获取国家
+exports.regionCountry = id => {
+  return $form.get(`countries/express-lines/${id}`)
 }
 exports.getStaff = params => {
   return $form.get('admins', { params })

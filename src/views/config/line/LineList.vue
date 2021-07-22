@@ -888,9 +888,12 @@ export default {
     onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
-      dialog({ type: 'lineLang', line: line, lang: lang, transCode: this.transCode }, () => {
-        this.getList()
-      })
+      dialog(
+        { type: 'lineLang', line: line, lang: lang, transCode: this.transCode, state: 'line' },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 搜索
     onSearch() {

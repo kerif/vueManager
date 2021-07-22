@@ -100,7 +100,9 @@ export default {
   },
   mixins: [pagination],
   mounted() {
-    this.getList()
+    if (this.$route.params.id) {
+      this.getList()
+    }
     this.getLanguageList() // 获取支持语言
   },
   created() {},
@@ -198,15 +200,20 @@ export default {
     },
     // 修改语言
     onLang(line, lang) {
+      console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
-      this.$router.push({
-        name: 'editContent',
-        params: {
-          line: JSON.stringify(line),
-          lang: JSON.stringify(lang),
-          transCode: this.transCode
+      dialog(
+        {
+          type: 'partitionLang',
+          line: line,
+          lang: lang,
+          transCode: this.transCode,
+          state: 'translate'
+        },
+        () => {
+          this.getList()
         }
-      })
+      )
     }
   },
   computed: {

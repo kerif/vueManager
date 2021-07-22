@@ -1,7 +1,7 @@
 <template>
   <div class="line-container">
     <div class="headerList">
-      <el-button>{{ $t('预设分区表') }}</el-button>
+      <el-button @click="goPartition">{{ $t('预设分区表') }}</el-button>
       <div class="header-right">
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
@@ -158,6 +158,11 @@ export default {
     // 新增路线
     newLine() {
       dialog({ type: 'LingLang', state: 'new' }, () => {
+        this.getList()
+      })
+    },
+    goPartition() {
+      this.$router.push({ name: 'partition' }, () => {
         this.getList()
       })
     },

@@ -54,6 +54,8 @@ const recordDetails = loadonDemand('finance/recordDetails')
 const LineList = loadonDemand('config/line/LineList')
 // 新路线
 const Line = loadonDemand('config/line/Line')
+// 分区
+const partitionList = loadonDemand('config/line/partition')
 // 渠道
 const channelLine = loadonDemand('config/line/channel')
 // 渠道 新增
@@ -914,6 +916,18 @@ export default [
               group: '配置',
               level: 2,
               name: '路线2'
+            }
+          },
+          {
+            path: '/config/line/partition',
+            name: 'partition',
+            component: partitionList,
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '路线2',
+              parent: '/config/line'
             }
           },
           {
