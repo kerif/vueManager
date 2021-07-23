@@ -168,6 +168,8 @@ const Freight = loadonDemand('order/freight/freight')
 const freightDetail = loadonDemand('order/freight/freightDetail')
 // 订单 包裹订单概览
 const orderEcharts = loadonDemand('order/echarts/orderEcharts')
+// 营销管理 会员体制
+const System = loadonDemand('marketing/member/system')
 // 营销管理 用户福利
 const Newuser = loadonDemand('marketing/new/new-user')
 // 营销管理 用户福利 新增
@@ -1438,6 +1440,17 @@ export default [
         icon: 'icon-ico_yuce',
         id: 800,
         children: [
+          {
+            path: '/marketing/member',
+            name: 'system',
+            component: System,
+            id: 801,
+            meta: {
+              level: 2,
+              group: '营销管理',
+              name: '会员体系'
+            }
+          },
           {
             path: '/marketing/new',
             name: 'newUser',
