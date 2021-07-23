@@ -279,9 +279,9 @@ export default {
       this.end_date && (params.end_date = this.end_date)
       this.$request.uploadNoOwner(params).then(res => {
         if (res.ret) {
-          this.urlExcel = res.data.url
+          // this.urlExcel = res.data.url
           // window.location.href = this.urlExcel
-          window.open(this.urlExcel)
+          // window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,

@@ -14,7 +14,9 @@
       </el-tab-pane>
       <el-tab-pane :label="$t('价格表')" name="4"></el-tab-pane>
       <el-tab-pane :label="$t('渠道增值服务')" name="5"></el-tab-pane>
-      <el-tab-pane :label="$t('渠道规则')" name="6"></el-tab-pane>
+      <el-tab-pane :label="$t('渠道规则')" name="6">
+        <rules-channle></rules-channle>
+      </el-tab-pane>
       <el-tab-pane :label="$t('面单对接')" name="7">
         <div class="landing-container">
           <el-form ref="form" :model="landing" label-width="120px">
@@ -49,12 +51,14 @@
 <script>
 import BasicInformation from './basicInformation.vue'
 import BillngSettings from './billingSettings.vue'
+import RulesChannle from './rulesChannle.vue'
 import PartitionSettings from './partition.vue'
 export default {
   components: {
     BasicInformation,
     BillngSettings,
-    PartitionSettings
+    PartitionSettings,
+    RulesChannle
   },
   data() {
     return {
