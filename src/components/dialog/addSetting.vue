@@ -12,9 +12,9 @@
         <el-input v-model="ruleForm.name"> </el-input>
       </el-form-item>
       <!-- 收款姓名与账号 -->
-      <el-form-item :label="$t('收款姓名与账号')">
+      <!-- <el-form-item :label="$t('收款姓名与账号')">
         <el-input v-model="ruleForm.account"> </el-input>
-      </el-form-item>
+      </el-form-item> -->
       <!-- 备注 -->
       <el-form-item :label="$t('备注')">
         <el-input
@@ -23,6 +23,41 @@
           :autosize="{ minRows: 2, maxRows: 4 }"
           :placeholder="$t('请输入备注')"
         ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" class="add-btn" @click="addPay">{{ $t('新增') }}</el-button>
+        <el-table :data="ruleForm.payment_setting_connection" border style="width: 100%">
+          <el-table-column type="index" label="#"> </el-table-column>
+          <el-table-column prop="name" :label="$t('提示名称')"> </el-table-column>
+          <el-table-column prop="content" :label="$t('提示内容')"> </el-table-column>
+          <el-table-column
+            :label="item.name"
+            v-for="item in formatLangData"
+            :key="item.id"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <span
+                v-if="scope.row['trans_' + item.language_code]"
+                class="el-icon-check icon-sty"
+                @click="onLang(scope.row, item, 'edit')"
+              ></span>
+              <span
+                v-else
+                class="el-icon-plus icon-sty"
+                @click="onLang(scope.row, item, 'add')"
+              ></span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('操作')" width="150">
+            <template slot-scope="scope">
+              <el-button size="small" @click="editPay(scope.$index, scope.row.id)">{{
+                $t('编辑')
+              }}</el-button>
+              <el-button size="small" @click="deletePay(scope.row.id)">{{ $t('删除') }}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form-item>
       <el-form-item :label="$t('上传收款二维码')" class="updateChe">
         <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
@@ -106,8 +141,10 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
+      languageData: [],
       ruleForm: {
         name: '',
+        payment_setting_connection: [],
         remark: '',
         account: '',
         show_rate: 0,
@@ -125,12 +162,53 @@ export default {
       baleImgList: []
     }
   },
+  created() {
+    this.getLanguageList()
+  },
+  computed: {
+    payment_setting_connection() {
+      return this.ruleForm.payment_setting_connection
+    },
+    formatLangData() {
+      return this.languageData.filter(item => item.language_code !== 'zh_CN')
+    }
+  },
   methods: {
+    // 获取支持语言
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    getPayLang() {
+      this.$request.getPayLang(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm.payment_setting_connection = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 获取汇率列表
     getRate() {
       this.$request.getAllRate().then(res => {
         if (res.ret) {
           this.options = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
@@ -140,7 +218,84 @@ export default {
         if (res.ret) {
           this.current = res.data.name
           this.currentCode = res.data.code
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
+      })
+    },
+    //新增转账支付内容
+    addPay() {
+      dialog(
+        {
+          type: 'addPay',
+          title: this.$t('新增'),
+          id: this.id
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    //修改转账支付内容
+    editPay(index, payId) {
+      dialog(
+        {
+          type: 'editPay',
+          title: this.$t('修改'),
+          id: this.id,
+          payId,
+          payData: {
+            name: this.ruleForm.payment_setting_connection[index].name,
+            content: this.ruleForm.payment_setting_connection[index].content
+          }
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    // 修改语言
+    onLang(line, lang, mode) {
+      this.payCode = line['trans_' + lang.language_code]
+      dialog(
+        {
+          type: 'addPayLang',
+          title: this.$t('收款人翻译内容'),
+          line: line,
+          lang: lang,
+          mode,
+          payCode: this.payCode
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    //删除转账支付内容
+    deletePay(id) {
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deletePay(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     getList() {
@@ -148,6 +303,7 @@ export default {
         if (res.ret) {
           this.ruleForm = res.data
           res.data.qr_code && (this.baleImgList[0] = res.data.qr_code)
+          this.getPayLang()
         } else {
           this.$message({
             message: res.msg,
@@ -157,7 +313,6 @@ export default {
       })
     },
     confirm() {
-      // console.log(this.ruleForm.show_rate, 'ruleForm.show_rate')
       if (this.baleImgList[0]) {
         this.ruleForm.qr_code = this.baleImgList[0]
       } else {
@@ -165,8 +320,6 @@ export default {
       }
       if (!this.ruleForm.name) {
         return this.$message.error(this.$t('请输入支付类型名称'))
-      } else if (!this.ruleForm.remark && !this.baleImgList[0]) {
-        return this.$message.error(this.$t('请输入备注'))
       } else if (this.ruleForm.rate_type === 1 && !this.ruleForm.rate) {
         return this.$message.error(this.$t('请输入转换汇率'))
       }
@@ -249,6 +402,7 @@ export default {
     },
     clear() {
       this.ruleForm.name = ''
+      this.ruleForm.payment_setting_connection = []
       this.ruleForm.remark = ''
       this.baleImgList = []
       this.ruleForm.qr_code = []
@@ -293,6 +447,10 @@ export default {
     display: inline-block;
     vertical-align: top;
     margin-left: 50px;
+  }
+  .add-btn {
+    float: right;
+    margin-bottom: 20px;
   }
   .img-item {
     display: inline-block;
