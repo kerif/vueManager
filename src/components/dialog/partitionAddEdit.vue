@@ -69,12 +69,13 @@ export default {
       areaData: null,
       newWarehouseList: [],
       keyValue: 0,
-      areaIds: []
+      areaIds: [],
+      areasData: []
     }
   },
   methods: {
     getList() {
-      if (status === 'partition') {
+      if (this.status === 'partition') {
         this.getPartition()
       } else {
         this.getRegions()
@@ -200,13 +201,20 @@ export default {
       rows.splice(index, 1)
     },
     confirm() {
+      if (this.tableData[0].areaData.length) {
+        this.areasData = this.tableData[0].areaData.map(item => ({
+          country_id: item[0],
+          area_id: item[1],
+          sub_area_id: item[2]
+        }))
+      }
       if (this.status === 'channel') {
         if (this.id) {
           this.$request
             .updateRegionDetails(this.$route.params.id, this.id, {
               name: this.ruleForm.name,
               reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds
+              areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
             })
             .then(res => {
               if (res.ret) {
@@ -256,7 +264,7 @@ export default {
             .updateRegionsTem(this.id, {
               name: this.ruleForm.name,
               reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds
+              areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
             })
             .then(res => {
               if (res.ret) {
