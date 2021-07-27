@@ -110,7 +110,7 @@
               style="margin-top: 10px"
               v-model="ruleForm.free_store_days"
               :min="0"
-              :max="100"
+              :max="999"
             ></el-input-number>
           </el-form-item>
         </el-col>
