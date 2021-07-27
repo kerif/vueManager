@@ -65,6 +65,7 @@ export default {
       ],
       state: '',
       id: '',
+      status: '',
       areaData: null,
       newWarehouseList: [],
       keyValue: 0,
@@ -253,6 +254,7 @@ export default {
     },
     init() {
       // this.getCountry()
+      console.log(this.status, 'status')
       this.getAllCountries()
       if (this.id) {
         this.getList()
