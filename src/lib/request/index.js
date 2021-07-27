@@ -222,6 +222,10 @@ exports.regionCountry = id => {
 exports.getRegionTemplate = params => {
   return $form.get(`express-lines/region-templates`, { params })
 }
+// 配置 新路线 获取价格表
+exports.getPriceTable = (id, params) => {
+  return $form.get(`express-lines/${id}/prices`, params)
+}
 // 配置 新路线 增值服务 获取列表
 exports.getServicesList = (id, params) => {
   return $form.get(`express-lines/${id}/services`, params)
@@ -1518,6 +1522,30 @@ exports.updatePaymentLang = (id, params) => {
 // 修改转账支付详情
 exports.updatePayments = (id, params) => {
   return $form.put(`payments/${id}`, params)
+}
+// 添加支付配置自定义选项
+exports.addPay = params => {
+  return $form.post(`payments/account`, params)
+}
+// 支付配置自定义列表
+exports.getPayLang = (id, params) => {
+  return $form.get(`payments/account/index/${id}`, params)
+}
+// 支付配置自定义详情
+exports.getPayDetails = (id, params) => {
+  return $form.get(`payments/account/${id}`, { params })
+}
+// 删除支付配置自定义选项
+exports.deletePay = (id, params) => {
+  return $form.delete(`payments/account/${id}`, params)
+}
+// 编辑支付配置自定义选项
+exports.editPay = (id, params) => {
+  return $form.put(`payments/account/${id}`, params)
+}
+// 修改支付配置自定义选项翻译
+exports.editPayLang = (id, params) => {
+  return $form.put(`payments/account/${id}/translate-data`, params)
 }
 // 修改转账支付的开关启用
 exports.closePayments = (id, status) => {

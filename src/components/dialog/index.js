@@ -105,6 +105,7 @@ import groupChange from './groupChange.vue'
 import LingLang from './lingLangEdit.vue'
 import partitionAddEdit from './partitionAddEdit.vue'
 import partitionLang from './partitionLang.vue'
+import transferPayment from './transferPayment.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -210,6 +211,7 @@ const GroupChangeController = Vue.extend(groupChange)
 const LineLangAddEdit = Vue.extend(LingLang)
 const PartitionAEController = Vue.extend(partitionAddEdit)
 const PartitionLangController = Vue.extend(partitionLang)
+const TransferPayment = Vue.extend(transferPayment)
 
 const mixin = {
   data() {
@@ -315,6 +317,15 @@ function initInstance(type) {
     // 支付配置
     case 'configuration':
       instance = new ConfigurationController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 支付配置
+    case 'addPay':
+    case 'editPay':
+    case 'addPayLang':
+      instance = new TransferPayment({
         el: document.createElement('div'),
         mixins: [mixin]
       })

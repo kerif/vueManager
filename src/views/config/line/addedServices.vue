@@ -96,12 +96,14 @@
       auto-resize
       show-overflow
       highlight-hover-row
+      :export-config="{}"
+      :tooltip-config="{ enterable: true }"
       :data="servicesList"
       v-bind="gridOptions"
     >
       <template #toolbar_buttons>
         <vxe-button>{{ $t('导入') }}</vxe-button>
-        <vxe-button>{{ $t('导出') }}</vxe-button>
+        <vxe-button @click="exportDataEvent">{{ $t('导出') }}</vxe-button>
         <vxe-button @click="addServices">{{ $t('新增') }}</vxe-button>
       </template>
       <template #num1_header="{ column }">
@@ -137,17 +139,20 @@ export default {
           {
             type: 'seq',
             title: this.$t('分区'),
+            fixed: 'left',
             width: 60
           },
           {
             field: 'name',
             title: this.$t('分区名称'),
+            fixed: 'left',
             minWidth: 160
           },
           {
             field: 'areas',
             title: this.$t('区域'),
-            minWidth: 450
+            fixed: 'left',
+            minWidth: 400
           }
         ],
         border: true,
@@ -326,6 +331,12 @@ export default {
             })
           }
         })
+      })
+    },
+    exportDataEvent() {
+      this.$refs.xGrid.openExport({
+        // 默认勾选源
+        original: true
       })
     },
     // 保存
