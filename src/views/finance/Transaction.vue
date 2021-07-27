@@ -78,13 +78,11 @@
             <span v-if="scope.row.type === 3">{{ $t('退款') }}</span>
             <span v-if="scope.row.type === 4">{{ $t('提现') }}</span>
             <span v-if="scope.row.type === 5">{{ $t('扣款') }}</span>
+            <span v-if="scope.row.type === 6">{{ $t('充值赠送') }}</span>
           </template>
         </el-table-column>
         <!-- 支付类型 -->
         <el-table-column :label="$t('支付类型')" prop="payment_type_name"> </el-table-column>
-        <!-- 支付方式 -->
-        <!-- <el-table-column label="支付方式">
-      </el-table-column> -->
         <!-- 应付金额¥ -->
         <el-table-column
           :label="$t('应付金额') + this.localization.currency_unit"

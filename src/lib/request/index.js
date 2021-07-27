@@ -1528,8 +1528,8 @@ exports.getRechargeAmount = () => {
   return $form.get('payments/payment/default-amount')
 }
 // 更多配置 新增 预设充值金额
-exports.updateRechargeAmount = val => {
-  return $form.post(`payments/payment/default-amount/${val}`)
+exports.updateRechargeAmount = params => {
+  return $form.post(`payments/payment/default-amount`, params)
 }
 // 更多配置 删除 预设充值金额
 exports.deleteRechargeAmount = id => {
