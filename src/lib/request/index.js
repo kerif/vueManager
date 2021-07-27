@@ -194,6 +194,18 @@ exports.newConfigBasic = params => {
 exports.updateConfigBasic = (id, params) => {
   return $form.put(`express-lines/${id}/basic-config`, params)
 }
+// 新路线 渠道规则 获取参数
+exports.getConditions = id => {
+  return $form.get(`express-lines/${id}/rules/conditions`)
+}
+// 新路线 渠道规则 分区数据
+exports.regionsAll = id => {
+  return $form.get(`express-lines/${id}/regions/all`)
+}
+// 新路线 渠道规则 更新规则数据
+exports.updateBaseRules = (id, params) => {
+  return $form.put(`express-lines/${id}/rules/base-config`, params)
+}
 // 新路线 计费设置 获取
 exports.getBillingConfig = id => {
   return $form.get(`express-lines/${id}/billing-config`)
@@ -205,6 +217,10 @@ exports.updateBillingConfig = (id, params) => {
 // 新路线 分区 获取国家
 exports.regionCountry = id => {
   return $form.get(`countries/express-lines/${id}`)
+}
+//  分区 获取预设分区表
+exports.getRegionTemplate = params => {
+  return $form.get(`express-lines/region-templates`, { params })
 }
 // 配置 新路线 增值服务 获取列表
 exports.getServicesList = (id, params) => {

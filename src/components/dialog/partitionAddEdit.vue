@@ -17,9 +17,6 @@
     <div style="margin-bottom: 20px">
       {{ $t('支持国家/地区') }}
     </div>
-    <!-- <div class="add-row">
-      <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-    </div> -->
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column type="index"> </el-table-column>
       <el-table-column :label="$t('国家')" style="width: 100%">
@@ -35,57 +32,11 @@
           ></el-cascader>
         </template>
       </el-table-column>
-      <!-- 姓名 -->
-      <!-- <el-table-column :label="$t('国家')">
-        <template slot-scope="scope">
-          <el-select
-            @change="changeCountry(scope.row)"
-            v-model="scope.row.country_id"
-            :placeholder="$t('请选择')"
-            clearable
-          >
-            <el-option
-              v-for="item in countryList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </template>
-      </el-table-column> -->
-      <!-- 值 -->
-      <!-- <el-table-column :label="$t('地区')">
-        <template slot-scope="scope">
-          <el-cascader
-            filterable
-            :key="keyValue"
-            class="country-select"
-            v-model="scope.row.areaData"
-            :options="newWarehouseList"
-            @change="handleChange"
-          >
-          </el-cascader>
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button class="btn-green" @click="editPartition(scope.row.id)">{{
-            $t('编辑')
-          }}</el-button>
-          <el-button class="btn-light-red" @click="deleteParition(scope.$index, tableData)">{{
-            $t('删除')
-          }}</el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
-    <!-- <div class="pagination-box">
-      <nle-pagination :pageParams="page_params"></nle-pagination>
-    </div> -->
   </el-dialog>
 </template>
 <script>
@@ -306,7 +257,6 @@ export default {
       if (this.id) {
         this.getList()
       }
-      // this.getList()
     },
     clear() {
       this.id = ''

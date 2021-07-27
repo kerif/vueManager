@@ -100,14 +100,19 @@ export default {
   },
   mixins: [pagination],
   mounted() {
-    if (this.$route.params.id) {
-      this.getList()
-    }
+    this.getList()
     this.getLanguageList() // 获取支持语言
   },
   created() {},
   methods: {
     getList() {
+      if (this.$route.params.id) {
+        this.getRulesTempalate()
+      } else {
+        this.getTempalte()
+      }
+    },
+    getRulesTempalate() {
       this.tableLoading = true
       this.$request
         .getRegions(this.$route.params.id, {
@@ -133,9 +138,36 @@ export default {
           }
         })
     },
+    getTempalte() {
+      this.tableLoading = true
+      this.$request
+        .getRegionTemplate({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.addressList = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
     // 新增
     addPartition() {
-      dialog({ type: 'partitionAddEdit', state: 'add' }, () => {
+      let status = this.$route.params.id ? 'channel' : 'parttion'
+      dialog({ type: 'partitionAddEdit', state: 'add', status: status }, () => {
         this.getList()
       })
     },

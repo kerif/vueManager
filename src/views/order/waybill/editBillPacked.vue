@@ -511,7 +511,6 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          // this.$router.push({ name: 'wayBillList' })
           this.$router.go(-1)
         } else {
           this.$message({
