@@ -74,6 +74,13 @@ export default {
   },
   methods: {
     getList() {
+      if (status === 'partition') {
+        this.getPartition()
+      } else {
+        this.getRegions()
+      }
+    },
+    getRegions() {
       this.$request.getRegionDetails(this.$route.params.id, this.id).then(res => {
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
@@ -85,6 +92,17 @@ export default {
         console.log(this.tableData, 'this.areaData')
       })
     },
+    getPartition() {
+      this.$request.getRegionsTem(this.id).then(res => {
+        this.ruleForm.reference_time = res.data.reference_time
+        this.ruleForm.name = res.data.name
+        if (res.data.areas) {
+          this.tableData[0].areaData = res.data.areas.map(item =>
+            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
+          )
+        }
+      })
+    },
     chooseAres(area) {
       this.areaIds = area.map(item => ({
         country_id: item[0],
@@ -93,7 +111,7 @@ export default {
       }))
       console.log(this.areaIds, 'form.area_ids')
     },
-    // 获取多级区域数据
+    // 获取多级区域数据 编辑渠道时
     getAllCountries() {
       this.$request.regionCountry(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -124,55 +142,35 @@ export default {
         }
       })
     },
-    // 获取所属国家地区
+    // 预设分区表 获取国家
     getCountry() {
       this.$request.countryLocation().then(res => {
-        this.countryList = res.data.map(item => {
-          return {
-            value: item.id,
-            label: item.name,
-            children: item.areas.map(item => {
-              return {
-                value: item.id,
-                label: item.name,
-                children: item.areas.map(item => {
-                  return {
-                    value: item.id,
-                    label: item.name
-                  }
-                })
-              }
-            })
-          }
-        })
-        // res.data.forEach(item => {
-        //   if (item.timezone === '0852') {
-        //     console.log(item.timezone, item.id, 'timezone')
-        //     this.timezoneId = item.id
-        //   }
-        // })
-        if (this.id) {
-          // const selectList = this.countryList.find(item => item.value === this.form.country_id)
-          // console.log(selectList, 'selectList')
-          // this.newWarehouseList = selectList ? selectList.children : []
-        } else {
-          const mapWarehouseList = res.data.find(item => item.areas.length) || { areas: [] }
-          console.log(mapWarehouseList, 'mapWarehouseList')
-          this.newWarehouseList = mapWarehouseList.areas.map(item => {
-            console.log(item, 'item')
+        if (res.ret) {
+          this.options = res.data.map(item => {
             return {
               value: item.id,
               label: item.name,
-              children: item.areas.map(item => {
-                return {
-                  value: item.id,
-                  label: item.name
-                }
-              })
+              children:
+                item.areas < 1
+                  ? undefined
+                  : item.areas.map(item => {
+                      return {
+                        value: item.id,
+                        label: item.name,
+                        children:
+                          item.areas < 1
+                            ? undefined
+                            : item.areas.map(item => {
+                                return {
+                                  value: item.id,
+                                  label: item.name
+                                }
+                              })
+                      }
+                    })
             }
           })
         }
-        console.log(this.newWarehouseList, 'this.newWarehouseList')
       })
     },
     // 切换国家
@@ -202,60 +200,115 @@ export default {
       rows.splice(index, 1)
     },
     confirm() {
-      if (this.id) {
-        this.$request
-          .updateRegionDetails(this.$route.params.id, this.id, {
-            name: this.ruleForm.name,
-            reference_time: this.ruleForm.reference_time,
-            areas: this.areaIds
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
+      if (this.status === 'channel') {
+        if (this.id) {
+          this.$request
+            .updateRegionDetails(this.$route.params.id, this.id, {
+              name: this.ruleForm.name,
+              reference_time: this.ruleForm.reference_time,
+              areas: this.areaIds
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+        } else {
+          this.$request
+            .newRegions(this.$route.params.id, {
+              name: this.ruleForm.name,
+              reference_time: this.ruleForm.reference_time,
+              areas: this.areaIds
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+        }
       } else {
-        this.$request
-          .newRegions(this.$route.params.id, {
-            name: this.ruleForm.name,
-            reference_time: this.ruleForm.reference_time,
-            areas: this.areaIds
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
+        if (this.id) {
+          this.$request
+            .updateRegionsTem(this.id, {
+              name: this.ruleForm.name,
+              reference_time: this.ruleForm.reference_time,
+              areas: this.areaIds
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+        } else {
+          this.$request
+            .newRegionsTem({
+              name: this.ruleForm.name,
+              reference_time: this.ruleForm.reference_time,
+              areas: this.areaIds
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+        }
       }
     },
     init() {
-      // this.getCountry()
       console.log(this.status, 'status')
-      this.getAllCountries()
+      if (this.status === 'partition') {
+        this.getCountry()
+      } else {
+        this.getAllCountries()
+      }
       if (this.id) {
         this.getList()
       }
@@ -264,6 +317,7 @@ export default {
       this.id = ''
       this.areaIds = []
       this.state = ''
+      this.status = ''
       this.ruleForm.reference_time = ''
       this.ruleForm.name = ''
       this.tableData[0].areaData = []

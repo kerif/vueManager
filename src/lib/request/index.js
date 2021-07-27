@@ -118,6 +118,18 @@ exports.updateIcon = (id, params) => {
 exports.getAllIcon = () => {
   return $form.get('express-lines/simple-icon-list')
 }
+// 新路线 新建分区表
+exports.newRegionsTem = params => {
+  return $form.post('express-lines/region-templates', params)
+}
+// 新路线 新建分区表 更新
+exports.updateRegionsTem = (id, params) => {
+  return $form.put(`express-lines/region-templates/${id}`, params)
+}
+// 新路线 新建分区表 获取单条详情
+exports.getRegionsTem = id => {
+  return $form.get(`express-lines/region-templates/${id}`)
+}
 // 配置 新路线 获取数据
 exports.getLineGroup = params => {
   return $form.get('express-lines/groups', { params })

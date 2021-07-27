@@ -166,7 +166,7 @@ export default {
     },
     // 新增
     addPartition() {
-      let status = this.$route.params.id ? 'channel' : 'parttion'
+      let status = this.$route.params.id ? 'channel' : 'partition'
       dialog({ type: 'partitionAddEdit', state: 'add', status: status }, () => {
         this.getList()
       })
@@ -198,7 +198,8 @@ export default {
     },
     // 修改资料
     editPartition(id) {
-      dialog({ type: 'partitionAddEdit', state: 'edit', id: id }, () => {
+      let status = this.$route.params.id ? 'channel' : 'partition'
+      dialog({ type: 'partitionAddEdit', state: 'edit', id: id, status: status }, () => {
         this.getList()
       })
     },
