@@ -684,11 +684,11 @@ export default {
         // this.supportWarehouse(warehouses)
       })
     },
-    onSelectChange(e) {
-      console.log(e)
-      this.icon = this.iconList.find(item => item.id === e)
-      // console.log(this.form.icon)
-    },
+    // onSelectChange(e) {
+    //   console.log(e)
+    //   this.icon = this.iconList.find(item => item.id === e)
+    //   // console.log(this.form.icon)
+    // },
     // supportWarehouse(item) {
     //   this.warehouseIds = item
     //   if (this.warehouseIds) {
@@ -755,6 +755,7 @@ export default {
         if (this.form.mode === 1) {
           delete this.form.price_grade
         }
+        this.form.icon = 58
         this.$request
           .saveEditLine(this.$route.params.id, {
             ...this.form,
