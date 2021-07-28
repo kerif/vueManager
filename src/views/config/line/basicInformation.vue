@@ -2,10 +2,10 @@
   <div class="basic-information-container">
     <el-form label-position="top" :model="form" ref="form">
       <el-form-item>
-        <el-row>
+        <el-row v-if="$route.query.state === 'edit'">
           <el-col :span="10">
             <div>{{ $t('所属路线') }}</div>
-            <span>vanora's line</span>
+            <span>{{ groupName }}</span>
             <!-- <el-input :placeholder="$t('请输入内容')" v-model="form.name"></el-input> -->
           </el-col>
         </el-row>
@@ -23,10 +23,9 @@
           <el-col :span="10">
             <div>{{ $t('*支持仓库') }}</div>
             <el-select
-              v-model="form.warehouses"
+              v-model="form.warehouse_ids"
               multiple
               filterable
-              @change="supportWarehouse"
               class="country-select"
               :placeholder="$t('请选择仓库')"
             >
@@ -41,417 +40,11 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <!-- <el-form-item>
-        <el-row :gutter="20">
-          <el-col :span="10">
-            <div>{{ $t('*支持国家/地区') }}</div>
-            <el-select
-              v-model="form.countries"
-              :disabled="!this.form.warehouses.length"
-              multiple
-              filterable
-              class="country-select"
-              :placeholder="$t('请选择国家/地区')"
-            >
-              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-              </el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="10" class="country-btn">
-            <el-button type="primary" @click="onAddCountry">+ 新增国家/地区</el-button>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
-      <!-- <el-form-item>
-        <div>{{ $t('*参考时效') }}</div>
-        <el-row>
-          <el-col :span="10">
-            <el-input
-              v-model="form.reference_time"
-              :placeholder="$t('例：5-12工作日/日')"
-            ></el-input>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
-      <!-- 取消包裹重量限制 -->
-      <!-- <el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="10">
-            <div>
-              <span>{{ $t('取消包裹重量限制') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('当包裹重量不足最小重量时，按最小重量来计算。')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
-            </div>
-            <el-switch
-              v-model="form.ceil_weight"
-              :active-text="$t('开')"
-              :active-value="1"
-              :inactive-value="0"
-              :inactive-text="$t('关')"
-              active-color="#13ce66"
-              inactive-color="gray"
-            >
-            </el-switch>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
-      <!-- 多箱出库按多箱重量计价 -->
-      <!-- <el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="10">
-            <div>
-              <span>{{ $t('多箱出库按多箱重量计价') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('仅对多箱出库时生效，关闭按统一的重量计算价格。')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
-            </div>
-            <el-switch
-              v-model="form.multi_boxes"
-              :active-text="$t('开')"
-              :active-value="1"
-              :inactive-value="0"
-              :inactive-text="$t('关')"
-              active-color="#13ce66"
-              inactive-color="gray"
-            >
-            </el-switch>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
-      <!-- 计费价格模式 -->
-      <!-- <el-form-item>
-        <div>{{ $t('*计费价格模式') }}</div>
-        <el-row>
-          <el-col :span="10">
-            <el-select
-              v-model="form.mode"
-              filterable
-              class="country-select"
-              :placeholder="$t('请选择')"
-            >
-              <el-option
-                v-for="item in modeData"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
-      <!-- 首重续重模式 -->
-      <!-- <div v-if="form.mode === 1">
-        <el-form-item>
-          <el-row :gutter="10">
-            <el-col :span="5">
-              <div>{{ $t('*首重') + this.localization.weight_unit }}</div>
-              <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-            <el-col :span="5">
-              <div>{{ $t('*首费') + this.localization.currency_unit }}</div>
-              <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-            <el-col :span="5">
-              <div>{{ $t('首费成本价') + this.localization.currency_unit }}</div>
-              <el-input v-model="form.first_cost_money" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item>
-          <el-row :gutter="10">
-            <el-col :span="5">
-              <div>{{ $t('*续重') + this.localization.weight_unit }}</div>
-              <el-input v-model="form.next_weight" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-            <el-col :span="5">
-              <div>{{ $t('*续费') + this.localization.currency_unit }}</div>
-              <el-input v-model="form.next_money" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-            <el-col :span="5">
-              <div>{{ $t('续费成本价') + this.localization.currency_unit }}</div>
-              <el-input v-model="form.next_cost_money" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item>
-          <el-row :gutter="10">
-            <el-col :span="5">
-              <div>{{ $t('*最小重量') + this.localization.weight_unit }}</div>
-              <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-            <el-col :span="5">
-              <div>{{ $t('*最大重量') + this.localization.weight_unit }}</div>
-              <el-input v-model="form.max_weight" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </div> -->
-      <!-- 阶梯价格模式 -->
-      <!-- <div v-if="form.mode === 2">
-        <el-form-item>
-          <el-col :span="16">
-            <div class="add-row">
-              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-            </div>
-            <el-table :data="form.price_grade" style="width: 100%" border>
-              <el-table-column :label="$t('起始重量') + this.localization.weight_unit">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.start"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="'*' + $t('截止重量') + this.localization.weight_unit">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                :label="
-                  $t('成本价格') +
-                  this.localization.currency_unit +
-                  '/' +
-                  this.localization.weight_unit
-                "
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.cost_price"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                :label="
-                  $t('销售价格') +
-                  this.localization.currency_unit +
-                  '/' +
-                  this.localization.weight_unit
-                "
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.sale_price"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent="deleteRow(scope.$index, form.price_grade)"
-                    class="btn-light-red"
-                    >{{ $t('移除') }}</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
-        </el-form-item>
-        <el-form-item>
-          <el-row :gutter="10">
-            <el-col :span="5">
-              <div>{{ $t('*最小重量') + this.localization.weight_unit }}</div>
-              <el-input
-                v-model="form.multi_box_min_weight"
-                :placeholder="$t('请输入内容')"
-              ></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </div> -->
-      <!-- 首重 + 阶梯价格模式 -->
-      <!-- <div v-if="form.mode === 3">
-        <el-form-item>
-          <el-row :gutter="10">
-            <el-col :span="5">
-              <div>
-                {{
-                  $t('*首重价格') +
-                  this.localization.currency_unit +
-                  '/' +
-                  this.localization.weight_unit
-                }}
-              </div>
-              <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-            <el-col :span="5">
-              <div>
-                {{
-                  $t('首费成本价') +
-                  this.localization.currency_unit +
-                  '/' +
-                  this.localization.weight_unit
-                }}
-              </div>
-              <el-input v-model="form.first_cost_money" :placeholder="$t('请输入内容')"></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item>
-          <el-col :span="16">
-            <div class="add-row">
-              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-            </div>
-            <el-table :data="form.price_grade" style="width: 100%" border>
-              <el-table-column :label="$t('起始重量') + this.localization.weight_unit + ' >='">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.start"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="'*' + $t('截止重量') + this.localization.weight_unit + ' <'">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('成本价格') + this.localization.currency_unit">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.cost_price"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('销售价格') + this.localization.currency_unit">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.sale_price"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent="deleteRow(scope.$index, form.price_grade)"
-                    class="btn-light-red"
-                    >{{ $t('移除') }}</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
-        </el-form-item>
-        <el-form-item>
-          <el-row :gutter="10">
-            <el-col :span="5">
-              <div>{{ $t('*最小重量') + this.localization.weight_unit }}</div>
-              <el-input
-                v-model="form.multi_box_min_weight"
-                :placeholder="$t('请输入内容')"
-              ></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </div> -->
-      <!-- 包裹重量向上取值 -->
-      <!-- <el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="10">
-            <div>
-              <span>{{ $t('包裹重量向上取值') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="
-                  $t('例如包裹重量1.1kg,向上取整0.5，就会变成1.5kg。向上取整1，就会变成2kg。')
-                "
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
-            </div>
-            <el-select
-              v-model="form.weight_rise"
-              filterable
-              class="country-select"
-              :placeholder="$t('请选择')"
-            >
-              <el-option
-                v-for="(item, index) in priceData"
-                :key="index"
-                :label="item.name"
-                :value="item.name"
-              >
-              </el-option>
-            </el-select>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
-      <!-- <el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="10">
-            <div>
-              <span>{{ $t('订单多箱打包重量向上取值') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('订单多箱打包时，每个打包箱重量分别上浮，而不是整个上浮。')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
-            </div>
-            <el-select
-              v-model="form.multi_boxes_ceil"
-              filterable
-              class="country-select"
-              :placeholder="$t('请选择')"
-            >
-              <el-option
-                v-for="(item, index) in priceData"
-                :key="index"
-                :label="item.name"
-                :value="item.name"
-              >
-              </el-option>
-            </el-select>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
-      <!-- <el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="10">
-            <div>
-              <span>{{ $t('*体积系数') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
-            </div>
-            <el-input v-model="form.factor" :placeholder="$t('请输入内容')"></el-input>
-          </el-col>
-          <el-col :span="3">
-            <div>
-              <span>{{ $t('计重模式') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="
-                  $t(
-                    '计费重量计算方式：1、全抛：实际重量与体积重量两者取大。2、半抛：（实际重量+体积重量）/2'
-                  )
-                "
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
-            </div>
-            <el-checkbox v-model="form.has_factor">{{ $t('考虑体积重') }}</el-checkbox>
-          </el-col>
-          <el-col :span="5" v-if="form.has_factor">
-            <div style="margin-top: 38px"></div>
-            <el-button @click="set">{{ $t('配置') }}</el-button>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
       <el-form-item>
         <el-row>
           <el-col :span="10">
             <div>{{ $t('*渠道属性') }}</div>
-            <el-checkbox-group v-model="form.types">
+            <el-checkbox-group v-model="form.prop_ids">
               <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
                 {{ item.name }}</el-checkbox
               >
@@ -698,81 +291,6 @@
     <el-dialog :visible.sync="setVisible" :title="$t('抛货配置')">
       <el-form></el-form>
     </el-dialog>
-    <!-- 计重配置 -->
-    <el-dialog title="抛货配置" :visible.sync="dialogVisible" width="55%">
-      <el-form ref="throwFrom" :model="throwFrom" label-width="20px">
-        <el-form-item>
-          <div>
-            <span>{{ $t('抛货方式') }}</span>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              :content="$t('全抛：实际重量与体积重量两者取大。半抛：（实际重量+体积重量）/2')"
-              placement="top"
-            >
-              <span class="el-icon-question icon-info"></span>
-            </el-tooltip>
-          </div>
-          <el-switch
-            v-model="throwFrom.is_avg_weight"
-            :active-text="$t('半抛')"
-            :active-value="1"
-            :inactive-value="0"
-            :inactive-text="$t('全抛')"
-            active-color="#13ce66"
-            inactive-color="gray"
-          >
-          </el-switch>
-        </el-form-item>
-        <el-form-item>
-          <div>
-            <span>{{ $t('免抛条件') }}</span>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              :content="$t('在满足免抛条件情况下，不考虑体积重，仅以实重计费')"
-              placement="top"
-            >
-              <span class="el-icon-question icon-info"></span>
-            </el-tooltip>
-          </div>
-          <el-row :gutter="20">
-            <el-col :span="1">
-              <el-checkbox v-model="throwFrom.checked"></el-checkbox>
-            </el-col>
-            <el-col :span="6">
-              <el-select v-model="throwFrom.type" :placeholder="$t('数据')">
-                <el-option
-                  v-for="item in paramsOptions"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                >
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="6">
-              <el-select v-model="throwFrom.condition" :placeholder="$t('条件')">
-                <el-option
-                  v-for="item in conditionOptions"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                >
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="5">
-              <el-input v-model="throwFrom.value" :placeholder="$t('请输入限制数值')"></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -784,37 +302,36 @@ export default {
       // is_avg_weight: 0,
       form: {
         name: '',
-        warehouses: '',
-        countries: '',
-        first_weight: '',
-        first_money: '',
-        first_cost_money: '',
-        next_cost_money: '',
-        next_weight: '',
-        next_money: '',
-        max_weight: '',
-        factor: '',
-        has_factor: '',
+        warehouse_ids: '',
+        // countries: '',
+        // first_weight: '',
+        // first_money: '',
+        // first_cost_money: '',
+        // next_cost_money: '',
+        // next_weight: '',
+        // next_money: '',
+        // max_weight: '',
+        // factor: '',
+        // has_factor: '',
         is_unique: '',
         min_weight: '',
-        reference_time: '',
-        mode: '',
-        types: [],
+        // reference_time: '',
+        // mode: '',
+        prop_ids: [],
         is_great_value: 0,
         icon: '',
         need_id_card: '',
         weight_rise: '',
-        multi_box_min_weight: '',
+        // multi_box_min_weight: '',
         multi_boxes_ceil: '',
         remark: '',
         clearance_code_remark: '',
         need_clearance_code: 0,
         need_personal_code: 0,
-        ceil_weight: 0,
-        multi_boxes: 0,
+        // ceil_weight: 0,
+        // multi_boxes: 0,
         default_pickup_station_id: '',
-        is_delivery: 0,
-        price_grade: []
+        is_delivery: 0
       },
       referenceTime: {
         minTime: '',
@@ -860,13 +377,6 @@ export default {
       itemArr: {},
       setVisible: false,
       dialogVisible: false,
-      throwFrom: {
-        is_avg_weight: 0,
-        type: '',
-        value: '',
-        checked: '',
-        condition: ''
-      },
       paramsOptions: [
         {
           id: 1,
@@ -899,52 +409,54 @@ export default {
           name: this.$t('小于等于')
         }
       ],
-      pickList: []
+      pickList: [],
+      groupName: ''
     }
   },
   created() {
+    console.log(this.$route.query.channelId, 'id')
     const add = localStorage.getItem('add')
     console.log(add, 'add')
     if (add) {
       this.form = {
         name: '',
-        warehouses: '',
-        countries: '',
-        first_weight: '',
-        first_money: '',
-        first_cost_money: '',
-        next_cost_money: '',
-        next_weight: '',
-        next_money: '',
-        max_weight: '',
-        factor: '',
-        has_factor: '',
+        warehouse_ids: '',
+        // countries: '',
+        // first_weight: '',
+        // first_money: '',
+        // first_cost_money: '',
+        // next_cost_money: '',
+        // next_weight: '',
+        // next_money: '',
+        // max_weight: '',
+        // factor: '',
+        // has_factor: '',
         // is_avg_weight: 0,
         is_unique: '',
         min_weight: '',
-        reference_time: '',
-        mode: '',
-        types: [],
+        // reference_time: '',
+        // mode: '',
+        prop_ids: [],
         is_great_value: 0,
         icon: '',
         need_id_card: '',
         weight_rise: '',
-        multi_box_min_weight: '',
+        // multi_box_min_weight: '',
         remark: '',
         clearance_code_remark: '',
         need_clearance_code: 0,
         need_personal_code: 0,
-        ceil_weight: 0,
-        multi_boxes: 0,
+        // ceil_weight: 0,
+        // multi_boxes: 0,
         is_delivery: 0,
-        default_pickup_station_id: '',
-        price_grade: []
+        default_pickup_station_id: ''
       }
     }
     this.getProp()
     this.getWarehouse()
     this.getIcon()
     if (this.$route.params.id) {
+      console.log('bianji')
       this.getList()
       this.getPick()
     }
@@ -960,37 +472,27 @@ export default {
     },
     // 编辑时拉取的数据
     getList() {
-      this.$request.getExpressLine(this.$route.params.id).then(res => {
-        const warehouses = res.data.warehouses.map(item => item.id)
-        this.form = res.data
-        this.icon = res.data.icon
-        this.form.icon = res.data.icon.id
-        this.form.types = res.data.types.map(item => item.id)
-        this.form.countries = res.data.countries.map(item => item.id)
-        this.form.warehouses = res.data.warehouses.map(item => item.id)
-        this.form.has_factor = Boolean(res.data.has_factor)
-        // this.form.is_avg_weight = res.data.is_avg_weight
-        this.throwFrom.is_avg_weight = res.data.is_avg_weight
-        if (res.data.no_throw_condition) {
-          this.throwFrom.type = res.data.no_throw_condition.type
-          this.throwFrom.value = res.data.no_throw_condition.value
-          this.throwFrom.checked = Boolean(res.data.no_throw_condition.checked)
-          this.throwFrom.condition = res.data.no_throw_condition.condition
-        }
+      this.$request.configBasic(this.$route.params.id).then(res => {
+        this.groupName = res.data.group_name
+        this.form.name = res.data.name
+        this.form.is_great_value = res.data.is_great_value
+        this.form.remark = res.data.remark
+        this.icon = res.data.icon && res.data.icon
+        this.form.icon = res.data.icon && res.data.icon.id
+        this.form.prop_ids = res.data.props.map(item => item.id)
+        this.form.warehouse_ids = res.data.warehouses.map(item => item.id)
         this.form.is_unique = Boolean(res.data.is_unique)
-        this.supportWarehouse(warehouses)
+        this.form.need_clearance_code = res.data.need_clearance_code
+        this.form.need_personal_code = res.data.need_personal_code
+        this.form.need_id_card = res.data.need_id_card
+        this.form.is_delivery = res.data.is_delivery
+        this.form.default_pickup_station_id = res.data.default_pickup_station_id
       })
     },
     onSelectChange(e) {
       console.log(e)
       this.icon = this.iconList.find(item => item.id === e)
       // console.log(this.form.icon)
-    },
-    supportWarehouse(item) {
-      this.warehouseIds = item
-      if (this.warehouseIds) {
-        this.searchCountry()
-      }
     },
     // 获取全部路线icon
     getIcon() {
@@ -1008,16 +510,6 @@ export default {
     },
     changeDelivery() {
       this.form.default_pickup_station_id = ''
-    },
-    // 配置
-    set() {
-      this.dialogVisible = true
-      // if (this.$route.params.id && this.form.no_throw_condition) {
-      // }
-    },
-    confirm() {
-      this.dialogVisible = false
-      console.log(this.throwFrom, 'throwFrom')
     },
     // 获取多选框
     getProp() {
@@ -1057,70 +549,21 @@ export default {
         this.warehouseList = res.data
       })
     },
-    // 新增行
-    addRow() {
-      console.log(this.form.price_grade, 'this.form.price_grade')
-      this.form.price_grade.push({
-        start: '',
-        end: '',
-        cost_price: '',
-        sale_price: ''
-      })
-    },
-    deleteRow(index, rows) {
-      rows.splice(index, 1)
-    },
     saveLine() {
-      console.log(this.form.mode, 'mode')
-      if (this.form.price_grade.length) {
-        this.itemArr = JSON.stringify(this.form.price_grade)
-      }
-      console.log(this.itemArr, 'this.itemArr')
-      if (this.form.mode === 2 && this.itemArr === '') {
-        this.$message.error('不能为空')
-      }
       if (this.form.name === '') {
         return this.$message.error(this.$t('请输入线路名称'))
-      } else if (this.form.warehouses === '') {
+      } else if (this.form.warehouse_ids === '') {
         return this.$message.error(this.$t('请选择支持仓库'))
-      } else if (this.form.countries === '') {
-        return this.$message.error(this.$t('请选择支持国家或地区'))
-      } else if (this.form.mode === 1 && this.form.first_weight === '') {
-        return this.$message.error(this.$t('请输入首重'))
-      } else if (this.form.mode === 1 && this.form.first_money === '') {
-        return this.$message.error(this.$t('请输入首费'))
-      } else if (this.form.mode === 1 && this.form.next_weight === '') {
-        return this.$message.error(this.$t('请输入续重'))
-      } else if (this.form.mode === 1 && this.form.next_money === '') {
-        return this.$message.error(this.$t('请输入续费'))
-      } else if (this.form.mode === 1 && this.form.min_weight === '') {
-        return this.$message.error(this.$t('请输入最小重量'))
-      } else if (this.form.mode === 1 && this.form.max_weight === '') {
-        return this.$message.error(this.$t('请输入最大重量'))
-      } else if (this.form.factor === '') {
-        return this.$message.error(this.$t('请输入体积系数'))
-      } else if (!this.form.types[0]) {
+      } else if (!this.form.prop_ids[0]) {
         return this.$message.error(this.$t('请选择线路类型'))
       } else if (this.form.remark === '') {
         return this.$message.error(this.$t('请输入备注'))
       }
       if (this.$route.params.id) {
         // 编辑状态
-        if (this.form.mode === 1) {
-          delete this.form.price_grade
-        }
         this.$request
-          .saveEditLine(this.$route.params.id, {
+          .updateConfigBasic(this.$route.params.id, {
             ...this.form,
-            no_throw_condition: {
-              type: this.throwFrom.type,
-              value: Number(this.throwFrom.value),
-              checked: Number(this.throwFrom.checked),
-              condition: this.throwFrom.condition
-            },
-            is_avg_weight: this.throwFrom.is_avg_weight,
-            // price_grade: this.itemArr,
-            has_factor: Number(this.form.has_factor),
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {
@@ -1130,7 +573,6 @@ export default {
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              // this.$router.push({ name: 'linelist' })
               this.$router.go(-1)
             } else {
               this.$message({
@@ -1140,21 +582,11 @@ export default {
             }
           })
       } else {
-        if (this.form.mode === 1) {
-          delete this.form.price_grade
-        }
         // 新建状态
         this.$request
-          .updateLines({
+          .newConfigBasic({
             ...this.form,
-            no_throw_condition: {
-              type: this.throwFrom.type,
-              value: Number(this.throwFrom.value),
-              checked: Number(this.throwFrom.checked),
-              condition: this.throwFrom.condition
-            },
-            is_avg_weight: this.throwFrom.is_avg_weight,
-            has_factor: Number(this.form.has_factor),
+            group_id: this.$route.query.channelId,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {
@@ -1214,15 +646,6 @@ export default {
       border-color: #eaecf5;
       color: #3540a5;
     }
-  }
-  .el-tag.el-tag--info {
-    border-color: #3540a5;
-    color: #3540a5;
-    background-color: #fff;
-  }
-  .el-tag.el-tag--info .el-tag__close {
-    color: #3540a5;
-    background-color: #fff;
   }
   .icon-img {
     width: 100px;

@@ -106,6 +106,13 @@ export default {
   created() {},
   methods: {
     getList() {
+      if (this.$route.params.id) {
+        this.getRulesTempalate()
+      } else {
+        this.getTempalte()
+      }
+    },
+    getRulesTempalate() {
       this.tableLoading = true
       this.$request
         .getRegions(this.$route.params.id, {
@@ -131,9 +138,36 @@ export default {
           }
         })
     },
+    getTempalte() {
+      this.tableLoading = true
+      this.$request
+        .getRegionTemplate({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.addressList = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
     // 新增
     addPartition() {
-      dialog({ type: 'partitionAddEdit', state: 'add' }, () => {
+      let status = this.$route.params.id ? 'channel' : 'partition'
+      dialog({ type: 'partitionAddEdit', state: 'add', status: status }, () => {
         this.getList()
       })
     },
@@ -144,27 +178,47 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.regionsDelete(this.$route.params.id, id).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+        if (this.$route.params.id) {
+          this.$request.regionsDelete(this.$route.params.id, id).then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        } else {
+          this.$request.deleteRegionsTem(id).then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        }
       })
     },
     // 修改资料
     editPartition(id) {
-      dialog({ type: 'partitionAddEdit', state: 'edit', id: id }, () => {
+      let status = this.$route.params.id ? 'channel' : 'partition'
+      dialog({ type: 'partitionAddEdit', state: 'edit', id: id, status: status }, () => {
         this.getList()
       })
     },
@@ -198,15 +252,20 @@ export default {
     },
     // 修改语言
     onLang(line, lang) {
+      console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
-      this.$router.push({
-        name: 'editContent',
-        params: {
-          line: JSON.stringify(line),
-          lang: JSON.stringify(lang),
-          transCode: this.transCode
+      dialog(
+        {
+          type: 'partitionLang',
+          line: line,
+          lang: lang,
+          transCode: this.transCode,
+          state: 'translate'
+        },
+        () => {
+          this.getList()
         }
-      })
+      )
     }
   },
   computed: {

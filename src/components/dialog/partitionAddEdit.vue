@@ -17,9 +17,6 @@
     <div style="margin-bottom: 20px">
       {{ $t('支持国家/地区') }}
     </div>
-    <!-- <div class="add-row">
-      <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-    </div> -->
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column type="index"> </el-table-column>
       <el-table-column :label="$t('国家')" style="width: 100%">
@@ -35,57 +32,11 @@
           ></el-cascader>
         </template>
       </el-table-column>
-      <!-- 姓名 -->
-      <!-- <el-table-column :label="$t('国家')">
-        <template slot-scope="scope">
-          <el-select
-            @change="changeCountry(scope.row)"
-            v-model="scope.row.country_id"
-            :placeholder="$t('请选择')"
-            clearable
-          >
-            <el-option
-              v-for="item in countryList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </template>
-      </el-table-column> -->
-      <!-- 值 -->
-      <!-- <el-table-column :label="$t('地区')">
-        <template slot-scope="scope">
-          <el-cascader
-            filterable
-            :key="keyValue"
-            class="country-select"
-            v-model="scope.row.areaData"
-            :options="newWarehouseList"
-            @change="handleChange"
-          >
-          </el-cascader>
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column :label="$t('操作')">
-        <template slot-scope="scope">
-          <el-button class="btn-green" @click="editPartition(scope.row.id)">{{
-            $t('编辑')
-          }}</el-button>
-          <el-button class="btn-light-red" @click="deleteParition(scope.$index, tableData)">{{
-            $t('删除')
-          }}</el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
-    <!-- <div class="pagination-box">
-      <nle-pagination :pageParams="page_params"></nle-pagination>
-    </div> -->
   </el-dialog>
 </template>
 <script>
@@ -114,23 +65,43 @@ export default {
       ],
       state: '',
       id: '',
+      status: '',
       areaData: null,
       newWarehouseList: [],
       keyValue: 0,
-      areaIds: []
+      areaIds: [],
+      areasData: []
     }
   },
   methods: {
     getList() {
+      if (this.status === 'partition') {
+        this.getPartition()
+      } else {
+        this.getRegions()
+      }
+    },
+    getRegions() {
       this.$request.getRegionDetails(this.$route.params.id, this.id).then(res => {
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
-        this.areaData = res.data.areas.map(item => [
-          item.country_id,
-          item.area_id,
-          item.sub_area_id
-        ])
-        console.log(this.areaData, 'this.areaData')
+        if (res.data.areas) {
+          this.tableData[0].areaData = res.data.areas.map(item =>
+            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
+          )
+        }
+        console.log(this.tableData, 'this.areaData')
+      })
+    },
+    getPartition() {
+      this.$request.getRegionsTem(this.id).then(res => {
+        this.ruleForm.reference_time = res.data.reference_time
+        this.ruleForm.name = res.data.name
+        if (res.data.areas) {
+          this.tableData[0].areaData = res.data.areas.map(item =>
+            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
+          )
+        }
       })
     },
     chooseAres(area) {
@@ -141,11 +112,10 @@ export default {
       }))
       console.log(this.areaIds, 'form.area_ids')
     },
-    // 获取多级区域数据
+    // 获取多级区域数据 编辑渠道时
     getAllCountries() {
-      this.$request.getCountry().then(res => {
+      this.$request.regionCountry(this.$route.params.id).then(res => {
         if (res.ret) {
-          console.log(res.data, 'daa')
           this.options = res.data.map(item => {
             return {
               value: item.id,
@@ -173,55 +143,35 @@ export default {
         }
       })
     },
-    // 获取所属国家地区
+    // 预设分区表 获取国家
     getCountry() {
       this.$request.countryLocation().then(res => {
-        this.countryList = res.data.map(item => {
-          return {
-            value: item.id,
-            label: item.name,
-            children: item.areas.map(item => {
-              return {
-                value: item.id,
-                label: item.name,
-                children: item.areas.map(item => {
-                  return {
-                    value: item.id,
-                    label: item.name
-                  }
-                })
-              }
-            })
-          }
-        })
-        // res.data.forEach(item => {
-        //   if (item.timezone === '0852') {
-        //     console.log(item.timezone, item.id, 'timezone')
-        //     this.timezoneId = item.id
-        //   }
-        // })
-        if (this.id) {
-          // const selectList = this.countryList.find(item => item.value === this.form.country_id)
-          // console.log(selectList, 'selectList')
-          // this.newWarehouseList = selectList ? selectList.children : []
-        } else {
-          const mapWarehouseList = res.data.find(item => item.areas.length) || { areas: [] }
-          console.log(mapWarehouseList, 'mapWarehouseList')
-          this.newWarehouseList = mapWarehouseList.areas.map(item => {
-            console.log(item, 'item')
+        if (res.ret) {
+          this.options = res.data.map(item => {
             return {
               value: item.id,
               label: item.name,
-              children: item.areas.map(item => {
-                return {
-                  value: item.id,
-                  label: item.name
-                }
-              })
+              children:
+                item.areas < 1
+                  ? undefined
+                  : item.areas.map(item => {
+                      return {
+                        value: item.id,
+                        label: item.name,
+                        children:
+                          item.areas < 1
+                            ? undefined
+                            : item.areas.map(item => {
+                                return {
+                                  value: item.id,
+                                  label: item.name
+                                }
+                              })
+                      }
+                    })
             }
           })
         }
-        console.log(this.newWarehouseList, 'this.newWarehouseList')
       })
     },
     // 切换国家
@@ -251,68 +201,131 @@ export default {
       rows.splice(index, 1)
     },
     confirm() {
-      if (this.id) {
-        this.$request
-          .updateRegionDetails(this.$route.params.id, this.id, {
-            name: this.ruleForm.name,
-            reference_time: this.ruleForm.reference_time,
-            areas: this.areaIds
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
+      if (this.tableData[0].areaData.length) {
+        this.areasData = this.tableData[0].areaData.map(item => ({
+          country_id: item[0],
+          area_id: item[1],
+          sub_area_id: item[2]
+        }))
+      }
+      if (this.status === 'channel') {
+        if (this.id) {
+          this.$request
+            .updateRegionDetails(this.$route.params.id, this.id, {
+              name: this.ruleForm.name,
+              reference_time: this.ruleForm.reference_time,
+              areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+        } else {
+          this.$request
+            .newRegions(this.$route.params.id, {
+              name: this.ruleForm.name,
+              reference_time: this.ruleForm.reference_time,
+              areas: this.areaIds
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+        }
       } else {
-        this.$request
-          .newRegions(this.$route.params.id, {
-            name: this.ruleForm.name,
-            reference_time: this.ruleForm.reference_time,
-            areas: this.areaIds
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('操作成功'),
-                message: res.msg
-              })
+        if (this.id) {
+          this.$request
+            .updateRegionsTem(this.id, {
+              name: this.ruleForm.name,
+              reference_time: this.ruleForm.reference_time,
+              areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
+        } else {
+          this.$request
+            .newRegionsTem({
+              name: this.ruleForm.name,
+              reference_time: this.ruleForm.reference_time,
+              areas: this.areaIds
+            })
+            .then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+              this.show = false
+            })
+        }
       }
     },
     init() {
-      // this.getCountry()
-      this.getAllCountries()
+      console.log(this.status, 'status')
+      if (this.status === 'partition') {
+        this.getCountry()
+      } else {
+        this.getAllCountries()
+      }
       if (this.id) {
         this.getList()
       }
-      // this.getList()
     },
     clear() {
       this.id = ''
       this.areaIds = []
       this.state = ''
+      this.status = ''
       this.ruleForm.reference_time = ''
       this.ruleForm.name = ''
       this.tableData[0].areaData = []

@@ -1,25 +1,53 @@
 <template>
   <div class="channel-set-container">
-    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
+    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange(activeName)">
       <el-tab-pane :label="$t('基础信息')" name="1">
         <div class="main-sty">
           <basic-information></basic-information>
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('计费设置')" name="2">
+      <el-tab-pane :label="$t('计费设置')" name="2" v-if="this.$route.query.state === 'edit'">
         <billng-settings></billng-settings>
       </el-tab-pane>
-      <el-tab-pane :label="$t('分区')" name="3">
+      <el-tab-pane :label="$t('分区')" name="3" v-if="this.$route.query.state === 'edit'">
         <partition-settings></partition-settings>
       </el-tab-pane>
-      <el-tab-pane :label="$t('价格表')" name="4">
+      <el-tab-pane :label="$t('价格表')" name="4" v-if="this.$route.query.state === 'edit'">
         <price-list></price-list>
       </el-tab-pane>
-      <el-tab-pane :label="$t('渠道增值服务')" name="5">
+      <el-tab-pane :label="$t('渠道增值服务')" name="5" v-if="this.$route.query.state === 'edit'">
         <added-services></added-services>
       </el-tab-pane>
-      <el-tab-pane :label="$t('渠道规则')" name="6"></el-tab-pane>
-      <el-tab-pane :label="$t('面单对接')" name="7"></el-tab-pane>
+      <el-tab-pane :label="$t('渠道规则')" name="6" v-if="this.$route.query.state === 'edit'">
+        <rules-channle></rules-channle>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('面单对接')" name="7" v-if="this.$route.query.state === 'edit'">
+        <div class="landing-container">
+          <el-form ref="form" :model="landing" label-width="120px">
+            <el-form-item :label="$t('落地配配置')">
+              <el-select
+                v-model="landing.docking_type"
+                clearable
+                filterable
+                allow-create
+                default-first-option
+                :placeholder="$t('请选择')"
+              >
+                <el-option
+                  v-for="item in dockingList"
+                  :key="item.id"
+                  :value="item.id"
+                  :label="item.name"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -28,6 +56,7 @@
 import AddedServices from './addedServices.vue'
 import BasicInformation from './basicInformation.vue'
 import BillngSettings from './billingSettings.vue'
+import RulesChannle from './rulesChannle.vue'
 import PartitionSettings from './partition.vue'
 import PriceList from './priceList.vue'
 export default {
@@ -35,12 +64,17 @@ export default {
     BasicInformation,
     BillngSettings,
     PartitionSettings,
+    RulesChannle,
     PriceList,
     AddedServices
   },
   data() {
     return {
-      activeName: '1'
+      activeName: '1',
+      landing: {
+        docking_type: ''
+      },
+      dockingList: []
     }
   },
   created() {
@@ -49,7 +83,51 @@ export default {
     }
   },
   methods: {
-    onTabChange() {
+    // 获取落地陪配置数据
+    getDocking() {
+      this.$request.dockingPick().then(res => {
+        if (res.ret) {
+          this.dockingList = res.data
+        }
+      })
+    },
+    dockData() {
+      this.$request.getExpressLine(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.landing.docking_type = res.data.express_company_id
+        }
+      })
+    },
+    // 更新落地配配置
+    saveDocking() {
+      this.$request
+        .updateDocking(this.$route.params.id, {
+          docking_type: this.landing.docking_type
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.dockData()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
+    onTabChange(activeName) {
+      this.activeName = activeName
+      console.log(activeName, 'activeName')
+      if (this.activeName === '7') {
+        this.getDocking()
+        this.dockData()
+      }
       // this.page_params.handleQueryChange('activeName', this.activeName)
     }
   }
@@ -60,6 +138,10 @@ export default {
 .channel-set-container {
   .main-sty {
     background-color: #fff;
+  }
+  .landing-container {
+    background-color: #fff !important;
+    padding: 20px;
   }
 }
 </style>

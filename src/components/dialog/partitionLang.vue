@@ -2,7 +2,7 @@
   <el-dialog
     :visible.sync="show"
     :title="line.name + $t('的翻译内容')"
-    class="dialog-line-lang"
+    class="dialog-partition-lang"
     @close="clear"
   >
     <div class="lang-sty">
@@ -13,21 +13,12 @@
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
       <!-- 线路名称 -->
-      <el-form-item :label="state === 'line' ? $t('线路名称') : $t('渠道名称')" prop="name">
+      <el-form-item :label="$t('分区名称')" prop="name">
         <el-input v-model="ruleForm.name" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
       <!-- 参考时效 -->
-      <el-form-item :label="$t('参考时效')" prop="reference_time" v-if="state === 'line'">
+      <el-form-item :label="$t('参考时效')" prop="reference_time">
         <el-input v-model="ruleForm.reference_time" :placeholder="$t('请输入')"></el-input>
-      </el-form-item>
-      <!-- 备注 -->
-      <el-form-item :label="$t('备注')" prop="remark">
-        <el-input
-          type="textarea"
-          v-model="ruleForm.remark"
-          :autosize="{ minRows: 2, maxRows: 4 }"
-          :placeholder="$t('请输入')"
-        ></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -43,14 +34,12 @@ export default {
       ruleForm: {
         name: '',
         reference_time: '',
-        remark: '',
         language: ''
       },
       state: '',
       rules: {
         name: [{ required: true, message: this.$t('请输入线路名称'), trigger: 'blur' }],
-        reference_time: [{ required: true, message: this.$t('请输入参考时效'), trigger: 'blur' }],
-        remark: [{ required: true, message: this.$t('请输入备注'), trigger: 'blur' }]
+        reference_time: [{ required: true, message: this.$t('请输入参考时效'), trigger: 'blur' }]
       },
       line: {
         id: '',
@@ -66,12 +55,11 @@ export default {
   methods: {
     getLang() {
       this.$request
-        .lineLang(this.line.id, {
+        .regionLangDetails(this.$route.params.id, this.line.id, {
           lang: this.ruleForm.language
         })
         .then(res => {
           this.ruleForm.name = res.data.name
-          this.ruleForm.remark = res.data.remark
           this.ruleForm.reference_time = res.data.reference_time
           console.log(this.ruleForm, 'this.ruleForm')
         })
@@ -79,22 +67,24 @@ export default {
     confirm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$request.updateLineLang(this.line.id, this.ruleForm).then(res => {
-            if (res.ret) {
-              this.$message({
-                message: res.msg,
-                type: 'success'
-              })
+          this.$request
+            .updateRegionsLang(this.$route.params.id, this.line.id, this.ruleForm)
+            .then(res => {
+              if (res.ret) {
+                this.$message({
+                  message: res.msg,
+                  type: 'success'
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
               this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
-          })
+            })
         } else {
           return false
         }
@@ -103,21 +93,14 @@ export default {
     clear() {
       this.ruleForm.name = ''
       this.ruleForm.reference_time = ''
-      this.ruleForm.remark = ''
     },
     cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()
       this.show = false
     },
     init() {
-      // this.line = this.line
-      // this.lang = this.lang
+      console.log(this.$route.params.id, 'idddd')
       this.ruleForm.language = this.lang.language_code
-      // this.transCode = this.transCode
-      console.log(this.line, 'line')
-      console.log(this.lang, 'lang')
-      console.log(this.transCode, 'this.transCode')
-      console.log(this.ruleForm.language, 'this.ruleForm.language')
       if (this.transCode === 1) {
         this.getLang()
       }
@@ -126,7 +109,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.dialog-line-lang {
+.dialog-partition-lang {
   .el-input {
     width: 40% !important;
     margin-left: 50px;

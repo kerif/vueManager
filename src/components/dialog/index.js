@@ -104,6 +104,7 @@ import linkAddEdit from './linkAddEdit.vue'
 import groupChange from './groupChange.vue'
 import LingLang from './lingLangEdit.vue'
 import partitionAddEdit from './partitionAddEdit.vue'
+import partitionLang from './partitionLang.vue'
 import transferPayment from './transferPayment.vue'
 
 const InviteController = Vue.extend(inviteList)
@@ -209,6 +210,7 @@ const LinkAddEditController = Vue.extend(linkAddEdit)
 const GroupChangeController = Vue.extend(groupChange)
 const LineLangAddEdit = Vue.extend(LingLang)
 const PartitionAEController = Vue.extend(partitionAddEdit)
+const PartitionLangController = Vue.extend(partitionLang)
 const TransferPayment = Vue.extend(transferPayment)
 
 const mixin = {
@@ -944,6 +946,13 @@ function initInstance(type) {
     // 分区 编辑与新增
     case 'partitionAddEdit':
       instance = new PartitionAEController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 分区 多语言 编辑与新增
+    case 'partitionLang':
+      instance = new PartitionLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

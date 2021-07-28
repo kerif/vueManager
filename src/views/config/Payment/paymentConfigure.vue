@@ -96,6 +96,7 @@
     <el-table :data="rechargeAmount" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index"></el-table-column>
       <el-table-column :label="$t('金额')" prop="amount"></el-table-column>
+      <el-table-column :label="$t('赠送金额')" prop="complimentary_amount"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
           <el-button class="btn-light-red" @click="deleteRecharge(scope.row.id)">{{
@@ -104,13 +105,15 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog
-      :visible.sync="rechargeDialog"
-      width="30%"
-      :title="$t('*预设充值金额')"
-      @close="clear"
-    >
-      <el-input v-model="amount"></el-input>
+    <el-dialog :visible.sync="rechargeDialog" width="30%" :title="$t('新增')" @close="clear">
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item :label="$t('预设充值金额')">
+          <el-input v-model="form.amount"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('赠送金额')">
+          <el-input v-model="form.complimentary_amount"></el-input>
+        </el-form-item>
+      </el-form>
       <div slot="footer">
         <el-button @click="rechargeDialog = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="submitRecharge">{{ $t('确定') }}</el-button>
@@ -140,7 +143,11 @@ export default {
         }
       ],
       amount: '',
-      rechargeAmount: []
+      rechargeAmount: [],
+      form: {
+        amount: '',
+        complimentary_amount: ''
+      }
     }
   },
   created() {
@@ -321,26 +328,31 @@ export default {
       this.rechargeDialog = true
     },
     submitRecharge() {
-      if (!this.amount) {
+      if (!this.form.amount) {
         return this.$message.error(this.$t('请输入预设充值金额'))
       }
-      this.$request.updateRechargeAmount(this.amount).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.rechargeDialog = false
-          this.getRecharge()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .updateRechargeAmount({
+          amount: this.form.amount,
+          complimentary_amount: this.form.complimentary_amount
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.rechargeDialog = false
+            this.getRecharge()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     // 获取预设充值金额
     getRecharge() {

@@ -173,7 +173,14 @@
           </template>
         </el-table-column> -->
         <!-- 价格模式 -->
-        <el-table-column :label="$t('价格模式')"></el-table-column>
+        <el-table-column :label="$t('价格模式')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.mode === 1">{{ $t('首重续重模式') }}</span>
+            <span v-if="scope.row.mode === 2">{{ $t('阶梯价格模式') }}</span>
+            <span v-if="scope.row.mode === 3">{{ $t('首重单位+阶梯价格模式') }}</span>
+            <span v-if="scope.row.mode === 4">{{ $t('多级续重模式') }}</span>
+          </template>
+        </el-table-column>
         <!-- 分区表 -->
         <el-table-column :label="$t('分区表')"></el-table-column>
         <!-- 价格表 -->
@@ -187,7 +194,13 @@
           </template>
         </el-table-column>
         <!-- 支持属性 -->
-        <el-table-column :label="$t('支持属性')"></el-table-column>
+        <el-table-column :label="$t('支持属性')" :show-overflow-tooltip="true" width="150">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.types" :key="item.id">
+              {{ item.name }}
+            </span>
+          </template>
+        </el-table-column>
         <!-- 最大重量 -->
         <el-table-column
           :label="$t('最大重量') + this.localization.weight_unit"
@@ -203,7 +216,20 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
-              @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+              @change="changeTransfer($event, scope.row.enabled, scope.row.id, 'open')"
+              :active-text="$t('开')"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('是否推荐')" width="120">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.is_great_value"
+              @change="changeTransfer($event, scope.row.is_great_value, scope.row.id, 'great')"
               :active-text="$t('开')"
               :inactive-text="$t('关')"
               active-color="#13ce66"
@@ -613,6 +639,9 @@ export default {
         name: 'channelLineEdit',
         params: {
           id: id
+        },
+        query: {
+          state: 'edit'
         }
       })
     },
@@ -639,7 +668,8 @@ export default {
     },
     // 新增
     addNew() {
-      this.$router.push({ name: 'channelLineAdd' })
+      console.log(this.lineId, '1111')
+      this.$router.push({ name: 'channelLineAdd', query: { channelId: this.lineId, state: 'add' } })
     },
     // 删除
     deleteLine(id) {
@@ -815,10 +845,9 @@ export default {
         })
     },
     // 修改转账支付的开关
-    changeTransfer(event, enabled, id) {
-      console.log(typeof event, '我是event')
-      console.log(event, 'event')
-      this.$request.resetLines(id, Number(event)).then(res => {
+    changeTransfer(event, enabled, id, status) {
+      let method = status === 'open' ? 'resetLines' : 'resetRecommend'
+      this.$request[method](id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -881,9 +910,12 @@ export default {
     onLang(line, lang) {
       console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
-      dialog({ type: 'lineLang', line: line, lang: lang, transCode: this.transCode }, () => {
-        this.getList()
-      })
+      dialog(
+        { type: 'lineLang', line: line, lang: lang, transCode: this.transCode, state: 'channel' },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 搜索
     onSearch() {
