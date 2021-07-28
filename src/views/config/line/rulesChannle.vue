@@ -138,11 +138,17 @@
         </el-form-item>
         <div v-if="item.type === 4">
           <el-form-item :label="$t('限制出仓提示')">
-            <el-input type="textarea" v-model="item.notice" class="tips-sty"></el-input>
-          </el-form-item>
-          <el-form-item v-for="item in stringData" :key="item.id" :label="item.name">
             <el-input
-              v-model="item.value"
+              :disabled="!item.state"
+              type="textarea"
+              v-model="item.notice"
+              class="tips-sty"
+            ></el-input>
+          </el-form-item>
+          <el-form-item v-for="lang in stringData" :key="lang.id" :label="lang.name">
+            <el-input
+              :disabled="!lang.state"
+              v-model="lang.value"
               type="textarea"
               class="tips-sty"
               :rows="2"
@@ -288,11 +294,18 @@ export default {
     getRulesData() {
       this.$request.getNewRules(this.$route.params.id).then(res => {
         if (res.ret) {
-          this.channel = res.data
+          this.channel = res.data.map(item => {
+            return {
+              ...item,
+              state: false
+            }
+          })
+          console.log(this.channel, 'this.channel')
           this.stringData = this.stringData.map(item => {
             const value = res.data.notice_translations[item.language_code]
             return {
               ...item,
+              state: false,
               value
             }
           })
@@ -371,10 +384,7 @@ export default {
       })
     },
     editState(state) {
-      console.log(state, 'state')
-      this.channel.push({
-        state: true
-      })
+      state.state = true
     },
     deleteChannel(index, item, id) {
       console.log(id, 'id')

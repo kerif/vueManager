@@ -552,8 +552,8 @@ export default {
   watch: {
     'form.base_mode': function (val) {
       console.log(val, 'val')
-      this.billingName = val === 0 ? '重量' : '体积'
-      this.unitName = val === 0 ? this.localization.weight_unit : '(立方)'
+      this.billingName = val === 0 ? this.$t('重量') : this.$t('体积')
+      this.unitName = val === 0 ? this.localization.weight_unit : this.$t('(立方)')
       console.log(this.billingName, 'this.billingName')
       console.log(this.unitName, 'this.unitName')
     }
