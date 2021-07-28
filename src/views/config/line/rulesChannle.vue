@@ -147,7 +147,7 @@
           </el-form-item>
           <el-form-item v-for="lang in stringData" :key="lang.id" :label="lang.name">
             <el-input
-              :disabled="!lang.state"
+              :disabled="!item.state"
               v-model="lang.value"
               type="textarea"
               class="tips-sty"
@@ -196,7 +196,7 @@
         </div>
       </el-form>
       <div class="btn-sty">
-        <el-button>{{ $t('取消') }}</el-button>
+        <el-button @click="item.state === false">{{ $t('取消') }}</el-button>
         <el-button @click="saveChannles(item)">{{ $t('保存') }}</el-button>
       </div>
     </div>
@@ -305,7 +305,6 @@ export default {
             const value = res.data.notice_translations[item.language_code]
             return {
               ...item,
-              state: false,
               value
             }
           })
