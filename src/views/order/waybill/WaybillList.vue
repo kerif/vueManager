@@ -529,8 +529,9 @@
           v-if="['1', '2', '3', '4'].includes(activeName)"
         >
           <template slot-scope="scope">
-            <span v-if="activeName === '3'">{{ scope.row.paid_at }}</span>
-            <span v-if="activeName === '4'">{{ scope.row.shipped_at }}</span>
+            <span v-if="activeName === '2'">{{ scope.row.created_at }}</span>
+            <span v-else-if="activeName === '3'">{{ scope.row.paid_at }}</span>
+            <span v-else-if="activeName === '4'">{{ scope.row.shipped_at }}</span>
             <span v-else>{{ scope.row.updated_at }}</span>
           </template>
         </el-table-column>

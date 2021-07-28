@@ -413,7 +413,7 @@
           </el-col>
           <el-col :span="10" :offset="$route.params.parent == 0 ? 2 : 0">
             <el-form-item :label="$t('客户备注') + localization.currency_unit">
-              <span>{{ user.vip_remark }}</span>
+              <span>{{ form.vip_remark }}</span>
             </el-form-item>
           </el-col>
         </el-row>
