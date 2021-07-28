@@ -258,6 +258,10 @@ exports.getRegionTemplate = params => {
 exports.getPriceTable = (id, params) => {
   return $form.get(`express-lines/${id}/prices`, params)
 }
+// 配置 新路线 获取价格表
+exports.editPrice = (id, params) => {
+  return $form.put(`express-lines/${id}/prices`, params)
+}
 // 配置 新路线 增值服务 获取列表
 exports.getServicesList = (id, params) => {
   return $form.get(`express-lines/${id}/services`, params)

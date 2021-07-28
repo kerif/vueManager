@@ -43,7 +43,8 @@ export default {
       mode: '',
       contentData: {
         name: '',
-        content: ''
+        content: '',
+        payment_settings_id: ''
       }
     }
   },
@@ -51,8 +52,11 @@ export default {
     async confirm() {
       let res = {}
       if (this.type === 'addPay') {
-        this.contentData.payment_settings_id = this.id
-        res = await this.$request.addPay(this.contentData)
+        this.success(Object.assign({}, this.contentData))
+        this.show = false
+        return
+        // this.contentData.payment_settings_id = this.id
+        // res = await this.$request.addPay(this.contentData)
       } else if (this.type === 'editPay') {
         this.contentData.payment_settings_id = this.id
         res = await this.$request.editPay(this.payId, this.contentData)
@@ -90,6 +94,7 @@ export default {
     clear() {
       this.contentData.name = ''
       this.contentData.content = ''
+      this.contentData.payment_settings_id = ''
     },
     init() {
       if (this.type === 'editPay') {

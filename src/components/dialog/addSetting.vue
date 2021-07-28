@@ -162,9 +162,7 @@ export default {
       baleImgList: []
     }
   },
-  created() {
-    this.getLanguageList()
-  },
+  created() {},
   computed: {
     payment_setting_connection() {
       return this.ruleForm.payment_setting_connection
@@ -176,6 +174,7 @@ export default {
   methods: {
     // 获取支持语言
     getLanguageList() {
+      if (this.state === 'add') return
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
@@ -234,8 +233,10 @@ export default {
           title: this.$t('新增'),
           id: this.id
         },
-        () => {
-          this.getList()
+        data => {
+          // this.getList()
+          this.ruleForm.payment_setting_connection.push(data)
+          console.log(this.ruleForm.payment_setting_connection, ' data')
         }
       )
     },
@@ -323,6 +324,15 @@ export default {
       } else if (this.ruleForm.rate_type === 1 && !this.ruleForm.rate) {
         return this.$message.error(this.$t('请输入转换汇率'))
       }
+      this.ruleForm.accounts = this.ruleForm.payment_setting_connection.map(item => {
+        let account_name = item.name
+        let account_content = item.content
+        return {
+          account_name,
+          account_content
+        }
+      })
+      console.log(this.ruleForm, 'this.ruleForm')
       if (this.state === 'add') {
         this.$request.addPayments(this.ruleForm).then(res => {
           if (res.ret) {
@@ -414,9 +424,10 @@ export default {
       this.ruleForm.rate_type = 0
     },
     init() {
-      console.log(this.id, '我是接受id')
       this.getRate()
       this.getCurrent()
+      this.getLanguageList()
+      console.log(this.state, 'this.state')
       if (this.state === 'edit') {
         this.getList()
       }
