@@ -1,6 +1,6 @@
 <template>
   <div class="channel-set-container">
-    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
+    <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange(activeName)">
       <el-tab-pane :label="$t('基础信息')" name="1">
         <div class="main-sty">
           <basic-information></basic-information>
@@ -111,7 +111,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getList()
+            this.dockData()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -121,7 +121,9 @@ export default {
           }
         })
     },
-    onTabChange() {
+    onTabChange(activeName) {
+      this.activeName = activeName
+      console.log(activeName, 'activeName')
       if (this.activeName === '7') {
         this.getDocking()
         this.dockData()

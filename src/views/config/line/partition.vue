@@ -178,22 +178,41 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.regionsDelete(this.$route.params.id, id).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+        if (this.$route.params.id) {
+          this.$request.regionsDelete(this.$route.params.id, id).then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        } else {
+          this.$request.deleteRegionsTem(id).then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        }
       })
     },
     // 修改资料

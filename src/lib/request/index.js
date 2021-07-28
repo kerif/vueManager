@@ -130,6 +130,10 @@ exports.updateRegionsTem = (id, params) => {
 exports.getRegionsTem = id => {
   return $form.get(`express-lines/region-templates/${id}`)
 }
+// 新路线 新建分区表 删除
+exports.deleteRegionsTem = id => {
+  return $form.delete(`express-lines/region-templates/${id}`)
+}
 // 配置 新路线 获取数据
 exports.getLineGroup = params => {
   return $form.get('express-lines/groups', { params })
@@ -217,6 +221,22 @@ exports.regionsAll = id => {
 // 新路线 渠道规则 更新规则数据
 exports.updateBaseRules = (id, params) => {
   return $form.put(`express-lines/${id}/rules/base-config`, params)
+}
+// 渠道规则 获取规则
+exports.getNewRules = id => {
+  return $form.get(`express-lines/${id}/rules`)
+}
+// 渠道规则 新建规则
+exports.newRules = (id, params) => {
+  return $form.post(`express-lines/${id}/rules`, params)
+}
+// 渠道规则 更新规则
+exports.updateNewRules = (id, ruleId, params) => {
+  return $form.put(`express-lines/${id}/rules/${ruleId}`, params)
+}
+// 渠道规则 删除规则
+exports.deleteNewRules = (id, ruleId) => {
+  return $form.delete(`express-lines/${id}/rules/${ruleId}`)
 }
 // 新路线 计费设置 获取
 exports.getBillingConfig = id => {

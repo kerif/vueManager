@@ -19,25 +19,31 @@
       </el-form-item>
     </el-form>
     <div class="add-sty">
-      <el-button @click="addChannel">{{ $t('新增') }}</el-button>
+      <el-button @click="addChannel" type="primary">{{ $t('新增') }}</el-button>
     </div>
     <div class="rules-main" v-for="(item, index) in channel" :key="index">
       <div class="rules-top">
         <div class="rules-left">
-          <h3>{{ $t('规则一') }}</h3>
+          <el-input v-model="item.name" v-if="item.state"></el-input>
+          <h3 v-else>{{ item.name }}</h3>
         </div>
         <div class="rules-right">
-          <el-button>{{ $t('修改') }}</el-button>
-          <el-button @click="deleteChannel(index, channel)">{{ $t('删除') }}</el-button>
+          <el-button @click="editState(item)">{{ $t('修改') }}</el-button>
+          <el-button @click="deleteChannel(index, channel, item.id)">{{ $t('删除') }}</el-button>
         </div>
       </div>
       <div class="line"></div>
       <el-form ref="form" label-width="100px">
         <el-form-item :label="$t('应用分区')">
-          <!-- <span>分区一、分区一</span> -->
-          <el-select v-model="item.region_ids" :placeholder="$t('请选择')" clearable>
+          <el-select
+            :disabled="!item.state"
+            v-model="item.region_ids"
+            multiple
+            :placeholder="$t('请选择')"
+            clearable
+          >
             <el-option
-              v-for="item in regionsData"
+              v-for="item in patitionData"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -46,14 +52,18 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('限定条件')">
-          <!-- <span>满足以下条件之一</span> -->
-          <el-select v-model="item.is_and" :placeholder="$t('请选择')" clearable>
+          <el-select
+            :disabled="!item.state"
+            v-model="item.is_and"
+            :placeholder="$t('请选择')"
+            clearable
+          >
             <el-option v-for="item in typeData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <div class="table-sty">
-          <div class="add-row">
+          <div class="add-row" v-if="item.state">
             <el-button @click="addRow(item.conditions)" class="btn-deep-purple">{{
               $t('新增')
             }}</el-button>
@@ -61,7 +71,12 @@
           <el-table :data="item.conditions" border>
             <el-table-column :label="$t('参数')">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.param" :placeholder="$t('请选择')" clearable>
+                <el-select
+                  :disabled="!item.state"
+                  v-model="scope.row.param"
+                  :placeholder="$t('请选择')"
+                  clearable
+                >
                   <el-option
                     v-for="item in paramData"
                     :key="item.id"
@@ -74,7 +89,12 @@
             </el-table-column>
             <el-table-column :label="$t('比较符')">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.comparison" :placeholder="$t('请选择')" clearable>
+                <el-select
+                  :disabled="!item.state"
+                  v-model="scope.row.comparison"
+                  :placeholder="$t('请选择')"
+                  clearable
+                >
                   <el-option
                     v-for="item in conditionOptions"
                     :key="item.id"
@@ -87,10 +107,10 @@
             </el-table-column>
             <el-table-column :label="$t('值')">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.value"></el-input>
+                <el-input :disabled="!item.state" v-model="scope.row.value"></el-input>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('操作')">
+            <el-table-column :label="$t('操作')" v-if="item.state">
               <template slot-scope="scope">
                 <el-button
                   @click.native.prevent="deleteRow(scope.$index, item.conditions)"
@@ -103,12 +123,18 @@
         </div>
         <el-form-item :label="$t('限定方式')">
           <!-- <span>满足以下条件之一</span> -->
-          <el-radio-group v-model="item.type">
+          <el-radio-group v-model="item.type" v-if="item.state">
             <el-radio :label="1">{{ $t('按订单收费') }}</el-radio>
             <el-radio :label="2">{{ $t('按箱收费') }}</el-radio>
             <el-radio :label="3">{{ $t('按单位计费重量收费') }}</el-radio>
             <el-radio :label="4">{{ $t('限制出仓') }}</el-radio>
           </el-radio-group>
+          <div v-else>
+            <span v-if="item.type === 1">{{ $t('按订单收费') }}</span>
+            <span v-if="item.type === 2">{{ $t('按箱收费') }}</span>
+            <span v-if="item.type === 3">{{ $t('按单位计费重量收费') }}</span>
+            <span v-if="item.type === 4">{{ $t('限制出仓') }}</span>
+          </div>
         </el-form-item>
         <div v-if="item.type === 4">
           <el-form-item :label="$t('限制出仓提示')">
@@ -126,7 +152,12 @@
         </div>
         <div v-else>
           <el-form-item :label="$t('收费方式')">
-            <el-select v-model="item.charge_mode" :placeholder="$t('请选择')" clearable>
+            <el-select
+              :disabled="!item.state"
+              v-model="item.charge_mode"
+              :placeholder="$t('请选择')"
+              clearable
+            >
               <el-option
                 v-for="item in charginData"
                 :key="item.id"
@@ -136,6 +167,7 @@
               </el-option>
             </el-select>
             <el-input
+              :disabled="!item.state"
               class="input-sty input-margin"
               v-model="item.value"
               :placeholder="$t('请输入固定值或百分比%')"
@@ -143,11 +175,13 @@
           </el-form-item>
           <el-form-item :label="$t('收费范围')">
             <el-input
+              :disabled="!item.state"
               class="input-sty"
               v-model="item.min_charge"
               :placeholder="$t('请输入最低收费（空值为不设限制）')"
             ></el-input>
             <el-input
+              :disabled="!item.state"
               class="input-sty input-margin"
               v-model="item.max_charge"
               :placeholder="$t('请输入最高收费（空值为不设限制）')"
@@ -157,7 +191,7 @@
       </el-form>
       <div class="btn-sty">
         <el-button>{{ $t('取消') }}</el-button>
-        <el-button>{{ $t('保存') }}</el-button>
+        <el-button @click="saveChannles(item)">{{ $t('保存') }}</el-button>
       </div>
     </div>
   </div>
@@ -172,7 +206,7 @@ export default {
         rule_fee_mode: 0
       },
       paramData: [],
-      regionsData: [],
+      patitionData: [],
       conditionOptions: [
         {
           id: '>',
@@ -247,21 +281,38 @@ export default {
     this.getRegions()
     this.getBaseRules()
     this.getString()
+    this.getPartition()
+    this.getRulesData()
   },
   methods: {
+    getRulesData() {
+      this.$request.getNewRules(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.channel = res.data
+          this.stringData = this.stringData.map(item => {
+            const value = res.data.notice_translations[item.language_code]
+            return {
+              ...item,
+              value
+            }
+          })
+        }
+      })
+    },
+    // 获取分区数据
+    getPartition() {
+      this.$request.regionsAll(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.patitionData = res.data
+        }
+      })
+    },
     // 获取规则数据
     getBaseRules() {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         if (res.ret) {
           this.form.max_rule_fee = res.data.max_rule_fee
           this.form.rule_fee_mode = res.data.rule_fee_mode
-          // this.stringData = this.stringData.map(item => {
-          //   const value = res.data.name_translations[item.language_code]
-          //   return {
-          //     ...item,
-          //     value
-          //   }
-          // })
         }
       })
     },
@@ -309,22 +360,44 @@ export default {
       this.$request.getString().then(res => {
         if (res.ret) {
           this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
-          // console.log(this.stringData, '11111')
-          // if (this.state === 'edit') {
-          //   this.getDetails()
-          // }
         }
       })
     },
     // 新增
     addChannel() {
       this.channel.push({
-        conditions: []
+        conditions: [],
+        state: true
       })
     },
-    deleteChannel(index, item) {
-      console.log(index, 'index')
-      item.splice(index, 1)
+    editState(state) {
+      console.log(state, 'state')
+      this.channel.push({
+        state: true
+      })
+    },
+    deleteChannel(index, item, id) {
+      console.log(id, 'id')
+      if (id) {
+        this.$request.deleteNewRules(this.$route.params.id, id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getRulesData()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        item.splice(index, 1)
+      }
     },
     deleteRow(index, rows) {
       rows.splice(index, 1)
@@ -337,6 +410,58 @@ export default {
         comparison: '',
         value: ''
       })
+    },
+    saveChannles(item) {
+      let translation = {}
+      this.stringData.forEach(item => {
+        translation[item.language_code] = item.value
+      })
+      console.log(item, 'item')
+      if (item.id) {
+        this.$request
+          .updateNewRules(this.$route.params.id, item.id, {
+            ...item,
+            notice_translations: item.type === 4 ? translation : ''
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getRulesData()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .newRules(this.$route.params.id, {
+            ...item,
+            notice_translations: item.type === 4 ? translation : ''
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getRulesData()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      }
     }
   }
 }
@@ -366,6 +491,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 8px;
     }
   }
   .add-sty {
