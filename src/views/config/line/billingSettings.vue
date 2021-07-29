@@ -4,8 +4,12 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <el-radio :label="0" v-model="form.base_mode">{{ $t('重量计费') }}</el-radio>
-            <el-radio :label="1" v-model="form.base_mode">{{ $t('体积计费') }}</el-radio>
+            <el-radio @change="changeBase" :label="0" v-model="form.base_mode">{{
+              $t('重量计费')
+            }}</el-radio>
+            <el-radio @change="changeBase" :label="1" v-model="form.base_mode">{{
+              $t('体积计费')
+            }}</el-radio>
           </el-col>
         </el-row>
       </el-form-item>
@@ -106,7 +110,7 @@
                   <el-input v-model="scope.row.end"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column :label="$t('单位续费') + unitName">
+              <el-table-column :label="$t('单位续重') + unitName">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.unit_weight"></el-input>
                 </template>
@@ -620,6 +624,9 @@ export default {
           this.form.condition = res.data.no_throw_condition.condition
         }
       })
+    },
+    changeBase() {
+      this.form.mode = ''
     },
     onSelectChange(e) {
       console.log(e)
