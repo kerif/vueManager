@@ -106,6 +106,11 @@ import LingLang from './lingLangEdit.vue'
 import partitionAddEdit from './partitionAddEdit.vue'
 import partitionLang from './partitionLang.vue'
 import transferPayment from './transferPayment.vue'
+import consumeGrowthValue from './consumeGrowthValue.vue'
+import evaluationRewardPoints from './evaluationRewardPoints.vue'
+import evaluationTable from './evaluationTable.vue'
+import explain from './explain.vue'
+import creditConsumption from './creditConsumption.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -212,6 +217,11 @@ const LineLangAddEdit = Vue.extend(LingLang)
 const PartitionAEController = Vue.extend(partitionAddEdit)
 const PartitionLangController = Vue.extend(partitionLang)
 const TransferPayment = Vue.extend(transferPayment)
+const ConsumeGrowthValue = Vue.extend(consumeGrowthValue)
+const EvaluationRewardPoints = Vue.extend(evaluationRewardPoints)
+const EvaluationTable = Vue.extend(evaluationTable)
+const Explain = Vue.extend(explain)
+const CreditConsumption = Vue.extend(creditConsumption)
 
 const mixin = {
   data() {
@@ -953,6 +963,43 @@ function initInstance(type) {
     // 分区 多语言 编辑与新增
     case 'partitionLang':
       instance = new PartitionLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 会员体系 成长值
+    case 'consumeGrowthValue':
+    case 'buyGrowthValue':
+      instance = new ConsumeGrowthValue({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 会员体系 收支规则 评论奖励积分
+    case 'evaluationRewardPoints':
+      instance = new EvaluationRewardPoints({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 会员体系 收支规则 评论奖励积分
+    case 'evaluationTable':
+    case 'addevaluationTable':
+      instance = new EvaluationTable({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 会员体系 收支规则 评论奖励积分 说明
+    case 'explain':
+      instance = new Explain({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 会员体系 收支规则 积分抵扣消费
+    case 'creditConsumption':
+      instance = new CreditConsumption({
         el: document.createElement('div'),
         mixins: [mixin]
       })
