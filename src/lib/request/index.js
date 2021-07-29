@@ -2164,6 +2164,118 @@ exports.updatePickRules = (id, params) => {
 exports.deletePickRules = id => {
   return $form.delete(`self-pickup-stations/rules/${id}`)
 }
+// 营销管理 会员体系 等级配置 列表
+exports.getGradeList = () => {
+  return $form.get(`member-level`)
+}
+// 营销管理 会员体系 等级配置 详情
+exports.getGradeDetails = id => {
+  return $form.get(`member-level/${id}`)
+}
+// 营销管理 会员体系 等级配置 编辑保存
+exports.editGrade = (id, params) => {
+  return $form.put(`member-level/${id}`, params)
+}
+// 营销管理 会员体系 等级配置 新增保存
+exports.addGrade = params => {
+  return $form.post(`member-level`, params)
+}
+// 营销管理 会员体系 等级配置 删除
+exports.deleteGrade = id => {
+  return $form.delete(`member-level/${id}`)
+}
+// 营销管理 会员体系 等级配置 删除
+exports.translateGrade = (id, params) => {
+  return $form.put(`member-level/${id}/translate-data`, params)
+}
+// 营销管理 会员体系 等级配置 等级说明
+exports.getGradeTips = () => {
+  return $form.get(`member-level-illustrate/show`)
+}
+// 营销管理 会员体系 等级配置 修改等级说明
+exports.editGradeTips = params => {
+  return $form.post(`member-level-illustrate`, params)
+}
+// 营销管理 会员体系 收支规则
+exports.getInOutRule = () => {
+  return $form.get(`in-out-rule`)
+}
+// 营销管理 会员体系 收支规则 启用禁用
+exports.changeRuleEnabled = (id, params) => {
+  return $form.put(`in-out-rule/${id}/enabled`, params)
+}
+// 营销管理 会员体系 收支规则 消费转换成长值 选项数据
+exports.getGrowthValue = () => {
+  return $form.get(`in-out-rule/growth-value-increase/init`)
+}
+// 营销管理 会员体系 收支规则 消费转换成长值详情
+exports.getGrowthValueDetails = () => {
+  return $form.get(`in-out-rule/growth-value-increase/show`)
+}
+// 营销管理 会员体系 收支规则 消费积累积分 选项数据
+exports.getPointIncrease = () => {
+  return $form.get(`in-out-rule/point-increase/init`)
+}
+// 营销管理 会员体系 收支规则 消费积累积分详情
+exports.getPointIncreaseDetails = () => {
+  return $form.get(`in-out-rule/point-increase/show`)
+}
+// 营销管理 会员体系 收支规则 消费转换成长值更新
+exports.updateGrowthDetails = params => {
+  return $json.post('in-out-rule/growth-value-increase', params)
+}
+// 营销管理 会员体系 收支规则 评论奖励积分 选项数据
+exports.getPointCommentConfig = () => {
+  return $form.get('in-out-rule/point-comment-config/init')
+}
+// 营销管理 会员体系 收支规则 评论奖励积分详情
+exports.getPointCommentDetails = () => {
+  return $form.get('in-out-rule/point-comment-config/show')
+}
+// 营销管理 会员体系 收支规则 更新评论奖励积分
+exports.updatePointComment = params => {
+  return $form.post('in-out-rule/point-comment-config', params)
+}
+// 营销管理 会员体系 收支规则 评论奖励积分 获取表格数据
+exports.getPointCommentTable = () => {
+  return $form.get('in-out-rule/point-comment')
+}
+// 营销管理 会员体系 收支规则 评论奖励积分 获取表格数据详情
+exports.getTableDetails = id => {
+  return $form.get(`in-out-rule/point-comment/${id}`)
+}
+// 营销管理 会员体系 收支规则 评论奖励积分 修改表格数据详情
+exports.editTableDetails = (id, params) => {
+  return $form.put(`in-out-rule/point-comment/${id}`, params)
+}
+// 营销管理 会员体系 收支规则 评论奖励积分 新增表格数据详情
+exports.addTable = params => {
+  return $form.post(`in-out-rule/point-comment`, params)
+}
+// 营销管理 会员体系 收支规则 评论奖励积分 删除表格数据详情
+exports.deleteTable = id => {
+  return $form.delete(`in-out-rule/point-comment/${id}`)
+}
+// 营销管理 会员体系 收支规则 积分抵扣消费初始化信息
+exports.getDecrease = () => {
+  return $form.get(`in-out-rule/point-decrease/init`)
+}
+// 营销管理 会员体系 收支规则 积分抵扣消费详情
+exports.getDecreaseDetails = () => {
+  return $form.get(`in-out-rule/point-decrease/show`)
+}
+// 营销管理 会员体系 收支规则 修改积分抵扣消费
+exports.updateDecrease = params => {
+  return $form.post(`in-out-rule/point-decrease`, params)
+}
+// 营销管理 会员体系 收支记录
+exports.getInOutRecord = () => {
+  return $form.get(`in-out-record`)
+}
+// 营销管理 会员体系 收支记录 详情
+exports.getRecordDetails = id => {
+  return $form.get(`in-out-record/${id}`)
+}
 // 营销管理 新用户福利
 exports.getCoupons = () => {
   return $form.get('new-user-coupons')

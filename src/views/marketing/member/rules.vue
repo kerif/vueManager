@@ -1,48 +1,27 @@
 <template>
   <div class="rules">
-    <el-dialog :title="$t('消费转换成长值')" :visible.sync="dialogVisible" width="40%">
-      <h5>{{ $t('转换规则') }}：</h5>
-      <div class="content">
-        <div>$ <el-input v-model="money" class="number"></el-input> = 1 {{ $t('成长值') }}</div>
-        <el-checkbox v-model="checked">{{ $t('不足1成长值部分不累计') }}</el-checkbox>
-      </div>
-      <h5>{{ $t('计入成长值消费（以实际支付为准）') }}：</h5>
-      <div class="content">
-        <el-checkbox-group v-model="checkList">
-          <el-checkbox label="运费"></el-checkbox>
-          <el-checkbox label="关税费"></el-checkbox>
-          <el-checkbox label="保险费"></el-checkbox>
-        </el-checkbox-group>
-      </div>
-      <h5>{{ $t('触发时间') }}：</h5>
-      <div class="content">
-        {{ $t('订单为该状态时，成长值进入账户') }}
-        <el-select :placeholder="$t('请选择')" v-model="time"></el-select>
-      </div>
-      <h5>{{ $t('成长值有效期') }}：</h5>
-      <div class="content">
-        {{ $t('成长值到账之日起计算，有效期为') }}
-        <el-select :placeholder="$t('请选择')" v-model="date"></el-select>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column type="index" width="50"> </el-table-column>
-      <el-table-column prop="name" :label="$t('分类')"> </el-table-column>
-      <el-table-column prop="name" :label="$t('收支类型')"> </el-table-column>
+      <el-table-column prop="resource_type_name" :label="$t('分类')"> </el-table-column>
+      <el-table-column prop="type_name" :label="$t('收支类型')"> </el-table-column>
       <el-table-column prop="name" :label="$t('规则名称')"> </el-table-column>
-      <el-table-column prop="name" :label="$t('规则说明')"> </el-table-column>
-      <el-table-column prop="name" :label="$t('是否启用')">
+      <el-table-column prop="remark" :label="$t('规则说明')"> </el-table-column>
+      <el-table-column prop="enabled" :label="$t('是否启用')">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.value" active-text="开" inactive-text="关"> </el-switch>
+          <el-switch
+            v-model="scope.row.enabled"
+            active-value="1"
+            inactive-value="0"
+            active-text="开"
+            inactive-text="关"
+            @change="changeRuleEnabled(scope.row.id, scope.row.enabled)"
+          >
+          </el-switch>
         </template>
       </el-table-column>
-      <el-table-column prop="name" :label="$t('操作')">
-        <template>
-          <el-button size="mini" @click="dialogVisible = true">{{ $t('配置') }}</el-button>
+      <el-table-column :label="$t('操作')">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="config(scope.row.code)">{{ $t('配置') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -50,6 +29,7 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   name: 'rules',
   data() {
@@ -60,32 +40,71 @@ export default {
       checkList: [],
       time: '',
       date: '',
-      tableData: [
-        {
-          name: '1',
-          value: true
+      tableData: []
+    }
+  },
+  created() {
+    this.getInOutRule()
+  },
+  methods: {
+    getInOutRule() {
+      this.$request.getInOutRule().then(res => {
+        if (res.ret) {
+          this.tableData = res.data.map(item => {
+            let enabled = item.enabled.toString()
+            return {
+              ...item,
+              enabled
+            }
+          })
         }
-      ]
+      })
+    },
+    // 启用禁用
+    changeRuleEnabled(id, enabled) {
+      this.$request.changeRuleEnabled(id, { enabled }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getInOutRule()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 配置
+    config(code) {
+      if (code === 'GROWTH_INCREASE') {
+        //消费积累成长值
+        dialog({ type: 'consumeGrowthValue' }, () => {
+          this.getInOutRule()
+        })
+      } else if (code === 'GROWTH_BUY') {
+        //成长值购买
+      } else if (code === 'POINT_INCREASE') {
+        //消费积累积分
+        dialog({ type: 'buyGrowthValue' }, () => {
+          this.getInOutRule()
+        })
+      } else if (code === 'COMMENT_POINT_INCREASE') {
+        //评价积累积分
+        dialog({ type: 'evaluationRewardPoints' }, () => {
+          this.getInOutRule()
+        })
+      } else if (code === 'POINT_DECREASE') {
+        //积分抵扣消费
+        dialog({ type: 'creditConsumption' }, () => {
+          this.getInOutRule()
+        })
+      }
     }
   }
 }
 </script>
-<style scoped lang="scss">
-.rules {
-  .el-dialog__body {
-    padding: 0 20px !important;
-  }
-  .content {
-    padding: 0 20px;
-    .number {
-      width: 70px !important;
-    }
-    > div {
-      margin-bottom: 20px;
-    }
-    .el-select {
-      width: 100px;
-    }
-  }
-}
-</style>
+<style scoped lang="scss"></style>
