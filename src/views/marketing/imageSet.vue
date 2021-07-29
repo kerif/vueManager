@@ -631,16 +631,12 @@ export default {
       this.$request.getProgramImg().then(res => {
         if (res.data) {
           this.setForm = res.data
-          res.data.video_entrance_image && (this.baleImgList[0] = res.data.video_entrance_image)
-          res.data.comment_entrance_image &&
-            (this.evaluationImgList[0] = res.data.comment_entrance_image)
           res.data.forecast_image && (this.customerList[0] = res.data.forecast_image)
           res.data.freight_image && (this.freightList[0] = res.data.freight_image)
           res.data.track_image && (this.logisticsList[0] = res.data.track_image)
           res.data.support_image && (this.supportList[0] = res.data.support_image)
           res.data.share_image && (this.shareList[0] = res.data.share_image)
           res.data.index_image && (this.indexList[0] = res.data.index_image)
-          res.data.video_image && (this.videoList[0] = res.data.video_image)
           res.data.comment_image && (this.commentList[0] = res.data.comment_image)
           res.data.user_center_image && (this.centerList[0] = res.data.user_center_image)
           res.data.group_buying_image && (this.groupList[0] = res.data.group_buying_image)
@@ -649,8 +645,8 @@ export default {
           res.data.backup_img1 && (this.backupOnce[0] = res.data.backup_img1)
           res.data.backup_img2 && (this.backupSecond = res.data.backup_img2)
           console.log(this.backupSecond, 'this.backupSecond')
-          // res.data.backup_img3 && (this.backupThird[0] = res.data.backup_img3)
-          // res.data.backup_img4 && (this.backupFourth[0] = res.data.backup_img4)
+          res.data.backup_img3 && (this.backupThird[0] = res.data.backup_img3)
+          res.data.backup_img4 && (this.backupFourth[0] = res.data.backup_img4)
         }
       })
     },

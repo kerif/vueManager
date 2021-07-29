@@ -450,7 +450,8 @@ export default {
         remark: '',
         clearance_code_remark: '',
         multi_boxes: 0,
-        grades: []
+        grades: [],
+        has_factor: 0
       },
       dialogDescription: false,
       value: [],
@@ -583,6 +584,7 @@ export default {
         remark: '',
         clearance_code_remark: '',
         multi_boxes: 0,
+        has_factor: 0,
         grades: []
       }
     }
@@ -676,7 +678,7 @@ export default {
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              this.$router.go(-1)
+              this.getList()
             } else {
               this.$message({
                 message: res.msg,

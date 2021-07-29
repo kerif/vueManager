@@ -7,7 +7,7 @@
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
         <div class="select-box">
-          <add-btn @click.native="newLine">{{ $t('添加渠道') }}</add-btn>
+          <add-btn @click.native="newLine">{{ $t('添加路线') }}</add-btn>
         </div>
       </div>
     </div>

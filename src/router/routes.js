@@ -198,6 +198,7 @@ const bannerList = loadonDemand('marketing/banner/bannerList')
 const poster = loadonDemand('marketing/poster')
 // 营销管理 广告图管理 页面广告管理
 const imageSet = loadonDemand('marketing/imageSet')
+// const imageSet2 = loadonDemand('marketing/imageSet2')
 // 营销管理 新增或编辑渠道管理
 const AddEditChannel = loadonDemand('marketing/channel/AddEditChannel')
 // 营销管理 引流列表
@@ -1685,6 +1686,17 @@ export default [
               parent: '/marketing/advertising'
             }
           }
+          // {
+          //   path: '/marketing/advertising/imageSet2',
+          //   name: 'imageSet2',
+          //   component: imageSet2,
+          //   id: 805,
+          //   meta: {
+          //     level: 2,
+          //     group: '营销管理',
+          //     name: '页面广告管理'
+          //   }
+          // }
         ]
       },
       {
