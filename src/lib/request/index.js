@@ -138,6 +138,10 @@ exports.deleteRegionsTem = id => {
 exports.getLineGroup = params => {
   return $form.get('express-lines/groups', { params })
 }
+// 配置 新路线 编辑路线名称
+exports.editLineGroup = (id, params) => {
+  return $form.put(`express-lines/groups/${id}`, params)
+}
 // 配置 新路线 新建
 exports.newGroupLang = params => {
   return $form.post('express-lines/groups', params)

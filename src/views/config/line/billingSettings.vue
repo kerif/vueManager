@@ -321,6 +321,7 @@
           </div>
           <el-row :gutter="20" style="margin-left: 10px">
             <el-col :span="1">
+              {{ form.checked }}
               <el-checkbox v-model="form.checked"></el-checkbox>
             </el-col>
             <el-col :span="6">
@@ -619,6 +620,7 @@ export default {
         this.form.first_weight = res.data.first_weight
         this.form.is_avg_weight = res.data.is_avg_weight
         if (res.data.no_throw_condition) {
+          console.log(res.data.no_throw_condition.checked, 'res.data.no_throw_condition.checked')
           this.form.type = res.data.no_throw_condition.type
           this.form.value = res.data.no_throw_condition.value
           this.form.checked = Boolean(res.data.no_throw_condition.checked)
@@ -677,7 +679,6 @@ export default {
               checked: Number(this.form.checked),
               condition: this.form.condition
             }
-            // grades: this.itemArr
           })
           .then(res => {
             if (res.ret) {
