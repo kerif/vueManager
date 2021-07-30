@@ -51,6 +51,11 @@ export default {
       })
     },
     submit() {
+      this.illustrate = this.illustrate.map(item => {
+        return {
+          [item.code]: item[item.code]
+        }
+      })
       this.success(this.illustrate)
       this.show = false
     },

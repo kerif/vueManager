@@ -64,7 +64,6 @@ export default {
       checkedList: []
     }
   },
-  created() {},
   methods: {
     //消费积累成长值
     getGrowthValue() {
@@ -73,6 +72,11 @@ export default {
           this.feeList = res.data.fee_list
           this.triggerTypeList = res.data.trigger_type_list
           this.validTimeList = res.data.valid_time_list
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
@@ -86,6 +90,11 @@ export default {
           this.tableData.trigger_type = res.data.trigger_type
           this.tableData.valid_time = res.data.valid_time
           this.checkedList = res.data.included_fee.filter(item => item.checked).map(item => item.id)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
@@ -96,6 +105,11 @@ export default {
           this.feeList = res.data.fee_list
           this.triggerTypeList = res.data.trigger_type_list
           this.validTimeList = res.data.valid_time_list
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
@@ -109,6 +123,11 @@ export default {
           this.tableData.trigger_type = res.data.trigger_type
           this.tableData.valid_time = res.data.valid_time
           this.checkedList = res.data.included_fee.filter(item => item.checked).map(item => item.id)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
@@ -133,7 +152,17 @@ export default {
         })
         .then(res => {
           if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
             this.show = false
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
           }
         })
     },

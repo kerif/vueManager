@@ -70,9 +70,13 @@
             <span
               v-if="scope.row['trans_' + item.language_code]"
               class="el-icon-check icon-sty"
-              @click="onLang(scope.row, item)"
+              @click="onLang(scope.row, item, 'edit')"
             ></span>
-            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
+            <span
+              v-else
+              class="el-icon-plus icon-sty"
+              @click="onLang(scope.row, item, 'add')"
+            ></span>
           </template>
         </el-table-column>
         <el-table-column prop="name" :label="$t('操作')">
@@ -203,11 +207,23 @@ export default {
       })
     },
     // 修改语言
-    onLang(line, lang) {
+    onLang(line, lang, type) {
       this.title = this.$t('编辑会员等级')
       this.gradeDialog = true
       this.lang = lang
       this.langId = line.id
+      if (type === 'edit') {
+        this.$request.getGradeDetails(line.id, { lang: lang.language_code }).then(res => {
+          if (res.ret) {
+            this.gradeForm.name = res.data.name
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
     },
     //获取等级说明
     getGradeTips() {
