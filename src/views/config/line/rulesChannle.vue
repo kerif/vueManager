@@ -158,40 +158,49 @@
         </div>
         <div v-else>
           <el-form-item :label="$t('收费方式')">
-            <el-select
-              :disabled="!item.state"
-              v-model="item.charge_mode"
-              :placeholder="$t('请选择')"
-              clearable
-            >
-              <el-option
-                v-for="item in charginData"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
-            <el-input
-              :disabled="!item.state"
-              class="input-sty input-margin"
-              v-model="item.value"
-              :placeholder="$t('请输入固定值或百分比%')"
-            ></el-input>
+            <el-row>
+              <el-col :span="5">
+                <el-select
+                  :disabled="!item.state"
+                  v-model="item.charge_mode"
+                  :placeholder="$t('请选择')"
+                  clearable
+                >
+                  <el-option
+                    v-for="item in charginData"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="5">
+                <el-input
+                  :disabled="!item.state"
+                  v-model="item.value"
+                  :placeholder="$t('请输入固定值或百分比%')"
+                ></el-input>
+              </el-col>
+            </el-row>
           </el-form-item>
           <el-form-item :label="$t('收费范围')">
-            <el-input
-              :disabled="!item.state"
-              class="input-sty"
-              v-model="item.min_charge"
-              :placeholder="$t('请输入最低收费（空值为不设限制）')"
-            ></el-input>
-            <el-input
-              :disabled="!item.state"
-              class="input-sty input-margin"
-              v-model="item.max_charge"
-              :placeholder="$t('请输入最高收费（空值为不设限制）')"
-            ></el-input>
+            <el-row>
+              <el-col :span="5">
+                <el-input
+                  :disabled="!item.state"
+                  v-model="item.min_charge"
+                  :placeholder="$t('请输入最低收费（空值为不设限制）')"
+                ></el-input>
+              </el-col>
+              <el-col :span="5">
+                <el-input
+                  :disabled="!item.state"
+                  v-model="item.max_charge"
+                  :placeholder="$t('请输入最高收费（空值为不设限制）')"
+                ></el-input>
+              </el-col>
+            </el-row>
           </el-form-item>
         </div>
       </el-form>
