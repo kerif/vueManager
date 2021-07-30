@@ -80,10 +80,10 @@ export default {
     },
     clearn() {
       this.illustrate = []
+      this.langObj = []
     },
     init() {
       this.getLanguageList()
-      console.log(this.langObj)
     }
   }
 }

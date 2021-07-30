@@ -15,7 +15,7 @@
     </div>
     <h5>{{ $t('计入成长值消费（以实际支付为准）') }}：</h5>
     <div class="content">
-      <el-checkbox-group v-model="checkedList">
+      <el-checkbox-group v-model="checkedList" class="checked-list">
         <el-checkbox v-for="item in feeList" :label="item.id" :key="item.id">
           {{ item.name }}</el-checkbox
         >
@@ -195,6 +195,19 @@ export default {
 <style scoped lang="scss">
 .el-dialog__body {
   padding: 0 20px !important;
+}
+h5 {
+  font-size: 15px;
+}
+h5:first-child {
+  margin-top: 0;
+}
+.checked-list {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 10px 20px;
+  border: 1px solid #ccc;
 }
 .content {
   padding: 0 20px;

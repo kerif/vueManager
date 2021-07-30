@@ -13,7 +13,7 @@
     </div>
     <div class="item-label">
       <p>{{ $t('可抵扣消费') + ':' }}</p>
-      <el-checkbox-group v-model="checkedList">
+      <el-checkbox-group v-model="checkedList" class="checked-list">
         <el-checkbox v-for="item in feeList" :key="item.id" :label="item.id">{{
           item.name
         }}</el-checkbox>
@@ -121,9 +121,24 @@ export default {
   .item-label {
     padding: 10px 0;
   }
+  .checked-list {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+  }
+  p {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  p:first-child {
+    margin-top: 0;
+  }
   .tips {
     padding-top: 10px;
-    color: #ccc;
+    font-size: 12px;
+    color: #a1a1a1;
   }
 }
 </style>

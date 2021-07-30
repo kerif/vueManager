@@ -190,8 +190,16 @@ export default {
 .evaluation {
   .item-label {
     margin: 40px 0;
+    p {
+      font-size: 15px;
+      font-weight: bold;
+    }
+    p:first-child {
+      margin-top: 0;
+    }
     .tips {
-      color: #ccc;
+      font-size: 12px;
+      color: #a1a1a1;
     }
   }
 }

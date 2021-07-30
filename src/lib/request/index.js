@@ -2285,8 +2285,12 @@ exports.getBaseTable = params => {
   return $form.get(`in-out-rule/growth-value-base-price`, { params })
 }
 // 营销管理 会员体系 收支规则 成长值购买 获取基础价格表详情
-exports.getBaseTableDetails = id => {
-  return $form.get(`in-out-rule/growth-value-base-price/${id}`)
+exports.getBaseTableDetails = (id, params) => {
+  return $form.get(`in-out-rule/growth-value-base-price/${id}`, { params })
+}
+// 营销管理 会员体系 收支规则 成长值购买 修改基础价格表翻译
+exports.editBaseTableTrans = (id, params) => {
+  return $form.put(`in-out-rule/growth-value-base-price/${id}/translate-data`, params)
 }
 // 营销管理 会员体系 收支规则 成长值购买 新增基础价格表
 exports.addBaseTable = params => {
@@ -2296,7 +2300,7 @@ exports.addBaseTable = params => {
 exports.editBaseTable = (id, params) => {
   return $form.put(`in-out-rule/growth-value-base-price/${id}`, params)
 }
-// 营销管理 会员体系 收支规则 成长值购买 修改基础价格表
+// 营销管理 会员体系 收支规则 成长值购买 删除基础价格表
 exports.deleteBaseTable = id => {
   return $form.delete(`in-out-rule/growth-value-base-price/${id}`)
 }
@@ -2328,9 +2332,17 @@ exports.editDiscountTable = (id, params) => {
 exports.deleteDiscountTable = id => {
   return $form.delete(`in-out-rule/growth-value-discount-price/${id}`)
 }
-// 营销管理 会员体系 收支记录
+// 营销管理 会员体系 获取收支记录
 exports.getInOutRecord = params => {
   return $form.get(`in-out-record`, { params })
+}
+// 营销管理 会员体系 获取收支记录初始化
+exports.getRecordDefault = () => {
+  return $form.get(`in-out-record/init`)
+}
+// 营销管理 会员体系 添加收支记录
+exports.addInOutRecord = params => {
+  return $form.post(`in-out-record`, params)
 }
 // 营销管理 会员体系 收支记录 详情
 exports.getRecordDetails = id => {

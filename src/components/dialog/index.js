@@ -1021,6 +1021,7 @@ function initInstance(type) {
     // 会员体系 收支规则 成长值购买 基础表格
     case 'addBaseTable':
     case 'editBaseTable':
+    case 'transBaseTable':
       instance = new BaseTable({
         el: document.createElement('div'),
         mixins: [mixin]

@@ -40,7 +40,25 @@
         <el-table-column prop="illustrate" :label="$t('产品说明')"> </el-table-column>
         <el-table-column prop="growth_value" :label="$t('成长值')"> </el-table-column>
         <el-table-column prop="price" :label="$t('价格')"> </el-table-column>
-        <!-- <el-table-column prop="name" :label="$t('产品名称')"> </el-table-column> -->
+        <el-table-column
+          :label="item.name"
+          v-for="item in formatLangData"
+          :key="item.id"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row['trans_' + item.language_code]"
+              class="el-icon-check icon-sty"
+              @click="onLang(scope.row, item, 'edit')"
+            ></span>
+            <span
+              v-else
+              class="el-icon-plus icon-sty"
+              @click="onLang(scope.row, item, 'add')"
+            ></span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('操作')" width="150">
           <template slot-scope="scope">
             <el-button size="mini" class="btn-green" @click="editBaseTable(scope.row.id)">{{
@@ -132,7 +150,7 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      languageList: [],
+      languageData: [],
       validTimeList: [],
       form: {
         valid_time: '',
@@ -154,12 +172,17 @@ export default {
       }
     }
   },
+  computed: {
+    formatLangData() {
+      return this.languageData.filter(item => item.language_code !== 'zh_CN')
+    }
+  },
   methods: {
     // 获取支持语言
     getLanguageList() {
       this.$request.languageList().then(res => {
         if (res.ret) {
-          this.languageList = res.data
+          this.languageData = res.data
         }
       })
     },
@@ -194,7 +217,7 @@ export default {
     },
     // 说明
     explain() {
-      dialog({ type: 'explain', illustrateData: this.form.illustrate }, data => {
+      dialog({ type: 'explain', langObj: this.form.illustrate }, data => {
         this.form.illustrate = data
       })
     },
@@ -235,6 +258,11 @@ export default {
     // 编辑基础表
     editBaseTable(baseId) {
       dialog({ type: 'editBaseTable', baseId }, () => {
+        this.getBaseTable()
+      })
+    },
+    onLang(line, lang, type) {
+      dialog({ type: 'transBaseTable', line: line, lang: lang, status: type }, () => {
         this.getBaseTable()
       })
     },

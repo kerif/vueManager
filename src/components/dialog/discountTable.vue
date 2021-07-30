@@ -43,6 +43,7 @@
         <el-checkbox-group
           v-model="discountForm.applicable_mode_ids"
           v-if="discountForm.applicable_mode === 1 || discountForm.applicable_mode === 2"
+          class="checked-list"
         >
           <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
             item.name
@@ -65,7 +66,7 @@
               </template>
             </el-autocomplete>
           </div>
-          <div class="customer">
+          <div class="customer checked-list">
             <div class="customer-item" v-for="item in customerList" :key="item.id">
               {{ item.id }}---{{ item.name }}
             </div>
@@ -254,5 +255,13 @@ export default {
 }
 .search {
   padding-top: 10px;
+}
+.checked-list {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
 }
 </style>

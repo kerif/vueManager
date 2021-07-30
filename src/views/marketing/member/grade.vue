@@ -110,8 +110,17 @@ export default {
   created() {
     this.getList()
     this.getGradeTips()
+    this.getLanguageList()
   },
   methods: {
+    // 获取支持语言
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+        }
+      })
+    },
     //获取列表
     getList() {
       this.$request

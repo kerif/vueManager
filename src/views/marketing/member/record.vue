@@ -3,40 +3,54 @@
     <el-dialog
       :title="$t('添加')"
       :visible.sync="addDialog"
-      width="30%"
+      width="40%"
       @close="resetForm('form')"
       class="dialog-container"
     >
       <div>
-        <el-form ref="form" :model="form">
+        <el-form ref="form" :model="form" label-position="top">
           <el-form-item :label="$t('选择客户')" prop="customer">
-            <el-select v-model="form.customer"></el-select>
+            <el-select v-model="form.user_id">
+              <el-option
+                v-for="item in userList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item :label="$t('选择分类')" prop="radio1">
-            <el-radio v-model="form.radio1" label="1">{{ $t('成长值') }}</el-radio>
-            <el-radio v-model="form.radio1" label="2">{{ $t('积分') }}</el-radio>
+            <el-radio v-model="form.resource_type" label="1">{{ $t('成长值') }}</el-radio>
+            <el-radio v-model="form.resource_type" label="2">{{ $t('积分') }}</el-radio>
           </el-form-item>
           <el-form-item :label="$t('选择操作')" prop="radio2">
-            <el-radio v-model="form.radio2" label="1">{{ $t('充值') }}</el-radio>
-            <el-radio v-model="form.radio2" label="2">{{ $t('扣款') }}</el-radio>
+            <el-radio v-model="form.code" label="RECHARGE">{{ $t('充值') }}</el-radio>
+            <el-radio v-model="form.code" label="DECREASE">{{ $t('扣款') }}</el-radio>
           </el-form-item>
-          <el-form-item :label="$t('请输入值')" prop="value">
-            <el-input v-model="form.value"></el-input>
+          <el-form-item :label="$t('值')" prop="value">
+            <el-input v-model="form.value" style="width: 210px"></el-input>
           </el-form-item>
           <el-form-item :label="$t('到账之日起计算，有效期为')">
-            <el-select v-model="form.customer"></el-select>
+            <el-select v-model="form.valid_time">
+              <el-option
+                v-for="item in validTimeList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item :label="$t('关联订单号')" prop="value">
-            <el-input v-model="form.value"></el-input>
+            <el-input v-model="form.order_sn" style="width: 210px"></el-input>
           </el-form-item>
           <el-form-item :label="$t('备注')" prop="value">
-            <el-input v-model="form.value"></el-input>
+            <el-input v-model="form.remark" type="textarea" :row="10"></el-input>
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">取 消</el-button>
-        <el-button type="primary" @click="addDialog = false">确 定</el-button>
+        <el-button type="primary" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -146,8 +160,8 @@
         <el-table-column prop="income_outlay_rule_name" :label="$t('收支规则')"> </el-table-column>
         <el-table-column prop="order_sn" :label="$t('相关订单')"> </el-table-column>
         <el-table-column prop="name" :label="$t('流水号')"> </el-table-column>
-        <el-table-column prop="created_at" :label="$t('时间')"> </el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column prop="updated_at" :label="$t('时间')" width="220"></el-table-column>
+        <el-table-column :label="$t('操作')" width="80">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -183,11 +197,16 @@ export default {
       rule: '',
       timeList: [],
       tableData: [],
+      userList: [],
+      validTimeList: [],
       form: {
-        customer: '',
-        radio1: '1',
-        radio2: '1',
-        value: ''
+        user_id: '',
+        resource_type: '',
+        code: '',
+        value: '',
+        order_sn: '',
+        valid_time: '',
+        remark: ''
       },
       detailsForm: {},
       title: ''
@@ -195,6 +214,8 @@ export default {
   },
   created() {
     this.getList()
+    this.getUsers()
+    this.getRecordDefault()
   },
   methods: {
     //获取列表
@@ -218,6 +239,28 @@ export default {
           }
         })
     },
+    //获取客户列表
+    getUsers() {
+      this.$request.getUsers().then(res => {
+        if (res.ret) {
+          this.userList = res.data
+        }
+      })
+    },
+    // 获取初始化
+    getRecordDefault() {
+      this.$request.getRecordDefault().then(res => {
+        if (res.data) {
+          this.validTimeList = res.data.valid_time_list
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    //详情
     getRecordDetails(id, type) {
       if (type === 1) {
         this.title = '收入详情'
@@ -228,6 +271,25 @@ export default {
       this.$request.getRecordDetails(id).then(res => {
         if (res.ret) {
           this.detailsForm = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 添加
+    confirm() {
+      this.$request.addInOutRecord({ ...this.form }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.addDialog = false
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
