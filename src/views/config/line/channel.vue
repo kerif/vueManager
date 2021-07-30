@@ -136,13 +136,13 @@
           <div class="add-btn-center">
             <!-- :params="{ add: 1 }" -->
             <add-btn @click.native="addNew" style="margin-right: 10px">{{
-              $t('添加路线')
+              $t('添加渠道')
             }}</add-btn>
-            <div class="filter">
+            <!-- <div class="filter">
               <el-button @click="onHighSearch" type="text"
                 >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
               ></el-button>
-            </div>
+            </div> -->
           </div>
         </el-col>
       </el-row>
@@ -263,9 +263,9 @@
                 <el-dropdown-item class="item-sty" @click.native="editLine(scope.row.id)">
                   <span>{{ $t('修改') }}</span>
                 </el-dropdown-item>
-                <el-dropdown-item class="item-sty" @click.native="goOthers(scope.row.id)">
+                <!-- <el-dropdown-item class="item-sty" @click.native="goOthers(scope.row.id)">
                   <span>{{ $t('附加费用') }}</span>
-                </el-dropdown-item>
+                </el-dropdown-item> -->
                 <el-dropdown-item class="item-sty" @click.native="Advanced(scope.row.id)">
                   <span>{{ $t('高级配置') }}</span>
                 </el-dropdown-item>

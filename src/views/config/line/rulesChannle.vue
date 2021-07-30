@@ -147,7 +147,7 @@
           </el-form-item>
           <el-form-item v-for="lang in stringData" :key="lang.id" :label="lang.name">
             <el-input
-              :disabled="!lang.state"
+              :disabled="!item.state"
               v-model="lang.value"
               type="textarea"
               class="tips-sty"
@@ -196,7 +196,7 @@
         </div>
       </el-form>
       <div class="btn-sty">
-        <el-button>{{ $t('取消') }}</el-button>
+        <el-button @click="cancelSave(item)">{{ $t('取消') }}</el-button>
         <el-button @click="saveChannles(item)">{{ $t('保存') }}</el-button>
       </div>
     </div>
@@ -204,6 +204,7 @@
 </template>
 
 <script>
+import { clone } from '@/router/utils'
 export default {
   data() {
     return {
@@ -279,7 +280,8 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      editData: {}
     }
   },
   created() {
@@ -305,7 +307,6 @@ export default {
             const value = res.data.notice_translations[item.language_code]
             return {
               ...item,
-              state: false,
               value
             }
           })
@@ -384,7 +385,19 @@ export default {
       })
     },
     editState(state) {
+      this.editData = clone.object(state)
+      console.log(state, 'state')
       state.state = true
+    },
+    cancelSave(state) {
+      state.state = false
+      console.log(this.editData, 'this.editData')
+      this.channel = this.channel.map(item => {
+        if (item.id === this.editData.id) {
+          return this.editData
+        }
+        return item
+      })
     },
     deleteChannel(index, item, id) {
       console.log(id, 'id')

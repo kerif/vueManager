@@ -273,37 +273,6 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <!-- 分享页 -->
-          <!-- <el-col :span="8">
-          <div class="new-top">
-          <el-form-item class="updateChe">
-              <span class="img-item" v-for="(item, index) in shareList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img">
-              <span class="model-box"></span>
-              <span class="operat-box">
-                  <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                  <i class="el-icon-delete" @click="onDeleteShare(index)"></i>
-              </span>
-              </span>
-            <el-upload
-              v-show="shareList.length < 1"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadShare"
-              :show-file-list="false">
-              <i class="el-icon-plus">
-              </i>
-          </el-upload><br/>
-          </el-form-item>
-          <p class="font-sty">{{$t('分享页')}}</p>
-          <div class="user-bottom">
-            <div class="bottom-right">
-              <span class="suggest-btn">{{$t('建议尺寸：750px*1204px')}}</span>
-            </div>
-          </div>
-          </div>
-        </el-col> -->
           <!-- 协议背景图片 -->
           <el-col :span="8">
             <div class="new-top">
@@ -498,17 +467,119 @@
               </el-form-item>
               <p class="font-sty">{{ $t('拼团背景图片') }}</p>
               <div class="user-bottom">
-                <!-- <div class="bottom-left">
-                <el-button class="btn-deep-blue">{{$t('编辑')}}</el-button>
-              </div> -->
                 <div class="bottom-right">
                   <span class="suggest-btn">{{ $t('建议尺寸：355px*160px') }}</span>
                 </div>
               </div>
             </div>
           </el-col>
+          <el-col :span="8">
+            <div class="new-top">
+              <!-- 备用图片1 -->
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in backupOnce" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteBackupOnce(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="backupOnce.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadBackupOnce"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('备用图片1') }}</p>
+            </div>
+          </el-col>
         </el-row>
-        <el-row :gutter="20"> </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <div class="new-top">
+              <!-- 备用图片2 -->
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in backupSecond" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteBackupSecond(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="backupSecond.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadBackupSecond"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('备用图片2') }}</p>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="new-top">
+              <!-- 备用图片3 -->
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in backupThird" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteBackupThird(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="backupThird.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadBackupThird"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('备用图片3') }}</p>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="new-top">
+              <!-- 备用图片4 -->
+              <el-form-item class="updateChe">
+                <span class="img-item" v-for="(item, index) in backupFourth" :key="index">
+                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                  <span class="model-box"></span>
+                  <span class="operat-box">
+                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                    <i class="el-icon-delete" @click="onDeleteBackupFourth(index)"></i>
+                  </span>
+                </span>
+                <el-upload
+                  v-show="backupFourth.length < 1"
+                  class="avatar-uploader"
+                  action=""
+                  list-type="picture-card"
+                  :http-request="uploadBackupFourth"
+                  :show-file-list="false"
+                >
+                  <i class="el-icon-plus"> </i> </el-upload
+                ><br />
+              </el-form-item>
+              <p class="font-sty">{{ $t('备用图片4') }}</p>
+            </div>
+          </el-col>
+        </el-row>
       </el-form>
       <el-button class="save-btn" @click="editOthers">{{ $t('保存') }}</el-button>
     </div>
@@ -533,6 +604,10 @@ export default {
       commentList: [], // 评论区
       centerList: [], // 个人中心背景
       groupList: [], // 拼团背景图片
+      backupOnce: [], // 备用图片1
+      backupSecond: [], // 备用图片1
+      backupThird: [], // 备用图片1
+      backupFourth: [], // 备用图片1
       licenseList: [], // 协议背景图
       approveList: [], // 增加代理成功提示
       warehouseList: [], // 仓库背景图
@@ -556,22 +631,22 @@ export default {
       this.$request.getProgramImg().then(res => {
         if (res.data) {
           this.setForm = res.data
-          res.data.video_entrance_image && (this.baleImgList[0] = res.data.video_entrance_image)
-          res.data.comment_entrance_image &&
-            (this.evaluationImgList[0] = res.data.comment_entrance_image)
           res.data.forecast_image && (this.customerList[0] = res.data.forecast_image)
           res.data.freight_image && (this.freightList[0] = res.data.freight_image)
           res.data.track_image && (this.logisticsList[0] = res.data.track_image)
           res.data.support_image && (this.supportList[0] = res.data.support_image)
           res.data.share_image && (this.shareList[0] = res.data.share_image)
           res.data.index_image && (this.indexList[0] = res.data.index_image)
-          res.data.video_image && (this.videoList[0] = res.data.video_image)
           res.data.comment_image && (this.commentList[0] = res.data.comment_image)
           res.data.user_center_image && (this.centerList[0] = res.data.user_center_image)
           res.data.group_buying_image && (this.groupList[0] = res.data.group_buying_image)
           res.data.license_image && (this.licenseList[0] = res.data.license_image)
           res.data.agent_approve_image && (this.approveList[0] = res.data.agent_approve_image)
-          res.data.warehouse_image && (this.warehouseList[0] = res.data.warehouse_image)
+          res.data.backup_img1 && (this.backupOnce[0] = res.data.backup_img1)
+          res.data.backup_img2 && (this.backupSecond = res.data.backup_img2)
+          console.log(this.backupSecond, 'this.backupSecond')
+          res.data.backup_img3 && (this.backupThird[0] = res.data.backup_img3)
+          res.data.backup_img4 && (this.backupFourth[0] = res.data.backup_img4)
         }
       })
     },
@@ -664,6 +739,17 @@ export default {
         }
       })
     },
+    // 上传首页
+    uploadLicense(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.licenseList.push(item.path)
+          })
+        }
+      })
+    },
     // 上传视频区
     uploadVideo(item) {
       let file = item.file
@@ -697,13 +783,46 @@ export default {
         }
       })
     },
-    // 协议背景图片
-    uploadLicense(item) {
+    // 备用图片1
+    uploadBackupOnce(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            this.licenseList.push(item.path)
+            this.backupOnce.push(item.path)
+          })
+        }
+      })
+    },
+    // 备用图片2
+    uploadBackupSecond(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.backupSecond.push(item.path)
+          })
+        }
+      })
+    },
+    // 备用图片3
+    uploadBackupThird(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.backupThird.push(item.path)
+          })
+        }
+      })
+    },
+    // 备用图片4
+    uploadBackupFourth(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.backupFourth.push(item.path)
           })
         }
       })
@@ -802,6 +921,22 @@ export default {
     // 拼团背景图片
     onDeleteGroup(index) {
       this.groupList.splice(index, 1)
+    },
+    // 备用图片1
+    onDeleteBackupOnce(index) {
+      this.backupOnce.splice(index, 1)
+    },
+    // 备用图片2
+    onDeleteBackupSecond(index) {
+      this.backupSecond.splice(index, 1)
+    },
+    // 备用图片3
+    onDeleteBackupThird(index) {
+      this.backupThird.splice(index, 1)
+    },
+    // 备用图片4
+    onDeleteBackupFourth(index) {
+      this.backupFourth.splice(index, 1)
     },
     // 协议背景图片
     onDeleteLicense(index) {

@@ -573,7 +573,7 @@ export default {
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              this.$router.go(-1)
+              this.getList()
             } else {
               this.$message({
                 message: res.msg,
@@ -591,13 +591,21 @@ export default {
           })
           .then(res => {
             if (res.ret) {
+              const dataId = res.data.id
+              this.$router.push({
+                name: 'channelLineEdit',
+                params: {
+                  id: dataId
+                },
+                query: {
+                  state: 'edit'
+                }
+              })
               this.$notify({
                 type: 'success',
                 title: this.$t('操作成功'),
                 message: res.msg
               })
-              // this.$router.push({ name: 'linelist' })
-              this.$router.go(-1)
             } else {
               this.$message({
                 message: res.msg,
