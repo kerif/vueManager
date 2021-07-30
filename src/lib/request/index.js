@@ -2165,8 +2165,8 @@ exports.deletePickRules = id => {
   return $form.delete(`self-pickup-stations/rules/${id}`)
 }
 // 营销管理 会员体系 等级配置 列表
-exports.getGradeList = () => {
-  return $form.get(`member-level`)
+exports.getGradeList = params => {
+  return $form.get(`member-level`, { params })
 }
 // 营销管理 会员体系 等级配置 详情
 exports.getGradeDetails = (id, params) => {
@@ -2329,8 +2329,8 @@ exports.deleteDiscountTable = id => {
   return $form.delete(`in-out-rule/growth-value-discount-price/${id}`)
 }
 // 营销管理 会员体系 收支记录
-exports.getInOutRecord = () => {
-  return $form.get(`in-out-record`)
+exports.getInOutRecord = params => {
+  return $form.get(`in-out-record`, { params })
 }
 // 营销管理 会员体系 收支记录 详情
 exports.getRecordDetails = id => {

@@ -998,6 +998,7 @@ function initInstance(type) {
       break
     // 会员体系 收支规则 评论奖励积分 说明
     case 'explain':
+    case 'getGradeTips':
       instance = new Explain({
         el: document.createElement('div'),
         mixins: [mixin]

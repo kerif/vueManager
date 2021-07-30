@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :title="title" :visible.sync="show" width="50%" @close="clearn">
+  <el-dialog
+    :title="title"
+    :visible.sync="show"
+    width="50%"
+    @close="clearn"
+    class="dialog-container"
+  >
     <el-form :model="baseForm">
       <el-form-item :label="$t('产品名称')">
         <el-input v-model="baseForm.name"></el-input>

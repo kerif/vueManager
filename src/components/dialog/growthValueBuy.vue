@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :title="$t('成长值购买')" :visible.sync="show" width="70%" class="growth-value-buy">
+  <el-dialog
+    :title="$t('成长值购买')"
+    :visible.sync="show"
+    width="70%"
+    class="growth-value-buy dialog-container"
+  >
     <div>
       <div class="title">{{ $t('购买设置') + ':' }}</div>
       <el-form ref="form" :model="form" label-width="230px" label-position="left">
@@ -29,7 +34,7 @@
         <el-button size="mini" type="primary" @click="addBaseTable">{{ $t('新增') }}</el-button>
         <span class="tips">{{ '*' + $t('最多添加10条') }}</span>
       </div>
-      <el-table :data="basePriceTable" border style="width: 100%">
+      <el-table :data="basePriceTable" border style="width: 100%; margin-bottom: 10px">
         <el-table-column type="index" label="#" width="40"> </el-table-column>
         <el-table-column prop="name" :label="$t('产品名称')"> </el-table-column>
         <el-table-column prop="illustrate" :label="$t('产品说明')"> </el-table-column>
@@ -38,21 +43,33 @@
         <!-- <el-table-column prop="name" :label="$t('产品名称')"> </el-table-column> -->
         <el-table-column :label="$t('操作')" width="150">
           <template slot-scope="scope">
-            <el-button size="mini" @click="editBaseTable(scope.row.id)">{{ $t('编辑') }}</el-button>
-            <el-button size="mini" @click="deleteBaseTable(scope.row.id)">{{
+            <el-button size="mini" class="btn-green" @click="editBaseTable(scope.row.id)">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button size="mini" class="btn-light-red" @click="deleteBaseTable(scope.row.id)">{{
               $t('删除')
             }}</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination :pageParams="page_paramss"></nle-pagination>
+      <el-pagination
+        style="text-align: right"
+        @size-change="baseSizeChange"
+        @current-change="baseCurrentChange"
+        :current-page="base.page"
+        :page-sizes="[10, 20, 30, 50, 100, 200, 300]"
+        :page-size="base.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="base.total"
+      >
+      </el-pagination>
     </div>
     <div>
       <div class="title">
         <span class="sub-title"> {{ $t('优惠价格表') + ':' }}</span>
         <el-button size="mini" type="primary" @click="addDiscountTable">{{ $t('新增') }}</el-button>
       </div>
-      <el-table :data="discountPriceTable" border style="width: 100%">
+      <el-table :data="discountPriceTable" border style="width: 100%; margin-bottom: 10px">
         <el-table-column type="index" label="#" width="40"> </el-table-column>
         <el-table-column prop="base_name" :label="$t('产品名称')"> </el-table-column>
         <el-table-column prop="price" :label="$t('活动价')"> </el-table-column>
@@ -80,16 +97,29 @@
         </el-table-column>
         <el-table-column :label="$t('操作')" width="150">
           <template slot-scope="scope">
-            <el-button size="mini" @click="editDiscountTable(scope.row.id)">{{
+            <el-button size="mini" class="btn-green" @click="editDiscountTable(scope.row.id)">{{
               $t('编辑')
             }}</el-button>
-            <el-button size="mini" @click="deleteDiscountTable(scope.row.id)">{{
-              $t('删除')
-            }}</el-button>
+            <el-button
+              size="mini"
+              class="btn-light-red"
+              @click="deleteDiscountTable(scope.row.id)"
+              >{{ $t('删除') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination :pageParams="page_params"></nle-pagination>
+      <el-pagination
+        style="text-align: right"
+        @size-change="discountSizeChange"
+        @current-change="discountCurrentChange"
+        :current-page="discount.page"
+        :page-sizes="[10, 20, 30, 50, 100, 200, 300]"
+        :page-size="discount.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="discount.total"
+      >
+      </el-pagination>
     </div>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -99,13 +129,7 @@
 </template>
 <script>
 import dialog from '@/components/dialog'
-import NlePagination from '@/components/pagination'
-import { pagination } from '@/mixin'
 export default {
-  components: {
-    NlePagination
-  },
-  mixins: [pagination],
   data() {
     return {
       languageList: [],
@@ -117,7 +141,17 @@ export default {
         illustrate: []
       },
       basePriceTable: [],
-      discountPriceTable: []
+      base: {
+        page: 1,
+        size: 10,
+        total: 0
+      },
+      discountPriceTable: [],
+      discount: {
+        page: 1,
+        size: 10,
+        total: 0
+      }
     }
   },
   methods: {
@@ -168,14 +202,14 @@ export default {
     getBaseTable() {
       this.$request
         .getBaseTable({
-          page: this.page_paramss.page,
-          size: this.page_paramss.size
+          page: this.base.page,
+          size: this.base.size
         })
         .then(res => {
           if (res.ret) {
             this.basePriceTable = res.data
-            this.page_paramss.page = res.meta.current_page
-            this.page_paramss.total = res.meta.total
+            this.base.page = res.meta.current_page
+            this.base.total = res.meta.total
           } else {
             this.$message({
               message: res.msg,
@@ -183,6 +217,14 @@ export default {
             })
           }
         })
+    },
+    baseSizeChange(val) {
+      this.base.size = val
+      this.getBaseTable()
+    },
+    baseCurrentChange(val) {
+      this.base.page = val
+      this.getBaseTable()
     },
     // 新增基础表
     addBaseTable() {
@@ -224,14 +266,14 @@ export default {
     getDiscountTable() {
       this.$request
         .getDiscountTable({
-          page: this.page_params.page,
-          size: this.page_params.size
+          page: this.discount.page,
+          size: this.discount.size
         })
         .then(res => {
           if (res.ret) {
             this.discountPriceTable = res.data
-            this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
+            this.discount.page = res.meta.current_page
+            this.discount.total = res.meta.total
           } else {
             this.$message({
               message: res.msg,
@@ -239,6 +281,14 @@ export default {
             })
           }
         })
+    },
+    discountSizeChange(val) {
+      this.discount.size = val
+      this.getDiscountTable()
+    },
+    discountCurrentChange(val) {
+      this.discount.page = val
+      this.getDiscountTable()
     },
     updateDiscountEnabled(id, enabled) {
       this.$request.updateDiscountEnabled(id, { enabled }).then(res => {

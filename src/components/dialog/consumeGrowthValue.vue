@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :title="$t('消费转换成长值')" :visible.sync="show" width="40%" @close="clear">
+  <el-dialog
+    :title="$t('消费转换成长值')"
+    :visible.sync="show"
+    width="40%"
+    @close="clear"
+    class="dialog-container"
+  >
     <h5>{{ $t('转换规则') }}：</h5>
     <div class="content">
       <div>

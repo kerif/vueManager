@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :title="$t('评论奖励积分')" :visible.sync="show" width="50%" class="evaluation">
+  <el-dialog
+    :title="$t('评论奖励积分')"
+    :visible.sync="show"
+    width="50%"
+    class="evaluation dialog-container"
+  >
     <div class="item-label" style="margin-top: 0">
       <p>{{ $t('订单签收之日起计算，评价奖励有效期（天）') + ':' }}</p>
       <el-input v-model="tableData.valid_days" style="width: 100px"></el-input>
@@ -26,7 +31,7 @@
     <div class="item-label">
       <div style="margin-bottom: 10px">
         <el-button size="small" @click="explain">{{ $t('说明') }}</el-button>
-        <el-button size="small" @click="addData">{{ $t('新增') }}</el-button>
+        <el-button size="small" type="primary" @click="addData">{{ $t('新增') }}</el-button>
         <span class="tips" style="margin-left: 20px">{{ '*' + $t('最多添加10条') }}</span>
       </div>
       <el-table :data="pointTableData" border style="width: 100%">
@@ -36,8 +41,12 @@
         <el-table-column prop="point" :label="$t('积分')"> </el-table-column>
         <el-table-column :label="$t('操作')" width="150">
           <template slot-scope="scope">
-            <el-button size="mini" @click="editData(scope.row.id)">{{ $t('编辑') }}</el-button>
-            <el-button size="mini" @click="deleteTable(scope.row.id)">{{ $t('删除') }}</el-button>
+            <el-button size="mini" class="btn-green" @click="editData(scope.row.id)">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button size="mini" class="btn-light-red" @click="deleteTable(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>

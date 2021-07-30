@@ -3,13 +3,13 @@
     :title="$t('评价规则说明')"
     :visible.sync="show"
     width="50%"
-    class="explain"
+    class="explain dialog-container"
     @close="clearn"
   >
     <p class="tips">{{ '*' + $t('该说明将显示在客户端（小程序/网站），方便客户理解规则') }}</p>
-    <div v-for="(item, index) in illustrate" :key="item.id">
+    <div v-for="item in illustrate" :key="item.id">
       <p>{{ item.name }}</p>
-      <el-input type="textarea" :rows="5" v-model="illustrate[index][item.code]"></el-input>
+      <el-input type="textarea" :rows="5" v-model="langObj[item.code]"></el-input>
     </div>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       illustrate: [],
-      illustrateData: []
+      langObj: {}
     }
   },
   methods: {
@@ -41,7 +41,6 @@ export default {
           this.illustrate.forEach(item => {
             this.$set(item, item.code, '')
           })
-          this.illustrate = [...JSON.parse(this.illustrateData)]
         } else {
           this.$message({
             message: res.msg,
@@ -56,7 +55,27 @@ export default {
           [item.code]: item[item.code]
         }
       })
-      this.success(this.illustrate)
+      if (this.type === 'getGradeTips') {
+        // 修改等级说明
+        this.$request.editGradeTips({ illustrate: { ...this.langObj } }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.tipsDialog = false
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+        this.show = false
+        return
+      }
+      this.success(this.langObj)
       this.show = false
     },
     clearn() {
@@ -64,6 +83,7 @@ export default {
     },
     init() {
       this.getLanguageList()
+      console.log(this.langObj)
     }
   }
 }

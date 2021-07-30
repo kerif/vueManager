@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :title="$t('评论奖励积分')" :visible.sync="show" width="30%" @close="clearn">
+  <el-dialog
+    :title="$t('评论奖励积分')"
+    :visible.sync="show"
+    width="30%"
+    @close="clearn"
+    class="dialog-container"
+  >
     <el-form ref="form" :model="form">
       <el-form-item :label="$t('字数') + '>='">
         <el-input v-model="form.word_count"></el-input>
