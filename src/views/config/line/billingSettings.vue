@@ -73,7 +73,7 @@
           <el-row :gutter="10">
             <el-col :span="5">
               <div v-if="form.base_mode === 0 && (form.mode === 1 || form.mode === 4)">
-                {{ $t('*首重') + localization.currency_unit + '/' + unitName }}
+                {{ $t('*首重') + unitName }}
               </div>
               <div v-if="form.base_mode === 1 && form.mode === 1">
                 {{ $t('*首费体积') + localization.currency_unit + '/' + unitName }}
@@ -99,7 +99,7 @@
                 :label="$t('起始') + billingName + unitName + ' >='"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.start"></el-input>
+                  <el-input v-model="scope.row.start" :disabled="!status"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -285,7 +285,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item v-if="form.base_mode === 0 && form.multi_boxes === 1">
+      <el-form-item v-if="form.base_mode === 0 && form.has_factor === 1">
         <div>{{ $t('体积系数') }}</div>
         <el-row>
           <el-col :span="10">
@@ -293,7 +293,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <div v-if="form.base_mode === 0 && form.multi_boxes === 1">
+      <div v-if="form.base_mode === 0 && form.has_factor === 1">
         <el-form-item>
           <div>*{{ $t('体积模式') }}</div>
           <el-row>
@@ -518,6 +518,7 @@ export default {
       itemArr: {},
       setVisible: false,
       dialogVisible: false,
+      status: true,
       paramsOptions: [
         {
           id: 1,

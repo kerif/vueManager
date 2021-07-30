@@ -24,7 +24,11 @@
     <div class="rules-main" v-for="(item, index) in channel" :key="index">
       <div class="rules-top">
         <div class="rules-left">
-          <el-input v-model="item.name" v-if="item.state"></el-input>
+          <el-input
+            :placeholder="$t('请输入规则名称')"
+            v-model="item.name"
+            v-if="item.state"
+          ></el-input>
           <h3 v-else>{{ item.name }}</h3>
         </div>
         <div class="rules-right">
@@ -159,7 +163,7 @@
         <div v-else>
           <el-form-item :label="$t('收费方式')">
             <el-row>
-              <el-col :span="5">
+              <el-col :span="8">
                 <el-select
                   :disabled="!item.state"
                   v-model="item.charge_mode"
@@ -175,7 +179,7 @@
                   </el-option>
                 </el-select>
               </el-col>
-              <el-col :span="5" :offset="1">
+              <el-col :span="8" :offset="1">
                 <el-input
                   :disabled="!item.state"
                   v-model="item.value"
@@ -186,14 +190,14 @@
           </el-form-item>
           <el-form-item :label="$t('收费范围')">
             <el-row>
-              <el-col :span="5">
+              <el-col :span="8">
                 <el-input
                   :disabled="!item.state"
                   v-model="item.min_charge"
                   :placeholder="$t('请输入最低收费（空值为不设限制）')"
                 ></el-input>
               </el-col>
-              <el-col :span="5" :offset="1">
+              <el-col :span="8" :offset="1">
                 <el-input
                   :disabled="!item.state"
                   v-model="item.max_charge"
