@@ -9,6 +9,15 @@ export default {
         handleCurrentChange: this.handleCurrentChange,
         handleSizeChange: this.handleSizeChange,
         handleQueryChange: this.handleQueryChange
+      },
+      page_paramss: {
+        page: 1,
+        size: 10,
+        total: 0,
+        keyword: '',
+        handleCurrentChange: this.handleCurrentChange,
+        handleSizeChange: this.handleSizeChange,
+        handleQueryChange: this.handleQueryChange
       }
     }
   },

@@ -2169,8 +2169,8 @@ exports.getGradeList = () => {
   return $form.get(`member-level`)
 }
 // 营销管理 会员体系 等级配置 详情
-exports.getGradeDetails = id => {
-  return $form.get(`member-level/${id}`)
+exports.getGradeDetails = (id, params) => {
+  return $form.get(`member-level/${id}`, { params })
 }
 // 营销管理 会员体系 等级配置 编辑保存
 exports.editGrade = (id, params) => {
@@ -2267,6 +2267,66 @@ exports.getDecreaseDetails = () => {
 // 营销管理 会员体系 收支规则 修改积分抵扣消费
 exports.updateDecrease = params => {
   return $form.post(`in-out-rule/point-decrease`, params)
+}
+// 营销管理 会员体系 收支规则 成长值购买初始化信息
+exports.getGrowthValueBuy = () => {
+  return $form.get(`in-out-rule/growth-value-price-config/init`)
+}
+// 营销管理 会员体系 收支规则 成长值购买详情
+exports.getGrowthValueBuyDetails = () => {
+  return $form.get(`in-out-rule/growth-value-price-config/show`)
+}
+// 营销管理 会员体系 收支规则 修改成长值购买
+exports.updateGrowthValueBuy = params => {
+  return $form.post(`in-out-rule/growth-value-price-config`, params)
+}
+// 营销管理 会员体系 收支规则 成长值购买 获取基础价格表
+exports.getBaseTable = params => {
+  return $form.get(`in-out-rule/growth-value-base-price`, { params })
+}
+// 营销管理 会员体系 收支规则 成长值购买 获取基础价格表详情
+exports.getBaseTableDetails = id => {
+  return $form.get(`in-out-rule/growth-value-base-price/${id}`)
+}
+// 营销管理 会员体系 收支规则 成长值购买 新增基础价格表
+exports.addBaseTable = params => {
+  return $form.post(`in-out-rule/growth-value-base-price`, params)
+}
+// 营销管理 会员体系 收支规则 成长值购买 修改基础价格表
+exports.editBaseTable = (id, params) => {
+  return $form.put(`in-out-rule/growth-value-base-price/${id}`, params)
+}
+// 营销管理 会员体系 收支规则 成长值购买 修改基础价格表
+exports.deleteBaseTable = id => {
+  return $form.delete(`in-out-rule/growth-value-base-price/${id}`)
+}
+// 营销管理 会员体系 收支规则 成长值购买 获取优惠价格表
+exports.getDiscountTable = params => {
+  return $form.get(`in-out-rule/growth-value-discount-price`, { params })
+}
+// 营销管理 会员体系 收支规则 成长值购买 获取优惠价格表初始化
+exports.getDiscount = () => {
+  return $form.get(`in-out-rule/growth-value-discount-price/init`)
+}
+// 营销管理 会员体系 收支规则 成长值购买 获取优惠价格表详情
+exports.getDiscountDetails = id => {
+  return $form.get(`in-out-rule/growth-value-discount-price/${id}`)
+}
+// 营销管理 会员体系 收支规则 成长值购买 优惠价格表启用禁用
+exports.updateDiscountEnabled = (id, params) => {
+  return $form.put(`in-out-rule/growth-value-discount-price/${id}/enabled`, params)
+}
+// 营销管理 会员体系 收支规则 成长值购买 新增优惠价格表
+exports.addDiscountTable = params => {
+  return $form.post(`in-out-rule/growth-value-discount-price`, params)
+}
+// 营销管理 会员体系 收支规则 成长值购买 修改优惠价格表
+exports.editDiscountTable = (id, params) => {
+  return $form.put(`in-out-rule/growth-value-discount-price/${id}`, params)
+}
+// 营销管理 会员体系 收支规则 成长值购买 删除优惠价格表
+exports.deleteDiscountTable = id => {
+  return $form.delete(`in-out-rule/growth-value-discount-price/${id}`)
 }
 // 营销管理 会员体系 收支记录
 exports.getInOutRecord = () => {

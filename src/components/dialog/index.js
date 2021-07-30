@@ -111,6 +111,9 @@ import evaluationRewardPoints from './evaluationRewardPoints.vue'
 import evaluationTable from './evaluationTable.vue'
 import explain from './explain.vue'
 import creditConsumption from './creditConsumption.vue'
+import growthValueBuy from './growthValueBuy.vue'
+import baseTable from './baseTable.vue'
+import discountTable from './discountTable.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -222,6 +225,9 @@ const EvaluationRewardPoints = Vue.extend(evaluationRewardPoints)
 const EvaluationTable = Vue.extend(evaluationTable)
 const Explain = Vue.extend(explain)
 const CreditConsumption = Vue.extend(creditConsumption)
+const GrowthValueBuy = Vue.extend(growthValueBuy)
+const BaseTable = Vue.extend(baseTable)
+const DiscountTable = Vue.extend(discountTable)
 
 const mixin = {
   data() {
@@ -1000,6 +1006,29 @@ function initInstance(type) {
     // 会员体系 收支规则 积分抵扣消费
     case 'creditConsumption':
       instance = new CreditConsumption({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 会员体系 收支规则 成长值购买
+    case 'growthValueBuy':
+      instance = new GrowthValueBuy({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 会员体系 收支规则 成长值购买 基础表格
+    case 'addBaseTable':
+    case 'editBaseTable':
+      instance = new BaseTable({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 会员体系 收支规则 成长值购买 优惠价格表格
+    case 'addDiscountTable':
+    case 'editDiscountTable':
+      instance = new DiscountTable({
         el: document.createElement('div'),
         mixins: [mixin]
       })

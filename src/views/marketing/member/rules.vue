@@ -87,6 +87,9 @@ export default {
         })
       } else if (code === 'GROWTH_BUY') {
         //成长值购买
+        dialog({ type: 'growthValueBuy' }, () => {
+          this.getInOutRule()
+        })
       } else if (code === 'POINT_INCREASE') {
         //消费积累积分
         dialog({ type: 'buyGrowthValue' }, () => {

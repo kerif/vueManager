@@ -8,7 +8,7 @@
   >
     <div class="item-label">
       <p>{{ $t('抵扣规则') + ':' }}</p>
-      1{{ $t('积分') }} = $ <el-input style="width: 50px" v-model="formData.amount"></el-input>
+      1{{ $t('积分') }} = $ <el-input style="width: 100px" v-model="formData.amount"></el-input>
       <div class="tips">{{ '*' + $t('抵扣金额默认计算至小数点后两位') }}（¥0.01）</div>
     </div>
     <div class="item-label">
@@ -63,17 +63,49 @@ export default {
         this.formData.amount = res.data.amount
         this.formData.max_point = res.data.max_point
         this.formData.included_fee = res.data.included_fee
+        this.checkedList = res.data.included_fee.filter(item => +item.checked).map(item => item.id)
       })
     },
     submit() {
-      // const included_fee = this.checkedList
-      this.$request.updateDecrease().then(res => {
-        if (res.ret) {
-          console.log(res.data)
+      const included_fee = this.formData.included_fee.map(item => {
+        if (this.checkedList.includes(item.id)) {
+          item.checked = 1
+        } else {
+          item.checked = 0
+        }
+        return {
+          id: item.id,
+          checked: item.checked
         }
       })
+      this.$request
+        .updateDecrease({
+          ...this.formData,
+          included_fee
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
-    clearn() {},
+    clearn() {
+      this.formData.amount = ''
+      this.formData.max_point = ''
+      this.formData.included_fee = []
+      this.checkedList = []
+    },
     init() {
       this.getDecrease()
       this.getDecreaseDetails()

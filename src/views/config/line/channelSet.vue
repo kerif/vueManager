@@ -1,27 +1,57 @@
 <template>
   <div class="channel-set-container">
     <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange(activeName)">
-      <el-tab-pane :label="$t('基础信息')" name="1">
+      <el-tab-pane :label="$t('基础信息')" name="basic" :lazy="true">
         <div class="main-sty">
-          <basic-information></basic-information>
+          <basic-information v-if="tabRefresh.basic"></basic-information>
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('计费设置')" name="2" v-if="this.$route.query.state === 'edit'">
-        <billng-settings></billng-settings>
+      <el-tab-pane
+        :label="$t('计费设置')"
+        name="billng"
+        v-if="this.$route.query.state === 'edit'"
+        :lazy="true"
+      >
+        <billng-settings v-if="tabRefresh.billng"></billng-settings>
       </el-tab-pane>
-      <el-tab-pane :label="$t('分区')" name="3" v-if="this.$route.query.state === 'edit'">
-        <partition-settings></partition-settings>
+      <el-tab-pane
+        :label="$t('分区')"
+        name="partition"
+        v-if="this.$route.query.state === 'edit'"
+        :lazy="true"
+      >
+        <partition-settings v-if="tabRefresh.partition"></partition-settings>
       </el-tab-pane>
-      <el-tab-pane :label="$t('价格表')" name="4" v-if="this.$route.query.state === 'edit'">
-        <price-list></price-list>
+      <el-tab-pane
+        :label="$t('价格表')"
+        name="price"
+        v-if="this.$route.query.state === 'edit'"
+        :lazy="true"
+      >
+        <price-list v-if="tabRefresh.price"></price-list>
       </el-tab-pane>
-      <el-tab-pane :label="$t('渠道增值服务')" name="5" v-if="this.$route.query.state === 'edit'">
-        <added-services></added-services>
+      <el-tab-pane
+        :label="$t('渠道增值服务')"
+        name="added"
+        v-if="this.$route.query.state === 'edit'"
+        :lazy="true"
+      >
+        <added-services v-if="tabRefresh.added"></added-services>
       </el-tab-pane>
-      <el-tab-pane :label="$t('渠道规则')" name="6" v-if="this.$route.query.state === 'edit'">
-        <rules-channle></rules-channle>
+      <el-tab-pane
+        :label="$t('渠道规则')"
+        name="rules"
+        v-if="this.$route.query.state === 'edit'"
+        :lazy="true"
+      >
+        <rules-channle v-if="tabRefresh.rules"></rules-channle>
       </el-tab-pane>
-      <el-tab-pane :label="$t('面单对接')" name="7" v-if="this.$route.query.state === 'edit'">
+      <el-tab-pane
+        :label="$t('面单对接')"
+        name="7"
+        v-if="this.$route.query.state === 'edit'"
+        :lazy="true"
+      >
         <div class="landing-container">
           <el-form ref="form" :model="landing" label-width="120px">
             <el-form-item :label="$t('落地配配置')">
@@ -70,11 +100,19 @@ export default {
   },
   data() {
     return {
-      activeName: '1',
+      activeName: 'basic',
       landing: {
         docking_type: ''
       },
-      dockingList: []
+      dockingList: [],
+      tabRefresh: {
+        basic: true,
+        billng: false,
+        partition: false,
+        price: false,
+        added: false,
+        rules: false
+      }
     }
   },
   created() {
@@ -123,12 +161,40 @@ export default {
     },
     onTabChange(activeName) {
       this.activeName = activeName
-      console.log(activeName, 'activeName')
+      switch (this.activeName) {
+        case 'basic':
+          this.switchTab('basic')
+          break
+        case 'billng':
+          this.switchTab('billng')
+          break
+        case 'partition':
+          this.switchTab('partition')
+          break
+        case 'price':
+          this.switchTab('price')
+          break
+        case 'added':
+          this.switchTab('added')
+          break
+        case 'rules':
+          this.switchTab('rules')
+          break
+      }
       if (this.activeName === '7') {
         this.getDocking()
         this.dockData()
       }
       // this.page_params.handleQueryChange('activeName', this.activeName)
+    },
+    switchTab(tab) {
+      for (let key in this.tabRefresh) {
+        if (key === tab) {
+          this.tabRefresh[key] = true
+        } else {
+          this.tabRefresh[key] = false
+        }
+      }
     }
   }
 }
