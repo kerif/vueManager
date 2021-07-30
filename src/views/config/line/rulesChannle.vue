@@ -175,7 +175,7 @@
                   </el-option>
                 </el-select>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="5" :offset="1">
                 <el-input
                   :disabled="!item.state"
                   v-model="item.value"
@@ -193,7 +193,7 @@
                   :placeholder="$t('请输入最低收费（空值为不设限制）')"
                 ></el-input>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="5" :offset="1">
                 <el-input
                   :disabled="!item.state"
                   v-model="item.max_charge"
@@ -247,11 +247,11 @@ export default {
       ],
       typeData: [
         {
-          id: 0,
+          id: 1,
           name: this.$t('同时满足以下条件')
         },
         {
-          id: 1,
+          id: 0,
           name: this.$t('满足以下条件之一')
         }
       ],
