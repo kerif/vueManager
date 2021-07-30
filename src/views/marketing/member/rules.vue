@@ -21,7 +21,9 @@
       </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button size="mini" @click="config(scope.row.code)">{{ $t('配置') }}</el-button>
+          <el-button size="mini" @click="config(scope.row.code)" class="btn-deep-purple">{{
+            $t('配置')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>

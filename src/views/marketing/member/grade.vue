@@ -6,6 +6,7 @@
       :title="title"
       :visible.sync="gradeDialog"
       width="30%"
+      class="dialog-container"
       @close="resetForm('gradeForm')"
     >
       <div class="lang-sty" v-if="lang.id">
@@ -27,33 +28,9 @@
         <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
-    <!-- 等级说明弹窗 -->
-    <el-dialog
-      :title="$t('等级说明')"
-      :visible.sync="tipsDialog"
-      width="30%"
-      label-width="80px"
-      @close="resetForm('tipsForm')"
-    >
-      <el-form ref="tipsForm" :model="tipsForm">
-        <el-form-item :label="$t('简体中文')" prop="zh_CN">
-          <el-input type="textarea" v-model="tipsForm.zh_CN"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('繁体中文')" prop="zh_TW">
-          <el-input type="textarea" v-model="tipsForm.zh_TW"></el-input>
-        </el-form-item>
-        <el-form-item label="English" prop="en_US">
-          <el-input type="textarea" v-model="tipsForm.en_US"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="tipsDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="editGradeTips">{{ $t('确定') }}</el-button>
-      </span>
-    </el-dialog>
     <div class="function-btn">
-      <el-button size="small" @click="addGrade">{{ $t('添加') }}</el-button>
-      <el-button size="small" @click="getGradeTips">{{ $t('等级说明') }}</el-button>
+      <el-button size="small" @click="addGrade" type="primary">{{ $t('添加') }}</el-button>
+      <el-button size="small" @click="explain">{{ $t('等级说明') }}</el-button>
     </div>
     <div>
       <el-table :data="tableData" border style="width: 100%">
@@ -102,6 +79,7 @@
 <script>
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   components: {
     NlePagination
@@ -125,41 +103,34 @@ export default {
       gradeId: '',
       languageData: [],
       lang: {},
-      langId: ''
+      langId: '',
+      langObj: {}
     }
   },
   created() {
-    this.getGradeList()
-    this.getLanguageList()
+    this.getList()
+    this.getGradeTips()
   },
   methods: {
-    // 获取支持语言
-    getLanguageList() {
-      this.$request.languageList().then(res => {
-        if (res.ret) {
-          this.languageData = res.data
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
     //获取列表
-    getGradeList() {
-      this.$request.getGradeList().then(res => {
-        if (res.ret) {
-          this.tableData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    getList() {
+      this.$request
+        .getGradeList({
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
     //获取详情
     editGrade(id) {
@@ -196,7 +167,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.getGradeList()
+            this.getList()
           } else {
             this.$message({
               message: res.msg,
@@ -227,10 +198,9 @@ export default {
     },
     //获取等级说明
     getGradeTips() {
-      this.tipsDialog = true
       this.$request.getGradeTips().then(res => {
         if (res.ret) {
-          this.tipsForm = res.data.illustrate
+          this.langObj = res.data.illustrate
         } else {
           this.$message({
             message: res.msg,
@@ -239,23 +209,8 @@ export default {
         }
       })
     },
-    // 修改等级说明
-    editGradeTips() {
-      this.$request.editGradeTips({ illustrate: this.tipsForm }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.tipsDialog = false
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+    explain() {
+      dialog({ type: 'getGradeTips', langObj: this.langObj })
     },
     //确定
     async confirm() {
@@ -275,7 +230,7 @@ export default {
           message: res.msg
         })
         this.gradeDialog = false
-        this.getGradeList()
+        this.getList()
       } else {
         this.$message({
           message: res.msg,

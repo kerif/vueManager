@@ -1,6 +1,12 @@
 <template>
   <div class="record">
-    <el-dialog :title="$t('添加')" :visible.sync="addDialog" width="30%" @close="resetForm('form')">
+    <el-dialog
+      :title="$t('添加')"
+      :visible.sync="addDialog"
+      width="30%"
+      @close="resetForm('form')"
+      class="dialog-container"
+    >
       <div>
         <el-form ref="form" :model="form">
           <el-form-item :label="$t('选择客户')" prop="customer">
@@ -38,51 +44,59 @@
       :visible.sync="detailsDialog"
       width="30%"
       @close="resetForm('detailsForm')"
+      class="dialog-container"
     >
       <el-form ref="detailsForm" :model="detailsForm">
-        <el-form-item :label="$t('流水号') + ':'" prop="customer">{{
-          detailsForm.order_sn + '字段是啥'
+        <el-form-item :label="$t('流水号') + ':'" prop="serial_no">{{
+          detailsForm.serial_no
         }}</el-form-item>
-        <el-form-item :label="$t('关联订单号') + ':'" prop="customer">{{
+        <el-form-item :label="$t('关联订单号') + ':'" prop="order_sn">{{
           detailsForm.order_sn
         }}</el-form-item>
-        <el-form-item :label="$t('客户ID') + ':'" prop="customer">{{
+        <el-form-item :label="$t('客户ID') + ':'" prop="user_id">{{
           detailsForm.user_id
         }}</el-form-item>
-        <el-form-item :label="$t('分类') + ':'" prop="customer">{{
+        <el-form-item :label="$t('分类') + ':'" prop="resource_type_name">{{
           detailsForm.resource_type_name
         }}</el-form-item>
-        <el-form-item :label="$t('收支类型') + ':'" prop="customer">{{
+        <el-form-item :label="$t('收支类型') + ':'" prop="type_name">{{
           detailsForm.type_name
         }}</el-form-item>
-        <el-form-item :label="$t('收支规则') + ':'" prop="customer">{{
+        <el-form-item :label="$t('收支规则') + ':'" prop="income_outlay_rule_name">{{
           detailsForm.income_outlay_rule_name
         }}</el-form-item>
-        <el-form-item :label="$t('到账时间') + ':'" prop="customer">{{
-          detailsForm.valid_time + '字段是啥'
+        <el-form-item :label="$t('到账时间') + ':'" prop="created_at">{{
+          detailsForm.created_at
         }}</el-form-item>
-        <el-form-item :label="$t('支出时间') + ':'" prop="customer" v-if="title === '支出详情'">{{
-          detailsForm.updated_at + '字段是啥'
+        <el-form-item :label="$t('支出时间') + ':'" prop="created_at" v-if="title === '支出详情'">{{
+          detailsForm.created_at
         }}</el-form-item>
-        <el-form-item :label="$t('有效期') + ':'" prop="customer" v-if="title === '收入详情'">{{
+        <el-form-item :label="$t('有效期') + ':'" prop="valid_time" v-if="title === '收入详情'">{{
           detailsForm.valid_time
         }}</el-form-item>
-        <el-form-item :label="$t('操作人') + ':'" prop="customer">{{
-          detailsForm.remark + '字段是啥'
+        <el-form-item :label="$t('操作人') + ':'" prop="operator">{{
+          detailsForm.operator
         }}</el-form-item>
-        <el-form-item :label="$t('备注') + ':'" prop="customer">{{
+        <el-form-item :label="$t('备注') + ':'" prop="remark">{{
           detailsForm.remark
         }}</el-form-item>
       </el-form>
     </el-dialog>
     <div class="search">
       <div class="searcg-l">
-        <search-group> </search-group>
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        >
+        </search-group>
         <div class="filter">
           <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
             >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
           ></el-button>
-          <el-button size="mini" primary @click="addDialog = true">{{ $t('添加') }}</el-button>
+          <el-button size="mini" type="primary" @click="addDialog = true">{{
+            $t('添加')
+          }}</el-button>
         </div>
       </div>
       <div class="screen" v-show="hasFilterCondition">
@@ -123,7 +137,7 @@
       </div>
     </div>
     <div class="content">
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%; margin-bottom: 10px">
         <el-table-column type="index" width="50"> </el-table-column>
         <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
         <el-table-column prop="resource_type_name" :label="$t('分类')"> </el-table-column>
@@ -135,22 +149,30 @@
         <el-table-column prop="created_at" :label="$t('时间')"> </el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button size="mini" @click="getRecordDetails(scope.row.id)">{{
-              $t('详情')
-            }}</el-button>
+            <el-button
+              size="mini"
+              class="btn-deep-purple"
+              @click="getRecordDetails(scope.row.id, scope.row.type)"
+              >{{ $t('详情') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
+      <nle-pagination :pageParams="page_params"></nle-pagination>
     </div>
   </div>
 </template>
 
 <script>
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 import { SearchGroup } from '@/components/searchs'
 export default {
   components: {
-    SearchGroup
+    SearchGroup,
+    NlePagination
   },
+  mixins: [pagination],
   data() {
     return {
       hasFilterCondition: false,
@@ -172,23 +194,45 @@ export default {
     }
   },
   created() {
-    this.getInOutRecord()
+    this.getList()
   },
   methods: {
     //获取列表
-    getInOutRecord() {
-      this.$request.getInOutRecord().then(res => {
-        if (res.ret) {
-          this.tableData = res.data
-        }
-      })
+    getList() {
+      this.$request
+        .getInOutRecord({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     },
-    getRecordDetails(id) {
-      this.title = '收入详情'
+    getRecordDetails(id, type) {
+      if (type === 1) {
+        this.title = '收入详情'
+      } else {
+        this.title = '支出详情'
+      }
       this.detailsDialog = true
       this.$request.getRecordDetails(id).then(res => {
         if (res.ret) {
           this.detailsForm = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },

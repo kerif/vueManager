@@ -3,7 +3,7 @@
     :title="$t('积分抵扣消费')"
     :visible.sync="show"
     width="50%"
-    class="credit"
+    class="credit dialog-container"
     @close="clearn"
   >
     <div class="item-label">
