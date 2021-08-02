@@ -99,7 +99,10 @@
                 :label="$t('起始') + billingName + unitName + ' >='"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.start" :disabled="!status"></el-input>
+                  <el-input
+                    v-model="scope.row.start"
+                    :disabled="form.mode === 1 && scope.$index === 0"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -321,7 +324,6 @@
           </div>
           <el-row :gutter="20" style="margin-left: 10px">
             <el-col :span="1">
-              {{ form.checked }}
               <el-checkbox v-model="form.checked"></el-checkbox>
             </el-col>
             <el-col :span="6">
@@ -669,6 +671,10 @@ export default {
       }
       if (this.$route.params.id) {
         // 编辑状态
+        console.log(this.form.checked, 'form.checked')
+        let checkStatus = Number(this.form.checked)
+        console.log(Number(this.form.checked), '转换1')
+        delete this.form.checked
         this.$request
           .updateBillingConfig(this.$route.params.id, {
             ...this.form,
@@ -676,7 +682,7 @@ export default {
             no_throw_condition: {
               type: this.form.type,
               value: Number(this.form.value),
-              checked: Number(this.form.checked),
+              checked: checkStatus,
               condition: this.form.condition
             }
           })

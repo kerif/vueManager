@@ -90,7 +90,7 @@
         </el-row>
       </el-form-item>
       <!-- 设为推荐 -->
-      <el-form-item>
+      <!-- <el-form-item>
         <el-row>
           <el-col :span="10">
             <div>
@@ -116,7 +116,7 @@
             </el-switch>
           </el-col>
         </el-row>
-      </el-form-item>
+      </el-form-item> -->
       <!-- 清关编码 -->
       <el-form-item>
         <el-row :gutter="10">
