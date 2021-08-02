@@ -167,8 +167,7 @@ export default {
     },
     //消费积累成长值
     async onUpdateDetail() {
-      let included_fee = []
-      included_fee = this.feeList.map(item => {
+      let included_fee = this.feeList.map(item => {
         if (this.checkedList.includes(item.id)) {
           item.checked = 1
         }
