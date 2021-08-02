@@ -138,6 +138,10 @@ exports.deleteRegionsTem = id => {
 exports.getSales = params => {
   return $form.get('express-lines/sale-prices', { params })
 }
+// 新路线 销售价格 删除
+exports.deleteSales = id => {
+  return $form.delete(`express-lines/sale-prices/${id}`)
+}
 // 配置 新路线 获取数据
 exports.getLineGroup = params => {
   return $form.get('express-lines/groups', { params })

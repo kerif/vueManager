@@ -672,7 +672,7 @@ export default {
       if (this.$route.params.id) {
         // 编辑状态
         console.log(this.form.checked, 'form.checked')
-        let checkStatus = Number(this.form.checked)
+        let checkStatus = this.form.checked ? Number(this.form.checked) : ''
         console.log(Number(this.form.checked), '转换1')
         delete this.form.checked
         this.$request
