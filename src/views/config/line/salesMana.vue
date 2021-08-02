@@ -38,14 +38,33 @@
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('价格表名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('适用对象')" prop="express_lines_count"></el-table-column>
-        <el-table-column :label="$t('适用渠道')" prop="express_lines_count"></el-table-column>
-        <el-table-column :label="$t('生效时间')" prop="express_lines_count"></el-table-column>
-        <el-table-column :label="$t('失效时间')" prop="express_lines_count"></el-table-column>
-        <el-table-column :label="$t('生效状态')" prop="express_lines_count"></el-table-column>
-        <el-table-column :label="$t('排序')" prop="express_lines_count"></el-table-column>
+        <el-table-column :label="$t('适用对象')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.scope === 0">{{ $t('所有用户') }}</span>
+            <span v-if="scope.row.scope === 1">{{ $t('特定用户组') }}</span>
+            <span v-if="scope.row.scope === 2">{{ $t('特定会员等级') }}</span>
+            <span v-if="scope.row.scope === 3">{{ $t('特定用户') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('适用渠道')">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.express_lines" :key="item.id">
+              {{ item.name }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('生效时间')" prop="effect_at"></el-table-column>
+        <el-table-column :label="$t('生效状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">{{ $t('未生效') }}</span>
+            <span v-if="scope.row.status === 1">{{ $t('生效中') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('已失效') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('失效时间')" prop="expire_at"></el-table-column>
+        <el-table-column :label="$t('排序')" prop="index"></el-table-column>
         <!-- 是否启用 -->
-        <el-table-column :label="$t('是否启用')" width="120">
+        <!-- <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
@@ -59,7 +78,7 @@
             >
             </el-switch>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column :label="$t('操作')" width="260">
           <template slot-scope="scope">
             <el-button class="btn-blue" @click="editLine(scope.row.id, scope.row.name, 'edit')">{{
@@ -135,13 +154,12 @@ export default {
   },
   created() {
     this.getList()
-    this.getLanguageList() // 获取支持语言
   },
   methods: {
     getList() {
       this.tableLoading = true
       this.$request
-        .getLineGroup({
+        .getSales({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size
@@ -193,14 +211,6 @@ export default {
             message: res.msg,
             type: 'error'
           })
-        }
-      })
-    },
-    // 获取支持语言
-    getLanguageList() {
-      this.$request.languageList().then(res => {
-        if (res.ret) {
-          this.languageData = res.data
         }
       })
     },
