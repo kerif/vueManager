@@ -1,14 +1,27 @@
 <template>
-  <div class="line-container">
+  <div class="sales-management-container">
     <div class="headerList">
-      <el-button @click="goPartition">{{ $t('预设分区表') }}</el-button>
-      <el-button @click="goSales">{{ $t('销售价管理') }}</el-button>
+      <div>
+        <span style="font-weight: 900">{{ $t('清关编码') }}</span>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="
+            $t(
+              ' 设置有销售价格时，客户计费价格为销售价。针对同一路线同一客户，销售价格表生效优先级按列表排序递减，即：排序越靠前的价格表优先级越高。'
+            )
+          "
+          placement="top"
+        >
+          <span class="el-icon-question icon-info"></span>
+        </el-tooltip>
+      </div>
       <div class="header-right">
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
         <div class="select-box">
-          <add-btn @click.native="newLine">{{ $t('添加路线') }}</add-btn>
+          <add-btn @click.native="newLine">{{ $t('添加价格表') }}</add-btn>
         </div>
       </div>
     </div>
@@ -24,8 +37,13 @@
         @selection-change="selectionChange"
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
-        <el-table-column :label="$t('路线')" prop="name"></el-table-column>
-        <el-table-column :label="$t('渠道数量')" prop="express_lines_count"></el-table-column>
+        <el-table-column :label="$t('价格表名称')" prop="name"></el-table-column>
+        <el-table-column :label="$t('适用对象')" prop="express_lines_count"></el-table-column>
+        <el-table-column :label="$t('适用渠道')" prop="express_lines_count"></el-table-column>
+        <el-table-column :label="$t('生效时间')" prop="express_lines_count"></el-table-column>
+        <el-table-column :label="$t('失效时间')" prop="express_lines_count"></el-table-column>
+        <el-table-column :label="$t('生效状态')" prop="express_lines_count"></el-table-column>
+        <el-table-column :label="$t('排序')" prop="express_lines_count"></el-table-column>
         <!-- 是否启用 -->
         <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
@@ -42,26 +60,8 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column
-          :label="item.name"
-          v-for="item in formatLangData"
-          :key="item.id"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span
-              v-if="scope.row['trans_' + item.language_code]"
-              class="el-icon-check icon-sty"
-              @click="onLang(scope.row, item)"
-            ></span>
-            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-          </template>
-        </el-table-column>
         <el-table-column :label="$t('操作')" width="260">
           <template slot-scope="scope">
-            <el-button class="btn-green" @click="editChannel(scope.row.id)">{{
-              $t('渠道')
-            }}</el-button>
             <el-button class="btn-blue" @click="editLine(scope.row.id, scope.row.name, 'edit')">{{
               $t('编辑')
             }}</el-button>
@@ -176,11 +176,6 @@ export default {
         this.getList()
       })
     },
-    goSales() {
-      this.$router.push({ name: 'salesMana' }, () => {
-        this.getList()
-      })
-    },
     // 修改开关
     changeTransfer(event, enabled, id) {
       console.log(typeof event, '我是event')
@@ -198,15 +193,6 @@ export default {
             message: res.msg,
             type: 'error'
           })
-        }
-      })
-    },
-    // 修改仓库
-    editChannel(id) {
-      this.$router.push({
-        name: 'channelLine',
-        params: {
-          id: id
         }
       })
     },
@@ -336,7 +322,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.line-container {
+.sales-management-container {
   .headerList {
     display: flex;
     justify-content: space-between;
@@ -373,6 +359,14 @@ export default {
   .save-sort {
     // margin-left: 10px;
     line-height: 40px;
+  }
+  .icon-info {
+    color: #74b34f;
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+    cursor: pointer;
   }
 }
 </style>
