@@ -257,6 +257,9 @@ export default {
     },
     // 新增基础表
     addBaseTable() {
+      if (this.basePriceTable.length >= 10) {
+        return this.$message.error(this.$t('最多添加10条数据'))
+      }
       dialog({ type: 'addBaseTable' }, () => {
         this.getBaseTable()
       })

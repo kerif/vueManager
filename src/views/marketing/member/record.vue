@@ -49,8 +49,8 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialog = false">取 消</el-button>
-        <el-button type="primary" @click="confirm">确 定</el-button>
+        <el-button @click="addDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -130,22 +130,43 @@
           size="mini"
           clearable
           :placeholder="$t('请选择分类')"
-          v-model="classify"
-        ></el-select>
+          v-model="searchForm.resource_type"
+        >
+          <el-option
+            v-for="item in classifyOpiton"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
         <el-select
           size="mini"
           clearable
           :placeholder="$t('请选择收支类型')"
-          v-model="type"
+          v-model="searchForm.type"
+        >
+          <el-option
+            v-for="item in typeOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option
         ></el-select>
         <el-select
           size="mini"
           clearable
           :placeholder="$t('请选择收支规则')"
-          v-model="rule"
+          v-model="searchForm.rule_code"
+        >
+          <el-option
+            v-for="item in ruleOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option
         ></el-select>
         <div class="submit">
-          <el-button type="primary" plain size="small">{{ $t('搜索') }}</el-button>
+          <el-button type="primary" plain size="small" @click="search">{{ $t('搜索') }}</el-button>
           <el-button size="small" @click="resetFormSearch">{{ $t('重置') }}</el-button>
         </div>
       </div>
@@ -211,22 +232,67 @@ export default {
       },
       detailsForm: {},
       title: '',
-      localization: {}
+      localization: {},
+      searchForm: {
+        resource_type: '',
+        type: '',
+        rule_code: '',
+        begin_date: '',
+        end_date: ''
+      },
+      classifyOpiton: [
+        {
+          value: 1,
+          label: this.$t('成长值')
+        },
+        {
+          value: 2,
+          label: this.$t('积分')
+        }
+      ],
+      typeOption: [
+        {
+          value: 1,
+          label: this.$t('收入')
+        },
+        {
+          value: 2,
+          label: this.$t('支出')
+        }
+      ],
+      ruleOption: []
     }
   },
   created() {
     this.getList()
     this.getUsers()
     this.getRecordDefault()
+    this.getInOutRule()
   },
   methods: {
+    //获取收支规则列表
+    getInOutRule() {
+      this.$request.getInOutRule().then(res => {
+        if (res.ret) {
+          this.ruleOption = res.data.map(item => {
+            let value = item.code
+            let label = item.name
+            return {
+              value,
+              label
+            }
+          })
+        }
+      })
+    },
     //获取列表
-    getList() {
+    getList(form) {
       this.$request
         .getInOutRecord({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          ...form
         })
         .then(res => {
           if (res.ret) {
@@ -301,8 +367,15 @@ export default {
         }
       })
     },
+    search() {
+      console.log(this.timeList, 'this.timeList')
+      this.searchForm.begin_date = this.timeList[0]
+      this.searchForm.end_date = this.timeList[1]
+      this.getList({ ...this.searchForm })
+    },
     resetFormSearch() {
-      console.log('1')
+      this.searchForm = {}
+      this.getList(this.searchForm)
     },
     // 重置表单
     resetForm(form) {
