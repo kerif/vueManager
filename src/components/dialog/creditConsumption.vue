@@ -8,7 +8,8 @@
   >
     <div class="item-label">
       <p>{{ $t('抵扣规则') + ':' }}</p>
-      1{{ $t('积分') }} = $ <el-input style="width: 100px" v-model="formData.amount"></el-input>
+      1{{ $t('积分') }} = {{ localization.currency_unit }}
+      <el-input style="width: 100px" v-model="formData.amount"></el-input>
       <div class="tips">{{ '*' + $t('抵扣金额默认计算至小数点后两位') }}（¥0.01）</div>
     </div>
     <div class="item-label">
@@ -21,7 +22,7 @@
     </div>
     <div class="item-label">
       <p>{{ $t('每张订单最高可用积分') + ':' }}</p>
-      <el-input v-model="formData.max_point"></el-input>
+      <el-input v-model="formData.max_point" style="width: 150px"></el-input>
       <div class="tips">{{ '*' + $t('为空则表示不限制') }}</div>
     </div>
     <div slot="footer">
@@ -40,7 +41,8 @@ export default {
         max_point: ''
       },
       feeList: [],
-      checkedList: []
+      checkedList: [],
+      localization: {}
     }
   },
   methods: {
@@ -64,6 +66,7 @@ export default {
         this.formData.max_point = res.data.max_point
         this.formData.included_fee = res.data.included_fee
         this.checkedList = res.data.included_fee.filter(item => +item.checked).map(item => item.id)
+        this.localization = res.localization
       })
     },
     submit() {

@@ -10,10 +10,12 @@
     <div class="content">
       <div>
         <span v-if="type === 'consumeGrowthValue'">
-          $ <el-input v-model="tableData.amount" class="number"></el-input> = 1 {{ $t('成长值') }}
+          {{ localization.currency_unit }}
+          <el-input v-model="tableData.amount" class="number"></el-input> = 1 {{ $t('成长值') }}
         </span>
         <span v-else>
-          $ <el-input v-model="tableData.amount" class="number"></el-input> = 1 {{ $t('积分') }}
+          {{ localization.currency_unit }}
+          <el-input v-model="tableData.amount" class="number"></el-input> = 1 {{ $t('积分') }}
         </span>
       </div>
       <el-checkbox v-model="tableData.is_ceil">{{ $t('不足1成长值部分不累计') }}</el-checkbox>
@@ -73,7 +75,8 @@ export default {
       validTimeList: [],
       enabled: '',
       checkedList: [],
-      title: ''
+      title: '',
+      localization: {}
     }
   },
   methods: {
@@ -92,7 +95,7 @@ export default {
         }
       })
     },
-    //消费积累成长值
+    //消费积累成长值详情
     getGrowthValueDetails() {
       this.$request.getGrowthValueDetails().then(res => {
         if (res.ret) {
@@ -102,6 +105,7 @@ export default {
           this.tableData.trigger_type = res.data.trigger_type
           this.tableData.valid_time = res.data.valid_time
           this.checkedList = res.data.included_fee.filter(item => item.checked).map(item => item.id)
+          this.localization = res.localization
         } else {
           this.$message({
             message: res.msg,
@@ -125,7 +129,7 @@ export default {
         }
       })
     },
-    //消费积累积分
+    //消费积累积分详情
     getPointIncreaseDetails() {
       this.$request.getPointIncreaseDetails().then(res => {
         if (res.ret) {
@@ -137,6 +141,7 @@ export default {
           this.checkedList = res.data.included_fee
             .filter(item => +item.checked)
             .map(item => item.id)
+          this.localization = res.localization
         } else {
           this.$message({
             message: res.msg,

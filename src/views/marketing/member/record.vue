@@ -156,10 +156,11 @@
         <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
         <el-table-column prop="resource_type_name" :label="$t('分类')"> </el-table-column>
         <el-table-column prop="type_name" :label="$t('收支类型')"> </el-table-column>
-        <el-table-column prop="amount" :label="$t('金额')"> </el-table-column>
+        <el-table-column prop="amount" :label="$t('金额') + localization.currency_unit">
+        </el-table-column>
         <el-table-column prop="income_outlay_rule_name" :label="$t('收支规则')"> </el-table-column>
         <el-table-column prop="order_sn" :label="$t('相关订单')"> </el-table-column>
-        <el-table-column prop="name" :label="$t('流水号')"> </el-table-column>
+        <el-table-column prop="serial_no" :label="$t('流水号')"> </el-table-column>
         <el-table-column prop="updated_at" :label="$t('时间')" width="220"></el-table-column>
         <el-table-column :label="$t('操作')" width="80">
           <template slot-scope="scope">
@@ -209,7 +210,8 @@ export default {
         remark: ''
       },
       detailsForm: {},
-      title: ''
+      title: '',
+      localization: {}
     }
   },
   created() {
@@ -231,6 +233,7 @@ export default {
             this.tableData = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.localization = res.localization
           } else {
             this.$message({
               message: res.msg,
