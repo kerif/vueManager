@@ -24,7 +24,11 @@
     <div class="rules-main" v-for="(item, index) in channel" :key="index">
       <div class="rules-top">
         <div class="rules-left">
-          <el-input v-model="item.name" v-if="item.state"></el-input>
+          <el-input
+            :placeholder="$t('请输入规则名称')"
+            v-model="item.name"
+            v-if="item.state"
+          ></el-input>
           <h3 v-else>{{ item.name }}</h3>
         </div>
         <div class="rules-right">
@@ -158,40 +162,49 @@
         </div>
         <div v-else>
           <el-form-item :label="$t('收费方式')">
-            <el-select
-              :disabled="!item.state"
-              v-model="item.charge_mode"
-              :placeholder="$t('请选择')"
-              clearable
-            >
-              <el-option
-                v-for="item in charginData"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
-            <el-input
-              :disabled="!item.state"
-              class="input-sty input-margin"
-              v-model="item.value"
-              :placeholder="$t('请输入固定值或百分比%')"
-            ></el-input>
+            <el-row>
+              <el-col :span="8">
+                <el-select
+                  :disabled="!item.state"
+                  v-model="item.charge_mode"
+                  :placeholder="$t('请选择')"
+                  clearable
+                >
+                  <el-option
+                    v-for="item in charginData"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="8" :offset="1">
+                <el-input
+                  :disabled="!item.state"
+                  v-model="item.value"
+                  :placeholder="$t('请输入固定值或百分比%')"
+                ></el-input>
+              </el-col>
+            </el-row>
           </el-form-item>
           <el-form-item :label="$t('收费范围')">
-            <el-input
-              :disabled="!item.state"
-              class="input-sty"
-              v-model="item.min_charge"
-              :placeholder="$t('请输入最低收费（空值为不设限制）')"
-            ></el-input>
-            <el-input
-              :disabled="!item.state"
-              class="input-sty input-margin"
-              v-model="item.max_charge"
-              :placeholder="$t('请输入最高收费（空值为不设限制）')"
-            ></el-input>
+            <el-row>
+              <el-col :span="8">
+                <el-input
+                  :disabled="!item.state"
+                  v-model="item.min_charge"
+                  :placeholder="$t('请输入最低收费（空值为不设限制）')"
+                ></el-input>
+              </el-col>
+              <el-col :span="8" :offset="1">
+                <el-input
+                  :disabled="!item.state"
+                  v-model="item.max_charge"
+                  :placeholder="$t('请输入最高收费（空值为不设限制）')"
+                ></el-input>
+              </el-col>
+            </el-row>
           </el-form-item>
         </div>
       </el-form>
@@ -238,11 +251,11 @@ export default {
       ],
       typeData: [
         {
-          id: 0,
+          id: 1,
           name: this.$t('同时满足以下条件')
         },
         {
-          id: 1,
+          id: 0,
           name: this.$t('满足以下条件之一')
         }
       ],

@@ -61,7 +61,10 @@
             <el-button class="btn-green" @click="editChannel(scope.row.id)">{{
               $t('渠道')
             }}</el-button>
-            <el-button class="btn-deep-purple" @click="copyLine(scope.row.id)">{{
+            <el-button class="btn-blue" @click="editLine(scope.row.id, scope.row.name, 'edit')">{{
+              $t('编辑')
+            }}</el-button>
+            <el-button class="btn-deep-purple" @click="copyLine(scope.row.id, 'copy')">{{
               $t('复制')
             }}</el-button>
             <el-button class="btn-light-red" @click="deleteLine(scope.row.id)">{{
@@ -82,9 +85,14 @@
       :notNeedInitQuery="false"
     ></nle-pagination>
     <!-- 复制线路 -->
-    <el-dialog :title="$t('复制路线')" :visible.sync="copyDialog" width="45%" @close="clear">
+    <el-dialog
+      :title="lineStatus === 'edit' ? $t('编辑路线') : $t('复制路线')"
+      :visible.sync="copyDialog"
+      width="45%"
+      @close="clear"
+    >
       <el-form ref="form" :model="copyData" label-width="100px">
-        <el-form-item :label="$t('*新线路名称')">
+        <el-form-item :label="lineStatus === 'edit' ? $t('*线路名称') : $t('*新线路名称')">
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
       </el-form>
@@ -120,7 +128,8 @@ export default {
       copyData: {
         name: ''
       },
-      copyDialog: false
+      copyDialog: false,
+      lineStatus: ''
     }
   },
   created() {
@@ -204,11 +213,20 @@ export default {
       })
     },
     // 复制线路
-    copyLine(id) {
+    copyLine(id, status) {
       this.copyId = id
       this.copyDialog = true
+      this.lineStatus = status
+    },
+    // 编辑
+    editLine(id, name, status) {
+      this.copyId = id
+      this.copyDialog = true
+      this.copyData.name = name
+      this.lineStatus = status
     },
     clear() {
+      this.lineStatus = ''
       this.copyId = ''
       this.copyData.name = ''
     },
@@ -217,27 +235,51 @@ export default {
       if (!this.copyData.name) {
         return this.$message.error(this.$t('请输入新线路名称'))
       }
-      this.$request
-        .copyGroupLine(this.copyId, {
-          name: this.copyData.name
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.copyDialog = false
-            this.getList()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      if (this.lineStatus === 'edit') {
+        this.$request
+          .editLineGroup(this.copyId, {
+            name: this.copyData.name
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.copyDialog = false
+              this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .copyGroupLine(this.copyId, {
+            name: this.copyData.name
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.copyDialog = false
+              this.getList()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+      }
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)

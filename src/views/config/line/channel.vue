@@ -574,7 +574,7 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.$route.query.size ? this.$route.query.size : this.page_params.size,
-        group_id: this.$route.query.groupId ? this.$route.query.groupId : ''
+        group_id: this.lineId ? this.lineId : ''
       }
       if (typeof this.query.enabled === 'number') {
         params.enabled = this.query.enabled

@@ -73,7 +73,7 @@
           <el-row :gutter="10">
             <el-col :span="5">
               <div v-if="form.base_mode === 0 && (form.mode === 1 || form.mode === 4)">
-                {{ $t('*首重') + localization.currency_unit + '/' + unitName }}
+                {{ $t('*首重') + unitName }}
               </div>
               <div v-if="form.base_mode === 1 && form.mode === 1">
                 {{ $t('*首费体积') + localization.currency_unit + '/' + unitName }}
@@ -99,7 +99,7 @@
                 :label="$t('起始') + billingName + unitName + ' >='"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.start"></el-input>
+                  <el-input v-model="scope.row.start" :disabled="!status"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -285,7 +285,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item v-if="form.base_mode === 0 && form.multi_boxes === 1">
+      <el-form-item v-if="form.base_mode === 0 && form.has_factor === 1">
         <div>{{ $t('体积系数') }}</div>
         <el-row>
           <el-col :span="10">
@@ -293,7 +293,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <div v-if="form.base_mode === 0 && form.multi_boxes === 1">
+      <div v-if="form.base_mode === 0 && form.has_factor === 1">
         <el-form-item>
           <div>*{{ $t('体积模式') }}</div>
           <el-row>
@@ -321,6 +321,7 @@
           </div>
           <el-row :gutter="20" style="margin-left: 10px">
             <el-col :span="1">
+              {{ form.checked }}
               <el-checkbox v-model="form.checked"></el-checkbox>
             </el-col>
             <el-col :span="6">
@@ -518,6 +519,7 @@ export default {
       itemArr: {},
       setVisible: false,
       dialogVisible: false,
+      status: true,
       paramsOptions: [
         {
           id: 1,
@@ -618,6 +620,7 @@ export default {
         this.form.first_weight = res.data.first_weight
         this.form.is_avg_weight = res.data.is_avg_weight
         if (res.data.no_throw_condition) {
+          console.log(res.data.no_throw_condition.checked, 'res.data.no_throw_condition.checked')
           this.form.type = res.data.no_throw_condition.type
           this.form.value = res.data.no_throw_condition.value
           this.form.checked = Boolean(res.data.no_throw_condition.checked)
@@ -676,7 +679,6 @@ export default {
               checked: Number(this.form.checked),
               condition: this.form.condition
             }
-            // grades: this.itemArr
           })
           .then(res => {
             if (res.ret) {
