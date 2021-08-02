@@ -84,7 +84,16 @@ export default {
     getGrowthValue() {
       this.$request.getGrowthValue().then(res => {
         if (res.ret) {
-          this.feeList = res.data.fee_list
+          this.feeList = res.data.fee_list.map(item => {
+            let id = item.id
+            let name = item.name
+            let checked = 0
+            return {
+              id,
+              name,
+              checked
+            }
+          })
           this.triggerTypeList = res.data.trigger_type_list
           this.validTimeList = res.data.valid_time_list
         } else {
@@ -104,7 +113,11 @@ export default {
           this.tableData.included_fee = res.data.included_fee
           this.tableData.trigger_type = res.data.trigger_type
           this.tableData.valid_time = res.data.valid_time
-          this.checkedList = res.data.included_fee.filter(item => item.checked).map(item => item.id)
+          if (res.data.included_fee) {
+            this.checkedList = res.data.included_fee
+              .filter(item => item.checked)
+              .map(item => item.id)
+          }
           this.localization = res.localization
         } else {
           this.$message({
@@ -138,9 +151,11 @@ export default {
           this.tableData.included_fee = res.data.included_fee
           this.tableData.trigger_type = res.data.trigger_type
           this.tableData.valid_time = res.data.valid_time
-          this.checkedList = res.data.included_fee
-            .filter(item => +item.checked)
-            .map(item => item.id)
+          if (res.data.included_fee) {
+            this.checkedList = res.data.included_fee
+              .filter(item => item.checked)
+              .map(item => item.id)
+          }
           this.localization = res.localization
         } else {
           this.$message({
@@ -152,15 +167,12 @@ export default {
     },
     //消费积累成长值
     async onUpdateDetail() {
-      const included_fee = this.tableData.included_fee.map(item => {
+      let included_fee = this.feeList.map(item => {
         if (this.checkedList.includes(item.id)) {
           item.checked = 1
-        } else {
-          item.checked = 0
         }
         return {
-          id: item.id,
-          checked: item.checked
+          ...item
         }
       })
       let res = {}

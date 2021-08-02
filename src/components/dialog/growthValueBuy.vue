@@ -87,6 +87,18 @@
     </div>
     <div>
       <div class="title">
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="
+            $t(
+              '当一个产品，对同一客户、在同一时间段为“开启状态”且“生效中”的优惠价格有多个时，以最新创建的优惠价格为准。'
+            )
+          "
+          placement="top-start"
+        >
+          <i class="el-icon-warning tips-icon"></i>
+        </el-tooltip>
         <span class="sub-title"> {{ $t('优惠价格表') + ':' }}</span>
         <el-button size="mini" type="primary" @click="addDiscountTable">{{ $t('新增') }}</el-button>
       </div>
@@ -257,6 +269,9 @@ export default {
     },
     // 新增基础表
     addBaseTable() {
+      if (this.basePriceTable.length >= 10) {
+        return this.$message.error(this.$t('最多添加10条数据'))
+      }
       dialog({ type: 'addBaseTable' }, () => {
         this.getBaseTable()
       })
@@ -408,6 +423,9 @@ export default {
 <style scoped lang="scss">
 .growth-value-buy {
   .title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     padding: 20px 0;
   }
   .sub-title {
@@ -416,6 +434,10 @@ export default {
   .tips {
     color: #ccc;
     padding-left: 10px;
+  }
+  .tips-icon {
+    font-size: 18px;
+    color: #3540a5;
   }
 }
 </style>

@@ -30,6 +30,10 @@ const customerEcharts = loadonDemand('vip/customer/echarts')
 const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
 // 财务 流水记录
 const Transaction = loadonDemand('finance/Transaction')
+// 财务 成长值财务
+const GrowthFinance = loadonDemand('finance/growthFinance')
+// 财务 成长值财务详情
+const GrowthFinanceDetails = loadonDemand('finance/growthFinanceDetails')
 // 财务 转账支付流水详情
 const TransactionDetails = loadonDemand('finance/financeDetails')
 // 财务 微信支付流水详情
@@ -1388,6 +1392,28 @@ export default [
               group: '财务',
               level: 2,
               name: '余额扣款处理'
+            }
+          },
+          {
+            path: '/finance/growthFinance',
+            name: 'growthFinance',
+            component: GrowthFinance,
+            id: 707,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '成长值财务'
+            }
+          },
+          {
+            path: '/finance/growthFinanceDetails/:id',
+            name: 'growthFinanceDetails',
+            component: GrowthFinanceDetails,
+            id: 707,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '成长值财务详情'
             }
           },
           {

@@ -50,7 +50,13 @@ export default {
     getDecrease() {
       this.$request.getDecrease().then(res => {
         if (res.ret) {
-          this.feeList = res.data.fee_list
+          this.feeList = res.data.fee_list.map(item => {
+            let checked = 0
+            return {
+              ...item,
+              checked
+            }
+          })
         } else {
           this.$message({
             message: res.msg,
@@ -65,20 +71,21 @@ export default {
         this.formData.amount = res.data.amount
         this.formData.max_point = res.data.max_point
         this.formData.included_fee = res.data.included_fee
-        this.checkedList = res.data.included_fee.filter(item => +item.checked).map(item => item.id)
+        if (res.data.included_fee) {
+          this.checkedList = res.data.included_fee
+            .filter(item => +item.checked)
+            .map(item => item.id)
+        }
         this.localization = res.localization
       })
     },
     submit() {
-      const included_fee = this.formData.included_fee.map(item => {
+      let included_fee = this.feeList.map(item => {
         if (this.checkedList.includes(item.id)) {
           item.checked = 1
-        } else {
-          item.checked = 0
         }
         return {
-          id: item.id,
-          checked: item.checked
+          ...item
         }
       })
       this.$request

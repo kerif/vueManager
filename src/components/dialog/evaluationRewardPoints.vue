@@ -63,6 +63,7 @@ export default {
   data() {
     return {
       editDialog: false,
+      langObj: {},
       tableData: {
         valid_days: '',
         valid_time: '',
@@ -97,6 +98,7 @@ export default {
       this.$request.getPointCommentDetails().then(res => {
         if (res.ret) {
           this.tableData = res.data
+          this.langObj = res.data.illustrate
         } else {
           this.$message({
             message: res.msg,
@@ -156,10 +158,7 @@ export default {
     },
     //说明
     explain() {
-      dialog({ type: 'explain', illustrateData: this.tableData.illustrate }, data => {
-        this.tableData.illustrate = data
-        console.log(this.tableData, 'this.tableData')
-      })
+      dialog({ type: 'explain', langObj: this.langObj })
     },
     submit() {
       this.$request.updatePointComment({ ...this.tableData }).then(res => {

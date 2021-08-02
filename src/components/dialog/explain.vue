@@ -7,7 +7,7 @@
     @close="clearn"
   >
     <p class="tips">{{ '*' + $t('该说明将显示在客户端（小程序/网站），方便客户理解规则') }}</p>
-    <div v-for="item in illustrate" :key="item.id">
+    <div v-for="item in illustrate" :key="item.code">
       <p>{{ item.name }}</p>
       <el-input type="textarea" :rows="5" v-model="langObj[item.code]"></el-input>
     </div>
