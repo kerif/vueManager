@@ -572,6 +572,22 @@ exports.getRecharge = params => {
 exports.uploadRecharge = params => {
   return $form.get('recharge-records/export', { params })
 }
+// 财务 充值记录 获取成长值财务列表
+exports.getGrowthFinance = () => {
+  return $form.get('growth-finances/payments')
+}
+// 财务 充值记录 获取成长值财务列表
+exports.getGrowthFinanceDetails = id => {
+  return $form.get(`growth-finances/payments/${id}`)
+}
+// 财务 充值记录 通过成长值财务
+exports.approvedGrowthValue = id => {
+  return $form.put(`growth-finances/payments/${id}/approved`)
+}
+// 财务 充值记录 拒绝成长值财务
+exports.refusedGrowthValue = id => {
+  return $form.put(`growth-finances/payments/${id}/refused`)
+}
 // 财务 自提点佣金结算
 exports.commissionsPick = params => {
   return $form.get('station-commissions', { params })
