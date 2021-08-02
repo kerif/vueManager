@@ -266,6 +266,14 @@ exports.getPriceTable = (id, params) => {
 exports.editPrice = (id, params) => {
   return $form.put(`express-lines/${id}/prices`, params)
 }
+// 配置 新路线 导出价格表
+exports.exportPrice = id => {
+  return $form.get(`express-lines/${id}/prices/export`)
+}
+// 配置 新路线 导入价格表
+exports.importPrice = id => {
+  return $form.post(`express-lines/${id}/prices/import`)
+}
 // 配置 新路线 增值服务 获取列表
 exports.getServicesList = (id, params) => {
   return $form.get(`express-lines/${id}/services`, params)

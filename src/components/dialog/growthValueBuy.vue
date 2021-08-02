@@ -39,7 +39,10 @@
         <el-table-column prop="name" :label="$t('产品名称')"> </el-table-column>
         <el-table-column prop="illustrate" :label="$t('产品说明')"> </el-table-column>
         <el-table-column prop="growth_value" :label="$t('成长值')"> </el-table-column>
-        <el-table-column prop="price" :label="$t('价格')"> </el-table-column>
+        <el-table-column
+          prop="price"
+          :label="$t('价格') + localization.currency_unit"
+        ></el-table-column>
         <el-table-column
           :label="item.name"
           v-for="item in formatLangData"
@@ -90,7 +93,8 @@
       <el-table :data="discountPriceTable" border style="width: 100%; margin-bottom: 10px">
         <el-table-column type="index" label="#" width="40"> </el-table-column>
         <el-table-column prop="base_name" :label="$t('产品名称')"> </el-table-column>
-        <el-table-column prop="price" :label="$t('活动价')"> </el-table-column>
+        <el-table-column prop="price" :label="$t('活动价') + localization.currency_unit">
+        </el-table-column>
         <el-table-column :label="$t('适用类型')">
           <template slot-scope="scope">
             <span v-if="scope.row.applicable_mode === 0">{{ $t('所有客户') }}</span>
@@ -169,7 +173,8 @@ export default {
         page: 1,
         size: 10,
         total: 0
-      }
+      },
+      localization: {}
     }
   },
   computed: {
@@ -191,6 +196,7 @@ export default {
       this.$request.getGrowthValueBuy().then(res => {
         if (res.ret) {
           this.validTimeList = res.data.valid_time_list
+          this.localization = res.localization
         } else {
           this.$message({
             message: res.msg,

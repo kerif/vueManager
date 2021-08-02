@@ -140,6 +140,26 @@ export default {
         }
       })
     },
+    //获取会员组
+    getGradeList() {
+      this.$request.getGradeList({ size: 100 }).then(res => {
+        if (res.ret) {
+          this.modeList = res.data.map(item => {
+            let name = item.name
+            let id = item.id
+            return {
+              name,
+              id
+            }
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // 获取详情
     getDiscountDetails(id) {
       this.$request.getDiscountDetails(id).then(res => {
@@ -173,7 +193,7 @@ export default {
           }
         })
       } else if (val === 2) {
-        this.modeList = this.proList
+        this.getGradeList()
       }
     },
     querySearchUser(keyword, cb) {

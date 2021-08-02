@@ -214,6 +214,26 @@ export default {
   methods: {
     // 获取增值服务列表
     getServicesList() {
+      this.gridOptions.columns = [
+        {
+          type: 'seq',
+          title: this.$t('分区'),
+          fixed: 'left',
+          width: 60
+        },
+        {
+          field: 'name',
+          title: this.$t('分区名称'),
+          fixed: 'left',
+          minWidth: 160
+        },
+        {
+          field: 'areas',
+          title: this.$t('区域'),
+          fixed: 'left',
+          minWidth: 400
+        }
+      ]
       this.$request.getServicesList(this.$route.params.id).then(res => {
         if (res.ret) {
           this.servicesList = res.data.map(item => {
@@ -275,7 +295,6 @@ export default {
     },
     //编辑增值服务
     editRowEvent(row) {
-      console.log(row)
       this.title = this.$t('编辑增值费用')
       this.dialogVisible = true
       this.detailsList = this.servicesList
@@ -323,7 +342,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.go(0)
+            this.getServicesList()
           } else {
             this.$message({
               message: res.msg,
@@ -355,7 +374,7 @@ export default {
         regions: [...updateRecords],
         name_translations: { ...this.langForm }
       }
-      if (this.serviceId) {
+      if (this.title === '编辑增值费用') {
         this.$request.updateServices(this.$route.params.id, this.serviceId, params).then(res => {
           if (res.ret) {
             this.$notify({
@@ -365,7 +384,8 @@ export default {
             })
             this.dialogVisible = false
             this.detailsList = []
-            this.$router.go(0)
+            this.getServicesList()
+            // this.$router.go(0)
           } else {
             this.$message({
               message: res.msg,
@@ -382,7 +402,7 @@ export default {
               message: res.msg
             })
             this.dialogVisible = false
-            this.$router.go(0)
+            this.getServicesList()
           } else {
             this.$message({
               message: res.msg,
