@@ -2220,6 +2220,10 @@ exports.getPointIncrease = () => {
 exports.getPointIncreaseDetails = () => {
   return $form.get(`in-out-rule/point-increase/show`)
 }
+// 营销管理 会员体系 收支规则 更新消费积累积分
+exports.updatePointIncrease = params => {
+  return $form.post(`in-out-rule/point-increase`, params)
+}
 // 营销管理 会员体系 收支规则 消费转换成长值更新
 exports.updateGrowthDetails = params => {
   return $json.post('in-out-rule/growth-value-increase', params)

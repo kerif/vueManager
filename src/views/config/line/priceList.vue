@@ -5,12 +5,12 @@
       <el-button size="small">{{ $t('导出价格表') }}</el-button>
       <el-button size="small">{{ $t('导入价格表') }}</el-button>
       <span class="tips">{{ $t('可导出价格表批量批量修改后，再导入表格') }}</span>
-      <div style="flex: 1; display: flex; justify-content: flex-end">
+      <!-- <div style="flex: 1; display: flex; justify-content: flex-end">
         <el-button type="primary" size="mini" @click="type = 1">首重续重</el-button>
         <el-button type="primary" size="mini" @click="type = 2">阶梯价格</el-button>
         <el-button type="primary" size="mini" @click="type = 3">单位价格+阶梯价格</el-button>
         <el-button type="primary" size="mini" @click="type = 4">多级续重</el-button>
-      </div>
+      </div> -->
     </div>
     <!-- <vxe-table
       border

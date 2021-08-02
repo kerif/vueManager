@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="$t('消费转换成长值')"
+    :title="title"
     :visible.sync="show"
     width="40%"
     @close="clear"
@@ -9,7 +9,12 @@
     <h5>{{ $t('转换规则') }}：</h5>
     <div class="content">
       <div>
-        $ <el-input v-model="tableData.amount" class="number"></el-input> = 1 {{ $t('成长值') }}
+        <span v-if="type === 'consumeGrowthValue'">
+          $ <el-input v-model="tableData.amount" class="number"></el-input> = 1 {{ $t('成长值') }}
+        </span>
+        <span v-else>
+          $ <el-input v-model="tableData.amount" class="number"></el-input> = 1 {{ $t('积分') }}
+        </span>
       </div>
       <el-checkbox v-model="tableData.is_ceil">{{ $t('不足1成长值部分不累计') }}</el-checkbox>
     </div>
@@ -67,7 +72,8 @@ export default {
       triggerTypeList: [],
       validTimeList: [],
       enabled: '',
-      checkedList: []
+      checkedList: [],
+      title: ''
     }
   },
   methods: {
@@ -128,7 +134,9 @@ export default {
           this.tableData.included_fee = res.data.included_fee
           this.tableData.trigger_type = res.data.trigger_type
           this.tableData.valid_time = res.data.valid_time
-          this.checkedList = res.data.included_fee.filter(item => item.checked).map(item => item.id)
+          this.checkedList = res.data.included_fee
+            .filter(item => +item.checked)
+            .map(item => item.id)
         } else {
           this.$message({
             message: res.msg,
@@ -138,7 +146,7 @@ export default {
       })
     },
     //消费积累成长值
-    onUpdateDetail() {
+    async onUpdateDetail() {
       const included_fee = this.tableData.included_fee.map(item => {
         if (this.checkedList.includes(item.id)) {
           item.checked = 1
@@ -150,33 +158,41 @@ export default {
           checked: item.checked
         }
       })
-      this.$request
-        .updateGrowthDetails({
+      let res = {}
+      if (this.type === 'consumeGrowthValue') {
+        res = await this.$request.updateGrowthDetails({
           ...this.tableData,
           is_ceil: ~~this.tableData.is_ceil,
           included_fee
         })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.show = false
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
+      } else {
+        res = await this.$request.updatePointIncrease({
+          ...this.tableData,
+          is_ceil: ~~this.tableData.is_ceil,
+          included_fee
         })
+      }
+      if (res.ret) {
+        this.$notify({
+          type: 'success',
+          title: this.$t('操作成功'),
+          message: res.msg
+        })
+        this.show = false
+      } else {
+        this.$message({
+          message: res.msg,
+          type: 'error'
+        })
+      }
     },
     init() {
       if (this.type === 'consumeGrowthValue') {
+        this.title = this.$t('消费转换成长值')
         this.getGrowthValue()
         this.getGrowthValueDetails()
       } else {
+        this.title = this.$t('消费转换积分')
         this.getPointIncrease()
         this.getPointIncreaseDetails()
       }
