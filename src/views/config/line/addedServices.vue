@@ -25,6 +25,11 @@
               :placeholder="$t('请输入')"
               style="width: 217px"
             ></el-input>
+            <el-input
+              v-model="form.remark"
+              :placeholder="$t('请输入费用说明')"
+              style="width: 300px; padding-left: 20px"
+            ></el-input>
           </el-form-item>
           <el-form-item :label="$t('类型')"
             ><el-select v-model="form.type">
@@ -69,11 +74,28 @@
         </el-form>
         <h5>{{ $t('增值费用名称（多语言）') }}：</h5>
         <el-form ref="langForm" :model="langForm" label-width="120px">
-          <el-form-item label="English">
+          <el-form-item v-for="item in languageData" :key="item.code" :label="item.name">
+            <el-input
+              v-model="form.name_translations[item.code]"
+              :placeholder="$t('请输入')"
+              style="width: 217px"
+            ></el-input>
+            <el-input
+              v-model="form.remark_translations[item.code]"
+              :placeholder="$t('请输入English费用说明')"
+              style="width: 300px; padding-left: 20px"
+            ></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="English">
             <el-input
               v-model="langForm.en_US"
               :placeholder="$t('请输入')"
               style="width: 217px"
+            ></el-input>
+            <el-input
+              v-model="form.remark"
+              :placeholder="$t('请输入English费用说明')"
+              style="width: 300px"
             ></el-input>
           </el-form-item>
           <el-form-item :label="$t('繁体中文')">
@@ -82,7 +104,12 @@
               :placeholder="$t('请输入')"
               style="width: 217px"
             ></el-input>
-          </el-form-item>
+            <el-input
+              v-model="form.remark"
+              :placeholder="$t('请输入繁体中文费用说明')"
+              style="width: 300px"
+            ></el-input>
+          </el-form-item> -->
         </el-form>
       </div>
       <span slot="footer">
@@ -166,14 +193,18 @@ export default {
       dialogVisible: false,
       serviceId: 0,
       form: {
-        name: '',
         type: '',
-        is_forced: ''
+        is_forced: '',
+        name: '',
+        name_translations: {},
+        remark: '',
+        remark_translations: {}
       },
       langForm: {
         en_US: '',
         zh_TW: ''
       },
+      languageData: [],
       typeList: [
         {
           value: 1,
@@ -210,8 +241,36 @@ export default {
   },
   created() {
     this.getServicesList()
+    this.getLanguageList()
   },
   methods: {
+    // 获取支持语言
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+            .filter(item => item.language_code !== 'zh_CN')
+            .map(item => {
+              return {
+                name: item.name,
+                code: item.language_code
+              }
+            })
+          // this.languageData = res.data
+          console.log(this.languageData, 'this.languageData')
+          // let arr = []
+          // arr = res.data.map(item => {
+          //   return {
+          //     [item.language_code]: ''
+          //   }
+          // })
+          // arr.forEach(item => {
+          //   Object.assign(this.languageData, item)
+          // })
+          // console.log(this.languageData, 'this.languageData')
+        }
+      })
+    },
     // 获取增值服务列表
     getServicesList() {
       this.gridOptions.columns = [
@@ -305,9 +364,11 @@ export default {
           this.form.name = res.data.name
           this.form.type = res.data.type
           this.form.is_forced = res.data.is_forced
-          console.log(this.form, 'this.form')
-          this.langForm.en_US = res.data.name_translations.en_US
-          this.langForm.zh_TW = res.data.name_translations.zh_TW
+          this.form.remark = res.data.remark
+          this.form.name_translations = res.data.name_translations
+          this.form.remark_translations = res.data.remark_translations
+          // this.langForm.en_US = res.data.name_translations.en_US
+          // this.langForm.zh_TW = res.data.name_translations.zh_TW
           this.detailsList = res.data.prices.map(item => {
             const name = item.region_name
             const areas = item.areas
@@ -372,8 +433,8 @@ export default {
       })
       const params = {
         ...this.form,
-        regions: [...updateRecords],
-        name_translations: { ...this.langForm }
+        regions: [...updateRecords]
+        // name_translations: { ...this.langForm }
       }
       if (this.title === '编辑增值费用') {
         this.$request.updateServices(this.$route.params.id, this.serviceId, params).then(res => {
@@ -417,11 +478,14 @@ export default {
     closeDialog() {
       this.detailsList.length = 0
       this.serviceId = 0
-      this.form.name = ''
       this.form.type = ''
       this.form.is_forced = ''
-      this.langForm.en_US = ''
-      this.langForm.zh_TW = ''
+      this.form.name = ''
+      this.form.name_translations = {}
+      this.form.remark = ''
+      this.form.remark_translations = {}
+      // this.langForm.en_US = ''
+      // this.langForm.zh_TW = ''
     }
   }
 }
