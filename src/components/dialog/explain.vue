@@ -41,6 +41,13 @@ export default {
           this.illustrate.forEach(item => {
             this.$set(item, item.code, '')
           })
+          if (!this.langObj) {
+            this.langObj = this.illustrate.map(item => {
+              return {
+                [item.code]: ''
+              }
+            })
+          }
         } else {
           this.$message({
             message: res.msg,
@@ -65,6 +72,7 @@ export default {
               message: res.msg
             })
             this.tipsDialog = false
+            this.success()
           } else {
             this.$message({
               message: res.msg,
@@ -80,7 +88,7 @@ export default {
     },
     clearn() {
       this.illustrate = []
-      this.langObj = []
+      this.langObj = {}
     },
     init() {
       this.getLanguageList()

@@ -271,8 +271,8 @@ exports.exportPrice = id => {
   return $form.get(`express-lines/${id}/prices/export`)
 }
 // 配置 新路线 导入价格表
-exports.importPrice = id => {
-  return $form.post(`express-lines/${id}/prices/import`)
+exports.importPrice = (id, params) => {
+  return $form.post(`express-lines/${id}/prices/import`, params)
 }
 // 配置 新路线 增值服务 获取列表
 exports.getServicesList = (id, params) => {

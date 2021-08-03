@@ -304,7 +304,8 @@ export default {
         if (res.ret) {
           this.form.name = res.data.name
           this.form.type = res.data.type
-          this.form.is_forced = res.data.is_force
+          this.form.is_forced = res.data.is_forced
+          console.log(this.form, 'this.form')
           this.langForm.en_US = res.data.name_translations.en_US
           this.langForm.zh_TW = res.data.name_translations.zh_TW
           this.detailsList = res.data.prices.map(item => {
