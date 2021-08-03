@@ -68,7 +68,7 @@ export default {
         valid_days: '',
         valid_time: '',
         type: 1,
-        illustrate: []
+        illustrate: {}
       },
       timeList: [],
       pointTableData: [],
@@ -98,7 +98,7 @@ export default {
       this.$request.getPointCommentDetails().then(res => {
         if (res.ret) {
           this.tableData = res.data
-          this.langObj = res.data.illustrate
+          this.langObj = res.data.illustrate ? res.data.illustrate : {}
         } else {
           this.$message({
             message: res.msg,
@@ -158,7 +158,9 @@ export default {
     },
     //说明
     explain() {
-      dialog({ type: 'explain', langObj: this.langObj })
+      dialog({ type: 'explain', langObj: this.langObj }, data => {
+        this.tableData.illustrate = data
+      })
     },
     submit() {
       this.$request.updatePointComment({ ...this.tableData }).then(res => {

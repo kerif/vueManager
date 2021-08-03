@@ -198,11 +198,11 @@ export default {
       ],
       forcedList: [
         {
-          value: 1,
+          value: 0,
           label: this.$t('强制收取')
         },
         {
-          value: 0,
+          value: 1,
           label: this.$t('自愿勾选')
         }
       ]

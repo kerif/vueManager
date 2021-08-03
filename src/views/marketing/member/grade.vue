@@ -212,7 +212,7 @@ export default {
     getGradeTips() {
       this.$request.getGradeTips().then(res => {
         if (res.ret) {
-          this.langObj = res.data.illustrate
+          this.langObj = res.data.illustrate ? res.data.illustrate : {}
         } else {
           this.$message({
             message: res.msg,

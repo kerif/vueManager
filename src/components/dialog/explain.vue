@@ -41,13 +41,13 @@ export default {
           this.illustrate.forEach(item => {
             this.$set(item, item.code, '')
           })
-          if (!this.langObj) {
-            this.langObj = this.illustrate.map(item => {
-              return {
-                [item.code]: ''
-              }
-            })
-          }
+          // if (!this.langObj.length) {
+          //   this.langObj = this.illustrate.map(item => {
+          //     return {
+          //       [item.code]: ''
+          //     }
+          //   })
+          // }
         } else {
           this.$message({
             message: res.msg,
@@ -57,11 +57,6 @@ export default {
       })
     },
     submit() {
-      this.illustrate = this.illustrate.map(item => {
-        return {
-          [item.code]: item[item.code]
-        }
-      })
       if (this.type === 'getGradeTips') {
         // 修改等级说明
         this.$request.editGradeTips({ illustrate: { ...this.langObj } }).then(res => {
