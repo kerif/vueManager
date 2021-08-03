@@ -100,9 +100,11 @@
               >
                 <template slot-scope="scope">
                   <el-input
-                    v-model="scope.row.start"
+                    v-if="form.mode === 1 && scope.$index === 0"
+                    v-model="form.first_weight"
                     :disabled="form.mode === 1 && scope.$index === 0"
                   ></el-input>
+                  <el-input v-else v-model="scope.row.start"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -660,6 +662,7 @@ export default {
     saveLine() {
       console.log(this.form.mode, 'mode')
       if (this.form.grades.length) {
+        this.form.grades[0].start = this.form.first_weight
         this.itemArr = JSON.stringify(this.form.grades)
       }
       console.log(this.itemArr, 'this.itemArr')

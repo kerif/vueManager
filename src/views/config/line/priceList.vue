@@ -39,7 +39,7 @@
         <vxe-table-colgroup v-if="type === 1 || type === 4">
           <vxe-table-colgroup
             field="unit_weight"
-            :title="$t('首位续重')"
+            :title="$t('首位重量')"
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
