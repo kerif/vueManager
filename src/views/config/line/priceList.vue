@@ -32,14 +32,14 @@
         <vxe-table-colgroup>
           <vxe-table-colgroup
             field="range"
-            :title="$t('重量范围')"
+            :title="$t('重量范围') + localization.weight_unit"
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
         <vxe-table-colgroup v-if="type === 1 || type === 4">
           <vxe-table-colgroup
             field="unit_weight"
-            :title="$t('首位重量')"
+            :title="$t('首位重量') + localization.weight_unit"
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
@@ -50,7 +50,11 @@
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
-        <vxe-table-colgroup v-for="config in ctableColumn" :key="config.id" :title="config.name">
+        <vxe-table-colgroup
+          v-for="config in ctableColumn"
+          :key="config.id"
+          :title="config.name + ' (' + $t('点击修改') + ')'"
+        >
           <vxe-table-colgroup
             :title="config.areas"
             :field="config.field"
@@ -83,7 +87,8 @@ export default {
       ctableData: [],
       ctableColumn: [],
       urlExcel: '',
-      name: ''
+      name: '',
+      localization: {}
     }
   },
   created() {
@@ -93,11 +98,17 @@ export default {
     getPriceTable() {
       this.$request.getPriceTable(this.$route.params.id).then(res => {
         if (res.ret) {
+          this.localization = res.localization
           if (this.type !== 4) {
             res.data.forEach(item => {
               this.ctableData.push(
                 ...item.prices.map(ele => {
-                  let range = `(${ele.start / 1000}，${ele.end / 1000}]`
+                  let range = ''
+                  if (ele.start / 1000 === ele.end / 1000) {
+                    range = ele.start / 1000
+                  } else {
+                    range = `(${ele.start / 1000}，${ele.end / 1000}]`
+                  }
                   let unit_weight = ele.unit_weight / 1000
                   let price = ele.price / 100
                   let priceId = ele.id
