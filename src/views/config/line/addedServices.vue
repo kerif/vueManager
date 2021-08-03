@@ -229,11 +229,11 @@ export default {
       ],
       forcedList: [
         {
-          value: 0,
+          value: 1,
           label: this.$t('强制收取')
         },
         {
-          value: 1,
+          value: 0,
           label: this.$t('自愿勾选')
         }
       ]
@@ -308,25 +308,25 @@ export default {
             if (item.service.length) {
               item.service.forEach(ele => {
                 item[`service_${ele.id}`] = ele.value
-                if (ele.type === 1 && ele.is_forced === 0) {
+                if (ele.type === 1 && ele.is_forced === 1) {
                   this.content = this.$t('类型：运费比例 收取方式：强制收取')
-                } else if (ele.type === 2 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：整票固定费用 收取方式：强制收取')
-                } else if (ele.type === 3 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单箱固定费用 收取方式：强制收取')
-                } else if (ele.type === 4 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单位计费重量固定费用 收取方式：强制收取')
-                } else if (ele.type === 5 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单位实际重量固定费用 收取方式：强制收取')
-                } else if (ele.type === 1 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：运费比例 收取方式：自愿勾选')
                 } else if (ele.type === 2 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：整票固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型：整票固定费用 收取方式：强制收取')
                 } else if (ele.type === 3 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：单箱固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型：单箱固定费用 收取方式：强制收取')
                 } else if (ele.type === 4 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：单位计费重量固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型：单位计费重量固定费用 收取方式：强制收取')
                 } else if (ele.type === 5 && ele.is_forced === 1) {
+                  this.content = this.$t('类型：单位实际重量固定费用 收取方式：强制收取')
+                } else if (ele.type === 1 && ele.is_forced === 0) {
+                  this.content = this.$t('类型：运费比例 收取方式：自愿勾选')
+                } else if (ele.type === 2 && ele.is_forced === 0) {
+                  this.content = this.$t('类型：整票固定费用 收取方式：自愿勾选')
+                } else if (ele.type === 3 && ele.is_forced === 0) {
+                  this.content = this.$t('类型：单箱固定费用 收取方式：自愿勾选')
+                } else if (ele.type === 4 && ele.is_forced === 0) {
+                  this.content = this.$t('类型：单位计费重量固定费用 收取方式：自愿勾选')
+                } else if (ele.type === 5 && ele.is_forced === 0) {
                   this.content = this.$t('类型：单位实际重量固定费用 收取方式：自愿勾选')
                 }
                 this.gridOptions.columns.push({
