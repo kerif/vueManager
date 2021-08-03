@@ -231,11 +231,11 @@
                     <el-input v-model="scope.row.height" @blur="changeNum(scope)"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('体积重量') + this.localization.weight_unit">
+                <!-- <el-table-column :label="$t('体积重量') + this.localization.weight_unit">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.volume_weight" disabled></el-input>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column :label="$t('操作')">
                   <template slot-scope="scope">
                     <el-button
