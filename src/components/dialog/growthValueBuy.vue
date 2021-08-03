@@ -172,7 +172,7 @@ export default {
         valid_time: '',
         increase_point: 0,
         balance_buy: 0,
-        illustrate: []
+        illustrate: {}
       },
       basePriceTable: [],
       base: {
@@ -221,10 +221,12 @@ export default {
     getGrowthValueBuyDetails() {
       this.$request.getGrowthValueBuyDetails().then(res => {
         if (res.ret) {
-          this.form.increase_point = res.data.increase_point
-          this.form.balance_buy = res.data.balance_buy
-          this.form.valid_time = res.data.valid_time
-          this.form.illustrate = res.data.illustrate
+          if (res.data.id) {
+            this.form.increase_point = res.data.increase_point
+            this.form.balance_buy = res.data.balance_buy
+            this.form.valid_time = res.data.valid_time
+            this.form.illustrate = res.data.illustrate
+          }
         } else {
           this.$message({
             message: res.msg,

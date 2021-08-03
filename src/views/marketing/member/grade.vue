@@ -112,6 +112,9 @@ export default {
     this.getGradeTips()
     this.getLanguageList()
   },
+  activated() {
+    this.getList()
+  },
   methods: {
     // 获取支持语言
     getLanguageList() {
@@ -209,7 +212,7 @@ export default {
     getGradeTips() {
       this.$request.getGradeTips().then(res => {
         if (res.ret) {
-          this.langObj = res.data.illustrate
+          this.langObj = res.data.illustrate ? res.data.illustrate : {}
         } else {
           this.$message({
             message: res.msg,
@@ -219,7 +222,9 @@ export default {
       })
     },
     explain() {
-      dialog({ type: 'getGradeTips', langObj: this.langObj })
+      dialog({ type: 'getGradeTips', langObj: this.langObj }, () => {
+        this.getGradeTips()
+      })
     },
     //确定
     async confirm() {

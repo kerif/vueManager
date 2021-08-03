@@ -3,7 +3,10 @@
     <div class="title">{{ name }}{{ $t('价格表') }}</div>
     <div class="func-btn">
       <el-button size="small" @click="exportPrice">{{ $t('导出价格表') }}</el-button>
-      <el-button size="small" @click="importPrice">{{ $t('导入价格表') }}</el-button>
+      <!-- <el-button size="small" @click="importPrice">{{ $t('导入价格表') }}</el-button> -->
+      <el-upload class="upload-demo" action="" :limit="1" :http-request="importPrice">
+        <el-button size="small" type="primary">{{ $t('导入价格表') }}</el-button>
+      </el-upload>
       <span class="tips">{{ $t('可导出价格表批量修改后，再导入表格') }}</span>
     </div>
     <div>
@@ -215,8 +218,6 @@ export default {
     exportPrice() {
       this.$request.exportPrice(this.$route.params.id).then(res => {
         if (res.ret) {
-          this.urlExcel = res.data.url
-          window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
@@ -231,12 +232,18 @@ export default {
         }
       })
     },
-    importPrice() {
-      this.$request.importPrice(this.$route.params.id).then(res => {
+    importPrice(item) {
+      console.log(item, 'item')
+      this.$request.importPrice(this.$route.params.id, item.file).then(res => {
         if (res.ret) {
           console.log(res.data)
         }
       })
+    },
+    onUpload(file) {
+      let params = new FormData()
+      params.append(`files[${0}][file]`, file)
+      return this.$request.uploadFiles(params)
     }
   }
 }
