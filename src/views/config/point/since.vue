@@ -62,7 +62,7 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.is_delivery"
-              @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+              @change="changeTransfer($event, scope.row.is_delivery, scope.row.id)"
               :active-text="$t('开')"
               :active-value="1"
               :inactive-value="0"

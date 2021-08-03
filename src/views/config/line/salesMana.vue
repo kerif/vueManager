@@ -1,14 +1,27 @@
 <template>
-  <div class="line-container">
+  <div class="sales-management-container">
     <div class="headerList">
-      <el-button @click="goPartition">{{ $t('预设分区表') }}</el-button>
-      <el-button @click="goSales">{{ $t('销售价管理') }}</el-button>
+      <div>
+        <span style="font-weight: 900">{{ $t('清关编码') }}</span>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="
+            $t(
+              ' 设置有销售价格时，客户计费价格为销售价。针对同一路线同一客户，销售价格表生效优先级按列表排序递减，即：排序越靠前的价格表优先级越高。'
+            )
+          "
+          placement="top"
+        >
+          <span class="el-icon-question icon-info"></span>
+        </el-tooltip>
+      </div>
       <div class="header-right">
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
         <div class="select-box">
-          <add-btn @click.native="newLine">{{ $t('添加路线') }}</add-btn>
+          <add-btn @click.native="newLine">{{ $t('添加价格表') }}</add-btn>
         </div>
       </div>
     </div>
@@ -24,10 +37,34 @@
         @selection-change="selectionChange"
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
-        <el-table-column :label="$t('路线')" prop="name"></el-table-column>
-        <el-table-column :label="$t('渠道数量')" prop="express_lines_count"></el-table-column>
+        <el-table-column :label="$t('价格表名称')" prop="name"></el-table-column>
+        <el-table-column :label="$t('适用对象')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.scope === 0">{{ $t('所有用户') }}</span>
+            <span v-if="scope.row.scope === 1">{{ $t('特定用户组') }}</span>
+            <span v-if="scope.row.scope === 2">{{ $t('特定会员等级') }}</span>
+            <span v-if="scope.row.scope === 3">{{ $t('特定用户') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('适用渠道')">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.express_lines" :key="item.id">
+              {{ item.name }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('生效时间')" prop="effect_at"></el-table-column>
+        <el-table-column :label="$t('生效状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">{{ $t('未生效') }}</span>
+            <span v-if="scope.row.status === 1">{{ $t('生效中') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('已失效') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('失效时间')" prop="expire_at"></el-table-column>
+        <el-table-column :label="$t('排序')" prop="index"></el-table-column>
         <!-- 是否启用 -->
-        <el-table-column :label="$t('是否启用')" width="120">
+        <!-- <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
@@ -41,34 +78,16 @@
             >
             </el-switch>
           </template>
-        </el-table-column>
-        <el-table-column
-          :label="item.name"
-          v-for="item in formatLangData"
-          :key="item.id"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span
-              v-if="scope.row['trans_' + item.language_code]"
-              class="el-icon-check icon-sty"
-              @click="onLang(scope.row, item)"
-            ></span>
-            <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
-          </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column :label="$t('操作')" width="260">
           <template slot-scope="scope">
-            <el-button class="btn-green" @click="editChannel(scope.row.id)">{{
-              $t('渠道')
-            }}</el-button>
-            <el-button class="btn-blue" @click="editLine(scope.row.id, scope.row.name, 'edit')">{{
+            <el-button class="btn-blue" @click="editLine(scope.row.id, scope.row.name)">{{
               $t('编辑')
             }}</el-button>
-            <el-button class="btn-deep-purple" @click="copyLine(scope.row.id, 'copy')">{{
+            <el-button class="btn-deep-purple" @click="copyLine(scope.row.id)">{{
               $t('复制')
             }}</el-button>
-            <el-button class="btn-light-red" @click="deleteLine(scope.row.id)">{{
+            <el-button class="btn-light-red" @click="deleteSales(scope.row.id)">{{
               $t('删除')
             }}</el-button>
           </template>
@@ -86,14 +105,9 @@
       :notNeedInitQuery="false"
     ></nle-pagination>
     <!-- 复制线路 -->
-    <el-dialog
-      :title="lineStatus === 'edit' ? $t('编辑路线') : $t('复制路线')"
-      :visible.sync="copyDialog"
-      width="45%"
-      @close="clear"
-    >
+    <el-dialog :title="$t('复制路线')" :visible.sync="copyDialog" width="45%" @close="clear">
       <el-form ref="form" :model="copyData" label-width="100px">
-        <el-form-item :label="lineStatus === 'edit' ? $t('*线路名称') : $t('*新线路名称')">
+        <el-form-item :label="$t('*价格表名称')">
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
       </el-form>
@@ -135,13 +149,12 @@ export default {
   },
   created() {
     this.getList()
-    this.getLanguageList() // 获取支持语言
   },
   methods: {
     getList() {
       this.tableLoading = true
       this.$request
-        .getLineGroup({
+        .getSales({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size
@@ -176,11 +189,6 @@ export default {
         this.getList()
       })
     },
-    goSales() {
-      this.$router.push({ name: 'salesMana' }, () => {
-        this.getList()
-      })
-    },
     // 修改开关
     changeTransfer(event, enabled, id) {
       console.log(typeof event, '我是event')
@@ -201,104 +209,60 @@ export default {
         }
       })
     },
-    // 修改仓库
-    editChannel(id) {
-      this.$router.push({
-        name: 'channelLine',
-        params: {
-          id: id
-        }
-      })
-    },
-    // 获取支持语言
-    getLanguageList() {
-      this.$request.languageList().then(res => {
-        if (res.ret) {
-          this.languageData = res.data
-        }
-      })
-    },
     // 复制线路
-    copyLine(id, status) {
+    copyLine(id) {
       this.copyId = id
       this.copyDialog = true
-      this.lineStatus = status
     },
     // 编辑
-    editLine(id, name, status) {
+    editLine(id, name) {
       this.copyId = id
       this.copyDialog = true
       this.copyData.name = name
-      this.lineStatus = status
     },
     clear() {
-      this.lineStatus = ''
       this.copyId = ''
       this.copyData.name = ''
     },
     // 确定复制
     confirmCopy() {
       if (!this.copyData.name) {
-        return this.$message.error(this.$t('请输入新线路名称'))
+        return this.$message.error(this.$t('请输入价格表名称'))
       }
-      if (this.lineStatus === 'edit') {
-        this.$request
-          .editLineGroup(this.copyId, {
-            name: this.copyData.name
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.copyDialog = false
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
-      } else {
-        this.$request
-          .copyGroupLine(this.copyId, {
-            name: this.copyData.name
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.copyDialog = false
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
-      }
+      this.$request
+        .copyGroupLine(this.copyId, {
+          name: this.copyData.name
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.copyDialog = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除
-    deleteLine(id) {
-      this.$confirm(this.$t('您真的要删除此路线？'), this.$t('提示'), {
+    deleteSales(id) {
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.deleteLineGroup(id).then(res => {
+        this.$request.deleteSales(id).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
@@ -336,7 +300,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.line-container {
+.sales-management-container {
   .headerList {
     display: flex;
     justify-content: space-between;
@@ -373,6 +337,14 @@ export default {
   .save-sort {
     // margin-left: 10px;
     line-height: 40px;
+  }
+  .icon-info {
+    color: #74b34f;
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+    cursor: pointer;
   }
 }
 </style>

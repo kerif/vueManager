@@ -442,6 +442,42 @@
           </template>
         </el-table-column>
         <el-table-column
+          :label="$t('增值服务费') + this.localization.currency_unit"
+          prop="line_service_fee"
+        >
+          <template slot="header">
+            <span>{{ $t('渠道增值服务') }}</span>
+            <el-tooltip placement="top">
+              <span slot="content" v-for="item in paymentData" :key="item.id">
+                <span v-if="item.line_services.length">
+                  <span v-for="val in item.line_services" :key="val.id">
+                    {{ val.name }} {{ `${localization.currency_unit}${val.price}` }} </span
+                  ><br />
+                </span>
+              </span>
+              <i class="el-icon-question" style="font-size: 18px; color: #35b85a"></i>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('渠道规则费用') + this.localization.currency_unit"
+          prop="line_rule_fee"
+        >
+          <template slot="header">
+            <span>{{ $t('渠道规则费用') }}</span>
+            <el-tooltip placement="top">
+              <span slot="content" v-for="item in paymentData" :key="item.id">
+                <span v-if="item.line_rules.length">
+                  <span v-for="val in item.line_rules" :key="val.id">
+                    {{ val.name }} {{ `${localization.currency_unit}${val.price}` }} </span
+                  ><br />
+                </span>
+              </span>
+              <i class="el-icon-question" style="font-size: 18px; color: #35b85a"></i>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column
           :label="$t('保险金额') + this.localization.currency_unit"
           prop="insurance_fee"
         ></el-table-column>

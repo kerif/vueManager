@@ -138,11 +138,11 @@
             <add-btn @click.native="addNew" style="margin-right: 10px">{{
               $t('添加渠道')
             }}</add-btn>
-            <!-- <div class="filter">
+            <div class="filter">
               <el-button @click="onHighSearch" type="text"
                 >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
               ></el-button>
-            </div> -->
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -216,7 +216,7 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
-              @change="changeTransfer($event, scope.row.enabled, scope.row.id, 'open')"
+              @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
               :active-text="$t('开')"
               :inactive-text="$t('关')"
               active-color="#13ce66"
@@ -229,9 +229,11 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.is_great_value"
-              @change="changeTransfer($event, scope.row.is_great_value, scope.row.id, 'great')"
+              @change="changeGreat($event, scope.row.is_great_value, scope.row.id)"
               :active-text="$t('开')"
               :inactive-text="$t('关')"
+              :active-value="1"
+              :inactive-value="0"
               active-color="#13ce66"
               inactive-color="gray"
             >
@@ -266,9 +268,9 @@
                 <!-- <el-dropdown-item class="item-sty" @click.native="goOthers(scope.row.id)">
                   <span>{{ $t('附加费用') }}</span>
                 </el-dropdown-item> -->
-                <el-dropdown-item class="item-sty" @click.native="Advanced(scope.row.id)">
+                <!-- <el-dropdown-item class="item-sty" @click.native="Advanced(scope.row.id)">
                   <span>{{ $t('高级配置') }}</span>
-                </el-dropdown-item>
+                </el-dropdown-item> -->
                 <el-dropdown-item class="item-sty" @click.native="copyLine(scope.row.id)">
                   <span>{{ $t('复制') }}</span>
                 </el-dropdown-item>
@@ -513,6 +515,9 @@ export default {
   },
   activated() {
     this.getList()
+    console.log(this.lineId, 'this.lineId')
+    console.log(this.$route.query, 'query')
+    console.log(this.$route.params, 'params')
     // this.$nextTick(() => {
     //   this.$refs.table.doLayout()
     // })
@@ -845,9 +850,28 @@ export default {
         })
     },
     // 修改转账支付的开关
-    changeTransfer(event, enabled, id, status) {
-      let method = status === 'open' ? 'resetLines' : 'resetRecommend'
-      this.$request[method](id, Number(event)).then(res => {
+    changeTransfer(event, enabled, id) {
+      console.log(event, 'event')
+      console.log(id, 'id')
+      this.$request.resetLines(id, Number(event)).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 修改转账支付的开关
+    changeGreat(event, enabled, id) {
+      this.$request.resetRecommend(id, event).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',

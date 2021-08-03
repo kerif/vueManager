@@ -58,6 +58,8 @@ const recordDetails = loadonDemand('finance/recordDetails')
 const LineList = loadonDemand('config/line/LineList')
 // 新路线
 const Line = loadonDemand('config/line/Line')
+// 新路线 销售价管理
+const salesMana = loadonDemand('config/line/salesMana')
 // 分区
 const partitionList = loadonDemand('config/line/partition')
 // 渠道
@@ -923,6 +925,18 @@ export default [
               group: '配置',
               level: 2,
               name: '路线2'
+            }
+          },
+          {
+            path: '/config/line/sales',
+            name: 'salesMana',
+            component: salesMana,
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '销售价管理',
+              parent: '/config/line'
             }
           },
           {

@@ -618,7 +618,12 @@ export default {
         freight_image: [],
         video_entrance_image: [],
         comment_entrance_image: [],
-        forecast_image: []
+        forecast_image: [],
+        video_image: [],
+        backup_img1: [],
+        backup_img2: [],
+        backup_img3: [],
+        backup_img4: []
       }
     }
   },
@@ -1043,6 +1048,26 @@ export default {
         this.setForm.warehouse_image = this.warehouseList[0]
       } else {
         this.setForm.warehouse_image = []
+      }
+      if (this.backupOnce[0]) {
+        this.setForm.backup_img1 = this.backupOnce[0]
+      } else {
+        this.setForm.backup_img1 = []
+      }
+      if (this.backupSecond[0]) {
+        this.setForm.backup_img2 = this.backupSecond[0]
+      } else {
+        this.setForm.backup_img2 = []
+      }
+      if (this.backupThird[0]) {
+        this.setForm.backup_img3 = this.backupThird[0]
+      } else {
+        this.setForm.backup_img3 = []
+      }
+      if (this.backupFourth[0]) {
+        this.setForm.backup_img4 = this.backupFourth[0]
+      } else {
+        this.setForm.backup_img4 = []
       }
       this.$request.changeProgramImg(this.setForm).then(res => {
         if (res.ret) {
