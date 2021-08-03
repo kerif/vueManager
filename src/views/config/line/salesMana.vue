@@ -105,7 +105,7 @@
       :notNeedInitQuery="false"
     ></nle-pagination>
     <!-- 复制线路 -->
-    <el-dialog :title="$t('复制路线')" :visible.sync="copyDialog" width="45%" @close="clear">
+    <el-dialog :title="$t('复制价格表')" :visible.sync="copyDialog" width="45%" @close="clear">
       <el-form ref="form" :model="copyData" label-width="100px">
         <el-form-item :label="$t('*价格表名称')">
           <el-input v-model="copyData.name"></el-input>
@@ -230,7 +230,7 @@ export default {
         return this.$message.error(this.$t('请输入价格表名称'))
       }
       this.$request
-        .copyGroupLine(this.copyId, {
+        .copySalesLine(this.copyId, {
           name: this.copyData.name
         })
         .then(res => {
