@@ -282,26 +282,46 @@ export default {
   },
   created() {
     this.getList()
-    // this.getUsers()
     this.getRecordDefault()
-    this.getInOutRule()
+    // this.getInOutRule()
   },
   methods: {
-    //获取收支规则列表
-    getInOutRule() {
-      this.$request.getInOutRule().then(res => {
-        if (res.ret) {
-          this.ruleOption = res.data.map(item => {
-            let value = item.code
+    // 获取初始化
+    getRecordDefault() {
+      this.$request.getRecordDefault().then(res => {
+        if (res.data) {
+          this.validTimeList = res.data.valid_time_list
+          this.ruleOption = res.data.rule_list.map(item => {
+            let value = item.id
             let label = item.name
             return {
               value,
               label
             }
           })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
+    //获取收支规则列表
+    // getInOutRule() {
+    //   this.$request.getInOutRule().then(res => {
+    //     if (res.ret) {
+    //       this.ruleOption = res.data.map(item => {
+    //         let value = item.code
+    //         let label = item.name
+    //         return {
+    //           value,
+    //           label
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
     //获取列表
     getList(form) {
       this.$request
@@ -338,29 +358,9 @@ export default {
         })
         .catch(() => cb([]))
     },
-    // getUsers() {
-    //   this.$request.getUsers().then(res => {
-    //     if (res.ret) {
-    //       this.userList = res.data
-    //     }
-    //   })
-    // },
     // 选择客户
     handleSelect(item) {
       this.form.user_id = item.id
-    },
-    // 获取初始化
-    getRecordDefault() {
-      this.$request.getRecordDefault().then(res => {
-        if (res.data) {
-          this.validTimeList = res.data.valid_time_list
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
     },
     //详情
     getRecordDetails(id, type) {

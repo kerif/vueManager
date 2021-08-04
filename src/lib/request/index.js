@@ -1964,6 +1964,10 @@ exports.getLineDetail = id => {
 exports.getExpressFee = params => {
   return $form.get('express-fee-query/warehouses', { params })
 }
+// 渠道增值服务
+exports.getExpressServes = (id, lineId) => {
+  return $form.get(`orders/${id}/express/${lineId}/vas`)
+}
 // 订单 包裹订单概览 饼图
 exports.getPie = params => {
   return $form.get('order-overviews/package/status-count', { params })

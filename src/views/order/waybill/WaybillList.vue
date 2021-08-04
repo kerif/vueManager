@@ -586,7 +586,14 @@
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="activeName === '2'"
-                  @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)"
+                  @click.native="
+                    editPacked(
+                      scope.row.id,
+                      activeName,
+                      scope.row.is_parent,
+                      scope.row.express_line.id
+                    )
+                  "
                 >
                   {{ $t('编辑') }}
                 </el-dropdown-item>
@@ -1518,13 +1525,14 @@ export default {
       })
     },
     // 待支付 编辑打包数据
-    editPacked(id, activeName, parent) {
+    editPacked(id, activeName, parent, lineId) {
       this.$router.push({
         name: 'editPacked',
         params: {
           id: id,
           activeName: activeName,
-          parent: parent
+          parent: parent,
+          lineId
         }
       })
     },
