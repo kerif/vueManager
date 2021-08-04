@@ -30,7 +30,14 @@
         height="calc(100vh - 270px)"
       >
         <el-table-column type="selection"></el-table-column>
-        <el-table-column :label="$t('标题')" prop="title"></el-table-column>
+        <el-table-column :label="$t('标题')" prop="title">
+          <!-- <template slot-scope="scope">
+            <div :title="$t('复制单号')" class="copy-sty" @click="copyUrl(scope.row.id)">
+              <span>{{ scope.row.title }}</span>
+              <i class="el-icon-copy-document"></i>
+            </div>
+          </template> -->
+        </el-table-column>
         <el-table-column :label="$t('类型')" prop="type">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('常见问题') }}</span>
@@ -223,6 +230,11 @@ export default {
 <style lang="scss">
 .notice-list-container {
   background-color: #f5f5f5 !important;
+  .copy-sty {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .icon-sty {
     cursor: pointer;
     // padding-left: 20px;

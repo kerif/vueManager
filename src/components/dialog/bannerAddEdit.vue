@@ -116,6 +116,14 @@
               class="banner-sty"
             ></el-input>
           </el-form-item>
+          <!-- 外部url -->
+          <el-form-item :label="$t('*公众号文章url')" v-if="this.ruleForm.link_type === 3">
+            <el-input
+              v-model="ruleForm.link_path"
+              :placeholder="$t('请输入外部url')"
+              class="banner-sty"
+            ></el-input>
+          </el-form-item>
         </el-form>
       </el-col>
       <el-col :span="8">
@@ -138,7 +146,8 @@
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
-        <p class="px-sty">{{ $t('建议尺寸：355px * 160px') }}</p>
+        <p class="px-sty" v-if="ruleForm.type === 1">{{ $t('建议尺寸：355px * 160px') }}</p>
+        <p class="px-sty" v-if="ruleForm.type === 2">{{ $t('建议尺寸：690px * 168px') }}</p>
       </el-col>
     </el-row>
     <div slot="footer">

@@ -663,7 +663,7 @@ export default [
             }
           },
           {
-            path: '/order/editBillPacked/:id/:activeName/:parent',
+            path: '/order/editBillPacked/:id/:activeName/:parent/:lineId',
             name: 'editPacked',
             component: editPacked,
             id: 402,

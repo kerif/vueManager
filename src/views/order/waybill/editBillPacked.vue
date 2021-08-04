@@ -231,7 +231,10 @@
                     <el-input v-model="scope.row.height" @blur="changeNum(scope)"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('体积重量') + this.localization.weight_unit">
+                <el-table-column
+                  :label="$t('体积重量') + this.localization.weight_unit"
+                  v-if="user.box_type === 1"
+                >
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.volume_weight" disabled></el-input>
                   </template>
@@ -247,7 +250,9 @@
                 </el-table-column>
               </el-table>
               <p>{{ $t('实际总重量') }}{{ localization.weight_unit }}：{{ TotalWeight }}</p>
-              <p>{{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}</p>
+              <p v-if="user.box_type === 1">
+                {{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}
+              </p>
             </el-col>
           </el-form-item>
         </el-row>
@@ -348,6 +353,24 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 渠道增值服务 -->
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
+          <el-col>
+            <el-form-item :label="$t('渠道增值服务')">
+              <el-checkbox-group v-model="user.line_service_ids">
+                <div v-for="item in lineServices" :key="item.id" class="service">
+                  <div class="serviceLeft">
+                    <el-checkbox :label="item.id">{{ item.name }}</el-checkbox>
+                  </div>
+                  <div class="serviceRight">
+                    <span>{{ localization.currency_unit }}</span>
+                    <el-input v-model="item.value" disabled class="add-value-ipt"></el-input>
+                  </div>
+                </div>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
     <!-- 保存 -->
@@ -400,7 +423,8 @@ export default {
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片
         pack_pictures: [], // 打包照片
-        box: []
+        box: [],
+        line_service_ids: []
       },
       tableLoading: false,
       baleImgList: [],
@@ -408,11 +432,13 @@ export default {
       PackageData: [],
       services: [],
       updateProp: [],
+      lineServices: [],
       localization: {},
       imgVisible: false,
       imgSrc: '',
       expressData: [],
       weightName: '',
+      lineService: [],
       express: {
         MaxWeight: '',
         cName: ''
@@ -426,8 +452,6 @@ export default {
   created() {
     this.getPackage()
     this.getExpress()
-    console.log(this.$route.params.parent, 'parent: parent')
-    // this.getProp() // 获取多选框数据
   },
   methods: {
     // 获取多选框
@@ -451,17 +475,38 @@ export default {
         }
       })
     },
+    //获取渠道增值服务
+    getExpressServes() {
+      this.$request.getExpressServes(this.$route.params.id, this.$route.params.lineId).then(res => {
+        if (res.ret) {
+          this.lineServices = res.data
+          this.lineService.forEach(item => {
+            if (this.lineServices.map(ele => ele.id).includes(item)) {
+              this.user.line_service_ids.push(item)
+            }
+          })
+        }
+      })
+    },
     // 计算体积重量
     changeNum(row = {}) {
       const { length, width, height } = row.row
-      console.log(length, 'height')
       if (length && width && height) {
-        this.user.box = this.user.box.map((item, index) => {
-          if (index === row.$index) {
-            return { ...item, volume_weight: (length * width * height) / this.factor }
-          }
-          return item
-        })
+        if (this.user.box_type === 0) {
+          this.user.box = this.user.box.map((item, index) => {
+            if (index === row.$index) {
+              return { ...item, volume_weight: (length * width * height) / this.factor }
+            }
+            return item
+          })
+        } else {
+          this.user.box = this.user.box.map((item, index) => {
+            if (index === row.$index) {
+              return { ...item }
+            }
+            return item
+          })
+        }
         this.unitVolume()
       }
     },
@@ -493,7 +538,6 @@ export default {
             price: item.price
           }
         })
-      console.log('ser', this.user.services)
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
         return {
           url: item.url
@@ -522,14 +566,22 @@ export default {
     },
     // 新增行
     addRow() {
-      console.log(this.user.box, 'this.user.box')
-      this.user.box.push({
-        weight: '',
-        length: '',
-        width: '',
-        height: '',
-        volume_weight: ''
-      })
+      if (this.user.box_type === 0) {
+        this.user.box.push({
+          weight: '',
+          length: '',
+          width: '',
+          height: '',
+          volume_weight: ''
+        })
+      } else {
+        this.user.box.push({
+          weight: '',
+          length: '',
+          width: '',
+          height: ''
+        })
+      }
     },
     deleteRow(index, rows) {
       rows.splice(index, 1)
@@ -566,6 +618,8 @@ export default {
         this.user.width = res.data.width
         this.user.height = res.data.height
         this.user.box_type = res.data.box_type
+        this.lineService = res.data.payment.line_services.map(item => item.line_service_id)
+        this.getExpressServes()
         if (res.data.box_type === 2) {
           // 出箱类型等于多箱出库时
           this.user.box = res.data.box
@@ -835,6 +889,9 @@ export default {
     padding-left: 30px;
     font-size: 13px;
     color: red;
+  }
+  .el-checkbox-group {
+    font-size: 14px;
   }
 }
 </style>
