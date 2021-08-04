@@ -114,6 +114,7 @@ import creditConsumption from './creditConsumption.vue'
 import growthValueBuy from './growthValueBuy.vue'
 import baseTable from './baseTable.vue'
 import discountTable from './discountTable.vue'
+import salesAddEdit from './salesAddEdit.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -228,6 +229,7 @@ const CreditConsumption = Vue.extend(creditConsumption)
 const GrowthValueBuy = Vue.extend(growthValueBuy)
 const BaseTable = Vue.extend(baseTable)
 const DiscountTable = Vue.extend(discountTable)
+const SalesAddEditController = Vue.extend(salesAddEdit)
 
 const mixin = {
   data() {
@@ -941,6 +943,13 @@ function initInstance(type) {
     // 区块管理 编辑 新增 链接
     case 'linkAddEdit':
       instance = new LinkAddEditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 销售价管理 编辑 新增
+    case 'salesAddEdit':
+      instance = new SalesAddEditController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

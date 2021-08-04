@@ -231,11 +231,11 @@
                     <el-input v-model="scope.row.height" @blur="changeNum(scope)"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('体积重量') + this.localization.weight_unit">
+                <!-- <el-table-column :label="$t('体积重量') + this.localization.weight_unit">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.volume_weight" disabled></el-input>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column :label="$t('操作')">
                   <template slot-scope="scope">
                     <el-button
@@ -247,7 +247,7 @@
                 </el-table-column>
               </el-table>
               <p>{{ $t('实际总重量') }}{{ localization.weight_unit }}：{{ TotalWeight }}</p>
-              <p>{{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}</p>
+              <!-- <p>{{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}</p> -->
             </el-col>
           </el-form-item>
         </el-row>
@@ -527,8 +527,8 @@ export default {
         weight: '',
         length: '',
         width: '',
-        height: '',
-        volume_weight: ''
+        height: ''
+        // volume_weight: ''
       })
     },
     deleteRow(index, rows) {
