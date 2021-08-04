@@ -2,7 +2,9 @@
   <div class="price-list">
     <div class="title">{{ name }}{{ $t('价格表') }}</div>
     <div class="func-btn">
-      <el-button size="small" @click="exportPrice">{{ $t('导出价格表') }}</el-button>
+      <el-button size="small" @click="exportPrice" style="margin-right: 10px">{{
+        $t('导出价格表')
+      }}</el-button>
       <!-- <el-button size="small" @click="importPrice">{{ $t('导入价格表') }}</el-button> -->
       <el-upload class="upload-demo" action="" :limit="1" :http-request="importPrice">
         <el-button size="small" type="primary">{{ $t('导入价格表') }}</el-button>
@@ -25,6 +27,7 @@
         class="x-table"
         height="400"
         :data="ctableData"
+        :span-method="mergeRowMethod"
         :edit-config="{ trigger: 'click', mode: 'cell' }"
         @edit-closed="editClosedEvent"
       >
@@ -39,7 +42,7 @@
         <vxe-table-colgroup v-if="type === 1 || type === 4">
           <vxe-table-colgroup
             field="unit_weight"
-            :title="$t('首位重量') + localization.weight_unit"
+            :title="$t('单位重量') + localization.weight_unit"
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
@@ -99,75 +102,100 @@ export default {
       this.$request.getPriceTable(this.$route.params.id).then(res => {
         if (res.ret) {
           this.localization = res.localization
-          if (this.type !== 4) {
-            res.data.forEach(item => {
-              this.ctableData.push(
-                ...item.prices.map(ele => {
-                  let range = ''
-                  if (ele.start / 1000 === ele.end / 1000) {
-                    range = ele.start / 1000
-                  } else {
-                    range = `(${ele.start / 1000}，${ele.end / 1000}]`
-                  }
-                  let unit_weight = ele.unit_weight / 1000
-                  let price = ele.price / 100
-                  let priceId = ele.id
-                  let type = ''
-                  if (this.type === 1) {
-                    ele.type === 0 ? (type = this.$t('首重')) : (type = this.$t('续重'))
-                  } else if (this.type === 2) {
-                    type = ''
-                  } else if (this.type === 3) {
-                    ele.type === 3 ? (type = this.$t('单位价格')) : (type = this.$t('阶梯价格'))
-                  } else if (this.type === 4) {
-                    ele.type === 0 ? (type = this.$t('首重')) : (type = this.$t('多级续重'))
-                  }
-                  return {
-                    ...item,
-                    range,
-                    unit_weight,
-                    type,
-                    price,
-                    priceId
-                  }
-                })
-              )
-            })
-            this.ctableData.forEach(item => {
-              item[`${item.id}_price`] = item.price
-              item[`${item.id}_price_id`] = item.priceId
-            })
-            let arr = []
-            this.ctableData.forEach(item => {
-              let flag = -1
+          res.data.forEach(item => {
+            this.ctableData.push(
+              ...item.prices.map(ele => {
+                let range = ''
+                if (ele.start / 1000 === ele.end / 1000) {
+                  range = ele.start / 1000
+                } else {
+                  range = `(${ele.start / 1000}，${ele.end / 1000}]`
+                }
+                let unit_weight = ele.unit_weight / 1000
+                let price = ele.price / 100
+                let priceId = ele.id
+                let type = ''
+                if (this.type === 1) {
+                  ele.type === 0 ? (type = this.$t('首重')) : (type = this.$t('续重'))
+                } else if (this.type === 2) {
+                  type = ''
+                } else if (this.type === 3) {
+                  ele.type === 3 ? (type = this.$t('单位价格')) : (type = this.$t('阶梯价格'))
+                } else if (this.type === 4) {
+                  ele.type === 0 ? (type = this.$t('首重')) : (type = this.$t('多级续重'))
+                }
+                return {
+                  ...item,
+                  range,
+                  unit_weight,
+                  type,
+                  price,
+                  priceId
+                }
+              })
+            )
+          })
+          this.ctableData.forEach(item => {
+            item[`${item.id}_price`] = item.price
+            item[`${item.id}_price_id`] = item.priceId
+          })
+          let arr = []
+          this.ctableData.forEach(item => {
+            let flag = -1
+            if (this.type === 4) {
+              arr.forEach((ele, index) => {
+                if (ele.range === item.range && ele.unit_weight === item.unit_weight) {
+                  flag = index
+                }
+              })
+            } else {
               arr.forEach((ele, index) => {
                 if (ele.range === item.range) {
                   flag = index
                 }
               })
-              if (flag !== -1) {
-                arr[flag] = { ...arr[flag], ...item }
-              } else {
-                arr.push(item)
-              }
-            })
-            this.ctableData = arr
-            this.ctableColumn = res.data.map(item => {
-              const areas = item.areas
-                .map(item => item.country_name + item.area_name + item.sub_area_name)
-                .join('、')
-              const field = `${item.id}_price`
-              let editRender = { name: 'input', attrs: { type: 'text' } }
-              return {
-                ...item,
-                areas,
-                field,
-                editRender
-              }
-            })
-          }
+            }
+            if (flag !== -1) {
+              arr[flag] = { ...arr[flag], ...item }
+            } else {
+              arr.push(item)
+            }
+          })
+          this.ctableData = arr
+          this.ctableColumn = res.data.map(item => {
+            const areas = item.areas
+              .map(item => item.country_name + item.area_name + item.sub_area_name)
+              .join('、')
+            const field = `${item.id}_price`
+            let editRender = { name: 'input', attrs: { type: 'text' } }
+            return {
+              ...item,
+              areas,
+              field,
+              editRender
+            }
+          })
         }
       })
+    },
+    mergeRowMethod({ row, _rowIndex, column, visibleData }) {
+      const fields = ['range']
+      const cellValue = row[column.property]
+      if (fields.includes(column.property)) {
+        const prevRow = visibleData[_rowIndex - 1]
+        let nextRow = visibleData[_rowIndex + 1]
+        if (prevRow && prevRow[column.property] === cellValue) {
+          return { rowspan: 0, colspan: 0 }
+        } else {
+          let countRowspan = 1
+          while (nextRow && nextRow[column.property] === cellValue) {
+            nextRow = visibleData[++countRowspan + _rowIndex]
+          }
+          if (countRowspan > 1) {
+            return { rowspan: countRowspan, colspan: 1 }
+          }
+        }
+      }
     },
     getList() {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
@@ -244,7 +272,6 @@ export default {
       })
     },
     importPrice(item) {
-      console.log(item, 'item')
       this.$request.importPrice(this.$route.params.id, item.file).then(res => {
         if (res.ret) {
           console.log(res.data)
