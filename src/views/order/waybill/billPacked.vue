@@ -330,7 +330,7 @@
                 </el-table-column>
               </el-table>
               <p>{{ $t('实际总重量') }}{{ localization.weight_unit }}：{{ TotalWeight }}</p>
-              <p>{{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}</p>
+              <!-- <p>{{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}</p> -->
             </el-col>
           </el-form-item>
         </el-row>
@@ -662,8 +662,8 @@ export default {
         weight: '',
         length: '',
         width: '',
-        height: '',
-        volume_weight: ''
+        height: ''
+        // volume_weight: ''
       })
     },
     deleteRow(index, rows) {
