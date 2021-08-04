@@ -314,10 +314,7 @@
                     <el-input v-model="scope.row.height" @blur="changeNum(scope)"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  v-if="user.express_line && user.express_line.base_mode === 0"
-                  :label="$t('体积重量') + this.localization.weight_unit"
-                >
+                <el-table-column :label="$t('体积重量') + this.localization.weight_unit">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.volume_weight" disabled></el-input>
                   </template>
@@ -333,9 +330,7 @@
                 </el-table-column>
               </el-table>
               <p>{{ $t('实际总重量') }}{{ localization.weight_unit }}：{{ TotalWeight }}</p>
-              <p v-if="user.express_line && user.express_line.base_mode === 0">
-                {{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}
-              </p>
+              <p>{{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}</p>
             </el-col>
           </el-form-item>
         </el-row>
