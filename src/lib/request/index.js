@@ -146,6 +146,10 @@ exports.copySalesLine = (id, params) => {
 exports.deleteSales = id => {
   return $form.delete(`express-lines/sale-prices/${id}`)
 }
+// 新路线 销售价格 获取适用渠道
+exports.groupWith = () => {
+  return $form.get(`express-lines/group-with-line-list`)
+}
 // 配置 新路线 获取数据
 exports.getLineGroup = params => {
   return $form.get('express-lines/groups', { params })

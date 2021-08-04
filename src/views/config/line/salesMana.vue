@@ -21,7 +21,7 @@
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
         <div class="select-box">
-          <add-btn @click.native="newLine">{{ $t('添加价格表') }}</add-btn>
+          <add-btn @click.native="newSales">{{ $t('添加价格表') }}</add-btn>
         </div>
       </div>
     </div>
@@ -81,7 +81,7 @@
         </el-table-column> -->
         <el-table-column :label="$t('操作')" width="260">
           <template slot-scope="scope">
-            <el-button class="btn-blue" @click="editLine(scope.row.id, scope.row.name)">{{
+            <el-button class="btn-blue" @click="editSales(scope.row.id)">{{
               $t('编辑')
             }}</el-button>
             <el-button class="btn-deep-purple" @click="copyLine(scope.row.id)">{{
@@ -179,10 +179,19 @@ export default {
         })
     },
     // 新增路线
-    newLine() {
-      dialog({ type: 'LingLang', state: 'new' }, () => {
+    newSales() {
+      dialog({ type: 'salesAddEdit', state: 'add' }, () => {
         this.getList()
       })
+    },
+    // 编辑
+    editSales(id) {
+      dialog({ type: 'salesAddEdit', state: 'edit', id: id }, () => {
+        this.getList()
+      })
+      // this.copyId = id
+      // this.copyDialog = true
+      // this.copyData.name = name
     },
     goPartition() {
       this.$router.push({ name: 'partition' }, () => {
@@ -213,12 +222,6 @@ export default {
     copyLine(id) {
       this.copyId = id
       this.copyDialog = true
-    },
-    // 编辑
-    editLine(id, name) {
-      this.copyId = id
-      this.copyDialog = true
-      this.copyData.name = name
     },
     clear() {
       this.copyId = ''
