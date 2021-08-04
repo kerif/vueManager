@@ -10,14 +10,30 @@
       <div>
         <el-form ref="form" :model="form" label-position="top">
           <el-form-item :label="$t('选择客户')" prop="customer">
-            <el-select v-model="form.user_id">
+            <div class="search">
+              <el-autocomplete
+                class="inline-input"
+                v-model="selectUser"
+                :fetch-suggestions="querySearchUser"
+                value-key="name"
+                clearable
+                :placeholder="$t('请输入客户ID')"
+                @select="handleSelect"
+                style="width: 217px"
+              >
+                <template #default="{ item }">
+                  <div class="name">{{ item.id }}---{{ item.name }}</div>
+                </template>
+              </el-autocomplete>
+            </div>
+            <!-- <el-select v-model="form.user_id">
               <el-option
                 v-for="item in userList"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
               ></el-option>
-            </el-select>
+            </el-select> -->
           </el-form-item>
           <el-form-item :label="$t('选择分类')" prop="radio1">
             <el-radio v-model="form.resource_type" label="1">{{ $t('成长值') }}</el-radio>
@@ -28,7 +44,7 @@
             <el-radio v-model="form.code" label="DECREASE">{{ $t('扣款') }}</el-radio>
           </el-form-item>
           <el-form-item :label="$t('值')" prop="value">
-            <el-input v-model="form.value" style="width: 210px"></el-input>
+            <el-input v-model="form.value" style="width: 217px"></el-input>
           </el-form-item>
           <el-form-item :label="$t('到账之日起计算，有效期为')">
             <el-select v-model="form.valid_time">
@@ -41,7 +57,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('关联订单号')" prop="value">
-            <el-input v-model="form.order_sn" style="width: 210px"></el-input>
+            <el-input v-model="form.order_sn" style="width: 217px"></el-input>
           </el-form-item>
           <el-form-item :label="$t('备注')" prop="value">
             <el-input v-model="form.remark" type="textarea" :row="10"></el-input>
@@ -220,6 +236,7 @@ export default {
       timeList: [],
       tableData: [],
       userList: [],
+      selectUser: '',
       validTimeList: [],
       form: {
         user_id: '',
@@ -265,7 +282,7 @@ export default {
   },
   created() {
     this.getList()
-    this.getUsers()
+    // this.getUsers()
     this.getRecordDefault()
     this.getInOutRule()
   },
@@ -309,12 +326,28 @@ export default {
         })
     },
     //获取客户列表
-    getUsers() {
-      this.$request.getUsers().then(res => {
-        if (res.ret) {
-          this.userList = res.data
-        }
-      })
+    querySearchUser(keyword, cb) {
+      this.$request
+        .getUsers({ keyword })
+        .then(res => {
+          if (res.ret) {
+            cb(res.data)
+          } else {
+            cb([])
+          }
+        })
+        .catch(() => cb([]))
+    },
+    // getUsers() {
+    //   this.$request.getUsers().then(res => {
+    //     if (res.ret) {
+    //       this.userList = res.data
+    //     }
+    //   })
+    // },
+    // 选择客户
+    handleSelect(item) {
+      this.form.user_id = item.id
     },
     // 获取初始化
     getRecordDefault() {
