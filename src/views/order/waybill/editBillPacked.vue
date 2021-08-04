@@ -360,7 +360,9 @@
               <el-checkbox-group v-model="user.line_service_ids">
                 <div v-for="item in lineServices" :key="item.id" class="service">
                   <div class="serviceLeft">
-                    <el-checkbox :label="item.id">{{ item.name }}</el-checkbox>
+                    <el-checkbox :label="item.id" :disabled="item.is_force === 1">{{
+                      item.name
+                    }}</el-checkbox>
                   </div>
                   <div class="serviceRight">
                     <span>{{ localization.currency_unit }}</span>
@@ -368,6 +370,19 @@
                   </div>
                 </div>
               </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 渠道限制费 -->
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
+          <el-col>
+            <el-form-item :label="$t('渠道限制费')">
+              <div class="service">
+                <div class="serviceLeft">
+                  <span>{{ localization.currency_unit }}</span>
+                  <el-input v-model="user.line_rule_fee" class="add-value-ipt" disabled></el-input>
+                </div>
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
@@ -438,7 +453,7 @@ export default {
       imgSrc: '',
       expressData: [],
       weightName: '',
-      lineService: [],
+      lineServiceId: [],
       express: {
         MaxWeight: '',
         cName: ''
@@ -480,8 +495,16 @@ export default {
       this.$request.getExpressServes(this.$route.params.id, this.$route.params.lineId).then(res => {
         if (res.ret) {
           this.lineServices = res.data
-          this.lineService.forEach(item => {
-            if (this.lineServices.map(ele => ele.id).includes(item)) {
+          this.lineServices.forEach(item => {
+            if (item.is_force) {
+              this.user.line_service_ids.push(item.id)
+            }
+          })
+          this.lineServiceId.forEach(item => {
+            if (
+              this.lineServices.map(ele => ele.id).includes(item) &&
+              !this.user.line_service_ids.includes(item)
+            ) {
               this.user.line_service_ids.push(item)
             }
           })
@@ -613,12 +636,13 @@ export default {
         this.PackageData = res.data.packages
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
+        this.user.line_rule_fee = res.data.payment.line_rule_fee
         this.user.order_sn = res.data.order_sn
         this.user.length = res.data.length
         this.user.width = res.data.width
         this.user.height = res.data.height
         this.user.box_type = res.data.box_type
-        this.lineService = res.data.payment.line_services.map(item => item.line_service_id)
+        this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
         this.getExpressServes()
         if (res.data.box_type === 2) {
           // 出箱类型等于多箱出库时
