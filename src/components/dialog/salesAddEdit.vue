@@ -6,7 +6,7 @@
     @close="clear"
     width="65%"
   >
-    <el-form ref="form" :model="ruleForm" class="commission-top">
+    <el-form ref="form" label-position="top" :model="ruleForm" class="commission-top">
       <el-row>
         <el-col :span="10">
           <el-form-item :label="$t('价格表名称')">
@@ -20,57 +20,88 @@
         </el-col>
       </el-row>
       <el-form-item :label="$t('适用对象')">
-        <el-radio-group v-model="ruleForm.scope">
+        <el-radio-group v-model="ruleForm.scope" @change="selectMode">
           <el-radio :label="0">{{ $t('所有用户') }}</el-radio>
           <el-radio :label="1">{{ $t('特定用户组') }}</el-radio>
           <el-radio :label="2">{{ $t('特定会员等级') }}</el-radio>
           <el-radio :label="3">{{ $t('特定用户') }}</el-radio>
         </el-radio-group>
+        <el-checkbox-group
+          v-model="ruleForm.ids"
+          v-if="ruleForm.scope === 1 || ruleForm.scope === 2"
+          class="checked-list"
+        >
+          <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
+            item.name
+          }}</el-checkbox>
+        </el-checkbox-group>
+        <div v-if="ruleForm.scope === 3">
+          <div class="search">
+            <el-autocomplete
+              class="inline-input"
+              v-model="selectUser"
+              :fetch-suggestions="querySearchUser"
+              value-key="name"
+              clearable
+              :placeholder="$t('请输入客户ID')"
+              @select="handleSelect"
+              style="width: 200px"
+            >
+              <template #default="{ item }">
+                <div class="name">{{ item.id }}---{{ item.name }}</div>
+              </template>
+            </el-autocomplete>
+          </div>
+          <div class="customer checked-list">
+            <div class="customer-item" v-for="item in customerList" :key="item.id">
+              {{ item.id }}---{{ item.name }}
+            </div>
+          </div>
+        </div>
       </el-form-item>
       <el-form-item :label="$t('适用渠道（可多选）')">
-        <el-table :data="ruleForm.tableData" border style="width: 100%">
-          <el-table-column type="index"> </el-table-column>
-          <el-table-column :label="$t('渠道')" style="width: 100%">
-            <template slot-scope="scope">
-              <el-cascader
-                style="width: 100%"
-                @change="chooseAres(scope.row.areaData)"
-                v-model="scope.row.areaData"
-                :options="options"
-                :props="props"
-                collapse-tags
-                clearable
-              ></el-cascader>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-cascader
+          v-model="ruleForm.express_line_ids"
+          :options="options"
+          :props="props"
+          collapse-tags
+          clearable
+        ></el-cascader>
       </el-form-item>
-      <el-form-item>
-        <div>{{ $t('设置价格') }}</div>
-        <div class="value-sty">
-          <el-row>
-            <el-col :span="10">
-              {{ $t('折扣力度（例：打九折则输入0.9）') }}
-            </el-col>
-            <el-col :span="6"> <el-input></el-input></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="10">
-              {{ $t('折扣计算方式') }}
-            </el-col>
-            <el-col :span="6">
-              <el-select v-model="value" :placeholder="$t('请选择')">
-                <el-option
-                  v-for="item in discountData"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                >
-                </el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-        </div>
+      <div>{{ $t('设置价格') }}</div>
+      <div class="value-sty">
+        <el-form-item>
+          {{ $t('折扣力度（例：打九折则输入0.9）') }}
+          <el-input v-model="ruleForm.discount" style="width: 217px"></el-input>
+        </el-form-item>
+        <el-form-item>
+          {{ $t('折扣计算方式') }}
+          <el-select
+            v-model="ruleForm.discount_type"
+            :placeholder="$t('请选择')"
+            style="margin-left: 10px"
+          >
+            <el-option
+              v-for="item in discountData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </div>
+      <el-form-item :label="$t('有效时间')">
+        <el-date-picker
+          v-model="time"
+          value-format="yyyy-MM-dd HH:mm"
+          format="yyyy-MM-dd HH:mm"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        >
+        </el-date-picker>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -80,38 +111,27 @@
   </el-dialog>
 </template>
 <script>
-// import NlePagination from '@/components/pagination'
-// import { pagination } from '@/mixin'
 export default {
-  // components: {
-  //   NlePagination
-  // },
-  // mixins: [pagination],
   data() {
     return {
+      state: '',
       ruleForm: {
         name: '',
         index: '',
-        scope: '',
-        tableData: [
-          {
-            areaData: []
-          }
-        ]
+        scope: -1,
+        ids: [],
+        express_line_ids: [],
+        discount: '',
+        discount_type: ''
       },
-      templateData: [],
-      countryList: [], // 获取全部国家
       options: [],
-      agentName: '',
       props: { multiple: true, checkStrictly: false },
-      state: '',
       id: '',
-      status: '',
       areaData: null,
-      newWarehouseList: [],
-      keyValue: 0,
-      areaIds: [],
-      areasData: [],
+      modeList: [],
+      customerList: [],
+      selectUser: '',
+      time: [],
       discountData: [
         {
           id: 1,
@@ -121,45 +141,49 @@ export default {
           id: 2,
           name: this.$t('折扣后总价')
         }
-      ]
+      ],
+      arr: []
     }
   },
   methods: {
-    getRegions() {
-      this.$request.getRegionDetails(this.$route.params.id, this.id).then(res => {
-        this.ruleForm.reference_time = res.data.reference_time
-        this.ruleForm.name = res.data.name
-        if (res.data.areas) {
-          this.tableData[0].areaData = res.data.areas.map(item =>
-            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
-          )
-        }
-        console.log(this.tableData, 'this.areaData')
-      })
-    },
+    // 获取详情
     getList() {
-      this.$request.getRegionsTem(this.id).then(res => {
-        this.ruleForm.reference_time = res.data.reference_time
-        this.ruleForm.name = res.data.name
-        if (res.data.areas) {
-          this.tableData[0].areaData = res.data.areas.map(item =>
-            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
-          )
+      this.$request.getSalesDetails(this.id).then(res => {
+        if (res.ret) {
+          this.ruleForm.name = res.data.name
+          this.ruleForm.index = res.data.index
+          this.ruleForm.scope = res.data.scope
+          this.ruleForm.discount = res.data.discount
+          this.ruleForm.discount_type = res.data.discount_type
+          this.time = [res.data.effect_at, res.data.expire_at]
+          this.ruleForm.express_line_ids = res.data.express_line_ids
+          this.ruleForm.express_line_ids.forEach(item => {
+            this.ruleForm.express_line_ids = this.arr.filter(ele => {
+              return ele.includes(item)
+            })
+          })
+          this.selectMode(res.data.scope)
+          if (res.data.scope === 1) {
+            this.ruleForm.ids = res.data.user_groups.map(item => item.id)
+          } else if (res.data.scope === 2) {
+            this.ruleForm.ids = res.data.member_levels.map(item => item.id)
+          } else if (res.data.scope === 3) {
+            this.customerList = res.data.users
+          }
         }
       })
     },
-    chooseAres(area) {
-      this.areaIds = area.map(item => ({
-        country_id: item[0],
-        area_id: item[1],
-        sub_area_id: item[2]
-      }))
-      console.log(this.areaIds, 'form.area_ids')
-    },
-    // 预设分区表 获取国家
-    getCountry() {
+    // 获取渠道
+    getLine() {
       this.$request.groupWith().then(res => {
         if (res.ret) {
+          let subArr = []
+          res.data.forEach(item => {
+            item.express_lines.forEach(ele => {
+              subArr = [item.id, ele.id]
+              this.arr.push(subArr)
+            })
+          })
           this.options = res.data.map(item => {
             return {
               value: item.id,
@@ -176,168 +200,122 @@ export default {
             }
           })
         }
+        if (this.id) {
+          this.getList()
+        }
       })
     },
-    // 切换国家
-    changeCountry(item) {
-      // this.areaData = []
-      console.log(item, 'item')
-      // ++this.keyValue
-      // const selectList = this.countryList.find(item => item.value === this.form.country_id)
-      // this.newWarehouseList = selectList ? selectList.children : []
-    },
-    handleChange() {
-      // this.form.area_id = this.areaData[0]
-      // this.form.sub_area_id = this.areaData[1]
-    },
-    editPartition(id) {
-      console.log(id)
-    },
-    // 新增行
-    addRow() {
-      console.log(this.tableData, 'this.tableData')
-      this.tableData.push({
-        country_id: '',
-        areaData: []
+    //获取会员组
+    getGradeList() {
+      this.$request.getGradeList({ size: 100 }).then(res => {
+        if (res.ret) {
+          this.modeList = res.data.map(item => {
+            let name = item.name
+            let id = item.id
+            return {
+              name,
+              id
+            }
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
-    deleteParition(index, rows) {
-      rows.splice(index, 1)
+    //获取客户组
+    getUserGroup() {
+      this.$request.getUserGroup({ size: 100 }).then(res => {
+        if (res.ret) {
+          this.modeList = res.data.map(item => {
+            let name = item.name_cn
+            let id = item.id
+            return {
+              name,
+              id
+            }
+          })
+        }
+      })
     },
-    confirm() {
-      if (this.tableData[0].areaData.length) {
-        this.areasData = this.tableData[0].areaData.map(item => ({
-          country_id: item[0],
-          area_id: item[1],
-          sub_area_id: item[2]
-        }))
+    // 选择适用方式
+    selectMode(val) {
+      this.ruleForm.ids = []
+      if (val === 1) {
+        this.getUserGroup()
+      } else if (val === 2) {
+        this.getGradeList()
       }
-      if (this.status === 'channel') {
-        if (this.id) {
-          this.$request
-            .updateRegionDetails(this.$route.params.id, this.id, {
-              name: this.ruleForm.name,
-              reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
-            })
-        } else {
-          this.$request
-            .newRegions(this.$route.params.id, {
-              name: this.ruleForm.name,
-              reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
-            })
-        }
+    },
+    // 选择客户
+    querySearchUser(keyword, cb) {
+      this.$request
+        .getUsers({ keyword })
+        .then(res => {
+          if (res.ret) {
+            cb(res.data)
+          } else {
+            cb([])
+          }
+        })
+        .catch(() => cb([]))
+    },
+    handleSelect(item) {
+      if (this.customerList.map(item => item.id).includes(item.id)) {
+        return false
+      }
+      this.customerList.push(item)
+      this.ruleForm.ids = this.customerList.map(item => item.id)
+    },
+    async confirm() {
+      this.ruleForm.express_line_ids = this.ruleForm.express_line_ids.map(item => item[1])
+      this.ruleForm.effect_at = this.time[0]
+      this.ruleForm.expire_at = this.time[1]
+      let res = {}
+      if (this.id) {
+        res = await this.$request.updateSales(this.id, { ...this.ruleForm })
       } else {
-        if (this.id) {
-          this.$request
-            .updateRegionsTem(this.id, {
-              name: this.ruleForm.name,
-              reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
-            })
-        } else {
-          this.$request
-            .newRegionsTem({
-              name: this.ruleForm.name,
-              reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-              this.show = false
-            })
-        }
+        res = await this.$request.addSales({ ...this.ruleForm })
+      }
+      if (res.ret) {
+        this.$notify({
+          type: 'success',
+          title: this.$t('操作成功'),
+          message: res.msg
+        })
+        this.show = false
+        this.success()
+      } else {
+        this.$message({
+          message: res.msg,
+          type: 'error'
+        })
       }
     },
     init() {
-      console.log(this.status, 'status')
-      this.getCountry()
-      if (this.id) {
-        this.getList()
-      }
+      this.getLine()
     },
     clear() {
+      this.selectUser = ''
+      this.customerList = []
       this.id = ''
-      this.areaIds = []
-      this.state = ''
-      this.status = ''
-      this.ruleForm.reference_time = ''
       this.ruleForm.name = ''
-      this.tableData[0].areaData = []
+      this.ruleForm.index = ''
+      this.ruleForm.scope = -1
+      this.ruleForm.ids = []
+      this.ruleForm.express_line_ids = []
+      this.ruleForm.discount = ''
+      this.ruleForm.discount_type = ''
+      this.time = []
+      this.modeList = []
     }
   }
 }
 </script>
 <style lang="scss">
 .dialog-sales-add-edit {
-  .pagination-box {
-    margin-top: 10px;
-  }
   .el-dialog__header {
     background-color: #0e102a;
   }
@@ -345,25 +323,18 @@ export default {
     font-size: 14px;
     color: #fff;
   }
-  .input-select {
-    width: 30%;
-    margin-right: 10px;
-  }
-  .el-dialog__close {
-    color: #fff;
-  }
-  .commission-top {
-    margin-left: 20px;
-  }
-  .input-sty {
-    width: 35%;
-  }
-  .add-row {
-    margin-bottom: 10px;
-    text-align: right;
-  }
   .value-sty {
+    margin: 10px 0;
+    padding: 30px;
     background-color: #f0f0f0;
+  }
+  .checked-list {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
   }
 }
 </style>

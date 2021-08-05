@@ -46,6 +46,21 @@
           </p>
           <span>{{ form.coupon_amount }}</span
           ><br />
+          <p class="transfer-right">
+            {{ $t('是否使用积分') }}
+          </p>
+          <span>{{ form.is_use_point === 1 ? '是' : '否' }}</span>
+          <br />
+          <p class="transfer-right">
+            {{ $t('使用积分') }}
+          </p>
+          <span>{{ form.point }}</span>
+          <br />
+          <p class="transfer-right">
+            {{ $t('积分抵扣的金额') + this.localization.currency_unit }}
+          </p>
+          <span>{{ form.point_amount }}</span>
+          <br />
           <p class="transfer-right">{{ $t('支付金额') + this.localization.currency_unit }}</p>
           <span>{{ form.tran_amount }}</span>
           <span v-if="this.form.show_rate == true">
@@ -419,7 +434,7 @@ export default {
   }
   .transfer-right {
     display: inline-block;
-    width: 120px;
+    width: 130px;
   }
   .img_box {
     text-align: center;

@@ -138,6 +138,22 @@ exports.deleteRegionsTem = id => {
 exports.getSales = params => {
   return $form.get('express-lines/sale-prices', { params })
 }
+// 新路线 销售价格 新增
+exports.addSales = params => {
+  return $form.post('express-lines/sale-prices', params)
+}
+// 新路线 销售价格 详情
+exports.getSalesDetails = id => {
+  return $form.get(`express-lines/sale-prices/${id}`)
+}
+// 新路线 销售价格 修改
+exports.updateSales = (id, params) => {
+  return $form.put(`express-lines/sale-prices/${id}`, params)
+}
+// 新路线 销售价格 修改状态
+exports.updateStatus = (id, status) => {
+  return $form.put(`express-lines/sale-prices/${id}/status/${status}`)
+}
 // 新路线 销售价格 复制路线
 exports.copySalesLine = (id, params) => {
   return $form.post(`express-lines/sale-prices/${id}/copy`, params)

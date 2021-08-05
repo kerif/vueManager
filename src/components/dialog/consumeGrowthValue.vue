@@ -40,7 +40,8 @@
         ></el-option>
       </el-select>
     </div>
-    <h5>{{ $t('成长值有效期') }}：</h5>
+    <h5 v-if="type === 'consumeGrowthValue'">{{ $t('成长值有效期') }}：</h5>
+    <h5 v-else>{{ $t('积分有效期') }}：</h5>
     <div class="content">
       {{ $t('成长值到账之日起计算，有效期为') }}
       <el-select :placeholder="$t('请选择')" v-model="tableData.valid_time" style="width: 150px">
