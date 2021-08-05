@@ -209,8 +209,8 @@
         </div>
       </el-form>
       <div class="btn-sty">
-        <el-button @click="cancelSave(item)">{{ $t('取消') }}</el-button>
-        <el-button @click="saveChannles(item)">{{ $t('保存') }}</el-button>
+        <el-button @click="cancelSave(item)" v-if="item.state">{{ $t('取消') }}</el-button>
+        <el-button @click="saveChannles(item)" v-if="item.state">{{ $t('保存') }}</el-button>
       </div>
     </div>
   </div>
@@ -402,9 +402,8 @@ export default {
       console.log(state, 'state')
       state.state = true
     },
-    cancelSave(state) {
-      state.state = false
-      console.log(this.editData, 'this.editData')
+    cancelSave() {
+      // state.state = false
       this.channel = this.channel.map(item => {
         if (item.id === this.editData.id) {
           return this.editData

@@ -32,13 +32,13 @@
           <template slot-scope="scope">
             <span v-if="scope.row.source === 1">{{ $t('小程序') }}</span>
             <span v-if="scope.row.source === 2">{{ $t('pc端') }}</span>
-            <span v-if="scope.row.source === 3">{{ $t('H5') }}</span>
           </template>
         </el-table-column>
         <!-- 类型 -->
         <el-table-column :label="$t('类型')">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('轮播图') }}</span>
+            <span v-if="scope.row.type === 2">{{ $t('横幅') }}</span>
           </template>
         </el-table-column>
         <!-- 连接方式 -->
@@ -46,6 +46,7 @@
           <template slot-scope="scope">
             <span v-if="scope.row.link_type === 1">{{ $t('应用内跳转') }}</span>
             <span v-if="scope.row.link_type === 2">{{ $t('外部url') }}</span>
+            <span v-if="scope.row.link_type === 3">{{ $t('关联公众号文章') }}</span>
           </template>
         </el-table-column>
         <el-table-column

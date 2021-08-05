@@ -475,7 +475,7 @@ export default {
         },
         {
           id: 3,
-          name: this.$t('首重单位+阶梯价格模式')
+          name: this.$t('单位价格+阶梯总价模式')
         },
         {
           id: 4,
