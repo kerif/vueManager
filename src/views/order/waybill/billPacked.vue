@@ -433,6 +433,39 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 渠道增值服务 -->
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
+          <el-col>
+            <el-form-item :label="$t('渠道增值服务')">
+              <el-checkbox-group v-model="user.line_service_ids">
+                <div v-for="item in lineServices" :key="item.id" class="service">
+                  <div class="serviceLeft">
+                    <el-checkbox :label="item.id" :disabled="item.is_force === 1">{{
+                      item.name
+                    }}</el-checkbox>
+                  </div>
+                  <div class="serviceRight">
+                    <span>{{ localization.currency_unit }}</span>
+                    <el-input v-model="item.value" disabled class="add-value-ipt"></el-input>
+                  </div>
+                </div>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 渠道限制费 -->
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
+          <el-col>
+            <el-form-item :label="$t('渠道限制费')">
+              <div class="service">
+                <div class="serviceLeft">
+                  <span>{{ localization.currency_unit }}</span>
+                  <el-input v-model="user.line_rule_fee" class="add-value-ipt" disabled></el-input>
+                </div>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
     <!-- 保存 -->
@@ -479,8 +512,11 @@ export default {
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片
         pack_pictures: [], // 打包照片
-        box: []
+        box: [],
+        line_service_ids: []
       },
+      lineServices: [],
+      lineServiceId: [],
       tableLoading: false,
       baleImgList: [],
       goodsImgList: [],
@@ -527,6 +563,27 @@ export default {
             if (index !== -1) {
               this.updateProp[index].checked = true
               this.updateProp[index].price = item.price
+            }
+          })
+        }
+      })
+    },
+    //获取渠道增值服务
+    getExpressServes() {
+      this.$request.getExpressServes(this.$route.params.id, this.$route.params.lineId).then(res => {
+        if (res.ret) {
+          this.lineServices = res.data
+          this.lineServices.forEach(item => {
+            if (item.is_force) {
+              this.user.line_service_ids.push(item.id)
+            }
+          })
+          this.lineServiceId.forEach(item => {
+            if (
+              this.lineServices.map(ele => ele.id).includes(item) &&
+              !this.user.line_service_ids.includes(item)
+            ) {
+              this.user.line_service_ids.push(item)
             }
           })
         }
@@ -722,10 +779,13 @@ export default {
         this.express.MaxWeight = this.form.express_line.max_weight
         this.user.express_line_id = this.form.express_line.id
         this.user.warehouse_id = this.form.warehouse.id
+        this.user.line_rule_fee = res.data.payment.line_rule_fee
         this.warehouse.warehouse_name = this.form.warehouse.warehouse_name
         this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
         console.log(this.factor, 'this.factor')
         this.localization = res.localization
+        this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
+        this.getExpressServes()
       })
     },
     // 获取全部线路详情
