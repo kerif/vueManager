@@ -64,11 +64,11 @@
         <el-table-column :label="$t('失效时间')" prop="expire_at"></el-table-column>
         <el-table-column :label="$t('排序')" prop="index"></el-table-column>
         <!-- 是否启用 -->
-        <!-- <el-table-column :label="$t('是否启用')" width="120">
+        <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
-              @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+              @change="changeTransfer(scope.row.id, scope.row.enabled)"
               :active-text="$t('开')"
               :inactive-text="$t('关')"
               :active-value="1"
@@ -78,7 +78,7 @@
             >
             </el-switch>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column :label="$t('操作')" width="260">
           <template slot-scope="scope">
             <el-button class="btn-blue" @click="editSales(scope.row.id)">{{
@@ -199,10 +199,8 @@ export default {
       })
     },
     // 修改开关
-    changeTransfer(event, enabled, id) {
-      console.log(typeof event, '我是event')
-      console.log(event, 'event')
-      this.$request.lineGroupEnabled(id, Number(event)).then(res => {
+    changeTransfer(id, enabled) {
+      this.$request.updateStatus(id, enabled).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',

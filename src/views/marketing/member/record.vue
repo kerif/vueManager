@@ -195,6 +195,7 @@
         <el-table-column prop="type_name" :label="$t('收支类型')"> </el-table-column>
         <el-table-column prop="amount" :label="$t('金额') + localization.currency_unit">
         </el-table-column>
+        <el-table-column prop="value" :label="$t('明细')"> </el-table-column>
         <el-table-column prop="income_outlay_rule_name" :label="$t('收支规则')"> </el-table-column>
         <el-table-column prop="order_sn" :label="$t('相关订单')"> </el-table-column>
         <el-table-column prop="serial_no" :label="$t('流水号')"> </el-table-column>

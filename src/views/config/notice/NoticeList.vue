@@ -31,12 +31,16 @@
       >
         <el-table-column type="selection"></el-table-column>
         <el-table-column :label="$t('标题')" prop="title">
-          <!-- <template slot-scope="scope">
-            <div :title="$t('复制单号')" class="copy-sty" @click="copyUrl(scope.row.id)">
+          <template slot-scope="scope">
+            <div
+              :title="scope.row.url + '?id=' + scope.row.id"
+              class="copy-sty"
+              @click="copyUrl(scope.row.url, scope.row.id)"
+            >
               <span>{{ scope.row.title }}</span>
               <i class="el-icon-copy-document"></i>
             </div>
-          </template> -->
+          </template>
         </el-table-column>
         <el-table-column :label="$t('类型')" prop="type">
           <template slot-scope="scope">
@@ -159,6 +163,18 @@ export default {
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
+    },
+    copyUrl(url, id) {
+      const href = `${url}?id=${id}`
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', href)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
     },
     // 删除
     deleteData() {

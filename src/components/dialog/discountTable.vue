@@ -209,6 +209,9 @@ export default {
         .catch(() => cb([]))
     },
     handleSelect(item) {
+      if (this.customerList.map(item => item.id).includes(item.id)) {
+        return false
+      }
       this.customerList.push(item)
     },
     async submit() {

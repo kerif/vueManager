@@ -619,13 +619,11 @@ export default {
           if (res.ret) {
             this.packageData = res.data.packages
             this.userId = res.data.packages[0].user_id
-            console.log(this.userId, 'this.userId')
             if (this.userId) {
               this.getAddressDialog() // 获取收件地址
               this.getCountry() // 获取新建收件地址的国家
             }
             this.optionsId = res.data.packages.map(item => item.id)
-            console.log(this.optionsId, 'optionsId')
             this.localization = res.localization
             if (res.data.items.added_service.length) {
               this.box.add_service = res.data.items.added_service
@@ -633,7 +631,6 @@ export default {
             this.box.is_insurance = res.data.items.insurance
             this.box.is_tariff = res.data.items.is_tariff
             this.box.payment_mode = res.data.items.payment_mode
-            this.getExpress()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -667,7 +664,6 @@ export default {
             this.box.is_insurance = res.data.items.insurance
             this.box.is_tariff = res.data.items.is_tariff
             this.box.payment_mode = res.data.items.payment_mode
-            this.getExpress()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -697,6 +693,7 @@ export default {
                 this.getTips()
               }
             })
+            this.getExpress()
           }
         })
     },
@@ -768,6 +765,7 @@ export default {
             title: this.$t('成功'),
             message: res.msg
           })
+          this.getExpress()
           this.boxDialog = false
           this.addressList = res.data
           res.data.map(item => {
@@ -794,8 +792,12 @@ export default {
     },
     // 获取快递方式
     getExpress() {
+      let address_ids = []
+      address_ids = this.addressList.map(item => item.address.id)
+      console.log(address_ids, 'address_ids')
       this.$request
         .usableLines({
+          address_ids,
           package_ids: this.optionsId,
           type: this.radio
         })
