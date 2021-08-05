@@ -952,7 +952,7 @@ export default [
             }
           },
           {
-            path: '/config/line/channel/:id',
+            path: '/config/line/channel/edit/:id',
             name: 'channelLine',
             component: channelLine,
             id: 601,
