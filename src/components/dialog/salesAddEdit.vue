@@ -7,32 +7,72 @@
     width="65%"
   >
     <el-form ref="form" :model="ruleForm" class="commission-top">
-      <el-form-item :label="$t('价格表名称')">
-        <el-input class="input-sty" v-model="ruleForm.name"></el-input>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="$t('价格表名称')">
+            <el-input v-model="ruleForm.name"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="3" :offset="1">
+          <el-form-item :label="$t('排序')">
+            <el-input v-model="ruleForm.index"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-form-item :label="$t('适用对象')">
+        <el-radio-group v-model="ruleForm.scope">
+          <el-radio :label="0">{{ $t('所有用户') }}</el-radio>
+          <el-radio :label="1">{{ $t('特定用户组') }}</el-radio>
+          <el-radio :label="2">{{ $t('特定会员等级') }}</el-radio>
+          <el-radio :label="3">{{ $t('特定用户') }}</el-radio>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item :label="$t('排序')">
-        <el-input class="input-sty" v-model="ruleForm.reference_time"></el-input>
+      <el-form-item :label="$t('适用渠道（可多选）')">
+        <el-table :data="ruleForm.tableData" border style="width: 100%">
+          <el-table-column type="index"> </el-table-column>
+          <el-table-column :label="$t('渠道')" style="width: 100%">
+            <template slot-scope="scope">
+              <el-cascader
+                style="width: 100%"
+                @change="chooseAres(scope.row.areaData)"
+                v-model="scope.row.areaData"
+                :options="options"
+                :props="props"
+                collapse-tags
+                clearable
+              ></el-cascader>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
+      <el-form-item>
+        <div>{{ $t('设置价格') }}</div>
+        <div class="value-sty">
+          <el-row>
+            <el-col :span="10">
+              {{ $t('折扣力度（例：打九折则输入0.9）') }}
+            </el-col>
+            <el-col :span="6"> <el-input></el-input></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">
+              {{ $t('折扣计算方式') }}
+            </el-col>
+            <el-col :span="6">
+              <el-select v-model="value" :placeholder="$t('请选择')">
+                <el-option
+                  v-for="item in discountData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+        </div>
       </el-form-item>
     </el-form>
-    <div style="margin-bottom: 20px">
-      {{ $t('适用渠道（可多选）') }}
-    </div>
-    <el-table :data="tableData" border style="width: 100%">
-      <el-table-column type="index"> </el-table-column>
-      <el-table-column :label="$t('国家')" style="width: 100%">
-        <template slot-scope="scope">
-          <el-cascader
-            style="width: 100%"
-            @change="chooseAres(scope.row.areaData)"
-            v-model="scope.row.areaData"
-            :options="options"
-            :props="props"
-            collapse-tags
-            clearable
-          ></el-cascader>
-        </template>
-      </el-table-column>
-    </el-table>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
@@ -51,18 +91,19 @@ export default {
     return {
       ruleForm: {
         name: '',
-        reference_time: ''
+        index: '',
+        scope: '',
+        tableData: [
+          {
+            areaData: []
+          }
+        ]
       },
       templateData: [],
       countryList: [], // 获取全部国家
       options: [],
       agentName: '',
       props: { multiple: true, checkStrictly: false },
-      tableData: [
-        {
-          areaData: []
-        }
-      ],
       state: '',
       id: '',
       status: '',
@@ -70,17 +111,20 @@ export default {
       newWarehouseList: [],
       keyValue: 0,
       areaIds: [],
-      areasData: []
+      areasData: [],
+      discountData: [
+        {
+          id: 1,
+          name: this.$t('折扣后单价')
+        },
+        {
+          id: 2,
+          name: this.$t('折扣后总价')
+        }
+      ]
     }
   },
   methods: {
-    getList() {
-      if (this.status === 'partition') {
-        this.getPartition()
-      } else {
-        this.getRegions()
-      }
-    },
     getRegions() {
       this.$request.getRegionDetails(this.$route.params.id, this.id).then(res => {
         this.ruleForm.reference_time = res.data.reference_time
@@ -93,7 +137,7 @@ export default {
         console.log(this.tableData, 'this.areaData')
       })
     },
-    getPartition() {
+    getList() {
       this.$request.getRegionsTem(this.id).then(res => {
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
@@ -112,61 +156,21 @@ export default {
       }))
       console.log(this.areaIds, 'form.area_ids')
     },
-    // 获取多级区域数据 编辑渠道时
-    getAllCountries() {
-      this.$request.regionCountry(this.$route.params.id).then(res => {
-        if (res.ret) {
-          this.options = res.data.map(item => {
-            return {
-              value: item.id,
-              label: item.name,
-              children:
-                item.areas < 1
-                  ? undefined
-                  : item.areas.map(item => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                        children:
-                          item.areas < 1
-                            ? undefined
-                            : item.areas.map(item => {
-                                return {
-                                  value: item.id,
-                                  label: item.name
-                                }
-                              })
-                      }
-                    })
-            }
-          })
-        }
-      })
-    },
     // 预设分区表 获取国家
     getCountry() {
-      this.$request.countryLocation().then(res => {
+      this.$request.groupWith().then(res => {
         if (res.ret) {
           this.options = res.data.map(item => {
             return {
               value: item.id,
               label: item.name,
               children:
-                item.areas < 1
+                item.express_lines < 1
                   ? undefined
-                  : item.areas.map(item => {
+                  : item.express_lines.map(item => {
                       return {
                         value: item.id,
-                        label: item.name,
-                        children:
-                          item.areas < 1
-                            ? undefined
-                            : item.areas.map(item => {
-                                return {
-                                  value: item.id,
-                                  label: item.name
-                                }
-                              })
+                        label: item.name
                       }
                     })
             }
@@ -312,11 +316,7 @@ export default {
     },
     init() {
       console.log(this.status, 'status')
-      if (this.status === 'partition') {
-        this.getCountry()
-      } else {
-        this.getAllCountries()
-      }
+      this.getCountry()
       if (this.id) {
         this.getList()
       }
@@ -361,6 +361,9 @@ export default {
   .add-row {
     margin-bottom: 10px;
     text-align: right;
+  }
+  .value-sty {
+    background-color: #f0f0f0;
   }
 }
 </style>
