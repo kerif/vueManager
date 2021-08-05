@@ -45,7 +45,33 @@
           </el-table-column>
         </el-table>
       </el-form-item>
-      <el-form-item :label="$t('设置价格')"> 折扣力度（例）<el-input></el-input> </el-form-item>
+      <el-form-item>
+        <div>{{ $t('设置价格') }}</div>
+        <div class="value-sty">
+          <el-row>
+            <el-col :span="10">
+              {{ $t('折扣力度（例：打九折则输入0.9）') }}
+            </el-col>
+            <el-col :span="6"> <el-input></el-input></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">
+              {{ $t('折扣计算方式') }}
+            </el-col>
+            <el-col :span="6">
+              <el-select v-model="value" :placeholder="$t('请选择')">
+                <el-option
+                  v-for="item in discountData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+        </div>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -85,17 +111,20 @@ export default {
       newWarehouseList: [],
       keyValue: 0,
       areaIds: [],
-      areasData: []
+      areasData: [],
+      discountData: [
+        {
+          id: 1,
+          name: this.$t('折扣后单价')
+        },
+        {
+          id: 2,
+          name: this.$t('折扣后总价')
+        }
+      ]
     }
   },
   methods: {
-    getList() {
-      if (this.status === 'partition') {
-        this.getPartition()
-      } else {
-        this.getRegions()
-      }
-    },
     getRegions() {
       this.$request.getRegionDetails(this.$route.params.id, this.id).then(res => {
         this.ruleForm.reference_time = res.data.reference_time
@@ -108,7 +137,7 @@ export default {
         console.log(this.tableData, 'this.areaData')
       })
     },
-    getPartition() {
+    getList() {
       this.$request.getRegionsTem(this.id).then(res => {
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
@@ -332,6 +361,9 @@ export default {
   .add-row {
     margin-bottom: 10px;
     text-align: right;
+  }
+  .value-sty {
+    background-color: #f0f0f0;
   }
 }
 </style>
