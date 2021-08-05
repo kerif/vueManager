@@ -604,7 +604,13 @@
                     (scope.row.group_buying_status === 0 || scope.row.group_buying_status === 1)
                   "
                   @click.native="
-                    packed(scope.row.id, scope.row.order_sn, scope.row.is_parent, activeName)
+                    packed(
+                      scope.row.id,
+                      scope.row.order_sn,
+                      scope.row.is_parent,
+                      activeName,
+                      scope.row.express_line.id
+                    )
                   "
                 >
                   {{ $t('打包') }}
@@ -1568,14 +1574,15 @@ export default {
         })
     },
     // 打包
-    packed(id, orderSN, parent, activeName) {
+    packed(id, orderSN, parent, activeName, lineId) {
       this.$router.push({
         name: 'billPacked',
         params: {
           id: id,
           order_sn: orderSN,
           activeName: activeName,
-          parent: parent
+          parent: parent,
+          lineId
         }
       })
     },

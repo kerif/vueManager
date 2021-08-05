@@ -233,7 +233,7 @@
                 </el-table-column>
                 <el-table-column
                   :label="$t('体积重量') + this.localization.weight_unit"
-                  v-if="user.box_type === 1"
+                  v-if="user.base_mode === 1"
                 >
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.volume_weight" disabled></el-input>
@@ -250,7 +250,7 @@
                 </el-table-column>
               </el-table>
               <p>{{ $t('实际总重量') }}{{ localization.weight_unit }}：{{ TotalWeight }}</p>
-              <p v-if="user.box_type === 1">
+              <p v-if="user.base_mode === 1">
                 {{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}
               </p>
             </el-col>
@@ -430,6 +430,7 @@ export default {
         remark: '',
         location: '',
         box_type: 1,
+        base_mode: 1,
         express_line_id: '',
         warehouse_id: '',
         insurance_fee: '',
@@ -515,7 +516,7 @@ export default {
     changeNum(row = {}) {
       const { length, width, height } = row.row
       if (length && width && height) {
-        if (this.user.box_type === 0) {
+        if (this.user.base_mode === 0) {
           this.user.box = this.user.box.map((item, index) => {
             if (index === row.$index) {
               return { ...item, volume_weight: (length * width * height) / this.factor }
@@ -589,7 +590,7 @@ export default {
     },
     // 新增行
     addRow() {
-      if (this.user.box_type === 0) {
+      if (this.user.base_mode === 0) {
         this.user.box.push({
           weight: '',
           length: '',
@@ -641,7 +642,7 @@ export default {
         this.user.length = res.data.length
         this.user.width = res.data.width
         this.user.height = res.data.height
-        this.user.box_type = res.data.box_type
+        this.user.base_mode = res.data.base_mode
         this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
         this.getExpressServes()
         if (res.data.box_type === 2) {
