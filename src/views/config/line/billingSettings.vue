@@ -240,7 +240,7 @@
         </el-row>
       </el-form-item>
       <el-form-item>
-        <el-row :gutter="10">
+        <el-row>
           <el-col :span="10">
             <div>
               <span>{{ $t('多箱出库计价方式') }}</span>
@@ -509,11 +509,11 @@ export default {
           name: `${this.$t('不开启多箱计价(按总重量/体积计算价格)')}`
         },
         {
-          id: 1,
-          name: `${this.$t('多箱单独计算计费(重量/体积相加后计算价格)')}`
+          id: 2,
+          name: `${this.$t('多箱单独计算计费重量(重量/体积相加后计算价格)')}`
         },
         {
-          id: 2,
+          id: 1,
           name: this.$t('多箱单独计算价格后，相加为总价')
         }
       ],
