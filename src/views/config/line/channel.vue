@@ -515,15 +515,16 @@ export default {
   },
   activated() {
     this.getList()
-    console.log(this.lineId, 'this.lineId')
-    console.log(this.$route.query, 'query')
-    console.log(this.$route.params, 'params')
     // this.$nextTick(() => {
     //   this.$refs.table.doLayout()
     // })
   },
   created() {
     this.lineId = this.$route.params.id
+    console.log(this.lineId, 'this.lineId')
+    console.log(this.$route.query, 'query')
+    console.log(this.$route.params, 'params')
+    console.log(this.lineId, 'this.lineId')
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
     console.log(this.unShow, 'this.unShow')
     console.log(this.$route.query.size || 10, 'size')

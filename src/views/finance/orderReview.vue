@@ -443,6 +443,7 @@ export default {
     this.getPayment()
   },
   activated() {
+    this.getList()
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
