@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="$t('评价规则说明')"
+    :title="title"
     :visible.sync="show"
     width="50%"
     class="explain dialog-container"
@@ -22,7 +22,8 @@ export default {
   data() {
     return {
       illustrate: [],
-      langObj: {}
+      langObj: {},
+      title: ''
     }
   },
   methods: {
@@ -86,6 +87,13 @@ export default {
       this.langObj = {}
     },
     init() {
+      if (this.type === 'getGradeTips') {
+        this.title = this.$t('等级说明')
+      } else if (this.type === 'explain') {
+        this.title = this.$t('购买价格说明')
+      } else if (this.type === 'evaluation') {
+        this.title = this.$t('评价规则说明')
+      }
       this.getLanguageList()
     }
   }

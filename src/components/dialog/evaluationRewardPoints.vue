@@ -158,7 +158,7 @@ export default {
     },
     //说明
     explain() {
-      dialog({ type: 'explain', langObj: this.langObj }, data => {
+      dialog({ type: 'evaluation', langObj: this.langObj }, data => {
         this.tableData.illustrate = data
       })
     },

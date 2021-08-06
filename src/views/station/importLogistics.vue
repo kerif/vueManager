@@ -214,6 +214,7 @@ export default {
     },
     uploadBaleImg(item) {
       let file = item.file
+      console.log(file, 'fileee')
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
@@ -232,6 +233,7 @@ export default {
     onUpload(file) {
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
+      console.log(params, 'paramssss')
       return this.$request.uploadFiles(params)
       // console.log(1111)
       // this.getList()

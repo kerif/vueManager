@@ -14,7 +14,6 @@
       show-footer
       esc-closable
       type="modal"
-      :position="position"
       :title="title"
     >
       <div>
@@ -158,9 +157,6 @@ export default {
       detailsList: [],
       title: '',
       content: '',
-      position: {
-        top: '10%'
-      },
       gridOptions: {
         columns: [
           {
@@ -376,6 +372,7 @@ export default {
     addServices() {
       this.title = this.$t('新增增值费用')
       this.dialogVisible = true
+      this.getServicesList()
       this.detailsList = this.servicesList
     },
     // 删除增值服务

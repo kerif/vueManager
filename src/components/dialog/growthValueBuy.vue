@@ -225,7 +225,7 @@ export default {
             this.form.increase_point = res.data.increase_point
             this.form.balance_buy = res.data.balance_buy
             this.form.valid_time = res.data.valid_time
-            this.form.illustrate = res.data.illustrate
+            this.form.illustrate = res.data.illustrate ? res.data.illustrate : {}
           }
         } else {
           this.$message({

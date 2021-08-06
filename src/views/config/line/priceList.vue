@@ -5,8 +5,15 @@
       <el-button size="small" @click="exportPrice" style="margin-right: 10px">{{
         $t('导出价格表')
       }}</el-button>
-      <!-- <el-button size="small" @click="importPrice">{{ $t('导入价格表') }}</el-button> -->
-      <el-upload class="upload-demo" action="" :limit="1" :http-request="importPrice">
+      <!-- <el-upload class="upload-demo" action="" :limit="1" :http-request="importPrice">
+        <el-button size="small" type="primary">{{ $t('导入价格表') }}</el-button>
+      </el-upload> -->
+      <el-upload
+        class="upload-demo"
+        action=""
+        :http-request="uploadBaleImg"
+        :show-file-list="false"
+      >
         <el-button size="small" type="primary">{{ $t('导入价格表') }}</el-button>
       </el-upload>
       <span class="tips">{{ $t('可导出价格表批量修改后，再导入表格') }}</span>
@@ -91,7 +98,8 @@ export default {
       ctableColumn: [],
       urlExcel: '',
       name: '',
-      localization: {}
+      localization: {},
+      file: ''
     }
   },
   created() {
@@ -116,13 +124,17 @@ export default {
                 let priceId = ele.id
                 let type = ''
                 if (this.type === 1) {
-                  ele.type === 0 ? (type = this.$t('首重')) : (type = this.$t('续重'))
+                  //首重续重
+                  ele.type === 0 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
                 } else if (this.type === 2) {
-                  type = ''
+                  //阶梯价格
+                  type = '单价'
                 } else if (this.type === 3) {
-                  ele.type === 3 ? (type = this.$t('单位价格')) : (type = this.$t('阶梯价格'))
+                  //首重+阶梯
+                  ele.type === 3 ? (type = this.$t('单价')) : (type = this.$t('阶梯总价'))
                 } else if (this.type === 4) {
-                  ele.type === 0 ? (type = this.$t('首重')) : (type = this.$t('多级续重'))
+                  //多级续重
+                  ele.type === 0 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
                 }
                 return {
                   ...item,
@@ -271,17 +283,32 @@ export default {
         }
       })
     },
-    importPrice(item) {
-      this.$request.importPrice(this.$route.params.id, item.file).then(res => {
+    uploadBaleImg(item) {
+      let file = item.file
+      let params = new FormData()
+      params.append(`file`, file)
+      this.onUpload(file).then(res => {
         if (res.ret) {
-          console.log(res.data)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getPriceTable()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
     onUpload(file) {
       let params = new FormData()
-      params.append(`files[${0}][file]`, file)
-      return this.$request.uploadFiles(params)
+      console.log(params, 'params')
+      params.append(`file`, file)
+      return this.$request.importPrice(this.$route.params.id, params)
     }
   }
 }
