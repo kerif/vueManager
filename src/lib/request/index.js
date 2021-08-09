@@ -326,6 +326,14 @@ exports.addServices = (id, params) => {
 exports.deleteServices = (id, serviceId, params) => {
   return $form.delete(`express-lines/${id}/services/${serviceId}`, params)
 }
+// 配置 新路线 导出增值服务
+exports.exportServices = id => {
+  return $form.get(`express-lines/${id}/services/export`)
+}
+// 配置 新路线 导入增值服务
+exports.importServices = (id, params) => {
+  return $file.post(`express-lines/${id}/services/import`, params)
+}
 exports.getStaff = params => {
   return $form.get('admins', { params })
 }

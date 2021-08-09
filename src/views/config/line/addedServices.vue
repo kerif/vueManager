@@ -1,11 +1,5 @@
 <template>
   <div class="added-services">
-    <!-- <el-dialog
-      :title="$t('编辑/新增增值费用')"
-      :visible.sync="dialogVisible"
-      width="70%"
-      @close="closeDialog"
-    > -->
     <vxe-modal
       v-model="dialogVisible"
       @hide="closeDialog"
@@ -115,7 +109,6 @@
         <el-button type="primary" @click="save">{{ $t('确 定') }}</el-button>
       </span>
     </vxe-modal>
-    <!-- </el-dialog> -->
     <vxe-grid
       ref="xGrid"
       resizable
@@ -128,9 +121,18 @@
       v-bind="gridOptions"
     >
       <template #toolbar_buttons>
-        <vxe-button>{{ $t('导入') }}</vxe-button>
-        <vxe-button @click="exportDataEvent">{{ $t('导出') }}</vxe-button>
-        <vxe-button @click="addServices">{{ $t('新增') }}</vxe-button>
+        <div style="display: flex; gap: 20px">
+          <el-button size="small" @click="addServices">{{ $t('新增') }}</el-button>
+          <el-upload
+            class="upload-demo"
+            action=""
+            :http-request="uploadBaleImg"
+            :show-file-list="false"
+          >
+            <el-button size="small">{{ $t('导入') }}</el-button>
+          </el-upload>
+          <el-button size="small" @click="exportDataEvent">{{ $t('导出') }}</el-button>
+        </div>
       </template>
       <template #num1_header="{ column }">
         <el-tooltip class="item" effect="dark" :content="column.params.tips" placement="top">
@@ -405,10 +407,47 @@ export default {
       })
     },
     exportDataEvent() {
-      this.$refs.xGrid.openExport({
-        // 默认勾选源
-        original: true
+      this.$request.exportServices(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
+    },
+    uploadBaleImg(item) {
+      let file = item.file
+      let params = new FormData()
+      params.append(`file`, file)
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getServicesList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onUpload(file) {
+      let params = new FormData()
+      params.append(`file`, file)
+      return this.$request.importServices(this.$route.params.id, params)
     },
     // 保存
     save() {
