@@ -104,6 +104,7 @@ export default {
   },
   created() {
     this.getList()
+    console.log(1)
   },
   methods: {
     getPriceTable() {

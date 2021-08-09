@@ -18,7 +18,10 @@
           <el-input v-model="tableData.amount" class="number"></el-input> = 1 {{ $t('积分') }}
         </span>
       </div>
-      <el-checkbox v-model="tableData.is_ceil">{{ $t('不足1成长值部分不累计') }}</el-checkbox>
+      <el-checkbox v-model="tableData.is_ceil">
+        <div v-if="type === 'consumeGrowthValue'">{{ $t('不足1成长值部分不累计') }}</div>
+        <div v-else>{{ $t('不足1积分部分不累计') }}</div>
+      </el-checkbox>
     </div>
     <h5>{{ $t('计入成长值消费（以实际支付为准）') }}：</h5>
     <div class="content">
@@ -30,7 +33,8 @@
     </div>
     <h5>{{ $t('触发时间') }}：</h5>
     <div class="content">
-      {{ $t('订单为该状态时，成长值进入账户') }}
+      <div v-if="type === 'consumeGrowthValue'">{{ $t('订单为该状态时，成长值进入账户') }}</div>
+      <div v-else>{{ $t('订单为该状态时，积分进入账户') }}</div>
       <el-select :placeholder="$t('请选择')" v-model="tableData.trigger_type" style="width: 150px">
         <el-option
           v-for="item in triggerTypeList"
@@ -43,7 +47,8 @@
     <h5 v-if="type === 'consumeGrowthValue'">{{ $t('成长值有效期') }}：</h5>
     <h5 v-else>{{ $t('积分有效期') }}：</h5>
     <div class="content">
-      {{ $t('成长值到账之日起计算，有效期为') }}
+      <div v-if="type === 'consumeGrowthValue'">{{ $t('成长值到账之日起计算，有效期为') }}</div>
+      <div v-else>{{ $t('积分到账之日起计算，有效期为') }}</div>
       <el-select :placeholder="$t('请选择')" v-model="tableData.valid_time" style="width: 150px">
         <el-option
           v-for="item in validTimeList"

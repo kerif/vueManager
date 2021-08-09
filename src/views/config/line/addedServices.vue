@@ -221,6 +221,10 @@ export default {
         {
           value: 5,
           label: this.$t('单位实际重量固定费用')
+        },
+        {
+          value: 6,
+          label: this.$t('申报价值比例')
         }
       ],
       forcedList: [
