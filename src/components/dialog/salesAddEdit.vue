@@ -149,6 +149,7 @@ export default {
     // 获取详情
     getList() {
       this.$request.getSalesDetails(this.id).then(res => {
+        let arr = []
         if (res.ret) {
           this.ruleForm.name = res.data.name
           this.ruleForm.index = res.data.index
@@ -156,12 +157,14 @@ export default {
           this.ruleForm.discount = res.data.discount
           this.ruleForm.discount_type = res.data.discount_type
           this.time = [res.data.effect_at, res.data.expire_at]
-          this.ruleForm.express_line_ids = res.data.express_line_ids
-          this.ruleForm.express_line_ids.forEach(item => {
-            this.ruleForm.express_line_ids = this.arr.filter(ele => {
-              return ele.includes(item)
+          res.data.express_line_ids.forEach(item => {
+            this.arr.forEach(ele => {
+              if (ele[1] === item) {
+                arr.push(ele)
+              }
             })
           })
+          this.ruleForm.express_line_ids = arr
           this.selectMode(res.data.scope)
           if (res.data.scope === 1) {
             this.ruleForm.ids = res.data.user_groups.map(item => item.id)

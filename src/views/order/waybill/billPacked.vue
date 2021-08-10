@@ -314,7 +314,10 @@
                     <el-input v-model="scope.row.height" @blur="changeNum(scope)"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('体积重量') + this.localization.weight_unit">
+                <el-table-column
+                  v-if="baseMode === 0"
+                  :label="$t('体积重量') + this.localization.weight_unit"
+                >
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.volume_weight" disabled></el-input>
                   </template>
@@ -330,7 +333,9 @@
                 </el-table-column>
               </el-table>
               <p>{{ $t('实际总重量') }}{{ localization.weight_unit }}：{{ TotalWeight }}</p>
-              <p>{{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}</p>
+              <p v-if="baseMode === 0">
+                {{ $t('体积总重量') }}{{ localization.weight_unit }}：{{ UnitTotalWeight }}
+              </p>
             </el-col>
           </el-form-item>
         </el-row>
@@ -515,6 +520,7 @@ export default {
         box: [],
         line_service_ids: []
       },
+      baseMode: 0,
       lineServices: [],
       lineServiceId: [],
       tableLoading: false,
@@ -668,7 +674,7 @@ export default {
         this.user.box.length === 1
           ? Number(this.user.box[0].volume_weight).toFixed(3)
           : this.user.box
-              .map(item => item.volume_weight)
+              .map(item => +item.volume_weight)
               .reduce(
                 (accumulator, currentValue) =>
                   (Number(accumulator) + Number(currentValue)).toFixed(3),
@@ -714,20 +720,27 @@ export default {
     },
     // 新增行
     addRow() {
-      console.log(this.user.box, 'this.user.box')
-      this.user.box.push({
-        weight: '',
-        length: '',
-        width: '',
-        height: '',
-        volume_weight: ''
-      })
+      if (this.baseMode === 0) {
+        this.user.box.push({
+          weight: '',
+          length: '',
+          width: '',
+          height: '',
+          volume_weight: ''
+        })
+      } else {
+        this.user.box.push({
+          weight: '',
+          length: '',
+          width: '',
+          height: ''
+        })
+      }
     },
     deleteRow(index, rows) {
       rows.splice(index, 1)
       this._onTotalWeight()
       this.unitVolume()
-      console.log(rows, 'rows')
     },
     // 更改仓库
     changeWarehouse() {
@@ -759,6 +772,8 @@ export default {
             weight: item.package_weight
           }
         })
+        this._onTotalWeight()
+        this.unitVolume()
       } else {
         this.user.weight = this.PackageData[0].package_weight
         this.user.length = this.PackageData[0].length
@@ -770,7 +785,6 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
-        console.log(this.PackageData.length, 'this.PackageData')
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.services = res.data.services
@@ -782,9 +796,9 @@ export default {
         this.user.line_rule_fee = res.data.payment.line_rule_fee
         this.warehouse.warehouse_name = this.form.warehouse.warehouse_name
         this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
-        console.log(this.factor, 'this.factor')
         this.localization = res.localization
         this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
+        this.baseMode = this.form.express_line.base_mode
         this.getExpressServes()
       })
     },
