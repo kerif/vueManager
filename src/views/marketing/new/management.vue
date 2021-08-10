@@ -49,6 +49,9 @@
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="200px" fixed="right">
         <template slot-scope="scope">
+          <el-button class="btn-purple" @click="goDetails(scope.row.id)">{{
+            $t('详情')
+          }}</el-button>
           <!-- 记录 -->
           <el-button
             size="small"
@@ -219,12 +222,21 @@ export default {
         }
       })
     },
+    // 新增
     goAdd() {
       if (this.$route.params.type === 4) {
         this.$router.push({ name: 'rebate', params: { type: this.$route.params.type } })
       } else {
         this.$router.push({ name: 'addNew', params: { type: this.$route.params.type } })
       }
+    },
+    // 编辑
+    goDetails(id) {
+      this.$router.push({
+        name: 'rebate',
+        params: { type: this.$route.params.type },
+        query: { id: id }
+      })
     },
     onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)

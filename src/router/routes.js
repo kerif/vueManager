@@ -860,7 +860,7 @@ export default [
       {
         path: 'pick',
         component: LayoutContainer,
-        icon: 'icon-gongbao',
+        icon: 'icon-dandianjingying',
         id: 1200,
         children: [
           {

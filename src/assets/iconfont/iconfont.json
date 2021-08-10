@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11082335",
+      "name": "单店经营",
+      "font_class": "dandianjingying",
+      "unicode": "e714",
+      "unicode_decimal": 59156
+    },
+    {
       "icon_id": "1496251",
       "name": "苹果",
       "font_class": "pingguo",
