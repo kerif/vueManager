@@ -769,7 +769,8 @@ export default {
             length: item.length,
             width: item.width,
             height: item.height,
-            weight: item.package_weight
+            weight: item.package_weight,
+            volume_weight: ((item.length * item.width * item.height) / this.factor).toFixed(3)
           }
         })
         this._onTotalWeight()
