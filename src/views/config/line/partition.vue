@@ -28,7 +28,14 @@
       >
         <el-table-column type="index" :index="1"></el-table-column>
         <el-table-column :label="$t('分区名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('启用国家/地区')" prop="areas_count"></el-table-column>
+        <el-table-column :label="$t('启用国家/地区')" :show-overflow-tooltip="true" width="150">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.areas" :key="item.id"
+              >{{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}&nbsp;</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('启用国家/地区总数量')" prop="areas_count"></el-table-column>
         <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
             <el-switch
@@ -59,9 +66,9 @@
             <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" width="140">
           <template slot-scope="scope">
-            <el-button class="btn-green" @click="editPartition(scope.row.id)">{{
+            <el-button class="btn-green edit-sty" @click="editPartition(scope.row.id)">{{
               $t('编辑')
             }}</el-button>
             <el-button class="btn-light-red" @click="deletePart(scope.row.id)">{{
@@ -239,6 +246,7 @@ export default {
             message: res.msg,
             type: 'error'
           })
+          this.getList()
         }
       })
     },
@@ -325,6 +333,9 @@ export default {
     position: relative;
     top: 2px;
     cursor: pointer;
+  }
+  .edit-sty {
+    margin-right: 5px;
   }
 }
 </style>

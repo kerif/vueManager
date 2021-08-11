@@ -502,6 +502,10 @@
           prop="coupon_amount"
         ></el-table-column>
         <el-table-column
+          :label="$t('积分抵扣金额') + this.localization.currency_unit"
+          prop="point_amount"
+        ></el-table-column>
+        <el-table-column
           :label="$t('实际支付') + this.localization.currency_unit"
           prop="pay_amount"
         ></el-table-column>

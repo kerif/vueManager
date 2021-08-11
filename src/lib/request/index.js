@@ -2480,6 +2480,10 @@ exports.rebateList = () => {
 exports.updateRebate = params => {
   return $form.put(`ordering-coupon`, params)
 }
+// 营销管理 下单返券 获取详细
+exports.getRebateDetails = id => {
+  return $form.get(`new-user-coupons/type/show/${id}`)
+}
 // 营销管理 下单返券 语言详情
 exports.rebateLang = params => {
   return $form.get(`ordering-coupon`, { params })
