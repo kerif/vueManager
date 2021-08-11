@@ -39,6 +39,7 @@
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('轮播图') }}</span>
             <span v-if="scope.row.type === 2">{{ $t('横幅') }}</span>
+            <span v-if="scope.row.type === 3">{{ $t('活动图') }}</span>
           </template>
         </el-table-column>
         <!-- 连接方式 -->
