@@ -290,6 +290,10 @@ exports.regionCountry = id => {
 exports.getRegionTemplate = params => {
   return $form.get(`express-lines/region-templates`, { params })
 }
+// 分区 选择模版
+exports.submitTmp = (id, tmpId) => {
+  return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
+}
 // 配置 新路线 获取价格表
 exports.getPriceTable = (id, params) => {
   return $form.get(`express-lines/${id}/prices`, params)
