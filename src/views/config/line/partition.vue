@@ -5,9 +5,9 @@
     </div> -->
     <div class="bottom-sty">
       <div>
-        <el-button size="small">{{ $t('导入') }}</el-button>
-        <el-button size="small">{{ $t('导出') }}</el-button>
-        <el-button size="small">{{ $t('选择模版') }}</el-button>
+        <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
+        <el-button size="small" type="success" plain>{{ $t('导出') }}</el-button>
+        <el-button size="small" type="danger" plain>{{ $t('选择模版') }}</el-button>
       </div>
       <div class="addUser">
         <div class="searchGroup">

@@ -121,17 +121,21 @@
       v-bind="gridOptions"
     >
       <template #toolbar_buttons>
-        <div style="display: flex; gap: 20px">
-          <el-button size="small" @click="addServices">{{ $t('新增') }}</el-button>
+        <div style="display: flex; gap: 10px">
+          <el-button size="small" type="primary" plain @click="addServices">{{
+            $t('新增')
+          }}</el-button>
           <el-upload
             class="upload-demo"
             action=""
             :http-request="uploadBaleImg"
             :show-file-list="false"
           >
-            <el-button size="small">{{ $t('导入') }}</el-button>
+            <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
           </el-upload>
-          <el-button size="small" @click="exportDataEvent">{{ $t('导出') }}</el-button>
+          <el-button size="small" @click="exportDataEvent" type="success" plain>{{
+            $t('导出')
+          }}</el-button>
         </div>
       </template>
       <template #num1_header="{ column }">
