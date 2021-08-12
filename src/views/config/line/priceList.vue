@@ -2,20 +2,17 @@
   <div class="price-list">
     <div class="title">{{ name }}{{ $t('价格表') }}</div>
     <div class="func-btn">
-      <el-button size="small" @click="exportPrice" style="margin-right: 10px">{{
-        $t('导出价格表')
-      }}</el-button>
-      <!-- <el-upload class="upload-demo" action="" :limit="1" :http-request="importPrice">
-        <el-button size="small" type="primary">{{ $t('导入价格表') }}</el-button>
-      </el-upload> -->
       <el-upload
         class="upload-demo"
         action=""
         :http-request="uploadBaleImg"
         :show-file-list="false"
       >
-        <el-button size="small" type="primary">{{ $t('导入价格表') }}</el-button>
+        <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
       </el-upload>
+      <el-button size="small" type="success" plain @click="exportPrice" style="margin-left: 10px">{{
+        $t('导出')
+      }}</el-button>
       <span class="tips">{{ $t('可导出价格表批量修改后，再导入表格') }}</span>
     </div>
     <div>

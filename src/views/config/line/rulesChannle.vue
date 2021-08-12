@@ -15,11 +15,11 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="saveRules">{{ $t('保存') }}</el-button>
+        <el-button type="primary" size="small" @click="saveRules">{{ $t('保存') }}</el-button>
       </el-form-item>
     </el-form>
     <div class="add-sty">
-      <el-button @click="addChannel" type="primary">{{ $t('新增') }}</el-button>
+      <el-button type="primary" size="small" @click="addChannel">{{ $t('新增') }}</el-button>
     </div>
     <div class="rules-main" v-for="(item, index) in channel" :key="index">
       <div class="rules-top">
@@ -32,8 +32,10 @@
           <h3 v-else>{{ item.name }}</h3>
         </div>
         <div class="rules-right">
-          <el-button @click="editState(item)">{{ $t('修改') }}</el-button>
-          <el-button @click="deleteChannel(index, channel, item.id)">{{ $t('删除') }}</el-button>
+          <el-button @click="editState(item)" class="btn-green">{{ $t('修改') }}</el-button>
+          <el-button @click="deleteChannel(index, channel, item.id)" class="btn-light-red">{{
+            $t('删除')
+          }}</el-button>
         </div>
       </div>
       <div class="line"></div>
@@ -209,8 +211,10 @@
         </div>
       </el-form>
       <div class="btn-sty">
-        <el-button @click="cancelSave(item)" v-if="item.state">{{ $t('取消') }}</el-button>
-        <el-button @click="saveChannles(item)" v-if="item.state">{{ $t('保存') }}</el-button>
+        <!-- <el-button @click="cancelSave(item)" v-if="item.state">{{ $t('取消') }}</el-button> -->
+        <el-button type="primary" size="small" @click="saveChannles(item)" v-if="item.state">{{
+          $t('保存')
+        }}</el-button>
       </div>
     </div>
   </div>
@@ -392,7 +396,7 @@ export default {
     },
     // 新增
     addChannel() {
-      this.channel.push({
+      this.channel.unshift({
         conditions: [],
         state: true
       })
@@ -412,27 +416,32 @@ export default {
       })
     },
     deleteChannel(index, item, id) {
-      console.log(id, 'id')
-      if (id) {
-        this.$request.deleteNewRules(this.$route.params.id, id).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getRulesData()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-      } else {
-        item.splice(index, 1)
-      }
+      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        if (id) {
+          this.$request.deleteNewRules(this.$route.params.id, id).then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getRulesData()
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        } else {
+          item.splice(index, 1)
+        }
+      })
     },
     deleteRow(index, rows) {
       rows.splice(index, 1)
@@ -530,7 +539,7 @@ export default {
     }
   }
   .add-sty {
-    text-align: right;
+    text-align: left;
     margin-bottom: 10px;
   }
   .line {
