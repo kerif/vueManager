@@ -567,8 +567,7 @@ export default {
       if (this.deleteNum.length === 0 && this.secondNum.length === 0) {
         return this.$message.error(this.$t('请选择'))
       }
-      const ids = this.secondNum.concat(this.deleteNum)
-      console.log(ids, 'ids')
+      const idNum = this.secondNum.concat(this.deleteNum)
       this.$confirm(
         this.$t('您是否确认批量删除？如果是批量删除二级地址的话，该分级下所有的三级地址也会删除'),
         this.$t('提示'),
@@ -578,7 +577,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        this.$request.deleteLOwLevel(ids).then(res => {
+        this.$request.deleteLOwLevel({ ids: idNum }).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),

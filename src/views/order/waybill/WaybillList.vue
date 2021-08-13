@@ -1273,6 +1273,7 @@ export default {
       this.form.logistics_type_id = ''
     },
     clearSn() {
+      this.showDialog = false
       this.tableSn = ''
       this.tableId = ''
     },
@@ -2108,6 +2109,9 @@ export default {
     display: inline-block;
     margin-left: 5px;
     cursor: pointer;
+  }
+  .el-icon {
+    display: block !important;
   }
 }
 .dialog-input {

@@ -582,7 +582,9 @@ export default {
     getLines() {
       this.$request
         .getStations({
-          country_id: this.countryId
+          country_id: this.countryId,
+          area_id: this.form.area_id || '',
+          sub_area_id: this.form.sub_area_id || ''
         })
         .then(res => {
           this.lineData = res.data

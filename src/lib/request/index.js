@@ -290,6 +290,10 @@ exports.regionCountry = id => {
 exports.getRegionTemplate = params => {
   return $form.get(`express-lines/region-templates`, { params })
 }
+// 分区 选择模版
+exports.submitTmp = (id, tmpId) => {
+  return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
+}
 // 配置 新路线 获取价格表
 exports.getPriceTable = (id, params) => {
   return $form.get(`express-lines/${id}/prices`, params)
@@ -2479,6 +2483,10 @@ exports.rebateList = () => {
 // 营销管理 更新 下单返券
 exports.updateRebate = params => {
   return $form.put(`ordering-coupon`, params)
+}
+// 营销管理 下单返券 获取详细
+exports.getRebateDetails = id => {
+  return $form.get(`new-user-coupons/type/show/${id}`)
 }
 // 营销管理 下单返券 语言详情
 exports.rebateLang = params => {

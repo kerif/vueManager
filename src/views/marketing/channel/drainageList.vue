@@ -7,6 +7,14 @@
       <p class="left-name">{{ $t('创建日期') }}</p>
       <span>{{ ruleForm.created_at }}</span
       ><br />
+      <div class="page-sty">
+        <p class="left-name">{{ $t('小程序页面路径') }}</p>
+        <p class="path-sty">{{ ruleForm.path }}</p>
+        <div :title="$t('复制单号')" class="copy-sty" @click="copyNumber(ruleForm.path)">
+          <i class="el-icon-copy-document"></i>
+        </div>
+      </div>
+      <br />
       <div class="code-font">{{ $t('专属小程序码') }}</div>
       <div class="left-bottom">
         <!-- <img src="../../../assets/bale.png"> -->
@@ -135,6 +143,17 @@ export default {
       // console.log('aki', aLink.href, aLink.download)
       // aLink.click()
       // aLink.dispatchEvent(new MouseEvent('click', {}))
+    },
+    copyNumber(orderSn) {
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', orderSn)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
     }
   }
 }
@@ -144,7 +163,7 @@ export default {
 .drainage-container {
   .poster-left {
     width: 330px;
-    height: 580px;
+    height: 640px;
     overflow: hidden;
     vertical-align: top;
     display: inline-block;
@@ -176,7 +195,8 @@ export default {
   }
   .left-name {
     display: inline-block;
-    margin-right: 30px;
+    // margin-right: 30px;
+    width: 130px;
   }
   .code-font {
     margin-top: 60px;
@@ -208,6 +228,26 @@ export default {
   .share {
     font-size: 13px;
     color: gray;
+  }
+  .search-group .pull-right {
+    width: 30% !important;
+  }
+  .path-sty {
+    width: 130px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .page-sty {
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+  }
+  .copy-sty {
+    display: inline-block;
+    margin-left: 5px;
+    cursor: pointer;
   }
 }
 </style>
