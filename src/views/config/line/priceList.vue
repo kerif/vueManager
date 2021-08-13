@@ -185,6 +185,12 @@ export default {
                   flag = index
                 }
               })
+            } else if (this.type === 2) {
+              arr.forEach((ele, index) => {
+                if (ele.range === item.range && ele.type === item.type) {
+                  flag = index
+                }
+              })
             } else if (this.type === 5) {
               arr.forEach((ele, index) => {
                 if (
