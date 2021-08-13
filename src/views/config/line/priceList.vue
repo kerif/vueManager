@@ -46,15 +46,15 @@
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
-        <vxe-table-colgroup v-if="type === 2 || type === 5">
+        <vxe-table-colgroup v-if="type === 5">
           <vxe-table-colgroup
-            field="first_weight"
-            :title="$t('首重') + localization.weight_unit"
+            field="type_weight"
+            :title="$t('首重/单位续重') + localization.weight_unit"
             min-width="120"
           >
           </vxe-table-colgroup>
         </vxe-table-colgroup>
-        <vxe-table-colgroup v-if="type !== 3">
+        <vxe-table-colgroup v-if="type === 1 || type === 4">
           <vxe-table-colgroup
             field="unit_weight"
             :title="
@@ -134,13 +134,14 @@ export default {
                 let price = ele.price / 100
                 let first_weight = ele.first_weight / 1000
                 let priceId = ele.id
+                let type_weight = ''
                 let type = ''
                 if (this.type === 1) {
                   //首重续重
                   ele.type === 0 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
                 } else if (this.type === 2) {
                   //阶梯价格
-                  type = '单价'
+                  ele.type === 2 ? (type = this.$t('单价')) : (type = this.$t('基价'))
                 } else if (this.type === 3) {
                   //首重+阶梯
                   ele.type === 3 ? (type = this.$t('单价')) : (type = this.$t('阶梯总价'))
@@ -150,6 +151,13 @@ export default {
                 } else if (this.type === 5) {
                   // 阶梯首重续重模式
                   ele.type === 6 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
+                  if (ele.type === 6) {
+                    type_weight = first_weight
+                    type = this.$t('首费')
+                  } else {
+                    type_weight = unit_weight
+                    type = this.$t('续单价')
+                  }
                 }
                 return {
                   ...item,
@@ -158,7 +166,8 @@ export default {
                   type,
                   price,
                   priceId,
-                  first_weight
+                  first_weight,
+                  type_weight
                 }
               })
             )
@@ -176,7 +185,7 @@ export default {
                   flag = index
                 }
               })
-            } else if (this.type === 2 || this.type === 5) {
+            } else if (this.type === 5) {
               arr.forEach((ele, index) => {
                 if (
                   ele.range === item.range &&
@@ -200,13 +209,6 @@ export default {
             }
           })
           this.ctableData = arr
-          this.ctableData.reduce((pre, next) => {
-            if (pre.range === next.range) {
-              pre.unit_weight = next.unit_weight
-              next.first_weight = pre.first_weight
-            }
-            return next
-          })
           this.ctableColumn = res.data.map(item => {
             const areas = item.areas
               .map(item => item.country_name + item.area_name + item.sub_area_name)

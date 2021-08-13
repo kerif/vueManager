@@ -314,6 +314,8 @@ export default {
                   this.content = this.$t('类型：单位计费重量固定费用 收取方式：强制收取')
                 } else if (ele.type === 5 && ele.is_forced === 1) {
                   this.content = this.$t('类型：单位实际重量固定费用 收取方式：强制收取')
+                } else if (ele.type === 6 && ele.is_forced === 1) {
+                  this.content = this.$t('类型：申报价值比例 收取方式：强制收取')
                 } else if (ele.type === 1 && ele.is_forced === 0) {
                   this.content = this.$t('类型：运费比例 收取方式：自愿勾选')
                 } else if (ele.type === 2 && ele.is_forced === 0) {
@@ -324,6 +326,10 @@ export default {
                   this.content = this.$t('类型：单位计费重量固定费用 收取方式：自愿勾选')
                 } else if (ele.type === 5 && ele.is_forced === 0) {
                   this.content = this.$t('类型：单位实际重量固定费用 收取方式：自愿勾选')
+                } else if (ele.type === 6 && ele.is_forced === 0) {
+                  this.content = this.$t('类型：申报价值比例 收取方式：自愿勾选')
+                } else {
+                  this.content = this.$t(' ')
                 }
                 this.gridOptions.columns.push({
                   field: `service_${ele.id}`,

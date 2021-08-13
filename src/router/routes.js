@@ -55,7 +55,7 @@ const selfSettlement = loadonDemand('finance/selfSettlement')
 // 财务 自提点佣金结算 结算记录
 const recordDetails = loadonDemand('finance/recordDetails')
 // 配置 路线列表
-const LineList = loadonDemand('config/line/LineList')
+// const LineList = loadonDemand('config/line/LineList')
 // 新路线
 const Line = loadonDemand('config/line/Line')
 // 新路线 销售价管理
@@ -905,17 +905,17 @@ export default [
         icon: 'icon-ico_zhuizon',
         id: 600,
         children: [
-          {
-            path: '/config/line/linelist',
-            name: 'linelist',
-            component: LineList,
-            id: 601,
-            meta: {
-              group: '配置',
-              level: 2,
-              name: '路线'
-            }
-          },
+          // {
+          //   path: '/config/line/linelist',
+          //   name: 'linelist',
+          //   component: LineList,
+          //   id: 601,
+          //   meta: {
+          //     group: '配置',
+          //     level: 2,
+          //     name: '路线'
+          //   }
+          // },
           {
             path: '/config/line',
             name: 'Line',
@@ -924,7 +924,7 @@ export default [
             meta: {
               group: '配置',
               level: 2,
-              name: '路线2'
+              name: '路线'
             }
           },
           {
