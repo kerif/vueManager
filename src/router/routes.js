@@ -918,7 +918,7 @@ export default [
           // },
           {
             path: '/config/line',
-            name: 'Line',
+            name: 'linelist',
             component: Line,
             id: 601,
             meta: {
