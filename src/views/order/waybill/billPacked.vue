@@ -546,7 +546,6 @@ export default {
     }
   },
   created() {
-    console.log('我是打包')
     this.getPackage()
     this.getExpress()
     this.getProduct()
@@ -788,6 +787,7 @@ export default {
         this.PackageData = res.data.packages
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
+        this.user.box_type = res.data.box_type
         this.services = res.data.services
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name

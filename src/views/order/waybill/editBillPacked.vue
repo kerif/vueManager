@@ -638,6 +638,7 @@ export default {
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.line_rule_fee = res.data.payment.line_rule_fee
+        this.user.box_type = res.data.box_type
         this.user.order_sn = res.data.order_sn
         this.user.length = res.data.length
         this.user.width = res.data.width
