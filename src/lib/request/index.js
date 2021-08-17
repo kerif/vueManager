@@ -294,6 +294,10 @@ exports.getRegionTemplate = params => {
 exports.submitTmp = (id, tmpId) => {
   return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
 }
+// 分区 模版列表
+exports.lineRegion = params => {
+  return $form.get('express-lines/region-templates', { params })
+}
 // 配置 新路线 获取价格表
 exports.getPriceTable = (id, params) => {
   return $form.get(`express-lines/${id}/prices`, params)
@@ -428,6 +432,14 @@ exports.noUsers = params => {
 // 客户 合并客户
 exports.mergeCustomer = (id, targetId) => {
   return $form.put(`users/merge/${id}/target/${targetId}`)
+}
+// 客户 分配客服
+exports.assignCustomer = params => {
+  return $form.put('users/assign-customer', params)
+}
+// 客户 分配销售
+exports.assignSale = params => {
+  return $form.put('users/assign-sale', params)
 }
 // 客户允许登录
 exports.customerLogin = ids => {

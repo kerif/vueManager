@@ -172,7 +172,7 @@ export default {
       })
     },
     goPartition() {
-      this.$router.push({ name: 'partition' }, () => {
+      this.$router.push({ name: 'tmpSet' }, () => {
         this.getList()
       })
     },

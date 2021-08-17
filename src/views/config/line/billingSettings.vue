@@ -480,6 +480,22 @@
           ><br />
         </div>
       </div>
+      <div>
+        <h3>5、{{ $t('阶梯首重续重模式') }}</h3>
+        <div style="padding-left: 20px">
+          <span>{{ $t('按照计费重量所属阶梯的计费方式计费') }}</span
+          ><br />
+          <span>{{ $t('例如设置为') }}：</span><br />
+          <span>{{ $t('0～5KG') }}:</span><span>{{ $t('首费20/1KG，续费8/1KG') }}</span
+          ><br />
+          <span>{{ $t('5～20KG') }}:</span><span>{{ $t('首费25/3KG，续费6/1KG') }}</span
+          ><br />
+          <span>{{ $t('则当计费重量属于0～5KG时，按照前者计费') }}</span
+          ><br />
+          <span>{{ $t('计费重量属于5～20KG时按照后者计费') }}</span
+          ><br />
+        </div>
+      </div>
     </el-dialog>
   </div>
 </template>
