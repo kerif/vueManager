@@ -16,10 +16,11 @@
     ></waybill-list-search>
     <div class="header-range">
       <div v-if="oderData.length && ['1', '2', '3', '4', '5'].includes(activeName)">
-        <el-button v-if="activeName === '1'" @click="oneBatch" size="small">{{
+        <el-button class="btn-yellow" v-if="activeName === '1'" @click="oneBatch" size="small">{{
           $t('一键批量打包')
         }}</el-button>
         <el-button
+          class="btn-deep-blue"
           v-if="activeName === '3'"
           size="small"
           @click="addInvoice(selectIDs)"
@@ -27,7 +28,7 @@
           >{{ $t('加入发货单') }}</el-button
         >
         <el-dropdown v-if="['2', '4'].includes(activeName)" style="margin-right: 10px">
-          <el-button size="small">{{ $t('发送通知') }}</el-button>
+          <el-button class="btn-yellow" size="small">{{ $t('发送通知') }}</el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-if="['2'].includes(activeName)" @click.native="orderUnpaidNotify">{{
               $t('订单待支付通知')
@@ -40,11 +41,15 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button v-if="activeName === '2'" size="small" @click="changeDelivery">{{
-          $t('改成货到付款')
-        }}</el-button>
+        <el-button
+          class="btn-dark-green"
+          v-if="activeName === '2'"
+          size="small"
+          @click="changeDelivery"
+          >{{ $t('改成货到付款') }}</el-button
+        >
         <el-dropdown v-if="['3', '4'].includes(activeName)" style="margin-right: 10px">
-          <el-button size="small">{{ $t('更新物流') }}</el-button>
+          <el-button size="small" class="btn-green">{{ $t('更新物流') }}</el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-if="activeName === '4'" @click.native="updateTracking">{{
               $t('更新物流状态')
@@ -57,13 +62,18 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button v-if="['3', '4', '5'].includes(activeName)" size="small" @click="payed"
+        <el-button
+          class="btn-blue-green"
+          v-if="['3', '4', '5'].includes(activeName)"
+          size="small"
+          @click="payed"
           >{{ $t('改为已付款') }}
         </el-button>
-        <el-button v-if="activeName === '4'" size="small" @click="signed"
+        <el-button class="btn-purple" v-if="activeName === '4'" size="small" @click="signed"
           >{{ $t('改为已签收') }}
         </el-button>
         <el-button
+          class="btn-deep-purple"
           v-if="['3', '4', '5'].includes(activeName)"
           size="small"
           @click="uploadInvoice(selectIDs)"

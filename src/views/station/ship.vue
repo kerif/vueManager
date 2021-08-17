@@ -52,10 +52,14 @@
     </div>
     <div class="searchGroup">
       <div class="bottom-sty">
-        <el-button size="small" @click="updateTracking">{{ $t('更新物流状态') }}</el-button>
+        <el-button class="btn-blue-green" size="small" @click="updateTracking">{{
+          $t('更新物流状态')
+        }}</el-button>
         <!-- 批量发送通知 -->
         <el-dropdown @command="dropdown">
-          <el-button size="small" @click="goNotify">{{ $t('批量发送通知') }}</el-button>
+          <el-button class="btn-orangey-red" size="small" @click="goNotify">{{
+            $t('批量发送通知')
+          }}</el-button>
           <el-dropdown-menu>
             <el-dropdown-item command="3">{{ $t('已发货通知') }}</el-dropdown-item>
             <el-dropdown-item command="4">{{ $t('待取件通知') }}</el-dropdown-item>
@@ -65,7 +69,9 @@
             <el-radio :label="4">{{ $t('待取件通知') }}</el-radio>
           </el-radio-group> -->
         </el-dropdown>
-        <el-button size="small" @click="batchNum">{{ $t('批量更新单号-二程') }}</el-button>
+        <el-button class="btn-deep-purple" size="small" @click="batchNum">{{
+          $t('批量更新单号-二程')
+        }}</el-button>
         <el-button size="small" type="success" plain @click="deleteData">{{
           $t('导出清单')
         }}</el-button>

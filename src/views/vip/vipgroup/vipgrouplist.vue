@@ -8,7 +8,9 @@
           @search="goSearch"
         ></search-group>
         <div class="bottom-sty">
-          <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+          <el-button class="btn-light-red" size="small" @click="deleteData">{{
+            $t('删除')
+          }}</el-button>
         </div>
       </div>
       <div class="select-box">
