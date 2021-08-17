@@ -637,12 +637,12 @@ exports.getGrowthFinanceDetails = id => {
   return $form.get(`growth-finances/payments/${id}`)
 }
 // 财务 充值记录 通过成长值财务
-exports.approvedGrowthValue = id => {
-  return $form.put(`growth-finances/payments/${id}/approved`)
+exports.approvedGrowthValue = (id, params) => {
+  return $form.put(`growth-finances/payments/${id}/approved`, params)
 }
 // 财务 充值记录 拒绝成长值财务
-exports.refusedGrowthValue = id => {
-  return $form.put(`growth-finances/payments/${id}/refused`)
+exports.refusedGrowthValue = (id, params) => {
+  return $form.put(`growth-finances/payments/${id}/refused`, params)
 }
 // 财务 自提点佣金结算
 exports.commissionsPick = params => {
@@ -1296,6 +1296,14 @@ exports.getTemplate = () => {
 // 更新 消息模版
 exports.updateTemplate = params => {
   return $form.put('mini-program/templates', params)
+}
+// 获取公众号消息模版
+exports.getPubTemplate = () => {
+  return $form.get('wechat-oa-config/templates')
+}
+// 更新公众号消息模版
+exports.updatePubTemplate = params => {
+  return $form.put('wechat-oa-config/templates', params)
 }
 // 文件上传
 exports.uploadFiles = params => {

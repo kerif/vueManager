@@ -475,6 +475,7 @@ function initInstance(type) {
       break
     // 流水记录审核
     case 'rechargeMsg':
+    case 'growthFinance':
       instance = new RechargeMsgController({
         el: document.createElement('div'),
         mixins: [mixin]

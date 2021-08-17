@@ -158,7 +158,6 @@ export default {
     }
   },
   mixins: [pagination],
-  name: 'recharge',
   components: {
     SearchGroup,
     NlePagination,
