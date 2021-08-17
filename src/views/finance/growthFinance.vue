@@ -55,6 +55,7 @@ export default {
           size: this.page_params.size
         })
         .then(res => {
+          console.log(res)
           if (res.ret) {
             this.tableData = res.data
             this.page_params.page = res.meta.current_page
