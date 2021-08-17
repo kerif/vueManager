@@ -25,7 +25,11 @@
         <div>{{ $t('客服备注') }}：{{ growthDetails.customer_remark }}</div>
         <div>
           {{ $t('客服图片') }}：
-          <img :src="growthDetails.customer_images" alt="" />
+          <img
+            class="image"
+            :src="$baseUrl.IMAGE_URL + growthDetails.customer_images"
+            @click="checkImg(growthDetails.customer_images)"
+          />
         </div>
         <div>{{ $t('创建时间') }}：{{ growthDetails.created_at }}</div>
       </div>
@@ -37,7 +41,11 @@
         <div>{{ $t('备注') }}：{{ growthDetails.remark }}</div>
         <div>
           {{ $t('图片') }}：
-          <img :src="growthDetails.images" alt="" />
+          <img
+            class="image"
+            :src="$baseUrl.IMAGE_URL + growthDetails.images"
+            @click="checkImg(growthDetails.images)"
+          />
         </div>
       </div>
     </div>
@@ -49,6 +57,12 @@
         $t('审核拒绝')
       }}</el-button>
     </div>
+    <!-- 查看图片 -->
+    <el-dialog :visible.sync="imgDialog">
+      <div style="text-align: center">
+        <img :src="imgUrl" style="max-width: 100%" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,13 +71,19 @@ export default {
   data() {
     return {
       growthDetails: {},
-      localization: {}
+      localization: {},
+      imgDialog: false,
+      imgUrl: ''
     }
   },
   created() {
     this.getGrowthFinanceDetails()
   },
   methods: {
+    checkImg(url) {
+      this.imgDialog = true
+      this.imgUrl = this.$baseUrl.IMAGE_URL + url
+    },
     getGrowthFinanceDetails() {
       this.$request.getGrowthFinanceDetails(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -104,6 +124,11 @@ export default {
     align-items: center;
     justify-content: space-between;
   }
+  .image {
+    max-width: 100px;
+    cursor: pointer;
+    text-align: center;
+  }
   .status {
     color: red;
     font-weight: bold;
@@ -121,9 +146,6 @@ export default {
     display: grid;
     gap: 20px;
     grid-template-columns: 1fr 1fr;
-    img {
-      max-width: 100%;
-    }
   }
 }
 </style>
