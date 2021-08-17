@@ -16,15 +16,15 @@
       <el-table
         border
         stripe
-        :data="addressList"
+        :data="templateData"
         ref="table"
         class="data-list"
         height="calc(100vh - 270px)"
       >
         <el-table-column type="index" :index="1"></el-table-column>
         <el-table-column :label="$t('模版名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('分区数量')" prop="areas_count"></el-table-column>
-        <el-table-column
+        <el-table-column :label="$t('分区数量')" prop="regions_count"></el-table-column>
+        <!-- <el-table-column
           :label="item.name"
           v-for="item in formatLangData"
           :key="item.id"
@@ -38,7 +38,7 @@
             ></span>
             <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column :label="$t('操作')" width="140">
           <template slot-scope="scope">
             <el-button class="btn-green edit-sty" @click="editPartition(scope.row.id)">{{
@@ -56,13 +56,10 @@
       :pageParams="page_params"
       :notNeedInitQuery="false"
     ></nle-pagination>
-    <el-dialog :title="$t('选择模版')" :visible.sync="dialogVisible" width="35%" @close="clearTmp">
+    <el-dialog :title="$t('新增')" :visible.sync="dialogVisible" width="35%" @close="clearTmp">
       <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item :label="$t('*请选择预设模版')">
-          <el-select v-model="form.templateId" :placeholder="$t('请选择')">
-            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-            </el-option>
-          </el-select>
+        <el-form-item :label="$t('*请输入模版名称')">
+          <el-input :placeholder="$t('请输入')"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -82,11 +79,10 @@ export default {
   name: 'vipaddress',
   data() {
     return {
-      addressList: [],
+      templateData: [],
       tableLoading: false,
       languageData: [],
       dialogVisible: false,
-      options: [],
       form: {
         templateId: ''
       }
@@ -115,7 +111,7 @@ export default {
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
-            this.addressList = res.data
+            this.templateData = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
             this.$nextTick(() => {
@@ -132,10 +128,11 @@ export default {
     },
     // 新增
     addPartition() {
-      let status = this.$route.params.id ? 'channel' : 'partition'
-      dialog({ type: 'partitionAddEdit', state: 'add', status: status }, () => {
-        this.getList()
-      })
+      this.dialogVisible = true
+      // let status = this.$route.params.id ? 'channel' : 'partition'
+      // dialog({ type: 'partitionAddEdit', state: 'add', status: status }, () => {
+      //   this.getList()
+      // })
     },
     // 删除
     deletePart(id) {
@@ -212,14 +209,6 @@ export default {
           this.getList()
         }
       )
-    },
-    // 获取模版数据
-    getPreset() {
-      this.$request.getRegionTemplate().then(res => {
-        if (res.ret) {
-          this.options = res.data
-        }
-      })
     },
     clearTmp() {
       this.form.templateId = ''
