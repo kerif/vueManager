@@ -11,6 +11,12 @@
         <el-button class="btn-light-red" size="small" @click="deleteData">{{
           $t('删除')
         }}</el-button>
+        <el-button class="btn-purple" size="small" @click="goServies('services')">{{
+          $t('分配客服')
+        }}</el-button>
+        <el-button class="btn-deep-blue" size="small" @click="goServies('sale')">{{
+          $t('分配销售')
+        }}</el-button>
         <div class="import-list">
           <el-button size="small" type="success" plain @click="uploadList">{{
             $t('导出清单')
@@ -57,8 +63,12 @@
         prop="balance"
         :label="$t('余额') + this.localization.currency_unit"
       ></el-table-column>
+      <el-table-column :label="$t('积分')" prop="point"></el-table-column>
       <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
+      <el-table-column :label="$t('VIP等级')" prop="growth_value"></el-table-column>
       <el-table-column :label="$t('客户组')" prop="user_group.name_cn"></el-table-column>
+      <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
+      <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
       <el-table-column :label="$t('注册时间')" prop="created_at"></el-table-column>
       <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
       <el-table-column :label="$t('邀请人')" prop="invitor"></el-table-column>
@@ -144,6 +154,23 @@
         <el-button type="primary" @click="mergeConfirm">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <!-- 分配客服 -->
+    <el-dialog
+      :title="staffStatus === 'services' ? $t('分配客服') : $t('分配销售')"
+      :visible.sync="dialogStaff"
+      width="30%"
+    >
+      <span>{{ $t('选择员工') }}</span
+      >&nbsp;&nbsp;
+      <el-select v-model="saleId" :placeholder="$t('请选择')">
+        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+        </el-option>
+      </el-select>
+      <div slot="footer">
+        <el-button @click="dialogStaff = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="staffConfirm">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -169,7 +196,11 @@ export default {
       customerId: '',
       customerName: '',
       targetID: '',
-      target: ''
+      target: '',
+      options: [],
+      saleId: '',
+      dialogStaff: false,
+      staffStatus: ''
     }
   },
   mixins: [pagination],
@@ -260,6 +291,86 @@ export default {
             }
           })
       })
+    },
+    staffConfirm() {
+      if (this.staffStatus === 'services') {
+        this.$request
+          .assignCustomer({
+            customer_id: this.saleId,
+            user_ids: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.dialogStaff = false
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .assignSale({
+            sale_id: this.saleId,
+            user_ids: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.dialogStaff = false
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      }
+    },
+    goServies(status) {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择客户'))
+      }
+      this.staffStatus = status
+      this.dialogStaff = true
+      this.getStaff()
+      // this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+      //   confirmButtonText: this.$t('确定'),
+      //   cancelButtonText: this.$t('取消'),
+      //   type: 'warning'
+      // }).then(() => {
+      //   this.$request
+      //     .deleteUser({
+      //       DELETE: this.deleteNum
+      //     })
+      //     .then(res => {
+      //       if (res.ret) {
+      //         this.$notify({
+      //           title: this.$t('操作成功'),
+      //           message: res.msg,
+      //           type: 'success'
+      //         })
+      //         this.getList()
+      //       } else {
+      //         this.$message({
+      //           message: res.msg,
+      //           type: 'error'
+      //         })
+      //       }
+      //     })
+      // })
     },
     // 获取客户组
     getCategory() {
@@ -425,6 +536,14 @@ export default {
     onGroupChange() {
       this.page_params.handleQueryChange('group', this.page_params.group)
       this.getList()
+    },
+    // 获取员工数据
+    getStaff() {
+      this.$request.getStaff().then(res => {
+        if (res.ret) {
+          this.options = res.data
+        }
+      })
     }
   },
   components: {
