@@ -27,8 +27,8 @@
           {{ $t('客服图片') }}：
           <img
             class="image"
-            :src="$baseUrl.IMAGE_URL + growthDetails.customer_images"
-            @click="checkImg(growthDetails.customer_images)"
+            :src="$baseUrl.IMAGE_URL + growthDetails.images"
+            @click="checkImg(growthDetails.images)"
           />
         </div>
         <div>{{ $t('创建时间') }}：{{ growthDetails.created_at }}</div>
@@ -43,8 +43,8 @@
           {{ $t('图片') }}：
           <img
             class="image"
-            :src="$baseUrl.IMAGE_URL + growthDetails.images"
-            @click="checkImg(growthDetails.images)"
+            :src="$baseUrl.IMAGE_URL + growthDetails.customer_images"
+            @click="checkImg(growthDetails.customer_images)"
           />
         </div>
       </div>
@@ -53,7 +53,7 @@
       <el-button size="small" type="primary" @click="updateStatus('pass')">{{
         $t('审核通过')
       }}</el-button>
-      <el-button size="small" type="danger" @click="updateStatus('refuse')">{{
+      <el-button size="small" type="danger" @click="updateStatus('reject')">{{
         $t('审核拒绝')
       }}</el-button>
     </div>
@@ -67,11 +67,13 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
       growthDetails: {},
       localization: {},
+      currencyUnit: '',
       imgDialog: false,
       imgUrl: ''
     }
@@ -89,30 +91,43 @@ export default {
         if (res.ret) {
           this.growthDetails = res.data
           this.localization = res.localization
+          this.currencyUnit = res.localization.currency_unit
         }
       })
     },
     async updateStatus(status) {
-      let res = {}
-      if (status === 'pass') {
-        res = await this.$request.approvedGrowthValue(this.$route.params.id)
-      } else {
-        res = await this.$request.refusedGrowthValue(this.$route.params.id)
-      }
-      if (res.ret) {
-        this.$notify({
-          title: this.$t('操作成功'),
-          message: res.msg,
-          type: 'success'
-        })
-        this.$router.go(-1)
-      } else {
-        this.$notify({
-          title: this.$t('操作失败'),
-          message: res.msg,
-          type: 'warning'
-        })
-      }
+      dialog(
+        {
+          type: 'growthFinance',
+          id: this.$route.params.id,
+          state: status,
+          tranAmount: this.growthDetails.tran_amount,
+          currencyUnit: this.currencyUnit
+        },
+        () => {
+          this.getGrowthFinanceDetails()
+        }
+      )
+      // let res = {}
+      // if (status === 'pass') {
+      //   res = await this.$request.approvedGrowthValue(this.$route.params.id)
+      // } else {
+      //   res = await this.$request.refusedGrowthValue(this.$route.params.id)
+      // }
+      // if (res.ret) {
+      //   this.$notify({
+      //     title: this.$t('操作成功'),
+      //     message: res.msg,
+      //     type: 'success'
+      //   })
+      //   this.$router.go(-1)
+      // } else {
+      //   this.$notify({
+      //     title: this.$t('操作失败'),
+      //     message: res.msg,
+      //     type: 'warning'
+      //   })
+      // }
     }
   }
 }

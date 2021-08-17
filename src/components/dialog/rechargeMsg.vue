@@ -78,65 +78,61 @@ export default {
       userId: '',
       tranAmount: '',
       baleImgList: [],
-      currencyUnit: ''
+      currencyUnit: '',
+      type: ''
     }
   },
   methods: {
-    confirm() {
+    async confirm() {
       this.ruleForm.customer_images = this.baleImgList
       if (this.state === 'pass' && !this.ruleForm.pay_amount && this.ruleForm.pay_amount !== 0) {
         return this.$message.error(this.$t('请输入金额'))
       } else if (this.state === 'reject' && !this.ruleForm.customer_remark) {
         return this.$message.error(this.$t('请输入备注'))
       }
-      // 审核通过
-      if (this.state === 'pass') {
-        this.$request
-          .rechargePassed(this.id, {
+      let res = {}
+      if (this.type === 'growthFinance') {
+        // 审核通过
+        if (this.state === 'pass') {
+          res = await this.$request.approvedGrowthValue(this.id, {
             confirm_amount: this.ruleForm.pay_amount,
             ...this.ruleForm
           })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
+        } else {
+          // 审核拒绝
+          res = await this.$request.refusedGrowthValue(this.id, {
+            confirm_amount: this.ruleForm.pay_amount,
+            ...this.ruleForm
           })
+        }
       } else {
-        // 审核拒绝
-        this.$request
-          .rechargeReject(this.id, {
+        // 审核通过
+        if (this.state === 'pass') {
+          res = await this.$request.rechargePassed(this.id, {
             confirm_amount: this.ruleForm.pay_amount,
             ...this.ruleForm
           })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                type: 'success',
-                title: this.$t('成功'),
-                message: res.msg
-              })
-              this.show = false
-              this.success()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-            this.show = false
+        } else {
+          // 审核拒绝
+          res = await this.$request.rechargeReject(this.id, {
+            confirm_amount: this.ruleForm.pay_amount,
+            ...this.ruleForm
           })
+        }
+      }
+      if (res.ret) {
+        this.$notify({
+          type: 'success',
+          title: this.$t('成功'),
+          message: res.msg
+        })
+        this.show = false
+        this.success()
+      } else {
+        this.$message({
+          message: res.msg,
+          type: 'error'
+        })
       }
     },
     // 上传打包照片
