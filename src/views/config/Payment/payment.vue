@@ -234,7 +234,7 @@
       <el-tab-pane :label="$t('拼团配置')" name="14" v-if="unShow">
         <div class="rate-top">
           <div class="rate-left">{{ $t(' 授权公开拼团团长') }}：</div>
-          <el-button class="btn-blue-green" @click="groupAdd">{{ $t('新增授权') }}</el-button>
+          <el-button @click="groupAdd">{{ $t('新增授权') }}</el-button>
         </div>
         <el-table
           :data="configurationData"

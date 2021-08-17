@@ -37,8 +37,12 @@
     </div>
     <div class="headerList">
       <div class="import-list">
-        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
-        <el-button size="small" @click="claimList">{{ $t('认领记录') }}</el-button>
+        <el-button class="btn-light-red" size="small" @click="deleteData">{{
+          $t('删除')
+        }}</el-button>
+        <el-button class="btn-blue-green" size="small" @click="claimList">{{
+          $t('认领记录')
+        }}</el-button>
         <el-button type="success" plain size="small" @click="uploadList">{{
           $t('导出清单')
         }}</el-button>

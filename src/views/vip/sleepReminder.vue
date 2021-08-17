@@ -39,8 +39,12 @@
     </div>
     <div class="searchGroup">
       <div class="bottom-sty">
-        <el-button size="small" @click="confirmWake">{{ $t('批量唤醒') }}</el-button>
-        <el-button size="small" @click="sleepWake">{{ $t('沉睡设置') }}</el-button>
+        <el-button class="btn-deep-purple" size="small" @click="confirmWake">{{
+          $t('批量唤醒')
+        }}</el-button>
+        <el-button class="btn-blue-green" size="small" @click="sleepWake">{{
+          $t('沉睡设置')
+        }}</el-button>
       </div>
       <div class="search-l">
         <search-group
