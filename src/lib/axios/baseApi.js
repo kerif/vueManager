@@ -52,6 +52,14 @@ switch (hostName) {
       BLOCK_URL: 'https://jiyun-test-api-v2.nle-tech.com/block-explain'
     }
     break
+  // v3 正式服
+  case 'jiyun-v3.haiouoms.com':
+    baseUrl = {
+      BASE_API_URL: 'https://api-jiyun-v3.haiouoms.com/api/admin',
+      IMAGE_URL: 'https://api-jiyun-v3.haiouoms.com',
+      BLOCK_URL: 'https://api-jiyun-v3.haiouoms.com/block-explain'
+    }
+    break
   default:
     // baseUrl = {
     //   BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',

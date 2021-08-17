@@ -1,8 +1,8 @@
 <template>
   <div class="line-container">
     <div class="headerList">
-      <el-button @click="goPartition">{{ $t('预设分区表') }}</el-button>
-      <el-button @click="goSales">{{ $t('销售价管理') }}</el-button>
+      <el-button class="btn-deep-purple" @click="goPartition">{{ $t('预设分区表') }}</el-button>
+      <el-button class="btn-dark-green" @click="goSales">{{ $t('销售价管理') }}</el-button>
       <div class="header-right">
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>

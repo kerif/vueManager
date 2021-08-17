@@ -19,28 +19,52 @@
     ></order-list-search>
     <div class="header-range">
       <div class="header-btns">
-        <el-button size="small" @click="deleteData" v-if="activeName === '1'">{{
-          $t('删除')
-        }}</el-button>
-        <el-button size="small" @click="discardPackage" v-if="['1', '2'].includes(activeName)">{{
-          $t('弃件')
-        }}</el-button>
-        <el-button size="small" @click="batchPackage" v-if="activeName === '2'">{{
+        <el-button
+          class="btn-light-red"
+          size="small"
+          @click="deleteData"
+          v-if="activeName === '1'"
+          >{{ $t('删除') }}</el-button
+        >
+        <el-button
+          class="btn-orangey-red"
+          size="small"
+          @click="discardPackage"
+          v-if="['1', '2'].includes(activeName)"
+          >{{ $t('弃件') }}</el-button
+        >
+        <el-button class="btn-green" size="small" @click="batchPackage" v-if="activeName === '2'">{{
           $t('批量集包')
         }}</el-button>
-        <el-button size="small" @click="goNotify" v-if="activeName === '2'">{{
+        <el-button class="btn-pink" size="small" @click="goNotify" v-if="activeName === '2'">{{
           $t('批量发送通知')
         }}</el-button>
-        <el-button size="small" v-if="activeName === '6'" @click="restore">{{
+        <el-button class="btn-dark-green" size="small" v-if="activeName === '6'" @click="restore">{{
           $t('恢复')
         }}</el-button>
-        <el-button size="small" v-if="activeName === '6'" @click="deleteDiscard">{{
-          $t('彻底删除')
-        }}</el-button>
-        <el-button v-if="activeName !== '6'" @click="importOrder" size="small" plain>{{
-          $t('批量入库')
-        }}</el-button>
-        <el-button v-if="activeName !== '6'" @click="uploadList" size="small" type="success" plain>
+        <el-button
+          class="btn-blue-green"
+          size="small"
+          v-if="activeName === '6'"
+          @click="deleteDiscard"
+          >{{ $t('彻底删除') }}</el-button
+        >
+        <el-button
+          class="btn-purple"
+          v-if="activeName !== '6'"
+          @click="importOrder"
+          size="small"
+          plain
+          >{{ $t('批量入库') }}</el-button
+        >
+        <el-button
+          class="btn-yellow"
+          v-if="activeName !== '6'"
+          @click="uploadList"
+          size="small"
+          type="success"
+          plain
+        >
           {{ $t('导出清单') }}
         </el-button>
       </div>

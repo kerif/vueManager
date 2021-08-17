@@ -104,15 +104,28 @@
     </el-tabs>
     <div class="searchGroup">
       <div class="import-list">
-        <el-button v-if="activeName === '0'" size="small" @click="BatchReceipt">
+        <el-button
+          class="btn-deep-purple"
+          v-if="activeName === '0'"
+          size="small"
+          @click="BatchReceipt"
+        >
           {{ $t('批量收货') }}</el-button
         >
-        <el-button v-if="activeName === '1'" size="small" @click="batchSign">{{
-          $t('批量签收')
-        }}</el-button>
-        <el-button v-if="activeName === '1'" size="small" @click="bacthDelivery">{{
-          $t('批量出库')
-        }}</el-button>
+        <el-button
+          class="btn-blue-green"
+          v-if="activeName === '1'"
+          size="small"
+          @click="batchSign"
+          >{{ $t('批量签收') }}</el-button
+        >
+        <el-button
+          class="btn-dark-green"
+          v-if="activeName === '1'"
+          size="small"
+          @click="bacthDelivery"
+          >{{ $t('批量出库') }}</el-button
+        >
         <el-button size="small" type="success" plain @click="uploadList(status)">{{
           $t('导出清单')
         }}</el-button>

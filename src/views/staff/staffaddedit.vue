@@ -1,96 +1,83 @@
 <template>
   <div class="staff-add-container">
-    <el-row class="client_detail">
-      <!-- 基础信息 -->
-      <el-form ref="params" :model="user" label-width="140px" label-position="left" :rules="rules">
-        <el-col :lg="12" class="baseInfo">
-          <!-- 用户名 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('用户名')" prop="username">
-                <el-input v-model="user.username" :placeholder="$t('请输入用户名')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 密码 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="this.$t('密码')" prop="password" v-if="!this.$route.params.id">
-                <el-input
-                  v-model="user.password"
-                  type="password"
-                  :placeholder="$t('请输入密码')"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 邮箱 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('邮箱')" prop="email">
-                <el-input v-model="user.email" :placeholder="$t('请输入邮箱')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 员工组 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('员工组')" prop="group_id" class="employ">
-                <el-select v-model="user.group_id" :placeholder="$t('请选择员工组')" clearable>
-                  <el-option
-                    v-for="item in employeeGroup"
-                    :key="item.id"
-                    :label="item.name_cn"
-                    :value="item.id"
-                  >
-                  </el-option>
-                </el-select>
-                <!-- </template> -->
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :lg="12" class="baseInfo">
-          <!-- 姓名 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('姓名')" prop="name">
-                <el-input v-model="user.name" :placeholder="$t('请输入姓名')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 确认密码 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item
-                :label="$t('确认密码')"
-                prop="confirm_password"
-                v-if="!this.$route.params.id"
-              >
-                <el-input
-                  v-model="user.confirm_password"
-                  type="password"
-                  :placeholder="$t('请再次输入密码')"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 联系电话 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('联系电话')" prop="phone">
-                <el-input v-model="user.phone" :placeholder="$t('请输入联系电话')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-form>
-    </el-row>
-    <div class="btn_box">
-      <el-button type="primary" @click="update('params')" :loading="$store.state.btnLoading">
-        {{ $t('保存') }}
-      </el-button>
-    </div>
+    <el-form
+      ref="params"
+      :model="user"
+      label-width="100px"
+      label-position="left"
+      :rules="rules"
+      style="max-width: 350px"
+    >
+      <h4>{{ $t('登录信息') }}</h4>
+      <!-- 用户名 -->
+      <el-form-item :label="$t('用户名')" prop="username">
+        <el-input
+          v-model="user.username"
+          :placeholder="$t('请输入用户名')"
+          autocomplete="off"
+        ></el-input>
+      </el-form-item>
+      <!-- 密码 -->
+      <el-form-item :label="this.$t('密码')" prop="password" v-if="!this.$route.params.id">
+        <el-input
+          v-model="user.password"
+          type="password"
+          :placeholder="$t('请输入密码')"
+          autocomplete="new-password"
+        ></el-input>
+      </el-form-item>
+      <!-- 确认密码 -->
+      <el-form-item :label="$t('确认密码')" prop="confirm_password" v-if="!this.$route.params.id">
+        <el-input
+          v-model="user.confirm_password"
+          type="password"
+          :placeholder="$t('请再次输入密码')"
+        ></el-input>
+      </el-form-item>
+      <!-- 所属员工组 -->
+      <el-form-item :label="$t('员工组')" prop="group_id" class="employ">
+        <el-select v-model="user.group_id" :placeholder="$t('请选择员工组')" clearable>
+          <el-option
+            v-for="item in employeeGroup"
+            :key="item.id"
+            :label="item.name_cn"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <h4>{{ $t('基本资料') }}</h4>
+      <!-- 姓名 -->
+      <el-form-item :label="$t('姓名')" prop="name">
+        <el-input v-model="user.name" :placeholder="$t('请输入姓名')"></el-input>
+      </el-form-item>
+      <!-- 手机号 -->
+      <el-form-item :label="$t('手机号')" prop="phone">
+        <el-input v-model="user.phone" :placeholder="$t('请输入联系电话')"></el-input>
+      </el-form-item>
+      <!-- 邮箱 -->
+      <el-form-item :label="$t('邮箱')" prop="email">
+        <el-input v-model="user.email" :placeholder="$t('请输入邮箱')"></el-input>
+      </el-form-item>
+      <h4>{{ $t('企业微信') }}</h4>
+      <!-- 微信号 -->
+      <el-form-item :label="$t('微信号')">
+        <el-input v-model="user.we_chat" :placeholder="$t('请输入微信号')"></el-input>
+      </el-form-item>
+      <!-- 微信昵称 -->
+      <el-form-item :label="$t('微信昵称')">
+        <el-input v-model="user.we_chat_name" :placeholder="$t('请输入微信昵称')"></el-input>
+      </el-form-item>
+      <!-- 手机号 -->
+      <el-form-item :label="$t('手机号')">
+        <el-input v-model="user.we_chat_phone" :placeholder="$t('请输入手机号')"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="update('params')" :loading="$store.state.btnLoading">
+          {{ $t('保存') }}
+        </el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 <script>
@@ -119,13 +106,13 @@ export default {
         phone: [{ required: true, message: this.$t('请输入电话号码'), trigger: 'change' }],
         password: [
           { required: true, message: this.$t('请输入密码'), trigger: 'blur' },
-          { min: 8, max: 32, message: this.$t('长度在 8 到 20 个字符'), trigger: 'change' }
+          { min: 8, max: 32, message: this.$t('长度在 8 到 20 个字符'), trigger: 'blur' }
         ],
         confirm_password: [
           { required: true, validator: validatePass2, trigger: 'blur' },
-          { min: 8, max: 20, message: this.$t('长度在 8 到 20 个字符'), trigger: 'change' }
+          { min: 8, max: 20, message: this.$t('长度在 8 到 20 个字符'), trigger: 'blur' }
         ],
-        group: [{ required: true, message: this.$t('请输入员工组'), trigger: 'change' }]
+        group_id: [{ required: true, message: this.$t('请输入员工组'), trigger: 'change' }]
       },
       user: {
         username: '',
@@ -134,7 +121,10 @@ export default {
         phone: '',
         group_id: '',
         password: '',
-        confirm_password: ''
+        confirm_password: '',
+        we_chat: '',
+        we_chat_name: '',
+        we_chat_phone: ''
       }
     }
   },
@@ -154,11 +144,7 @@ export default {
       this.$request.EditVip(this.$route.params.id).then(res => {
         if (res.ret) {
           this.user = res.data
-          console.log(res.data)
-          // this.user.group_id = res.data.admin_group.id
           this.$set(this.user, 'group_id', res.data.admin_group.id)
-          // console.log(this.user.group_id, ' this.user.group_id')
-          // console.log(this.user, 'this.user')
         }
       })
     },
@@ -166,7 +152,6 @@ export default {
     getVipGroup() {
       this.$request.getVips().then(res => {
         this.employeeGroup = res.data
-        // console.log(this.employeeGroup, 'this.employeeGroup')
       })
     },
     // 保存
@@ -182,7 +167,6 @@ export default {
                   message: res.msg,
                   type: 'success'
                 })
-                // this.$router.push({ name: 'stafflist' })
                 this.$router.go(-1)
               } else {
                 this.$notify({
@@ -229,8 +213,8 @@ export default {
 @import '../../styles/commonality.scss';
 .staff-add-container {
   min-height: 67vh;
+  padding: 1em 3em !important;
   background-color: #fff !important;
-  padding: 1em 3em;
   .title_box {
     text-align: right;
     line-height: 2.5em;
@@ -245,11 +229,6 @@ export default {
     display: inline-block;
     vertical-align: middle;
     margin-top: 0.8em;
-  }
-  .el-icon-circle-check {
-    display: inline-block;
-    margin-top: 0.8em;
-    color: $green;
   }
   .client_detail {
     .Info {

@@ -2,20 +2,17 @@
   <div class="price-list">
     <div class="title">{{ name }}{{ $t('价格表') }}</div>
     <div class="func-btn">
-      <el-button size="small" @click="exportPrice" style="margin-right: 10px">{{
-        $t('导出价格表')
-      }}</el-button>
-      <!-- <el-upload class="upload-demo" action="" :limit="1" :http-request="importPrice">
-        <el-button size="small" type="primary">{{ $t('导入价格表') }}</el-button>
-      </el-upload> -->
       <el-upload
         class="upload-demo"
         action=""
         :http-request="uploadBaleImg"
         :show-file-list="false"
       >
-        <el-button size="small" type="primary">{{ $t('导入价格表') }}</el-button>
+        <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
       </el-upload>
+      <el-button size="small" type="success" plain @click="exportPrice" style="margin-left: 10px">{{
+        $t('导出')
+      }}</el-button>
       <span class="tips">{{ $t('可导出价格表批量修改后，再导入表格') }}</span>
     </div>
     <div>
@@ -23,6 +20,7 @@
       <p v-if="type === 2">{{ $t('阶梯价格模式') }}</p>
       <p v-if="type === 3">{{ $t('单位价格+阶梯价格模式（总价=单位价格*重量+所属阶梯总价）') }}</p>
       <p v-if="type === 4">{{ $t('多级续重模式') }}</p>
+      <p v-if="type === 5">{{ $t('阶梯首重续重模式') }}</p>
       <vxe-table
         border
         auto-resize
@@ -42,14 +40,26 @@
         <vxe-table-colgroup>
           <vxe-table-colgroup
             field="range"
-            :title="$t('重量范围') + localization.weight_unit"
+            :title="
+              baseMode === 0 ? $t('重量范围') + localization.weight_unit : $t('体积范围(立方)')
+            "
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
+        <vxe-table-colgroup v-if="type === 5">
+          <vxe-table-colgroup
+            field="type_weight"
+            :title="$t('首重/单位续重') + localization.weight_unit"
+            min-width="120"
+          >
+          </vxe-table-colgroup>
+        </vxe-table-colgroup>
         <vxe-table-colgroup v-if="type === 1 || type === 4">
           <vxe-table-colgroup
             field="unit_weight"
-            :title="$t('单位重量') + localization.weight_unit"
+            :title="
+              baseMode === 0 ? $t('单位重量') + localization.weight_unit : $t('单位体积(立方)')
+            "
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
@@ -83,7 +93,8 @@
 export default {
   data() {
     return {
-      type: 0, //1.首重续重 2.阶梯价格 3.首重+阶梯 4.多级续重
+      type: 0, //1.首重续重 2.阶梯价格 3.首重+阶梯 4.多级续重 5.阶梯首重续重模式
+      baseMode: 0,
       tableColumn: [],
       tableData: [],
       region_id: '',
@@ -104,7 +115,6 @@ export default {
   },
   created() {
     this.getList()
-    console.log(1)
   },
   methods: {
     getPriceTable() {
@@ -122,20 +132,32 @@ export default {
                 }
                 let unit_weight = ele.unit_weight / 1000
                 let price = ele.price / 100
+                let first_weight = ele.first_weight / 1000
                 let priceId = ele.id
+                let type_weight = ''
                 let type = ''
                 if (this.type === 1) {
                   //首重续重
                   ele.type === 0 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
                 } else if (this.type === 2) {
                   //阶梯价格
-                  type = '单价'
+                  ele.type === 2 ? (type = this.$t('单价')) : (type = this.$t('基价'))
                 } else if (this.type === 3) {
                   //首重+阶梯
                   ele.type === 3 ? (type = this.$t('单价')) : (type = this.$t('阶梯总价'))
                 } else if (this.type === 4) {
                   //多级续重
                   ele.type === 0 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
+                } else if (this.type === 5) {
+                  // 阶梯首重续重模式
+                  ele.type === 6 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
+                  if (ele.type === 6) {
+                    type_weight = first_weight
+                    type = this.$t('首费')
+                  } else {
+                    type_weight = unit_weight
+                    type = this.$t('续单价')
+                  }
                 }
                 return {
                   ...item,
@@ -143,7 +165,9 @@ export default {
                   unit_weight,
                   type,
                   price,
-                  priceId
+                  priceId,
+                  first_weight,
+                  type_weight
                 }
               })
             )
@@ -158,6 +182,22 @@ export default {
             if (this.type === 4) {
               arr.forEach((ele, index) => {
                 if (ele.range === item.range && ele.unit_weight === item.unit_weight) {
+                  flag = index
+                }
+              })
+            } else if (this.type === 2) {
+              arr.forEach((ele, index) => {
+                if (ele.range === item.range && ele.type === item.type) {
+                  flag = index
+                }
+              })
+            } else if (this.type === 5) {
+              arr.forEach((ele, index) => {
+                if (
+                  ele.range === item.range &&
+                  ele.first_weight === item.first_weight &&
+                  ele.unit_weight === item.unit_weight
+                ) {
                   flag = index
                 }
               })
@@ -192,7 +232,7 @@ export default {
       })
     },
     mergeRowMethod({ row, _rowIndex, column, visibleData }) {
-      const fields = ['range']
+      const fields = ['range', 'unit_weight', 'first_weight']
       const cellValue = row[column.property]
       if (fields.includes(column.property)) {
         const prevRow = visibleData[_rowIndex - 1]
@@ -211,9 +251,10 @@ export default {
       }
     },
     getList() {
-      this.$request.getExpressLine(this.$route.params.id).then(res => {
+      this.$request.getBillingConfig(this.$route.params.id).then(res => {
         if (res.ret) {
           this.type = res.data.mode
+          this.baseMode = res.data.base_mode
           this.name = res.data.name
           this.getPriceTable()
         }

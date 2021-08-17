@@ -61,7 +61,7 @@ const viewDetails = loadonDemand('finance/agency/viewDetails')
 // 财务 代理结算
 const agencyCommission = loadonDemand('finance/agency/agencyCommission')
 // 配置 路线列表
-const LineList = loadonDemand('config/line/LineList')
+// const LineList = loadonDemand('config/line/LineList')
 // 新路线
 const Line = loadonDemand('config/line/Line')
 // 新路线 销售价管理
@@ -681,7 +681,7 @@ export default [
             }
           },
           {
-            path: '/order/billPacked/:id/:order_sn/:activeName/:parent',
+            path: '/order/billPacked/:id/:order_sn/:activeName/:parent/:lineId',
             name: 'billPacked',
             component: Billpacked,
             id: 402,
@@ -911,26 +911,26 @@ export default [
         icon: 'icon-ico_zhuizon',
         id: 600,
         children: [
-          {
-            path: '/config/line/linelist',
-            name: 'linelist',
-            component: LineList,
-            id: 601,
-            meta: {
-              group: '配置',
-              level: 2,
-              name: '路线'
-            }
-          },
+          // {
+          //   path: '/config/line/linelist',
+          //   name: 'linelist',
+          //   component: LineList,
+          //   id: 601,
+          //   meta: {
+          //     group: '配置',
+          //     level: 2,
+          //     name: '路线'
+          //   }
+          // },
           {
             path: '/config/line',
-            name: 'Line',
+            name: 'linelist',
             component: Line,
             id: 601,
             meta: {
               group: '配置',
               level: 2,
-              name: '路线2'
+              name: '路线'
             }
           },
           {

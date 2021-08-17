@@ -174,6 +174,57 @@
           </el-col>
         </el-form-item>
       </div>
+      <div v-if="form.mode === 5">
+        <el-form-item>
+          <el-col :span="16">
+            <div class="add-row">
+              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+            </div>
+            <el-table :data="form.grades" style="width: 100%" border>
+              <el-table-column :label="$t('起始') + billingName + unitName + ' >='">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.start"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column :label="'*' + $t('截止') + billingName + unitName + ' <'">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.end"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('首重') + unitName">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.first_weight"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('单位续重') + unitName">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.unit_weight"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('操作')">
+                <template slot-scope="scope">
+                  <el-button
+                    @click.native.prevent="deleteRow(scope.$index, form.grades)"
+                    class="btn-light-red"
+                    >{{ $t('移除') }}</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-col>
+        </el-form-item>
+        <el-form-item v-if="form.base_mode === 0 && (form.mode === 2 || form.mode === 3)">
+          <el-row :gutter="10">
+            <el-col :span="5">
+              <div>{{ $t('多箱出库最小重量') + unitName }}</div>
+              <el-input
+                v-model="form.multi_box_min_weight"
+                :placeholder="$t('请输入内容')"
+              ></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </div>
       <!-- 包裹重量向上取值 -->
       <el-form-item>
         <el-row :gutter="10">
@@ -480,6 +531,10 @@ export default {
         {
           id: 4,
           name: this.$t('多级续重模式')
+        },
+        {
+          id: 5,
+          name: this.$t('阶梯首重续重模式')
         }
       ],
       volumnData: [

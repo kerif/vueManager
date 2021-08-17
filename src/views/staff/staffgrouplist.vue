@@ -3,7 +3,9 @@
     <div class="select-box">
       <div class="bottom-sty">
         <!-- 删除 -->
-        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+        <el-button class="btn-light-red" size="small" @click="deleteData">{{
+          $t('删除')
+        }}</el-button>
       </div>
       <div class="searchGroup">
         <search-group v-model="page_params.keyword" @search="goSearch"></search-group>

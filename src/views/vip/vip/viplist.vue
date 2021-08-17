@@ -2,9 +2,15 @@
   <div class="vip-list-container">
     <div class="bottom-sty">
       <div>
-        <el-button size="small" @click="forbidLogin(0)">{{ $t('禁止登录') }}</el-button>
-        <el-button size="small" @click="forbidLogin(1)">{{ $t('允许登录') }}</el-button>
-        <el-button size="small" @click="deleteData">{{ $t('删除') }}</el-button>
+        <el-button class="btn-orangey-red" size="small" @click="forbidLogin(0)">{{
+          $t('禁止登录')
+        }}</el-button>
+        <el-button class="btn-blue-green" size="small" @click="forbidLogin(1)">{{
+          $t('允许登录')
+        }}</el-button>
+        <el-button class="btn-light-red" size="small" @click="deleteData">{{
+          $t('删除')
+        }}</el-button>
         <div class="import-list">
           <el-button size="small" type="success" plain @click="uploadList">{{
             $t('导出清单')

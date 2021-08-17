@@ -245,7 +245,7 @@ export default {
         code: '',
         value: '',
         order_sn: '',
-        valid_time: '',
+        valid_time: 0,
         remark: ''
       },
       detailsForm: {},

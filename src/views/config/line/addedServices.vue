@@ -121,17 +121,21 @@
       v-bind="gridOptions"
     >
       <template #toolbar_buttons>
-        <div style="display: flex; gap: 20px">
-          <el-button size="small" @click="addServices">{{ $t('新增') }}</el-button>
+        <div style="display: flex; gap: 10px">
+          <el-button size="small" type="primary" plain @click="addServices">{{
+            $t('新增')
+          }}</el-button>
           <el-upload
             class="upload-demo"
             action=""
             :http-request="uploadBaleImg"
             :show-file-list="false"
           >
-            <el-button size="small">{{ $t('导入') }}</el-button>
+            <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
           </el-upload>
-          <el-button size="small" @click="exportDataEvent">{{ $t('导出') }}</el-button>
+          <el-button size="small" @click="exportDataEvent" type="success" plain>{{
+            $t('导出')
+          }}</el-button>
         </div>
       </template>
       <template #num1_header="{ column }">
@@ -310,6 +314,8 @@ export default {
                   this.content = this.$t('类型：单位计费重量固定费用 收取方式：强制收取')
                 } else if (ele.type === 5 && ele.is_forced === 1) {
                   this.content = this.$t('类型：单位实际重量固定费用 收取方式：强制收取')
+                } else if (ele.type === 6 && ele.is_forced === 1) {
+                  this.content = this.$t('类型：申报价值比例 收取方式：强制收取')
                 } else if (ele.type === 1 && ele.is_forced === 0) {
                   this.content = this.$t('类型：运费比例 收取方式：自愿勾选')
                 } else if (ele.type === 2 && ele.is_forced === 0) {
@@ -320,6 +326,10 @@ export default {
                   this.content = this.$t('类型：单位计费重量固定费用 收取方式：自愿勾选')
                 } else if (ele.type === 5 && ele.is_forced === 0) {
                   this.content = this.$t('类型：单位实际重量固定费用 收取方式：自愿勾选')
+                } else if (ele.type === 6 && ele.is_forced === 0) {
+                  this.content = this.$t('类型：申报价值比例 收取方式：自愿勾选')
+                } else {
+                  this.content = this.$t(' ')
                 }
                 this.gridOptions.columns.push({
                   field: `service_${ele.id}`,
