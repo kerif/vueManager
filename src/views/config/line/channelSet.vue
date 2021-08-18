@@ -165,6 +165,7 @@ export default {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         if (res.ret) {
           this.landing.docking_type = res.data.express_company_id
+          this.getChannel()
           this.landing.channel_code = res.data.channel_code
         }
       })
