@@ -70,7 +70,8 @@ export default {
       newWarehouseList: [],
       keyValue: 0,
       areaIds: [],
-      areasData: []
+      areasData: [],
+      tmpId: ''
     }
   },
   methods: {
@@ -94,7 +95,7 @@ export default {
       })
     },
     getPartition() {
-      this.$request.getRegionsTem(this.id).then(res => {
+      this.$request.regionTmpDetails(this.tmpId, this.id).then(res => {
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
         if (res.data.areas) {
@@ -261,7 +262,7 @@ export default {
       } else {
         if (this.id) {
           this.$request
-            .updateRegionsTem(this.id, {
+            .updateRegionTmpDetails(this.tmpId, this.id, {
               name: this.ruleForm.name,
               reference_time: this.ruleForm.reference_time,
               areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
@@ -285,7 +286,7 @@ export default {
             })
         } else {
           this.$request
-            .newRegionsTem({
+            .newRegionTmp(this.tmpId, {
               name: this.ruleForm.name,
               reference_time: this.ruleForm.reference_time,
               areas: this.areaIds

@@ -169,7 +169,7 @@ export default {
     getTempalte() {
       this.tableLoading = true
       this.$request
-        .getRegionTemplate({
+        .regionTemplates(this.$route.query.id, {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size
@@ -224,7 +224,7 @@ export default {
             }
           })
         } else {
-          this.$request.deleteRegionsTem(id).then(res => {
+          this.$request.deleteRegionTmp(this.$route.query.id, id).then(res => {
             if (res.ret) {
               this.$notify({
                 title: this.$t('操作成功'),
@@ -246,9 +246,18 @@ export default {
     // 修改资料
     editPartition(id) {
       let status = this.$route.params.id ? 'channel' : 'partition'
-      dialog({ type: 'partitionAddEdit', state: 'edit', id: id, status: status }, () => {
-        this.getList()
-      })
+      dialog(
+        {
+          type: 'partitionAddEdit',
+          state: 'edit',
+          id: id,
+          status: status,
+          tmpId: this.$route.query.id
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 修改开关
     changeTransfer(event, enabled, id) {
