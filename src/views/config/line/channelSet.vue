@@ -81,6 +81,7 @@
                 :placeholder="$t('请选择')"
               >
                 <el-option
+                  style="width: 100%"
                   v-for="item in channelList"
                   :key="item.id"
                   :value="item.code"
@@ -230,16 +231,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 .channel-set-container {
   .main-sty {
     background-color: #fff;
   }
   .el-select {
     width: 300px;
-  }
-  ::v-deep .el-select-dropdown__item {
-    width: 100% !important;
   }
   .landing-container {
     background-color: #fff !important;
