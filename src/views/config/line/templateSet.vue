@@ -59,12 +59,12 @@
     <el-dialog :title="$t('新增')" :visible.sync="dialogVisible" width="35%" @close="clearTmp">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item :label="$t('*请输入模版名称')">
-          <el-input :placeholder="$t('请输入')"></el-input>
+          <el-input v-model="form.name" :placeholder="$t('请输入')"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="confirmAdd">{{ $t('确定') }}</el-button>
+        <el-button type="primary" @click="confirmTmp">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -84,7 +84,7 @@ export default {
       languageData: [],
       dialogVisible: false,
       form: {
-        templateId: ''
+        name: ''
       }
     }
   },
@@ -141,49 +141,30 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        if (this.$route.params.id) {
-          this.$request.regionsDelete(this.$route.params.id, id).then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
-        } else {
-          this.$request.deleteRegionsTem(id).then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
-        }
+        this.$request.deleteTmp(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
-    // 修改资料
     editPartition(id) {
-      let status = this.$route.params.id ? 'channel' : 'partition'
-      dialog({ type: 'partitionAddEdit', state: 'edit', id: id, status: status }, () => {
-        this.getList()
-      })
+      // let status = this.$route.params.id ? 'channel' : 'partition'
+      this.$router.push({ name: 'partition', query: { id: id } })
+      // dialog({ type: 'partition', id: id }, () => {
+      //   this.getList()
+      // })
     },
     // 获取支持语言
     getLanguageList() {
@@ -213,27 +194,31 @@ export default {
     clearTmp() {
       this.form.templateId = ''
     },
-    confirmAdd() {
-      if (!this.form.templateId) {
-        return this.$message.error(this.$t('模版不能为空'))
+    confirmTmp() {
+      if (!this.form.name) {
+        return this.$message.error(this.$t('名称不能为空'))
       }
-      this.$request.submitTmp(this.$route.params.id, this.form.templateId).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.dialogVisible = false
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-          // this.getList()
-        }
-      })
+      this.$request
+        .newTmp({
+          name: this.form.name
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.dialogVisible = false
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+            // this.getList()
+          }
+        })
     }
   },
   computed: {

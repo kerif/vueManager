@@ -182,6 +182,10 @@ exports.newGroupLang = params => {
 exports.updateDocking = (id, params) => {
   return $form.put(`express-lines/${id}/docking-config`, params)
 }
+// 配置 新路线 面单对接 获取渠道代码数据
+exports.channelCode = id => {
+  return $form.get(`express-lines/channel-code-list/${id}`)
+}
 // 配置 新路线 开启或关闭
 exports.lineGroupEnabled = (id, status) => {
   return $form.put(`express-lines/groups/${id}/status/${status}`)
@@ -287,16 +291,44 @@ exports.regionCountry = id => {
   return $form.get(`countries/express-lines/${id}`)
 }
 //  分区 获取预设分区表
-exports.getRegionTemplate = params => {
-  return $form.get(`express-lines/region-templates`, { params })
+exports.getRegionTemplate = id => {
+  return $form.get(`express-lines/region-templates/${id}`)
 }
 // 分区 选择模版
 exports.submitTmp = (id, tmpId) => {
   return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
 }
+// 模版列表
+exports.regionTemplates = id => {
+  return $form.get(`express-lines/region-templates/${id}/regions`)
+}
+// 模版 获取详情
+exports.regionTmpDetails = (tmpId, id) => {
+  return $form.get(`express-lines/region-templates/${tmpId}/regions/${id}`)
+}
+// 模版 更新
+exports.updateRegionTmpDetails = (tmpId, id, params) => {
+  return $form.put(`express-lines/region-templates/${tmpId}/regions/${id}`, params)
+}
+// 模版 删除
+exports.deleteRegionTmp = (tmpId, id) => {
+  return $form.delete(`express-lines/region-templates/${tmpId}/regions/${id}`)
+}
+// 模版 新建
+exports.newRegionTmp = (id, params) => {
+  return $form.post(`express-lines/region-templates/${id}/regions`, params)
+}
 // 分区 模版列表
 exports.lineRegion = params => {
   return $form.get('express-lines/region-templates', { params })
+}
+// 新建模版
+exports.newTmp = params => {
+  return $form.post('express-lines/region-templates', params)
+}
+// 模版 删除
+exports.deleteTmp = id => {
+  return $form.delete(`express-lines/region-templates/${id}`)
 }
 // 配置 新路线 获取价格表
 exports.getPriceTable = (id, params) => {
