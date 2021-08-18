@@ -37,7 +37,8 @@
       </div>
     </div>
     <div class="content" v-if="growthDetails.status !== 0">
-      <h4>{{ $t('审核通过信息') }}</h4>
+      <h4 v-if="growthDetails.status === 1">{{ $t('审核通过信息') }}</h4>
+      <h4 v-if="growthDetails.status === 2">{{ $t('审核拒绝信息') }}</h4>
       <div class="user">
         <div>{{ $t('审核人员') }}：{{ growthDetails.operator }}</div>
         <div>{{ $t('备注') }}：{{ growthDetails.customer_remark }}</div>
