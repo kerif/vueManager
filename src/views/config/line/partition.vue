@@ -195,9 +195,12 @@ export default {
     // 新增
     addPartition() {
       let status = this.$route.params.id ? 'channel' : 'partition'
-      dialog({ type: 'partitionAddEdit', state: 'add', status: status }, () => {
-        this.getList()
-      })
+      dialog(
+        { type: 'partitionAddEdit', tmpId: this.$route.query.id, state: 'add', status: status },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 删除
     deletePart(id) {
