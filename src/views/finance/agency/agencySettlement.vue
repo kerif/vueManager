@@ -2,24 +2,28 @@
   <div class="agency-list-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane :label="$t('全部')" name="first">
-        <dropdown></dropdown>
-        <All :allData="all" @subprice="fn" />
+        <auditData
+          :allData="all"
+          @subprice="fn"
+          :totalSettlement="totalSettlement"
+          @passval="getList"
+        />
       </el-tab-pane>
       <el-tab-pane :label="$t('待审核')" name="second">
-        <dropdown></dropdown>
-        <All :allData="resultData" @subprice="fn" />
+        <auditData :allData="resultData" @subprice="fn" :totalSettlement="totalSettlement" />
       </el-tab-pane>
       <el-tab-pane :label="$t('已审核')" name="third">
-        <dropdown></dropdown>
-        <All :allData="passData" @subprice="fn" />
+        <auditData :allData="passData" @subprice="fn" :totalSettlement="totalSettlement" />
       </el-tab-pane>
     </el-tabs>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
 <script>
-import All from './table.vue'
-import dropdown from './dropdown.vue'
+import auditData from './auditData.vue'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -27,15 +31,18 @@ export default {
       all: [],
       resultData: [],
       passData: [],
-      value: ''
+      page_params: {},
+      totalSettlement: 1
     }
   },
+  mixins: [pagination],
   components: {
-    All,
-    dropdown
+    auditData,
+    NlePagination
   },
   created() {
-    this.getAllData()
+    this.getList()
+    this.getSettleAccounts()
   },
   methods: {
     handleClick(tab, event) {
@@ -49,19 +56,29 @@ export default {
         }
       })
     },
-    getAllData() {
-      this.$request.PendingReview().then(res => {
-        console.log(res)
-        if (res.ret) {
-          this.all = res.data
-          this.resultData = this.all.filter(item => item.status_name === '待审核')
-          console.log(this.resultData)
-          this.passData = this.all.filter(
-            item => item.status_name === '审核通过' || item.status_name === '审核拒绝'
-          )
-          console.log(this.passData)
-        }
-      })
+    getList(param_list) {
+      console.log(param_list, 'param_list')
+      this.$request
+        .PendingReview({
+          page: this.page_params.page,
+          size: this.page_params.size,
+          ...param_list
+        })
+        .then(res => {
+          console.log(res)
+          console.log(param_list)
+          if (res.ret) {
+            this.all = res.data
+            this.resultData = this.all.filter(item => item.status_name === '待审核')
+            console.log(this.resultData)
+            this.passData = this.all.filter(
+              item => item.status_name === '审核通过' || item.status_name === '审核拒绝'
+            )
+            console.log(this.passData)
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
     },
     fn(id) {
       console.log(id)
@@ -69,6 +86,14 @@ export default {
         name: 'viewDetails',
         params: {
           id: id
+        }
+      })
+    },
+    getSettleAccounts() {
+      this.$request.SettleAccounts().then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.totalSettlement = res.data
         }
       })
     }

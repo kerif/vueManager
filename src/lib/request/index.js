@@ -693,16 +693,24 @@ exports.AutoDeductions = params => {
   return $form.get('money-deductions/user-search', { params })
 }
 // 代理佣金计算 全部
-exports.PendingReview = () => {
-  return $form.get('agents/withdraws')
+exports.PendingReview = params => {
+  return $form.get('agents/withdraws', { params })
 }
 // 代理佣金计算 详情
 exports.Review = id => {
   return $form.get(`agents/withdraws/${id}`)
 }
 // 代理佣金计算 待结算
-exports.NoSettled = () => {
-  return $form.get('agents/deal-orders')
+exports.NoSettled = params => {
+  return $form.get('agents/deal-orders', { params })
+}
+// 代理佣金计算 待结算数量
+exports.SettleAccounts = () => {
+  return $form.get('agents/commissions/settled-count')
+}
+// 代理佣金计算 待结算初始化信息
+exports.InitSettle = params => {
+  return $form.get('agents/deal-order-init', { params })
 }
 // 代理佣金计算 一键结算
 exports.ClickSettlement = () => {

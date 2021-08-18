@@ -4,33 +4,57 @@
       <el-row :gutter="10">
         <el-col :span="4">
           <!-- 下拉 -->
-          <el-select v-model="value" :placeholder="$t('请选择订单状态')" size="small">
-            <el-option :label="$t('请选择订单状态')" :value="$t('选项一')"> </el-option>
-            <el-option :label="$t('已发货')" :value="$t('选项二')"> </el-option>
-            <el-option :label="$t('已支付')" :value="$t('选项三')"> </el-option>
-            <el-option :label="$t('已签收')" :value="$t('选项四')"> </el-option>
+          <el-select v-model="page_params.status" :placeholder="$t('请选择结算状态')" size="small">
+            <el-option
+              v-for="item in settledData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
           </el-select>
         </el-col>
         <!--  -->
-        <el-col :span="3">
-          <el-select v-model="value1" :placeholder="$t('请选择客户ID')" size="small">
-            <el-option> </el-option>
-          </el-select>
+        <el-col :span="4">
+          <el-autocomplete
+            :fetch-suggestions="queryCNSearch"
+            @select="handleSelect"
+            :placeholder="$t('请输入客户ID')"
+            v-model="page_params.user_id"
+            :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
+            size="small"
+          >
+          </el-autocomplete>
         </el-col>
         <!-- 搜索 -->
-        <el-col :span="4">
-          <el-input placeholder="请选择提交时间范围" v-model="input" clearable size="small">
-          </el-input>
+        <el-col :span="5">
+          <!-- <el-input placeholder="请选择提交时间范围" v-model="time" clearable size="small">
+          </el-input> -->
+          <el-date-picker
+            size="small"
+            class="selectTime"
+            v-model="timeList"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            :range-separator="$t('至')"
+            :start-placeholder="$t('提交开始日期')"
+            :end-placeholder="$t('提交结束日期')"
+            @change="fm"
+          >
+          </el-date-picker>
         </el-col>
         <el-col :span="3">
-          <el-button size="small" class="searchBtn">搜索</el-button>
+          <el-button size="small" class="searchBtn" @click.native="getList">{{
+            $t('搜索')
+          }}</el-button>
         </el-col>
         <el-col :span="3">
           <el-button size="small" class="unsettled" type="primary" @click="oneSettlement">
             {{ $t('一键结算') }}
           </el-button>
         </el-col>
-        <el-col :span="5" :offset="2">
+        <el-col :span="5">
           <search-group
             v-model="page_params.keyword"
             @search="goSearch"
@@ -74,33 +98,64 @@
         </el-table-column>
       </el-table>
     </div>
-    <nle-pagination :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
 <script>
+import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   data() {
     return {
-      value: '',
-      settleData: {}
+      page_params: {
+        user_id: '',
+        status: '',
+        begin_date: '',
+        end_date: ''
+      },
+      customerID: '',
+      time: '',
+      settleData: [],
+      hasStore: false,
+      shipNum: '', // 通过快递单号拉取的包裹id
+      settledData: [],
+      timeList: []
     }
   },
   components: {
-    NlePagination
+    NlePagination,
+    SearchGroup
   },
   created() {
-    this.getSettled()
+    this.getList()
+    this.goInit()
   },
   mixins: [pagination],
   methods: {
-    getSettled() {
-      this.$request.NoSettled().then(res => {
-        console.log(res)
-        this.settleData = res.data
-      })
+    // 待结算
+    getList() {
+      console.log(this.page_params.keyword)
+      this.$request
+        .NoSettled({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size,
+          user_id: this.page_params.user_id,
+          status: this.page_params.status,
+          begin_date: this.timeList[0],
+          end_date: this.timeList[1]
+        })
+        .then(res => {
+          console.log(res)
+          console.log(this.page_params.keyword)
+          if (res.ret) {
+            this.settleData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
     },
     oneSettlement() {
       this.$request.ClickSettlement().then(res => {
@@ -136,6 +191,40 @@ export default {
           })
         }
       })
+    },
+    // 客户id
+    queryCNSearch(queryString, callback) {
+      console.log(this.page_params.user_id)
+      var list = [{}]
+      this.$request
+        .getUsers({
+          keyword: this.page_params.user_id.toString()
+        })
+        .then(res => {
+          for (let i of res.data) {
+            i.value = i.id + '---' + i.name
+          }
+          list = res.data
+          callback && callback(list)
+        })
+    },
+    // 客户id
+    handleSelect(item) {
+      console.log(item)
+      this.supplierId = item.id
+      this.userId = item.id
+      this.supplierName = item.name
+      this.page_params.user_id = item.id
+      this.getAreaLocation()
+    },
+    goInit() {
+      this.$request.InitSettle().then(res => {
+        this.settledData = res.data.status_list
+        console.log(res)
+      })
+    },
+    fm() {
+      console.log(this.timeList)
     }
   }
 }
@@ -147,9 +236,13 @@ export default {
     margin-top: 20px;
     .searchBtn {
       width: 120px;
+      margin-left: 10px;
     }
     .unsettled {
       width: 120px;
+    }
+    .selectTime {
+      width: 240px !important;
     }
   }
   .data-list {

@@ -23,8 +23,10 @@
         <div class="rightInfo">
           <!-- <h1>待审核</h1> -->
           <template>
-            <h1 v-if="detailData.status_name === '待审核'" class="">待审核</h1>
-            <h1 v-else><span class="">审核通过</span>/<span class="">审核拒绝</span></h1>
+            <h1 v-if="detailData.status_name === '待审核'" class="review_color">待审核</h1>
+            <h1 v-else>
+              <span class="reject_color">审核拒绝</span>/<span class="pass_color">审核通过</span>
+            </h1>
           </template>
         </div>
       </div>
@@ -103,14 +105,16 @@
             <el-row>
               <el-col>
                 <div class="positive">
-                  <span>身份证反面</span>
+                  <img v-if="info.back_img !== ''" :src="info.back_img" alt="" />
+                  <span v-else>身份证反面</span>
                 </div>
               </el-col>
             </el-row>
             <el-row>
               <el-col>
                 <div class="reverse">
-                  <span>身份证正面</span>
+                  <img v-if="info.face_img !== ''" :src="info.face_img" alt="" />
+                  <span v-else>身份证正面</span>
                 </div>
               </el-col>
             </el-row>
@@ -126,10 +130,13 @@
       </div>
       <h3>审核备注</h3>
       <div class="remarks-card">
-        <div class="text">
-          {{ detailData.remark }}
+        <div v-if="detailData.status_name === '待审核'" class="condition">该记录还未审核</div>
+        <div v-else>
+          <div class="text">
+            {{ detailData.remark }}
+          </div>
+          <div class="screenshot"></div>
         </div>
-        <div class="screenshot"></div>
       </div>
     </div>
     <div class="clearfix">
@@ -138,13 +145,13 @@
         <el-row :gutter="20">
           <!-- 提现方式 -->
           <el-col :span="5">
-            <span class="withdrawal">提现金额¥</span>
-            <span class="bank">{{ detailData.amount }}</span>
+            <span class="withdrawal">提现金额</span>
+            <span class="withdrawal_amount">{{ detailData.amount }}</span>
           </el-col>
           <!-- 提现金额¥ -->
           <el-col :span="5" :offset="10">
             <span class="withdrawal">确认金额</span>
-            <span>{{ detailData.confirm_amount }}</span>
+            <span class="confirm_amount">{{ detailData.confirm_amount }}</span>
           </el-col>
         </el-row>
         <div class="text">
@@ -160,34 +167,21 @@
         </div>
       </el-card>
       <el-row class="auditStatus">
-        <el-button type="danger">审核拒绝</el-button>
-        <el-button type="primary" @click="showDialog = true">审核通过</el-button>
+        <el-button type="danger" @click="showDialog = true">审核拒绝</el-button>
+        <el-button type="primary" @click="viewApproved">审核通过</el-button>
       </el-row>
     </div>
-    <audit-reject :show-dialog.sync="showDialog" />
+    <confirm-audit :show-dialog.sync="showDialog" />
   </div>
 </template>
 
 <script>
-import auditReject from '@/components/dialog/auditReject'
+import confirmAudit from '@/components/dialog/confirmAudit'
 export default {
   data() {
     return {
-      statusData: [
-        {
-          id: 0,
-          name: this.$t('待审核')
-        },
-        {
-          id: 1,
-          name: this.$t('审核通过')
-        },
-        {
-          id: 2,
-          name: this.$t('审核拒绝')
-        }
-      ],
       showDialog: false,
+      showCancelDialog: false,
       detailData: {},
       info: {},
       charge: {}
@@ -197,7 +191,7 @@ export default {
     this.getReview()
   },
   components: {
-    auditReject
+    confirmAudit
   },
   methods: {
     getReview() {
@@ -207,6 +201,10 @@ export default {
         this.info = res.data.bank_card_info || {}
         this.charge = res.data.commissions
       })
+    },
+    // 审核通过
+    viewApproved() {
+      this.showDialog = true
     }
   }
 }
@@ -240,6 +238,15 @@ export default {
       }
       .rightInfo {
         width: 150px;
+        .review_color {
+          color: red;
+        }
+        .reject_color {
+          color: red;
+        }
+        .pass_color {
+          color: green;
+        }
       }
     }
     .info-card {
@@ -318,9 +325,13 @@ export default {
     }
     .remarks-card {
       width: 340px;
+      height: 300px;
       font-size: 14px;
       background-color: #fff;
       padding: 20px 0px;
+      .condition {
+        text-align: center;
+      }
       .text {
         padding: 5px 40px;
       }
@@ -347,6 +358,16 @@ export default {
       .withdrawal {
         display: inline-block;
         width: 100px;
+      }
+      .withdrawal_amount {
+        color: red;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .confirm_amount {
+        color: blue;
+        font-size: 24px;
+        font-weight: bold;
       }
       /deep/.el-table th > .cell {
         text-align: center;
