@@ -84,7 +84,7 @@
                   v-for="item in channelList"
                   :key="item.id"
                   :value="item.code"
-                  :label="item.name"
+                  :label="item.code + '----' + item.name"
                 >
                 </el-option>
               </el-select>
@@ -234,6 +234,12 @@ export default {
 .channel-set-container {
   .main-sty {
     background-color: #fff;
+  }
+  .el-select {
+    width: 300px;
+  }
+  ::v-deep .el-select-dropdown__item {
+    width: 100% !important;
   }
   .landing-container {
     background-color: #fff !important;

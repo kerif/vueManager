@@ -172,6 +172,7 @@ export default {
             this.ruleForm.ids = res.data.member_levels.map(item => item.id)
           } else if (res.data.scope === 3) {
             this.customerList = res.data.users
+            this.ruleForm.ids = this.customerList.map(item => item.id)
           }
         }
       })

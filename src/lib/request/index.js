@@ -220,7 +220,7 @@ exports.updateRegionsLang = (id, regionId, params) => {
 }
 // 配置 新路线 分区列表 开启或关闭
 exports.regionsEnabled = (id, regionsId, status) => {
-  return $form.put(`express-lines/${id}/regions/${regionsId}/status/${status}`)
+  return $form.put(`express-lines/region-templates/${id}/regions/${regionsId}/status/${status}`)
 }
 // 配置 新路线 分区列表 详细
 exports.getRegionDetails = (id, regionId) => {

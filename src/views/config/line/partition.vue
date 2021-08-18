@@ -261,9 +261,7 @@ export default {
     },
     // 修改开关
     changeTransfer(event, enabled, id) {
-      console.log(typeof event, '我是event')
-      console.log(event, 'event')
-      this.$request.regionsEnabled(this.$route.params.id, id, Number(event)).then(res => {
+      this.$request.regionsEnabled(this.$route.query.id, id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
