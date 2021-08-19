@@ -42,7 +42,7 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
-              @change="changeTransfer($event, scope.row.enabled, scope.row.id)"
+              @change="changeTransfer(scope.row.id, scope.row.enabled)"
               :active-text="$t('开')"
               :inactive-text="$t('关')"
               :active-value="1"
@@ -133,64 +133,54 @@ export default {
   },
   created() {},
   methods: {
-    getList() {
+    // 获取分区
+    async getList() {
+      let res = {}
+      this.tableLoading = true
       if (this.$route.params.id) {
-        this.getRulesTempalate()
+        // 获取分区模板
+        res = await this.$request.getRegions(this.$route.params.id, { ...this.page_params })
       } else {
-        this.getTempalte()
+        // 获取预设分区模板
+        res = await this.$request.regionTemplates(this.$route.query.id, { ...this.page_params })
+      }
+      this.tableLoading = false
+      if (res.ret) {
+        this.addressList = res.data
+        this.page_params.page = res.meta.current_page
+        this.page_params.total = res.meta.total
+        this.$nextTick(() => {
+          this.$refs.table.doLayout()
+        })
+      } else {
+        this.$notify({
+          title: this.$t('操作失败'),
+          message: res.msg,
+          type: 'warning'
+        })
       }
     },
-    getRulesTempalate() {
-      this.tableLoading = true
-      this.$request
-        .getRegions(this.$route.params.id, {
-          keyword: this.page_params.keyword,
-          page: this.page_params.page,
-          size: this.page_params.size
+    // 修改开关
+    async changeTransfer(id, status) {
+      let res = {}
+      if (this.$route.params.id) {
+        res = await this.$request.regionsEnabled(this.$route.params.id, id, status)
+      } else {
+        res = await this.$request.presetRegionsEnabled(this.$route.query.id, id, status)
+      }
+      if (res.ret) {
+        this.$notify({
+          type: 'success',
+          title: this.$t('操作成功'),
+          message: res.msg
         })
-        .then(res => {
-          this.tableLoading = false
-          if (res.ret) {
-            this.addressList = res.data
-            this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
-            this.$nextTick(() => {
-              this.$refs.table.doLayout()
-            })
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
+      } else {
+        this.$message({
+          message: res.msg,
+          type: 'error'
         })
-    },
-    getTempalte() {
-      this.tableLoading = true
-      this.$request
-        .regionTemplates(this.$route.query.id, {
-          keyword: this.page_params.keyword,
-          page: this.page_params.page,
-          size: this.page_params.size
-        })
-        .then(res => {
-          this.tableLoading = false
-          if (res.ret) {
-            this.addressList = res.data
-            this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
-            this.$nextTick(() => {
-              this.$refs.table.doLayout()
-            })
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      }
+      this.getList()
     },
     // 新增
     addPartition() {
@@ -208,40 +198,25 @@ export default {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
-      }).then(() => {
+      }).then(async () => {
+        let res = {}
         if (this.$route.params.id) {
-          this.$request.regionsDelete(this.$route.params.id, id).then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
+          res = await this.$request.regionsDelete(this.$route.params.id, id)
         } else {
-          this.$request.deleteRegionTmp(this.$route.query.id, id).then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
+          res = await this.$request.deleteRegionTmp(this.$route.query.id, id)
+        }
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
           })
         }
       })
@@ -261,25 +236,6 @@ export default {
           this.getList()
         }
       )
-    },
-    // 修改开关
-    changeTransfer(event, enabled, id) {
-      this.$request.regionsEnabled(this.$route.query.id, id, Number(event)).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-          this.getList()
-        }
-      })
     },
     // 获取支持语言
     getLanguageList() {

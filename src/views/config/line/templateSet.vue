@@ -160,11 +160,7 @@ export default {
       })
     },
     editPartition(id) {
-      // let status = this.$route.params.id ? 'channel' : 'partition'
-      this.$router.push({ name: 'partition', query: { id: id } })
-      // dialog({ type: 'partition', id: id }, () => {
-      //   this.getList()
-      // })
+      this.$router.push({ name: 'partition', query: { id } })
     },
     // 获取支持语言
     getLanguageList() {

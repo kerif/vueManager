@@ -220,7 +220,7 @@ exports.updateRegionsLang = (id, regionId, params) => {
 }
 // 配置 新路线 分区列表 开启或关闭
 exports.regionsEnabled = (id, regionsId, status) => {
-  return $form.put(`express-lines/region-templates/${id}/regions/${regionsId}/status/${status}`)
+  return $form.put(`express-lines/${id}/regions/${regionsId}/status/${status}`)
 }
 // 配置 新路线 分区列表 详细
 exports.getRegionDetails = (id, regionId) => {
@@ -301,6 +301,10 @@ exports.submitTmp = (id, tmpId) => {
 // 模版列表
 exports.regionTemplates = id => {
   return $form.get(`express-lines/region-templates/${id}/regions`)
+}
+// 模版 开启或关闭
+exports.presetRegionsEnabled = (id, regionsId, status) => {
+  return $form.put(`express-lines/region-templates/${id}/regions/${regionsId}/status/${status}`)
 }
 // 模版 获取详情
 exports.regionTmpDetails = (tmpId, id) => {
