@@ -21,9 +21,32 @@
       </el-checkbox-group>
     </div>
     <div class="item-label">
-      <p>{{ $t('每张订单最高可用积分') + ':' }}</p>
-      <el-input v-model="formData.max_point" style="width: 150px"></el-input>
-      <div class="tips">{{ '*' + $t('为空则表示不限制') }}</div>
+      <p>{{ $t('每张订单抵扣限制') + ':' }}</p>
+      <el-radio-group
+        v-model="formData.decrease_type"
+        class="deduction-limit"
+        @change="switchRadio"
+      >
+        <el-radio :label="1">{{ $t('不限制') }}</el-radio>
+        <el-radio :label="2">
+          {{ $t('限制使用积分') }}
+          <el-input
+            v-model="numberValue"
+            :disabled="formData.decrease_type !== 2"
+            style="width: 200px; margin-left: 10px"
+            :placeholder="$t('请输入限制积分数值')"
+          ></el-input>
+        </el-radio>
+        <el-radio :label="3">
+          {{ $t('限制抵扣运费比例') }}
+          <el-input
+            v-model="proportion"
+            :disabled="formData.decrease_type !== 3"
+            style="width: 200px; margin-left: 10px"
+            :placeholder="$t('请输入限制抵扣比例')"
+          ></el-input>
+        </el-radio>
+      </el-radio-group>
     </div>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -38,8 +61,11 @@ export default {
       formData: {
         amount: '',
         included_fee: [],
-        max_point: ''
+        decrease_type: 0,
+        max_value: ''
       },
+      numberValue: '',
+      proportion: '',
       feeList: [],
       checkedList: [],
       localization: {}
@@ -69,15 +95,24 @@ export default {
     getDecreaseDetails() {
       this.$request.getDecreaseDetails().then(res => {
         this.formData.amount = res.data.amount
-        this.formData.max_point = res.data.max_point
+        this.formData.decrease_type = res.data.decrease_type
         this.formData.included_fee = res.data.included_fee
         if (res.data.included_fee) {
           this.checkedList = res.data.included_fee
             .filter(item => +item.checked)
             .map(item => item.id)
         }
+        if (res.data.decrease_type === 2) {
+          this.numberValue = res.data.max_value
+        } else if (res.data.decrease_type === 3) {
+          this.proportion = res.data.max_value
+        }
         this.localization = res.localization
       })
+    },
+    switchRadio() {
+      this.numberValue = ''
+      this.proportion = ''
     },
     submit() {
       let included_fee = this.feeList.map(item => {
@@ -88,6 +123,11 @@ export default {
           ...item
         }
       })
+      if (this.formData.decrease_type === 2) {
+        this.formData.max_value = this.numberValue
+      } else if (this.formData.decrease_type === 3) {
+        this.formData.max_value = this.proportion
+      }
       this.$request
         .updateDecrease({
           ...this.formData,
@@ -112,7 +152,6 @@ export default {
     },
     clearn() {
       this.formData.amount = ''
-      this.formData.max_point = ''
       this.formData.included_fee = []
       this.checkedList = []
     },
@@ -130,6 +169,11 @@ export default {
   }
   .item-label {
     padding: 10px 0;
+  }
+  .deduction-limit {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
   }
   .checked-list {
     display: grid;
