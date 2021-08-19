@@ -173,6 +173,7 @@ export default {
   .deduction-limit {
     display: flex;
     gap: 10px;
+    align-items: flex-start;
     flex-direction: column;
   }
   .checked-list {
