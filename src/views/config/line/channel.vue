@@ -638,19 +638,6 @@ export default {
         }
       })
     },
-    // 修改线路
-    editLine(id) {
-      localStorage.setItem('add', '')
-      this.$router.push({
-        name: 'channelLineEdit',
-        params: {
-          id: id
-        },
-        query: {
-          state: 'edit'
-        }
-      })
-    },
     // 拼团配置
     groupSet(id) {
       this.groupId = id
@@ -674,8 +661,20 @@ export default {
     },
     // 新增
     addNew() {
-      console.log(this.lineId, '1111')
       this.$router.push({ name: 'channelLineAdd', query: { channelId: this.lineId, state: 'add' } })
+    },
+    // 修改线路
+    editLine(id) {
+      localStorage.setItem('add', '')
+      this.$router.push({
+        name: 'channelLineEdit',
+        params: {
+          id: id
+        },
+        query: {
+          state: 'edit'
+        }
+      })
     },
     // 删除
     deleteLine(id) {
