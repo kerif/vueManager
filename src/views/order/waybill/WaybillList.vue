@@ -632,6 +632,12 @@
                   {{ $t('加入发货单') }}
                 </el-dropdown-item>
                 <el-dropdown-item
+                  v-if="(activeName === '3' || activeName === '4') && scope.row.boxes_count === 2"
+                  @click.native="multiLogisticsDialog(scope.row.id)"
+                >
+                  {{ $t('更新多箱物流') }}
+                </el-dropdown-item>
+                <el-dropdown-item
                   v-if="activeName === '3' && scope.row.shipment_sn"
                   @click.native="removeShip(scope.row.id)"
                   >{{ $t('移除发货单') }}</el-dropdown-item
@@ -1072,7 +1078,9 @@ export default {
       hasFilterCondition: false,
       page_params: {
         size: 20
-      }
+      },
+      type: '',
+      box: []
     }
   },
   activated() {
@@ -1488,6 +1496,19 @@ export default {
             })
           }
         })
+    },
+    multiLogisticsDialog(id) {
+      dialog(
+        {
+          type: 'addCompany',
+          orderId: id,
+          box: this.box,
+          state: 'multiBox'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 打印标签
     getLabel(id) {
