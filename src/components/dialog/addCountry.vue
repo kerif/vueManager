@@ -59,7 +59,7 @@ export default {
     },
     // queryCNSearch (queryString, cb) {
     //   let list = this.CNList
-    //   let result = queryString ? list.filter(this.createFilter(queryString)) : list
+    //   let result = queryString ? list.(this.createFilter(queryString)) : list
     //   cb(result)
     // },
     // queryENSearch (queryString, cb) {

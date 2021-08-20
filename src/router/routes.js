@@ -54,6 +54,16 @@ const reviewFinance = loadonDemand('finance/reviewFinance')
 const selfSettlement = loadonDemand('finance/selfSettlement')
 // 财务 自提点佣金结算 结算记录
 const recordDetails = loadonDemand('finance/recordDetails')
+// 财务 代理佣金结算
+const agencySettlement = loadonDemand('finance/agency/agencySettlement')
+// 财务 查看详细
+const viewDetails = loadonDemand('finance/agency/viewDetails')
+// 财务 代理结算
+const agencyCommission = loadonDemand('finance/agency/agencyCommission')
+// 财务 发票管理
+const invoiceManage = loadonDemand('finance/invoice/invoiceManage')
+// 财务 发票详情
+const invoiceDetails = loadonDemand('finance/invoice/invoiceDetails')
 // 配置 路线列表
 // const LineList = loadonDemand('config/line/LineList')
 // 新路线
@@ -1485,6 +1495,64 @@ export default [
               level: 3,
               name: '审核',
               parent: '/finance/orderReview'
+            }
+          },
+          {
+            path: '/finance/agency',
+            name: 'agencySettlement',
+            component: agencySettlement,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '代理佣金结算'
+            }
+          },
+          {
+            path: '/finance/agency/viewDetails/:id',
+            name: 'viewDetails',
+            component: viewDetails,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '查看详细',
+              parent: '/finance/agency'
+            }
+          },
+          {
+            path: '/finance/agency/agencyCommission/:id',
+            name: 'agencyCommission',
+            component: agencyCommission,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '代理结算',
+              parent: '/finance/agency'
+            }
+          },
+          {
+            path: '/finance/invoice',
+            name: 'invoiceManage',
+            component: invoiceManage,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '发票管理'
+            }
+          },
+          {
+            path: '/finance/invoice/invoiceDetails/:id',
+            name: 'invoiceDetails',
+            component: invoiceDetails,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '发票详情',
+              parent: '/finance/invoice'
             }
           }
         ]

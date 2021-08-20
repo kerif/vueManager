@@ -740,6 +740,38 @@ exports.addDeductions = params => {
 exports.AutoDeductions = params => {
   return $form.get('money-deductions/user-search', { params })
 }
+// 代理佣金计算 全部
+exports.PendingReview = params => {
+  return $form.get('agents/withdraws', { params })
+}
+// 代理佣金计算 详情
+exports.Review = id => {
+  return $form.get(`agents/withdraws/${id}`)
+}
+// 代理佣金计算 待结算
+exports.NoSettled = params => {
+  return $form.get('agents/deal-orders', { params })
+}
+// 代理佣金计算 待结算数量
+exports.SettleAccounts = () => {
+  return $form.get('agents/commissions/settled-count')
+}
+// 代理佣金计算 待结算初始化信息
+exports.InitSettle = params => {
+  return $form.get('agents/deal-order-init', { params })
+}
+// 代理佣金计算 一键结算id
+exports.ClickSettlement = params => {
+  return $form.put('agents/commissions/settled-all', params)
+}
+// 代理佣金计算 审核通过提现申请
+exports.approveWithdraw = (id, withdrawsId) => {
+  return $form.put(`agents/${id}/withdraws/${withdrawsId}/approved`)
+}
+// 代理佣金计算 审核拒绝提现申请
+exports.refusedWithdraw = (id, withdrawsId) => {
+  return $form.put(`agents/${id}/withdraws/${withdrawsId}/refused`)
+}
 // 代理管理 审核拒绝
 exports.rechargeReject = (id, params) => {
   return $form.put(`recharge-records/${id}/refused`, params)

@@ -9430,6 +9430,11 @@ vuex@^3.0.1:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.6.2.tgz#236bc086a870c3ae79946f107f16de59d5895e71"
 
+vxe-table@^3.3.9:
+  version "3.3.10"
+  resolved "https://registry.nlark.com/vxe-table/download/vxe-table-3.3.10.tgz#83e4e2b91fcc5657119c070e0f2763671d1018b5"
+  integrity sha1-g+TiuR/MVlcRnAcODydjZx0QGLU=
+
 w3c-hr-time@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/w3c-hr-time/-/w3c-hr-time-1.0.2.tgz#0a89cdf5cc15822df9c360543676963e0cc308cd"
@@ -9752,6 +9757,11 @@ ws@^6.0.0, ws@^6.2.1:
   resolved "https://registry.yarnpkg.com/ws/-/ws-6.2.1.tgz#442fdf0a47ed64f59b6a5d8ff130f4748ed524fb"
   dependencies:
     async-limiter "~1.0.0"
+
+xe-utils@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.nlark.com/xe-utils/download/xe-utils-3.3.1.tgz#77af254b12d5ae2d4d3f32c3df7e3a5ccde1fad8"
+  integrity sha1-d68lSxLVri1NPzLD3346XM3h+tg=
 
 xhr@2.4.0:
   version "2.4.0"
