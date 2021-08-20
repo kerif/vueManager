@@ -2910,6 +2910,10 @@ exports.getUsable = (id, params) => {
 exports.getUsableWarehouse = () => {
   return $form.get(`orders/warehouse-simple-list`)
 }
+// 订单 更新多箱物流
+exports.updateMultiLogistics = params => {
+  return $form.put(`orders/update-box-logistics`, params)
+}
 // 订单列表 获取一键打包数据
 exports.getOrderBatch = params => {
   return $form.get(`orders`, { params })
