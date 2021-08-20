@@ -57,9 +57,9 @@
     </div>
     <!-- 表格 -->
     <div class="data-list">
-      <el-table border style="width: 100%" :data="allData">
+      <el-table border style="width: 100%" height="calc(100vh - 270px)" :data="allData">
         <el-table-column type="index" width="50" :label="$t('#')"> </el-table-column>
-        <el-table-column prop="serial_no" :label="$t('流水号')" width="140"> </el-table-column>
+        <el-table-column prop="serial_no" :label="$t('流水号')" width="185"> </el-table-column>
         <el-table-column prop="status" :label="$t('审核状态')">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0" class="noAudit">{{ $t('待审核') }}</span>

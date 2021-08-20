@@ -32,7 +32,7 @@ export default {
       resultData: [],
       passData: [],
       page_params: {},
-      totalSettlement: 1
+      totalSettlement: 0
     }
   },
   mixins: [pagination],

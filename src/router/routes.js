@@ -60,6 +60,10 @@ const agencySettlement = loadonDemand('finance/agency/agencySettlement')
 const viewDetails = loadonDemand('finance/agency/viewDetails')
 // 财务 代理结算
 const agencyCommission = loadonDemand('finance/agency/agencyCommission')
+// 财务 发票管理
+const invoiceManage = loadonDemand('finance/invoice/invoiceManage')
+// 财务 发票详情
+const invoiceDetails = loadonDemand('finance/invoice/invoiceDetails')
 // 配置 路线列表
 // const LineList = loadonDemand('config/line/LineList')
 // 新路线
@@ -1512,6 +1516,29 @@ export default [
               level: 3,
               name: '代理结算',
               parent: '/finance/agency'
+            }
+          },
+          {
+            path: '/finance/invoice',
+            name: 'invoiceManage',
+            component: invoiceManage,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '发票管理'
+            }
+          },
+          {
+            path: '/finance/invoice/invoiceDetails/:id',
+            name: 'invoiceDetails',
+            component: invoiceDetails,
+            id: 706,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '发票详情',
+              parent: '/finance/invoice'
             }
           }
         ]

@@ -1,12 +1,13 @@
 <template>
   <div class="detail-container">
     <div class="leftSide">
-      <h3>客户信息</h3>
+      <h3>{{ $t('客户信息') }}</h3>
       <div class="box-card">
         <div class="leftInfo">
           <el-row :gutter="20">
             <el-col :span="24">
-              <span class="leftWidth">客户ID</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="leftWidth">{{ $t('客户ID') }}</span
+              >&nbsp;&nbsp;&nbsp;&nbsp;
               <span
                 ><i class="idNum">{{ detailData.user.id }}</i
                 >&nbsp;&nbsp;&nbsp;{{ detailData.user.name }}</span
@@ -15,88 +16,93 @@
           </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
-              <span class="leftWidth">流水号</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="leftWidth">{{ $t('流水号') }}</span
+              >&nbsp;&nbsp;&nbsp;&nbsp;
               <span>{{ detailData.serial_no }}</span>
             </el-col>
           </el-row>
         </div>
         <div class="rightInfo">
-          <!-- <h1>待审核</h1> -->
           <template>
-            <h1 v-if="detailData.status_name === '待审核'" class="review_color">待审核</h1>
-            <h1 v-else>
-              <span class="reject_color">审核拒绝</span>/<span class="pass_color">审核通过</span>
+            <h1 v-if="detailData.status_name === '待审核'" class="review_color">
+              {{ $t('待审核') }}
+            </h1>
+            <h1 v-else-if="detailData.status_name === '审核拒绝'" class="reject_color">
+              {{ $t('审核拒绝') }}
+            </h1>
+            <h1 v-else class="pass_color">
+              {{ $t('审核通过') }}
             </h1>
           </template>
         </div>
       </div>
-      <h3>提现信息</h3>
+      <h3>{{ $t('提现信息') }}</h3>
       <div class="info-card">
         <el-row :gutter="20">
           <!-- 提现方式 -->
           <el-col :span="8">
-            <span class="withdrawal">提现方式</span>
+            <span class="withdrawal">{{ $t('提现方式') }}</span>
             <span class="bank">{{ detailData.type }}</span>
           </el-col>
           <!-- 提现金额¥ -->
           <el-col :span="8" :offset="4">
-            <span class="withdrawal">提现金额¥</span>
+            <span class="withdrawal">{{ $t('提现金额¥') }}</span>
             <span>{{ detailData.amount }}</span>
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <!-- 提现方式 -->
+          <!-- 账户名 -->
           <el-col :span="8">
-            <span class="withdrawal">账户名</span>
+            <span class="withdrawal">{{ $t('账户名') }}</span>
             <span>{{ detailData.account }}</span>
           </el-col>
-          <!-- 提现金额¥ -->
+          <!-- 客户备注 -->
           <el-col :span="8" :offset="4">
-            <span class="withdrawal">客户备注：</span>
+            <span class="withdrawal">{{ $t('客户备注：') }}</span>
             <span>{{ detailData.customer_remark }}</span>
           </el-col>
         </el-row>
         <div class="main">
           <div class="leftBank">
             <el-row :gutter="20">
-              <!-- 提现方式 -->
+              <!-- 真实姓名 -->
               <el-col :span="24">
-                <span class="withdrawal">真实姓名</span>
+                <span class="withdrawal">{{ $t('真实姓名') }}</span>
                 <span>{{ info.fullname }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <!-- 提现方式 -->
+              <!-- 银行名称 -->
               <el-col :span="24">
-                <span class="withdrawal">银行名称</span>
+                <span class="withdrawal">{{ $t('银行名称') }}</span>
                 <span>{{ info.bank_name }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <!-- 提现方式 -->
+              <!-- 银行卡号 -->
               <el-col :span="24">
-                <span class="withdrawal">银行卡号</span>
+                <span class="withdrawal">{{ $t('银行卡号') }}</span>
                 <span>{{ info.bank_number }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <!-- 提现方式 -->
+              <!-- 手机号码 -->
               <el-col :span="24">
-                <span class="withdrawal">手机号码</span>
+                <span class="withdrawal">{{ $t('手机号码') }}</span>
                 <span>{{ info.phone }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <!-- 提现方式 -->
+              <!-- 电子邮箱 -->
               <el-col :span="24">
-                <span class="withdrawal">电子邮箱</span>
+                <span class="withdrawal">{{ $t('电子邮箱') }}</span>
                 <span>{{ info.email }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <!-- 提现方式 -->
+              <!-- 身份证号码 -->
               <el-col :span="24">
-                <span class="withdrawal">身份证号码</span>
+                <span class="withdrawal">{{ $t('身份证号码') }}</span>
                 <span>{{ info.idcard }}</span>
               </el-col>
             </el-row>
@@ -105,7 +111,7 @@
             <el-row>
               <el-col>
                 <div class="positive">
-                  <img v-if="info.back_img !== ''" :src="info.back_img" alt="" />
+                  <img v-if="detailData.back_img !== ''" :src="detailData.back_img" alt="" />
                   <span v-else>身份证反面</span>
                 </div>
               </el-col>
@@ -113,7 +119,7 @@
             <el-row>
               <el-col>
                 <div class="reverse">
-                  <img v-if="info.face_img !== ''" :src="info.face_img" alt="" />
+                  <img v-if="detailData.face_img !== ''" :src="detailData.face_img" alt="" />
                   <span v-else>身份证正面</span>
                 </div>
               </el-col>
@@ -124,11 +130,11 @@
     </div>
     <div class="middle"></div>
     <div class="rightSide">
-      <h3>日志</h3>
+      <h3>{{ $t('日志') }}</h3>
       <div class="daily-card">
         <div class="text">2021-08-01&nbsp; 12:00:00&nbsp; 提交申请&nbsp; 100392</div>
       </div>
-      <h3>审核备注</h3>
+      <h3>{{ $t('审核备注') }}</h3>
       <div class="remarks-card">
         <div v-if="detailData.status_name === '待审核'" class="condition">该记录还未审核</div>
         <div v-else>
@@ -140,17 +146,17 @@
       </div>
     </div>
     <div class="clearfix">
-      <h3>提现明细</h3>
+      <h3>{{ $t('提现明细') }}</h3>
       <el-card class="detail-card" shadow="never">
         <el-row :gutter="20">
-          <!-- 提现方式 -->
+          <!-- 提现金额 -->
           <el-col :span="5">
-            <span class="withdrawal">提现金额</span>
+            <span class="withdrawal">{{ $t('提现金额') }}</span>
             <span class="withdrawal_amount">{{ detailData.amount }}</span>
           </el-col>
-          <!-- 提现金额¥ -->
+          <!-- 确认金额 -->
           <el-col :span="5" :offset="10">
-            <span class="withdrawal">确认金额</span>
+            <span class="withdrawal">{{ $t('确认金额') }}</span>
             <span class="confirm_amount">{{ detailData.confirm_amount }}</span>
           </el-col>
         </el-row>
@@ -167,16 +173,15 @@
         </div>
       </el-card>
       <el-row class="auditStatus">
-        <el-button type="danger" @click="showDialog = true">审核拒绝</el-button>
-        <el-button type="primary" @click="viewApproved">审核通过</el-button>
+        <el-button type="danger" @click="viewRejused">{{ $t('审核拒绝') }}</el-button>
+        <el-button type="primary" @click="viewApproved">{{ $t('审核通过') }}</el-button>
       </el-row>
     </div>
-    <confirm-audit :show-dialog.sync="showDialog" />
   </div>
 </template>
 
 <script>
-import confirmAudit from '@/components/dialog/confirmAudit'
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -184,15 +189,14 @@ export default {
       showCancelDialog: false,
       detailData: {},
       info: {},
-      charge: {}
+      charge: {},
+      tableLoading: false
     }
   },
   created() {
     this.getReview()
   },
-  components: {
-    confirmAudit
-  },
+  components: {},
   methods: {
     getReview() {
       this.$request.Review(this.$route.params.id).then(res => {
@@ -204,7 +208,29 @@ export default {
     },
     // 审核通过
     viewApproved() {
-      this.showDialog = true
+      dialog(
+        {
+          type: 'confirmAudit',
+          userid: this.detailData.user.id,
+          withdrawsId: this.$route.params.id,
+          amount: this.detailData.confirm_amount
+        },
+        () => {
+          this.getReview()
+        }
+      )
+    },
+    viewRejused() {
+      dialog(
+        {
+          type: 'failAudit',
+          userid: this.detailData.user.id,
+          withdrawsId: this.$route.params.id
+        },
+        () => {
+          this.getReview()
+        }
+      )
     }
   }
 }

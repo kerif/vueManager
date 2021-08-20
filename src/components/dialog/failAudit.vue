@@ -1,10 +1,6 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-confirmAudit">
+  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-failAudit">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px">
-      <!--支付金额  -->
-      <el-form-item :label="$t('支付金额')" prop="amount">
-        <el-input v-model="ruleForm.amount" :placeholder="$t('请输入支付金额')"> </el-input>
-      </el-form-item>
       <!-- 备注 -->
       <el-form-item :label="$t('备注')" prop="remark">
         <el-input
@@ -39,11 +35,9 @@ export default {
   data() {
     return {
       ruleForm: {
-        amount: '',
         remark: ''
       },
       rules: {
-        amount: [{ required: true, message: this.$t('请输入支付金额'), trigger: 'blur' }],
         remark: [{ required: true, message: this.$t('请输入备注'), trigger: 'blur' }]
       },
       statusData: [
@@ -59,10 +53,7 @@ export default {
           id: 2,
           name: this.$t('审核拒绝')
         }
-      ],
-      userid: '',
-      withdrawsId: '',
-      amount: ''
+      ]
     }
   },
   methods: {
@@ -76,17 +67,8 @@ export default {
       }
       return true
     },
-    init() {
-      this.ruleForm.amount = this.amount
-      console.log(this.amount)
-    },
     submit() {
-      // if (this.ruleForm.amount === '') {
-      //   return this.$message.error(this.$t('请输入支付金额'))
-      // } else if (this.ruleForm.remark === '') {
-      //   return this.$message.error(this.$t('请输入备注'))
-      // }
-      this.$request.approveWithdraw(this.userid, this.withdrawsId).then(res => {
+      this.$request.refusedWithdraw(this.userid, this.withdrawsId).then(res => {
         console.log(res)
         if (res.ret) {
           this.$notify({
@@ -109,7 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dialog-confirmAudit {
+.dialog-failAudit {
   /deep/ .el-dialog__header {
     background-color: #0e102a;
   }

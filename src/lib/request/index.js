@@ -712,9 +712,17 @@ exports.SettleAccounts = () => {
 exports.InitSettle = params => {
   return $form.get('agents/deal-order-init', { params })
 }
-// 代理佣金计算 一键结算
-exports.ClickSettlement = () => {
-  return $form.put('agents/commissions/settled-all')
+// 代理佣金计算 一键结算id
+exports.ClickSettlement = params => {
+  return $form.put('agents/commissions/settled-all', params)
+}
+// 代理佣金计算 审核通过提现申请
+exports.approveWithdraw = (id, withdrawsId) => {
+  return $form.put(`agents/${id}/withdraws/${withdrawsId}/approved`)
+}
+// 代理佣金计算 审核拒绝提现申请
+exports.refusedWithdraw = (id, withdrawsId) => {
+  return $form.put(`agents/${id}/withdraws/${withdrawsId}/refused`)
 }
 // 代理管理 审核拒绝
 exports.rechargeReject = (id, params) => {

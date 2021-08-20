@@ -28,8 +28,6 @@
         </el-col>
         <!-- 搜索 -->
         <el-col :span="5">
-          <!-- <el-input placeholder="请选择提交时间范围" v-model="time" clearable size="small">
-          </el-input> -->
           <el-date-picker
             size="small"
             class="selectTime"
@@ -117,11 +115,13 @@ export default {
       },
       customerID: '',
       time: '',
-      settleData: [],
+      settleData: [], // 待结算数据
       hasStore: false,
       shipNum: '', // 通过快递单号拉取的包裹id
       settledData: [],
-      timeList: []
+      timeList: [],
+      unsettleId: '',
+      ids: []
     }
   },
   components: {
@@ -131,12 +131,12 @@ export default {
   created() {
     this.getList()
     this.goInit()
+    console.log(this.$route.query.userId, 'user_id')
   },
   mixins: [pagination],
   methods: {
     // 待结算
     getList() {
-      console.log(this.page_params.keyword)
       this.$request
         .NoSettled({
           keyword: this.page_params.keyword,
@@ -149,7 +149,6 @@ export default {
         })
         .then(res => {
           console.log(res)
-          console.log(this.page_params.keyword)
           if (res.ret) {
             this.settleData = res.data
             this.page_params.page = res.meta.current_page
@@ -157,23 +156,36 @@ export default {
           }
         })
     },
+    // 一键结算
     oneSettlement() {
-      this.$request.ClickSettlement().then(res => {
-        console.log(res)
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
+      this.unsettleId = this.settleData.filter(item => item.settled === 0)
+      console.log(this.unsettleId)
+      this.ids = this.unsettleId.map(item => item.id)
+      console.log(this.ids)
+      this.$confirm(this.$t('您真的确认要一键结算吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.ClickSettlement({ commission_ids: this.ids }).then(res => {
+          console.log(res)
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
+    // 成交记录
     settlement(id) {
       console.log(id, 'id')
       this.$request.finishOrders(id).then(res => {
@@ -183,6 +195,7 @@ export default {
             type: 'success',
             title: this.$t('操作成功')
           })
+          this.getList()
         } else {
           this.$notify({
             title: this.$t('操作失败'),
