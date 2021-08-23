@@ -5,7 +5,7 @@
       <el-form-item :label="$t('支付金额')" prop="amount">
         <!-- <el-input v-model="ruleForm.amount" :placeholder="$t('请输入支付金额')"> </el-input> -->
         <el-input v-model="ruleForm.amount">
-          <template slot="append"></template>
+          <template slot="append">¥</template>
         </el-input>
       </el-form-item>
       <!-- 备注 -->
@@ -18,9 +18,9 @@
         ></el-input>
       </el-form-item>
       <!--上传照片-->
-      <el-form-item :label="$t('上传照片')" class="updateChe">
-        <span class="img-item">
-          <img :src="$baseUrl.IMAGE_URL" alt="" class="goods-img" />
+      <el-form-item :label="$t('上传照片')">
+        <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
           <span class="model-box"></span>
           <span class="operat-box">
             <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
@@ -28,6 +28,7 @@
           </span>
         </span>
         <el-upload
+          v-show="baleImgList.length < 3"
           class="avatar-uploader"
           action=""
           list-type="picture-card"
@@ -74,7 +75,9 @@ export default {
       ],
       userid: '',
       withdrawsId: '',
-      amount: ''
+      amount: '',
+      remark: '',
+      baleImgList: []
     }
   },
   methods: {
@@ -84,7 +87,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
-            // this.baleImgList.push(item.path)
+            this.baleImgList.push(item.path)
             console.log(item)
           })
         }
@@ -99,7 +102,7 @@ export default {
     },
     // 删除图片
     onDeleteImg(index) {
-      // this.baleImgList.splice(index, 1)
+      this.baleImgList.splice(index, 1)
       console.log(index)
     },
     // 上传图片
@@ -110,7 +113,7 @@ export default {
     },
     init() {
       this.ruleForm.amount = this.amount
-      console.log(this.amount)
+      console.log(this.amount, this.remark)
     },
     submit() {
       // if (this.ruleForm.amount === '') {
@@ -118,7 +121,10 @@ export default {
       // } else if (this.ruleForm.remark === '') {
       //   return this.$message.error(this.$t('请输入备注'))
       // }
-      this.$request.approveWithdraw(this.userid, this.withdrawsId).then(res => {
+      let info = {
+        confirm_amount: this.amount
+      }
+      this.$request.approveWithdraw(this.userid, this.withdrawsId, info).then(res => {
         console.log(res)
         if (res.ret) {
           this.$notify({
@@ -157,6 +163,56 @@ export default {
   }
   /deep/.el-dialog__close {
     color: #fff;
+  }
+  .avatar-uploader {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 50px;
+  }
+  .goods-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+  .img-item {
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    width: 148px;
+    height: 148px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box,
+      .operat-box {
+        opacity: 1;
+        transition: all 0.5s ease-in;
+      }
+    }
+  }
+  .model-box {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    i {
+      font-size: 20px;
+      color: #fff;
+      margin-right: 10px;
+    }
   }
 }
 </style>

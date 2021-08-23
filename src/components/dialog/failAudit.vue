@@ -5,19 +5,28 @@
       <el-form-item :label="$t('备注')" prop="remark">
         <el-input
           type="textarea"
-          :rows="2"
           :autosize="{ minRows: 2, maxRows: 4 }"
           v-model="ruleForm.remark"
           :placeholder="$t('请输入备注')"
         ></el-input>
       </el-form-item>
       <!--上传照片-->
-      <el-form-item prop="uploadPhotos" :label="$t('上传照片')">
+      <el-form-item :label="$t('上传照片')" class="updateChe">
+        <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+          <span class="model-box"></span>
+          <span class="operat-box">
+            <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+            <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+          </span>
+        </span>
         <el-upload
+          v-show="baleImgList.length < 3"
           class="avatar-uploader"
-          list-type="picture-card"
           action=""
-          :before-upload="beforeUploadImg"
+          list-type="picture-card"
+          :http-request="uploadBaleImg"
+          :show-file-list="false"
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
@@ -31,6 +40,7 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -53,19 +63,40 @@ export default {
           id: 2,
           name: this.$t('审核拒绝')
         }
-      ]
+      ],
+      baleImgList: []
     }
   },
   methods: {
-    beforeUploadImg(file) {
-      if (!/^image/.test(file.type)) {
-        this.$message.info(this.$t('请上传图片类型文件'))
-        return false
-      } else if (file.size > 1024 * 1024 * 2) {
-        this.$message.info(this.$t('上传图片大小不能超过2M'))
-        return false
-      }
-      return true
+    // 上传打包照片
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.baleImgList.push(item.path)
+            console.log(item)
+          })
+        }
+      })
+    },
+    // 预览图片
+    onPreview(image) {
+      dialog({
+        type: 'previewimage',
+        image
+      })
+    },
+    // 删除图片
+    onDeleteImg(index) {
+      this.baleImgList.splice(index, 1)
+      console.log(index)
+    },
+    // 上传图片
+    onUpload(file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
     },
     submit() {
       this.$request.refusedWithdraw(this.userid, this.withdrawsId).then(res => {
@@ -107,6 +138,56 @@ export default {
   }
   /deep/.el-dialog__close {
     color: #fff;
+  }
+  .avatar-uploader {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 50px;
+  }
+  .goods-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+  .img-item {
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    width: 148px;
+    height: 148px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box,
+      .operat-box {
+        opacity: 1;
+        transition: all 0.5s ease-in;
+      }
+    }
+  }
+  .model-box {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    i {
+      font-size: 20px;
+      color: #fff;
+      margin-right: 10px;
+    }
   }
 }
 </style>
