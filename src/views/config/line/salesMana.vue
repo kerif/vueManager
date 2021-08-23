@@ -2,7 +2,7 @@
   <div class="sales-management-container">
     <div class="headerList">
       <div>
-        <span style="font-weight: 900">{{ $t('清关编码') }}</span>
+        <span style="font-weight: 900">{{ $t('销售价格表') }}</span>
         <el-tooltip
           class="item"
           effect="dark"
@@ -37,8 +37,8 @@
         @selection-change="selectionChange"
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
-        <el-table-column :label="$t('价格表名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('适用对象')">
+        <el-table-column :label="$t('价格表名称')" prop="name" width="120"></el-table-column>
+        <el-table-column :label="$t('适用对象')" width="120">
           <template slot-scope="scope">
             <span v-if="scope.row.scope === 0">{{ $t('所有用户') }}</span>
             <span v-if="scope.row.scope === 1">{{ $t('特定用户组') }}</span>
@@ -46,14 +46,14 @@
             <span v-if="scope.row.scope === 3">{{ $t('特定用户') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('适用渠道')">
+        <el-table-column :label="$t('适用渠道')" width="250" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span v-for="item in scope.row.express_lines" :key="item.id">
               {{ item.name }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('生效时间')" prop="effect_at"></el-table-column>
+        <el-table-column :label="$t('生效时间')" prop="effect_at" width="160"></el-table-column>
         <el-table-column :label="$t('生效状态')">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0">{{ $t('未生效') }}</span>
@@ -61,7 +61,7 @@
             <span v-if="scope.row.status === 2">{{ $t('已失效') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('失效时间')" prop="expire_at"></el-table-column>
+        <el-table-column :label="$t('失效时间')" prop="expire_at" width="160"></el-table-column>
         <el-table-column :label="$t('排序')" prop="index"></el-table-column>
         <!-- 是否启用 -->
         <el-table-column :label="$t('是否启用')" width="120">
@@ -79,7 +79,7 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')" width="260">
+        <el-table-column :label="$t('操作')" width="190">
           <template slot-scope="scope">
             <el-button class="btn-blue" @click="editSales(scope.row.id)">{{
               $t('编辑')

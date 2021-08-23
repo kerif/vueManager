@@ -330,11 +330,15 @@
     <el-table class="data-list" border stripe :data="oderData" v-loading="tableLoading">
       <!-- 预计重量kg -->
       <el-table-column
-        :label="$t('预计重量') + this.localization.weight_unit"
+        :label="
+          baseMode === 1 ? $t('预计体积（立方）') : $t('预计重量') + this.localization.weight_unit
+        "
         prop="except_weight"
       ></el-table-column>
       <el-table-column
-        :label="$t('计费重量') + this.localization.weight_unit"
+        :label="
+          baseMode === 1 ? $t('计费体积（立方）') : $t('计费重量') + this.localization.weight_unit
+        "
         prop="payment_weight"
       ></el-table-column>
       <!-- 称重重量kg -->
@@ -344,11 +348,15 @@
       ></el-table-column>
       <!-- 体积重量 -->
       <el-table-column
+        v-if="baseMode !== 1"
         :label="$t('体积重量') + this.localization.weight_unit"
         prop="volume_weight"
       ></el-table-column>
       <!-- 尺寸（长宽高cm） -->
-      <el-table-column :label="$t('尺寸（长宽高）') + this.localization.length_unit">
+      <el-table-column
+        :label="$t('尺寸（长宽高）') + this.localization.length_unit"
+        v-if="form.box_type === 1"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.length }}*</span>
           <span>{{ scope.row.width }}*</span>
@@ -761,7 +769,8 @@ export default {
       boxDialog: false,
       tableData: [],
       userId: '',
-      unEdit: false
+      unEdit: false,
+      baseMode: 0
     }
   },
   created() {
@@ -776,6 +785,7 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.tableLoading = false
         this.form = res.data
+        this.baseMode = res.data.express_line.base_mode
         this.oderData = [{ ...res.data.details, box_type: res.data.box_type }]
         console.log(this.oderData, 'this.oderData')
         this.PackageData = res.data.packages

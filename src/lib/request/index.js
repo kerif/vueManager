@@ -182,6 +182,10 @@ exports.newGroupLang = params => {
 exports.updateDocking = (id, params) => {
   return $form.put(`express-lines/${id}/docking-config`, params)
 }
+// 配置 新路线 面单对接 获取渠道代码数据
+exports.channelCode = id => {
+  return $form.get(`express-lines/channel-code-list/${id}`)
+}
 // 配置 新路线 开启或关闭
 exports.lineGroupEnabled = (id, status) => {
   return $form.put(`express-lines/groups/${id}/status/${status}`)
@@ -287,12 +291,48 @@ exports.regionCountry = id => {
   return $form.get(`countries/express-lines/${id}`)
 }
 //  分区 获取预设分区表
-exports.getRegionTemplate = params => {
-  return $form.get(`express-lines/region-templates`, { params })
+exports.getRegionTemplate = id => {
+  return $form.get(`express-lines/region-templates/${id}`)
 }
 // 分区 选择模版
 exports.submitTmp = (id, tmpId) => {
   return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
+}
+// 模版列表
+exports.regionTemplates = id => {
+  return $form.get(`express-lines/region-templates/${id}/regions`)
+}
+// 模版 开启或关闭
+exports.presetRegionsEnabled = (id, regionsId, status) => {
+  return $form.put(`express-lines/region-templates/${id}/regions/${regionsId}/status/${status}`)
+}
+// 模版 获取详情
+exports.regionTmpDetails = (tmpId, id) => {
+  return $form.get(`express-lines/region-templates/${tmpId}/regions/${id}`)
+}
+// 模版 更新
+exports.updateRegionTmpDetails = (tmpId, id, params) => {
+  return $form.put(`express-lines/region-templates/${tmpId}/regions/${id}`, params)
+}
+// 模版 删除
+exports.deleteRegionTmp = (tmpId, id) => {
+  return $form.delete(`express-lines/region-templates/${tmpId}/regions/${id}`)
+}
+// 模版 新建
+exports.newRegionTmp = (id, params) => {
+  return $form.post(`express-lines/region-templates/${id}/regions`, params)
+}
+// 分区 模版列表
+exports.lineRegion = params => {
+  return $form.get('express-lines/region-templates', { params })
+}
+// 新建模版
+exports.newTmp = params => {
+  return $form.post('express-lines/region-templates', params)
+}
+// 模版 删除
+exports.deleteTmp = id => {
+  return $form.delete(`express-lines/region-templates/${id}`)
 }
 // 配置 新路线 获取价格表
 exports.getPriceTable = (id, params) => {
@@ -428,6 +468,14 @@ exports.noUsers = params => {
 // 客户 合并客户
 exports.mergeCustomer = (id, targetId) => {
   return $form.put(`users/merge/${id}/target/${targetId}`)
+}
+// 客户 分配客服
+exports.assignCustomer = params => {
+  return $form.put('users/assign-customer', params)
+}
+// 客户 分配销售
+exports.assignSale = params => {
+  return $form.put('users/assign-sale', params)
 }
 // 客户允许登录
 exports.customerLogin = ids => {
@@ -625,12 +673,12 @@ exports.getGrowthFinanceDetails = id => {
   return $form.get(`growth-finances/payments/${id}`)
 }
 // 财务 充值记录 通过成长值财务
-exports.approvedGrowthValue = id => {
-  return $form.put(`growth-finances/payments/${id}/approved`)
+exports.approvedGrowthValue = (id, params) => {
+  return $form.put(`growth-finances/payments/${id}/approved`, params)
 }
 // 财务 充值记录 拒绝成长值财务
-exports.refusedGrowthValue = id => {
-  return $form.put(`growth-finances/payments/${id}/refused`)
+exports.refusedGrowthValue = (id, params) => {
+  return $form.put(`growth-finances/payments/${id}/refused`, params)
 }
 // 财务 自提点佣金结算
 exports.commissionsPick = params => {
@@ -1328,6 +1376,14 @@ exports.getTemplate = () => {
 // 更新 消息模版
 exports.updateTemplate = params => {
   return $form.put('mini-program/templates', params)
+}
+// 获取公众号消息模版
+exports.getPubTemplate = () => {
+  return $form.get('wechat-oa-config/templates')
+}
+// 更新公众号消息模版
+exports.updatePubTemplate = params => {
+  return $form.put('wechat-oa-config/templates', params)
 }
 // 文件上传
 exports.uploadFiles = params => {
@@ -2897,6 +2953,10 @@ exports.getUsable = (id, params) => {
 // 订单 打包 获取仓库详情
 exports.getUsableWarehouse = () => {
   return $form.get(`orders/warehouse-simple-list`)
+}
+// 订单 更新多箱物流
+exports.updateMultiLogistics = params => {
+  return $form.put(`orders/update-box-logistics`, params)
 }
 // 订单列表 获取一键打包数据
 exports.getOrderBatch = params => {

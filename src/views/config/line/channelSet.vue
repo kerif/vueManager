@@ -56,8 +56,8 @@
           <el-form ref="form" :model="landing" label-width="120px">
             <el-form-item :label="$t('落地配配置')">
               <el-select
+                @change="changeChannel"
                 v-model="landing.docking_type"
-                clearable
                 filterable
                 allow-create
                 default-first-option
@@ -68,6 +68,24 @@
                   :key="item.id"
                   :value="item.id"
                   :label="item.name"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('渠道代码')">
+              <el-select
+                v-model="landing.channel_code"
+                filterable
+                allow-create
+                default-first-option
+                :placeholder="$t('请选择')"
+              >
+                <el-option
+                  style="width: 100%"
+                  v-for="item in channelList"
+                  :key="item.id"
+                  :value="item.code"
+                  :label="item.code + '----' + item.name"
                 >
                 </el-option>
               </el-select>
@@ -102,9 +120,11 @@ export default {
     return {
       activeName: 'basic',
       landing: {
-        docking_type: ''
+        docking_type: '',
+        channel_code: ''
       },
       dockingList: [],
+      channelList: [],
       tabRefresh: {
         basic: true,
         billng: false,
@@ -129,35 +149,46 @@ export default {
         }
       })
     },
+    // 获取渠道代码数据
+    getChannel() {
+      this.$request.channelCode(this.landing.docking_type).then(res => {
+        if (res.ret) {
+          this.channelList = res.data
+        }
+      })
+    },
+    changeChannel() {
+      this.landing.channel_code = ''
+      this.channelList = []
+      this.getChannel()
+    },
     dockData() {
       this.$request.getExpressLine(this.$route.params.id).then(res => {
         if (res.ret) {
           this.landing.docking_type = res.data.express_company_id
+          this.getChannel()
+          this.landing.channel_code = res.data.channel_code
         }
       })
     },
     // 更新落地配配置
     saveDocking() {
-      this.$request
-        .updateDocking(this.$route.params.id, {
-          docking_type: this.landing.docking_type
-        })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.dockData()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      this.$request.updateDocking(this.$route.params.id, { ...this.landing }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.dockData()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     onTabChange(activeName) {
       this.activeName = activeName
@@ -200,10 +231,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 .channel-set-container {
   .main-sty {
     background-color: #fff;
+  }
+  .el-select {
+    width: 300px;
   }
   .landing-container {
     background-color: #fff !important;

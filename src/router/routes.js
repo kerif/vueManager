@@ -70,6 +70,8 @@ const invoiceDetails = loadonDemand('finance/invoice/invoiceDetails')
 const Line = loadonDemand('config/line/Line')
 // 新路线 销售价管理
 const salesMana = loadonDemand('config/line/salesMana')
+// 模版
+const tmpSet = loadonDemand('config/line/templateSet')
 // 分区
 const partitionList = loadonDemand('config/line/partition')
 // 渠道
@@ -950,6 +952,18 @@ export default [
             }
           },
           {
+            path: '/config/line/tmpSet',
+            name: 'tmpSet',
+            component: tmpSet,
+            id: 601,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '模版',
+              parent: '/config/line'
+            }
+          },
+          {
             path: '/config/line/partition',
             name: 'partition',
             component: partitionList,
@@ -957,12 +971,12 @@ export default [
             meta: {
               group: '配置',
               level: 3,
-              name: '路线2',
+              name: '分区',
               parent: '/config/line'
             }
           },
           {
-            path: '/config/line/channel/edit/:id',
+            path: '/config/line/channel/:id',
             name: 'channelLine',
             component: channelLine,
             id: 601,

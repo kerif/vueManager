@@ -154,6 +154,7 @@
               <el-radio-group v-model="user.box_type">
                 <el-radio :label="1">{{ $t('单箱出库') }}</el-radio>
                 <el-radio :label="2">{{ $t('多箱出库') }}</el-radio>
+                <el-button @click="originalBox">{{ $t('原箱出库') }}</el-button>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -553,6 +554,28 @@ export default {
               .reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
               .toFixed(2)
     },
+    // 原箱出库
+    originalBox() {
+      if (this.PackageData.length > 1) {
+        this.user.box_type = 2
+        this.user.box = this.PackageData.map(item => {
+          return {
+            length: item.length,
+            width: item.width,
+            height: item.height,
+            weight: item.package_weight,
+            volume_weight: ((item.length * item.width * item.height) / this.factor).toFixed(3)
+          }
+        })
+        this._onTotalWeight()
+        this.unitVolume()
+      } else {
+        this.user.weight = this.PackageData[0].package_weight
+        this.user.length = this.PackageData[0].length
+        this.user.width = this.PackageData[0].width
+        this.user.height = this.PackageData[0].height
+      }
+    },
     savePacked() {
       this.user.services = this.updateProp
         .filter(item => item.checked)
@@ -638,6 +661,7 @@ export default {
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.line_rule_fee = res.data.payment.line_rule_fee
+        this.user.box_type = res.data.box_type
         this.user.order_sn = res.data.order_sn
         this.user.length = res.data.length
         this.user.width = res.data.width

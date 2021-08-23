@@ -73,7 +73,7 @@
             style="cursor: pointer"
             @click.stop=";(imgSrc = `${item}`), (imgVisible = true)"
           >
-            <img :src="`${item}`" style="width: 150px; margin-right: 30px" />
+            <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px" />
           </span>
         </el-col>
       </el-row>

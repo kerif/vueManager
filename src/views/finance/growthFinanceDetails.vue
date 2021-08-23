@@ -22,22 +22,35 @@
           {{ $t('转账金额') }}：{{ localization.currency_unit }} {{ growthDetails.tran_amount }}
         </div>
         <div>{{ $t('关联单号') }}：{{ growthDetails.order_number }}</div>
-        <div>{{ $t('客服备注') }}：{{ growthDetails.customer_remark }}</div>
+        <div>{{ $t('客户备注') }}：{{ growthDetails.remark }}</div>
         <div>
-          {{ $t('客服图片') }}：
-          <img :src="growthDetails.customer_images" alt="" />
+          {{ $t('客户图片') }}：
+          <img
+            v-for="item in growthDetails.images"
+            :key="item.index"
+            class="image"
+            :src="$baseUrl.IMAGE_URL + item"
+            @click="checkImg(item)"
+          />
         </div>
         <div>{{ $t('创建时间') }}：{{ growthDetails.created_at }}</div>
       </div>
     </div>
-    <div class="content">
-      <h4>{{ $t('审核通过信息') }}</h4>
+    <div class="content" v-if="growthDetails.status !== 0">
+      <h4 v-if="growthDetails.status === 1">{{ $t('审核通过信息') }}</h4>
+      <h4 v-if="growthDetails.status === 2">{{ $t('审核拒绝信息') }}</h4>
       <div class="user">
         <div>{{ $t('审核人员') }}：{{ growthDetails.operator }}</div>
-        <div>{{ $t('备注') }}：{{ growthDetails.remark }}</div>
+        <div>{{ $t('备注') }}：{{ growthDetails.customer_remark }}</div>
         <div>
           {{ $t('图片') }}：
-          <img :src="growthDetails.images" alt="" />
+          <img
+            v-for="item in growthDetails.customer_images"
+            :key="item.index"
+            class="image"
+            :src="$baseUrl.IMAGE_URL + item"
+            @click="checkImg(item)"
+          />
         </div>
       </div>
     </div>
@@ -45,54 +58,61 @@
       <el-button size="small" type="primary" @click="updateStatus('pass')">{{
         $t('审核通过')
       }}</el-button>
-      <el-button size="small" type="danger" @click="updateStatus('refuse')">{{
+      <el-button size="small" type="danger" @click="updateStatus('reject')">{{
         $t('审核拒绝')
       }}</el-button>
     </div>
+    <!-- 查看图片 -->
+    <el-dialog :visible.sync="imgDialog">
+      <div style="text-align: center">
+        <img :src="imgUrl" style="max-width: 100%" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
       growthDetails: {},
-      localization: {}
+      localization: {},
+      currencyUnit: '',
+      imgDialog: false,
+      imgUrl: ''
     }
   },
   created() {
     this.getGrowthFinanceDetails()
   },
   methods: {
+    checkImg(url) {
+      this.imgDialog = true
+      this.imgUrl = this.$baseUrl.IMAGE_URL + url
+    },
     getGrowthFinanceDetails() {
       this.$request.getGrowthFinanceDetails(this.$route.params.id).then(res => {
         if (res.ret) {
           this.growthDetails = res.data
           this.localization = res.localization
+          this.currencyUnit = res.localization.currency_unit
         }
       })
     },
     async updateStatus(status) {
-      let res = {}
-      if (status === 'pass') {
-        res = await this.$request.approvedGrowthValue(this.$route.params.id)
-      } else {
-        res = await this.$request.refusedGrowthValue(this.$route.params.id)
-      }
-      if (res.ret) {
-        this.$notify({
-          title: this.$t('操作成功'),
-          message: res.msg,
-          type: 'success'
-        })
-        this.$router.go(-1)
-      } else {
-        this.$notify({
-          title: this.$t('操作失败'),
-          message: res.msg,
-          type: 'warning'
-        })
-      }
+      dialog(
+        {
+          type: 'growthFinance',
+          id: this.$route.params.id,
+          state: status,
+          tranAmount: this.growthDetails.tran_amount,
+          currencyUnit: this.currencyUnit
+        },
+        () => {
+          this.getGrowthFinanceDetails()
+        }
+      )
     }
   }
 }
@@ -103,6 +123,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .image {
+    max-width: 100px;
+    cursor: pointer;
+    text-align: center;
   }
   .status {
     color: red;
@@ -121,9 +146,6 @@ export default {
     display: grid;
     gap: 20px;
     grid-template-columns: 1fr 1fr;
-    img {
-      max-width: 100%;
-    }
   }
 }
 </style>
