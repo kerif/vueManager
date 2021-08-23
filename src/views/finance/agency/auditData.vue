@@ -3,9 +3,10 @@
     <div class="headline">
       <el-row :gutter="10">
         <el-col :span="3">
-          <!-- 下拉 -->
+          <!-- 提现方式 -->
           <el-select v-model="page_params.type" :placeholder="$t('提现方式')" size="small">
-            <el-option :label="$t('提现方式')" :value="$t('选项一')"> </el-option>
+            <el-option v-for="item in typeData" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
           </el-select>
         </el-col>
         <!-- 审核状态 -->
@@ -20,8 +21,8 @@
             </el-option>
           </el-select>
         </el-col>
-        <!-- 搜索 -->
-        <el-col :span="5">
+        <!-- 日期 -->
+        <el-col :span="4">
           <el-date-picker
             size="small"
             class="selectTime"
@@ -36,16 +37,19 @@
           >
           </el-date-picker>
         </el-col>
+        <!--搜索  -->
         <el-col :span="3">
-          <el-button size="small" class="searchBtn" @click="triggerVal">搜索</el-button>
+          <el-button size="small" class="searchBtn" @click="triggerVal">{{ $t('搜索') }}</el-button>
         </el-col>
+        <!--待结算  -->
         <el-col :span="3">
           <el-button size="small" type="primary" class="unsettled" @click="editSettled">
-            待结算
+            {{ $t('待结算') }}
             <i class="count">{{ totalSettlement }}</i>
           </el-button>
         </el-col>
-        <el-col :span="5" :offset="2">
+        <!-- 关键字搜索 -->
+        <el-col :span="4" :offset="4">
           <search-group
             v-model="page_params.keyword"
             @search="goSearch"
@@ -82,7 +86,7 @@
               type="success"
               plain
               size="mini"
-              @click="editDetail(scope.row.id)"
+              @click="editInviteDetail(scope.row.id)"
               >{{ $t('审核') }}</el-button
             >
             <el-button
@@ -107,6 +111,7 @@ export default {
   data() {
     return {
       timeList: [],
+      typeData: [],
       page_params: {
         status: '',
         type: '',
@@ -141,10 +146,15 @@ export default {
   },
   mixins: [pagination],
   created() {
-    console.log(this.page_params, 'page_params')
+    this.goMethods()
   },
   methods: {
+    // 详情
     editDetail(id) {
+      this.$emit('subprice', id)
+    },
+    // 审核
+    editInviteDetail(id) {
       this.$emit('subprice', id)
     },
     editSettled() {
@@ -159,6 +169,14 @@ export default {
     },
     fm() {
       console.log(this.timeList)
+    },
+    // 提现方式
+    goMethods() {
+      this.$request.withdrawalMethod().then(res => {
+        console.log(res)
+        this.typeData = res.data.type_list
+        console.log(this.typeData)
+      })
     }
   }
 }
@@ -172,11 +190,10 @@ export default {
       margin: 0px;
     }
     .selectTime {
-      width: 240px !important;
+      width: 260px !important;
     }
     .searchBtn {
       width: 120px;
-      margin-left: 10px;
     }
     .unsettled {
       width: 120px;

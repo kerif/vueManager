@@ -3,25 +3,36 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px">
       <!--支付金额  -->
       <el-form-item :label="$t('支付金额')" prop="amount">
-        <el-input v-model="ruleForm.amount" :placeholder="$t('请输入支付金额')"> </el-input>
+        <!-- <el-input v-model="ruleForm.amount" :placeholder="$t('请输入支付金额')"> </el-input> -->
+        <el-input v-model="ruleForm.amount">
+          <template slot="append"></template>
+        </el-input>
       </el-form-item>
       <!-- 备注 -->
       <el-form-item :label="$t('备注')" prop="remark">
         <el-input
           type="textarea"
-          :rows="2"
           :autosize="{ minRows: 2, maxRows: 4 }"
           v-model="ruleForm.remark"
           :placeholder="$t('请输入备注')"
         ></el-input>
       </el-form-item>
       <!--上传照片-->
-      <el-form-item prop="uploadPhotos" :label="$t('上传照片')">
+      <el-form-item :label="$t('上传照片')" class="updateChe">
+        <span class="img-item">
+          <img :src="$baseUrl.IMAGE_URL" alt="" class="goods-img" />
+          <span class="model-box"></span>
+          <span class="operat-box">
+            <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+            <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+          </span>
+        </span>
         <el-upload
           class="avatar-uploader"
-          list-type="picture-card"
           action=""
-          :before-upload="beforeUploadImg"
+          list-type="picture-card"
+          :http-request="uploadBaleImg"
+          :show-file-list="false"
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
@@ -35,6 +46,7 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -66,15 +78,35 @@ export default {
     }
   },
   methods: {
-    beforeUploadImg(file) {
-      if (!/^image/.test(file.type)) {
-        this.$message.info(this.$t('请上传图片类型文件'))
-        return false
-      } else if (file.size > 1024 * 1024 * 2) {
-        this.$message.info(this.$t('上传图片大小不能超过2M'))
-        return false
-      }
-      return true
+    // 上传打包照片
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            // this.baleImgList.push(item.path)
+            console.log(item)
+          })
+        }
+      })
+    },
+    // 预览图片
+    onPreview(image) {
+      dialog({
+        type: 'previewimage',
+        image
+      })
+    },
+    // 删除图片
+    onDeleteImg(index) {
+      // this.baleImgList.splice(index, 1)
+      console.log(index)
+    },
+    // 上传图片
+    onUpload(file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
     },
     init() {
       this.ruleForm.amount = this.amount

@@ -14,7 +14,7 @@
         </el-select>
       </el-col>
       <!-- 时间 -->
-      <el-col :span="5">
+      <el-col :span="4">
         <el-date-picker
           size="small"
           class="selectTime"
@@ -30,9 +30,9 @@
       </el-col>
       <!-- 搜索 -->
       <el-col :span="3">
-        <el-button size="small" class="searchBtn">搜索</el-button>
+        <el-button size="small" class="searchBtn">{{ $t('搜索') }}</el-button>
       </el-col>
-      <el-col :span="5" :offset="5">
+      <el-col :span="4" :offset="7">
         <search-group v-model="page_params.keyword" :placeholder="$t('请输入内容')"> </search-group>
       </el-col>
     </el-row>
@@ -111,6 +111,25 @@ export default {
 .invoiceData-container {
   .data-list {
     margin-top: 40px;
+  }
+  .selectTime {
+    width: 260px !important;
+  }
+  .searchBtn {
+    width: 120px;
+  }
+  /deep/.el-button {
+    margin: 0px;
+  }
+  /deep/.el-table tr th.is-leaf {
+    border-bottom: 1px #ecedf0 solid;
+    background-color: #fff;
+  }
+  /deep/.el-table th > .cell {
+    text-align: center;
+  }
+  /deep/.el-table .cell {
+    text-align: center;
   }
 }
 </style>

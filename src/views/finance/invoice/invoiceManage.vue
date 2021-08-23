@@ -1,16 +1,16 @@
 <template>
   <div class="invoice-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="全部" name="first">
+      <el-tab-pane :label="$t('全部')" name="first">
         <invoice-data></invoice-data>
       </el-tab-pane>
-      <el-tab-pane label="待处理" name="second">
+      <el-tab-pane :label="$t('待处理')" name="second">
         <invoice-data></invoice-data>
       </el-tab-pane>
-      <el-tab-pane label="已开票" name="third">
+      <el-tab-pane :label="$t('已开票')" name="third">
         <invoice-data></invoice-data>
       </el-tab-pane>
-      <el-tab-pane label="已作废" name="fourth">
+      <el-tab-pane :label="$t('已作废')" name="fourth">
         <invoice-data></invoice-data>
       </el-tab-pane>
     </el-tabs>

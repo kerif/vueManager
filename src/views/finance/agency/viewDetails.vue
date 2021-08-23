@@ -111,16 +111,38 @@
             <el-row>
               <el-col>
                 <div class="positive">
-                  <img v-if="detailData.back_img !== ''" :src="detailData.back_img" alt="" />
-                  <span v-else>身份证反面</span>
+                  <div
+                    v-if="detailData.back_img !== ''"
+                    style="cursor: pointer"
+                    @click.stop=";(imgSrc = `${detailData.back_img}`), (imgVisible = true)"
+                  >
+                    <img
+                      :src="`${detailData.back_img}`"
+                      alt=""
+                      style="width: 200px; height: 100px"
+                    />
+                  </div>
+                  <span v-else>{{ $t('身份证反面') }}</span>
                 </div>
               </el-col>
             </el-row>
             <el-row>
               <el-col>
                 <div class="reverse">
-                  <img v-if="detailData.face_img !== ''" :src="detailData.face_img" alt="" />
-                  <span v-else>身份证正面</span>
+                  <!-- <img v-if="detailData.face_img !== ''" :src="detailData.face_img" alt="" />
+                  <span v-else>{{ $t('身份证正面') }}</span> -->
+                  <div
+                    v-if="detailData.face_img !== ''"
+                    style="cursor: pointer"
+                    @click.stop=";(imgSrc = `${detailData.face_img}`), (imgVisible = true)"
+                  >
+                    <img
+                      :src="`${detailData.face_img}`"
+                      alt=""
+                      style="width: 200px; height: 100px"
+                    />
+                  </div>
+                  <span v-else>{{ $t('身份证正面') }}</span>
                 </div>
               </el-col>
             </el-row>
@@ -136,7 +158,9 @@
       </div>
       <h3>{{ $t('审核备注') }}</h3>
       <div class="remarks-card">
-        <div v-if="detailData.status_name === '待审核'" class="condition">该记录还未审核</div>
+        <div v-if="detailData.status_name === '待审核'" class="condition">
+          {{ $t('该记录还未审核') }}
+        </div>
         <div v-else>
           <div class="text">
             {{ detailData.remark }}
@@ -164,19 +188,24 @@
           <!-- 表格 -->
           <el-table border style="width: 100%" :data="charge">
             <el-table-column type="index" label="#" width="120"> </el-table-column>
-            <el-table-column prop="order_number" label="订单号" width="180"> </el-table-column>
+            <el-table-column prop="order_number" label="订单号"> </el-table-column>
             <el-table-column prop="order_status" label="状态"> </el-table-column>
-            <el-table-column prop="order_amount" label="总金额￥" width="180"> </el-table-column>
-            <el-table-column prop="proportion" label="佣金方式" width="180"> </el-table-column>
+            <el-table-column prop="order_amount" label="总金额￥"> </el-table-column>
+            <el-table-column prop="proportion" label="佣金方式"> </el-table-column>
             <el-table-column prop="commission_amount" label="可得佣金￥"> </el-table-column>
           </el-table>
         </div>
       </el-card>
-      <el-row class="auditStatus">
+      <el-row class="auditStatus" v-if="detailData.status_name === '待审核'">
         <el-button type="danger" @click="viewRejused">{{ $t('审核拒绝') }}</el-button>
         <el-button type="primary" @click="viewApproved">{{ $t('审核通过') }}</el-button>
       </el-row>
     </div>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -185,16 +214,17 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      showDialog: false,
-      showCancelDialog: false,
       detailData: {},
       info: {},
       charge: {},
-      tableLoading: false
+      tableLoading: false,
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   created() {
     this.getReview()
+    console.log(this.$route.params.id)
   },
   components: {},
   methods: {
@@ -216,7 +246,7 @@ export default {
           amount: this.detailData.confirm_amount
         },
         () => {
-          this.getReview()
+          this.$router.go(-1)
         }
       )
     },
@@ -228,7 +258,7 @@ export default {
           withdrawsId: this.$route.params.id
         },
         () => {
-          this.getReview()
+          this.$router.go(-1)
         }
       )
     }
@@ -242,7 +272,7 @@ export default {
     float: left;
     .box-card {
       display: flex;
-      width: 680px;
+      width: 1150px;
       font-size: 14px;
       padding: 15px 40px;
       background-color: #fff;
@@ -276,7 +306,7 @@ export default {
       }
     }
     .info-card {
-      width: 680px;
+      width: 1150px;
       font-size: 14px;
       padding: 15px 40px;
       background-color: #fff;
@@ -301,11 +331,12 @@ export default {
           flex: 1;
         }
         .idCard {
-          width: 300px;
+          width: 550px;
           .positive {
             width: 200px;
             height: 100px;
-            background-color: #ccc;
+            background-color: white;
+            border: 1px solid #ccc;
             span {
               display: block;
               width: 80px;
@@ -317,7 +348,10 @@ export default {
           .reverse {
             width: 200px;
             height: 100px;
-            background-color: #ccc;
+            background-color: white;
+            border: 1px solid #ccc;
+            width: 200px;
+            height: 100px;
             span {
               display: block;
               width: 80px;
@@ -337,12 +371,12 @@ export default {
     text-align: center;
     border-right: 1px solid black;
     margin-top: 26px;
-    margin-left: 14px;
+    margin-left: 25px;
   }
   .rightSide {
     float: right;
     .daily-card {
-      width: 340px;
+      width: 400px;
       font-size: 14px;
       background-color: #fff;
       .text {
@@ -350,7 +384,7 @@ export default {
       }
     }
     .remarks-card {
-      width: 340px;
+      width: 400px;
       height: 300px;
       font-size: 14px;
       background-color: #fff;
@@ -390,6 +424,9 @@ export default {
         font-size: 24px;
         font-weight: bold;
       }
+      .text {
+        margin-top: 10px;
+      }
       .confirm_amount {
         color: blue;
         font-size: 24px;
@@ -405,6 +442,12 @@ export default {
     .auditStatus {
       margin-top: 40px;
       text-align: center;
+    }
+  }
+  .img_box {
+    text-align: center;
+    .imgDialog {
+      width: 50%;
     }
   }
 }

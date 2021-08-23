@@ -693,7 +693,15 @@ exports.AutoDeductions = params => {
   return $form.get('money-deductions/user-search', { params })
 }
 // 代理佣金计算 全部
-exports.PendingReview = params => {
+exports.pendingReview = params => {
+  return $form.get('agents/withdraws', { params })
+}
+// 代理佣金计算 待审核
+exports.unReviewed = params => {
+  return $form.get('agents/withdraws', { params })
+}
+// 代理佣金计算 已审核
+exports.Reviewed = params => {
   return $form.get('agents/withdraws', { params })
 }
 // 代理佣金计算 详情
@@ -701,19 +709,23 @@ exports.Review = id => {
   return $form.get(`agents/withdraws/${id}`)
 }
 // 代理佣金计算 待结算
-exports.NoSettled = params => {
+exports.noSettled = params => {
   return $form.get('agents/deal-orders', { params })
 }
 // 代理佣金计算 待结算数量
-exports.SettleAccounts = () => {
+exports.settleAccounts = () => {
   return $form.get('agents/commissions/settled-count')
 }
 // 代理佣金计算 待结算初始化信息
-exports.InitSettle = params => {
+exports.initSettle = params => {
   return $form.get('agents/deal-order-init', { params })
 }
+// 代理佣金计算 提现方式
+exports.withdrawalMethod = () => {
+  return $form.get('agents/withdraws/index-init')
+}
 // 代理佣金计算 一键结算id
-exports.ClickSettlement = params => {
+exports.clickSettlement = params => {
   return $form.put('agents/commissions/settled-all', params)
 }
 // 代理佣金计算 审核通过提现申请

@@ -2,8 +2,8 @@
   <div class="settled-list-container">
     <div class="headline">
       <el-row :gutter="10">
-        <el-col :span="4">
-          <!-- 下拉 -->
+        <el-col :span="3">
+          <!-- 结算状态 -->
           <el-select v-model="page_params.status" :placeholder="$t('请选择结算状态')" size="small">
             <el-option
               v-for="item in settledData"
@@ -14,8 +14,8 @@
             </el-option>
           </el-select>
         </el-col>
-        <!--  -->
-        <el-col :span="4">
+        <!--客户ID-->
+        <el-col :span="3">
           <el-autocomplete
             :fetch-suggestions="queryCNSearch"
             @select="handleSelect"
@@ -27,7 +27,7 @@
           </el-autocomplete>
         </el-col>
         <!-- 搜索 -->
-        <el-col :span="5">
+        <el-col :span="4">
           <el-date-picker
             size="small"
             class="selectTime"
@@ -42,17 +42,19 @@
           >
           </el-date-picker>
         </el-col>
+        <!-- 搜索 -->
         <el-col :span="3">
           <el-button size="small" class="searchBtn" @click.native="getList">{{
             $t('搜索')
           }}</el-button>
         </el-col>
+        <!-- 一键结算 -->
         <el-col :span="3">
           <el-button size="small" class="unsettled" type="primary" @click="oneSettlement">
             {{ $t('一键结算') }}
           </el-button>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="4" :offset="4">
           <search-group
             v-model="page_params.keyword"
             @search="goSearch"
@@ -138,7 +140,7 @@ export default {
     // 待结算
     getList() {
       this.$request
-        .NoSettled({
+        .noSettled({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
@@ -167,7 +169,7 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.ClickSettlement({ commission_ids: this.ids }).then(res => {
+        this.$request.clickSettlement({ commission_ids: this.ids }).then(res => {
           console.log(res)
           if (res.ret) {
             this.$notify({
@@ -231,7 +233,7 @@ export default {
       this.getAreaLocation()
     },
     goInit() {
-      this.$request.InitSettle().then(res => {
+      this.$request.initSettle().then(res => {
         this.settledData = res.data.status_list
         console.log(res)
       })

@@ -45,21 +45,10 @@ export default {
     this.getSettleAccounts()
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event)
-    },
-    editSettled(id) {
-      this.$router.push({
-        name: 'agencyCommission',
-        params: {
-          id: id
-        }
-      })
-    },
     getList(param_list) {
       console.log(param_list, 'param_list')
       this.$request
-        .PendingReview({
+        .pendingReview({
           page: this.page_params.page,
           size: this.page_params.size,
           ...param_list
@@ -80,6 +69,17 @@ export default {
           }
         })
     },
+    handleClick(tab, event) {
+      console.log(tab, event)
+    },
+    editSettled(id) {
+      this.$router.push({
+        name: 'agencyCommission',
+        params: {
+          id: id
+        }
+      })
+    },
     fn(id) {
       console.log(id)
       this.$router.push({
@@ -90,7 +90,7 @@ export default {
       })
     },
     getSettleAccounts() {
-      this.$request.SettleAccounts().then(res => {
+      this.$request.settleAccounts().then(res => {
         console.log(res)
         if (res.ret) {
           this.totalSettlement = res.data

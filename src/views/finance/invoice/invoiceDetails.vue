@@ -1,45 +1,48 @@
 <template>
   <div class="invoiceDetails-container">
     <div class="leftSide">
-      <h3>客户信息</h3>
+      <h3>{{ $t('客户信息') }}</h3>
       <div class="box-card">
         <div class="leftInfo">
           <el-row :gutter="20">
             <el-col :span="24">
-              <span class="leftWidth">客户ID</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="leftWidth">{{ $t('客户ID') }}</span
+              >&nbsp;&nbsp;&nbsp;&nbsp;
               <span><i class="idNum"></i>&nbsp;&nbsp;&nbsp;</span>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
-              <span class="leftWidth">流水号</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="leftWidth">{{ $t('流水号') }}</span
+              >&nbsp;&nbsp;&nbsp;&nbsp;
               <span></span>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
-              <span class="leftWidth">订单状态</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="leftWidth">{{ $t('订单状态') }}</span
+              >&nbsp;&nbsp;&nbsp;&nbsp;
               <span></span>
             </el-col>
           </el-row>
         </div>
         <div class="rightInfo">
           <template>
-            <h1 class="review_color">待审核</h1>
+            <h1 class="review_color">{{ $t('待审核') }}</h1>
           </template>
         </div>
       </div>
-      <h3>开票信息</h3>
+      <h3>{{ $t('开票信息') }}</h3>
       <div class="info-card">
         <el-row :gutter="20">
           <!-- 发票类型 -->
           <el-col :span="8">
-            <span class="withdrawal">发票类型</span>
+            <span class="withdrawal">{{ $t('发票类型') }}</span>
             <span class="bank"></span>
           </el-col>
           <!-- 抬头类型 -->
           <el-col :span="8" :offset="4">
-            <span class="withdrawal">抬头类型</span>
+            <span class="withdrawal">{{ $t('抬头类型') }}</span>
             <span></span>
           </el-col>
         </el-row>
@@ -48,42 +51,42 @@
             <el-row :gutter="20">
               <!-- 发票抬头 -->
               <el-col :span="24">
-                <span class="withdrawal">发票抬头</span>
+                <span class="withdrawal">{{ $t('发票抬头') }}</span>
                 <span></span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 税号 -->
               <el-col :span="24">
-                <span class="withdrawal">税号</span>
+                <span class="withdrawal">{{ $t('税号') }}</span>
                 <span></span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 开户银行 -->
               <el-col :span="24">
-                <span class="withdrawal">开户银行</span>
+                <span class="withdrawal">{{ $t('开户银行') }}</span>
                 <span></span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 银行账号 -->
               <el-col :span="24">
-                <span class="withdrawal">银行账号</span>
+                <span class="withdrawal">{{ $t('银行账号') }}</span>
                 <span></span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 企业地址 -->
               <el-col :span="24">
-                <span class="withdrawal">企业地址</span>
+                <span class="withdrawal">{{ $t('企业地址') }}</span>
                 <span></span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 企业电话 -->
               <el-col :span="24">
-                <span class="withdrawal">企业电话</span>
+                <span class="withdrawal">{{ $t('企业电话') }}</span>
                 <span></span>
               </el-col>
             </el-row>
@@ -93,39 +96,39 @@
     </div>
     <div class="middle"></div>
     <div class="rightSide">
-      <h3>日志</h3>
+      <h3>{{ $t('日志') }}</h3>
       <div class="daily-card">
         <div class="text">2021-08-01&nbsp; 12:00:00&nbsp; 提交申请&nbsp; 100392</div>
       </div>
-      <h3>审核备注</h3>
+      <h3>{{ $t('审核备注') }}</h3>
       <div class="remarks-card">
         <div class="condition">该记录还未审核</div>
       </div>
     </div>
     <div class="clearfix">
-      <h3>开票明细</h3>
+      <h3>{{ $t('开票明细') }}</h3>
       <el-card class="detail-card" shadow="never">
         <el-row :gutter="20">
           <!-- 订单金额¥ -->
           <el-col :span="5">
-            <span class="withdrawal">订单金额¥</span>
+            <span class="withdrawal">{{ $t('订单金额¥') }}</span>
             <span class="withdrawal_amount"></span>
           </el-col>
           <!-- 添加明细 -->
-          <el-col :span="5" :offset="14">
-            <el-button type="success" size="small" plain>添加明细</el-button>
+          <el-col :span="2" :offset="17">
+            <el-button type="success" size="small" plain>{{ $t('添加明细') }}</el-button>
           </el-col>
         </el-row>
         <div class="text">
           <!-- 表格 -->
           <el-table border show-summary :data="tableData" style="width: 100%">
             <el-table-column type="index" label="#" width="100"> </el-table-column>
-            <el-table-column prop="order_number" label="服务名称" width="180"> </el-table-column>
-            <el-table-column prop="order_status" label="数量"> </el-table-column>
-            <el-table-column prop="order_amount" label="单价（¥）" width="180"> </el-table-column>
-            <el-table-column prop="proportion" label="金额（¥）" width="180"> </el-table-column>
-            <el-table-column prop="commission_amount" label="税率（%）"> </el-table-column>
-            <el-table-column prop="commission_amount" label="税款（¥）"> </el-table-column>
+            <el-table-column prop="name" label="服务名称" width="180"> </el-table-column>
+            <el-table-column prop="name" label="数量"> </el-table-column>
+            <el-table-column prop="name" label="单价（¥）" width="180"> </el-table-column>
+            <el-table-column prop="amount2" label="金额（¥）" width="180"> </el-table-column>
+            <el-table-column prop="amount1" label="税率（%）"> </el-table-column>
+            <el-table-column prop="amount3" label="税款（¥）"> </el-table-column>
             <el-table-column prop="commission_amount" label="操作">
               <template slot-scope="scope">
                 <el-button type="success" plain size="mini" @click="editDetail(scope.row.id)">{{
@@ -137,8 +140,8 @@
         </div>
       </el-card>
       <el-row class="auditStatus">
-        <el-button type="danger">作废申请</el-button>
-        <el-button type="primary">开票完成</el-button>
+        <el-button type="danger">{{ $t('作废申请') }}</el-button>
+        <el-button type="primary">{{ $t('开票完成') }}</el-button>
       </el-row>
     </div>
   </div>
@@ -155,6 +158,13 @@ export default {
           amount1: '234',
           amount2: '3.2',
           amount3: 10
+        },
+        {
+          id: '12987123',
+          name: '王小虎',
+          amount1: '165',
+          amount2: '4.43',
+          amount3: 12
         }
       ]
     }
@@ -169,7 +179,7 @@ export default {
     float: left;
     .box-card {
       display: flex;
-      width: 680px;
+      width: 1150px;
       font-size: 14px;
       padding: 15px 40px;
       background-color: #fff;
@@ -190,7 +200,10 @@ export default {
         }
       }
       .rightInfo {
+        display: flex;
         width: 150px;
+        justify-content: center;
+        align-items: center;
         .review_color {
           color: red;
         }
@@ -203,7 +216,7 @@ export default {
       }
     }
     .info-card {
-      width: 680px;
+      width: 1150px;
       font-size: 14px;
       padding: 15px 40px;
       background-color: #fff;
@@ -237,12 +250,12 @@ export default {
     text-align: center;
     border-right: 1px solid black;
     margin-top: 26px;
-    margin-left: 14px;
+    margin-left: 25px;
   }
   .rightSide {
     float: right;
     .daily-card {
-      width: 340px;
+      width: 400px;
       font-size: 14px;
       background-color: #fff;
       .text {
@@ -250,7 +263,7 @@ export default {
       }
     }
     .remarks-card {
-      width: 340px;
+      width: 400px;
       height: 300px;
       font-size: 14px;
       background-color: #fff;
@@ -289,6 +302,9 @@ export default {
         color: red;
         font-size: 24px;
         font-weight: bold;
+      }
+      .text {
+        margin-top: 10px;
       }
       .confirm_amount {
         color: blue;
