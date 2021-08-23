@@ -28,11 +28,8 @@
         }}</el-button>
       </el-form-item>
       <div v-if="this.state === 'multiBox'">
-        <el-form-item
-          v-for="(item, index) in box"
-          :key="item.id"
-          :label="$t(`快递转运单号-箱${index + 1}`)"
-        >
+        <el-form-item v-for="item in box" :key="item.id" :label="$t(`*快递转运单号：`)">
+          <span>{{ item.sn }}</span>
           <el-input v-model="item.logistics_sn"></el-input>
         </el-form-item>
       </div>
@@ -103,11 +100,15 @@ export default {
         return this.$message.error(this.$t('请输入转运快递公司二程'))
       }
       if (this.state === 'multiBox') {
+        let isNull = false
         this.box.forEach(item => {
           if (!item.logistics_sn) {
-            return this.$message.error(this.$t('请输入转运快递单号'))
+            isNull = true
           }
         })
+        if (isNull) {
+          return this.$message.error(this.$t('请输入转运快递单号'))
+        }
       } else {
         if (this.company.sn === '') {
           return this.$message.error(this.$t('请输入转运快递单号二程'))
