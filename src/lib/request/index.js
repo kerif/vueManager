@@ -777,12 +777,12 @@ exports.clickSettlement = params => {
   return $form.put('agents/commissions/settled-all', params)
 }
 // 代理佣金计算 审核通过提现申请
-exports.approveWithdraw = (id, withdrawsId) => {
-  return $form.put(`agents/${id}/withdraws/${withdrawsId}/approved`)
+exports.approveWithdraw = (id, withdrawsId, params) => {
+  return $form.put(`agents/${id}/withdraws/${withdrawsId}/approved`, params)
 }
 // 代理佣金计算 审核拒绝提现申请
-exports.refusedWithdraw = (id, withdrawsId) => {
-  return $form.put(`agents/${id}/withdraws/${withdrawsId}/refused`)
+exports.refusedWithdraw = (id, withdrawsId, params) => {
+  return $form.put(`agents/${id}/withdraws/${withdrawsId}/refused`, params)
 }
 // 代理管理 审核拒绝
 exports.rechargeReject = (id, params) => {
