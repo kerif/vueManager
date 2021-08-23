@@ -61,7 +61,7 @@
                 <img :src="item.user.avatar" />
               </div>
             </el-col>
-            <el-col :span="16" :offset="1">
+            <el-col :span="15" :offset="1">
               <div class="list-font">
                 <span>{{ item.user.id }}---{{ item.user.name }}</span
                 >&nbsp;&nbsp;
@@ -86,9 +86,24 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="4" :offset="1">
+            <el-col :span="5" :offset="1">
               <!-- 星级 -->
-              <el-rate v-model="item.score" disabled> </el-rate>
+              <div class="star">
+                <span>{{ $t('综合评分') }}</span
+                ><el-rate v-model="item.score" disabled> </el-rate>
+              </div>
+              <div class="star" v-if="item.logistics_score">
+                <span>{{ $t('物流评分') }}</span
+                ><el-rate v-model="item.logistics_score" disabled> </el-rate>
+              </div>
+              <div class="star" v-if="item.customer_score">
+                <span>{{ $t('客服评分') }}</span
+                ><el-rate v-model="item.customer_score" disabled> </el-rate>
+              </div>
+              <div class="star" v-if="item.pack_score">
+                <span>{{ $t('打包评分') }}</span
+                ><el-rate v-model="item.pack_score" disabled> </el-rate>
+              </div>
               <!-- 精选 -->
               <div class="featured" v-if="item.is_recommend === 1">
                 <span class="featured-font">
@@ -261,6 +276,10 @@ export default {
   .agentRight {
     // display: inline-block;
     float: right;
+  }
+  .star {
+    display: flex;
+    gap: 10px;
   }
   .changeTime {
     display: inline-block;
