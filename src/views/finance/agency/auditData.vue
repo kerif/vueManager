@@ -47,6 +47,11 @@
             {{ $t('待结算') }}
             <i class="count">{{ totalSettlement }}</i>
           </el-button>
+          <!-- <el-badge :value="totalSettlement" class="item" type="primary">
+            <el-button size="small" class="unsettled" @click="editSettled">{{
+              $t('待结算')
+            }}</el-button>
+          </el-badge> -->
         </el-col>
         <!-- 关键字搜索 -->
         <el-col :span="4" :offset="4">
@@ -116,7 +121,8 @@ export default {
         status: '',
         type: '',
         begin_date: '',
-        end_date: ''
+        end_date: '',
+        keyword: ''
       },
       statusData: [
         {

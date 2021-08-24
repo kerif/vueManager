@@ -94,7 +94,6 @@
         </div>
       </div>
     </div>
-    <div class="middle"></div>
     <div class="rightSide">
       <h3>{{ $t('日志') }}</h3>
       <div class="daily-card">
@@ -177,9 +176,9 @@ export default {
 .invoiceDetails-container {
   .leftSide {
     float: left;
+    width: 75%;
     .box-card {
       display: flex;
-      width: 1150px;
       font-size: 14px;
       padding: 15px 40px;
       background-color: #fff;
@@ -216,7 +215,6 @@ export default {
       }
     }
     .info-card {
-      width: 1150px;
       font-size: 14px;
       padding: 15px 40px;
       background-color: #fff;
@@ -236,36 +234,29 @@ export default {
       .main {
         display: flex;
         padding: 5px;
-        border: 2px dashed grey;
+        border: 2px dashed #ccc;
         .leftBank {
           flex: 1;
         }
       }
     }
   }
-  .middle {
-    float: left;
-    width: 1px;
-    height: 520px;
-    text-align: center;
-    border-right: 1px solid black;
-    margin-top: 26px;
-    margin-left: 25px;
-  }
   .rightSide {
     float: right;
+    width: 23%;
     .daily-card {
-      width: 400px;
+      height: 126px;
       font-size: 14px;
+      overflow: auto;
       background-color: #fff;
       .text {
         padding: 15px 40px;
       }
     }
     .remarks-card {
-      width: 400px;
-      height: 300px;
+      height: 257px;
       font-size: 14px;
+      overflow: auto;
       background-color: #fff;
       padding: 20px 0px;
       .condition {
