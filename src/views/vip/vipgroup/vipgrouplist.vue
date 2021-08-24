@@ -1,7 +1,7 @@
 <template>
   <div class="vipgroup-list-container">
     <div class="btn-flex">
-      <div class="search">
+      <div class="vip-group-search">
         <search-group
           paddingBottom="0"
           v-model="page_params.keyword"
@@ -191,7 +191,7 @@ export default {
     display: flex;
     justify-content: space-between;
   }
-  .search {
+  .vip-group-search {
     width: 12.5%;
     overflow: hidden;
     float: left;

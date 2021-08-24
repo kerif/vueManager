@@ -1567,7 +1567,7 @@ export default [
             path: '/marketing/member',
             name: 'system',
             component: System,
-            id: 801,
+            id: 806,
             meta: {
               level: 2,
               group: '营销管理',
