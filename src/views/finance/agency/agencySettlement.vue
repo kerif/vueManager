@@ -49,6 +49,7 @@ export default {
       console.log(param_list, 'param_list')
       this.$request
         .pendingReview({
+          keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
           ...param_list

@@ -149,7 +149,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="middle"></div> -->
       <div class="rightSide">
         <h3>{{ $t('日志') }}</h3>
         <div class="daily-card">
@@ -270,12 +269,11 @@ export default {
 <style lang="scss" scoped>
 .detail-container {
   .head {
-    display: flex;
     .leftSide {
-      flex: 1;
+      float: left;
+      width: 75%;
       .box-card {
         display: flex;
-        width: 1150px;
         font-size: 14px;
         padding: 15px 40px;
         background-color: #fff;
@@ -309,7 +307,6 @@ export default {
         }
       }
       .info-card {
-        width: 1150px;
         font-size: 14px;
         padding: 15px 40px;
         background-color: #fff;
@@ -368,17 +365,21 @@ export default {
       }
     }
     .rightSide {
-      width: 400px;
+      float: right;
+      width: 23%;
       .daily-card {
+        height: 88px;
         font-size: 14px;
+        overflow: auto;
         background-color: #fff;
         .text {
           padding: 15px 40px;
         }
       }
       .remarks-card {
-        height: 300px;
+        height: 305px;
         font-size: 14px;
+        overflow: auto;
         background-color: #fff;
         padding: 20px 0px;
         .condition {
@@ -386,9 +387,10 @@ export default {
         }
         .text {
           padding: 5px 40px;
+          word-wrap: break-word;
         }
         .screenshot {
-          width: 260px;
+          width: 80%;
           height: 180px;
           margin: 0 auto;
           background-color: #ccc;
@@ -398,6 +400,7 @@ export default {
   }
 
   .clearfix {
+    clear: both;
     h3 {
       padding-top: 15px;
     }
