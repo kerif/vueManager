@@ -600,9 +600,7 @@ export default {
       this.getList()
       this.getRadio()
       this.getInsurance()
-      this.getRecipeAddress()
     } else if (this.$route.query.packageId) {
-      console.log(this.$route.query.packageId, 'packageId')
       this.getBatch()
       this.radio = 2
       this.packageId = this.$route.query.packageId
@@ -656,7 +654,6 @@ export default {
               this.getCountry() // 获取新建收件地址的国家
             }
             this.optionsId = res.data.packages.map(item => item.id)
-            console.log(this.optionsId, 'optionsId')
             this.localization = res.localization
             if (res.data.items.added_service.length) {
               this.box.add_service = res.data.items.added_service
@@ -664,6 +661,7 @@ export default {
             this.box.is_insurance = res.data.items.insurance
             this.box.is_tariff = res.data.items.is_tariff
             this.box.payment_mode = res.data.items.payment_mode
+            this.getExpress()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -693,7 +691,6 @@ export default {
                 this.getTips()
               }
             })
-            this.getExpress()
           }
         })
     },
@@ -734,16 +731,7 @@ export default {
       if (!this.chooseId) {
         return this.$message.error(this.$t('请选择'))
       }
-      // chooseId
-      // let params = [
-      //   {
-      //     address_id: this.chooseId,
-      //     package_count: this.counts,
-      //     user_id: this.clientId
-      //   }
-      // ]
       let params = this.addressList.map(item => {
-        // const { userId, packageCount, addressId } = item
         if (item.user_id === this.counts.user_id) {
           return {
             address_id: this.chooseId,
@@ -757,7 +745,6 @@ export default {
           address_id: item.address.id
         }
       })
-      console.log(params, 'params')
       this.$request.confirmChangeAddress(params).then(res => {
         if (res.ret) {
           this.$notify({
@@ -777,7 +764,6 @@ export default {
               this.getTips()
             }
           })
-          // this.getRecipeAddress() // 重新拉取收件地址
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -787,14 +773,12 @@ export default {
         }
         this.boxDialog = false
       })
-      // this.userData = this.user
       this.boxDialog = false
     },
     // 获取快递方式
     getExpress() {
       let address_ids = []
       address_ids = this.addressList.map(item => item.address.id)
-      console.log(address_ids, 'address_ids')
       this.$request
         .usableLines({
           address_ids,
