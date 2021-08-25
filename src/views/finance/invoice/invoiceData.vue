@@ -4,7 +4,7 @@
       <el-col :span="3">
         <!-- 订单状态 -->
         <el-select v-model="type" :placeholder="$t('订单状态')" size="small">
-          <el-option :label="$t('订单状态')" :value="$t('选项一')"> </el-option>
+          <el-option :label="$t('订单状态')"> </el-option>
         </el-select>
       </el-col>
       <!-- 开票状态 -->
@@ -40,19 +40,19 @@
     <!-- 表格 -->
     <div class="data-list">
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column type="index" label="#" width="80"> </el-table-column>
-        <el-table-column prop="name" label="订单号" width="160"> </el-table-column>
-        <el-table-column prop="data" label="订单状态"> </el-table-column>
-        <el-table-column prop="data" label="客户ID" width="160"> </el-table-column>
-        <el-table-column prop="name" label="发票类型" width="160"> </el-table-column>
-        <el-table-column prop="data" label="抬头类型"> </el-table-column>
-        <el-table-column prop="data" label="发票金额￥" width="160"> </el-table-column>
-        <el-table-column prop="name" label="审核状态" width="160"> </el-table-column>
-        <el-table-column prop="data" label="申请时间"> </el-table-column>
-        <el-table-column prop="data" label="处理人" width="160"> </el-table-column>
-        <el-table-column prop="name" label="处理时间" width="160"> </el-table-column>
-        <el-table-column prop="data" label="发票号码"> </el-table-column>
-        <el-table-column prop="data" label="操作">
+        <el-table-column type="index" :label="$t('#')" width="80"> </el-table-column>
+        <el-table-column prop="name" :label="$t('订单号')" width="160"> </el-table-column>
+        <el-table-column prop="data" :label="$t('订单状态')"> </el-table-column>
+        <el-table-column prop="data" :label="$t('客户ID')" width="160"> </el-table-column>
+        <el-table-column prop="name" :label="$t('发票类型')" width="160"> </el-table-column>
+        <el-table-column prop="data" :label="$t('抬头类型')"> </el-table-column>
+        <el-table-column prop="data" :label="$t('发票金额￥')" width="160"> </el-table-column>
+        <el-table-column prop="name" :label="$t('审核状态')" width="160"> </el-table-column>
+        <el-table-column prop="data" :label="$t('申请时间')"> </el-table-column>
+        <el-table-column prop="data" :label="$t('处理人')" width="160"> </el-table-column>
+        <el-table-column prop="name" :label="$t('处理时间')" width="160"> </el-table-column>
+        <el-table-column prop="data" :label="$t('发票号码')"> </el-table-column>
+        <el-table-column prop="data" :label="$t('操作')">
           <template slot-scope="scope">
             <el-button type="success" plain size="mini" @click="editDetail(scope.row.id)">{{
               $t('处理')
@@ -87,7 +87,8 @@ export default {
       },
       timeList: [],
       type: '',
-      status: ''
+      status: '',
+      value: ''
     }
   },
   mixins: [pagination],

@@ -113,7 +113,7 @@ export default {
     },
     init() {
       this.ruleForm.amount = this.amount
-      console.log(this.amount, this.remark)
+      console.log(this.amount)
     },
     submit() {
       // if (this.ruleForm.amount === '') {

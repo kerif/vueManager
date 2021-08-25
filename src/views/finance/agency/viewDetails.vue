@@ -63,7 +63,7 @@
               <span>{{ detailData.customer_remark }}</span>
             </el-col>
           </el-row>
-          <div class="main">
+          <div class="main" v-if="this.detailData.type !== '余额充值'">
             <div class="leftBank">
               <el-row :gutter="20">
                 <!-- 真实姓名 -->
@@ -213,9 +213,11 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      detailData: {},
+      detailData: {
+        user: {}
+      },
       info: {},
-      charge: {},
+      charge: [],
       tableLoading: false,
       imgVisible: false,
       imgSrc: ''
@@ -223,13 +225,11 @@ export default {
   },
   created() {
     this.getReview()
-    console.log(this.$route.params.id)
   },
   components: {},
   methods: {
     getReview() {
       this.$request.Review(this.$route.params.id).then(res => {
-        console.log(res)
         this.detailData = res.data
         this.info = res.data.bank_card_info || {}
         this.charge = res.data.commissions

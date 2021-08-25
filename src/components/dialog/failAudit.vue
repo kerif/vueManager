@@ -98,8 +98,15 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
+    init() {
+      this.ruleForm.remark = this.remark
+      console.log(this.remark, this.ruleForm.remark)
+    },
     submit() {
-      this.$request.refusedWithdraw(this.userid, this.withdrawsId).then(res => {
+      let info = {
+        customer_remark: this.remark
+      }
+      this.$request.refusedWithdraw(this.userid, this.withdrawsId, info).then(res => {
         console.log(res)
         if (res.ret) {
           this.$notify({

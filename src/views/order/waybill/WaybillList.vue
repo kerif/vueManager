@@ -2096,9 +2096,9 @@ export default {
   .dialog-sty {
     margin-left: 30px;
   }
-  .el-icon {
-    display: none;
-  }
+  // .el-icon {
+  //   display: none;
+  // }
   .iframe {
     width: 100%;
     min-height: 300px;
@@ -2144,9 +2144,9 @@ export default {
     margin-left: 5px;
     cursor: pointer;
   }
-  .el-icon {
-    display: block !important;
-  }
+  // .el-icon {
+  //   display: block !important;
+  // }
 }
 .dialog-input {
   width: 30% !important;

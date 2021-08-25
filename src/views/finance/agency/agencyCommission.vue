@@ -133,7 +133,6 @@ export default {
   created() {
     this.getList()
     this.goInit()
-    console.log(this.$route.query.userId, 'user_id')
   },
   mixins: [pagination],
   methods: {
@@ -150,7 +149,6 @@ export default {
           end_date: this.timeList[1]
         })
         .then(res => {
-          console.log(res)
           if (res.ret) {
             this.settleData = res.data
             this.page_params.page = res.meta.current_page
@@ -161,16 +159,13 @@ export default {
     // 一键结算
     oneSettlement() {
       this.unsettleId = this.settleData.filter(item => item.settled === 0)
-      console.log(this.unsettleId)
       this.ids = this.unsettleId.map(item => item.id)
-      console.log(this.ids)
       this.$confirm(this.$t('您真的确认要一键结算吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
         this.$request.clickSettlement({ commission_ids: this.ids }).then(res => {
-          console.log(res)
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
@@ -189,7 +184,6 @@ export default {
     },
     // 成交记录
     settlement(id) {
-      console.log(id, 'id')
       this.$request.finishOrders(id).then(res => {
         if (res.ret) {
           this.$notify({
@@ -209,7 +203,6 @@ export default {
     },
     // 客户id
     queryCNSearch(queryString, callback) {
-      console.log(this.page_params.user_id)
       var list = [{}]
       this.$request
         .getUsers({
@@ -225,7 +218,6 @@ export default {
     },
     // 客户id
     handleSelect(item) {
-      console.log(item)
       this.supplierId = item.id
       this.userId = item.id
       this.supplierName = item.name
@@ -235,7 +227,6 @@ export default {
     goInit() {
       this.$request.initSettle().then(res => {
         this.settledData = res.data.status_list
-        console.log(res)
       })
     },
     fm() {

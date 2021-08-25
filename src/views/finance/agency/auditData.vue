@@ -48,7 +48,7 @@
             <i class="count">{{ totalSettlement }}</i>
           </el-button>
           <!-- <el-badge :value="totalSettlement" class="item" type="primary">
-            <el-button size="small" class="unsettled" @click="editSettled">{{
+            <el-button size="small" type="primary" class="unsettled" @click="editSettled">{{
               $t('待结算')
             }}</el-button>
           </el-badge> -->
@@ -179,9 +179,7 @@ export default {
     // 提现方式
     goMethods() {
       this.$request.withdrawalMethod().then(res => {
-        console.log(res)
         this.typeData = res.data.type_list
-        console.log(this.typeData)
       })
     }
   }
