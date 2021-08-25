@@ -6,7 +6,7 @@
       <div class="changeVou">
         <el-button @click="withdraw">{{ $t('提现说明') }}</el-button>
       </div>
-      <div class="search">
+      <div class="agent-search">
         <search-group
           :placeholder="$t('请输入关键字')"
           v-model="page_params.keyword"
@@ -353,7 +353,7 @@ export default {
   align-items: center;
   flex-direction: row-reverse;
 }
-.search {
+.agent-search {
   width: 21.5%;
   float: right;
 }

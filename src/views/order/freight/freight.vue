@@ -4,21 +4,29 @@
       <div class="freight-left">
         <el-form label-position="top">
           <el-form-item :label="`*${$t('收货国家')}`">
-            <el-select
-              v-model="queryInfo.country_id"
-              filterable
-              :placeholder="$t('请选择国家或地区')"
-              class="long-item"
+            <el-cascader
+              v-model="selectId"
+              :options="countryList"
+              :props="{ checkStrictly: true }"
               @change="onCountryChange"
-            >
-              <el-option
-                v-for="item in countryList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
+              clearable
+            ></el-cascader>
+            <el-form-item :label="`*${$t('寄往仓库')}`">
+              <el-select
+                v-model="queryInfo.warehouse_id"
+                :placeholder="$t('请选择寄往仓库')"
+                class="long-item"
+                @change="onQuery('warehouse_id')"
               >
-              </el-option>
-            </el-select>
+                <el-option
+                  v-for="item in warehouseList"
+                  :key="item.id"
+                  :label="item.warehouse_name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
           </el-form-item>
           <el-form-item :label="`*${$t('物品重量')}`">
             <el-input
@@ -46,18 +54,6 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <!-- 用户组 -->
-          <!-- <el-form-item :label="`*${$t('用户组')}`">
-          <el-select v-model="queryInfo.prop_ids" multiple
-          :placeholder="$t('请选择')" class="long-item" @change="onQuery('prop_ids')">
-            <el-option
-              v-for="item in propList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item> -->
           <el-form-item :label="$t('包裹尺寸（选填）')">
             <el-input
               :placeholder="$t('长')"
@@ -83,22 +79,6 @@
             <div class="calc-info">
               {{ $t('包裹尺寸为商品打包后，实际包裹箱的长宽高用于某些体积重量的线路运费计算') }}
             </div>
-          </el-form-item>
-          <el-form-item :label="`*${$t('寄往仓库')}`">
-            <el-select
-              v-model="queryInfo.warehouse_id"
-              :placeholder="$t('请选择寄往仓库')"
-              class="long-item"
-              @change="onQuery('warehouse_id')"
-            >
-              <el-option
-                v-for="item in warehouseList"
-                :key="item.id"
-                :label="item.warehouse_name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
           </el-form-item>
         </el-form>
         <el-button
@@ -148,10 +128,11 @@ export default {
   name: 'freight',
   data() {
     return {
-      countryList: [],
       isEmpty: true,
       queryInfo: {
         country_id: '',
+        area_id: '',
+        sub_area_id: '',
         length: '',
         width: '',
         height: '',
@@ -159,6 +140,8 @@ export default {
         warehouse_id: '',
         prop_ids: []
       },
+      countryList: [],
+      selectId: [],
       lineList: [],
       warehouseList: [],
       propList: [],
@@ -193,7 +176,28 @@ export default {
     getCountrys() {
       this.$request.countryLocation().then(res => {
         if (res.ret) {
-          this.countryList = res.data
+          this.countryList = res.data.map(item => {
+            return {
+              value: item.id,
+              label: item.name,
+              children: item.areas.length
+                ? item.areas.map(item2 => {
+                    return {
+                      value: item2.id,
+                      label: item2.name,
+                      children: item2.areas.length
+                        ? item2.areas.map(item3 => {
+                            return {
+                              value: item3.id,
+                              label: item3.name
+                            }
+                          })
+                        : []
+                    }
+                  })
+                : []
+            }
+          })
         }
       })
     },
@@ -209,6 +213,12 @@ export default {
     },
     // 根据所选国家拉取寄往仓库地址
     onCountryChange(flag = true) {
+      this.lineList = []
+      ;[
+        this.queryInfo.country_id,
+        this.queryInfo.area_id,
+        this.queryInfo.sub_area_id
+      ] = this.selectId
       flag && this.handleQueryChange('country_id', this.queryInfo.country_id)
       this.$request
         .getExpressFee({

@@ -154,6 +154,7 @@
               <el-radio-group v-model="user.box_type">
                 <el-radio :label="1">{{ $t('单箱出库') }}</el-radio>
                 <el-radio :label="2">{{ $t('多箱出库') }}</el-radio>
+                <el-button @click="originalBox">{{ $t('原箱出库') }}</el-button>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -552,6 +553,28 @@ export default {
               .map(item => item.volume_weight)
               .reduce((accumulator, currentValue) => Number(accumulator) + Number(currentValue), 0)
               .toFixed(2)
+    },
+    // 原箱出库
+    originalBox() {
+      if (this.PackageData.length > 1) {
+        this.user.box_type = 2
+        this.user.box = this.PackageData.map(item => {
+          return {
+            length: item.length,
+            width: item.width,
+            height: item.height,
+            weight: item.package_weight,
+            volume_weight: ((item.length * item.width * item.height) / this.factor).toFixed(3)
+          }
+        })
+        this._onTotalWeight()
+        this.unitVolume()
+      } else {
+        this.user.weight = this.PackageData[0].package_weight
+        this.user.length = this.PackageData[0].length
+        this.user.width = this.PackageData[0].width
+        this.user.height = this.PackageData[0].height
+      }
     },
     savePacked() {
       this.user.services = this.updateProp

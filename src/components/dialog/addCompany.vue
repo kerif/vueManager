@@ -7,14 +7,7 @@
     @close="clear"
   >
     <el-form ref="form" :model="company" label-width="160px">
-      <el-form-item :label="$t('*转运快递单号-二程：')">
-        <el-input v-model="company.sn" class="input-select"></el-input>
-        <el-button @click.native="goExpress" class="express-btn">{{
-          $t('管理发货快递公司')
-        }}</el-button>
-      </el-form-item>
       <el-form-item :label="$t('*转运快递公司-二程：')">
-        <!-- <el-input v-model="company.company"></el-input> -->
         <el-select
           v-model="company.company"
           clearable
@@ -30,6 +23,18 @@
           >
           </el-option>
         </el-select>
+        <el-button @click.native="goExpress" class="express-btn">{{
+          $t('管理发货快递公司')
+        }}</el-button>
+      </el-form-item>
+      <div v-if="this.state === 'multiBox'">
+        <el-form-item v-for="item in box" :key="item.id" :label="$t(`*快递转运单号：`)">
+          <span>{{ item.sn }}</span>
+          <el-input v-model="item.logistics_sn"></el-input>
+        </el-form-item>
+      </div>
+      <el-form-item :label="$t('*转运快递单号-二程：')" v-else>
+        <el-input v-model="company.sn" class="input-select"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -47,8 +52,10 @@ export default {
         sn: '',
         company: ''
       },
+      orderId: '',
       companyList: [],
-      state: ''
+      state: '',
+      box: []
     }
   },
   methods: {
@@ -75,38 +82,72 @@ export default {
         }
       })
     },
-    confirm() {
-      if (this.company.sn === '') {
-        return this.$message.error(this.$t('请输入转运快递单号二程'))
-      } else if (this.company.company === '') {
+    getOrderDetails() {
+      this.$request.getOrderDetails(this.orderId).then(res => {
+        if (res.ret) {
+          this.box = res.data.box.map(item => {
+            return {
+              id: item.id,
+              sn: item.sn,
+              logistics_sn: ''
+            }
+          })
+        }
+      })
+    },
+    async confirm() {
+      if (!this.company.company) {
         return this.$message.error(this.$t('请输入转运快递公司二程'))
       }
-      this.$request
-        .updateLogistics(
+      if (this.state === 'multiBox') {
+        let isNull = false
+        this.box.forEach(item => {
+          if (!item.logistics_sn) {
+            isNull = true
+          }
+        })
+        if (isNull) {
+          return this.$message.error(this.$t('请输入转运快递单号'))
+        }
+      } else {
+        if (this.company.sn === '') {
+          return this.$message.error(this.$t('请输入转运快递单号二程'))
+        }
+      }
+      let res = {}
+      if (this.state === 'multiBox') {
+        let box = this.box.map(item => {
+          return {
+            id: item.id,
+            logistics_sn: item.logistics_sn,
+            company: this.company.company
+          }
+        })
+        res = await this.$request.updateMultiLogistics(box)
+      } else {
+        res = await this.$request.updateLogistics(
           this.id.map(i => ({
             id: i,
             sn: this.company.sn,
             company: this.company.company
           }))
         )
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('保存成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.show = false
-            this.success()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-          this.show = false
+      }
+      if (res.ret) {
+        this.$notify({
+          title: this.$t('保存成功'),
+          message: res.msg,
+          type: 'success'
         })
+        this.show = false
+        this.success()
+      } else {
+        this.$notify({
+          title: this.$t('操作失败'),
+          message: res.msg,
+          type: 'warning'
+        })
+      }
     },
     goExpress() {
       this.show = false
@@ -125,6 +166,9 @@ export default {
     init() {
       this.getCompany()
       // this.getList()
+      if (this.state === 'multiBox') {
+        this.getOrderDetails()
+      }
     }
   }
 }

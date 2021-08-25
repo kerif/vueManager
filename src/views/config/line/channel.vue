@@ -182,9 +182,13 @@
           </template>
         </el-table-column>
         <!-- 分区表 -->
-        <el-table-column :label="$t('分区表')"></el-table-column>
+        <el-table-column :label="$t('分区表')"> </el-table-column>
         <!-- 价格表 -->
-        <el-table-column :label="$t('价格表')"></el-table-column>
+        <el-table-column :label="$t('价格表')">
+          <template slot-scope="scope">
+            {{ scope.row.price_grade ? scope.row.price_grade.length : 0 }}
+          </template>
+        </el-table-column>
         <!-- 支持仓库 -->
         <el-table-column :label="$t('支持仓库')">
           <template slot-scope="scope">
@@ -255,7 +259,7 @@
             <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="116px" fixed="right">
+        <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
             <el-dropdown>
               <el-button type="primary" plain>
@@ -638,19 +642,6 @@ export default {
         }
       })
     },
-    // 修改线路
-    editLine(id) {
-      localStorage.setItem('add', '')
-      this.$router.push({
-        name: 'channelLineEdit',
-        params: {
-          id: id
-        },
-        query: {
-          state: 'edit'
-        }
-      })
-    },
     // 拼团配置
     groupSet(id) {
       this.groupId = id
@@ -674,8 +665,20 @@ export default {
     },
     // 新增
     addNew() {
-      console.log(this.lineId, '1111')
       this.$router.push({ name: 'channelLineAdd', query: { channelId: this.lineId, state: 'add' } })
+    },
+    // 修改线路
+    editLine(id) {
+      localStorage.setItem('add', '')
+      this.$router.push({
+        name: 'channelLineEdit',
+        params: {
+          id: id
+        },
+        query: {
+          state: 'edit'
+        }
+      })
     },
     // 删除
     deleteLine(id) {

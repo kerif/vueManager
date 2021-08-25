@@ -293,6 +293,7 @@ export default {
     // 支付审核
     getPay() {
       this.$request.payData(this.$route.params.id).then(res => {
+        console.log(res)
         if (res.ret) {
           this.form = res.data
           this.oderData = [res.data.details]
@@ -310,6 +311,7 @@ export default {
     // 退款审核
     getReturn() {
       this.$request.refundsData(this.$route.params.id).then(res => {
+        console.log(res)
         if (res.ret) {
           this.form = res.data
           this.oderData = [res.data.details]

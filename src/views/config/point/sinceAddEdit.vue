@@ -518,11 +518,9 @@ export default {
     },
     // 更新 公告设置
     updateAnnoucement() {
-      console.log(this.announcementData, 'announcementData')
       this.form.opening_hours = this.announcementData.opening_hours
       this.form.announcement = this.announcementData.announcement
       this.announcementDailog = false
-      console.log(this.form, 'this.form')
     },
     clearAnnouncement() {
       this.announcementData.opening_hours = ''

@@ -2,7 +2,7 @@
   <div class="sales-management-container">
     <div class="headerList">
       <div>
-        <span style="font-weight: 900">{{ $t('清关编码') }}</span>
+        <span style="font-weight: 900">{{ $t('销售价格表') }}</span>
         <el-tooltip
           class="item"
           effect="dark"

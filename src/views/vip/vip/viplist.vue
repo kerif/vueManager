@@ -65,7 +65,7 @@
       ></el-table-column>
       <el-table-column :label="$t('积分')" prop="point"></el-table-column>
       <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
-      <el-table-column :label="$t('VIP等级')" prop="growth_value"></el-table-column>
+      <el-table-column :label="$t('VIP等级')" prop="member_level_name"></el-table-column>
       <el-table-column :label="$t('客户组')" prop="user_group.name_cn"></el-table-column>
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
       <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>

@@ -22,29 +22,34 @@
           {{ $t('转账金额') }}：{{ localization.currency_unit }} {{ growthDetails.tran_amount }}
         </div>
         <div>{{ $t('关联单号') }}：{{ growthDetails.order_number }}</div>
-        <div>{{ $t('客服备注') }}：{{ growthDetails.customer_remark }}</div>
+        <div>{{ $t('客户备注') }}：{{ growthDetails.remark }}</div>
         <div>
-          {{ $t('客服图片') }}：
+          {{ $t('客户图片') }}：
           <img
+            v-for="item in growthDetails.images"
+            :key="item.index"
             class="image"
-            :src="$baseUrl.IMAGE_URL + growthDetails.images"
-            @click="checkImg(growthDetails.images)"
+            :src="$baseUrl.IMAGE_URL + item"
+            @click="checkImg(item)"
           />
         </div>
         <div>{{ $t('创建时间') }}：{{ growthDetails.created_at }}</div>
       </div>
     </div>
-    <div class="content">
-      <h4>{{ $t('审核通过信息') }}</h4>
+    <div class="content" v-if="growthDetails.status !== 0">
+      <h4 v-if="growthDetails.status === 1">{{ $t('审核通过信息') }}</h4>
+      <h4 v-if="growthDetails.status === 2">{{ $t('审核拒绝信息') }}</h4>
       <div class="user">
         <div>{{ $t('审核人员') }}：{{ growthDetails.operator }}</div>
-        <div>{{ $t('备注') }}：{{ growthDetails.remark }}</div>
+        <div>{{ $t('备注') }}：{{ growthDetails.customer_remark }}</div>
         <div>
           {{ $t('图片') }}：
           <img
+            v-for="item in growthDetails.customer_images"
+            :key="item.index"
             class="image"
-            :src="$baseUrl.IMAGE_URL + growthDetails.customer_images"
-            @click="checkImg(growthDetails.customer_images)"
+            :src="$baseUrl.IMAGE_URL + item"
+            @click="checkImg(item)"
           />
         </div>
       </div>
@@ -108,26 +113,6 @@ export default {
           this.getGrowthFinanceDetails()
         }
       )
-      // let res = {}
-      // if (status === 'pass') {
-      //   res = await this.$request.approvedGrowthValue(this.$route.params.id)
-      // } else {
-      //   res = await this.$request.refusedGrowthValue(this.$route.params.id)
-      // }
-      // if (res.ret) {
-      //   this.$notify({
-      //     title: this.$t('操作成功'),
-      //     message: res.msg,
-      //     type: 'success'
-      //   })
-      //   this.$router.go(-1)
-      // } else {
-      //   this.$notify({
-      //     title: this.$t('操作失败'),
-      //     message: res.msg,
-      //     type: 'warning'
-      //   })
-      // }
     }
   }
 }

@@ -22,6 +22,9 @@
       >
         <el-input v-model="discountForm.price" style="width: 207px"></el-input>
       </el-form-item>
+      <el-form-item :label="$t('每年可购买次数')">
+        <el-input v-model="discountForm.count" style="width: 207px"></el-input>
+      </el-form-item>
       <el-form-item :label="$t('有效时间')">
         <el-date-picker
           v-model="time"
@@ -90,6 +93,7 @@ export default {
         base_price_id: '',
         price: '',
         base_price: '',
+        count: '',
         start_time: '',
         end_time: '',
         applicable_mode: 0,
@@ -166,6 +170,7 @@ export default {
         if (res.ret) {
           this.product = this.proList.filter(item => item.id === +res.data.base_price_id)[0]
           this.discountForm.price = res.data.price
+          this.discountForm.count = res.data.count
           this.discountForm.applicable_mode = res.data.applicable_mode
           this.time = [res.data.start_time, res.data.end_time]
           this.selectMode(this.discountForm.applicable_mode)
@@ -252,6 +257,7 @@ export default {
       this.product = ''
       this.discountForm.price = ''
       this.discountForm.base_price = ''
+      this.discountForm.count = ''
       this.discountForm.start_time = ''
       this.discountForm.end_time = ''
       this.discountForm.applicable_mode = 0

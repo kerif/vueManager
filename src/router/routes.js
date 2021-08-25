@@ -54,6 +54,16 @@ const reviewFinance = loadonDemand('finance/reviewFinance')
 const selfSettlement = loadonDemand('finance/selfSettlement')
 // 财务 自提点佣金结算 结算记录
 const recordDetails = loadonDemand('finance/recordDetails')
+// 财务 代理佣金结算
+// const agencySettlement = loadonDemand('finance/agency/agencySettlement')
+// 财务 查看详细
+const viewDetails = loadonDemand('finance/agency/viewDetails')
+// 财务 代理结算
+const agencyCommission = loadonDemand('finance/agency/agencyCommission')
+// 财务 发票管理
+// const invoiceManage = loadonDemand('finance/invoice/invoiceManage')
+// 财务 发票详情
+const invoiceDetails = loadonDemand('finance/invoice/invoiceDetails')
 // 配置 路线列表
 // const LineList = loadonDemand('config/line/LineList')
 // 新路线
@@ -966,7 +976,7 @@ export default [
             }
           },
           {
-            path: '/config/line/channel/edit/:id',
+            path: '/config/line/channel/:id',
             name: 'channelLine',
             component: channelLine,
             id: 601,
@@ -1409,25 +1419,14 @@ export default [
             }
           },
           {
-            path: '/finance/growthFinance',
-            name: 'growthFinance',
-            component: GrowthFinance,
-            id: 707,
+            path: '/finance/financeCharts',
+            name: 'financeCharts',
+            component: financeCharts,
+            id: 704,
             meta: {
               group: '财务',
               level: 2,
-              name: '成长值财务'
-            }
-          },
-          {
-            path: '/finance/growthFinanceDetails/:id',
-            name: 'growthFinanceDetails',
-            component: GrowthFinanceDetails,
-            id: 707,
-            meta: {
-              group: '财务',
-              level: 3,
-              name: '成长值财务详情'
+              name: '财务概览'
             }
           },
           {
@@ -1454,17 +1453,6 @@ export default [
             }
           },
           {
-            path: '/finance/financeCharts',
-            name: 'financeCharts',
-            component: financeCharts,
-            id: 704,
-            meta: {
-              group: '财务',
-              level: 2,
-              name: '财务概览'
-            }
-          },
-          {
             path: '/finance/orderReview',
             name: 'orderReview',
             component: orderReview,
@@ -1486,6 +1474,86 @@ export default [
               name: '审核',
               parent: '/finance/orderReview'
             }
+          },
+          {
+            path: '/finance/growthFinance',
+            name: 'growthFinance',
+            component: GrowthFinance,
+            id: 707,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '成长值财务'
+            }
+          },
+          {
+            path: '/finance/growthFinanceDetails/:id',
+            name: 'growthFinanceDetails',
+            component: GrowthFinanceDetails,
+            id: 707,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '成长值财务详情'
+            }
+          },
+          // {
+          //   path: '/finance/agency',
+          //   name: 'agencySettlement',
+          //   component: agencySettlement,
+          //   id: 708,
+          //   meta: {
+          //     group: '财务',
+          //     level: 2,
+          //     name: '代理佣金结算'
+          //   }
+          // },
+          {
+            path: '/finance/agency/viewDetails/:id',
+            name: 'viewDetails',
+            component: viewDetails,
+            id: 708,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '查看详细',
+              parent: '/finance/agency'
+            }
+          },
+          {
+            path: '/finance/agency/agencyCommission/:id',
+            name: 'agencyCommission',
+            component: agencyCommission,
+            id: 708,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '代理结算',
+              parent: '/finance/agency'
+            }
+          },
+          // {
+          //   path: '/finance/invoice',
+          //   name: 'invoiceManage',
+          //   component: invoiceManage,
+          //   id: 709,
+          //   meta: {
+          //     group: '财务',
+          //     level: 2,
+          //     name: '发票管理'
+          //   }
+          // },
+          {
+            path: '/finance/invoice/invoiceDetails/:id',
+            name: 'invoiceDetails',
+            component: invoiceDetails,
+            id: 709,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '发票详情',
+              parent: '/finance/invoice'
+            }
           }
         ]
       },
@@ -1499,7 +1567,7 @@ export default [
             path: '/marketing/member',
             name: 'system',
             component: System,
-            id: 801,
+            id: 806,
             meta: {
               level: 2,
               group: '营销管理',

@@ -44,7 +44,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .pagination_and_buttons {
   padding: 20px 5px;
   background: #fff;
@@ -94,6 +94,9 @@ export default {
     .el-pagination__total {
       margin: 0 0 0 10px;
     }
+  }
+  /deep/.way-list-container .el-icon {
+    display: inline-block !important;
   }
 }
 </style>

@@ -32,6 +32,7 @@
           <template slot-scope="scope">
             <span v-if="scope.row.source === 1">{{ $t('小程序') }}</span>
             <span v-if="scope.row.source === 2">{{ $t('pc端') }}</span>
+            <span v-if="scope.row.source === 3">{{ $t('h5端') }}</span>
           </template>
         </el-table-column>
         <!-- 类型 -->
