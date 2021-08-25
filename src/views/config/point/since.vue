@@ -152,7 +152,6 @@ import AddBtn from '@/components/addBtn'
 // import dialog from '@/components/dialog'
 import { pagination } from '@/mixin'
 export default {
-  name: 'point',
   components: {
     SearchGroup,
     NlePagination,

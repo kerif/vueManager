@@ -117,7 +117,7 @@
         <search-group
           :placeholder="$t('请输入关键字')"
           v-model="page_params.keyword"
-          @search="goSearch"
+          @search="getList"
         >
         </search-group>
         <div class="filter">
@@ -146,7 +146,7 @@
           size="mini"
           clearable
           :placeholder="$t('请选择分类')"
-          v-model="searchForm.resource_type"
+          v-model="page_params.resource_type"
         >
           <el-option
             v-for="item in classifyOpiton"
@@ -159,7 +159,7 @@
           size="mini"
           clearable
           :placeholder="$t('请选择收支类型')"
-          v-model="searchForm.type"
+          v-model="page_params.type"
         >
           <el-option
             v-for="item in typeOption"
@@ -172,7 +172,7 @@
           size="mini"
           clearable
           :placeholder="$t('请选择收支规则')"
-          v-model="searchForm.rule_code"
+          v-model="page_params.rule_code"
         >
           <el-option
             v-for="item in ruleOption"
@@ -251,7 +251,7 @@ export default {
       detailsForm: {},
       title: '',
       localization: {},
-      searchForm: {
+      page_params: {
         resource_type: '',
         type: '',
         rule_code: '',
@@ -284,7 +284,6 @@ export default {
   created() {
     this.getList()
     this.getRecordDefault()
-    // this.getInOutRule()
   },
   methods: {
     // 获取初始化
@@ -308,29 +307,11 @@ export default {
         }
       })
     },
-    //获取收支规则列表
-    // getInOutRule() {
-    //   this.$request.getInOutRule().then(res => {
-    //     if (res.ret) {
-    //       this.ruleOption = res.data.map(item => {
-    //         let value = item.code
-    //         let label = item.name
-    //         return {
-    //           value,
-    //           label
-    //         }
-    //       })
-    //     }
-    //   })
-    // },
     //获取列表
-    getList(form) {
+    getList() {
       this.$request
         .getInOutRecord({
-          keyword: this.page_params.keyword,
-          page: this.page_params.page,
-          size: this.page_params.size,
-          ...form
+          ...this.page_params
         })
         .then(res => {
           if (res.ret) {
@@ -402,14 +383,17 @@ export default {
       })
     },
     search() {
-      console.log(this.timeList, 'this.timeList')
-      this.searchForm.begin_date = this.timeList[0]
-      this.searchForm.end_date = this.timeList[1]
-      this.getList({ ...this.searchForm })
+      this.page_params.begin_date = this.timeList[0]
+      this.page_params.end_date = this.timeList[1]
+      this.getList()
     },
     resetFormSearch() {
-      this.searchForm = {}
-      this.getList(this.searchForm)
+      this.page_params.resource_type = ''
+      this.page_params.type = ''
+      this.page_params.rule_code = ''
+      this.page_params.begin_date = ''
+      this.page_params.end_date = ''
+      this.getList()
     },
     // 重置表单
     resetForm(form) {
