@@ -292,24 +292,27 @@
       :title="$t('批量更新单号')"
       @close="clearBatch"
     >
-      <el-form>
+      <el-form label-width="70px">
         <!-- 公告标题 -->
         <el-form-item :label="$t('发货单号')">
           <span v-for="(item, index) in orderNum" :key="index"> {{ item }} </span><br />
         </el-form-item>
         <el-form-item :label="$t('模版下载')">
-          <el-row>
-            <el-col :span="10">
-              <el-button @click="uploadList"> {{ $t('模版下载') }}</el-button
-              ><br />
-              <span class="batch-sty">1，{{ $t('请先下载指定的模版') }}</span
-              ><br />
-              <span class="batch-sty">2，{{ $t('根据模版内容填充物流信息') }}</span
-              ><br />
-              <span class="batch-sty">3，{{ $t('上传') }}</span
-              ><br />
-            </el-col>
-          </el-row>
+          <el-button @click="uploadList(1)" type="primary" plain size="small">
+            {{ $t('标准模版下载') }}</el-button
+          >
+          <el-button @click="uploadList(2)" type="warning" plain size="small">
+            {{ $t('分箱模版下载') }}</el-button
+          >
+          <div class="batch-sty">1，{{ $t('请根据需求选择模板并下载') }}</div>
+          <div class="batch-sty">2，{{ $t('根据模版内容填充物流信息') }}</div>
+          <div class="batch-sty">3，{{ $t('上传') }}</div>
+        </el-form-item>
+        <el-form-item :label="$t('模板类型')">
+          <el-radio-group v-model="type">
+            <el-radio :label="1">{{ $t('标准模版下载') }}</el-radio>
+            <el-radio :label="2">{{ $t('分箱模版下载') }}</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('模版上传')">
           <el-row>
@@ -323,7 +326,6 @@
                 :http-request="uploadBaleImg"
               >
                 <el-button size="small" type="primary">{{ $t('请选择要上传的文件') }}</el-button>
-                <!-- <div slot="tip" class="el-upload__tip">{{$t('支持格式：.doc .docx .pdf，单个文件不能超过3MB')}}</div> -->
               </el-upload>
             </el-col>
           </el-row>
@@ -391,7 +393,8 @@ export default {
       urlName: '',
       fileList: [],
       hasFilterCondition: false,
-      radio: ''
+      radio: '',
+      type: 1
     }
   },
   created() {},
@@ -452,10 +455,11 @@ export default {
       })
     },
     // 下载excel
-    uploadList() {
+    uploadList(type) {
       this.$request
         .uploadBatch({
-          ids: this.deleteNum
+          ids: this.deleteNum,
+          type
         })
         .then(res => {
           if (res.ret) {
@@ -498,7 +502,8 @@ export default {
       this.$request
         .updateBatch({
           ids: this.deleteNum,
-          name: this.urlName
+          name: this.urlName,
+          type: this.type
         })
         .then(res => {
           if (res.ret) {
@@ -533,8 +538,6 @@ export default {
     },
     // 跳转至详情
     goDetails(id, status) {
-      console.log(id, '我是传过去id')
-      console.log(status, '我是传过去的status')
       dialog({ type: 'shipDetails', id: id, status: status }, () => {
         this.getList()
       })
@@ -548,8 +551,6 @@ export default {
       })
     },
     addCompany(id, logisticsSn, logisticsCompany) {
-      console.log(id, 'id')
-      console.log(logisticsSn, 'logisticsSn')
       dialog(
         {
           type: 'batchExpress',

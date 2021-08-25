@@ -41,7 +41,6 @@ export default {
   name: 'SearchGroup',
   methods: {
     Enter() {
-      console.log(15523)
       this.$emit('search')
     },
     updateValue(val) {
