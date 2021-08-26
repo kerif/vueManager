@@ -677,7 +677,7 @@
             </ul>
           </div>
           <div>
-            <el-button>{{ $t('查看全程物流轨迹') }}</el-button>
+            <el-button @click="goTracking">{{ $t('查看全程物流轨迹') }}</el-button>
           </div>
         </div>
       </el-col>
@@ -1583,6 +1583,14 @@ export default {
       this.$request.packageDetails(this.$route.params.id).then(res => {
         if (res.ret) {
           this.productData = res.data
+        }
+      })
+    },
+    goTracking() {
+      this.$router.push({
+        name: 'tracking',
+        query: {
+          orderSn: this.form.order_sn
         }
       })
     },
