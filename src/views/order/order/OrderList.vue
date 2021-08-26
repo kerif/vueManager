@@ -122,6 +122,15 @@
               >{{ scope.row.express_num }}</el-button
             >
             <span v-else>{{ scope.row.express_num }}</span>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="scope.row.exceptional_remark"
+              placement="top-end"
+              v-if="scope.row.is_exceptional"
+            >
+              <i class="el-icon-warning" style="color: red; margin-left: 10px"></i>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column :label="$t('包裹编码')" prop="code" key="code"> </el-table-column>

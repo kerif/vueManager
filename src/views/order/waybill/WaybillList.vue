@@ -2067,7 +2067,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .way-list-container {
   .header-range {
     display: flex;

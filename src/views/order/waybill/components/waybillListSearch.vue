@@ -1,18 +1,14 @@
 <template>
   <div class="waybill-list-search">
     <el-form class="search-form" :model="searchFieldData" ref="searchForm" size="mini">
-      <div>
-        <div style="display: flex">
-          <el-form-item prop="order_sn">
-            <el-input
-              v-model="searchFieldData.order_sn"
-              :autosize="{ minRows: 4, maxRows: 5 }"
-              type="textarea"
-              :placeholder="$t('请输入订单号搜索，多个单号请用回车区分')"
-            ></el-input>
-          </el-form-item>
-        </div>
-      </div>
+      <el-form-item prop="order_sn">
+        <el-input
+          v-model="searchFieldData.order_sn"
+          :autosize="{ minRows: 4, maxRows: 5 }"
+          type="textarea"
+          :placeholder="$t('请输入订单号搜索，多个单号请用回车区分')"
+        ></el-input>
+      </el-form-item>
       <div>
         <el-form-item prop="date_type">
           <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('时间')">
@@ -92,6 +88,21 @@
                 :key="item.id"
                 :value="item.id"
                 :label="item.name"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="warehouse_id">
+            <el-select
+              v-model="searchFieldData.warehouse_id"
+              clearable
+              :placeholder="$t('请选择仓库')"
+            >
+              <el-option
+                v-for="item in wareHouseList"
+                :key="item.id"
+                :value="item.id"
+                :label="item.warehouse_name"
               >
               </el-option>
             </el-select>
@@ -247,7 +258,8 @@ export default {
       },
       agentData: [],
       paymentData: [],
-      lineData: []
+      lineData: [],
+      wareHouseList: []
     }
   },
   created() {
@@ -255,6 +267,7 @@ export default {
     this.getPaymentType()
     this.getLineType()
     this.initQuery()
+    this.getSimpleList()
   },
   activated() {
     this.initQuery()
@@ -278,6 +291,14 @@ export default {
     getAgentData() {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
+      })
+    },
+    // 获取仓库列表
+    getSimpleList() {
+      this.$request.getSimpleList().then(res => {
+        if (res.ret) {
+          this.wareHouseList = res.data
+        }
       })
     },
     // 获取支付方式列表
