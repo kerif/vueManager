@@ -1,19 +1,21 @@
 <template>
   <div class="bill-details-container">
-    <div style="text-align: center; font-size: 18px; margin-bottom: 20px">{{ $t('订单详情') }}</div>
+    <div style="text-align: center; font-size: 18px; margin-bottom: 20px">
+      {{ $t('订单详情') }}
+    </div>
     <el-row>
       <el-col :span="17">
         <div class="details-top">
-          <div>
+          <div class="number-top">
             {{ $t('订单号') }}：<span
               >{{ form.order_sn }}{{ form.warehouse && form.warehouse.warehouse_name }}</span
             >
           </div>
-          <div>
+          <div class="number-top">
             {{ $t('客户编号') }}：<span>{{ form.user_id }}---</span
             ><span>{{ form.user_name }}</span>
           </div>
-          <div>
+          <div class="number-top">
             {{ $t('转运单号') }}：<span>{{ form.order_sn }}</span
             ><span>({{ form.logistics_company }})</span>
           </div>
@@ -31,14 +33,22 @@
           <div class="container-sty container-weight">
             <span
               ><strong
-                >{{ form.length }}{{ form.width }}{{ form.height
-                }}{{ localization.length_unit }}</strong
+                >{{ form.length }}{{ form.width }}{{ form.height }}&nbsp;{{
+                  localization.length_unit
+                }}</strong
               ></span
-            >&nbsp;/&nbsp;<span
-              ><strong>{{ form.weight }}{{ localization.weight_unit }}</strong></span
+            ><i style="margin-left: 50px">/</i
+            ><span style="margin-left: 50px"
+              ><strong>{{ form.weight }}&nbsp;{{ localization.weight_unit }}</strong></span
             >
             <br />
-            <div class="container-left">{{ form.details && form.details.payment_weight }}</div>
+            <div class="container-left">
+              <span>{{ $t('计费体积') }}{{ form.details && form.details.payment_weight }}</span
+              ><i style="margin-left: 60px">/</i>
+              <span style="margin-left: 20px"
+                >{{ $t('计费重量') }}{{ form.details && form.details.payment_weight }}</span
+              >
+            </div>
             <!-- <div class="container-right">{{ form.details && form.details.payment_weight }}</div> -->
           </div>
           <div class="container-sty container-pay">
@@ -47,9 +57,10 @@
                 >{{ form.details && form.details.actual_payment_fee
                 }}{{ localization.currency_unit }}</strong
               ></span
-            >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ form.payment && form.payment.payment_type_name
-            }}<br />
+            ><span class="pay">{{ form.payment && form.payment.payment_type_name }}</span
+            ><br />
             <div class="container-left">
+              {{ $t('订单实付') }}
               {{ form.payment && form.payment.pay_amount }}({{ localization.currency_unit }})
             </div>
             <div class="container-right">
@@ -63,7 +74,7 @@
             </div>
           </div>
           <div class="container-sty container-status">
-            <span
+            <span class="ship"
               ><strong>{{ form.status_name }}</strong></span
             ><br />
             <div class="container-left">{{ $t('状态') }}</div>
@@ -72,7 +83,7 @@
         <el-tabs v-model="activeName" class="tabLength">
           <el-tab-pane :label="$t('基本信息')" name="0">
             <el-row style="background-color: #fff; padding: 10px">
-              <el-col :span="13" style="border-right: 1px solid #e5e5e5">
+              <el-col :span="11" style="border-right: 1px solid #e5e5e5">
                 <h4 class="change-sty">{{ $t('收货人信息') }}</h4>
                 <el-button
                   v-if="
@@ -100,7 +111,13 @@
                   @click="cancelMsg"
                   >{{ $t('取消') }}</el-button
                 >
-                <el-form ref="form" :model="form" label-width="100px" label-position="right">
+                <el-form
+                  ref="form"
+                  :model="form"
+                  label-width="100px"
+                  class="info"
+                  label-position="right"
+                >
                   <el-row class="container-center" :gutter="20">
                     <!-- 姓名 -->
                     <el-col :span="11">
@@ -314,10 +331,10 @@
                   </el-row>
                 </el-form>
               </el-col>
-              <el-col :span="11" style="padding-left: 10px">
-                <div class="details-top">
-                  <div>{{ $t('申请打包包裹记录') }}</div>
-                  <div>{{ $t('包裹总价值') }}</div>
+              <el-col :span="13" style="padding-left: 10px; font-size: 14px">
+                <div class="details-top" style="margin-bottom: 0px">
+                  <h4>{{ $t('申请打包包裹记录') }}</h4>
+                  <h4>{{ $t('包裹总价值') }}</h4>
                 </div>
                 <div class="review-package review-bg">
                   <div>{{ $t('快递单号') }}</div>
@@ -332,9 +349,9 @@
                     <span>{{ item.express_company }}</span
                     ><br />
                     <span>{{ item.code }}</span
-                    ><span>（包裹编码）</span>
+                    ><br /><span>（包裹编码）</span>
                   </div>
-                  <div>
+                  <div style="margin-left: -30px">
                     <span>{{ item.package_name }}x{{ item.qty }}</span
                     ><br />
                     <span>{{ localization.currency_unit }}{{ item.package_value }}</span
@@ -343,7 +360,7 @@
                       {{ val.cn_name }}
                     </span>
                   </div>
-                  <div>
+                  <div style="margin-left: 36px">
                     <span>{{ item.package_weight }}{{ localization.weight_unit }}</span
                     ><br />
                     <span>{{ item.dimension }}{{ localization.length_unit }}</span
@@ -377,7 +394,7 @@
                     v-loading="tableLoading"
                     ref="table"
                   >
-                    <el-table-column type="index" width="50"></el-table-column>
+                    <el-table-column type="index" label="#" width="50"></el-table-column>
                     <el-table-column :label="$t('服务名称')" prop="name"></el-table-column>
                     <el-table-column
                       prop="price"
@@ -396,7 +413,7 @@
                 stripe
                 v-loading="tableLoading"
               >
-                <el-table-column type="index" width="50"></el-table-column>
+                <el-table-column type="index" label="#" width="50"></el-table-column>
                 <!-- 物品名称 -->
                 <el-table-column :label="$t('物品名称')" prop="name"></el-table-column>
                 <!-- 数量 -->
@@ -440,15 +457,15 @@
           <el-tab-pane :label="$t('打包详细')" name="1">
             <div class="package-details">
               <div class="details-top">
-                <div>
+                <div class="size">
                   {{ $t('操作仓库') }}：{{ form.warehouse && form.warehouse.warehouse_name }}
                 </div>
-                <div>
+                <div class="size">
                   {{ $t('出库方式') }}：
                   <span v-if="form.box_type === 1">{{ $t('单箱') }}</span>
                   <span v-if="form.box_type === 2">{{ $t('多箱') }}</span>
                 </div>
-                <div>
+                <div class="size">
                   {{ $t('计费重量') }}：
                   <span
                     >{{ form.details && form.details.payment_weight
@@ -479,7 +496,7 @@
                 <el-table-column :label="$t('实重')" prop="weight"></el-table-column>
                 <el-table-column :label="$t('承运单号')" prop="sn"></el-table-column>
               </el-table>
-              <el-row>
+              <el-row class="size">
                 <el-col :span="10">
                   <div class="bale">
                     <div class="bale-left">
@@ -528,7 +545,7 @@
           </el-tab-pane>
           <el-tab-pane :label="$t('费用清单')" name="2">
             <div class="package-details">
-              <div>
+              <div class="size">
                 {{ $t('计价模式') }}:
                 <span v-if="form.express_line && form.express_line.mode === 1">{{
                   $t('首重续重模式')
@@ -588,7 +605,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-              <div style="text-align: right">
+              <div style="text-align: right; font-size: 14px">
                 <div>
                   <div class="price-sty">{{ $t('应付') }}{{ localization.currency_unit }}</div>
                   <div class="price-sty pay-sty">
@@ -615,13 +632,13 @@
           <el-tab-pane :label="$t('签收日志')" name="3">
             <div class="bale package-details">
               <div class="bale-left packed-details">
-                <span>{{ $t('签收时间') }}</span>
+                <span>{{ $t('签收时间:') }}</span>
                 <span>
                   {{ form.signed_at }}
                 </span>
               </div>
               <div class="bale-left packed-details">
-                <span>{{ $t('签收照片') }}</span>
+                <span>{{ $t('签收照片:') }}</span>
                 <div class="left-img" v-for="item in form.sign_images" :key="item.id">
                   <span
                     style="cursor: pointer"
@@ -631,8 +648,8 @@
                   </span>
                 </div>
               </div>
-              <div>
-                {{ $t('评价') }}
+              <div style="margin-top: 20px; font-size: 14px">
+                {{ $t('评价:') }}
                 <span>{{ form.comment && form.comment.content }}</span>
               </div>
             </div>
@@ -1876,13 +1893,16 @@ export default {
   .msg-top {
     margin-bottom: 20px;
   }
+  .info {
+    font-size: 14px;
+  }
   .leftWidth {
     display: inline-block;
     width: 120px;
   }
   .bale {
     .bale-left {
-      width: 50%;
+      width: 100%;
       display: inline-block;
       vertical-align: top;
     }
@@ -1900,6 +1920,7 @@ export default {
   }
   .packed-details {
     margin-top: 20px;
+    font-size: 14px;
   }
   .nullProduct {
     padding-left: 70px;
@@ -1962,6 +1983,10 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    .number-top {
+      font-size: 14px;
+      font-weight: 650;
+    }
     .container-sty {
       // padding: 20px;
       background-color: #fff;
@@ -1972,25 +1997,42 @@ export default {
       padding: 10px !important;
     }
     .container-weight {
-      width: 15%;
+      width: 18%;
       padding: 10px !important;
     }
     .container-pay {
-      width: 17%;
+      width: 19%;
       padding: 10px !important;
+      .pay {
+        display: inline-block;
+        margin-left: 105px;
+        color: #d9001b;
+        font-weight: 650;
+        font-style: normal;
+        font-size: 18px;
+      }
     }
     .container-status {
       width: 15%;
       padding: 10px !important;
+      .ship {
+        color: #333333;
+        font-size: 18px;
+        font-weight: 650;
+        font-style: normal;
+      }
     }
     .container-sty > div {
       display: inline-block;
     }
     .container-left {
       float: left;
+      font-size: 14px;
+      margin-top: 10px;
     }
     .container-right {
       float: right;
+      margin-top: 10px;
     }
   }
   .package-details {
@@ -1999,7 +2041,7 @@ export default {
   }
   .review-package {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 5px;
   }
   .package-sty {
@@ -2105,6 +2147,19 @@ export default {
     // width: 600px;
     margin: auto;
     padding-top: 20px;
+  }
+  .el-table tr th.is-leaf {
+    border-bottom: 1px #ecedf0 solid;
+    background-color: #fff;
+  }
+  .el-table th > .cell {
+    text-align: center;
+  }
+  .el-table .cell {
+    text-align: center;
+  }
+  .size {
+    font-size: 14px;
   }
 }
 </style>
