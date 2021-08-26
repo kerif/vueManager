@@ -153,20 +153,20 @@ export default {
 
 <style lang="scss" scoped>
 .dialog-confirmAudit {
-  /deep/ .el-dialog__header {
+  .el-dialog__header {
     background-color: #0e102a;
   }
-  /deep/.el-input {
+  .el-input {
     width: 50%;
   }
-  /deep/.el-textarea {
+  .el-textarea {
     width: 50%;
   }
-  /deep/.el-dialog__title {
+  .el-dialog__title {
     font-size: 14px;
     color: #fff;
   }
-  /deep/.el-dialog__close {
+  .el-dialog__close {
     color: #fff;
   }
   .avatar-uploader {

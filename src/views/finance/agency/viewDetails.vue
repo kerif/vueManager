@@ -470,7 +470,7 @@ export default {
     .detail-card {
       font-size: 14px;
       padding: 15px;
-      /deep/.el-table tr th.is-leaf {
+      .el-table tr th.is-leaf {
         border-bottom: 1px #ecedf0 solid;
         background-color: #fff;
       }
@@ -491,10 +491,10 @@ export default {
         font-size: 24px;
         font-weight: bold;
       }
-      /deep/.el-table th > .cell {
+      .el-table th > .cell {
         text-align: center;
       }
-      /deep/.el-table .cell {
+      .el-table .cell {
         text-align: center;
       }
     }

@@ -65,16 +65,21 @@ switch (hostName) {
     //   BASE_API_URL: 'https://dev-jiyun-api-v2.nle-tech.com/api/admin',
     //   IMAGE_URL: 'https://dev-jiyun-api-v2.nle-tech.com'
     // }
-    baseUrl = {
-      BASE_API_URL: 'https://dev-api.haiouoms.com/api/admin',
-      IMAGE_URL: 'https://dev-api.haiouoms.com',
-      BLOCK_URL: 'https://dev-api.haiouoms.com/block-explain'
-      // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
-    }
+    // baseUrl = {
+    //   BASE_API_URL: 'https://dev-api.haiouoms.com/api/admin',
+    //   IMAGE_URL: 'https://dev-api.haiouoms.com',
+    //   BLOCK_URL: 'https://dev-api.haiouoms.com/block-explain'
+    //   // BASE_API_URL: 'https://dev-jiyun.tomtiddler.top/jiyun-api/admin'
+    // }
     // baseUrl = {
     //   BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
     //   IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com'
     // }
+    baseUrl = {
+      BASE_API_URL: 'https://api-jiyun-v3.haiouoms.com/api/admin',
+      IMAGE_URL: 'https://api-jiyun-v3.haiouoms.com',
+      BLOCK_URL: 'https://api-jiyun-v3.haiouoms.com/block-explain'
+    }
     break
 }
 
