@@ -640,7 +640,12 @@
         </el-tabs>
       </el-col>
       <el-col :span="6" style="padding-left: 20px">
-        <el-button class="btn-green">{{ $t('发票') }}</el-button>
+        <el-button
+          @click="uploadInvoice"
+          class="btn-green"
+          v-if="['3', '4', '5'].includes($route.params.activeName)"
+          >{{ $t('发票') }}</el-button
+        >
         <el-button
           @click="batchEditCompany"
           class="btn-deep-purple"
@@ -1584,6 +1589,36 @@ export default {
         if (res.ret) {
           this.productData = res.data
         }
+      })
+    },
+    // 导出发票
+    uploadInvoice() {
+      this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request
+          .uploadOrder({
+            ids: this.$route.params.id
+          })
+          .then(res => {
+            if (res.ret) {
+              this.urlExcel = res.data.url
+              window.open(this.urlExcel)
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              // this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       })
     },
     goTracking() {
