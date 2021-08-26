@@ -101,9 +101,12 @@
         <el-form-item :label="$t('支出时间') + ':'" prop="created_at" v-if="title === '支出详情'">{{
           detailsForm.created_at
         }}</el-form-item>
-        <el-form-item :label="$t('有效期') + ':'" prop="valid_time" v-if="title === '收入详情'">{{
-          detailsForm.valid_time
-        }}</el-form-item>
+        <el-form-item
+          :label="$t('有效期') + ':'"
+          prop="valid_time_name"
+          v-if="title === '收入详情'"
+          >{{ detailsForm.valid_time_name }}</el-form-item
+        >
         <el-form-item :label="$t('操作人') + ':'" prop="operator">{{
           detailsForm.operator
         }}</el-form-item>
