@@ -253,14 +253,14 @@ export default {
   }
   .data-list {
     margin-top: 40px;
-    /deep/.el-table tr th.is-leaf {
+    .el-table tr th.is-leaf {
       border-bottom: 1px #ecedf0 solid;
       background-color: #fff;
     }
-    /deep/.el-table th > .cell {
+    .el-table th > .cell {
       text-align: center;
     }
-    /deep/.el-table .cell {
+    .el-table .cell {
       text-align: center;
     }
   }

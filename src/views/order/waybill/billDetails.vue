@@ -34,7 +34,7 @@
                 >{{ form.length }}{{ form.width }}{{ form.height
                 }}{{ localization.length_unit }}</strong
               ></span
-            ><span
+            >&nbsp;/&nbsp;<span
               ><strong>{{ form.weight }}{{ localization.weight_unit }}</strong></span
             >
             <br />
@@ -47,7 +47,8 @@
                 >{{ form.details && form.details.actual_payment_fee
                 }}{{ localization.currency_unit }}</strong
               ></span
-            >{{ form.payment && form.payment.payment_type_name }}<br />
+            >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ form.payment && form.payment.payment_type_name
+            }}<br />
             <div class="container-left">
               {{ form.payment && form.payment.pay_amount }}({{ localization.currency_unit }})
             </div>
@@ -553,16 +554,39 @@
                 v-loading="tableLoading"
               >
                 <el-table-column type="index" width="50"></el-table-column>
-                <el-table-column :label="$t('费用类型')">
+                <el-table-column :label="$t('费用类型')" prop="name">
+                  <!-- <template slot-scope="scope">
+                    <span v-if="scope.row.name === '运费'">{{ scope.row.freight_mode }}</span>
+                  </template> -->
+                </el-table-column>
+                <el-table-column prop="amount" :label="$t('金额') + localization.currency_unit">
                   <template slot-scope="scope">
-                    <span v-for="(item, index) in scope.row.paymentType" :key="index">
-                      <span v-if="item.type === 1">1111</span>
-                      <span v-if="item.type === 2">222</span>
+                    <span v-if="scope.row.name === '运费'">{{ scope.row.freight_amount }}</span>
+                    <span v-if="scope.row.name === '增值服务费'">{{
+                      scope.row.value_added_amount
+                    }}</span>
+                    <span v-if="scope.row.name === '渠道服务费'">{{
+                      scope.row.line_service_fee
+                    }}</span>
+                    <span v-if="scope.row.name === '渠道规则费'">{{
+                      scope.row.line_rule_fee
+                    }}</span>
+                    <span v-if="scope.row.name === '保险费用'">{{ scope.row.insurance_fee }}</span>
+                    <span v-if="scope.row.name === '抵用券减免'">{{
+                      scope.row.coupon_amount
+                    }}</span>
+                    <span v-if="scope.row.name === '积分抵扣'">{{ scope.row.point_amount }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('描述')">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.name === '运费'">
+                      {{ $t('首费') }}{{ localization.currency_unit
+                      }}{{ scope.row.first_freight_fee }},{{ $t('续费')
+                      }}{{ localization.currency_unit }}{{ scope.row.next_freight_fee }}
                     </span>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('金额') + localization.currency_unit"></el-table-column>
-                <el-table-column :label="$t('描述')"></el-table-column>
               </el-table>
               <div style="text-align: right">
                 <div>
@@ -617,8 +641,45 @@
       </el-col>
       <el-col :span="6" style="padding-left: 20px">
         <el-button class="btn-green">{{ $t('发票') }}</el-button>
-        <el-button class="btn-deep-purple">{{ $t('更新二程单号') }}</el-button>
-        <el-button class="btn-pink">{{ $t('更新物流轨迹') }}</el-button>
+        <el-button
+          @click="batchEditCompany"
+          class="btn-deep-purple"
+          v-if="['3', '4'].includes($route.params.activeName)"
+          >{{ $t('更新二程单号') }}</el-button
+        >
+        <el-button
+          @click="updateTracking"
+          class="btn-pink"
+          v-if="$route.params.activeName === '4'"
+          >{{ $t('更新物流轨迹') }}</el-button
+        >
+        <div class="express-content" v-loading="$store.state.btnLoading">
+          <div v-if="TrackingData.length" class="line-sty">
+            <div class="content-top">
+              <div class="time">{{ $t('时间轴') }}</div>
+            </div>
+            <ul class="result-list">
+              <li
+                :class="{ 'last-finish': index === 0 }"
+                v-for="(item, index) in TrackingData"
+                :key="index"
+              >
+                <!-- <div class="time">{{ item.ftime }}</div> -->
+                <div class="dot">
+                  <span class="out-dot dot-box"> </span>
+                  <span class="in-dot dot-box"></span>
+                </div>
+                <div class="text">
+                  {{ item.context }}<br />
+                  <span>{{ item.ftime }}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <el-button>{{ $t('查看全程物流轨迹') }}</el-button>
+          </div>
+        </div>
       </el-col>
     </el-row>
     <!-- <div>
@@ -938,15 +999,7 @@
         :label="$t('体积重量') + this.localization.weight_unit"
         prop="volume_weight"
       ></el-table-column>
-<<<<<<< HEAD
       <el-table-column :label="$t('尺寸（长宽高）') + this.localization.length_unit">
-=======
-      <!-- 尺寸（长宽高cm） -->
-      <el-table-column
-        :label="$t('尺寸（长宽高）') + this.localization.length_unit"
-        v-if="form.box_type === 1"
-      >
->>>>>>> 89354bb481d85dc73fc4812f9f0180877e906adb
         <template slot-scope="scope">
           <span>{{ scope.row.length }}*</span>
           <span>{{ scope.row.width }}*</span>
@@ -1320,6 +1373,31 @@
         <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('更新物流状态')" @close="clear">
+      <el-form label-position="top" :model="logist" ref="form">
+        <el-form-item :label="$t('物流状态')">
+          <el-select
+            v-model="logist.logistics_type_id"
+            filterable
+            class="country-select"
+            :placeholder="$t('请选择')"
+          >
+            <el-option
+              v-for="item in modeData"
+              :key="item.id"
+              :label="item.context"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+          <el-button class="type-sty" @click="goMore">{{ $t('管理') }}</el-button>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="trackDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="changeStatus">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -1337,34 +1415,32 @@ export default {
       paymentData: [],
       paymentType: [
         {
-          // type: 1
           name: this.$t('运费'),
-          key: 'insurance_fee'
+          key: 'amount'
         },
         {
-          // type: 2
           name: this.$t('增值服务费'),
-          key: 'value_added_amount'
+          key: 'amount'
         },
         {
           name: this.$t('渠道服务费'),
-          key: ''
+          key: 'amount'
         },
         {
           name: this.$t('渠道规则费'),
-          key: ''
+          key: 'amount'
         },
         {
           name: this.$t('保险费用'),
-          key: ''
+          key: 'amount'
         },
         {
           name: this.$t('抵用券减免'),
-          key: ''
+          key: 'amount'
         },
         {
           name: this.$t('积分抵扣'),
-          key: ''
+          key: 'amount'
         }
       ],
       boxData: [],
@@ -1378,8 +1454,14 @@ export default {
       unEdit: false,
       activeName: '0',
       addedData: [],
-      doubleData: []
-      baseMode: 0
+      doubleData: [],
+      baseMode: 0,
+      trackDialog: false,
+      modeData: [],
+      logist: {
+        logistics_type_id: ''
+      },
+      TrackingData: []
     }
   },
   created() {
@@ -1389,6 +1471,14 @@ export default {
     }
   },
   methods: {
+    // 获取全部物流状态
+    getType() {
+      this.$request.getOrderStatus().then(res => {
+        if (res.ret) {
+          this.modeData = res.data
+        }
+      })
+    },
     chooseData() {
       console.log(this.paymentData, 'this.paymentData11')
       for (var item in this.paymentData[0]) {
@@ -1415,14 +1505,72 @@ export default {
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization
-        this.paymentData = [res.data.payment]
-        // this.paymentData = this.paymentData.map(item => {
-        //   return {
-        //     ...item,
-        //     paymentType: this.paymentType
-        //   }
-        // })
-        this.chooseData()
+        this.paymentData = [
+          {
+            name: this.$t('运费'),
+            freight_amount: res.data.payment.freight_amount,
+            first_freight_fee: res.data.payment.freights.first_freight_fee,
+            next_freight_fee: res.data.payment.freights.next_freight_fee
+          },
+          {
+            name: this.$t('增值服务费'),
+            value_added_amount: res.data.payment.value_added_amount,
+            first_freight_fee: res.data.payment.freights.first_freight_fee,
+            next_freight_fee: res.data.payment.freights.next_freight_fee
+          },
+          {
+            name: this.$t('渠道服务费'),
+            line_service_fee: res.data.payment.line_service_fee,
+            first_freight_fee: res.data.payment.freights.first_freight_fee,
+            next_freight_fee: res.data.payment.freights.next_freight_fee
+          },
+          {
+            name: this.$t('渠道规则费'),
+            line_rule_fee: res.data.payment.line_rule_fee,
+            first_freight_fee: res.data.payment.freights.first_freight_fee,
+            next_freight_fee: res.data.payment.freights.next_freight_fee
+          },
+          {
+            name: this.$t('保险费用'),
+            insurance_fee: res.data.payment.insurance_fee,
+            first_freight_fee: res.data.payment.freights.first_freight_fee,
+            next_freight_fee: res.data.payment.freights.next_freight_fee
+          },
+          {
+            name: this.$t('抵用券减免'),
+            coupon_amount: res.data.payment.coupon_amount,
+            first_freight_fee: res.data.payment.freights.first_freight_fee,
+            next_freight_fee: res.data.payment.freights.next_freight_fee
+          },
+          {
+            name: this.$t('积分抵扣'),
+            point_amount: res.data.payment.point_amount,
+            first_freight_fee: res.data.payment.freights.first_freight_fee,
+            next_freight_fee: res.data.payment.freights.next_freight_fee
+          }
+        ]
+        this.TrackingData = [
+          {
+            context: '签收时间',
+            ftime: res.data.signed_at
+          },
+          {
+            context: '发货时间',
+            ftime: res.data.shipped_at
+          },
+          {
+            context: '支付时间',
+            ftime: res.data.paid_at
+          },
+          {
+            context: '打包时间',
+            ftime: res.data.packed_at
+          },
+          {
+            context: '提交时间',
+            ftime: res.data.created_at
+          }
+        ]
         this.boxData = res.data.box
         this.userId = res.data.user_id
         if (res.data.payment && res.data.payment.value_added_service) {
@@ -1447,6 +1595,54 @@ export default {
         .then(res => {
           if (res.ret) {
             this.tableData = res.data
+          }
+        })
+    },
+    // 弹窗 管理
+    goMore() {
+      this.trackDialog = false
+      this.$router.push({
+        name: 'configurationMore',
+        query: {
+          activeName: '4',
+          secondTab4: '4'
+        }
+      })
+    },
+    // 修改转运快递公司
+    batchEditCompany() {
+      dialog(
+        {
+          type: 'addCompany',
+          id: this.$route.params.id,
+          state: 'edit'
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    // 更改物流状态
+    changeStatus() {
+      this.$request
+        .changeOrderStatus({
+          logistics_type_id: this.logist.logistics_type_id,
+          order_ids: this.$route.params.id
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.trackDialog = false
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
           }
         })
     },
@@ -1476,6 +1672,11 @@ export default {
             }
           })
       })
+    },
+    // 更新物流状态
+    updateTracking() {
+      this.trackDialog = true
+      this.getType()
     },
     clear() {
       this.chooseId = ''
@@ -1779,6 +1980,88 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     width: 80px;
+  }
+  .express-content {
+    background-color: #fff;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 35px;
+    padding-bottom: 20px;
+  }
+  .time {
+    width: 155px;
+  }
+  .result-list {
+    padding: 0;
+    padding-left: 30px;
+    li {
+      display: flex;
+      padding-bottom: 30px;
+      &:not(:last-child) {
+        .text::before {
+          content: '';
+          position: absolute;
+          left: -8px;
+          border-left: 1px solid #a8b7bf;
+          height: calc(100% + 10px);
+          top: 20px;
+        }
+      }
+    }
+    .last-finish {
+      .out-dot {
+        background-color: #35a581;
+      }
+      .in-dot {
+        background-color: #35a581;
+      }
+    }
+  }
+  .dot-box {
+    display: inline-block;
+    border-radius: 50%;
+  }
+  .out-dot {
+    width: 16px;
+    height: 16px;
+    background-color: #bcbcbc;
+    opacity: 0.4;
+    margin-top: 2px;
+  }
+  .in-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #bcbcbc;
+    position: absolute;
+    left: 3px;
+    top: 5px;
+  }
+  .text {
+    padding-left: 10px;
+    position: relative;
+    flex: 1;
+    text-align: left;
+  }
+  .dot {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    top: 5px;
+  }
+  .main-top {
+    text-align: center;
+  }
+  .empty-box {
+    text-align: center;
+    img {
+      width: 150px;
+    }
+  }
+  .line-sty {
+    // text-align: center;
+    // width: 600px;
+    margin: auto;
+    padding-top: 20px;
   }
 }
 </style>
