@@ -382,6 +382,7 @@
               </div>
 
               <el-alert
+                v-if="form.vip_remark"
                 :title="$t('申请打包备注')"
                 type="warning"
                 :description="form.vip_remark"
@@ -560,6 +561,7 @@
                 </div>
               </div>
               <el-alert
+                v-if="form.remark"
                 :title="$t('仓库打包备注')"
                 type="success"
                 :description="form.remark"
