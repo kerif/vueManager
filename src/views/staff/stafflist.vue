@@ -53,12 +53,12 @@
         <!-- 员工组 -->
         <el-table-column prop="admin_group.name_cn" :label="$t('员工组')"> </el-table-column>
         <!-- 电话 -->
-        <el-table-column prop="phone" :label="$t('电话')"> </el-table-column>
+        <el-table-column prop="phone" :label="$t('电话')" width="120"> </el-table-column>
         <!-- 最后登录时间 -->
         <el-table-column prop="last_login_at" :label="$t('最后登录时间')" width="155">
         </el-table-column>
         <!-- 操作 -->
-        <el-table-column :label="$t('操作')" fixed="right" width="155">
+        <el-table-column :label="$t('操作')" fixed="right" width="205">
           <template slot-scope="scope">
             <!-- 编辑 -->
             <el-button class="btn-main" @click.stop="editInfo(scope.row.id)">{{

@@ -152,6 +152,12 @@
         ></el-table-column>
         <!-- 客户昵称 -->
         <el-table-column
+          :label="$t('客户ID')"
+          prop="id"
+          v-if="activeName === '4' || activeName === '5'"
+        ></el-table-column>
+        <!-- 客户昵称 -->
+        <el-table-column
           :label="$t('客户昵称')"
           prop="name"
           v-if="activeName === '4' || activeName === '5'"
