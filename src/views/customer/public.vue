@@ -43,7 +43,7 @@
       >
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <!-- 公告标题 -->
-        <el-table-column :label="$t('公告标题')" prop="title"></el-table-column>
+        <el-table-column :label="$t('公告标题')" prop="title" width="500"></el-table-column>
         <!-- 发布人员 -->
         <el-table-column :label="$t('发布人员')" prop="operator"> </el-table-column>
         <!-- 发布时间 -->
@@ -63,7 +63,7 @@
             <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-button class="btn-deep-purple" @click="details(scope.row.id)">{{
               $t('详情')

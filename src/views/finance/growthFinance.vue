@@ -21,7 +21,7 @@
       <el-table-column prop="remark" :label="$t('备注')" width="150"> </el-table-column>
       <el-table-column prop="operator" :label="$t('操作人')"> </el-table-column>
       <el-table-column prop="created_at" :label="$t('创建时间')" width="170"> </el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('操作')" fixed="right">
         <template slot-scope="scope">
           <el-button
             size="mini"

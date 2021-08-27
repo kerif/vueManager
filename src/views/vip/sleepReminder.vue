@@ -77,9 +77,17 @@
         <el-table-column :label="$t('代理')" prop="invitor"></el-table-column>
         <el-table-column :label="$t('未登录（天）')" prop="not_login_days"></el-table-column>
         <el-table-column :label="$t('未下单（天）')" prop="not_order_days"></el-table-column>
-        <el-table-column :label="$t('最后下单时间')" prop="last_order_at"></el-table-column>
-        <el-table-column :label="$t('登录时间')" prop="last_login_at"></el-table-column>
-        <el-table-column :label="$t('最近唤醒时间')" prop="wakeup_time"></el-table-column>
+        <el-table-column
+          :label="$t('最后下单时间')"
+          prop="last_order_at"
+          width="155"
+        ></el-table-column>
+        <el-table-column :label="$t('登录时间')" prop="last_login_at" width="155"></el-table-column>
+        <el-table-column
+          :label="$t('最近唤醒时间')"
+          prop="wakeup_time"
+          width="155"
+        ></el-table-column>
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" width="116px" fixed="right">
           <template slot-scope="scope">

@@ -59,18 +59,33 @@
       <!-- <el-table-column :label="$t('客户编号')" prop="uid"></el-table-column> -->
       <el-table-column :label="$t('邮箱')" prop="email"></el-table-column>
       <el-table-column :label="$t('手机号码')" prop="phone"></el-table-column>
-      <el-table-column
-        prop="balance"
-        :label="$t('余额') + this.localization.currency_unit"
-      ></el-table-column>
+      <el-table-column :label="$t('余额') + this.localization.currency_unit">
+        <template slot-scope="scope">
+          <div>
+            <span class="balance"> {{ scope.row.balance }}</span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('积分')" prop="point"></el-table-column>
-      <el-table-column :label="$t('客户昵称')" prop="name"></el-table-column>
-      <el-table-column :label="$t('VIP等级')" prop="member_level_name"></el-table-column>
-      <el-table-column :label="$t('客户组')" prop="user_group.name_cn"></el-table-column>
+      <el-table-column :label="$t('客户昵称')" prop="name" width="150"></el-table-column>
+      <el-table-column
+        :label="$t('VIP等级')"
+        prop="member_level_name"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('客户组')"
+        prop="user_group.name_cn"
+        align="center"
+      ></el-table-column>
       <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
       <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
-      <el-table-column :label="$t('注册时间')" prop="created_at"></el-table-column>
-      <el-table-column :label="$t('最后登录时间')" prop="last_login_at"></el-table-column>
+      <el-table-column :label="$t('注册时间')" prop="created_at" width="155"></el-table-column>
+      <el-table-column
+        :label="$t('最后登录时间')"
+        prop="last_login_at"
+        width="155"
+      ></el-table-column>
       <el-table-column :label="$t('邀请人')" prop="invitor"></el-table-column>
       <el-table-column :label="$t('操作')" width="116px" fixed="right">
         <template slot-scope="scope">
@@ -557,6 +572,9 @@ export default {
 
 <style lang="scss">
 .vip-list-container {
+  .balance {
+    color: red;
+  }
   .btnList:after {
     content: '';
     height: 0;

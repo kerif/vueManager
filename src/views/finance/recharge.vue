@@ -89,15 +89,15 @@
           prop="confirm_amount"
         ></el-table-column>
         <!-- 第三方流水号 -->
-        <el-table-column :label="$t('流水号')" prop="serial_no"></el-table-column>
+        <el-table-column :label="$t('流水号')" prop="serial_no" width="205"></el-table-column>
         <!-- 支付时间 -->
-        <el-table-column :label="$t('支付时间')" prop="created_at"></el-table-column>
+        <el-table-column :label="$t('支付时间')" prop="created_at" width="155"></el-table-column>
         <!-- 审核时间 -->
-        <el-table-column :label="$t('审核时间')" prop="updated_at"></el-table-column>
+        <el-table-column :label="$t('审核时间')" prop="updated_at" width="155"></el-table-column>
         <!-- 处理人 -->
         <el-table-column :label="$t('处理人')" prop="operator"></el-table-column>
         <!-- 操作 -->
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status === 0"
