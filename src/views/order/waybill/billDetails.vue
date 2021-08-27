@@ -10,6 +10,7 @@
     </el-steps>
     <div style="text-align: center; font-size: 18px; margin-bottom: 20px">
       {{ $t('订单详情') }}({{ form.warehouse && form.warehouse.warehouse_name }}) <Br />
+      <div v-if="form.group_leader_id > 0" class="group-text">=======拼团订单=======</div>
       <el-alert
         v-if="form.status === 19"
         title="提示"
