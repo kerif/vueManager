@@ -122,6 +122,11 @@
               >{{ scope.row.express_num }}</el-button
             >
             <span v-else>{{ scope.row.express_num }}</span>
+            <el-tooltip mini effect="dark" :content="$t('单号追踪')" placement="top-start">
+              <el-button type="text" @click.native="goExpress(scope.row.express_num)"
+                ><i class="el-icon-position"></i
+              ></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column :label="$t('包裹编码')" prop="code" key="code"> </el-table-column>
