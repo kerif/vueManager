@@ -14,7 +14,7 @@
       </div>
     </div>
     <div>
-      <div class="receiverMSg msg-top">
+      <div class="receiverMSg msg-top number-top">
         <!-- <h4 class="change-sty">{{ $t('包裹详情') }}</h4> -->
         <el-form ref="form" :model="form" label-width="100px" label-position="right">
           <!-- <el-form-item :label="$t('姓名')"></el-form-item> -->
@@ -138,7 +138,7 @@
       </div>
       <div class="receiverMSg msg-top">
         <h4 class="all-group">{{ $t('商品信息') }}</h4>
-        <el-row class="container-center" :gutter="20">
+        <el-row class="container-center number-top" :gutter="20">
           <!-- 物品名称 -->
           <el-col :span="7">
             <span class="leftWidth">{{ $t('物品名称') }}</span>
@@ -155,7 +155,7 @@
             <span>{{ form.package_value }}</span>
           </el-col>
         </el-row>
-        <el-row class="container-center" :gutter="20">
+        <el-row class="container-center number-top" :gutter="20">
           <!-- 品牌 -->
           <el-col :span="7">
             <span class="leftWidth">{{ $t('品牌名称') }}</span>
@@ -202,7 +202,13 @@
     </div>
     <div class="receiverMSg msg-top">
       <h4>{{ $t('详细清单') }}</h4>
-      <el-table :data="form.details" class="data-list" border stripe v-loading="tableLoading">
+      <el-table
+        :data="form.details"
+        class="data-list number-top"
+        border
+        stripe
+        v-loading="tableLoading"
+      >
         <el-table-column type="index" width="50"></el-table-column>
         <!-- 货品名称 -->
         <el-table-column :label="$t('货品名称')" prop="name"></el-table-column>
@@ -246,7 +252,7 @@
     </div>
     <div class="receiverMSg msg-top">
       <h4 class="all-group">{{ $t('预报申请服务') }}</h4>
-      <el-row class="container-center" :gutter="20">
+      <el-row class="container-center number-top" :gutter="20">
         <!-- 物品名称 -->
         <el-col :span="7">
           <span v-for="item in form.chosen_services" :key="item.id">
@@ -256,7 +262,7 @@
       </el-row>
     </div>
     <h3>{{ $t('入库信息') }}</h3>
-    <div class="receiverMSg msg-top">
+    <div class="receiverMSg msg-top number-top">
       <el-row class="container-center" :gutter="20">
         <!-- 物品名称 -->
         <el-col :span="7">
@@ -325,7 +331,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="receiverMSg msg-top reson-sty">
+    <div class="receiverMSg msg-top reson-sty number-top">
       <el-row class="container-center" :gutter="20">
         <!-- 物品名称 -->
         <el-col>
@@ -503,6 +509,10 @@ export default {
   }
   .reson-sty {
     padding: 20px;
+  }
+  .number-top {
+    font-size: 14px;
+    font-weight: 650;
   }
 }
 </style>
