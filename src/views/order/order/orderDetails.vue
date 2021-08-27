@@ -1,17 +1,55 @@
 <template>
   <div class="order-details-container">
+    <el-steps :active="form.active" finish-status="success" class="steps">
+      <el-step :title="$t('未入库')"></el-step>
+      <el-step :title="$t('已入库')"></el-step>
+      <el-step :title="$t('已集包')"></el-step>
+      <el-step :title="$t('已发货')"></el-step>
+      <el-step :title="$t('已收货')"></el-step>
+      <el-step :title="$t('弃件')"></el-step>
+    </el-steps>
+
     <div style="text-align: center; font-size: 18px; margin-bottom: 20px; font-weight: 900">
-      {{ $t('包裹详情') }}
+      {{ $t('包裹详情') }}<Br />
+      <div class="tools">
+        <el-row>
+          <el-button
+            size="small"
+            icon="el-icon-position"
+            @click.native="goExpress(form.express_num)"
+            >单号跟踪</el-button
+          >
+          <el-button
+            size="small"
+            icon="el-icon-receiving"
+            v-if="form.status === 1"
+            @click.native="storage(form.id)"
+            type="primary"
+            >入库</el-button
+          >
+          <el-button
+            size="small"
+            icon="el-icon-edit"
+            v-if="form.status === 2"
+            @click.native="editWarehoused(form.id)"
+            >编辑</el-button
+          >
+          <el-button
+            size="small"
+            icon="el-icon-s-home"
+            type="warning"
+            v-if="form.status === 2"
+            @click.native="returnWarehouse(form.id)"
+            >退回未入库</el-button
+          >
+          <el-button size="small" icon="el-icon-s-order" @click.native="goLogs(form.express_num)"
+            >日志</el-button
+          >
+        </el-row>
+      </div>
     </div>
     <div class="forecast-sty">
       <div class="information-sty">{{ $t('预报信息') }}</div>
-      <div class="information-sty">
-        <span v-if="form.status === 3 || form.status === 4">{{ $t('已集包') }}</span
-        >&nbsp; <span v-if="form.status === 5">{{ $t('已发货') }}</span
-        >&nbsp; <span v-if="form.status === 6">{{ $t('已收货') }}</span
-        >&nbsp; <span v-if="form.status === 19">{{ $t('弃件') }}</span
-        >&nbsp;
-      </div>
     </div>
     <div>
       <div class="receiverMSg msg-top number-top">
@@ -32,11 +70,12 @@
             <!-- 包裹状态 -->
             <el-col :span="7" :offset="1">
               <span class="leftWidth">{{ $t('包裹状态') }}</span>
-              <span v-if="form.status === 3 || form.status === 4">{{ $t('已集包') }}</span
-              >&nbsp; <span v-if="form.status === 5">{{ $t('已发货') }}</span
-              >&nbsp; <span v-if="form.status === 6">{{ $t('已收货') }}</span
-              >&nbsp; <span v-if="form.status === 19">{{ $t('弃件') }}</span
-              >&nbsp;
+              <span v-if="form.status === 1">{{ $t('未入库') }}</span
+              ><span v-if="form.status === 2">{{ $t('已入库') }}</span
+              ><span v-if="form.status === 3 || form.status === 4">{{ $t('已集包') }}</span
+              ><span v-if="form.status === 5">{{ $t('已发货') }}</span
+              ><span v-if="form.status === 6">{{ $t('已收货') }}</span
+              ><span v-if="form.status === 19">{{ $t('弃件') }}</span>
             </el-col>
           </el-row>
           <el-row class="container-center" :gutter="20">
@@ -261,8 +300,8 @@
         </el-col>
       </el-row>
     </div>
-    <h3>{{ $t('入库信息') }}</h3>
-    <div class="receiverMSg msg-top number-top">
+    <h3 v-if="form.status !== 1">{{ $t('入库信息') }}</h3>
+    <div class="receiverMSg msg-top number-top" v-if="form.status !== 1">
       <el-row class="container-center" :gutter="20">
         <!-- 物品名称 -->
         <el-col :span="7">
@@ -331,7 +370,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="receiverMSg msg-top reson-sty number-top">
+    <div class="receiverMSg msg-top reson-sty number-top" v-if="form.reason != ''">
       <el-row class="container-center" :gutter="20">
         <!-- 物品名称 -->
         <el-col>
@@ -382,6 +421,25 @@ export default {
         this.localization = res.localization
         this.boxData = res.data.box
         this.userId = res.data.user_id
+        switch (this.form.status) {
+          case 1:
+          case 2:
+          case 3:
+          case 4:
+          case 5:
+            this.form.active = this.form.status - 1
+            break
+          case 6:
+            this.form.active = 4
+            break
+          case 19:
+            this.form.active = 5
+            break
+
+          default:
+            this.form.active = 0
+            break
+        }
       })
     },
     // 获取商品清单
@@ -390,6 +448,44 @@ export default {
         if (res.ret) {
           this.productData = res.data
         }
+      })
+    },
+    goExpress(expressNum) {
+      window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
+    },
+    storage(id) {
+      this.$router.push({ name: 'editStorage', params: { id: id } })
+    },
+    // 入库日志
+    goLogs(expressNum) {
+      this.$router.push({ name: 'pickingContainer', query: { keyword: expressNum } })
+    },
+    // 已入库编辑
+    editWarehoused(id) {
+      this.$router.push({ name: 'editWarehouse', params: { id: id, state: 'editWarehouse' } })
+    },
+    // 退回未入库
+    returnWarehouse(id) {
+      this.$confirm(this.$t('您是否确认将该包裹退回未入库状态'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.returnBack(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     }
   }
@@ -401,6 +497,14 @@ export default {
   .container-center {
     margin-bottom: 20px;
   }
+  .tools {
+    float: right;
+  }
+  .steps {
+    background-color: white;
+    padding: 20px;
+    margin: 10px 0px;
+  }
   .receiverMSg {
     padding: 10px;
     background-color: #fff !important;
@@ -411,6 +515,7 @@ export default {
   .leftWidth {
     display: inline-block;
     width: 120px;
+    font-weight: normal;
   }
   .bale {
     .bale-left {
