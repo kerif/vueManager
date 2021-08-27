@@ -149,11 +149,13 @@
             <div :title="$t('复制单号')" class="copy-sty" @click="copyNumber(scope.row.order_sn)">
               <i class="el-icon-copy-document"></i>
             </div>
-            <img
-              class="group-sty"
+            <el-button
+              type="text"
               v-if="scope.row.is_parent === 1"
-              src="../../../assets/group.jpg"
-            />
+              @click.native="groupBuy(scope.row)"
+            >
+              <img class="group-sty" src="../../../assets/group.jpg"
+            /></el-button>
           </template>
         </el-table-column>
         <el-table-column key="status" :label="$t('审核状态')" v-if="activeName === '2'">

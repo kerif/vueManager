@@ -9,7 +9,7 @@
       <el-step :title="$t('作废订单')"></el-step>
     </el-steps>
     <div style="text-align: center; font-size: 18px; margin-bottom: 20px">
-      {{ $t('订单详情') }} <Br />
+      {{ $t('订单详情') }}({{ form.warehouse && form.warehouse.warehouse_name }}) <Br />
       <el-alert
         v-if="form.status === 19"
         title="提示"
@@ -20,23 +20,34 @@
       </el-alert>
       <div class="tools">
         <el-button
-          @click="uploadInvoice"
-          class="btn-green"
-          v-if="['3', '4', '5'].includes($route.params.activeName)"
+          @click="downloadInvoice"
+          icon="el-icon-tickets"
+          mini
+          v-if="[3, 4, 5].includes(form.status)"
           >{{ $t('发票') }}</el-button
         >
         <el-button
-          @click="batchEditCompany"
-          class="btn-deep-purple"
-          v-if="['3', '4'].includes($route.params.activeName)"
-          >{{ $t('更新二程单号') }}</el-button
+          type="primary"
+          @click="packed"
+          icon="el-icon-suitcase"
+          mini
+          v-if="1 === form.status"
+          >{{ $t('打包') }}</el-button
         >
         <el-button
-          @click="updateTracking"
-          class="btn-pink"
-          v-if="$route.params.activeName === '4'"
-          >{{ $t('更新物流轨迹') }}</el-button
+          @click="edit"
+          icon="el-icon-edit"
+          @click.native="editPacked()"
+          v-if="2 === form.status"
+          >{{ $t('编辑') }}</el-button
         >
+
+        <el-button @click="batchEditCompany" v-if="[3, 4].includes(form.status)">{{
+          $t('更新二程单号')
+        }}</el-button>
+        <el-button @click="updateTracking" v-if="form.status === 4">{{
+          $t('更新物流轨迹')
+        }}</el-button>
       </div>
     </div>
 
@@ -60,7 +71,14 @@
         <el-row :gutter="24">
           <el-col :span="6">
             <div class="panel-bg">
-              <h4>{{ form.express_line && form.express_line.cn_name }}</h4>
+              <h4>
+                {{
+                  form.express_line &&
+                  (form.express_line.cn_name === undefined
+                    ? form.express_line.name
+                    : form.express_line.cn_name)
+                }}
+              </h4>
               <span style="color: blue; font-weight: bold">
                 {{ form.address && form.address.country_name }}
               </span>
@@ -221,7 +239,7 @@
                       <span style="font-weight: bold; font-size: 12px"
                         >{{ scope.row.package_name }} x {{ scope.row.qty }}</span
                       ><br />
-                      <span class="small-text"
+                      <span class="small-price-text"
                         >{{ localization.currency_unit }}{{ scope.row.package_value }}</span
                       ><br />
                       <span v-for="val in scope.row.props" :key="val.id" style="font-weight: bold">
@@ -382,6 +400,7 @@
                     <span v-for="(item, index) in scope.row.packages" :key="index">
                       {{ item }}
                     </span>
+                    <span v-if="scope.row.packages.length === 0">未明确指定</span>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('长')" prop="length"></el-table-column>
@@ -486,41 +505,17 @@
                 v-loading="tableLoading"
               >
                 <el-table-column type="index" width="50"></el-table-column>
-                <el-table-column :label="$t('费用类型')" prop="name">
-                  <!-- <template slot-scope="scope">
-                    <span v-if="scope.row.name === '运费'">{{ scope.row.freight_mode }}</span>
-                  </template> -->
-                </el-table-column>
-                <el-table-column prop="amount" :label="$t('金额') + localization.currency_unit">
+                <el-table-column :label="$t('费用类型')" prop="name"> </el-table-column>
+                <el-table-column
+                  prop="amount"
+                  align="right"
+                  :label="$t('金额') + localization.currency_unit"
+                >
                   <template slot-scope="scope">
-                    <span v-if="scope.row.name === '运费'">+ {{ scope.row.freight_amount }}</span>
-                    <span v-if="scope.row.name === '增值服务费'"
-                      >+ {{ scope.row.value_added_amount }}</span
-                    >
-                    <span v-if="scope.row.name === '渠道服务费'"
-                      >+ {{ scope.row.line_service_fee }}</span
-                    >
-                    <span v-if="scope.row.name === '渠道规则费'"
-                      >+ {{ scope.row.line_rule_fee }}</span
-                    >
-                    <span v-if="scope.row.name === '保险费用'">{{ scope.row.insurance_fee }}</span>
-                    <span v-if="scope.row.name === '抵用券减免'">
-                      - {{ scope.row.coupon_amount }}</span
-                    >
-                    <span v-if="scope.row.name === '积分抵扣'">
-                      - {{ scope.row.point_amount }}</span
-                    >
+                    {{ scope.row.amout }}
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('描述')">
-                  <template slot-scope="scope">
-                    <span v-if="scope.row.name === '运费'">
-                      {{ $t('首费') }}{{ localization.currency_unit
-                      }}{{ scope.row.first_freight_fee }},{{ $t('续费')
-                      }}{{ localization.currency_unit }}{{ scope.row.next_freight_fee }}
-                    </span>
-                  </template>
-                </el-table-column>
+                <el-table-column :label="$t('描述')" prop="remark"> </el-table-column>
               </el-table>
               <div style="text-align: right; font-size: 14px">
                 <div>
@@ -831,21 +826,6 @@ export default {
     packageDetail(id) {
       this.$router.push({ name: 'oderDetails', params: { id: id } })
     },
-    chooseData() {
-      console.log(this.paymentData, 'this.paymentData11')
-      for (var item in this.paymentData[0]) {
-        console.log(item, 'item')
-        this.paymentType.map(el => {
-          if (el.key === item) {
-            this.doubleData.push({
-              name: el.name,
-              value: this.paymentData[item]
-            })
-          }
-        })
-      }
-      console.log(this.doubleData, 'doubleData')
-    },
     getList() {
       this.tableLoading = true
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
@@ -860,47 +840,53 @@ export default {
         this.paymentData = [
           {
             name: this.$t('运费'),
-            freight_amount: res.data.payment.freight_amount,
-            first_freight_fee: res.data.payment.freights.first_freight_fee,
-            next_freight_fee: res.data.payment.freights.next_freight_fee
+            amout: res.data.payment.freight_amount,
+            remark:
+              '首费:' +
+              res.data.payment.freights.first_freight_fee +
+              ', 续费' +
+              res.data.payment.freights.next_freight_fee
           },
           {
             name: this.$t('增值服务费'),
-            value_added_amount: res.data.payment.value_added_amount,
-            first_freight_fee: res.data.payment.freights.first_freight_fee,
-            next_freight_fee: res.data.payment.freights.next_freight_fee
+            amout: res.data.payment.value_added_amount,
+            remark: ''
           },
           {
             name: this.$t('渠道服务费'),
-            line_service_fee: res.data.payment.line_service_fee,
-            first_freight_fee: res.data.payment.freights.first_freight_fee,
-            next_freight_fee: res.data.payment.freights.next_freight_fee
+            amout: res.data.payment.line_service_fee,
+            remark: ''
           },
           {
             name: this.$t('渠道规则费'),
-            line_rule_fee: res.data.payment.line_rule_fee,
-            first_freight_fee: res.data.payment.freights.first_freight_fee,
-            next_freight_fee: res.data.payment.freights.next_freight_fee
+            amout: res.data.payment.line_rule_fee,
+            remark: ''
           },
           {
             name: this.$t('保险费用'),
-            insurance_fee: res.data.payment.insurance_fee,
-            first_freight_fee: res.data.payment.freights.first_freight_fee,
-            next_freight_fee: res.data.payment.freights.next_freight_fee
+            amout: res.data.payment.insurance_fee,
+            remark: ''
           },
           {
             name: this.$t('抵用券减免'),
-            coupon_amount: res.data.payment.coupon_amount,
-            first_freight_fee: res.data.payment.freights.first_freight_fee,
-            next_freight_fee: res.data.payment.freights.next_freight_fee
+            amout: res.data.payment.coupon_amount * -1,
+            remark: ''
           },
           {
             name: this.$t('积分抵扣'),
-            point_amount: res.data.payment.point_amount,
-            first_freight_fee: res.data.payment.freights.first_freight_fee,
-            next_freight_fee: res.data.payment.freights.next_freight_fee
+            amout: res.data.payment.point_amount * -1,
+            remark: ''
           }
         ]
+        if (this.services.length > 0) {
+          for (let index = 0; index < this.services.length; index++) {
+            this.paymentData.push({
+              name: this.services[index].name,
+              amout: this.services[index].price,
+              remark: this.services[index].remark
+            })
+          }
+        }
         this.TrackingData = [
           {
             context: '签收时间',
@@ -952,6 +938,9 @@ export default {
           case 6:
             this.form.active = 4
             break
+          case 11:
+            this.form.active = 2
+            break
           case 19:
             this.form.active = 5
             break
@@ -974,7 +963,7 @@ export default {
       })
     },
     // 导出发票
-    uploadInvoice() {
+    downloadInvoice() {
       this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
@@ -1071,31 +1060,29 @@ export default {
           }
         })
     },
-    payed() {
-      this.$confirm(this.$t('您真的确认更改状态为已付款吗？'), this.$t('提示'), {
-        confirmButtonText: this.$t('确定'),
-        cancelButtonText: this.$t('取消'),
-        type: 'warning'
-      }).then(() => {
-        this.$request
-          .payedOrders({
-            ids: this.$route.params.id
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.getList()
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          })
+    // 打包
+    packed() {
+      this.$router.push({
+        name: 'billPacked',
+        params: {
+          id: this.form.id,
+          order_sn: this.form.order_sn,
+          activeName: this.form.status,
+          parent: this.form.is_parent,
+          lineId: this.form.express_line.id
+        }
+      })
+    },
+    // 待支付 编辑打包数据
+    editPacked() {
+      this.$router.push({
+        name: 'editPacked',
+        params: {
+          id: this.form.id,
+          activeName: this.form.status,
+          parent: this.form.is_parent,
+          lineId: this.form.express_line.id
+        }
       })
     },
     // 更新物流状态
@@ -1151,72 +1138,10 @@ export default {
           }
         })
     },
-    // 新增包裹
-    addPackages() {
-      dialog({ type: 'addPackages', id: this.$route.params.id }, () => {
-        this.getList()
-      })
-    },
-    // 取消
-    cancelMsg() {
-      this.unEdit = false
-      this.getList()
-    },
-    copyUrl() {
-      const input = document.createElement('input')
-      document.body.appendChild(input)
-      input.setAttribute('value', this.form.order_sn)
-      input.select()
-      if (document.execCommand('copy')) {
-        document.execCommand('copy')
-        this.$message.success(this.$t('复制成功'))
-      }
-      document.body.removeChild(input)
-    },
-    // 跳转到财务 流水记录
-    goSerial(serialNumber) {
-      this.$router.push({ name: 'transaction', query: { serial_number: serialNumber } })
-    },
     onRowChange(row) {
       this.chooseId = row.id
       // this.box.address_id = this.chooseId
       this.user = row
-    },
-    // 包裹清单 详情
-    packageDetails(id) {
-      this.$router.push({ name: 'oderDetails', params: { id: id } })
-    },
-    // 移除 包裹清单
-    removePackage(id, expressNum, orderSn) {
-      this.$confirm(
-        this.$t(
-          `该操作无法撤回，移除后的包裹将回到已入库状态，您是否确认将包裹（${expressNum}）从订单（${orderSn}）中移除？注：若该订单只有一个包裹，则该包裹移除后订单自动作废`
-        ),
-        this.$t('提示'),
-        {
-          confirmButtonText: this.$t('确定'),
-          cancelButtonText: this.$t('取消'),
-          type: 'warning'
-        }
-      ).then(() => {
-        this.$request.removePackage(this.$route.params.id, id).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-            this.getProduct()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-      })
     },
     confirm() {
       if (!this.chooseId) {
@@ -1424,6 +1349,10 @@ export default {
   .small-text {
     font-size: 12px;
     color: #bcbcbc;
+  }
+  .small-price-text {
+    font-size: 13px;
+    color: red;
   }
   .package-sty {
     border: 1px solid #f0f0f0;
