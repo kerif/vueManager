@@ -78,6 +78,7 @@
                     ? form.express_line.name
                     : form.express_line.cn_name)
                 }}
+                <span class="group-text">{{ form.group_name }}</span>
               </h4>
               <span style="color: blue; font-weight: bold">
                 {{ form.address && form.address.country_name }}
@@ -201,7 +202,174 @@
               </div>
             </el-card>
             <br />
-            <el-card class="box-card">
+            <el-card class="box-card" v-if="form.is_parent === 1">
+              <div slot="header" class="clearfix">
+                <span>{{ $t('拼团子订单详细') }}</span>
+              </div>
+              <el-table :data="groupDataList" class="expand-table">
+                <!-- 客户ID -->
+                <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+                <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
+                <!-- 订单号 -->
+                <el-table-column :label="$t('订单号')">
+                  <template slot-scope="scope">
+                    <router-link
+                      class="choose-order"
+                      :to="`/order/billDetails/${scope.row.id}/${scope.row.status}`"
+                    >
+                      {{ scope.row.order_sn }}
+                    </router-link>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('打包状态')" v-if="activeName === '1'">
+                  <template slot-scope="scope">
+                    <div class="no-package" v-if="scope.row.group_buying_status === 0">
+                      {{ $t('未打包') }}
+                    </div>
+                    <div class="packaged" v-if="scope.row.group_buying_status === 1">
+                      {{ $t('已打包') }}
+                    </div>
+                  </template>
+                </el-table-column>
+                <!-- 支付状态 -->
+                <el-table-column :label="$t('支付状态')" v-if="activeName === '2'">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.status === 3" class="packaged">{{ $t('已支付') }}</span>
+                    <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
+                    <router-link
+                      v-if="scope.row.status === 12"
+                      class="choose-order"
+                      :to="`/order/review/?id=${scope.row.id}`"
+                    >
+                      {{ $t('审核拒绝') }}
+                    </router-link>
+                  </template>
+                </el-table-column>
+                <!-- 转运快递单号 -->
+                <el-table-column
+                  :label="$t('头程物流信息')"
+                  v-if="['3', '4', '5', '6'].includes(activeName)"
+                >
+                  <template slot-scope="scope">
+                    <span
+                      >{{ scope.row.shipment && scope.row.shipment.logistics_company }}&nbsp;{{
+                        scope.row.shipment && scope.row.shipment.logistics_sn
+                      }}</span
+                    >
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  :label="$t('二程物流信息')"
+                  v-if="['3', '4', '5', '6'].includes(activeName)"
+                >
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('线路名称')" prop="express_line.cn_name">
+                </el-table-column>
+                <el-table-column
+                  :label="$t('收货人')"
+                  prop="address.receiver_name"
+                ></el-table-column>
+                <el-table-column
+                  :label="$t('收货国家/地区')"
+                  prop="address.country_name"
+                ></el-table-column>
+                <el-table-column :label="$t('包裹数与件数')">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  :label="
+                    activeName === '1'
+                      ? $t('预计重量') + localization.weight_unit
+                      : $t('实际重量') + localization.weight_unit
+                  "
+                  :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"
+                ></el-table-column>
+                <!-- 详见产品图 -->
+                <el-table-column
+                  :label="
+                    activeName === '1'
+                      ? $t('预计费用') + localization.currency_unit
+                      : $t('实际费用') + localization.currency_unit
+                  "
+                  :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"
+                ></el-table-column>
+                <el-table-column
+                  :label="$t('申报价值') + localization.currency_unit"
+                  prop="declare_value"
+                ></el-table-column>
+                <!-- 支付方式 -->
+                <el-table-column
+                  :label="$t('支付方式')"
+                  v-if="['3', '4', '5'].includes(activeName)"
+                >
+                  <template slot-scope="scope">
+                    <span class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">{{
+                      scope.row.payment_type_name
+                    }}</span>
+                    <span v-else>{{ scope.row.payment_type_name }}</span>
+                  </template>
+                </el-table-column>
+                <!-- 抵用券金额 -->
+                <el-table-column
+                  :label="$t('抵用券金额') + localization.currency_unit"
+                  v-if="['3', '4', '5'].includes(activeName)"
+                  prop="coupon_amount"
+                >
+                </el-table-column>
+                <!-- 增值服务金额 -->
+                <el-table-column
+                  :label="$t('增值服务金额') + localization.currency_unit"
+                  v-if="['3', '4', '5'].includes(activeName)"
+                  prop="value_added_amount"
+                >
+                </el-table-column>
+                <!-- 所属代理 -->
+                <el-table-column
+                  :label="$t('所属代理')"
+                  prop="agent + agent_commission"
+                  width="100px"
+                >
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.agent }}</span>
+                    <span>({{ scope.row.agent_commission }}%)</span>
+                  </template>
+                </el-table-column>
+                <!-- 提交时间 -->
+                <el-table-column
+                  :label="$t('提交时间')"
+                  prop="created_at"
+                  v-if="['1', '2', '3', '4'].includes(activeName)"
+                ></el-table-column>
+                <el-table-column
+                  :label="$t('拣货时间')"
+                  prop="packed_at"
+                  v-if="activeName === '2' || activeName === '3'"
+                ></el-table-column>
+                <el-table-column
+                  :label="$t('签收时间')"
+                  prop="updated_at"
+                  v-if="activeName === '5'"
+                >
+                </el-table-column>
+                <el-table-column
+                  :label="$t('所属发货单')"
+                  v-if="['3', '4', '5'].includes(activeName)"
+                >
+                  <template slot-scope="scope">
+                    <span @click="goShip(scope.row.shipment_sn)" class="choose-order">{{
+                      scope.row.shipment_sn
+                    }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-card>
+            <br />
+            <el-card class="box-card" v-if="form.is_parent === 0">
               <div slot="header" class="clearfix">
                 <span>{{ $t('申请打包包裹记录') }}</span>
                 <el-button style="float: right; padding: 3px 0" type="text"
@@ -804,7 +972,8 @@ export default {
         logistics_type_id: ''
       },
       TrackingData: [],
-      dialogInfo: false
+      dialogInfo: false,
+      groupDataList: []
     }
   },
   created() {
@@ -825,6 +994,12 @@ export default {
     // 详情
     packageDetail(id) {
       this.$router.push({ name: 'oderDetails', params: { id: id } })
+    },
+    //拼团子订单详细
+    loadGroupData(id) {
+      this.$request.orderSecond(id).then(res => {
+        if (res.ret) this.groupDataList = res.data
+      })
     },
     getList() {
       this.tableLoading = true
@@ -927,6 +1102,11 @@ export default {
             }
           ]
         }
+        //团购子订单
+        if (this.form.group_buying_status && this.form.group_buying_status === 1) {
+          this.form.status = 3
+          this.form.status_name = '已打包'
+        }
         switch (this.form.status) {
           case 1:
           case 2:
@@ -952,6 +1132,7 @@ export default {
         if (res.data.payment && res.data.payment.value_added_service) {
           this.addedData = res.data.payment.value_added_service
         }
+        if (this.form.is_parent === 1) this.loadGroupData(this.form.id)
       })
     },
     // 获取商品清单
@@ -1195,6 +1376,11 @@ export default {
     font-size: 15px;
     color: #35a581;
   }
+  .group-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: red;
+  }
   .address {
     font-size: 12px;
     padding: 0px;
@@ -1299,20 +1485,6 @@ export default {
   }
   .second-sty {
     width: 30%;
-  }
-  .cn-address-sty {
-    width: 20%;
-  }
-  .all-group {
-    display: inline-block;
-  }
-  .all-sty {
-    margin-left: 20px;
-  }
-  .group-sty {
-    padding-left: 20px;
-    font-size: 14px;
-    color: #909399;
   }
   .add-sty {
     text-align: right;

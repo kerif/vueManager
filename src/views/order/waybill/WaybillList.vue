@@ -466,13 +466,12 @@
               <!-- 订单号 -->
               <el-table-column :label="$t('订单号')">
                 <template slot-scope="scope">
-                  <!-- <i v-if="scope.row.is_parent === 1" class="iconfont icon-icon-test group-sty"></i> -->
-                  <span>{{ scope.row.order_sn }}</span>
-                  <img
-                    class="group-sty"
-                    v-if="scope.row.is_parent === 1"
-                    src="../../../assets/group.jpg"
-                  />
+                  <router-link
+                    class="choose-order"
+                    :to="`/order/billDetails/${scope.row.id}/${scope.row.status}`"
+                  >
+                    {{ scope.row.order_sn }}
+                  </router-link>
                 </template>
               </el-table-column>
               <el-table-column :label="$t('打包状态')" v-if="activeName === '1'">
