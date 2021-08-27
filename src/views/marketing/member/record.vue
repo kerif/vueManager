@@ -194,6 +194,7 @@
       <el-table :data="tableData" border style="width: 100%; margin-bottom: 10px">
         <el-table-column type="index" width="50"> </el-table-column>
         <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
+        <el-table-column prop="user_name" :label="$t('客户昵称')"> </el-table-column>
         <el-table-column prop="resource_type_name" :label="$t('分类')"> </el-table-column>
         <el-table-column prop="type_name" :label="$t('收支类型')"> </el-table-column>
         <el-table-column prop="amount" :label="$t('金额') + localization.currency_unit">

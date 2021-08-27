@@ -33,15 +33,6 @@
           v-model="ruleForm.threshold"
         ></el-input>
       </el-form-item>
-      <!-- <el-form-item :label="$t('生效时间')" prop="begin_at">
-           <el-date-picker
-           value-format="yyyy-MM-dd"
-            v-model="ruleForm.begin_at"
-            type="date"
-            :picker-options="pickerOptions"
-            :placeholder="$t('请输入生效时间')">
-            </el-date-picker>
-    </el-form-item> -->
       <el-form-item :label="$t('有效期')" prop="days">
         <el-input
           class="input-sty"
@@ -53,6 +44,16 @@
         <el-radio-group v-model="ruleForm.scope">
           <el-radio :label="0">{{ $t('全部') }}</el-radio>
           <el-radio :label="1">{{ $t('按路线') }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item
+        :label="$t('获券条件')"
+        prop="trigger_condition"
+        v-if="$route.params.type === 2"
+      >
+        <el-radio-group v-model="ruleForm.trigger_condition">
+          <el-radio :label="1">{{ $t('新用户支付一笔订单') }}</el-radio>
+          <el-radio :label="2">{{ $t('用户注册登陆') }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <div v-if="this.ruleForm.scope === 1" class="choose-btn">
@@ -88,6 +89,7 @@ export default {
         begin_at: '',
         days: '',
         scope: 0,
+        trigger_condition: 1,
         express_line_ids: []
       },
       lineName: [], // 保存获取到的路线
@@ -97,7 +99,8 @@ export default {
         threshold: [{ required: true, message: this.$t('请输入最低消费'), trigger: 'blur' }],
         days: [{ required: true, message: this.$t('请输入有效期'), trigger: 'blur' }],
         begin_at: [{ required: true, message: this.$t('请输入生效时间'), trigger: 'blur' }],
-        scope: [{ required: true, message: this.$t('请选择使用范围'), trigger: 'blur' }]
+        scope: [{ required: true, message: this.$t('请选择使用范围'), trigger: 'blur' }],
+        trigger_condition: [{ required: true, message: this.$t('请选择获券条件'), trigger: 'blur' }]
       },
       pickerOptions: {
         disabledDate(time) {
@@ -106,14 +109,9 @@ export default {
       }
     }
   },
-  created() {
-    console.log(typeof this.$route.params.type, 'type')
-    console.log(this.$route.params.type, 'type')
-  },
   methods: {
     chooseLine() {
       dialog({ type: 'lineChoose' }, data => {
-        // console.log(data, '我是路线data')
         this.lineName = data
         this.ruleForm.express_line_ids = data.map(item => item.id)
       })

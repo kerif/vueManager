@@ -94,7 +94,7 @@
           </el-form-item>
           <el-form-item prop="warehouse_id">
             <el-select
-              v-model="searchFieldData.warehouse_id"
+              v-model="searchFieldData.warehouse"
               clearable
               :placeholder="$t('请选择仓库')"
             >

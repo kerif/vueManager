@@ -17,7 +17,7 @@
         >
           <el-option
             v-for="item in companyList"
-            :key="item.id"
+            :key="item.code"
             :value="item.code"
             :label="item.name"
           >
@@ -27,15 +27,23 @@
           $t('管理发货快递公司')
         }}</el-button>
       </el-form-item>
-      <div v-if="this.state === 'multiBox'">
-        <el-form-item v-for="item in box" :key="item.id" :label="$t(`*快递转运单号：`)">
-          <span>{{ item.sn }}</span>
-          <el-input v-model="item.logistics_sn"></el-input>
-        </el-form-item>
-      </div>
-      <el-form-item :label="$t('*转运快递单号-二程：')" v-else>
+      <el-form-item :label="$t('*转运快递单号-二程：')" v-if="!count">
         <el-input v-model="company.sn" class="input-select"></el-input>
       </el-form-item>
+      <div v-else>
+        <div v-if="count === 1">
+          <el-form-item :label="$t(`*快递转运单号：`)">
+            <span>{{ orderSn }}</span>
+            <el-input v-model="company.sn"></el-input>
+          </el-form-item>
+        </div>
+        <div v-else>
+          <el-form-item v-for="item in box" :key="item.id" :label="$t(`*快递转运单号：`)">
+            <span>{{ item.sn }}</span>
+            <el-input v-model="item.logistics_sn"></el-input>
+          </el-form-item>
+        </div>
+      </div>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -55,6 +63,8 @@ export default {
       orderId: '',
       companyList: [],
       state: '',
+      count: '',
+      orderSn: '',
       box: []
     }
   },
@@ -67,7 +77,6 @@ export default {
             this.companyList = res.data
             if (this.company.company === '') {
               this.company.company = this.companyList[0].code
-              console.log(this.company.company, 'this.company.company')
             }
           }
         }
@@ -85,13 +94,19 @@ export default {
     getOrderDetails() {
       this.$request.getOrderDetails(this.orderId).then(res => {
         if (res.ret) {
-          this.box = res.data.box.map(item => {
-            return {
-              id: item.id,
-              sn: item.sn,
-              logistics_sn: ''
-            }
-          })
+          this.orderSn = res.data.order_sn
+          this.company.company = res.data.logistics_company
+          if (this.count >= 2) {
+            this.box = res.data.box.map(item => {
+              return {
+                id: item.id,
+                sn: item.sn,
+                logistics_sn: item.logistics_sn
+              }
+            })
+          } else {
+            this.company.sn = res.data.logistics_sn
+          }
         }
       })
     },
@@ -100,6 +115,11 @@ export default {
         return this.$message.error(this.$t('请输入转运快递公司二程'))
       }
       if (this.state === 'multiBox') {
+        if (this.count === 1) {
+          if (this.company.sn === '') {
+            return this.$message.error(this.$t('请输入转运快递单号二程'))
+          }
+        }
         let isNull = false
         this.box.forEach(item => {
           if (!item.logistics_sn) {
@@ -116,14 +136,24 @@ export default {
       }
       let res = {}
       if (this.state === 'multiBox') {
-        let box = this.box.map(item => {
-          return {
-            id: item.id,
-            logistics_sn: item.logistics_sn,
-            company: this.company.company
-          }
-        })
-        res = await this.$request.updateMultiLogistics(box)
+        if (this.count === 1) {
+          res = await this.$request.updateLogistics([
+            {
+              id: this.orderId,
+              sn: this.company.sn,
+              company: this.company.company
+            }
+          ])
+        } else {
+          let box = this.box.map(item => {
+            return {
+              id: item.id,
+              logistics_sn: item.logistics_sn,
+              company: this.company.company
+            }
+          })
+          res = await this.$request.updateMultiLogistics(box)
+        }
       } else {
         res = await this.$request.updateLogistics(
           this.id.map(i => ({
@@ -165,7 +195,6 @@ export default {
     },
     init() {
       this.getCompany()
-      // this.getList()
       if (this.state === 'multiBox') {
         this.getOrderDetails()
       }
