@@ -530,7 +530,18 @@
             </el-card>
           </el-tab-pane>
           <el-tab-pane :label="$t('打包详细')" name="1">
-            <div class="package-details">
+            <div class="package-details" v-if="form.status === 1">
+              <h1><i class="el-icon-warning-outline"></i> 还未打包, 现在需要打包吗?</h1>
+              <el-button
+                type="primary"
+                @click="packed"
+                icon="el-icon-suitcase"
+                mini
+                v-if="1 === form.status"
+                >{{ $t('打包') }}</el-button
+              >
+            </div>
+            <div class="package-details" v-if="form.status > 1">
               <div class="details-top">
                 <div class="size">
                   {{ $t('操作仓库') }}：{{ form.warehouse && form.warehouse.warehouse_name }}
@@ -569,7 +580,7 @@
                     <span v-for="(item, index) in scope.row.packages" :key="index">
                       {{ item }}
                     </span>
-                    <span v-if="scope.row.packages.length === 0">未明确指定</span>
+                    <span v-if="scope.row.packages.length === 0">-</span>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('长')" prop="length"></el-table-column>
