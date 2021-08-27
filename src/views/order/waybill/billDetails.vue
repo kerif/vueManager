@@ -1,10 +1,47 @@
 <template>
   <div class="bill-details-container">
+    <el-steps :active="form.active" finish-status="success" class="steps">
+      <el-step :title="$t('待处理')"></el-step>
+      <el-step :title="$t('待支付')"></el-step>
+      <el-step :title="$t('待发货')"></el-step>
+      <el-step :title="$t('已发货')"></el-step>
+      <el-step :title="$t('已签收')"></el-step>
+      <el-step :title="$t('作废订单')"></el-step>
+    </el-steps>
     <div style="text-align: center; font-size: 18px; margin-bottom: 20px">
-      {{ $t('订单详情') }}
+      {{ $t('订单详情') }} <Br />
+      <el-alert
+        v-if="form.status === 19"
+        title="提示"
+        type="warning"
+        description="订单已作废"
+        show-icon
+      >
+      </el-alert>
+      <div class="tools">
+        <el-button
+          @click="uploadInvoice"
+          class="btn-green"
+          v-if="['3', '4', '5'].includes($route.params.activeName)"
+          >{{ $t('发票') }}</el-button
+        >
+        <el-button
+          @click="batchEditCompany"
+          class="btn-deep-purple"
+          v-if="['3', '4'].includes($route.params.activeName)"
+          >{{ $t('更新二程单号') }}</el-button
+        >
+        <el-button
+          @click="updateTracking"
+          class="btn-pink"
+          v-if="$route.params.activeName === '4'"
+          >{{ $t('更新物流轨迹') }}</el-button
+        >
+      </div>
     </div>
+
     <el-row>
-      <el-col :span="18">
+      <el-col :span="21">
         <div class="details-top">
           <div class="number-top">
             {{ $t('订单号') }}：<span
@@ -20,413 +57,243 @@
             ><span>({{ form.logistics_company }})</span>
           </div>
         </div>
-        <div class="details-top">
-          <div class="container-sty container-line">
-            <span
-              ><strong>{{ form.express_line && form.express_line.name }}</strong></span
-            ><br />
-            <div class="flex-sty">
-              <div style="color: blue">
+        <el-row :gutter="24">
+          <el-col :span="6">
+            <div class="panel-bg">
+              <h4>{{ form.express_line && form.express_line.cn_name }}</h4>
+              <span style="color: blue; font-weight: bold">
                 {{ form.address && form.address.country_name }}
-              </div>
-              <div>
-                {{ form.station_name }}
-              </div>
+              </span>
+              {{ form.station_name }}
             </div>
-          </div>
-          <div class="container-sty container-weight">
-            <div class="flex-sty">
-              <div>
-                <strong
-                  >{{ form.length }}*{{ form.width }}*{{ form.height }}&nbsp;{{
-                    localization.length_unit
-                  }}</strong
-                >
-              </div>
-              <div>/</div>
-              <div>
-                <strong>{{ form.weight }}&nbsp;{{ localization.weight_unit }}</strong>
-              </div>
+          </el-col>
+          <el-col :span="6">
+            <div class="panel-bg">
+              {{ $t('计费体积') }} {{ form.length }} x {{ form.width }} x {{ form.height }}&nbsp;{{
+                localization.length_unit
+              }}
+              <br />
+              {{ $t('计费重量') }}
+              <span class="weight-text">
+                {{ form.details && form.details.payment_weight }}{{ localization.weight_unit }}
+              </span>
             </div>
-            <div class="flex-sty">
-              <div class="number-top">
-                {{ $t('计费体积') }}{{ form.details && form.details.payment_weight }}
-              </div>
-              <div>/</div>
-              <div style="margin-left: 20px" class="number-top">
-                {{ $t('计费重量') }}{{ form.details && form.details.payment_weight }}
-              </div>
-            </div>
-            <!-- <div class="container-right">{{ form.details && form.details.payment_weight }}</div> -->
-          </div>
-          <div class="container-sty container-pay">
-            <!-- <span
-              ><strong
-                >{{ form.details && form.details.actual_payment_fee
-                }}{{ localization.currency_unit }}</strong
-              ></span
-            ><span class="pay">{{ form.payment && form.payment.payment_type_name }}</span
-            ><br /> -->
-            <div class="flex-sty">
-              <div>
-                <strong
-                  >{{ form.details && form.details.actual_payment_fee
-                  }}{{ localization.currency_unit }}</strong
-                >
-              </div>
-              <div style="color: red; font-size: 18px">
+          </el-col>
+          <el-col :span="6">
+            <div class="panel-bg">
+              {{ $t('预计费用') }}&nbsp;{{ localization.currency_unit }}
+              <strong>{{ form.details && form.details.payment_fee }}</strong>
+              <br />
+              {{ $t('实际费用') }}&nbsp;
+              <span class="pay-text"
+                >{{ localization.currency_unit }} {{ form.payment && form.payment.pay_amount }}
+              </span>
+              <span class="pay-type-text">
                 {{ form.payment && form.payment.payment_type_name }}
-              </div>
+              </span>
             </div>
-            <div class="flex-sty">
-              <div class="number-top">
-                {{ $t('订单实付') }}
-                {{ form.payment && form.payment.pay_amount }}({{ localization.currency_unit }})
-              </div>
-              <div>
-                <el-button
-                  class="btn-blue-green"
-                  v-if="['3', '4', '5'].includes(this.$route.params.activeName)"
-                  size="small"
-                  @click="payed"
-                  >{{ $t('改为已付款') }}
-                </el-button>
-              </div>
+          </el-col>
+          <el-col :span="6">
+            <div class="panel-bg">
+              <h4>{{ form.status_name }}</h4>
+              {{ $t('状态') }}
             </div>
-          </div>
-          <div class="container-sty container-status">
-            <span class="ship"
-              ><strong>{{ form.status_name }}</strong></span
-            ><br />
-            <div class="container-left">{{ $t('状态') }}</div>
-          </div>
-        </div>
+          </el-col>
+        </el-row>
         <el-tabs v-model="activeName" class="tabLength">
           <el-tab-pane :label="$t('基本信息')" name="0">
-            <el-row style="background-color: #fff; padding: 10px">
-              <el-col :span="11" style="border-right: 1px solid #e5e5e5">
-                <h4 class="change-sty">{{ $t('收货人信息') }}</h4>
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>{{ $t('收货人信息') }}</span>
                 <el-button
-                  v-if="
-                    this.$route.params.activeName === '1' || this.$route.params.activeName === '2'
-                  "
+                  v-if="this.form.status === 1 || this.form.status === 2"
                   class="change-sty msg-sty btn-deep-purple"
                   @click="changeReceive"
                   >{{ $t('更换收货人信息') }}</el-button
                 >
                 <el-button
-                  v-if="unEdit === false"
                   class="btn-deep-blue change-sty msg-sty"
                   @click="goEdit"
-                  >{{ $t('编辑') }}</el-button
+                  v-if="this.form.status === 1 || this.form.status === 2"
+                  >{{ $t('编辑收货人') }}</el-button
                 >
-                <el-button
-                  v-if="unEdit === true"
-                  class="btn-dark-green change-sty msg-sty"
-                  @click="saveMsg"
-                  >{{ $t('保存') }}</el-button
+              </div>
+              <div class="address" v-if="form.address">
+                <table>
+                  <tr>
+                    <td>{{ $t('姓名') }}</td>
+                    <th>{{ form.address.receiver_name }}</th>
+                    <td>{{ $t('电话') }}</td>
+                    <th>{{ form.address.timezone }}-{{ form.address.phone }}</th>
+                  </tr>
+
+                  <tr>
+                    <td>{{ $t('国家/地区') }}</td>
+                    <th>{{ form.address.code }} {{ form.address.country.cn_name }}</th>
+                    <td>{{ $t('省/市/区') }}</td>
+                    <th>
+                      {{ form.address.province }}{{ form.address.city }}{{ form.address.district }}
+                    </th>
+                  </tr>
+
+                  <tr>
+                    <td>{{ $t('区域') }}</td>
+                    <th>{{ form.address.area.name }}</th>
+                    <td>{{ $t('邮编') }}</td>
+                    <th>{{ form.address.postcode }}</th>
+                  </tr>
+
+                  <tr>
+                    <td>{{ $t('街道') }}</td>
+                    <th>{{ form.address.street }}</th>
+                    <td>{{ $t('门牌号') }}</td>
+                    <th>{{ form.address.door_no }}</th>
+                  </tr>
+
+                  <tr class="one-line">
+                    <td>{{ $t('附加地址') }}</td>
+                    <th colspan="3">{{ form.address.address }}</th>
+                  </tr>
+
+                  <tr class="one-line" v-if="form.address.wechat_id">
+                    <td>{{ $t('微信号') }}</td>
+                    <th colspan="3">{{ form.address.wechat_id }}</th>
+                  </tr>
+
+                  <tr class="one-line" v-if="form.station_name">
+                    <td>{{ $t('收货自提点') }}</td>
+                    <th colspan="3">{{ form.station_name }}</th>
+                  </tr>
+
+                  <tr class="one-line" v-if="form.personal_code">
+                    <td>{{ $t('个人通关码') }}</td>
+                    <th colspan="3">{{ form.personal_code }}</th>
+                  </tr>
+
+                  <tr class="one-line" v-if="form.clearance_code">
+                    <td>{{ $t('清关编码') }}</td>
+                    <th colspan="3">{{ form.clearance_code }}</th>
+                  </tr>
+
+                  <tr class="one-line" v-if="form.id_card">
+                    <td>{{ $t('身份证号码') }}</td>
+                    <th colspan="3">{{ form.id_card }}</th>
+                  </tr>
+                </table>
+              </div>
+            </el-card>
+            <br />
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>{{ $t('申请打包包裹记录') }}</span>
+                <el-button style="float: right; padding: 3px 0" type="text"
+                  >{{ $t('包裹总价值') }}:
+                  <span style="font-size: 15px; font-weight: bold; color: red">
+                    {{ form.details.value }}
+                  </span></el-button
                 >
-                <el-button
-                  v-if="unEdit === true"
-                  class="btn-light-red change-sty msg-sty"
-                  @click="cancelMsg"
-                  >{{ $t('取消') }}</el-button
-                >
-                <el-form
-                  ref="form"
-                  :model="form"
-                  label-width="100px"
-                  class="info"
-                  label-position="right"
-                >
-                  <el-row class="container-center" :gutter="20">
-                    <!-- 姓名 -->
-                    <el-col :span="11">
-                      <span class="leftWidth">{{ $t('姓名') }}</span>
-                      <el-input
-                        class="input-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.receiver_name"
-                      ></el-input>
-                      <span v-if="unEdit === false">{{
-                        form.address && form.address.receiver_name
-                      }}</span>
-                    </el-col>
-                    <!-- 手机/联系电话 -->
-                    <el-col :span="11" :offset="1">
-                      <span class="leftWidth">{{ $t('手机/联系电话') }}</span>
-                      <el-input
-                        class="second-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.timezone"
-                        :placeholder="$t('区号')"
-                      ></el-input>
-                      <el-input
-                        class="second-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.phone"
-                        :placeholder="$t('号码')"
-                      ></el-input>
-                      <span v-if="unEdit === false"
-                        >{{ form.address && form.address.timezone }}-{{
-                          form.address && form.address.phone
-                        }}</span
+              </div>
+
+              <el-alert
+                :title="$t('申请打包备注')"
+                type="warning"
+                :description="form.vip_remark"
+                show-icon
+              >
+              </el-alert>
+              <el-table :data="PackageData" style="width: 100%">
+                <el-table-column type="index" label="#" width="50"></el-table-column>
+                <el-table-column :label="$t('快递单号')" width="180">
+                  <template slot-scope="scope">
+                    <el-button
+                      type="text"
+                      icon="el-icon-link"
+                      @click="packageDetail(scope.row.id)"
+                      >{{ scope.row.express_num }}</el-button
+                    ><br />
+                    <span>{{ scope.row.code }}</span>
+                    <span v-if="scope.row.code" class="small-text">（包裹编码）</span>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('物品')">
+                  <template slot-scope="scope">
+                    <div>
+                      <span style="font-weight: bold; font-size: 12px"
+                        >{{ scope.row.package_name }} x {{ scope.row.qty }}</span
+                      ><br />
+                      <span class="small-text"
+                        >{{ localization.currency_unit }}{{ scope.row.package_value }}</span
+                      ><br />
+                      <span v-for="val in scope.row.props" :key="val.id" style="font-weight: bold">
+                        {{ val.cn_name }}
+                      </span>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('重量尺寸')" width="180">
+                  <template slot-scope="scope">
+                    <div>
+                      <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span
+                      ><br />
+                      <span class="small-text"
+                        >{{ scope.row.dimension }}{{ localization.length_unit }}</span
                       >
-                    </el-col>
-                  </el-row>
-                  <el-row class="container-center" :gutter="20">
-                    <!-- 国家或地区 -->
-                    <el-col :span="11">
-                      <span class="leftWidth">{{ $t('国家/地区') }}</span>
-                      <el-input
-                        class="second-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.country.cn_name"
-                      ></el-input>
-                      <span v-if="unEdit === false">{{ form.address && form.address.code }}</span
-                      >&nbsp;
-                      <span v-if="unEdit === false">{{
-                        form.address && form.address.country.cn_name
-                      }}</span>
-                    </el-col>
-                    <el-col
-                      :span="11"
-                      :offset="1"
-                      v-if="form.address && form.address.is_cn_address == 1"
-                    >
-                      <span class="leftWidth">{{ $t('省/市/区') }}</span>
-                      <el-input
-                        class="cn-address-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.province"
-                      ></el-input>
-                      <el-input
-                        class="cn-address-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.city"
-                      ></el-input>
-                      <el-input
-                        class="cn-address-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.district"
-                      ></el-input>
-                      <span v-if="unEdit === false"
-                        >{{ form.address && form.address.province
-                        }}{{ form.address && form.address.city
-                        }}{{ form.address && form.address.district }}</span
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('货位')" width="180">
+                  <template slot-scope="scope">
+                    <div>
+                      <span>{{ scope.row.location }}</span>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('照片')" width="180">
+                  <template slot-scope="scope">
+                    <div>
+                      <span
+                        v-for="pic in scope.row.package_pictures"
+                        :key="pic.id"
+                        style="cursor: pointer"
+                        @click.stop=";(imgSrc = $baseUrl.IMAGE_URL + pic), (imgVisible = true)"
                       >
-                    </el-col>
-                    <el-col :span="11" v-else :offset="1">
-                      <span class="leftWidth">{{ $t('城市') }}</span>
-                      <el-input
-                        class="input-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.city"
-                      ></el-input>
-                      <span v-if="unEdit === false">{{ form.address && form.address.city }}</span>
-                    </el-col>
-                  </el-row>
-                  <el-row class="container-center" :gutter="20">
-                    <!-- 城市 -->
-                    <!-- 街道/门牌号 -->
-                    <el-col :span="11">
-                      <span class="leftWidth">{{ $t('街道/门牌号') }}</span>
-                      <el-input
-                        class="second-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.street"
-                        :placeholder="$t('街道')"
-                      ></el-input>
-                      <el-input
-                        class="second-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.door_no"
-                        :placeholder="$t('门牌号')"
-                      ></el-input>
-                      <span class="over-sty" v-if="unEdit === false"
-                        >{{ form.address && form.address.street
-                        }}{{ form.address && form.address.door_no }}</span
-                      >
-                    </el-col>
-                    <!-- 附加地址 -->
-                    <el-col :span="11" :offset="1">
-                      <span class="leftWidth">{{ $t('附加地址') }}</span>
-                      <el-input
-                        class="input-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.address"
-                      ></el-input>
-                      <div v-if="unEdit === false" class="over-sty">
-                        {{ form.address && form.address.address }}
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <el-row class="container-center" :gutter="20">
-                    <!-- 邮编 -->
-                    <el-col :span="11">
-                      <span class="leftWidth">{{ $t('邮编') }}</span>
-                      <el-input
-                        class="input-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.postcode"
-                      ></el-input>
-                      <span v-if="unEdit === false">{{
-                        form.address && form.address.postcode
-                      }}</span>
-                    </el-col>
-                    <!-- 微信号 -->
-                    <el-col :span="11" :offset="1">
-                      <span class="leftWidth">{{ $t('微信号') }}</span>
-                      <el-input
-                        class="input-sty"
-                        v-if="form.address && unEdit === true"
-                        v-model="form.address.wechat_id"
-                      ></el-input>
-                      <span v-if="unEdit === false">{{
-                        form.address && form.address.wechat_id
-                      }}</span>
-                    </el-col>
-                  </el-row>
-                  <el-row class="container-center" :gutter="20">
-                    <!-- 收货自提点 -->
-                    <el-col :span="11">
-                      <span class="leftWidth">{{ $t('收货自提点') }}</span>
-                      <!-- <el-input class="input-sty" v-model="form.address.wechat_id"></el-input> -->
-                      <span>{{ form.station_name }}</span>
-                    </el-col>
-                    <!-- 区域 -->
-                    <el-col :span="11" :offset="1" v-if="form.address && form.address.area">
-                      <span class="leftWidth">{{ $t('区域') }}</span>
-                      <el-input
-                        class="area-sty"
-                        v-if="form.address && unEdit === true && form.address.area"
-                        v-model="form.address.area.name"
-                      ></el-input>
-                      <span v-if="unEdit === false && form.address.area">{{
-                        form.address && form.address.area.name
-                      }}</span>
-                      <el-input
-                        class="area-sty"
-                        v-if="form.address && unEdit === true && form.address.sub_area"
-                        v-model="form.address.sub_area.name"
-                      ></el-input>
-                      <span v-if="unEdit === false && form.address.sub_area">{{
-                        form.address && form.address.sub_area.name
-                      }}</span>
-                    </el-col>
-                    <el-col :span="7" :offset="1" v-if="form.personal_code">
-                      <span class="leftWidth">{{ $t('个人通关码') }}</span>
-                      <el-input
-                        class="input-sty"
-                        v-if="form && unEdit === true"
-                        v-model="form.personal_code"
-                      ></el-input>
-                      <span v-if="unEdit === false">{{ form.personal_code }}</span>
-                    </el-col>
-                  </el-row>
-                  <el-row
-                    class="container-center"
-                    :gutter="20"
-                    v-if="form.clearance_code || form.id_card || form.personal_code"
-                  >
-                    <!-- 清关编码 -->
-                    <el-col :span="7" v-if="form.clearance_code">
-                      <span class="leftWidth">{{ $t('清关编码') }}</span>
-                      <el-input
-                        class="input-sty"
-                        v-if="form && unEdit === true"
-                        v-model="form.clearance_code"
-                      ></el-input>
-                      <span v-if="unEdit === false">{{ form.clearance_code }}</span>
-                    </el-col>
-                    <!-- 身份证号码 -->
-                    <el-col :span="7" :offset="1" v-if="form.id_card">
-                      <span class="leftWidth">{{ $t('身份证号码') }}</span>
-                      <el-input
-                        class="input-sty"
-                        v-if="form && unEdit === true"
-                        v-model="form.id_card"
-                      ></el-input>
-                      <span v-if="unEdit === false">{{ form.id_card }}</span>
-                    </el-col>
-                  </el-row>
-                </el-form>
-              </el-col>
-              <el-col :span="13" style="padding-left: 10px; font-size: 14px">
-                <div class="details-top" style="margin-bottom: 0px">
-                  <h4>{{ $t('申请打包包裹记录') }}</h4>
-                  <h4>{{ $t('包裹总价值') }}</h4>
-                </div>
-                <div class="review-package review-bg">
-                  <div>{{ $t('快递单号') }}</div>
-                  <div>{{ $t('物品') }}</div>
-                  <div>{{ $t('重量') }}</div>
-                  <div>{{ $t('照片') }}</div>
-                </div>
-                <div class="review-package package-sty" v-for="item in PackageData" :key="item.id">
-                  <div>
-                    <span>{{ item.express_num }}</span
-                    ><br />
-                    <span>{{ item.express_company && item.express_company.name }}</span
-                    ><br />
-                    <span>{{ item.code }}</span
-                    ><br /><span>（包裹编码）</span>
-                  </div>
-                  <div style="margin-left: -30px">
-                    <span>{{ item.package_name }}x{{ item.qty }}</span
-                    ><br />
-                    <span>{{ localization.currency_unit }}{{ item.package_value }}</span
-                    ><br />
-                    <span v-for="val in item.props" :key="val.id">
-                      {{ val.cn_name }}
-                    </span>
-                  </div>
-                  <div style="margin-left: 36px">
-                    <span>{{ item.package_weight }}{{ localization.weight_unit }}</span
-                    ><br />
-                    <span>{{ item.dimension }}{{ localization.length_unit }}</span
-                    ><br />
-                    <span>{{ item.location }}</span>
-                  </div>
-                  <div>
-                    <span>{{ item.agent }}{{ $t('代理') }}</span
-                    ><br />
-                    <span
-                      v-for="pic in item.package_pictures"
-                      :key="pic.id"
-                      style="cursor: pointer"
-                      @click.stop=";(imgSrc = $baseUrl.IMAGE_URL + pic), (imgVisible = true)"
-                    >
-                      <img :src="$baseUrl.IMAGE_URL + pic" style="width: 40px; margin-right: 5px" />
-                    </span>
-                  </div>
-                </div>
-                <div class="application-sty">
-                  {{ $t('申请备注') }}
-                  {{ form.vip_remark }}
-                </div>
-                <div class="application-sty">
-                  {{ $t('申请增值服务') }}
-                  <el-table
-                    :data="addedData"
-                    class="data-list"
-                    border
-                    stripe
-                    v-loading="tableLoading"
-                    ref="table"
-                  >
-                    <el-table-column type="index" label="#" width="50"></el-table-column>
-                    <el-table-column :label="$t('服务名称')" prop="name"></el-table-column>
-                    <el-table-column
-                      prop="price"
-                      :label="$t('费用') + localization.currency_unit"
-                    ></el-table-column>
-                  </el-table>
-                </div>
-              </el-col>
-            </el-row>
-            <div style="background-color: #fff; padding: 10px">
-              <h4>{{ $t('商品清单') }}</h4>
+                        <img
+                          :src="$baseUrl.IMAGE_URL + pic"
+                          style="width: 40px; margin-right: 5px"
+                        />
+                      </span>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-card>
+            <br />
+            <el-card class="box-card" v-if="addedData">
+              <div slot="header" class="clearfix">
+                <span>{{ $t('申请增值服务') }}</span>
+              </div>
+              <el-table
+                :data="addedData"
+                class="data-list"
+                border
+                stripe
+                v-loading="tableLoading"
+                ref="table"
+              >
+                <el-table-column type="index" label="#" width="50"></el-table-column>
+                <el-table-column :label="$t('服务名称')" prop="name"></el-table-column>
+                <el-table-column
+                  prop="price"
+                  :label="$t('费用') + localization.currency_unit"
+                ></el-table-column>
+              </el-table>
+            </el-card>
+            <br />
+            <el-card class="box-card" v-if="productData">
+              <div slot="header" class="clearfix">
+                <span>{{ $t('商品清单') }}</span>
+              </div>
+
               <el-table
                 :data="productData"
                 class="data-list"
@@ -473,7 +340,7 @@
                 <!-- 所属包裹 -->
                 <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
               </el-table>
-            </div>
+            </el-card>
           </el-tab-pane>
           <el-tab-pane :label="$t('打包详细')" name="1">
             <div class="package-details">
@@ -494,6 +361,13 @@
                   >
                 </div>
               </div>
+              <el-alert
+                :title="$t('仓库打包备注')"
+                type="success"
+                :description="form.remark"
+                show-icon
+              >
+              </el-alert>
               <el-table
                 :data="boxData"
                 class="data-list"
@@ -502,7 +376,7 @@
                 v-loading="tableLoading"
                 ref="table"
               >
-                <el-table-column :label="$t('箱号')" type="index"></el-table-column>
+                <el-table-column :label="$t('箱号')" type="index" width="50"></el-table-column>
                 <el-table-column :label="$t('包裹号')">
                   <template slot-scope="scope">
                     <span v-for="(item, index) in scope.row.packages" :key="index">
@@ -515,7 +389,7 @@
                 <el-table-column :label="$t('高')" prop="height"></el-table-column>
                 <el-table-column :label="$t('体积重')" prop="volume_weight"></el-table-column>
                 <el-table-column :label="$t('实重')" prop="weight"></el-table-column>
-                <el-table-column :label="$t('承运单号')" prop="sn"></el-table-column>
+                <el-table-column :label="$t('承运单号')" prop="logistics_sn"></el-table-column>
               </el-table>
               <el-row class="size">
                 <el-col :span="10">
@@ -534,6 +408,26 @@
                       </div>
                     </div>
                   </div>
+                  <div class="bale">
+                    <div class="bale-left">
+                      <span>{{ $t('物品照片') }}</span>
+                      <div
+                        class="left-img"
+                        v-for="item in form.in_warehouse_pictures"
+                        :key="item.id"
+                      >
+                        <span
+                          style="cursor: pointer"
+                          @click.stop="
+                            ;(imgSrc = `${$baseUrl.IMAGE_URL}${item.url}`), (imgVisible = true)
+                          "
+                        >
+                          <img :src="`${$baseUrl.IMAGE_URL}${item.url}`" class="productImg" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
                   <div>
                     {{ $t('转运公司') }}
                     {{ form.logistics_company }}
@@ -544,7 +438,7 @@
                   </div>
                   <div>
                     {{ $t('发货单单号') }}
-                    {{ form.shipment && form.shipment.sn }}
+                    {{ form.logistics_sn && form.shipment && form.shipment.sn }}
                   </div>
                 </el-col>
                 <el-col :span="10" :offset="1">
@@ -599,21 +493,23 @@
                 </el-table-column>
                 <el-table-column prop="amount" :label="$t('金额') + localization.currency_unit">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.name === '运费'">{{ scope.row.freight_amount }}</span>
-                    <span v-if="scope.row.name === '增值服务费'">{{
-                      scope.row.value_added_amount
-                    }}</span>
-                    <span v-if="scope.row.name === '渠道服务费'">{{
-                      scope.row.line_service_fee
-                    }}</span>
-                    <span v-if="scope.row.name === '渠道规则费'">{{
-                      scope.row.line_rule_fee
-                    }}</span>
+                    <span v-if="scope.row.name === '运费'">+ {{ scope.row.freight_amount }}</span>
+                    <span v-if="scope.row.name === '增值服务费'"
+                      >+ {{ scope.row.value_added_amount }}</span
+                    >
+                    <span v-if="scope.row.name === '渠道服务费'"
+                      >+ {{ scope.row.line_service_fee }}</span
+                    >
+                    <span v-if="scope.row.name === '渠道规则费'"
+                      >+ {{ scope.row.line_rule_fee }}</span
+                    >
                     <span v-if="scope.row.name === '保险费用'">{{ scope.row.insurance_fee }}</span>
-                    <span v-if="scope.row.name === '抵用券减免'">{{
-                      scope.row.coupon_amount
-                    }}</span>
-                    <span v-if="scope.row.name === '积分抵扣'">{{ scope.row.point_amount }}</span>
+                    <span v-if="scope.row.name === '抵用券减免'">
+                      - {{ scope.row.coupon_amount }}</span
+                    >
+                    <span v-if="scope.row.name === '积分抵扣'">
+                      - {{ scope.row.point_amount }}</span
+                    >
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('描述')">
@@ -636,7 +532,7 @@
                 <div>
                   <div class="price-sty">{{ $t('实付') }}{{ localization.currency_unit }}</div>
                   <div class="price-sty pay-sty" style="color: red">
-                    {{ form.payment && form.pay_amount }}
+                    {{ form.payment && form.payment.pay_amount }}
                   </div>
                 </div>
                 <div>
@@ -679,30 +575,9 @@
           </el-tab-pane>
         </el-tabs>
       </el-col>
-      <el-col :span="5" style="padding-left: 20px">
-        <el-button
-          @click="uploadInvoice"
-          class="btn-green"
-          v-if="['3', '4', '5'].includes($route.params.activeName)"
-          >{{ $t('发票') }}</el-button
-        >
-        <el-button
-          @click="batchEditCompany"
-          class="btn-deep-purple"
-          v-if="['3', '4'].includes($route.params.activeName)"
-          >{{ $t('更新二程单号') }}</el-button
-        >
-        <el-button
-          @click="updateTracking"
-          class="btn-pink"
-          v-if="$route.params.activeName === '4'"
-          >{{ $t('更新物流轨迹') }}</el-button
-        >
+      <el-col :span="3" style="padding: 25px 0px 0px 20px">
         <div class="express-content" v-loading="$store.state.btnLoading">
           <div v-if="TrackingData.length" class="line-sty">
-            <div class="content-top">
-              <div class="time">{{ $t('时间轴') }}</div>
-            </div>
             <ul class="result-list">
               <li
                 :class="{ 'last-finish': index === 0 }"
@@ -722,7 +597,7 @@
             </ul>
           </div>
           <div>
-            <el-button @click="goTracking">{{ $t('查看全程物流轨迹') }}</el-button>
+            <el-button @click="goTracking" mini>{{ $t('物流轨迹') }}</el-button>
           </div>
         </div>
       </el-col>
@@ -884,6 +759,7 @@ export default {
       services: [],
       localization: {},
       paymentData: [],
+      active: 0,
       paymentType: [
         {
           name: this.$t('运费'),
@@ -950,6 +826,10 @@ export default {
           this.modeData = res.data
         }
       })
+    },
+    // 详情
+    packageDetail(id) {
+      this.$router.push({ name: 'oderDetails', params: { id: id } })
     },
     chooseData() {
       console.log(this.paymentData, 'this.paymentData11')
@@ -1045,6 +925,41 @@ export default {
         ]
         this.boxData = res.data.box
         this.userId = res.data.user_id
+        //如果是单箱出库
+        if (this.form.box_type === 1) {
+          this.boxData = [
+            {
+              id: 0,
+              length: res.data.details.length,
+              weight: res.data.details.actual_weight,
+              height: res.data.details.height,
+              width: res.data.details.width,
+              volume_weight: res.data.details.volume_weight,
+              logistics_sn: this.form.order_sn,
+              sn: this.form.order_sn,
+              packages: '全部一箱'
+            }
+          ]
+        }
+        switch (this.form.status) {
+          case 1:
+          case 2:
+          case 3:
+          case 4:
+          case 5:
+            this.form.active = this.form.status - 1
+            break
+          case 6:
+            this.form.active = 4
+            break
+          case 19:
+            this.form.active = 5
+            break
+
+          default:
+            this.form.active = 0
+            break
+        }
         if (res.data.payment && res.data.payment.value_added_service) {
           this.addedData = res.data.payment.value_added_service
         }
@@ -1337,6 +1252,53 @@ export default {
   .container-center {
     margin-bottom: 20px;
   }
+  .tools {
+    float: right;
+  }
+  .weight-text {
+    font-weight: bold;
+    font-size: 15px;
+    color: blue;
+  }
+  .pay-text {
+    font-weight: bold;
+    font-size: 15px;
+    color: red;
+  }
+  .pay-type-text {
+    font-weight: bold;
+    font-size: 15px;
+    color: #35a581;
+  }
+  .address {
+    font-size: 12px;
+    padding: 0px;
+    margin-bottom: 20px;
+    table {
+      clear: both;
+      margin: 0px;
+      padding: 0px;
+      line-height: 35px;
+      width: 99%;
+      td {
+        text-align: right;
+        width: 15%;
+        padding-right: 15px;
+      }
+      th {
+        height: 35px;
+        overflow: hidden;
+        border-bottom: 1px solid #a8b7bf;
+        font-weight: bold;
+        text-align: left;
+        width: 35%;
+      }
+    }
+  }
+  .address-tools {
+    padding: 50px;
+    text-align: center;
+  }
   .receiverMSg {
     padding: 10px;
     background-color: #fff !important;
@@ -1438,52 +1400,15 @@ export default {
       font-size: 14px;
       font-weight: 650;
     }
-    .container-sty {
-      // padding: 20px;
-      background-color: #fff;
-      // overflow: hidden;
-    }
-    .container-line {
-      width: 28%;
-      padding: 10px !important;
-    }
-    .container-weight {
-      width: 21%;
-      padding: 10px !important;
-    }
-    .container-pay {
-      width: 21%;
-      padding: 10px !important;
-      .pay {
-        display: inline-block;
-        margin-left: 105px;
-        color: #d9001b;
-        font-weight: 650;
-        font-style: normal;
-        font-size: 18px;
-      }
-    }
-    .container-status {
-      width: 13%;
-      padding: 10px !important;
-      .ship {
-        color: #333333;
-        font-size: 18px;
-        font-weight: 650;
-        font-style: normal;
-      }
-    }
-    // .container-sty > div {
-    //   display: inline-block;
-    // }
-    .container-left {
-      float: left;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-    .container-right {
-      float: right;
-      margin-top: 10px;
+  }
+  .panel-bg {
+    background-color: white;
+    padding: 20px;
+    line-height: 35px;
+    font-size: 13px;
+    h4 {
+      margin: 0px;
+      padding: 0px;
     }
   }
   .package-details {
@@ -1494,6 +1419,11 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 5px;
+    line-height: 25px;
+  }
+  .small-text {
+    font-size: 12px;
+    color: #bcbcbc;
   }
   .package-sty {
     border: 1px solid #f0f0f0;
@@ -1519,7 +1449,7 @@ export default {
   }
   .express-content {
     background-color: #fff;
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
     // margin-top: 35px;
     position: relative;
