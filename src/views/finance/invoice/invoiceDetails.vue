@@ -8,27 +8,36 @@
             <el-col :span="24">
               <span class="leftWidth">{{ $t('客户ID') }}</span
               >&nbsp;&nbsp;&nbsp;&nbsp;
-              <span><i class="idNum"></i>&nbsp;&nbsp;&nbsp;</span>
+              <span
+                ><i class="idNum">{{ invoiceStatus.user_id }}</i
+                >&nbsp;&nbsp;&nbsp;{{ invoiceStatus.user_name }}</span
+              >
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
-              <span class="leftWidth">{{ $t('流水号') }}</span
+              <span class="leftWidth">{{ $t('订单号') }}</span
               >&nbsp;&nbsp;&nbsp;&nbsp;
-              <span></span>
+              <span>{{ invoiceStatus.order_id }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('订单状态') }}</span
               >&nbsp;&nbsp;&nbsp;&nbsp;
-              <span></span>
+              <span>{{ invoiceStatus.order_status }}</span>
             </el-col>
           </el-row>
         </div>
         <div class="rightInfo">
           <template>
-            <h1 class="review_color">{{ $t('待审核') }}</h1>
+            <h1 class="review_color">
+              <template>
+                <span v-if="invoiceStatus.state === 1">{{ $t('待处理') }}</span>
+                <span v-if="invoiceStatus.state === 2">{{ $t('申请通过') }}</span>
+                <span v-if="invoiceStatus.state === 3">{{ $t('作废发票') }}</span>
+              </template>
+            </h1>
           </template>
         </div>
       </div>
@@ -38,12 +47,21 @@
           <!-- 发票类型 -->
           <el-col :span="8">
             <span class="withdrawal">{{ $t('发票类型') }}</span>
-            <span class="bank"></span>
+            <span class="bank">
+              <template>
+                <span v-if="invoiceStatus.type === 1">{{ $t('普通纸质发票') }}</span>
+              </template>
+            </span>
           </el-col>
           <!-- 抬头类型 -->
           <el-col :span="8" :offset="4">
             <span class="withdrawal">{{ $t('抬头类型') }}</span>
-            <span></span>
+            <span>
+              <template>
+                <span v-if="invoiceStatus.invoice_type === 1">{{ $t('个人') }}</span>
+                <span v-if="invoiceStatus.invoice_type === 2">{{ $t('企业') }}</span>
+              </template>
+            </span>
           </el-col>
         </el-row>
         <div class="main">
@@ -52,42 +70,42 @@
               <!-- 发票抬头 -->
               <el-col :span="24">
                 <span class="withdrawal">{{ $t('发票抬头') }}</span>
-                <span></span>
+                <span>{{ invoiceStatus.title }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 税号 -->
               <el-col :span="24">
                 <span class="withdrawal">{{ $t('税号') }}</span>
-                <span></span>
+                <span>{{ invoiceStatus.duty_paragraph }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 开户银行 -->
               <el-col :span="24">
                 <span class="withdrawal">{{ $t('开户银行') }}</span>
-                <span></span>
+                <span>{{ invoiceStatus.bank_name }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 银行账号 -->
               <el-col :span="24">
                 <span class="withdrawal">{{ $t('银行账号') }}</span>
-                <span></span>
+                <span>{{ invoiceStatus.bank_account }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 企业地址 -->
               <el-col :span="24">
                 <span class="withdrawal">{{ $t('企业地址') }}</span>
-                <span></span>
+                <span>{{ invoiceStatus.company_address }}</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <!-- 企业电话 -->
               <el-col :span="24">
                 <span class="withdrawal">{{ $t('企业电话') }}</span>
-                <span></span>
+                <span>{{ invoiceStatus.company_tel }}</span>
               </el-col>
             </el-row>
           </div>
@@ -101,7 +119,7 @@
       </div>
       <h3>{{ $t('审核备注') }}</h3>
       <div class="remarks-card">
-        <div class="condition">该记录还未审核</div>
+        <div class="condition">{{ invoiceStatus.remarks }}</div>
       </div>
     </div>
     <div class="clearfix">
@@ -123,19 +141,20 @@
           <el-table
             border
             show-summary
-            :data="tableData"
+            :data="costData"
             style="width: 100%"
             :summary-method="getSummaries"
-            :span-method="arraySpanMethod"
           >
             <el-table-column type="index" :label="$t('#')" width="100"> </el-table-column>
-            <el-table-column prop="name" :label="$t('服务名称')" width="180"> </el-table-column>
-            <el-table-column prop="amount2" :label="$t('数量')"> </el-table-column>
-            <el-table-column prop="amount2" :label="$t('单价（¥）')" width="180"> </el-table-column>
-            <el-table-column prop="amount2" :label="$t('金额（¥）')" width="180"> </el-table-column>
-            <el-table-column prop="amount1" :label="$t('税率（%）')"> </el-table-column>
-            <el-table-column prop="amount3" :label="$t('税款（¥）')"> </el-table-column>
-            <el-table-column prop="commission_amount" label="操作">
+            <el-table-column prop="service_name" :label="$t('服务名称')" width="180">
+            </el-table-column>
+            <el-table-column prop="quantity" :label="$t('数量')"> </el-table-column>
+            <el-table-column prop="unit_price" :label="$t('单价（¥）')" width="180">
+            </el-table-column>
+            <el-table-column prop="money" :label="$t('金额（¥）')" width="180"> </el-table-column>
+            <el-table-column prop="tax_rate" :label="$t('税率（%）')"> </el-table-column>
+            <el-table-column prop="taxes" :label="$t('税款（¥）')"> </el-table-column>
+            <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="success" plain size="mini" @click="editDetail(scope.row.id)">{{
                   $t('删除')
@@ -145,9 +164,15 @@
           </el-table>
         </div>
       </el-card>
-      <el-row class="auditStatus">
+      <el-row class="auditStatus" v-if="invoiceStatus.state === 1">
         <el-button type="danger">{{ $t('作废申请') }}</el-button>
-        <el-button type="primary">{{ $t('开票完成') }}</el-button>
+        <el-button type="primary" @click="invoiceComplete">{{ $t('开票完成') }}</el-button>
+      </el-row>
+      <el-row class="auditStatus" v-if="invoiceStatus.state === 2">
+        <el-button type="primary">{{ $t('重开发票') }}</el-button>
+      </el-row>
+      <el-row class="auditStatus" v-if="invoiceStatus.state === 3">
+        <el-button type="primary">{{ $t('恢复申请') }}</el-button>
       </el-row>
     </div>
   </div>
@@ -158,18 +183,25 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      tableData: [
-        {
-          id: '12987122',
-          name: '王小虎',
-          amount1: '234',
-          amount2: '3.2',
-          amount3: 10
-        }
-      ]
+      invoiceStatus: {},
+      costData: [],
+      imgVisible: false,
+      imgSrc: ''
     }
   },
+  created() {
+    this.getInvoiceDetail()
+  },
   methods: {
+    getInvoiceDetail() {
+      this.$request.invoiceDetail(this.$route.params.id).then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.invoiceStatus = res.data
+          this.costData = res.data.orderCostDetailed
+        }
+      })
+    },
     getSummaries(param) {
       const { columns, data } = param
       const sums = []
@@ -204,18 +236,11 @@ export default {
 
       return sums
     },
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      console.log(row, column, rowIndex, columnIndex)
-      if (rowIndex % 2 !== 0) {
-        if (columnIndex === 4 && columnIndex === 5 && columnIndex === 6 && columnIndex === 7) {
-          return [4, 7]
-        }
-      }
-    },
     invoiceComplete() {
       dialog(
         {
-          type: 'addInvoicing'
+          type: 'toAddInvoicing',
+          state: 'pass'
         },
         () => {
           this.$router.go(-1)

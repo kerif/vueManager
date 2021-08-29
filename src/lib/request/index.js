@@ -800,6 +800,38 @@ exports.updateWithdrawData = params => {
 exports.agentTemplate = params => {
   return $form.get('agents/commission-templates', { params })
 }
+// 发票管理 全部
+exports.manageInvoice = params => {
+  return $form.get('invoice', { params })
+}
+// 发票管理 详情
+exports.invoiceDetail = id => {
+  return $form.get(`invoice/${id}`)
+}
+// 发票管理 搜索
+exports.searchMode = params => {
+  return $form.get('invoice', { params })
+}
+// 发票管理 统计数量
+exports.invoiceCount = () => {
+  return $form.get('invoice/count')
+}
+// 发票管理 开票完成
+exports.invoiceComplete = id => {
+  return $form.put(`invoice/complete/${id}`)
+}
+// 发票管理 开票作废
+exports.invoiceVoid = id => {
+  return $form.put(`invoice/to-void/${id}`)
+}
+// 发票管理 重新开票
+exports.invoiceReopen = id => {
+  return $form.put(`reopen/${id}`)
+}
+// 发票管理 开票作废
+exports.invoiceRecovery = id => {
+  return $form.put(`recovery/${id}`)
+}
 // 计佣模版配置 获取form表单详情
 exports.commissionSet = id => {
   return $form.get(`agents/commission-templates/${id}`)

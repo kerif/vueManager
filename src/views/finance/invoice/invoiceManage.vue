@@ -2,16 +2,16 @@
   <div class="invoice-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane :label="$t('全部')" name="first">
-        <invoice-data></invoice-data>
+        <invoice-data :allData="all" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
       <el-tab-pane :label="$t('待处理')" name="second">
-        <invoice-data></invoice-data>
+        <invoice-data :allData="pendData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
       <el-tab-pane :label="$t('已开票')" name="third">
-        <invoice-data></invoice-data>
+        <invoice-data :allData="invoicedData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
       <el-tab-pane :label="$t('已作废')" name="fourth">
-        <invoice-data></invoice-data>
+        <invoice-data :allData="voidedData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
     </el-tabs>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -27,7 +27,11 @@ export default {
   data() {
     return {
       activeName: 'first',
-      page_params: {}
+      page_params: {},
+      all: [],
+      pendData: [],
+      invoicedData: [],
+      voidedData: []
     }
   },
   components: {
@@ -35,9 +39,54 @@ export default {
     NlePagination
   },
   mixins: [pagination],
+  created() {
+    this.getList()
+    this.getCounts()
+  },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event)
+    },
+    getList(param_list) {
+      this.$request
+        .manageInvoice({
+          page: this.page_params.page,
+          size: this.page_params.size,
+          ...param_list
+        })
+        .then(res => {
+          console.log(res)
+          if (res.ret) {
+            this.all = res.data
+            this.pendData = this.all.filter(item => item.state === 1)
+            console.log(this.pendData, '待处理')
+            this.invoicedData = this.all.filter(item => item.state === 2)
+            console.log(this.invoicedData, '已开票')
+            this.voidedData = this.all.filter(item => item.state === 3)
+            console.log(this.voidedData, '已作废')
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
+    },
+    fn(id, state) {
+      this.$router.push({
+        name: 'invoiceDetails',
+        params: {
+          id: id,
+          state: state
+        }
+      })
+    },
+    getCounts() {
+      this.$request.invoiceCount().then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.complete = res.data.complete
+          this.reopen = res.data.reopen
+          this.stay = res.data.stay
+        }
+      })
     }
   }
 }

@@ -75,6 +75,7 @@ import alipay from './alipay.vue'
 import addressEdit from './addressEdit.vue'
 import confirmAudit from './confirmAudit.vue'
 import failAudit from './failAudit.vue'
+import toAddInvoicing from './toAddInvoicing'
 import editInfo from './editVipInfo.vue'
 import notifyOrder from './notifyOder.vue'
 import groupAdd from './groupAdd.vue'
@@ -192,6 +193,7 @@ const AlipayController = Vue.extend(alipay)
 const AddressEditController = Vue.extend(addressEdit)
 const ConfirmAuditController = Vue.extend(confirmAudit)
 const FailAuditController = Vue.extend(failAudit)
+const ToAddInvoicingController = Vue.extend(toAddInvoicing)
 const EditVipInfoController = Vue.extend(editInfo)
 const NotifyOrderController = Vue.extend(notifyOrder)
 const GroupAddController = Vue.extend(groupAdd)
@@ -766,6 +768,13 @@ function initInstance(type) {
     // 财务 代理佣金结算 审核拒绝
     case 'failAudit':
       instance = new FailAuditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 财务 发票管理 开票完成
+    case 'toAddInvoicing':
+      instance = new ToAddInvoicingController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -69,13 +69,6 @@
             </el-button>
           </template>
         </el-table-column>
-        <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small" class="btn-deep-blue" @click="forbidLogin(0)">{{$t('禁止登录')}}</el-button>
-          <el-button size="small" class="btn-green" @click="forbidLogin(1)">{{$t('允许登录')}}</el-button>
-          <el-button size="small" class="btn-light-red" @click="deleteData">{{$t('删除')}}</el-button>
-        </div>
-      </template> -->
       </el-table>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>

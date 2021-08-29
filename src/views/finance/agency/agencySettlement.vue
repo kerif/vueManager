@@ -1,6 +1,6 @@
 <template>
   <div class="agency-list-container">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName">
       <el-tab-pane :label="$t('全部')" name="first">
         <auditData
           :allData="all"
@@ -74,9 +74,6 @@ export default {
             this.page_params.total = res.meta.total
           }
         })
-    },
-    handleClick(tab, event) {
-      console.log(tab, event)
     },
     editSettled(id) {
       this.$router.push({

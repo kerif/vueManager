@@ -179,6 +179,7 @@ export default {
     // 提现方式
     goMethods() {
       this.$request.withdrawalMethod().then(res => {
+        console.log(res)
         this.typeData = res.data.type_list
       })
     }
