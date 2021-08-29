@@ -1,16 +1,16 @@
 <template>
   <div class="invoice-container">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane :label="$t('全部')" name="first">
+    <el-tabs v-model="activeName">
+      <el-tab-pane :label="`${$t('全部')} (${0})`" name="first">
         <invoice-data :allData="all" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="$t('待处理')" name="second">
+      <el-tab-pane :label="`${$t('待处理')} (${0})`" name="second">
         <invoice-data :allData="pendData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="$t('已开票')" name="third">
+      <el-tab-pane :label="`${$t('已开票')} (${0})`" name="third">
         <invoice-data :allData="invoicedData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="$t('已作废')" name="fourth">
+      <el-tab-pane :label="`${$t('已作废')} (${0})`" name="fourth">
         <invoice-data :allData="voidedData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
     </el-tabs>
@@ -31,7 +31,9 @@ export default {
       all: [],
       pendData: [],
       invoicedData: [],
-      voidedData: []
+      voidedData: [],
+      countData: {},
+      stay: ''
     }
   },
   components: {
@@ -44,9 +46,6 @@ export default {
     this.getCounts()
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event)
-    },
     getList(param_list) {
       this.$request
         .manageInvoice({
@@ -81,11 +80,6 @@ export default {
     getCounts() {
       this.$request.invoiceCount().then(res => {
         console.log(res)
-        if (res.ret) {
-          this.complete = res.data.complete
-          this.reopen = res.data.reopen
-          this.stay = res.data.stay
-        }
       })
     }
   }
