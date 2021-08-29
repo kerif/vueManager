@@ -115,13 +115,9 @@
         </el-table-column>
         <el-table-column :label="$t('快递单号')" key="express_num" width="180">
           <template slot-scope="scope">
-            <el-button
-              v-if="['3', '4', '5', '6'].includes(activeName)"
-              @click="oderDetails(scope.row.id)"
-              type="text"
-              >{{ scope.row.express_num }}</el-button
-            >
-            <span v-else>{{ scope.row.express_num }}</span>
+            <el-button @click="oderDetails(scope.row.id)" type="text">{{
+              scope.row.express_num
+            }}</el-button>
           </template>
         </el-table-column>
         <el-table-column :label="$t('包裹编码')" prop="code" key="code"> </el-table-column>
@@ -132,9 +128,16 @@
             <span v-if="scope.row.status === 3 || scope.row.status === 4">{{ $t('已集包') }}</span>
             <span v-if="scope.row.status === 5">{{ $t('已发货') }}</span>
             <span v-if="scope.row.status === 6">{{ $t('已收货') }}</span>
-            <span class="warning-sty" v-if="activeName === '1' && scope.row.is_warning === 1"
-              >（{{ $t('丢包预警') }}）</span
+
+            <el-tooltip
+              v-if="scope.row.status === 1 && scope.row.is_warning === 1"
+              class="item"
+              effect="dark"
+              :content="$t('丢包预警')"
+              placement="top-start"
             >
+              <i class="el-icon-warning" style="color: red"></i>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column

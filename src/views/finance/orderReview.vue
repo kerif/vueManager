@@ -149,9 +149,9 @@
         <!-- 支付类型 -->
         <el-table-column :label="$t('支付类型')" prop="payment_method"> </el-table-column>
         <!-- 关联单号 -->
-        <el-table-column :label="$t('关联单号')" prop="order_sn"> </el-table-column>
+        <el-table-column :label="$t('关联单号')" prop="order_sn" width="205"> </el-table-column>
         <!-- 流水号 -->
-        <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
+        <el-table-column :label="$t('流水号')" prop="serial_no" width="255"> </el-table-column>
         <!-- 应付金额 -->
         <el-table-column
           :label="
@@ -161,7 +161,7 @@
         >
         </el-table-column>
         <!-- 提交时间 -->
-        <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
+        <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" width="160px" fixed="right">
           <template slot-scope="scope">

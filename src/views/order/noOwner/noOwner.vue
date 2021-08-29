@@ -76,7 +76,7 @@
       <!-- height="550" -->
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <!-- 快递单号 -->
-      <el-table-column :label="$t('快递单号')">
+      <el-table-column :label="$t('快递单号')" width="155">
         <template slot-scope="scope">
           <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{
             scope.row.express_num
@@ -89,6 +89,7 @@
       <el-table-column
         :label="$t('包裹重量') + this.localization.weight_unit"
         prop="package_weight"
+        width="155"
       ></el-table-column>
       <!-- 物品属性 -->
       <el-table-column :label="$t('物品属性')">
@@ -107,7 +108,7 @@
         width="120px"
       ></el-table-column>
       <!-- 提交时间 -->
-      <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
+      <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
       <!-- 仓库 -->
       <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name"> </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"> </el-table-column>
@@ -128,7 +129,7 @@
         <div class="append-box">
         </div>
       </template> -->
-      <el-table-column :label="$t('操作')" width="220">
+      <el-table-column :label="$t('操作')" width="220" fixed="right">
         <template slot-scope="scope">
           <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
             $t('打印标签')

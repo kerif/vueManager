@@ -40,7 +40,7 @@
       >
         <el-table-column type="selection" width="55"> </el-table-column>
         <!-- 用户名 -->
-        <el-table-column :label="$t('用户名')">
+        <el-table-column :label="$t('用户名')" width="245">
           <template slot-scope="scope">
             <span>{{ scope.row.username }}</span>
             <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
@@ -49,15 +49,16 @@
         <!-- 姓名 -->
         <el-table-column prop="name" :label="$t('姓名')"> </el-table-column>
         <!-- 邮箱 -->
-        <el-table-column prop="email" :label="$t('邮箱')"> </el-table-column>
+        <el-table-column prop="email" :label="$t('邮箱')" width="245"> </el-table-column>
         <!-- 员工组 -->
         <el-table-column prop="admin_group.name_cn" :label="$t('员工组')"> </el-table-column>
         <!-- 电话 -->
-        <el-table-column prop="phone" :label="$t('电话')"> </el-table-column>
+        <el-table-column prop="phone" :label="$t('电话')" width="120"> </el-table-column>
         <!-- 最后登录时间 -->
-        <el-table-column prop="last_login_at" :label="$t('最后登录时间')"> </el-table-column>
+        <el-table-column prop="last_login_at" :label="$t('最后登录时间')" width="155">
+        </el-table-column>
         <!-- 操作 -->
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" fixed="right" width="205">
           <template slot-scope="scope">
             <!-- 编辑 -->
             <el-button class="btn-main" @click.stop="editInfo(scope.row.id)">{{

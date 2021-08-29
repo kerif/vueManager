@@ -75,6 +75,11 @@ switch (hostName) {
     //   BASE_API_URL: 'https://api-jiyun-v2.haiouoms.com/api/admin',
     //   IMAGE_URL: 'https://api-jiyun-v2.haiouoms.com'
     // }
+    // baseUrl = {
+    //   BASE_API_URL: 'https://api-jiyun-v3.haiouoms.com/api/admin',
+    //   IMAGE_URL: 'https://api-jiyun-v3.haiouoms.com',
+    //   BLOCK_URL: 'https://api-jiyun-v3.haiouoms.com/block-explain'
+    // }
     break
 }
 

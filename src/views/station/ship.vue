@@ -135,13 +135,13 @@
     </el-table-column> -->
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <!-- 发货单号 -->
-        <el-table-column :label="$t('发货单号')" prop="sn"></el-table-column>
+        <el-table-column :label="$t('发货单号')" prop="sn" width="155"></el-table-column>
         <!-- 创建时间 -->
-        <el-table-column :label="$t('提交时间')" prop="created_at"></el-table-column>
+        <el-table-column :label="$t('提交时间')" prop="created_at" width="155"></el-table-column>
         <!-- 发货时间 -->
-        <el-table-column :label="$t('发货时间')" prop="shipped_at"></el-table-column>
+        <el-table-column :label="$t('发货时间')" prop="shipped_at" width="155"></el-table-column>
 
-        <el-table-column :label="$t('转运快递单号-头程')">
+        <el-table-column :label="$t('转运快递单号-头程')" width="155">
           <template slot-scope="scope">
             <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
           </template>
@@ -151,9 +151,9 @@
         <!-- 目的地 -->
         <el-table-column :label="$t('目的地')" prop="destination_country"></el-table-column>
         <!-- 发货单名称 -->
-        <el-table-column :label="$t('发货单名称')" prop="name"></el-table-column>
+        <el-table-column :label="$t('发货单名称')" prop="name" width="155"></el-table-column>
         <!-- 状态 -->
-        <el-table-column :label="$t('状态')" prop="status_name">
+        <el-table-column :label="$t('状态')" prop="status_name" width="155">
           <!-- <template slot-scope="scope">
           <span v-if="scope.row.status === 0">{{$t('未发货')}}</span>
           <span v-else>{{$t('已发货')}}</span>
@@ -173,7 +173,7 @@
           prop="value"
         ></el-table-column>
         <!-- 物品属性 -->
-        <el-table-column :label="$t('物品属性')" prop="props"></el-table-column>
+        <el-table-column :label="$t('物品属性')" prop="props" width="200"></el-table-column>
         <!-- 备注 -->
         <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
         <!-- 操作 -->

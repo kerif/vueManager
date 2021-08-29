@@ -87,16 +87,24 @@
         <el-table-column
           :label="$t('应付金额') + this.localization.currency_unit"
           prop="order_amount"
+          width="105"
+          align="right"
         ></el-table-column>
         <!-- 抵用券金额¥ -->
         <el-table-column
           :label="$t('抵用券金额') + this.localization.currency_unit"
           prop="coupon_amount"
+          width="105"
+          align="right"
         ></el-table-column>
         <!-- 支付金额¥ -->
-        <el-table-column :label="$t('支付金额') + this.localization.currency_unit">
+        <el-table-column
+          :label="$t('支付金额') + this.localization.currency_unit"
+          width="105"
+          align="right"
+        >
           <template slot-scope="scope">
-            <span>{{ scope.row.pay_amount }}</span>
+            <span style="color: red">{{ scope.row.pay_amount }}</span>
             <span v-if="scope.row.show_rate == true">
               （{{ scope.row.currency_code }}&nbsp;{{ scope.row.currency_symbol }}&nbsp;{{
                 scope.row.rate_amount
@@ -105,14 +113,14 @@
           </template>
         </el-table-column>
         <!-- 相关订单 -->
-        <el-table-column :label="$t('相关订单')" prop="order_sn"></el-table-column>
+        <el-table-column :label="$t('相关订单')" prop="order_sn" width="205"></el-table-column>
         <!-- 流水号 -->
-        <el-table-column :label="$t('流水号')" prop="serial_no"></el-table-column>
+        <el-table-column :label="$t('流水号')" prop="serial_no" width="205"></el-table-column>
         <!-- 外部交易号 -->
-        <el-table-column :label="$t('外部交易号')" prop="outer_sn"></el-table-column>
+        <el-table-column :label="$t('外部交易号')" prop="outer_sn" width="255"></el-table-column>
         <!-- 支付时间 -->
-        <el-table-column :label="$t('支付时间')" prop="created_at"></el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('支付时间')" prop="created_at" width="155"></el-table-column>
+        <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-button
               class="btn-deep-purple"

@@ -28,11 +28,11 @@
         <!-- 员工组英文名 -->
         <el-table-column prop="name_en" :label="$t('员工组英文名')"> </el-table-column>
         <!-- 成员数量 -->
-        <el-table-column prop="admin_count" :label="$t('成员数量')"> </el-table-column>
+        <el-table-column prop="admin_count" :label="$t('成员数量')" width="100"> </el-table-column>
         <!-- 所属仓库 -->
         <el-table-column prop="warehouse_name" :label="$t('所属仓库')"> </el-table-column>
         <!-- 操作 -->
-        <el-table-column :label="$t('操作')" width="290">
+        <el-table-column :label="$t('操作')" width="450">
           <template slot-scope="scope">
             <!-- 编辑 -->
             <el-button

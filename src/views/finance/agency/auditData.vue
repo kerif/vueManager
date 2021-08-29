@@ -191,7 +191,7 @@ export default {
 .data-container {
   .headline {
     margin-top: 20px;
-    /deep/.el-button {
+    .el-button {
       margin: 0px;
     }
     .selectTime {
@@ -219,23 +219,23 @@ export default {
   }
   .data-list {
     margin-top: 40px;
-    /deep/.el-table tr th.is-leaf {
+    .el-table tr th.is-leaf {
       border-bottom: 1px #ecedf0 solid;
       background-color: #fff;
     }
-    /deep/.noAudit {
+    .noAudit {
       color: red;
     }
-    /deep/.pass {
+    .pass {
       color: green;
     }
-    /deep/.refuse {
+    .refuse {
       color: #e6a23c;
     }
-    /deep/.el-table th > .cell {
+    .el-table th > .cell {
       text-align: center;
     }
-    /deep/.el-table .cell {
+    .el-table .cell {
       text-align: center;
     }
   }

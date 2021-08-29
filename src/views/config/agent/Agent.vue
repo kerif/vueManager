@@ -26,28 +26,23 @@
       height="calc(100vh - 275px)"
     >
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column :label="$t('代理名称')">
+      <el-table-column :label="$t('代理名称')" width="185">
         <template slot-scope="scope">
           <span>{{ scope.row.user_id }}-{{ scope.row.agent_name }}-</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('佣金分成%')" prop="commission"> </el-table-column>
-      <el-table-column :label="$t('代理二维码')" align="center">
+      <el-table-column :label="$t('佣金分成%')" prop="commission" width="100"> </el-table-column>
+      <el-table-column :label="$t('下单数')">
         <template slot-scope="scope">
-          <span
-            style="cursor: pointer"
-            @click.stop=";(imgSrc = scope.row.qr_code), (imgVisible = true)"
-          >
-            <img :src="scope.row.qr_code" style="width: 100px" />
-          </span>
+          <span style="color: blue">{{ scope.row.deal_order }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('创建时间')" prop="created_at"> </el-table-column>
-      <el-table-column :label="$t('下单/成交数')">
+      <el-table-column :label="$t('成交数')">
         <template slot-scope="scope">
-          <span>{{ scope.row.total_order }}/{{ scope.row.deal_order }}</span>
+          <span style="color: red">{{ scope.row.deal_order }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('创建时间')" prop="created_at" width="155"> </el-table-column>
       <el-table-column :label="$t('是否启用')" width="120">
         <template slot-scope="scope">
           <el-switch
@@ -61,8 +56,16 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="450" fixed="right">
         <template slot-scope="scope">
+          <!-- 代理二维码 -->
+          <el-button
+            class="btn-green"
+            @click.stop="
+              ;(imgSrc = scope.row.qr_code), (imgVisible = true), (imgUser = scope.row.user_id)
+            "
+            >{{ $t('代理二维码') }}</el-button
+          >
           <!-- 修改 -->
           <el-button class="btn-green" @click="editAgent(scope.row.id)">{{ $t('修改') }}</el-button>
           <!-- 成交记录 -->
@@ -94,6 +97,7 @@
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog" />
+        <div>{{ imgUser }}</div>
       </div>
     </el-dialog>
     <!-- 提现说明弹窗 -->
@@ -149,6 +153,7 @@ export default {
       tableLoading: false,
       imgVisible: false,
       imgSrc: '',
+      imgUser: '',
       deleteNum: [],
       options: [],
       withdrawVisible: false,
