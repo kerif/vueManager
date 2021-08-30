@@ -38,7 +38,8 @@
           </div>
         </div>
         <h3>{{ $t('提现信息') }}</h3>
-        <div class="info-card">
+        <!-- 银行卡 -->
+        <div class="info-card" v-if="this.detailData.type === '银行卡'">
           <el-row :gutter="20">
             <!-- 提现方式 -->
             <el-col :span="8">
@@ -63,7 +64,7 @@
               <span>{{ detailData.customer_remark }}</span>
             </el-col>
           </el-row>
-          <div class="main" v-if="this.detailData.type !== '余额充值'">
+          <div class="main">
             <div class="leftBank">
               <el-row :gutter="20">
                 <!-- 真实姓名 -->
@@ -148,6 +149,33 @@
             </div>
           </div>
         </div>
+        <!-- 其他方式 微信 支付宝 余额 -->
+        <div class="news-card" v-else>
+          <el-row :gutter="20">
+            <!-- 提现方式 -->
+            <el-col :span="8">
+              <span class="withdrawal">{{ $t('提现方式') }}</span>
+              <span class="bank">{{ detailData.type }}</span>
+            </el-col>
+            <!-- 提现金额¥ -->
+            <el-col :span="8" :offset="4">
+              <span class="withdrawal">{{ $t('提现金额¥') }}</span>
+              <span>{{ detailData.amount }}</span>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <!-- 账户名 -->
+            <el-col :span="8">
+              <span class="withdrawal">{{ $t('账户名') }}</span>
+              <span>{{ detailData.account }}</span>
+            </el-col>
+            <!-- 客户备注 -->
+            <el-col :span="8" :offset="4">
+              <span class="withdrawal">{{ $t('客户备注：') }}</span>
+              <span>{{ detailData.customer_remark }}</span>
+            </el-col>
+          </el-row>
+        </div>
       </div>
       <div class="rightSide">
         <h3>{{ $t('日志') }}</h3>
@@ -155,7 +183,18 @@
           <div class="text">2021-08-01&nbsp; 12:00:00&nbsp; 提交申请&nbsp; 100392</div>
         </div>
         <h3>{{ $t('审核备注') }}</h3>
-        <div class="remarks-card">
+        <div class="remarks-card" v-if="this.detailData.type === '银行卡'">
+          <div v-if="detailData.status_name === '待审核'" class="condition">
+            {{ $t('该记录还未审核') }}
+          </div>
+          <div v-else>
+            <div class="text">
+              {{ detailData.remark }}
+            </div>
+            <div class="screenshot"></div>
+          </div>
+        </div>
+        <div class="verify-card" v-else>
           <div v-if="detailData.status_name === '待审核'" class="condition">
             {{ $t('该记录还未审核') }}
           </div>
@@ -241,8 +280,7 @@ export default {
         {
           type: 'confirmAudit',
           userid: this.detailData.user.id,
-          withdrawsId: this.$route.params.id,
-          amount: this.detailData.confirm_amount
+          withdrawsId: this.$route.params.id
         },
         () => {
           this.$router.go(-1)
@@ -254,8 +292,7 @@ export default {
         {
           type: 'failAudit',
           userid: this.detailData.user.id,
-          withdrawsId: this.$route.params.id,
-          remark: this.detailData.customer_remark
+          withdrawsId: this.$route.params.id
         },
         () => {
           this.$router.go(-1)
@@ -363,10 +400,42 @@ export default {
           }
         }
       }
+      .news-card {
+        height: 158px;
+        font-size: 14px;
+        padding: 15px 40px;
+        background-color: #fff;
+        .el-row {
+          margin-bottom: 20px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+        .withdrawal {
+          display: inline-block;
+          width: 100px;
+        }
+        .bank {
+          color: blue;
+        }
+      }
     }
     .rightSide {
       float: right;
       width: 23%;
+      .condition {
+        text-align: center;
+      }
+      .text {
+        padding: 5px 40px;
+        word-wrap: break-word;
+      }
+      .screenshot {
+        width: 80%;
+        height: 180px;
+        margin: 0 auto;
+        background-color: #ccc;
+      }
       .daily-card {
         height: 88px;
         font-size: 14px;
@@ -382,19 +451,13 @@ export default {
         overflow: auto;
         background-color: #fff;
         padding: 20px 0px;
-        .condition {
-          text-align: center;
-        }
-        .text {
-          padding: 5px 40px;
-          word-wrap: break-word;
-        }
-        .screenshot {
-          width: 80%;
-          height: 180px;
-          margin: 0 auto;
-          background-color: #ccc;
-        }
+      }
+      .verify-card {
+        height: 148px;
+        font-size: 14px;
+        overflow: auto;
+        background-color: #fff;
+        padding: 20px 0px;
       }
     }
   }
@@ -407,7 +470,7 @@ export default {
     .detail-card {
       font-size: 14px;
       padding: 15px;
-      /deep/.el-table tr th.is-leaf {
+      .el-table tr th.is-leaf {
         border-bottom: 1px #ecedf0 solid;
         background-color: #fff;
       }
@@ -428,10 +491,10 @@ export default {
         font-size: 24px;
         font-weight: bold;
       }
-      /deep/.el-table th > .cell {
+      .el-table th > .cell {
         text-align: center;
       }
-      /deep/.el-table .cell {
+      .el-table .cell {
         text-align: center;
       }
     }

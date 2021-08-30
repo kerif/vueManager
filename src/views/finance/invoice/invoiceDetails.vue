@@ -126,6 +126,7 @@
             :data="tableData"
             style="width: 100%"
             :summary-method="getSummaries"
+            :span-method="arraySpanMethod"
           >
             <el-table-column type="index" :label="$t('#')" width="100"> </el-table-column>
             <el-table-column prop="name" :label="$t('服务名称')" width="180"> </el-table-column>
@@ -202,6 +203,14 @@ export default {
       })
 
       return sums
+    },
+    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+      console.log(row, column, rowIndex, columnIndex)
+      if (rowIndex % 2 !== 0) {
+        if (columnIndex === 4 && columnIndex === 5 && columnIndex === 6 && columnIndex === 7) {
+          return [4, 7]
+        }
+      }
     },
     invoiceComplete() {
       dialog(
@@ -326,7 +335,7 @@ export default {
     .detail-card {
       font-size: 14px;
       padding: 15px;
-      /deep/.el-table tr th.is-leaf {
+      .el-table tr th.is-leaf {
         border-bottom: 1px #ecedf0 solid;
         background-color: #fff;
       }
@@ -347,10 +356,10 @@ export default {
         font-size: 24px;
         font-weight: bold;
       }
-      /deep/.el-table th > .cell {
+      .el-table th > .cell {
         text-align: center;
       }
-      /deep/.el-table .cell {
+      .el-table .cell {
         text-align: center;
       }
     }

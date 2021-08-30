@@ -27,9 +27,9 @@
       >
         <!-- 操作人 -->
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column :label="$t('操作人')" prop="operator"></el-table-column>
+        <el-table-column :label="$t('操作人')" prop="operator" width="155"></el-table-column>
         <!-- 操作时间 -->
-        <el-table-column :label="$t('操作时间')" prop="created_at"></el-table-column>
+        <el-table-column :label="$t('操作时间')" prop="created_at" width="155"></el-table-column>
         <!-- 具体操作 -->
         <el-table-column :label="$t('具体操作')" v-if="activeName === '1'">
           <template slot-scope="scope">
@@ -50,6 +50,7 @@
           :label="$t('快递单号')"
           prop="express_num"
           v-if="activeName === '1'"
+          width="155"
         ></el-table-column>
         <!-- 订单号 -->
         <el-table-column
@@ -67,14 +68,15 @@
           :label="$t('长宽高') + this.localization.length_unit"
           prop="dimension"
         ></el-table-column>
-        <!-- 备注 -->
-        <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
         <!-- 物品属性 -->
         <el-table-column
           :label="$t('物品属性')"
           v-if="activeName === '1'"
           prop="props"
+          width="155"
         ></el-table-column>
+        <!-- 备注 -->
+        <el-table-column :label="$t('备注')" prop="remark" width="200"></el-table-column>
         <!-- 打包图片 -->
         <el-table-column :label="$t('打包图片')" v-if="activeName === '2'" prop="pictures">
           <template slot-scope="scope">

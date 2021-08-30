@@ -1,19 +1,18 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-confirmAudit">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px">
+  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-confirmAudit" @close="clear">
+    <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
       <!--支付金额  -->
-      <el-form-item :label="$t('支付金额')" prop="amount">
-        <!-- <el-input v-model="ruleForm.amount" :placeholder="$t('请输入支付金额')"> </el-input> -->
-        <el-input v-model="ruleForm.amount">
+      <el-form-item :label="$t('支付金额')">
+        <el-input v-model="ruleForm.confirm_amount">
           <template slot="append">¥</template>
         </el-input>
       </el-form-item>
       <!-- 备注 -->
-      <el-form-item :label="$t('备注')" prop="remark">
+      <el-form-item :label="$t('备注')">
         <el-input
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4 }"
-          v-model="ruleForm.remark"
+          v-model="ruleForm.customer_remark"
           :placeholder="$t('请输入备注')"
         ></el-input>
       </el-form-item>
@@ -52,12 +51,9 @@ export default {
   data() {
     return {
       ruleForm: {
-        amount: '',
-        remark: ''
-      },
-      rules: {
-        amount: [{ required: true, message: this.$t('请输入支付金额'), trigger: 'blur' }],
-        remark: [{ required: true, message: this.$t('请输入备注'), trigger: 'blur' }]
+        confirm_amount: '',
+        customer_remark: '',
+        customer_images: []
       },
       statusData: [
         {
@@ -75,9 +71,9 @@ export default {
       ],
       userid: '',
       withdrawsId: '',
-      amount: '',
-      remark: '',
-      baleImgList: []
+      baleImgList: [],
+      confirm_amount: '',
+      customer_remark: ''
     }
   },
   methods: {
@@ -111,10 +107,10 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    init() {
-      this.ruleForm.amount = this.amount
-      console.log(this.amount)
-    },
+    // init() {
+    //    this.ruleForm.amount = this.amount
+    //    console.log(this.amount)
+    // },
     submit() {
       // if (this.ruleForm.amount === '') {
       //   return this.$message.error(this.$t('请输入支付金额'))
@@ -122,7 +118,8 @@ export default {
       //   return this.$message.error(this.$t('请输入备注'))
       // }
       let info = {
-        confirm_amount: this.amount
+        confirm_amount: this.ruleForm.confirm_amount,
+        customer_remark: this.ruleForm.customer_remark
       }
       this.$request.approveWithdraw(this.userid, this.withdrawsId, info).then(res => {
         console.log(res)
@@ -133,6 +130,7 @@ export default {
             message: res.msg
           })
           this.show = false
+          // this.$router.go(-1)
         } else {
           this.$message({
             message: res.msg,
@@ -141,6 +139,13 @@ export default {
         }
         this.show = false
       })
+    },
+    clear() {
+      this.$refs['ruleForm'].resetFields()
+      this.$refs['ruleForm'].clearValidate()
+      this.ruleForm.confirm_amount = ''
+      this.ruleForm.customer_remark = ''
+      this.baleImgList = []
     }
   }
 }
@@ -148,20 +153,20 @@ export default {
 
 <style lang="scss" scoped>
 .dialog-confirmAudit {
-  /deep/ .el-dialog__header {
+  .el-dialog__header {
     background-color: #0e102a;
   }
-  /deep/.el-input {
+  .el-input {
     width: 50%;
   }
-  /deep/.el-textarea {
+  .el-textarea {
     width: 50%;
   }
-  /deep/.el-dialog__title {
+  .el-dialog__title {
     font-size: 14px;
     color: #fff;
   }
-  /deep/.el-dialog__close {
+  .el-dialog__close {
     color: #fff;
   }
   .avatar-uploader {

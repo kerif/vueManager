@@ -1,12 +1,12 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-failAudit">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px">
+  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-failAudit" @close="clear">
+    <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
       <!-- 备注 -->
-      <el-form-item :label="$t('备注')" prop="remark">
+      <el-form-item :label="$t('备注')">
         <el-input
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4 }"
-          v-model="ruleForm.remark"
+          v-model="ruleForm.customer_remark"
           :placeholder="$t('请输入备注')"
         ></el-input>
       </el-form-item>
@@ -45,10 +45,7 @@ export default {
   data() {
     return {
       ruleForm: {
-        remark: ''
-      },
-      rules: {
-        remark: [{ required: true, message: this.$t('请输入备注'), trigger: 'blur' }]
+        customer_remark: ''
       },
       statusData: [
         {
@@ -64,7 +61,8 @@ export default {
           name: this.$t('审核拒绝')
         }
       ],
-      baleImgList: []
+      baleImgList: [],
+      customer_remark: ''
     }
   },
   methods: {
@@ -98,13 +96,19 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    init() {
-      this.ruleForm.remark = this.remark
-      console.log(this.remark, this.ruleForm.remark)
+    clear() {
+      this.$refs['ruleForm'].resetFields()
+      this.$refs['ruleForm'].clearValidate()
+      this.ruleForm.customer_remark = ''
+      this.baleImgList = []
     },
+    // init() {
+    //   this.ruleForm.remark = this.remark
+    //   console.log(this.remark, this.ruleForm.remark)
+    // },
     submit() {
       let info = {
-        customer_remark: this.remark
+        customer_remark: this.ruleForm.customer_remark
       }
       this.$request.refusedWithdraw(this.userid, this.withdrawsId, info).then(res => {
         console.log(res)
@@ -130,20 +134,20 @@ export default {
 
 <style lang="scss" scoped>
 .dialog-failAudit {
-  /deep/ .el-dialog__header {
+  .el-dialog__header {
     background-color: #0e102a;
   }
-  /deep/.el-input {
+  .el-input {
     width: 50%;
   }
-  /deep/.el-textarea {
+  .el-textarea {
     width: 50%;
   }
-  /deep/.el-dialog__title {
+  .el-dialog__title {
     font-size: 14px;
     color: #fff;
   }
-  /deep/.el-dialog__close {
+  .el-dialog__close {
     color: #fff;
   }
   .avatar-uploader {

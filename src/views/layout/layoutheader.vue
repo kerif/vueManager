@@ -22,32 +22,37 @@
       inactive-color="#13ce66" /> -->
       <!-- <el-button class="upload-btn">{{$t('下载管理')}}</el-button> -->
       <!-- <div>关于我们</div> -->
-      <el-popover placement="top" width="600" trigger="click">
+      <el-popover placement="top" width="800" trigger="click">
         <el-table :data="gridData">
-          <el-table-column>
+          <el-table-column label="文件名">
             <template slot-scope="scope">
               <div class="name-sty">{{ scope.row.name }}</div>
             </template>
           </el-table-column>
-          <el-table-column property="created_at"></el-table-column>
-          <el-table-column width="80">
+          <el-table-column property="created_at" width="165" label="时间"></el-table-column>
+          <el-table-column width="80" label="状态">
             <template slot-scope="scope">
               <span v-if="scope.row.status === 0">{{ $t('处理中') }}</span>
-              <span v-if="scope.row.status === 1">{{ $t('完成') }}</span>
-              <span v-if="scope.row.status === 2">{{ $t('失败') }}</span>
+              <span v-if="scope.row.status === 1" style="color: blue">{{ $t('完成') }}</span>
+              <span v-if="scope.row.status === 2" style="color: red">{{ $t('失败') }}</span>
             </template>
           </el-table-column>
-          <el-table-column width="100">
+          <el-table-column width="100" label="操作">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.status === 1" @click="goUpload(scope.row.url)">{{
-                $t('下载')
-              }}</el-button>
+              <el-button
+                icon="el-icon-download"
+                round
+                size="mini"
+                v-if="scope.row.status === 1"
+                @click="goUpload(scope.row.url)"
+                >{{ $t('下载') }}</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
-        <el-button class="upload-btn" slot="reference" @click="uploadManagenent"
-          >{{ $t('下载管理') }} <i class="iconfont icon-bianji upload-icon"></i
-        ></el-button>
+        <el-button icon="el-icon-download" slot="reference" round @click="uploadManagenent"
+          >{{ $t('下载管理') }}
+        </el-button>
       </el-popover>
       <!-- <span class="user-box" @click="checkUser">{{ $store.state.userName }}</span> -->
       <el-popover class="user-box" placement="bottom" trigger="click" width="250">
