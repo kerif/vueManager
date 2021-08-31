@@ -260,6 +260,8 @@
           :label="$t('单价') + this.localization.currency_unit"
           prop="unit_price"
         ></el-table-column>
+        <!-- 规格 -->
+        <el-table-column :label="$t('规格')" prop="spec"></el-table-column>
         <!-- 总价 -->
         <el-table-column :label="$t('总价') + this.localization.currency_unit">
           <template slot-scope="scope">
@@ -287,6 +289,8 @@
             </span>
           </template>
         </el-table-column>
+        <!-- 备注 -->
+        <el-table-column :label="$t('备注')" prop="remark"></el-table-column>
       </el-table>
     </div>
     <div class="receiverMSg msg-top">
@@ -366,7 +370,7 @@
         </el-col>
         <el-col :span="7" :offset="1">
           <span class="leftWidth">{{ $t('备注') }}</span>
-          <span>{{ form.in_storage_remark }}</span>
+          <span>{{ form.remark }} {{ form.in_storage_remark }}</span>
         </el-col>
       </el-row>
     </div>
