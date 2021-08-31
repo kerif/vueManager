@@ -119,6 +119,7 @@ export default {
             message: res.msg
           })
           this.show = false
+          this.success()
         } else {
           this.$message({
             message: res.msg,

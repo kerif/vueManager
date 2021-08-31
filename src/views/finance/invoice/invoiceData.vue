@@ -35,7 +35,9 @@
         <el-button size="small" class="searchBtn" @click="triggerVal">{{ $t('搜索') }}</el-button>
       </el-col>
       <el-col :span="4" :offset="7">
-        <search-group v-model="page_params.keyword" :placeholder="$t('请输入内容')"> </search-group>
+        <el-input placeholder="请输入内容" v-model="page_params.keyword">
+          <i slot="prefix" class="el-input__icon el-icon-search" @click="triggerVal"></i>
+        </el-input>
       </el-col>
     </el-row>
 
@@ -101,7 +103,6 @@
 </template>
 
 <script>
-import { SearchGroup } from '@/components/searchs'
 import { pagination } from '@/mixin'
 export default {
   props: {
@@ -149,21 +150,17 @@ export default {
         }
       ],
       type: '',
-      status: '',
-      value: ''
+      status: ''
     }
   },
   created() {
     this.getOrderStatus()
   },
   mixins: [pagination],
-  components: {
-    SearchGroup
-  },
   methods: {
     // 详情
-    editDetail(id, state) {
-      this.$emit('transVal', id, state)
+    editDetail(id) {
+      this.$emit('transVal', id)
     },
     triggerVal() {
       this.page_params.begin_date = this.timeList[0]
@@ -171,7 +168,7 @@ export default {
       this.$emit('passval', this.page_params)
     },
     getOrderStatus() {
-      this.$request.searchMode(this.$route.params.state).then(res => {
+      this.$request.searchMode().then(res => {
         console.log(res)
       })
     }
@@ -193,14 +190,14 @@ export default {
   .el-button {
     margin: 0px;
   }
-  .el-table tr th.is-leaf {
+  /deep/ .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
     background-color: #fff;
   }
-  .el-table th > .cell {
+  /deep/ .el-table th > .cell {
     text-align: center;
   }
-  .el-table .cell {
+  /deep/ .el-table .cell {
     text-align: center;
   }
 }

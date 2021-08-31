@@ -58,7 +58,7 @@ export default {
     getList(param_list) {
       this.$request
         .pendingReview({
-          // keyword: this.page_params.keyword,
+          keyword: this.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
           ...param_list

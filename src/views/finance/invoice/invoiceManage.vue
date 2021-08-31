@@ -1,16 +1,16 @@
 <template>
   <div class="invoice-container">
     <el-tabs v-model="activeName">
-      <el-tab-pane :label="`${$t('全部')} (${0})`" name="first">
+      <el-tab-pane :label="`${$t('全部')} (${this.countData.whole || 0})`" name="first">
         <invoice-data :allData="all" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('待处理')} (${0})`" name="second">
+      <el-tab-pane :label="`${$t('待处理')} (${this.countData.stay || 0})`" name="second">
         <invoice-data :allData="pendData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('已开票')} (${0})`" name="third">
+      <el-tab-pane :label="`${$t('已开票')} (${this.countData.complete || 0})`" name="third">
         <invoice-data :allData="invoicedData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('已作废')} (${0})`" name="fourth">
+      <el-tab-pane :label="`${$t('已作废')} (${this.countData.reopen || 0})`" name="fourth">
         <invoice-data :allData="voidedData" @transVal="fn" @passval="getList"></invoice-data>
       </el-tab-pane>
     </el-tabs>
@@ -32,7 +32,12 @@ export default {
       pendData: [],
       invoicedData: [],
       voidedData: [],
-      countData: {},
+      countData: {
+        whole: '',
+        stay: '',
+        complete: '',
+        reopen: ''
+      },
       stay: ''
     }
   },
@@ -51,6 +56,7 @@ export default {
         .manageInvoice({
           page: this.page_params.page,
           size: this.page_params.size,
+          keyword: this.keyword,
           ...param_list
         })
         .then(res => {
@@ -68,19 +74,22 @@ export default {
           }
         })
     },
-    fn(id, state) {
+    fn(id) {
       this.$router.push({
         name: 'invoiceDetails',
         params: {
-          id: id,
-          state: state
+          id: id
         }
       })
     },
     getCounts() {
       this.$request.invoiceCount().then(res => {
         console.log(res)
+        this.countData = res.data
       })
+    },
+    init() {
+      console.log(this.countData.whole)
     }
   }
 }

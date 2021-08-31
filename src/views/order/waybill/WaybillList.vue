@@ -112,8 +112,6 @@
         </div>
       </div>
     </div>
-    <!-- :cell-style="{ padding: '0' }"
- size="mini" -->
     <div style="height: calc(100vh - 270px)">
       <el-table
         row-key="id"

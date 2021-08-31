@@ -1,16 +1,16 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-addInvoicing">
+  <el-dialog :visible.sync="show" :title="$t('审核')" class="dialog-addInvoicing" @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
       <!--开票金额  -->
-      <el-form-item :label="$t('开票金额')" v-if="state === 'pass'">
+      <el-form-item :label="$t('开票金额')" v-if="this.state === 'complete'">
         <el-input v-model="ruleForm.money"> </el-input>
       </el-form-item>
       <!-- 发票号码 -->
-      <el-form-item :label="$t('发票号码')" v-if="state === 'pass'">
+      <el-form-item :label="$t('发票号码')" v-if="this.state === 'complete'">
         <el-input v-model="ruleForm.invoices_number"> </el-input>
       </el-form-item>
       <!-- 备注 -->
-      <el-form-item :label="$t('备注')" v-if="state === 'pass'">
+      <el-form-item :label="$t('备注')" v-if="this.state === 'complete'">
         <el-input
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4 }"
@@ -20,7 +20,7 @@
       </el-form-item>
       <!-- 作废申请 -->
       <!-- 备注 -->
-      <el-form-item :label="$t('备注')">
+      <el-form-item :label="$t('备注')" v-if="state === 'void'">
         <el-input
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4 }"
@@ -30,15 +30,15 @@
       </el-form-item>
       <!-- 重开发票 -->
       <!--开票金额  -->
-      <el-form-item :label="$t('开票金额')">
+      <el-form-item :label="$t('开票金额')" v-if="state === 'reopen'">
         <el-input v-model="ruleForm.money"> </el-input>
       </el-form-item>
       <!-- 发票号码 -->
-      <el-form-item :label="$t('发票号码')">
+      <el-form-item :label="$t('发票号码')" v-if="state === 'reopen'">
         <el-input v-model="ruleForm.invoices_number"> </el-input>
       </el-form-item>
       <!-- 备注 -->
-      <el-form-item :label="$t('备注')">
+      <el-form-item :label="$t('备注')" v-if="state === 'reopen'">
         <el-input
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4 }"
@@ -85,7 +85,17 @@ export default {
         invoices_number: '',
         remarks: ''
       },
-      baleImgList: []
+      baleImgList: [],
+      id: '',
+      remarks: '',
+      state: '',
+      detailed: '',
+      taxes: '',
+      amount: '',
+      subtotal: '',
+      total: '',
+      order_id: '',
+      invoices_id: ''
     }
   },
   methods: {
@@ -99,6 +109,9 @@ export default {
           })
         }
       })
+    },
+    init() {
+      console.log(this.state)
     },
     // 预览图片
     onPreview(image) {
@@ -116,6 +129,110 @@ export default {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
+    },
+    submit() {
+      let money = this.ruleForm.money
+      let enclosure = this.baleImgList
+      let remarks = this.ruleForm.remarks
+      if (this.state === 'complete') {
+        this.$request
+          .invoiceComplete(this.id, {
+            detailed: this.detailed,
+            taxes: this.taxes,
+            amount: this.amount,
+            subtotal: this.subtotal,
+            total: this.total,
+            order_id: this.order_id,
+            invoices_id: this.invoices_id,
+            money,
+            enclosure
+          })
+          .then(res => {
+            console.log(res)
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else if (this.state === 'void') {
+        this.$request
+          .invoiceVoid(this.id, {
+            detailed: this.detailed,
+            taxes: this.taxes,
+            amount: this.amount,
+            subtotal: this.subtotal,
+            total: this.total,
+            order_id: this.order_id,
+            invoices_id: this.invoices_id,
+            remarks,
+            enclosure
+          })
+          .then(res => {
+            console.log(res)
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .invoiceReopen(this.id, {
+            detailed: this.detailed,
+            taxes: this.taxes,
+            amount: this.amount,
+            subtotal: this.subtotal,
+            total: this.total,
+            order_id: this.order_id,
+            invoices_id: this.invoices_id,
+            money,
+            enclosure
+          })
+          .then(res => {
+            console.log(res)
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      }
+    },
+    clear() {
+      this.$refs['ruleForm'].resetFields()
+      this.$refs['ruleForm'].clearValidate()
+      this.ruleForm.money = ''
+      this.ruleForm.invoices_number = ''
+      this.ruleForm.remarks = ''
+      this.baleImgList = []
     }
   }
 }

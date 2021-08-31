@@ -817,20 +817,20 @@ exports.invoiceCount = () => {
   return $form.get('invoice/count')
 }
 // 发票管理 开票完成
-exports.invoiceComplete = id => {
-  return $form.put(`invoice/complete/${id}`)
+exports.invoiceComplete = (id, params) => {
+  return $form.put(`invoice/complete/${id}`, params)
 }
 // 发票管理 开票作废
-exports.invoiceVoid = id => {
-  return $form.put(`invoice/to-void/${id}`)
+exports.invoiceVoid = (id, params) => {
+  return $form.put(`invoice/to-void/${id}`, params)
 }
 // 发票管理 重新开票
-exports.invoiceReopen = id => {
-  return $form.put(`reopen/${id}`)
+exports.invoiceReopen = (id, params) => {
+  return $form.put(`invoice/reopen/${id}`, params)
 }
 // 发票管理 开票作废
-exports.invoiceRecovery = id => {
-  return $form.put(`recovery/${id}`)
+exports.invoiceRecovery = (id, params) => {
+  return $form.put(`invoice/recovery/${id}`, params)
 }
 // 计佣模版配置 获取form表单详情
 exports.commissionSet = id => {
