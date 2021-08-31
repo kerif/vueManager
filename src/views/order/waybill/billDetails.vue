@@ -755,7 +755,7 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
+    <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear" width="80%">
       <el-table :data="tableData" border @row-click="onRowChange" style="width: 100%">
         <el-table-column>
           <template slot-scope="scope">
@@ -818,6 +818,7 @@
       :title="$t('编辑收货人信息')"
       class="edit-info-dialog"
       @close="clear"
+      width="80%"
     >
       <el-form :model="form">
         <el-row :gutter="20">
