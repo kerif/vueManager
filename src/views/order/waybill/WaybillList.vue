@@ -373,8 +373,8 @@
                   {{ $t('加入发货单') }}
                 </el-dropdown-item>
                 <el-dropdown-item
-                  v-if="(activeName === '3' || activeName === '4') && scope.row.boxes_count >= 2"
-                  @click.native="multiLogisticsDialog(scope.row.id)"
+                  v-if="activeName === '3' || activeName === '4'"
+                  @click.native="multiLogisticsDialog(scope.row.id, scope.row.boxes_count)"
                 >
                   {{ $t('更新多箱物流') }}
                 </el-dropdown-item>
@@ -454,7 +454,7 @@
           type="expand"
           key="expand"
           width="1"
-          style="display: none"
+          v-if="activeName !== 0"
         >
           <template slot-scope="props">
             <el-table :data="props.row.secondData" class="expand-table">
@@ -1499,12 +1499,13 @@ export default {
           }
         })
     },
-    multiLogisticsDialog(id) {
+    multiLogisticsDialog(id, count) {
       dialog(
         {
           type: 'addCompany',
           orderId: id,
           box: this.box,
+          count,
           state: 'multiBox'
         },
         () => {
@@ -2066,7 +2067,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .way-list-container {
   .header-range {
     display: flex;

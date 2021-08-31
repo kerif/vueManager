@@ -25,7 +25,7 @@
                 >
               </p>
             </div>
-            <p class="font-sty">{{ $t('新人注册登录并完成一笔订单后，邀请人送券') }}</p>
+            <p class="font-sty">{{ $t('邀请新人达成要求后，邀请人可获券') }}</p>
           </div>
           <!-- 被邀请人送券 -->
           <div v-if="item.type === 3">
@@ -77,7 +77,6 @@
               </el-switch>
             </div>
             <div v-if="item.type === 3" class="coupon-sty">
-              <!-- <el-checkbox v-model="ruleForm.some_with_name">{{$t('与“新用户送券”同时开启时，仅享受“被邀请人券”；不勾选则两券共享。')}}</el-checkbox> -->
               <el-checkbox @change="changeUnique(item.type)" v-model="isUnique">{{
                 $t('关闭两券共享')
               }}</el-checkbox>

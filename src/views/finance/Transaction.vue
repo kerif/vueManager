@@ -122,13 +122,9 @@
         <el-table-column :label="$t('支付时间')" prop="created_at" width="155"></el-table-column>
         <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
-            <el-button
-              class="btn-deep-purple"
-              @click="
-                details(scope.row.type, scope.row.id, scope.row.order_id, scope.row.payment_type)
-              "
-              >{{ $t('详情') }}</el-button
-            >
+            <el-button class="btn-deep-purple" @click="details(scope.row.id)">{{
+              $t('详情')
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -224,26 +220,8 @@ export default {
       // this.getList()
     },
     // 详情
-    details(type, id, orderId, paymentType) {
-      console.log(type, 'paymentType')
-      // type等于消费的时候 就要判断消费类型
-      if (type === 1) {
-        if (
-          paymentType === 0 ||
-          paymentType === 1 ||
-          paymentType === 6 ||
-          paymentType === 4 ||
-          paymentType === 7
-        ) {
-          console.log('我是微信')
-          this.$router.push({ name: 'wechatPay', query: { id: id } })
-        } else {
-          console.log('我是转账')
-          this.$router.push({ name: 'TransactionDetails', query: { order_id: orderId } })
-        }
-      } else {
-        this.$router.push({ name: 'wechatPay', query: { id: id } })
-      }
+    details(id) {
+      this.$router.push({ name: 'wechatPay', query: { id } })
     },
     // 选择不同类型优惠券
     onVocherTypeChange() {

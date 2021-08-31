@@ -291,6 +291,24 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- 异常件 -->
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item :label="$t('异常件')" class="service-style">
+                <el-radio-group v-model="user.is_exceptional">
+                  <el-radio :label="0">{{ $t('正常件') }}</el-radio>
+                  <el-radio :label="1">{{ $t('异常件') }}</el-radio>
+                </el-radio-group>
+                <el-input
+                  v-if="user.is_exceptional === 1"
+                  type="textarea"
+                  v-model="user.exceptional_remark"
+                  :placeholder="$t('请输入异常件备注,不能超过250个字')"
+                  style="width: 100%"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 物品属性 -->
           <el-row :gutter="20">
             <el-col :span="18">
@@ -449,7 +467,9 @@ export default {
         qty: '',
         code: '',
         location: '',
-        package_pictures: ''
+        package_pictures: '',
+        is_exceptional: 0,
+        exceptional_remark: ''
       },
       updateProp: [], // 物品属性数据
       updateService: [], // 服务数据
@@ -808,7 +828,6 @@ export default {
     },
     // 保存
     submitStorage() {
-      console.log(this.user.location, 'user.location')
       this.user.package_pictures = this.goodsImgList
       if (this.user.express_num === '') {
         return this.$message.error(this.$t('请输入快递单号'))

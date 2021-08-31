@@ -565,10 +565,12 @@ export default {
     },
     // 弹窗 管理
     goMore() {
+      this.trackDialog = false
       this.$router.push({
-        name: 'mailConfigur',
+        name: 'configurationMore',
         query: {
-          activeName: '12'
+          activeName: '4',
+          secondTab4: '4'
         }
       })
     },

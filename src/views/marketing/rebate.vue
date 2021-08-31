@@ -9,7 +9,10 @@
       ref="ruleForm"
     >
       <el-form-item :label="$t('种类')">
-        <span>{{ $t('下单返券') }}</span>
+        <span v-if="$route.params.type === 1">{{ $t('新用户送券') }}</span>
+        <span v-if="$route.params.type === 2">{{ $t('邀请新人送券') }}</span>
+        <span v-if="$route.params.type === 3">{{ $t('被邀请人送券') }}</span>
+        <span v-if="$route.params.type === 4">{{ $t('下单返券') }}</span>
       </el-form-item>
       <!-- 新用户送券 -->
       <!-- <el-form-item :label="$t('支付成功送券')">
@@ -48,19 +51,20 @@
           <template slot="append">{{ $t('天') }}</template>
         </el-input>
       </el-form-item>
-      <!-- <el-form-item :label="$t('生效时间')" prop="begin_at">
-      <el-date-picker
-      value-format="yyyy-MM-dd"
-      v-model="ruleForm.begin_at"
-      type="date"
-      :picker-options="pickerOptions"
-      :placeholder="$t('请输入生效时间')">
-      </el-date-picker>
-    </el-form-item> -->
       <el-form-item :label="$t('使用范围')" prop="scope">
         <el-radio-group v-model="ruleForm.scope">
           <el-radio :label="0" :disabled="statusEdit">{{ $t('全部') }}</el-radio>
           <el-radio :label="1" :disabled="statusEdit">{{ $t('按路线') }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item
+        :label="$t('获券条件')"
+        prop="trigger_condition"
+        v-if="$route.params.type === 2"
+      >
+        <el-radio-group v-model="ruleForm.trigger_condition">
+          <el-radio :label="1" :disabled="statusEdit">{{ $t('新用户支付一笔订单') }}</el-radio>
+          <el-radio :label="2" :disabled="statusEdit">{{ $t('用户注册登陆') }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <div v-if="this.ruleForm.scope === 1" class="choose-btn">
@@ -77,7 +81,7 @@
         <p>{{ $t('送券条件') }}：</p>
       </div>
       <!-- 仅首次下单返券 -->
-      <el-form-item :label="$t('仅首次下单返券')">
+      <el-form-item :label="$t('仅首次下单返券')" v-if="$route.params.type === 4">
         <el-radio-group v-model="ruleForm.times">
           <el-radio :label="1" :disabled="statusEdit">{{ $t('开启') }}</el-radio>
           <el-radio :label="0" :disabled="statusEdit">{{ $t('关闭') }}</el-radio>
@@ -169,6 +173,7 @@ export default {
         max_coupon_amount: '',
         type: 1,
         scope: 0,
+        trigger_condition: 1,
         express_line_ids: []
       },
       options: [
@@ -205,9 +210,7 @@ export default {
     }
   },
   created() {
-    // this.getList()
     this.getLanguageList()
-    console.log(this.$route.query, 'query')
     if (this.$route.query.id) {
       this.statusEdit = true
       this.getList()
@@ -222,8 +225,9 @@ export default {
     getList() {
       this.$request.getRebateDetails(this.$route.query.id).then(res => {
         this.ruleForm = res.data
-        // this.ruleForm.type = res.data.type
-        // this.localization = res.localization
+        this.ruleForm.trigger_condition = res.data.trigger_condition
+          ? res.data.trigger_condition
+          : 1
       })
     },
     submit(formName) {

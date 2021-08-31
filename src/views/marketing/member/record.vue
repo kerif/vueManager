@@ -101,9 +101,12 @@
         <el-form-item :label="$t('支出时间') + ':'" prop="created_at" v-if="title === '支出详情'">{{
           detailsForm.created_at
         }}</el-form-item>
-        <el-form-item :label="$t('有效期') + ':'" prop="valid_time" v-if="title === '收入详情'">{{
-          detailsForm.valid_time
-        }}</el-form-item>
+        <el-form-item
+          :label="$t('有效期') + ':'"
+          prop="valid_time_name"
+          v-if="title === '收入详情'"
+          >{{ detailsForm.valid_time_name }}</el-form-item
+        >
         <el-form-item :label="$t('操作人') + ':'" prop="operator">{{
           detailsForm.operator
         }}</el-form-item>
@@ -191,6 +194,7 @@
       <el-table :data="tableData" border style="width: 100%; margin-bottom: 10px">
         <el-table-column type="index" width="50"> </el-table-column>
         <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
+        <el-table-column prop="user_name" :label="$t('客户昵称')"> </el-table-column>
         <el-table-column prop="resource_type_name" :label="$t('分类')"> </el-table-column>
         <el-table-column prop="type_name" :label="$t('收支类型')"> </el-table-column>
         <el-table-column prop="amount" :label="$t('金额') + localization.currency_unit">
