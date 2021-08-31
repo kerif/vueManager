@@ -79,7 +79,13 @@
         <!-- 投放数量 -->
         <el-table-column :label="$t('投放数量')" prop="total_count"></el-table-column>
         <!-- 使用数量 -->
-        <el-table-column :label="$t('使用数量')" prop="used_count"></el-table-column>
+        <el-table-column :label="$t('使用数量')">
+          <template slot-scope="scope">
+            <span v-bind:style="{ color: scope.row.used_count > 0 ? 'blue' : '' }">{{
+              scope.row.used_count
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           :label="item.name"
           v-for="item in formatLangData"

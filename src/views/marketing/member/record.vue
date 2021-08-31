@@ -193,11 +193,16 @@
         <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
         <el-table-column prop="resource_type_name" :label="$t('分类')"> </el-table-column>
         <el-table-column prop="type_name" :label="$t('收支类型')"> </el-table-column>
-        <el-table-column prop="amount" :label="$t('金额') + localization.currency_unit">
+        <el-table-column :label="$t('金额') + localization.currency_unit">
+          <template slot-scope="scope">
+            <span v-bind:style="{ color: scope.row.type === 1 ? 'red' : 'green' }">{{
+              scope.row.amount
+            }}</span>
+          </template>
         </el-table-column>
         <el-table-column prop="value" :label="$t('明细')"> </el-table-column>
         <el-table-column prop="income_outlay_rule_name" :label="$t('收支规则')"> </el-table-column>
-        <el-table-column prop="order_sn" :label="$t('相关订单')"> </el-table-column>
+        <el-table-column prop="order_sn" :label="$t('相关订单')"></el-table-column>
         <el-table-column prop="serial_no" :label="$t('流水号')"> </el-table-column>
         <el-table-column prop="updated_at" :label="$t('时间')" width="220"></el-table-column>
         <el-table-column :label="$t('操作')" width="80">

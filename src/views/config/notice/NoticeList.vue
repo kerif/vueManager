@@ -30,7 +30,7 @@
         height="calc(100vh - 270px)"
       >
         <el-table-column type="selection"></el-table-column>
-        <el-table-column :label="$t('标题')" prop="title">
+        <el-table-column :label="$t('标题')" prop="title" width="500">
           <template slot-scope="scope">
             <div
               :title="scope.row.url + '?id=' + scope.row.id"
@@ -38,6 +38,16 @@
               @click="copyUrl(scope.row.url, scope.row.id)"
             >
               <span>{{ scope.row.title }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('小程序链接')" prop="type" width="100">
+          <template slot-scope="scope">
+            <div
+              :title="scope.row.url + '?id=' + scope.row.id"
+              class="copy-sty"
+              @click="copyUrl(scope.row.url, scope.row.id)"
+            >
               <i class="el-icon-copy-document"></i>
             </div>
           </template>
@@ -250,6 +260,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
   }
   .icon-sty {
     cursor: pointer;
