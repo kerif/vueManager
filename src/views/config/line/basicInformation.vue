@@ -258,6 +258,27 @@
               <span>{{ $t('无') }}</span>
             </div>
           </el-col>
+          <el-col :span="10" style="display: flex">
+            <div style="flex: 1">
+              <span>{{ $t('渠道标签') }}</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="$t('渠道标签在客户端仅作展示，无特定功能')"
+                placement="top"
+              >
+                <span class="el-icon-warning-outline"></span>
+              </el-tooltip>
+              <el-checkbox-group v-model="form.prop_ids">
+                <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
+                  {{ item.name }}</el-checkbox
+                >
+              </el-checkbox-group>
+            </div>
+            <div style="width: 100px; margin-top: 25px">
+              <el-button type="primary" @click="addIcon">+ {{ $t('新增icon') }}</el-button>
+            </div>
+          </el-col>
         </el-row>
       </el-form-item>
       <el-form-item>

@@ -102,10 +102,6 @@ export default {
       this.ruleForm.customer_remark = ''
       this.baleImgList = []
     },
-    // init() {
-    //   this.ruleForm.remark = this.remark
-    //   console.log(this.remark, this.ruleForm.remark)
-    // },
     submit() {
       let info = {
         customer_remark: this.ruleForm.customer_remark

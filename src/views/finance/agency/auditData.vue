@@ -55,7 +55,11 @@
         </el-col>
         <!-- 关键字搜索 -->
         <el-col :span="4" :offset="4">
-          <el-input placeholder="请输入内容" v-model="page_params.keyword">
+          <el-input
+            placeholder="请输入内容"
+            v-model="page_params.keyword"
+            @keyup.enter.native="triggerVal"
+          >
             <i slot="prefix" class="el-input__icon el-icon-search" @click="triggerVal"></i>
           </el-input>
         </el-col>

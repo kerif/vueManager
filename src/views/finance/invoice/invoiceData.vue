@@ -35,7 +35,11 @@
         <el-button size="small" class="searchBtn" @click="triggerVal">{{ $t('搜索') }}</el-button>
       </el-col>
       <el-col :span="4" :offset="7">
-        <el-input placeholder="请输入内容" v-model="page_params.keyword">
+        <el-input
+          placeholder="请输入内容"
+          v-model="page_params.keyword"
+          @keyup.enter.native="triggerVal"
+        >
           <i slot="prefix" class="el-input__icon el-icon-search" @click="triggerVal"></i>
         </el-input>
       </el-col>
@@ -68,9 +72,9 @@
         <el-table-column prop="money" :label="$t('发票金额￥')" width="160"> </el-table-column>
         <el-table-column prop="state" :label="$t('审核状态')" width="160">
           <template slot-scope="scope">
-            <span v-if="scope.row.state === 1">{{ $t('待处理') }}</span>
-            <span v-if="scope.row.state === 2">{{ $t('申请通过') }}</span>
-            <span v-if="scope.row.state === 3">{{ $t('作废发票') }}</span>
+            <span v-if="scope.row.state === 1" class="col_red">{{ $t('待处理') }}</span>
+            <span v-if="scope.row.state === 2" class="col_green">{{ $t('已开票') }}</span>
+            <span v-if="scope.row.state === 3">{{ $t('已作废') }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="created_at" :label="$t('申请时间')" width="160"> </el-table-column>
@@ -89,7 +93,7 @@
             >
             <el-button
               v-if="scope.row.state === 2 || scope.row.state === 3"
-              type="success"
+              type="primary"
               plain
               size="mini"
               @click="editDetail(scope.row.id)"
@@ -199,6 +203,12 @@ export default {
   }
   /deep/ .el-table .cell {
     text-align: center;
+  }
+  .col_green {
+    color: green;
+  }
+  .col_red {
+    color: red;
   }
 }
 </style>

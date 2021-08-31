@@ -33,8 +33,8 @@
           <template>
             <h1 class="review_color">
               <template>
-                <span v-if="invoiceStatus.state === 1">{{ $t('待处理') }}</span>
-                <span v-if="invoiceStatus.state === 2">{{ $t('已开票') }}</span>
+                <span v-if="invoiceStatus.state === 1" class="col_red">{{ $t('待处理') }}</span>
+                <span v-if="invoiceStatus.state === 2" class="col_green">{{ $t('已开票') }}</span>
                 <span v-if="invoiceStatus.state === 3">{{ $t('已作废') }}</span>
               </template>
             </h1>
@@ -243,7 +243,7 @@ export default {
       return this.costData.map(item => item.money).reduce((acc, cur) => parseFloat(cur) + acc, 0)
     },
     sumTaxes() {
-      return this.costData.map(item => item.tax_rate).reduce((acc, cur) => parseFloat(cur) + acc, 0)
+      return this.costData.map(item => item.taxes).reduce((acc, cur) => parseFloat(cur) + acc, 0)
     }
   },
   methods: {
@@ -314,7 +314,7 @@ export default {
       )
     },
     addTable() {
-      this.costData.push({})
+      this.costData.push({ money: 0, taxes: 0 })
     },
     delete(index) {
       this.costData.splice(index, 1)
@@ -387,15 +387,6 @@ export default {
         width: 150px;
         justify-content: center;
         align-items: center;
-        .review_color {
-          color: red;
-        }
-        .reject_color {
-          color: red;
-        }
-        .pass_color {
-          color: green;
-        }
       }
     }
     .info-card {
@@ -515,6 +506,12 @@ export default {
       margin-top: 40px;
       text-align: center;
     }
+  }
+  .col_red {
+    color: red;
+  }
+  .col_green {
+    color: green;
   }
 }
 </style>
