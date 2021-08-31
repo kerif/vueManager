@@ -204,6 +204,7 @@
           :label="$t('仓库')"
           prop="warehouse.warehouse_name"
           key="warehouse.warehouse_name"
+          width="155"
         >
         </el-table-column>
         <el-table-column
