@@ -62,11 +62,21 @@
       <el-table-column :label="$t('余额') + this.localization.currency_unit">
         <template slot-scope="scope">
           <div>
-            <span class="balance"> {{ scope.row.balance }}</span>
+            <span v-bind:style="{ color: scope.row.balance > 0 ? 'red' : '' }">
+              {{ scope.row.balance }}</span
+            >
           </div>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('积分')" prop="point"></el-table-column>
+      <el-table-column :label="$t('积分')" prop="point">
+        <template slot-scope="scope">
+          <div>
+            <span v-bind:style="{ color: scope.row.point > 0 ? 'blue' : '' }">
+              {{ scope.row.point }}</span
+            >
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('客户昵称')" prop="name" width="150"></el-table-column>
       <el-table-column
         :label="$t('VIP等级')"
