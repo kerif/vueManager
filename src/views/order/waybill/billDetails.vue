@@ -17,6 +17,7 @@
         type="warning"
         description="订单已作废"
         show-icon
+        closable="false"
       >
       </el-alert>
       <div class="tools">
@@ -61,8 +62,12 @@
             >
           </div>
           <div class="number-top">
-            {{ $t('客户编号') }}：<span>{{ form.user_id }}---</span
+            {{ form.group_leader_id === 0 ? $t('客户编号') : $t('团长') }}：<span
+              >{{ form.user_id }}---</span
             ><span>{{ form.user_name }}</span>
+            <span v-if="form.group_leader_id" class="group-status-text">
+              拼团状态: {{ form.group_status_name }}</span
+            >
           </div>
           <div class="number-top">
             {{ $t('转运单号') }}：<span>{{ form.order_sn }}</span
@@ -104,7 +109,7 @@
               {{ $t('预计费用') }}&nbsp;{{ localization.currency_unit }}
               <strong>{{ form.details && form.details.payment_fee }}</strong>
               <br />
-              {{ $t('实际费用') }}&nbsp;
+              {{ $t('实付费用') }}&nbsp;
               <span class="pay-text"
                 >{{ localization.currency_unit }} {{ form.payment && form.payment.pay_amount }}
               </span>
@@ -207,35 +212,67 @@
               <div slot="header" class="clearfix">
                 <span>{{ $t('拼团子订单详细') }}</span>
               </div>
-              <el-table :data="groupDataList" class="expand-table">
-                <!-- 客户ID -->
-                <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
-                <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
+              <el-table :data="groupDataList">
                 <!-- 订单号 -->
-                <el-table-column :label="$t('订单号')">
+                <el-table-column :label="$t('操作')" fixed="left" width="100">
                   <template slot-scope="scope">
-                    <router-link
-                      class="choose-order"
-                      :to="`/order/billDetails/${scope.row.id}/${scope.row.status}`"
+                    <el-button
+                      v-if="scope.row.group_buying_status === 0"
+                      @click="
+                        packed(
+                          scope.row.id,
+                          scope.row.order_sn,
+                          scope.row.status,
+                          scope.row.is_parent,
+                          scope.row.express_line.id
+                        )
+                      "
+                      icon="el-icon-suitcase"
+                      mini
+                      >{{ $t('打包') }}</el-button
                     >
-                      {{ scope.row.order_sn }}
-                    </router-link>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('打包状态')" v-if="activeName === '1'">
+                <el-table-column :label="$t('订单号')" fixed="left" width="155">
+                  <template slot-scope="scope">
+                    <div>
+                      <router-link
+                        class="choose-order"
+                        :to="`/order/billDetails/${scope.row.id}/${scope.row.status}`"
+                      >
+                        {{ scope.row.order_sn }}
+                      </router-link>
+                    </div>
+                  </template>
+                </el-table-column>
+                <!-- 客户ID -->
+                <el-table-column
+                  :label="$t('客户ID')"
+                  prop="user_id"
+                  fixed="left"
+                ></el-table-column>
+                <el-table-column
+                  :label="$t('用户名')"
+                  prop="user_name"
+                  fixed="left"
+                  width="155"
+                ></el-table-column>
+                <el-table-column :label="$t('打包状态')">
                   <template slot-scope="scope">
                     <div class="no-package" v-if="scope.row.group_buying_status === 0">
                       {{ $t('未打包') }}
                     </div>
-                    <div class="packaged" v-if="scope.row.group_buying_status === 1">
+                    <div class="packaged" v-if="scope.row.group_buying_status >= 1">
                       {{ $t('已打包') }}
                     </div>
                   </template>
                 </el-table-column>
                 <!-- 支付状态 -->
-                <el-table-column :label="$t('支付状态')" v-if="activeName === '2'">
+                <el-table-column :label="$t('支付状态')">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status === 3" class="packaged">{{ $t('已支付') }}</span>
+                    <span v-if="scope.row.status >= 3 || scope.row.status < 11" class="packaged">{{
+                      $t('已支付')
+                    }}</span>
                     <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
                     <router-link
                       v-if="scope.row.status === 12"
@@ -247,27 +284,7 @@
                   </template>
                 </el-table-column>
                 <!-- 转运快递单号 -->
-                <el-table-column
-                  :label="$t('头程物流信息')"
-                  v-if="['3', '4', '5', '6'].includes(activeName)"
-                >
-                  <template slot-scope="scope">
-                    <span
-                      >{{ scope.row.shipment && scope.row.shipment.logistics_company }}&nbsp;{{
-                        scope.row.shipment && scope.row.shipment.logistics_sn
-                      }}</span
-                    >
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  :label="$t('二程物流信息')"
-                  v-if="['3', '4', '5', '6'].includes(activeName)"
-                >
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column :label="$t('线路名称')" prop="express_line.cn_name">
+                <el-table-column :label="$t('线路名称')" prop="express_line.cn_name" width="185">
                 </el-table-column>
                 <el-table-column
                   :label="$t('收货人')"
@@ -276,6 +293,7 @@
                 <el-table-column
                   :label="$t('收货国家/地区')"
                   prop="address.country_name"
+                  width="155"
                 ></el-table-column>
                 <el-table-column :label="$t('包裹数与件数')">
                   <template slot-scope="scope">
@@ -283,31 +301,20 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  :label="
-                    activeName === '1'
-                      ? $t('预计重量') + localization.weight_unit
-                      : $t('实际重量') + localization.weight_unit
-                  "
-                  :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"
+                  :label="$t('实际重量') + localization.weight_unit"
+                  :prop="actual_weight"
                 ></el-table-column>
                 <!-- 详见产品图 -->
                 <el-table-column
-                  :label="
-                    activeName === '1'
-                      ? $t('预计费用') + localization.currency_unit
-                      : $t('实际费用') + localization.currency_unit
-                  "
-                  :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"
+                  :label="$t('实际费用') + localization.currency_unit"
+                  :prop="actual_payment_fee"
                 ></el-table-column>
                 <el-table-column
                   :label="$t('申报价值') + localization.currency_unit"
                   prop="declare_value"
                 ></el-table-column>
                 <!-- 支付方式 -->
-                <el-table-column
-                  :label="$t('支付方式')"
-                  v-if="['3', '4', '5'].includes(activeName)"
-                >
+                <el-table-column :label="$t('支付方式')">
                   <template slot-scope="scope">
                     <span class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">{{
                       scope.row.payment_type_name
@@ -316,56 +323,18 @@
                   </template>
                 </el-table-column>
                 <!-- 抵用券金额 -->
-                <el-table-column
-                  :label="$t('抵用券金额') + localization.currency_unit"
-                  v-if="['3', '4', '5'].includes(activeName)"
-                  prop="coupon_amount"
-                >
-                </el-table-column>
-                <!-- 增值服务金额 -->
-                <el-table-column
-                  :label="$t('增值服务金额') + localization.currency_unit"
-                  v-if="['3', '4', '5'].includes(activeName)"
-                  prop="value_added_amount"
-                >
-                </el-table-column>
-                <!-- 所属代理 -->
-                <el-table-column
-                  :label="$t('所属代理')"
-                  prop="agent + agent_commission"
-                  width="100px"
-                >
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.agent }}</span>
-                    <span>({{ scope.row.agent_commission }}%)</span>
-                  </template>
-                </el-table-column>
                 <!-- 提交时间 -->
                 <el-table-column
                   :label="$t('提交时间')"
                   prop="created_at"
-                  v-if="['1', '2', '3', '4'].includes(activeName)"
+                  width="155"
                 ></el-table-column>
                 <el-table-column
                   :label="$t('拣货时间')"
                   prop="packed_at"
-                  v-if="activeName === '2' || activeName === '3'"
+                  width="155"
                 ></el-table-column>
-                <el-table-column
-                  :label="$t('签收时间')"
-                  prop="updated_at"
-                  v-if="activeName === '5'"
-                >
-                </el-table-column>
-                <el-table-column
-                  :label="$t('所属发货单')"
-                  v-if="['3', '4', '5'].includes(activeName)"
-                >
-                  <template slot-scope="scope">
-                    <span @click="goShip(scope.row.shipment_sn)" class="choose-order">{{
-                      scope.row.shipment_sn
-                    }}</span>
-                  </template>
+                <el-table-column :label="$t('签收时间')" prop="updated_at" width="155">
                 </el-table-column>
               </el-table>
             </el-card>
@@ -535,7 +504,9 @@
               <h1><i class="el-icon-warning-outline"></i> 还未打包, 现在需要打包吗?</h1>
               <el-button
                 type="primary"
-                @click="packed"
+                @click="
+                  packed(form.id, form.order_sn, form.status, form.is_parent, form.express_line.id)
+                "
                 icon="el-icon-suitcase"
                 mini
                 v-if="1 === form.status"
@@ -757,7 +728,7 @@
           <div v-if="TrackingData.length" class="line-sty">
             <ul class="result-list">
               <li
-                :class="{ 'last-finish': index === 0 }"
+                :class="{ 'last-finish': form.active === 4 - index }"
                 v-for="(item, index) in TrackingData"
                 :key="index"
               >
@@ -1026,6 +997,8 @@ export default {
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization
+        let groupStatusName = ['进行中', '已结束', '已取消']
+        this.form.group_status_name = groupStatusName[this.form.group_status]
         this.paymentData = [
           {
             name: this.$t('运费'),
@@ -1034,7 +1007,9 @@ export default {
               '首费:' +
               res.data.payment.freights.first_freight_fee +
               ', 续费' +
-              res.data.payment.freights.next_freight_fee
+              res.data.payment.freights.next_freight_fee +
+              ', 附加费用' +
+              res.data.payment.express_line_costs_amount
           },
           {
             name: this.$t('增值服务费'),
@@ -1069,11 +1044,8 @@ export default {
         ]
         if (this.services.length > 0) {
           for (let index = 0; index < this.services.length; index++) {
-            this.paymentData.push({
-              name: this.services[index].name,
-              amout: this.services[index].price,
-              remark: this.services[index].remark
-            })
+            this.paymentData[1].remark +=
+              this.services[index].name + ':' + this.services[index].price + ';'
           }
         }
         this.TrackingData = [
@@ -1256,15 +1228,15 @@ export default {
         })
     },
     // 打包
-    packed() {
+    packed(id, order_sn, status, is_parent, line_id) {
       this.$router.push({
         name: 'billPacked',
         params: {
-          id: this.form.id,
-          order_sn: this.form.order_sn,
-          activeName: this.form.status,
-          parent: this.form.is_parent,
-          lineId: this.form.express_line.id
+          id: id,
+          order_sn: order_sn,
+          activeName: status,
+          parent: is_parent,
+          lineId: line_id
         }
       })
     },
@@ -1375,6 +1347,7 @@ export default {
   .tools {
     float: right;
   }
+  .group-status-text,
   .weight-text {
     font-weight: bold;
     font-size: 15px;
