@@ -62,9 +62,11 @@
             >
           </div>
           <div class="number-top">
-            {{ form.group_leader_id === 0 ? $t('客户编号') : $t('团长') }}：<span
-              >{{ form.user_id }}---</span
-            ><span>{{ form.user_name }}</span>
+            {{
+              form.group_leader_id === 0 || form.group_leader_id === ''
+                ? $t('客户编号')
+                : $t('团长')
+            }}：<span>{{ form.user_id }}---</span><span>{{ form.user_name }}</span>
             <span v-if="form.group_leader_id" class="group-status-text">
               拼团状态: {{ form.group_status_name }}</span
             >
