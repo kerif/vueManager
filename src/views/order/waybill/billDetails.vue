@@ -30,15 +30,7 @@
         >
         <el-button
           type="primary"
-          @click="
-            packed(
-              scope.row.id,
-              scope.row.order_sn,
-              scope.row.status,
-              scope.row.is_parent,
-              scope.row.express_line.id
-            )
-          "
+          @click="packed(form.id, form.order_sn, form.status, form.is_parent, form.express_line.id)"
           icon="el-icon-suitcase"
           mini
           v-if="1 === form.status"
