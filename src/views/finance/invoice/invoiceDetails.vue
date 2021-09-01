@@ -115,7 +115,9 @@
     <div class="rightSide">
       <h3>{{ $t('日志') }}</h3>
       <div class="daily-card">
-        <div class="text">2021-08-01&nbsp; 12:00:00&nbsp; 提交申请&nbsp; 100392</div>
+        <div class="text" v-for="item in log" :key="item.id">
+          {{ item.created_at }}&nbsp; {{ item.content }}&nbsp; {{ item.handler }}
+        </div>
       </div>
       <h3>{{ $t('审核备注') }}</h3>
       <div class="remarks-card">
@@ -224,6 +226,7 @@ export default {
     return {
       invoiceStatus: {},
       costData: [],
+      log: [],
       imgVisible: false,
       imgSrc: '',
       detailed: '',
@@ -253,6 +256,7 @@ export default {
         if (res.ret) {
           this.invoiceStatus = res.data
           this.costData = res.data.orderCostDetailed
+          this.log = res.data.log
         }
       })
     },
@@ -342,7 +346,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
-              this.success()
+              this.$router.go(-1)
             } else {
               this.$message({
                 message: res.msg,
@@ -425,7 +429,8 @@ export default {
       overflow: auto;
       background-color: #fff;
       .text {
-        padding: 15px 40px;
+        padding: 15px 20px;
+        overflow: auto;
       }
     }
     .remarks-card {

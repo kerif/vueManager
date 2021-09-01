@@ -1,17 +1,17 @@
 <template>
   <div class="invoice-container">
-    <el-tabs v-model="activeName">
-      <el-tab-pane :label="`${$t('全部')} (${this.countData.whole || 0})`" name="first">
-        <invoice-data :allData="all" @transVal="fn" @passval="getList"></invoice-data>
+    <el-tabs v-model="activeName" @tab-click="onTabChange">
+      <el-tab-pane :label="`${$t('全部')} (${this.countData.whole || 0})`" name="0">
+        <invoice-data :allData="all" @transVal="fn" @passval="onSearch"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('待处理')} (${this.countData.stay || 0})`" name="second">
-        <invoice-data :allData="pendData" @transVal="fn" @passval="getList"></invoice-data>
+      <el-tab-pane :label="`${$t('待处理')} (${this.countData.stay || 0})`" name="1">
+        <invoice-data :allData="all" @transVal="fn" @passval="onSearch"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('已开票')} (${this.countData.complete || 0})`" name="third">
-        <invoice-data :allData="invoicedData" @transVal="fn" @passval="getList"></invoice-data>
+      <el-tab-pane :label="`${$t('已开票')} (${this.countData.complete || 0})`" name="2">
+        <invoice-data :allData="all" @transVal="fn" @passval="onSearch"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('已作废')} (${this.countData.reopen || 0})`" name="fourth">
-        <invoice-data :allData="voidedData" @transVal="fn" @passval="getList"></invoice-data>
+      <el-tab-pane :label="`${$t('已作废')} (${this.countData.reopen || 0})`" name="3">
+        <invoice-data :allData="all" @transVal="fn" @passval="onSearch"></invoice-data>
       </el-tab-pane>
     </el-tabs>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -26,7 +26,7 @@ export default {
   name: 'invoiceManage',
   data() {
     return {
-      activeName: 'first',
+      activeName: '0',
       page_params: {},
       all: [],
       pendData: [],
@@ -37,8 +37,7 @@ export default {
         stay: '',
         complete: '',
         reopen: ''
-      },
-      stay: ''
+      }
     }
   },
   components: {
@@ -51,24 +50,19 @@ export default {
     this.getCounts()
   },
   methods: {
-    getList(param_list) {
+    getList(state, param_list) {
       this.$request
         .manageInvoice({
           page: this.page_params.page,
           size: this.page_params.size,
           keyword: this.keyword,
+          state: state !== '0' ? state : '',
           ...param_list
         })
         .then(res => {
           console.log(res)
           if (res.ret) {
             this.all = res.data
-            this.pendData = this.all.filter(item => item.state === 1)
-            console.log(this.pendData, '待处理')
-            this.invoicedData = this.all.filter(item => item.state === 2)
-            console.log(this.invoicedData, '已开票')
-            this.voidedData = this.all.filter(item => item.state === 3)
-            console.log(this.voidedData, '已作废')
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           }
@@ -90,6 +84,14 @@ export default {
     },
     init() {
       console.log(this.countData.whole)
+    },
+    onTabChange(tab) {
+      this.page_params.page = 1
+      this.getList(tab.name)
+    },
+    onSearch(params) {
+      this.page_params.page = 1
+      this.getList(this.activeName, params)
     }
   }
 }

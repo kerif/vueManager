@@ -168,6 +168,8 @@ const OrderList = loadonDemand('order/order/OrderList')
 const oderDetails = loadonDemand('order/order/orderDetails')
 // 订单 预报包裹列表 批量入库
 const ImportOrder = loadonDemand('order/order/importOrder')
+// 订单 预报包裹列表 批量上架
+const BatchShelves = loadonDemand('order/order/batchShelves')
 // 订单 无人认领包裹
 const noOwner = loadonDemand('order/noOwner/noOwner')
 // 订单 运单列表
@@ -590,6 +592,18 @@ export default [
               level: 3,
               group: '订单',
               name: '批量入库',
+              parent: '/order/orderlist'
+            }
+          },
+          {
+            path: '/order/orderlist/batchShelves',
+            component: BatchShelves,
+            name: 'BatchShelves',
+            id: 401,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '批量上架',
               parent: '/order/orderlist'
             }
           },
@@ -1536,7 +1550,7 @@ export default [
             path: '/finance/invoice',
             name: 'invoiceManage',
             component: invoiceManage,
-            id: 707,
+            id: 709,
             meta: {
               group: '财务',
               level: 2,
@@ -1547,7 +1561,7 @@ export default [
             path: '/finance/invoice/invoiceDetails/:id',
             name: 'invoiceDetails',
             component: invoiceDetails,
-            id: 707,
+            id: 709,
             meta: {
               group: '财务',
               level: 3,

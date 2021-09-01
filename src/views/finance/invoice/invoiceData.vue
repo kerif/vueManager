@@ -1,25 +1,33 @@
 <template>
   <div class="invoiceData-container">
-    <el-row :gutter="10">
-      <el-col :span="3">
+    <div class="header-range">
+      <div class="header-status">
         <!-- 订单状态 -->
-        <el-select v-model="page_params.status" :placeholder="$t('订单状态')" size="small">
+        <el-select
+          v-model="page_params.status"
+          class="head-mr"
+          :placeholder="$t('订单状态')"
+          size="small"
+          clearable
+        >
           <el-option v-for="item in statusData" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
-      </el-col>
-      <!-- 开票状态 -->
-      <el-col :span="3">
-        <el-select v-model="page_params.state" :placeholder="$t('开票状态')" size="small">
+        <!-- 开票状态 -->
+        <el-select
+          v-model="page_params.state"
+          class="head-mr"
+          :placeholder="$t('开票状态')"
+          size="small"
+          clearable
+        >
           <el-option v-for="item in stateData" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
-      </el-col>
-      <!-- 时间 -->
-      <el-col :span="4">
+        <!-- 时间 -->
         <el-date-picker
           size="small"
-          class="selectTime"
+          class="selectTime head-mr"
           v-model="timeList"
           type="daterange"
           format="yyyy-MM-dd"
@@ -29,27 +37,26 @@
           :end-placeholder="$t('提交结束日期')"
         >
         </el-date-picker>
-      </el-col>
-      <!-- 搜索 -->
-      <el-col :span="3">
-        <el-button size="small" class="searchBtn" @click="triggerVal">{{ $t('搜索') }}</el-button>
-      </el-col>
-      <el-col :span="4" :offset="7">
+        <!-- 搜索 -->
+        <el-button size="small" class="searchBtn head-mr" @click="triggerVal">{{
+          $t('搜索')
+        }}</el-button>
+      </div>
+      <div class="header-search">
         <el-input
           placeholder="请输入内容"
           v-model="page_params.keyword"
           @keyup.enter.native="triggerVal"
         >
-          <i slot="prefix" class="el-input__icon el-icon-search" @click="triggerVal"></i>
+          <i slot="suffix" class="el-input__icon el-icon-search" @click="triggerVal"></i>
         </el-input>
-      </el-col>
-    </el-row>
-
+      </div>
+    </div>
     <!-- 表格 -->
     <div class="data-list">
       <el-table :data="allData" border style="width: 100%">
         <el-table-column type="index" :label="$t('#')" width="80"> </el-table-column>
-        <el-table-column prop="order_id" :label="$t('订单号')" width="160"> </el-table-column>
+        <el-table-column prop="order_sn" :label="$t('订单号')" width="160"> </el-table-column>
         <el-table-column prop="order_status" :label="$t('订单状态')">
           <template slot-scope="scope">
             <span v-if="scope.row.order_status === 3">{{ $t('待发货') }}</span>
@@ -57,7 +64,11 @@
             <span v-if="scope.row.order_status === 5">{{ $t('已签收') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="user_id" :label="$t('客户ID')" width="160"> </el-table-column>
+        <el-table-column :label="$t('客户ID')" width="160">
+          <template slot-scope="scope">
+            <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="type" :label="$t('发票类型')" width="160">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('普通纸质发票') }}</span>
@@ -69,7 +80,7 @@
             <span v-if="scope.row.invoice_type === 2">{{ $t('企业') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="money" :label="$t('发票金额￥')" width="160"> </el-table-column>
+        <el-table-column prop="money" :label="$t('发票金额')" width="160"> </el-table-column>
         <el-table-column prop="state" :label="$t('审核状态')" width="160">
           <template slot-scope="scope">
             <span v-if="scope.row.state === 1" class="col_red">{{ $t('待处理') }}</span>
@@ -107,7 +118,6 @@
 </template>
 
 <script>
-import { pagination } from '@/mixin'
 export default {
   props: {
     allData: {
@@ -118,7 +128,6 @@ export default {
   data() {
     return {
       page_params: {
-        keyword: '',
         status: '',
         state: '',
         begin_date: '',
@@ -157,10 +166,7 @@ export default {
       status: ''
     }
   },
-  created() {
-    this.getOrderStatus()
-  },
-  mixins: [pagination],
+  created() {},
   methods: {
     // 详情
     editDetail(id) {
@@ -170,11 +176,7 @@ export default {
       this.page_params.begin_date = this.timeList[0]
       this.page_params.end_date = this.timeList[1]
       this.$emit('passval', this.page_params)
-    },
-    getOrderStatus() {
-      this.$request.searchMode().then(res => {
-        console.log(res)
-      })
+      console.log(this.page_params)
     }
   }
 }
@@ -182,6 +184,19 @@ export default {
 
 <style lang="scss" scoped>
 .invoiceData-container {
+  .header-range {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .header-status {
+      .head-mr {
+        margin-right: 10px;
+      }
+    }
+    .header-search {
+      width: 200px;
+    }
+  }
   .data-list {
     margin-top: 40px;
   }
