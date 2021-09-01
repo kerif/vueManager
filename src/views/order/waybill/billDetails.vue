@@ -30,7 +30,7 @@
         >
         <el-button
           type="primary"
-          @click="packed"
+          @click="packed(form.id, form.order_sn, form.status, form.is_parent, form.express_line.id)"
           icon="el-icon-suitcase"
           mini
           v-if="1 === form.status"
@@ -62,9 +62,11 @@
             >
           </div>
           <div class="number-top">
-            {{ form.group_leader_id === 0 ? $t('客户编号') : $t('团长') }}：<span
-              >{{ form.user_id }}---</span
-            ><span>{{ form.user_name }}</span>
+            {{
+              form.group_leader_id === 0 || form.group_leader_id === ''
+                ? $t('客户编号')
+                : $t('团长')
+            }}：<span>{{ form.user_id }}---</span><span>{{ form.user_name }}</span>
             <span v-if="form.group_leader_id" class="group-status-text">
               拼团状态: {{ form.group_status_name }}</span
             >
@@ -755,7 +757,7 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
+    <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear" width="80%">
       <el-table :data="tableData" border @row-click="onRowChange" style="width: 100%">
         <el-table-column>
           <template slot-scope="scope">
@@ -818,24 +820,25 @@
       :title="$t('编辑收货人信息')"
       class="edit-info-dialog"
       @close="clear"
+      width="80%"
     >
-      <el-form :model="form">
+      <el-form :model="form" label-position="right" label-width="120px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('姓名')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.receiver_name"></el-input>
+              <el-input class="input-sty" v-model="address.receiver_name"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('手机/联系电话')" class="label-sty">
               <el-input
                 class="second-sty"
-                v-model="form.address.timezone"
+                v-model="address.timezone"
                 :placeholder="$t('区号')"
               ></el-input>
               <el-input
                 class="second-sty"
-                v-model="form.address.phone"
+                v-model="address.phone"
                 :placeholder="$t('号码')"
               ></el-input>
             </el-form-item>
@@ -844,12 +847,19 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('国家/地区')" class="label-sty">
-              <el-input class="second-sty" v-model="form.address.country.cn_name"></el-input>
+              <el-cascader
+                v-model="countryList"
+                :options="options"
+                :props="{ checkStrictly: true }"
+                clearable
+                style="width: 60%"
+              >
+              </el-cascader>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('城市')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.city"></el-input>
+              <el-input class="input-sty" v-model="address.city"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -858,31 +868,31 @@
             <el-form-item :label="$t('街道/门牌号')" class="label-sty">
               <el-input
                 class="second-sty"
-                v-model="form.address.street"
+                v-model="address.street"
                 :placeholder="$t('街道')"
               ></el-input>
               <el-input
                 class="second-sty"
-                v-model="form.address.door_no"
+                v-model="address.door_no"
                 :placeholder="$t('门牌号')"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('附加地址')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.address"></el-input>
+              <el-input class="input-sty" v-model="address.address"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('邮编')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.postcode"></el-input>
+              <el-input class="input-sty" v-model="address.postcode"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('微信号')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.wechat_id"></el-input>
+              <el-input class="input-sty" v-model="address.wechat_id"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -901,6 +911,7 @@ export default {
   data() {
     return {
       form: {},
+      address: {},
       oderData: [],
       PackageData: [],
       productData: [], // 商品清单
@@ -958,7 +969,9 @@ export default {
       },
       TrackingData: [],
       dialogInfo: false,
-      groupDataList: []
+      groupDataList: [],
+      options: [],
+      countryList: []
     }
   },
   created() {
@@ -973,6 +986,40 @@ export default {
       this.$request.getOrderStatus().then(res => {
         if (res.ret) {
           this.modeData = res.data
+        }
+      })
+    },
+    // 国家列表
+    getCountrys() {
+      this.$request.getCountry().then(res => {
+        if (res.ret) {
+          this.options = res.data.map(item => {
+            return {
+              value: item.id,
+              label: item.name,
+              children: item.areas.length
+                ? item.areas.map(item2 => {
+                    return {
+                      value: item2.id,
+                      label: item2.name,
+                      children: item2.areas.length
+                        ? item2.areas.map(item3 => {
+                            return {
+                              value: item3.id,
+                              label: item3.name
+                            }
+                          })
+                        : []
+                    }
+                  })
+                : []
+            }
+          })
+          this.countryList = [
+            +this.address.country_id,
+            this.address.area_id ? +this.address.area_id : '',
+            this.address.sub_area_id ? +this.address.sub_area_id : ''
+          ]
         }
       })
     },
@@ -991,6 +1038,7 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.tableLoading = false
         this.form = res.data
+        this.address = res.data.address
         this.baseMode = res.data.express_line.base_mode
         this.oderData = [{ ...res.data.details, box_type: res.data.box_type }]
         console.log(this.oderData, 'this.oderData')
@@ -1270,22 +1318,25 @@ export default {
     goEdit() {
       // this.unEdit = true
       this.dialogInfo = true
+      this.getCountrys()
     },
     // 保存 编辑
     saveMsg() {
       this.$request
         .modifyReceive(this.$route.params.id, {
-          receiver_name: this.form.address.receiver_name,
-          street: this.form.address.street,
-          door_no: this.form.address.door_no,
-          phone: this.form.address.phone,
-          timezone: this.form.address.timezone,
-          city: this.form.address.city,
-          postcode: this.form.address.postcode,
-          address: this.form.address.address,
-          country: this.form.address.country.cn_name,
-          clearance_code: this.form.clearance_code,
-          wechat_id: this.form.address.wechat_id
+          receiver_name: this.address.receiver_name,
+          street: this.address.street,
+          door_no: this.address.door_no,
+          phone: this.address.phone,
+          timezone: this.address.timezone,
+          city: this.address.city,
+          postcode: this.address.postcode,
+          address: this.address.address,
+          clearance_code: this.clearance_code,
+          wechat_id: this.address.wechat_id,
+          country_id: this.countryList[0],
+          area_id: this.countryList[1] || '',
+          sub_area_id: this.countryList[2] || ''
         })
         .then(res => {
           if (res.ret) {
@@ -1307,7 +1358,6 @@ export default {
     },
     onRowChange(row) {
       this.chooseId = row.id
-      // this.box.address_id = this.chooseId
       this.user = row
     },
     confirm() {
@@ -1331,9 +1381,6 @@ export default {
           })
         }
       })
-      // console.log(this.user, 'user')
-      // this.userData = this.user
-      // this.boxDialog = false
     }
   }
 }

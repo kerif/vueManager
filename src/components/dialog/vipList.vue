@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('客户组成员')" class="dialog-vip-list" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="$t('客户组成员')"
+    class="dialog-vip-list"
+    @close="clear"
+    width="80%"
+  >
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column type="index"> </el-table-column>
       <!-- 客户ID -->

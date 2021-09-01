@@ -57,8 +57,8 @@
         </template>
       </el-table-column>
       <!-- <el-table-column :label="$t('客户编号')" prop="uid"></el-table-column> -->
-      <el-table-column :label="$t('邮箱')" prop="email"></el-table-column>
-      <el-table-column :label="$t('手机号码')" prop="phone"></el-table-column>
+      <el-table-column :label="$t('邮箱')" prop="email" width="200"></el-table-column>
+      <el-table-column :label="$t('手机号码')" prop="phone" width="150"></el-table-column>
       <el-table-column :label="$t('余额') + this.localization.currency_unit">
         <template slot-scope="scope">
           <div>

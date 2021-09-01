@@ -72,7 +72,7 @@
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <!-- 客户ID -->
-        <el-table-column :label="$t('客户ID')">
+        <el-table-column :label="$t('客户ID')" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
           </template>
@@ -88,9 +88,9 @@
         <!-- 支付类型 -->
         <el-table-column :label="$t('支付类型')" prop="payment_type_name"> </el-table-column>
         <!-- 关联单号 -->
-        <el-table-column :label="$t('关联单号')" prop="order_number"> </el-table-column>
+        <el-table-column :label="$t('关联单号')" prop="order_number" width="155"> </el-table-column>
         <!-- 流水号 -->
-        <el-table-column :label="$t('流水号')" prop="serial_no"> </el-table-column>
+        <el-table-column :label="$t('流水号')" prop="serial_no" width="185"> </el-table-column>
         <!-- 应付金额 -->
         <el-table-column
           :label="
@@ -102,7 +102,7 @@
           </template>
         </el-table-column>
         <!-- 提交时间 -->
-        <el-table-column :label="$t('提交时间')" prop="created_at"> </el-table-column>
+        <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" width="160px" fixed="right">
           <template slot-scope="scope">
@@ -133,7 +133,7 @@
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <!-- 客户ID -->
-        <el-table-column :label="$t('客户ID')">
+        <el-table-column :label="$t('客户ID')" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.user.id }}---{{ scope.row.user.name }}</span>
           </template>

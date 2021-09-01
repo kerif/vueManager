@@ -117,7 +117,8 @@
       <!-- 提交时间 -->
       <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
       <!-- 仓库 -->
-      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name"> </el-table-column>
+      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name" width="155">
+      </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"> </el-table-column>
       <!-- 包裹图片 -->
       <el-table-column :label="$t('包裹图片')" prop="package_pictures" width="150">
