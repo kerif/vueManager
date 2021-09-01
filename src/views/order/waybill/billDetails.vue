@@ -1617,8 +1617,6 @@ export default {
     }
   }
   .line-sty {
-    // text-align: center;
-    // width: 600px;
     margin: auto;
     padding-top: 20px;
   }
