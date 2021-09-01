@@ -55,12 +55,13 @@
         </el-col>
         <!-- 关键字搜索 -->
         <el-col :span="4" :offset="4">
-          <search-group
+          <el-input
+            placeholder="请输入内容"
             v-model="page_params.keyword"
-            @search="goSearch"
-            :placeholder="$t('请输入关键字')"
+            @keyup.enter.native="triggerVal"
           >
-          </search-group>
+            <i slot="prefix" class="el-input__icon el-icon-search" @click="triggerVal"></i>
+          </el-input>
         </el-col>
       </el-row>
     </div>
@@ -110,7 +111,6 @@
 </template>
 
 <script>
-import { SearchGroup } from '@/components/searchs'
 import { pagination } from '@/mixin'
 export default {
   data() {
@@ -147,9 +147,6 @@ export default {
       required: true
     }
   },
-  components: {
-    SearchGroup
-  },
   mixins: [pagination],
   created() {
     this.goMethods()
@@ -179,6 +176,7 @@ export default {
     // 提现方式
     goMethods() {
       this.$request.withdrawalMethod().then(res => {
+        console.log(res)
         this.typeData = res.data.type_list
       })
     }
