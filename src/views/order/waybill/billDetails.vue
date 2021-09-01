@@ -30,7 +30,7 @@
         >
         <el-button
           type="primary"
-          @click="packed"
+          @click="packed(form.id, form.order_sn, form.status, form.is_parent, form.express_line.id)"
           icon="el-icon-suitcase"
           mini
           v-if="1 === form.status"
@@ -62,9 +62,11 @@
             >
           </div>
           <div class="number-top">
-            {{ form.group_leader_id === 0 ? $t('客户编号') : $t('团长') }}：<span
-              >{{ form.user_id }}---</span
-            ><span>{{ form.user_name }}</span>
+            {{
+              form.group_leader_id === 0 || form.group_leader_id === ''
+                ? $t('客户编号')
+                : $t('团长')
+            }}：<span>{{ form.user_id }}---</span><span>{{ form.user_name }}</span>
             <span v-if="form.group_leader_id" class="group-status-text">
               拼团状态: {{ form.group_status_name }}</span
             >
@@ -755,7 +757,7 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear">
+    <el-dialog :visible.sync="boxDialog" :title="$t('收件地址列表')" @close="clear" width="80%">
       <el-table :data="tableData" border @row-click="onRowChange" style="width: 100%">
         <el-table-column>
           <template slot-scope="scope">
@@ -818,6 +820,7 @@
       :title="$t('编辑收货人信息')"
       class="edit-info-dialog"
       @close="clear"
+      width="80%"
     >
       <el-form :model="form">
         <el-row :gutter="20">

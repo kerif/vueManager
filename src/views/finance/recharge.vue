@@ -95,7 +95,7 @@
         <!-- 审核时间 -->
         <el-table-column :label="$t('审核时间')" prop="updated_at" width="155"></el-table-column>
         <!-- 处理人 -->
-        <el-table-column :label="$t('处理人')" prop="operator"></el-table-column>
+        <el-table-column :label="$t('处理人')" prop="operator" width="155"></el-table-column>
         <!-- 操作 -->
         <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">

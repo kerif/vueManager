@@ -81,6 +81,13 @@
           <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{
             scope.row.express_num
           }}</span>
+          <span
+            :title="$t('复制单号')"
+            class="copy-number"
+            @click="copyNumber(scope.row.express_num)"
+          >
+            <i class="el-icon-copy-document"></i>
+          </span>
         </template>
       </el-table-column>
       <!-- 包裹编码 -->
@@ -110,7 +117,8 @@
       <!-- 提交时间 -->
       <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
       <!-- 仓库 -->
-      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name"> </el-table-column>
+      <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name" width="155">
+      </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"> </el-table-column>
       <!-- 包裹图片 -->
       <el-table-column :label="$t('包裹图片')" prop="package_pictures" width="150">
@@ -379,6 +387,18 @@ export default {
       this.timeList = []
       this.agent_name = ''
     },
+    //复制单号
+    copyNumber(orderSn) {
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', orderSn)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
+    },
     // 搜索
     submitForm() {
       this.onTime(this.timeList)
@@ -432,6 +452,10 @@ export default {
       margin-right: 10px;
       width: 276px !important;
     }
+  }
+  .copy-number {
+    padding-left: 5px;
+    cursor: pointer;
   }
   .img_box {
     text-align: center;

@@ -118,6 +118,13 @@
             <el-button @click="oderDetails(scope.row.id)" type="text">{{
               scope.row.express_num
             }}</el-button>
+            <span
+              :title="$t('复制单号')"
+              class="copy-number"
+              @click="copyNumber(scope.row.express_num)"
+            >
+              <i class="el-icon-copy-document"></i>
+            </span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('包裹编码')" prop="code" key="code"> </el-table-column>
@@ -197,6 +204,7 @@
           :label="$t('仓库')"
           prop="warehouse.warehouse_name"
           key="warehouse.warehouse_name"
+          width="155"
         >
         </el-table-column>
         <el-table-column
@@ -565,6 +573,18 @@ export default {
           })
       })
     },
+    //复制单号
+    copyNumber(orderSn) {
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', orderSn)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
+    },
     // 弃件日志
     invalidLog(id) {
       dialog({ type: 'invalidLog', id: id })
@@ -758,6 +778,10 @@ export default {
   }
   .tab-length {
     width: 870px !important;
+  }
+  .copy-number {
+    padding-left: 5px;
+    cursor: pointer;
   }
   .img-box {
     text-align: center;

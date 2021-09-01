@@ -44,6 +44,13 @@
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <!-- 公告标题 -->
         <el-table-column :label="$t('公告标题')" prop="title" width="500"></el-table-column>
+        <el-table-column :label="$t('小程序链接')" prop="type" width="100">
+          <template slot-scope="scope">
+            <div class="copy-sty" @click="copyUrl('/pages/help/notice_detail/index', scope.row.id)">
+              <i class="el-icon-copy-document"></i>
+            </div>
+          </template>
+        </el-table-column>
         <!-- 发布人员 -->
         <el-table-column :label="$t('发布人员')" prop="operator"> </el-table-column>
         <!-- 发布时间 -->
@@ -173,6 +180,18 @@ export default {
       this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
       this.getList()
     },
+    copyUrl(url, id) {
+      const href = `${url}?id=${id}`
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', href)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message.success(this.$t('复制成功'))
+      }
+      document.body.removeChild(input)
+    },
     // 删除
     deleteData() {
       console.log(this.deleteNum, 'this.deleteNum')
@@ -284,6 +303,12 @@ export default {
     // margin-top: 20px;
     // margin-bottom: 10px;
     float: left;
+  }
+  .copy-sty {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
   }
 }
 </style>

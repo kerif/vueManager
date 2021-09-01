@@ -33,16 +33,20 @@
           </template>
         </el-table-column>
         <el-table-column type="index" width="55" align="center"></el-table-column>
-        <el-table-column :label="$t('仓库名字')" prop="warehouse_name"></el-table-column>
-        <el-table-column :label="$t('自动货位功能')">
+        <el-table-column
+          :label="$t('仓库名字')"
+          prop="warehouse_name"
+          width="155"
+        ></el-table-column>
+        <el-table-column :label="$t('自动货位')">
           <template slot-scope="scope">
             <span v-if="scope.row.auto_location === 0">{{ $t('关闭') }}</span>
             <span v-if="scope.row.auto_location === 1">{{ $t('开启') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('收件人姓名')" prop="receiver_name"></el-table-column>
-        <el-table-column :label="$t('打印面单地址')" prop="short_address"></el-table-column>
-        <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
+        <el-table-column :label="$t('收件人')" prop="receiver_name" width="120"></el-table-column>
+        <el-table-column :label="$t('面单地址')" prop="short_address" width="200"></el-table-column>
+        <el-table-column :label="$t('联系电话')" prop="phone" width="155"></el-table-column>
         <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
         <el-table-column
           :label="$t('地址')"
@@ -88,7 +92,7 @@
             <span v-else class="el-icon-plus icon-sty" @click="onLang(scope.row, item)"></span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')" width="260">
+        <el-table-column :label="$t('操作')" width="260" fixed="right">
           <template slot-scope="scope">
             <el-button class="btn-green" @click="editWarehouse(scope.row.id)">{{
               $t('修改仓库')
