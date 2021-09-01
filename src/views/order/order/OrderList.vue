@@ -67,6 +67,16 @@
         >
           {{ $t('导出清单') }}
         </el-button>
+        <el-button
+          class="btn-yellow"
+          v-if="activeName !== '6'"
+          @click="batchShelves"
+          size="small"
+          type="success"
+          plain
+        >
+          {{ $t('批量上架') }}
+        </el-button>
       </div>
       <div class="header-search">
         <el-input
@@ -441,6 +451,9 @@ export default {
     importOrder() {
       this.$router.push({ name: 'ImportOrder' })
     },
+    batchShelves() {
+      this.$router.push({ name: 'BatchShelves' })
+    },
     getDiscard() {
       this.tableLoading = true
       const params = this.computedParams()
@@ -749,7 +762,6 @@ export default {
 .order-list-container {
   .header-range {
     display: flex;
-    align-items: center;
     // flex-direction: row;
     justify-content: space-between;
     align-items: center;

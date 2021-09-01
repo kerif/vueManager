@@ -1,69 +1,63 @@
 <template>
   <div class="data-container">
     <div class="headline">
-      <el-row :gutter="10">
-        <el-col :span="3">
-          <!-- 提现方式 -->
-          <el-select v-model="page_params.type" :placeholder="$t('提现方式')" size="small">
-            <el-option v-for="item in typeData" :key="item.id" :label="item.name" :value="item.id">
-            </el-option>
-          </el-select>
-        </el-col>
+      <div class="head-method">
+        <!-- 提现方式 -->
+        <el-select
+          v-model="page_params.type"
+          class="head-mr"
+          :placeholder="$t('提现方式')"
+          size="small"
+          clearable
+        >
+          <el-option v-for="item in typeData" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
         <!-- 审核状态 -->
-        <el-col :span="3">
-          <el-select v-model="page_params.status" :placeholder="$t('审核状态')" size="small">
-            <el-option
-              v-for="item in statusData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </el-col>
+        <el-select
+          v-model="page_params.status"
+          class="head-mr"
+          :placeholder="$t('审核状态')"
+          size="small"
+          clearable
+        >
+          <el-option v-for="item in statusData" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
         <!-- 日期 -->
-        <el-col :span="4">
-          <el-date-picker
-            size="small"
-            class="selectTime"
-            v-model="timeList"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :range-separator="$t('至')"
-            :start-placeholder="$t('提交开始日期')"
-            :end-placeholder="$t('提交结束日期')"
-            @change="fm"
-          >
-          </el-date-picker>
-        </el-col>
+        <el-date-picker
+          size="small"
+          class="selectTime head-mr"
+          v-model="timeList"
+          type="daterange"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('提交开始日期')"
+          :end-placeholder="$t('提交结束日期')"
+          @change="fm"
+        >
+        </el-date-picker>
         <!--搜索  -->
-        <el-col :span="3">
-          <el-button size="small" class="searchBtn" @click="triggerVal">{{ $t('搜索') }}</el-button>
-        </el-col>
+        <el-button size="small" class="searchBtn head-mr" @click="triggerVal">{{
+          $t('搜索')
+        }}</el-button>
         <!--待结算  -->
-        <el-col :span="3">
-          <el-button size="small" type="primary" class="unsettled" @click="editSettled">
-            {{ $t('待结算') }}
-            <i class="count">{{ totalSettlement }}</i>
-          </el-button>
-          <!-- <el-badge :value="totalSettlement" class="item" type="primary">
-            <el-button size="small" type="primary" class="unsettled" @click="editSettled">{{
-              $t('待结算')
-            }}</el-button>
-          </el-badge> -->
-        </el-col>
-        <!-- 关键字搜索 -->
-        <el-col :span="4" :offset="4">
-          <el-input
-            placeholder="请输入内容"
-            v-model="page_params.keyword"
-            @keyup.enter.native="triggerVal"
-          >
-            <i slot="prefix" class="el-input__icon el-icon-search" @click="triggerVal"></i>
-          </el-input>
-        </el-col>
-      </el-row>
+        <el-button size="small" type="primary" class="unsettled" @click="editSettled">
+          {{ $t('待结算') }}
+          <i class="count">{{ totalSettlement }}</i>
+        </el-button>
+      </div>
+      <!-- 关键字搜索 -->
+      <div class="head-search">
+        <el-input
+          placeholder="请输入内容"
+          v-model="page_params.keyword"
+          @keyup.enter.native="triggerVal"
+        >
+          <i slot="suffix" class="el-input__icon el-icon-search" @click="triggerVal"></i>
+        </el-input>
+      </div>
     </div>
     <!-- 表格 -->
     <div class="data-list">
@@ -79,12 +73,12 @@
         </el-table-column>
         <el-table-column prop="user.id" :label="$t('代理ID')" width="100"> </el-table-column>
         <el-table-column prop="user.name" :label="$t('代理昵称')" width="100"> </el-table-column>
-        <el-table-column prop="type" :label="$t('提现方式')"> </el-table-column>
+        <el-table-column prop="type" :label="$t('提现方式')" width="100"> </el-table-column>
         <el-table-column prop="amount" :label="$t('提现金额￥')" width="100"> </el-table-column>
         <el-table-column prop="item_count" :label="$t('提现明细数')" width="100"> </el-table-column>
-        <el-table-column prop="created_at" :label="$t('申请时间')" width="100"> </el-table-column>
-        <el-table-column prop="operator" :label="$t('处理人')" width="100"> </el-table-column>
-        <el-table-column prop="audit_at" :label="$t('处理时间')" width="100"> </el-table-column>
+        <el-table-column prop="created_at" :label="$t('申请时间')" width="160"> </el-table-column>
+        <el-table-column prop="operator" :label="$t('处理人')" width="160"> </el-table-column>
+        <el-table-column prop="audit_at" :label="$t('处理时间')" width="160"> </el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
             <el-button
@@ -111,7 +105,6 @@
 </template>
 
 <script>
-import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -121,8 +114,7 @@ export default {
         status: '',
         type: '',
         begin_date: '',
-        end_date: '',
-        keyword: ''
+        end_date: ''
       },
       statusData: [
         {
@@ -147,7 +139,6 @@ export default {
       required: true
     }
   },
-  mixins: [pagination],
   created() {
     this.goMethods()
   },
@@ -187,22 +178,32 @@ export default {
 <style lang="scss" scoped>
 .data-container {
   .headline {
-    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .head-method {
+      .selectTime {
+        width: 260px !important;
+      }
+      .searchBtn {
+        width: 120px;
+      }
+      .head-mr {
+        margin-right: 10px;
+      }
+    }
+    .head-search {
+      width: 200px;
+    }
     .el-button {
       margin: 0px;
-    }
-    .selectTime {
-      width: 260px !important;
-    }
-    .searchBtn {
-      width: 120px;
     }
     .unsettled {
       width: 120px;
       position: relative;
       .count {
         position: absolute;
-        top: -10px;
+        top: -5px;
         left: 100px;
         width: 24px;
         height: 24px;
@@ -229,10 +230,10 @@ export default {
     .refuse {
       color: #e6a23c;
     }
-    .el-table th > .cell {
+    /deep/.el-table th > .cell {
       text-align: center;
     }
-    .el-table .cell {
+    /deep/.el-table .cell {
       text-align: center;
     }
   }

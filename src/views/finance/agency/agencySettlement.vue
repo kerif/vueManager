@@ -1,28 +1,28 @@
 <template>
   <div class="agency-list-container">
-    <el-tabs v-model="activeName">
-      <el-tab-pane :label="$t('全部')" name="first">
+    <el-tabs v-model="activeName" @tab-click="onTabChange">
+      <el-tab-pane :label="$t('全部')" name="-1">
         <auditData
           :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
-          @passval="getList"
+          @passval="onSearch"
         />
       </el-tab-pane>
-      <el-tab-pane :label="$t('待审核')" name="second">
+      <el-tab-pane :label="$t('待审核')" name="0">
         <auditData
-          :allData="resultData"
+          :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
-          @passval="getList"
+          @passval="onSearch"
         />
       </el-tab-pane>
-      <el-tab-pane :label="$t('已审核')" name="third">
+      <el-tab-pane :label="$t('已审核')" name="12">
         <auditData
-          :allData="passData"
+          :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
-          @passval="getList"
+          @passval="onSearch"
         />
       </el-tab-pane>
     </el-tabs>
@@ -37,7 +37,7 @@ import { pagination } from '@/mixin'
 export default {
   data() {
     return {
-      activeName: 'first',
+      activeName: '-1',
       all: [],
       resultData: [],
       passData: [],
@@ -55,21 +55,18 @@ export default {
     this.getSettleAccounts()
   },
   methods: {
-    getList(param_list) {
+    getList(state, param_list) {
       this.$request
         .pendingReview({
           keyword: this.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
+          state: state !== '3' ? state : '',
           ...param_list
         })
         .then(res => {
           if (res.ret) {
             this.all = res.data
-            this.resultData = this.all.filter(item => item.status_name === '待审核')
-            this.passData = this.all.filter(
-              item => item.status_name === '审核通过' || item.status_name === '审核拒绝'
-            )
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           }
@@ -97,6 +94,14 @@ export default {
           this.totalSettlement = res.data
         }
       })
+    },
+    onTabChange(tab) {
+      this.page_params.page = 1
+      this.getList(tab.name)
+    },
+    onSearch(params) {
+      this.page_params.page = 1
+      this.getList(this.activeName, params)
     }
   }
 }

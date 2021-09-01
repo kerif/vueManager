@@ -1,68 +1,62 @@
 <template>
   <div class="settled-list-container">
     <div class="headline">
-      <el-row :gutter="10">
-        <el-col :span="3">
-          <!-- 结算状态 -->
-          <el-select v-model="page_params.status" :placeholder="$t('请选择结算状态')" size="small">
-            <el-option
-              v-for="item in settledData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </el-col>
+      <div class="head-status">
+        <!-- 结算状态 -->
+        <el-select
+          v-model="page_params.status"
+          :placeholder="$t('请选择结算状态')"
+          size="small"
+          class="head-mr"
+          clearable
+        >
+          <el-option v-for="item in settledData" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
         <!--客户ID-->
-        <el-col :span="3">
-          <el-autocomplete
-            :fetch-suggestions="queryCNSearch"
-            @select="handleSelect"
-            :placeholder="$t('请输入客户ID')"
-            v-model="page_params.user_id"
-            :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
-            size="small"
-          >
-          </el-autocomplete>
-        </el-col>
+        <el-autocomplete
+          :fetch-suggestions="queryCNSearch"
+          @select="handleSelect"
+          :placeholder="$t('请输入客户ID')"
+          v-model="page_params.user_id"
+          :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
+          size="small"
+          class="head-mr"
+          clearable
+        >
+        </el-autocomplete>
         <!-- 搜索 -->
-        <el-col :span="4">
-          <el-date-picker
-            size="small"
-            class="selectTime"
-            v-model="timeList"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :range-separator="$t('至')"
-            :start-placeholder="$t('提交开始日期')"
-            :end-placeholder="$t('提交结束日期')"
-            @change="fm"
-          >
-          </el-date-picker>
-        </el-col>
+        <el-date-picker
+          size="small"
+          class="selectTime head-mr"
+          v-model="timeList"
+          type="daterange"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('提交开始日期')"
+          :end-placeholder="$t('提交结束日期')"
+          @change="fm"
+        >
+        </el-date-picker>
         <!-- 搜索 -->
-        <el-col :span="3">
-          <el-button size="small" class="searchBtn" @click.native="getList">{{
-            $t('搜索')
-          }}</el-button>
-        </el-col>
+        <el-button size="small" class="searchBtn" @click.native="getList">{{
+          $t('搜索')
+        }}</el-button>
         <!-- 一键结算 -->
-        <el-col :span="3">
-          <el-button size="small" class="unsettled" type="primary" @click="oneSettlement">
-            {{ $t('一键结算') }}
-          </el-button>
-        </el-col>
-        <el-col :span="4" :offset="4">
-          <search-group
-            v-model="page_params.keyword"
-            @search="goSearch"
-            :placeholder="$t('请输入关键字')"
-          >
-          </search-group>
-        </el-col>
-      </el-row>
+        <el-button size="small" class="unsettled" type="primary" @click="oneSettlement">
+          {{ $t('一键结算') }}
+        </el-button>
+      </div>
+      <div class="head-search">
+        <el-input
+          placeholder="请输入内容"
+          v-model="page_params.keyword"
+          @keyup.enter.native="getList"
+        >
+          <i slot="suffix" class="el-input__icon el-icon-search" @click="getList"></i>
+        </el-input>
+      </div>
     </div>
     <div class="data-list">
       <el-table border style="width: 100%" :data="settleData">
@@ -73,7 +67,7 @@
         <el-table-column prop="order_amount" :label="$t('计佣金额¥')" width="100">
         </el-table-column>
         <el-table-column prop="agent_name" :label="$t('代理')"> </el-table-column>
-        <el-table-column prop="commission_amount" :label="$t('可获佣金￥')" width="100">
+        <el-table-column prop="commission_amount" :label="$t('可获佣金')" width="100">
         </el-table-column>
         <el-table-column prop="created_at" :label="$t('成交时间')" width="100"> </el-table-column>
         <el-table-column :label="$t('结算状态')">
@@ -103,7 +97,6 @@
 </template>
 
 <script>
-import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
@@ -127,8 +120,7 @@ export default {
     }
   },
   components: {
-    NlePagination,
-    SearchGroup
+    NlePagination
   },
   created() {
     this.getList()
@@ -239,16 +231,25 @@ export default {
 <style lang="scss" scoped>
 .settled-list-container {
   .headline {
-    margin-top: 20px;
-    .searchBtn {
-      width: 120px;
-      margin-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .head-status {
+      .head-mr {
+        margin-right: 10px;
+      }
+      .searchBtn {
+        width: 120px;
+      }
+      .unsettled {
+        width: 120px;
+      }
+      .selectTime {
+        width: 240px !important;
+      }
     }
-    .unsettled {
-      width: 120px;
-    }
-    .selectTime {
-      width: 240px !important;
+    .head-search {
+      width: 200px;
     }
   }
   .data-list {
