@@ -373,21 +373,17 @@ export default {
   methods: {
     // 获取订单统计数据
     getCounts() {
-      console.log('111')
-      this.$request
-        .getOrderCounts({
-          keyword: this.searchFieldData.keyword
-        })
-        .then(res => {
-          if (res.ret) {
-            this.countData = res.data
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      const params = this.computedParams()
+      this.$request.getOrderCounts(params).then(res => {
+        if (res.ret) {
+          this.countData = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     goMatch() {
       this.page_params.page = 1

@@ -1015,6 +1015,11 @@ export default {
                 : []
             }
           })
+          this.countryList = [
+            +this.address.country_id,
+            this.address.area_id ? +this.address.area_id : '',
+            this.address.sub_area_id ? +this.address.sub_area_id : ''
+          ]
         }
       })
     },
@@ -1314,11 +1319,6 @@ export default {
       // this.unEdit = true
       this.dialogInfo = true
       this.getCountrys()
-      this.countryList = [
-        this.address.country_id,
-        this.address.area_id ? this.address.area_id : '',
-        this.address.sub_area_id ? this.address.sub_area_id : ''
-      ]
     },
     // 保存 编辑
     saveMsg() {
