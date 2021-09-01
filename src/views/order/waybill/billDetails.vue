@@ -1335,8 +1335,8 @@ export default {
           clearance_code: this.clearance_code,
           wechat_id: this.address.wechat_id,
           country_id: this.countryList[0],
-          area_id: this.countryList[1],
-          sub_area_id: this.countryList[2]
+          area_id: this.countryList[1] || '',
+          sub_area_id: this.countryList[2] || ''
         })
         .then(res => {
           if (res.ret) {
