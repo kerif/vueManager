@@ -2,7 +2,7 @@
   <el-dialog
     :visible.sync="show"
     :title="$t('发货单详情')"
-    width="70%"
+    width="80%"
     class="ship-details-container"
     @close="clear"
   >
@@ -12,9 +12,9 @@
     <el-table :data="shipData" border @selection-change="selectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <!-- 客户ID -->
-      <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+      <el-table-column :label="$t('客户ID')" prop="user_id" width="100"></el-table-column>
       <!-- 客户昵称 -->
-      <el-table-column :label="$t('客户昵称')" prop="user_name"></el-table-column>
+      <el-table-column :label="$t('客户昵称')" prop="user_name" width="155"></el-table-column>
       <!-- 付款状态 -->
       <el-table-column :label="$t('付款状态')">
         <template slot-scope="scope">
@@ -23,7 +23,7 @@
           <span v-if="scope.row.on_delivery_status === 2">{{ $t('货到付款（已付款）') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('订单号')">
+      <el-table-column :label="$t('订单号')" width="155">
         <template slot-scope="scope">
           <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{
             scope.row.order_sn
@@ -33,10 +33,14 @@
       <el-table-column
         :label="$t('转运快递单号-二程')"
         prop="logistics_sn"
-        width="120"
+        width="155"
       ></el-table-column>
       <!-- <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column> -->
-      <el-table-column :label="$t('线路名称')" prop="express_line.cn_name"></el-table-column>
+      <el-table-column
+        :label="$t('线路名称')"
+        prop="express_line.cn_name"
+        width="155"
+      ></el-table-column>
       <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
       <el-table-column :label="$t('收货国家/地区')" prop="address.country_name"></el-table-column>
       <el-table-column :label="$t('包裹数与件数')">

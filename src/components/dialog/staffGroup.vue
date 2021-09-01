@@ -4,6 +4,7 @@
     :title="$t('员工组成员')"
     class="dialog-staff-group"
     @close="clear"
+    width="80%"
   >
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column type="index"> </el-table-column>
