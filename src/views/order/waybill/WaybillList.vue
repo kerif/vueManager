@@ -724,7 +724,7 @@
       </el-table>
       <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
         <div class="remark-text">
-          <span>{{ $t('总实际重量') }}:</span><span>0.00 KG</span>
+          <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
         </div>
       </nle-pagination>
     </div>
@@ -1007,6 +1007,7 @@ export default {
     return {
       timeList: [],
       uploadRadio: 1,
+      sumData: {},
       packed_end_date: '',
       activeName: '1',
       oderData: [],
@@ -1187,6 +1188,7 @@ export default {
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.sumData = res.sum
             this.$nextTick(() => {
               this.$refs.table.doLayout()
             })
