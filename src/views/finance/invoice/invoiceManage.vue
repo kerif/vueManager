@@ -90,6 +90,8 @@ export default {
       this.getList(tab.name)
     },
     onSearch(params) {
+      console.log(params, 'params')
+      console.log(this.activeName, 'this.activeName')
       this.page_params.page = 1
       this.getList(this.activeName, params)
     }

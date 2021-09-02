@@ -35,7 +35,23 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      tableLoading: false
+    }
+  },
+  created() {
+    this.getLineLabel()
+  },
+  methods: {
+    getLineLabel() {
+      this.$request.lineLabel().then(res => {
+        console.log(res)
+      })
+    }
+  }
+}
 </script>
 
-<style></style>
+<style lang="scss"></style>
