@@ -13,17 +13,6 @@
           <el-option v-for="item in statusData" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
-        <!-- 开票状态 -->
-        <el-select
-          v-model="page_params.state"
-          class="head-mr"
-          :placeholder="$t('开票状态')"
-          size="small"
-          clearable
-        >
-          <el-option v-for="item in stateData" :key="item.id" :label="item.name" :value="item.id">
-          </el-option>
-        </el-select>
         <!-- 时间 -->
         <el-date-picker
           size="small"
@@ -129,7 +118,6 @@ export default {
     return {
       page_params: {
         status: '',
-        state: '',
         begin_date: '',
         end_date: ''
       },
