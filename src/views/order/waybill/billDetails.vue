@@ -8,7 +8,15 @@
       <el-step :title="$t('已签收')"></el-step>
       <el-step :title="$t('作废订单')"></el-step>
     </el-steps>
-    <div style="text-align: center; font-size: 18px; margin-bottom: 20px">
+    <div
+      style="
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        line-height: 30px;
+      "
+    >
       {{ $t('订单详情') }}({{ form.warehouse && form.warehouse.warehouse_name }}) <Br />
       <div v-if="form.group_leader_id > 0" class="group-text">=======拼团订单=======</div>
       <el-alert
@@ -122,12 +130,29 @@
           </el-col>
           <el-col :span="6">
             <div class="panel-bg">
-              <h4>{{ form.status_name }}</h4>
+              <h4 style="font-size: 16px; color: blue">
+                {{ form.status_name }}
+                <router-link
+                  v-if="form.status === 11"
+                  style="color: red; font-weight: bolder"
+                  :to="`/finance/orderReview/reviewFinance/${form.id}/pay`"
+                >
+                  {{ $t('待审核') }}
+                </router-link>
+                <router-link
+                  v-if="form.status === 12"
+                  class="choose-order"
+                  style="color: red; font-weight: bolder"
+                  :to="`/order/review/?id=${form.id}`"
+                >
+                  {{ $t('审核拒绝') }}
+                </router-link>
+              </h4>
               {{ $t('状态') }}
             </div>
           </el-col>
         </el-row>
-        <el-tabs v-model="activeName" class="tabLength">
+        <el-tabs v-model="activeName" class="tabs">
           <el-tab-pane :label="$t('基本信息')" name="0">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
@@ -159,7 +184,9 @@
                     <th>{{ form.address.code }} {{ form.address.country.cn_name }}</th>
                     <td>{{ $t('省/市/区') }}</td>
                     <th>
-                      {{ form.address.province }}{{ form.address.city }}{{ form.address.district }}
+                      {{ form.address.province }},{{ form.address.city }},{{
+                        form.address.district
+                      }}
                     </th>
                   </tr>
 
@@ -347,7 +374,7 @@
                 <el-button style="float: right; padding: 3px 0" type="text"
                   >{{ $t('包裹总价值') }}:
                   <span style="font-size: 15px; font-weight: bold; color: red">
-                    {{ form.details.value }}
+                    {{ localization.currency_unit }} {{ form.details.value }}
                   </span></el-button
                 >
               </div>
@@ -392,18 +419,16 @@
                 <el-table-column :label="$t('重量尺寸')" width="180">
                   <template slot-scope="scope">
                     <div>
-                      <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span
+                      <strong>{{ scope.row.package_weight }} {{ localization.weight_unit }}</strong
                       ><br />
-                      <span class="small-text"
-                        >{{ scope.row.dimension }}{{ localization.length_unit }}</span
-                      >
+                      <span>{{ scope.row.dimension }} {{ localization.length_unit }}</span>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('货位')" width="180">
                   <template slot-scope="scope">
                     <div>
-                      <span>{{ scope.row.location }}</span>
+                      <strong>{{ scope.row.location }}</strong>
                     </div>
                   </template>
                 </el-table-column>
@@ -636,19 +661,19 @@
             <div class="package-details">
               <div class="size">
                 {{ $t('计价模式') }}:
-                <span v-if="form.express_line && form.express_line.mode === 1">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 1">{{
                   $t('首重续重模式')
                 }}</span>
-                <span v-if="form.express_line && form.express_line.mode === 2">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 2">{{
                   $t('阶梯价格模式')
                 }}</span>
-                <span v-if="form.express_line && form.express_line.mode === 3">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 3">{{
                   $t('单位价格+阶梯总价模式')
                 }}</span>
-                <span v-if="form.express_line && form.express_line.mode === 4">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 4">{{
                   $t('多级续重模式')
                 }}</span>
-                <span v-if="form.express_line && form.express_line.mode === 5">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 5">{{
                   $t('阶梯首重续重模式')
                 }}</span>
               </div>
@@ -1415,6 +1440,9 @@ export default {
     font-weight: bold;
     color: red;
   }
+  .tabs {
+    margin-top: 20px;
+  }
   .address {
     font-size: 12px;
     padding: 0px;
@@ -1527,6 +1555,7 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    margin-top: 20px;
     .number-top {
       font-size: 14px;
       font-weight: 650;
