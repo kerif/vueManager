@@ -298,11 +298,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination
-        style="margin-top: 5px"
-        :pageParams="page_params"
-        :notNeedInitQuery="false"
-      ></nle-pagination>
+      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
+        <div class="remark-text">
+          <span>{{ $t('总实际重量') }}:</span><span>0.00 KG</span>
+        </div>
+      </nle-pagination>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img-box">
@@ -760,15 +760,17 @@ export default {
 
 <style lang="scss" scoped>
 .order-list-container {
+  .remark-text {
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
+  }
   .header-range {
     display: flex;
     // flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1px;
-    .header-btns {
-      // margin-bottom: 10px;
-    }
     .header-search {
       display: flex;
       align-items: center;

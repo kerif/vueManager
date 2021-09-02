@@ -139,7 +139,7 @@
           key="user_name"
           show-overflow-tooltip
         ></el-table-column>
-        <el-table-column key="order_sn" :label="$t('订单号')" width="200">
+        <el-table-column key="order_sn" :label="$t('订单号')" width="250">
           <template slot-scope="scope">
             <el-button @click="details(scope.row.id, activeName)" type="text">{{
               scope.row.order_sn
@@ -154,18 +154,22 @@
             >
               <img class="group-sty" src="../../../assets/group.jpg"
             /></el-button>
-          </template>
-        </el-table-column>
-        <el-table-column key="status" :label="$t('审核状态')" v-if="activeName === '2'">
-          <template slot-scope="scope">
-            <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
-            <router-link
-              v-if="scope.row.status === 12"
-              class="choose-order"
-              :to="`/order/review/?id=${scope.row.id}`"
-            >
-              {{ $t('审核拒绝') }}
-            </router-link>
+            <span>
+              <el-button
+                style="color: red; font-weight: bolder"
+                type="text"
+                v-if="scope.row.status === 11"
+                @click.native="reviewPackage(scope.row.id)"
+                >{{ $t('待审核') }}</el-button
+              >
+              <router-link
+                v-if="scope.row.status === 12"
+                class="choose-order"
+                :to="`/order/review/?id=${scope.row.id}`"
+              >
+                {{ $t('审核拒绝') }}
+              </router-link>
+            </span>
           </template>
         </el-table-column>
         <el-table-column
@@ -486,7 +490,12 @@
               <el-table-column :label="$t('支付状态')" v-if="activeName === '2'">
                 <template slot-scope="scope">
                   <span v-if="scope.row.status === 3" class="packaged">{{ $t('已支付') }}</span>
-                  <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
+                  <el-button
+                    type="text"
+                    v-if="scope.row.status === 11"
+                    @click.native="reviewPackage(scope.row.id)"
+                    >{{ $t('待审核') }}</el-button
+                  >
                   <router-link
                     v-if="scope.row.status === 12"
                     class="choose-order"
@@ -713,11 +722,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination
-        style="margin-top: 5px"
-        :pageParams="page_params"
-        :notNeedInitQuery="false"
-      ></nle-pagination>
+      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
+        <div class="remark-text">
+          <span>{{ $t('总实际重量') }}:</span><span>0.00 KG</span>
+        </div>
+      </nle-pagination>
     </div>
 
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
@@ -2085,7 +2094,11 @@ export default {
       }
     }
   }
-
+  .remark-text {
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
+  }
   .waybill-data-list {
     background-color: inherit;
     overflow-y: auto !important;
