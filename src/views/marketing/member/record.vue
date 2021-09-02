@@ -26,14 +26,6 @@
                 </template>
               </el-autocomplete>
             </div>
-            <!-- <el-select v-model="form.user_id">
-              <el-option
-                v-for="item in userList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select> -->
           </el-form-item>
           <el-form-item :label="$t('选择分类')" prop="radio1">
             <el-radio v-model="form.resource_type" label="1">{{ $t('成长值') }}</el-radio>
@@ -66,7 +58,9 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+        <el-button type="primary" :loading="$store.state.btnLoading" @click="confirm">{{
+          $t('确定')
+        }}</el-button>
       </span>
     </el-dialog>
     <el-dialog
