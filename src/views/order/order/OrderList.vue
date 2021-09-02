@@ -125,9 +125,10 @@
         </el-table-column>
         <el-table-column :label="$t('快递单号')" key="express_num" width="180">
           <template slot-scope="scope">
-            <el-button @click="oderDetails(scope.row.id)" type="text">{{
-              scope.row.express_num
-            }}</el-button>
+            <el-button @click="oderDetails(scope.row.id)" type="text"
+              >{{ scope.row.express_num }}
+            </el-button>
+            <span v-if="scope.row.code != ''" style="color: #66666">({{ scope.row.code }})</span>
             <span
               :title="$t('复制单号')"
               class="copy-number"
@@ -137,7 +138,6 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('包裹编码')" prop="code" key="code"> </el-table-column>
         <el-table-column :label="$t('状态')" key="status">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>
@@ -182,7 +182,11 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('物品重量')" key="package_weight" v-if="activeName === '2'">
+        <el-table-column
+          :label="$t('物品重量')"
+          key="package_weight"
+          v-if="['2', '3', '4', '5'].includes(activeName)"
+        >
           <template slot-scope="scope">
             <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>
           </template>
@@ -217,12 +221,6 @@
           width="155"
         >
         </el-table-column>
-        <el-table-column
-          :label="$t('备注')"
-          prop="remark"
-          key="remark"
-          v-if="activeName === '2'"
-        ></el-table-column>
         <el-table-column
           :label="$t('规格(长宽高cm)')"
           prop="dimension"
@@ -300,7 +298,7 @@
       </el-table>
       <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
         <div class="remark-text">
-          <span>{{ $t('总实际重量') }}:</span><span>0.00 KG</span>
+          <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
         </div>
       </nle-pagination>
     </div>
@@ -348,6 +346,7 @@ export default {
       countData: {},
       urlExcel: '',
       hasFilterCondition: false,
+      sumData: {},
       searchFieldData: {
         begin_date: '',
         end_date: '',
@@ -432,6 +431,7 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.orderData = res.data
+            this.sumData = res.sum
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
@@ -463,6 +463,7 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.orderData = res.data
+            this.sumData = res.sum
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           } else {

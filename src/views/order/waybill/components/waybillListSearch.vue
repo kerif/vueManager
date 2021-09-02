@@ -1,67 +1,45 @@
 <template>
   <div class="waybill-list-search">
     <el-form class="search-form" :model="searchFieldData" ref="searchForm" size="mini">
-      <el-form-item prop="order_sn">
-        <el-input
-          v-model="searchFieldData.order_sn"
-          :autosize="{ minRows: 4, maxRows: 5 }"
-          type="textarea"
-          :placeholder="$t('请输入订单号搜索，多个单号请用回车区分')"
-        ></el-input>
-      </el-form-item>
-      <div>
-        <el-form-item prop="date_type">
-          <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('时间')">
-            <el-option
-              v-for="item in timeOptions"
-              :key="item.id"
-              :value="item.value"
-              :label="$t(item.name)"
-            >
-            </el-option>
-          </el-select>
-          <el-form-item prop="date" style="margin: 0">
-            <el-date-picker
-              v-model="searchFieldData.date"
-              type="daterange"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              :range-separator="$t('至')"
-              :start-placeholder="$t('开始日期')"
-              :end-placeholder="$t('结束日期')"
-            >
-            </el-date-picker>
-          </el-form-item>
-        </el-form-item>
-        <el-form-item prop="value_type">
-          <el-select v-model="searchFieldData.value_type" clearable :placeholder="$t('价格区间')">
-            <el-option
-              v-for="item in priceRangeOptions"
-              :key="item.id"
-              :value="item.value"
-              :label="$t(item.name)"
-            >
-            </el-option>
-          </el-select>
-          <el-form-item prop="value_begin">
+      <el-row :gutter="20">
+        <el-col :span="6" :xl="10">
+          <!--订单号搜索-->
+          <el-form-item prop="order_sn">
             <el-input
-              class="number"
-              :placeholder="$t('请输入起始价格')"
-              v-model="searchFieldData.value_begin"
-              onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
-            ></el-input
-          ></el-form-item>
-          -
-          <el-form-item prop="value_end">
-            <el-input
-              class="number"
-              :placeholder="$t('请输入结束价格')"
-              v-model="searchFieldData.value_end"
-              onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
+              v-model="searchFieldData.order_sn"
+              :autosize="{ minRows: 5, maxRows: 10 }"
+              type="textarea"
+              :placeholder="$t('请输入订单号搜索，多个单号请用回车区分')"
             ></el-input>
           </el-form-item>
-        </el-form-item>
-        <div style="display: flex; height: 28px">
+        </el-col>
+        <el-col :span="4" xl="2">
+          <!--第二列表开始-->
+          <!--时间-->
+          <el-form-item prop="date_type">
+            <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('时间')">
+              <el-option
+                v-for="item in timeOptions"
+                :key="item.id"
+                :value="item.value"
+                :label="$t(item.name)"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!--价格区间-->
+          <el-form-item prop="value_type">
+            <el-select v-model="searchFieldData.value_type" clearable :placeholder="$t('价格区间')">
+              <el-option
+                v-for="item in priceRangeOptions"
+                :key="item.id"
+                :value="item.value"
+                :label="$t(item.name)"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!--线路名称-->
           <el-form-item prop="express_line_id">
             <el-select
               v-model="searchFieldData.express_line_id"
@@ -77,6 +55,101 @@
               </el-option>
             </el-select>
           </el-form-item>
+        </el-col>
+        <el-col :span="6" xl="4">
+          <!--第三列开始-->
+          <el-row>
+            <el-col :span="24">
+              <el-form-item prop="date">
+                <el-date-picker
+                  style="width: 100%"
+                  v-model="searchFieldData.date"
+                  type="daterange"
+                  format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd"
+                  :range-separator="$t('至')"
+                  :start-placeholder="$t('开始日期')"
+                  :end-placeholder="$t('结束日期')"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <!--价格-->
+          <el-row>
+            <el-col :span="11">
+              <el-form-item prop="value_begin">
+                <el-input
+                  class="number"
+                  :placeholder="$t('请输入起始价格')"
+                  v-model="searchFieldData.value_begin"
+                  onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
+                ></el-input
+              ></el-form-item>
+            </el-col>
+            <el-col :span="2" style="text-align: center">-</el-col>
+            <el-col :span="11"
+              ><el-form-item prop="value_end">
+                <el-input
+                  class="number"
+                  :placeholder="$t('请输入结束价格')"
+                  v-model="searchFieldData.value_end"
+                  onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
+                ></el-input> </el-form-item
+            ></el-col>
+          </el-row>
+
+          <!--支付方式 仓库-->
+          <el-row>
+            <el-col :span="11">
+              <el-form-item prop="payment_type">
+                <el-select
+                  v-model="searchFieldData.payment_type"
+                  clearable
+                  :placeholder="$t('支付方式')"
+                >
+                  <el-option
+                    v-for="item in paymentData"
+                    :key="item.id"
+                    :value="item.id"
+                    :label="item.name"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">&nbsp;</el-col>
+            <el-col :span="11">
+              <el-form-item prop="warehouse_id">
+                <el-select
+                  v-model="searchFieldData.warehouse"
+                  clearable
+                  :placeholder="$t('请选择仓库')"
+                >
+                  <el-option
+                    v-for="item in wareHouseList"
+                    :key="item.id"
+                    :value="item.id"
+                    :label="item.warehouse_name"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :span="4" xl="4">
+          <!--收货国家地区-->
+          <el-form-item prop="countryArr">
+            <el-cascader
+              :placeholder="$t('收货国家/地区')"
+              :show-all-levels="false"
+              :props="countryProps"
+              v-model="searchFieldData.countryArr"
+              clearable
+            ></el-cascader>
+          </el-form-item>
+          <!--支付方式-->
           <el-form-item prop="payment_type">
             <el-select
               v-model="searchFieldData.payment_type"
@@ -92,34 +165,9 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="warehouse_id">
-            <el-select
-              v-model="searchFieldData.warehouse"
-              clearable
-              :placeholder="$t('请选择仓库')"
-            >
-              <el-option
-                v-for="item in wareHouseList"
-                :key="item.id"
-                :value="item.id"
-                :label="item.warehouse_name"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-      </div>
-      <div>
-        <div style="display: flex">
-          <el-form-item prop="countryArr">
-            <el-cascader
-              :placeholder="$t('收货国家/地区')"
-              :show-all-levels="false"
-              :props="countryProps"
-              v-model="searchFieldData.countryArr"
-              clearable
-            ></el-cascader>
-          </el-form-item>
+        </el-col>
+        <el-col :span="4" xl="4">
+          <!--收货方式-->
           <el-form-item prop="receive_type">
             <el-select
               v-model="searchFieldData.receive_type"
@@ -135,23 +183,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </div>
-        <div style="display: flex">
-          <el-form-item prop="pay_delivery">
-            <el-select
-              v-model="searchFieldData.pay_delivery"
-              clearable
-              :placeholder="$t('支付状态')"
-            >
-              <el-option
-                v-for="item in paymentStatusData"
-                :key="item.id"
-                :value="item.id"
-                :label="item.name"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
+          <!--所属代理 -->
           <el-form-item prop="agent">
             <el-select v-model="searchFieldData.agent" clearable :placeholder="$t('所属代理')">
               <el-option
@@ -163,14 +195,14 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </div>
-        <div class="submit">
-          <el-button type="primary" plain size="small" @click="submitForm">{{
-            $t('搜索')
-          }}</el-button>
-          <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
-        </div>
-      </div>
+          <div class="submit">
+            <el-button type="primary" plain size="small" @click="submitForm">{{
+              $t('搜索')
+            }}</el-button>
+            <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+          </div>
+        </el-col>
+      </el-row>
     </el-form>
   </div>
 </template>
@@ -322,32 +354,23 @@ export default {
   margin: 10px 0;
   .search-form {
     background-color: #fff;
-    padding: 10px 0;
-    display: flex;
-    justify-content: flex-end;
-    // align-items: center;
+    padding: 10px;
     .el-select,
     .el-cascader,
     .el-input,
     .el-date-editor {
       margin: 0 5px;
     }
-    .number ::v-deep .el-input__inner {
-      // text-align: center;
-    }
     .el-form-item--mini.el-form-item {
       margin-bottom: 10px;
       height: 28px;
     }
+    .el-select,
+    .el-cascader {
+      width: 100%;
+    }
     ::v-deep .el-input {
-      width: 168px;
-    }
-    ::v-deep .el-form-item__content {
-      display: flex;
-    }
-    .submit {
-      float: right;
-      padding-right: 5px;
+      // width: 168px;
     }
   }
 }
