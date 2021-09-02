@@ -150,14 +150,14 @@
             ></el-cascader>
           </el-form-item>
           <!--支付方式-->
-          <el-form-item prop="payment_type">
+          <el-form-item prop="pay_delivery">
             <el-select
-              v-model="searchFieldData.payment_type"
+              v-model="searchFieldData.pay_delivery"
               clearable
-              :placeholder="$t('支付方式')"
+              :placeholder="$t('支付状态')"
             >
               <el-option
-                v-for="item in paymentData"
+                v-for="item in paymentStatusData"
                 :key="item.id"
                 :value="item.id"
                 :label="item.name"
