@@ -13,7 +13,7 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="4" xl="2">
+        <el-col :span="4" :xl="2">
           <!--第二列表开始-->
           <!--时间-->
           <el-form-item prop="date_type">
@@ -138,7 +138,7 @@
             </el-col>
           </el-row>
         </el-col>
-        <el-col :span="4" xl="4">
+        <el-col :span="4" :xl="3">
           <!--收货国家地区-->
           <el-form-item prop="countryArr">
             <el-cascader
@@ -166,7 +166,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="4" xl="4">
+        <el-col :span="4" :xl="3">
           <!--收货方式-->
           <el-form-item prop="receive_type">
             <el-select
