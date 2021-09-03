@@ -27,6 +27,16 @@
             type="primary"
             >入库</el-button
           >
+
+          <el-button
+            size="small"
+            icon="el-icon-s-check"
+            v-if="form.status === 0"
+            class="btn-deep-blue"
+            @click="goClaim(form.id)"
+            >{{ $t('认领') }}</el-button
+          >
+
           <el-button
             size="small"
             icon="el-icon-edit"
@@ -70,6 +80,7 @@
             <!-- 包裹状态 -->
             <el-col :span="7" :offset="1">
               <span class="leftWidth">{{ $t('包裹状态') }}</span>
+              <span v-if="form.status === 0" style="color: red">{{ $t('无人认领') }}</span>
               <span v-if="form.status === 1">{{ $t('未入库') }}</span
               ><span v-if="form.status === 2">{{ $t('已入库') }}</span
               ><span v-if="form.status === 3 || form.status === 4">{{ $t('已集包') }}</span
@@ -392,6 +403,7 @@
 </template>
 
 <script>
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -426,6 +438,9 @@ export default {
         this.boxData = res.data.box
         this.userId = res.data.user_id
         switch (this.form.status) {
+          case 0:
+            this.form.active = 1
+            break
           case 1:
           case 2:
           case 3:
@@ -452,6 +467,12 @@ export default {
         if (res.ret) {
           this.productData = res.data
         }
+      })
+    },
+    // 认领包裹
+    goClaim(id) {
+      dialog({ type: 'claim', id: id }, () => {
+        this.getList()
       })
     },
     goExpress(expressNum) {

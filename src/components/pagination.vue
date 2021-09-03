@@ -1,18 +1,25 @@
 <template>
   <div class="pagination-container">
-    <el-pagination
-      background
-      :prev-text="$t('上一页')"
-      :next-text="$t('下一页')"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageParams.page"
-      :page-sizes="[10, 20, 30, 50, 100, 200, 300]"
-      :page-size="pageParams.size"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pageParams.total"
-    >
-    </el-pagination>
+    <div class="left-sider">
+      <div class="left-sider-container"><slot></slot></div>
+    </div>
+    <div class="right-sider">
+      <div class="right-sider-container">
+        <el-pagination
+          background
+          :prev-text="$t('上一页')"
+          :next-text="$t('下一页')"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageParams.page"
+          :page-sizes="[10, 20, 30, 50, 100, 200, 300]"
+          :page-size="pageParams.size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageParams.total"
+        >
+        </el-pagination>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -63,6 +70,24 @@ export default {
 <style lang="scss">
 .pagination-container {
   text-align: right;
+  .left-sider {
+    float: left;
+    width: 30%;
+    min-width: 100px;
+    .left-sider-container {
+      text-align: left;
+      font-size: 13px;
+      padding-top: 5px;
+    }
+  }
+  .right-sider {
+    float: right;
+    width: 70%;
+    text-align: right;
+    .right-sider-container {
+      text-align: right;
+    }
+  }
   .btn-prev,
   .btn-next {
     padding: 0 10px !important;

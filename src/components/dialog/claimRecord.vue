@@ -4,7 +4,7 @@
     :title="$t('认领记录')"
     class="claim-record"
     @close="clear"
-    width="60%"
+    width="80%"
   >
     <div class="top">
       <div class="top-left">
