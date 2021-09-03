@@ -164,14 +164,6 @@
         </el-table-column>
         <!-- 线路名称 -->
         <el-table-column :label="$t('渠道名称')" prop="name"></el-table-column>
-        <!-- 支持国家/地区 -->
-        <!-- <el-table-column :label="$t('支持国家/地区')" :show-overflow-tooltip="true" width="150">
-          <template slot-scope="scope">
-            <span v-for="item in scope.row.countries" :key="item.id">
-              {{ item.name }}
-            </span>
-          </template>
-        </el-table-column> -->
         <!-- 价格模式 -->
         <el-table-column :label="$t('价格模式')">
           <template slot-scope="scope">
@@ -182,11 +174,41 @@
           </template>
         </el-table-column>
         <!-- 分区表 -->
-        <el-table-column :label="$t('分区表')"> </el-table-column>
+        <el-table-column :label="$t('分区表')">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              @click="
+                $router.push({
+                  name: 'channelLineEdit',
+                  params: { id: scope.row.id },
+                  query: {
+                    state: 'edit',
+                    activeName: 'partition'
+                  }
+                })
+              "
+              >{{ $t('分区表') }}</el-button
+            >
+          </template>
+        </el-table-column>
         <!-- 价格表 -->
         <el-table-column :label="$t('价格表')">
           <template slot-scope="scope">
-            {{ scope.row.price_grade ? scope.row.price_grade.length : 0 }}
+            <el-button
+              type="text"
+              @click="
+                $router.push({
+                  name: 'channelLineEdit',
+                  params: { id: scope.row.id },
+                  query: {
+                    state: 'edit',
+                    activeName: 'price'
+                  }
+                })
+              "
+              >{{ $t('价格表') }}</el-button
+            >
           </template>
         </el-table-column>
         <!-- 支持仓库 -->
