@@ -55,13 +55,13 @@ export default {
     this.getSettleAccounts()
   },
   methods: {
-    getList(state, param_list) {
+    getList(status, param_list) {
       this.$request
         .pendingReview({
           keyword: this.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          state: state !== '3' ? state : '',
+          status: status !== '-1' ? status : '',
           ...param_list
         })
         .then(res => {

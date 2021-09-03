@@ -41,15 +41,13 @@
           height="350"
         >
           <el-table-column type="index" width="55" align="center"></el-table-column>
-          <el-table-column :label="$t('仓库')" prop="user_id"> </el-table-column>
-          <el-table-column :label="$t('货位')"></el-table-column>
+          <el-table-column :label="$t('仓库')" prop="warehouse_name"> </el-table-column>
+          <el-table-column :label="$t('货位')" prop="location"></el-table-column>
           <!-- 商品名称 -->
-          <el-table-column :label="$t('上架数量')" prop="package_name"> </el-table-column>
+          <el-table-column :label="$t('上架数量')" prop="packages_count"> </el-table-column>
           <el-table-column :label="$t('包裹')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('操作')" width="260">
             <template>
-              <!-- 轨迹 -->
-              <el-button class="btn-green">{{ $t('详细') }}</el-button>
               <!-- 删除 -->
               <el-button class="btn-light-red">{{ $t('删除') }}</el-button>
             </template>
@@ -57,13 +55,7 @@
         </el-table>
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          class="save-btn"
-          @click="saveImport"
-          :loading="$store.state.btnLoading"
-          >{{ $t('保存') }}</el-button
-        >
+        <el-button type="primary" class="save-btn" @click="saveImport">{{ $t('保存') }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -76,18 +68,18 @@ export default {
       fileList: [],
       tableLoading: false,
       packageList: [],
-      localization: {}
+      localization: {},
+      urlName: '',
+      file: ''
     }
   },
-  created() {
-    this.getList()
-  },
+  created() {},
   methods: {
     getList() {
       this.tableLoading = true
       this.$request
         .importPackageData({
-          name: this.urlName
+          file: this.fileList
         })
         .then(res => {
           this.tableLoading = false
@@ -138,9 +130,8 @@ export default {
               url: item.path
             })
           })
-          console.log(res.data, 'res.data')
           this.urlName = res.data[0].name
-          console.log(this.urlName, 'this.urlName')
+          console.log(this.urlName, 'urlName')
           this.getList()
         }
       })
@@ -166,7 +157,7 @@ export default {
               message: res.tips,
               type: 'success'
             })
-            // this.$router.push({ name: 'orderlist', query: { activeName: '2' } })
+            this.$router.push({ name: 'orderlist', query: { activeName: '2' } })
           } else {
             this.$notify({
               title: this.$t('操作失败'),

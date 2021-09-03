@@ -49,7 +49,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="ignore_lon_lat">
         <el-row>
           <el-col :span="10">
             <div>
@@ -185,7 +185,7 @@ export default {
         store_fee: '',
         auto_location: 0,
         free_store_days: 0,
-        ignore_lon_lat: 0,
+        ignore_lon_lat: 1,
         support_countries: ''
       },
       options: [],
@@ -215,6 +215,7 @@ export default {
         if (res.ret) {
           this.ruleForm = res.data
           this.ruleForm.support_countries = res.data.support_countries.map(item => item.id)
+          this.ruleForm.ignore_lon_lat = res.data.ignore_lon_lat || 1
         }
       })
     },

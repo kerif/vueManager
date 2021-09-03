@@ -68,11 +68,10 @@
           {{ $t('导出清单') }}
         </el-button>
         <el-button
-          class="btn-yellow"
+          class="btn-light-red"
           v-if="activeName !== '6'"
           @click="batchShelves"
           size="small"
-          type="success"
           plain
         >
           {{ $t('批量上架') }}
