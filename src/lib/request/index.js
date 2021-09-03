@@ -2349,24 +2349,24 @@ exports.detailLabel = id => {
   return $form.get(`express-line-labels/${id}`)
 }
 //自定义标签 新增
-exports.newLabel = () => {
-  return $form.post('express-line-labels')
+exports.newLabel = params => {
+  return $form.post('express-line-labels', params)
 }
 //自定义标签 修改
-exports.modifyLabel = id => {
-  return $form.put(`express-line-labels/${id}`)
+exports.modifyLabel = (id, params) => {
+  return $form.put(`express-line-labels/${id}`, params)
 }
 //自定义标签 排序
-exports.sortLabel = () => {
-  return $form.put('express-line-labels/sort')
+exports.sortLabel = params => {
+  return $form.put('express-line-labels/sort', params)
 }
 //自定义标签 翻译
 exports.getTranslate = id => {
   return $form.put(`express-line-labels/${id}/translate-data`)
 }
 //自定义标签 批量删除
-exports.deleteLabel = () => {
-  return $form.put('express-line-labels/batch-delete')
+exports.deleteLabel = ids => {
+  return $form.put('express-line-labels/batch-delete', ids)
 }
 // 自提点 获取详细
 exports.getOneSelf = id => {
@@ -3203,12 +3203,12 @@ exports.importPackage = () => {
   return $form.get('packages/location-template')
 }
 //预报包裹列表 批量上架 上传模板获取解析后的数据
-exports.importPackageData = () => {
-  return $form.post('packages/location-import-data')
+exports.importPackageData = file => {
+  return $form.post('packages/location-import-data', file)
 }
 //预报包裹列表 批量上架 导入包裹货位数据
-exports.packageLocationData = () => {
-  return $form.post('packages/location-import')
+exports.packageLocationData = params => {
+  return $json.post('packages/location-import', params)
 }
 // 发货单 详情批量导出发货单
 exports.uploadShipmentLabel = (id, ids) => {
