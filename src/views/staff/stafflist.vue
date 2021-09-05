@@ -49,7 +49,7 @@
         <!-- 姓名 -->
         <el-table-column prop="name" :label="$t('姓名')" width="200"> </el-table-column>
         <!-- 邮箱 -->
-        <el-table-column prop="email" :label="$t('邮箱')" width="245"> </el-table-column>
+        <el-table-column prop="email" :label="$t('邮箱')"> </el-table-column>
         <!-- 员工组 -->
         <el-table-column prop="admin_group.name_cn" :label="$t('员工组')" width="120">
         </el-table-column>
