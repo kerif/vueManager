@@ -24,16 +24,16 @@
         </div>
       </div>
       <div class="addUser">
-        <div class="searchGroup">
-          <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
-        </div>
+        <add-btn size="small" plain @click.native="addUser">{{ $t('添加客户') }}</add-btn>
         <search-select
           :selectArr="clientGroupList"
           v-model="page_params.group"
           @search="onGroupChange"
         >
         </search-select>
-        <add-btn @click.native="addUser">{{ $t('添加客户') }}</add-btn>
+        <div class="searchGroup">
+          <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+        </div>
       </div>
     </div>
     <!-- <div class="select-box">
