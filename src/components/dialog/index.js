@@ -118,6 +118,7 @@ import growthValueBuy from './growthValueBuy.vue'
 import baseTable from './baseTable.vue'
 import discountTable from './discountTable.vue'
 import salesAddEdit from './salesAddEdit.vue'
+import addCustomLabel from './addCustomLabel.vue'
 import addLabel from './addLabel.vue'
 
 const InviteController = Vue.extend(inviteList)
@@ -237,6 +238,7 @@ const GrowthValueBuy = Vue.extend(growthValueBuy)
 const BaseTable = Vue.extend(baseTable)
 const DiscountTable = Vue.extend(discountTable)
 const SalesAddEditController = Vue.extend(salesAddEdit)
+const AddCustomLabelController = Vue.extend(addCustomLabel)
 const AddLabelController = Vue.extend(addLabel)
 
 const mixin = {
@@ -537,6 +539,13 @@ function initInstance(type) {
       })
       break
     // 自定义标签 新增 编辑
+    case 'addCustomLabel':
+      instance = new AddCustomLabelController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 配置 路线 基础信息
     case 'addLabel':
       instance = new AddLabelController({
         el: document.createElement('div'),

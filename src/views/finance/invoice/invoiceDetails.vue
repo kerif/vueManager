@@ -185,7 +185,7 @@
                   type="success"
                   plain
                   size="mini"
-                  @click="delete (scope.$index, scope.row)"
+                  @click="deleteTrack(scope.$index, costData)"
                   >{{ $t('删除') }}</el-button
                 >
               </template>
@@ -320,8 +320,8 @@ export default {
     addTable() {
       this.costData.push({ money: 0, taxes: 0 })
     },
-    delete(index) {
-      this.costData.splice(index, 1)
+    deleteTrack(index, rows) {
+      rows.splice(index, 1)
     },
     recovery() {
       this.$confirm(this.$t('您确认要恢复该开票申请吗？'), this.$t('恢复申请'), {

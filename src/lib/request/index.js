@@ -34,6 +34,17 @@ exports.addPackageProps = params => {
 exports.updatePackageProps = (id, params) => {
   return $form.put(`package-props/${id}`, params)
 }
+
+// 配置 路线 渠道标签
+exports.channelLabel = id => {
+  return $form.get(`express-lines/${id}/basic-config`)
+}
+
+// 配置 路线 添加标签
+exports.addChannelLabel = params => {
+  return $form.post('express-lines/basic-config', params)
+}
+
 // 获取高级配置
 // exports.getSorting = (id) => {
 //   return $form.get(`orders/${id}/re-sorting`)
@@ -2361,8 +2372,8 @@ exports.sortLabel = params => {
   return $form.put('express-line-labels/sort', params)
 }
 //自定义标签 翻译
-exports.getTranslate = id => {
-  return $form.put(`express-line-labels/${id}/translate-data`)
+exports.getTranslate = (id, params) => {
+  return $form.put(`express-line-labels/${id}/translate-data`, params)
 }
 //自定义标签 批量删除
 exports.deleteLabel = ids => {

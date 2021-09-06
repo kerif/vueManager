@@ -145,6 +145,7 @@ export default {
     }
   },
   methods: {
+    // 上传数据
     getList() {
       this.tableLoading = true
       this.$request
