@@ -252,7 +252,6 @@ export default {
   methods: {
     getInvoiceDetail() {
       this.$request.invoiceDetail(this.$route.params.id).then(res => {
-        console.log(res)
         if (res.ret) {
           this.invoiceStatus = res.data
           this.costData = res.data.orderCostDetailed

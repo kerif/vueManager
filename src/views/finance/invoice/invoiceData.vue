@@ -79,7 +79,7 @@
         </el-table-column>
         <el-table-column prop="created_at" :label="$t('申请时间')" width="160"> </el-table-column>
         <el-table-column prop="handler" :label="$t('处理人')" width="160"> </el-table-column>
-        <el-table-column prop="handle_at" :label="$t('处理时间')" width="160"> </el-table-column>
+        <el-table-column prop="updated_at" :label="$t('处理时间')" width="160"> </el-table-column>
         <el-table-column prop="invoices_number" :label="$t('发票号码')"> </el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
@@ -164,7 +164,6 @@ export default {
       this.page_params.begin_date = this.timeList[0]
       this.page_params.end_date = this.timeList[1]
       this.$emit('passval', this.page_params)
-      console.log(this.page_params)
     }
   }
 }

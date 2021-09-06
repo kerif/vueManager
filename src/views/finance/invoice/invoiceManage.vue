@@ -27,7 +27,10 @@ export default {
   data() {
     return {
       activeName: '0',
-      page_params: {},
+      page_params: {
+        keyword: this.keyword,
+        state: ''
+      },
       all: [],
       pendData: [],
       invoicedData: [],
@@ -53,14 +56,10 @@ export default {
     getList(state, param_list) {
       this.$request
         .manageInvoice({
-          page: this.page_params.page,
-          size: this.page_params.size,
-          keyword: this.keyword,
-          state: state !== '0' ? state : '',
+          ...this.page_params,
           ...param_list
         })
         .then(res => {
-          console.log(res)
           if (res.ret) {
             this.all = res.data
             this.page_params.page = res.meta.current_page
@@ -78,7 +77,6 @@ export default {
     },
     getCounts() {
       this.$request.invoiceCount().then(res => {
-        console.log(res)
         this.countData = res.data
       })
     },
@@ -87,11 +85,10 @@ export default {
     },
     onTabChange(tab) {
       this.page_params.page = 1
-      this.getList(tab.name)
+      this.page_params.state = tab.name
+      this.getList()
     },
     onSearch(params) {
-      console.log(params, 'params')
-      console.log(this.activeName, 'this.activeName')
       this.page_params.page = 1
       this.getList(this.activeName, params)
     }
