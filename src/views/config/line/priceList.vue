@@ -70,11 +70,7 @@
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
-        <vxe-table-colgroup
-          v-for="config in ctableColumn"
-          :key="config.id"
-          :title="config.name + ' (' + $t('点击修改') + ')'"
-        >
+        <vxe-table-colgroup v-for="config in ctableColumn" :key="config.id" :title="config.name">
           <vxe-table-colgroup
             :title="config.areas"
             :field="config.field"
@@ -131,7 +127,7 @@ export default {
                   range = `(${ele.start / 1000}，${ele.end / 1000}]`
                 }
                 let unit_weight = ele.unit_weight / 1000
-                let price = ele.price / 100
+                let price = ele.price ? ele.price / 100 : this.$t('点击修改')
                 let first_weight = ele.first_weight / 1000
                 let priceId = ele.id
                 let type_weight = ''
@@ -219,10 +215,12 @@ export default {
             const areas = item.areas
               .map(item => item.country_name + item.area_name + item.sub_area_name)
               .join('、')
+            const name = item.enabled ? item.name : `${item.name}${this.$t('（未启用）')}`
             const field = `${item.id}_price`
             let editRender = { name: 'input', attrs: { type: 'text' } }
             return {
               ...item,
+              name,
               areas,
               field,
               editRender
@@ -262,27 +260,31 @@ export default {
     },
     editClosedEvent({ row, column }) {
       this.newField = column.property
-      this.newCellValue = row[this.newField] //价格
-      if (this.type === 0) {
-        this.region_id = +column.property.split('_')[1] //分区id
-        this.id = row[this.region_id] //价格id
-      } else if (this.type === 1) {
-        this.region_id = row.id //分区id
-        this.id = row[`${this.newField}_id`] //价格id
+      if (row[this.newField] > 0) {
+        this.newCellValue = row[this.newField] //价格
+        if (this.type === 0) {
+          this.region_id = +column.property.split('_')[1] //分区id
+          this.id = row[this.region_id] //价格id
+        } else if (this.type === 1) {
+          this.region_id = row.id //分区id
+          this.id = row[`${this.newField}_id`] //价格id
+        } else {
+          this.region_id = +this.newField.split('_')[0] //分区id
+          this.id = row[`${this.newField}_id`] //价格id
+        }
+        let obj = {
+          region_id: this.region_id,
+          prices: [
+            {
+              id: this.id,
+              price: +this.newCellValue
+            }
+          ]
+        }
+        this.params.push(obj)
       } else {
-        this.region_id = +this.newField.split('_')[0] //分区id
-        this.id = row[`${this.newField}_id`] //价格id
+        return false
       }
-      let obj = {
-        region_id: this.region_id,
-        prices: [
-          {
-            id: this.id,
-            price: +this.newCellValue
-          }
-        ]
-      }
-      this.params.push(obj)
     },
     editPrice() {
       if (!this.params.length) return
@@ -348,7 +350,6 @@ export default {
     },
     onUpload(file) {
       let params = new FormData()
-      console.log(params, 'params')
       params.append(`file`, file)
       return this.$request.importPrice(this.$route.params.id, params)
     }
