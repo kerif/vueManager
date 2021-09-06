@@ -75,8 +75,7 @@ export default {
       tableLoading: false,
       packageList: [],
       localization: {},
-      urlName: '',
-      file: ''
+      fileName: ''
     }
   },
   created() {},
@@ -87,7 +86,7 @@ export default {
       console.log(this.fileList)
       this.$request
         .importPackageData({
-          file: this.fileList
+          file: this.fileName
         })
         .then(res => {
           this.tableLoading = false
@@ -134,6 +133,7 @@ export default {
       let file = item.file
       console.log(file)
       this.onUpload(file).then(res => {
+        console.log(res)
         if (res.ret) {
           res.data.forEach(item => {
             this.fileList.push({
@@ -141,8 +141,8 @@ export default {
               url: item.path
             })
           })
-          this.urlName = res.data[0].name
-          console.log(this.urlName, 'urlName')
+          this.fileName = res.data[0].name
+          console.log(this.fileName, 'fileName')
           this.getList()
         }
       })
@@ -160,6 +160,7 @@ export default {
       console.log(fileList)
       this.fileList = fileList
     },
+    // 保存
     saveImport() {
       this.$request
         .packageLocationData({

@@ -132,6 +132,7 @@ export default {
     },
     submit() {
       let money = this.ruleForm.money
+      let invoices_number = this.ruleForm.invoices_number
       let enclosure = this.baleImgList
       let remarks = this.ruleForm.remarks
       if (this.state === 'complete') {
@@ -145,6 +146,7 @@ export default {
             order_id: this.order_id,
             invoices_id: this.invoices_id,
             money,
+            invoices_number,
             enclosure
           })
           .then(res => {
@@ -205,6 +207,7 @@ export default {
             order_id: this.order_id,
             invoices_id: this.invoices_id,
             money,
+            invoices_number,
             enclosure
           })
           .then(res => {
