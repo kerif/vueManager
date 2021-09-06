@@ -3,6 +3,7 @@
     <div class="btn">
       <add-btn router="addAgent" class="add-sty">{{ $t('添加代理') }}</add-btn>
       <add-btn router="agentTemplate">{{ $t('计佣模版配置') }}</add-btn>
+      <el-button type="primary" @click="updateAgentCode">{{ $t('更新代理二维码') }}</el-button>
       <div class="changeVou">
         <el-button @click="withdraw">{{ $t('提现说明') }}</el-button>
       </div>
@@ -281,6 +282,26 @@ export default {
           this.withdrawVisible = false
         }
       })
+    },
+    // 更新代理二维码
+    updateAgentCode() {
+      this.$confirm(this.$t('是否确认更新代理二维码'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      })
+        .then(() => {
+          this.$request.updateAgentCode().then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+            }
+          })
+        })
+        .catch(() => {})
     },
     // 提现说明
     withdraw() {
