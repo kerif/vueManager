@@ -44,7 +44,7 @@
           <el-table-column :label="$t('仓库')" prop="warehouse_name"> </el-table-column>
           <el-table-column :label="$t('货位')" prop="location"></el-table-column>
           <!-- 商品名称 -->
-          <el-table-column :label="$t('上架数量')" prop="packages_count"> </el-table-column>
+          <!-- <el-table-column :label="$t('上架数量')" prop="packages_count"> </el-table-column> -->
           <el-table-column :label="$t('包裹')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('操作')" width="260">
             <template slot-scope="scope">
@@ -82,25 +82,25 @@ export default {
   created() {},
   methods: {
     //上传获取解析后的数据
-    getList() {
-      this.tableLoading = true
-      this.$request.getPackageTemplate().then(res => {
-        this.tableLoading = false
-        if (res.ret) {
-          this.packageList = res.data
-          this.localization = res.localization
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
-    },
+    // getList() {
+    //   this.tableLoading = true
+    //   this.$request.getPackageTemplate().then(res => {
+    //     this.tableLoading = false
+    //     if (res.ret) {
+    //       this.packageList = res.data
+    //       this.localization = res.localization
+    //     } else {
+    //       this.$notify({
+    //         title: this.$t('操作失败'),
+    //         message: res.msg,
+    //         type: 'warning'
+    //       })
+    //     }
+    //   })
+    // },
     // 下载excel
     uploadList() {
-      this.$request.importPackage().then(res => {
+      this.$request.getPackageTemplate().then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           window.open(this.urlExcel)
@@ -126,15 +126,7 @@ export default {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          res.data.forEach(item => {
-            console.log(item, 'item')
-            this.fileList.push({
-              name: item.name,
-              url: item.path
-            })
-          })
-          this.urlName = res.data[0].name
-          this.getList()
+          this.packageList = res.data.data
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -147,17 +139,16 @@ export default {
     onUpload(file) {
       // 通过FormData对象上传文件
       let params = new FormData()
-      params.append(`files[${0}][file]`, file)
-      return this.$request.packageLocationData(params)
+      params.append(`file`, file)
+      return this.$request.importPackageData(params)
     },
-
     // 文件删除
     onFileRemove(file, fileList) {
       this.fileList = fileList
     },
     saveImport() {
       this.$request
-        .packageLocationData({
+        .savePackageData({
           ...this.packageList
         })
         .then(res => {

@@ -3219,11 +3219,11 @@ exports.getPackageTemplate = () => {
 }
 //预报包裹列表 批量上架 上传模板获取解析后的数据
 exports.importPackageData = file => {
-  return $form.post('packages/location-import-data', file)
+  return $file.post('packages/location-import-data', file)
 }
 //预报包裹列表 批量上架 导入包裹货位数据
-exports.packageLocationData = params => {
-  return $json.post('packages/location-import', params)
+exports.savePackageData = params => {
+  return $form.post('packages/location-import', params)
 }
 // 发货单 详情批量导出发货单
 exports.uploadShipmentLabel = (id, ids) => {
