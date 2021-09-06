@@ -3214,7 +3214,7 @@ exports.removePackage = (orderId, packageId) => {
   return $form.put(`orders/${orderId}/packages/${packageId}/remove`)
 }
 //预报包裹列表 批量上架 获取包裹货位导入模板
-exports.importPackage = () => {
+exports.getPackageTemplate = () => {
   return $form.get('packages/location-template')
 }
 //预报包裹列表 批量上架 上传模板获取解析后的数据

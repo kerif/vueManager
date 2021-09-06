@@ -84,30 +84,23 @@ export default {
     //上传获取解析后的数据
     getList() {
       this.tableLoading = true
-      console.log(this.fileList)
-      this.$request
-        .importPackageData({
-          file: this.fileList
-        })
-        .then(res => {
-          this.tableLoading = false
-          console.log(res)
-          if (res.ret) {
-            this.packageList = res.data
-            this.localization = res.localization
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      this.$request.getPackageTemplate().then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.packageList = res.data
+          this.localization = res.localization
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 下载excel
     uploadList() {
       this.$request.importPackage().then(res => {
-        console.log(res)
         if (res.ret) {
           this.urlExcel = res.data.url
           window.open(this.urlExcel)
@@ -130,20 +123,24 @@ export default {
     },
     // 自定义上传方法
     uploadBaleImg(item) {
-      console.log(item)
       let file = item.file
-      console.log(file)
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
+            console.log(item, 'item')
             this.fileList.push({
               name: item.name,
               url: item.path
             })
           })
           this.urlName = res.data[0].name
-          console.log(this.urlName, 'urlName')
           this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
@@ -151,13 +148,11 @@ export default {
       // 通过FormData对象上传文件
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
-      return this.$request.uploadFiles(params)
+      return this.$request.packageLocationData(params)
     },
 
     // 文件删除
     onFileRemove(file, fileList) {
-      console.log(file)
-      console.log(fileList)
       this.fileList = fileList
     },
     saveImport() {
