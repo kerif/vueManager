@@ -3,7 +3,7 @@
     <el-form>
       <el-form-item>
         <div style="text-align: right">
-          <el-button class="btn-light-red" @click="addProps">{{ $t('添加属性') }}</el-button>
+          <el-button class="btn-light-red" @click="addLabel">{{ $t('添加属性') }}</el-button>
         </div>
         <el-table
           :data="lineTable"
@@ -28,14 +28,13 @@
               <span
                 v-if="scope.row['trans_' + item.language_code]"
                 class="el-icon-check icon-sty"
-                @click="onProps(scope.row, item)"
               ></span>
-              <span v-else class="el-icon-plus icon-sty" @click="onProps(scope.row, item)"></span>
+              <span v-else class="el-icon-plus icon-sty"></span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('操作')" width="200">
             <template slot-scope="scope">
-              <el-button class="btn-dark-green" @click="editProps(scope.row.id, scope.row.name)">{{
+              <el-button class="btn-dark-green" @click="editLabel(scope.row.id, scope.row.name)">{{
                 $t('编辑')
               }}</el-button>
               <el-button class="btn-light-red" @click="handleClose(scope.row.id)">{{
@@ -86,37 +85,23 @@ export default {
       })
     },
     // 基础配置 修改语言
-    onProps(line, lang) {
-      this.transCode = line['trans_' + lang.language_code]
-      dialog({ type: 'propsLang', line: line, lang: lang, transCode: this.transCode }, () => {
-        this.getLineLabel()
-      })
-    },
-    getLineLabel() {
-      this.$request.lineLabel().then(res => {
-        console.log(res)
-        if (res.ret) {
-          this.lineTable = res.data
-          this.typeSendData = [...res.data]
-          this.$nextTick(() => {
-            this.typeRowDrop()
-          })
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
+    // onProps(line, lang) {
+    //   this.transCode = line['trans_' + lang.language_code]
+    //   dialog({ type: 'labelLang', line: line, lang: lang, transCode: this.transCode }, () => {
+    //     this.getLineLabel()
+    //   })
+    // },
+
+    // 翻译
     // 添加属性
-    addProps() {
-      dialog({ type: 'addLabel', state: 'add' }, () => {
+    addLabel() {
+      dialog({ type: 'addCustomLabel', state: 'add' }, () => {
         this.getLineLabel()
       })
     },
-    editProps(id, name) {
-      dialog({ type: 'addLabel', id: id, name: name, state: 'edit' }, () => {
+    // 编辑属性
+    editLabel(id, name) {
+      dialog({ type: 'addCustomLabel', id: id, name: name, state: 'edit' }, () => {
         this.getLineLabel()
       })
     },
@@ -179,6 +164,23 @@ export default {
               })
             }
           })
+      })
+    },
+    getLineLabel() {
+      this.$request.lineLabel().then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.lineTable = res.data
+          this.typeSendData = [...res.data]
+          this.$nextTick(() => {
+            this.typeRowDrop()
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     }
   }

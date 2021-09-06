@@ -47,12 +47,18 @@
           <el-table-column :label="$t('上架数量')" prop="packages_count"> </el-table-column>
           <el-table-column :label="$t('包裹')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('操作')" width="260">
-            <template>
+            <template slot-scope="scope">
               <!-- 删除 -->
-              <el-button class="btn-light-red">{{ $t('删除') }}</el-button>
+              <el-button class="btn-light-red" @click="deleteTrack(scope.$index, packageList)">{{
+                $t('删除')
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <div>
+          <span>货位:{{ this.packageList.locations_count }} 个</span
+          ><span style="margin-left: 10px">上架包裹:{{ this.packageList.packages_count }} 个</span>
+        </div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="saveImport">{{ $t('保存') }}</el-button>
@@ -75,8 +81,10 @@ export default {
   },
   created() {},
   methods: {
+    //上传获取解析后的数据
     getList() {
       this.tableLoading = true
+      console.log(this.fileList)
       this.$request
         .importPackageData({
           file: this.fileList
@@ -120,8 +128,11 @@ export default {
     handleExceed() {
       return this.$message.warning(this.$t('当前限制上传1个文件'))
     },
+    // 自定义上传方法
     uploadBaleImg(item) {
+      console.log(item)
       let file = item.file
+      console.log(file)
       this.onUpload(file).then(res => {
         if (res.ret) {
           res.data.forEach(item => {
@@ -137,12 +148,16 @@ export default {
       })
     },
     onUpload(file) {
+      // 通过FormData对象上传文件
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
       return this.$request.uploadFiles(params)
     },
+
     // 文件删除
     onFileRemove(file, fileList) {
+      console.log(file)
+      console.log(fileList)
       this.fileList = fileList
     },
     saveImport() {
@@ -166,6 +181,10 @@ export default {
             })
           }
         })
+    },
+    // 表格删除
+    deleteTrack(index, rows) {
+      rows.splice(index, 1)
     },
     beforeUploadImg() {}
   }
