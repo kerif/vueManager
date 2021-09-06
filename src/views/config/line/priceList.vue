@@ -30,7 +30,6 @@
         align="center"
         ref="cTable"
         class="x-table"
-        height="400"
         :data="ctableData"
         :span-method="mergeRowMethod"
         :edit-config="{ trigger: 'click', mode: 'cell' }"
