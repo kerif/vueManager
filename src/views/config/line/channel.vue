@@ -167,10 +167,26 @@
         <!-- 价格模式 -->
         <el-table-column :label="$t('价格模式')">
           <template slot-scope="scope">
-            <span v-if="scope.row.mode === 1">{{ $t('首重续重模式') }}</span>
-            <span v-if="scope.row.mode === 2">{{ $t('阶梯价格模式') }}</span>
-            <span v-if="scope.row.mode === 3">{{ $t('首重单位+阶梯价格模式') }}</span>
-            <span v-if="scope.row.mode === 4">{{ $t('多级续重模式') }}</span>
+            <span v-if="scope.row.mode === 1">
+              {{ $t('首重续重模式') }}
+              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
+              <span v-else>({{ $t('体积计费') }})</span>
+            </span>
+            <span v-if="scope.row.mode === 2"
+              >{{ $t('阶梯价格模式') }}
+              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
+              <span v-else>({{ $t('体积计费') }})</span>
+            </span>
+            <span v-if="scope.row.mode === 3"
+              >{{ $t('首重单位+阶梯价格模式') }}
+              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
+              <span v-else>({{ $t('体积计费') }})</span>
+            </span>
+            <span v-if="scope.row.mode === 4"
+              >{{ $t('多级续重模式') }}
+              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
+              <span v-else>({{ $t('体积计费') }})</span>
+            </span>
           </template>
         </el-table-column>
         <!-- 分区表 -->

@@ -78,9 +78,9 @@
       <!-- 快递单号 -->
       <el-table-column :label="$t('快递单号')" width="155">
         <template slot-scope="scope">
-          <span @click="goExpress(scope.row.express_num)" class="chooseOrder">{{
+          <el-button @click="oderDetails(scope.row.id)" type="text">{{
             scope.row.express_num
-          }}</span>
+          }}</el-button>
           <span
             :title="$t('复制单号')"
             class="copy-number"
@@ -210,6 +210,10 @@ export default {
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
+    },
+    // 详情
+    oderDetails(id) {
+      this.$router.push({ name: 'oderDetails', params: { id: id } })
     },
     goExpress(expressNum) {
       console.log(expressNum)
