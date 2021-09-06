@@ -80,13 +80,18 @@
             <!-- 包裹状态 -->
             <el-col :span="7" :offset="1">
               <span class="leftWidth">{{ $t('包裹状态') }}</span>
-              <span v-if="form.status === 0" style="color: red">{{ $t('无人认领') }}</span>
-              <span v-if="form.status === 1">{{ $t('未入库') }}</span
-              ><span v-if="form.status === 2">{{ $t('已入库') }}</span
-              ><span v-if="form.status === 3 || form.status === 4">{{ $t('已集包') }}</span
-              ><span v-if="form.status === 5">{{ $t('已发货') }}</span
-              ><span v-if="form.status === 6">{{ $t('已收货') }}</span
-              ><span v-if="form.status === 19">{{ $t('弃件') }}</span>
+              <span class="status-text" v-if="form.status === 0" style="color: red">{{
+                $t('无人认领')
+              }}</span>
+              <span class="status-text" v-if="form.status === 1">{{ $t('未入库') }}</span
+              ><span class="status-text" v-if="form.status === 2">{{ $t('已入库') }}</span
+              ><span class="status-text" v-if="form.status === 3 || form.status === 4">{{
+                $t('已集包')
+              }}</span
+              ><span class="status-text" v-if="form.status === 5">{{ $t('已发货') }}</span
+              ><span class="status-text" v-if="form.status === 6">{{ $t('已收货') }}</span
+              ><span class="status-text" v-if="form.status === 19">{{ $t('弃件') }}</span>
+              <span class="status-text" v-if="form.is_exceptional === 1">({{ $t('异常件') }})</span>
             </el-col>
           </el-row>
           <el-row class="container-center" :gutter="20">
@@ -97,8 +102,6 @@
             </el-col>
             <!-- 入库时间 -->
             <el-col :span="7" :offset="1">
-              <!-- <span class="leftWidth">{{ $t('入库时间') }}</span>
-              <span>{{ form.in_storage_at }}</span> -->
               <span class="leftWidth">{{ $t('预报仓库') }}</span>
               <span>{{ form.warehouse && form.warehouse.warehouse_name }}</span>
             </el-col>
@@ -113,77 +116,17 @@
           <el-row class="container-center" :gutter="20">
             <!-- 寄往仓库 -->
             <el-col :span="7">
-              <!-- <span class="leftWidth">{{ $t('寄往仓库') }}</span>
-              <span>{{ form.warehouse && form.warehouse.warehouse_name }}</span> -->
               <span class="leftWidth">{{ $t('预报时间') }}</span>
               <span>{{ form.created_at }}</span>
             </el-col>
             <!-- 寄往地区 -->
             <el-col :span="7" :offset="1">
-              <!-- <span class="leftWidth">{{ $t('寄往地区') }}</span>
-              <span>{{ form.country && form.country.name }}</span> -->
               <span class="leftWidth">{{ $t('物品属性') }}</span>
               <span v-for="item in form.props" :key="item.id">
                 {{ item.cn_name }}
               </span>
             </el-col>
-            <!-- 所属发货单 -->
-            <!-- <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{ $t('所属发货单') }}</span>
-              <span>{{ form.shipment_sn }}</span>
-            </el-col> -->
           </el-row>
-          <!-- <el-row class="container-center" :gutter="20">
-            <el-col :span="7">
-              <span class="leftWidth">{{ $t('入库重量') }}</span>
-              <span>{{ form.package_weight }}{{ localization.weight_unit }}</span>
-            </el-col>
-            <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{ $t('入库尺寸') }}</span>
-              <span>{{ form.dimension }}&nbsp;{{ localization.length_unit }}</span>
-            </el-col>
-            <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{ $t('备注') }}</span>
-              <span>{{ form.remark }}</span>
-            </el-col>
-          </el-row> -->
-          <!-- <el-row class="container-center" :gutter="20">
-            <el-col :span="7">
-              <span class="leftWidth">{{ $t('存放货位') }}</span>
-              <span>{{ form.location }}</span>
-              <span v-if="form.location_suffix !== ''">_{{ form.location_suffix }}</span>
-            </el-col>
-            <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{ $t('包裹编码') }}</span>
-              <span>{{ form.code }}</span>
-            </el-col>
-            <el-col :span="7" :offset="1">
-              <span class="leftWidth">{{ $t('弃件原因') }}</span>
-              <span>{{ form.reason }}</span>
-            </el-col>
-          </el-row> -->
-          <!-- <el-row class="container-center" :gutter="20">
-            <el-col>
-              <span class="leftWidth">{{ $t('服务') }}</span>
-              <span v-for="item in form.chosen_services" :key="item.id">
-                {{ item.name }}
-              </span>
-            </el-col>
-          </el-row> -->
-          <!-- <el-row class="container-center" :gutter="20">
-            <el-col>
-              <span class="leftWidth">{{ $t('物品属性') }}</span>
-              <span v-for="item in form.props" :key="item.id">
-                {{ item.cn_name }}
-              </span>
-            </el-col>
-          </el-row> -->
-          <!-- <el-row class="container-center" :gutter="20">
-            <el-col>
-              <span class="leftWidth">{{ $t('弃件原因') }}</span>
-              <span>{{ form.reason }}</span>
-            </el-col>
-          </el-row> -->
         </el-form>
       </div>
       <div class="receiverMSg msg-top">
@@ -394,6 +337,15 @@
         </el-col>
       </el-row>
     </div>
+    <div class="receiverMSg msg-top reson-sty number-top" v-if="form.is_exceptional === 1">
+      <el-row class="container-center" :gutter="20">
+        <!-- 物品名称 -->
+        <el-col>
+          <span class="leftWidth">{{ $t('异常件原因') }}</span>
+          <span style="color: red">{{ form.exceptional_remark }}</span>
+        </el-col>
+      </el-row>
+    </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog" />
@@ -541,6 +493,11 @@ export default {
     display: inline-block;
     width: 120px;
     font-weight: normal;
+  }
+  .status-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: blue;
   }
   .bale {
     .bale-left {

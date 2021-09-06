@@ -154,6 +154,16 @@
             >
               <i class="el-icon-warning" style="color: red"></i>
             </el-tooltip>
+
+            <el-tooltip
+              v-if="scope.row.is_exceptional === 1"
+              class="item"
+              effect="dark"
+              :content="scope.row.exceptional_remark"
+              placement="top-start"
+            >
+              <i class="el-icon-wind-power" style="color: red"></i>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column
