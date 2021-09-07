@@ -43,7 +43,7 @@
           <el-table-column type="index" width="55" align="center"></el-table-column>
           <el-table-column :label="$t('仓库')" prop="warehouse_name"> </el-table-column>
           <el-table-column :label="$t('货位')" prop="location"></el-table-column>
-          <!-- 商品名称 -->
+          <!-- 上架数量 -->
           <!-- <el-table-column :label="$t('上架数量')" prop="packages_count"> </el-table-column> -->
           <el-table-column :label="$t('包裹')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('操作')" width="260">

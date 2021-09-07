@@ -95,7 +95,8 @@ export default {
       subtotal: '',
       total: '',
       order_id: '',
-      invoices_id: ''
+      invoices_id: '',
+      create_detailed: []
     }
   },
   methods: {
