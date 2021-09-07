@@ -112,7 +112,7 @@
                 :label="'*' + $t('截止') + billingName + unitName + ' <'"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
+                  <el-input v-model="scope.row.end" @input="inputEnd(scope)"></el-input>
                 </template>
               </el-table-column>
               <el-table-column :label="$t('单位续重') + unitName">
@@ -449,7 +449,7 @@
       <div>
         <h3>【{{ $t('计费模式') }}】</h3>
         <h4>a) {{ $t('首重续重模式') }}</h4>
-        <div>{{ $t('：生成价格表样式如下时') }}:</div>
+        <div>{{ $t('例：生成价格表样式如下时') }}:</div>
         <img src="../../../assets/table2.png" />
         <div>{{ $t('计算方式（以分区一为例）') }}:</div>
         <div>0～5KG：{{ $t('总价') }}50</div>
@@ -743,6 +743,17 @@ export default {
           end: '',
           unit_weight: ''
         })
+      }
+    },
+    inputEnd(scope) {
+      if (this.form.mode === 1 || this.form.mode === 2 || this.form.mode === 5) {
+        console.log(this.form.grades.length, 'this.form.grades.length')
+        if (
+          this.form.grades.length - 1 > scope.$index &&
+          scope.$index !== this.form.grades.length - 1
+        ) {
+          this.form.grades[scope.$index + 1].start = this.form.grades[scope.$index].end
+        }
       }
     },
     deleteRow(index, rows) {
