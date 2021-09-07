@@ -69,7 +69,7 @@
         </el-button>
         <el-button
           class="btn-light-red"
-          v-if="activeName !== '6'"
+          v-if="activeName !== '1' && activeName !== '6'"
           @click="batchShelves"
           size="small"
           plain

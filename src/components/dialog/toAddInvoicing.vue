@@ -95,7 +95,8 @@ export default {
       subtotal: '',
       total: '',
       order_id: '',
-      invoices_id: ''
+      invoices_id: '',
+      create_detailed: []
     }
   },
   methods: {
@@ -147,7 +148,8 @@ export default {
             invoices_id: this.invoices_id,
             money,
             invoices_number,
-            enclosure
+            enclosure,
+            remarks
           })
           .then(res => {
             console.log(res)
@@ -176,8 +178,10 @@ export default {
             total: this.total,
             order_id: this.order_id,
             invoices_id: this.invoices_id,
-            remarks,
-            enclosure
+            money,
+            invoices_number,
+            enclosure,
+            remarks
           })
           .then(res => {
             console.log(res)
@@ -208,7 +212,8 @@ export default {
             invoices_id: this.invoices_id,
             money,
             invoices_number,
-            enclosure
+            enclosure,
+            remarks
           })
           .then(res => {
             console.log(res)

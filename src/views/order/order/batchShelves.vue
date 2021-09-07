@@ -43,7 +43,7 @@
           <el-table-column type="index" width="55" align="center"></el-table-column>
           <el-table-column :label="$t('仓库')" prop="warehouse_name"> </el-table-column>
           <el-table-column :label="$t('货位')" prop="location"></el-table-column>
-          <!-- 商品名称 -->
+          <!-- 上架数量 -->
           <!-- <el-table-column :label="$t('上架数量')" prop="packages_count"> </el-table-column> -->
           <el-table-column :label="$t('包裹')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('操作')" width="260">
@@ -56,8 +56,8 @@
           </el-table-column>
         </el-table>
         <div>
-          <span>货位:{{ this.packageList.locations_count }} 个</span
-          ><span style="margin-left: 10px">上架包裹:{{ this.packageList.packages_count }} 个</span>
+          <span>货位:{{ locations }} 个</span
+          ><span style="margin-left: 10px">上架包裹:{{ packages }} 个</span>
         </div>
       </el-form-item>
       <el-form-item>
@@ -76,7 +76,9 @@ export default {
       packageList: [],
       localization: {},
       urlName: '',
-      file: ''
+      file: '',
+      locations: '',
+      packages: ''
     }
   },
   created() {},
@@ -125,8 +127,11 @@ export default {
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
+        console.log(res)
         if (res.ret) {
           this.packageList = res.data.data
+          this.locations = res.data.locations_count
+          this.packages = res.data.packages_count
         } else {
           this.$notify({
             title: this.$t('操作失败'),

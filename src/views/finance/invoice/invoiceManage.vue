@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import invoiceData from './invoiceData.vue'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import invoiceData from './invoiceData.vue'
 export default {
   name: 'invoiceManage',
   data() {
@@ -85,8 +85,8 @@ export default {
     },
     onTabChange(tab) {
       this.page_params.page = 1
-      this.page_params.state = tab.name
-      this.getList()
+      this.page_params.state = tab.name == 0 ? '' : tab.name
+      this.getList(tab.name)
     },
     onSearch(params) {
       this.page_params.page = 1

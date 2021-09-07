@@ -15,6 +15,7 @@
         </el-select>
         <!-- 审核状态 -->
         <el-select
+          v-if="activeName !== '0' && activeName !== '12'"
           v-model="page_params.status"
           class="head-mr"
           :placeholder="$t('审核状态')"
@@ -136,6 +137,10 @@ export default {
     allData: {},
     totalSettlement: {
       type: Number,
+      required: true
+    },
+    activeName: {
+      type: String,
       required: true
     }
   },
