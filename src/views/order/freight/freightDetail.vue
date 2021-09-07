@@ -23,6 +23,14 @@
                 <span v-if="expressData.mode === 5">{{ $t('多级首重续重模式') }}</span>
               </span>
             </li>
+            <li>
+              <span>{{ $t('运费') }}：</span>
+              <span>{{ priceSymbol }}{{ expressData.expire_fee | formatPrice }}</span>
+            </li>
+            <li>
+              <span>{{ $t('计费重量') }}：</span>
+              <span>{{ expressData.count_weight | formatWeight }}{{ weightSymbol }}</span>
+            </li>
             <li v-if="expressData.base_mode === 1">
               <span>{{ $t('体积重量') }}：</span>
               <span>{{ $t('长') }}*{{ $t('宽') }}*{{ $t('高') }}/{{ expressData.factor }}</span>
@@ -217,6 +225,7 @@
   </div>
 </template>
 <script>
+import { formatFilter } from '@/mixin'
 export default {
   data() {
     return {
@@ -236,6 +245,7 @@ export default {
       regionDialog: false
     }
   },
+  mixins: [formatFilter],
   created() {
     this.getLocalization()
   },
@@ -321,10 +331,22 @@ export default {
       }
       this.tableData = this.tableData.map(item => {
         let range = ''
-        if (item.start === item.end) {
-          range = item.start / 1000
+        if (this.expressData.mode === 4) {
+          if (item.type === 0) {
+            if (item.start === item.end) {
+              range = item.start / 1000
+            } else {
+              range = `${item.start / 1000} ~ ${item.end / 1000}`
+            }
+          } else {
+            range = `${item.start / 1000}~${this.expressData.max_weight / 1000}`
+          }
         } else {
-          range = `${item.start / 1000} ~ ${item.end / 1000}`
+          if (item.start === item.end) {
+            range = item.start / 1000
+          } else {
+            range = `${item.start / 1000} ~ ${item.end / 1000}`
+          }
         }
         let weightSymbol = ''
         if (this.expressData.base_mode === 0) {
@@ -334,9 +356,14 @@ export default {
         }
         // 阶梯价格
         if (this.expressData.mode === 2) {
-          let regionPrice = `${item.base_price ? +item.base_price / 100 : ''}${
-            item.price ? '+' + item.price / 100 : ''
-          }/${weightSymbol}`
+          let regionPrice = ''
+          if (item.base_price && !item.price) {
+            regionPrice = `${item.base_price / 100}`
+          } else if (!item.base_price && item.price) {
+            regionPrice = `${item.price / 100}/${weightSymbol}`
+          } else {
+            regionPrice = `${item.base_price / 100}+${item.price / 100}/${weightSymbol}`
+          }
           return {
             range,
             regionPrice
