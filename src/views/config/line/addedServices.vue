@@ -1,85 +1,92 @@
 <template>
-  <div class="added-services">
-    <vxe-modal
-      v-model="dialogVisible"
-      @hide="closeDialog"
-      id="myModal6"
-      width="70%"
-      show-footer
-      esc-closable
-      type="modal"
-      :title="title"
-    >
-      <div>
-        <el-form ref="form" :model="form" label-width="120px">
-          <el-form-item :label="$t('增值费用名称')">
-            <el-input
-              v-model="form.name"
-              :placeholder="$t('请输入')"
-              style="width: 217px"
-            ></el-input>
-            <el-input
-              v-model="form.remark"
-              :placeholder="$t('请输入费用说明')"
-              style="width: 300px; padding-left: 20px"
-            ></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('类型')"
-            ><el-select v-model="form.type">
-              <el-option
-                v-for="item in typeList"
-                :key="item.value"
-                :value="item.value"
-                :label="item.label"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$t('收取方式')">
-            <el-select v-model="form.is_forced">
-              <el-option
-                v-for="item in forcedList"
-                :key="item.value"
-                :value="item.value"
-                :label="item.label"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$t('费用值')">
-            <vxe-table
-              border
-              resizable
-              show-overflow
-              align="center"
-              ref="xTable"
-              :data="detailsList"
-              :edit-config="{ trigger: 'click', mode: 'cell' }"
-            >
-              <vxe-table-column type="seq" title="分区" width="60"></vxe-table-column>
-              <vxe-table-column field="name" title="分区名称"></vxe-table-column>
-              <vxe-table-column field="areas" title="国家/地区"></vxe-table-column>
-              <vxe-table-column
-                field="value"
-                :title="$t('值(点击修改)')"
-                :edit-render="{ name: 'input', attrs: { type: 'text', placeholder: $t('请输入') } }"
-              ></vxe-table-column>
-            </vxe-table>
-          </el-form-item>
-        </el-form>
-        <h5>{{ $t('增值费用名称（多语言）') }}：</h5>
-        <el-form ref="langForm" :model="langForm" label-width="120px">
-          <el-form-item v-for="item in languageData" :key="item.code" :label="item.name">
-            <el-input
-              v-model="form.name_translations[item.code]"
-              :placeholder="$t(`请输入${item.name}费用名称`)"
-              style="width: 217px"
-            ></el-input>
-            <el-input
-              v-model="form.remark_translations[item.code]"
-              :placeholder="$t(`请输入${item.name}费用说明`)"
-              style="width: 300px; padding-left: 20px"
-            ></el-input>
-          </el-form-item>
-          <!-- <el-form-item label="English">
+  <div>
+    <h5 style="color: #f40b00">
+      *{{ $t('可在此界面设置渠道专用增值服务，如加固费、打包费、保价费、偏远地区配送费等。') }}
+    </h5>
+    <div class="added-services">
+      <vxe-modal
+        v-model="dialogVisible"
+        @hide="closeDialog"
+        id="myModal6"
+        width="70%"
+        show-footer
+        esc-closable
+        type="modal"
+        :title="title"
+      >
+        <div>
+          <el-form ref="form" :model="form" label-width="120px">
+            <el-form-item :label="$t('增值费用名称')">
+              <el-input
+                v-model="form.name"
+                :placeholder="$t('请输入')"
+                style="width: 217px"
+              ></el-input>
+              <el-input
+                v-model="form.remark"
+                :placeholder="$t('请输入费用说明')"
+                style="width: 300px; padding-left: 20px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('类型')"
+              ><el-select v-model="form.type">
+                <el-option
+                  v-for="item in typeList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('收取方式')">
+              <el-select v-model="form.is_forced">
+                <el-option
+                  v-for="item in forcedList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('费用值')">
+              <vxe-table
+                border
+                resizable
+                show-overflow
+                align="center"
+                ref="xTable"
+                :data="detailsList"
+                :edit-config="{ trigger: 'click', mode: 'cell' }"
+              >
+                <vxe-table-column type="seq" title="分区" width="60"></vxe-table-column>
+                <vxe-table-column field="name" title="分区名称"></vxe-table-column>
+                <vxe-table-column field="areas" title="国家/地区"></vxe-table-column>
+                <vxe-table-column
+                  field="value"
+                  :title="$t('值(点击修改)')"
+                  :edit-render="{
+                    name: 'input',
+                    attrs: { type: 'text', placeholder: $t('请输入') }
+                  }"
+                ></vxe-table-column>
+              </vxe-table>
+            </el-form-item>
+          </el-form>
+          <h5>{{ $t('增值费用名称（多语言）') }}：</h5>
+          <el-form ref="langForm" :model="langForm" label-width="120px">
+            <el-form-item v-for="item in languageData" :key="item.code" :label="item.name">
+              <el-input
+                v-model="form.name_translations[item.code]"
+                :placeholder="$t(`请输入${item.name}费用名称`)"
+                style="width: 217px"
+              ></el-input>
+              <el-input
+                v-model="form.remark_translations[item.code]"
+                :placeholder="$t(`请输入${item.name}费用说明`)"
+                style="width: 300px; padding-left: 20px"
+              ></el-input>
+            </el-form-item>
+            <!-- <el-form-item label="English">
             <el-input
               v-model="langForm.en_US"
               :placeholder="$t('请输入')"
@@ -103,55 +110,56 @@
               style="width: 300px"
             ></el-input>
           </el-form-item> -->
-        </el-form>
-      </div>
-      <span slot="footer">
-        <el-button type="primary" @click="save">{{ $t('确 定') }}</el-button>
-      </span>
-    </vxe-modal>
-    <vxe-grid
-      ref="xGrid"
-      resizable
-      auto-resize
-      show-overflow
-      highlight-hover-row
-      :export-config="{}"
-      :tooltip-config="{ enterable: true }"
-      :data="servicesList"
-      v-bind="gridOptions"
-    >
-      <template #toolbar_buttons>
-        <div style="display: flex; gap: 10px">
-          <el-button size="small" type="primary" plain @click="addServices">{{
-            $t('新增')
-          }}</el-button>
-          <el-upload
-            class="upload-demo"
-            action=""
-            :http-request="uploadBaleImg"
-            :show-file-list="false"
-          >
-            <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
-          </el-upload>
-          <el-button size="small" @click="exportDataEvent" type="success" plain>{{
-            $t('导出')
-          }}</el-button>
+          </el-form>
         </div>
-      </template>
-      <template #num1_header="{ column }">
-        <el-tooltip class="item" effect="dark" :content="column.params.tips" placement="top">
-          <div class="function">
-            <span>{{ column.title }}</span>
-            <span class="func-icon">
-              <i class="el-icon-edit-outline" @click="editRowEvent(column)"></i>
-              <i class="el-icon-delete" @click="deleteServices(column)"></i>
-            </span>
-            <!-- <vxe-button type="text" @click="editRowEvent(column)">{{ $t('编辑') }}</vxe-button> -->
-            <!-- <vxe-button type="text" @click="deleteServices(column)">{{ $t('删除') }}</vxe-button> -->
+        <span slot="footer">
+          <el-button type="primary" @click="save">{{ $t('确 定') }}</el-button>
+        </span>
+      </vxe-modal>
+      <vxe-grid
+        ref="xGrid"
+        resizable
+        auto-resize
+        show-overflow
+        highlight-hover-row
+        :export-config="{}"
+        :tooltip-config="{ enterable: true }"
+        :data="servicesList"
+        v-bind="gridOptions"
+      >
+        <template #toolbar_buttons>
+          <div style="display: flex; gap: 10px">
+            <el-button size="small" type="primary" plain @click="addServices">{{
+              $t('新增')
+            }}</el-button>
+            <el-upload
+              class="upload-demo"
+              action=""
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
+            >
+              <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
+            </el-upload>
+            <el-button size="small" @click="exportDataEvent" type="success" plain>{{
+              $t('导出')
+            }}</el-button>
           </div>
-        </el-tooltip>
-      </template>
-    </vxe-grid>
+        </template>
+        <template #num1_header="{ column }">
+          <el-tooltip class="item" effect="dark" :content="column.params.tips" placement="top">
+            <div class="function">
+              <span>{{ column.title }}</span>
+              <span class="func-icon">
+                <i class="el-icon-edit-outline" @click="editRowEvent(column)"></i>
+                <i class="el-icon-delete" @click="deleteServices(column)"></i>
+              </span>
+              <!-- <vxe-button type="text" @click="editRowEvent(column)">{{ $t('编辑') }}</vxe-button> -->
+              <!-- <vxe-button type="text" @click="deleteServices(column)">{{ $t('删除') }}</vxe-button> -->
+            </div>
+          </el-tooltip>
+        </template>
+      </vxe-grid>
+    </div>
   </div>
 </template>
 
