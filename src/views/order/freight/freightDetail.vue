@@ -222,7 +222,11 @@ export default {
     return {
       priceSymbol: '',
       weightSymbol: '',
-      expressData: {},
+      expressData: {
+        icon: {
+          icon: ''
+        }
+      },
       regions: [],
       activeName: '',
       tableData: [],
@@ -233,7 +237,6 @@ export default {
     }
   },
   created() {
-    this.getExpressDetail()
     this.getLocalization()
   },
   methods: {
@@ -243,6 +246,7 @@ export default {
         if (res.ret) {
           this.priceSymbol = res.localization.currency_unit
           this.weightSymbol = res.localization.weight_unit
+          this.getExpressDetail()
         }
       })
     },
@@ -266,16 +270,6 @@ export default {
       this.activeName = this.regions[0].name
       this.title = this.expressData.name
       this.handleClick()
-      // this.$request.getLineDetail(this.$route.params.id).then(res => {
-      //   if (res.ret) {
-      //     this.expressData = res.data
-      //     if (this.$route.params.regionId) {
-      //       this.regions = res.data.regions.filter(item => item.id === this.$route.params.regionId)
-      //     } else {
-      //       this.regions = res.data.regions
-      //     }
-      //   }
-      // })
     },
     handleClick(tab = 0) {
       this.tableData = this.regions[tab === 0 ? tab : tab.index].prices
@@ -340,7 +334,9 @@ export default {
         }
         // 阶梯价格
         if (this.expressData.mode === 2) {
-          let regionPrice = `${+item.base_price / 100}+${item.price / 100}/${weightSymbol}`
+          let regionPrice = `${item.base_price ? +item.base_price / 100 : ''}${
+            item.price ? '+' + item.price / 100 : ''
+          }/${weightSymbol}`
           return {
             range,
             regionPrice

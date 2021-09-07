@@ -51,6 +51,7 @@
         align="center"
         ref="cTable"
         class="x-table"
+        max-height="100%"
         :data="ctableData"
         :cell-style="cellStyle"
         :span-method="mergeRowMethod"
@@ -86,7 +87,7 @@
         ></vxe-table-colgroup>
         <vxe-table-colgroup>
           <vxe-table-colgroup
-            field="type"
+            field="textType"
             :title="$t('价格类型')"
             min-width="120"
           ></vxe-table-colgroup
@@ -164,8 +165,9 @@ export default {
                 let price = ''
                 let first_weight = ele.first_weight / 1000
                 let priceId = ele.id
+                let type = ele.type
                 let type_weight = ''
-                let type = ''
+                let textType = ''
                 if (!item.enabled) {
                   price = `${ele.price / 100}(${this.$t('点击修改')})`
                 } else {
@@ -174,36 +176,37 @@ export default {
                 if (this.type === 1) {
                   //首重续重
                   if (ele.type === 0) {
-                    type = this.$t('首费')
+                    textType = this.$t('首费')
                     unit_weight = '-'
                   } else {
-                    type = this.$t('续单价')
+                    textType = this.$t('续单价')
                   }
                 } else if (this.type === 2) {
                   //阶梯价格
-                  ele.type === 2 ? (type = this.$t('单价')) : (type = this.$t('基价'))
+                  ele.type === 2 ? (textType = this.$t('单价')) : (textType = this.$t('基价'))
                 } else if (this.type === 3) {
                   //首重+阶梯
-                  ele.type === 3 ? (type = this.$t('单价')) : (type = this.$t('阶梯总价'))
+                  ele.type === 3 ? (textType = this.$t('单价')) : (textType = this.$t('阶梯总价'))
                 } else if (this.type === 4) {
                   //多级续重
-                  ele.type === 0 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
+                  ele.type === 0 ? (textType = this.$t('首费')) : (textType = this.$t('续单价'))
                 } else if (this.type === 5) {
                   // 阶梯首重续重模式
-                  ele.type === 6 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
+                  ele.type === 6 ? (textType = this.$t('首费')) : (textType = this.$t('续单价'))
                   if (ele.type === 6) {
                     type_weight = first_weight
-                    type = this.$t('首费')
+                    textType = this.$t('首费')
                   } else {
                     type_weight = unit_weight
-                    type = this.$t('续单价')
+                    textType = this.$t('续单价')
                   }
                 }
                 return {
                   ...item,
                   range,
-                  unit_weight,
                   type,
+                  unit_weight,
+                  textType,
                   price,
                   priceId,
                   first_weight,
@@ -212,16 +215,17 @@ export default {
               })
             )
           })
+          console.log(this.ctableData, 'this.ctableData')
           this.ctableData.forEach(item => {
             item[`${item.id}_price`] = item.price
             item[`${item.id}_price_id`] = item.priceId
           })
           this.ctableData.sort((pre, next) => {
-            if (pre[`${pre.id}_price_id`] < next[`${next.id}_price_id`]) {
+            if (pre.range === next.range && pre.type < next.type) {
               return -1
-            } else if (pre[`${pre.id}_price_id`] === next[`${next.id}_price_id`]) {
+            } else if (pre.range === next.range && pre.type === next.type) {
               return 0
-            } else if (pre[`${pre.id}_price_id`] > next[`${next.id}_price_id`]) {
+            } else if (pre.range === next.range && pre.type > next.type) {
               return 1
             }
           })
@@ -264,7 +268,6 @@ export default {
             }
           })
           this.ctableData = arr
-          console.log(this.ctableData, 'this.ctableData')
           this.ctableColumn = res.data.map(item => {
             const areas = item.areas
               .map(item => item.country_name + item.area_name + item.sub_area_name)
@@ -286,13 +289,13 @@ export default {
     // 表格样式
     cellStyle({ row, column }) {
       if (column.property !== 'range' && column.property) {
-        if (row.type == '单价') {
+        if (row.textType == '单价') {
           return {
             backgroundColor: '#f2f2f2'
           }
         }
       }
-      if (row.type == '首费') {
+      if (row.textType == '首费') {
         return {
           backgroundColor: '#f2f2f2'
         }
@@ -391,7 +394,7 @@ export default {
         .priceTableCal({ region_id: this.lineId, weight: this.weight * 1000 })
         .then(res => {
           if (res.ret) {
-            this.amount = res.data.expire_fee
+            this.amount = res.data.expire_fee / 100
           }
         })
     },

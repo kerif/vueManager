@@ -2419,6 +2419,14 @@ exports.updatePickRules = (id, params) => {
 exports.deletePickRules = id => {
   return $form.delete(`self-pickup-stations/rules/${id}`)
 }
+// 营销管理 会员体系 等级配置 启用成长值、积分
+exports.updateGradeBtn = params => {
+  return $form.post(`member-config`, params)
+}
+// 营销管理 会员体系 等级配置 获取成长值、积分开关状态
+exports.getGradeBtn = () => {
+  return $form.get(`member-config/show`)
+}
 // 营销管理 会员体系 等级配置 列表
 exports.getGradeList = params => {
   return $form.get(`member-level`, { params })
