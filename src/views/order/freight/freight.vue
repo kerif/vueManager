@@ -7,16 +7,17 @@
             <el-cascader
               v-model="selectId"
               :options="countryList"
+              filterable
               :props="{ checkStrictly: true }"
               @change="onCountryChange"
               clearable
+              style="width: 100%"
             ></el-cascader>
             <el-form-item :label="`*${$t('寄往仓库')}`">
               <el-select
                 v-model="queryInfo.warehouse_id"
                 :placeholder="$t('请选择寄往仓库')"
                 class="long-item"
-                @change="onQuery('warehouse_id')"
               >
                 <el-option
                   v-for="item in warehouseList"
@@ -32,7 +33,6 @@
             <el-input
               :placeholder="$t('请输入实际重量')"
               v-model="queryInfo.weight"
-              @blur="onQuery('weight')"
               type="number"
             ></el-input>
           </el-form-item>
@@ -43,7 +43,6 @@
               multiple
               :placeholder="$t('请选择物品属性')"
               class="long-item"
-              @change="onQuery('prop_ids')"
             >
               <el-option
                 v-for="item in propList"
@@ -60,21 +59,18 @@
               type="number"
               class="short-item"
               v-model="queryInfo.length"
-              @blur="onQuery('length')"
             ></el-input>
             <el-input
               :placeholder="$t('宽')"
               type="number"
               class="short-item"
               v-model="queryInfo.width"
-              @blur="onQuery('width')"
             ></el-input>
             <el-input
               :placeholder="$t('高')"
               type="number"
               class="short-item"
               v-model="queryInfo.height"
-              @blur="onQuery('height')"
             ></el-input>
             <div class="calc-info">
               {{ $t('包裹尺寸为商品打包后，实际包裹箱的长宽高用于某些体积重量的线路运费计算') }}
@@ -151,24 +147,7 @@ export default {
   created() {
     this.getCountrys()
     this.getProps()
-    const query = this.$route.query
-    for (const key in query) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (query.hasOwnProperty(key) && query[key]) {
-        if (key === 'prop_ids') {
-          this.queryInfo[key] = query[key].split(',').map(item => Number(item))
-        } else {
-          this.queryInfo[key] = Number(query[key])
-        }
-        if (key === 'country_id') {
-          this.onCountryChange(false)
-        }
-      }
-    }
-    if (this.queryInfo.country_id && this.queryInfo.weight && this.queryInfo.prop_ids.length) {
-      this.onCountryChange(false)
-      this.onResult()
-    }
+    this.onCountryChange(false)
   },
   mixins: [formatFilter],
   methods: {
@@ -206,34 +185,21 @@ export default {
       this.$request.getPackage().then(res => {
         if (res.ret) {
           this.propList = res.data
-          console.log(res.localization, 'localization')
           this.localization = res.localization
         }
       })
     },
     // 根据所选国家拉取寄往仓库地址
-    onCountryChange(flag = true) {
-      this.lineList = []
-      ;[
-        this.queryInfo.country_id,
-        this.queryInfo.area_id,
-        this.queryInfo.sub_area_id
-      ] = this.selectId
-      flag && this.handleQueryChange('country_id', this.queryInfo.country_id)
-      this.$request
-        .getExpressFee({
-          country_id: this.queryInfo.country_id
-        })
-        .then(res => {
-          if (res.ret) {
-            this.warehouseList = res.data
-            // 默认选择第一个仓库
-            if (res.data.length && flag) {
-              this.queryInfo.warehouse_id = res.data[0].id
-              this.handleQueryChange('warehouse_id', res.data[0].id)
-            }
-          }
-        })
+    onCountryChange() {
+      this.queryInfo.country_id = this.selectId[0]
+      this.queryInfo.area_id = this.selectId[1] || ''
+      this.queryInfo.sub_area_id = this.selectId[2] || ''
+      this.$request.getExpressFee({ country_id: this.queryInfo.country_id }).then(res => {
+        if (res.ret) {
+          this.warehouseList = res.data
+          this.queryInfo.warehouse_id = res.data[0].id
+        }
+      })
     },
     // 计算结果
     onResult() {
@@ -272,38 +238,11 @@ export default {
     // 路线详情
     onDetail(item) {
       this.$router.push({
+        path: '/order/freight/detail/:id',
         name: 'freightDetail',
         params: { id: item.id },
-        query: {
-          count: JSON.stringify({
-            countWeight: item.count_weight,
-            exceptFee: item.expire_fee,
-            countFirst: item.count_first,
-            countNext: item.count_next
-          })
-        }
+        query: { region: JSON.stringify(item) }
       })
-    },
-    onQuery(key) {
-      let value = this.queryInfo[key]
-      if (key === 'prop_ids') {
-        value = value.join(',')
-      }
-      if (!value) return
-      this.handleQueryChange(key, value)
-    },
-    handleQueryChange(key, value) {
-      if (this.$route) {
-        const { name, params, query } = this.$route
-        this.$router.replace({
-          name,
-          params,
-          query: {
-            ...query,
-            [key]: value
-          }
-        })
-      }
     }
   }
 }
@@ -376,10 +315,14 @@ export default {
     font-size: 18px;
   }
   .result-item {
+    cursor: pointer;
     margin-bottom: 20px;
     border: 1px solid #f3f3f3;
     padding: 20px;
     position: relative;
+  }
+  .result-item:hover {
+    background-color: #f8f8f8;
   }
   .right-text {
     line-height: 40px;
