@@ -163,7 +163,7 @@ export default {
                 if (ele.start / 1000 === ele.end / 1000) {
                   range = ele.start / 1000
                 } else {
-                  range = `(${ele.start / 1000}，${ele.end / 1000}]`
+                  range = `[${ele.start / 1000}，${ele.end / 1000})`
                 }
                 let unit_weight = ele.unit_weight / 1000
                 let price = ''
