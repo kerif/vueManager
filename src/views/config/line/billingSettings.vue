@@ -422,78 +422,86 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="setVisible" :title="$t('抛货配置')">
-      <el-form></el-form>
-    </el-dialog>
-    <el-dialog :title="$t('计费价格模式说明')" :visible.sync="dialogDescription">
+    <el-dialog
+      :title="$t('计费价格模式说明')"
+      :visible.sync="dialogDescription"
+      class="billing-settings-dialog dialog-container"
+      width="50%"
+    >
       <div>
-        <h3>1、{{ $t('首重续重模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('运费=首费+续重*续费 (超出续重部分按下一续重计费)') }}</span
-          ><br />
-          <span>{{ $t('例如 若续重为每1kg，7.3KG包裹则按照8KG计费;') }} </span><br />
-          <span>{{ $t('若续重为每0.5kg，7.3KG包裹则按7.5KG计费') }}</span>
+        <h3>【{{ $t('价格配置方式') }}】</h3>
+        <div>{{ $t('价格设置需再在三个选项卡中配置') }}:</div>
+        <div>1、{{ $t('"计费设置"页面配置计费类型与首重、续重、重量阶梯等基础数据') }}</div>
+        <div>2、{{ $t('"分区表"中设置不同区域分组') }}</div>
+        <div>3、{{ $t('在1、2步骤完成后，系统生成空白"价格表"，在价格表中配置具体价格') }}</div>
+        <img src="../../../assets/table1.png" />
+      </div>
+      <div>
+        <h3>【{{ $t('计费维度') }}】</h3>
+        <div>
+          {{
+            $t(
+              '系统计费维度分为“重量计费“与”体积计费“，重量计费包含考虑体积重量的”全抛“与”半抛“模式；体积计费则根据包裹长宽高（cm）自动换算体积（立方米），以体积计算价格。'
+            )
+          }}
         </div>
       </div>
       <div>
-        <h3>2、{{ $t('阶梯价格模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('运费=对应阶梯单价*重量') }}</span
-          ><br />
-          <span>{{ $t('例如设置为') }}： </span><br />
-          <span>{{ $t('阶梯价格:1~5KG 价格10元，') }}</span
-          ><br />
-          <span>{{ $t(' 5~10kg价格8元，则7.3KG计费为:8*7.3') }}</span>
+        <h3>【{{ $t('计费模式') }}】</h3>
+        <h4>a) {{ $t('首重续重模式') }}</h4>
+        <div>{{ $t('：生成价格表样式如下时') }}:</div>
+        <img src="../../../assets/table2.png" />
+        <div>{{ $t('计算方式（以分区一为例）') }}:</div>
+        <div>0～5KG：{{ $t('总价') }}50</div>
+        <div>
+          5～10KG：{{ $t('首费') }}50+（{{ $t('总重量') }}-{{ $t('首重') }}5KG）*
+          {{ $t('续单价') }}18/KG
         </div>
-      </div>
-      <div>
-        <h3>3、{{ $t('单位价格+阶梯总价模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('运费=单位价格*重量+对应阶梯价格') }}</span
-          ><br />
-          <span>{{ $t('例如设置为') }}：</span><br />
-          <span>{{ $t('单位价格:5元') }}</span
-          ><br />
-          <span>{{ $t('阶梯价格:1~5KG 价格100元') }}</span
-          ><br />
-          <span>{{ $t(' 5~10kg价格180元，则7KG计费为:5*7+180') }}</span
-          ><br />
+        <div>
+          10～100KG：{{ $t('首费') }}50+ {{ $t('续费') }}5 * 18 +（{{ $t('总重量') }}-10）*
+          {{ $t('续单价') }}15/KG
         </div>
-      </div>
-      <div>
-        <h3>4、{{ $t('多级续重模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('运费=首费+续重*续费（可设置多级续重模式') }}</span
-          ><br />
-          <span>{{ $t('例如设置为') }}：</span><br />
-          <span>{{ $t('首重 5元/KG') }}</span
-          ><br />
-          <span>{{ $t('续重一：4元/1KG') }}</span
-          ><br />
-          <span>{{ $t('续重二：3元/0.5KG') }}</span
-          ><br />
-          <span>{{ $t('则1.4KG收费为5+3') }}</span
-          ><br />
-          <span>{{ $t('1.7KG收费为5+4') }}</span
-          ><br />
-          <span>{{ $t('2.3KG收费为5+4*1+3') }}</span
-          ><br />
+        <div>
+          100～999KG：{{ $t('首费') }}50+ {{ $t('续费') }}5 * 18 + {{ $t('续费') }}90 * 15 + （{{
+            $t('总重量')
+          }}-100）/5 * 35
         </div>
-      </div>
-      <div>
-        <h3>5、{{ $t('阶梯首重续重模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('按照计费重量所属阶梯的计费方式计费') }}</span
-          ><br />
-          <span>{{ $t('例如设置为') }}：</span><br />
-          <span>{{ $t('0～5KG') }}:</span><span>{{ $t('首费20/1KG，续费8/1KG') }}</span
-          ><br />
-          <span>{{ $t('5～20KG') }}:</span><span>{{ $t('首费25/3KG，续费6/1KG') }}</span
-          ><br />
-          <span>{{ $t('则当计费重量属于0～5KG时，按照前者计费') }}</span
-          ><br />
-          <span>{{ $t('计费重量属于5～20KG时按照后者计费') }}</span
-          ><br />
+        <div>{{ $t('注：灰色部分向上取整') }}</div>
+        <h4>b) {{ $t('阶梯价格模式') }}</h4>
+        <div>{{ $t('例：生成价格表样式如下时') }}:</div>
+        <img src="../../../assets/table3.png" />
+        <div>
+          {{ $t('计算方式：重量处于哪一个区间，即采用该区间对应的“基价”“单价”计算费用：') }}
+        </div>
+        <div>{{ $t('总费用= 基价 + 总重量 * 该区间单价') }}</div>
+        <h4>c) {{ $t('多级续重模式') }}</h4>
+        <div>{{ $t('例：生成价格表样式如下时') }}:</div>
+        <img src="../../../assets/table4.png" />
+        <div>{{ $t('计算方式') }}：</div>
+        <div>
+          {{ $t('假设计费重量为') }}5.8KG，{{ $t('首重') }}5，{{ $t('续重') }}0.8，{{
+            $t('大于')
+          }}0.5{{ $t('不足') }}1，{{ $t('计费为首费') }}50 + 8
+        </div>
+        <div>
+          {{ $t('假设计费重量为') }}5.4KG，{{ $t('首重') }}5，{{ $t('续重') }}0.5，{{
+            $t('大于')
+          }}0.3{{ $t('不足') }}0.5，{{ $t('计费为首费') }}50 + 5
+        </div>
+        <div>
+          {{ $t('假设计费重量为') }}5.2KG，{{ $t('首重') }}5，{{ $t('续重') }}0.2，{{
+            $t('不足')
+          }}0.3，{{ $t('计费为首费') }}50 + 4元
+        </div>
+        <h4>d) {{ $t('阶梯首重续重模式') }}</h4>
+        <div>{{ $t('例：生成价格表样式如下时') }}:</div>
+        <img src="../../../assets/table5.png" />
+        <div>
+          {{ $t('计算方式：重量处于哪一个区间，即采用该区间对应的“首费”“续单价”计算费用：') }}
+        </div>
+        <div>
+          {{ $t('总费用') }} = {{ $t('首费') }} + （{{ $t('总重量') }}-{{ $t('首重') }}） *
+          {{ $t('该区间续单价') }}
         </div>
       </div>
     </el-dialog>
@@ -588,7 +596,6 @@ export default {
       imgVisible: false,
       imgSrc: '',
       itemArr: {},
-      setVisible: false,
       dialogVisible: false,
       status: true,
       paramsOptions: [
@@ -716,12 +723,27 @@ export default {
     },
     // 新增行
     addRow() {
-      console.log(this.form.grades, 'this.form.grades')
-      this.form.grades.push({
-        start: '',
-        end: '',
-        unit_weight: ''
-      })
+      if (this.form.mode === 1 || this.form.mode === 2 || this.form.mode === 5) {
+        if (this.form.grades.length && this.form.grades[this.form.grades.length - 1].end) {
+          this.form.grades.push({
+            start: this.form.grades[this.form.grades.length - 1].end,
+            end: '',
+            unit_weight: ''
+          })
+        } else {
+          this.form.grades.push({
+            start: '',
+            end: '',
+            unit_weight: ''
+          })
+        }
+      } else {
+        this.form.grades.push({
+          start: '',
+          end: '',
+          unit_weight: ''
+        })
+      }
     },
     deleteRow(index, rows) {
       rows.splice(index, 1)
@@ -776,12 +798,17 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .billing-setting-container {
   background-color: #fff !important;
   padding: 20px;
   .country-select {
     width: 100%;
+  }
+  .billing-settings-dialog {
+    img {
+      max-width: 100%;
+    }
   }
   .sava-btn {
     min-width: 100px;

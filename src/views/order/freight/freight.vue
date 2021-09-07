@@ -104,7 +104,7 @@
                 {{ $t('运费') }}：{{ localization.currency_unit
                 }}{{ item.expire_fee | formatPrice }}
               </div>
-              <div>{{ $t('运送时效') }}：{{ item.reference_time }}</div>
+              <div>{{ $t('运送时效') }}：{{ item.region.reference_time }}</div>
               <div>
                 {{ $t('计费重量') }}：{{ item.count_weight | formatWeight }}
                 {{ localization.weight_unit }}
