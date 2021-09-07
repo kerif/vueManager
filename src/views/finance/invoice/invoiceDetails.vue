@@ -119,9 +119,37 @@
           {{ item.created_at }}&nbsp; {{ item.content }}&nbsp; {{ item.handler }}
         </div>
       </div>
-      <h3>{{ $t('审核备注') }}</h3>
+      <h3>{{ $t('开票备注') }}</h3>
       <div class="remarks-card">
-        <div class="condition">{{ invoiceStatus.remarks }}</div>
+        <div class="condition" v-if="invoiceStatus.state === 1">{{ $t('该申请还未开票') }}</div>
+        <div class="invoice-remark" v-if="invoiceStatus.state === 2">
+          <div class="text">{{ $t('开票金额:') }}{{ invoiceStatus.money }}</div>
+          <div class="text">{{ $t('发票号码:') }}{{ invoiceStatus.invoices_number }}</div>
+          <div class="text">{{ $t('备注:') }}{{ invoiceStatus.remarks }}</div>
+          <div class="screenshot">
+            <span
+              style="cursor: pointer"
+              @click.stop="
+                ;(imgSrc = `${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`), (imgVisible = true)
+              "
+            >
+              <img :src="`${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`" style="width: 100px" />
+            </span>
+          </div>
+        </div>
+        <div class="invoice-remark" v-if="invoiceStatus.state === 3">
+          <div class="text">{{ $t('备注:') }}</div>
+          <div class="screenshot">
+            <span
+              style="cursor: pointer"
+              @click.stop="
+                ;(imgSrc = `${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`), (imgVisible = true)
+              "
+            >
+              <img :src="`${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`" style="width: 100px" />
+            </span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="clearfix">
@@ -216,6 +244,11 @@
         <el-button type="primary" @click="recovery">{{ $t('恢复申请') }}</el-button>
       </el-row>
     </div>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -252,6 +285,7 @@ export default {
   methods: {
     getInvoiceDetail() {
       this.$request.invoiceDetail(this.$route.params.id).then(res => {
+        console.log(res)
         if (res.ret) {
           this.invoiceStatus = res.data
           this.costData = res.data.orderCostDetailed
@@ -274,6 +308,7 @@ export default {
           invoices_id: this.$route.params.id
         },
         () => {
+          this.getInvoiceDetail()
           this.$router.go(-1)
         }
       )
@@ -293,6 +328,7 @@ export default {
           invoices_id: this.$route.params.id
         },
         () => {
+          this.getInvoiceDetail()
           this.$router.go(-1)
         }
       )
@@ -312,6 +348,7 @@ export default {
           invoices_id: this.$route.params.id
         },
         () => {
+          this.getInvoiceDetail()
           this.$router.go(-1)
         }
       )
@@ -441,14 +478,16 @@ export default {
       .condition {
         text-align: center;
       }
+      .invoice-remark {
+        overflow: auto;
+      }
       .text {
-        padding: 5px 40px;
+        padding: 5px 20px;
       }
       .screenshot {
-        width: 260px;
-        height: 180px;
-        margin: 0 auto;
-        background-color: #ccc;
+        width: 100px;
+        height: 80px;
+        margin: 10px 20px;
       }
     }
   }
@@ -516,6 +555,12 @@ export default {
   }
   .col_green {
     color: green;
+  }
+  .img_box {
+    text-align: center;
+    .imgDialog {
+      width: 50%;
+    }
   }
 }
 </style>

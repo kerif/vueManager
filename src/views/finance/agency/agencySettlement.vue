@@ -6,6 +6,7 @@
           :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
+          :activeName="activeName"
           @passval="onSearch"
         />
       </el-tab-pane>
@@ -14,6 +15,7 @@
           :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
+          :activeName="activeName"
           @passval="onSearch"
         />
       </el-tab-pane>
@@ -22,6 +24,7 @@
           :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
+          :activeName="activeName"
           @passval="onSearch"
         />
       </el-tab-pane>
