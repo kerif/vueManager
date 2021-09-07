@@ -1,6 +1,6 @@
 <template>
   <div class="grade">
-    <h3>{{ $t('会员等级') }}</h3>
+    <div class="text-bold" style="font-size: 16px">{{ $t('会员等级') }}</div>
     <!-- 添加弹窗 -->
     <el-dialog
       :title="title"
@@ -28,9 +28,30 @@
         <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
+    <div class="text-bold">
+      <span style="margin-right: 20px">{{ $t('启用成长值') }}</span>
+      <el-switch
+        v-model="growth_value_status"
+        :active-value="1"
+        :inactive-value="0"
+        @change="updateBtn"
+      ></el-switch>
+    </div>
+    <div class="text-bold">
+      <span style="margin-right: 20px">{{ $t('启用积分') }}</span>
+      <el-switch
+        v-model="point_status"
+        :active-value="1"
+        :inactive-value="0"
+        @change="updateBtn"
+      ></el-switch>
+    </div>
+    <div class="text-bold">
+      <span style="margin-right: 10px">{{ $t('成长说明') }}</span>
+      <el-button size="small" @click="explain" class="btn-deep-blue">{{ $t('配置') }}</el-button>
+    </div>
     <div class="function-btn">
       <el-button size="small" @click="addGrade" type="primary">{{ $t('添加') }}</el-button>
-      <el-button size="small" @click="explain">{{ $t('等级说明') }}</el-button>
     </div>
     <div>
       <el-table :data="tableData" border style="width: 100%">
@@ -87,6 +108,8 @@ export default {
   mixins: [pagination],
   data() {
     return {
+      growth_value_status: 0,
+      point_status: 0,
       gradeDialog: false,
       gradeForm: {
         name: '',
@@ -109,6 +132,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getGradeBtn()
     this.getGradeTips()
     this.getLanguageList()
   },
@@ -123,6 +147,38 @@ export default {
           this.languageData = res.data
         }
       })
+    },
+    // 获取开关状态
+    getGradeBtn() {
+      this.$request.getGradeBtn().then(res => {
+        if (res.ret) {
+          this.growth_value_status = res.data.growth_value_status
+          this.point_status = res.data.point_status
+        }
+      })
+    },
+    // 更新开关
+    updateBtn() {
+      this.$request
+        .updateGradeBtn({
+          growth_value_status: this.growth_value_status,
+          point_status: this.point_status
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+          this.getGradeBtn()
+        })
     },
     //获取列表
     getList() {
@@ -268,8 +324,16 @@ export default {
 </script>
 <style scoped lang="scss">
 .grade {
+  padding: 30px;
+  overflow: hidden;
+  font-size: 14px;
+  background-color: #fff;
   .function-btn {
     margin-bottom: 20px;
+  }
+  .text-bold {
+    font-weight: bold;
+    padding-bottom: 20px;
   }
   .lang-sty {
     line-height: 40px;
