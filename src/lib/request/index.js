@@ -825,7 +825,7 @@ exports.manageInvoice = params => {
 }
 // 发票管理 详情
 exports.invoiceDetail = id => {
-  return $form.get(`invoice/${id}`)
+  return $json.get(`invoice/${id}`)
 }
 // 发票管理 搜索
 exports.searchMode = params => {
@@ -837,19 +837,19 @@ exports.invoiceCount = () => {
 }
 // 发票管理 开票完成
 exports.invoiceComplete = (id, params) => {
-  return $form.put(`invoice/complete/${id}`, params)
+  return $json.put(`invoice/complete/${id}`, params)
 }
 // 发票管理 开票作废
 exports.invoiceVoid = (id, params) => {
-  return $form.put(`invoice/to-void/${id}`, params)
+  return $json.put(`invoice/to-void/${id}`, params)
 }
 // 发票管理 重新开票
 exports.invoiceReopen = (id, params) => {
-  return $form.put(`invoice/reopen/${id}`, params)
+  return $json.put(`invoice/reopen/${id}`, params)
 }
 // 发票管理 开票作废
 exports.invoiceRecovery = (id, params) => {
-  return $form.put(`invoice/recovery/${id}`, params)
+  return $json.put(`invoice/recovery/${id}`, params)
 }
 // 计佣模版配置 获取form表单详情
 exports.commissionSet = id => {
