@@ -1,19 +1,40 @@
 <template>
   <div class="price-list">
     <div class="title">{{ name }}{{ $t('价格表') }}</div>
-    <div class="func-btn">
-      <el-upload
-        class="upload-demo"
-        action=""
-        :http-request="uploadBaleImg"
-        :show-file-list="false"
-      >
-        <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
-      </el-upload>
-      <el-button size="small" type="success" plain @click="exportPrice" style="margin-left: 10px">{{
-        $t('导出')
-      }}</el-button>
-      <span class="tips">{{ $t('可导出价格表批量修改后，再导入表格') }}</span>
+    <div style="display: flex; justify-content: space-between">
+      <div class="func-btn">
+        <el-upload
+          class="upload-demo"
+          action=""
+          :http-request="uploadBaleImg"
+          :show-file-list="false"
+        >
+          <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
+        </el-upload>
+        <el-button
+          size="small"
+          type="success"
+          plain
+          @click="exportPrice"
+          style="margin-left: 10px"
+          >{{ $t('导出') }}</el-button
+        >
+        <span class="tips">{{ $t('可导出价格表批量修改后，再导入表格') }}</span>
+      </div>
+      <div class="calculation-btn">
+        <div style="flex-shrink: 0">{{ $t('运费试算') }}</div>
+        <el-select v-model="lineId" style="width: 120px">
+          <el-option
+            v-for="item in lineData"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          ></el-option>
+        </el-select>
+        <el-input v-model="weight" :placeholder="$t('请输入重量')" style="width: 120px"></el-input>
+        <el-button size="small" type="primary" @click="calculation">{{ $t('计算') }}</el-button>
+        <div class="amount" v-if="amount >= 0">{{ localization.currency_unit }}{{ amount }}</div>
+      </div>
     </div>
     <div>
       <p v-if="type === 1">{{ $t('首重续重模式') }}</p>
@@ -30,8 +51,8 @@
         align="center"
         ref="cTable"
         class="x-table"
-        height="400"
         :data="ctableData"
+        :cell-style="cellStyle"
         :span-method="mergeRowMethod"
         :edit-config="{ trigger: 'click', mode: 'cell' }"
         @edit-closed="editClosedEvent"
@@ -90,6 +111,10 @@ export default {
   data() {
     return {
       type: 0, //1.首重续重 2.阶梯价格 3.首重+阶梯 4.多级续重 5.阶梯首重续重模式
+      weight: '',
+      lineId: '',
+      lineData: [],
+      amount: -1,
       baseMode: 0,
       tableColumn: [],
       tableData: [],
@@ -113,10 +138,19 @@ export default {
     this.getList()
   },
   methods: {
+    // 表格数据
     getPriceTable() {
       this.$request.getPriceTable(this.$route.params.id).then(res => {
         if (res.ret) {
           this.localization = res.localization
+          this.lineData = res.data.map(item => {
+            let id = item.id
+            let name = item.name
+            return {
+              id,
+              name
+            }
+          })
           res.data.forEach(item => {
             this.ctableData.push(
               ...item.prices.map(ele => {
@@ -127,14 +161,24 @@ export default {
                   range = `(${ele.start / 1000}，${ele.end / 1000}]`
                 }
                 let unit_weight = ele.unit_weight / 1000
-                let price = ele.price ? ele.price / 100 : this.$t('点击修改')
+                let price = ''
                 let first_weight = ele.first_weight / 1000
                 let priceId = ele.id
                 let type_weight = ''
                 let type = ''
+                if (!item.enabled) {
+                  price = `${ele.price / 100}(${this.$t('点击修改')})`
+                } else {
+                  price = ele.price / 100
+                }
                 if (this.type === 1) {
                   //首重续重
-                  ele.type === 0 ? (type = this.$t('首费')) : (type = this.$t('续单价'))
+                  if (ele.type === 0) {
+                    type = this.$t('首费')
+                    unit_weight = '-'
+                  } else {
+                    type = this.$t('续单价')
+                  }
                 } else if (this.type === 2) {
                   //阶梯价格
                   ele.type === 2 ? (type = this.$t('单价')) : (type = this.$t('基价'))
@@ -171,6 +215,15 @@ export default {
           this.ctableData.forEach(item => {
             item[`${item.id}_price`] = item.price
             item[`${item.id}_price_id`] = item.priceId
+          })
+          this.ctableData.sort((pre, next) => {
+            if (pre[`${pre.id}_price_id`] < next[`${next.id}_price_id`]) {
+              return -1
+            } else if (pre[`${pre.id}_price_id`] === next[`${next.id}_price_id`]) {
+              return 0
+            } else if (pre[`${pre.id}_price_id`] > next[`${next.id}_price_id`]) {
+              return 1
+            }
           })
           let arr = []
           this.ctableData.forEach(item => {
@@ -211,6 +264,7 @@ export default {
             }
           })
           this.ctableData = arr
+          console.log(this.ctableData, 'this.ctableData')
           this.ctableColumn = res.data.map(item => {
             const areas = item.areas
               .map(item => item.country_name + item.area_name + item.sub_area_name)
@@ -229,6 +283,22 @@ export default {
         }
       })
     },
+    // 表格样式
+    cellStyle({ row, column }) {
+      if (column.property !== 'range' && column.property) {
+        if (row.type == '单价') {
+          return {
+            backgroundColor: '#f2f2f2'
+          }
+        }
+      }
+      if (row.type == '首费') {
+        return {
+          backgroundColor: '#f2f2f2'
+        }
+      }
+    },
+    // 合并表格行函数
     mergeRowMethod({ row, _rowIndex, column, visibleData }) {
       const fields = ['range', 'unit_weight', 'first_weight']
       const cellValue = row[column.property]
@@ -248,6 +318,7 @@ export default {
         }
       }
     },
+    // 获取渠道名称
     getList() {
       this.$request.getBillingConfig(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -258,9 +329,10 @@ export default {
         }
       })
     },
+    // 编辑单元格关闭时触发
     editClosedEvent({ row, column }) {
       this.newField = column.property
-      if (row[this.newField] > 0) {
+      if (row[this.newField] >= 0) {
         this.newCellValue = row[this.newField] //价格
         if (this.type === 0) {
           this.region_id = +column.property.split('_')[1] //分区id
@@ -286,6 +358,7 @@ export default {
         return false
       }
     },
+    // 保存
     editPrice() {
       if (!this.params.length) return
       this.$request.editPrice(this.$route.params.id, this.params).then(res => {
@@ -310,6 +383,19 @@ export default {
       this.region_id = ''
       this.id = ''
     },
+    // 运费试算
+    calculation() {
+      if (!this.lineId) return this.$message.error(this.$t('请选择分区'))
+      if (!this.weight) return this.$message.error(this.$t('请输入重量'))
+      this.$request
+        .priceTableCal({ region_id: this.lineId, weight: this.weight * 1000 })
+        .then(res => {
+          if (res.ret) {
+            this.amount = res.data.expire_fee
+          }
+        })
+    },
+    // 导出
     exportPrice() {
       this.$request.exportPrice(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -327,6 +413,7 @@ export default {
         }
       })
     },
+    // 导入
     uploadBaleImg(item) {
       let file = item.file
       let params = new FormData()
@@ -348,6 +435,7 @@ export default {
         }
       })
     },
+    // 导入
     onUpload(file) {
       let params = new FormData()
       params.append(`file`, file)
@@ -368,6 +456,15 @@ export default {
   .func-btn {
     display: flex;
     align-items: flex-end;
+  }
+  .amount {
+    color: #dc143c;
+    font-size: 16px;
+  }
+  .calculation-btn {
+    display: flex;
+    gap: 10px;
+    align-items: center;
   }
   .tips {
     padding-left: 20px;

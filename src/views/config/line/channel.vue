@@ -165,7 +165,7 @@
         <!-- 线路名称 -->
         <el-table-column :label="$t('渠道名称')" prop="name"></el-table-column>
         <!-- 价格模式 -->
-        <el-table-column :label="$t('价格模式')">
+        <el-table-column :label="$t('价格模式')" width="150">
           <template slot-scope="scope">
             <span v-if="scope.row.mode === 1">
               {{ $t('首重续重模式') }}
@@ -184,6 +184,11 @@
             </span>
             <span v-if="scope.row.mode === 4"
               >{{ $t('多级续重模式') }}
+              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
+              <span v-else>({{ $t('体积计费') }})</span>
+            </span>
+            <span v-if="scope.row.mode === 5"
+              >{{ $t('阶梯首重续重模式') }}
               <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
               <span v-else>({{ $t('体积计费') }})</span>
             </span>

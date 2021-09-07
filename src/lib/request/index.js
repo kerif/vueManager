@@ -345,11 +345,15 @@ exports.newTmp = params => {
 exports.deleteTmp = id => {
   return $form.delete(`express-lines/region-templates/${id}`)
 }
+// 配置 新路线 价格表 运费试算
+exports.priceTableCal = params => {
+  return $form.post(`express-lines/price-test`, params)
+}
 // 配置 新路线 获取价格表
 exports.getPriceTable = (id, params) => {
   return $form.get(`express-lines/${id}/prices`, params)
 }
-// 配置 新路线 获取价格表
+// 配置 新路线 保存价格表
 exports.editPrice = (id, params) => {
   return $form.put(`express-lines/${id}/prices`, params)
 }
