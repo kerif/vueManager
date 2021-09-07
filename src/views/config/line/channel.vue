@@ -164,14 +164,19 @@
         </el-table-column>
         <!-- 线路名称 -->
         <el-table-column :label="$t('渠道名称')" prop="name"></el-table-column>
-        <!-- 支持国家/地区 -->
-        <!-- <el-table-column :label="$t('支持国家/地区')" :show-overflow-tooltip="true" width="150">
+        <!-- 价格模式 -->
+        <el-table-column :label="$t('价格模式')" width="150">
           <template slot-scope="scope">
             <span v-for="item in scope.row.countries" :key="item.id">
               {{ item.name }}
             </span>
+            <span v-if="scope.row.mode === 5"
+              >{{ $t('阶梯首重续重模式') }}
+              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
+              <span v-else>({{ $t('体积计费') }})</span>
+            </span>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <!-- 价格模式 -->
         <el-table-column :label="$t('价格模式')">
           <template slot-scope="scope">

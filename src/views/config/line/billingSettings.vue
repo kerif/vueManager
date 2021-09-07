@@ -541,10 +541,6 @@ export default {
           name: this.$t('阶梯价格模式')
         },
         {
-          id: 3,
-          name: this.$t('单位价格+阶梯总价模式')
-        },
-        {
           id: 4,
           name: this.$t('多级续重模式')
         },
