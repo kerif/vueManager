@@ -61,7 +61,7 @@
             <!-- 客户备注 -->
             <el-col :span="8" :offset="4">
               <span class="withdrawal">{{ $t('客户备注：') }}</span>
-              <span>{{ detailData.customer_remark }}</span>
+              <span>{{ detailData.remark }}</span>
             </el-col>
           </el-row>
           <div class="main">
@@ -172,7 +172,7 @@
             <!-- 客户备注 -->
             <el-col :span="8" :offset="4">
               <span class="withdrawal">{{ $t('客户备注：') }}</span>
-              <span>{{ detailData.customer_remark }}</span>
+              <span>{{ detailData.remark }}</span>
             </el-col>
           </el-row>
         </div>
@@ -189,9 +189,22 @@
           </div>
           <div v-else>
             <div class="text">
-              {{ detailData.remark }}
+              {{ detailData.customer_remark }}
             </div>
-            <div class="screenshot"></div>
+            <div class="screenshot" v-if="detailData.customer_images">
+              <span
+                style="cursor: pointer"
+                @click.stop="
+                  ;(imgSrc = `${$baseUrl.IMAGE_URL}${detailData.customer_images}`),
+                    (imgVisible = true)
+                "
+              >
+                <img
+                  :src="`${$baseUrl.IMAGE_URL}${detailData.customer_images}`"
+                  style="width: 100px"
+                />
+              </span>
+            </div>
           </div>
         </div>
         <div class="verify-card" v-else>
@@ -200,9 +213,22 @@
           </div>
           <div v-else>
             <div class="text">
-              {{ detailData.remark }}
+              {{ detailData.customer_remark }}
             </div>
-            <div class="screenshot"></div>
+            <div class="screenshot" v-if="detailData.customer_images">
+              <span
+                style="cursor: pointer"
+                @click.stop="
+                  ;(imgSrc = `${$baseUrl.IMAGE_URL}${detailData.customer_images}`),
+                    (imgVisible = true)
+                "
+              >
+                <img
+                  :src="`${$baseUrl.IMAGE_URL}${detailData.customer_images}`"
+                  style="width: 100px"
+                />
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -229,7 +255,7 @@
             <el-table-column prop="order_number" label="订单号"></el-table-column>
             <el-table-column prop="order_status" label="状态"></el-table-column>
             <el-table-column prop="order_amount" label="总金额￥"></el-table-column>
-            <el-table-column prop="proportion" label="佣金方式"></el-table-column>
+            <!-- <el-table-column prop="proportion" label="佣金方式"></el-table-column> -->
             <el-table-column prop="commission_amount" label="可得佣金￥"></el-table-column>
           </el-table>
         </div>
@@ -434,7 +460,6 @@ export default {
         width: 80%;
         height: 180px;
         margin: 0 auto;
-        background-color: #ccc;
       }
       .daily-card {
         height: 88px;

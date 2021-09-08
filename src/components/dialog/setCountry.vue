@@ -5,6 +5,13 @@
     class="set-country-dialog"
     @close="clear"
   >
+    <div class="remark">
+      {{
+        $t(
+          '注:添加国家后，请先在【仓库配置】中将该国家加入支持收货的仓库，否则配置渠道时无法通过【仓库】匹配到该国家'
+        )
+      }}
+    </div>
     <el-form label-width="80" :model="ruleForm">
       <el-form-item :label="$t('国家/地区：')">
         <el-autocomplete
@@ -87,6 +94,10 @@ export default {
 <style lang="scss" scope>
 .el-autocomplete-suggestion {
   z-index: 4000 !important;
+}
+.remark {
+  color: red;
+  margin-bottom: 10px;
 }
 .set-country-dialog {
   .el-dialog__header {

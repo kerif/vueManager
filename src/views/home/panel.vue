@@ -884,6 +884,7 @@ export default {
       console.log(id, 'type_id')
     },
     goRouter(id, route) {
+      this.showTips = false
       this.$request.updateGuides(id)
       this.$router.push(`/${route}`)
     },

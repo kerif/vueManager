@@ -126,8 +126,6 @@
   </div>
 </template>
 <script>
-// import NlePagination from '@/components/pagination'
-// import { pagination } from '@/mixin'
 export default {
   // components: {
   //   NlePagination

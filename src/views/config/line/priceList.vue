@@ -69,11 +69,7 @@
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
-        <vxe-table-colgroup
-          v-for="config in ctableColumn"
-          :key="config.id"
-          :title="config.name + ' (' + $t('点击修改') + ')'"
-        >
+        <vxe-table-colgroup v-for="config in ctableColumn" :key="config.id" :title="config.name">
           <vxe-table-colgroup
             :title="config.areas"
             :field="config.field"

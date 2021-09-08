@@ -68,11 +68,10 @@
           {{ $t('导出清单') }}
         </el-button>
         <el-button
-          class="btn-yellow"
+          class="btn-light-red"
           v-if="activeName !== '6'"
           @click="batchShelves"
           size="small"
-          type="success"
           plain
         >
           {{ $t('批量上架') }}
@@ -738,7 +737,7 @@ export default {
       this.$request.uploadPackage(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
-          window.open(this.urlExcel)
+          // window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,

@@ -118,6 +118,7 @@ import growthValueBuy from './growthValueBuy.vue'
 import baseTable from './baseTable.vue'
 import discountTable from './discountTable.vue'
 import salesAddEdit from './salesAddEdit.vue'
+import addLabel from './addLabel.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -236,6 +237,7 @@ const GrowthValueBuy = Vue.extend(growthValueBuy)
 const BaseTable = Vue.extend(baseTable)
 const DiscountTable = Vue.extend(discountTable)
 const SalesAddEditController = Vue.extend(salesAddEdit)
+const AddLabelController = Vue.extend(addLabel)
 
 const mixin = {
   data() {
@@ -530,6 +532,13 @@ function initInstance(type) {
     // 作废订单
     case 'voidList':
       instance = new VoidListController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自定义标签 新增 编辑
+    case 'addLabel':
+      instance = new AddLabelController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

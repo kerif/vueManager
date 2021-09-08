@@ -6,6 +6,13 @@
     @close="clear"
     width="65%"
   >
+    <div class="remark">
+      {{
+        $t(
+          '注：新增分区后，该分区默认为未开启状态，同时会生成该分区对应的空白价格表，请先前往【价格表】配置价格后，再开启该分区投入使用。'
+        )
+      }}
+    </div>
     <el-form ref="form" :model="ruleForm" class="commission-top">
       <el-form-item :label="$t('分区名称')">
         <el-input class="input-sty" v-model="ruleForm.name"></el-input>
@@ -337,6 +344,10 @@ export default {
 .dialog-partition-add-edit {
   .pagination-box {
     margin-top: 10px;
+  }
+  .remark {
+    color: red;
+    margin-bottom: 10px;
   }
   .el-dialog__header {
     background-color: #0e102a;
