@@ -1,7 +1,7 @@
 <template>
   <div class="system">
     <el-tabs v-model="activeName">
-      <el-tab-pane label="等级配置" name="first" :lazy="true">
+      <el-tab-pane label="基础配置" name="first" :lazy="true">
         <grade />
       </el-tab-pane>
       <el-tab-pane label="收支规则" name="second" :lazy="true">

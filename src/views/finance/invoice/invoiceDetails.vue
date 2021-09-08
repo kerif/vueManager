@@ -127,27 +127,35 @@
           <div class="text">{{ $t('发票号码:') }}{{ invoiceStatus.invoices_number }}</div>
           <div class="text">{{ $t('备注:') }}{{ invoiceStatus.remarks }}</div>
           <div class="screenshot">
-            <span
+            <!-- <span
               style="cursor: pointer"
               @click.stop="
                 ;(imgSrc = `${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`), (imgVisible = true)
               "
             >
               <img :src="`${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`" style="width: 100px" />
-            </span>
+            </span> -->
+            <img
+              style="cursor: pointer; width: 100px"
+              v-for="item in invoiceStatus.enclosure"
+              :key="item.index"
+              class="image"
+              :src="$baseUrl.IMAGE_URL + item"
+              @click="checkImg(item)"
+            />
           </div>
         </div>
         <div class="invoice-remark" v-if="invoiceStatus.state === 3">
-          <div class="text">{{ $t('备注:') }}</div>
+          <div class="text">{{ $t('备注:') }}{{ invoiceStatus.remarks }}</div>
           <div class="screenshot">
-            <span
-              style="cursor: pointer"
-              @click.stop="
-                ;(imgSrc = `${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`), (imgVisible = true)
-              "
-            >
-              <img :src="`${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`" style="width: 100px" />
-            </span>
+            <img
+              style="cursor: pointer; width: 100px"
+              v-for="item in invoiceStatus.enclosure"
+              :key="item.index"
+              class="image"
+              :src="$baseUrl.IMAGE_URL + item"
+              @click="checkImg(item)"
+            />
           </div>
         </div>
       </div>
@@ -244,9 +252,10 @@
         <el-button type="primary" @click="recovery">{{ $t('恢复申请') }}</el-button>
       </el-row>
     </div>
-    <el-dialog :visible.sync="imgVisible" size="small">
-      <div class="img_box">
-        <img :src="imgSrc" class="imgDialog" />
+    <!-- 查看图片 -->
+    <el-dialog :visible.sync="imgDialog">
+      <div style="text-align: center">
+        <img :src="imgUrl" style="max-width: 100%" />
       </div>
     </el-dialog>
   </div>
@@ -268,7 +277,9 @@ export default {
       subtotal: '',
       total: '',
       order_id: '',
-      invoices_id: ''
+      invoices_id: '',
+      imgDialog: false,
+      imgUrl: ''
     }
   },
   created() {
@@ -285,13 +296,16 @@ export default {
   methods: {
     getInvoiceDetail() {
       this.$request.invoiceDetail(this.$route.params.id).then(res => {
-        console.log(res)
         if (res.ret) {
           this.invoiceStatus = res.data
           this.costData = res.data.orderCostDetailed
           this.log = res.data.log
         }
       })
+    },
+    checkImg(url) {
+      this.imgDialog = true
+      this.imgUrl = this.$baseUrl.IMAGE_URL + url
     },
     invoiceToComplete(state) {
       dialog(
@@ -308,8 +322,8 @@ export default {
           invoices_id: this.$route.params.id
         },
         () => {
-          this.getInvoiceDetail()
           this.$router.go(-1)
+          this.getInvoiceDetail()
         }
       )
     },
@@ -328,8 +342,8 @@ export default {
           invoices_id: this.$route.params.id
         },
         () => {
-          this.getInvoiceDetail()
           this.$router.go(-1)
+          this.getInvoiceDetail()
         }
       )
     },
@@ -348,8 +362,8 @@ export default {
           invoices_id: this.$route.params.id
         },
         () => {
-          this.getInvoiceDetail()
           this.$router.go(-1)
+          this.getInvoiceDetail()
         }
       )
     },
@@ -478,11 +492,9 @@ export default {
       .condition {
         text-align: center;
       }
-      .invoice-remark {
-        overflow: auto;
-      }
       .text {
         padding: 5px 20px;
+        word-wrap: break-word;
       }
       .screenshot {
         width: 100px;
@@ -561,6 +573,11 @@ export default {
     .imgDialog {
       width: 50%;
     }
+  }
+  .image {
+    max-width: 100px;
+    cursor: pointer;
+    text-align: center;
   }
 }
 </style>

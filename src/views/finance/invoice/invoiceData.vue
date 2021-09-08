@@ -161,6 +161,10 @@ export default {
       this.$emit('transVal', id)
     },
     triggerVal() {
+      console.log(this.timeList)
+      if (!this.timeList) {
+        this.timeList = []
+      }
       this.page_params.begin_date = this.timeList[0]
       this.page_params.end_date = this.timeList[1]
       this.$emit('passval', this.page_params)
