@@ -192,7 +192,7 @@
               {{ detailData.customer_remark }}
             </div>
             <div class="screenshot" v-if="detailData.customer_images">
-              <span
+              <!-- <span
                 style="cursor: pointer"
                 @click.stop="
                   ;(imgSrc = `${$baseUrl.IMAGE_URL}${detailData.customer_images}`),
@@ -203,7 +203,15 @@
                   :src="`${$baseUrl.IMAGE_URL}${detailData.customer_images}`"
                   style="width: 100px"
                 />
-              </span>
+              </span> -->
+              <img
+                style="cursor: pointer; width: 100px"
+                v-for="item in detailData.customer_images"
+                :key="item.index"
+                class="image"
+                :src="$baseUrl.IMAGE_URL + item"
+                @click="checkImg(item)"
+              />
             </div>
           </div>
         </div>
@@ -216,7 +224,7 @@
               {{ detailData.customer_remark }}
             </div>
             <div class="screenshot" v-if="detailData.customer_images">
-              <span
+              <!-- <span
                 style="cursor: pointer"
                 @click.stop="
                   ;(imgSrc = `${$baseUrl.IMAGE_URL}${detailData.customer_images}`),
@@ -227,7 +235,15 @@
                   :src="`${$baseUrl.IMAGE_URL}${detailData.customer_images}`"
                   style="width: 100px"
                 />
-              </span>
+              </span> -->
+              <img
+                style="cursor: pointer; width: 100px"
+                v-for="item in detailData.customer_images"
+                :key="item.index"
+                class="image"
+                :src="$baseUrl.IMAGE_URL + item"
+                @click="checkImg(item)"
+              />
             </div>
           </div>
         </div>
@@ -265,9 +281,10 @@
         <el-button type="primary" @click="viewApproved">{{ $t('审核通过') }}</el-button>
       </el-row>
     </div>
-    <el-dialog :visible.sync="imgVisible" size="small">
-      <div class="img_box">
-        <img :src="imgSrc" class="imgDialog" />
+    <!-- 查看图片 -->
+    <el-dialog :visible.sync="imgDialog">
+      <div style="text-align: center">
+        <img :src="imgUrl" style="max-width: 100%" />
       </div>
     </el-dialog>
   </div>
@@ -285,7 +302,9 @@ export default {
       charge: [],
       tableLoading: false,
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      imgDialog: false,
+      imgUrl: ''
     }
   },
   created() {
@@ -299,6 +318,10 @@ export default {
         this.info = res.data.bank_card_info || {}
         this.charge = res.data.commissions
       })
+    },
+    checkImg(url) {
+      this.imgDialog = true
+      this.imgUrl = this.$baseUrl.IMAGE_URL + url
     },
     // 审核通过
     viewApproved() {
@@ -533,6 +556,11 @@ export default {
     .imgDialog {
       width: 50%;
     }
+  }
+  .image {
+    max-width: 100px;
+    cursor: pointer;
+    text-align: center;
   }
 }
 </style>
