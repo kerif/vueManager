@@ -158,12 +158,14 @@ export default {
           })
           res.data.forEach(item => {
             this.ctableData.push(
-              ...item.prices.map(ele => {
+              ...item.prices.map((ele, index) => {
                 let range = ''
-                if (ele.start / 1000 === ele.end / 1000) {
-                  range = ele.start / 1000
+                if (item.prices.length - 2 === index || item.prices.length - 1 === index) {
+                  range = `[${ele.start / 1000}，${ele.end / 1000}]`
                 } else {
-                  range = `[${ele.start / 1000}，${ele.end / 1000})`
+                  ele.start === ele.end
+                    ? (range = ele.start / 1000)
+                    : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
                 }
                 let unit_weight = ele.unit_weight / 1000
                 let price = ''
@@ -219,7 +221,6 @@ export default {
               })
             )
           })
-          console.log(this.ctableData, 'this.ctableData')
           this.ctableData.forEach(item => {
             item[`${item.id}_price`] = item.price
             item[`${item.id}_price_id`] = item.priceId
@@ -454,7 +455,6 @@ export default {
     // 导入
     onUpload(file) {
       let params = new FormData()
-      console.log(params, 'params')
       params.append(`file`, file)
       return this.$request.importPrice(this.$route.params.id, params)
     }
