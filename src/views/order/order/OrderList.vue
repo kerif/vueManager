@@ -345,7 +345,10 @@ export default {
       activeName: 0,
       orderData: [],
       tableLoading: false,
-      localization: {},
+      localization: {
+        currency_unit: '',
+        weight_unit: ''
+      },
       imgVisible: false,
       imgSrc: '',
       urlHtml: '',
