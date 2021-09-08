@@ -472,7 +472,8 @@ export default {
         // ceil_weight: 0,
         // multi_boxes: 0,
         is_delivery: 0,
-        default_pickup_station_id: ''
+        default_pickup_station_id: '',
+        label_ids: []
       }
     }
     this.getProp()
@@ -511,6 +512,7 @@ export default {
         this.form.need_id_card = res.data.need_id_card
         this.form.is_delivery = res.data.is_delivery
         this.form.default_pickup_station_id = res.data.default_pickup_station_id
+        this.form.label_ids = res.data.labels.map(item => item.id)
       })
     },
     onSelectChange(e) {

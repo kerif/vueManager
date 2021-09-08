@@ -44,7 +44,10 @@ export default {
       all: [],
       resultData: [],
       passData: [],
-      page_params: {},
+      page_params: {
+        keyword: '',
+        status: ''
+      },
       totalSettlement: 0
     }
   },
@@ -61,10 +64,10 @@ export default {
     getList(status, param_list) {
       this.$request
         .pendingReview({
-          keyword: this.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          status: status !== '-1' ? status : '',
+          keyword: this.keyword,
+          status: this.page_params.status,
           ...param_list
         })
         .then(res => {
@@ -100,6 +103,7 @@ export default {
     },
     onTabChange(tab) {
       this.page_params.page = 1
+      this.page_params.status = tab.name == -1 ? '' : tab.name
       this.getList(tab.name)
     },
     onSearch(params) {

@@ -28,7 +28,7 @@ export default {
     return {
       activeName: '0',
       page_params: {
-        keyword: this.keyword,
+        keyword: '',
         state: ''
       },
       all: [],
@@ -52,11 +52,17 @@ export default {
     this.getList()
     this.getCounts()
   },
+  activated() {
+    this.getList()
+  },
   methods: {
     getList(state, param_list) {
       this.$request
         .manageInvoice({
-          ...this.page_params,
+          page: this.page_params.page,
+          size: this.page_params.size,
+          keyword: this.keyword,
+          state: this.page_params.state,
           ...param_list
         })
         .then(res => {
