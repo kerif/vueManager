@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="order-service">
     <div class="select-box">
       <add-btn @click.native="addService">{{ $t('添加订单增值服务') }}</add-btn>
     </div>
@@ -52,10 +52,9 @@
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <!-- 保险服务 -->
-    <div class="select-box">
+    <div>
       <h4>{{ $t('保险服务') }}</h4>
       &nbsp;&nbsp;&nbsp;
-      <!-- v-model="enabled" -->
       <el-switch
         v-model="insuranceEnabled"
         @change="changeInsurance($event)"
@@ -67,10 +66,13 @@
         inactive-color="gray"
       >
       </el-switch>
-      <el-button @click="openLines('insurance')" v-if="insuranceEnabled === 1" class="openStyle">{{
-        $t('开启线路')
-      }}</el-button>
-      <el-button class="add-insurance" @click="goInsurance('insurance')">{{
+      <el-button
+        @click="openLines('insurance')"
+        v-if="insuranceEnabled === 1"
+        class="open-style btn-deep-blue"
+        >{{ $t('开启线路') }}</el-button
+      >
+      <el-button class="add-insurance btn-deep-blue" @click="goInsurance('insurance')">{{
         $t('保险说明')
       }}</el-button>
     </div>
@@ -118,7 +120,7 @@
       </el-table-column>
     </el-table>
     <!-- 关税服务 -->
-    <div class="select-box">
+    <div>
       <h4>{{ $t('关税服务') }}</h4>
       &nbsp;&nbsp;&nbsp;
       <!-- v-model="enabled" -->
@@ -133,13 +135,16 @@
         inactive-color="gray"
       >
       </el-switch>
-      <el-button @click="openLines('tariff')" v-if="tariffEnabled === 1" class="openStyle">{{
-        $t('开启线路')
+      <el-button
+        @click="openLines('tariff')"
+        v-if="tariffEnabled === 1"
+        class="open-style btn-deep-purple"
+        >{{ $t('开启线路') }}</el-button
+      >
+      <el-button @click="addTariff" class="btn-deep-purple">{{ $t('添加') }}</el-button>
+      <el-button @click="goInsurance('tariff')" class="btn-deep-purple">{{
+        $t('关税说明')
       }}</el-button>
-      <div class="add-insurance">
-        <el-button @click="addTariff">{{ $t('添加') }}</el-button>
-        <el-button @click="goInsurance('tariff')">{{ $t('关税说明') }}</el-button>
-      </div>
     </div>
     <el-table
       :data="tariffData"
@@ -512,8 +517,16 @@ export default {
   }
 }
 </script>
-<style scoped>
-.openStyle {
-  margin-left: 10px;
+<style lang="scss" scoped>
+.order-service {
+  .open-style {
+    margin-left: 10px;
+  }
+  .select-box {
+    overflow: hidden;
+  }
+  .data-list {
+    margin-top: 20px;
+  }
 }
 </style>
