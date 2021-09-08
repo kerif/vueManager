@@ -333,20 +333,16 @@ export default {
         let range = ''
         if (this.expressData.mode === 4) {
           if (item.type === 0) {
-            if (item.start === item.end) {
-              range = item.start / 1000
-            } else {
-              range = `${item.start / 1000} ~ ${item.end / 1000}`
-            }
+            item.start === item.end
+              ? (range = item.start / 1000)
+              : (range = `${item.start / 1000} ~ ${item.end / 1000}`)
           } else {
-            range = `${item.start / 1000}~${this.expressData.max_weight / 1000}`
+            range = `${this.expressData.max_weight / 1000}`
           }
         } else {
-          if (item.start === item.end) {
-            range = item.start / 1000
-          } else {
-            range = `${item.start / 1000} ~ ${item.end / 1000}`
-          }
+          item.start === item.end
+            ? (range = item.start / 1000)
+            : (range = `${item.start / 1000} ~ ${item.end / 1000}`)
         }
         let weightSymbol = ''
         if (this.expressData.base_mode === 0) {

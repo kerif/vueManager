@@ -667,7 +667,7 @@
                   :label="$t('金额') + localization.currency_unit"
                 >
                   <template slot-scope="scope">
-                    {{ scope.row.amout }}
+                    {{ scope.row.amount }}
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('描述')" prop="remark"> </el-table-column>
@@ -1005,7 +1005,7 @@ export default {
         this.paymentData = [
           {
             name: this.$t('运费'),
-            amout: res.data.payment.freight_amount,
+            amount: res.data.payment.freight_amount,
             remark:
               '首费:' +
               res.data.payment.freights.first_freight_fee +
@@ -1016,41 +1016,44 @@ export default {
           },
           {
             name: this.$t('增值服务费'),
-            amout: res.data.payment.value_added_amount,
-            remark: ''
+            amount: +res.data.payment.value_added_amount,
+            remark: res.data.services.map(item => `${item.name}: ${item.price}`).join('，')
           },
           {
             name: this.$t('渠道服务费'),
-            amout: res.data.payment.line_service_fee,
-            remark: ''
+            amount: +res.data.payment.line_service_fee,
+            remark: res.data.payment.line_services
+              .map(item => `${item.name}: ${item.price}`)
+              .join('，')
           },
           {
             name: this.$t('渠道规则费'),
-            amout: res.data.payment.line_rule_fee,
-            remark: ''
+            amount: +res.data.payment.line_rule_fee,
+            remark: res.data.payment.line_rules
+              .map(item => `${item.name}: ${item.price}`)
+              .join('，')
           },
           {
             name: this.$t('保险费用'),
-            amout: res.data.payment.insurance_fee,
+            amount: +res.data.payment.insurance_fee,
+            remark: ''
+          },
+          {
+            name: this.$t('关税费用'),
+            amount: +res.data.payment.tariff_fee,
             remark: ''
           },
           {
             name: this.$t('抵用券减免'),
-            amout: res.data.payment.coupon_amount * -1,
+            amount: +res.data.payment.coupon_amount,
             remark: ''
           },
           {
             name: this.$t('积分抵扣'),
-            amout: res.data.payment.point_amount * -1,
+            amount: +res.data.payment.point_amount,
             remark: ''
           }
         ]
-        if (this.services.length > 0) {
-          for (let index = 0; index < this.services.length; index++) {
-            this.paymentData[1].remark +=
-              this.services[index].name + ':' + this.services[index].price + ';'
-          }
-        }
         this.TrackingData = [
           {
             context: '签收时间',
