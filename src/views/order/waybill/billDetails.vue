@@ -1018,7 +1018,7 @@ export default {
     getCountrys() {
       this.$request.getCountry().then(res => {
         if (res.ret) {
-          this.options = res.data.map(item => {
+          ;(this.options = res.data.map(item => {
             return {
               value: item.id,
               label: item.name,
@@ -1039,12 +1039,10 @@ export default {
                   })
                 : []
             }
-          })
-          this.countryList = [
-            +this.address.country_id,
-            this.address.area_id ? +this.address.area_id : '',
-            this.address.sub_area_id ? +this.address.sub_area_id : ''
-          ]
+          })),
+            (this.countryList = [+this.address.country_id])
+          if (this.address.area_id) this.countryList.push(this.address.sub_area_id)
+          if (this.address.sub_area_id) this.countryList.push(this.address.sub_area_id)
         }
       })
     },
