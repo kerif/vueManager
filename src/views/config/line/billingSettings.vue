@@ -760,8 +760,7 @@ export default {
       rows.splice(index, 1)
     },
     saveLine() {
-      console.log(this.form.mode, 'mode')
-      if (this.form.grades.length) {
+      if (this.form.mode === 1 && this.form.grades.length) {
         this.form.grades[0].start = this.form.first_weight
         this.itemArr = JSON.stringify(this.form.grades)
       }

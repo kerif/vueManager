@@ -192,6 +192,11 @@
               <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
               <span v-else>({{ $t('体积计费') }})</span>
             </span>
+            <span v-if="scope.row.mode === 5"
+              >{{ $t('阶梯首重续重模式') }}
+              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
+              <span v-else>({{ $t('体积计费') }})</span>
+            </span>
           </template>
         </el-table-column>
         <!-- 分区表 -->
