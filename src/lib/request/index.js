@@ -34,6 +34,17 @@ exports.addPackageProps = params => {
 exports.updatePackageProps = (id, params) => {
   return $form.put(`package-props/${id}`, params)
 }
+
+// 配置 路线 渠道标签
+exports.channelLabel = id => {
+  return $form.get(`express-lines/${id}/basic-config`)
+}
+
+// 配置 路线 添加标签
+exports.addChannelLabel = params => {
+  return $form.post('express-lines/basic-config', params)
+}
+
 // 获取高级配置
 // exports.getSorting = (id) => {
 //   return $form.get(`orders/${id}/re-sorting`)
@@ -807,6 +818,38 @@ exports.updateWithdrawData = params => {
 // 代理管理 计佣模版配置列表
 exports.agentTemplate = params => {
   return $form.get('agents/commission-templates', { params })
+}
+// 发票管理 全部
+exports.manageInvoice = params => {
+  return $form.get('invoice', { params })
+}
+// 发票管理 详情
+exports.invoiceDetail = id => {
+  return $json.get(`invoice/${id}`)
+}
+// 发票管理 搜索
+exports.searchMode = params => {
+  return $form.get('invoice', { params })
+}
+// 发票管理 统计数量
+exports.invoiceCount = () => {
+  return $form.get('invoice/count')
+}
+// 发票管理 开票完成
+exports.invoiceComplete = (id, params) => {
+  return $json.put(`invoice/complete/${id}`, params)
+}
+// 发票管理 开票作废
+exports.invoiceVoid = (id, params) => {
+  return $json.put(`invoice/to-void/${id}`, params)
+}
+// 发票管理 重新开票
+exports.invoiceReopen = (id, params) => {
+  return $json.put(`invoice/reopen/${id}`, params)
+}
+// 发票管理 开票作废
+exports.invoiceRecovery = (id, params) => {
+  return $json.put(`invoice/recovery/${id}`, params)
 }
 // 计佣模版配置 获取form表单详情
 exports.commissionSet = id => {
@@ -2316,6 +2359,34 @@ exports.addSelf = params => {
 exports.deleteSelf = id => {
   return $form.delete(`self-pickup-stations/${id}`)
 }
+//自定义标签 列表查询
+exports.lineLabel = () => {
+  return $form.get('express-line-labels')
+}
+//自定义标签 获取详情
+exports.detailLabel = id => {
+  return $form.get(`express-line-labels/${id}`)
+}
+//自定义标签 新增
+exports.newLabel = params => {
+  return $form.post('express-line-labels', params)
+}
+//自定义标签 修改
+exports.modifyLabel = (id, params) => {
+  return $form.put(`express-line-labels/${id}`, params)
+}
+//自定义标签 排序
+exports.sortLabel = params => {
+  return $form.put('express-line-labels/sort', params)
+}
+//自定义标签 翻译
+exports.getTranslate = (id, params) => {
+  return $form.put(`express-line-labels/${id}/translate-data`, params)
+}
+//自定义标签 批量删除
+exports.deleteLabel = ids => {
+  return $form.put('express-line-labels/batch-delete', ids)
+}
 // 自提点 获取详细
 exports.getOneSelf = id => {
   return $form.get(`self-pickup-stations/${id}`)
@@ -3153,6 +3224,18 @@ exports.orderExport = params => {
 // 订单列表 详情 移除包裹清单
 exports.removePackage = (orderId, packageId) => {
   return $form.put(`orders/${orderId}/packages/${packageId}/remove`)
+}
+//预报包裹列表 批量上架 获取包裹货位导入模板
+exports.getPackageTemplate = () => {
+  return $form.get('packages/location-template')
+}
+//预报包裹列表 批量上架 上传模板获取解析后的数据
+exports.importPackageData = file => {
+  return $file.post('packages/location-import-data', file)
+}
+//预报包裹列表 批量上架 导入包裹货位数据
+exports.savePackageData = params => {
+  return $form.post('packages/location-import', params)
 }
 // 发货单 详情批量导出发货单
 exports.uploadShipmentLabel = (id, ids) => {

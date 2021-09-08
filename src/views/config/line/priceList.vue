@@ -92,11 +92,7 @@
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
-        <vxe-table-colgroup
-          v-for="config in ctableColumn"
-          :key="config.id"
-          :title="config.name + ' (' + $t('点击修改') + ')'"
-        >
+        <vxe-table-colgroup v-for="config in ctableColumn" :key="config.id" :title="config.name">
           <vxe-table-colgroup
             :title="config.areas"
             :field="config.field"
@@ -221,6 +217,7 @@ export default {
               })
             )
           })
+          console.log(this.ctableData, 'this.ctableData')
           this.ctableData.forEach(item => {
             item[`${item.id}_price`] = item.price
             item[`${item.id}_price_id`] = item.priceId
@@ -277,10 +274,12 @@ export default {
             const areas = item.areas
               .map(item => item.country_name + item.area_name + item.sub_area_name)
               .join('、')
+            const name = item.enabled ? item.name : `${item.name}${this.$t('（未启用）')}`
             const field = `${item.id}_price`
             let editRender = { name: 'input', attrs: { type: 'text' } }
             return {
               ...item,
+              name,
               areas,
               field,
               editRender
@@ -361,19 +360,8 @@ export default {
         }
         this.params.push(obj)
       } else {
-        this.region_id = +this.newField.split('_')[0] //分区id
-        this.id = row[`${this.newField}_id`] //价格id
+        return false
       }
-      let obj = {
-        region_id: this.region_id,
-        prices: [
-          {
-            id: this.id,
-            price: +this.newCellValue
-          }
-        ]
-      }
-      this.params.push(obj)
     },
     // 保存
     editPrice() {

@@ -75,6 +75,7 @@ import alipay from './alipay.vue'
 import addressEdit from './addressEdit.vue'
 import confirmAudit from './confirmAudit.vue'
 import failAudit from './failAudit.vue'
+import toAddInvoicing from './toAddInvoicing'
 import editInfo from './editVipInfo.vue'
 import notifyOrder from './notifyOder.vue'
 import groupAdd from './groupAdd.vue'
@@ -117,6 +118,8 @@ import growthValueBuy from './growthValueBuy.vue'
 import baseTable from './baseTable.vue'
 import discountTable from './discountTable.vue'
 import salesAddEdit from './salesAddEdit.vue'
+import addCustomLabel from './addCustomLabel.vue'
+import addLabel from './addLabel.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -192,6 +195,7 @@ const AlipayController = Vue.extend(alipay)
 const AddressEditController = Vue.extend(addressEdit)
 const ConfirmAuditController = Vue.extend(confirmAudit)
 const FailAuditController = Vue.extend(failAudit)
+const ToAddInvoicingController = Vue.extend(toAddInvoicing)
 const EditVipInfoController = Vue.extend(editInfo)
 const NotifyOrderController = Vue.extend(notifyOrder)
 const GroupAddController = Vue.extend(groupAdd)
@@ -234,6 +238,8 @@ const GrowthValueBuy = Vue.extend(growthValueBuy)
 const BaseTable = Vue.extend(baseTable)
 const DiscountTable = Vue.extend(discountTable)
 const SalesAddEditController = Vue.extend(salesAddEdit)
+const AddCustomLabelController = Vue.extend(addCustomLabel)
+const AddLabelController = Vue.extend(addLabel)
 
 const mixin = {
   data() {
@@ -532,6 +538,20 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 自定义标签 新增 编辑
+    case 'addCustomLabel':
+      instance = new AddCustomLabelController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 配置 路线 基础信息
+    case 'addLabel':
+      instance = new AddLabelController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 充值记录 新增
     case 'rechargeAdd':
       instance = new RechargeAddController({
@@ -766,6 +786,13 @@ function initInstance(type) {
     // 财务 代理佣金结算 审核拒绝
     case 'failAudit':
       instance = new FailAuditController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 财务 发票管理 开票完成
+    case 'toAddInvoicing':
+      instance = new ToAddInvoicingController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

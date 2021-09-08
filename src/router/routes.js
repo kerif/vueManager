@@ -55,13 +55,13 @@ const selfSettlement = loadonDemand('finance/selfSettlement')
 // 财务 自提点佣金结算 结算记录
 const recordDetails = loadonDemand('finance/recordDetails')
 // 财务 代理佣金结算
-// const agencySettlement = loadonDemand('finance/agency/agencySettlement')
+const agencySettlement = loadonDemand('finance/agency/agencySettlement')
 // 财务 查看详细
 const viewDetails = loadonDemand('finance/agency/viewDetails')
 // 财务 代理结算
 const agencyCommission = loadonDemand('finance/agency/agencyCommission')
 // 财务 发票管理
-// const invoiceManage = loadonDemand('finance/invoice/invoiceManage')
+const invoiceManage = loadonDemand('finance/invoice/invoiceManage')
 // 财务 发票详情
 const invoiceDetails = loadonDemand('finance/invoice/invoiceDetails')
 // 配置 路线列表
@@ -168,6 +168,8 @@ const OrderList = loadonDemand('order/order/OrderList')
 const oderDetails = loadonDemand('order/order/orderDetails')
 // 订单 预报包裹列表 批量入库
 const ImportOrder = loadonDemand('order/order/importOrder')
+// 订单 预报包裹列表 批量上架
+const BatchShelves = loadonDemand('order/order/batchShelves')
 // 订单 无人认领包裹
 const noOwner = loadonDemand('order/noOwner/noOwner')
 // 订单 运单列表
@@ -590,6 +592,18 @@ export default [
               level: 3,
               group: '订单',
               name: '批量入库',
+              parent: '/order/orderlist'
+            }
+          },
+          {
+            path: '/order/orderlist/batchShelves',
+            component: BatchShelves,
+            name: 'BatchShelves',
+            id: 401,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '批量上架',
               parent: '/order/orderlist'
             }
           },
@@ -1497,17 +1511,17 @@ export default [
               name: '成长值财务详情'
             }
           },
-          // {
-          //   path: '/finance/agency',
-          //   name: 'agencySettlement',
-          //   component: agencySettlement,
-          //   id: 708,
-          //   meta: {
-          //     group: '财务',
-          //     level: 2,
-          //     name: '代理佣金结算'
-          //   }
-          // },
+          {
+            path: '/finance/agency',
+            name: 'agencySettlement',
+            component: agencySettlement,
+            id: 708,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '代理佣金结算'
+            }
+          },
           {
             path: '/finance/agency/viewDetails/:id',
             name: 'viewDetails',
@@ -1532,17 +1546,17 @@ export default [
               parent: '/finance/agency'
             }
           },
-          // {
-          //   path: '/finance/invoice',
-          //   name: 'invoiceManage',
-          //   component: invoiceManage,
-          //   id: 709,
-          //   meta: {
-          //     group: '财务',
-          //     level: 2,
-          //     name: '发票管理'
-          //   }
-          // },
+          {
+            path: '/finance/invoice',
+            name: 'invoiceManage',
+            component: invoiceManage,
+            id: 709,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '发票管理'
+            }
+          },
           {
             path: '/finance/invoice/invoiceDetails/:id',
             name: 'invoiceDetails',

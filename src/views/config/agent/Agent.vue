@@ -86,7 +86,10 @@
             }}</el-button>
           </el-badge>
           <!-- 提现申请 -->
-          <el-badge :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''" class="item">
+          <el-badge
+            :value="scope.row.apply_counts > 0 ? scope.row.apply_counts : ''"
+            class="item record-sty"
+          >
             <el-button class="btn-deep-blue" @click="withdrawal(scope.row.user_id)">{{
               $t('提现申请')
             }}</el-button>
@@ -384,7 +387,9 @@ export default {
   float: right;
 }
 .record-sty {
-  margin-right: 8px;
+  .el-badge__content.is-fixed {
+    top: 10px;
+  }
 }
 .changeVou {
   float: right;

@@ -258,6 +258,27 @@
               <span>{{ $t('无') }}</span>
             </div>
           </el-col>
+          <el-col :span="10" style="display: flex">
+            <div style="flex: 1">
+              <span>{{ $t('渠道标签') }}</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="$t('渠道标签在客户端仅作展示，无特定功能')"
+                placement="top"
+              >
+                <span class="el-icon-warning-outline icon-info"></span>
+              </el-tooltip>
+              <el-checkbox-group v-model="form.label_ids">
+                <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id">
+                  {{ item.name }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </div>
+            <div style="width: 100px; margin-top: 25px" class="country-btn">
+              <el-button type="primary" @click="addLabels">+ {{ $t('添加标签') }}</el-button>
+            </div>
+          </el-col>
         </el-row>
       </el-form-item>
       <el-form-item>
@@ -331,7 +352,8 @@ export default {
         // ceil_weight: 0,
         // multi_boxes: 0,
         default_pickup_station_id: '',
-        is_delivery: 0
+        is_delivery: 0,
+        label_ids: []
       },
       referenceTime: {
         minTime: '',
@@ -369,6 +391,7 @@ export default {
       iconList: [],
       warehouseList: [], // 获取全部仓库
       typeList: [],
+      labelList: [],
       localization: {},
       warehouseIds: [], // 保存支持仓库的id
       imgVisible: false,
@@ -455,6 +478,7 @@ export default {
     this.getProp()
     this.getWarehouse()
     this.getIcon()
+    this.getChannelLabel()
     if (this.$route.params.id) {
       console.log('bianji')
       this.getList()
@@ -508,6 +532,12 @@ export default {
         this.getProp()
       })
     },
+    // 添加标签
+    addLabels() {
+      dialog({ type: 'addLabel' }, () => {
+        this.getChannelLabel()
+      })
+    },
     changeDelivery() {
       this.form.default_pickup_station_id = ''
     },
@@ -547,6 +577,15 @@ export default {
     getWarehouse() {
       this.$request.getAllWarehouse().then(res => {
         this.warehouseList = res.data
+      })
+    },
+    // 获取渠道标签多选框
+    getChannelLabel() {
+      this.$request.lineLabel().then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.labelList = res.data
+        }
       })
     },
     saveLine() {

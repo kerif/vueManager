@@ -8,7 +8,15 @@
       <el-step :title="$t('已签收')"></el-step>
       <el-step :title="$t('作废订单')"></el-step>
     </el-steps>
-    <div style="text-align: center; font-size: 18px; margin-bottom: 20px">
+    <div
+      style="
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        line-height: 30px;
+      "
+    >
       {{ $t('订单详情') }}({{ form.warehouse && form.warehouse.warehouse_name }}) <Br />
       <div v-if="form.group_leader_id > 0" class="group-text">=======拼团订单=======</div>
       <el-alert
@@ -122,12 +130,29 @@
           </el-col>
           <el-col :span="6">
             <div class="panel-bg">
-              <h4>{{ form.status_name }}</h4>
+              <h4 style="font-size: 16px; color: blue">
+                {{ form.status_name }}
+                <router-link
+                  v-if="form.status === 11"
+                  style="color: red; font-weight: bolder"
+                  :to="`/finance/orderReview/reviewFinance/${form.id}/pay`"
+                >
+                  {{ $t('待审核') }}
+                </router-link>
+                <router-link
+                  v-if="form.status === 12"
+                  class="choose-order"
+                  style="color: red; font-weight: bolder"
+                  :to="`/order/review/?id=${form.id}`"
+                >
+                  {{ $t('审核拒绝') }}
+                </router-link>
+              </h4>
               {{ $t('状态') }}
             </div>
           </el-col>
         </el-row>
-        <el-tabs v-model="activeName" class="tabLength">
+        <el-tabs v-model="activeName" class="tabs">
           <el-tab-pane :label="$t('基本信息')" name="0">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
@@ -159,7 +184,9 @@
                     <th>{{ form.address.code }} {{ form.address.country.cn_name }}</th>
                     <td>{{ $t('省/市/区') }}</td>
                     <th>
-                      {{ form.address.province }}{{ form.address.city }}{{ form.address.district }}
+                      {{ form.address.province }},{{ form.address.city }},{{
+                        form.address.district
+                      }}
                     </th>
                   </tr>
 
@@ -347,7 +374,7 @@
                 <el-button style="float: right; padding: 3px 0" type="text"
                   >{{ $t('包裹总价值') }}:
                   <span style="font-size: 15px; font-weight: bold; color: red">
-                    {{ form.details.value }}
+                    {{ localization.currency_unit }} {{ form.details.value }}
                   </span></el-button
                 >
               </div>
@@ -392,18 +419,16 @@
                 <el-table-column :label="$t('重量尺寸')" width="180">
                   <template slot-scope="scope">
                     <div>
-                      <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span
+                      <strong>{{ scope.row.package_weight }} {{ localization.weight_unit }}</strong
                       ><br />
-                      <span class="small-text"
-                        >{{ scope.row.dimension }}{{ localization.length_unit }}</span
-                      >
+                      <span>{{ scope.row.dimension }} {{ localization.length_unit }}</span>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('货位')" width="180">
                   <template slot-scope="scope">
                     <div>
-                      <span>{{ scope.row.location }}</span>
+                      <strong>{{ scope.row.location }}</strong>
                     </div>
                   </template>
                 </el-table-column>
@@ -636,19 +661,19 @@
             <div class="package-details">
               <div class="size">
                 {{ $t('计价模式') }}:
-                <span v-if="form.express_line && form.express_line.mode === 1">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 1">{{
                   $t('首重续重模式')
                 }}</span>
-                <span v-if="form.express_line && form.express_line.mode === 2">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 2">{{
                   $t('阶梯价格模式')
                 }}</span>
-                <span v-if="form.express_line && form.express_line.mode === 3">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 3">{{
                   $t('单位价格+阶梯总价模式')
                 }}</span>
-                <span v-if="form.express_line && form.express_line.mode === 4">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 4">{{
                   $t('多级续重模式')
                 }}</span>
-                <span v-if="form.express_line && form.express_line.mode === 5">{{
+                <span class="pay-text" v-if="form.express_line && form.express_line.mode === 5">{{
                   $t('阶梯首重续重模式')
                 }}</span>
               </div>
@@ -822,23 +847,23 @@
       @close="clear"
       width="80%"
     >
-      <el-form :model="form">
+      <el-form :model="form" label-position="right" label-width="120px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('姓名')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.receiver_name"></el-input>
+              <el-input class="input-sty" v-model="address.receiver_name"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('手机/联系电话')" class="label-sty">
               <el-input
                 class="second-sty"
-                v-model="form.address.timezone"
+                v-model="address.timezone"
                 :placeholder="$t('区号')"
               ></el-input>
               <el-input
                 class="second-sty"
-                v-model="form.address.phone"
+                v-model="address.phone"
                 :placeholder="$t('号码')"
               ></el-input>
             </el-form-item>
@@ -847,12 +872,19 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('国家/地区')" class="label-sty">
-              <el-input class="second-sty" v-model="form.address.country.cn_name"></el-input>
+              <el-cascader
+                v-model="countryList"
+                :options="options"
+                :props="{ checkStrictly: true }"
+                clearable
+                style="width: 60%"
+              >
+              </el-cascader>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('城市')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.city"></el-input>
+              <el-input class="input-sty" v-model="address.city"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -861,31 +893,31 @@
             <el-form-item :label="$t('街道/门牌号')" class="label-sty">
               <el-input
                 class="second-sty"
-                v-model="form.address.street"
+                v-model="address.street"
                 :placeholder="$t('街道')"
               ></el-input>
               <el-input
                 class="second-sty"
-                v-model="form.address.door_no"
+                v-model="address.door_no"
                 :placeholder="$t('门牌号')"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('附加地址')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.address"></el-input>
+              <el-input class="input-sty" v-model="address.address"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('邮编')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.postcode"></el-input>
+              <el-input class="input-sty" v-model="address.postcode"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('微信号')" class="label-sty">
-              <el-input class="input-sty" v-model="form.address.wechat_id"></el-input>
+              <el-input class="input-sty" v-model="address.wechat_id"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -904,6 +936,7 @@ export default {
   data() {
     return {
       form: {},
+      address: {},
       oderData: [],
       PackageData: [],
       productData: [], // 商品清单
@@ -961,7 +994,9 @@ export default {
       },
       TrackingData: [],
       dialogInfo: false,
-      groupDataList: []
+      groupDataList: [],
+      options: [],
+      countryList: []
     }
   },
   created() {
@@ -976,6 +1011,40 @@ export default {
       this.$request.getOrderStatus().then(res => {
         if (res.ret) {
           this.modeData = res.data
+        }
+      })
+    },
+    // 国家列表
+    getCountrys() {
+      this.$request.getCountry().then(res => {
+        if (res.ret) {
+          this.options = res.data.map(item => {
+            return {
+              value: item.id,
+              label: item.name,
+              children: item.areas.length
+                ? item.areas.map(item2 => {
+                    return {
+                      value: item2.id,
+                      label: item2.name,
+                      children: item2.areas.length
+                        ? item2.areas.map(item3 => {
+                            return {
+                              value: item3.id,
+                              label: item3.name
+                            }
+                          })
+                        : []
+                    }
+                  })
+                : []
+            }
+          })
+          this.countryList = [
+            +this.address.country_id,
+            this.address.area_id ? +this.address.area_id : '',
+            this.address.sub_area_id ? +this.address.sub_area_id : ''
+          ]
         }
       })
     },
@@ -994,6 +1063,7 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.tableLoading = false
         this.form = res.data
+        this.address = res.data.address
         this.baseMode = res.data.express_line.base_mode
         this.oderData = [{ ...res.data.details, box_type: res.data.box_type }]
         console.log(this.oderData, 'this.oderData')
@@ -1276,22 +1346,25 @@ export default {
     goEdit() {
       // this.unEdit = true
       this.dialogInfo = true
+      this.getCountrys()
     },
     // 保存 编辑
     saveMsg() {
       this.$request
         .modifyReceive(this.$route.params.id, {
-          receiver_name: this.form.address.receiver_name,
-          street: this.form.address.street,
-          door_no: this.form.address.door_no,
-          phone: this.form.address.phone,
-          timezone: this.form.address.timezone,
-          city: this.form.address.city,
-          postcode: this.form.address.postcode,
-          address: this.form.address.address,
-          country: this.form.address.country.cn_name,
-          clearance_code: this.form.clearance_code,
-          wechat_id: this.form.address.wechat_id
+          receiver_name: this.address.receiver_name,
+          street: this.address.street,
+          door_no: this.address.door_no,
+          phone: this.address.phone,
+          timezone: this.address.timezone,
+          city: this.address.city,
+          postcode: this.address.postcode,
+          address: this.address.address,
+          clearance_code: this.clearance_code,
+          wechat_id: this.address.wechat_id,
+          country_id: this.countryList[0],
+          area_id: this.countryList[1] || '',
+          sub_area_id: this.countryList[2] || ''
         })
         .then(res => {
           if (res.ret) {
@@ -1313,7 +1386,6 @@ export default {
     },
     onRowChange(row) {
       this.chooseId = row.id
-      // this.box.address_id = this.chooseId
       this.user = row
     },
     confirm() {
@@ -1337,9 +1409,6 @@ export default {
           })
         }
       })
-      // console.log(this.user, 'user')
-      // this.userData = this.user
-      // this.boxDialog = false
     }
   }
 }
@@ -1373,6 +1442,9 @@ export default {
     font-size: 16px;
     font-weight: bold;
     color: red;
+  }
+  .tabs {
+    margin-top: 20px;
   }
   .address {
     font-size: 12px;
@@ -1486,6 +1558,7 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    margin-top: 20px;
     .number-top {
       font-size: 14px;
       font-weight: 650;
@@ -1620,8 +1693,6 @@ export default {
     }
   }
   .line-sty {
-    // text-align: center;
-    // width: 600px;
     margin: auto;
     padding-top: 20px;
   }

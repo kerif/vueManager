@@ -162,6 +162,9 @@
                   <el-menu-item index="4">
                     {{ $t('自定义轨迹类型') }}
                   </el-menu-item>
+                  <el-menu-item index="5">
+                    {{ $t('自定义标签') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -180,6 +183,10 @@
             <!-- 自定义轨迹类型 -->
             <el-col :span="19" v-if="secondTab4 === '4'" class="main-right">
               <custom-track></custom-track>
+            </el-col>
+            <!-- 自定义标签 -->
+            <el-col :span="19" v-if="secondTab4 === '5'" class="main-right">
+              <custom-label></custom-label>
             </el-col>
           </el-row>
         </div>
@@ -210,6 +217,7 @@ import OrderRule from './orderRule.vue'
 import Commodity from './commodity.vue'
 import ExpressCompany from './expressCompany.vue'
 import CustomTrack from './customTrack.vue'
+import CustomLabel from './customLabel.vue'
 import LoginConfigure from './loginConfigure.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
@@ -230,6 +238,7 @@ export default {
     Commodity,
     ExpressCompany,
     CustomTrack,
+    CustomLabel,
     LoginConfigure
     // GroupConfigure
   },
@@ -290,7 +299,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .configuration-container {
   .save-btn {
     color: #fff;

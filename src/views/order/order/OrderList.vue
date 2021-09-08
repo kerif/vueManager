@@ -67,6 +67,15 @@
         >
           {{ $t('导出清单') }}
         </el-button>
+        <el-button
+          class="btn-light-red"
+          v-if="activeName !== '1' && activeName !== '6'"
+          @click="batchShelves"
+          size="small"
+          plain
+        >
+          {{ $t('批量上架') }}
+        </el-button>
       </div>
       <div class="header-search">
         <el-input
@@ -115,9 +124,10 @@
         </el-table-column>
         <el-table-column :label="$t('快递单号')" key="express_num" width="180">
           <template slot-scope="scope">
-            <el-button @click="oderDetails(scope.row.id)" type="text">{{
-              scope.row.express_num
-            }}</el-button>
+            <el-button @click="oderDetails(scope.row.id)" type="text"
+              >{{ scope.row.express_num }}
+            </el-button>
+            <span v-if="scope.row.code != ''" style="color: #66666">({{ scope.row.code }})</span>
             <span
               :title="$t('复制单号')"
               class="copy-number"
@@ -127,7 +137,6 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('包裹编码')" prop="code" key="code"> </el-table-column>
         <el-table-column :label="$t('状态')" key="status">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>
@@ -144,6 +153,16 @@
               placement="top-start"
             >
               <i class="el-icon-warning" style="color: red"></i>
+            </el-tooltip>
+
+            <el-tooltip
+              v-if="scope.row.is_exceptional === 1"
+              class="item"
+              effect="dark"
+              :content="scope.row.exceptional_remark"
+              placement="top-start"
+            >
+              <i class="el-icon-wind-power" style="color: red"></i>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -172,7 +191,11 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('物品重量')" key="package_weight" v-if="activeName === '2'">
+        <el-table-column
+          :label="$t('物品重量')"
+          key="package_weight"
+          v-if="['2', '3', '4', '5'].includes(activeName)"
+        >
           <template slot-scope="scope">
             <span>{{ scope.row.package_weight }}{{ localization.weight_unit }}</span>
           </template>
@@ -207,12 +230,6 @@
           width="155"
         >
         </el-table-column>
-        <el-table-column
-          :label="$t('备注')"
-          prop="remark"
-          key="remark"
-          v-if="activeName === '2'"
-        ></el-table-column>
         <el-table-column
           :label="$t('规格(长宽高cm)')"
           prop="dimension"
@@ -288,11 +305,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination
-        style="margin-top: 5px"
-        :pageParams="page_params"
-        :notNeedInitQuery="false"
-      ></nle-pagination>
+      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
+        <div class="remark-text">
+          <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
+        </div>
+      </nle-pagination>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img-box">
@@ -338,6 +355,7 @@ export default {
       countData: {},
       urlExcel: '',
       hasFilterCondition: false,
+      sumData: {},
       searchFieldData: {
         begin_date: '',
         end_date: '',
@@ -373,21 +391,17 @@ export default {
   methods: {
     // 获取订单统计数据
     getCounts() {
-      console.log('111')
-      this.$request
-        .getOrderCounts({
-          keyword: this.searchFieldData.keyword
-        })
-        .then(res => {
-          if (res.ret) {
-            this.countData = res.data
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+      const params = this.computedParams()
+      this.$request.getOrderCounts(params).then(res => {
+        if (res.ret) {
+          this.countData = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     goMatch() {
       this.page_params.page = 1
@@ -426,6 +440,7 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.orderData = res.data
+            this.sumData = res.sum
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
@@ -445,6 +460,9 @@ export default {
     importOrder() {
       this.$router.push({ name: 'ImportOrder' })
     },
+    batchShelves() {
+      this.$router.push({ name: 'BatchShelves' })
+    },
     getDiscard() {
       this.tableLoading = true
       const params = this.computedParams()
@@ -454,6 +472,7 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.orderData = res.data
+            this.sumData = res.sum
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           } else {
@@ -751,16 +770,17 @@ export default {
 
 <style lang="scss" scoped>
 .order-list-container {
+  .remark-text {
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
+  }
   .header-range {
     display: flex;
-    align-items: center;
     // flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1px;
-    .header-btns {
-      // margin-bottom: 10px;
-    }
     .header-search {
       display: flex;
       align-items: center;

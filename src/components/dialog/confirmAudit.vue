@@ -107,19 +107,11 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    // init() {
-    //    this.ruleForm.amount = this.amount
-    //    console.log(this.amount)
-    // },
     submit() {
-      // if (this.ruleForm.amount === '') {
-      //   return this.$message.error(this.$t('请输入支付金额'))
-      // } else if (this.ruleForm.remark === '') {
-      //   return this.$message.error(this.$t('请输入备注'))
-      // }
       let info = {
         confirm_amount: this.ruleForm.confirm_amount,
-        customer_remark: this.ruleForm.customer_remark
+        customer_remark: this.ruleForm.customer_remark,
+        customer_images: this.baleImgList
       }
       this.$request.approveWithdraw(this.userid, this.withdrawsId, info).then(res => {
         console.log(res)
@@ -130,7 +122,7 @@ export default {
             message: res.msg
           })
           this.show = false
-          // this.$router.go(-1)
+          this.success()
         } else {
           this.$message({
             message: res.msg,

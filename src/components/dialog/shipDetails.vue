@@ -30,6 +30,14 @@
           }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('收货方式')" width="155">
+        <template slot-scope="scope">
+          <span v-if="scope.row.station_name">{{
+            $t('自提收货') + '(' + scope.row.station_name + ')'
+          }}</span>
+          <span v-else>{{ $t('送货上门') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         :label="$t('转运快递单号-二程')"
         prop="logistics_sn"
