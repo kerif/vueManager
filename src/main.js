@@ -17,7 +17,7 @@ Vue.config.productionTip = false
 store.commit('initToken')
 store.commit('initLanguageCode')
 Element.Dialog.props.closeOnClickModal.default = false
-// console.log = () => {}
+console.log = () => {}
 Vue.prototype.$request = request
 Vue.prototype.$baseUrl = baseUrl
 Vue.prototype.$t = convert
