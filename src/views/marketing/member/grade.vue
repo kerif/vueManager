@@ -29,7 +29,9 @@
       </span>
     </el-dialog>
     <div class="text-bold">
-      <span style="margin-right: 20px">{{ $t('启用成长值') }}</span>
+      <span style="display: inline-block; margin-right: 20px; width: 80px">{{
+        $t('启用成长值')
+      }}</span>
       <el-switch
         v-model="growth_value_status"
         :active-value="1"
@@ -38,7 +40,9 @@
       ></el-switch>
     </div>
     <div class="text-bold">
-      <span style="margin-right: 20px">{{ $t('启用积分') }}</span>
+      <span style="display: inline-block; margin-right: 20px; width: 80px">{{
+        $t('启用积分')
+      }}</span>
       <el-switch
         v-model="point_status"
         :active-value="1"
@@ -47,11 +51,13 @@
       ></el-switch>
     </div>
     <div class="text-bold">
-      <span style="margin-right: 10px">{{ $t('成长说明') }}</span>
+      <span style="display: inline-block; margin-right: 10px; width: 90px">{{
+        $t('成长说明')
+      }}</span>
       <el-button size="small" @click="explain" class="btn-deep-blue">{{ $t('配置') }}</el-button>
     </div>
     <div class="function-btn">
-      <el-button size="small" @click="addGrade" type="primary">{{ $t('添加') }}</el-button>
+      <el-button size="small" @click="addGrade" type="primary">{{ $t('添加等级') }}</el-button>
     </div>
     <div>
       <el-table :data="tableData" border style="width: 100%">
@@ -329,6 +335,7 @@ export default {
   font-size: 14px;
   background-color: #fff;
   .function-btn {
+    float: right;
     margin-bottom: 20px;
   }
   .text-bold {

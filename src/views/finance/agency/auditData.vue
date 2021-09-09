@@ -80,7 +80,7 @@
         <el-table-column prop="created_at" :label="$t('申请时间')" width="160"> </el-table-column>
         <el-table-column prop="operator" :label="$t('处理人')" width="160"> </el-table-column>
         <el-table-column prop="audit_at" :label="$t('处理时间')" width="160"> </el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status === 0"
@@ -111,6 +111,7 @@ export default {
     return {
       timeList: [],
       typeData: [],
+      localization: {},
       page_params: {
         status: '',
         type: '',

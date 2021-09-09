@@ -44,6 +44,7 @@ export default {
       all: [],
       resultData: [],
       passData: [],
+      localization: {},
       page_params: {
         keyword: '',
         status: ''
@@ -73,6 +74,7 @@ export default {
         .then(res => {
           if (res.ret) {
             this.all = res.data
+            this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           }
