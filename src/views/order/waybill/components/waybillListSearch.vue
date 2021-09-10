@@ -56,7 +56,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6" xl="4">
+        <el-col :span="6" :xl="4">
           <!--第三列开始-->
           <el-row>
             <el-col :span="24">
