@@ -386,6 +386,9 @@ export default {
       })
     },
     search() {
+      if (!this.timeList) {
+        this.timeList = []
+      }
       this.page_params.begin_date = this.timeList[0]
       this.page_params.end_date = this.timeList[1]
       this.getList()

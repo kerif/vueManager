@@ -156,12 +156,22 @@ export default {
             this.ctableData.push(
               ...item.prices.map((ele, index) => {
                 let range = ''
-                if (item.prices.length - 2 === index || item.prices.length - 1 === index) {
-                  range = `[${ele.start / 1000}，${ele.end / 1000}]`
+                if (this.type === 2) {
+                  if (item.prices.length - 2 === index || item.prices.length - 1 === index) {
+                    range = `[${ele.start / 1000}，${ele.end / 1000}]`
+                  } else {
+                    ele.start === ele.end
+                      ? (range = ele.start / 1000)
+                      : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
+                  }
                 } else {
-                  ele.start === ele.end
-                    ? (range = ele.start / 1000)
-                    : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
+                  if (item.prices.length - 1 === index) {
+                    range = `[${ele.start / 1000}，${ele.end / 1000}]`
+                  } else {
+                    ele.start === ele.end
+                      ? (range = ele.start / 1000)
+                      : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
+                  }
                 }
                 let unit_weight = ele.unit_weight / 1000
                 let price = ''
