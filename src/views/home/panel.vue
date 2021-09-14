@@ -936,7 +936,7 @@ export default {
       $event.currentTarget.className = 'book-sty'
     },
     uploadDesktop() {
-      let url = 'http://des-update.nle-tech.com/jiyun/update.html'
+      let url = 'http://des-update.nle-tech.com/jiyun_v3/update.html'
       window.open(url)
     },
     uploadAndroid() {
