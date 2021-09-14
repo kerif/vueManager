@@ -158,7 +158,7 @@
               </el-table-column>
               <el-table-column :label="'*' + $t('截止') + billingName + unitName">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
+                  <el-input v-model="scope.row.end" @input="inputEnd(scope)"></el-input>
                 </template>
               </el-table-column>
               <el-table-column :label="$t('操作')">
@@ -188,7 +188,7 @@
               </el-table-column>
               <el-table-column :label="'*' + $t('截止') + billingName + unitName + ' <'">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
+                  <el-input v-model="scope.row.end" @input="inputEnd(scope)"></el-input>
                 </template>
               </el-table-column>
               <el-table-column :label="$t('首重') + unitName">
@@ -747,7 +747,6 @@ export default {
     },
     inputEnd(scope) {
       if (this.form.mode === 1 || this.form.mode === 2 || this.form.mode === 5) {
-        console.log(this.form.grades.length, 'this.form.grades.length')
         if (
           this.form.grades.length - 1 > scope.$index &&
           scope.$index !== this.form.grades.length - 1
