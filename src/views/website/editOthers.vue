@@ -56,15 +56,18 @@
         <el-row :gutter="20">
           <el-col :span="5">
             <div>{{ $t('经度') }}</div>
-            <el-input v-model="params.lon" disabled></el-input>
+            <el-input v-model="params.lon"></el-input>
           </el-col>
           <el-col :span="5">
             <div>{{ $t('纬度') }}</div>
-            <el-input v-model="params.lat" disabled></el-input>
+            <el-input v-model="params.lat"></el-input>
           </el-col>
           <el-col :span="5">
             <el-button type="primary" plain class="clear-btn" @click="onClearMap">{{
               $t('清除')
+            }}</el-button>
+            <el-button type="primary" plain class="clear-btn" @click="savePoint">{{
+              $t('保存')
             }}</el-button>
           </el-col>
         </el-row>
@@ -131,10 +134,7 @@ export default {
       TMap.event.addListener(this.map, 'click', this.onPoint)
     }, // 选取地图上的点
     onPoint(e) {
-      console.log(e.latLng)
-      console.log(e, 'eeee')
       this.params.lon = e.latLng.lng
-      console.log(this.params.lon, 'params.lon')
       this.params.lat = e.latLng.lat
       if (!this.marker) {
         this.marker = new TMap.Marker({
@@ -151,6 +151,20 @@ export default {
       this.params.lon = ''
       this.marker.setPosition(null)
     },
+    savePoint() {
+      const point = new TMap.LatLng(this.params.lat, this.params.lon)
+      if (!this.marker) {
+        this.marker = new TMap.Marker({
+          position: point,
+          map: this.map
+        })
+      } else {
+        this.marker.setPosition(new TMap.LatLng(this.params.lat, this.params.lon))
+      }
+      this.$nextTick(() => {
+        this.map.panTo(point)
+      })
+    },
     getList() {
       this.$request.getBlocksDetails(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -162,21 +176,7 @@ export default {
           if (res.data.content && res.data.content.lon) {
             this.params.lat = res.data.content && res.data.content.lat
             this.params.lon = res.data.content && res.data.content.lon
-            const point = new TMap.LatLng(this.params.lat, this.params.lon)
-            if (!this.marker) {
-              console.log('非marker')
-              console.log(this.params.lat, this.params.lon)
-              this.marker = new TMap.Marker({
-                position: point,
-                map: this.map
-              })
-            } else {
-              console.log('marker')
-              this.marker.setPosition(new TMap.LatLng(this.params.lat, this.params.lon))
-            }
-            this.$nextTick(() => {
-              this.map.panTo(point)
-            })
+            this.savePoint()
           }
         }
       })

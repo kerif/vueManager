@@ -63,7 +63,7 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="5" :xl="4">
+        <el-col :span="5" :xl="6">
           <!--包裹号搜索-->
           <el-form-item :label="$t('仓库')" prop="warehouse">
             <el-select v-model="searchFieldData.warehouse" clearable :placeholder="$t('请选择')">

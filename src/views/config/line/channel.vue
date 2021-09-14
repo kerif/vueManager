@@ -573,15 +573,8 @@ export default {
   },
   created() {
     this.lineId = this.$route.params.id
-    console.log(this.lineId, 'this.lineId')
-    console.log(this.$route.query, 'query')
-    console.log(this.$route.params, 'params')
-    console.log(this.lineId, 'this.lineId')
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
-    console.log(this.unShow, 'this.unShow')
-    console.log(this.$route.query.size || 10, 'size')
     this.getLanguageList() // 获取支持语言
-    // this.getList()
     // 获取线路名称筛选列表
     this.getColumnList('name', 'lineNameColumn')
     // 获取支持仓库筛选列表
@@ -984,7 +977,6 @@ export default {
     },
     // 修改语言
     onLang(line, lang) {
-      console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       dialog(
         { type: 'lineLang', line: line, lang: lang, transCode: this.transCode, state: 'channel' },

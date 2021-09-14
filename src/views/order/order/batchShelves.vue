@@ -55,7 +55,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div>
+        <div v-if="packageList.length">
           <span>货位:{{ locations }} 个</span
           ><span style="margin-left: 10px">上架包裹:{{ packages }} 个</span>
         </div>

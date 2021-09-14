@@ -44,7 +44,11 @@ export default {
       all: [],
       resultData: [],
       passData: [],
-      page_params: {},
+      localization: {},
+      page_params: {
+        keyword: '',
+        status: ''
+      },
       totalSettlement: 0
     }
   },
@@ -58,18 +62,19 @@ export default {
     this.getSettleAccounts()
   },
   methods: {
-    getList(status, param_list) {
+    getList(status, param_list = {}) {
       this.$request
         .pendingReview({
-          keyword: this.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          status: status !== '-1' ? status : '',
-          ...param_list
+          keyword: this.keyword,
+          ...param_list,
+          status: this.page_params.status || param_list.status
         })
         .then(res => {
           if (res.ret) {
             this.all = res.data
+            this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           }
@@ -100,6 +105,7 @@ export default {
     },
     onTabChange(tab) {
       this.page_params.page = 1
+      this.page_params.status = tab.name == -1 ? '' : tab.name
       this.getList(tab.name)
     },
     onSearch(params) {

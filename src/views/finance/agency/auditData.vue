@@ -62,7 +62,7 @@
     </div>
     <!-- 表格 -->
     <div class="data-list">
-      <el-table border style="width: 100%" height="calc(100vh - 270px)" :data="allData">
+      <el-table border style="width: 100%" :data="allData">
         <el-table-column type="index" width="50" :label="$t('#')"> </el-table-column>
         <el-table-column prop="serial_no" :label="$t('流水号')" width="185"> </el-table-column>
         <el-table-column prop="status" :label="$t('审核状态')">
@@ -80,7 +80,7 @@
         <el-table-column prop="created_at" :label="$t('申请时间')" width="160"> </el-table-column>
         <el-table-column prop="operator" :label="$t('处理人')" width="160"> </el-table-column>
         <el-table-column prop="audit_at" :label="$t('处理时间')" width="160"> </el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status === 0"
@@ -111,6 +111,7 @@ export default {
     return {
       timeList: [],
       typeData: [],
+      localization: {},
       page_params: {
         status: '',
         type: '',
@@ -162,6 +163,9 @@ export default {
       })
     },
     triggerVal() {
+      if (!this.timeList) {
+        this.timeList = []
+      }
       this.page_params.begin_date = this.timeList[0]
       this.page_params.end_date = this.timeList[1]
       this.$emit('passval', this.page_params)
