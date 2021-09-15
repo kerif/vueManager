@@ -36,7 +36,7 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('参考时效')" prop="reference_time"></el-table-column>
+          <!-- <el-table-column :label="$t('参考时效')" prop="reference_time"></el-table-column> -->
           <el-table-column :label="$t('最小重量')" prop="min_weight"></el-table-column>
           <el-table-column :label="$t('开启拼团')" width="110">
             <template slot-scope="scope">
