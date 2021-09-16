@@ -99,6 +99,13 @@
           width="105"
           align="right"
         ></el-table-column>
+        <!-- 积分抵扣金额 -->
+        <el-table-column
+          :label="$t('积分抵扣金额') + this.localization.currency_unit"
+          prop="point_amount"
+          width="115"
+          align="right"
+        ></el-table-column>
         <!-- 支付金额¥ -->
         <el-table-column
           :label="$t('支付金额') + this.localization.currency_unit"

@@ -142,6 +142,7 @@ export default {
   data() {
     return {
       languageData: [],
+      id: '',
       ruleForm: {
         name: '',
         payment_setting_connection: [],
@@ -233,10 +234,9 @@ export default {
           title: this.$t('新增'),
           id: this.id
         },
-        data => {
-          // this.getList()
-          this.ruleForm.payment_setting_connection.push(data)
-          console.log(this.ruleForm.payment_setting_connection, ' data')
+        () => {
+          this.getList()
+          // this.ruleForm.payment_setting_connection.push(data)
         }
       )
     },

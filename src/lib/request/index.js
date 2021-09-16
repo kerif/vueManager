@@ -680,8 +680,8 @@ exports.uploadRecharge = params => {
   return $form.get('recharge-records/export', { params })
 }
 // 财务 充值记录 获取成长值财务列表
-exports.getGrowthFinance = () => {
-  return $form.get('growth-finances/payments')
+exports.getGrowthFinance = params => {
+  return $form.get('growth-finances/payments', { params })
 }
 // 财务 充值记录 获取成长值财务列表
 exports.getGrowthFinanceDetails = id => {

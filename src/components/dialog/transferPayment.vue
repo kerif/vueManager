@@ -52,11 +52,11 @@ export default {
     async confirm() {
       let res = {}
       if (this.type === 'addPay') {
-        this.success(Object.assign({}, this.contentData))
-        this.show = false
-        return
-        // this.contentData.payment_settings_id = this.id
-        // res = await this.$request.addPay(this.contentData)
+        // this.success(Object.assign({}, this.contentData))
+        // this.show = false
+        // return
+        this.contentData.payment_settings_id = this.id
+        res = await this.$request.addPay(this.contentData)
       } else if (this.type === 'editPay') {
         this.contentData.payment_settings_id = this.id
         res = await this.$request.editPay(this.payId, this.contentData)

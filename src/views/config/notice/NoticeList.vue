@@ -224,6 +224,7 @@ export default {
     },
     // 筛选
     onVocherTypeChange() {
+      this.page_params.page = 1
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },

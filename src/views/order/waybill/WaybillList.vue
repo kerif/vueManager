@@ -392,7 +392,7 @@
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="activeName === '3' || activeName === '4'"
-                  @click.native="multiLogisticsDialog(scope.row.id, scope.row.boxes_count)"
+                  @click.native="multiLogisticsDialog(scope.row.id)"
                 >
                   {{ $t('更新多箱物流') }}
                 </el-dropdown-item>
@@ -1562,13 +1562,11 @@ export default {
           }
         })
     },
-    multiLogisticsDialog(id, count) {
+    multiLogisticsDialog(id) {
       dialog(
         {
           type: 'addCompany',
           orderId: id,
-          box: this.box,
-          count,
           state: 'multiBox'
         },
         () => {
