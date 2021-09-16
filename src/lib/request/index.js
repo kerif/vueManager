@@ -1482,6 +1482,10 @@ exports.warehouseEnabled = (id, status) => {
 exports.warehouseLocationIndex = params => {
   return $form.put('warehouse-address/sort', params)
 }
+//设置无人认领包裹专区
+exports.unclaimedArea = id => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/set-nps-area`)
+}
 // 仓位管理 锁定或开锁
 exports.updateLocks = (id, status) => {
   return $form.put(`warehouse-address/area-Unlock/${id}/status/${status}`)
@@ -3016,6 +3020,22 @@ exports.uploadUserExcel = () => {
 // 订单列表 获取订单统计数据
 exports.getCounts = params => {
   return $form.get('orders/order-counts', { params })
+}
+// 订单列表 打包处理 订单价格计算
+exports.calOrderPrice = (id, params) => {
+  return $form.post(`orders/${id}/price-counter`, params)
+}
+// 订单列表 打包处理 订单数据保存
+exports.saveOrderData = (id, params) => {
+  return $form.put(`orders/${id}/save`, params)
+}
+//订单列表 待支付 改为已付款
+exports.paid = (id, params) => {
+  return $form.put(`orders/${id}/paid`, params)
+}
+//订单列表 待支付 获取支付方式
+exports.payMethod = () => {
+  return $form.get('orders/pay-method')
 }
 // 发货单 获取弹窗里可使用的物流状态
 exports.getOrderStatus = () => {

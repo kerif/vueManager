@@ -62,6 +62,9 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <el-button class="btn-blue-green" v-if="activeName === '2'" size="small" @click="isPaid"
+          >{{ $t('改为已付款') }}
+        </el-button>
         <el-button
           class="btn-blue-green"
           v-if="['3', '4', '5'].includes(activeName)"
@@ -170,6 +173,17 @@
                 {{ $t('审核拒绝') }}
               </router-link>
             </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('状态')"
+          v-if="activeName === '1'"
+          key="is_saved"
+          prop="is_saved"
+        >
+          <template slot-scope="scope">
+            <span v-if="scope.row.is_saved === 1">{{ $t('待提交') }}</span>
+            <span v-else></span>
           </template>
         </el-table-column>
         <el-table-column
@@ -1095,7 +1109,15 @@ export default {
         size: 20
       },
       type: '',
-      box: []
+      box: [],
+      user_id: '',
+      order_sn: '',
+      actual_payment_fee: '',
+      orderInfo: '',
+      selectUserID: [],
+      user_name: '',
+      status: '',
+      id: ''
     }
   },
   activated() {
@@ -1385,6 +1407,36 @@ export default {
         }
       })
     },
+    isPaid() {
+      console.log(this.orderInfo)
+      this.order_sn = this.orderInfo[0].order_sn
+      this.user_id = this.orderInfo[0].user_id
+      this.actual_payment_fee = this.orderInfo[0].actual_payment_fee
+      this.user_name = this.orderInfo[0].user_name
+      this.id = this.orderInfo[0].id
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      if (this.orderInfo[0].status === 11) {
+        return this.$message.error(this.$t('该订单为待审核状态，无法更改付款状态，请操作审核'))
+      }
+      if (this.selectIDs.length > 1) {
+        return this.$message.error(this.$t('请选择单个订单进行操作'))
+      }
+      dialog(
+        {
+          type: 'addPaid',
+          id: this.id,
+          user_id: this.user_id,
+          order_sn: this.order_sn,
+          actual_payment_fee: this.actual_payment_fee,
+          user_name: this.user_name
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
     payed() {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
@@ -1644,6 +1696,7 @@ export default {
     },
     onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)
+      this.orderInfo = selection
     },
     exChange(row, expandedRows) {
       console.log(expandedRows, 'expandedRows')

@@ -182,11 +182,20 @@
                   <tr>
                     <td>{{ $t('国家/地区') }}</td>
                     <th>{{ form.address.code }} {{ form.address.country.cn_name }}</th>
-                    <td>{{ $t('省/市/区') }}</td>
-                    <th>
-                      {{ form.address.province }},{{ form.address.city }},{{
-                        form.address.district
-                      }}
+                    <td>{{ $t('省') }}</td>
+                    <th class="part">
+                      {{ form.address.province }}
+                    </th>
+                  </tr>
+
+                  <tr>
+                    <td>{{ $t('市') }}</td>
+                    <th class="part">
+                      {{ form.address.city }}
+                    </th>
+                    <td>{{ $t('区') }}</td>
+                    <th class="part">
+                      {{ form.address.district }}
                     </th>
                   </tr>
 
@@ -206,7 +215,9 @@
 
                   <tr class="one-line">
                     <td>{{ $t('附加地址') }}</td>
-                    <th colspan="3">{{ form.address.address }}</th>
+                    <th>{{ form.address.address }}</th>
+                    <td>{{ $t('邮箱') }}</td>
+                    <th>{{ form.address.email }}</th>
                   </tr>
 
                   <tr class="one-line" v-if="form.address.wechat_id">
@@ -1460,6 +1471,9 @@ export default {
         text-align: right;
         width: 15%;
         padding-right: 15px;
+      }
+      .part {
+        width: 10% !important;
       }
       th {
         height: 35px;

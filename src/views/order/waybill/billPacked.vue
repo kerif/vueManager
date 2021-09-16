@@ -473,13 +473,44 @@
         </el-row>
       </el-form>
     </div>
+    <!-- 运费计算 -->
+    <div class="receiverMSg">
+      <div class="leftBtn">
+        <el-button type="danger" @click="getCalOrderPrice">{{ $t('计算') }}</el-button>
+      </div>
+      <div class="rightTab">
+        <!-- <el-table border style="width: 80%">
+          <el-table-column
+            v-for="item in freightData"
+            :label="item.name"
+            :prop="item.value"
+            :key="item.index"
+          ></el-table-column>
+        </el-table> -->
+        <div v-for="item in freightData" :key="item.index" class="check">
+          <div style="padding-top: 10px">{{ item.name }}</div>
+          <div style="padding-top: 10px">
+            {{ item.value }}
+          </div>
+        </div>
+        <div v-if="freightData.length === 0" class="text">请填写重量体积后，点击计算核算价格</div>
+        <div class="total">
+          {{ $t('合计:') }}<span class="color_fee">{{ this.total_fee }}</span>
+        </div>
+        <div class="changePrice">
+          <el-checkbox v-model="is_checked"> {{ $t('改价:') }} </el-checkbox>
+          <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
+        </div>
+      </div>
+    </div>
     <!-- 保存 -->
-    <el-row :gutter="20">
-      <el-col :span="18">
-        <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{
-          $t('保存')
-        }}</el-button>
-      </el-col>
+    <el-row>
+      <el-button type="primary" @click="saveOnly" :loading="$store.state.btnLoading">{{
+        $t('仅保存')
+      }}</el-button>
+      <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{
+        $t('保存并提交')
+      }}</el-button>
     </el-row>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -518,7 +549,8 @@ export default {
         in_warehouse_pictures: [], // 留仓物品照片
         pack_pictures: [], // 打包照片
         box: [],
-        line_service_ids: []
+        line_service_ids: [],
+        order_service_ids: []
       },
       baseMode: 0,
       lineServices: [],
@@ -542,7 +574,16 @@ export default {
       warehouse: {
         warehouse_name: ''
       },
-      factor: ''
+      factor: '',
+      freightData: [],
+      changePrice: '',
+      is_checked: false,
+      total_fee: '',
+      line_rules_fee: '',
+      freight: '',
+      first: '',
+      next: '',
+      service: []
     }
   },
   created() {
@@ -680,6 +721,63 @@ export default {
                 0
               )
     },
+    //订单价格计算
+    getCalOrderPrice() {
+      this.$request.calOrderPrice(this.$route.params.id, { ...this.user }).then(res => {
+        console.log(res)
+        this.total_fee = res.data.total_fee
+        let line_services = res.data.line_services.services.map(item => {
+          let name = item.name
+          let value = item.price
+          return { name, value }
+        })
+        let order_services = res.data.order_services.services.map(item => {
+          let name = item.name
+          let value = item.price
+          return { name, value }
+        })
+        this.freightData = []
+        this.freightData.push(
+          {
+            name: '运费',
+            value: res.data.freight.first + res.data.freight.next
+          },
+          {
+            name: '保险费',
+            value: res.data.insurance_fee
+          },
+          {
+            name: '关税费',
+            value: res.data.tariff_fee
+          },
+          {
+            name: '渠道限制费',
+            value: res.data.line_rules.fee
+          },
+          ...line_services,
+          ...order_services
+        )
+      })
+    },
+    // 仅保存
+    saveOnly() {
+      this.$request.saveOrderData(this.$route.params.id, { ...this.user }).then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    //
     savePacked() {
       this.user.services = this.updateProp
         .filter(item => item.checked)
@@ -1002,6 +1100,43 @@ export default {
     padding: 10px;
     margin-bottom: 20px;
     background-color: #fff !important;
+    .leftBtn {
+      float: left;
+      height: 200px;
+      margin: 0 20px;
+      .el-button {
+        height: 160px;
+      }
+    }
+    .rightTab {
+      height: 180px;
+      font-size: 14px;
+      .check {
+        width: 120px;
+        height: 80px;
+        border: 1px solid #000;
+        vertical-align: top;
+        display: inline-block;
+        text-align: center;
+      }
+      .text {
+        padding-top: 70px;
+      }
+      .total {
+        margin-top: 40px;
+        font-size: 20px;
+        font-weight: bold;
+        .color_fee {
+          color: red;
+        }
+      }
+      .changePrice {
+        margin: -26px 0 0 300px;
+        .inpLength {
+          width: 10% !important;
+        }
+      }
+    }
   }
   .leftWidth {
     display: inline-block;

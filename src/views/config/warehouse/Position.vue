@@ -4,7 +4,9 @@
       <search-group v-model="page_params.keyword" @search="goSearch">
       </search-group>
       </div> -->
+
     <div class="select-box">
+      <el-button type="danger" plain @click.native="addShelfRules">上架规则</el-button>
       <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
     </div>
     <el-table
@@ -216,6 +218,17 @@ export default {
         }
       })
     },
+    // 上架规则
+    addShelfRules() {
+      dialog(
+        {
+          type: 'shelfRules'
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
     // 新增货位
     addLocation() {
       dialog(
@@ -310,6 +323,7 @@ export default {
 <style lang="scss">
 .position-container {
   .select-box {
+    float: right;
     overflow: hidden;
   }
   .country-box {
