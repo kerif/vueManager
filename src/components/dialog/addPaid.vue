@@ -32,6 +32,7 @@
           style="margin-left: 50px"
           v-model="ruleForm.payment_id"
           placeholder="请选择支付方式"
+          clearable
         >
           <el-option v-for="item in methodData" :key="item.id" :label="item.name" :value="item.id"
             >{{ item.name }}
@@ -173,6 +174,9 @@ export default {
         images: this.images
       }
       this.$request.paid(this.id, { ...info }).then(res => {
+        if (this.ruleForm.confirm_amount > this.actual_payment_fee) {
+          return this.$message.error(this.$t('实付金额必须小于等于应付'))
+        }
         if (res.ret) {
           console.log(res)
           this.$notify({

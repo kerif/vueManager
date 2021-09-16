@@ -90,7 +90,9 @@ export default {
       positionList: [],
       typeSendData: [],
       tableLoading: false,
-      deleteNum: []
+      deleteNum: [],
+      unClaimed: '',
+      number: []
     }
   },
   created() {
@@ -110,6 +112,8 @@ export default {
           if (res.ret) {
             this.positionList = res.data
             this.typeSendData = [...res.data]
+            this.unClaimed = res.data.map(item => item.no_package_special)
+            this.number = res.data.map(item => item.number)
             this.$nextTick(() => {
               this.typeRowDrop()
             })
@@ -222,7 +226,8 @@ export default {
     addShelfRules() {
       dialog(
         {
-          type: 'shelfRules'
+          type: 'shelfRules',
+          nubmer: this.number
         },
         () => {
           this.getList()

@@ -1408,12 +1408,6 @@ export default {
       })
     },
     isPaid() {
-      console.log(this.orderInfo)
-      this.order_sn = this.orderInfo[0].order_sn
-      this.user_id = this.orderInfo[0].user_id
-      this.actual_payment_fee = this.orderInfo[0].actual_payment_fee
-      this.user_name = this.orderInfo[0].user_name
-      this.id = this.orderInfo[0].id
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
@@ -1423,6 +1417,11 @@ export default {
       if (this.selectIDs.length > 1) {
         return this.$message.error(this.$t('请选择单个订单进行操作'))
       }
+      this.order_sn = this.orderInfo[0].order_sn
+      this.user_id = this.orderInfo[0].user_id
+      this.actual_payment_fee = this.orderInfo[0].actual_payment_fee
+      this.user_name = this.orderInfo[0].user_name
+      this.id = this.orderInfo[0].id
       dialog(
         {
           type: 'addPaid',

@@ -21,11 +21,29 @@
 export default {
   data() {
     return {
-      ruleForm: {}
+      ruleForm: {},
+      number: []
     }
   },
   methods: {
-    submit() {}
+    submit() {
+      this.$request.unclaimedArea().then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    }
   }
 }
 </script>

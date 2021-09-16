@@ -3,7 +3,7 @@
     <el-form>
       <el-form-item>
         <div style="text-align: right">
-          <el-button class="btn-light-red" @click="addLabel">{{ $t('添加属性') }}</el-button>
+          <el-button class="btn-light-red" @click="addLabel">{{ $t('添加标签') }}</el-button>
         </div>
         <el-table
           :data="lineTable"
