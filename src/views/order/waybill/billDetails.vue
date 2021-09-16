@@ -15,6 +15,7 @@
         margin-bottom: 20px;
         margin-top: 20px;
         line-height: 30px;
+        overflow: hidden;
       "
     >
       {{ $t('订单详情') }}({{ form.warehouse && form.warehouse.warehouse_name }}) <Br />
@@ -1271,8 +1272,8 @@ export default {
       dialog(
         {
           type: 'addCompany',
-          id: this.$route.params.id,
-          state: 'edit'
+          orderId: this.$route.params.id,
+          state: 'multiBox'
         },
         () => {
           this.getList()

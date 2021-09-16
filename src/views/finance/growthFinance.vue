@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div class="searchGroup">
+      <search-group
+        :placeholder="$t('请输入关键字')"
+        v-model="page_params.keyword"
+        @search="getList"
+      >
+      </search-group>
+    </div>
     <el-table :data="tableData" border style="width: 100%; margin-bottom: 10px">
       <el-table-column type="index" width="40"> </el-table-column>
       <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
@@ -42,6 +50,7 @@
 </template>
 
 <script>
+import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
@@ -51,7 +60,8 @@ export default {
     }
   },
   components: {
-    NlePagination
+    NlePagination,
+    SearchGroup
   },
   mixins: [pagination],
   created() {
@@ -62,10 +72,10 @@ export default {
       this.$request
         .getGrowthFinance({
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          keyword: this.page_params.keyword
         })
         .then(res => {
-          console.log(res)
           if (res.ret) {
             this.tableData = res.data
             this.page_params.page = res.meta.current_page
@@ -79,4 +89,14 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.searchGroup {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 10px;
+  .filter {
+    margin-left: 10px;
+  }
+}
+</style>

@@ -56,6 +56,10 @@
               form.rate_amount
             }}） </span
           ><br />
+          <!-- 积分抵扣金额 -->
+          <p class="transfer-right">{{ $t('积分抵扣金额') + this.localization.currency_unit }}</p>
+          <span>{{ form.point_amount }}</span>
+          <br />
           <!-- 关联单号 -->
           <p class="transfer-right">{{ $t('关联单号') }}</p>
           <span>{{ form.order_sn }}</span
