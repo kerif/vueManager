@@ -1040,11 +1040,15 @@ export default {
                 : []
             }
           })
-          this.countryList = [
-            +this.address.country_id,
-            this.address.area_id ? +this.address.area_id : '',
-            this.address.sub_area_id ? +this.address.sub_area_id : ''
-          ]
+          if (this.address.country_id) {
+            this.countryList.push(+this.address.country_id)
+          }
+          if (this.address.area_id) {
+            this.countryList.push(+this.address.area_id)
+          }
+          if (this.address.sub_area_id) {
+            this.countryList.push(+this.address.sub_area_id)
+          }
         }
       })
     },
@@ -1336,6 +1340,7 @@ export default {
     clear() {
       this.chooseId = ''
       this.user = {}
+      this.countryList = []
     },
     // 更换收件人信息
     changeReceive() {
