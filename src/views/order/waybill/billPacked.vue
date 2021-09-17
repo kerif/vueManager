@@ -474,19 +474,11 @@
       </el-form>
     </div>
     <!-- 运费计算 -->
-    <div class="receiverMSg">
+    <!-- <div class="receiverMSg">
       <div class="leftBtn">
         <el-button type="danger" @click="getCalOrderPrice">{{ $t('计算') }}</el-button>
       </div>
       <div class="rightTab">
-        <!-- <el-table border style="width: 80%">
-          <el-table-column
-            v-for="item in freightData"
-            :label="item.name"
-            :prop="item.value"
-            :key="item.index"
-          ></el-table-column>
-        </el-table> -->
         <div v-for="item in freightData" :key="item.index" class="check">
           <div style="padding-top: 10px">{{ item.name }}</div>
           <div style="padding-top: 10px">
@@ -502,7 +494,7 @@
           <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- 保存 -->
     <el-row>
       <el-button type="primary" @click="saveOnly" :loading="$store.state.btnLoading">{{
