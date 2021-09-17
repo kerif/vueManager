@@ -177,18 +177,8 @@
               <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
               <span v-else>({{ $t('体积计费') }})</span>
             </span>
-            <span v-if="scope.row.mode === 3"
-              >{{ $t('首重单位+阶梯价格模式') }}
-              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
-              <span v-else>({{ $t('体积计费') }})</span>
-            </span>
             <span v-if="scope.row.mode === 4"
               >{{ $t('多级续重模式') }}
-              <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
-              <span v-else>({{ $t('体积计费') }})</span>
-            </span>
-            <span v-if="scope.row.mode === 5"
-              >{{ $t('阶梯首重续重模式') }}
               <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
               <span v-else>({{ $t('体积计费') }})</span>
             </span>
