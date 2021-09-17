@@ -1483,8 +1483,8 @@ exports.warehouseLocationIndex = params => {
   return $form.put('warehouse-address/sort', params)
 }
 //设置无人认领包裹专区
-exports.unclaimedArea = id => {
-  return $form.put(`warehouse-address/${id}/goods-allocation-areas/set-nps-area`)
+exports.unclaimedArea = (id, params) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/set-nps-area`, params)
 }
 // 仓位管理 锁定或开锁
 exports.updateLocks = (id, status) => {

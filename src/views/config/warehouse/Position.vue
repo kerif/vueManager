@@ -68,6 +68,34 @@
         $t('按区域编号自动排序')
       }}</el-button>
     </div>
+    <el-dialog
+      :visible.sync="show"
+      :title="$t('上架规则')"
+      class="dialog-shelfRules"
+      @close="clear"
+    >
+      <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
+        <!--无人认领专区  -->
+        <el-form-item :label="$t('无人认领专区')">
+          <el-select placeholder="请选择" v-model="ruleForm.number" multiple>
+            <el-option
+              v-for="item in areaNumber"
+              :key="item.id"
+              :label="item.numbers"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <div style="margin-left: 20px">
+          *货区可多选，当包裹为无人认领时，强制放入专区，不受其他规则限制
+        </div>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="show = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -87,12 +115,16 @@ export default {
   mixins: [pagination],
   data() {
     return {
+      ruleForm: {
+        number: ''
+      },
       positionList: [],
       typeSendData: [],
       tableLoading: false,
       deleteNum: [],
       unClaimed: '',
-      number: []
+      areaNumber: [],
+      show: false
     }
   },
   created() {
@@ -113,7 +145,12 @@ export default {
             this.positionList = res.data
             this.typeSendData = [...res.data]
             this.unClaimed = res.data.map(item => item.no_package_special)
-            this.number = res.data.map(item => item.number)
+            this.areaNumber = res.data.map(item => {
+              let id = item.id
+              let numbers = item.number
+              return { id, numbers }
+            })
+            console.log(this.areaNumber)
             this.$nextTick(() => {
               this.typeRowDrop()
             })
@@ -224,15 +261,7 @@ export default {
     },
     // 上架规则
     addShelfRules() {
-      dialog(
-        {
-          type: 'shelfRules',
-          nubmer: this.number
-        },
-        () => {
-          this.getList()
-        }
-      )
+      this.show = true
     },
     // 新增货位
     addLocation() {
@@ -291,6 +320,29 @@ export default {
           }
         })
       })
+    },
+    submit() {
+      this.$request
+        .unclaimedArea(this.$route.params.id, { area_ids: this.ruleForm.number })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+    },
+    clear() {
+      this.ruleForm.number = ''
     }
     // // 删除
     // deleteData () {
@@ -349,6 +401,18 @@ export default {
     margin-top: 20px;
     color: red;
     font-size: 13px;
+  }
+  .dialog-shelfRules {
+    /deep/ .el-dialog__header {
+      background-color: #0e102a;
+    }
+    /deep/.el-dialog__title {
+      font-size: 14px;
+      color: #fff;
+    }
+    /deep/.el-dialog__close {
+      color: #fff;
+    }
   }
 }
 </style>

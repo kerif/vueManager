@@ -120,7 +120,6 @@ import discountTable from './discountTable.vue'
 import salesAddEdit from './salesAddEdit.vue'
 import addCustomLabel from './addCustomLabel.vue'
 import addLabel from './addLabel.vue'
-import shelfRules from './shelfRules.vue'
 import addPaid from './addPaid.vue'
 
 const InviteController = Vue.extend(inviteList)
@@ -242,7 +241,6 @@ const DiscountTable = Vue.extend(discountTable)
 const SalesAddEditController = Vue.extend(salesAddEdit)
 const AddCustomLabelController = Vue.extend(addCustomLabel)
 const AddLabelController = Vue.extend(addLabel)
-const ShelfRulesController = Vue.extend(shelfRules)
 const AddPaidController = Vue.extend(addPaid)
 
 const mixin = {
@@ -599,12 +597,12 @@ function initInstance(type) {
       })
       break
     //仓库地址配置 货位管理 上架规则
-    case 'shelfRules':
-      instance = new ShelfRulesController({
-        el: document.createElement('div'),
-        mixins: [mixin]
-      })
-      break
+    // case 'shelfRules':
+    //   instance = new ShelfRulesController({
+    //     el: document.createElement('div'),
+    //     mixins: [mixin]
+    //   })
+    //   break
     // 更多配置 支付转账配置 双语弹窗
     case 'payLang':
       instance = new PayLangController({
