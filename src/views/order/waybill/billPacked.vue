@@ -878,6 +878,14 @@ export default {
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.box_type = res.data.box_type
+        this.user.box = res.data.box
+        this.user.remark = res.data.remark
+        this.user.location = res.data.location
+        this.user.in_warehouse_item = res.data.in_warehouse_item
+        this.user.weight = res.data.weight
+        this.user.length = res.data.length
+        this.user.height = res.data.height
+        this.user.width = res.data.width
         this.services = res.data.services
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name

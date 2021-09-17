@@ -50,7 +50,7 @@
         ></el-input>
       </el-form-item>
       <!-- 转账支付账号 -->
-      <el-form-item :label="$t('转账支付账号')">
+      <el-form-item :label="$t('转账支付账号')" v-if="ruleForm.payment_id">
         <el-input
           class="input-sty"
           v-model="ruleForm.transfer_account"
@@ -58,7 +58,7 @@
         ></el-input>
       </el-form-item>
       <!-- 外部交易号 -->
-      <el-form-item :label="$t('外部交易号')">
+      <el-form-item :label="$t('外部交易号')" v-if="ruleForm.payment_id">
         <el-input
           class="input-sty"
           v-model="ruleForm.external_number"
@@ -66,7 +66,7 @@
         ></el-input>
       </el-form-item>
       <!--截图-->
-      <el-form-item :label="$t('截图')">
+      <el-form-item :label="$t('截图')" v-if="ruleForm.payment_id">
         <span class="img-item" v-for="(item, index) in images" :key="index">
           <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
           <span class="model-box"></span>

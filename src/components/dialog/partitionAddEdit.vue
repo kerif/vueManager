@@ -239,7 +239,7 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
+              // this.show = false
             })
         } else {
           this.$request
@@ -263,7 +263,7 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
+              // this.show = false
             })
         }
       } else {
@@ -289,7 +289,7 @@ export default {
                   type: 'error'
                 })
               }
-              this.show = false
+              // this.show = false
             })
         } else {
           this.$request
