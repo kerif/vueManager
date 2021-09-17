@@ -497,9 +497,9 @@
     </div> -->
     <!-- 保存 -->
     <el-row>
-      <el-button type="primary" @click="saveOnly" :loading="$store.state.btnLoading">{{
+      <!-- <el-button type="primary" @click="saveOnly" :loading="$store.state.btnLoading">{{
         $t('仅保存')
-      }}</el-button>
+      }}</el-button> -->
       <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{
         $t('保存并提交')
       }}</el-button>

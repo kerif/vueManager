@@ -491,7 +491,10 @@
       >
         <div style="text-align: center">
           <img v-if="uplodaStatus === 'ios'" src="../../assets/ios.png" />
-          <img v-else src="../../assets/android.png" />
+          <div v-else>
+            <img src="../../assets/android.png" />
+            <div>{{ $t('微信扫码请点击打开页面右上角选择“在浏览器中打开”') }}</div>
+          </div>
         </div>
       </el-dialog>
     </el-dialog>
