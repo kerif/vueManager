@@ -150,7 +150,6 @@ export default {
               let numbers = item.number
               return { id, numbers }
             })
-            console.log(this.areaNumber)
             this.$nextTick(() => {
               this.typeRowDrop()
             })

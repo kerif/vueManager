@@ -1207,8 +1207,12 @@ export default {
             this.form.active = 0
             break
         }
-        if (res.data.payment && res.data.payment.value_added_service) {
+        if (
+          res.data.payment &&
+          (res.data.payment.value_added_service || res.data.payment.line_services)
+        ) {
           this.addedData = res.data.payment.value_added_service
+          this.addedData.push(...res.data.payment.line_services)
         }
         if (this.form.is_parent === 1) this.loadGroupData(this.form.id)
       })
