@@ -1,6 +1,6 @@
 <template>
   <div class="packed-container">
-    <div class="receiverMSg">
+    <div class="receiver_msg">
       <h4>{{ $t('收货人信息') }}</h4>
       <el-row class="container-center" :gutter="20">
         <!-- 姓名 -->
@@ -55,7 +55,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="receiverMSg">
+    <div class="receiver_msg">
       <h4 class="all-group">{{ $t('打包详情') }}</h4>
       <!-- <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
         <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
@@ -181,7 +181,7 @@
       <!-- 所属包裹 -->
       <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
     </el-table>
-    <div class="receiverMSg">
+    <div class="receiver_msg">
       <el-form
         ref="params"
         :model="user"
@@ -474,7 +474,7 @@
       </el-form>
     </div>
     <!-- 运费计算 -->
-    <!-- <div class="receiverMSg">
+    <div class="receiver_msg">
       <div class="leftBtn">
         <el-button type="danger" @click="getCalOrderPrice">{{ $t('计算') }}</el-button>
       </div>
@@ -486,21 +486,37 @@
           </div>
         </div>
         <div v-if="freightData.length === 0" class="text">请填写重量体积后，点击计算核算价格</div>
-        <div class="total">
-          {{ $t('合计:') }}<span class="color_fee">{{ this.total_fee }}</span>
+        <div style="margin-left: 100px">
+          <div class="total">
+            {{ $t('合计:') }}<span class="color_fee">{{ this.total_fee }}</span>
+          </div>
+          <div class="changePrice">
+            <el-checkbox v-model="is_checked"> {{ $t('改价:') }} </el-checkbox>
+            <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
+          </div>
         </div>
-        <div class="changePrice">
-          <el-checkbox v-model="is_checked"> {{ $t('改价:') }} </el-checkbox>
-          <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
-        </div>
+
+        <!-- <el-row>
+          <el-col>
+            <div class="total">
+              {{ $t('合计:') }}<span class="color_fee">{{ this.total_fee }}</span>
+            </div>
+          </el-col>
+          <el-col>
+            <div class="changePrice">
+              <el-checkbox v-model="is_checked"> {{ $t('改价:') }} </el-checkbox>
+              <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
+            </div>
+          </el-col>
+        </el-row> -->
       </div>
-    </div> -->
+    </div>
     <!-- 保存 -->
     <el-row>
-      <!-- <el-button type="primary" @click="saveOnly" :loading="$store.state.btnLoading">{{
+      <el-button type="primary" @click="savePacked(1)" :loading="$store.state.btnLoading">{{
         $t('仅保存')
-      }}</el-button> -->
-      <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{
+      }}</el-button>
+      <el-button @click="savePacked(2)" type="primary" :loading="$store.state.btnLoading">{{
         $t('保存并提交')
       }}</el-button>
     </el-row>
@@ -751,26 +767,8 @@ export default {
         )
       })
     },
-    // 仅保存
-    saveOnly() {
-      this.$request.saveOrderData(this.$route.params.id, { ...this.user }).then(res => {
-        console.log(res)
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
-    //
-    savePacked() {
+    //仅保存和保存并提交
+    async savePacked(type) {
       this.user.services = this.updateProp
         .filter(item => item.checked)
         .map(item => {
@@ -779,7 +777,6 @@ export default {
             price: item.price
           }
         })
-      console.log('ser', this.user.services)
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
         return {
           url: item.url
@@ -790,22 +787,25 @@ export default {
           url: item.url
         }
       })
-      this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          // this.$router.push({ name: 'wayBillList' })
-          this.$router.go(-1)
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      let res = {}
+      if (type === 1) {
+        res = await this.$request.saveOrderData(this.$route.params.id, this.user)
+      } else {
+        res = await this.$request.saveOrderPack(this.$route.params.id, this.user)
+      }
+      if (res.ret) {
+        this.$notify({
+          type: 'success',
+          title: this.$t('操作成功'),
+          message: res.msg
+        })
+        this.$router.go(-1)
+      } else {
+        this.$message({
+          message: res.msg,
+          type: 'error'
+        })
+      }
     },
     // 新增行
     addRow() {
@@ -1096,7 +1096,7 @@ export default {
   .container-center {
     margin-bottom: 20px;
   }
-  .receiverMSg {
+  .receiver_msg {
     padding: 10px;
     margin-bottom: 20px;
     background-color: #fff !important;
@@ -1109,7 +1109,6 @@ export default {
       }
     }
     .rightTab {
-      height: 180px;
       font-size: 14px;
       .check {
         width: 120px;
