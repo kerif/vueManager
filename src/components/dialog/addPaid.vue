@@ -174,9 +174,6 @@ export default {
         images: this.images
       }
       this.$request.paid(this.id, { ...info }).then(res => {
-        // if (this.ruleForm.confirm_amount > this.actual_payment_fee) {
-        //   return this.$message.error(this.$t('实付金额必须小于等于应付'))
-        // }
         if (res.ret) {
           console.log(res)
           this.$notify({
