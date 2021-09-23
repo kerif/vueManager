@@ -639,7 +639,6 @@ export default {
         this.locationId = id
         this.user.location = ''
         this.locationCNSearch()
-        console.log(this.locationId, '我是改变的locationId')
         this.getAreaLocation()
         this.$request.getArea(id).then(res => {
           if (res.ret) {
@@ -788,7 +787,7 @@ export default {
       this.$request
         .AutoLocation(this.locationId, {
           keyword: this.user.location,
-          user_id: this.user.user_id
+          user_id: this.userId
         })
         .then(res => {
           console.log(res.data, 'res data')
@@ -815,6 +814,7 @@ export default {
       this.userId = item.id
       this.supplierName = item.name
       this.getAreaLocation()
+      this.locationCNSearch()
     },
     // 货位
     locationSelect(item) {

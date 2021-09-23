@@ -426,15 +426,17 @@
         <el-row :gutter="20" v-if="$route.params.parent == 0">
           <el-col>
             <el-form-item :label="$t('增值服务')">
-              <div v-for="item in updateProp" :key="item.id" class="service">
-                <div class="serviceLeft">
-                  <el-checkbox v-model="item.checked">{{ item.name }}</el-checkbox>
+              <el-checkbox-group v-model="user.services">
+                <div v-for="item in updateProp" :key="item.id" class="service">
+                  <div class="serviceLeft">
+                    <el-checkbox :label="item.id">{{ item.name }}</el-checkbox>
+                  </div>
+                  <div class="serviceRight">
+                    <span>{{ localization.currency_unit }}</span>
+                    <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                  </div>
                 </div>
-                <div class="serviceRight">
-                  <span>{{ localization.currency_unit }}</span>
-                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
-                </div>
-              </div>
+              </el-checkbox-group>
             </el-form-item>
           </el-col>
         </el-row>
@@ -491,24 +493,12 @@
             {{ $t('合计:') }}<span class="color_fee">{{ this.total_fee }}</span>
           </div>
           <div class="changePrice">
-            <el-checkbox v-model="is_checked"> {{ $t('改价:') }} </el-checkbox>
-            <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
-          </div>
-        </div>
-
-        <!-- <el-row>
-          <el-col>
-            <div class="total">
-              {{ $t('合计:') }}<span class="color_fee">{{ this.total_fee }}</span>
-            </div>
-          </el-col>
-          <el-col>
-            <div class="changePrice">
+            <el-checkbox-group v-model="final_price">
               <el-checkbox v-model="is_checked"> {{ $t('改价:') }} </el-checkbox>
               <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
-            </div>
-          </el-col>
-        </el-row> -->
+            </el-checkbox-group>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 保存 -->
@@ -591,7 +581,8 @@ export default {
       freight: '',
       first: '',
       next: '',
-      service: []
+      service: [],
+      final_price: ''
     }
   },
   created() {
@@ -605,18 +596,16 @@ export default {
     getProp(arr) {
       this.$request.getAdded().then(res => {
         if (res.ret) {
+          this.updateProp = res.data
           let ids = res.data.map(item => item.id)
-          this.updateProp = res.data.map(item => {
-            return {
-              ...item,
-              checked: false
-            }
-          })
           arr.forEach(item => {
             let index = ids.indexOf(item.service_id)
             if (index !== -1) {
               this.updateProp[index].checked = true
               this.updateProp[index].price = item.price
+              this.user.services.push(this.updateProp[index].id)
+            } else {
+              this.updateProp[index].checked = false
             }
           })
         }
@@ -731,8 +720,17 @@ export default {
     },
     //订单价格计算
     getCalOrderPrice() {
-      this.$request.calOrderPrice(this.$route.params.id, { ...this.user }).then(res => {
+      let services = []
+      services = this.updateProp
+        .filter(ele => this.user.services.includes(ele.id))
+        .map(ele => {
+          let id = ele.id
+          let price = ele.price
+          return { id, price }
+        })
+      this.$request.calOrderPrice(this.$route.params.id, { ...this.user, services }).then(res => {
         console.log(res)
+        console.log(res.data.line_services)
         this.total_fee = res.data.total_fee
         let line_services = res.data.line_services.services.map(item => {
           let name = item.name
@@ -777,6 +775,8 @@ export default {
             price: item.price
           }
         })
+      this.user.in_warehouse_pictures = this.goodsImgList
+      this.user.pack_pictures = this.baleImgList
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
         return {
           url: item.url
@@ -886,6 +886,10 @@ export default {
         this.user.length = res.data.length
         this.user.height = res.data.height
         this.user.width = res.data.width
+        this.user.in_warehouse_pictures = res.data.in_warehouse_pictures
+        this.user.pack_pictures = res.data.pack_pictures
+        this.goodsImgList = res.data.in_warehouse_pictures
+        this.baleImgList = res.data.pack_pictures
         this.services = res.data.services
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name
@@ -980,7 +984,6 @@ export default {
           arr[index].checked = true
         }
       })
-      console.log('dcd', this.arr)
       return arr
     }
   }

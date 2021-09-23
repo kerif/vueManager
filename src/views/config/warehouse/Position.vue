@@ -144,12 +144,13 @@ export default {
           if (res.ret) {
             this.positionList = res.data
             this.typeSendData = [...res.data]
-            this.unClaimed = res.data.map(item => item.no_package_special)
-            this.areaNumber = res.data.map(item => {
-              let id = item.id
-              let numbers = item.number
-              return { id, numbers }
-            })
+            this.areaNumber = res.data
+              .filter(item => item.no_package_special)
+              .map(item => {
+                let id = item.id
+                let numbers = item.number
+                return { id, numbers }
+              })
             this.$nextTick(() => {
               this.typeRowDrop()
             })
