@@ -1,6 +1,6 @@
 <template>
   <div class="packed-container">
-    <div class="receiver_msg">
+    <div class="receiver-msg">
       <h4>{{ $t('收货人信息') }}</h4>
       <el-row class="container-center" :gutter="20">
         <!-- 姓名 -->
@@ -55,7 +55,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="receiver_msg">
+    <div class="receiver-msg">
       <h4 class="all-group">{{ $t('打包详情') }}</h4>
       <!-- <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
         <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
@@ -181,7 +181,7 @@
       <!-- 所属包裹 -->
       <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
     </el-table>
-    <div class="receiver_msg">
+    <div class="receiver-msg">
       <el-form
         ref="params"
         :model="user"
@@ -476,7 +476,7 @@
       </el-form>
     </div>
     <!-- 运费计算 -->
-    <div class="receiver_msg">
+    <div class="receiver-msg">
       <div class="leftBtn">
         <el-button type="danger" @click="getCalOrderPrice">{{ $t('计算') }}</el-button>
       </div>
@@ -729,8 +729,6 @@ export default {
           return { id, price }
         })
       this.$request.calOrderPrice(this.$route.params.id, { ...this.user, services }).then(res => {
-        console.log(res)
-        console.log(res.data.line_services)
         this.total_fee = res.data.total_fee
         let line_services = res.data.line_services.services.map(item => {
           let name = item.name
@@ -1099,7 +1097,7 @@ export default {
   .container-center {
     margin-bottom: 20px;
   }
-  .receiver_msg {
+  .receiver-msg {
     padding: 10px;
     margin-bottom: 20px;
     background-color: #fff !important;

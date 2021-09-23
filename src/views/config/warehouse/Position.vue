@@ -1,10 +1,5 @@
 <template>
   <div class="position-container">
-    <!-- <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-      </search-group>
-      </div> -->
-
     <div class="select-box">
       <el-button type="danger" plain @click.native="addShelfRules">上架规则</el-button>
       <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
@@ -52,11 +47,6 @@
           }}</el-button>
         </template>
       </el-table-column>
-      <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
-        </div>
-      </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <div class="sort-sty">
@@ -99,7 +89,6 @@
   </div>
 </template>
 <script>
-// import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
@@ -188,7 +177,6 @@ export default {
     // 确定拖拽
     typeRowUpdate() {
       const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
-      console.log(ids)
       this.positionList = []
       this.$request.positionsSort(this.$route.params.id, ids).then(res => {
         if (res.ret) {

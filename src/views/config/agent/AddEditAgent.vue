@@ -100,16 +100,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('联系电话')" v-if="this.$route.query.id">
-                <el-input
-                  v-model="user.contact_phone"
-                  :placeholder="$t('请输入联系电话')"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row> -->
           <el-row :gutter="20">
             <el-col :span="18">
               <el-form-item :label="$t('微信号')" prop="wechat_id">

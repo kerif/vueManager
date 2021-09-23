@@ -782,7 +782,6 @@ export default {
     },
     // 货位搜索
     locationCNSearch(queryString, callback) {
-      console.log(this.user.location, 'location')
       var list = [{}]
       this.$request
         .AutoLocation(this.locationId, {
