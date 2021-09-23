@@ -812,6 +812,7 @@ export default {
       this.supplierId = item.id
       this.userId = item.id
       this.supplierName = item.name
+      this.user.location = ''
       this.getAreaLocation()
       this.locationCNSearch()
     },

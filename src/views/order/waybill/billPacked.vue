@@ -451,9 +451,9 @@
                       item.name
                     }}</el-checkbox>
                   </div>
-                  <div class="serviceRight">
-                    <span>{{ localization.currency_unit }}</span>
-                    <el-input v-model="item.value" disabled class="add-value-ipt"></el-input>
+                  <div class="service-right">
+                    <span>{{ localization.currency_unit }} {{ item.value }}/{{ $t('箱') }} </span>
+                    <!-- <el-input v-model="item.value" disabled class="add-value-ipt"></el-input> -->
                   </div>
                 </div>
               </el-checkbox-group>
@@ -728,40 +728,49 @@ export default {
           let price = ele.price
           return { id, price }
         })
-      this.$request.calOrderPrice(this.$route.params.id, { ...this.user, services }).then(res => {
-        this.total_fee = res.data.total_fee
-        let line_services = res.data.line_services.services.map(item => {
-          let name = item.name
-          let value = item.price
-          return { name, value }
+      this.$request
+        .calOrderPrice(this.$route.params.id, {
+          ...this.user,
+          services,
+          width: this.user.width || '',
+          height: this.user.height || '',
+          length: this.user.length || '',
+          weight: this.user.weight || ''
         })
-        let order_services = res.data.order_services.services.map(item => {
-          let name = item.name
-          let value = item.price
-          return { name, value }
+        .then(res => {
+          this.total_fee = res.data.total_fee
+          let line_services = res.data.line_services.services.map(item => {
+            let name = item.name
+            let value = item.price
+            return { name, value }
+          })
+          let order_services = res.data.order_services.services.map(item => {
+            let name = item.name
+            let value = item.price
+            return { name, value }
+          })
+          this.freightData = []
+          this.freightData.push(
+            {
+              name: '运费',
+              value: res.data.freight.first + res.data.freight.next
+            },
+            {
+              name: '关税费',
+              value: res.data.tariff_fee
+            },
+            {
+              name: '保险费',
+              value: res.data.insurance_fee
+            },
+            ...order_services,
+            ...line_services,
+            {
+              name: '渠道限制费',
+              value: res.data.line_rules.fee
+            }
+          )
         })
-        this.freightData = []
-        this.freightData.push(
-          {
-            name: '运费',
-            value: res.data.freight.first + res.data.freight.next
-          },
-          {
-            name: '保险费',
-            value: res.data.insurance_fee
-          },
-          {
-            name: '关税费',
-            value: res.data.tariff_fee
-          },
-          {
-            name: '渠道限制费',
-            value: res.data.line_rules.fee
-          },
-          ...line_services,
-          ...order_services
-        )
-      })
     },
     //仅保存和保存并提交
     async savePacked(type) {
@@ -1030,6 +1039,10 @@ export default {
       display: inline-block;
       float: right;
     }
+    .service-right {
+      display: inline-block;
+      padding-left: 10px;
+    }
   }
   .saveBtn {
     .el-button {
@@ -1114,7 +1127,7 @@ export default {
       .check {
         width: 120px;
         height: 80px;
-        border: 1px solid #000;
+        border: 1px solid #dcdfe6;
         vertical-align: top;
         display: inline-block;
         text-align: center;
@@ -1180,6 +1193,9 @@ export default {
   }
   .add-sty {
     text-align: right;
+  }
+  /deep/.el-checkbox-group {
+    font-size: 14px;
   }
 }
 </style>

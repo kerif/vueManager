@@ -113,6 +113,7 @@ export default {
       deleteNum: [],
       unClaimed: '',
       areaNumber: [],
+      noAreaNumber: [],
       show: false
     }
   },
@@ -133,13 +134,14 @@ export default {
           if (res.ret) {
             this.positionList = res.data
             this.typeSendData = [...res.data]
-            this.areaNumber = res.data
+            this.ruleForm.number = res.data
               .filter(item => item.no_package_special)
-              .map(item => {
-                let id = item.id
-                let numbers = item.number
-                return { id, numbers }
-              })
+              .map(item => item.id)
+            this.areaNumber = res.data.map(item => {
+              let id = item.id
+              let numbers = item.number
+              return { id, numbers }
+            })
             this.$nextTick(() => {
               this.typeRowDrop()
             })
