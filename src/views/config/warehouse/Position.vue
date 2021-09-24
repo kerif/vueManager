@@ -322,6 +322,7 @@ export default {
               message: res.msg
             })
             this.show = false
+            this.getList()
             this.success()
           } else {
             this.$message({
