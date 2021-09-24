@@ -92,6 +92,9 @@
           $t('导出清单')
         }}</el-button>
       </div>
+      <div style="margin-left: 5px" v-if="['0', '1', '2', '3', '4', '5'].includes(activeName)">
+        <el-button size="small" type="danger" plain>{{ $t('货量统计') }}</el-button>
+      </div>
       <div class="header-search">
         <el-input
           class="header-keyword"
