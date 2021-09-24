@@ -1,7 +1,7 @@
 <template>
   <div class="position-container">
     <div class="select-box">
-      <el-button type="danger" plain @click.native="addShelfRules">上架规则</el-button>
+      <!-- <el-button type="danger" plain @click.native="addShelfRules">{{ $t('上架规则') }}</el-button> -->
       <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
     </div>
     <el-table
@@ -67,7 +67,7 @@
       <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
         <!--无人认领专区  -->
         <el-form-item :label="$t('无人认领专区')">
-          <el-select placeholder="请选择" v-model="ruleForm.number" multiple>
+          <el-select :placeholder="$t('请选择')" v-model="ruleForm.number" multiple>
             <el-option
               v-for="item in areaNumber"
               :key="item.id"
@@ -78,7 +78,7 @@
           </el-select>
         </el-form-item>
         <div style="margin-left: 20px">
-          *货区可多选，当包裹为无人认领时，强制放入专区，不受其他规则限制
+          *{{ $t('货区可多选，当包裹为无人认领时，强制放入专区，不受其他规则限制') }}
         </div>
       </el-form>
       <div slot="footer">
@@ -145,13 +145,6 @@ export default {
             this.$nextTick(() => {
               this.typeRowDrop()
             })
-            // this.positionList = res.data.map(item => {
-            //   let arr = item.support_countries.map(item => item.cn_name)
-            //   return {
-            //     ...item,
-            //     countries: arr.join(' ')
-            //   }
-            // })
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           } else {
@@ -166,7 +159,6 @@ export default {
     // 自定义物流 行拖拽
     typeRowDrop() {
       const tbody = document.querySelector('.positions-type tbody')
-      console.log(tbody, 'tbody')
       Sortable.create(tbody, {
         onEnd: ({ newIndex, oldIndex }) => {
           if (oldIndex === newIndex) return false
@@ -231,8 +223,6 @@ export default {
     },
     // 修改开关
     changeTransfer(event, enabled, id) {
-      console.log(typeof event, '我是event')
-      console.log(event, 'event')
       this.$request.updateLocks(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
@@ -284,7 +274,6 @@ export default {
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
-      console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除单条转账支付
     deleteWarehouse(areaId) {
@@ -336,36 +325,6 @@ export default {
       this.getList()
       this.ruleForm.number = ''
     }
-    // // 删除
-    // deleteData () {
-    //   console.log(this.deleteNum, 'this.deleteNum')
-    //   if (!this.deleteNum || !this.deleteNum.length) {
-    //     return this.$message.error('请选择仓库')
-    //   }
-    //   this.$confirm(`是否确认删除？`, '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     this.$request.deleteWarehouseAddress({
-    //       DELETE: this.deleteNum
-    //     }).then(res => {
-    //       if (res.ret) {
-    //         this.$notify({
-    //           title: '操作成功',
-    //           message: res.msg,
-    //           type: 'success'
-    //         })
-    //         this.getList()
-    //       } else {
-    //         this.$message({
-    //           message: res.msg,
-    //           type: 'error'
-    //         })
-    //       }
-    //     })
-    //   })
-    // }
   }
 }
 </script>
