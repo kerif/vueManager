@@ -93,7 +93,9 @@
         }}</el-button>
       </div>
       <div style="margin-left: 5px" v-if="['0', '1', '2', '3', '4', '5'].includes(activeName)">
-        <el-button size="small" type="danger" plain>{{ $t('货量统计') }}</el-button>
+        <el-button size="small" type="danger" @click="statistics" plain>{{
+          $t('货量统计')
+        }}</el-button>
       </div>
       <div class="header-search">
         <el-input
@@ -1497,6 +1499,12 @@ export default {
               })
             }
           })
+      })
+    },
+    // 货量统计
+    statistics() {
+      this.$router.push({
+        name: 'VolumeStatistics'
       })
     },
     // 获取全部物流状态

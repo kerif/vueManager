@@ -333,6 +333,7 @@ export default {
         })
     },
     clear() {
+      this.getList()
       this.ruleForm.number = ''
     }
     // // 删除

@@ -3069,6 +3069,10 @@ exports.updateMultiLogistics = params => {
 exports.getOrderBatch = params => {
   return $form.get(`orders`, { params })
 }
+//订单 订单列表 货量统计
+exports.volumeStatistics = () => {
+  return $form.get(`orders/statistics`)
+}
 // 一键更改支付方式
 exports.changePayMode = params => {
   return $form.put('orders/payment-mode', params)

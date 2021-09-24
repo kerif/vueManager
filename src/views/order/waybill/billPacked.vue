@@ -452,7 +452,7 @@
                     }}</el-checkbox>
                   </div>
                   <div class="service-right">
-                    <span>{{ localization.currency_unit }} {{ item.value }}/{{ $t('箱') }} </span>
+                    <span>{{ localization.currency_unit }} {{ item.value }}</span>
                     <!-- <el-input v-model="item.value" disabled class="add-value-ipt"></el-input> -->
                   </div>
                 </div>
