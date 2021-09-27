@@ -170,6 +170,8 @@ const oderDetails = loadonDemand('order/order/orderDetails')
 const ImportOrder = loadonDemand('order/order/importOrder')
 // 订单 预报包裹列表 批量上架
 const BatchShelves = loadonDemand('order/order/batchShelves')
+// 订单 订单列表 货量统计
+const VolumeStatistics = loadonDemand('order/order/volumeStatistics')
 // 订单 无人认领包裹
 const noOwner = loadonDemand('order/noOwner/noOwner')
 // 订单 运单列表
@@ -628,6 +630,17 @@ export default [
               level: 2,
               group: '订单',
               name: '订单列表'
+            }
+          },
+          {
+            path: '/order/order/volumeStatistics',
+            component: VolumeStatistics,
+            name: 'VolumeStatistics',
+            id: 402,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '货量统计'
             }
           },
           {

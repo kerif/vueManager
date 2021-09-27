@@ -65,6 +65,8 @@
             {{ scope.row.user.id }}
           </template>
         </el-table-column>
+        <!-- 用户名 -->
+        <el-table-column :label="$t('用户名')" prop="user.name"></el-table-column>
         <!-- 状态 -->
         <el-table-column :label="$t('状态')">
           <template slot-scope="scope">

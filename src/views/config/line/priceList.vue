@@ -111,7 +111,7 @@
 export default {
   data() {
     return {
-      type: 0, //1.首重续重 2.阶梯价格 3.首重+阶梯 4.多级续重 5.阶梯首重续重模式
+      type: 0, //1.首重续重 2.阶梯价格 4.多级续重 5.阶梯首重续重模式
       weight: '',
       lineId: '',
       lineData: [],
@@ -132,7 +132,9 @@ export default {
       urlExcel: '',
       name: '',
       localization: {},
-      file: ''
+      file: '',
+      firstWeight: '',
+      maxWeight: ''
     }
   },
   created() {
@@ -156,13 +158,19 @@ export default {
             this.ctableData.push(
               ...item.prices.map((ele, index) => {
                 let range = ''
-                if (this.type === 2) {
+                if (this.type === 2 || this.type === 5) {
                   if (item.prices.length - 2 === index || item.prices.length - 1 === index) {
                     range = `[${ele.start / 1000}，${ele.end / 1000}]`
                   } else {
                     ele.start === ele.end
                       ? (range = ele.start / 1000)
                       : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
+                  }
+                } else if (this.type === 4) {
+                  if (ele.type === 5) {
+                    range = `[${this.firstWeight}，${this.maxWeight})`
+                  } else {
+                    range = `${this.maxWeight}`
                   }
                 } else {
                   if (item.prices.length - 1 === index && item.prices.type) {
@@ -227,20 +235,34 @@ export default {
               })
             )
           })
-          console.log(this.ctableData, 'this.ctableData')
           this.ctableData.forEach(item => {
             item[`${item.id}_price`] = item.price
             item[`${item.id}_price_id`] = item.priceId
           })
-          this.ctableData.sort((pre, next) => {
-            if (pre.range === next.range && pre.type < next.type) {
-              return -1
-            } else if (pre.range === next.range && pre.type === next.type) {
-              return 0
-            } else if (pre.range === next.range && pre.type > next.type) {
-              return 1
-            }
-          })
+          if (this.type === 2 || this.type === 5) {
+            // 阶梯价格模式、阶梯首重续重模式排序
+            this.ctableData.sort((pre, next) => {
+              if (pre.range === next.range && pre.type < next.type) {
+                return -1
+              } else if (pre.range === next.range && pre.type === next.type) {
+                return 0
+              } else if (pre.range === next.range && pre.type > next.type) {
+                return 1
+              }
+            })
+          } else if (this.type === 1 || this.type === 4) {
+            //首重续重 type = 0 首费, type = 1 续费
+            //多级续重 type = 0 首重, type = 5 续重
+            this.ctableData.sort((pre, next) => {
+              if (pre.type < next.type) {
+                return -1
+              } else if (pre.type === next.type) {
+                return 0
+              } else if (pre.type > next.type) {
+                return 1
+              }
+            })
+          }
           let arr = []
           this.ctableData.forEach(item => {
             let flag = -1
@@ -306,10 +328,10 @@ export default {
             backgroundColor: '#f2f2f2'
           }
         }
-      }
-      if (row.textType == '首费') {
-        return {
-          backgroundColor: '#f2f2f2'
+        if (row.textType == '首费') {
+          return {
+            backgroundColor: '#f2f2f2'
+          }
         }
       }
     },
@@ -338,6 +360,10 @@ export default {
       this.$request.getBillingConfig(this.$route.params.id).then(res => {
         if (res.ret) {
           this.type = res.data.mode
+          if (res.data.mode == 4) {
+            this.firstWeight = res.data.first_weight
+            this.maxWeight = res.data.max_weight
+          }
           this.baseMode = res.data.base_mode
           this.name = res.data.name
           this.getPriceTable()

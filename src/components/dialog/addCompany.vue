@@ -27,11 +27,11 @@
           $t('管理发货快递公司')
         }}</el-button>
       </el-form-item>
-      <el-form-item :label="$t('*转运快递单号-二程：')" v-if="!count">
+      <el-form-item :label="$t('*转运快递单号-二程：')" v-if="state == 'edit'">
         <el-input v-model="company.sn" class="input-select"></el-input>
       </el-form-item>
       <div v-else>
-        <div v-if="count === 1">
+        <div v-if="!box.length">
           <el-form-item :label="$t(`*快递转运单号：`)">
             <span>{{ orderSn }}</span>
             <el-input v-model="company.sn"></el-input>
@@ -63,7 +63,6 @@ export default {
       orderId: '',
       companyList: [],
       state: '',
-      count: '',
       orderSn: '',
       box: []
     }
@@ -95,18 +94,16 @@ export default {
       this.$request.getOrderDetails(this.orderId).then(res => {
         if (res.ret) {
           this.orderSn = res.data.order_sn
-          this.company.company = res.data.logistics_company
-          if (this.count >= 2) {
-            this.box = res.data.box.map(item => {
-              return {
-                id: item.id,
-                sn: item.sn,
-                logistics_sn: item.logistics_sn
-              }
-            })
-          } else {
-            this.company.sn = res.data.logistics_sn
-          }
+          this.company.company = res.data.logistics_company_code
+          res.data.box.length
+            ? (this.box = res.data.box.map(item => {
+                return {
+                  id: item.id,
+                  sn: item.sn,
+                  logistics_sn: item.logistics_sn
+                }
+              }))
+            : (this.company.sn = res.data.logistics_sn)
         }
       })
     },
@@ -115,20 +112,14 @@ export default {
         return this.$message.error(this.$t('请输入转运快递公司二程'))
       }
       if (this.state === 'multiBox') {
-        if (this.count === 1) {
-          if (this.company.sn === '') {
-            return this.$message.error(this.$t('请输入转运快递单号二程'))
-          }
+        if (!this.box.length && !this.company.sn) {
+          return this.$message.error(this.$t('请输入转运快递单号二程'))
         }
-        let isNull = false
         this.box.forEach(item => {
           if (!item.logistics_sn) {
-            isNull = true
+            return this.$message.error(this.$t('请输入转运快递单号'))
           }
         })
-        if (isNull) {
-          return this.$message.error(this.$t('请输入转运快递单号'))
-        }
       } else {
         if (this.company.sn === '') {
           return this.$message.error(this.$t('请输入转运快递单号二程'))
@@ -136,7 +127,7 @@ export default {
       }
       let res = {}
       if (this.state === 'multiBox') {
-        if (this.count === 1) {
+        if (!this.box.length) {
           res = await this.$request.updateLogistics([
             {
               id: this.orderId,
@@ -192,6 +183,7 @@ export default {
     clear() {
       this.company.sn = ''
       this.company.company = ''
+      this.box = []
     },
     init() {
       this.getCompany()

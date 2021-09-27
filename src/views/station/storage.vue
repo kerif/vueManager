@@ -490,7 +490,8 @@ export default {
       shipNum: '', // 通过快递单号拉取的包裹id
       expressNum: '', // 保存的快递单号
       userId: '',
-      locationCode: ''
+      locationCode: '',
+      user_id: ''
     }
   },
   created() {
@@ -638,7 +639,6 @@ export default {
         this.locationId = id
         this.user.location = ''
         this.locationCNSearch()
-        console.log(this.locationId, '我是改变的locationId')
         this.getAreaLocation()
         this.$request.getArea(id).then(res => {
           if (res.ret) {
@@ -650,18 +650,13 @@ export default {
     // 更改线路
     changeLine() {
       dialog({ type: 'expressChange' }, data => {
-        console.log(data, 'data')
-        // this.$set(this.user, 'CName', data.cn_name)
-        console.log(this.user, 'CName', data.name)
         this.user.CName = data.name
         this.user.MaxWeight = data.max_weight
         this.user.express_line_id = data.id
       })
     },
     changeShip(e) {
-      console.log(e)
       this.$set(this.user, 'country_id', e)
-      console.log(this.user.country_id, 'user.country_id')
     },
     // 通过仓库id拉取相对应的地区
     updateAreaData() {
@@ -787,11 +782,11 @@ export default {
     },
     // 货位搜索
     locationCNSearch(queryString, callback) {
-      console.log(this.user.location, 'location')
       var list = [{}]
       this.$request
         .AutoLocation(this.locationId, {
-          keyword: this.user.location
+          keyword: this.user.location,
+          user_id: this.userId
         })
         .then(res => {
           console.log(res.data, 'res data')
@@ -817,7 +812,9 @@ export default {
       this.supplierId = item.id
       this.userId = item.id
       this.supplierName = item.name
+      this.user.location = ''
       this.getAreaLocation()
+      this.locationCNSearch()
     },
     // 货位
     locationSelect(item) {

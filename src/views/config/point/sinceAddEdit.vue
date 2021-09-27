@@ -606,9 +606,13 @@ export default {
     confirmLines() {
       this.lineVisible = false
       console.log(this.lineIds, 'lineIds')
-      this.form.expressLines = this.lineData.filter(item => {
-        return this.lineIds.includes(item.id)
+      let selectIds = this.form.expressLines.map(item => item.id)
+      let selectLine = this.lineData.filter(item => {
+        return this.lineIds.includes(item.id) && !selectIds.includes(item.id)
       })
+      this.form.expressLines = this.form.expressLines.concat(selectLine)
+      console.log(selectLine)
+      console.log(this.form.expressLines)
     },
     clear() {
       this.lineIds = []

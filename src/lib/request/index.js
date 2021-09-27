@@ -680,8 +680,8 @@ exports.uploadRecharge = params => {
   return $form.get('recharge-records/export', { params })
 }
 // 财务 充值记录 获取成长值财务列表
-exports.getGrowthFinance = () => {
-  return $form.get('growth-finances/payments')
+exports.getGrowthFinance = params => {
+  return $form.get('growth-finances/payments', { params })
 }
 // 财务 充值记录 获取成长值财务列表
 exports.getGrowthFinanceDetails = id => {
@@ -1481,6 +1481,10 @@ exports.warehouseEnabled = (id, status) => {
 }
 exports.warehouseLocationIndex = params => {
   return $form.put('warehouse-address/sort', params)
+}
+//设置无人认领包裹专区
+exports.unclaimedArea = (id, params) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/set-nps-area`, params)
 }
 // 仓位管理 锁定或开锁
 exports.updateLocks = (id, status) => {
@@ -3017,6 +3021,22 @@ exports.uploadUserExcel = () => {
 exports.getCounts = params => {
   return $form.get('orders/order-counts', { params })
 }
+// 订单列表 打包处理 订单价格计算
+exports.calOrderPrice = (id, params) => {
+  return $form.post(`orders/${id}/price-counter`, params)
+}
+// 订单列表 打包处理 订单数据保存
+exports.saveOrderData = (id, params) => {
+  return $form.put(`orders/${id}/save`, params)
+}
+//订单列表 待支付 改为已付款
+exports.paid = (id, params) => {
+  return $form.put(`orders/${id}/paid`, params)
+}
+//订单列表 待支付 获取支付方式
+exports.payMethod = () => {
+  return $form.get('orders/pay-method')
+}
 // 发货单 获取弹窗里可使用的物流状态
 exports.getOrderStatus = () => {
   return $form.get('orders/logistics-types')
@@ -3048,6 +3068,10 @@ exports.updateMultiLogistics = params => {
 // 订单列表 获取一键打包数据
 exports.getOrderBatch = params => {
   return $form.get(`orders`, { params })
+}
+//订单 订单列表 货量统计
+exports.volumeStatistics = () => {
+  return $form.get(`orders/statistics`)
 }
 // 一键更改支付方式
 exports.changePayMode = params => {

@@ -1,10 +1,7 @@
 <template>
   <div class="position-container">
-    <!-- <div>
-      <search-group v-model="page_params.keyword" @search="goSearch">
-      </search-group>
-      </div> -->
     <div class="select-box">
+      <!-- <el-button type="danger" plain @click.native="addShelfRules">{{ $t('上架规则') }}</el-button> -->
       <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
     </div>
     <el-table
@@ -50,11 +47,6 @@
           }}</el-button>
         </template>
       </el-table-column>
-      <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
-        </div>
-      </template> -->
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <div class="sort-sty">
@@ -66,10 +58,37 @@
         $t('按区域编号自动排序')
       }}</el-button>
     </div>
+    <el-dialog
+      :visible.sync="show"
+      :title="$t('上架规则')"
+      class="dialog-shelfRules"
+      @close="clear"
+    >
+      <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
+        <!--无人认领专区  -->
+        <el-form-item :label="$t('无人认领专区')">
+          <el-select :placeholder="$t('请选择')" v-model="ruleForm.number" multiple>
+            <el-option
+              v-for="item in areaNumber"
+              :key="item.id"
+              :label="item.numbers"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <div style="margin-left: 20px">
+          *{{ $t('货区可多选，当包裹为无人认领时，强制放入专区，不受其他规则限制') }}
+        </div>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="show = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-// import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
@@ -85,10 +104,17 @@ export default {
   mixins: [pagination],
   data() {
     return {
+      ruleForm: {
+        number: ''
+      },
       positionList: [],
       typeSendData: [],
       tableLoading: false,
-      deleteNum: []
+      deleteNum: [],
+      unClaimed: '',
+      areaNumber: [],
+      noAreaNumber: [],
+      show: false
     }
   },
   created() {
@@ -108,16 +134,17 @@ export default {
           if (res.ret) {
             this.positionList = res.data
             this.typeSendData = [...res.data]
+            this.ruleForm.number = res.data
+              .filter(item => item.no_package_special)
+              .map(item => item.id)
+            this.areaNumber = res.data.map(item => {
+              let id = item.id
+              let numbers = item.number
+              return { id, numbers }
+            })
             this.$nextTick(() => {
               this.typeRowDrop()
             })
-            // this.positionList = res.data.map(item => {
-            //   let arr = item.support_countries.map(item => item.cn_name)
-            //   return {
-            //     ...item,
-            //     countries: arr.join(' ')
-            //   }
-            // })
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           } else {
@@ -132,7 +159,6 @@ export default {
     // 自定义物流 行拖拽
     typeRowDrop() {
       const tbody = document.querySelector('.positions-type tbody')
-      console.log(tbody, 'tbody')
       Sortable.create(tbody, {
         onEnd: ({ newIndex, oldIndex }) => {
           if (oldIndex === newIndex) return false
@@ -145,7 +171,6 @@ export default {
     // 确定拖拽
     typeRowUpdate() {
       const ids = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
-      console.log(ids)
       this.positionList = []
       this.$request.positionsSort(this.$route.params.id, ids).then(res => {
         if (res.ret) {
@@ -198,8 +223,6 @@ export default {
     },
     // 修改开关
     changeTransfer(event, enabled, id) {
-      console.log(typeof event, '我是event')
-      console.log(event, 'event')
       this.$request.updateLocks(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
@@ -215,6 +238,10 @@ export default {
           })
         }
       })
+    },
+    // 上架规则
+    addShelfRules() {
+      this.show = true
     },
     // 新增货位
     addLocation() {
@@ -247,7 +274,6 @@ export default {
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
-      console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除单条转账支付
     deleteWarehouse(areaId) {
@@ -273,43 +299,39 @@ export default {
           }
         })
       })
+    },
+    submit() {
+      this.$request
+        .unclaimedArea(this.$route.params.id, { area_ids: this.ruleForm.number })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.show = false
+            this.getList()
+            this.success()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+    },
+    clear() {
+      this.getList()
+      this.ruleForm.number = ''
     }
-    // // 删除
-    // deleteData () {
-    //   console.log(this.deleteNum, 'this.deleteNum')
-    //   if (!this.deleteNum || !this.deleteNum.length) {
-    //     return this.$message.error('请选择仓库')
-    //   }
-    //   this.$confirm(`是否确认删除？`, '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     this.$request.deleteWarehouseAddress({
-    //       DELETE: this.deleteNum
-    //     }).then(res => {
-    //       if (res.ret) {
-    //         this.$notify({
-    //           title: '操作成功',
-    //           message: res.msg,
-    //           type: 'success'
-    //         })
-    //         this.getList()
-    //       } else {
-    //         this.$message({
-    //           message: res.msg,
-    //           type: 'error'
-    //         })
-    //       }
-    //     })
-    //   })
-    // }
   }
 }
 </script>
 <style lang="scss">
 .position-container {
   .select-box {
+    float: right;
     overflow: hidden;
   }
   .country-box {
@@ -330,6 +352,18 @@ export default {
     margin-top: 20px;
     color: red;
     font-size: 13px;
+  }
+  .dialog-shelfRules {
+    /deep/ .el-dialog__header {
+      background-color: #0e102a;
+    }
+    /deep/.el-dialog__title {
+      font-size: 14px;
+      color: #fff;
+    }
+    /deep/.el-dialog__close {
+      color: #fff;
+    }
   }
 }
 </style>

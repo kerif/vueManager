@@ -73,7 +73,7 @@
               <el-form-item
                 :label="$t('联系电话')"
                 prop="contact_phone"
-                v-if="!this.$route.query.id"
+                :rules="this.$route.query.id ? [{ required: false }] : rules.contact_phone"
               >
                 <el-input
                   v-model="user.contact_phone"
@@ -97,6 +97,13 @@
             <el-col :span="18">
               <el-form-item :label="$t('邮箱')" prop="contact_email">
                 <el-input v-model="user.contact_email" :placeholder="$t('请输入邮箱')"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <el-form-item :label="$t('微信号')" prop="wechat_id">
+                <el-input v-model="user.wechat_id" :placeholder="$t('请输入微信号')"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -126,7 +133,8 @@ export default {
           { type: 'email', message: this.$t('请输入正确的邮箱地址'), trigger: ['blur', 'change'] }
         ],
         contact_phone: [{ required: true, message: this.$t('请输入联系电话'), trigger: 'blur' }],
-        commission: [{ required: true, message: this.$t('请输入佣金分成'), trigger: 'change' }]
+        commission: [{ required: true, message: this.$t('请输入佣金分成'), trigger: 'change' }],
+        wechat_id: [{ message: this.$t('请输入微信号'), trigger: 'change' }]
       },
       user: {
         user_id: '',
@@ -136,7 +144,8 @@ export default {
         contact_email: '',
         group_id: '',
         commission: '',
-        remark: ''
+        remark: '',
+        wechat_id: ''
       }
     }
   },
@@ -272,6 +281,9 @@ export default {
     color: #fff;
     background-color: #3540a5;
     border-color: #3540a5;
+  }
+  /deep/.el-form-item__label::before {
+    content: '';
   }
 }
 </style>

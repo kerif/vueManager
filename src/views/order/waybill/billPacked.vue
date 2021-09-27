@@ -1,6 +1,6 @@
 <template>
   <div class="packed-container">
-    <div class="receiverMSg">
+    <div class="receiver-msg">
       <h4>{{ $t('收货人信息') }}</h4>
       <el-row class="container-center" :gutter="20">
         <!-- 姓名 -->
@@ -55,7 +55,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="receiverMSg">
+    <div class="receiver-msg">
       <h4 class="all-group">{{ $t('打包详情') }}</h4>
       <!-- <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
         <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
@@ -181,7 +181,7 @@
       <!-- 所属包裹 -->
       <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
     </el-table>
-    <div class="receiverMSg">
+    <div class="receiver-msg">
       <el-form
         ref="params"
         :model="user"
@@ -426,15 +426,17 @@
         <el-row :gutter="20" v-if="$route.params.parent == 0">
           <el-col>
             <el-form-item :label="$t('增值服务')">
-              <div v-for="item in updateProp" :key="item.id" class="service">
-                <div class="serviceLeft">
-                  <el-checkbox v-model="item.checked">{{ item.name }}</el-checkbox>
+              <el-checkbox-group v-model="user.services">
+                <div v-for="item in updateProp" :key="item.id" class="service">
+                  <div class="serviceLeft">
+                    <el-checkbox :label="item.id">{{ item.name }}</el-checkbox>
+                  </div>
+                  <div class="serviceRight">
+                    <span>{{ localization.currency_unit }}</span>
+                    <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                  </div>
                 </div>
-                <div class="serviceRight">
-                  <span>{{ localization.currency_unit }}</span>
-                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
-                </div>
-              </div>
+              </el-checkbox-group>
             </el-form-item>
           </el-col>
         </el-row>
@@ -449,9 +451,9 @@
                       item.name
                     }}</el-checkbox>
                   </div>
-                  <div class="serviceRight">
-                    <span>{{ localization.currency_unit }}</span>
-                    <el-input v-model="item.value" disabled class="add-value-ipt"></el-input>
+                  <div class="service-right">
+                    <span>{{ localization.currency_unit }} {{ item.value }}</span>
+                    <!-- <el-input v-model="item.value" disabled class="add-value-ipt"></el-input> -->
                   </div>
                 </div>
               </el-checkbox-group>
@@ -473,13 +475,40 @@
         </el-row>
       </el-form>
     </div>
+    <!-- 运费计算 -->
+    <div class="receiver-msg">
+      <div class="leftBtn">
+        <el-button type="danger" @click="getCalOrderPrice">{{ $t('计算') }}</el-button>
+      </div>
+      <div class="rightTab">
+        <div v-for="item in freightData" :key="item.index" class="check">
+          <div style="padding-top: 10px">{{ item.name }}</div>
+          <div style="padding-top: 10px">
+            {{ item.value }}
+          </div>
+        </div>
+        <div v-if="freightData.length === 0" class="text">请填写重量体积后，点击计算核算价格</div>
+        <div style="margin-left: 100px">
+          <div class="total">
+            {{ $t('合计:') }}<span class="color_fee">{{ this.total_fee }}</span>
+          </div>
+          <div class="changePrice">
+            <el-checkbox-group v-model="final_price">
+              <el-checkbox v-model="is_checked"> {{ $t('改价:') }} </el-checkbox>
+              <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
+            </el-checkbox-group>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- 保存 -->
-    <el-row :gutter="20">
-      <el-col :span="18">
-        <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{
-          $t('保存')
-        }}</el-button>
-      </el-col>
+    <el-row>
+      <el-button type="primary" @click="savePacked(1)" :loading="$store.state.btnLoading">{{
+        $t('仅保存')
+      }}</el-button>
+      <el-button @click="savePacked(2)" type="primary" :loading="$store.state.btnLoading">{{
+        $t('保存并提交')
+      }}</el-button>
     </el-row>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -518,7 +547,8 @@ export default {
         in_warehouse_pictures: [], // 留仓物品照片
         pack_pictures: [], // 打包照片
         box: [],
-        line_service_ids: []
+        line_service_ids: [],
+        order_service_ids: []
       },
       baseMode: 0,
       lineServices: [],
@@ -542,7 +572,17 @@ export default {
       warehouse: {
         warehouse_name: ''
       },
-      factor: ''
+      factor: '',
+      freightData: [],
+      changePrice: '',
+      is_checked: false,
+      total_fee: '',
+      line_rules_fee: '',
+      freight: '',
+      first: '',
+      next: '',
+      service: [],
+      final_price: ''
     }
   },
   created() {
@@ -556,18 +596,16 @@ export default {
     getProp(arr) {
       this.$request.getAdded().then(res => {
         if (res.ret) {
+          this.updateProp = res.data
           let ids = res.data.map(item => item.id)
-          this.updateProp = res.data.map(item => {
-            return {
-              ...item,
-              checked: false
-            }
-          })
           arr.forEach(item => {
             let index = ids.indexOf(item.service_id)
             if (index !== -1) {
               this.updateProp[index].checked = true
               this.updateProp[index].price = item.price
+              this.user.services.push(this.updateProp[index].id)
+            } else {
+              this.updateProp[index].checked = false
             }
           })
         }
@@ -680,7 +718,62 @@ export default {
                 0
               )
     },
-    savePacked() {
+    //订单价格计算
+    getCalOrderPrice() {
+      let services = []
+      services = this.updateProp
+        .filter(ele => this.user.services.includes(ele.id))
+        .map(ele => {
+          let id = ele.id
+          let price = ele.price
+          return { id, price }
+        })
+      this.$request
+        .calOrderPrice(this.$route.params.id, {
+          ...this.user,
+          services,
+          width: this.user.width || '',
+          height: this.user.height || '',
+          length: this.user.length || '',
+          weight: this.user.weight || ''
+        })
+        .then(res => {
+          this.total_fee = res.data.total_fee
+          let line_services = res.data.line_services.services.map(item => {
+            let name = item.name
+            let value = item.price
+            return { name, value }
+          })
+          let order_services = res.data.order_services.services.map(item => {
+            let name = item.name
+            let value = item.price
+            return { name, value }
+          })
+          this.freightData = []
+          this.freightData.push(
+            {
+              name: '运费',
+              value: res.data.freight.first + res.data.freight.next
+            },
+            {
+              name: '关税费',
+              value: res.data.tariff_fee
+            },
+            {
+              name: '保险费',
+              value: res.data.insurance_fee
+            },
+            ...order_services,
+            ...line_services,
+            {
+              name: '渠道限制费',
+              value: res.data.line_rules.fee
+            }
+          )
+        })
+    },
+    //仅保存和保存并提交
+    async savePacked(type) {
       this.user.services = this.updateProp
         .filter(item => item.checked)
         .map(item => {
@@ -689,7 +782,8 @@ export default {
             price: item.price
           }
         })
-      console.log('ser', this.user.services)
+      this.user.in_warehouse_pictures = this.goodsImgList
+      this.user.pack_pictures = this.baleImgList
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
         return {
           url: item.url
@@ -700,22 +794,25 @@ export default {
           url: item.url
         }
       })
-      this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          // this.$router.push({ name: 'wayBillList' })
-          this.$router.go(-1)
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      let res = {}
+      if (type === 1) {
+        res = await this.$request.saveOrderData(this.$route.params.id, this.user)
+      } else {
+        res = await this.$request.saveOrderPack(this.$route.params.id, this.user)
+      }
+      if (res.ret) {
+        this.$notify({
+          type: 'success',
+          title: this.$t('操作成功'),
+          message: res.msg
+        })
+        this.$router.go(-1)
+      } else {
+        this.$message({
+          message: res.msg,
+          type: 'error'
+        })
+      }
     },
     // 新增行
     addRow() {
@@ -788,6 +885,18 @@ export default {
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.box_type = res.data.box_type
+        this.user.box = res.data.box
+        this.user.remark = res.data.remark
+        this.user.location = res.data.location
+        this.user.in_warehouse_item = res.data.in_warehouse_item
+        this.user.weight = res.data.weight
+        this.user.length = res.data.length
+        this.user.height = res.data.height
+        this.user.width = res.data.width
+        this.user.in_warehouse_pictures = res.data.in_warehouse_pictures
+        this.user.pack_pictures = res.data.pack_pictures
+        this.goodsImgList = res.data.in_warehouse_pictures
+        this.baleImgList = res.data.pack_pictures
         this.services = res.data.services
         this.getProp(res.data.services)
         this.express.CName = this.form.express_line.cn_name
@@ -882,7 +991,6 @@ export default {
           arr[index].checked = true
         }
       })
-      console.log('dcd', this.arr)
       return arr
     }
   }
@@ -930,6 +1038,10 @@ export default {
     .serviceRight {
       display: inline-block;
       float: right;
+    }
+    .service-right {
+      display: inline-block;
+      padding-left: 10px;
     }
   }
   .saveBtn {
@@ -998,10 +1110,46 @@ export default {
   .container-center {
     margin-bottom: 20px;
   }
-  .receiverMSg {
+  .receiver-msg {
     padding: 10px;
     margin-bottom: 20px;
     background-color: #fff !important;
+    .leftBtn {
+      float: left;
+      height: 200px;
+      margin: 0 20px;
+      .el-button {
+        height: 160px;
+      }
+    }
+    .rightTab {
+      font-size: 14px;
+      .check {
+        width: 120px;
+        height: 80px;
+        border: 1px solid #dcdfe6;
+        vertical-align: top;
+        display: inline-block;
+        text-align: center;
+      }
+      .text {
+        padding-top: 70px;
+      }
+      .total {
+        margin-top: 40px;
+        font-size: 20px;
+        font-weight: bold;
+        .color_fee {
+          color: red;
+        }
+      }
+      .changePrice {
+        margin: -26px 0 0 300px;
+        .inpLength {
+          width: 10% !important;
+        }
+      }
+    }
   }
   .leftWidth {
     display: inline-block;
@@ -1045,6 +1193,9 @@ export default {
   }
   .add-sty {
     text-align: right;
+  }
+  /deep/.el-checkbox-group {
+    font-size: 14px;
   }
 }
 </style>
