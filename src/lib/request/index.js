@@ -249,6 +249,14 @@ exports.regionsDelete = (id, regionId) => {
 exports.newRegions = (id, params) => {
   return $form.post(`express-lines/${id}/regions`, params)
 }
+// 配置 分区 线路分区详情
+exports.lineRegionsDetail = (id, regionId) => {
+  return $form.get(`express-lines/${id}/regions/${regionId}`)
+}
+// 配置 分区 更新线路分区信息
+exports.updateRegions = (id, regionId, params) => {
+  return $form.put(`express-lines/${id}/regions/${regionId}`, params)
+}
 // 新路线 基础信息 获取
 exports.configBasic = id => {
   return $form.get(`express-lines/${id}/basic-config`)

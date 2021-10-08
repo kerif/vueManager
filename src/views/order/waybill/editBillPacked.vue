@@ -73,6 +73,9 @@
     </div>
     <!-- 打包清单 -->
     <h4>{{ $t('包裹清单') }}</h4>
+    <div class="add-sty">
+      <el-button class="btn-blue" @click="addPackages">{{ $t('添加包裹') }}</el-button>
+    </div>
     <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
       <el-table-column type="index" width="50"></el-table-column>
       <el-table-column :label="$t('快递单号')" prop="express_num"></el-table-column>
@@ -777,6 +780,12 @@ export default {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
+    },
+    // 新增包裹
+    addPackages() {
+      dialog({ type: 'addPackages', id: this.$route.params.id }, () => {
+        this.getPackage()
+      })
     }
   },
   computed: {
@@ -941,6 +950,9 @@ export default {
   }
   .el-checkbox-group {
     font-size: 14px;
+  }
+  .add-sty {
+    text-align: right;
   }
 }
 </style>

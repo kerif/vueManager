@@ -20,8 +20,51 @@
       <el-form-item :label="$t('参考时效')">
         <el-input class="input-sty" v-model="ruleForm.reference_time"></el-input>
       </el-form-item>
+      <el-form-item :label="$t('分区方案')">
+        <el-radio-group v-model="radio">
+          <el-radio label="1">国家地区</el-radio>
+          <el-radio label="2">国家邮编</el-radio>
+        </el-radio-group>
+        <br />
+        <el-cascader
+          v-if="this.radio === 1"
+          style="width: 30%; margin-left: 70px"
+          @change="chooseAres"
+          v-model="areaData"
+          :options="options"
+          :props="props"
+          collapse-tags
+          clearable
+        ></el-cascader>
+        <br />
+        <el-cascader
+          style="width: 30%; margin-left: 70px"
+          @change="chooseAres"
+          v-model="areaData"
+          :options="options"
+          :props="props"
+          collapse-tags
+          clearable
+        ></el-cascader>
+        <el-button>添加邮编规则</el-button>
+      </el-form-item>
+      <el-table>
+        <el-table :data="postData" border style="width: 80%">
+          <el-table-column label="#" width="180"> </el-table-column>
+          <el-table-column label="规则" width="180"> </el-table-column>
+          <el-table-column label="内容"> </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <!-- 移除 -->
+              <el-button class="btn-red" @click="deleteWarehoused(scope.row.id)">{{
+                $t('移除')
+              }}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-table>
     </el-form>
-    <div style="margin-bottom: 20px">
+    <!-- <div style="margin-bottom: 20px">
       {{ $t('支持国家/地区') }}
     </div>
     <el-table :data="tableData" border style="width: 100%">
@@ -39,7 +82,8 @@
           ></el-cascader>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
+
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
@@ -78,7 +122,9 @@ export default {
       keyValue: 0,
       areaIds: [],
       areasData: [],
-      tmpId: ''
+      postData: [],
+      tmpId: '',
+      radio: 1
     }
   },
   methods: {

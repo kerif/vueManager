@@ -633,7 +633,7 @@ export default {
           .then(res => {
             if (res.ret) {
               const dataId = res.data.id
-              this.$router.push({
+              this.$router.replace({
                 name: 'channelLineEdit',
                 params: {
                   id: dataId
