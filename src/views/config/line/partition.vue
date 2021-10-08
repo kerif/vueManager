@@ -15,6 +15,7 @@
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
+        <el-button type="danger" plain @click.native="selectPartition">选用预设分区表</el-button>
         <add-btn @click.native="addPartition">{{ $t('新增') }}</add-btn>
       </div>
     </div>
@@ -99,6 +100,26 @@
         <el-button type="primary" @click="confirmAdd">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      :title="$t('选用预设分区表')"
+      :visible.sync="show"
+      class="dialog-preset"
+      width="35%"
+      @close="clearPreset"
+    >
+      <div class="remark">*选用预设分区表后，将在当前渠道增加分区，需设置价格表后再启用分区</div>
+      <el-form ref="form" :model="form" label-width="120px">
+        <el-radio-group v-model="radio">
+          <el-radio class="options" label="1">备选项</el-radio><br />
+          <el-radio class="options" label="2">备选项</el-radio><br />
+          <el-radio class="options" label="3">备选项</el-radio><br />
+        </el-radio-group>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirmAdd">{{ $t('确定') }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -118,7 +139,9 @@ export default {
       options: [],
       form: {
         templateId: ''
-      }
+      },
+      show: false,
+      radio: 1
     }
   },
   components: {
@@ -137,6 +160,12 @@ export default {
     async getList() {
       let res = {}
       this.tableLoading = true
+      this.page_params = {
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size,
+        total: this.page_params.total
+      }
       if (this.$route.params.id) {
         // 获取分区模板
         res = await this.$request.getRegions(this.$route.params.id, { ...this.page_params })
@@ -191,6 +220,15 @@ export default {
           this.getList()
         }
       )
+    },
+    //选用预设分区表
+    selectPartition() {
+      this.show = true
+      // this.$request.lineRegionsDetail(this.$route.params.id, this.id).then(res => {
+      //   if (res.ret) {
+      //     console.log(res.data)
+      //   }
+      // })
     },
     // 删除
     deletePart(id) {
@@ -277,6 +315,7 @@ export default {
     clearTmp() {
       this.form.templateId = ''
     },
+    clearPreset() {},
     confirmAdd() {
       if (!this.form.templateId) {
         return this.$message.error(this.$t('模版不能为空'))
@@ -317,6 +356,10 @@ export default {
     margin-left: 10px;
     // text-align: right;
   }
+  .remark {
+    color: red;
+    margin-bottom: 10px;
+  }
   .addUser {
     display: flex;
     justify-content: flex-end;
@@ -340,6 +383,13 @@ export default {
     width: 21.5%;
     float: right;
   }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
+  }
   .clear {
     clear: both;
   }
@@ -360,6 +410,9 @@ export default {
   }
   .edit-sty {
     margin-right: 5px;
+  }
+  .options {
+    margin-bottom: 10px;
   }
 }
 </style>

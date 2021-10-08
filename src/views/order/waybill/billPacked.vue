@@ -720,6 +720,9 @@ export default {
     },
     //订单价格计算
     getCalOrderPrice() {
+      if (this.user.weight === '') {
+        return this.$message.error(this.$t('重量不能为空'))
+      }
       let services = []
       services = this.updateProp
         .filter(ele => this.user.services.includes(ele.id))
