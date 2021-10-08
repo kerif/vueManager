@@ -173,7 +173,7 @@ export default {
                     range = `${this.maxWeight}`
                   }
                 } else {
-                  if (item.prices.length - 1 === index) {
+                  if (item.prices.length - 1 === index && item.prices.type) {
                     range = `[${ele.start / 1000}，${ele.end / 1000}]`
                   } else {
                     ele.start === ele.end

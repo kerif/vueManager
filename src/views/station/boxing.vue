@@ -604,8 +604,8 @@ export default {
       this.getBatch()
       this.radio = 2
       this.packageId = this.$route.query.packageId
-      this.getRecipeAddress()
     }
+    this.getRecipeAddress()
   },
   methods: {
     getList() {
@@ -617,6 +617,7 @@ export default {
           if (res.ret) {
             this.packageData = res.data.packages
             this.userId = res.data.packages[0].user_id
+            this.clientId = res.data.packages[0].user_id
             if (this.userId) {
               this.getAddressDialog() // 获取收件地址
               this.getCountry() // 获取新建收件地址的国家
@@ -629,6 +630,7 @@ export default {
             this.box.is_insurance = res.data.items.insurance
             this.box.is_tariff = res.data.items.is_tariff
             this.box.payment_mode = res.data.items.payment_mode
+            this.getExpress()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -648,7 +650,6 @@ export default {
           if (res.ret) {
             this.packageData = res.data.packages
             this.userId = res.data.packages[0].user_id
-            console.log(this.userId, 'this.userId')
             if (this.userId) {
               this.getAddressDialog() // 获取收件地址
               this.getCountry() // 获取新建收件地址的国家
@@ -687,7 +688,6 @@ export default {
                 this.addressIds = item.address.sub_area_id
                   ? [item.address.sub_area_id]
                   : [item.address.area_id]
-                console.log(this.addressIds, 'this.addressIds')
                 this.getTips()
               }
             })
@@ -706,7 +706,6 @@ export default {
             if (this.tipsContent.length) {
               this.tipsDialog = true
             }
-            console.log(res.data, 'data')
           }
         })
     },
@@ -715,11 +714,9 @@ export default {
       this.addressList = this.addressList.filter(item => item.user_id !== userId)
       this.packageData = this.packageData.filter(item => item.user_id !== userId)
       this.packageId = this.packageData.map(item => item.id)
-      console.log(this.packageId, 'this.packageId')
     },
     // 更改地址
     changeAddress(userId, counts, addressList) {
-      console.log(addressList, 'addressList')
       this.clientId = userId // 客户ID
       this.counts = counts // 选择包果数
       this.addressData = addressList // 收件地址数据
@@ -760,7 +757,6 @@ export default {
               this.addressIds = item.address.sub_area_id
                 ? [item.address.sub_area_id]
                 : [item.address.area_id]
-              console.log(this.addressIds, 'this.addressIds')
               this.getTips()
             }
           })
@@ -792,7 +788,6 @@ export default {
             this.lineId = this.box.express_line_id
             this.lineStations()
             this.getId()
-            console.log(this.box.express_line_id, 'this.box.express_line_id')
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -807,7 +802,6 @@ export default {
       // this.options = []
       this.selfData = {}
       this.lineId = this.box.express_line_id
-      console.log(this.lineId, 'this.lineId')
       // this.clearance_code = val.need_clearance_code
       // this.need_id_card = val.need_id_card
       this.lineStations()
@@ -823,18 +817,15 @@ export default {
     getId() {
       this.$request.idCards(this.lineId).then(res => {
         if (res.ret) {
-          console.log(res.data, 'res')
           this.needCode = res.data.need_clearance_code
           this.idCode = res.data.need_id_card
           this.personalCode = res.data.need_personal_code
           this.isDelivery = res.data.is_delivery
           this.multiBoxes = res.data.multi_boxes
-          console.log(this.isDelivery, 'this.isDelivery')
         }
       })
     },
     changeRadio() {
-      console.log(this.radio, 'radio')
       this.box.express_line_id = ''
       this.options = []
       this.getExpress()
@@ -845,10 +836,8 @@ export default {
         if (res.ret) {
           this.stationsData = res.data
           this.selfData = res.data[0]
-          console.log(this.selfData, 'this.selfData.id')
           if (this.selfData) {
             this.box.address_id = this.selfData.id
-            console.log(this.box.address_id, 'box.address_id')
           }
         }
       })
@@ -889,7 +878,6 @@ export default {
             this.userData = this.tableData[0]
             if (this.userData) {
               this.box.address_id = this.userData.id
-              console.log(this.box.address_id, 'this.address_id')
             }
           }
         })
@@ -972,19 +960,12 @@ export default {
     },
     // 提交
     saveBoxing() {
-      // if (this.radio === 1 && !this.userData) {
-      //   return this.$message.error('请选择收件地址')
-      // }
       let params = this.addressList.map(item => {
-        console.log(item.address, 'item111')
         return {
           user_id: item.user_id,
           address_id: item.address ? item.address.id : ''
         }
       })
-      console.log(params, 'params111')
-      // console.log(this.box.address_id, 'address_id')
-      // console.log(this.box.add_service, 'box.add_service')
       if (this.changeUpdate === 1) {
         this.$request
           .savePacksUser({
@@ -994,7 +975,6 @@ export default {
             package_ids: this.packageId,
             address_type: this.radio === 2 ? 2 : 1,
             batch_mode: this.$route.query.packageId ? 1 : '',
-            // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
             type: this.radio === 2 ? 2 : ''
           })
           .then(res => {
@@ -1048,9 +1028,7 @@ export default {
       if (!this.chooseId) {
         return this.$message.error(this.$t('请选择'))
       }
-      console.log(this.user, 'user')
       this.userData = this.user
-      console.log(this.userData, 'this.userData1111')
       this.boxDialog = false
       this.selfDialog = false
     },
@@ -1076,10 +1054,8 @@ export default {
       if (!this.box.station_id) {
         return this.$message.error(this.$t('请选择'))
       }
-      console.log(this.selfAddress, 'selfAddress')
       this.selfData = this.selfAddress
       this.box.address_id = this.selfData.id
-      console.log(this.selfData, 'selfData')
       this.addressDialog = false
     },
     clearSelf() {
