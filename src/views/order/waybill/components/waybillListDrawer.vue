@@ -29,11 +29,11 @@
               <td>{{ $t('总计') }}</td>
               <td></td>
               <td>{{ packageTotal }}</td>
-              <td>{{ orderTotal }}</td>
+              <td class="order-sty">{{ orderTotal }}</td>
               <td>{{ boxTotal }}</td>
-              <td>{{ parseInt(paymentWeight) }}</td>
+              <td class="pay-sty">{{ parseInt(paymentWeight) }}</td>
               <td>{{ value.toFixed(2) }}</td>
-              <td>{{ paymentTotal.toFixed(2) }}</td>
+              <td class="total-sty">{{ paymentTotal.toFixed(2) }}</td>
             </tr>
           </div>
         </el-col>
@@ -66,6 +66,9 @@ export default {
     showDrawer: {
       type: Boolean,
       default: false
+    },
+    searchFieldData: {
+      type: Object
     }
   },
   created() {
@@ -81,10 +84,10 @@ export default {
       this.$emit('receive', false)
     },
     getPie() {
-      // let params = {
-      //   status: this.activeName
-      // }
-      this.$request.volumeStatistics().then(res => {
+      let params = {
+        ...this.searchFieldData
+      }
+      this.$request.volumeStatistics(params).then(res => {
         if (res.ret) {
           this.pieOrderData = res.data.pay_method
           const arr = this.pieOrderData.map(item => {
@@ -104,7 +107,10 @@ export default {
             {
               name: '目的地',
               type: 'pie',
+              minAngle: 5,
+              avoidLabelOverlap: true,
               radius: ['30%', '70%'],
+              center: ['65%', '50%'],
               label: {
                 formatter: ' {d}% '
               },
@@ -125,7 +131,10 @@ export default {
             {
               name: '支付方式',
               type: 'pie',
+              minAngle: 5,
+              avoidLabelOverlap: true,
               radius: ['30%', '70%'],
+              center: ['65%', '60%'],
               label: {
                 formatter: ' {d}% '
               },
@@ -148,7 +157,10 @@ export default {
       })
     },
     getLine() {
-      this.$request.volumeStatistics().then(res => {
+      let params = {
+        ...this.searchFieldData
+      }
+      this.$request.volumeStatistics(params).then(res => {
         if (res.ret) {
           this.lineData = res.data.line
         }
@@ -234,6 +246,9 @@ export default {
   /deep/.el-drawer__open .el-drawer.rtl {
     width: 90% !important;
   }
+  .el-drawer.rtl {
+    overflow: scroll;
+  }
   .el-drawer__header {
     margin-bottom: 0;
   }
@@ -250,6 +265,15 @@ export default {
         text-align: center;
       }
     }
+  }
+  .order-sty {
+    color: #006400;
+  }
+  .pay-sty {
+    color: #3540a5;
+  }
+  .total-sty {
+    color: #dc143c;
   }
 }
 </style>

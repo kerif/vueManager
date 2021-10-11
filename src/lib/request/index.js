@@ -3086,8 +3086,8 @@ exports.getOrderBatch = params => {
   return $form.get(`orders`, { params })
 }
 //订单 订单列表 货量统计
-exports.volumeStatistics = () => {
-  return $form.get(`orders/statistics`)
+exports.volumeStatistics = params => {
+  return $form.get(`orders/statistics`, { params })
 }
 // 一键更改支付方式
 exports.changePayMode = params => {
