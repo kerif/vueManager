@@ -93,7 +93,7 @@
         }}</el-button>
       </div>
       <div style="margin-left: 5px" v-if="['0', '1', '2', '3', '4', '5'].includes(activeName)">
-        <el-button size="small" type="danger" @click="drawer = true" plain>{{
+        <el-button size="small" type="danger" @click="showDrawer = true" plain>{{
           $t('货量统计')
         }}</el-button>
       </div>
@@ -1007,47 +1007,8 @@
         }}</el-button>
       </div>
     </el-dialog>
-    <el-drawer :visible.sync="drawer">
-      <div class="volume-echarts-container">
-        <h3>货量统计</h3>
-        <el-row :gutter="20">
-          <el-col :span="14" style="height: 100%">
-            <div>(根据列表筛选条件)</div>
-            <div style="margin-top: 60px">线路统计</div>
-            <el-table :data="lineData" border style="width: 100%">
-              <el-table-column label="#" type="index"> </el-table-column>
-              <el-table-column prop="express_line_id_name" label="线路名称"> </el-table-column>
-              <el-table-column prop="percent" label="渠道占比"> </el-table-column>
-              <el-table-column prop="package_count" label="包裹总数"> </el-table-column>
-              <el-table-column prop="order_count" label="订单总数"> </el-table-column>
-              <el-table-column prop="box_count" label="箱总数"> </el-table-column>
-              <el-table-column prop="payment_weight" label="计费重量"> </el-table-column>
-              <el-table-column prop="value" label="申报总值"> </el-table-column>
-              <el-table-column prop="actual_payment_fee" label="实付总计"> </el-table-column>
-            </el-table>
-            <div>
-              <tr>
-                <td></td>
-                <td>总计</td>
-                <td></td>
-                <td>10000</td>
-                <td>10000</td>
-                <td>10000</td>
-                <td>10000</td>
-                <td>10000</td>
-                <td>10000</td>
-              </tr>
-            </div>
-          </el-col>
-          <el-col :span="10" style="height: 100%">
-            <h3>{{ $t('支付方式') }}</h3>
-            <div class="charts-top" id="chartsFirst"></div>
-            <h3>{{ $t('目的地') }}</h3>
-            <div class="charts-bottom" id="chartsSecond"></div>
-          </el-col>
-        </el-row>
-      </div>
-    </el-drawer>
+    <!-- 货量统计 -->
+    <waybill-list-drawer :showDrawer="showDrawer" @receive="receive"></waybill-list-drawer>
   </div>
 </template>
 
@@ -1056,10 +1017,11 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import WaybillListSearch from './components/waybillListSearch'
-import echarts from 'echarts'
+import WaybillListDrawer from './components/waybillListDrawer'
 export default {
   components: {
     WaybillListSearch,
+    WaybillListDrawer,
     NlePagination
   },
   mixins: [pagination],
@@ -1165,14 +1127,7 @@ export default {
       user_name: '',
       status: '',
       id: '',
-      drawer: false,
-      myChart: '',
-      myDestinationChart: '',
-      orderRight: {},
-      orderTop: {},
-      lineData: [],
-      pieOrderData: [],
-      pieDestinationData: []
+      showDrawer: false
     }
   },
   activated() {
@@ -1189,8 +1144,6 @@ export default {
     this.getOrderFieldList()
     this.getCounts()
     this.initQuery()
-    this.getPie() // 支付方式饼图数据
-    this.getDestinationPie()
   },
   methods: {
     initQuery() {
@@ -1205,6 +1158,9 @@ export default {
         })
       }
       this.getList()
+    },
+    receive() {
+      this.showDrawer = false
     },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {
@@ -1238,79 +1194,6 @@ export default {
           })
         }
         this.localization = res.localization
-      })
-    },
-    getPie() {
-      this.$request.volumeStatistics().then(res => {
-        if (res.ret) {
-          this.pieOrderData = res.data.pay_method
-          console.log(this.pieOrderData)
-          const arr = this.pieOrderData.map(item => {
-            return {
-              value: item.order_count,
-              name: item.pay_name
-            }
-          })
-          this.tableData = res.data.line
-          this.orderRight.series = [
-            {
-              name: '支付方式',
-              type: 'pie',
-              radius: ['30%', '70%'],
-              label: {
-                formatter: ' {d}% '
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              },
-              labelLine: {
-                show: true
-              },
-              data: arr
-            }
-          ]
-          this.myChart.setOption(this.orderRight)
-        }
-      })
-    },
-    getDestinationPie() {
-      this.$request.volumeStatistics().then(res => {
-        if (res.ret) {
-          this.pieDestinationData = res.data.destination
-          console.log(this.pieDestinationData)
-          const arr = this.pieDestinationData.map(item => {
-            return {
-              value: item.order_count,
-              name: item.country_name
-            }
-          })
-          this.orderTop.series = [
-            {
-              name: '目的地',
-              type: 'pie',
-              radius: ['30%', '70%'],
-              label: {
-                formatter: ' {d}% '
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              },
-              labelLine: {
-                show: true
-              },
-              data: arr
-            }
-          ]
-          this.myDestinationChart.setOption(this.orderTop)
-        }
       })
     },
     getList() {
@@ -2243,40 +2126,6 @@ export default {
       this.payment_mode = ''
     }
   },
-  mounted() {
-    // 支付方式饼图
-    console.log(document.getElementById('chartsFirst'), 11111111)
-    this.myChart = echarts.init(document.getElementById('chartsFirst'))
-    window.onresize = this.myChart.resize
-    this.orderRight = {
-      backgroundColor: '#ffffff',
-      color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left'
-      }
-    }
-    //目的地饼图
-    console.log(document.getElementById('chartsSecond'), 11111111)
-    this.myDestinationChart = echarts.init(document.getElementById('chartsSecond'))
-    window.onresize = this.myDestinationChart.resize
-    this.orderTop = {
-      backgroundColor: '#ffffff',
-      color: ['#9969BD', '#6495F9', '#E96C5B', '#62DAAB', '#F6C022', '#74CBED'],
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left'
-      }
-    }
-  },
   computed: {
     timeLabel() {
       let label = this.$t('提交时间')
@@ -2409,19 +2258,6 @@ export default {
 }
 .expand-table {
   width: 80%;
-}
-.volume-echarts-container {
-  padding: 0 0 0 10px;
-  .charts-top {
-    display: inline-block;
-    width: 100%;
-    height: 300px;
-  }
-  .charts-bottom {
-    display: inline-block;
-    width: 100%;
-    height: 300px;
-  }
 }
 /deep/.el-drawer__open .el-drawer.rtl {
   width: 90% !important;

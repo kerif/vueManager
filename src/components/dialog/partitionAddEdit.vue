@@ -21,47 +21,77 @@
         <el-input class="input-sty" v-model="ruleForm.reference_time"></el-input>
       </el-form-item>
       <el-form-item :label="$t('分区方案')">
-        <el-radio-group v-model="radio">
-          <el-radio label="1">国家地区</el-radio>
-          <el-radio label="2">国家邮编</el-radio>
+        <el-radio-group v-model="ruleForm.radio">
+          <el-radio :label="1">{{ $t('国家地区') }}</el-radio>
+          <el-radio :label="2">{{ $t('国家邮编') }}</el-radio>
         </el-radio-group>
         <br />
         <el-cascader
-          v-if="this.radio === 1"
+          v-if="ruleForm.radio === 1"
           style="width: 30%; margin-left: 70px"
-          @change="chooseAres"
+          @change="chooseAres(areaData)"
           v-model="areaData"
           :options="options"
           :props="props"
           collapse-tags
           clearable
         ></el-cascader>
-        <br />
-        <el-cascader
-          style="width: 30%; margin-left: 70px"
-          @change="chooseAres"
-          v-model="areaData"
-          :options="options"
-          :props="props"
-          collapse-tags
-          clearable
-        ></el-cascader>
-        <el-button>添加邮编规则</el-button>
+        <el-row v-else style="margin-left: 60px" :gutter="20">
+          <el-col :span="5">
+            <el-select
+              v-model="ruleForm.country_id"
+              filterable
+              clearable
+              class="country-select"
+              :placeholder="$t('请选择国家')"
+            >
+              <el-option
+                v-for="item in countryList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="4" class="country-btn">
+            <el-button @click="addPost">{{ $t('添加邮编规则') }}</el-button>
+          </el-col>
+        </el-row>
       </el-form-item>
-      <el-table>
-        <el-table :data="postData" border style="width: 80%">
-          <el-table-column label="#" width="180"> </el-table-column>
-          <el-table-column label="规则" width="180"> </el-table-column>
-          <el-table-column label="内容"> </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <!-- 移除 -->
-              <el-button class="btn-red" @click="deleteWarehoused(scope.row.id)">{{
-                $t('移除')
-              }}</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+      <el-table
+        :data="postData"
+        v-if="ruleForm.radio !== 1"
+        border
+        style="width: 80%; margin-left: 60px"
+      >
+        <el-table-column label="#" type="index"> </el-table-column>
+        <el-table-column :label="$t('规则')" prop="rule"> </el-table-column>
+        <el-table-column :label="$t('内容')">
+          <template slot-scope="scope">
+            <el-col>
+              <el-input
+                v-model="scope.row.start"
+                size="mini"
+                :placeholder="$t('请输入起始邮编')"
+              ></el-input>
+              -
+              <el-input
+                v-model="scope.row.end"
+                size="mini"
+                :placeholder="$t('请输入截止邮编')"
+              ></el-input>
+            </el-col>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <!-- 移除 -->
+            <el-button class="danger" @click="deletePostcode(scope.$index, postData)">{{
+              $t('移除')
+            }}</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-form>
     <!-- <div style="margin-bottom: 20px">
@@ -91,18 +121,14 @@
   </el-dialog>
 </template>
 <script>
-// import NlePagination from '@/components/pagination'
-// import { pagination } from '@/mixin'
 export default {
-  // components: {
-  //   NlePagination
-  // },
-  // mixins: [pagination],
   data() {
     return {
       ruleForm: {
         name: '',
-        reference_time: ''
+        reference_time: '',
+        country_id: '',
+        radio: 1
       },
       templateData: [],
       countryList: [], // 获取全部国家
@@ -122,10 +148,16 @@ export default {
       keyValue: 0,
       areaIds: [],
       areasData: [],
-      postData: [],
+      postData: [{ rule: '邮编规则', start: '', end: '', type: 1 }],
       tmpId: '',
-      radio: 1
+      areaNum: [],
+      start: '',
+      end: '',
+      postcodes: []
     }
+  },
+  created() {
+    this.getCountry()
   },
   methods: {
     getList() {
@@ -201,6 +233,8 @@ export default {
     getCountry() {
       this.$request.countryLocation().then(res => {
         if (res.ret) {
+          this.countryList = res.data
+          console.log(this.countryList)
           this.options = res.data.map(item => {
             return {
               value: item.id,
@@ -245,13 +279,23 @@ export default {
     },
     // 新增行
     addRow() {
-      console.log(this.tableData, 'this.tableData')
       this.tableData.push({
         country_id: '',
         areaData: []
       })
     },
+    addPost() {
+      this.postData.push({
+        rule: '邮编规则',
+        start: '',
+        end: '',
+        type: 1
+      })
+    },
     deleteParition(index, rows) {
+      rows.splice(index, 1)
+    },
+    deletePostcode(index, rows) {
       rows.splice(index, 1)
     },
     confirm() {
@@ -264,11 +308,15 @@ export default {
       }
       if (this.status === 'channel') {
         if (this.id) {
+          // 更新
           this.$request
-            .updateRegionDetails(this.$route.params.id, this.id, {
+            .updateRegions(this.$route.params.id, this.id, {
               name: this.ruleForm.name,
               reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
+              type: this.ruleForm.radio,
+              areas: this.ruleForm.radio === 1 ? this.areasData : [],
+              country_id: this.ruleForm.country_id,
+              postcodes: this.postData
             })
             .then(res => {
               if (res.ret) {
@@ -285,14 +333,17 @@ export default {
                   type: 'error'
                 })
               }
-              // this.show = false
             })
         } else {
+          // 新建
           this.$request
-            .newRegions(this.$route.params.id, {
+            .newLineRegions(this.$route.params.id, {
               name: this.ruleForm.name,
               reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds
+              type: this.ruleForm.radio,
+              areas: this.ruleForm.radio === 1 ? this.areasData : [],
+              country_id: this.ruleForm.country_id,
+              postcodes: this.postData
             })
             .then(res => {
               if (res.ret) {
@@ -309,16 +360,19 @@ export default {
                   type: 'error'
                 })
               }
-              // this.show = false
             })
         }
       } else {
         if (this.id) {
+          // 模板
           this.$request
             .updateRegionTmpDetails(this.tmpId, this.id, {
               name: this.ruleForm.name,
               reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds.length === 0 ? this.areasData : this.areaIds
+              type: this.ruleForm.radio,
+              areas: this.ruleForm.radio === 1 ? this.areasData : [],
+              country_id: this.ruleForm.country_id,
+              postcodes: this.postData
             })
             .then(res => {
               if (res.ret) {
@@ -335,14 +389,16 @@ export default {
                   type: 'error'
                 })
               }
-              // this.show = false
             })
         } else {
           this.$request
             .newRegionTmp(this.tmpId, {
               name: this.ruleForm.name,
               reference_time: this.ruleForm.reference_time,
-              areas: this.areaIds
+              type: this.ruleForm.radio,
+              areas: this.ruleForm.radio === 1 ? this.areasData : [],
+              country_id: this.ruleForm.country_id,
+              postcodes: this.postData
             })
             .then(res => {
               if (res.ret) {
