@@ -1,8 +1,5 @@
 <template>
   <div class="partition-container">
-    <!-- <div class="searchGroup">
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
-    </div> -->
     <div class="bottom-sty">
       <div>
         <!-- <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
@@ -10,12 +7,24 @@
         <!-- <el-button size="small" @click="chooseTemplate" type="danger" plain>{{
           $t('选择模版')
         }}</el-button> -->
+        <el-input
+          size="small"
+          :placeholder="$t('分区表名称')"
+          v-model="input"
+          class="edit"
+        ></el-input>
       </div>
       <div class="addUser">
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
-        <el-button type="danger" plain @click.native="selectPartition">选用预设分区表</el-button>
+        <el-button
+          type="danger"
+          v-if="this.$route.params.id"
+          plain
+          @click.native="selectPartition"
+          >{{ $t('选用预设分区表') }}</el-button
+        >
         <add-btn @click.native="addPartition">{{ $t('新增') }}</add-btn>
       </div>
     </div>
@@ -107,17 +116,19 @@
       width="35%"
       @close="clearPreset"
     >
-      <div class="remark">*选用预设分区表后，将在当前渠道增加分区，需设置价格表后再启用分区</div>
+      <div class="remark">
+        {{ $t('*选用预设分区表后，将在当前渠道增加分区，需设置价格表后再启用分区') }}
+      </div>
       <el-form ref="form" :model="form" label-width="120px">
         <el-radio-group v-model="radio">
-          <el-radio class="options" label="1">备选项</el-radio><br />
-          <el-radio class="options" label="2">备选项</el-radio><br />
-          <el-radio class="options" label="3">备选项</el-radio><br />
+          <el-radio class="options" v-for="item in tmpData" :key="item.id" :label="item.id"
+            >{{ item.name }} ({{ item.regions_count }}{{ $t('个分区') }})</el-radio
+          ><br />
         </el-radio-group>
       </el-form>
       <span slot="footer">
-        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="confirmAdd">{{ $t('确定') }}</el-button>
+        <el-button @click="show = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -141,7 +152,9 @@ export default {
         templateId: ''
       },
       show: false,
-      radio: 1
+      radio: 1,
+      tmpData: [],
+      input: ''
     }
   },
   components: {
@@ -154,7 +167,9 @@ export default {
     this.getList()
     this.getLanguageList() // 获取支持语言
   },
-  created() {},
+  created() {
+    this.getTmp()
+  },
   methods: {
     // 获取分区
     async getList() {
@@ -221,14 +236,17 @@ export default {
         }
       )
     },
+    // 获取模板的分区个数
+    getTmp() {
+      this.$request.lineRegion().then(res => {
+        if (res.ret) {
+          this.tmpData = res.data
+        }
+      })
+    },
     //选用预设分区表
     selectPartition() {
       this.show = true
-      // this.$request.lineRegionsDetail(this.$route.params.id, this.id).then(res => {
-      //   if (res.ret) {
-      //     console.log(res.data)
-      //   }
-      // })
     },
     // 删除
     deletePart(id) {
@@ -337,6 +355,24 @@ export default {
           // this.getList()
         }
       })
+    },
+    confirm() {
+      this.$request.copyPartitionTmp(this.$route.params.id, this.radio).then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.show = false
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   },
   computed: {
@@ -378,6 +414,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .edit .el-input__inner {
+      border: 1px solid #f5f5f5;
+      background-color: #f5f5f5;
+    }
   }
   .searchGroup {
     width: 21.5%;
@@ -412,6 +452,7 @@ export default {
     margin-right: 5px;
   }
   .options {
+    display: block;
     margin-bottom: 10px;
   }
 }

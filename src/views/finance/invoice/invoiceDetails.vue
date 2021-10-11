@@ -229,10 +229,10 @@
           </el-table>
           <div class="total">
             <tr>
-              <td>合计金额:¥{{ sumAmount.toFixed(2) }}</td>
+              <td>{{ $t('合计金额') }}:¥{{ sumAmount.toFixed(2) }}</td>
               <td></td>
-              <td>合计税款:¥{{ sumTaxes.toFixed(2) }}</td>
-              <td>小计:¥{{ (sumAmount + sumTaxes).toFixed(2) }}</td>
+              <td>{{ $t('合计税款') }}:¥{{ sumTaxes.toFixed(2) }}</td>
+              <td>{{ $t('小计') }}:¥{{ (sumAmount + sumTaxes).toFixed(2) }}</td>
             </tr>
           </div>
         </div>

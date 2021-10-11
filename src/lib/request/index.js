@@ -253,9 +253,17 @@ exports.newRegions = (id, params) => {
 exports.lineRegionsDetail = (id, regionId) => {
   return $form.get(`express-lines/${id}/regions/${regionId}`)
 }
+// 配置 分区 新建线路分区
+exports.newLineRegions = (id, params) => {
+  return $form.post(`express-lines/${id}/regions`, params)
+}
 // 配置 分区 更新线路分区信息
 exports.updateRegions = (id, regionId, params) => {
   return $form.put(`express-lines/${id}/regions/${regionId}`, params)
+}
+// 配置 分区 复制分区模板
+exports.copyPartitionTmp = (id, tmpId) => {
+  return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
 }
 // 新路线 基础信息 获取
 exports.configBasic = id => {
@@ -1421,8 +1429,8 @@ exports.updateProgramShare = params => {
   return $form.put('mini-program/share-page-info', params)
 }
 // 获取功能配置
-exports.getValidate = () => {
-  return $form.get(`mini-program/configs`)
+exports.getValidate = params => {
+  return $form.get(`mini-program/configs`, params)
 }
 // 更新 功能配置
 exports.updateValidate = params => {

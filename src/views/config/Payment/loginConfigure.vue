@@ -53,7 +53,8 @@ export default {
         // 功能配置
         validate_phone: '',
         validate_email: '',
-        validate_status: ''
+        validate_status: '',
+        login_coupon_status: 0
       }
     }
   },
@@ -63,7 +64,7 @@ export default {
   methods: {
     // 获取功能配置
     getValidate() {
-      this.$request.getValidate().then(res => {
+      this.$request.getValidate(this.login_coupon_status).then(res => {
         if (res.ret) {
           this.validateList = res.data
         }
