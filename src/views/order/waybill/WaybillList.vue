@@ -1008,7 +1008,11 @@
       </div>
     </el-dialog>
     <!-- 货量统计 -->
-    <waybill-list-drawer :showDrawer="showDrawer" @receive="receive"></waybill-list-drawer>
+    <waybill-list-drawer
+      :showDrawer="showDrawer"
+      :searchFieldData="searchFieldData"
+      @receive="receive"
+    ></waybill-list-drawer>
   </div>
 </template>
 

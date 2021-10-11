@@ -151,9 +151,9 @@ export default {
       postData: [{ rule: '邮编规则', start: '', end: '', type: 1 }],
       tmpId: '',
       areaNum: [],
+      postcodes: [],
       start: '',
-      end: '',
-      postcodes: []
+      end: ''
     }
   },
   created() {
@@ -307,115 +307,103 @@ export default {
         }))
       }
       if (this.status === 'channel') {
+        let params = {}
+        params = {
+          name: this.ruleForm.name,
+          reference_time: this.ruleForm.reference_time,
+          type: this.ruleForm.radio
+        }
+        if (this.ruleForm.radio === 1) {
+          params.areas = this.tableData[0].areaData.length ? this.areasData : this.areaIds
+        } else {
+          params.country_id = this.ruleForm.country_id
+          params.postcodes = this.postData
+        }
         if (this.id) {
           // 更新
-          this.$request
-            .updateRegions(this.$route.params.id, this.id, {
-              name: this.ruleForm.name,
-              reference_time: this.ruleForm.reference_time,
-              type: this.ruleForm.radio,
-              areas: this.ruleForm.radio === 1 ? this.areasData : [],
-              country_id: this.ruleForm.country_id,
-              postcodes: this.postData
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-            })
+          this.$request.updateRegions(this.$route.params.id, this.id, params).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
         } else {
           // 新建
-          this.$request
-            .newLineRegions(this.$route.params.id, {
-              name: this.ruleForm.name,
-              reference_time: this.ruleForm.reference_time,
-              type: this.ruleForm.radio,
-              areas: this.ruleForm.radio === 1 ? this.areasData : [],
-              country_id: this.ruleForm.country_id,
-              postcodes: this.postData
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-            })
+          this.$request.newLineRegions(this.$route.params.id, params).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
         }
       } else {
+        let params = {}
+        params = {
+          name: this.ruleForm.name,
+          reference_time: this.ruleForm.reference_time,
+          type: this.ruleForm.radio
+        }
+        if (this.ruleForm.radio === 1) {
+          params.areas = this.tableData[0].areaData.length ? this.areasData : this.areaIds
+        } else {
+          params.country_id = this.ruleForm.country_id
+          params.postcodes = this.postData
+        }
         if (this.id) {
           // 模板
-          this.$request
-            .updateRegionTmpDetails(this.tmpId, this.id, {
-              name: this.ruleForm.name,
-              reference_time: this.ruleForm.reference_time,
-              type: this.ruleForm.radio,
-              areas: this.ruleForm.radio === 1 ? this.areasData : [],
-              country_id: this.ruleForm.country_id,
-              postcodes: this.postData
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-            })
+          this.$request.updateRegionTmpDetails(this.tmpId, this.id, params).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
         } else {
-          this.$request
-            .newRegionTmp(this.tmpId, {
-              name: this.ruleForm.name,
-              reference_time: this.ruleForm.reference_time,
-              type: this.ruleForm.radio,
-              areas: this.ruleForm.radio === 1 ? this.areasData : [],
-              country_id: this.ruleForm.country_id,
-              postcodes: this.postData
-            })
-            .then(res => {
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.show = false
-                this.success()
-              } else {
-                this.$message({
-                  message: res.msg,
-                  type: 'error'
-                })
-              }
-            })
+          this.$request.newRegionTmp(this.tmpId, params).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
         }
       }
     },
@@ -438,6 +426,8 @@ export default {
       this.ruleForm.reference_time = ''
       this.ruleForm.name = ''
       this.tableData[0].areaData = []
+      this.country_id = ''
+      this.postData = []
     }
   }
 }

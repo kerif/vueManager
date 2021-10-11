@@ -1,7 +1,7 @@
 <template>
   <div class="position-container">
     <div class="select-box">
-      <!-- <el-button type="danger" plain @click.native="addShelfRules">{{ $t('上架规则') }}</el-button> -->
+      <el-button type="danger" plain @click.native="addShelfRules">{{ $t('上架规则') }}</el-button>
       <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
     </div>
     <el-table
