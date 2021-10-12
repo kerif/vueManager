@@ -367,7 +367,7 @@
               ><br />
               <span style="padding-left: 20px"
                 >{{ $t('计费重量') }}：{{ $t('(实际重量 + 体积重量）/2') }}</span
-              >
+              ><span style="padding-left: 20px">{{ $t('体积重大于实重时生效') }}</span>
             </el-col>
           </el-row>
         </el-form-item>
@@ -776,7 +776,7 @@ export default {
         console.log(this.form.checked, 'form.checked')
         let checkStatus = this.form.checked ? Number(this.form.checked) : ''
         console.log(Number(this.form.checked), '转换1')
-        delete this.form.checked
+        // delete this.form.checked
         this.$request
           .updateBillingConfig(this.$route.params.id, {
             ...this.form,
