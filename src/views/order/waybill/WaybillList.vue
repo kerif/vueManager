@@ -1011,6 +1011,7 @@
     <waybill-list-drawer
       :showDrawer="showDrawer"
       :searchFieldData="searchFieldData"
+      :activeName="activeName"
       @receive="receive"
     ></waybill-list-drawer>
   </div>
