@@ -179,7 +179,6 @@ export default {
           )
           this.ruleForm.country_id = res.data.areas.map(item => item.country_id)[0]
         }
-        console.log(res.data.areas)
         this.postData = res.data.postcode_areas
       })
     },
@@ -234,6 +233,7 @@ export default {
                     })
             }
           })
+          console.log(this.options)
         }
       })
     },
@@ -267,6 +267,7 @@ export default {
                     })
             }
           })
+          console.log(this.options)
         }
       })
     },
@@ -416,7 +417,6 @@ export default {
       }
     },
     init() {
-      console.log(this.status, 'status')
       if (this.status === 'partition') {
         this.getCountry()
       } else {
@@ -425,7 +425,6 @@ export default {
       if (this.id) {
         this.getList()
       }
-      // this.getEditPartition()
     },
     clear() {
       this.id = ''
