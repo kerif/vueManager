@@ -57,6 +57,7 @@
                 <el-autocomplete
                   :fetch-suggestions="queryCNSearch"
                   @select="handleSelect"
+                  @change="changeSelect"
                   :placeholder="$t('请输入客户ID，不填则默认无人认领包裹')"
                   v-model="user.user_id"
                   :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
@@ -433,14 +434,12 @@
 </template>
 
 <script>
-// import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
 export default {
   mixins: [pagination],
   components: {
-    // NlePagination,
     AddBtn
   },
   data() {
@@ -808,13 +807,18 @@ export default {
     },
     // 客户id
     handleSelect(item) {
-      console.log(item)
+      console.log(this.user.user_id, 'user.user_id')
       this.supplierId = item.id
       this.userId = item.id
       this.supplierName = item.name
       this.user.location = ''
       this.getAreaLocation()
       this.locationCNSearch()
+    },
+    changeSelect() {
+      if (!this.user.user_id) {
+        this.userId = ''
+      }
     },
     // 货位
     locationSelect(item) {
