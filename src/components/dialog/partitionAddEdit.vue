@@ -153,7 +153,8 @@ export default {
       areaNum: [],
       postcodes: [],
       start: '',
-      end: ''
+      end: '',
+      country_id: ''
     }
   },
   created() {
@@ -169,25 +170,32 @@ export default {
     },
     getRegions() {
       this.$request.getRegionDetails(this.$route.params.id, this.id).then(res => {
+        console.log(res.data)
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
         if (res.data.areas) {
-          this.tableData[0].areaData = res.data.areas.map(item =>
+          this.areaData = res.data.areas.map(item =>
             [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
           )
+          this.ruleForm.country_id = res.data.areas.map(item => item.country_id)[0]
         }
-        console.log(this.tableData, 'this.areaData')
+        console.log(res.data.areas)
+        this.postData = res.data.postcode_areas
       })
     },
     getPartition() {
       this.$request.regionTmpDetails(this.tmpId, this.id).then(res => {
+        console.log(res.data)
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
+        console.log(res.data.areas)
         if (res.data.areas) {
-          this.tableData[0].areaData = res.data.areas.map(item =>
+          this.areaData = res.data.areas.map(item =>
             [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
           )
+          this.ruleForm.country_id = res.data.areas.map(item => item.country_id)[0]
         }
+        this.postData = res.data.postcode_areas
       })
     },
     chooseAres(area) {
@@ -417,6 +425,7 @@ export default {
       if (this.id) {
         this.getList()
       }
+      // this.getEditPartition()
     },
     clear() {
       this.id = ''
@@ -426,8 +435,9 @@ export default {
       this.ruleForm.reference_time = ''
       this.ruleForm.name = ''
       this.tableData[0].areaData = []
-      this.country_id = ''
-      this.postData = []
+      this.ruleForm.country_id = ''
+      this.areaData = []
+      this.postData = [{ rule: '邮编规则', start: '', end: '', type: 1 }]
     }
   }
 }

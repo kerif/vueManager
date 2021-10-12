@@ -69,6 +69,9 @@ export default {
     },
     searchFieldData: {
       type: Object
+    },
+    activeName: {
+      type: String
     }
   },
   created() {
@@ -85,7 +88,8 @@ export default {
     },
     getPie() {
       let params = {
-        ...this.searchFieldData
+        ...this.searchFieldData,
+        status: this.activeName
       }
       this.$request.volumeStatistics(params).then(res => {
         if (res.ret) {
