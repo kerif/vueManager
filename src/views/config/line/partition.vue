@@ -40,6 +40,12 @@
       >
         <el-table-column type="index" :index="1"></el-table-column>
         <el-table-column :label="$t('分区名称')" prop="name"></el-table-column>
+        <el-table-column :label="$t('分区分类型')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type === 1">{{ $t('国家地区') }}</span>
+            <span v-else>{{ scope.row.country.name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('启用国家/地区')" :show-overflow-tooltip="true" width="150">
           <template slot-scope="scope">
             <span v-for="item in scope.row.areas" :key="item.id"

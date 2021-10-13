@@ -180,6 +180,7 @@ export default {
           this.ruleForm.country_id = res.data.areas.map(item => item.country_id)[0]
         }
         this.postData = res.data.postcode_areas
+        // this.postData.push({ rule: '邮编规则' })
       })
     },
     getPartition() {
@@ -195,6 +196,7 @@ export default {
           this.ruleForm.country_id = res.data.areas.map(item => item.country_id)[0]
         }
         this.postData = res.data.postcode_areas
+        // this.postData.push({ rule: '邮编规则' })
       })
     },
     chooseAres(area) {
@@ -209,6 +211,8 @@ export default {
     getAllCountries() {
       this.$request.regionCountry(this.$route.params.id).then(res => {
         if (res.ret) {
+          this.countryList = res.data
+          console.log(this.countryList)
           this.options = res.data.map(item => {
             return {
               value: item.id,
@@ -242,7 +246,6 @@ export default {
       this.$request.countryLocation().then(res => {
         if (res.ret) {
           this.countryList = res.data
-          console.log(this.countryList)
           this.options = res.data.map(item => {
             return {
               value: item.id,
