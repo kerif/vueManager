@@ -177,10 +177,10 @@ export default {
           this.areaData = res.data.areas.map(item =>
             [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
           )
-          this.ruleForm.country_id = res.data.areas.map(item => item.country_id)[0]
         }
+        this.ruleForm.country_id = res.data.country_id
+        this.ruleForm.radio = res.data.type
         this.postData = res.data.postcode_areas
-        // this.postData.push({ rule: '邮编规则' })
       })
     },
     getPartition() {
@@ -193,10 +193,10 @@ export default {
           this.areaData = res.data.areas.map(item =>
             [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
           )
-          this.ruleForm.country_id = res.data.areas.map(item => item.country_id)[0]
         }
+        this.ruleForm.country_id = res.data.country_id
+        this.ruleForm.radio = res.data.type
         this.postData = res.data.postcode_areas
-        // this.postData.push({ rule: '邮编规则' })
       })
     },
     chooseAres(area) {
@@ -237,7 +237,6 @@ export default {
                     })
             }
           })
-          console.log(this.options)
         }
       })
     },

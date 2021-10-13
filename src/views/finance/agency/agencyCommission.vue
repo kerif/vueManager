@@ -92,8 +92,13 @@
         </el-table-column>
       </el-table>
     </div>
-    <!-- <div><span></span><span></span></div> -->
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false">
+      <div class="remark-text">
+        <span>{{ $t('未结算总金额') }}:</span><span>{{ this.unsettle_amount }},</span>&nbsp;<span
+          >{{ $t('已结算佣金') }}:</span
+        ><span>{{ this.settle_amount }}</span>
+      </div>
+    </nle-pagination>
   </div>
 </template>
 
@@ -276,6 +281,11 @@ export default {
     .el-table .cell {
       text-align: center;
     }
+  }
+  .remark-text {
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
   }
 }
 </style>

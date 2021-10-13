@@ -630,7 +630,7 @@ export default {
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             if (res.ret) {
               this.$notify({
                 type: 'success',

@@ -839,6 +839,10 @@ exports.updateWithdrawData = params => {
 exports.agentTemplate = params => {
   return $form.get('agents/commission-templates', { params })
 }
+// 代理管理 代理删除
+exports.deleteAgent = id => {
+  return $form.delete(`agents/${id}`)
+}
 // 发票管理 全部
 exports.manageInvoice = params => {
   return $form.get('invoice', { params })
