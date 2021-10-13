@@ -807,6 +807,10 @@ exports.withdrawalMethod = () => {
 exports.clickSettlement = params => {
   return $form.put('agents/commissions/settled-all', params)
 }
+// 代理佣金结算 代理结算统计
+exports.settleStatistics = () => {
+  return $form.get('agents/deal-orders-total')
+}
 // 代理佣金计算 审核通过提现申请
 exports.approveWithdraw = (id, withdrawsId, params) => {
   return $form.put(`agents/${id}/withdraws/${withdrawsId}/approved`, params)

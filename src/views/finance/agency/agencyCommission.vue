@@ -92,6 +92,7 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- <div><span></span><span></span></div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -116,7 +117,9 @@ export default {
       settledData: [],
       timeList: [],
       unsettleId: '',
-      ids: []
+      ids: [],
+      settle_amount: '',
+      unsettle_amount: ''
     }
   },
   components: {
@@ -124,6 +127,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getSettleStatistics()
     this.goInit()
   },
   mixins: [pagination],
@@ -215,6 +219,14 @@ export default {
       this.supplierName = item.name
       this.page_params.user_id = item.id
       this.getAreaLocation()
+    },
+    // 代理结算统计
+    getSettleStatistics() {
+      this.$request.settleStatistics().then(res => {
+        console.log(res.data)
+        this.unsettle_amount = res.data.unsettle_amount
+        this.settle_amount = res.data.settle_amount
+      })
     },
     goInit() {
       this.$request.initSettle().then(res => {
