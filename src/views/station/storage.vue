@@ -57,7 +57,6 @@
                 <el-autocomplete
                   :fetch-suggestions="queryCNSearch"
                   @select="handleSelect"
-                  @change="changeSelect"
                   :placeholder="$t('请输入客户ID，不填则默认无人认领包裹')"
                   v-model="user.user_id"
                   :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
@@ -815,11 +814,11 @@ export default {
       this.getAreaLocation()
       this.locationCNSearch()
     },
-    changeSelect() {
-      if (!this.user.user_id) {
-        this.userId = ''
-      }
-    },
+    // changeSelect() {
+    //   if (!this.user.user_id) {
+    //     this.user_id = ''
+    //   }
+    // },
     // 货位
     locationSelect(item) {
       // this.ruleForm.en_name = item.name

@@ -40,17 +40,20 @@
       >
         <el-table-column type="index" :index="1"></el-table-column>
         <el-table-column :label="$t('分区名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('分区分类型')">
+        <el-table-column :label="$t('分区类型')">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">{{ $t('国家地区') }}</span>
-            <span v-else>{{ scope.row.country.name }}</span>
+            <span v-else>{{ $t('国家邮编') }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('启用国家/地区')" :show-overflow-tooltip="true" width="150">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.areas" :key="item.id"
-              >{{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}&nbsp;</span
-            >
+            <span v-if="scope.row.type === 1">
+              <span v-for="item in scope.row.areas" :key="item.id"
+                >{{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}&nbsp;</span
+              >
+            </span>
+            <span v-else>{{ scope.row.country.name }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('启用国家/地区总数量')" prop="areas_count"></el-table-column>

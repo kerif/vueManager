@@ -69,6 +69,10 @@
           >
           <!-- 修改 -->
           <el-button class="btn-green" @click="editAgent(scope.row.id)">{{ $t('修改') }}</el-button>
+          <!-- 删除 -->
+          <el-button class="btn-light-red" @click="deleteAgent(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
           <!-- 成交记录 -->
           <!-- 设置佣金 -->
           <el-button
@@ -213,6 +217,31 @@ export default {
         query: {
           id: id
         }
+      })
+    },
+    //删除代理
+    deleteAgent(id) {
+      this.$confirm(this.$t('您真的要删除此代理？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteAgent(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 提现申请

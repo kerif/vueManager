@@ -17,7 +17,12 @@
           <!--第二列表开始-->
           <!--时间-->
           <el-form-item prop="date_type">
-            <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('时间')">
+            <el-select
+              v-model="searchFieldData.date_type"
+              clearable
+              :placeholder="$t('时间')"
+              value-key="id"
+            >
               <el-option
                 v-for="item in timeOptions"
                 :key="item.id"
@@ -29,7 +34,12 @@
           </el-form-item>
           <!--价格区间-->
           <el-form-item prop="value_type">
-            <el-select v-model="searchFieldData.value_type" clearable :placeholder="$t('价格区间')">
+            <el-select
+              v-model="searchFieldData.value_type"
+              clearable
+              :placeholder="$t('价格区间')"
+              value-key="id"
+            >
               <el-option
                 v-for="item in priceRangeOptions"
                 :key="item.id"
@@ -45,6 +55,7 @@
               v-model="searchFieldData.express_line_id"
               clearable
               :placeholder="$t('线路名称')"
+              value-key="id"
             >
               <el-option
                 v-for="item in lineData"
@@ -107,6 +118,7 @@
                   v-model="searchFieldData.payment_type"
                   clearable
                   :placeholder="$t('支付方式')"
+                  value-key="id"
                 >
                   <el-option
                     v-for="item in paymentData"
@@ -125,6 +137,7 @@
                   v-model="searchFieldData.warehouse"
                   clearable
                   :placeholder="$t('请选择仓库')"
+                  value-key="id"
                 >
                   <el-option
                     v-for="item in wareHouseList"
@@ -155,6 +168,7 @@
               v-model="searchFieldData.pay_delivery"
               clearable
               :placeholder="$t('支付状态')"
+              value-key="id"
             >
               <el-option
                 v-for="item in paymentStatusData"
@@ -173,6 +187,7 @@
               v-model="searchFieldData.receive_type"
               clearable
               :placeholder="$t('收货方式')"
+              value-key="id"
             >
               <el-option
                 v-for="item in receiverOptions"
@@ -185,7 +200,12 @@
           </el-form-item>
           <!--所属代理 -->
           <el-form-item prop="agent">
-            <el-select v-model="searchFieldData.agent" clearable :placeholder="$t('所属代理')">
+            <el-select
+              v-model="searchFieldData.agent"
+              clearable
+              :placeholder="$t('所属代理')"
+              value-key="id"
+            >
               <el-option
                 v-for="item in agentData"
                 :key="item.id"
@@ -337,12 +357,14 @@ export default {
     getPaymentType() {
       this.$request.paymentType().then(res => {
         this.paymentData = res.data
+        console.log(res.data)
       })
     },
     // 获取筛选线路列表
     getLineType() {
       this.$request.lineType().then(res => {
         this.lineData = res.data
+        console.log(res.data)
       })
     }
   }
