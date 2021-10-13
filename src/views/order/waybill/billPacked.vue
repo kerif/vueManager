@@ -801,13 +801,32 @@ export default {
       if (type === 1) {
         res = await this.$request.saveOrderData(this.$route.params.id, this.user)
       } else {
-        res = await this.$request.saveOrderPack(this.$route.params.id, {
-          ...this.user,
-          width: this.user.width || '',
-          height: this.user.height || '',
-          length: this.user.length || '',
-          weight: this.user.weight || ''
-        })
+        let params = {}
+        params = {
+          ...this.user
+        }
+        if (this.user.box_type === 1) {
+          params.width = this.user.width || ''
+          params.height = this.user.height || ''
+          params.length = this.user.length || ''
+          params.weight = this.user.weight || ''
+        } else {
+          params.width = ''
+          params.height = ''
+          params.length = ''
+          params.weight = ''
+        }
+        res = await this.$request.saveOrderPack(
+          this.$route.params.id,
+          params
+          //{
+          // ...this.user,
+          // width: this.user.width || '',
+          // height: this.user.height || '',
+          // length: this.user.length || '',
+          // weight: this.user.weight || ''
+          //}
+        )
       }
       if (res.ret) {
         this.$notify({
