@@ -10,9 +10,9 @@
       <el-row :gutter="20">
         <el-col :span="14" style="height: 100%">
           <div>{{ $t('(根据列表筛选条件)') }}</div>
-          <div style="margin-top: 5px">
+          <!-- <div style="margin-top: 5px">
             <el-tag>标签一</el-tag>
-          </div>
+          </div> -->
           <div style="margin-top: 60px">{{ $t('线路统计') }}</div>
           <el-table :data="lineData" border style="width: 100%">
             <el-table-column label="#" type="index"> </el-table-column>
@@ -77,9 +77,6 @@ export default {
       type: String
     }
   },
-  created() {
-    this.getLine()
-  },
   methods: {
     open() {
       this.myChart = echarts.init(document.getElementById('chartsFirst'))
@@ -90,12 +87,16 @@ export default {
       this.$emit('receive', false)
     },
     getPie() {
+      const searchData = this.searchFieldData
       let params = {
         ...this.searchFieldData,
-        status: this.activeName
+        status: this.activeName,
+        begin_date: searchData.date ? searchData.date[0] : '',
+        end_date: searchData.date ? searchData.date[1] : ''
       }
       this.$request.volumeStatistics(params).then(res => {
         if (res.ret) {
+          this.lineData = res.data.line
           this.pieOrderData = res.data.pay_method
           const arr = this.pieOrderData.map(item => {
             return {
@@ -160,16 +161,6 @@ export default {
           ]
           this.myChart.setOption(this.orderRight)
           this.myDestinationChart.setOption(this.orderTop)
-        }
-      })
-    },
-    getLine() {
-      let params = {
-        ...this.searchFieldData
-      }
-      this.$request.volumeStatistics(params).then(res => {
-        if (res.ret) {
-          this.lineData = res.data.line
         }
       })
     }

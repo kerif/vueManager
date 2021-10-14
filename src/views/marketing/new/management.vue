@@ -2,7 +2,34 @@
   <div class="management-new-container">
     <!-- <search-group :placeholder="$t('请输入关键字')" v-model="page_params.keyword" @search="goSearch"></search-group> -->
     <div class="add-sty">
-      <add-btn @click.native="goAdd">{{ $t('添加') }}</add-btn>
+      <div class="coupons">
+        <h3>{{ $t('新用户送券') }}</h3>
+        <div style="width: 1100px">
+          <el-row :gutter="20">
+            <el-col :span="4"
+              ><span>{{ $t('券总量') }}</span
+              ><span class="count">{{ total_count }}</span></el-col
+            >
+            <el-col :span="4"
+              ><span>{{ $t('投放数量') }}</span
+              ><span class="count">{{ throw_count }}</span></el-col
+            >
+            <el-col :span="4"
+              ><span>{{ $t('已使用数量') }}</span>
+              <span class="count">{{ used_count }}</span></el-col
+            >
+            <el-col :span="4"
+              ><span>{{ $t('过期数量') }}</span
+              ><span class="count">{{ expired_count }}</span></el-col
+            >
+            <el-col :span="4"
+              ><span>{{ $t('未使用数量') }}</span
+              ><span class="count">{{ unused_count }}</span></el-col
+            >
+          </el-row>
+        </div>
+      </div>
+      <add-btn @click.native="goAdd" class="btn-add">{{ $t('添加') }}</add-btn>
     </div>
     <el-table
       class="data-list"
@@ -116,7 +143,12 @@ export default {
       ruleForm: {
         status: []
       },
-      deleteNum: []
+      deleteNum: [],
+      expired_count: '',
+      throw_count: '',
+      total_count: '',
+      unused_count: '',
+      used_count: ''
     }
   },
   created() {
@@ -133,6 +165,7 @@ export default {
     }
     console.log(this.$route.params.type, 'type')
     console.log(typeof this.$route.params.type, 'type')
+    this.getTypeStatistics()
   },
   activated() {
     console.log(1111)
@@ -238,6 +271,17 @@ export default {
         query: { id: id }
       })
     },
+    //统计
+    getTypeStatistics() {
+      this.$request.typeStatistics(this.$route.params.type).then(res => {
+        console.log(res.data)
+        this.expired_count = res.data.expired_count
+        this.throw_count = res.data.throw_count
+        this.total_count = res.data.total_count
+        this.unused_count = res.data.unused_count
+        this.used_count = res.data.used_count
+      })
+    },
     onSelectChange(selection) {
       this.selectIDs = selection.map(item => item.id)
     },
@@ -340,8 +384,23 @@ export default {
     }
   }
   .add-sty {
+    width: 100%;
+    height: 140px;
+    background: white;
     margin-bottom: 20px;
     overflow: hidden;
+    .coupons {
+      float: left;
+      margin: 0 0 0 20px;
+    }
+    .count {
+      display: inline-block;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+  }
+  .btn-add {
+    margin: 20px 20px 0 0;
   }
 }
 </style>
