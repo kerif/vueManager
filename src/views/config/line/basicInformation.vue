@@ -447,11 +447,12 @@ export default {
         }
       ],
       pickList: [],
-      groupName: ''
+      groupName: '',
+      id: ''
     }
   },
   created() {
-    console.log(this.$route.query.channelId, 'id')
+    // console.log(this.$route.query.channelId, 'id')
     const add = localStorage.getItem('add')
     console.log(add, 'add')
     if (add) {
@@ -600,6 +601,8 @@ export default {
     getLine() {
       this.$request.getLineGroup().then(res => {
         this.lineList = res.data
+        this.id = this.lineList.map(item => item.id)
+        console.log(this.id)
       })
     },
     // 获取渠道标签多选框
@@ -626,11 +629,10 @@ export default {
         this.$request
           .updateConfigBasic(this.$route.params.id, {
             ...this.form,
-            group_id: this.$route.query.channelId,
+            // group_id: this.id,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {
-            // console.log(res.data)
             if (res.ret) {
               this.$notify({
                 type: 'success',

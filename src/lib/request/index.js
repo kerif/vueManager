@@ -265,6 +265,10 @@ exports.updateRegions = (id, regionId, params) => {
 exports.copyPartitionTmp = (id, tmpId) => {
   return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
 }
+// 配置 路线 保存
+exports.saveName = (id, params) => {
+  return $form.put(`express-lines/region-templates/${id}`, params)
+}
 // 新路线 基础信息 获取
 exports.configBasic = id => {
   return $form.get(`express-lines/${id}/basic-config`)
@@ -2710,6 +2714,10 @@ exports.rebateLang = params => {
 // 营销管理 下单返券 添加或修改语言
 exports.updateRebateLang = params => {
   return $form.put(`ordering-coupon/translate-data`, params)
+}
+// 营销管理 用户福利 用户福利券各类型统计
+exports.typeStatistics = id => {
+  return $form.get(`new-user-coupons/type/${id}/total`)
 }
 // 抵用券管理 路线列表
 exports.getLineList = params => {

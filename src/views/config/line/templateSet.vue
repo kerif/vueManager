@@ -42,9 +42,11 @@
         </el-table-column> -->
         <el-table-column :label="$t('操作')" width="140">
           <template slot-scope="scope">
-            <el-button class="btn-green edit-sty" @click="editPartition(scope.row.id)">{{
-              $t('编辑')
-            }}</el-button>
+            <el-button
+              class="btn-green edit-sty"
+              @click="editPartition(scope.row.id, scope.row.name)"
+              >{{ $t('编辑') }}</el-button
+            >
             <el-button class="btn-light-red" @click="deletePart(scope.row.id)">{{
               $t('删除')
             }}</el-button>
@@ -160,8 +162,8 @@ export default {
         })
       })
     },
-    editPartition(id) {
-      this.$router.push({ name: 'partition', query: { id } })
+    editPartition(id, name) {
+      this.$router.push({ name: 'partition', query: { id, name } })
     },
     // 获取支持语言
     getLanguageList() {

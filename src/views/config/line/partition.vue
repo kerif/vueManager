@@ -1,7 +1,7 @@
 <template>
   <div class="partition-container">
     <div class="bottom-sty">
-      <div>
+      <div style="width: 500px" v-if="!this.$route.params.id">
         <!-- <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
         <el-button size="small" type="success" plain>{{ $t('导出') }}</el-button> -->
         <!-- <el-button size="small" @click="chooseTemplate" type="danger" plain>{{
@@ -10,9 +10,11 @@
         <el-input
           size="small"
           :placeholder="$t('分区表名称')"
-          v-model="input"
+          v-model="name"
           class="edit"
+          style="width: 200px"
         ></el-input>
+        <el-button type="primary" @click="saveName">{{ $t('保存') }}</el-button>
       </div>
       <div class="addUser">
         <div class="searchGroup">
@@ -53,7 +55,10 @@
                 >{{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}&nbsp;</span
               >
             </span>
-            <span v-else>{{ scope.row.country.name }}</span>
+            <span v-else>
+              <!-- <span>{{ scope.row.country_id }}</span> -->
+              <!-- <span>{{ scope.row.country.name }}</span> -->
+            </span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('启用国家/地区总数量')" prop="areas_count"></el-table-column>
@@ -163,7 +168,7 @@ export default {
       show: false,
       radio: 1,
       tmpData: [],
-      input: ''
+      name: ''
     }
   },
   components: {
@@ -200,6 +205,7 @@ export default {
       this.tableLoading = false
       if (res.ret) {
         this.addressList = res.data
+        console.log(this.addressList)
         this.page_params.page = res.meta.current_page
         this.page_params.total = res.meta.total
         this.$nextTick(() => {
@@ -343,6 +349,25 @@ export default {
       this.form.templateId = ''
     },
     clearPreset() {},
+    saveName() {
+      let params = {
+        name: this.name
+      }
+      this.$request.saveName(this.$route.query.id, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     confirmAdd() {
       if (!this.form.templateId) {
         return this.$message.error(this.$t('模版不能为空'))
