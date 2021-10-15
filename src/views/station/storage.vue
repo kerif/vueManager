@@ -59,6 +59,7 @@
                   @select="handleSelect"
                   :placeholder="$t('请输入客户ID，不填则默认无人认领包裹')"
                   v-model="user.user_id"
+                  @change="changeSelect"
                   :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
                 >
                 </el-autocomplete>
@@ -784,7 +785,7 @@ export default {
       this.$request
         .AutoLocation(this.locationId, {
           keyword: this.user.location,
-          user_id: this.userId
+          user_id: this.user.user_id.substring(0, 6)
         })
         .then(res => {
           console.log(res.data, 'res data')
@@ -819,6 +820,12 @@ export default {
     //     this.user_id = ''
     //   }
     // },
+    changeSelect() {
+      if (!this.user.user_id) {
+        // this.user_id = ''
+        this.locationCNSearch()
+      }
+    },
     // 货位
     locationSelect(item) {
       // this.ruleForm.en_name = item.name

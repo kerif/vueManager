@@ -28,6 +28,9 @@
             >
           </el-row>
         </div>
+        <div class="remark">
+          {{ $t('该数据统计包含已删除活动数据，已发放券正常使用，可前往抵用券管理查看') }}
+        </div>
       </div>
       <add-btn @click.native="goAdd" class="btn-add">{{ $t('添加') }}</add-btn>
     </div>
@@ -401,6 +404,10 @@ export default {
   }
   .btn-add {
     margin: 20px 20px 0 0;
+  }
+  .remark {
+    color: red;
+    margin-top: 10px;
   }
 }
 </style>

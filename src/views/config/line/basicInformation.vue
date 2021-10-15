@@ -601,8 +601,6 @@ export default {
     getLine() {
       this.$request.getLineGroup().then(res => {
         this.lineList = res.data
-        this.id = this.lineList.map(item => item.id)
-        console.log(this.id)
       })
     },
     // 获取渠道标签多选框
@@ -629,7 +627,7 @@ export default {
         this.$request
           .updateConfigBasic(this.$route.params.id, {
             ...this.form,
-            // group_id: this.id,
+            // group_id: this.groupName,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {
