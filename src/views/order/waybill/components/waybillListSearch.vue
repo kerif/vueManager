@@ -313,7 +313,8 @@ export default {
       agentData: [],
       paymentData: [],
       lineData: [],
-      wareHouseList: []
+      wareHouseList: [],
+      countryName: []
     }
   },
   created() {
@@ -361,6 +362,7 @@ export default {
       // )
       // console.log(status)
       // var param = {
+      //   countryName: this.countryName,
       //   deliverTime,
       //   line,
       //   priceRange,
