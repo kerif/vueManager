@@ -159,6 +159,8 @@
               :show-all-levels="false"
               :props="countryProps"
               v-model="searchFieldData.countryArr"
+              ref="getCountryName"
+              @change="handleSel"
               clearable
             ></el-cascader>
           </el-form-item>
@@ -331,6 +333,40 @@ export default {
       }
     },
     submitForm() {
+      // console.log(this.searchFieldData)
+      // let time = this.timeOptions.filter(item => item.value === this.searchFieldData.date_type)
+      // let startDate, endDate
+      // if (this.searchFieldData.date !== null) {
+      //   startDate = this.searchFieldData.date[0].split('-').join('')
+      //   endDate = this.searchFieldData.date[1].split('-').join('')
+      // }
+      // let deliverTime = time[0].name + ':' + startDate + '-' + endDate
+      // console.log(deliverTime)
+      // let line = this.lineData.filter(item => item.value === this.searchFieldData.express_line_id)
+      // console.log(line)
+      // let price = this.priceRangeOptions.filter(
+      //   item => item.value === this.searchFieldData.value_type
+      // )
+      // console.log(price)
+      // let begin = this.searchFieldData.value_begin
+      // let end = this.searchFieldData.value_end
+      // let priceRange = price[0].name + ':' + begin + '-' + end
+      // console.log(priceRange)
+      // let payMethods = this.paymentData.filter(
+      //   item => item.value === this.searchFieldData.payment_type
+      // )
+      // console.log(payMethods)
+      // let status = this.paymentStatusData.filter(
+      //   item => item.value === this.searchFieldData.pay_delivery
+      // )
+      // console.log(status)
+      // var param = {
+      //   deliverTime,
+      //   line,
+      //   priceRange,
+      //   payMethods,
+      //   status
+      // }
       this.$emit('submit')
     },
     resetForm() {
@@ -338,6 +374,11 @@ export default {
       this.searchFieldData.start = ''
       this.searchFieldData.end = ''
       this.searchFieldData.agent = ''
+    },
+    handleSel(value) {
+      this.countryName = this.$refs['getCountryName'].getCheckedNodes()[0].pathLabels
+      console.log(this.countryName)
+      console.log(value)
     },
     // 获得客户下拉列表
     getAgentData() {
@@ -367,7 +408,8 @@ export default {
         console.log(res.data)
       })
     }
-  }
+  },
+  watch: {}
 }
 </script>
 

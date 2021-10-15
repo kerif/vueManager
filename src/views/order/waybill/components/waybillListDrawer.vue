@@ -10,9 +10,10 @@
       <el-row :gutter="20">
         <el-col :span="14" style="height: 100%">
           <div>{{ $t('(根据列表筛选条件)') }}</div>
-          <!-- <div style="margin-top: 5px">
-            <el-tag>标签一</el-tag>
-          </div> -->
+          <div style="margin-top: 5px">
+            <!-- <el-tag>{{ searchFieldData.date }}</el-tag>
+            <el-tag>{{ searchFieldData.date }}</el-tag> -->
+          </div>
           <div style="margin-top: 60px">{{ $t('线路统计') }}</div>
           <el-table :data="lineData" border style="width: 100%">
             <el-table-column label="#" type="index"> </el-table-column>
@@ -92,7 +93,11 @@ export default {
         ...this.searchFieldData,
         status: this.activeName,
         begin_date: searchData.date ? searchData.date[0] : '',
-        end_date: searchData.date ? searchData.date[1] : ''
+        end_date: searchData.date ? searchData.date[1] : '',
+        country_id:
+          searchData.countryArr.length > 1
+            ? searchData.countryArr[0]
+            : searchData.countryArr[searchData.countryArr.length - 1]
       }
       this.$request.volumeStatistics(params).then(res => {
         if (res.ret) {

@@ -56,8 +56,7 @@
               >
             </span>
             <span v-else>
-              <!-- <span>{{ scope.row.country_id }}</span> -->
-              <!-- <span>{{ scope.row.country.name }}</span> -->
+              {{ scope.row.country.name }}
             </span>
           </template>
         </el-table-column>
@@ -183,6 +182,7 @@ export default {
   },
   created() {
     this.getTmp()
+    this.name = this.$route.query.name
   },
   methods: {
     // 获取分区

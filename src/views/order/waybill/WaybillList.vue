@@ -1150,6 +1150,7 @@ export default {
     this.getCounts()
     this.initQuery()
   },
+  watch: {},
   methods: {
     initQuery() {
       if (this.$route.query.activeName) {
@@ -1305,6 +1306,7 @@ export default {
       // this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
       this.getCounts()
+      // console.log(param)
     },
     // 更新物流状态
     updateTracking() {
