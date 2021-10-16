@@ -1027,7 +1027,7 @@ export default [
             }
           },
           {
-            path: '/config/line/channel/edit/:id',
+            path: '/config/line/channel/edit/:lineId/:id',
             name: 'channelLineEdit',
             component: channelLineAdd,
             id: 601,

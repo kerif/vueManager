@@ -627,7 +627,7 @@ export default {
         this.$request
           .updateConfigBasic(this.$route.params.id, {
             ...this.form,
-            // group_id: this.groupName,
+            group_id: this.$route.params.lineId,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {

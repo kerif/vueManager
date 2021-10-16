@@ -11,8 +11,7 @@
         <el-col :span="14" style="height: 100%">
           <div>{{ $t('(根据列表筛选条件)') }}</div>
           <div style="margin-top: 5px">
-            <!-- <el-tag>{{ searchFieldData.date }}</el-tag>
-            <el-tag>{{ searchFieldData.date }}</el-tag> -->
+            <el-tag v-for="(item, index) in tag" :key="index">{{ item }}</el-tag>
           </div>
           <div style="margin-top: 60px">{{ $t('线路统计') }}</div>
           <el-table :data="lineData" border style="width: 100%">
@@ -76,6 +75,9 @@ export default {
     },
     activeName: {
       type: String
+    },
+    tag: {
+      type: Array
     }
   },
   methods: {
@@ -83,6 +85,7 @@ export default {
       this.myChart = echarts.init(document.getElementById('chartsFirst'))
       this.myDestinationChart = echarts.init(document.getElementById('chartsSecond'))
       this.getPie() // 支付方式饼图数据
+      console.log(this.tag)
     },
     close() {
       this.$emit('receive', false)

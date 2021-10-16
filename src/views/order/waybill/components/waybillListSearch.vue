@@ -314,7 +314,20 @@ export default {
       paymentData: [],
       lineData: [],
       wareHouseList: [],
-      countryName: []
+      countryName: [],
+      time: '',
+      price: '',
+      startDate: '',
+      endDate: '',
+      deliverTime: '',
+      payStatus: '',
+      arr: [],
+      line: '',
+      priceRange: '',
+      payMethods: '',
+      warehouse: '',
+      agent: '',
+      receiveType: ''
     }
   },
   created() {
@@ -334,42 +347,83 @@ export default {
       }
     },
     submitForm() {
-      // console.log(this.searchFieldData)
-      // let time = this.timeOptions.filter(item => item.value === this.searchFieldData.date_type)
-      // let startDate, endDate
-      // if (this.searchFieldData.date !== null) {
-      //   startDate = this.searchFieldData.date[0].split('-').join('')
-      //   endDate = this.searchFieldData.date[1].split('-').join('')
-      // }
-      // let deliverTime = time[0].name + ':' + startDate + '-' + endDate
-      // console.log(deliverTime)
-      // let line = this.lineData.filter(item => item.value === this.searchFieldData.express_line_id)
-      // console.log(line)
-      // let price = this.priceRangeOptions.filter(
-      //   item => item.value === this.searchFieldData.value_type
-      // )
-      // console.log(price)
-      // let begin = this.searchFieldData.value_begin
-      // let end = this.searchFieldData.value_end
-      // let priceRange = price[0].name + ':' + begin + '-' + end
-      // console.log(priceRange)
-      // let payMethods = this.paymentData.filter(
-      //   item => item.value === this.searchFieldData.payment_type
-      // )
-      // console.log(payMethods)
-      // let status = this.paymentStatusData.filter(
-      //   item => item.value === this.searchFieldData.pay_delivery
-      // )
-      // console.log(status)
-      // var param = {
-      //   countryName: this.countryName,
-      //   deliverTime,
-      //   line,
-      //   priceRange,
-      //   payMethods,
-      //   status
-      // }
-      this.$emit('submit')
+      this.arr = []
+      console.log(this.searchFieldData)
+      // 时间 开始日期 结束日期
+      this.time = this.timeOptions
+        .filter(item => item.value === this.searchFieldData.date_type)
+        .map(item => item.name)
+      if (this.searchFieldData.date) {
+        this.startDate = this.searchFieldData.date[0]
+        this.endDate = this.searchFieldData.date[1]
+      }
+      this.deliverTime = this.time + ':' + this.startDate + '-' + this.endDate
+      console.log(this.deliverTime)
+      // 线路
+      this.line = this.lineData
+        .filter(item => item.id === this.searchFieldData.express_line_id)
+        .map(item => item.name)[0]
+      console.log(this.line)
+      // 价格区间 起使价格 结束价格
+      this.price = this.priceRangeOptions
+        .filter(item => item.value === this.searchFieldData.value_type)
+        .map(item => item.name)
+      let begin = this.searchFieldData.value_begin
+      let end = this.searchFieldData.value_end
+      this.priceRange = this.price + ':' + begin + '-' + end
+      console.log(this.priceRange)
+      // 支付方式
+      this.payMethods = this.paymentData
+        .filter(item => item.id === this.searchFieldData.payment_type)
+        .map(item => item.name)[0]
+      console.log(this.payMethods)
+      // 支付状态
+      this.payStatus = this.paymentStatusData
+        .filter(item => item.id === this.searchFieldData.pay_delivery)
+        .map(item => item.name)[0]
+      console.log(this.payStatus)
+      //仓库
+      this.warehouse = this.wareHouseList
+        .filter(item => item.id === this.searchFieldData.warehouse)
+        .map(item => item.warehouse_name)[0]
+      console.log(this.warehouse)
+      // 代理
+      this.agent = this.agentData
+        .filter(item => item.user_id.toString() === this.searchFieldData.agent)
+        .map(item => item.agent_name)[0]
+      console.log(this.agent)
+      // 收获方式
+      this.receiveType = this.receiverOptions
+        .filter(item => item.value === this.searchFieldData.receive_type)
+        .map(item => item.name)[0]
+      console.log(this.receiveType)
+      console.log(typeof this.countryName)
+      if (this.deliverTime) {
+        this.arr.push(this.deliverTime)
+      }
+      if (this.line) {
+        this.arr.push(this.line)
+      }
+      if (this.priceRange) {
+        this.arr.push(this.priceRange)
+      }
+      if (this.payMethods) {
+        this.arr.push(this.payMethods)
+      }
+      if (this.payStatus) {
+        this.arr.push(this.payStatus)
+      }
+      if (this.warehouse) {
+        this.arr.push(this.warehouse)
+      }
+      if (this.agent) {
+        this.arr.push(this.agent)
+      }
+      if (this.receiveType) {
+        this.arr.push(this.receiveType)
+      }
+      console.log(this.arr)
+      this.$emit('submit', this.arr)
     },
     resetForm() {
       this.$refs.searchForm.resetFields()
@@ -386,6 +440,7 @@ export default {
     getAgentData() {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
+        console.log(this.agentData)
       })
     },
     // 获取仓库列表
@@ -393,6 +448,7 @@ export default {
       this.$request.getSimpleList().then(res => {
         if (res.ret) {
           this.wareHouseList = res.data
+          console.log(this.wareHouseList)
         }
       })
     },
@@ -410,8 +466,7 @@ export default {
         console.log(res.data)
       })
     }
-  },
-  watch: {}
+  }
 }
 </script>
 
