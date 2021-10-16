@@ -823,6 +823,10 @@ exports.approveWithdraw = (id, withdrawsId, params) => {
 exports.refusedWithdraw = (id, withdrawsId, params) => {
   return $form.put(`agents/${id}/withdraws/${withdrawsId}/refused`, params)
 }
+// 代理佣金结算 提现
+exports.withdrawThird = (id, applyId) => {
+  return $form.put(`agents/${id}/withdraws/${applyId}/withdraw-third`)
+}
 // 代理管理 审核拒绝
 exports.rechargeReject = (id, params) => {
   return $form.put(`recharge-records/${id}/refused`, params)

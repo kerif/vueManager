@@ -1012,6 +1012,7 @@
       :showDrawer="showDrawer"
       :searchFieldData="searchFieldData"
       :activeName="activeName"
+      :tag="keyData"
       @receive="receive"
     ></waybill-list-drawer>
   </div>
@@ -1132,7 +1133,8 @@ export default {
       user_name: '',
       status: '',
       id: '',
-      showDrawer: false
+      showDrawer: false,
+      keyData: []
     }
   },
   activated() {
@@ -1150,7 +1152,6 @@ export default {
     this.getCounts()
     this.initQuery()
   },
-  watch: {},
   methods: {
     initQuery() {
       if (this.$route.query.activeName) {
@@ -1298,7 +1299,7 @@ export default {
         }
       })
     },
-    goMatch() {
+    goMatch(param) {
       this.page_params.page = 1
       this.page_params.size = 20
       // this.handleQueryChange('page', this.page_params.page)
@@ -1306,7 +1307,8 @@ export default {
       // this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
       this.getCounts()
-      // console.log(param)
+      console.log(param)
+      this.keyData = param
     },
     // 更新物流状态
     updateTracking() {
@@ -2132,6 +2134,7 @@ export default {
     clearPayment() {
       this.payment_mode = ''
     }
+    // 饼图
   },
   computed: {
     timeLabel() {
@@ -2180,9 +2183,6 @@ export default {
   .dialog-sty {
     margin-left: 30px;
   }
-  // .el-icon {
-  //   display: none;
-  // }
   .iframe {
     width: 100%;
     min-height: 300px;
@@ -2235,6 +2235,9 @@ export default {
 .dialog-input {
   width: 30% !important;
 }
+/deep/.el-drawer__open .el-drawer.rtl {
+  width: 90% !important;
+}
 .add-box {
   margin-bottom: 10px;
   margin-right: 5px;
@@ -2265,9 +2268,6 @@ export default {
 }
 .expand-table {
   width: 80%;
-}
-/deep/.el-drawer__open .el-drawer.rtl {
-  width: 90% !important;
 }
 @media (min-width: 1550px) {
   .expand-table {
