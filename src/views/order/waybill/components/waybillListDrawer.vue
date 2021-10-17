@@ -11,7 +11,9 @@
         <el-col :span="14" style="height: 100%">
           <div>{{ $t('(根据列表筛选条件)') }}</div>
           <div style="margin-top: 5px">
-            <el-tag v-for="(item, index) in tag" :key="index">{{ item }}</el-tag>
+            <el-tag v-for="(item, index) in tag" :key="index">
+              <span>{{ item }}</span>
+            </el-tag>
           </div>
           <div style="margin-top: 60px">{{ $t('线路统计') }}</div>
           <el-table :data="lineData" border style="width: 100%">
@@ -280,6 +282,10 @@ export default {
   }
   .total-sty {
     color: #dc143c;
+  }
+  .el-tag {
+    margin-right: 10px;
+    margin-top: 10px;
   }
 }
 </style>

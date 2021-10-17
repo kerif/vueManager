@@ -1307,7 +1307,6 @@ export default {
       // this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
       this.getCounts()
-      console.log(param)
       this.keyData = param
     },
     // 更新物流状态
