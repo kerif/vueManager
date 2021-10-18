@@ -397,13 +397,13 @@ export default {
         )
       }
       if (this.line) {
-        this.arr.push('线路名称' + ':' + this.line)
+        this.arr.push('{{$t("线路名称")}}' + ':' + this.line)
       }
       if (this.price && this.begin && this.end) {
         this.arr.push(this.price + ':' + this.begin + '-' + this.end)
       }
       if (this.payMethods) {
-        this.arr.push('支付方式' + ':' + this.payMethods)
+        this.arr.push('{{$t("支付方式")}}' + ':' + this.payMethods)
       }
       if (this.payStatus) {
         this.arr.push(this.payStatus)
@@ -415,7 +415,7 @@ export default {
         this.arr.push(this.agent)
       }
       if (this.receiveType) {
-        this.arr.push('收获方式' + ':' + this.receiveType)
+        this.arr.push('{{$t("收获方式")}}' + ':' + this.receiveType)
       }
       if (this.countryName) {
         if (this.countryName.length === 3) {
@@ -426,7 +426,6 @@ export default {
           this.arr.push(this.countryName[0])
         }
       }
-      console.log(this.arr)
       this.$emit('submit', this.arr)
     },
     resetForm() {
@@ -444,7 +443,6 @@ export default {
     getAgentData() {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
-        console.log(this.agentData)
       })
     },
     // 获取仓库列表
@@ -452,7 +450,6 @@ export default {
       this.$request.getSimpleList().then(res => {
         if (res.ret) {
           this.wareHouseList = res.data
-          console.log(this.wareHouseList)
         }
       })
     },
