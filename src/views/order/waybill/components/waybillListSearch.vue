@@ -319,15 +319,15 @@ export default {
       price: '',
       startDate: '',
       endDate: '',
-      deliverTime: '',
       payStatus: '',
       arr: [],
       line: '',
-      priceRange: '',
       payMethods: '',
       warehouse: '',
       agent: '',
-      receiveType: ''
+      receiveType: '',
+      begin: '',
+      end: ''
     }
   },
   created() {
@@ -348,7 +348,7 @@ export default {
     },
     submitForm() {
       this.arr = []
-      console.log(this.searchFieldData)
+      // console.log(this.searchFieldData)
       // 时间 开始日期 结束日期
       this.time = this.timeOptions
         .filter(item => item.value === this.searchFieldData.date_type)
@@ -357,58 +357,53 @@ export default {
         this.startDate = this.searchFieldData.date[0]
         this.endDate = this.searchFieldData.date[1]
       }
-      this.deliverTime = this.time + ':' + this.startDate + '-' + this.endDate
-      console.log(this.deliverTime)
       // 线路
       this.line = this.lineData
         .filter(item => item.id === this.searchFieldData.express_line_id)
         .map(item => item.name)[0]
-      console.log(this.line)
       // 价格区间 起使价格 结束价格
       this.price = this.priceRangeOptions
         .filter(item => item.value === this.searchFieldData.value_type)
         .map(item => item.name)
-      let begin = this.searchFieldData.value_begin
-      let end = this.searchFieldData.value_end
-      this.priceRange = this.price + ':' + begin + '-' + end
-      console.log(this.priceRange)
+      this.begin = this.searchFieldData.value_begin
+      this.end = this.searchFieldData.value_end
       // 支付方式
       this.payMethods = this.paymentData
         .filter(item => item.id === this.searchFieldData.payment_type)
         .map(item => item.name)[0]
-      console.log(this.payMethods)
       // 支付状态
       this.payStatus = this.paymentStatusData
         .filter(item => item.id === this.searchFieldData.pay_delivery)
         .map(item => item.name)[0]
-      console.log(this.payStatus)
       //仓库
       this.warehouse = this.wareHouseList
         .filter(item => item.id === this.searchFieldData.warehouse)
         .map(item => item.warehouse_name)[0]
-      console.log(this.warehouse)
       // 代理
       this.agent = this.agentData
         .filter(item => item.user_id.toString() === this.searchFieldData.agent)
         .map(item => item.agent_name)[0]
-      console.log(this.agent)
       // 收获方式
       this.receiveType = this.receiverOptions
         .filter(item => item.value === this.searchFieldData.receive_type)
         .map(item => item.name)[0]
-      console.log(this.receiveType)
-      console.log(typeof this.countryName)
-      if (this.deliverTime) {
-        this.arr.push(this.deliverTime)
+      if (this.time && this.startDate && this.endDate) {
+        this.arr.push(
+          this.time +
+            ':' +
+            this.startDate.split('-').join('') +
+            '-' +
+            this.endDate.split('-').join('')
+        )
       }
       if (this.line) {
-        this.arr.push(this.line)
+        this.arr.push('{{$t("线路名称")}}' + ':' + this.line)
       }
-      if (this.priceRange) {
-        this.arr.push(this.priceRange)
+      if (this.price && this.begin && this.end) {
+        this.arr.push(this.price + ':' + this.begin + '-' + this.end)
       }
       if (this.payMethods) {
-        this.arr.push(this.payMethods)
+        this.arr.push('{{$t("支付方式")}}' + ':' + this.payMethods)
       }
       if (this.payStatus) {
         this.arr.push(this.payStatus)
@@ -420,9 +415,17 @@ export default {
         this.arr.push(this.agent)
       }
       if (this.receiveType) {
-        this.arr.push(this.receiveType)
+        this.arr.push('{{$t("收获方式")}}' + ':' + this.receiveType)
       }
-      console.log(this.arr)
+      if (this.countryName) {
+        if (this.countryName.length === 3) {
+          console.log(this.countryName)
+          this.arr.push(this.countryName[2])
+        }
+        if (this.countryName.length === 1) {
+          this.arr.push(this.countryName[0])
+        }
+      }
       this.$emit('submit', this.arr)
     },
     resetForm() {
@@ -440,7 +443,6 @@ export default {
     getAgentData() {
       this.$request.getAgent().then(res => {
         this.agentData = res.data
-        console.log(this.agentData)
       })
     },
     // 获取仓库列表
@@ -448,7 +450,6 @@ export default {
       this.$request.getSimpleList().then(res => {
         if (res.ret) {
           this.wareHouseList = res.data
-          console.log(this.wareHouseList)
         }
       })
     },
