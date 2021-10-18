@@ -705,8 +705,7 @@ export default {
       this.$router.push({
         name: 'channelLineEdit',
         params: {
-          id,
-          lineId: this.$route.params.id
+          id
         },
         query: {
           state: 'edit'

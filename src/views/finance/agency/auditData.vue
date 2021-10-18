@@ -72,6 +72,14 @@
             <span v-if="scope.row.status === 2" class="refuse">{{ $t('审核拒绝') }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="withdraw_status" :label="$t('第三方审核状态')" width="120">
+          <template slot-scope="scope">
+            <span v-if="scope.row.withdraw_status === 1">{{ $t('待提现') }}</span>
+            <span v-if="scope.row.withdraw_status === 2">{{ $t('提现中') }}</span>
+            <span v-if="scope.row.withdraw_status === 3">{{ $t('提现成功') }}</span>
+            <span v-if="scope.row.withdraw_status === 4">{{ $t('提现失败') }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="user.id" :label="$t('代理ID')" width="100"> </el-table-column>
         <el-table-column prop="user.name" :label="$t('代理昵称')" width="100"> </el-table-column>
         <el-table-column prop="type" :label="$t('提现方式')" width="100"> </el-table-column>
@@ -147,6 +155,7 @@ export default {
   },
   created() {
     this.goMethods()
+    // this.goReapply()
   },
   methods: {
     // 详情
@@ -180,6 +189,12 @@ export default {
         this.typeData = res.data.type_list
       })
     }
+    // 重新申请
+    // goReapply() {
+    //   this.$request.withdrawThird(this.$route.params.user.id).then(res => {
+    //     console.log(res.data)
+    //   })
+    // }
   }
 }
 </script>
