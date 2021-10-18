@@ -348,7 +348,7 @@ export default {
     },
     submitForm() {
       this.arr = []
-      console.log(this.searchFieldData)
+      // console.log(this.searchFieldData)
       // 时间 开始日期 结束日期
       this.time = this.timeOptions
         .filter(item => item.value === this.searchFieldData.date_type)
