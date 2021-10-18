@@ -55,6 +55,7 @@
               v-model="searchFieldData.express_line_id"
               clearable
               :placeholder="$t('线路名称')"
+              @change="changeVal"
               value-key="id"
             >
               <el-option
@@ -118,6 +119,7 @@
                   v-model="searchFieldData.payment_type"
                   clearable
                   :placeholder="$t('支付方式')"
+                  @change="changeVal"
                   value-key="id"
                 >
                   <el-option
@@ -137,6 +139,7 @@
                   v-model="searchFieldData.warehouse"
                   clearable
                   :placeholder="$t('请选择仓库')"
+                  @change="changeVal"
                   value-key="id"
                 >
                   <el-option
@@ -160,7 +163,7 @@
               :props="countryProps"
               v-model="searchFieldData.countryArr"
               ref="getCountryName"
-              @change="handleSel"
+              @change="changeVal"
               clearable
             ></el-cascader>
           </el-form-item>
@@ -205,6 +208,7 @@
             <el-select
               v-model="searchFieldData.agent"
               clearable
+              @change="changeVal"
               :placeholder="$t('所属代理')"
               value-key="id"
             >
@@ -314,20 +318,7 @@ export default {
       paymentData: [],
       lineData: [],
       wareHouseList: [],
-      countryName: [],
-      time: '',
-      price: '',
-      startDate: '',
-      endDate: '',
-      payStatus: '',
-      arr: [],
-      line: '',
-      payMethods: '',
-      warehouse: '',
-      agent: '',
-      receiveType: '',
-      begin: '',
-      end: ''
+      countryName: []
     }
   },
   created() {
@@ -346,87 +337,20 @@ export default {
         this.searchFieldData.agent = this.$route.query.agent
       }
     },
+    changeVal() {
+      this.handleSel()
+      let param = {
+        lineData: this.lineData,
+        paymentData: this.paymentData,
+        agentData: this.agentData,
+        wareHouseList: this.wareHouseList,
+        countryName: this.countryName
+      }
+      console.log(param)
+      this.$emit('info', param)
+    },
     submitForm() {
-      this.arr = []
-      // console.log(this.searchFieldData)
-      // 时间 开始日期 结束日期
-      this.time = this.timeOptions
-        .filter(item => item.value === this.searchFieldData.date_type)
-        .map(item => item.name)
-      if (this.searchFieldData.date) {
-        this.startDate = this.searchFieldData.date[0]
-        this.endDate = this.searchFieldData.date[1]
-      }
-      // 线路
-      this.line = this.lineData
-        .filter(item => item.id === this.searchFieldData.express_line_id)
-        .map(item => item.name)[0]
-      // 价格区间 起使价格 结束价格
-      this.price = this.priceRangeOptions
-        .filter(item => item.value === this.searchFieldData.value_type)
-        .map(item => item.name)
-      this.begin = this.searchFieldData.value_begin
-      this.end = this.searchFieldData.value_end
-      // 支付方式
-      this.payMethods = this.paymentData
-        .filter(item => item.id === this.searchFieldData.payment_type)
-        .map(item => item.name)[0]
-      // 支付状态
-      this.payStatus = this.paymentStatusData
-        .filter(item => item.id === this.searchFieldData.pay_delivery)
-        .map(item => item.name)[0]
-      //仓库
-      this.warehouse = this.wareHouseList
-        .filter(item => item.id === this.searchFieldData.warehouse)
-        .map(item => item.warehouse_name)[0]
-      // 代理
-      this.agent = this.agentData
-        .filter(item => item.user_id.toString() === this.searchFieldData.agent)
-        .map(item => item.agent_name)[0]
-      // 收获方式
-      this.receiveType = this.receiverOptions
-        .filter(item => item.value === this.searchFieldData.receive_type)
-        .map(item => item.name)[0]
-      if (this.time && this.startDate && this.endDate) {
-        this.arr.push(
-          this.time +
-            ':' +
-            this.startDate.split('-').join('') +
-            '-' +
-            this.endDate.split('-').join('')
-        )
-      }
-      if (this.line) {
-        this.arr.push('{{$t("线路名称")}}' + ':' + this.line)
-      }
-      if (this.price && this.begin && this.end) {
-        this.arr.push(this.price + ':' + this.begin + '-' + this.end)
-      }
-      if (this.payMethods) {
-        this.arr.push('{{$t("支付方式")}}' + ':' + this.payMethods)
-      }
-      if (this.payStatus) {
-        this.arr.push(this.payStatus)
-      }
-      if (this.warehouse) {
-        this.arr.push(this.warehouse)
-      }
-      if (this.agent) {
-        this.arr.push(this.agent)
-      }
-      if (this.receiveType) {
-        this.arr.push('{{$t("收获方式")}}' + ':' + this.receiveType)
-      }
-      if (this.countryName) {
-        if (this.countryName.length === 3) {
-          console.log(this.countryName)
-          this.arr.push(this.countryName[2])
-        }
-        if (this.countryName.length === 1) {
-          this.arr.push(this.countryName[0])
-        }
-      }
-      this.$emit('submit', this.arr)
+      this.$emit('submit')
     },
     resetForm() {
       this.$refs.searchForm.resetFields()
@@ -434,10 +358,11 @@ export default {
       this.searchFieldData.end = ''
       this.searchFieldData.agent = ''
     },
-    handleSel(value) {
-      this.countryName = this.$refs['getCountryName'].getCheckedNodes()[0].pathLabels
-      console.log(this.countryName)
-      console.log(value)
+    handleSel() {
+      if (this.$refs['getCountryName'].getCheckedNodes()[0]) {
+        this.countryName = this.$refs['getCountryName'].getCheckedNodes()[0].pathLabels
+        console.log(this.countryName)
+      }
     },
     // 获得客户下拉列表
     getAgentData() {

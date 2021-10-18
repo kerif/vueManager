@@ -6,7 +6,7 @@
           <el-col :span="10">
             <div>{{ $t('所属路线') }}</div>
             <el-select
-              v-model="groupName"
+              v-model="group_id"
               filterable
               clearable
               class="country-select"
@@ -448,7 +448,8 @@ export default {
       ],
       pickList: [],
       groupName: '',
-      id: ''
+      id: '',
+      group_id: ''
     }
   },
   created() {
@@ -515,6 +516,7 @@ export default {
     getList() {
       this.$request.configBasic(this.$route.params.id).then(res => {
         this.groupName = res.data.group_name
+        this.group_id = res.data.group_id
         this.form.name = res.data.name
         this.form.is_great_value = res.data.is_great_value
         this.form.remark = res.data.remark
@@ -624,10 +626,11 @@ export default {
       }
       if (this.$route.params.id) {
         // 编辑状态
+        console.log(this.groupName, '1111')
         this.$request
           .updateConfigBasic(this.$route.params.id, {
             ...this.form,
-            group_id: this.$route.params.lineId,
+            group_id: this.group_id,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {
@@ -650,7 +653,7 @@ export default {
         this.$request
           .newConfigBasic({
             ...this.form,
-            group_id: this.$route.query.channelId,
+            group_id: this.group_id,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {

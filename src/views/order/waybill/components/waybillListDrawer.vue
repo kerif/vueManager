@@ -11,12 +11,12 @@
         <el-col :span="14" style="height: 100%">
           <div>{{ $t('(根据列表筛选条件)') }}</div>
           <div style="margin-top: 5px">
-            <el-tag v-for="(item, index) in tag" :key="index">
+            <el-tag v-for="(item, index) in arr" :key="index">
               <span>{{ item }}</span>
             </el-tag>
           </div>
           <div style="margin-top: 60px">{{ $t('线路统计') }}</div>
-          <el-table :data="lineData" border style="width: 100%">
+          <el-table :data="linesData" border style="width: 100%">
             <el-table-column label="#" type="index"> </el-table-column>
             <el-table-column prop="express_line_id_name" :label="$t('线路名称')" width="160">
             </el-table-column>
@@ -26,7 +26,10 @@
             <el-table-column prop="box_count" :label="$t('箱总数')"> </el-table-column>
             <el-table-column prop="payment_weight" :label="$t('计费重量')"> </el-table-column>
             <el-table-column prop="value" :label="$t('申报总值')"> </el-table-column>
-            <el-table-column prop="actual_payment_fee" :label="$t('实付总计')"> </el-table-column>
+            <el-table-column
+              prop="actual_payment_fee"
+              :label="$t('应付费用总计')"
+            ></el-table-column>
           </el-table>
           <div class="total">
             <tr>
@@ -36,7 +39,7 @@
               <td>{{ packageTotal }}</td>
               <td class="order-sty">{{ orderTotal }}</td>
               <td>{{ boxTotal }}</td>
-              <td class="pay-sty">{{ parseInt(paymentWeight) }}</td>
+              <td class="pay-sty">{{ paymentWeight.toFixed(2) }}</td>
               <td>{{ value.toFixed(2) }}</td>
               <td class="total-sty">{{ paymentTotal.toFixed(2) }}</td>
             </tr>
@@ -62,9 +65,60 @@ export default {
       myDestinationChart: '',
       orderRight: {},
       orderTop: {},
-      lineData: [],
+      linesData: [],
       pieOrderData: [],
-      pieDestinationData: []
+      pieDestinationData: [],
+      time: '',
+      price: '',
+      startDate: '',
+      endDate: '',
+      payStatus: '',
+      arr: [],
+      line: '',
+      payMethods: '',
+      warehouse: '',
+      agent: '',
+      receiveType: '',
+      begin: '',
+      end: '',
+      timeOptions: [
+        { value: 'created_at', name: '订单提交时间' },
+        { value: 'packed_at', name: '打包称重时间' },
+        { value: 'paid_at', name: '支付时间' },
+        { value: 'shipped_at', name: '发货时间' },
+        { value: 'signed_at', name: '签收时间' }
+      ],
+      priceRangeOptions: [
+        { value: 'actual_payment_fee', name: '应付总费用' },
+        { value: 'actual_pay', name: '实际支付' },
+        { value: 'declare_value', name: '申报价值' }
+      ],
+      receiverOptions: [
+        { value: 1, name: '自提' },
+        { value: 2, name: '非自提' }
+      ],
+      paymentStatusData: [
+        {
+          id: 1,
+          name: this.$t('全部货到付款')
+        },
+        {
+          id: 2,
+          name: this.$t('未支付')
+        },
+        {
+          id: 3,
+          name: this.$t('已支付')
+        },
+        {
+          id: 11,
+          name: this.$t('待审核')
+        },
+        {
+          id: 12,
+          name: this.$t('审核拒绝')
+        }
+      ]
     }
   },
   props: {
@@ -79,7 +133,10 @@ export default {
       type: String
     },
     tag: {
-      type: Array
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   methods: {
@@ -87,13 +144,103 @@ export default {
       this.myChart = echarts.init(document.getElementById('chartsFirst'))
       this.myDestinationChart = echarts.init(document.getElementById('chartsSecond'))
       this.getPie() // 支付方式饼图数据
-      console.log(this.tag)
     },
     close() {
       this.$emit('receive', false)
     },
     getPie() {
+      this.arr = []
       const searchData = this.searchFieldData
+      console.log(searchData)
+      // 时间
+      this.time = this.timeOptions
+        .filter(item => item.value === this.searchFieldData.date_type)
+        .map(item => item.name)[0]
+      if (this.searchFieldData.date) {
+        this.startDate = this.searchFieldData.date[0]
+        this.endDate = this.searchFieldData.date[1]
+      }
+      if (this.time && this.startDate && this.endDate) {
+        this.arr.push(
+          this.time +
+            ':' +
+            this.startDate.split('-').join('') +
+            '-' +
+            this.endDate.split('-').join('')
+        )
+      }
+      // 价格区间 起使价格 结束价格
+      this.price = this.priceRangeOptions
+        .filter(item => item.value === this.searchFieldData.value_type)
+        .map(item => item.name)
+      this.begin = this.searchFieldData.value_begin
+      this.end = this.searchFieldData.value_end
+      if (this.price && this.begin && this.end) {
+        this.arr.push(this.price + ':' + this.begin + '-' + this.end)
+      }
+      // 收获方式
+      this.receiveType = this.receiverOptions
+        .filter(item => item.value === this.searchFieldData.receive_type)
+        .map(item => item.name)[0]
+      if (this.receiveType) {
+        let receiveName = '收获方式'
+        this.arr.push(receiveName + ':' + this.receiveType)
+      }
+      // 支付状态
+      this.payStatus = this.paymentStatusData
+        .filter(item => item.id === this.searchFieldData.pay_delivery)
+        .map(item => item.name)[0]
+      if (this.payStatus) {
+        this.arr.push(this.payStatus)
+      }
+      //线路
+      if (this.tag.lineData) {
+        console.log(this.tag.lineData, 'this.tag.lineData')
+        this.line = this.tag.lineData
+          .filter(item => item.id === this.searchFieldData.express_line_id)
+          .map(item => item.name)[0]
+        if (this.line) {
+          let lineName = '线路名称'
+          this.arr.push(lineName + ':' + this.line)
+        }
+      }
+      // 支付方式
+      if (this.tag.paymentData) {
+        console.log(typeof this.tag.paymentData, 'this.tag.paymentData')
+        this.payMethods = this.tag.paymentData
+          .filter(item => item.id === this.searchFieldData.payment_type)
+          .map(item => item.name)[0]
+        if (this.payMethods) {
+          let payName = '支付方式'
+          this.arr.push(payName + ':' + this.payMethods)
+        }
+      }
+      //仓库
+      if (this.tag.wareHouseList) {
+        this.warehouse = this.tag.wareHouseList
+          .filter(item => item.id === this.searchFieldData.warehouse)
+          .map(item => item.warehouse_name)[0]
+        if (this.warehouse) {
+          this.arr.push(this.warehouse)
+        }
+      }
+      // 代理
+      if (this.tag.agentData) {
+        this.agent = this.tag.agentData
+          .filter(item => item.user_id.toString() === this.searchFieldData.agent)
+          .map(item => item.agent_name)[0]
+        if (this.agent) {
+          this.arr.push(this.agent)
+        }
+      }
+      if (this.tag.countryName) {
+        if (this.tag.countryName.length === 3) {
+          this.arr.push(this.tag.countryName[2])
+        }
+        if (this.tag.countryName.length === 1) {
+          this.arr.push(this.tag.countryName[0])
+        }
+      }
       let params = {
         ...this.searchFieldData,
         status: this.activeName,
@@ -106,7 +253,7 @@ export default {
       }
       this.$request.volumeStatistics(params).then(res => {
         if (res.ret) {
-          this.lineData = res.data.line
+          this.linesData = res.data.line
           this.pieOrderData = res.data.pay_method
           const arr = this.pieOrderData.map(item => {
             return {
@@ -207,30 +354,30 @@ export default {
   },
   computed: {
     packageTotal() {
-      return this.lineData
+      return this.linesData
         .map(item => item.package_count)
         .reduce((acc, cur) => parseFloat(cur) + acc, 0)
     },
     orderTotal() {
-      return this.lineData
+      return this.linesData
         .map(item => item.order_count)
         .reduce((acc, cur) => parseFloat(cur) + acc, 0)
     },
     boxTotal() {
-      return this.lineData
+      return this.linesData
         .map(item => item.box_count)
         .reduce((acc, cur) => parseFloat(cur) + acc, 0)
     },
     paymentWeight() {
-      return this.lineData
+      return this.linesData
         .map(item => item.payment_weight)
         .reduce((acc, cur) => parseFloat(cur) + acc, 0)
     },
     value() {
-      return this.lineData.map(item => item.value).reduce((acc, cur) => parseFloat(cur) + acc, 0)
+      return this.linesData.map(item => item.value).reduce((acc, cur) => parseFloat(cur) + acc, 0)
     },
     paymentTotal() {
-      return this.lineData
+      return this.linesData
         .map(item => item.actual_payment_fee)
         .reduce((acc, cur) => parseFloat(cur) + acc, 0)
     }

@@ -12,6 +12,7 @@
     <waybill-list-search
       v-show="hasFilterCondition"
       :searchFieldData="searchFieldData"
+      @info="getVal"
       v-on:submit="goMatch"
     ></waybill-list-search>
     <div class="header-range">
@@ -664,7 +665,14 @@
                       </el-dropdown-item>
                       <el-dropdown-item
                         class="item-sty"
-                        @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)"
+                        @click.native="
+                          editPacked(
+                            scope.row.id,
+                            activeName,
+                            scope.row.is_parent,
+                            scope.row.express_line.id
+                          )
+                        "
                       >
                         <span v-if="activeName === '1' && scope.row.group_buying_status === 1"
                           >{{ $t('编辑') }}
@@ -673,7 +681,13 @@
                       <el-dropdown-item
                         class="item-sty"
                         @click.native="
-                          packed(scope.row.id, scope.row.order_sn, scope.row.is_parent, activeName)
+                          packed(
+                            scope.row.id,
+                            scope.row.order_sn,
+                            scope.row.is_parent,
+                            activeName,
+                            scope.row.express_line.id
+                          )
                         "
                       >
                         <span v-if="activeName === '1' && scope.row.group_buying_status === 0">{{
@@ -1134,7 +1148,8 @@ export default {
       status: '',
       id: '',
       showDrawer: false,
-      keyData: []
+      keyData: {},
+      lineId: ''
     }
   },
   activated() {
@@ -1299,7 +1314,7 @@ export default {
         }
       })
     },
-    goMatch(param) {
+    goMatch() {
       this.page_params.page = 1
       this.page_params.size = 20
       // this.handleQueryChange('page', this.page_params.page)
@@ -1307,7 +1322,10 @@ export default {
       // this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
       this.getCounts()
+    },
+    getVal(param) {
       this.keyData = param
+      console.log(this.keyData, 'this.keyData')
     },
     // 更新物流状态
     updateTracking() {
@@ -1647,6 +1665,7 @@ export default {
     },
     // 待支付 编辑打包数据
     editPacked(id, activeName, parent, lineId) {
+      console.log(lineId, 'lineId')
       this.$router.push({
         name: 'editPacked',
         params: {
