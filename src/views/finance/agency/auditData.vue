@@ -106,6 +106,9 @@
               @click="editDetail(scope.row.id)"
               >{{ $t('详情') }}</el-button
             >
+            <!-- <el-button type="primary" plain size="mini" @click="goReapply(scope.row.id)">{{
+              $t('重新申请')
+            }}</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -155,7 +158,6 @@ export default {
   },
   created() {
     this.goMethods()
-    // this.goReapply()
   },
   methods: {
     // 详情
@@ -166,6 +168,10 @@ export default {
     editInviteDetail(id) {
       this.$emit('subprice', id)
     },
+    // 重新申请
+    // goReapply(id) {
+    //   this.$emit('subprice', id)
+    // },
     editSettled() {
       this.$router.push({
         name: 'agencyCommission'
@@ -189,12 +195,6 @@ export default {
         this.typeData = res.data.type_list
       })
     }
-    // 重新申请
-    // goReapply() {
-    //   this.$request.withdrawThird(this.$route.params.user.id).then(res => {
-    //     console.log(res.data)
-    //   })
-    // }
   }
 }
 </script>
