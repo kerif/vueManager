@@ -830,8 +830,8 @@ export default {
   .warning-sty {
     color: red;
   }
-  .el-button--text {
-    color: #006400;
-  }
+  // .el-button--text {
+  //   color: blue;
+  // }
 }
 </style>

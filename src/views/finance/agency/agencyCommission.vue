@@ -118,7 +118,7 @@ export default {
       time: '',
       settleData: [], // 待结算数据
       hasStore: false,
-      shipNum: '', // 通过快递单号拉取的包裹id
+      shipNum: '',
       settledData: [],
       timeList: [],
       unsettleId: '',
