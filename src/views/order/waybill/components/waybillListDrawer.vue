@@ -246,6 +246,7 @@ export default {
         status: this.activeName,
         begin_date: searchData.date ? searchData.date[0] : '',
         end_date: searchData.date ? searchData.date[1] : '',
+        order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
         country_id:
           searchData.countryArr.length > 1
             ? searchData.countryArr[0]

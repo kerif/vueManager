@@ -283,9 +283,9 @@
         <el-button type="danger" @click="viewRejused">{{ $t('审核拒绝') }}</el-button>
         <el-button type="primary" @click="viewApproved">{{ $t('审核通过') }}</el-button>
       </el-row>
-      <!-- <el-row class="auditStatus">
+      <el-row class="auditStatus" v-if="this.withdraw_status === 4">
         <el-button type="danger" @click="goReapply">{{ $t('重新申请') }}</el-button>
-      </el-row> -->
+      </el-row>
     </div>
     <!-- 查看图片 -->
     <el-dialog :visible.sync="imgDialog">
@@ -311,7 +311,8 @@ export default {
       imgSrc: '',
       imgDialog: false,
       imgUrl: '',
-      log: []
+      log: [],
+      withdraw_status: ''
     }
   },
   created() {
@@ -325,6 +326,7 @@ export default {
         this.info = res.data.bank_card_info || {}
         this.charge = res.data.commissions
         this.log = res.data.third_withdraw_logs
+        this.withdraw_status = res.data.withdraw_status
       })
     },
     checkImg(url) {
@@ -332,11 +334,23 @@ export default {
       this.imgUrl = this.$baseUrl.IMAGE_URL + url
     },
     // 重新申请
-    // goReapply() {
-    //   this.$request.withdrawThird(this.detailData.user.id, this.$route.params.id).then(res => {
-    //     console.log(res.data)
-    //   })
-    // },
+    goReapply() {
+      this.$request.withdrawThird(this.detailData.user.id, this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 审核通过
     viewApproved() {
       dialog(

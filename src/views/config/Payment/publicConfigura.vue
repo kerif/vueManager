@@ -39,6 +39,30 @@
           <i class="el-icon-plus"> </i>
         </el-upload>
       </el-form-item>
+      <!-- <el-form-item :label="$t('自定义菜单')">
+        <el-switch
+          :active-text="$t('开启')"
+          :active-value="1"
+          :inactive-value="0"
+          :inactive-text="$t('关闭')"
+          active-color="#13ce66"
+          inactive-color="gray"
+        >
+        </el-switch>
+        <el-button class="configBtn">{{ $t('配置') }}</el-button>
+      </el-form-item>
+      <el-form-item :label="$t('自动回复')">
+        <el-switch
+          :active-text="$t('开启')"
+          :active-value="1"
+          :inactive-value="0"
+          :inactive-text="$t('关闭')"
+          active-color="#13ce66"
+          inactive-color="gray"
+        >
+        </el-switch>
+        <el-button class="configBtn">{{ $t('配置') }}</el-button>
+      </el-form-item> -->
     </el-form>
     <el-button :loading="$store.state.btnLoading" class="save-btn" @click="editOthers">{{
       $t('保存')
@@ -212,6 +236,9 @@ export default {
     .el-form-item__content {
       margin-left: 0 !important;
     }
+  }
+  .configBtn {
+    margin-left: 20px;
   }
 }
 </style>
