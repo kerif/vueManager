@@ -1,6 +1,6 @@
 <template>
   <div class="autoReply-container">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName">
       <el-tab-pane :label="$t('关键词回复')" name="0"></el-tab-pane>
       <el-tab-pane :label="$t('被关注回复')" name="1"></el-tab-pane>
       <el-tab-pane :label="$t('收到消息回复')" name="2"></el-tab-pane>
@@ -9,7 +9,7 @@
       <div class="number-sty">{{ $t('规则名称') }}:</div>
       <el-input v-model="expressName" class="input-sty"> </el-input>
       <el-button>{{ $t('搜索') }}</el-button>
-      <el-button>{{ $t('添加新规则') }}</el-button>
+      <el-button @click="addNewRule">{{ $t('添加新规则') }}</el-button>
     </div>
     <el-table :data="tableData" border style="width: 80%">
       <el-table-column label="#" type="index"> </el-table-column>
@@ -59,7 +59,7 @@
         </el-form-item>
         <!-- 关键词 -->
         <el-form-item :label="$t('关键词')">
-          <el-select v-model="value" :placeholder="$t('请选择')">
+          <el-select v-model="value" style="width: 30%" :placeholder="$t('半匹配')">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -68,10 +68,19 @@
             >
             </el-option>
           </el-select>
-          <el-input v-model="ruleForm.keyword" :placeholder="$t('请输入关键词')"> </el-input>
+          <el-input v-model="ruleForm.keyword" style="width: 40%" :placeholder="$t('请输入关键词')">
+          </el-input>
         </el-form-item>
         <!-- 回复内容 -->
-        <el-form-item>
+        <el-form-item :label="$t('回复内容')">
+          <el-radio-group v-model="ansContent">
+            <el-radio :label="1">{{ $t('文字') }}</el-radio>
+            <el-radio :label="2">{{ $t('图片') }}</el-radio>
+          </el-radio-group>
+          <el-input type="textarea" :rows="5" :placeholder="$t('请输入内容')" v-model="textarea">
+          </el-input>
+        </el-form-item>
+        <el-form-item :label="$t('回复内容')">
           <el-radio-group v-model="ansContent">
             <el-radio :label="1">{{ $t('文字') }}</el-radio>
             <el-radio :label="2">{{ $t('图片') }}</el-radio>
@@ -80,10 +89,10 @@
           </el-input>
         </el-form-item>
         <!-- 回复方式 -->
-        <el-form-item>
+        <el-form-item :label="$t('回复方式')">
           <el-radio-group v-model="ansMethod">
-            <el-radio :label="3">{{ $t('文字') }}</el-radio>
-            <el-radio :label="4">{{ $t('图片') }}</el-radio>
+            <el-radio :label="3">{{ $t('随机一条') }}</el-radio>
+            <el-radio :label="4">{{ $t('回复全部') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <div slot="footer">
@@ -126,8 +135,8 @@ export default {
     }
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event)
+    addNewRule() {
+      this.show = true
     },
     clear() {}
   }
@@ -147,6 +156,9 @@ export default {
       width: 30%;
       margin-right: 10px;
     }
+  }
+  .el-textarea__inner {
+    width: 70%;
   }
 }
 </style>
