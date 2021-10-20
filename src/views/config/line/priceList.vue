@@ -112,6 +112,7 @@ export default {
   data() {
     return {
       type: 0, //1.首重续重 2.阶梯价格 4.多级续重 5.阶梯首重续重模式
+      range: 0, //区间
       weight: '',
       lineId: '',
       lineData: [],
@@ -159,12 +160,23 @@ export default {
               ...item.prices.map((ele, index) => {
                 let range = ''
                 if (this.type === 2 || this.type === 5) {
-                  if (item.prices.length - 2 === index || item.prices.length - 1 === index) {
-                    range = `[${ele.start / 1000}，${ele.end / 1000}]`
+                  // range为0时，左闭右开，最后一行左右都为闭区间，为1时，左开右闭，最后一行左右都为开区间
+                  if (!this.range) {
+                    if (item.prices.length - 2 === index || item.prices.length - 1 === index) {
+                      range = `[${ele.start / 1000}，${ele.end / 1000}]`
+                    } else {
+                      ele.start === ele.end
+                        ? (range = ele.start / 1000)
+                        : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
+                    }
                   } else {
-                    ele.start === ele.end
-                      ? (range = ele.start / 1000)
-                      : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
+                    if (item.prices.length - 2 === index || item.prices.length - 1 === index) {
+                      range = `(${ele.start / 1000}，${ele.end / 1000})`
+                    } else {
+                      ele.start === ele.end
+                        ? (range = ele.start / 1000)
+                        : (range = `(${ele.start / 1000}，${ele.end / 1000}]`)
+                    }
                   }
                 } else if (this.type === 4) {
                   if (ele.type === 5) {
@@ -364,6 +376,7 @@ export default {
             this.firstWeight = res.data.first_weight
             this.maxWeight = res.data.max_weight
           }
+          this.range = res.data.range
           this.baseMode = res.data.base_mode
           this.name = res.data.name
           this.getPriceTable()

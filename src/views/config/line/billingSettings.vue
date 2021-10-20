@@ -144,6 +144,23 @@
           </el-row>
         </el-form-item>
       </div>
+      <div v-if="form.mode === 2 || form.mode === 5">
+        <span>{{ $t('开闭区间选择') }}</span>
+        <el-tooltip
+          style="color: #7bc764; padding: 0 20px 0 5px"
+          effect="dark"
+          :content="
+            $t(
+              '例：如果设置10~50区间，左闭右开为[10,50)“大于等于10且小于50”，左开右闭为(10,50]“大于10且小于等于50”'
+            )
+          "
+          placement="top-end"
+        >
+          <i class="el-icon-info"></i>
+        </el-tooltip>
+        <el-radio v-model="form.range" :label="0">{{ $t('左闭右开') }}</el-radio>
+        <el-radio v-model="form.range" :label="1">{{ $t('左开右闭') }}</el-radio>
+      </div>
       <div v-if="form.mode === 2 || form.mode === 3">
         <el-form-item>
           <el-col :span="16">
@@ -535,7 +552,8 @@ export default {
         clearance_code_remark: '',
         multi_boxes: 0,
         grades: [],
-        has_factor: 0
+        has_factor: 0,
+        range: 0
       },
       dialogDescription: false,
       value: [],
@@ -697,6 +715,7 @@ export default {
         this.form.multi_boxes_ceil = res.data.multi_boxes_ceil
         this.form.first_weight = res.data.first_weight
         this.form.is_avg_weight = res.data.is_avg_weight
+        this.form.range = res.data.range
         if (res.data.no_throw_condition) {
           console.log(res.data.no_throw_condition.checked, 'res.data.no_throw_condition.checked')
           this.form.type = res.data.no_throw_condition.type
