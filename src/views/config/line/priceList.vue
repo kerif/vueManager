@@ -170,8 +170,8 @@ export default {
                         : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
                     }
                   } else {
-                    if (item.prices.length - 2 === index || item.prices.length - 1 === index) {
-                      range = `(${ele.start / 1000}，${ele.end / 1000})`
+                    if (!index) {
+                      range = `[${ele.start / 1000}，${ele.end / 1000}]`
                     } else {
                       ele.start === ele.end
                         ? (range = ele.start / 1000)
