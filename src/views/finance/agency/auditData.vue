@@ -106,14 +106,14 @@
               @click="editDetail(scope.row.id)"
               >{{ $t('详情') }}</el-button
             >
-            <!-- <el-button
+            <el-button
               type="primary"
               v-if="scope.row.withdraw_status === 4"
               plain
               size="mini"
               @click="goReapply(scope.row.id)"
               >{{ $t('重新申请') }}</el-button
-            > -->
+            >
           </template>
         </el-table-column>
       </el-table>

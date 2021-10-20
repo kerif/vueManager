@@ -13,21 +13,24 @@
               clearable
               style="width: 100%"
             ></el-cascader>
-            <el-form-item :label="`*${$t('寄往仓库')}`">
-              <el-select
-                v-model="queryInfo.warehouse_id"
-                :placeholder="$t('请选择寄往仓库')"
-                class="long-item"
+          </el-form-item>
+          <el-form-item :label="`*${$t('邮编')}`">
+            <el-input :placeholder="$t('请输入邮编')" v-model="queryInfo.postcode"></el-input>
+          </el-form-item>
+          <el-form-item :label="`*${$t('寄往仓库')}`">
+            <el-select
+              v-model="queryInfo.warehouse_id"
+              :placeholder="$t('请选择寄往仓库')"
+              class="long-item"
+            >
+              <el-option
+                v-for="item in warehouseList"
+                :key="item.id"
+                :label="item.warehouse_name"
+                :value="item.id"
               >
-                <el-option
-                  v-for="item in warehouseList"
-                  :key="item.id"
-                  :label="item.warehouse_name"
-                  :value="item.id"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item :label="`*${$t('物品重量')}`">
             <el-input
@@ -134,6 +137,7 @@ export default {
         height: '',
         weight: '',
         warehouse_id: '',
+        postcode: '',
         prop_ids: []
       },
       countryList: [],
