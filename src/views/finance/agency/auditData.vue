@@ -74,10 +74,10 @@
         </el-table-column>
         <el-table-column prop="withdraw_status" :label="$t('第三方审核状态')" width="120">
           <template slot-scope="scope">
-            <span v-if="scope.row.withdraw_status === 1">{{ $t('待提现') }}</span>
+            <span v-if="scope.row.withdraw_status === 1" class="noAudit">{{ $t('待提现') }}</span>
             <span v-if="scope.row.withdraw_status === 2">{{ $t('提现中') }}</span>
-            <span v-if="scope.row.withdraw_status === 3">{{ $t('提现成功') }}</span>
-            <span v-if="scope.row.withdraw_status === 4">{{ $t('提现失败') }}</span>
+            <span v-if="scope.row.withdraw_status === 3" class="pass">{{ $t('提现成功') }}</span>
+            <span v-if="scope.row.withdraw_status === 4" class="refuse">{{ $t('提现失败') }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="user.id" :label="$t('代理ID')" width="100"> </el-table-column>
@@ -88,7 +88,7 @@
         <el-table-column prop="created_at" :label="$t('申请时间')" width="160"> </el-table-column>
         <el-table-column prop="operator" :label="$t('处理人')" width="160"> </el-table-column>
         <el-table-column prop="audit_at" :label="$t('处理时间')" width="160"> </el-table-column>
-        <el-table-column :label="$t('操作')" fixed="right">
+        <el-table-column :label="$t('操作')" width="180" fixed="right">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status === 0"
@@ -106,14 +106,14 @@
               @click="editDetail(scope.row.id)"
               >{{ $t('详情') }}</el-button
             >
-            <el-button
+            <!-- <el-button
               type="primary"
               v-if="scope.row.withdraw_status === 4"
               plain
               size="mini"
               @click="goReapply(scope.row.id)"
               >{{ $t('重新申请') }}</el-button
-            >
+            > -->
           </template>
         </el-table-column>
       </el-table>

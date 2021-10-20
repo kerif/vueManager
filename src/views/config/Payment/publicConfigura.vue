@@ -49,7 +49,7 @@
           inactive-color="gray"
         >
         </el-switch>
-        <el-button class="configBtn">{{ $t('配置') }}</el-button>
+        <el-button class="configBtn" @click="goCustomMenu">{{ $t('配置') }}</el-button>
       </el-form-item>
       <el-form-item :label="$t('自动回复')">
         <el-switch
@@ -61,7 +61,7 @@
           inactive-color="gray"
         >
         </el-switch>
-        <el-button class="configBtn">{{ $t('配置') }}</el-button>
+        <el-button class="configBtn" @click="goReplyConfiguration">{{ $t('配置') }}</el-button>
       </el-form-item> -->
     </el-form>
     <el-button :loading="$store.state.btnLoading" class="save-btn" @click="editOthers">{{
@@ -222,6 +222,14 @@ export default {
           })
         }
       })
+    },
+    // 跳转到自动回复页面
+    goReplyConfiguration() {
+      this.$router.push({ name: 'autoReply' })
+    },
+    // 跳转到自定义菜单页面
+    goCustomMenu() {
+      this.$router.push({ name: 'customMenu' })
     }
   }
 }

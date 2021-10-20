@@ -653,7 +653,7 @@ export default {
         this.$request
           .newConfigBasic({
             ...this.form,
-            group_id: this.group_id,
+            group_id: this.$route.query.channelId,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {

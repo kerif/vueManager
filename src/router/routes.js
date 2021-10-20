@@ -124,6 +124,10 @@ const configurationMore = loadonDemand('config/Payment/configuration')
 const smsServices = loadonDemand('config/Payment/smsService')
 // 配置 更多配置 物流查询服务
 const trackingService = loadonDemand('config/Payment/trackingService')
+// 配置 更多配置 系统服务配置 公众号配置 自定义菜单
+const customMenu = loadonDemand('config/Payment/customMenu')
+// 配置 更多配置 系统服务配置 公众号配置 自动回复
+const autoReply = loadonDemand('config/Payment/autoReply')
 // 配置 更多配置 商品分类管理 风险提示
 const EditSick = loadonDemand('config/Payment/sickTips')
 // 更多配置 修改或新增邮件模版
@@ -1270,6 +1274,30 @@ export default [
               level: 2,
               group: '配置',
               name: '更多配置'
+            }
+          },
+          {
+            path: '/config/auto-reply',
+            name: 'autoReply',
+            component: autoReply,
+            id: 606,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '自动回复',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/custom-menu',
+            name: 'customMenu',
+            component: customMenu,
+            id: 606,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '自定义菜单',
+              parent: '/config/configuration-more'
             }
           },
           {
