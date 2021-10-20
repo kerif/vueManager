@@ -839,6 +839,10 @@ exports.withdrawData = params => {
 exports.updateAgentCode = () => {
   return $form.put('agents/qrcode-regenerate')
 }
+// 代理管理 代理二维码 下载二维码
+exports.uploadAgentCode = id => {
+  return $form.get(`agents/${id}/mp-code`)
+}
 // 代理管理 确定 提现说明
 exports.updateWithdrawData = params => {
   return $form.put('agents/withdraw-rule', params)

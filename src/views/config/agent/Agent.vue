@@ -105,7 +105,12 @@
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog" />
-        <div>{{ imgUser }}</div>
+        <div>
+          <div class="img-code">{{ imgUser }}</div>
+          <!-- <el-button size="mini" class="btn-light-red" @click="uploadAgentCode">{{
+            $t('下载二维码')
+          }}</el-button> -->
+        </div>
       </div>
     </el-dialog>
     <!-- 提现说明弹窗 -->
@@ -165,6 +170,7 @@ export default {
       deleteNum: [],
       options: [],
       withdrawVisible: false,
+      id: '',
       form: {
         content: '',
         language: ''
@@ -335,6 +341,12 @@ export default {
         })
         .catch(() => {})
     },
+    // 下载二维码
+    // uploadAgentCode() {
+    //   this.$request.uploadAgentCode(this.$route.params.id).then(res => {
+    //     console.log(res.data)
+    //   })
+    // },
     // 提现说明
     withdraw() {
       this.withdrawVisible = true
@@ -437,5 +449,8 @@ export default {
 }
 .add-sty {
   margin-left: 10px;
+}
+.img-code {
+  display: inline-block;
 }
 </style>

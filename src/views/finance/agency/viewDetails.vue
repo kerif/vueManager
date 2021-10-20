@@ -181,8 +181,10 @@
         <h3>{{ $t('日志') }}</h3>
         <div class="daily-card">
           <div class="text">2021-08-01&nbsp; 12:00:00&nbsp; 提交申请&nbsp; 100392</div>
-          <div v-if="this.log" class="text">
-            {{ this.log.created_at }}&nbsp;{{ this.log.sn }}&nbsp;{{ this.log.content }}
+          <div v-if="this.log">
+            <div v-for="item in log" :key="item.id" class="text">
+              {{ item.created_at }}&nbsp;{{ item.sn }}&nbsp;{{ item.content }}
+            </div>
           </div>
         </div>
         <h3>{{ $t('审核备注') }}</h3>
