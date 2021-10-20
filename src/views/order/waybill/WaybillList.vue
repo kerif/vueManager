@@ -12,6 +12,7 @@
     <waybill-list-search
       v-show="hasFilterCondition"
       :searchFieldData="searchFieldData"
+      @info="getVal"
       v-on:submit="goMatch"
     ></waybill-list-search>
     <div class="header-range">
@@ -93,7 +94,7 @@
         }}</el-button>
       </div>
       <div style="margin-left: 5px" v-if="['0', '1', '2', '3', '4', '5'].includes(activeName)">
-        <el-button size="small" type="danger" @click="statistics" plain>{{
+        <el-button size="small" type="danger" @click="showDrawer = true" plain>{{
           $t('货量统计')
         }}</el-button>
       </div>
@@ -664,7 +665,14 @@
                       </el-dropdown-item>
                       <el-dropdown-item
                         class="item-sty"
-                        @click.native="editPacked(scope.row.id, activeName, scope.row.is_parent)"
+                        @click.native="
+                          editPacked(
+                            scope.row.id,
+                            activeName,
+                            scope.row.is_parent,
+                            scope.row.express_line.id
+                          )
+                        "
                       >
                         <span v-if="activeName === '1' && scope.row.group_buying_status === 1"
                           >{{ $t('编辑') }}
@@ -673,7 +681,13 @@
                       <el-dropdown-item
                         class="item-sty"
                         @click.native="
-                          packed(scope.row.id, scope.row.order_sn, scope.row.is_parent, activeName)
+                          packed(
+                            scope.row.id,
+                            scope.row.order_sn,
+                            scope.row.is_parent,
+                            activeName,
+                            scope.row.express_line.id
+                          )
                         "
                       >
                         <span v-if="activeName === '1' && scope.row.group_buying_status === 0">{{
@@ -1007,6 +1021,14 @@
         }}</el-button>
       </div>
     </el-dialog>
+    <!-- 货量统计 -->
+    <waybill-list-drawer
+      :showDrawer="showDrawer"
+      :searchFieldData="searchFieldData"
+      :activeName="activeName"
+      :tag="keyData"
+      @receive="receive"
+    ></waybill-list-drawer>
   </div>
 </template>
 
@@ -1015,9 +1037,11 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import WaybillListSearch from './components/waybillListSearch'
+import WaybillListDrawer from './components/waybillListDrawer'
 export default {
   components: {
     WaybillListSearch,
+    WaybillListDrawer,
     NlePagination
   },
   mixins: [pagination],
@@ -1122,7 +1146,10 @@ export default {
       selectUserID: [],
       user_name: '',
       status: '',
-      id: ''
+      id: '',
+      showDrawer: false,
+      keyData: {},
+      lineId: ''
     }
   },
   activated() {
@@ -1140,7 +1167,6 @@ export default {
     this.getCounts()
     this.initQuery()
   },
-  mounted() {},
   methods: {
     initQuery() {
       if (this.$route.query.activeName) {
@@ -1154,6 +1180,9 @@ export default {
         })
       }
       this.getList()
+    },
+    receive() {
+      this.showDrawer = false
     },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {
@@ -1293,6 +1322,10 @@ export default {
       // this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
       this.getCounts()
+    },
+    getVal(param) {
+      this.keyData = param
+      console.log(this.keyData, 'this.keyData')
     },
     // 更新物流状态
     updateTracking() {
@@ -1501,12 +1534,6 @@ export default {
           })
       })
     },
-    // 货量统计
-    statistics() {
-      this.$router.push({
-        name: 'VolumeStatistics'
-      })
-    },
     // 获取全部物流状态
     getType() {
       this.$request.getOrderStatus().then(res => {
@@ -1638,6 +1665,7 @@ export default {
     },
     // 待支付 编辑打包数据
     editPacked(id, activeName, parent, lineId) {
+      console.log(lineId, 'lineId')
       this.$router.push({
         name: 'editPacked',
         params: {
@@ -2124,6 +2152,7 @@ export default {
     clearPayment() {
       this.payment_mode = ''
     }
+    // 饼图
   },
   computed: {
     timeLabel() {
@@ -2172,9 +2201,6 @@ export default {
   .dialog-sty {
     margin-left: 30px;
   }
-  // .el-icon {
-  //   display: none;
-  // }
   .iframe {
     width: 100%;
     min-height: 300px;
@@ -2226,6 +2252,9 @@ export default {
 }
 .dialog-input {
   width: 30% !important;
+}
+/deep/.el-drawer__open .el-drawer.rtl {
+  width: 90% !important;
 }
 .add-box {
   margin-bottom: 10px;

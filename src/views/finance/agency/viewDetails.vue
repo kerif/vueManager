@@ -181,6 +181,9 @@
         <h3>{{ $t('日志') }}</h3>
         <div class="daily-card">
           <div class="text">2021-08-01&nbsp; 12:00:00&nbsp; 提交申请&nbsp; 100392</div>
+          <div v-if="this.log" class="text">
+            {{ this.log.created_at }}&nbsp;{{ this.log.sn }}&nbsp;{{ this.log.content }}
+          </div>
         </div>
         <h3>{{ $t('审核备注') }}</h3>
         <div class="remarks-card" v-if="this.detailData.type === '银行卡'">
@@ -268,17 +271,20 @@
           <!--表格-->
           <el-table border style="width: 100%" :data="charge">
             <el-table-column type="index" label="#" width="120"></el-table-column>
-            <el-table-column prop="order_number" label="订单号"></el-table-column>
-            <el-table-column prop="order_status" label="状态"></el-table-column>
-            <el-table-column prop="order_amount" label="总金额￥"></el-table-column>
-            <!-- <el-table-column prop="proportion" label="佣金方式"></el-table-column> -->
-            <el-table-column prop="commission_amount" label="可得佣金￥"></el-table-column>
+            <el-table-column prop="order_number" :label="$t('订单号')"></el-table-column>
+            <el-table-column prop="order_status" :label="$t('状态')"></el-table-column>
+            <el-table-column prop="order_amount" :label="$t('总金额￥')"></el-table-column>
+            <!-- <el-table-column prop="proportion" label="$t('佣金方式"></el-table-column> -->
+            <el-table-column prop="commission_amount" :label="$t('可得佣金￥')"></el-table-column>
           </el-table>
         </div>
       </el-card>
       <el-row class="auditStatus" v-if="detailData.status_name === '待审核'">
         <el-button type="danger" @click="viewRejused">{{ $t('审核拒绝') }}</el-button>
         <el-button type="primary" @click="viewApproved">{{ $t('审核通过') }}</el-button>
+      </el-row>
+      <el-row class="auditStatus" v-if="this.withdraw_status === 4">
+        <el-button type="danger" @click="goReapply">{{ $t('重新申请') }}</el-button>
       </el-row>
     </div>
     <!-- 查看图片 -->
@@ -304,7 +310,9 @@ export default {
       imgVisible: false,
       imgSrc: '',
       imgDialog: false,
-      imgUrl: ''
+      imgUrl: '',
+      log: [],
+      withdraw_status: ''
     }
   },
   created() {
@@ -317,11 +325,31 @@ export default {
         this.detailData = res.data
         this.info = res.data.bank_card_info || {}
         this.charge = res.data.commissions
+        this.log = res.data.third_withdraw_logs
+        this.withdraw_status = res.data.withdraw_status
       })
     },
     checkImg(url) {
       this.imgDialog = true
       this.imgUrl = this.$baseUrl.IMAGE_URL + url
+    },
+    // 重新申请
+    goReapply() {
+      this.$request.withdrawThird(this.detailData.user.id, this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 审核通过
     viewApproved() {

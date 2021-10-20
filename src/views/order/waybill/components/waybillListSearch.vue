@@ -17,7 +17,12 @@
           <!--第二列表开始-->
           <!--时间-->
           <el-form-item prop="date_type">
-            <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('时间')">
+            <el-select
+              v-model="searchFieldData.date_type"
+              clearable
+              :placeholder="$t('时间')"
+              value-key="id"
+            >
               <el-option
                 v-for="item in timeOptions"
                 :key="item.id"
@@ -29,7 +34,12 @@
           </el-form-item>
           <!--价格区间-->
           <el-form-item prop="value_type">
-            <el-select v-model="searchFieldData.value_type" clearable :placeholder="$t('价格区间')">
+            <el-select
+              v-model="searchFieldData.value_type"
+              clearable
+              :placeholder="$t('价格区间')"
+              value-key="id"
+            >
               <el-option
                 v-for="item in priceRangeOptions"
                 :key="item.id"
@@ -45,6 +55,8 @@
               v-model="searchFieldData.express_line_id"
               clearable
               :placeholder="$t('线路名称')"
+              @change="changeVal"
+              value-key="id"
             >
               <el-option
                 v-for="item in lineData"
@@ -107,6 +119,8 @@
                   v-model="searchFieldData.payment_type"
                   clearable
                   :placeholder="$t('支付方式')"
+                  @change="changeVal"
+                  value-key="id"
                 >
                   <el-option
                     v-for="item in paymentData"
@@ -125,6 +139,8 @@
                   v-model="searchFieldData.warehouse"
                   clearable
                   :placeholder="$t('请选择仓库')"
+                  @change="changeVal"
+                  value-key="id"
                 >
                   <el-option
                     v-for="item in wareHouseList"
@@ -146,6 +162,8 @@
               :show-all-levels="false"
               :props="countryProps"
               v-model="searchFieldData.countryArr"
+              ref="getCountryName"
+              @change="changeVal"
               clearable
             ></el-cascader>
           </el-form-item>
@@ -155,6 +173,7 @@
               v-model="searchFieldData.pay_delivery"
               clearable
               :placeholder="$t('支付状态')"
+              value-key="id"
             >
               <el-option
                 v-for="item in paymentStatusData"
@@ -173,6 +192,7 @@
               v-model="searchFieldData.receive_type"
               clearable
               :placeholder="$t('收货方式')"
+              value-key="id"
             >
               <el-option
                 v-for="item in receiverOptions"
@@ -185,7 +205,13 @@
           </el-form-item>
           <!--所属代理 -->
           <el-form-item prop="agent">
-            <el-select v-model="searchFieldData.agent" clearable :placeholder="$t('所属代理')">
+            <el-select
+              v-model="searchFieldData.agent"
+              clearable
+              @change="changeVal"
+              :placeholder="$t('所属代理')"
+              value-key="id"
+            >
               <el-option
                 v-for="item in agentData"
                 :key="item.id"
@@ -291,7 +317,8 @@ export default {
       agentData: [],
       paymentData: [],
       lineData: [],
-      wareHouseList: []
+      wareHouseList: [],
+      countryName: []
     }
   },
   created() {
@@ -310,6 +337,18 @@ export default {
         this.searchFieldData.agent = this.$route.query.agent
       }
     },
+    changeVal() {
+      this.handleSel()
+      let param = {
+        lineData: this.lineData,
+        paymentData: this.paymentData,
+        agentData: this.agentData,
+        wareHouseList: this.wareHouseList,
+        countryName: this.countryName
+      }
+      console.log(param)
+      this.$emit('info', param)
+    },
     submitForm() {
       this.$emit('submit')
     },
@@ -318,6 +357,12 @@ export default {
       this.searchFieldData.start = ''
       this.searchFieldData.end = ''
       this.searchFieldData.agent = ''
+    },
+    handleSel() {
+      if (this.$refs['getCountryName'].getCheckedNodes()[0]) {
+        this.countryName = this.$refs['getCountryName'].getCheckedNodes()[0].pathLabels
+        console.log(this.countryName)
+      }
     },
     // 获得客户下拉列表
     getAgentData() {
@@ -337,12 +382,14 @@ export default {
     getPaymentType() {
       this.$request.paymentType().then(res => {
         this.paymentData = res.data
+        console.log(res.data)
       })
     },
     // 获取筛选线路列表
     getLineType() {
       this.$request.lineType().then(res => {
         this.lineData = res.data
+        console.log(res.data)
       })
     }
   }

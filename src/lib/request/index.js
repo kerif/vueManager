@@ -249,6 +249,26 @@ exports.regionsDelete = (id, regionId) => {
 exports.newRegions = (id, params) => {
   return $form.post(`express-lines/${id}/regions`, params)
 }
+// 配置 分区 线路分区详情
+exports.lineRegionsDetail = (id, regionId) => {
+  return $form.get(`express-lines/${id}/regions/${regionId}`)
+}
+// 配置 分区 新建线路分区
+exports.newLineRegions = (id, params) => {
+  return $form.post(`express-lines/${id}/regions`, params)
+}
+// 配置 分区 更新线路分区信息
+exports.updateRegions = (id, regionId, params) => {
+  return $form.put(`express-lines/${id}/regions/${regionId}`, params)
+}
+// 配置 分区 复制分区模板
+exports.copyPartitionTmp = (id, tmpId) => {
+  return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
+}
+// 配置 路线 保存
+exports.saveName = (id, params) => {
+  return $form.put(`express-lines/region-templates/${id}`, params)
+}
 // 新路线 基础信息 获取
 exports.configBasic = id => {
   return $form.get(`express-lines/${id}/basic-config`)
@@ -791,6 +811,10 @@ exports.withdrawalMethod = () => {
 exports.clickSettlement = params => {
   return $form.put('agents/commissions/settled-all', params)
 }
+// 代理佣金结算 代理结算统计
+exports.settleStatistics = () => {
+  return $form.get('agents/deal-orders-total')
+}
 // 代理佣金计算 审核通过提现申请
 exports.approveWithdraw = (id, withdrawsId, params) => {
   return $form.put(`agents/${id}/withdraws/${withdrawsId}/approved`, params)
@@ -798,6 +822,10 @@ exports.approveWithdraw = (id, withdrawsId, params) => {
 // 代理佣金计算 审核拒绝提现申请
 exports.refusedWithdraw = (id, withdrawsId, params) => {
   return $form.put(`agents/${id}/withdraws/${withdrawsId}/refused`, params)
+}
+// 代理佣金结算 提现
+exports.withdrawThird = (id, applyId) => {
+  return $form.put(`agents/${id}/withdraws/${applyId}/withdraw-third`)
 }
 // 代理管理 审核拒绝
 exports.rechargeReject = (id, params) => {
@@ -818,6 +846,10 @@ exports.updateWithdrawData = params => {
 // 代理管理 计佣模版配置列表
 exports.agentTemplate = params => {
   return $form.get('agents/commission-templates', { params })
+}
+// 代理管理 代理删除
+exports.deleteAgent = id => {
+  return $form.delete(`agents/${id}`)
 }
 // 发票管理 全部
 exports.manageInvoice = params => {
@@ -1413,8 +1445,8 @@ exports.updateProgramShare = params => {
   return $form.put('mini-program/share-page-info', params)
 }
 // 获取功能配置
-exports.getValidate = () => {
-  return $form.get(`mini-program/configs`)
+exports.getValidate = params => {
+  return $form.get(`mini-program/configs`, params)
 }
 // 更新 功能配置
 exports.updateValidate = params => {
@@ -2687,6 +2719,10 @@ exports.rebateLang = params => {
 exports.updateRebateLang = params => {
   return $form.put(`ordering-coupon/translate-data`, params)
 }
+// 营销管理 用户福利 用户福利券各类型统计
+exports.typeStatistics = id => {
+  return $form.get(`new-user-coupons/type/${id}/total`)
+}
 // 抵用券管理 路线列表
 exports.getLineList = params => {
   return $form.get('coupons/express-line-list', { params })
@@ -3070,8 +3106,8 @@ exports.getOrderBatch = params => {
   return $form.get(`orders`, { params })
 }
 //订单 订单列表 货量统计
-exports.volumeStatistics = () => {
-  return $form.get(`orders/statistics`)
+exports.volumeStatistics = params => {
+  return $form.get(`orders/statistics`, { params })
 }
 // 一键更改支付方式
 exports.changePayMode = params => {

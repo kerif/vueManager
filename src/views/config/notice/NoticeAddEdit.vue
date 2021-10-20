@@ -40,7 +40,7 @@
             >
               <i class="el-icon-plus"> </i> </el-upload
             ><br />
-            <!-- <span class="suggest-btn">建议尺寸：355px*160px</span> -->
+            <span class="suggest-btn">{{ $t('建议尺寸') }}:160px*80px</span>
           </el-col>
         </el-row>
       </el-form-item>

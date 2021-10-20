@@ -5,8 +5,21 @@
         <el-row v-if="$route.query.state === 'edit'">
           <el-col :span="10">
             <div>{{ $t('所属路线') }}</div>
-            <span>{{ groupName }}</span>
-            <!-- <el-input :placeholder="$t('请输入内容')" v-model="form.name"></el-input> -->
+            <el-select
+              v-model="group_id"
+              filterable
+              clearable
+              class="country-select"
+              :placeholder="$t('请选择路线')"
+            >
+              <el-option
+                v-for="item in lineList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-col>
         </el-row>
       </el-form-item>
@@ -390,6 +403,7 @@ export default {
       ],
       iconList: [],
       warehouseList: [], // 获取全部仓库
+      lineList: [], //获取所有路线
       typeList: [],
       labelList: [],
       localization: {},
@@ -433,11 +447,13 @@ export default {
         }
       ],
       pickList: [],
-      groupName: ''
+      groupName: '',
+      id: '',
+      group_id: ''
     }
   },
   created() {
-    console.log(this.$route.query.channelId, 'id')
+    // console.log(this.$route.query.channelId, 'id')
     const add = localStorage.getItem('add')
     console.log(add, 'add')
     if (add) {
@@ -477,6 +493,7 @@ export default {
       }
     }
     this.getProp()
+    this.getLine()
     this.getWarehouse()
     this.getIcon()
     this.getChannelLabel()
@@ -499,6 +516,7 @@ export default {
     getList() {
       this.$request.configBasic(this.$route.params.id).then(res => {
         this.groupName = res.data.group_name
+        this.group_id = res.data.group_id
         this.form.name = res.data.name
         this.form.is_great_value = res.data.is_great_value
         this.form.remark = res.data.remark
@@ -581,6 +599,12 @@ export default {
         this.warehouseList = res.data
       })
     },
+    // 获取全部路线
+    getLine() {
+      this.$request.getLineGroup().then(res => {
+        this.lineList = res.data
+      })
+    },
     // 获取渠道标签多选框
     getChannelLabel() {
       this.$request.lineLabel().then(res => {
@@ -602,9 +626,11 @@ export default {
       }
       if (this.$route.params.id) {
         // 编辑状态
+        console.log(this.groupName, '1111')
         this.$request
           .updateConfigBasic(this.$route.params.id, {
             ...this.form,
+            group_id: this.group_id,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {

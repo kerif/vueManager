@@ -552,7 +552,8 @@ export default {
       },
       groupId: '',
       unShow: '',
-      lineId: ''
+      lineId: '',
+      group_id: ''
     }
   },
   activated() {
@@ -704,7 +705,7 @@ export default {
       this.$router.push({
         name: 'channelLineEdit',
         params: {
-          id: id
+          id
         },
         query: {
           state: 'edit'
