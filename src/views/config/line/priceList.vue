@@ -170,7 +170,7 @@ export default {
                         : (range = `[${ele.start / 1000}，${ele.end / 1000})`)
                     }
                   } else {
-                    if (!index) {
+                    if (index === 0 || index === 1) {
                       range = `[${ele.start / 1000}，${ele.end / 1000}]`
                     } else {
                       ele.start === ele.end
