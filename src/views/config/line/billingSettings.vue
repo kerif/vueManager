@@ -89,6 +89,7 @@
           </el-row>
         </el-form-item>
         <el-form-item>
+          <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
           <el-col :span="16">
             <el-table :data="form.grades" style="width: 100%" border>
               <el-table-column
@@ -170,6 +171,7 @@
       </p>
       <div v-if="form.mode === 2 || form.mode === 3">
         <el-form-item>
+          <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
           <el-col :span="16">
             <el-table :data="form.grades" style="width: 100%" border>
               <el-table-column :label="$t('起始') + billingName + unitName">
@@ -206,6 +208,7 @@
       </div>
       <div v-if="form.mode === 5">
         <el-form-item>
+          <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
           <el-col :span="18">
             <el-table :data="form.grades" style="width: 100%" border>
               <el-table-column :label="$t('起始') + billingName + unitName + ' >='">
@@ -923,6 +926,9 @@ export default {
   }
   .checkbox-sty {
     margin-right: 0;
+  }
+  .remark {
+    color: red;
   }
 }
 </style>

@@ -2,20 +2,27 @@
   <el-dialog
     :visible.sync="show"
     :title="$t('发货单详情')"
-    width="80%"
+    width="40%"
     class="ship-details-container"
     @close="clear"
   >
-    <div class="import-list">
-      <el-button class="btn-deep-purple" @click="uploadList">{{ $t('导出清单') }}</el-button>
+    <div class="excel-date">
+      <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单（含包裹信息）') }}</el-radio>
+      <el-radio :label="2" v-model="uploadRadio">{{ $t('导出清单') }}</el-radio>
     </div>
-    <el-table :data="shipData" border @selection-change="selectionChange">
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="show = false" class="cancel-btn">{{ $t('取消') }}</el-button>
+      <el-button type="primary" @click="getDispatchList" :loading="$store.state.btnLoading">{{
+        $t('确定')
+      }}</el-button>
+    </div>
+    <!-- <div class="import-list">
+      <el-button class="btn-deep-purple" @click="uploadList">{{ $t('导出清单') }}</el-button>
+    </div> -->
+    <!-- <el-table :data="shipData" border @selection-change="selectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <!-- 客户ID -->
       <el-table-column :label="$t('客户ID')" prop="user_id" width="100"></el-table-column>
-      <!-- 客户昵称 -->
       <el-table-column :label="$t('客户昵称')" prop="user_name" width="155"></el-table-column>
-      <!-- 付款状态 -->
       <el-table-column :label="$t('付款状态')">
         <template slot-scope="scope">
           <span v-if="scope.row.on_delivery_status === 0">{{ $t('已付款') }}</span>
@@ -43,7 +50,6 @@
         prop="logistics_sn"
         width="155"
       ></el-table-column>
-      <!-- <el-table-column label="转运快递公司" prop="logistics_company"></el-table-column> -->
       <el-table-column
         :label="$t('线路名称')"
         prop="express_line.cn_name"
@@ -69,9 +75,6 @@
         :label="$t('申报价值') + localization.currency_unit"
         prop="declare_value"
       ></el-table-column>
-      <!-- <el-table-column label="备注" prop="remark"></el-table-column>
-        <el-table-column label="提交时间" prop="packed_at"></el-table-column>
-        <el-table-column label="拣货时间" prop="updated_at"></el-table-column> -->
       <el-table-column :label="$t('操作')" width="130" v-if="status === 0">
         <template slot-scope="scope">
           <el-button @click="removeShip(scope.row.id)" class="btn-light-red">{{
@@ -85,7 +88,7 @@
           <el-button size="small" @click="removeBatch">{{ $t('批量移除发货单') }}</el-button>
         </div>
       </template>
-    </el-table>
+    </el-table> -->
     <!-- <div class="pagination-box">
     <nle-pagination :pageParams="page_params"></nle-pagination>
      </div> -->
@@ -105,7 +108,9 @@ export default {
       localization: {},
       status: '',
       deleteNum: [],
-      urlExcel: ''
+      urlExcel: '',
+      show: false,
+      uploadRadio: 1
     }
   },
   mounted() {
@@ -131,6 +136,32 @@ export default {
             })
           }
         })
+    },
+    // 类型
+    getDispatchList() {
+      let param = {}
+      if (this.uploadRadio === 1) {
+        param.type = 0
+      } else if (this.uploadRadio === 2) {
+        param.type = 1
+      }
+      this.$request.dispatchList(this.id, param).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)

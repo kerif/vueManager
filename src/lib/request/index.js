@@ -839,6 +839,10 @@ exports.withdrawData = params => {
 exports.updateAgentCode = () => {
   return $form.put('agents/qrcode-regenerate')
 }
+// 代理管理 代理二维码 下载二维码
+exports.uploadAgentCode = (id, config) => {
+  return $form.get(`agents/${id}/mp-code`, config)
+}
 // 代理管理 确定 提现说明
 exports.updateWithdrawData = params => {
   return $form.put('agents/withdraw-rule', params)
@@ -1909,6 +1913,10 @@ exports.verifySmtp = params => {
 // 更多配置 服务配置 检测Juhe
 exports.verifyJuhe = params => {
   return $form.post(`configs/verify-juhe`, params)
+}
+// 配置 更多配置 系统服务配置 公众号配置 列表
+exports.customMenuList = () => {
+  return $form.get('wechat-oa-config/menus')
 }
 // 新增 邮件模版
 exports.addEmail = params => {
@@ -3216,6 +3224,10 @@ exports.getAloneSelf = id => {
 // 货站 申请集包
 exports.packs = params => {
   return $form.get('package-packs/packages', { params })
+}
+// 货站 发货单 发货单详情
+exports.dispatchList = (id, params) => {
+  return $form.get(`shipments/${id}/order-export`, { params })
 }
 // 集包 新增收货地址
 exports.addAddress = params => {
