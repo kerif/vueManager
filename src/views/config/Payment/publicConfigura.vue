@@ -222,15 +222,15 @@ export default {
           })
         }
       })
-    },
-    // 跳转到自动回复页面
-    goReplyConfiguration() {
-      this.$router.push({ name: 'autoReply' })
-    },
-    // 跳转到自定义菜单页面
-    goCustomMenu() {
-      this.$router.push({ name: 'customMenu' })
     }
+    // 跳转到自动回复页面
+    // goReplyConfiguration() {
+    //   this.$router.push({ name: 'autoReply' })
+    // },
+    // 跳转到自定义菜单页面
+    // goCustomMenu() {
+    //   this.$router.push({ name: 'customMenu' })
+    // }
   }
 }
 </script>

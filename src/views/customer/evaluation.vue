@@ -37,17 +37,22 @@
         <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
       </div>
     </div>
-    <div class="searchGroup">
-      <search-group
-        :placeholder="$t('请输入关键字')"
-        v-model="page_params.keyword"
-        @search="goSearch"
-      >
-      </search-group>
-      <div class="filter">
-        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
-          >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
-        ></el-button>
+    <div class="comment">
+      <!-- <el-button type="danger" size="mini" class="evaluate" @click="showDialog = true">{{
+        $t('新增评价')
+      }}</el-button> -->
+      <div class="searchGroup">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        >
+        </search-group>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
       </div>
     </div>
     <div v-if="evaluationData.length">
@@ -135,11 +140,85 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
+    <el-dialog
+      :visible.sync="showDialog"
+      :title="$t('新增评论')"
+      class="dialog-comment"
+      @close="clear"
+    >
+      <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
+        <!--客户昵称 -->
+        <el-form-item :label="$t('客户昵称')">
+          <el-input v-model="ruleForm.nickname" :placeholder="$t('请输入')"> </el-input>
+        </el-form-item>
+        <!--客户ID -->
+        <el-form-item :label="$t('客户ID')">
+          <el-input v-model="ruleForm.customerId" :placeholder="$t('请输入')"> </el-input>
+        </el-form-item>
+        <!-- 显示时间 -->
+        <el-form-item :label="$t('显示时间')">
+          <el-date-picker v-model="ruleForm.display_time" type="date" :placeholder="$t('选择日期')">
+          </el-date-picker>
+        </el-form-item>
+        <!-- 收货国家 -->
+        <el-form-item :label="$t('收货国家')">
+          <el-select
+            v-model="ruleForm.country_id"
+            filterable
+            clearable
+            class="country-select"
+            :placeholder="$t('请选择国家')"
+          >
+            <el-option
+              v-for="item in countryList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 评价内容 -->
+        <el-form-item :label="$t('评价内容')">
+          <el-input v-model="ruleForm.content" :placeholder="$t('请输入')"> </el-input>
+        </el-form-item>
+        <!-- 上传图片 -->
+        <el-form-item :label="$t('上传图片')">
+          <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+            <span class="model-box"></span>
+            <span class="operat-box">
+              <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+            </span>
+          </span>
+          <el-upload
+            v-show="baleImgList.length < 3"
+            class="avatar-uploader"
+            action=""
+            list-type="picture-card"
+            :http-request="uploadBaleImg"
+            :show-file-list="false"
+          >
+            <i class="el-icon-plus"> </i>
+          </el-upload>
+        </el-form-item>
+        <!-- 评分 -->
+        <el-form-item :label="$t('评分')">
+          <el-rate v-model="ruleForm.rate"></el-rate>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="showDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { SearchGroup } from '@/components/searchs'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 import NlePagination from '@/components/pagination'
 export default {
   components: {
@@ -156,16 +235,27 @@ export default {
       localization: {},
       evaluationData: [],
       timeList: [],
+      baleImgList: [],
       begin_date: '',
       end_date: '',
       imgVisible: false,
       imgSrc: '',
       urlHtml: '',
       show: false,
+      showDialog: false,
       labelId: '',
       form: {},
       value: 2,
+      countryList: [],
       hasFilterCondition: false,
+      ruleForm: {
+        nickname: '',
+        customerId: '',
+        country_id: '',
+        display_time: '',
+        content: '',
+        rate: null
+      },
       statusList: [
         {
           id: 0,
@@ -206,6 +296,36 @@ export default {
           })
         }
       })
+    },
+    // 上传打包照片
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.baleImgList.push(item.path)
+            console.log(item)
+          })
+        }
+      })
+    },
+    // 预览图片
+    onPreview(image) {
+      dialog({
+        type: 'previewimage',
+        image
+      })
+    },
+    // 删除图片
+    onDeleteImg(index) {
+      this.baleImgList.splice(index, 1)
+      console.log(index)
+    },
+    // 上传图片
+    onUpload(file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
     },
     // 精选状态选择
     onShipStatus() {
@@ -253,6 +373,39 @@ export default {
         })
       })
     },
+    // 预设分区表 获取国家
+    getCountry() {
+      this.$request.countryLocation().then(res => {
+        if (res.ret) {
+          this.countryList = res.data
+          this.options = res.data.map(item => {
+            return {
+              value: item.id,
+              label: item.name,
+              children:
+                item.areas < 1
+                  ? undefined
+                  : item.areas.map(item => {
+                      return {
+                        value: item.id,
+                        label: item.name,
+                        children:
+                          item.areas < 1
+                            ? undefined
+                            : item.areas.map(item => {
+                                return {
+                                  value: item.id,
+                                  label: item.name
+                                }
+                              })
+                      }
+                    })
+            }
+          })
+          console.log(this.options)
+        }
+      })
+    },
     // 重置表单
     resetForm() {
       this.timeList = []
@@ -262,11 +415,16 @@ export default {
     submitForm() {
       this.onTime(this.timeList)
       this.onShipStatus()
-    }
+    },
+    clear() {
+      this.ruleForm.nickname = ''
+    },
+    submit() {}
   },
   created() {
     // this.getAgentData()
     this.getList()
+    this.getCountry()
   }
 }
 </script>
@@ -441,6 +599,32 @@ export default {
     }
     .submit {
       float: right;
+      margin-top: 10px;
+    }
+  }
+  .comment {
+    display: flex;
+    justify-content: flex-start;
+    .evaluate {
+      height: 40px;
+      margin-top: 10px;
+    }
+  }
+  .dialog-comment {
+    .el-dialog__header {
+      background-color: #0e102a;
+    }
+    .el-dialog__title {
+      font-size: 14px;
+      color: #fff;
+    }
+    .el-dialog__close {
+      color: #fff;
+    }
+    .el-input {
+      width: 50%;
+    }
+    .el-rate {
       margin-top: 10px;
     }
   }

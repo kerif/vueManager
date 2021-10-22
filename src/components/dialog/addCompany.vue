@@ -31,7 +31,7 @@
         <el-input v-model="company.sn" class="input-select"></el-input>
       </el-form-item>
       <div v-else>
-        <div v-if="!box.length">
+        <div v-if="boxType === 1">
           <el-form-item :label="$t(`*快递转运单号：`)">
             <span>{{ orderSn }}</span>
             <el-input v-model="company.sn"></el-input>
@@ -64,7 +64,8 @@ export default {
       companyList: [],
       state: '',
       orderSn: '',
-      box: []
+      box: [],
+      boxType: ''
     }
   },
   methods: {
@@ -95,6 +96,7 @@ export default {
         if (res.ret) {
           this.orderSn = res.data.order_sn
           this.company.company = res.data.logistics_company_code
+          this.boxType = res.data.box_type
           res.data.box.length
             ? (this.box = res.data.box.map(item => {
                 return {
@@ -112,22 +114,19 @@ export default {
         return this.$message.error(this.$t('请输入转运快递公司二程'))
       }
       if (this.state === 'multiBox') {
-        if (!this.box.length && !this.company.sn) {
+        if (this.boxType === 1 && !this.company.sn)
           return this.$message.error(this.$t('请输入转运快递单号二程'))
-        }
         this.box.forEach(item => {
           if (!item.logistics_sn) {
             return this.$message.error(this.$t('请输入转运快递单号'))
           }
         })
       } else {
-        if (this.company.sn === '') {
-          return this.$message.error(this.$t('请输入转运快递单号二程'))
-        }
+        if (!this.company.sn) return this.$message.error(this.$t('请输入转运快递单号二程'))
       }
       let res = {}
       if (this.state === 'multiBox') {
-        if (!this.box.length) {
+        if (this.boxType === 1) {
           res = await this.$request.updateLogistics([
             {
               id: this.orderId,
