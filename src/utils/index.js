@@ -65,3 +65,14 @@ export const countryCallback = list => {
     leaf: item.areas.length ? '' : 'leaf'
   }))
 }
+export const downloadStreamFile = (data, name = 'file', type = 'xlsx') => {
+  if (data && data.code && data.code === 5000) return
+  let url = window.URL.createObjectURL(new Blob([data]))
+  let link = document.createElement('a')
+  link.style.display = 'none'
+  link.href = url
+  link.setAttribute('download', `${name}.${type}`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}

@@ -60,13 +60,9 @@
       <el-table-column label="操作" width="450" fixed="right">
         <template slot-scope="scope">
           <!-- 代理二维码 -->
-          <el-button
-            class="btn-green"
-            @click.stop="
-              ;(imgSrc = scope.row.qr_code), (imgVisible = true), (imgUser = scope.row.user_id)
-            "
-            >{{ $t('代理二维码') }}</el-button
-          >
+          <el-button class="btn-green" @click.stop="openAgent(scope.row)">{{
+            $t('代理二维码')
+          }}</el-button>
           <!-- 修改 -->
           <el-button class="btn-green" @click="editAgent(scope.row.id)">{{ $t('修改') }}</el-button>
           <!-- 删除 -->
@@ -107,9 +103,13 @@
         <img :src="imgSrc" class="imgDialog" />
         <div>
           <div class="img-code">{{ imgUser }}</div>
-          <!-- <el-button size="mini" class="btn-light-red" @click="uploadAgentCode">{{
-            $t('下载二维码')
-          }}</el-button> -->
+          <el-button
+            size="mini"
+            class="btn-light-red"
+            style="margin-left: 20px"
+            @click="uploadAgentCode"
+            >{{ $t('下载二维码') }}</el-button
+          >
         </div>
       </div>
     </el-dialog>
@@ -155,6 +155,7 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
+import { downloadStreamFile } from '@/utils/index'
 export default {
   data() {
     return {
@@ -171,6 +172,7 @@ export default {
       options: [],
       withdrawVisible: false,
       id: '',
+      type: '',
       form: {
         content: '',
         language: ''
@@ -214,6 +216,12 @@ export default {
             })
           }
         })
+    },
+    openAgent(data) {
+      this.imgSrc = data.qr_code
+      this.imgVisible = true
+      this.imgUser = data.user_id
+      this.id = data.id
     },
     // 修改代理
     editAgent(id) {
@@ -342,11 +350,14 @@ export default {
         .catch(() => {})
     },
     // 下载二维码
-    // uploadAgentCode() {
-    //   this.$request.uploadAgentCode(this.$route.params.id).then(res => {
-    //     console.log(res.data)
-    //   })
-    // },
+    uploadAgentCode() {
+      let param = {
+        responseType: 'blob'
+      }
+      this.$request.uploadAgentCode(this.id, param).then(res => {
+        downloadStreamFile(res, 'code', 'jpg')
+      })
+    },
     // 提现说明
     withdraw() {
       this.withdrawVisible = true

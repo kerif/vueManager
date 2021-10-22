@@ -9,7 +9,9 @@
       <div class="number-sty">{{ $t('规则名称') }}:</div>
       <el-input v-model="expressName" class="input-sty"> </el-input>
       <el-button>{{ $t('搜索') }}</el-button>
-      <el-button @click="addNewRule">{{ $t('添加新规则') }}</el-button>
+      <el-button @click="addNewRule" style="background-color: #3540a5; color: #fff">{{
+        $t('添加新规则')
+      }}</el-button>
     </div>
     <el-table :data="tableData" border style="width: 70%">
       <el-table-column label="#" type="index"> </el-table-column>
@@ -17,10 +19,14 @@
       <el-table-column prop="name" :label="$t('关键词')"> </el-table-column>
       <el-table-column prop="address" :label="$t('回复类型')"> </el-table-column>
       <el-table-column :label="$t('操作')">
-        <el-button>{{ $t('修改') }}</el-button>
-        <el-button>{{ $t('删除') }}</el-button>
+        <el-button class="btn-dark-green btn-margin">{{ $t('修改') }}</el-button>
+        <el-button class="btn-light-red">{{ $t('删除') }}</el-button>
       </el-table-column>
     </el-table>
+    <div>
+      <span>{{ $t('被关注回复') }}</span>
+      <span>{{ $t('可以同时发两条消息') }}</span>
+    </div>
     <el-form>
       <!-- 消息类型 -->
       <el-form-item :label="$t('消息类型')">
@@ -28,7 +34,13 @@
           <el-radio :label="1">{{ $t('文字') }}</el-radio>
           <el-radio :label="2">{{ $t('图片') }}</el-radio>
         </el-radio-group>
-        <el-input type="textarea" :rows="5" :placeholder="$t('请输入内容')" v-model="textarea">
+        <el-input
+          type="textarea"
+          style="margin-left: 65px"
+          :rows="5"
+          :placeholder="$t('请输入内容')"
+          v-model="textarea"
+        >
         </el-input>
       </el-form-item>
       <el-form-item :label="$t('消息类型')">
@@ -36,7 +48,13 @@
           <el-radio :label="1">{{ $t('文字') }}</el-radio>
           <el-radio :label="2">{{ $t('图片') }}</el-radio>
         </el-radio-group>
-        <el-input type="textarea" :rows="5" :placeholder="$t('请输入内容')" v-model="textarea">
+        <el-input
+          type="textarea"
+          style="margin-left: 65px"
+          :rows="5"
+          :placeholder="$t('请输入内容')"
+          v-model="textarea"
+        >
         </el-input>
       </el-form-item>
       <!-- 回复内容 -->
@@ -45,12 +63,18 @@
           <el-radio :label="1">{{ $t('文字') }}</el-radio>
           <el-radio :label="2">{{ $t('图片') }}</el-radio>
         </el-radio-group>
-        <el-input type="textarea" :rows="5" :placeholder="$t('请输入内容')" v-model="textarea">
+        <el-input
+          type="textarea"
+          style="margin-left: 65px"
+          :rows="5"
+          :placeholder="$t('请输入内容')"
+          v-model="textarea"
+        >
         </el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button>{{ $t('保存') }}</el-button>
+      <el-button style="background-color: #3540a5; color: #fff">{{ $t('保存') }}</el-button>
       <el-button>{{ $t('删除回复') }}</el-button>
     </div>
     <el-dialog :visible.sync="show" :title="$t('规则设置')" @close="clear">
@@ -77,8 +101,8 @@
           </el-select>
           <el-input v-model="ruleForm.keyword" style="width: 50%" :placeholder="$t('请输入关键词')">
           </el-input>
-          <i class="el-icon-circle-plus-outline"></i>
-          <i class="el-icon-remove-outline"></i>
+          <i class="el-icon-circle-plus-outline" @click="addItem"></i>
+          <i class="el-icon-remove-outline" @click="deleteItem"></i>
         </el-form-item>
         <!-- 回复内容 -->
         <el-form-item :label="$t('回复内容')">
@@ -88,6 +112,26 @@
           </el-radio-group>
           <el-input type="textarea" :rows="5" :placeholder="$t('请输入内容')" v-model="textarea">
           </el-input>
+          <div>
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+              <span class="model-box"></span>
+              <span class="operat-box">
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              </span>
+            </span>
+            <el-upload
+              v-show="baleImgList.length < 3"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
+            >
+              <i class="el-icon-plus"> </i>
+            </el-upload>
+          </div>
         </el-form-item>
         <el-form-item :label="$t('回复内容')">
           <el-radio-group v-model="ansContent">
@@ -96,6 +140,26 @@
           </el-radio-group>
           <el-input type="textarea" :rows="5" :placeholder="$t('请输入内容')" v-model="textarea">
           </el-input>
+          <div>
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+              <span class="model-box"></span>
+              <span class="operat-box">
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              </span>
+            </span>
+            <el-upload
+              v-show="baleImgList.length < 3"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
+            >
+              <i class="el-icon-plus"> </i>
+            </el-upload>
+          </div>
         </el-form-item>
         <!-- 回复方式 -->
         <el-form-item :label="$t('回复方式')">
@@ -106,7 +170,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
-        <el-button>{{ $t('保存') }}</el-button>
+        <el-button style="background-color: #3540a5; color: #fff">{{ $t('保存') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -124,6 +188,7 @@ export default {
       expressName: '',
       value: '',
       show: false,
+      baleImgList: [],
       ruleForm: {
         ruleName: '',
         keyword: ''
@@ -147,6 +212,9 @@ export default {
     addNewRule() {
       this.show = true
     },
+    addItem() {},
+    deleteItem() {},
+    uploadBaleImg() {},
     clear() {}
   }
 }
@@ -176,6 +244,16 @@ export default {
   }
   .el-icon-remove-outline:before {
     font-size: 24px;
+  }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
+  }
+  .el-dialog__close {
+    color: #fff;
   }
   .el-table tr th.is-leaf div {
     text-align: center;

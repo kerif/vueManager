@@ -91,6 +91,7 @@
         <el-form-item>
           <el-col :span="16">
             <div class="add-row">
+              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
               <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
             </div>
             <el-table :data="form.grades" style="width: 100%" border>
@@ -148,6 +149,7 @@
         <el-form-item>
           <el-col :span="16">
             <div class="add-row">
+              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
               <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
             </div>
             <el-table :data="form.grades" style="width: 100%" border>
@@ -178,6 +180,7 @@
         <el-form-item>
           <el-col :span="16">
             <div class="add-row">
+              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
               <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
             </div>
             <el-table :data="form.grades" style="width: 100%" border>
@@ -877,6 +880,10 @@ export default {
   }
   .checkbox-sty {
     margin-right: 0;
+  }
+  .remark {
+    float: left;
+    color: red;
   }
 }
 </style>
