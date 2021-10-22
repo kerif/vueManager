@@ -90,9 +90,6 @@
         </el-form-item>
         <el-form-item>
           <el-col :span="16">
-            <div class="add-row">
-              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-            </div>
             <el-table :data="form.grades" style="width: 100%" border>
               <el-table-column
                 v-if="form.mode === 1"
@@ -127,6 +124,15 @@
                     class="btn-light-red"
                     >{{ $t('移除') }}</el-button
                   >
+                  <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                    $t('插入')
+                  }}</el-button>
+                  <el-button
+                    v-if="scope.$index === form.grades.length - 1"
+                    @click="addRow"
+                    class="btn-deep-purple"
+                    >{{ $t('新增') }}</el-button
+                  >
                 </template>
               </el-table-column>
             </el-table>
@@ -144,7 +150,8 @@
           </el-row>
         </el-form-item>
       </div>
-      <div v-if="form.mode === 2 || form.mode === 5">
+      <!-- 开闭区间 -->
+      <p v-if="form.mode === 2 || form.mode === 5">
         <span>{{ $t('开闭区间选择') }}</span>
         <el-tooltip
           style="color: #7bc764; padding: 0 20px 0 5px"
@@ -160,13 +167,10 @@
         </el-tooltip>
         <el-radio v-model="form.range" :label="0">{{ $t('左闭右开') }}</el-radio>
         <el-radio v-model="form.range" :label="1">{{ $t('左开右闭') }}</el-radio>
-      </div>
+      </p>
       <div v-if="form.mode === 2 || form.mode === 3">
         <el-form-item>
           <el-col :span="16">
-            <div class="add-row">
-              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-            </div>
             <el-table :data="form.grades" style="width: 100%" border>
               <el-table-column :label="$t('起始') + billingName + unitName">
                 <template slot-scope="scope">
@@ -185,6 +189,15 @@
                     class="btn-light-red"
                     >{{ $t('移除') }}</el-button
                   >
+                  <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                    $t('插入')
+                  }}</el-button>
+                  <el-button
+                    v-if="scope.$index === form.grades.length - 1"
+                    @click="addRow"
+                    class="btn-deep-purple"
+                    >{{ $t('新增') }}</el-button
+                  >
                 </template>
               </el-table-column>
             </el-table>
@@ -193,10 +206,7 @@
       </div>
       <div v-if="form.mode === 5">
         <el-form-item>
-          <el-col :span="16">
-            <div class="add-row">
-              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-            </div>
+          <el-col :span="18">
             <el-table :data="form.grades" style="width: 100%" border>
               <el-table-column :label="$t('起始') + billingName + unitName + ' >='">
                 <template slot-scope="scope">
@@ -224,6 +234,15 @@
                     @click.native.prevent="deleteRow(scope.$index, form.grades)"
                     class="btn-light-red"
                     >{{ $t('移除') }}</el-button
+                  >
+                  <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                    $t('插入')
+                  }}</el-button>
+                  <el-button
+                    v-if="scope.$index === form.grades.length - 1"
+                    @click="addRow"
+                    class="btn-deep-purple"
+                    >{{ $t('新增') }}</el-button
                   >
                 </template>
               </el-table-column>
@@ -739,6 +758,14 @@ export default {
     // 跳转到增加icon
     addIcon() {
       this.$router.push({ name: 'IconAdd' })
+    },
+    // 插入行
+    insert(index, arr) {
+      arr.splice(index, 0, {
+        start: '',
+        end: '',
+        unit_weight: ''
+      })
     },
     // 新增行
     addRow() {
