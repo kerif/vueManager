@@ -89,55 +89,60 @@
           </el-row>
         </el-form-item>
         <el-form-item>
-          <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
-          <el-col :span="16">
-            <el-table :data="form.grades" style="width: 100%" border>
-              <el-table-column
-                v-if="form.mode === 1"
-                :label="$t('起始') + billingName + unitName + ' >='"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-if="form.mode === 1 && scope.$index === 0"
-                    v-model="form.first_weight"
-                    :disabled="form.mode === 1 && scope.$index === 0"
-                  ></el-input>
-                  <el-input v-else v-model="scope.row.start"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                v-if="form.mode === 1"
-                :label="'*' + $t('截止') + billingName + unitName + ' <'"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.end" @input="inputEnd(scope)"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('单位续重') + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.unit_weight"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent="deleteRow(scope.$index, form.grades)"
-                    class="btn-light-red"
-                    >{{ $t('移除') }}</el-button
-                  >
-                  <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
-                    $t('插入')
-                  }}</el-button>
-                  <el-button
-                    v-if="scope.$index === form.grades.length - 1"
-                    @click="addRow"
-                    class="btn-deep-purple"
-                    >{{ $t('新增') }}</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
+          <el-row :gutter="10">
+            <el-col :span="16">
+              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
+              <div class="add-row">
+                <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+              </div>
+              <el-table :data="form.grades" style="width: 100%" border>
+                <el-table-column
+                  v-if="form.mode === 1"
+                  :label="$t('起始') + billingName + unitName + ' >='"
+                >
+                  <template slot-scope="scope">
+                    <el-input
+                      v-if="form.mode === 1 && scope.$index === 0"
+                      v-model="form.first_weight"
+                      :disabled="form.mode === 1 && scope.$index === 0"
+                    ></el-input>
+                    <el-input v-else v-model="scope.row.start"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  v-if="form.mode === 1"
+                  :label="'*' + $t('截止') + billingName + unitName + ' <'"
+                >
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.end" @input="inputEnd(scope)"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('单位续重') + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.unit_weight"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('操作')">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click.native.prevent="deleteRow(scope.$index, form.grades)"
+                      class="btn-light-red"
+                      >{{ $t('移除') }}</el-button
+                    >
+                    <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                      $t('插入')
+                    }}</el-button>
+                    <el-button
+                      v-if="scope.$index === form.grades.length - 1"
+                      @click="addRow"
+                      class="btn-deep-purple"
+                      >{{ $t('新增') }}</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item v-if="form.base_mode === 0 && (form.mode === 2 || form.mode === 3)">
           <el-row :gutter="10">
@@ -171,86 +176,96 @@
       </p>
       <div v-if="form.mode === 2 || form.mode === 3">
         <el-form-item>
-          <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
-          <el-col :span="16">
-            <el-table :data="form.grades" style="width: 100%" border>
-              <el-table-column :label="$t('起始') + billingName + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.start"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="'*' + $t('截止') + billingName + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent="deleteRow(scope.$index, form.grades)"
-                    class="btn-light-red"
-                    >{{ $t('移除') }}</el-button
-                  >
-                  <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
-                    $t('插入')
-                  }}</el-button>
-                  <el-button
-                    v-if="scope.$index === form.grades.length - 1"
-                    @click="addRow"
-                    class="btn-deep-purple"
-                    >{{ $t('新增') }}</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
+          <el-row>
+            <el-col :span="16">
+              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
+              <div class="add-row">
+                <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+              </div>
+              <el-table :data="form.grades" style="width: 100%" border>
+                <el-table-column :label="$t('起始') + billingName + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.start"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="'*' + $t('截止') + billingName + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.end"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('操作')">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click.native.prevent="deleteRow(scope.$index, form.grades)"
+                      class="btn-light-red"
+                      >{{ $t('移除') }}</el-button
+                    >
+                    <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                      $t('插入')
+                    }}</el-button>
+                    <el-button
+                      v-if="scope.$index === form.grades.length - 1"
+                      @click="addRow"
+                      class="btn-deep-purple"
+                      >{{ $t('新增') }}</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-form-item>
       </div>
       <div v-if="form.mode === 5">
         <el-form-item>
-          <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
-          <el-col :span="18">
-            <el-table :data="form.grades" style="width: 100%" border>
-              <el-table-column :label="$t('起始') + billingName + unitName + ' >='">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.start"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="'*' + $t('截止') + billingName + unitName + ' <'">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('首重') + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.first_weight"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('单位续重') + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.unit_weight"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent="deleteRow(scope.$index, form.grades)"
-                    class="btn-light-red"
-                    >{{ $t('移除') }}</el-button
-                  >
-                  <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
-                    $t('插入')
-                  }}</el-button>
-                  <el-button
-                    v-if="scope.$index === form.grades.length - 1"
-                    @click="addRow"
-                    class="btn-deep-purple"
-                    >{{ $t('新增') }}</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
+          <el-row>
+            <el-col :span="18">
+              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
+              <div class="add-row">
+                <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+              </div>
+              <el-table :data="form.grades" style="width: 100%" border>
+                <el-table-column :label="$t('起始') + billingName + unitName + ' >='">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.start"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="'*' + $t('截止') + billingName + unitName + ' <'">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.end"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('首重') + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.first_weight"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('单位续重') + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.unit_weight"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('操作')">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click.native.prevent="deleteRow(scope.$index, form.grades)"
+                      class="btn-light-red"
+                      >{{ $t('移除') }}</el-button
+                    >
+                    <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                      $t('插入')
+                    }}</el-button>
+                    <el-button
+                      v-if="scope.$index === form.grades.length - 1"
+                      @click="addRow"
+                      class="btn-deep-purple"
+                      >{{ $t('新增') }}</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item v-if="form.base_mode === 0 && (form.mode === 2 || form.mode === 3)">
           <el-row :gutter="10">
@@ -928,6 +943,7 @@ export default {
     margin-right: 0;
   }
   .remark {
+    float: left;
     color: red;
   }
 }
