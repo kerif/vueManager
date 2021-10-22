@@ -2,24 +2,26 @@
   <el-dialog
     :visible.sync="show"
     :title="$t('发货单详情')"
-    width="40%"
+    width="80%"
     class="ship-details-container"
     @close="clear"
   >
-    <div class="excel-date">
-      <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单（含包裹信息）') }}</el-radio>
-      <el-radio :label="2" v-model="uploadRadio">{{ $t('导出清单') }}</el-radio>
+    <el-dialog width="40%" :title="$t('发货单详情')" :visible.sync="showInner" append-to-body>
+      <div class="excel-date">
+        <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单（含包裹信息）') }}</el-radio>
+        <el-radio :label="2" v-model="uploadRadio">{{ $t('导出清单') }}</el-radio>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showInner = false" class="cancel-btn">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="getDispatchList" :loading="$store.state.btnLoading">{{
+          $t('确定')
+        }}</el-button>
+      </div>
+    </el-dialog>
+    <div class="import-list">
+      <el-button class="btn-deep-purple" @click="exportList">{{ $t('导出清单') }}</el-button>
     </div>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="show = false" class="cancel-btn">{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="getDispatchList" :loading="$store.state.btnLoading">{{
-        $t('确定')
-      }}</el-button>
-    </div>
-    <!-- <div class="import-list">
-      <el-button class="btn-deep-purple" @click="uploadList">{{ $t('导出清单') }}</el-button>
-    </div> -->
-    <!-- <el-table :data="shipData" border @selection-change="selectionChange">
+    <el-table :data="shipData" border @selection-change="selectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column :label="$t('客户ID')" prop="user_id" width="100"></el-table-column>
       <el-table-column :label="$t('客户昵称')" prop="user_name" width="155"></el-table-column>
@@ -88,7 +90,7 @@
           <el-button size="small" @click="removeBatch">{{ $t('批量移除发货单') }}</el-button>
         </div>
       </template>
-    </el-table> -->
+    </el-table>
     <!-- <div class="pagination-box">
     <nle-pagination :pageParams="page_params"></nle-pagination>
      </div> -->
@@ -110,6 +112,7 @@ export default {
       deleteNum: [],
       urlExcel: '',
       show: false,
+      showInner: false,
       uploadRadio: 1
     }
   },
@@ -152,7 +155,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
-          this.show = false
+          this.showInner = false
           this.success()
         } else {
           this.$message({
@@ -290,6 +293,10 @@ export default {
           })
         }
       })
+    },
+    exportList() {
+      this.show = false
+      this.showInner = true
     },
     init() {
       console.log(this.id, '我是接收的id')
