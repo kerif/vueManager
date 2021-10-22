@@ -418,8 +418,26 @@ export default {
     },
     clear() {
       this.ruleForm.nickname = ''
+      this.ruleForm.customerId = ''
+      this.ruleForm.display_time = ''
+      this.ruleForm.country_id = ''
+      this.ruleForm.content = ''
+      this.ruleForm.rate = null
+      this.baleImgList = []
     },
-    submit() {}
+    submit() {
+      let param = {
+        username: this.ruleForm.nickname,
+        user_id: this.ruleForm.customerId,
+        content: this.ruleForm.content,
+        images: this.baleImgList,
+        score: this.ruleForm.rate,
+        country_id: this.ruleForm.country_id
+      }
+      this.$request.getAddEvaluate(param).then(res => {
+        console.log(res)
+      })
+    }
   },
   created() {
     // this.getAgentData()
@@ -622,6 +640,9 @@ export default {
       color: #fff;
     }
     .el-input {
+      width: 50%;
+    }
+    .el-select {
       width: 50%;
     }
     .el-rate {

@@ -555,6 +555,10 @@ exports.submitSuggest = (id, params) => {
 exports.getComments = params => {
   return $form.get('order-comments', { params })
 }
+// 客服中心 评价管理 新增评价
+exports.getAddEvaluate = params => {
+  return $form.post('order-comments', params)
+}
 // 客服中心 取消或设置精选
 exports.updateRecommend = (id, status) => {
   return $form.put(`order-comments/${id}/recommend/${status}`)
