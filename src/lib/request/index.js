@@ -1922,6 +1922,26 @@ exports.verifyJuhe = params => {
 exports.customMenuList = () => {
   return $form.get('wechat-oa-config/menus')
 }
+// 配置 更多配置 系统服务配置 公众号配置 详情
+exports.getMenuDetail = id => {
+  return $form.get(`wechat-oa-config/menus/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 新建
+exports.getNewMenu = () => {
+  return $form.get('wechat-oa-config/menus')
+}
+// 配置 更多配置 系统服务配置 公众号配置 更新
+exports.updateMenu = id => {
+  return $form.put(`wechat-oa-config/menus/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 删除
+exports.deleteMenu = id => {
+  return $form.delete(`wechat-oa-config/menus/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 发布菜单
+exports.publishMenu = () => {
+  return $form.post('wechat-oa-config/menus/publish')
+}
 // 新增 邮件模版
 exports.addEmail = params => {
   return $form.post('email-templates', params)
