@@ -10,6 +10,7 @@
       <div class="excel-date">
         <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单（含包裹信息）') }}</el-radio>
         <el-radio :label="2" v-model="uploadRadio">{{ $t('导出清单') }}</el-radio>
+        <el-radio :label="3" v-model="uploadRadio">{{ $t('发货单详情') }}</el-radio>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="showInner = false" class="cancel-btn">{{ $t('取消') }}</el-button>
@@ -147,6 +148,8 @@ export default {
         param.type = 0
       } else if (this.uploadRadio === 2) {
         param.type = 1
+      } else {
+        param.type = 2
       }
       this.$request.dispatchList(this.id, param).then(res => {
         if (res.ret) {
