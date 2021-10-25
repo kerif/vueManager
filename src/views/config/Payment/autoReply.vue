@@ -114,9 +114,12 @@ export default {
   },
   methods: {
     addNewRule() {
-      dialog({ type: 'addRule', state: 'add' }, () => {
-        this.getList()
-      })
+      dialog(
+        { type: 'addRule', state: 'add', types: this.activeName, reply_type: this.megType },
+        () => {
+          this.getList()
+        }
+      )
     },
     editRule(id) {
       dialog({ type: 'addRule', state: 'edit', id: id }, () => {

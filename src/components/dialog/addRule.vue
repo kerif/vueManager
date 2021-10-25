@@ -115,11 +115,17 @@ export default {
       baleImgList: [],
       options: [
         {
-          value: '选项1',
-          label: '黄金糕'
+          value: '0',
+          label: '半匹配'
+        },
+        {
+          value: '1',
+          label: '全匹配'
         }
       ],
-      show: false
+      show: false,
+      types: '',
+      reply_type: ''
     }
   },
   created() {},
@@ -135,19 +141,20 @@ export default {
       console.log(this.ruleForm.dynamicItem, '删除')
     },
     addContent() {
-      this.ruleForm.dynamic.push({
+      this.ruleForm.replyList.push({
         ansContent: '',
         content: ''
       })
     },
     deleteContent(item, index) {
-      this.ruleForm.dynamic.splice(index, 1)
-      console.log(this.ruleForm.dynamic, '删除')
+      this.ruleForm.replyList.splice(index, 1)
+      console.log(this.ruleForm.replyList, '删除')
     },
     confirm() {
       let param = {
-        type: this.activeName,
-        reply_type: this.megType,
+        type: this.types,
+        reply_type: this.reply_type,
+        name: this.ruleForm.ruleName,
         ...this.ruleForm
       }
       if (this.state === 'add') {
