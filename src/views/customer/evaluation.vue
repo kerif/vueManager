@@ -427,6 +427,7 @@ export default {
     },
     submit() {
       let param = {
+        order_sn: '',
         username: this.ruleForm.nickname,
         user_id: this.ruleForm.customerId,
         content: this.ruleForm.content,
@@ -435,7 +436,20 @@ export default {
         country_id: this.ruleForm.country_id
       }
       this.$request.getAddEvaluate(param).then(res => {
-        console.log(res)
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     }
   },

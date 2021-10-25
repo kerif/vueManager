@@ -121,6 +121,8 @@ import salesAddEdit from './salesAddEdit.vue'
 import addCustomLabel from './addCustomLabel.vue'
 import addLabel from './addLabel.vue'
 import addPaid from './addPaid.vue'
+import addMenu from './addMenu.vue'
+import addRule from './addRule.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -242,6 +244,8 @@ const SalesAddEditController = Vue.extend(salesAddEdit)
 const AddCustomLabelController = Vue.extend(addCustomLabel)
 const AddLabelController = Vue.extend(addLabel)
 const AddPaidController = Vue.extend(addPaid)
+const AddMenuController = Vue.extend(addMenu)
+const AddRuleController = Vue.extend(addRule)
 
 const mixin = {
   data() {
@@ -907,6 +911,20 @@ function initInstance(type) {
     //订单列表 待支付 改为已付款
     case 'addPaid':
       instance = new AddPaidController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //配置 更多配置 自动回复
+    case 'addRule':
+      instance = new AddRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //配置 更多配置 系统服务配置 公众号配置 自定义菜单
+    case 'addMenu':
+      instance = new AddMenuController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

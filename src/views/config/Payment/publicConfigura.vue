@@ -47,6 +47,7 @@
           :inactive-text="$t('关闭')"
           active-color="#13ce66"
           inactive-color="gray"
+          v-model="setForm.menu"
         >
         </el-switch>
         <el-button class="configBtn" @click="goCustomMenu">{{ $t('配置') }}</el-button>
@@ -59,6 +60,7 @@
           :inactive-text="$t('关闭')"
           active-color="#13ce66"
           inactive-color="gray"
+          v-model="setForm.reply"
         >
         </el-switch>
         <el-button class="configBtn" @click="goReplyConfiguration">{{ $t('配置') }}</el-button>
@@ -101,7 +103,9 @@ export default {
         secret: '',
         token: '',
         aes_key: '',
-        app_id: ''
+        app_id: '',
+        menu: false,
+        reply: false
       },
       visibleOauth: false,
       baleImgList: [],
@@ -125,7 +129,7 @@ export default {
       this.tableLoading = true
       this.$request.getPubTemplate().then(res => {
         if (res.ret) {
-          this.messageData = res.data
+          this.messageData = Object.values(res.data)
           this.tableLoading = false
         }
       })
