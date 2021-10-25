@@ -159,7 +159,8 @@ export default {
     getMenuDetail() {
       let id = this.id
       this.$request.getMenuDetail(id).then(res => {
-        console.log(res, '222')
+        console.log(res.data)
+        console.log(res.data.sub_menus)
       })
     },
     submit() {

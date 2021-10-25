@@ -3,7 +3,7 @@
     <div class="remark">
       {{ $t('*公众号菜单主菜单最多只能是三级，每级主菜单最多可以有五个子菜单栏目') }}
     </div>
-    <el-button type="success" style="margin: 10px 0; background-color: #3540a5">{{
+    <el-button type="success" @click="newMenu" style="margin: 10px 0; background-color: #3540a5">{{
       $t('添加菜单')
     }}</el-button>
     <el-table
@@ -111,6 +111,11 @@ export default {
     },
     editMenu(id) {
       dialog({ type: 'addMenu', state: 'edit', id: id }, () => {
+        this.getCustomMenuList()
+      })
+    },
+    newMenu() {
+      dialog({ type: 'addMenu', state: 'add' }, () => {
         this.getCustomMenuList()
       })
     },
