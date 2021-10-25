@@ -1927,12 +1927,12 @@ exports.getMenuDetail = id => {
   return $form.get(`wechat-oa-config/menus/${id}`)
 }
 // 配置 更多配置 系统服务配置 公众号配置 新建
-exports.getNewMenu = () => {
-  return $form.get('wechat-oa-config/menus')
+exports.getNewMenu = params => {
+  return $form.post('wechat-oa-config/menus', params)
 }
 // 配置 更多配置 系统服务配置 公众号配置 更新
-exports.updateMenu = id => {
-  return $form.put(`wechat-oa-config/menus/${id}`)
+exports.updateMenu = (id, params) => {
+  return $form.put(`wechat-oa-config/menus/${id}`, params)
 }
 // 配置 更多配置 系统服务配置 公众号配置 删除
 exports.deleteMenu = id => {
@@ -1941,6 +1941,26 @@ exports.deleteMenu = id => {
 // 配置 更多配置 系统服务配置 公众号配置 发布菜单
 exports.publishMenu = () => {
   return $form.post('wechat-oa-config/menus/publish')
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 列表
+exports.replyMessageList = params => {
+  return $form.get('wechat-oa-config/messages', { params })
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 详情
+exports.replyMessageDetail = id => {
+  return $form.get(`wechat-oa-config/messages/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 新建
+exports.addReplyMessage = params => {
+  return $form.post('wechat-oa-config/messages', params)
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 更新
+exports.updateReplyMessage = (id, params) => {
+  return $form.put(`wechat-oa-config/messages/${id}`, params)
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 删除
+exports.deleteReplyMessage = id => {
+  return $form.delete(`wechat-oa-config/messages/${id}`)
 }
 // 新增 邮件模版
 exports.addEmail = params => {
