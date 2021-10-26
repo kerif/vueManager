@@ -86,30 +86,6 @@
                 style="width: 300px; padding-left: 20px"
               ></el-input>
             </el-form-item>
-            <!-- <el-form-item label="English">
-            <el-input
-              v-model="langForm.en_US"
-              :placeholder="$t('请输入')"
-              style="width: 217px"
-            ></el-input>
-            <el-input
-              v-model="form.remark"
-              :placeholder="$t('请输入English费用说明')"
-              style="width: 300px"
-            ></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('繁体中文')">
-            <el-input
-              v-model="langForm.zh_TW"
-              :placeholder="$t('请输入')"
-              style="width: 217px"
-            ></el-input>
-            <el-input
-              v-model="form.remark"
-              :placeholder="$t('请输入繁体中文费用说明')"
-              style="width: 300px"
-            ></el-input>
-          </el-form-item> -->
           </el-form>
         </div>
         <span slot="footer">
@@ -153,17 +129,22 @@
                 <i class="el-icon-edit-outline" @click="editRowEvent(column)"></i>
                 <i class="el-icon-delete" @click="deleteServices(column)"></i>
               </span>
-              <!-- <vxe-button type="text" @click="editRowEvent(column)">{{ $t('编辑') }}</vxe-button> -->
-              <!-- <vxe-button type="text" @click="deleteServices(column)">{{ $t('删除') }}</vxe-button> -->
             </div>
           </el-tooltip>
         </template>
       </vxe-grid>
     </div>
+    <nle-pagination
+      style="margin-top: 5px"
+      :pageParams="page_params"
+      :notNeedInitQuery="false"
+    ></nle-pagination>
   </div>
 </template>
 
 <script>
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -254,8 +235,12 @@ export default {
       localization: {}
     }
   },
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   created() {
-    this.getServicesList()
+    this.getList()
     this.getLanguageList()
   },
   methods: {
@@ -275,7 +260,7 @@ export default {
       })
     },
     // 获取增值服务列表
-    getServicesList() {
+    getList() {
       this.gridOptions.columns = [
         {
           type: 'seq',
@@ -296,8 +281,16 @@ export default {
           minWidth: 400
         }
       ]
-      this.$request.getServicesList(this.$route.params.id).then(res => {
+      let page_params = {
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size,
+        total: this.page_params.total
+      }
+      this.$request.getServicesList(this.$route.params.id, { ...page_params }).then(res => {
         if (res.ret) {
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
           this.localization = res.localization
           this.servicesList = res.data.map(item => {
             const areas = item.areas
@@ -341,7 +334,6 @@ export default {
                 }
                 this.gridOptions.columns.push({
                   field: `service_${ele.id}`,
-                  // title: ele.name + '(' + this.localization.currency_unit + ')',
                   title: ele.name,
                   params: {
                     tips: this.content
@@ -396,7 +388,7 @@ export default {
     addServices() {
       this.title = this.$t('新增增值费用')
       this.dialogVisible = true
-      this.getServicesList()
+      this.getList()
       this.detailsList = this.servicesList
     },
     // 删除增值服务
@@ -414,7 +406,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.getServicesList()
+            this.getList()
           } else {
             this.$message({
               message: res.msg,
@@ -452,7 +444,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
-          this.getServicesList()
+          this.getList()
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -492,7 +484,7 @@ export default {
             })
             this.dialogVisible = false
             this.detailsList = []
-            this.getServicesList()
+            this.getList()
             // this.$router.go(0)
           } else {
             this.$message({
@@ -510,7 +502,7 @@ export default {
               message: res.msg
             })
             this.dialogVisible = false
-            this.getServicesList()
+            this.getList()
           } else {
             this.$message({
               message: res.msg,
