@@ -13,7 +13,7 @@
       <!-- 关键词 -->
       <div v-for="(item, index) in ruleForm.dynamicItem" :key="index">
         <el-form-item :label="$t('关键词')">
-          <el-select v-model="item.key" style="width: 20%" :placeholder="$t('半匹配')">
+          <el-select v-model="item.match" style="width: 20%" :placeholder="$t('半匹配')">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -25,17 +25,13 @@
           <el-input v-model="item.keyword" style="width: 50%" :placeholder="$t('请输入关键词')">
           </el-input>
           <i class="el-icon-circle-plus-outline" @click="addItem"></i>
-          <i
-            class="el-icon-remove-outline"
-            @click="deleteItem"
-            v-if="ruleForm.dynamicItem.length === 2"
-          ></i>
+          <i class="el-icon-remove-outline" @click="deleteItem" v-if="index !== 0"></i>
         </el-form-item>
       </div>
       <!-- 回复内容 -->
       <div v-for="(item, index) in ruleForm.replyList" :key="'info-' + index">
         <el-form-item :label="$t('回复内容')">
-          <el-radio-group v-model="item.ansContent">
+          <el-radio-group v-model="item.form">
             <el-radio :label="1">{{ $t('文字') }}</el-radio>
             <el-radio :label="2">{{ $t('图片') }}</el-radio>
           </el-radio-group>
@@ -44,7 +40,7 @@
             :rows="5"
             :placeholder="$t('请输入内容')"
             v-model="item.content"
-            v-if="item.ansContent === 1"
+            v-if="item.form === 1"
           >
           </el-input>
           <div v-else>
@@ -68,16 +64,12 @@
             </el-upload>
           </div>
           <i class="el-icon-circle-plus-outline" @click="addContent"></i>
-          <i
-            class="el-icon-remove-outline"
-            @click="deleteContent"
-            v-if="ruleForm.replyList.length === 2"
-          ></i>
+          <i class="el-icon-remove-outline" @click="deleteContent" v-if="index !== 0"></i>
         </el-form-item>
       </div>
       <!-- 回复方式 -->
       <el-form-item :label="$t('回复方式')">
-        <el-radio-group v-model="ruleForm.ansMethod">
+        <el-radio-group v-model="ruleForm.reply_type">
           <el-radio :label="1">{{ $t('随机一条') }}</el-radio>
           <el-radio :label="2">{{ $t('回复全部') }}</el-radio>
         </el-radio-group>
@@ -98,16 +90,16 @@ export default {
     return {
       ruleForm: {
         ruleName: '',
-        ansMethod: 1,
+        reply_type: '1',
         dynamicItem: [
           {
-            key: '',
+            match: '',
             keyword: ''
           }
         ],
         replyList: [
           {
-            ansContent: 1,
+            form: '',
             content: ''
           }
         ]
@@ -125,37 +117,50 @@ export default {
       ],
       show: false,
       types: '',
-      reply_type: ''
+      id: ''
     }
   },
   created() {},
   methods: {
     addItem() {
       this.ruleForm.dynamicItem.push({
-        key: '',
+        match: '',
         keyword: ''
       })
     },
     deleteItem(item, index) {
       this.ruleForm.dynamicItem.splice(index, 1)
-      console.log(this.ruleForm.dynamicItem, '删除')
     },
     addContent() {
       this.ruleForm.replyList.push({
-        ansContent: '',
+        form: '',
         content: ''
       })
     },
     deleteContent(item, index) {
       this.ruleForm.replyList.splice(index, 1)
-      console.log(this.ruleForm.replyList, '删除')
+    },
+    getMsgDetail() {
+      this.$request.replyMessageDetail(this.id).then(res => {
+        console.log(res.data)
+        this.ruleForm.ruleName = res.data.name
+        this.ruleForm.dynamicItem = res.data.keywords
+        this.ruleForm.reply_type = res.data.reply_type
+        this.ruleForm.replyList = res.data.contents
+      })
+    },
+    init() {
+      if (this.state === 'edit') {
+        this.getMsgDetail()
+      }
     },
     confirm() {
       let param = {
         type: this.types,
-        reply_type: this.reply_type,
+        reply_type: this.ruleForm.reply_type,
         name: this.ruleForm.ruleName,
-        ...this.ruleForm
+        keywords: this.ruleForm.dynamicItem,
+        contents: this.ruleForm.replyList
       }
       if (this.state === 'add') {
         this.$request.addReplyMessage(param).then(res => {
@@ -175,7 +180,7 @@ export default {
           }
         })
       } else {
-        this.$request.updateReplyMessage().then(res => {
+        this.$request.updateReplyMessage(this.id, param).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -193,6 +198,7 @@ export default {
         })
       }
     },
+    // 上传图片
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
@@ -222,10 +228,8 @@ export default {
     },
     clear() {
       this.ruleForm.ruleName = ''
-      this.ruleForm.keyword = ''
-      this.ruleForm.ansContent = ''
-      this.ruleForm.ansMethod = ''
-      this.ruleForm.value = ''
+      this.ruleForm.dynamicItem = [{ match: '', keyword: '' }]
+      this.ruleForm.replyList = [{ form: '', content: '' }]
       this.baleImgList = []
     }
   }

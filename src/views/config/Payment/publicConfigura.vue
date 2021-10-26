@@ -39,7 +39,7 @@
           <i class="el-icon-plus"> </i>
         </el-upload>
       </el-form-item>
-      <!-- <el-form-item :label="$t('自定义菜单')">
+      <el-form-item :label="$t('自定义菜单')">
         <el-switch
           :active-text="$t('开启')"
           :active-value="1"
@@ -64,7 +64,7 @@
         >
         </el-switch>
         <el-button class="configBtn" @click="goReplyConfiguration">{{ $t('配置') }}</el-button>
-      </el-form-item> -->
+      </el-form-item>
     </el-form>
     <el-button :loading="$store.state.btnLoading" class="save-btn" @click="editOthers">{{
       $t('保存')

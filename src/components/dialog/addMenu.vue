@@ -124,9 +124,7 @@ export default {
       }
     }
   },
-  created() {
-    this.getMenuDetail()
-  },
+  created() {},
   methods: {
     onPreview(image) {
       dialog({
@@ -156,11 +154,20 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
+    init() {
+      if (this.state === 'edit') {
+        this.getMenuDetail()
+      }
+    },
     getMenuDetail() {
-      let id = this.id
-      this.$request.getMenuDetail(id).then(res => {
+      this.$request.getMenuDetail(this.id).then(res => {
         console.log(res.data)
-        console.log(res.data.sub_menus)
+        this.ruleForm.menuName = res.data.name
+        this.ruleForm.radio = res.data.type
+        this.ruleForm.content = res.data.content
+        this.ruleForm.pageAddress = res.data.page_path
+        this.ruleForm.webPage = res.data.url
+        this.ruleForm.appid = res.data.appid
       })
     },
     submit() {
@@ -226,7 +233,6 @@ export default {
       this.ruleForm.app = ''
       this.ruleForm.appPath = ''
       this.ruleForm.webPage = ''
-      this.baleImgList = []
     }
   }
 }

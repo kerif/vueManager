@@ -13,6 +13,7 @@
       border
       class="data-list"
       v-loading="tableLoading"
+      :row-class-name="getRowClass"
       height="calc(100vh - 360px)"
     >
       <!-- 二级分类列表 -->
@@ -143,6 +144,19 @@ export default {
         }
       })
     },
+    // 下拉箭头是否显示
+    getRowClass(row, rowIndex) {
+      let data = row.row
+      let res = []
+      console.log(rowIndex)
+      if (data.sub_menus && data.sub_menus.length > 0) {
+        res.push('row-expand-has')
+        return res
+      } else {
+        res.push('row-expand-unhas')
+        return res
+      }
+    },
     deleteMenu(id) {
       this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
@@ -177,6 +191,12 @@ export default {
   background-color: #fff !important;
   .remark {
     color: red;
+  }
+  .row-expand-unhas .el-table__expand-column {
+    pointer-events: none;
+  }
+  .row-expand-unhas .el-table__expand-column .el-icon {
+    visibility: hidden;
   }
 }
 </style>

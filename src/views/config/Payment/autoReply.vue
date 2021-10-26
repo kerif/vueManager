@@ -8,7 +8,7 @@
     <div v-if="this.activeName === '1'">
       <div class="main-top">
         <div class="number-sty">{{ $t('规则名称') }}:</div>
-        <el-input v-model="expressName" class="input-sty"> </el-input>
+        <el-input v-model="expressName" class="input-sty" clearable> </el-input>
         <el-button @click="search">{{ $t('搜索') }}</el-button>
         <el-button @click="addNewRule" style="background-color: #3540a5; color: #fff">{{
           $t('添加新规则')
@@ -21,17 +21,20 @@
         </el-table-column>
         <el-table-column :label="$t('回复类型')">
           <template slot-scope="scope">
-            <span v-if="scope.row.reply_type === 0">{{ $t('全部') }}</span>
-            <span v-if="scope.row.reply_type === 1">{{ $t('随机') }}</span>
+            <span v-if="scope.row.type === 1">{{ $t('关键词回复') }}</span>
+            <span v-if="scope.row.type === 2">{{ $t('被关注回复') }}</span>
+            <span v-if="scope.row.type === 3">{{ $t('收到消息回复') }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('操作')">
-          <el-button class="btn-dark-green btn-margin" @click="editRule(scope.row.id)">{{
-            $t('修改')
-          }}</el-button>
-          <el-button class="btn-light-red" @click="deleteMsg(scope.row.id)">{{
-            $t('删除')
-          }}</el-button>
+          <template slot-scope="scope">
+            <el-button class="btn-dark-green btn-margin" @click="editRule(scope.row.id)">{{
+              $t('修改')
+            }}</el-button>
+            <el-button class="btn-light-red" @click="deleteMsg(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -43,7 +46,7 @@
       <el-form>
         <!-- 消息类型 -->
         <el-form-item :label="$t('消息类型')">
-          <el-radio-group v-model="megType">
+          <el-radio-group v-model="topMegType">
             <el-radio :label="1">{{ $t('文字') }}</el-radio>
             <el-radio :label="2">{{ $t('图片') }}</el-radio>
           </el-radio-group>
@@ -52,12 +55,33 @@
             style="margin-left: 65px"
             :rows="5"
             :placeholder="$t('请输入内容')"
-            v-model="textarea"
+            v-model="topMessage"
+            v-if="this.topMegType === 1"
           >
           </el-input>
+          <div v-else style="margin-left: 65px">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+              <span class="model-box"></span>
+              <span class="operat-box">
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              </span>
+            </span>
+            <el-upload
+              v-show="baleImgList.length < 3"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
+            >
+              <i class="el-icon-plus"> </i>
+            </el-upload>
+          </div>
         </el-form-item>
         <el-form-item :label="$t('消息类型')">
-          <el-radio-group v-model="megType">
+          <el-radio-group v-model="bottomMegType">
             <el-radio :label="1">{{ $t('文字') }}</el-radio>
             <el-radio :label="2">{{ $t('图片') }}</el-radio>
           </el-radio-group>
@@ -66,9 +90,30 @@
             style="margin-left: 65px"
             :rows="5"
             :placeholder="$t('请输入内容')"
-            v-model="textarea"
+            v-model="bottomMessage"
+            v-if="this.bottomMegType === 1"
           >
           </el-input>
+          <div v-else style="margin-left: 65px">
+            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+              <span class="model-box"></span>
+              <span class="operat-box">
+                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              </span>
+            </span>
+            <el-upload
+              v-show="baleImgList.length < 1"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
+            >
+              <i class="el-icon-plus"> </i>
+            </el-upload>
+          </div>
         </el-form-item>
       </el-form>
     </div>
@@ -84,14 +129,37 @@
           style="margin-left: 65px"
           :rows="5"
           :placeholder="$t('请输入内容')"
-          v-model="textarea"
+          v-model="content"
+          v-if="this.ansContent === 1"
         >
         </el-input>
+        <div v-else style="margin-left: 65px">
+          <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+            <span class="model-box"></span>
+            <span class="operat-box">
+              <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+            </span>
+          </span>
+          <el-upload
+            v-show="baleImgList.length < 3"
+            class="avatar-uploader"
+            action=""
+            list-type="picture-card"
+            :http-request="uploadBaleImg"
+            :show-file-list="false"
+          >
+            <i class="el-icon-plus"> </i>
+          </el-upload>
+        </div>
       </el-form-item>
     </el-form>
     <div slot="footer" v-if="this.activeName !== '1'">
-      <el-button style="background-color: #3540a5; color: #fff">{{ $t('保存') }}</el-button>
-      <el-button>{{ $t('删除回复') }}</el-button>
+      <el-button style="background-color: #3540a5; color: #fff" @click="save">{{
+        $t('保存')
+      }}</el-button>
+      <el-button @click="clear">{{ $t('删除回复') }}</el-button>
     </div>
   </div>
 </template>
@@ -102,8 +170,12 @@ export default {
   data() {
     return {
       activeName: '1',
-      megType: 1,
-      textarea: '',
+      topMegType: 1,
+      topMessage: '',
+      bottomMegType: 1,
+      bottomMessage: '',
+      ansContent: '1',
+      content: '',
       expressName: '',
       baleImgList: [],
       tableData: []
@@ -114,19 +186,21 @@ export default {
   },
   methods: {
     addNewRule() {
-      dialog(
-        { type: 'addRule', state: 'add', types: this.activeName, reply_type: this.megType },
-        () => {
-          this.getList()
-        }
-      )
+      dialog({ type: 'addRule', state: 'add', types: this.activeName }, () => {
+        this.getList()
+      })
     },
     editRule(id) {
       dialog({ type: 'addRule', state: 'edit', id: id }, () => {
         this.getList()
       })
     },
-    save() {},
+    save() {
+      let param = {}
+      this.$request.addReplyMessage(param).then(res => {
+        console.log(res)
+      })
+    },
     fileData(row) {
       let arr = []
       row.keywords.forEach((item, match) => {
@@ -175,7 +249,14 @@ export default {
         console.log(this.tableData)
       })
     },
-    search() {},
+    search() {
+      this.getList()
+    },
+    clear() {
+      this.topMessage = ''
+      this.bottomMessage = ''
+      this.baleImgList = []
+    },
     deleteMsg(id) {
       this.$confirm(this.$t('您真的要删除此规则？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
@@ -208,6 +289,7 @@ export default {
 .autoReply-container {
   margin-left: 30px;
   font-size: 14px;
+  background-color: #fff !important;
   .main-top {
     margin-top: 20px;
     margin-bottom: 20px;
