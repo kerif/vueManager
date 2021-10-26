@@ -67,7 +67,7 @@
       <el-table-column :label="$t('操作')" width="300">
         <template slot-scope="scope">
           <!-- 添加子菜单 -->
-          <el-button class="btn-dark-green btn-margin" @click="addMenu(scope.row.id)">{{
+          <el-button class="btn-dark-green btn-margin" @click="addMenu(scope.row)">{{
             $t('添加子菜单')
           }}</el-button>
           <!-- 修改 -->
@@ -105,8 +105,11 @@ export default {
     this.getCustomMenuList()
   },
   methods: {
-    addMenu(id) {
-      dialog({ type: 'addMenu', state: 'add', id: id }, () => {
+    addMenu(data) {
+      if (data.sub_menus.length >= 5) {
+        return this.$message.error(this.$t('每级主菜单最多可以有五个子菜单栏目'))
+      }
+      dialog({ type: 'addMenu', state: 'add', id: data.id }, () => {
         this.getCustomMenuList()
       })
     },
@@ -116,6 +119,9 @@ export default {
       })
     },
     newMenu() {
+      if (this.menuList.length >= 3) {
+        return this.$message.error(this.$t('主菜单最多只能是三级'))
+      }
       dialog({ type: 'addMenu', state: 'add' }, () => {
         this.getCustomMenuList()
       })
