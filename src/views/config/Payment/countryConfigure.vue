@@ -77,6 +77,7 @@
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
           <div class="top-right">
+            <!-- <el-button class="btn-light-red" @click="batchImport">{{ $t('批量导入') }}</el-button> -->
             <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
             <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
           </div>
@@ -562,6 +563,8 @@ export default {
           })
       })
     },
+    // 批量导入
+    batchImport() {},
     // 批量删除
     batchDelete() {
       if (this.deleteNum.length === 0 && this.secondNum.length === 0) {

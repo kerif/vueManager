@@ -25,7 +25,7 @@
           <el-input v-model="item.keyword" style="width: 50%" :placeholder="$t('请输入关键词')">
           </el-input>
           <i class="el-icon-circle-plus-outline" @click="addItem"></i>
-          <i class="el-icon-remove-outline" @click="deleteItem" v-if="index !== 0"></i>
+          <i class="el-icon-remove-outline" @click="deleteItem(item)" v-if="index !== 0"></i>
         </el-form-item>
       </div>
       <!-- 回复内容 -->
@@ -64,7 +64,7 @@
             </el-upload>
           </div>
           <i class="el-icon-circle-plus-outline" @click="addContent"></i>
-          <i class="el-icon-remove-outline" @click="deleteContent" v-if="index !== 0"></i>
+          <i class="el-icon-remove-outline" @click="deleteContent(item)" v-if="index !== 0"></i>
         </el-form-item>
       </div>
       <!-- 回复方式 -->
@@ -128,8 +128,11 @@ export default {
         keyword: ''
       })
     },
-    deleteItem(item, index) {
-      this.ruleForm.dynamicItem.splice(index, 1)
+    deleteItem(item) {
+      var index = this.ruleForm.dynamicItem.indexOf(item)
+      if (index !== -1) {
+        this.ruleForm.dynamicItem.splice(index, 1)
+      }
     },
     addContent() {
       this.ruleForm.replyList.push({
@@ -137,8 +140,11 @@ export default {
         content: ''
       })
     },
-    deleteContent(item, index) {
-      this.ruleForm.replyList.splice(index, 1)
+    deleteContent(item) {
+      var index = this.ruleForm.replyList.indexOf(item)
+      if (index !== -1) {
+        this.ruleForm.replyList.splice(index, 1)
+      }
     },
     getMsgDetail() {
       this.$request.replyMessageDetail(this.id).then(res => {

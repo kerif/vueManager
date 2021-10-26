@@ -174,7 +174,7 @@ export default {
       topMessage: '',
       bottomMegType: 1,
       bottomMessage: '',
-      ansContent: '1',
+      ansContent: 1,
       content: '',
       expressName: '',
       baleImgList: [],
@@ -196,8 +196,10 @@ export default {
       })
     },
     save() {
-      let param = {}
-      this.$request.addReplyMessage(param).then(res => {
+      let param = {
+        type: this.activeName
+      }
+      this.$request.updateMsgReply(param).then(res => {
         console.log(res)
       })
     },
@@ -256,6 +258,19 @@ export default {
       this.topMessage = ''
       this.bottomMessage = ''
       this.baleImgList = []
+    },
+    getMsgReply() {
+      let param = {
+        type: this.activeName
+      }
+      this.$request.getMsgReply(param).then(res => {
+        console.log(res)
+        this.topMessage = res.data[0].content
+        this.topMegType = res.data[0].form
+      })
+    },
+    init() {
+      this.getMsgReply()
     },
     deleteMsg(id) {
       this.$confirm(this.$t('您真的要删除此规则？'), this.$t('提示'), {
