@@ -106,8 +106,8 @@ export default {
         token: '',
         aes_key: '',
         app_id: '',
-        menu: false,
-        message: false
+        menu: '',
+        message: ''
       },
       visibleOauth: false,
       baleImgList: [],
@@ -138,8 +138,16 @@ export default {
     },
     // 设置功能状态
     changeMenu(type) {
+      // let param = {}
+      // if (type === 'menu') {
+      //   param.status = this.setForm.menu_enabled
+      // } else {
+      //   param.status = this.setForm.message_enabled
+      // }
       this.$request.setFunctionStatus(type, this.setForm[type]).then(res => {
         if (res.ret) {
+          this.setForm.menu = res.data.menu_enabled
+          this.setForm.message = res.data.message_enabled
           this.$notify({
             title: this.$t('保存成功'),
             message: res.msg,

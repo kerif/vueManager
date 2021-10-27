@@ -179,8 +179,9 @@ export default {
         this.ruleForm.radio = res.data.type
         this.ruleForm.content = res.data.content
         this.ruleForm.appPath = res.data.page_path
-        this.ruleForm.webPage = res.data.url
+        this.ruleForm.pageAddress = res.data.url
         this.ruleForm.appid = res.data.appid
+        this.image = res.data.image
       })
     },
     submit() {

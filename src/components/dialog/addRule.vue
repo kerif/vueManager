@@ -48,7 +48,7 @@
               <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
               <span class="model-box"></span>
               <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
                 <i class="el-icon-delete" @click="onDeleteImg"></i>
               </span>
             </span>
@@ -90,7 +90,7 @@ export default {
     return {
       ruleForm: {
         ruleName: '',
-        reply_type: '1',
+        reply_type: 1,
         dynamicItem: [
           {
             match: '',
@@ -100,7 +100,8 @@ export default {
         replyList: [
           {
             form: '',
-            content: ''
+            content: '',
+            image: ''
           }
         ]
       },
@@ -137,7 +138,8 @@ export default {
     addContent() {
       this.ruleForm.replyList.push({
         form: '',
-        content: ''
+        content: '',
+        image: ''
       })
     },
     deleteContent(item) {
@@ -166,8 +168,8 @@ export default {
         reply_type: this.ruleForm.reply_type,
         name: this.ruleForm.ruleName,
         keywords: this.ruleForm.dynamicItem,
-        contents: this.ruleForm.replyList,
-        image: this.image
+        contents: this.ruleForm.replyList
+        // image: this.image
       }
       if (this.state === 'add') {
         this.$request.addReplyMessage(param).then(res => {
@@ -212,15 +214,17 @@ export default {
       })
     },
     onDeleteImg() {
-      this.image = ''
+      this.ruleForm.replyList[0].image = ''
     },
     // 上传打包照片
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          console.log(res)
-          this.image = res.data[0].path
+          // this.image = res.data[0].path
+          res.data.forEach(item => {
+            this.ruleForm.replyList[0].image = item.path
+          })
           this.$message.success(this.$t('上传成功'))
         } else {
           this.$message({

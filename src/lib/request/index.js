@@ -1976,7 +1976,7 @@ exports.getMsgReply = params => {
 }
 // 配置 更多配置 系统服务配置 公众号配置 更新关注回复和收到消息回复
 exports.updateMsgReply = params => {
-  return $form.put('wechat-oa-config/messages/replies', { params })
+  return $form.put('wechat-oa-config/messages/replies', params)
 }
 // 新增 邮件模版
 exports.addEmail = params => {

@@ -45,7 +45,45 @@
       </div>
       <el-form>
         <!-- 消息类型 -->
-        <el-form-item :label="$t('消息类型')">
+        <el-form-item
+          :label="$t('消息类型')"
+          v-for="(item, index) in replyList"
+          :key="'reply-' + index"
+        >
+          <el-radio-group v-model="item.form">
+            <el-radio :label="1">{{ $t('文字') }}</el-radio>
+            <el-radio :label="2">{{ $t('图片') }}</el-radio>
+          </el-radio-group>
+          <el-input
+            type="textarea"
+            :rows="5"
+            :placeholder="$t('请输入内容')"
+            v-model="item.content"
+            v-if="item.form === 1"
+          >
+          </el-input>
+          <div v-else style="margin-left: 65px">
+            <span class="img-item" v-if="item.image">
+              <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
+              <span class="model-box"></span>
+              <span class="operat-box">
+                <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg"></i>
+              </span>
+            </span>
+            <el-upload
+              v-show="!item.image"
+              class="avatar-uploader"
+              action=""
+              list-type="picture-card"
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
+            >
+              <i class="el-icon-plus"> </i>
+            </el-upload>
+          </div>
+        </el-form-item>
+        <!-- <el-form-item :label="$t('消息类型')">
           <el-radio-group v-model="topMegType">
             <el-radio :label="1">{{ $t('文字') }}</el-radio>
             <el-radio :label="2">{{ $t('图片') }}</el-radio>
@@ -79,7 +117,7 @@
               <i class="el-icon-plus"> </i>
             </el-upload>
           </div>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item :label="$t('消息类型')">
           <el-radio-group v-model="bottomMegType">
             <el-radio :label="1">{{ $t('文字') }}</el-radio>
@@ -119,7 +157,7 @@
     </div>
     <!-- 回复内容 -->
     <el-form v-if="this.activeName === '3'">
-      <el-form-item :label="$t('回复内容')">
+      <!-- <el-form-item :label="$t('回复内容')">
         <el-radio-group v-model="form">
           <el-radio :label="1">{{ $t('文字') }}</el-radio>
           <el-radio :label="2">{{ $t('图片') }}</el-radio>
@@ -144,6 +182,44 @@
           </span>
           <el-upload
             v-show="!this.image"
+            class="avatar-uploader"
+            action=""
+            list-type="picture-card"
+            :http-request="uploadBaleImg"
+            :show-file-list="false"
+          >
+            <i class="el-icon-plus"> </i>
+          </el-upload>
+        </div>
+      </el-form-item> -->
+      <el-form-item
+        :label="$t('回复内容')"
+        v-for="(item, index) in replyList"
+        :key="'info-' + index"
+      >
+        <el-radio-group v-model="item.form">
+          <el-radio :label="1">{{ $t('文字') }}</el-radio>
+          <el-radio :label="2">{{ $t('图片') }}</el-radio>
+        </el-radio-group>
+        <el-input
+          type="textarea"
+          :rows="5"
+          :placeholder="$t('请输入内容')"
+          v-model="item.content"
+          v-if="item.form === 1"
+        >
+        </el-input>
+        <div v-else style="margin-left: 65px">
+          <span class="img-item" v-if="item.image">
+            <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
+            <span class="model-box"></span>
+            <span class="operat-box">
+              <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
+              <i class="el-icon-delete" @click="onDeleteImg"></i>
+            </span>
+          </span>
+          <el-upload
+            v-show="!item.image"
             class="avatar-uploader"
             action=""
             list-type="picture-card"
@@ -178,11 +254,19 @@ export default {
       content: '',
       expressName: '',
       tableData: [],
-      image: ''
+      image: '',
+      replyList: [
+        {
+          form: '',
+          content: '',
+          image: ''
+        }
+      ]
     }
   },
   created() {
     this.getList()
+    this.getMsgReply()
   },
   methods: {
     addNewRule() {
@@ -197,10 +281,24 @@ export default {
     },
     save() {
       let param = {
-        type: this.activeName
+        type: this.activeName,
+        contents: this.replyList
       }
       this.$request.updateMsgReply(param).then(res => {
-        console.log(res)
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          // this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     fileData(row) {
@@ -220,15 +318,16 @@ export default {
       })
     },
     onDeleteImg() {
-      this.image = ''
+      this.replyList[0].image = ''
     },
     // 上传打包照片
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          this.image = res.data[0].path
-          console.log(this.image)
+          res.data.forEach(item => {
+            this.replyList[0].image = item.path
+          })
           this.$message.success(this.$t('上传成功'))
         } else {
           this.$message({
@@ -269,8 +368,7 @@ export default {
       }
       this.$request.getMsgReply(param).then(res => {
         console.log(res)
-        this.topMessage = res.data[0].content
-        this.topMegType = res.data[0].form
+        this.replyList = res.data
       })
     },
     init() {
