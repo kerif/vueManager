@@ -391,7 +391,7 @@ exports.getServicesList = (id, params) => {
 }
 // 配置 新路线 增值服务 获取详细
 exports.getServicesDetails = (id, serviceId, params) => {
-  return $form.get(`express-lines/${id}/services/${serviceId}`, params)
+  return $form.get(`express-lines/${id}/services/${serviceId}`, { params })
 }
 // 配置 新路线 增值服务 修改
 exports.updateServices = (id, serviceId, params) => {

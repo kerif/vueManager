@@ -4,15 +4,53 @@
       *{{ $t('可在此界面设置渠道专用增值服务，如加固费、打包费、保价费、偏远地区配送费等。') }}
     </h5>
     <div class="added-services">
-      <vxe-modal
-        v-model="dialogVisible"
-        @hide="closeDialog"
-        id="myModal6"
-        width="70%"
-        show-footer
-        esc-closable
-        type="modal"
+      <vxe-grid
+        ref="xGrid"
+        resizable
+        auto-resize
+        show-overflow
+        highlight-hover-row
+        :export-config="{}"
+        :tooltip-config="{ enterable: true }"
+        :data="servicesList"
+        v-bind="gridOptions"
+      >
+        <template #toolbar_buttons>
+          <div style="display: flex; gap: 10px">
+            <el-button size="small" type="primary" plain @click="addServices">{{
+              $t('新增')
+            }}</el-button>
+            <el-upload
+              class="upload-demo"
+              action=""
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
+            >
+              <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
+            </el-upload>
+            <el-button size="small" @click="exportDataEvent" type="success" plain>{{
+              $t('导出')
+            }}</el-button>
+          </div>
+        </template>
+        <template #num1_header="{ column }">
+          <el-tooltip class="item" effect="dark" :content="column.params.tips" placement="top">
+            <div class="function">
+              <span>{{ column.title }}</span>
+              <span class="func-icon">
+                <i class="el-icon-edit-outline" @click="editRowEvent(column)"></i>
+                <i class="el-icon-delete" @click="deleteServices(column)"></i>
+              </span>
+            </div>
+          </el-tooltip>
+        </template>
+      </vxe-grid>
+      <el-dialog
+        class="dialog-container"
         :title="title"
+        :visible.sync="dialogVisible"
+        width="70%"
+        @close="handleClose"
       >
         <div>
           <el-form ref="form" :model="form" label-width="120px">
@@ -88,63 +126,15 @@
             </el-form-item>
           </el-form>
         </div>
-        <span slot="footer">
+        <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="save">{{ $t('确 定') }}</el-button>
         </span>
-      </vxe-modal>
-      <vxe-grid
-        ref="xGrid"
-        resizable
-        auto-resize
-        show-overflow
-        highlight-hover-row
-        :export-config="{}"
-        :tooltip-config="{ enterable: true }"
-        :data="servicesList"
-        v-bind="gridOptions"
-      >
-        <template #toolbar_buttons>
-          <div style="display: flex; gap: 10px">
-            <el-button size="small" type="primary" plain @click="addServices">{{
-              $t('新增')
-            }}</el-button>
-            <el-upload
-              class="upload-demo"
-              action=""
-              :http-request="uploadBaleImg"
-              :show-file-list="false"
-            >
-              <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
-            </el-upload>
-            <el-button size="small" @click="exportDataEvent" type="success" plain>{{
-              $t('导出')
-            }}</el-button>
-          </div>
-        </template>
-        <template #num1_header="{ column }">
-          <el-tooltip class="item" effect="dark" :content="column.params.tips" placement="top">
-            <div class="function">
-              <span>{{ column.title }}</span>
-              <span class="func-icon">
-                <i class="el-icon-edit-outline" @click="editRowEvent(column)"></i>
-                <i class="el-icon-delete" @click="deleteServices(column)"></i>
-              </span>
-            </div>
-          </el-tooltip>
-        </template>
-      </vxe-grid>
+      </el-dialog>
     </div>
-    <nle-pagination
-      style="margin-top: 5px"
-      :pageParams="page_params"
-      :notNeedInitQuery="false"
-    ></nle-pagination>
   </div>
 </template>
 
 <script>
-import NlePagination from '@/components/pagination'
-import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -235,10 +225,6 @@ export default {
       localization: {}
     }
   },
-  components: {
-    NlePagination
-  },
-  mixins: [pagination],
   created() {
     this.getList()
     this.getLanguageList()
@@ -281,16 +267,8 @@ export default {
           minWidth: 400
         }
       ]
-      let page_params = {
-        keyword: this.page_params.keyword,
-        page: this.page_params.page,
-        size: this.page_params.size,
-        total: this.page_params.total
-      }
-      this.$request.getServicesList(this.$route.params.id, { ...page_params }).then(res => {
+      this.$request.getServicesList(this.$route.params.id, { size: 200 }).then(res => {
         if (res.ret) {
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
           this.localization = res.localization
           this.servicesList = res.data.map(item => {
             const areas = item.areas
@@ -362,27 +340,29 @@ export default {
       this.detailsList = this.servicesList
       this.serviceId = +row.property.split('_')[1]
       // 获取编辑时表格数据
-      this.$request.getServicesDetails(this.$route.params.id, this.serviceId).then(res => {
-        if (res.ret) {
-          this.form.name = res.data.name
-          this.form.type = res.data.type
-          this.form.is_forced = res.data.is_forced
-          this.form.remark = res.data.remark
-          this.form.name_translations = res.data.name_translations
-          this.form.remark_translations = res.data.remark_translations
-          this.detailsList = res.data.prices.map(item => {
-            const name = item.region_name
-            const areas = item.areas
-              .map(item => item.country_name + item.area_name + item.sub_area_name)
-              .join('、')
-            return {
-              ...item,
-              name,
-              areas
-            }
-          })
-        }
-      })
+      this.$request
+        .getServicesDetails(this.$route.params.id, this.serviceId, { size: 200 })
+        .then(res => {
+          if (res.ret) {
+            this.form.name = res.data.name
+            this.form.type = res.data.type
+            this.form.is_forced = res.data.is_forced
+            this.form.remark = res.data.remark
+            this.form.name_translations = res.data.name_translations
+            this.form.remark_translations = res.data.remark_translations
+            this.detailsList = res.data.prices.map(item => {
+              const name = item.region_name
+              const areas = item.areas
+                .map(item => item.country_name + item.area_name + item.sub_area_name)
+                .join('、')
+              return {
+                ...item,
+                name,
+                areas
+              }
+            })
+          }
+        })
     },
     // 新增增值服务
     addServices() {
@@ -513,7 +493,7 @@ export default {
       }
     },
     // 关闭弹窗
-    closeDialog() {
+    handleClose() {
       this.detailsList.length = 0
       this.serviceId = 0
       this.form.type = ''
