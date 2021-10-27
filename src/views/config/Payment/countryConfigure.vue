@@ -77,7 +77,18 @@
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
           <div class="top-right">
-            <!-- <el-button class="btn-light-red" @click="batchImport">{{ $t('批量导入') }}</el-button> -->
+            <!-- <el-upload
+              class="upload-demo"
+              action=""
+              :limit="1"
+              :on-remove="onFileRemove"
+              :file-list="fileList"
+              :on-exceed="handleExceed"
+              :before-upload="beforeUploadImg"
+              :http-request="uploadBaleImg"
+            >
+              <el-button class="btn-light-red">{{ $t('批量导入') }}</el-button>
+            </el-upload> -->
             <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
             <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
           </div>
@@ -288,7 +299,8 @@ export default {
         content_translations: {}
       },
       state: '',
-      areasId: ''
+      areasId: '',
+      fileList: []
     }
   },
   created() {
@@ -564,11 +576,36 @@ export default {
       })
     },
     // 批量导入
-    batchImport() {
-      this.$request.batchImport().then(res => {
-        console.log(res)
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.fileList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+          console.log(res.data, 'res.data')
+          this.urlName = res.data[0].name
+          console.log(this.urlName, 'this.urlName')
+          this.getList()
+        }
       })
     },
+    onUpload(file) {
+      let params = new FormData()
+      params.append(`files[${0}][file]`, file)
+      return this.$request.batchImport(params)
+    },
+    handleExceed() {
+      return this.$message.warning(this.$t('当前限制上传1个文件'))
+    },
+    // batchImport() {
+    //   this.$request.batchImport().then(res => {
+    //     console.log(res)
+    //   })
+    // },
     // 批量删除
     batchDelete() {
       if (this.deleteNum.length === 0 && this.secondNum.length === 0) {
