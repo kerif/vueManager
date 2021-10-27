@@ -564,7 +564,11 @@ export default {
       })
     },
     // 批量导入
-    batchImport() {},
+    batchImport() {
+      this.$request.batchImport().then(res => {
+        console.log(res)
+      })
+    },
     // 批量删除
     batchDelete() {
       if (this.deleteNum.length === 0 && this.secondNum.length === 0) {

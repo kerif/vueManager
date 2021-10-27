@@ -60,16 +60,16 @@
           >
           </el-input>
           <div v-else style="margin-left: 65px">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+            <span class="img-item" v-if="this.image">
+              <img :src="$baseUrl.IMAGE_URL + image" alt="" class="goods-img" />
               <span class="model-box"></span>
               <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg"></i>
               </span>
             </span>
             <el-upload
-              v-show="baleImgList.length < 3"
+              v-show="!this.image"
               class="avatar-uploader"
               action=""
               list-type="picture-card"
@@ -80,7 +80,7 @@
             </el-upload>
           </div>
         </el-form-item>
-        <el-form-item :label="$t('消息类型')">
+        <!-- <el-form-item :label="$t('消息类型')">
           <el-radio-group v-model="bottomMegType">
             <el-radio :label="1">{{ $t('文字') }}</el-radio>
             <el-radio :label="2">{{ $t('图片') }}</el-radio>
@@ -95,16 +95,16 @@
           >
           </el-input>
           <div v-else style="margin-left: 65px">
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+            <span class="img-item" v-if="this.image">
+              <img :src="$baseUrl.IMAGE_URL + image" alt="" class="goods-img" />
               <span class="model-box"></span>
               <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg"></i>
               </span>
             </span>
             <el-upload
-              v-show="baleImgList.length < 1"
+              v-show="!this.image"
               class="avatar-uploader"
               action=""
               list-type="picture-card"
@@ -114,13 +114,13 @@
               <i class="el-icon-plus"> </i>
             </el-upload>
           </div>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
     </div>
     <!-- 回复内容 -->
     <el-form v-if="this.activeName === '3'">
       <el-form-item :label="$t('回复内容')">
-        <el-radio-group v-model="ansContent">
+        <el-radio-group v-model="form">
           <el-radio :label="1">{{ $t('文字') }}</el-radio>
           <el-radio :label="2">{{ $t('图片') }}</el-radio>
         </el-radio-group>
@@ -130,20 +130,20 @@
           :rows="5"
           :placeholder="$t('请输入内容')"
           v-model="content"
-          v-if="this.ansContent === 1"
+          v-if="this.form === 1"
         >
         </el-input>
         <div v-else style="margin-left: 65px">
-          <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-            <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+          <span class="img-item" v-if="this.image">
+            <img :src="$baseUrl.IMAGE_URL + image" alt="" class="goods-img" />
             <span class="model-box"></span>
             <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
+              <i class="el-icon-delete" @click="onDeleteImg"></i>
             </span>
           </span>
           <el-upload
-            v-show="baleImgList.length < 3"
+            v-show="!this.image"
             class="avatar-uploader"
             action=""
             list-type="picture-card"
@@ -174,11 +174,11 @@ export default {
       topMessage: '',
       bottomMegType: 1,
       bottomMessage: '',
-      ansContent: 1,
+      form: 1,
       content: '',
       expressName: '',
-      baleImgList: [],
-      tableData: []
+      tableData: [],
+      image: ''
     }
   },
   created() {
@@ -219,18 +219,21 @@ export default {
         image
       })
     },
-    onDeleteImg(index) {
-      this.baleImgList.splice(index, 1)
-      console.log(index)
+    onDeleteImg() {
+      this.image = ''
     },
     // 上传打包照片
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          res.data.forEach(item => {
-            this.baleImgList.push(item.path)
-            console.log(item)
+          this.image = res.data[0].path
+          console.log(this.image)
+          this.$message.success(this.$t('上传成功'))
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
           })
         }
       })
@@ -257,7 +260,8 @@ export default {
     clear() {
       this.topMessage = ''
       this.bottomMessage = ''
-      this.baleImgList = []
+      this.image = ''
+      this.content = ''
     },
     getMsgReply() {
       let param = {

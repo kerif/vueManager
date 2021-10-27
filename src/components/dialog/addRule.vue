@@ -44,16 +44,16 @@
           >
           </el-input>
           <div v-else>
-            <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-              <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+            <span class="img-item" v-if="item.image">
+              <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
               <span class="model-box"></span>
               <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
+                <i class="el-icon-delete" @click="onDeleteImg"></i>
               </span>
             </span>
             <el-upload
-              v-show="baleImgList.length < 3"
+              v-show="!item.image"
               class="avatar-uploader"
               action=""
               list-type="picture-card"
@@ -104,7 +104,6 @@ export default {
           }
         ]
       },
-      baleImgList: [],
       options: [
         {
           value: '0',
@@ -117,6 +116,7 @@ export default {
       ],
       show: false,
       types: '',
+      image: '',
       id: ''
     }
   },
@@ -166,7 +166,8 @@ export default {
         reply_type: this.ruleForm.reply_type,
         name: this.ruleForm.ruleName,
         keywords: this.ruleForm.dynamicItem,
-        contents: this.ruleForm.replyList
+        contents: this.ruleForm.replyList,
+        image: this.image
       }
       if (this.state === 'add') {
         this.$request.addReplyMessage(param).then(res => {
@@ -204,27 +205,30 @@ export default {
         })
       }
     },
-    // 上传图片
-    uploadBaleImg(item) {
-      let file = item.file
-      this.onUpload(file).then(res => {
-        if (res.ret) {
-          res.data.forEach(item => {
-            this.baleImgList.push(item.path)
-            console.log(item)
-          })
-        }
-      })
-    },
     onPreview(image) {
       dialog({
         type: 'previewimage',
         image
       })
     },
-    onDeleteImg(index) {
-      this.baleImgList.splice(index, 1)
-      console.log(index)
+    onDeleteImg() {
+      this.image = ''
+    },
+    // 上传打包照片
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.image = res.data[0].path
+          this.$message.success(this.$t('上传成功'))
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 上传图片
     onUpload(file) {
@@ -236,7 +240,7 @@ export default {
       this.ruleForm.ruleName = ''
       this.ruleForm.dynamicItem = [{ match: '', keyword: '' }]
       this.ruleForm.replyList = [{ form: '', content: '' }]
-      this.baleImgList = []
+      this.image = ''
     }
   }
 }
@@ -259,9 +263,11 @@ export default {
   }
   .el-icon-circle-plus-outline:before {
     font-size: 24px;
+    cursor: pointer;
   }
   .el-icon-remove-outline:before {
     font-size: 24px;
+    cursor: pointer;
   }
 }
 </style>
