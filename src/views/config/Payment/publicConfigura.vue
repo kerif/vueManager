@@ -106,8 +106,8 @@ export default {
         token: '',
         aes_key: '',
         app_id: '',
-        menu: '',
-        message: ''
+        menu: 0,
+        message: 0
       },
       visibleOauth: false,
       baleImgList: [],
@@ -138,16 +138,8 @@ export default {
     },
     // 设置功能状态
     changeMenu(type) {
-      // let param = {}
-      // if (type === 'menu') {
-      //   param.status = this.setForm.menu_enabled
-      // } else {
-      //   param.status = this.setForm.message_enabled
-      // }
       this.$request.setFunctionStatus(type, this.setForm[type]).then(res => {
         if (res.ret) {
-          this.setForm.menu = res.data.menu_enabled
-          this.setForm.message = res.data.message_enabled
           this.$notify({
             title: this.$t('保存成功'),
             message: res.msg,
@@ -198,6 +190,8 @@ export default {
         this.setForm.aes_key = res.data.aes_key
         res.data.image && (this.baleImgList[0] = res.data.image)
         // this.$set(this.baleImgList, 0, res.data.image)
+        this.setForm.menu = res.data.menu_enabled
+        this.setForm.message = res.data.message_enabled
       })
     },
     // 修改公众号配置
