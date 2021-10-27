@@ -387,7 +387,7 @@ exports.importPrice = (id, params) => {
 }
 // 配置 新路线 增值服务 获取列表
 exports.getServicesList = (id, params) => {
-  return $form.get(`express-lines/${id}/services`, params)
+  return $form.get(`express-lines/${id}/services`, { params })
 }
 // 配置 新路线 增值服务 获取详细
 exports.getServicesDetails = (id, serviceId, params) => {

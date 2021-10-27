@@ -189,7 +189,7 @@ export default {
     async getList() {
       let res = {}
       this.tableLoading = true
-      this.page_params = {
+      let page_params = {
         keyword: this.page_params.keyword,
         page: this.page_params.page,
         size: this.page_params.size,
@@ -197,15 +197,14 @@ export default {
       }
       if (this.$route.params.id) {
         // 获取分区模板
-        res = await this.$request.getRegions(this.$route.params.id, { ...this.page_params })
+        res = await this.$request.getRegions(this.$route.params.id, { ...page_params })
       } else {
         // 获取预设分区模板
-        res = await this.$request.regionTemplates(this.$route.query.id, { ...this.page_params })
+        res = await this.$request.regionTemplates(this.$route.query.id, { ...page_params })
       }
       this.tableLoading = false
       if (res.ret) {
         this.addressList = res.data
-        console.log(this.addressList)
         this.page_params.page = res.meta.current_page
         this.page_params.total = res.meta.total
         this.$nextTick(() => {
