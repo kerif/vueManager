@@ -36,16 +36,16 @@
       </el-form-item>
       <!-- 图片 -->
       <el-form-item class="updateChe" v-if="this.ruleForm.radio === 2">
-        <span class="img-item" v-for="(item, index) in baleImgList" :key="index">
-          <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+        <span class="img-item" v-if="this.image">
+          <img :src="$baseUrl.IMAGE_URL + image" alt="" class="goods-img" />
           <span class="model-box"></span>
           <span class="operat-box">
-            <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-            <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+            <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
+            <i class="el-icon-delete" @click="onDeleteImg"></i>
           </span>
         </span>
         <el-upload
-          v-show="baleImgList.length < 1"
+          v-show="!this.image"
           class="avatar-uploader"
           action=""
           list-type="picture-card"
@@ -113,7 +113,6 @@ export default {
       state: '',
       id: '',
       image: '',
-      baleImgList: [],
       ruleForm: {
         menuName: '',
         radio: 1,
@@ -133,21 +132,21 @@ export default {
         image
       })
     },
-    onDeleteImg(index) {
-      this.baleImgList.splice(index, 1)
-      console.log(index)
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
+    onDeleteImg() {
+      this.image = ''
     },
     // 上传打包照片
     uploadBaleImg(item) {
+      console.log(item)
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          res.data.forEach(item => {
-            this.baleImgList.push(item.path)
-            console.log(item)
+          this.image = res.data[0].path
+          this.$message.success(this.$t('上传成功'))
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
           })
         }
       })
@@ -157,6 +156,16 @@ export default {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
+    },
+    beforeUploadImg(file) {
+      if (!/^image/.test(file.type)) {
+        this.$message.info(this.$t('请上传图片类型文件'))
+        return false
+      } else if (file.size > 1024 * 1024 * 10) {
+        this.$message.info(this.$t('上传图片大小不能超过10M'))
+        return false
+      }
+      return true
     },
     init() {
       if (this.state === 'edit') {
@@ -169,7 +178,7 @@ export default {
         this.ruleForm.menuName = res.data.name
         this.ruleForm.radio = res.data.type
         this.ruleForm.content = res.data.content
-        this.ruleForm.pageAddress = res.data.page_path
+        this.ruleForm.appPath = res.data.page_path
         this.ruleForm.webPage = res.data.url
         this.ruleForm.appid = res.data.appid
       })
@@ -182,7 +191,7 @@ export default {
         url: this.ruleForm.pageAddress,
         page_path: this.ruleForm.appPath,
         parent_id: this.id,
-        image: this.baleImgList
+        image: this.image
       }
       if (this.ruleForm.radio === 1) {
         param.type = 1
@@ -237,6 +246,7 @@ export default {
       this.ruleForm.app = ''
       this.ruleForm.appPath = ''
       this.ruleForm.webPage = ''
+      this.image = ''
     }
   }
 }

@@ -48,6 +48,7 @@
           active-color="#13ce66"
           inactive-color="gray"
           v-model="setForm.menu"
+          @change="changeMenu('menu')"
         >
         </el-switch>
         <el-button class="configBtn" @click="goCustomMenu">{{ $t('配置') }}</el-button>
@@ -60,7 +61,8 @@
           :inactive-text="$t('关闭')"
           active-color="#13ce66"
           inactive-color="gray"
-          v-model="setForm.reply"
+          v-model="setForm.message"
+          @change="changeMenu('message')"
         >
         </el-switch>
         <el-button class="configBtn" @click="goReplyConfiguration">{{ $t('配置') }}</el-button>
@@ -105,7 +107,7 @@ export default {
         aes_key: '',
         app_id: '',
         menu: false,
-        reply: false
+        message: false
       },
       visibleOauth: false,
       baleImgList: [],
@@ -131,6 +133,24 @@ export default {
         if (res.ret) {
           this.messageData = Object.values(res.data)
           this.tableLoading = false
+        }
+      })
+    },
+    // 设置功能状态
+    changeMenu(type) {
+      this.$request.setFunctionStatus(type, this.setForm[type]).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('保存成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
