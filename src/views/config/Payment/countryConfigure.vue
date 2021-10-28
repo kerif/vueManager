@@ -77,7 +77,7 @@
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
           <div class="top-right">
-            <!-- <el-upload
+            <el-upload
               class="upload-demo"
               action=""
               :limit="1"
@@ -87,10 +87,14 @@
               :before-upload="beforeUploadImg"
               :http-request="uploadBaleImg"
             >
-              <el-button class="btn-light-red">{{ $t('批量导入') }}</el-button>
-            </el-upload> -->
-            <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
-            <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
+              <el-button class="btn-light-red" style="margin: 0 10px" slot="trigger">{{
+                $t('批量导入')
+              }}</el-button>
+              <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
+              <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
+            </el-upload>
+            <!-- <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
+            <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button> -->
           </div>
           <!-- @expand-change="onExpand" -->
           <div style="height: calc(100vh - 480px)">
@@ -300,7 +304,8 @@ export default {
       },
       state: '',
       areasId: '',
-      fileList: []
+      fileList: [],
+      file: ''
     }
   },
   created() {
@@ -581,23 +586,14 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           console.log(res)
-          res.data.forEach(item => {
-            this.fileList.push({
-              name: item.name,
-              url: item.path
-            })
-          })
-          console.log(res.data, 'res.data')
-          this.urlName = res.data[0].name
-          console.log(this.urlName, 'this.urlName')
-          this.getList()
+          this.currentCountryList = res.data
         }
       })
     },
     onUpload(file) {
       let params = new FormData()
       params.append(`file`, file)
-      return this.$request.uploadFiles(params)
+      return this.$request.batchImport(params)
     },
     handleExceed() {
       return this.$message.warning(this.$t('当前限制上传1个文件'))
@@ -877,10 +873,10 @@ export default {
     line-height: 30px;
     padding-right: 20px;
   }
-  .upload-demo {
-    display: inline-block;
-    margin: 0 10px;
-  }
+  // .upload-demo .el-upload-list {
+  //   display: inline-block;
+  //   transform: translateY(8px);
+  // }
 }
 .innnerClass {
   .input-sty {

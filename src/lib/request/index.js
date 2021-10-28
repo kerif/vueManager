@@ -1919,8 +1919,8 @@ exports.verifyJuhe = params => {
   return $form.post(`configs/verify-juhe`, params)
 }
 // 配置 批量导入
-exports.batchImport = params => {
-  return $form.post('countries/import', params)
+exports.batchImport = file => {
+  return $file.post('countries/import', file)
 }
 // 配置 设置功能状态
 exports.setFunctionStatus = (func, status) => {
