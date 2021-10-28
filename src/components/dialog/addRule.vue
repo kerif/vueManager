@@ -169,7 +169,6 @@ export default {
         name: this.ruleForm.ruleName,
         keywords: this.ruleForm.dynamicItem,
         contents: this.ruleForm.replyList
-        // image: this.image
       }
       if (this.state === 'add') {
         this.$request.addReplyMessage(param).then(res => {
@@ -252,7 +251,7 @@ export default {
     clear() {
       this.ruleForm.ruleName = ''
       this.ruleForm.dynamicItem = [{ match: '', keyword: '' }]
-      this.ruleForm.replyList = [{ form: '', content: '' }]
+      this.ruleForm.replyList = [{ form: '', content: '', image: '' }]
       this.image = ''
     }
   }

@@ -240,7 +240,7 @@ export default {
       })
     },
     editRule(id) {
-      dialog({ type: 'addRule', state: 'edit', id: id }, () => {
+      dialog({ type: 'addRule', state: 'edit', id: id, types: this.activeName }, () => {
         this.getList()
       })
     },
