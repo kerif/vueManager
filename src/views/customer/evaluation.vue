@@ -127,6 +127,12 @@
             <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">{{
               $t('设为精选')
             }}</el-button>
+            <el-button
+              class="btn-light-red"
+              v-if="item.is_admin_add === 1"
+              @click="deleteRecommend(item.id)"
+              >{{ $t('删除') }}</el-button
+            >
           </div>
         </li>
       </ul>
@@ -373,6 +379,31 @@ export default {
         })
       })
     },
+    // 删除
+    deleteRecommend(id) {
+      this.$confirm(this.$t('您真的要执行此操作吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteComment(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
     // 预设分区表 获取国家
     getCountry() {
       this.$request.countryLocation().then(res => {
@@ -427,7 +458,7 @@ export default {
     },
     submit() {
       let param = {
-        order_sn: '111',
+        order_sn: 'DEB020392032111',
         username: this.ruleForm.nickname,
         user_id: this.ruleForm.customerId,
         content: this.ruleForm.content,
@@ -442,6 +473,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          this.showDialog = false
           this.getList()
         } else {
           this.$notify({
