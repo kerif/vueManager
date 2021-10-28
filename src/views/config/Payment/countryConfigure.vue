@@ -586,7 +586,7 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           console.log(res)
-          this.currentCountryList = res.data
+          this.currentCountryList.push(res.data)
         }
       })
     },
@@ -602,6 +602,7 @@ export default {
     onFileRemove(file, fileList) {
       this.fileList = fileList
     },
+    beforeUploadImg() {},
     // 批量删除
     batchDelete() {
       if (this.deleteNum.length === 0 && this.secondNum.length === 0) {
@@ -679,7 +680,6 @@ export default {
       this.getAllCountries()
       // this.getDetails()
     },
-    beforeUploadImg() {},
     // 获取详情
     getDetails() {
       this.$request.getNotifi(this.areasId).then(res => {

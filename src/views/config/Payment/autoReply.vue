@@ -245,6 +245,9 @@ export default {
       })
     },
     addContent() {
+      if (this.replyList.length >= 2) {
+        return this.$message.error(this.$t('被关注回复最多只能同事发两条消息'))
+      }
       this.replyList.push({
         form: '',
         content: '',
