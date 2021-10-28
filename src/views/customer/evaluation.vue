@@ -38,9 +38,9 @@
       </div>
     </div>
     <div class="comment">
-      <!-- <el-button type="danger" size="mini" class="evaluate" @click="showDialog = true">{{
+      <el-button type="danger" size="mini" class="evaluate" @click="showDialog = true">{{
         $t('新增评价')
-      }}</el-button> -->
+      }}</el-button>
       <div class="searchGroup">
         <search-group
           :placeholder="$t('请输入关键字')"
@@ -427,7 +427,7 @@ export default {
     },
     submit() {
       let param = {
-        order_sn: '',
+        order_sn: '111',
         username: this.ruleForm.nickname,
         user_id: this.ruleForm.customerId,
         content: this.ruleForm.content,
