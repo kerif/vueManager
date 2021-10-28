@@ -13,7 +13,7 @@
       <!-- 关键词 -->
       <div v-for="(item, index) in ruleForm.dynamicItem" :key="index">
         <el-form-item :label="$t('关键词')">
-          <el-select v-model="item.match" style="width: 20%" :placeholder="$t('半匹配')">
+          <el-select v-model="item.match" style="width: 20%" :placeholder="$t('请选择')">
             <el-option
               v-for="item in options"
               :key="item.value"
