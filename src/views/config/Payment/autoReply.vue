@@ -1,6 +1,6 @@
 <template>
   <div class="autoReply-container">
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" @tab-click="onTabChange">
       <el-tab-pane :label="$t('关键词回复')" name="1"></el-tab-pane>
       <el-tab-pane :label="$t('被关注回复')" name="2"></el-tab-pane>
       <el-tab-pane :label="$t('收到消息回复')" name="3"></el-tab-pane>
@@ -58,6 +58,7 @@
             type="textarea"
             :rows="5"
             :placeholder="$t('请输入内容')"
+            style="margin-left: 65px"
             v-model="item.content"
             v-if="item.form === 1"
           >
@@ -82,6 +83,8 @@
               <i class="el-icon-plus"> </i>
             </el-upload>
           </div>
+          <i class="el-icon-circle-plus-outline" @click="addContent"></i>
+          <i class="el-icon-remove-outline" @click="deleteContent(item)" v-if="index !== 0"></i>
         </el-form-item>
         <!-- <el-form-item :label="$t('消息类型')">
           <el-radio-group v-model="topMegType">
@@ -95,41 +98,6 @@
             :placeholder="$t('请输入内容')"
             v-model="topMessage"
             v-if="this.topMegType === 1"
-          >
-          </el-input>
-          <div v-else style="margin-left: 65px">
-            <span class="img-item" v-if="this.image">
-              <img :src="$baseUrl.IMAGE_URL + image" alt="" class="goods-img" />
-              <span class="model-box"></span>
-              <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg"></i>
-              </span>
-            </span>
-            <el-upload
-              v-show="!this.image"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadBaleImg"
-              :show-file-list="false"
-            >
-              <i class="el-icon-plus"> </i>
-            </el-upload>
-          </div>
-        </el-form-item> -->
-        <!-- <el-form-item :label="$t('消息类型')">
-          <el-radio-group v-model="bottomMegType">
-            <el-radio :label="1">{{ $t('文字') }}</el-radio>
-            <el-radio :label="2">{{ $t('图片') }}</el-radio>
-          </el-radio-group>
-          <el-input
-            type="textarea"
-            style="margin-left: 65px"
-            :rows="5"
-            :placeholder="$t('请输入内容')"
-            v-model="bottomMessage"
-            v-if="this.bottomMegType === 1"
           >
           </el-input>
           <div v-else style="margin-left: 65px">
@@ -205,6 +173,7 @@
           type="textarea"
           :rows="5"
           :placeholder="$t('请输入内容')"
+          style="margin-left: 65px"
           v-model="item.content"
           v-if="item.form === 1"
         >
@@ -246,8 +215,6 @@ export default {
   data() {
     return {
       activeName: '1',
-      topMegType: 1,
-      topMessage: '',
       bottomMegType: 1,
       bottomMessage: '',
       form: 1,
@@ -278,6 +245,19 @@ export default {
       dialog({ type: 'addRule', state: 'edit', id: id }, () => {
         this.getList()
       })
+    },
+    addContent() {
+      this.replyList.push({
+        form: '',
+        content: '',
+        image: ''
+      })
+    },
+    deleteContent(item) {
+      var index = this.replyList.indexOf(item)
+      if (index !== -1) {
+        this.replyList.splice(index, 1)
+      }
     },
     save() {
       let param = {
@@ -360,7 +340,21 @@ export default {
       this.topMessage = ''
       this.bottomMessage = ''
       this.image = ''
+      this.replyList = [
+        {
+          form: '',
+          content: '',
+          image: ''
+        }
+      ]
       this.content = ''
+    },
+    onTabChange(tab) {
+      if (tab.name == 1) {
+        this.getList(tab.name)
+      } else {
+        this.getMsgReply(tab.name)
+      }
     },
     getMsgReply() {
       let param = {
@@ -424,9 +418,11 @@ export default {
   }
   .el-icon-circle-plus-outline:before {
     font-size: 24px;
+    margin-left: 65px;
   }
   .el-icon-remove-outline:before {
     font-size: 24px;
+    margin-left: 5px;
   }
   .el-dialog__header {
     background-color: #0e102a;

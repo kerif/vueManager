@@ -580,6 +580,7 @@ export default {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
+          console.log(res)
           res.data.forEach(item => {
             this.fileList.push({
               name: item.name,
@@ -595,17 +596,16 @@ export default {
     },
     onUpload(file) {
       let params = new FormData()
-      params.append(`files[${0}][file]`, file)
-      return this.$request.batchImport(params)
+      params.append(`file`, file)
+      return this.$request.uploadFiles(params)
     },
     handleExceed() {
       return this.$message.warning(this.$t('当前限制上传1个文件'))
     },
-    // batchImport() {
-    //   this.$request.batchImport().then(res => {
-    //     console.log(res)
-    //   })
-    // },
+    // 文件删除
+    onFileRemove(file, fileList) {
+      this.fileList = fileList
+    },
     // 批量删除
     batchDelete() {
       if (this.deleteNum.length === 0 && this.secondNum.length === 0) {
@@ -683,6 +683,7 @@ export default {
       this.getAllCountries()
       // this.getDetails()
     },
+    beforeUploadImg() {},
     // 获取详情
     getDetails() {
       this.$request.getNotifi(this.areasId).then(res => {
@@ -875,6 +876,10 @@ export default {
     background-color: #f5f5f5;
     line-height: 30px;
     padding-right: 20px;
+  }
+  .upload-demo {
+    display: inline-block;
+    margin: 0 10px;
   }
 }
 .innnerClass {
