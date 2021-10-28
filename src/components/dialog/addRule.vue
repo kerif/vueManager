@@ -213,7 +213,13 @@ export default {
       })
     },
     onDeleteImg() {
-      this.ruleForm.replyList[0].image = ''
+      if (this.ruleForm.replyList[0].image) {
+        this.ruleForm.replyList[0].image = ''
+      } else if (this.ruleForm.replyList[1].image) {
+        this.ruleForm.replyList[1].image = ''
+      }
+      // this.ruleForm.replyList[0].image = ''
+      // this.ruleForm.replyList[1].image = ''
     },
     // 上传打包照片
     uploadBaleImg(item) {
