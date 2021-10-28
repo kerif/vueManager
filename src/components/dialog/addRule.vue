@@ -57,7 +57,11 @@
               class="avatar-uploader"
               action=""
               list-type="picture-card"
-              :http-request="uploadBaleImg"
+              :http-request="
+                item => {
+                  uploadBaleImg(index, item)
+                }
+              "
               :show-file-list="false"
             >
               <i class="el-icon-plus"> </i>
@@ -222,23 +226,15 @@ export default {
       // this.ruleForm.replyList[1].image = ''
     },
     // 上传打包照片
-    uploadBaleImg(item) {
+    uploadBaleImg(index, item) {
+      console.log(item)
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          // this.image = res.data[0].path
-          // res.data.forEach(item => {
-          //   this.ruleForm.replyList[0].image = item.path
+          // res.data.forEach((item, index) => {
+          //   this.ruleForm.replyList[index].image = item.path
           // })
-          if (this.ruleForm.replyList.length === 1) {
-            res.data.forEach(item => {
-              this.ruleForm.replyList[0].image = item.path
-            })
-          } else if (this.ruleForm.replyList.length === 2) {
-            res.data.forEach(item => {
-              this.ruleForm.replyList[1].image = item.path
-            })
-          }
+          this.ruleForm.replyList[index].image = res.data[0].path
           this.$message.success(this.$t('上传成功'))
         } else {
           this.$message({
