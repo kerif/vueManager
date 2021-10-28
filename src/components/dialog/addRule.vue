@@ -71,7 +71,7 @@
       <el-form-item :label="$t('回复方式')">
         <el-radio-group v-model="ruleForm.reply_type">
           <el-radio :label="1">{{ $t('随机一条') }}</el-radio>
-          <el-radio :label="2">{{ $t('回复全部') }}</el-radio>
+          <el-radio :label="0">{{ $t('回复全部') }}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -222,9 +222,18 @@ export default {
       this.onUpload(file).then(res => {
         if (res.ret) {
           // this.image = res.data[0].path
-          res.data.forEach(item => {
-            this.ruleForm.replyList[0].image = item.path
-          })
+          // res.data.forEach(item => {
+          //   this.ruleForm.replyList[0].image = item.path
+          // })
+          if (this.ruleForm.replyList.length === 1) {
+            res.data.forEach(item => {
+              this.ruleForm.replyList[0].image = item.path
+            })
+          } else if (this.ruleForm.replyList.length === 2) {
+            res.data.forEach(item => {
+              this.ruleForm.replyList[1].image = item.path
+            })
+          }
           this.$message.success(this.$t('上传成功'))
         } else {
           this.$message({
