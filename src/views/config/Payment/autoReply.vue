@@ -216,7 +216,6 @@ export default {
     return {
       activeName: '1',
       bottomMegType: 1,
-      bottomMessage: '',
       form: 1,
       content: '',
       expressName: '',
@@ -233,7 +232,6 @@ export default {
   },
   created() {
     this.getList()
-    this.getMsgReply()
   },
   methods: {
     addNewRule() {
@@ -337,12 +335,10 @@ export default {
       this.getList()
     },
     clear() {
-      this.topMessage = ''
-      this.bottomMessage = ''
       this.image = ''
       this.replyList = [
         {
-          form: '',
+          form: '1',
           content: '',
           image: ''
         }
