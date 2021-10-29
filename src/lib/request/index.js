@@ -559,6 +559,14 @@ exports.getComments = params => {
 exports.getAddEvaluate = params => {
   return $form.post('order-comments', params)
 }
+// 客服中心 评价管理 删除
+exports.deleteComment = id => {
+  return $form.delete(`order-comments/${id}`)
+}
+// 客服中心 评价管理  获取功能配置
+exports.getFunConfig = () => {
+  return $form.get('function-config')
+}
 // 客服中心 取消或设置精选
 exports.updateRecommend = (id, status) => {
   return $form.put(`order-comments/${id}/recommend/${status}`)
@@ -1918,6 +1926,18 @@ exports.verifySmtp = params => {
 exports.verifyJuhe = params => {
   return $form.post(`configs/verify-juhe`, params)
 }
+// 配置 下载国际导入模板
+exports.getImportTemplate = config => {
+  return $form.get('countries/import-template', config)
+}
+// 配置 批量导入
+exports.batchImport = file => {
+  return $file.post('countries/import', file)
+}
+// 配置 设置功能状态
+exports.setFunctionStatus = (func, status) => {
+  return $form.put(`wechat-oa-config/${func}/status/${status}`)
+}
 // 配置 更多配置 系统服务配置 公众号配置 列表
 exports.customMenuList = () => {
   return $form.get('wechat-oa-config/menus')
@@ -1961,6 +1981,14 @@ exports.updateReplyMessage = (id, params) => {
 // 配置 更多配置 系统服务配置 公众号配置 回复消息 删除
 exports.deleteReplyMessage = id => {
   return $form.delete(`wechat-oa-config/messages/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 获取被关注回复或收到消息回复
+exports.getMsgReply = params => {
+  return $form.get('wechat-oa-config/messages/replies', { params })
+}
+// 配置 更多配置 系统服务配置 公众号配置 更新关注回复和收到消息回复
+exports.updateMsgReply = params => {
+  return $form.put('wechat-oa-config/messages/replies', params)
 }
 // 新增 邮件模版
 exports.addEmail = params => {

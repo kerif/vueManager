@@ -3,9 +3,7 @@
     <div class="remark">
       {{ $t('*公众号菜单主菜单最多只能是三级，每级主菜单最多可以有五个子菜单栏目') }}
     </div>
-    <el-button type="success" @click="newMenu" style="margin: 10px 0; background-color: #3540a5">{{
-      $t('添加菜单')
-    }}</el-button>
+    <el-button type="success" @click="newMenu" class="add-menu">{{ $t('添加菜单') }}</el-button>
     <el-table
       :data="menuList"
       stripe
@@ -13,6 +11,7 @@
       border
       class="data-list"
       v-loading="tableLoading"
+      :row-class-name="getRowClass"
       height="calc(100vh - 360px)"
     >
       <!-- 二级分类列表 -->
@@ -66,7 +65,7 @@
       <el-table-column :label="$t('操作')" width="300">
         <template slot-scope="scope">
           <!-- 添加子菜单 -->
-          <el-button class="btn-dark-green btn-margin" @click="addMenu(scope.row.id)">{{
+          <el-button class="btn-dark-green btn-margin" @click="addMenu(scope.row)">{{
             $t('添加子菜单')
           }}</el-button>
           <!-- 修改 -->
@@ -104,8 +103,11 @@ export default {
     this.getCustomMenuList()
   },
   methods: {
-    addMenu(id) {
-      dialog({ type: 'addMenu', state: 'add', id: id }, () => {
+    addMenu(data) {
+      if (data.sub_menus.length >= 5) {
+        return this.$message.error(this.$t('每级主菜单最多可以有五个子菜单栏目'))
+      }
+      dialog({ type: 'addMenu', state: 'add', id: data.id }, () => {
         this.getCustomMenuList()
       })
     },
@@ -115,6 +117,9 @@ export default {
       })
     },
     newMenu() {
+      if (this.menuList.length >= 3) {
+        return this.$message.error(this.$t('主菜单最多只能是三级'))
+      }
       dialog({ type: 'addMenu', state: 'add' }, () => {
         this.getCustomMenuList()
       })
@@ -142,6 +147,19 @@ export default {
           })
         }
       })
+    },
+    // 下拉箭头是否显示
+    getRowClass(row, rowIndex) {
+      let data = row.row
+      let res = []
+      console.log(rowIndex)
+      if (data.sub_menus && data.sub_menus.length > 0) {
+        res.push('row-expand-has')
+        return res
+      } else {
+        res.push('row-expand-unhas')
+        return res
+      }
     },
     deleteMenu(id) {
       this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
@@ -177,6 +195,16 @@ export default {
   background-color: #fff !important;
   .remark {
     color: red;
+  }
+  .add-menu {
+    margin: 10px 0;
+    background-color: #3540a5;
+  }
+  .row-expand-unhas .el-table__expand-column {
+    pointer-events: none;
+  }
+  .row-expand-unhas .el-table__expand-column .el-icon {
+    visibility: hidden;
   }
 }
 </style>

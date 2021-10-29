@@ -39,7 +39,7 @@
           <i class="el-icon-plus"> </i>
         </el-upload>
       </el-form-item>
-      <!-- <el-form-item :label="$t('自定义菜单')">
+      <el-form-item :label="$t('自定义菜单')">
         <el-switch
           :active-text="$t('开启')"
           :active-value="1"
@@ -48,6 +48,7 @@
           active-color="#13ce66"
           inactive-color="gray"
           v-model="setForm.menu"
+          @change="changeMenu('menu')"
         >
         </el-switch>
         <el-button class="configBtn" @click="goCustomMenu">{{ $t('配置') }}</el-button>
@@ -60,11 +61,12 @@
           :inactive-text="$t('关闭')"
           active-color="#13ce66"
           inactive-color="gray"
-          v-model="setForm.reply"
+          v-model="setForm.message"
+          @change="changeMenu('message')"
         >
         </el-switch>
         <el-button class="configBtn" @click="goReplyConfiguration">{{ $t('配置') }}</el-button>
-      </el-form-item> -->
+      </el-form-item>
     </el-form>
     <el-button :loading="$store.state.btnLoading" class="save-btn" @click="editOthers">{{
       $t('保存')
@@ -104,8 +106,8 @@ export default {
         token: '',
         aes_key: '',
         app_id: '',
-        menu: false,
-        reply: false
+        menu: 0,
+        message: 0
       },
       visibleOauth: false,
       baleImgList: [],
@@ -131,6 +133,24 @@ export default {
         if (res.ret) {
           this.messageData = Object.values(res.data)
           this.tableLoading = false
+        }
+      })
+    },
+    // 设置功能状态
+    changeMenu(type) {
+      this.$request.setFunctionStatus(type, this.setForm[type]).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('保存成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
@@ -170,6 +190,8 @@ export default {
         this.setForm.aes_key = res.data.aes_key
         res.data.image && (this.baleImgList[0] = res.data.image)
         // this.$set(this.baleImgList, 0, res.data.image)
+        this.setForm.menu = res.data.menu_enabled
+        this.setForm.message = res.data.message_enabled
       })
     },
     // 修改公众号配置
