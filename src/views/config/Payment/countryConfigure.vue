@@ -259,10 +259,6 @@
           <el-button type="primary" @click="newCountry">{{ $t('确定') }}</el-button>
         </div>
       </el-dialog>
-      <!-- <div slot="footer" class="dialog-footer">
-        <el-button @click="outerVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="innerVisible = true">{{ $t('确定') }}</el-button>
-      </div> -->
     </el-dialog>
   </div>
 </template>
