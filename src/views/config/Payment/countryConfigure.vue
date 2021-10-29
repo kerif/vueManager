@@ -83,7 +83,6 @@
               :limit="1"
               :on-remove="onFileRemove"
               :file-list="fileList"
-              :on-exceed="handleExceed"
               :before-upload="beforeUploadImg"
               :http-request="uploadBaleImg"
             >
