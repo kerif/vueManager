@@ -158,6 +158,27 @@
       @close="clear"
     >
       <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
+        <!-- 客户头像 -->
+        <el-form-item :label="$t('客户头像')">
+          <span class="img-item" v-if="this.image" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + this.image" alt="" class="goods-img" />
+            <span class="model-box"></span>
+            <span class="operat-box">
+              <i class="el-icon-zoom-in" @click="onPreviewImg(image)"></i>
+              <i class="el-icon-delete" @click="onDelete"></i>
+            </span>
+          </span>
+          <el-upload
+            v-show="!this.image"
+            class="avatar-uploader"
+            action=""
+            list-type="picture-card"
+            :http-request="uploadBaleImage"
+            :show-file-list="false"
+          >
+            <i class="el-icon-plus"> </i>
+          </el-upload>
+        </el-form-item>
         <!--客户昵称 -->
         <el-form-item :label="$t('客户昵称')">
           <el-input v-model="ruleForm.nickname" :placeholder="$t('请输入')"> </el-input>
@@ -259,6 +280,7 @@ export default {
       value: 2,
       countryList: [],
       enabled: 0,
+      image: '',
       hasFilterCondition: false,
       ruleForm: {
         nickname: '',
@@ -335,6 +357,35 @@ export default {
     },
     // 上传图片
     onUpload(file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
+    },
+    onPreviewImg(image) {
+      dialog({
+        type: 'previewimage',
+        image
+      })
+    },
+    onDelete() {
+      this.image = ''
+    },
+    uploadBaleImage(item) {
+      let file = item.file
+      this.onUploads(file).then(res => {
+        if (res.ret) {
+          this.image = res.data[0].path
+          this.$message.success(this.$t('上传成功'))
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 上传封面
+    onUploads(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
@@ -470,6 +521,7 @@ export default {
     submit() {
       let param = {
         order_sn: 'DEB020392032111',
+        avatar: this.image,
         username: this.ruleForm.nickname,
         user_id: this.ruleForm.customerId,
         content: this.ruleForm.content,
@@ -706,6 +758,19 @@ export default {
     .el-rate {
       margin-top: 10px;
     }
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  .operat-box i {
+    font-size: 20px;
+    color: #fff;
+    margin-right: 10px;
   }
 }
 </style>

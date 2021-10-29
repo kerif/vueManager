@@ -272,6 +272,7 @@ import dialog from '@/components/dialog'
 import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import { downloadStreamFile } from '@/utils/index'
 export default {
   components: {
     AddBtn,
@@ -581,22 +582,11 @@ export default {
     },
     // 下载模板
     uploadList() {
-      this.$request.getImportTemplate().then(res => {
-        if (res.ret) {
-          this.urlExcel = res.data.url
-          window.open(this.urlExcel)
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
+      let param = {
+        responseType: 'blob'
+      }
+      this.$request.getImportTemplate(param).then(res => {
+        downloadStreamFile(res, 'file', 'xlsx')
       })
     },
     // 批量导入

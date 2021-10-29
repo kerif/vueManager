@@ -1927,8 +1927,8 @@ exports.verifyJuhe = params => {
   return $form.post(`configs/verify-juhe`, params)
 }
 // 配置 下载国际导入模板
-exports.getImportTemplate = () => {
-  return $form.get('countries/import-template')
+exports.getImportTemplate = config => {
+  return $form.get('countries/import-template', config)
 }
 // 配置 批量导入
 exports.batchImport = file => {
