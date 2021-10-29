@@ -88,7 +88,7 @@
               :http-request="uploadBaleImg"
             >
               <el-button class="btn-blue" @click="uploadList" style="margin: 0 10px">{{
-                $t('下载国际导入模板')
+                $t('下载国家导入模板')
               }}</el-button>
               <el-button class="btn-light-red" style="margin: 0 10px" slot="trigger">{{
                 $t('批量导入')
@@ -594,8 +594,9 @@ export default {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          console.log(res)
-          this.currentCountryList.push(res.data)
+          // this.currentCountryList.push(res.data)
+          this.currentCountryList = res.data
+          this.goDeatils(this.countryName, this.countryId)
         }
       })
     },
@@ -886,6 +887,9 @@ export default {
   //   display: inline-block;
   //   transform: translateY(8px);
   // }
+  .el-upload-list__item-name {
+    display: none;
+  }
 }
 .innnerClass {
   .input-sty {
