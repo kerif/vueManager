@@ -49,7 +49,7 @@
               <span class="model-box"></span>
               <span class="operat-box">
                 <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg"></i>
+                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
               </span>
             </span>
             <el-upload
@@ -141,7 +141,7 @@ export default {
     },
     addContent() {
       this.ruleForm.replyList.push({
-        form: '',
+        form: 1,
         content: '',
         image: ''
       })
@@ -216,14 +216,13 @@ export default {
         image
       })
     },
-    onDeleteImg() {
-      if (this.ruleForm.replyList[0].image) {
-        this.ruleForm.replyList[0].image = ''
-      } else if (this.ruleForm.replyList[1].image) {
-        this.ruleForm.replyList[1].image = ''
-      }
-      // this.ruleForm.replyList[0].image = ''
-      // this.ruleForm.replyList[1].image = ''
+    onDeleteImg(index) {
+      // if (this.ruleForm.replyList[0].image) {
+      //   this.ruleForm.replyList[0].image = ''
+      // } else if (this.ruleForm.replyList[1].image) {
+      //   this.ruleForm.replyList[1].image = ''
+      // }
+      this.ruleForm.replyList[index].image = ''
     },
     // 上传打包照片
     uploadBaleImg(index, item) {
@@ -282,6 +281,19 @@ export default {
   .el-icon-remove-outline:before {
     font-size: 24px;
     cursor: pointer;
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  .operat-box i {
+    font-size: 20px;
+    color: #fff;
+    margin-right: 10px;
   }
 }
 </style>

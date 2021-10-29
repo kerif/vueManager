@@ -69,7 +69,7 @@
               <span class="model-box"></span>
               <span class="operat-box">
                 <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg"></i>
+                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
               </span>
             </span>
             <el-upload
@@ -77,7 +77,11 @@
               class="avatar-uploader"
               action=""
               list-type="picture-card"
-              :http-request="uploadBaleImg"
+              :http-request="
+                item => {
+                  uploadBaleImg(index, item)
+                }
+              "
               :show-file-list="false"
             >
               <i class="el-icon-plus"> </i>
@@ -184,7 +188,7 @@
             <span class="model-box"></span>
             <span class="operat-box">
               <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
-              <i class="el-icon-delete" @click="onDeleteImg"></i>
+              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
             </span>
           </span>
           <el-upload
@@ -192,7 +196,11 @@
             class="avatar-uploader"
             action=""
             list-type="picture-card"
-            :http-request="uploadBaleImg"
+            :http-request="
+              item => {
+                uploadBaleImg(index, item)
+              }
+            "
             :show-file-list="false"
           >
             <i class="el-icon-plus"> </i>
@@ -298,17 +306,18 @@ export default {
         image
       })
     },
-    onDeleteImg() {
-      this.replyList[0].image = ''
+    onDeleteImg(index) {
+      this.replyList[index].image = ''
     },
     // 上传打包照片
-    uploadBaleImg(item) {
+    uploadBaleImg(index, item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          res.data.forEach(item => {
-            this.replyList[0].image = item.path
-          })
+          // res.data.forEach(item => {
+          //   this.replyList[0].image = item.path
+          // })
+          this.replyList[index].image = res.data[0].path
           this.$message.success(this.$t('上传成功'))
         } else {
           this.$message({
@@ -341,7 +350,7 @@ export default {
       this.image = ''
       this.replyList = [
         {
-          form: '1',
+          form: 1,
           content: '',
           image: ''
         }
@@ -438,6 +447,19 @@ export default {
   }
   .el-table td div {
     text-align: center;
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  .operat-box i {
+    font-size: 20px;
+    color: #fff;
+    margin-right: 10px;
   }
 }
 </style>
