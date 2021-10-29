@@ -87,6 +87,9 @@
               :before-upload="beforeUploadImg"
               :http-request="uploadBaleImg"
             >
+              <el-button class="btn-blue" @click="uploadList" style="margin: 0 10px">{{
+                $t('下载国际导入模板')
+              }}</el-button>
               <el-button class="btn-light-red" style="margin: 0 10px" slot="trigger">{{
                 $t('批量导入')
               }}</el-button>
@@ -574,6 +577,26 @@ export default {
               })
             }
           })
+      })
+    },
+    // 下载模板
+    uploadList() {
+      this.$request.getImportTemplate().then(res => {
+        if (res.ret) {
+          this.urlExcel = res.data.url
+          window.open(this.urlExcel)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 批量导入

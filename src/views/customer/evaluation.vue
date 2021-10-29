@@ -38,9 +38,14 @@
       </div>
     </div>
     <div class="comment">
-      <el-button type="danger" size="mini" class="evaluate" @click="showDialog = true">{{
-        $t('新增评价')
-      }}</el-button>
+      <el-button
+        type="danger"
+        size="mini"
+        v-if="this.enabled === 1"
+        class="evaluate"
+        @click="showDialog = true"
+        >{{ $t('新增评价') }}</el-button
+      >
       <div class="searchGroup">
         <search-group
           :placeholder="$t('请输入关键字')"
@@ -253,6 +258,7 @@ export default {
       form: {},
       value: 2,
       countryList: [],
+      enabled: 0,
       hasFilterCondition: false,
       ruleForm: {
         nickname: '',
@@ -447,6 +453,11 @@ export default {
       this.onTime(this.timeList)
       this.onShipStatus()
     },
+    getConfig() {
+      this.$request.getFunConfig().then(res => {
+        this.enabled = res.data[0].enabled
+      })
+    },
     clear() {
       this.ruleForm.nickname = ''
       this.ruleForm.customerId = ''
@@ -489,6 +500,7 @@ export default {
     // this.getAgentData()
     this.getList()
     this.getCountry()
+    this.getConfig()
   }
 }
 </script>

@@ -563,6 +563,10 @@ exports.getAddEvaluate = params => {
 exports.deleteComment = id => {
   return $form.delete(`order-comments/${id}`)
 }
+// 客服中心 评价管理  获取功能配置
+exports.getFunConfig = () => {
+  return $form.get('function-config')
+}
 // 客服中心 取消或设置精选
 exports.updateRecommend = (id, status) => {
   return $form.put(`order-comments/${id}/recommend/${status}`)
@@ -1921,6 +1925,10 @@ exports.verifySmtp = params => {
 // 更多配置 服务配置 检测Juhe
 exports.verifyJuhe = params => {
   return $form.post(`configs/verify-juhe`, params)
+}
+// 配置 下载国际导入模板
+exports.getImportTemplate = () => {
+  return $form.get('countries/import-template')
 }
 // 配置 批量导入
 exports.batchImport = file => {
