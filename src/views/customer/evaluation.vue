@@ -38,9 +38,14 @@
       </div>
     </div>
     <div class="comment">
-      <!-- <el-button type="danger" size="mini" class="evaluate" @click="showDialog = true">{{
-        $t('新增评价')
-      }}</el-button> -->
+      <el-button
+        type="danger"
+        size="mini"
+        v-if="this.enabled === 1"
+        class="evaluate"
+        @click="showDialog = true"
+        >{{ $t('新增评价') }}</el-button
+      >
       <div class="searchGroup">
         <search-group
           :placeholder="$t('请输入关键字')"
@@ -127,6 +132,12 @@
             <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">{{
               $t('设为精选')
             }}</el-button>
+            <el-button
+              class="btn-light-red"
+              v-if="item.is_admin_add === 1"
+              @click="deleteRecommend(item.id)"
+              >{{ $t('删除') }}</el-button
+            >
           </div>
         </li>
       </ul>
@@ -147,6 +158,27 @@
       @close="clear"
     >
       <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
+        <!-- 客户头像 -->
+        <el-form-item :label="$t('客户头像')">
+          <span class="img-item" v-if="this.image" :key="index">
+            <img :src="$baseUrl.IMAGE_URL + this.image" alt="" class="goods-img" />
+            <span class="model-box"></span>
+            <span class="operat-box">
+              <i class="el-icon-zoom-in" @click="onPreviewImg(image)"></i>
+              <i class="el-icon-delete" @click="onDelete"></i>
+            </span>
+          </span>
+          <el-upload
+            v-show="!this.image"
+            class="avatar-uploader"
+            action=""
+            list-type="picture-card"
+            :http-request="uploadBaleImage"
+            :show-file-list="false"
+          >
+            <i class="el-icon-plus"> </i>
+          </el-upload>
+        </el-form-item>
         <!--客户昵称 -->
         <el-form-item :label="$t('客户昵称')">
           <el-input v-model="ruleForm.nickname" :placeholder="$t('请输入')"> </el-input>
@@ -157,7 +189,13 @@
         </el-form-item>
         <!-- 显示时间 -->
         <el-form-item :label="$t('显示时间')">
-          <el-date-picker v-model="ruleForm.display_time" type="date" :placeholder="$t('选择日期')">
+          <el-date-picker
+            v-model="ruleForm.display_time"
+            type="date"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            :placeholder="$t('选择日期')"
+          >
           </el-date-picker>
         </el-form-item>
         <!-- 收货国家 -->
@@ -247,6 +285,8 @@ export default {
       form: {},
       value: 2,
       countryList: [],
+      enabled: 0,
+      image: '',
       hasFilterCondition: false,
       ruleForm: {
         nickname: '',
@@ -327,6 +367,35 @@ export default {
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
+    onPreviewImg(image) {
+      dialog({
+        type: 'previewimage',
+        image
+      })
+    },
+    onDelete() {
+      this.image = ''
+    },
+    uploadBaleImage(item) {
+      let file = item.file
+      this.onUploads(file).then(res => {
+        if (res.ret) {
+          this.image = res.data[0].path
+          this.$message.success(this.$t('上传成功'))
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 上传封面
+    onUploads(file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
+    },
     // 精选状态选择
     onShipStatus() {
       this.page_params.handleQueryChange('status', this.is_recommend)
@@ -356,6 +425,31 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$request.updateRecommend(id, status).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    // 删除
+    deleteRecommend(id) {
+      this.$confirm(this.$t('您真的要执行此操作吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteComment(id).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
@@ -416,6 +510,11 @@ export default {
       this.onTime(this.timeList)
       this.onShipStatus()
     },
+    getConfig() {
+      this.$request.getFunConfig().then(res => {
+        this.enabled = res.data[0].enabled
+      })
+    },
     clear() {
       this.ruleForm.nickname = ''
       this.ruleForm.customerId = ''
@@ -427,12 +526,14 @@ export default {
     },
     submit() {
       let param = {
-        order_sn: '',
+        order_sn: 'DEB020392032111',
+        avatar: this.image,
         username: this.ruleForm.nickname,
         user_id: this.ruleForm.customerId,
         content: this.ruleForm.content,
         images: this.baleImgList,
         score: this.ruleForm.rate,
+        created_at: this.ruleForm.display_time,
         country_id: this.ruleForm.country_id
       }
       this.$request.getAddEvaluate(param).then(res => {
@@ -442,6 +543,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          this.showDialog = false
           this.getList()
         } else {
           this.$notify({
@@ -457,6 +559,7 @@ export default {
     // this.getAgentData()
     this.getList()
     this.getCountry()
+    this.getConfig()
   }
 }
 </script>
@@ -662,6 +765,19 @@ export default {
     .el-rate {
       margin-top: 10px;
     }
+  }
+  .operat-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  .operat-box i {
+    font-size: 20px;
+    color: #fff;
+    margin-right: 10px;
   }
 }
 </style>
