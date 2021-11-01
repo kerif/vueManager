@@ -68,7 +68,7 @@
             <!-- 头像 -->
             <el-col :span="2">
               <div class="list-img">
-                <img :src="item.user.avatar" />
+                <img :src="`${$baseUrl.IMAGE_URL}` + item.user.avatar" />
               </div>
             </el-col>
             <el-col :span="15" :offset="1">
@@ -524,6 +524,7 @@ export default {
       this.ruleForm.content = ''
       this.ruleForm.rate = null
       this.baleImgList = []
+      this.image = ''
     },
     submit() {
       let param = {
