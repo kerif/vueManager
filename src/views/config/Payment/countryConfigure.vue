@@ -77,8 +77,26 @@
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
           <div class="top-right">
-            <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
-            <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
+            <el-upload
+              class="upload-demo"
+              action=""
+              :limit="1"
+              :on-remove="onFileRemove"
+              :file-list="fileList"
+              :before-upload="beforeUploadImg"
+              :http-request="uploadBaleImg"
+            >
+              <el-button class="btn-blue" @click="uploadList" style="margin: 0 10px">{{
+                $t('下载国家导入模板')
+              }}</el-button>
+              <el-button class="btn-light-red" style="margin: 0 10px" slot="trigger">{{
+                $t('批量导入')
+              }}</el-button>
+              <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
+              <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
+            </el-upload>
+            <!-- <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
+            <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button> -->
           </div>
           <!-- @expand-change="onExpand" -->
           <div style="height: calc(100vh - 480px)">
@@ -243,10 +261,6 @@
           <el-button type="primary" @click="newCountry">{{ $t('确定') }}</el-button>
         </div>
       </el-dialog>
-      <!-- <div slot="footer" class="dialog-footer">
-        <el-button @click="outerVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="innerVisible = true">{{ $t('确定') }}</el-button>
-      </div> -->
     </el-dialog>
   </div>
 </template>
@@ -257,6 +271,7 @@ import dialog from '@/components/dialog'
 import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import { downloadStreamFile } from '@/utils/index'
 export default {
   components: {
     AddBtn,
@@ -287,7 +302,9 @@ export default {
         content_translations: {}
       },
       state: '',
-      areasId: ''
+      areasId: '',
+      fileList: [],
+      file: ''
     }
   },
   created() {
@@ -562,6 +579,39 @@ export default {
           })
       })
     },
+    // 下载模板
+    uploadList() {
+      let param = {
+        responseType: 'blob'
+      }
+      this.$request.getImportTemplate(param).then(res => {
+        downloadStreamFile(res, 'file', 'xlsx')
+      })
+    },
+    // 批量导入
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          // this.currentCountryList.push(res.data)
+          this.currentCountryList = res.data
+          this.goDeatils(this.countryName, this.countryId)
+        }
+      })
+    },
+    onUpload(file) {
+      let params = new FormData()
+      params.append(`file`, file)
+      return this.$request.batchImport(params)
+    },
+    handleExceed() {
+      return this.$message.warning(this.$t('当前限制上传1个文件'))
+    },
+    // 文件删除
+    onFileRemove(file, fileList) {
+      this.fileList = fileList
+    },
+    beforeUploadImg() {},
     // 批量删除
     batchDelete() {
       if (this.deleteNum.length === 0 && this.secondNum.length === 0) {
@@ -831,6 +881,13 @@ export default {
     background-color: #f5f5f5;
     line-height: 30px;
     padding-right: 20px;
+  }
+  // .upload-demo .el-upload-list {
+  //   display: inline-block;
+  //   transform: translateY(8px);
+  // }
+  .el-upload-list__item-name {
+    display: none;
   }
 }
 .innnerClass {
