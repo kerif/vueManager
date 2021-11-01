@@ -310,8 +310,15 @@ export default {
       rows.splice(index, 1)
     },
     confirm() {
-      if (this.tableData[0].areaData.length) {
-        this.areasData = this.tableData[0].areaData.map(item => ({
+      // if (this.tableData[0].areaData.length) {
+      //   this.areasData = this.tableData[0].areaData.map(item => ({
+      //     country_id: item[0],
+      //     area_id: item[1],
+      //     sub_area_id: item[2]
+      //   }))
+      // }
+      if (this.areaData.length) {
+        this.areasData = this.areaData.map(item => ({
           country_id: item[0],
           area_id: item[1],
           sub_area_id: item[2]
@@ -325,7 +332,7 @@ export default {
           type: this.ruleForm.radio
         }
         if (this.ruleForm.radio === 1) {
-          params.areas = this.tableData[0].areaData.length ? this.areasData : this.areaIds
+          params.areas = this.areaData.length ? this.areasData : this.areaIds
         } else {
           params.country_id = this.ruleForm.country_id
           params.postcodes = this.postData
@@ -375,7 +382,7 @@ export default {
           type: this.ruleForm.radio
         }
         if (this.ruleForm.radio === 1) {
-          params.areas = this.tableData[0].areaData.length ? this.areasData : this.areaIds
+          params.areas = this.areaData.length ? this.areasData : this.areaIds
         } else {
           params.country_id = this.ruleForm.country_id
           params.postcodes = this.postData
