@@ -68,7 +68,7 @@
             <!-- 头像 -->
             <el-col :span="2">
               <div class="list-img">
-                <img :src="`${$baseUrl.IMAGE_URL}` + item.user.avatar" />
+                <img :src="item.user.avatar" />
               </div>
             </el-col>
             <el-col :span="15" :offset="1">
