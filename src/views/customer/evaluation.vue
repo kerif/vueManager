@@ -286,6 +286,7 @@ export default {
       value: 2,
       countryList: [],
       enabled: 0,
+      index: '',
       image: '',
       hasFilterCondition: false,
       ruleForm: {
