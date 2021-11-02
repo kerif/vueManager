@@ -191,7 +191,7 @@
         <el-form-item :label="$t('显示时间')">
           <el-date-picker
             v-model="ruleForm.display_time"
-            type="date"
+            type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
             :placeholder="$t('选择日期')"
@@ -286,6 +286,7 @@ export default {
       value: 2,
       countryList: [],
       enabled: 0,
+      index: '',
       image: '',
       hasFilterCondition: false,
       ruleForm: {
@@ -523,6 +524,7 @@ export default {
       this.ruleForm.content = ''
       this.ruleForm.rate = null
       this.baleImgList = []
+      this.image = ''
     },
     submit() {
       let param = {
@@ -532,7 +534,7 @@ export default {
         user_id: this.ruleForm.customerId,
         content: this.ruleForm.content,
         images: this.baleImgList,
-        score: this.ruleForm.rate,
+        score: this.ruleForm.rate || '',
         created_at: this.ruleForm.display_time,
         country_id: this.ruleForm.country_id
       }

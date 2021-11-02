@@ -811,7 +811,6 @@ export default {
     },
     inputEnd(scope) {
       if (this.form.mode === 1 || this.form.mode === 2 || this.form.mode === 5) {
-        console.log(this.form.grades.length, 'this.form.grades.length')
         if (
           this.form.grades.length - 1 > scope.$index &&
           scope.$index !== this.form.grades.length - 1
