@@ -80,10 +80,7 @@
             <el-upload
               class="upload-demo"
               action=""
-              :limit="1"
-              :on-remove="onFileRemove"
-              :file-list="fileList"
-              :before-upload="beforeUploadImg"
+              :show-file-list="false"
               :http-request="uploadBaleImg"
             >
               <el-button class="btn-blue" @click="uploadList" style="margin: 0 10px">{{
@@ -593,9 +590,14 @@ export default {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          // this.currentCountryList.push(res.data)
           this.currentCountryList = res.data
           this.goDeatils(this.countryName, this.countryId)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     },
@@ -637,7 +639,7 @@ export default {
             this.goDeatils(this.countryName, this.countryId)
           } else {
             this.$notify({
-              title: this.$t('操作成功'),
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -887,7 +889,7 @@ export default {
   //   transform: translateY(8px);
   // }
   .el-upload-list__item-name {
-    display: none;
+    // display: none;
   }
 }
 .innnerClass {
