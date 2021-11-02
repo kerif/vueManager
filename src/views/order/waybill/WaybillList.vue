@@ -93,6 +93,11 @@
           $t('导出清单')
         }}</el-button>
       </div>
+      <!-- <div style="margin-left: 5px" v-if="oderData.length && ['4'].includes(activeName)">
+        <el-button size="small" type="success" @click="showTmpDrawer = true" plain>{{
+          $t('导出清单')
+        }}</el-button>
+      </div> -->
       <div style="margin-left: 5px" v-if="['0', '1', '2', '3', '4', '5'].includes(activeName)">
         <el-button size="small" type="danger" @click="showDrawer = true" plain>{{
           $t('货量统计')
@@ -1029,6 +1034,11 @@
       :tag="keyData"
       @receive="receive"
     ></waybill-list-drawer>
+    <!-- 导出清单抽屉 -->
+    <waybill-list-tmp-drawer
+      :showTmpDrawer="showTmpDrawer"
+      @receiveTmp="receiveTmp"
+    ></waybill-list-tmp-drawer>
   </div>
 </template>
 
@@ -1038,10 +1048,12 @@ import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import WaybillListSearch from './components/waybillListSearch'
 import WaybillListDrawer from './components/waybillListDrawer'
+import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
 export default {
   components: {
     WaybillListSearch,
     WaybillListDrawer,
+    WaybillListTmpDrawer,
     NlePagination
   },
   mixins: [pagination],
@@ -1148,6 +1160,7 @@ export default {
       status: '',
       id: '',
       showDrawer: false,
+      showTmpDrawer: false,
       keyData: {},
       lineId: ''
     }
@@ -1181,8 +1194,12 @@ export default {
       }
       this.getList()
     },
+    // 货量统计
     receive() {
       this.showDrawer = false
+    },
+    receiveTmp() {
+      this.showTmpDrawer = false
     },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {

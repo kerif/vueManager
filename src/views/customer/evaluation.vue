@@ -187,6 +187,10 @@
         <el-form-item :label="$t('客户ID')">
           <el-input v-model="ruleForm.customerId" :placeholder="$t('请输入')"> </el-input>
         </el-form-item>
+        <!-- 订单号 -->
+        <el-form-item :label="$t('订单号')">
+          <el-input v-model="ruleForm.orderSn" :placeholder="$t('请输入')"> </el-input>
+        </el-form-item>
         <!-- 显示时间 -->
         <el-form-item :label="$t('显示时间')">
           <el-date-picker
@@ -292,6 +296,7 @@ export default {
       ruleForm: {
         nickname: '',
         customerId: '',
+        orderSn: '',
         country_id: '',
         display_time: '',
         content: '',
@@ -525,10 +530,11 @@ export default {
       this.ruleForm.rate = null
       this.baleImgList = []
       this.image = ''
+      this.ruleForm.orderSn = ''
     },
     submit() {
       let param = {
-        order_sn: 'DEB020392032111',
+        order_sn: this.ruleForm.orderSn,
         avatar: this.image,
         username: this.ruleForm.nickname,
         user_id: this.ruleForm.customerId,
