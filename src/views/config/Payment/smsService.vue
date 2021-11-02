@@ -169,6 +169,7 @@
             <span v-if="scope.row.type === 2">{{ $t('国际') }}</span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('扣除次数')" prop="fee"> </el-table-column>
       </el-table>
       <div class="dialog-bottom">
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
