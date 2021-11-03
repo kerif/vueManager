@@ -43,7 +43,7 @@
           <!-- 消息类型 -->
           <el-form-item
             :label="$t('消息类型')"
-            v-for="(item, index) in replyList"
+            v-for="(item, index) in replyTypeList"
             :key="'reply-' + index"
           >
             <el-radio-group v-model="item.form">
@@ -157,7 +157,7 @@ export default {
       expressName: '',
       tableData: [],
       image: '',
-      replyList: [
+      replyTypeList: [
         {
           form: 1,
           content: '',
@@ -188,26 +188,26 @@ export default {
       })
     },
     addContent() {
-      if (this.replyList.length >= 2) {
+      if (this.replyTypeList.length >= 2) {
         return this.$message.error(this.$t('被关注回复最多只能同时发两条消息'))
       }
-      this.replyList.push({
+      this.replyTypeList.push({
         form: '',
         content: '',
         image: ''
       })
     },
     deleteContent(item) {
-      var index = this.replyList.indexOf(item)
+      var index = this.replyTypeList.indexOf(item)
       if (index !== -1) {
-        this.replyList.splice(index, 1)
+        this.replyTypeList.splice(index, 1)
       }
     },
     save() {
       if (this.activeName === '2') {
         let param = {
           type: this.activeName,
-          contents: this.replyList
+          contents: this.replyTypeList
         }
         this.$request.updateMsgReply(param).then(res => {
           if (res.ret) {
@@ -265,7 +265,7 @@ export default {
       })
     },
     onDeleteImg(index) {
-      this.replyList[index].image = ''
+      this.replyTypeList[index].image = ''
     },
     // 上传打包照片
     uploadBaleImg(index, item) {
@@ -275,7 +275,7 @@ export default {
           // res.data.forEach(item => {
           //   this.replyList[0].image = item.path
           // })
-          this.replyList[index].image = res.data[0].path
+          this.replyTypeList[index].image = res.data[0].path
           this.$message.success(this.$t('上传成功'))
         } else {
           this.$message({
@@ -339,7 +339,7 @@ export default {
     },
     clear() {
       this.image = ''
-      this.replyList = [
+      this.replyTypeList = [
         {
           form: 1,
           content: '',
@@ -368,7 +368,7 @@ export default {
       }
       this.$request.getMsgReply(param).then(res => {
         console.log(res)
-        this.replyList = res.data
+        this.replyTypeList = res.data
       })
     },
     init() {
