@@ -61,6 +61,7 @@ exports.resetRecommend = (id, status) => {
 exports.importLines = () => {
   return $form.get(`express-lines/excel-export-all`)
 }
+
 // 路线 获取拼团配置
 exports.getGroupLine = id => {
   return $form.get(`express-lines/${id}/group-config`)
@@ -3189,6 +3190,25 @@ exports.getOrderBatch = params => {
 exports.volumeStatistics = params => {
   return $form.get(`orders/statistics`, { params })
 }
+// 订单 订单列表 导出清单 列表查询
+exports.listQuery = params => {
+  return $form.get(`export-templates`, { params })
+}
+// 订单 订单列表 导出清单 获取详情
+exports.listDetail = id => {
+  return $form.get(`export-templates/${id}`)
+}
+// 订单 订单列表 导出清单 获取编码列表
+exports.getCodeList = () => {
+  return $form.get('export-templates/codes')
+}
+// 订单 订单列表 导出清单 获取模板
+exports.getListTemplate = code => {
+  return $form.get(`export-templates/template/${code}`)
+}
+// 订单 订单列表 导出清单 新增
+// 订单 订单列表 导出清单 删除
+// 订单 订单列表 导出清单 修改
 // 一键更改支付方式
 exports.changePayMode = params => {
   return $form.put('orders/payment-mode', params)

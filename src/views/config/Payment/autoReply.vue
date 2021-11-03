@@ -38,7 +38,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div v-if="this.activeName === '2'">
+    <div v-if="replyList.length && this.activeName === '2'">
       <div>
         <span>{{ $t('被关注回复') }}</span>
         <span>{{ $t('可以同时发两条消息') }}</span>
@@ -90,80 +90,10 @@
           <i class="el-icon-circle-plus-outline" @click="addContent"></i>
           <i class="el-icon-remove-outline" @click="deleteContent(item)" v-if="index !== 0"></i>
         </el-form-item>
-        <!-- <el-form-item :label="$t('消息类型')">
-          <el-radio-group v-model="topMegType">
-            <el-radio :label="1">{{ $t('文字') }}</el-radio>
-            <el-radio :label="2">{{ $t('图片') }}</el-radio>
-          </el-radio-group>
-          <el-input
-            type="textarea"
-            style="margin-left: 65px"
-            :rows="5"
-            :placeholder="$t('请输入内容')"
-            v-model="topMessage"
-            v-if="this.topMegType === 1"
-          >
-          </el-input>
-          <div v-else style="margin-left: 65px">
-            <span class="img-item" v-if="this.image">
-              <img :src="$baseUrl.IMAGE_URL + image" alt="" class="goods-img" />
-              <span class="model-box"></span>
-              <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg"></i>
-              </span>
-            </span>
-            <el-upload
-              v-show="!this.image"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="uploadBaleImg"
-              :show-file-list="false"
-            >
-              <i class="el-icon-plus"> </i>
-            </el-upload>
-          </div>
-        </el-form-item> -->
       </el-form>
     </div>
     <!-- 回复内容 -->
-    <el-form v-if="this.activeName === '3'">
-      <!-- <el-form-item :label="$t('回复内容')">
-        <el-radio-group v-model="form">
-          <el-radio :label="1">{{ $t('文字') }}</el-radio>
-          <el-radio :label="2">{{ $t('图片') }}</el-radio>
-        </el-radio-group>
-        <el-input
-          type="textarea"
-          style="margin-left: 65px"
-          :rows="5"
-          :placeholder="$t('请输入内容')"
-          v-model="content"
-          v-if="this.form === 1"
-        >
-        </el-input>
-        <div v-else style="margin-left: 65px">
-          <span class="img-item" v-if="this.image">
-            <img :src="$baseUrl.IMAGE_URL + image" alt="" class="goods-img" />
-            <span class="model-box"></span>
-            <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
-              <i class="el-icon-delete" @click="onDeleteImg"></i>
-            </span>
-          </span>
-          <el-upload
-            v-show="!this.image"
-            class="avatar-uploader"
-            action=""
-            list-type="picture-card"
-            :http-request="uploadBaleImg"
-            :show-file-list="false"
-          >
-            <i class="el-icon-plus"> </i>
-          </el-upload>
-        </div>
-      </el-form-item> -->
+    <el-form v-if="replyList.length && this.activeName === '3'">
       <el-form-item
         :label="$t('回复内容')"
         v-for="(item, index) in replyList"

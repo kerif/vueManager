@@ -103,7 +103,7 @@ export default {
         ],
         replyList: [
           {
-            form: '',
+            form: 1,
             content: '',
             image: ''
           }

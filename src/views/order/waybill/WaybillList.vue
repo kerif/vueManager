@@ -1038,6 +1038,7 @@
     <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
       @receiveTmp="receiveTmp"
+      class="tmp"
     ></waybill-list-tmp-drawer>
   </div>
 </template>
@@ -2272,6 +2273,9 @@ export default {
 }
 /deep/.el-drawer__open .el-drawer.rtl {
   width: 90% !important;
+}
+/deep/ .tmp .el-drawer__open .el-drawer.rtl {
+  width: 40% !important;
 }
 .add-box {
   margin-bottom: 10px;

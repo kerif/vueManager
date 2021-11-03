@@ -247,6 +247,7 @@ export default {
       this.ruleForm.app = ''
       this.ruleForm.appPath = ''
       this.ruleForm.webPage = ''
+      this.id = ''
       this.image = ''
     }
   }
