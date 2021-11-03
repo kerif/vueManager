@@ -5,7 +5,7 @@
     @close="clear"
     class="dialog-addMenu"
   >
-    <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
+    <el-form :model="ruleForm" ref="ruleForm" label-width="120px" :rules="rules">
       <!-- 菜单名称 -->
       <el-form-item :label="$t('菜单名称')">
         <el-input
@@ -33,6 +33,9 @@
           v-model="ruleForm.content"
         >
         </el-input>
+      </el-form-item>
+      <el-form-item :label="$t('转义符号')" v-if="this.ruleForm.radio === 1">
+        <p v-text="'{{user_id}} = ' + $t('用户id')" style="margin-top: 0px"></p>
       </el-form-item>
       <!-- 图片 -->
       <el-form-item class="updateChe" v-if="this.ruleForm.radio === 2">
@@ -70,7 +73,7 @@
         <div style="margin-left: 120px; margin-bottom: 20px">
           {{ $t('订阅者点击该子菜单会跳到以下小程序') }}
         </div>
-        <el-form-item :label="$t('小程序')" style="margin-left: 70px">
+        <el-form-item :label="$t('小程序')" style="margin-left: 70px" prop="appid">
           <el-input
             v-model="ruleForm.appid"
             style="width: 50%"
@@ -78,7 +81,7 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item :label="$t('小程序路径')" style="margin-left: 70px">
+        <el-form-item :label="$t('小程序路径')" style="margin-left: 70px" prop="appPath">
           <el-input
             v-model="ruleForm.appPath"
             style="width: 50%"
@@ -86,7 +89,7 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item :label="$t('备用网页')" style="margin-left: 70px">
+        <el-form-item :label="$t('备用网页')" style="margin-left: 70px" prop="webPage">
           <el-input
             v-model="ruleForm.webPage"
             style="width: 65%"
@@ -121,6 +124,11 @@ export default {
         appid: '',
         appPath: '',
         webPage: ''
+      },
+      rules: {
+        appid: [{ required: true, message: '请输入小程序的appid', trigger: 'blur' }],
+        appPath: [{ required: true, message: '请输入小程序的页面路径', trigger: 'blur' }],
+        webPage: [{ required: true, message: '请输入备用网页', trigger: 'blur' }]
       }
     }
   },
@@ -180,6 +188,7 @@ export default {
         this.ruleForm.content = res.data.content
         this.ruleForm.appPath = res.data.page_path
         this.ruleForm.pageAddress = res.data.url
+        this.ruleForm.webPage = res.data.url
         this.ruleForm.appid = res.data.appid
         this.image = res.data.image
       })

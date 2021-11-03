@@ -138,7 +138,7 @@
         </div>
       </el-form-item>
     </el-form>
-    <div slot="footer" v-if="activeName !== '1'">
+    <div v-if="activeName !== '1'">
       <el-button style="background-color: #3540a5; color: #fff" @click="save">{{
         $t('保存')
       }}</el-button>
