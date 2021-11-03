@@ -204,7 +204,6 @@ export default {
     getDetails() {
       this.$request.groupDetails(this.id).then(res => {
         if (res.ret) {
-          console.log(res.data)
           this.groupData = res.data
           if (res.data.address) {
             this.groupData.address_id = res.data.address.id
