@@ -1,144 +1,142 @@
 <template>
   <div class="autoReply-container">
     <el-tabs v-model="activeName" @tab-click="onTabChange">
-      <el-tab-pane :label="$t('关键词回复')" name="1"></el-tab-pane>
-      <el-tab-pane :label="$t('被关注回复')" name="2"></el-tab-pane>
-      <el-tab-pane :label="$t('收到消息回复')" name="3"></el-tab-pane>
-    </el-tabs>
-    <div v-if="activeName === '1'">
-      <div class="main-top">
-        <div class="number-sty">{{ $t('规则名称') }}:</div>
-        <el-input v-model="expressName" class="input-sty" clearable> </el-input>
-        <el-button @click="search">{{ $t('搜索') }}</el-button>
-        <el-button @click="addNewRule" style="background-color: #3540a5; color: #fff">{{
-          $t('添加新规则')
-        }}</el-button>
-      </div>
-      <el-table :data="tableData" border style="width: 70%">
-        <el-table-column label="#" type="index"> </el-table-column>
-        <el-table-column prop="name" :label="$t('规则名称')"> </el-table-column>
-        <el-table-column prop="keywords" :formatter="fileData" :label="$t('关键词')">
-        </el-table-column>
-        <el-table-column :label="$t('回复类型')">
-          <template slot-scope="scope">
-            <span v-if="scope.row.type === 1">{{ $t('关键词回复') }}</span>
-            <span v-if="scope.row.type === 2">{{ $t('被关注回复') }}</span>
-            <span v-if="scope.row.type === 3">{{ $t('收到消息回复') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('操作')">
-          <template slot-scope="scope">
-            <el-button class="btn-dark-green btn-margin" @click="editRule(scope.row.id)">{{
-              $t('修改')
-            }}</el-button>
-            <el-button class="btn-light-red" @click="deleteMsg(scope.row.id)">{{
-              $t('删除')
-            }}</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div v-if="activeName === '2'">
-      <div>
-        <span>{{ $t('被关注回复') }}</span>
-        <span>{{ $t('可以同时发两条消息') }}</span>
-      </div>
-      <el-form>
-        <!-- 消息类型 -->
-        <el-form-item
-          :label="$t('消息类型')"
-          v-for="(item, index) in replyList"
-          :key="'reply-' + index"
-        >
-          <el-radio-group v-model="item.form">
-            <el-radio :label="1">{{ $t('文字') }}</el-radio>
-            <el-radio :label="2">{{ $t('图片') }}</el-radio>
-          </el-radio-group>
-          <el-input
-            type="textarea"
-            :rows="5"
-            :placeholder="$t('请输入内容')"
-            style="margin-left: 65px"
-            v-model="item.content"
-            v-if="item.form === 1"
-          >
-          </el-input>
-          <div v-else style="margin-left: 65px">
-            <span class="img-item" v-if="item.image">
-              <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
-              <span class="model-box"></span>
-              <span class="operat-box">
-                <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
-                <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-              </span>
-            </span>
-            <el-upload
-              v-show="!item.image"
-              class="avatar-uploader"
-              action=""
-              list-type="picture-card"
-              :http-request="
-                item => {
-                  uploadBaleImg(index, item)
-                }
-              "
-              :show-file-list="false"
-            >
-              <i class="el-icon-plus"> </i>
-            </el-upload>
-          </div>
-          <i class="el-icon-circle-plus-outline" @click="addContent"></i>
-          <i class="el-icon-remove-outline" @click="deleteContent(item)" v-if="index !== 0"></i>
-        </el-form-item>
-      </el-form>
-    </div>
-    <!-- 回复内容 -->
-    <el-form v-if="activeName === '3'">
-      <el-form-item
-        :label="$t('回复内容')"
-        v-for="(item, index) in contentList"
-        :key="'info-' + index"
-      >
-        <el-radio-group v-model="item.form">
-          <el-radio :label="1">{{ $t('文字') }}</el-radio>
-          <el-radio :label="2">{{ $t('图片') }}</el-radio>
-        </el-radio-group>
-        <el-input
-          type="textarea"
-          :rows="5"
-          :placeholder="$t('请输入内容')"
-          style="margin-left: 65px"
-          v-model="item.content"
-          v-if="item.form === 1"
-        >
-        </el-input>
-        <div v-else style="margin-left: 65px">
-          <span class="img-item" v-if="item.image">
-            <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
-            <span class="model-box"></span>
-            <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreviewImg(item.image)"></i>
-              <i class="el-icon-delete" @click="onDelete(index)"></i>
-            </span>
-          </span>
-          <el-upload
-            v-show="!item.image"
-            class="avatar-uploader"
-            action=""
-            list-type="picture-card"
-            :http-request="
-              item => {
-                uploadBale(index, item)
-              }
-            "
-            :show-file-list="false"
-          >
-            <i class="el-icon-plus"> </i>
-          </el-upload>
+      <el-tab-pane :label="$t('关键词回复')" name="1">
+        <div class="main-top">
+          <div class="number-sty">{{ $t('规则名称') }}:</div>
+          <el-input v-model="expressName" class="input-sty" clearable> </el-input>
+          <el-button @click="search">{{ $t('搜索') }}</el-button>
+          <el-button @click="addNewRule" style="background-color: #3540a5; color: #fff">{{
+            $t('添加新规则')
+          }}</el-button>
         </div>
-      </el-form-item>
-    </el-form>
-    <div v-if="activeName !== '1'">
+        <el-table :data="tableData" border style="width: 70%">
+          <el-table-column label="#" type="index"> </el-table-column>
+          <el-table-column prop="name" :label="$t('规则名称')"> </el-table-column>
+          <el-table-column prop="keywords" :formatter="fileData" :label="$t('关键词')">
+          </el-table-column>
+          <el-table-column :label="$t('回复类型')">
+            <template slot-scope="scope">
+              <span v-if="scope.row.type === 1">{{ $t('关键词回复') }}</span>
+              <span v-if="scope.row.type === 2">{{ $t('被关注回复') }}</span>
+              <span v-if="scope.row.type === 3">{{ $t('收到消息回复') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('操作')">
+            <template slot-scope="scope">
+              <el-button class="btn-dark-green btn-margin" @click="editRule(scope.row.id)">{{
+                $t('修改')
+              }}</el-button>
+              <el-button class="btn-light-red" @click="deleteMsg(scope.row.id)">{{
+                $t('删除')
+              }}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('被关注回复')" name="2">
+        <div>
+          <span>{{ $t('被关注回复') }}</span>
+          <span>{{ $t('可以同时发两条消息') }}</span>
+        </div>
+        <el-form>
+          <!-- 消息类型 -->
+          <el-form-item
+            :label="$t('消息类型')"
+            v-for="(item, index) in replyList"
+            :key="'reply-' + index"
+          >
+            <el-radio-group v-model="item.form">
+              <el-radio :label="1">{{ $t('文字') }}</el-radio>
+              <el-radio :label="2">{{ $t('图片') }}</el-radio>
+            </el-radio-group>
+            <el-input
+              type="textarea"
+              :rows="5"
+              :placeholder="$t('请输入内容')"
+              style="margin-left: 65px"
+              v-model="item.content"
+              v-if="item.form === 1"
+            >
+            </el-input>
+            <div v-else style="margin-left: 65px">
+              <span class="img-item" v-if="item.image">
+                <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
+                <span class="model-box"></span>
+                <span class="operat-box">
+                  <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
+                  <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                </span>
+              </span>
+              <el-upload
+                v-show="!item.image"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="
+                  item => {
+                    uploadBaleImg(index, item)
+                  }
+                "
+                :show-file-list="false"
+              >
+                <i class="el-icon-plus"> </i>
+              </el-upload>
+            </div>
+            <i class="el-icon-circle-plus-outline" @click="addContent"></i>
+            <i class="el-icon-remove-outline" @click="deleteContent(item)" v-if="index !== 0"></i>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('收到消息回复')" name="3">
+        <el-form>
+          <el-form-item
+            :label="$t('回复内容')"
+            v-for="(item, index) in contentList"
+            :key="'info-' + index"
+          >
+            <el-radio-group v-model="item.form">
+              <el-radio :label="1">{{ $t('文字') }}</el-radio>
+              <el-radio :label="2">{{ $t('图片') }}</el-radio>
+            </el-radio-group>
+            <el-input
+              type="textarea"
+              :rows="5"
+              :placeholder="$t('请输入内容')"
+              style="margin-left: 65px"
+              v-model="item.content"
+              v-if="item.form === 1"
+            >
+            </el-input>
+            <div v-else style="margin-left: 65px">
+              <span class="img-item" v-if="item.image">
+                <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
+                <span class="model-box"></span>
+                <span class="operat-box">
+                  <i class="el-icon-zoom-in" @click="onPreviewImg(item.image)"></i>
+                  <i class="el-icon-delete" @click="onDelete(index)"></i>
+                </span>
+              </span>
+              <el-upload
+                v-show="!item.image"
+                class="avatar-uploader"
+                action=""
+                list-type="picture-card"
+                :http-request="
+                  item => {
+                    uploadBale(index, item)
+                  }
+                "
+                :show-file-list="false"
+              >
+                <i class="el-icon-plus"> </i>
+              </el-upload>
+            </div>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+    </el-tabs>
+    <div slot="footer" v-if="activeName !== '1'">
       <el-button style="background-color: #3540a5; color: #fff" @click="save">{{
         $t('保存')
       }}</el-button>
