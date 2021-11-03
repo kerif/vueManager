@@ -68,7 +68,7 @@ export default new Vuex.Store({
       localStorage.setItem('language', data)
     },
     initLanguageCode(state) {
-      state.languageCode = localStorage.getItem('language') || 'simple'
+      state.languageCode = localStorage.getItem('language') || 'cn'
     }
   },
   actions: {}

@@ -270,7 +270,7 @@
     </el-dialog>
     <!-- 轨迹 -->
     <el-dialog :visible.sync="showDialog" width="45%" :title="$t('更新物流状态')" @close="clearSn">
-      <div class="table-sty">{{ $t('发货单号：') }}{{ this.tableSn }}</div>
+      <div class="table-sty">{{ $t('发货单号') }}{{ this.tableSn }}</div>
       <el-table :data="tableData" stripe border style="width: 100%">
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column :label="$t('物流轨迹')" prop="context"></el-table-column>
