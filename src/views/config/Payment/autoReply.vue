@@ -5,7 +5,7 @@
       <el-tab-pane :label="$t('被关注回复')" name="2"></el-tab-pane>
       <el-tab-pane :label="$t('收到消息回复')" name="3"></el-tab-pane>
     </el-tabs>
-    <div v-if="this.activeName === '1'">
+    <div v-if="activeName === '1'">
       <div class="main-top">
         <div class="number-sty">{{ $t('规则名称') }}:</div>
         <el-input v-model="expressName" class="input-sty" clearable> </el-input>
@@ -38,7 +38,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div v-if="replyList.length && this.activeName === '2'">
+    <div v-if="activeName === '2'">
       <div>
         <span>{{ $t('被关注回复') }}</span>
         <span>{{ $t('可以同时发两条消息') }}</span>
@@ -93,7 +93,7 @@
       </el-form>
     </div>
     <!-- 回复内容 -->
-    <el-form v-if="replyList.length && this.activeName === '3'">
+    <el-form v-if="activeName === '3'">
       <el-form-item
         :label="$t('回复内容')"
         v-for="(item, index) in replyList"
@@ -138,7 +138,7 @@
         </div>
       </el-form-item>
     </el-form>
-    <div slot="footer" v-if="this.activeName !== '1'">
+    <div slot="footer" v-if="activeName !== '1'">
       <el-button style="background-color: #3540a5; color: #fff" @click="save">{{
         $t('保存')
       }}</el-button>
@@ -161,7 +161,7 @@ export default {
       image: '',
       replyList: [
         {
-          form: '',
+          form: 1,
           content: '',
           image: ''
         }
