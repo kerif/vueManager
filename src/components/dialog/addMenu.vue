@@ -202,7 +202,6 @@ export default {
             name: this.ruleForm.menuName,
             content: this.ruleForm.content,
             appid: this.ruleForm.appid,
-            url: this.ruleForm.webPage || this.ruleForm.pageAddress,
             page_path: this.ruleForm.appPath,
             parent_id: this.id,
             image: this.image
@@ -213,8 +212,10 @@ export default {
             param.type = 2
           } else if (this.ruleForm.radio === 3) {
             param.type = 3
+            param.url = this.ruleForm.pageAddress
           } else {
             param.type = 4
+            param.url = this.ruleForm.webPage
           }
           if (this.state === 'add') {
             this.$request.getNewMenu(param).then(res => {

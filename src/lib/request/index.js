@@ -3207,8 +3207,17 @@ exports.getListTemplate = code => {
   return $form.get(`export-templates/template/${code}`)
 }
 // 订单 订单列表 导出清单 新增
+exports.addTemplate = params => {
+  return $form.post('export-templates', params)
+}
 // 订单 订单列表 导出清单 删除
+exports.deleteTemplate = id => {
+  return $form.delete(`export-templates/${id}`)
+}
 // 订单 订单列表 导出清单 修改
+// exports.editTemplate = id => {
+// return $form.
+// }
 // 一键更改支付方式
 exports.changePayMode = params => {
   return $form.put('orders/payment-mode', params)
