@@ -202,7 +202,7 @@ export default {
             name: this.ruleForm.menuName,
             content: this.ruleForm.content,
             appid: this.ruleForm.appid,
-            url: this.ruleForm.pageAddress,
+            url: this.ruleForm.webPage,
             page_path: this.ruleForm.appPath,
             parent_id: this.id,
             image: this.image
