@@ -368,16 +368,20 @@ export default {
       if (this.activeName === '2') {
         this.$request.getMsgReply(param).then(res => {
           console.log(res)
-          this.replyTypeList = res.data
+          if (res.data.length) {
+            this.replyTypeList = res.data
+          }
         })
       } else if (this.activeName === '3') {
         this.$request.getMsgReply(param).then(res => {
-          this.contentList = res.data
+          if (res.data.length) {
+            this.contentList = res.data
+          }
         })
       }
     },
     init() {
-      this.getMsgReply()
+      // this.getMsgReply()
     },
     deleteMsg(id) {
       this.$confirm(this.$t('您真的要删除此规则？'), this.$t('提示'), {

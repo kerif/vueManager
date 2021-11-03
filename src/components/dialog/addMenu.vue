@@ -100,9 +100,11 @@
       </div>
     </el-form>
     <div slot="footer">
-      <el-button style="text-align: left; background-color: #3540a5; color: #fff" @click="submit">{{
-        $t('保存')
-      }}</el-button>
+      <el-button
+        style="text-align: left; background-color: #3540a5; color: #fff"
+        @click="submit('ruleForm')"
+        >{{ $t('保存') }}</el-button
+      >
     </div>
   </el-dialog>
 </template>
@@ -193,61 +195,68 @@ export default {
         this.image = res.data.image
       })
     },
-    submit() {
-      let param = {
-        name: this.ruleForm.menuName,
-        content: this.ruleForm.content,
-        appid: this.ruleForm.appid,
-        url: this.ruleForm.pageAddress,
-        page_path: this.ruleForm.appPath,
-        parent_id: this.id,
-        image: this.image
-      }
-      if (this.ruleForm.radio === 1) {
-        param.type = 1
-      } else if (this.ruleForm.radio === 2) {
-        param.type = 2
-      } else if (this.ruleForm.radio === 3) {
-        param.type = 3
-      } else {
-        param.type = 4
-      }
-      if (this.state === 'add') {
-        this.$request.getNewMenu(param).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.show = false
-            this.success()
+    submit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let param = {
+            name: this.ruleForm.menuName,
+            content: this.ruleForm.content,
+            appid: this.ruleForm.appid,
+            page_path: this.ruleForm.appPath,
+            parent_id: this.id,
+            image: this.image
+          }
+          if (this.ruleForm.radio === 1) {
+            param.type = 1
+          } else if (this.ruleForm.radio === 2) {
+            param.type = 2
+          } else if (this.ruleForm.radio === 3) {
+            param.type = 3
+            param.url = this.ruleForm.pageAddress
           } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
+            param.type = 4
+            param.url = this.ruleForm.webPage
+          }
+          if (this.state === 'add') {
+            this.$request.getNewMenu(param).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
+            })
+          } else {
+            let id = this.id
+            this.$request.updateMenu(id, param).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
             })
           }
-        })
-      } else {
-        let id = this.id
-        this.$request.updateMenu(id, param).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.show = false
-            this.success()
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
-      }
+        } else {
+          return false
+        }
+      })
     },
     clear() {
       this.ruleForm.menuName = ''
