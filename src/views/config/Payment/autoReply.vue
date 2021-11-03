@@ -348,6 +348,13 @@ export default {
           image: ''
         }
       ]
+      this.contentList = [
+        {
+          form: 1,
+          content: '',
+          image: ''
+        }
+      ]
       this.content = ''
     },
     onTabChange(tab) {
