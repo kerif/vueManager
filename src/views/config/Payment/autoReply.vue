@@ -151,7 +151,6 @@ export default {
   data() {
     return {
       activeName: '1',
-      bottomMegType: 1,
       form: 1,
       content: '',
       expressName: '',
@@ -366,10 +365,16 @@ export default {
       let param = {
         type: this.activeName
       }
-      this.$request.getMsgReply(param).then(res => {
-        console.log(res)
-        this.replyTypeList = res.data
-      })
+      if (this.activeName === '2') {
+        this.$request.getMsgReply(param).then(res => {
+          console.log(res)
+          this.replyTypeList = res.data
+        })
+      } else if (this.activeName === '3') {
+        this.$request.getMsgReply(param).then(res => {
+          this.contentList = res.data
+        })
+      }
     },
     init() {
       this.getMsgReply()
