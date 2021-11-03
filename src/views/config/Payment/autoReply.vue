@@ -96,7 +96,7 @@
     <el-form v-if="activeName === '3'">
       <el-form-item
         :label="$t('回复内容')"
-        v-for="(item, index) in replyList"
+        v-for="(item, index) in contentList"
         :key="'info-' + index"
       >
         <el-radio-group v-model="item.form">
@@ -117,8 +117,8 @@
             <img :src="$baseUrl.IMAGE_URL + item.image" alt="" class="goods-img" />
             <span class="model-box"></span>
             <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreview(item.image)"></i>
-              <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+              <i class="el-icon-zoom-in" @click="onPreviewImg(item.image)"></i>
+              <i class="el-icon-delete" @click="onDelete(index)"></i>
             </span>
           </span>
           <el-upload
@@ -128,7 +128,7 @@
             list-type="picture-card"
             :http-request="
               item => {
-                uploadBaleImg(index, item)
+                uploadBale(index, item)
               }
             "
             :show-file-list="false"
@@ -160,6 +160,13 @@ export default {
       tableData: [],
       image: '',
       replyList: [
+        {
+          form: 1,
+          content: '',
+          image: ''
+        }
+      ],
+      contentList: [
         {
           form: 1,
           content: '',
@@ -199,26 +206,49 @@ export default {
       }
     },
     save() {
-      let param = {
-        type: this.activeName,
-        contents: this.replyList
-      }
-      this.$request.updateMsgReply(param).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          // this.getList()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
+      if (this.activeName === '2') {
+        let param = {
+          type: this.activeName,
+          contents: this.replyList
         }
-      })
+        this.$request.updateMsgReply(param).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            // this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.activeName === '3') {
+        let param = {
+          type: this.activeName,
+          contents: this.contentList
+        }
+        this.$request.updateMsgReply(param).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            // this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     },
     fileData(row) {
       let arr = []
@@ -259,6 +289,39 @@ export default {
     },
     // 上传图片
     onUpload(file) {
+      let params = new FormData()
+      params.append(`images[${0}][file]`, file)
+      return this.$request.uploadImg(params)
+    },
+    onPreviewImg(image) {
+      dialog({
+        type: 'previewimage',
+        image
+      })
+    },
+    onDelete(index) {
+      this.contentList[index].image = ''
+    },
+    // 上传打包照片
+    uploadBale(index, item) {
+      let file = item.file
+      this.onUploadImg(file).then(res => {
+        if (res.ret) {
+          // res.data.forEach(item => {
+          //   this.replyList[0].image = item.path
+          // })
+          this.contentList[index].image = res.data[0].path
+          this.$message.success(this.$t('上传成功'))
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 上传图片
+    onUploadImg(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
