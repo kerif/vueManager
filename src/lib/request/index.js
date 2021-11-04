@@ -260,7 +260,7 @@ exports.newLineRegions = (id, params) => {
 }
 // 配置 分区 更新线路分区信息
 exports.updateRegions = (id, regionId, params) => {
-  return $form.put(`express-lines/${id}/regions/${regionId}`, params)
+  return $json.put(`express-lines/${id}/regions/${regionId}`, params)
 }
 // 配置 分区 复制分区模板
 exports.copyPartitionTmp = (id, tmpId) => {
@@ -3215,9 +3215,9 @@ exports.deleteTemplate = id => {
   return $form.delete(`export-templates/${id}`)
 }
 // 订单 订单列表 导出清单 修改
-// exports.editTemplate = id => {
-// return $form.
-// }
+exports.editTemplate = (id, params) => {
+  return $form.put(`export-templates/${id}`, params)
+}
 // 一键更改支付方式
 exports.changePayMode = params => {
   return $form.put('orders/payment-mode', params)

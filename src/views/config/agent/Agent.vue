@@ -94,6 +94,7 @@
               $t('提现申请')
             }}</el-button>
           </el-badge>
+          <el-button class="btn-blue" @click="invite(scope.row.id)">{{ $t('邀请记录') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -232,6 +233,10 @@ export default {
           id: id
         }
       })
+    },
+    // 邀请记录
+    invite(id) {
+      dialog({ type: 'inviteList', state: 'invite', id })
     },
     //删除代理
     deleteAgent(id) {

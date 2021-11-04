@@ -284,6 +284,17 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 子订单单价 -->
+        <el-row :gutter="20">
+          <el-col :span="10">
+            <el-form-item :label="$t('子订单单价(选填)')">
+              <el-input v-model="user.unit_price" :placeholder="$t('请输入子订单单价')"></el-input>
+              <span style="color: red">{{
+                $t('填写该项则优先使用该单价计算团购单费用，不再使用渠道中所设置的单价')
+              }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row :gutter="20" v-if="user.box_type === 2">
           <el-form-item>
             <el-col :span="18">
@@ -542,6 +553,7 @@ export default {
         warehouse_id: '',
         insurance_fee: '',
         tariff_fee: '',
+        unit_price: '',
         services: [],
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片
