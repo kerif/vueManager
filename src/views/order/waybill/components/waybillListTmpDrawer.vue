@@ -34,127 +34,28 @@
         </div>
       </el-col>
     </el-row>
-    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
-      <el-col>
-        <div style="height: 180px">
-          <el-col>
-            <div>模板名称</div>
-          </el-col>
-          <el-row>
-            <el-col :span="20"
-              ><div style="margin-top: 20px; padding: 10px">
-                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
-              </div></el-col
-            >
-            <el-col :span="4">
-              <div style="margin-top: 10px">
-                <el-button @click="editTmpDrawer = true">编辑</el-button>
-              </div>
-              <div style="margin-top: 20px">
-                <el-button @click="deleteTmpDrawer">删除</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
-      <el-col>
-        <div style="height: 180px">
-          <el-col>
-            <div>模板名称</div>
-          </el-col>
-          <el-row>
-            <el-col :span="20"
-              ><div style="margin-top: 20px; padding: 10px">
-                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
-              </div></el-col
-            >
-            <el-col :span="4">
-              <div style="margin-top: 10px">
-                <el-button @click="editTmpDrawer = true">编辑</el-button>
-              </div>
-              <div style="margin-top: 20px">
-                <el-button @click="deleteTmpDrawer">删除</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
-      <el-col>
-        <div style="height: 180px">
-          <el-col>
-            <div>模板名称</div>
-          </el-col>
-          <el-row>
-            <el-col :span="20"
-              ><div style="margin-top: 20px; padding: 10px">
-                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
-              </div></el-col
-            >
-            <el-col :span="4">
-              <div style="margin-top: 10px">
-                <el-button @click="editTmpDrawer = true">编辑</el-button>
-              </div>
-              <div style="margin-top: 20px">
-                <el-button @click="deleteTmpDrawer">删除</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
-      <el-col>
-        <div style="height: 180px">
-          <el-col>
-            <div>模板名称</div>
-          </el-col>
-          <el-row>
-            <el-col :span="20"
-              ><div style="margin-top: 20px; padding: 10px">
-                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
-              </div></el-col
-            >
-            <el-col :span="4">
-              <div style="margin-top: 10px">
-                <el-button @click="editTmpDrawer = true">编辑</el-button>
-              </div>
-              <div style="margin-top: 20px">
-                <el-button @click="deleteTmpDrawer">删除</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
-    </el-row>
-    <!-- <waybill-list-inner-drawer
+    <inner-drawer
       :editTmpDrawer="editTmpDrawer"
       @receiveInner="receiveInner"
-      :append-to-body="true"
-    ></waybill-list-inner-drawer> -->
+      :tmpCode="tmpCode"
+    ></inner-drawer>
   </el-drawer>
 </template>
 
 <script>
-// import WaybillListInnerDrawer from './components/waybillListInnerDrawer'
+import InnerDrawer from './innerDrawer'
 export default {
   components: {
-    // WaybillListInnerDrawer
+    InnerDrawer
   },
   data() {
     return {
       editTmpDrawer: false,
-      activeNames: ['1'],
-      order: 1,
       code: '',
       name: '',
       tmpName: '',
       tmpCode: '',
-      tmpList: [],
-      checkList: []
+      tmpList: []
     }
   },
   props: {
@@ -166,32 +67,20 @@ export default {
   created() {
     this.getCodeList()
     this.getTmpList()
-    this.getTmpData()
   },
   methods: {
     close() {
       this.$emit('receiveTmp', false)
     },
     open() {},
-    handleChange(val) {
-      console.log(val)
-    },
     addTmp() {
       this.editTmpDrawer = true
-      let param = {
-        // name:
-        // code:
-        // header:
-      }
-      this.$request.addTemplate(param).then(res => {
-        console.log(res.data)
-      })
     },
     editTmp() {
       this.editTmpDrawer = true
     },
     receiveInner() {
-      this.editTmpDrawer = true
+      this.editTmpDrawer = false
     },
     deleteTmpDrawer() {
       // this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
@@ -223,14 +112,6 @@ export default {
         this.tmpList = res.data
         this.tmpCode = res.data[0].code
         console.log(this.tmpCode)
-      })
-    },
-    getTmpData() {
-      let param = {
-        code: this.tmpCode
-      }
-      this.$request.getListTemplate(param).then(res => {
-        console.log(res)
       })
     },
     getCodeList() {

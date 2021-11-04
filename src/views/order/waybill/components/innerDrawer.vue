@@ -4,6 +4,7 @@
     class="inner-container"
     :size="size"
     :visible.sync="editTmpDrawer"
+    :append-to-body="true"
     :before-close="close"
     @opened="open()"
   >
@@ -33,7 +34,7 @@
             <el-radio :label="4">渠道名称</el-radio>
           </el-radio-group>
         </el-collapse-item>
-        <el-collapse-item :title="$t('收件信息')" name="1">
+        <el-collapse-item :title="$t('收件信息')" name="2">
           <el-radio-group v-model="order">
             <el-radio :label="1">收货人</el-radio>
             <el-radio :label="2">联系方式</el-radio>
@@ -41,7 +42,7 @@
             <el-radio :label="4">国家地区</el-radio>
           </el-radio-group>
         </el-collapse-item>
-        <el-collapse-item :title="$t('入库信息')" name="1">
+        <el-collapse-item :title="$t('入库信息')" name="3">
           <div>总计</div>
           <el-radio-group v-model="order">
             <el-radio :label="1">收货人</el-radio>
@@ -57,7 +58,7 @@
             <el-radio :label="4">入库实重</el-radio>
           </el-radio-group>
         </el-collapse-item>
-        <el-collapse-item :title="$t('出库信息')" name="1">
+        <el-collapse-item :title="$t('出库信息')" name="4">
           <div>总计</div>
           <el-radio-group v-model="order">
             <el-radio :label="1">出库箱数</el-radio>
@@ -73,7 +74,7 @@
             <el-radio :label="4">出库体积重</el-radio>
           </el-radio-group>
         </el-collapse-item>
-        <el-collapse-item :title="$t('支付信息')" name="1">
+        <el-collapse-item :title="$t('支付信息')" name="5">
           <el-radio-group v-model="order">
             <el-radio :label="1">支付方式</el-radio>
             <el-radio :label="2">支付状态</el-radio>
@@ -88,7 +89,7 @@
             <el-radio :label="4">增值费用</el-radio>
           </el-radio-group>
         </el-collapse-item>
-        <el-collapse-item :title="$t('发货信息')" name="1">
+        <el-collapse-item :title="$t('发货信息')" name="6">
           <el-radio-group v-model="order">
             <el-radio :label="1">发货单号</el-radio>
             <el-radio :label="2">发货单名称</el-radio>
@@ -96,7 +97,7 @@
             <el-radio :label="4">发货状态</el-radio>
           </el-radio-group>
         </el-collapse-item>
-        <el-collapse-item :title="$t('操作信息')" name="1">
+        <el-collapse-item :title="$t('操作信息')" name="7">
           <el-radio-group v-model="order">
             <el-radio :label="1">提交时间</el-radio>
             <el-radio :label="2">打包时间</el-radio>
@@ -104,7 +105,7 @@
             <el-radio :label="4">发货时间</el-radio>
           </el-radio-group>
         </el-collapse-item>
-        <el-collapse-item :title="$t('其他客户信息')" name="1">
+        <el-collapse-item :title="$t('其他客户信息')" name="8">
           <el-radio-group v-model="order">
             <el-radio :label="1">绑定手机号</el-radio>
             <el-radio :label="2">绑定邮箱</el-radio>
@@ -114,8 +115,8 @@
       </el-collapse>
       <el-form-item style="margin-left: 20px" :label="$t('同时导出附表')">
         <el-checkbox-group v-model="checkList">
-          <el-checkbox label="禁用" disabled></el-checkbox>
-          <el-checkbox label="选中且禁用" disabled></el-checkbox>
+          <el-checkbox :label="$t('禁用')" disabled></el-checkbox>
+          <el-checkbox :label="$t('选中且禁用')" disabled></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <div style="float: right">
@@ -133,20 +134,39 @@ export default {
         name: '',
         remark: ''
       },
-      size: '50%'
+      size: '50%',
+      activeNames: ['1'],
+      checkList: [],
+      order: 1
     }
   },
   props: {
     editTmpDrawer: {
       type: Boolean,
       default: false
+    },
+    tmpCode: {
+      type: String,
+      required: true
     }
   },
-  created() {},
+  created() {
+    this.getTmpData()
+  },
   methods: {
     open() {},
     close() {
       this.$emit('receiveInner', false)
+    },
+    handleChange(val) {
+      console.log(val)
+    },
+    getTmpData() {
+      let code = this.tmpCode
+      console.log(code)
+      this.$request.getListTemplate(code).then(res => {
+        console.log(res)
+      })
     }
   }
 }
@@ -154,5 +174,9 @@ export default {
 
 <style lang="scss">
 .inner-container {
+  font-size: 14px;
+  .el-drawer.rtl {
+    overflow: scroll;
+  }
 }
 </style>
