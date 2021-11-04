@@ -814,10 +814,12 @@ export default {
           item.first_weight = 0
         }
       })
-      let flag = this.form.grades.some(item => {
-        return !item.unit_weight
-      })
-      if (flag) return this.$message.error(this.$t('请输入单位续重'))
+      if (this.form.mode !== 2) {
+        let flag = this.form.grades.some(item => {
+          return !item.unit_weight
+        })
+        if (flag) return this.$message.error(this.$t('单位续重不能为空或为0'))
+      }
       if (this.$route.params.id) {
         // 编辑状态
         let checkStatus = this.form.checked ? Number(this.form.checked) : ''
