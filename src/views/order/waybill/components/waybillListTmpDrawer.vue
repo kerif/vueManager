@@ -7,27 +7,32 @@
     @opened="open()"
   >
     <div style="margin: 20px">
-      <el-button @click="addTmp">{{ $t('新增模板') }}</el-button>
+      <el-button @click="addTmp('add')">{{ $t('新增模板') }}</el-button>
       <el-button>{{ $t('确定导出') }}</el-button>
     </div>
-    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
+    <el-row
+      v-for="item in tmpList"
+      :key="item.id"
+      style="background: #ccc; margin: 20px; padding: 10px"
+      :gutter="20"
+    >
       <el-col>
         <div style="height: 180px">
           <el-col>
-            <div>模板名称</div>
+            <div>{{ item.name }}</div>
           </el-col>
           <el-row>
             <el-col :span="20"
               ><div style="margin-top: 20px; padding: 10px">
-                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
+                {{ item.remark }}
               </div></el-col
             >
             <el-col :span="4">
               <div style="margin-top: 10px">
-                <el-button @click="editTmp">编辑</el-button>
+                <el-button @click="editTmp('edit')">{{ $t('编辑') }}</el-button>
               </div>
               <div style="margin-top: 20px">
-                <el-button @click="deleteTmpDrawer">删除</el-button>
+                <el-button @click="deleteTmpDrawer">{{ $t('删除') }}</el-button>
               </div>
             </el-col>
           </el-row>
