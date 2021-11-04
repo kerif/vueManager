@@ -601,6 +601,9 @@ export default {
           name: 0
         },
         {
+          name: 0.2
+        },
+        {
           name: 0.5
         },
         {
