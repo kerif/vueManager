@@ -6,136 +6,155 @@
     :before-close="close"
     @opened="open()"
   >
-    <div style="margin-top: 20px">
-      <el-button>{{ $t('新增模板') }}</el-button> <el-button>{{ $t('确定导出') }}</el-button>
+    <div style="margin: 20px">
+      <el-button @click="addTmp">{{ $t('新增模板') }}</el-button>
+      <el-button>{{ $t('确定导出') }}</el-button>
     </div>
-    <el-row style="background: #ccc" :gutter="20">
+    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
       <el-col>
-        <div>模板名称</div>
+        <div style="height: 180px">
+          <el-col>
+            <div>模板名称</div>
+          </el-col>
+          <el-row>
+            <el-col :span="20"
+              ><div style="margin-top: 20px; padding: 10px">
+                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
+              </div></el-col
+            >
+            <el-col :span="4">
+              <div style="margin-top: 10px">
+                <el-button @click="editTmp">编辑</el-button>
+              </div>
+              <div style="margin-top: 20px">
+                <el-button @click="deleteTmpDrawer">删除</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
       </el-col>
-      <el-row>
-        <el-col :span="18">模板名称模板名称模板名称模板名称模板名称模板名称模板名称</el-col>
-        <el-col :span="6">
-          <el-button @click="editTmpDrawer = true">编辑</el-button>
-          <el-button @click="deleteTmpDrawer">删除</el-button>
-        </el-col>
-      </el-row>
     </el-row>
-    <el-drawer
-      :title="$t('编辑默认模板')"
-      class="inner"
-      :size="size"
-      :visible.sync="editTmpDrawer"
+    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
+      <el-col>
+        <div style="height: 180px">
+          <el-col>
+            <div>模板名称</div>
+          </el-col>
+          <el-row>
+            <el-col :span="20"
+              ><div style="margin-top: 20px; padding: 10px">
+                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
+              </div></el-col
+            >
+            <el-col :span="4">
+              <div style="margin-top: 10px">
+                <el-button @click="editTmpDrawer = true">编辑</el-button>
+              </div>
+              <div style="margin-top: 20px">
+                <el-button @click="deleteTmpDrawer">删除</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
+      <el-col>
+        <div style="height: 180px">
+          <el-col>
+            <div>模板名称</div>
+          </el-col>
+          <el-row>
+            <el-col :span="20"
+              ><div style="margin-top: 20px; padding: 10px">
+                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
+              </div></el-col
+            >
+            <el-col :span="4">
+              <div style="margin-top: 10px">
+                <el-button @click="editTmpDrawer = true">编辑</el-button>
+              </div>
+              <div style="margin-top: 20px">
+                <el-button @click="deleteTmpDrawer">删除</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
+      <el-col>
+        <div style="height: 180px">
+          <el-col>
+            <div>模板名称</div>
+          </el-col>
+          <el-row>
+            <el-col :span="20"
+              ><div style="margin-top: 20px; padding: 10px">
+                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
+              </div></el-col
+            >
+            <el-col :span="4">
+              <div style="margin-top: 10px">
+                <el-button @click="editTmpDrawer = true">编辑</el-button>
+              </div>
+              <div style="margin-top: 20px">
+                <el-button @click="deleteTmpDrawer">删除</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row style="background: #ccc; margin: 20px; padding: 10px" :gutter="20">
+      <el-col>
+        <div style="height: 180px">
+          <el-col>
+            <div>模板名称</div>
+          </el-col>
+          <el-row>
+            <el-col :span="20"
+              ><div style="margin-top: 20px; padding: 10px">
+                模板名称模板名称模板名称模板名称模板名称模板名称模板名称
+              </div></el-col
+            >
+            <el-col :span="4">
+              <div style="margin-top: 10px">
+                <el-button @click="editTmpDrawer = true">编辑</el-button>
+              </div>
+              <div style="margin-top: 20px">
+                <el-button @click="deleteTmpDrawer">删除</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+    </el-row>
+    <!-- <waybill-list-inner-drawer
+      :editTmpDrawer="editTmpDrawer"
+      @receiveInner="receiveInner"
       :append-to-body="true"
-    >
-      <el-form>
-        <el-form-item :label="$t('模板名称')">
-          <el-input :placeholder="$t('请输入模板名称')" class="input-sty"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('模板备注')">
-          <el-input :placeholder="$t('请输入模板名称')" class="input-sty"></el-input>
-        </el-form-item>
-        <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item :title="$t('订单信息')" name="1">
-            <el-radio-group v-model="order">
-              <el-radio :label="1">用户ID</el-radio>
-              <el-radio :label="2">用户昵称</el-radio>
-              <el-radio :label="3">订单号</el-radio>
-              <el-radio :label="4">渠道名称</el-radio>
-            </el-radio-group>
-          </el-collapse-item>
-          <el-collapse-item :title="$t('收件信息')" name="1">
-            <el-radio-group v-model="order">
-              <el-radio :label="1">收货人</el-radio>
-              <el-radio :label="2">联系方式</el-radio>
-              <el-radio :label="3">收获方式</el-radio>
-              <el-radio :label="4">国家地区</el-radio>
-            </el-radio-group>
-          </el-collapse-item>
-          <el-collapse-item :title="$t('入库信息')" name="1">
-            <div>总计</div>
-            <el-radio-group v-model="order">
-              <el-radio :label="1">收货人</el-radio>
-              <el-radio :label="2">联系方式</el-radio>
-              <el-radio :label="3">收获方式</el-radio>
-              <el-radio :label="4">国家地区</el-radio>
-            </el-radio-group>
-            <div>分箱</div>
-            <el-radio-group v-model="order">
-              <el-radio :label="1">申报价值</el-radio>
-              <el-radio :label="2">商品数量</el-radio>
-              <el-radio :label="3">入库件数</el-radio>
-              <el-radio :label="4">入库实重</el-radio>
-            </el-radio-group>
-          </el-collapse-item>
-          <el-collapse-item :title="$t('出库信息')" name="1">
-            <div>总计</div>
-            <el-radio-group v-model="order">
-              <el-radio :label="1">出库箱数</el-radio>
-              <el-radio :label="2">计费重量</el-radio>
-              <el-radio :label="3">出库实重</el-radio>
-              <el-radio :label="4">出库体积重</el-radio>
-            </el-radio-group>
-            <div>分箱</div>
-            <el-radio-group v-model="order">
-              <el-radio :label="1">计费重量</el-radio>
-              <el-radio :label="2">出库实重</el-radio>
-              <el-radio :label="3">出库尺寸</el-radio>
-              <el-radio :label="4">出库体积重</el-radio>
-            </el-radio-group>
-          </el-collapse-item>
-          <el-collapse-item :title="$t('支付信息')" name="1">
-            <el-radio-group v-model="order">
-              <el-radio :label="1">支付方式</el-radio>
-              <el-radio :label="2">支付状态</el-radio>
-              <el-radio :label="3">应付金额</el-radio>
-              <el-radio :label="4">实付金额</el-radio>
-            </el-radio-group>
-            <div>其他费用明细</div>
-            <el-radio-group v-model="order">
-              <el-radio :label="1">仓储费</el-radio>
-              <el-radio :label="2">保险服务</el-radio>
-              <el-radio :label="3">关税服务</el-radio>
-              <el-radio :label="4">增值费用</el-radio>
-            </el-radio-group>
-          </el-collapse-item>
-          <el-collapse-item :title="$t('发货信息')" name="1">
-            <el-radio-group v-model="order">
-              <el-radio :label="1">发货单号</el-radio>
-              <el-radio :label="2">发货单名称</el-radio>
-              <el-radio :label="3">发货单目的地</el-radio>
-              <el-radio :label="4">发货状态</el-radio>
-            </el-radio-group>
-          </el-collapse-item>
-          <el-collapse-item :title="$t('操作信息')" name="1">
-            <el-radio-group v-model="order">
-              <el-radio :label="1">提交时间</el-radio>
-              <el-radio :label="2">打包时间</el-radio>
-              <el-radio :label="3">支付时间</el-radio>
-              <el-radio :label="4">发货时间</el-radio>
-            </el-radio-group>
-          </el-collapse-item>
-          <el-collapse-item :title="$t('其他客户信息')" name="1">
-            <el-radio-group v-model="order">
-              <el-radio :label="1">绑定手机号</el-radio>
-              <el-radio :label="2">绑定邮箱</el-radio>
-              <el-radio :label="3">微信号</el-radio>
-            </el-radio-group>
-          </el-collapse-item>
-        </el-collapse>
-      </el-form>
-    </el-drawer>
+    ></waybill-list-inner-drawer> -->
   </el-drawer>
 </template>
 
 <script>
+// import WaybillListInnerDrawer from './components/waybillListInnerDrawer'
 export default {
+  components: {
+    // WaybillListInnerDrawer
+  },
   data() {
     return {
       editTmpDrawer: false,
       activeNames: ['1'],
       order: 1,
-      size: '40%'
+      code: '',
+      name: '',
+      tmpName: '',
+      tmpCode: '',
+      tmpList: [],
+      checkList: []
     }
   },
   props: {
@@ -143,6 +162,11 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  created() {
+    this.getCodeList()
+    this.getTmpList()
+    this.getTmpData()
   },
   methods: {
     close() {
@@ -152,21 +176,84 @@ export default {
     handleChange(val) {
       console.log(val)
     },
-    deleteTmpDrawer() {}
+    addTmp() {
+      this.editTmpDrawer = true
+      let param = {
+        // name:
+        // code:
+        // header:
+      }
+      this.$request.addTemplate(param).then(res => {
+        console.log(res.data)
+      })
+    },
+    editTmp() {
+      this.editTmpDrawer = true
+    },
+    receiveInner() {
+      this.editTmpDrawer = true
+    },
+    deleteTmpDrawer() {
+      // this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
+      //   confirmButtonText: this.$t('确定'),
+      //   cancelButtonText: this.$t('取消'),
+      //   type: 'warning'
+      // }).then(() => {
+      //   this.$request.deleteTemplate().then(res => {
+      //     if (res.ret) {
+      //       this.$notify({
+      //         title: this.$t('操作成功'),
+      //         message: res.msg,
+      //         type: 'success'
+      //       })
+      //     } else {
+      //       this.$notify({
+      //         title: this.$t('操作失败'),
+      //         message: res.msg,
+      //         type: 'warning'
+      //       })
+      //     }
+      //   })
+      // })
+    },
+    getTmpList() {
+      let code = this.code
+      this.$request.listQuery(code).then(res => {
+        console.log(res.data)
+        this.tmpList = res.data
+        this.tmpCode = res.data[0].code
+        console.log(this.tmpCode)
+      })
+    },
+    getTmpData() {
+      let param = {
+        code: this.tmpCode
+      }
+      this.$request.getListTemplate(param).then(res => {
+        console.log(res)
+      })
+    },
+    getCodeList() {
+      this.$request.getCodeList().then(res => {
+        this.code = res.data[0].id
+        this.name = res.data[0].name
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .exportTmp-container {
-  /deep/.inner .el-drawer__open .el-drawer.rtl {
-    width: 40% !important;
-  }
+  font-size: 14px;
   .el-drawer.rtl {
     overflow: scroll;
   }
   .el-drawer__header {
     margin-bottom: 0;
+  }
+  /deep/.el-form-item {
+    width: 200px;
   }
   /deep/.el-input {
     width: 40% !important;
