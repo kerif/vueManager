@@ -8,7 +8,7 @@
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
       <!-- 邮件标题 -->
-      <el-form-item :label="$t('*邮件标题')">
+      <el-form-item :label="$t('邮件标题')">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="params.title"></el-input
@@ -16,7 +16,7 @@
         </el-row>
       </el-form-item>
       <!-- 邮件内容 -->
-      <el-form-item :label="$t('*邮件内容')">
+      <el-form-item :label="$t('邮件内容')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>

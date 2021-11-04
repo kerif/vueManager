@@ -38,7 +38,7 @@
           <el-form-item :label="$t('值')" prop="value">
             <el-input v-model="form.value" style="width: 217px"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('到账之日起计算，有效期为')">
+          <el-form-item :label="$t('到账之日起计算有效期为')">
             <el-select v-model="form.valid_time">
               <el-option
                 v-for="item in validTimeList"

@@ -89,7 +89,7 @@ export default {
     },
     // 设为默认
     setDefault(id) {
-      this.$confirm(this.$t('您真的要设为默认吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要设为默认吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -147,7 +147,7 @@ export default {
     },
     // 删除语言
     deleteTransfer(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

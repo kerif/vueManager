@@ -1,7 +1,7 @@
 <template>
   <div class="customMenu-container">
     <div class="remark">
-      {{ $t('*公众号菜单主菜单最多只能是三级，每级主菜单最多可以有五个子菜单栏目') }}
+      {{ $t('公众号菜单主菜单最多只能是三级每级主菜单最多可以有五个子菜单栏目') }}
     </div>
     <el-button type="success" @click="newMenu" class="add-menu">{{ $t('添加菜单') }}</el-button>
     <el-table
@@ -162,7 +162,7 @@ export default {
       }
     },
     deleteMenu(id) {
-      this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除此菜单'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

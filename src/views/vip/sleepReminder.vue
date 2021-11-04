@@ -75,8 +75,8 @@
         <el-table-column :label="$t('会员ID')" prop="id"></el-table-column>
         <el-table-column :label="$t('会员昵称')" prop="name"></el-table-column>
         <el-table-column :label="$t('代理')" prop="invitor"></el-table-column>
-        <el-table-column :label="$t('未登录（天）')" prop="not_login_days"></el-table-column>
-        <el-table-column :label="$t('未下单（天）')" prop="not_order_days"></el-table-column>
+        <el-table-column :label="$t('未登录天')" prop="not_login_days"></el-table-column>
+        <el-table-column :label="$t('未下单天')" prop="not_order_days"></el-table-column>
         <el-table-column
           :label="$t('最后下单时间')"
           prop="last_order_at"
@@ -100,7 +100,7 @@
     <!-- 轨迹 -->
     <el-dialog :visible.sync="sleepDialog" width="65%" :title="$t('沉睡设置')" @close="clearSn">
       <div style="margin-bottom: 20px">
-        <p>{{ $t('请选择同时满足以下规则为沉睡会员：') }}</p>
+        <p>{{ $t('请选择同时满足以下规则为沉睡会员') }}</p>
         <el-row>
           <el-col :span="10">
             {{ $t('未登录天数大于') }}
@@ -112,7 +112,7 @@
           </el-col>
         </el-row>
       </div>
-      <div class="sleep-tips">{{ $t('不填写或填写数值为0，代表不启用该条件') }}</div>
+      <div class="sleep-tips">{{ $t('不填写或填写数值为0代表不启用该条件') }}</div>
       <div slot="footer">
         <el-button @click="sleepDialog = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="changeSleep">{{ $t('确定') }}</el-button>
@@ -226,7 +226,7 @@ export default {
       })
     },
     wake(id) {
-      this.$confirm(this.$t('是否确认唤醒客户？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认唤醒客户'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -282,7 +282,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('是否确认批量唤醒客户？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认批量唤醒客户'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

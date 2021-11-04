@@ -75,7 +75,7 @@
         <!-- 二维码头像尺寸 -->
         <el-form-item :label="$t('二维码尺寸')" class="slogan">
           <el-input v-model="backgroundList.avatar_size" @blur="changeSize"> </el-input>px
-          <p class="slogan-height">{{ $t('高和宽一致，只需要填写一个参数') }}</p>
+          <p class="slogan-height">{{ $t('高和宽一致只需要填写一个参数') }}</p>
         </el-form-item>
         <!-- 背景图像 -->
         <el-form-item :label="$t('背景图像')">
@@ -121,9 +121,7 @@
           >
             <i class="el-icon-plus"> </i> </el-upload
           ><br />
-          <span class="suggest-btn">{{
-            $t('链接自定义图片只需要上传一张，显示图片长宽比5:4')
-          }}</span>
+          <span class="suggest-btn">{{ $t('链接自定义图片只需要上传一张显示图片长宽比54') }}</span>
         </el-form-item>
         <div class="background-btn">
           <el-button class="save-btn" @click="updateBackground">{{ $t('保存') }}</el-button>

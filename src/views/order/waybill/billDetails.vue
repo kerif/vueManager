@@ -181,7 +181,7 @@
                   </tr>
 
                   <tr>
-                    <td>{{ $t('国家/地区') }}</td>
+                    <td>{{ $t('国家地区') }}</td>
                     <th>{{ form.address.code }} {{ form.address.country.cn_name }}</th>
                     <td>{{ $t('省') }}</td>
                     <th class="part">
@@ -332,7 +332,7 @@
                   prop="address.receiver_name"
                 ></el-table-column>
                 <el-table-column
-                  :label="$t('收货国家/地区')"
+                  :label="$t('收货国家地区')"
                   prop="address.country_name"
                   width="155"
                 ></el-table-column>
@@ -738,13 +738,13 @@
           <el-tab-pane :label="$t('签收日志')" name="3">
             <div class="bale package-details">
               <div class="bale-left packed-details">
-                <span>{{ $t('签收时间:') }}</span>
+                <span>{{ $t('签收时间') }}</span>
                 <span>
                   {{ form.signed_at }}
                 </span>
               </div>
               <div class="bale-left packed-details">
-                <span>{{ $t('签收照片:') }}</span>
+                <span>{{ $t('签收照片') }}</span>
                 <div class="left-img" v-for="item in form.sign_images" :key="item.id">
                   <span
                     style="cursor: pointer"
@@ -755,7 +755,7 @@
                 </div>
               </div>
               <div style="margin-top: 20px; font-size: 14px">
-                {{ $t('评价:') }}
+                {{ $t('评价') }}
                 <span>{{ form.comment && form.comment.content }}</span>
               </div>
             </div>
@@ -867,7 +867,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('手机/联系电话')" class="label-sty">
+            <el-form-item :label="$t('手机联系电话')" class="label-sty">
               <el-input
                 class="second-sty"
                 v-model="address.timezone"
@@ -883,7 +883,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="$t('国家/地区')" class="label-sty">
+            <el-form-item :label="$t('国家地区')" class="label-sty">
               <el-cascader
                 v-model="countryList"
                 :options="options"
@@ -902,7 +902,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="$t('街道/门牌号')" class="label-sty">
+            <el-form-item :label="$t('街道门牌号')" class="label-sty">
               <el-input
                 class="second-sty"
                 v-model="address.street"
@@ -1227,7 +1227,7 @@ export default {
     },
     // 导出发票
     downloadInvoice() {
-      this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认导出'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

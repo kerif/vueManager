@@ -1,7 +1,7 @@
 <template>
   <div class="email-add-container">
     <el-form label-position="top">
-      <el-form-item :label="$t('*模版类型')" class="email-tmp">
+      <el-form-item :label="$t('模版类型')" class="email-tmp">
         <el-row>
           <el-col :span="10">
             <el-select v-model="params.type" :placeholder="$t('请选择')" clearable>

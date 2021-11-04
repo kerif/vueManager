@@ -29,7 +29,7 @@
           </el-row>
         </div>
         <div class="remark">
-          {{ $t('该数据统计包含已删除活动数据，已发放券正常使用，可前往抵用券管理查看') }}
+          {{ $t('该数据统计包含已删除活动数据已发放券正常使用可前往抵用券管理查看') }}
         </div>
       </div>
       <add-btn @click.native="goAdd" class="btn-add">{{ $t('添加') }}</add-btn>
@@ -224,7 +224,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

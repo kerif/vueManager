@@ -63,7 +63,7 @@
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="form.mode">{{
-            $t('按比例计佣时，仅计算实际运费佣金（不包含增值费用、保险费用、抵用券等）')
+            $t('按比例计佣时仅计算实际运费佣金不包含增值费用保险费用抵用券等）')
           }}</el-checkbox>
         </el-form-item>
       </el-form>
@@ -148,7 +148,7 @@ export default {
         },
         {
           id: 3,
-          name: this.$t('按计费重量计佣（设置每单位重量佣金）')
+          name: this.$t('按计费重量计佣设置每单位重量佣金')
         }
       ]
     }
@@ -306,7 +306,7 @@ export default {
     },
     // 删除单条转账支付
     deleteSelf(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

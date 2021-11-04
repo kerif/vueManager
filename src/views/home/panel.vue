@@ -496,7 +496,7 @@
             <div>
               <span style="font-weight: bold">{{ $t('提示') }}：</span>
               <span>{{
-                $t('微信扫码请点击打开页面右上角选择“在浏览器中打开”，或直接使用浏览器扫码')
+                $t('微信扫码请点击打开页面右上角选择在浏览器中打开或直接使用浏览器扫码')
               }}</span>
             </div>
           </div>
@@ -815,7 +815,7 @@ export default {
       if (!this.isPermissionFilterArr.includes(permissionNumber)) {
         this.$message({
           type: 'error',
-          message: this.$t('当前操作暂无权限！')
+          message: this.$t('当前操作暂无权限')
         })
       } else {
         this.$router.push({ name: routerName, query: query })

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="$t('新增国家/地区')"
+    :title="$t('新增国家地区')"
     class="set-country-dialog"
     @close="clear"
   >

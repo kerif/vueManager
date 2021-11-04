@@ -14,7 +14,7 @@
       >
       </el-table-column>
       <el-table-column
-        :label="`${$t('比例%/金额')}${localization.currency_unit}/${$t('单位金额')}${
+        :label="`${$t('比例金额')}${localization.currency_unit}/${$t('单位金额')}${
           localization.currency_unit
         }`"
         prop="proportion"
@@ -118,7 +118,7 @@ export default {
     },
     // 批量结算
     batchSettlement() {
-      this.$confirm(this.$t('您真的确认批量结算吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的确认批量结算吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

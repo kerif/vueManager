@@ -13,12 +13,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item :label="'*' + $t('国家/地区')">
+          <el-form-item :label="'*' + $t('国家地区')">
             <el-select
               v-model="form.country_id"
               filterable
               class="country-select"
-              :placeholder="$t('请选择国家/地区')"
+              :placeholder="$t('请选择国家地区')"
             >
               <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
@@ -158,7 +158,7 @@ export default {
     },
     submit() {
       if (this.form.country_id === '') {
-        return this.$message.error(this.$t('请选择国家/地区'))
+        return this.$message.error(this.$t('请选择国家地区'))
       } else if (this.form.receiver_name === '') {
         return this.$message.error(this.$t('请输入收件人'))
       } else if (this.form.phone === '') {

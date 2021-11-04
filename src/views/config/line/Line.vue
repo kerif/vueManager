@@ -93,7 +93,7 @@
       @close="clear"
     >
       <el-form ref="form" :model="copyData" label-width="100px">
-        <el-form-item :label="lineStatus === 'edit' ? $t('*线路名称') : $t('*新线路名称')">
+        <el-form-item :label="lineStatus === 'edit' ? $t('线路名称') : $t('新线路名称')">
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
       </el-form>
@@ -293,7 +293,7 @@ export default {
     },
     // 删除
     deleteLine(id) {
-      this.$confirm(this.$t('您真的要删除此路线？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除此路线'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

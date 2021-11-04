@@ -8,7 +8,7 @@
       label-position="left"
     >
       <!-- 网站名称 -->
-      <el-form-item :label="$t('*网站名称')">
+      <el-form-item :label="$t('网站名称')">
         <el-input v-model="setForm.website_name"> </el-input>
         <el-button
           class="btn-deep-purple others-btn"

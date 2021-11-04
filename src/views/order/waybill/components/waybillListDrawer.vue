@@ -9,7 +9,7 @@
       <h3>{{ $t('货量统计') }}</h3>
       <el-row :gutter="20">
         <el-col :span="14" style="height: 100%">
-          <div>{{ $t('(根据列表筛选条件)') }}</div>
+          <div>{{ $t('根据列表筛选条件') }}</div>
           <div style="margin-top: 5px">
             <el-tag v-for="(item, index) in arr" :key="index">
               <span>{{ item }}</span>

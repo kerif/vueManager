@@ -2,7 +2,7 @@
   <div class="balance-container">
     <el-form label-position="top" class="warehouse-form" :model="ruleForm" ref="ruleForm">
       <!-- 客户 -->
-      <el-form-item :label="$t('*客户')" class="changeQuery">
+      <el-form-item :label="$t('客户')" class="changeQuery">
         <el-row>
           <el-col :span="10">
             <el-autocomplete
@@ -17,7 +17,7 @@
       </el-form-item>
       <!-- 扣款金额 -->
       <el-form-item
-        :label="$t('*扣款金额') + `${localization.currency_unit ? localization.currency_unit : ''}`"
+        :label="$t('扣款金额') + `${localization.currency_unit ? localization.currency_unit : ''}`"
       >
         <el-row>
           <el-col :span="10">

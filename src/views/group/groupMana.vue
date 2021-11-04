@@ -160,14 +160,14 @@
       </el-table>
       <div>
         <el-col :offset="1" :span="5">
-          {{ $t('合计已提交包裹：') }}{{ packagesCount }} {{ $t('个') }}</el-col
+          {{ $t('合计已提交包裹') }}{{ packagesCount }} {{ $t('个') }}</el-col
         >
         <el-col :offset="1" :span="5">
-          {{ $t('重量：') }}{{ packageWeight }}
+          {{ $t('重量') }}{{ packageWeight }}
           {{ `${localization.weight_unit ? localization.weight_unit : ''}` }}</el-col
         >
         <el-col :span="5">
-          {{ $t('体积重量：') }}{{ volumeWeight }}
+          {{ $t('体积重量') }}{{ volumeWeight }}
           {{ `${localization.weight_unit ? localization.weight_unit : ''}` }}</el-col
         >
       </div>
@@ -356,7 +356,7 @@ export default {
     // 移除拼团
     removeGroup(id) {
       this.$confirm(
-        this.$t('移除该团员后，团员已提交的拼团包裹将会退回原仓库，您确定要移除该团员吗？'),
+        this.$t('移除该团员后团员已提交的拼团包裹将会退回原仓库您确定要移除该团员吗'),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),
@@ -385,7 +385,7 @@ export default {
     // 取消拼团
     cancelGroup(id) {
       this.$confirm(
-        this.$t('取消拼团后，团员已提交的拼团包裹将会退回原仓库，您确定要取消该拼团吗？'),
+        this.$t('取消拼团后团员已提交的拼团包裹将会退回原仓库您确定要取消该拼团吗'),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),
@@ -415,7 +415,7 @@ export default {
     submitGroup(subCount, count, id) {
       if (subCount < count) {
         this.$confirm(
-          this.$t('还有团员未提交包裹，提交包裹会自动踢出该团员，您确定要提交该拼团吗？'),
+          this.$t('还有团员未提交包裹提交包裹会自动踢出该团员您确定要提交该拼团吗'),
           this.$t('提示'),
           {
             confirmButtonText: this.$t('确定'),
@@ -441,7 +441,7 @@ export default {
           })
         })
       } else {
-        this.$confirm(this.$t('您确定提交该拼团吗？'), this.$t('提示'), {
+        this.$confirm(this.$t('您确定提交该拼团吗'), this.$t('提示'), {
           confirmButtonText: this.$t('确定'),
           cancelButtonText: this.$t('取消'),
           type: 'warning'

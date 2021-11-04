@@ -29,7 +29,6 @@
     <div v-if="evaluationData.length">
       <ul>
         <li v-for="(item, index) in evaluationData" :key="index" class="evaluation-list">
-          <!-- <div class="order-num">订单号：{{item.order}}</div> -->
           <el-row :gutter="20">
             <!-- 头像 -->
             <el-col :span="6">

@@ -2,7 +2,7 @@
   <div class="public-add-container">
     <el-form label-position="top">
       <!-- 公告标题 -->
-      <el-form-item :label="$t('*公告标题')">
+      <el-form-item :label="$t('公告标题')">
         <el-row>
           <el-col :span="10"
             ><el-input :placeholder="$t('公告标题不超过30个字')" v-model="params.title"></el-input
@@ -10,7 +10,7 @@
         </el-row>
       </el-form-item>
       <!-- 公告详情 -->
-      <el-form-item :label="$t('*公告详情')">
+      <el-form-item :label="$t('公告详情')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>

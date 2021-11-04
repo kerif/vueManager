@@ -8,7 +8,6 @@ import Element from 'element-ui'
 import './styles/element-variable.scss'
 import request from './lib/request'
 import baseUrl from './lib/axios/baseApi'
-// import convert from './utils/language'
 import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
@@ -21,7 +20,6 @@ store.commit('initLanguageCode')
 Element.Dialog.props.closeOnClickModal.default = false
 Vue.prototype.$request = request
 Vue.prototype.$baseUrl = baseUrl
-// Vue.prototype.$t = convert
 
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 new Vue({

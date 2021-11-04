@@ -107,7 +107,7 @@
     <!-- 复制线路 -->
     <el-dialog :title="$t('复制价格表')" :visible.sync="copyDialog" width="45%" @close="clear">
       <el-form ref="form" :model="copyData" label-width="100px">
-        <el-form-item :label="$t('*价格表名称')">
+        <el-form-item :label="$t('价格表名称')">
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
       </el-form>
@@ -258,7 +258,7 @@ export default {
     },
     // 删除
     deleteSales(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import $i18n from '../utils/i18n'
 import tagsView from './module/tagsView'
 
 Vue.use(Vuex)
@@ -16,7 +17,7 @@ export default new Vuex.Store({
     groupMe: '', // 是否显示拼团配置
     btnLoading: false,
     isCollapse: false,
-    languageCode: 'simple', // 默认简体中文
+    languageCode: 'zhCN', // 默认简体中文
     pagePath: '', // 路径列表
     orderListFieldData: [] // 订单列表显示字段
   },
@@ -52,7 +53,6 @@ export default new Vuex.Store({
     },
     saveMe(state, data) {
       state.groupMe = data
-      console.log(state.groupMe, 'state.groupMe')
       localStorage.setItem('me', data)
       console.log(localStorage.setItem, 'localStorage.setItem')
     },
@@ -65,10 +65,12 @@ export default new Vuex.Store({
     },
     saveLanguageCode(state, data) {
       state.languageCode = data
+      $i18n.locale = data
       localStorage.setItem('language', data)
     },
     initLanguageCode(state) {
-      state.languageCode = localStorage.getItem('language') || 'cn'
+      state.languageCode = localStorage.getItem('language') || 'zhCN'
+      $i18n.locale = localStorage.getItem('language') || 'zhCN'
     }
   },
   actions: {}

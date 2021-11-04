@@ -8,7 +8,7 @@
   >
     <el-dialog width="40%" :title="$t('发货单详情')" :visible.sync="showInner" append-to-body>
       <div class="excel-date">
-        <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单（含包裹信息）') }}</el-radio>
+        <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单含包裹信息') }}</el-radio>
         <el-radio :label="2" v-model="uploadRadio">{{ $t('导出清单') }}</el-radio>
         <el-radio :label="3" v-model="uploadRadio">{{ $t('发货单详情') }}</el-radio>
       </div>
@@ -59,7 +59,7 @@
         width="155"
       ></el-table-column>
       <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
-      <el-table-column :label="$t('收货国家/地区')" prop="address.country_name"></el-table-column>
+      <el-table-column :label="$t('收货国家地区')" prop="address.country_name"></el-table-column>
       <el-table-column :label="$t('包裹数与件数')">
         <template slot-scope="scope">
           <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>

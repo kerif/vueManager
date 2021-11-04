@@ -117,7 +117,7 @@ export default {
     },
     regenerate() {
       this.$confirm(
-        this.$t('确定要重新生成会员编号吗？原来的编号将会被重置，可能会部分影响到包裹订单出入库'),
+        this.$t('确定要重新生成会员编号吗原来的编号将会被重置可能会部分影响到包裹订单出入库'),
         this.$t('重新生成'),
         {
           confirmButtonText: this.$t('确定'),

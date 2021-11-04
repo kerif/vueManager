@@ -63,7 +63,7 @@
     <div v-if="evaluationData.length">
       <ul>
         <li v-for="(item, index) in evaluationData" :key="index" class="evaluation-list">
-          <div class="order-num">{{ $t('订单号：') }}{{ item.order }}</div>
+          <div class="order-num">{{ $t('订单号') }}{{ item.order }}</div>
           <el-row :gutter="20">
             <!-- 头像 -->
             <el-col :span="2">
@@ -418,9 +418,7 @@ export default {
     },
     // 取消或设置精选
     resetRecommend(id, status) {
-      console.log(id, 'im id')
-      console.log(status, 'im status')
-      this.$confirm(this.$t('您真的要执行此操作吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要执行此操作吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -445,7 +443,7 @@ export default {
     },
     // 删除
     deleteRecommend(id) {
-      this.$confirm(this.$t('您真的要执行此操作吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要执行此操作吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

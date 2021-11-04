@@ -19,7 +19,7 @@
           <el-input
             v-model="form.max_rule_fee"
             class="input-sty"
-            :placeholder="$t('请输入值（空值为不限制）')"
+            :placeholder="$t('请输入值空值为不限制')"
           ></el-input>
         </el-form-item>
         <el-form-item>
@@ -198,7 +198,7 @@
                   <el-input
                     :disabled="!item.state"
                     v-model="item.value"
-                    :placeholder="$t('请输入固定值或百分比%')"
+                    :placeholder="$t('请输入固定值或百分比')"
                   ></el-input>
                 </el-col>
               </el-row>
@@ -209,14 +209,14 @@
                   <el-input
                     :disabled="!item.state"
                     v-model="item.min_charge"
-                    :placeholder="$t('请输入最低收费（空值为不设限制）')"
+                    :placeholder="$t('请输入最低收费空值为不设限制')"
                   ></el-input>
                 </el-col>
                 <el-col :span="8" :offset="1">
                   <el-input
                     :disabled="!item.state"
                     v-model="item.max_charge"
-                    :placeholder="$t('请输入最高收费（空值为不设限制）')"
+                    :placeholder="$t('请输入最高收费空值为不设限制')"
                   ></el-input>
                 </el-col>
               </el-row>
@@ -288,7 +288,7 @@ export default {
         },
         {
           id: 3,
-          name: this.$t('运费价格比例（仅运费）')
+          name: this.$t('运费价格比例仅运费')
         }
       ],
       stringData: [],
@@ -430,7 +430,7 @@ export default {
       })
     },
     deleteChannel(index, item, id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

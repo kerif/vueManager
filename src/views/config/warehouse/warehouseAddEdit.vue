@@ -3,7 +3,7 @@
     <div class="tips-box">
       <span class="tips-title">{{ $t('温馨提示') }}: </span>
       <span class="tips-content">{{
-        $t('当前页面配置的地址为用户发往仓库的真实收件地址，请填写有效准确的信息，请不要填写座机')
+        $t('当前页面配置的地址为用户发往仓库的真实收件地址请填写有效准确的信息请不要填写座机')
       }}</span>
     </div>
     <el-form
@@ -57,7 +57,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('选择开启会忽略当次地址精确度检查。')"
+                :content="$t('选择开启会忽略当次地址精确度检查')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -96,11 +96,11 @@
         <el-col :span="10">
           <el-form-item>
             <div>
-              <span class="address-sty">{{ $t('免费仓储期(天)') }}</span>
+              <span class="address-sty">{{ $t('免费仓储期天') }}</span>
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('仓储期按自然日计算，称重当日为仓储第一天')"
+                :content="$t('仓储期按自然日计算称重当日为仓储第一天')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -125,7 +125,7 @@
         </el-col>
       </el-row>
       <el-form-item
-        :label="$t('温馨提示（主要提醒客户需要注意的事项，在客户端仓库地址页面显示）')"
+        :label="$t('温馨提示主要提醒客户需要注意的事项在客户端仓库地址页面显示）')"
         prop="tips"
       >
         <el-row>
@@ -139,21 +139,21 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item prop="support_countries" :label="$t('支持国家/地区')">
+      <el-form-item prop="support_countries" :label="$t('支持国家地区')">
         <el-col :span="10">
           <el-select
             v-model="ruleForm.support_countries"
             multiple
             filterable
             class="country-select"
-            :placeholder="$t('请选择国家/地区')"
+            :placeholder="$t('请选择国家地区')"
           >
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
         </el-col>
         <el-col :span="4" class="country-btn">
-          <el-button type="primary" @click="onAddCountry">+ {{ $t('新增国家/地区') }}</el-button>
+          <el-button type="primary" @click="onAddCountry">+ {{ $t('新增国家地区') }}</el-button>
         </el-col>
       </el-form-item>
       <el-form-item>

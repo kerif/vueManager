@@ -32,7 +32,7 @@
           <span>{{ scope.row.user_id }}-{{ scope.row.agent_name }}-</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('佣金分成%')" prop="commission" width="100"> </el-table-column>
+      <el-table-column :label="$t('佣金分成')" prop="commission" width="100"> </el-table-column>
       <el-table-column :label="$t('下单数')">
         <template slot-scope="scope">
           <span style="color: blue">{{ scope.row.deal_order }}</span>
@@ -235,7 +235,7 @@ export default {
     },
     //删除代理
     deleteAgent(id) {
-      this.$confirm(this.$t('您真的要删除此代理？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除此代理'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

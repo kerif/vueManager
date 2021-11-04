@@ -35,7 +35,7 @@
       </el-form-item> -->
       <el-form-item v-if="ruleForm.template_id === 0">
         <el-checkbox v-model="ruleForm.mode">{{
-          $t('按比例计佣时，仅计算实际运费佣金（不包含增值费用、保险费用、抵用券等）')
+          $t('按比例计佣时仅计算实际运费佣金不包含增值费用保险费用抵用券等')
         }}</el-checkbox>
       </el-form-item>
       <el-form-item :label="$t('默认佣金')" v-if="ruleForm.template_id === 0">
@@ -102,7 +102,7 @@ export default {
         },
         {
           id: 3,
-          name: this.$t('按计费重量计佣（设置每单位重量佣金）')
+          name: this.$t('按计费重量计佣设置每单位重量佣金')
         }
       ],
       agentName: '',

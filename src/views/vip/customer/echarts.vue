@@ -101,7 +101,7 @@
       <h3>{{ $t('代理邀请客户成交金额排行榜') }}</h3>
       <el-table class="data-list" border stripe v-loading="tableLoading" :data="packageCompare">
         <el-table-column :label="$t('代理名称')" prop="agent_name"></el-table-column>
-        <el-table-column :label="$t('佣金分成%')" prop="rate"></el-table-column>
+        <el-table-column :label="$t('佣金分成')" prop="rate"></el-table-column>
         <el-table-column :label="$t('成交订单数')" prop="order_count"></el-table-column>
         <el-table-column :label="$t('成交金额')" prop="order_amount"></el-table-column>
         <el-table-column :label="$t('提现金额')" prop="withdraw"></el-table-column>
@@ -257,7 +257,7 @@ export default {
             {
               type: 'value',
               scale: true,
-              name: this.$t('新增客户数(个)'),
+              name: this.$t('新增客户数个'),
               min: 0,
               boundaryGap: true,
               max(value) {
@@ -398,7 +398,7 @@ export default {
             {
               type: 'value',
               scale: true,
-              name: this.$t('邀请客户成交订单数(个)'),
+              name: this.$t('邀请客户成交订单数个'),
               min: 0,
               max(value) {
                 return Math.ceil(value.max / 5) * 5
@@ -421,7 +421,7 @@ export default {
             {
               type: 'value',
               scale: true,
-              name: this.$t('成交金额(元)'),
+              name: this.$t('成交金额元'),
               splitNumber: 5,
               min: 0,
               max: maxValue,

@@ -83,7 +83,7 @@
         <el-table-column prop="user.id" :label="$t('代理ID')" width="100"> </el-table-column>
         <el-table-column prop="user.name" :label="$t('代理昵称')" width="100"> </el-table-column>
         <el-table-column prop="type" :label="$t('提现方式')" width="100"> </el-table-column>
-        <el-table-column prop="amount" :label="$t('提现金额￥')" width="100"> </el-table-column>
+        <el-table-column prop="amount" :label="$t('提现金额')" width="100"> </el-table-column>
         <el-table-column prop="item_count" :label="$t('提现明细数')" width="100"> </el-table-column>
         <el-table-column prop="created_at" :label="$t('申请时间')" width="160"> </el-table-column>
         <el-table-column prop="operator" :label="$t('处理人')" width="160"> </el-table-column>

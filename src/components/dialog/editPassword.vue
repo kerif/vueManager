@@ -60,11 +60,11 @@ export default {
       rules: {
         password: [
           { required: true, message: this.$t('请输入密码'), trigger: 'blur' },
-          { min: 8, max: 32, message: this.$t('长度在 8 到 20 个字符'), trigger: 'change' }
+          { min: 8, max: 32, message: this.$t('长度在8到20个字符'), trigger: 'change' }
         ],
         confirm_password: [
           { required: true, validator: validatePass2, trigger: 'blur' },
-          { min: 8, max: 20, message: this.$t('长度在 8 到 20 个字符'), trigger: 'change' }
+          { min: 8, max: 20, message: this.$t('长度在8到20个字符'), trigger: 'change' }
         ]
       }
     }
