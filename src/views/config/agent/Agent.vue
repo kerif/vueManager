@@ -94,7 +94,9 @@
               $t('提现申请')
             }}</el-button>
           </el-badge>
-          <el-button class="btn-blue" @click="invite(scope.row.id)">{{ $t('邀请记录') }}</el-button>
+          <el-button class="btn-blue" @click="invite(scope.row.user_id)">{{
+            $t('邀请记录')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
