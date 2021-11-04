@@ -285,16 +285,6 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('包裹') }}{{ billingName }}{{ $t('向上取值') }}</span>
-              <!-- <el-tooltip
-                class="item"
-                effect="dark"
-                :content="
-                  $t('例如包裹重量1.1kg,向上取整0.5，就会变成1.5kg。向上取整1，就会变成2kg。')
-                "
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
             </div>
             <el-select
               v-model="form.weight_rise"
@@ -318,14 +308,6 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('订单多箱打包') }}{{ billingName }}{{ $t('向上取值') }}</span>
-              <!-- <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('订单多箱打包时，每个打包箱重量分别上浮，而不是整个上浮。')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
             </div>
             <el-select
               v-model="form.multi_boxes_ceil"
@@ -349,14 +331,6 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('多箱出库计价方式') }}</span>
-              <!-- <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('订单多箱打包时，每个打包箱重量分别上浮，而不是整个上浮。')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
             </div>
             <el-select
               v-model="form.multi_boxes"
@@ -827,18 +801,23 @@ export default {
         this.form.grades[0].start = this.form.first_weight
         this.itemArr = JSON.stringify(this.form.grades)
       }
-      console.log(this.itemArr, 'this.itemArr')
       if (this.form.mode === 2 && this.itemArr === '') {
         this.$message.error('不能为空')
       }
-      if (this.form.mode === 1 && this.form.first_weight === '') {
+      if (this.form.mode === 1 && this.form.first_weight === '')
         return this.$message.error(this.$t('请输入首重'))
-      }
+      this.form.grades.forEach(item => {
+        if (!item.first_weight) {
+          item.first_weight = 0
+        }
+      })
+      let flag = this.form.grades.some(item => {
+        return !item.unit_weight
+      })
+      if (flag) return this.$message.error(this.$t('请输入单位续重'))
       if (this.$route.params.id) {
         // 编辑状态
-        console.log(this.form.checked, 'form.checked')
         let checkStatus = this.form.checked ? Number(this.form.checked) : ''
-        console.log(Number(this.form.checked), '转换1')
         // delete this.form.checked
         this.$request
           .updateBillingConfig(this.$route.params.id, {
