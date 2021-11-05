@@ -47,6 +47,12 @@
           >{{ $t('下载管理') }}
         </el-button>
       </el-popover>
+      <!-- <el-tooltip :content="$t('常见问题')" placement="top">
+        <span class="el-icon-question quest-icon" @click="getCommonProblem"></span>
+      </el-tooltip>
+      <el-tooltip :content="$t('系统消息')" placement="top">
+        <span class="el-icon-message info-icon" @click="getSystemInfo"></span>
+      </el-tooltip> -->
       <!-- <span class="user-box" @click="checkUser">{{ $store.state.userName }}</span> -->
       <el-popover class="user-box" placement="bottom" trigger="click" width="250">
         <p>{{ $t('公司') }}：{{ form.company_name }}</p>
@@ -142,6 +148,16 @@ export default {
     },
     switchLeft() {
       this.$store.commit('switchCollapse', !this.$store.state.isCollapse)
+    },
+    getCommonProblem() {
+      this.$router.push({
+        name: 'commonProblem'
+      })
+    },
+    getSystemInfo() {
+      this.$router.push({
+        name: 'systemInfo'
+      })
     }
   },
   computed: {
@@ -193,6 +209,20 @@ export default {
     .el-button {
       border: none;
     }
+  }
+  .quest-icon {
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    margin-left: 20px;
+  }
+  .info-icon {
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    margin-left: 20px;
   }
   .logout-icon {
     font-size: 20px;

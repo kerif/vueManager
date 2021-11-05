@@ -96,7 +96,7 @@
     </div>
     <!-- 打包清单 -->
     <h4>{{ $t('包裹清单') }}</h4>
-    <div class="add-sty" v-if="this.$route.params.activeName === '1'">
+    <div class="add-sty" v-if="this.$route.params.activeName">
       <el-button class="btn-blue" @click="addPackages">{{ $t('添加包裹') }}</el-button>
     </div>
     <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
