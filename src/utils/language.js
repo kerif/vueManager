@@ -8,7 +8,7 @@ export default function convert(str = '') {
 }
 
 // 简转繁
-function traditionalized(cc = '') {
+export function traditionalized(cc = '') {
   let str = ''
   for (let i = 0; i < cc.length; i++) {
     // console.log(cc.charAt(i), charPYStr.indexOf(cc.charAt(i)))
