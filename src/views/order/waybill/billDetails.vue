@@ -337,12 +337,12 @@
                 </el-table-column>
                 <el-table-column
                   :label="$t('实际重量') + localization.weight_unit"
-                  :prop="actual_weight"
+                  prop="details.actual_weight"
                 ></el-table-column>
                 <!-- 详见产品图 -->
                 <el-table-column
                   :label="$t('实际费用') + localization.currency_unit"
-                  :prop="actual_payment_fee"
+                  prop="details.actual_payment_fee"
                 ></el-table-column>
                 <el-table-column
                   :label="$t('申报价值') + localization.currency_unit"
