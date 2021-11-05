@@ -71,6 +71,7 @@ export default {
     return {
       languageList: [
         { label: '简体', value: 'zhCN' },
+        { label: '繁体', value: 'zhTW' },
         { label: 'English', value: 'en' }
       ],
       language: '',
@@ -152,7 +153,6 @@ export default {
         return this.$store.state.languageCode
       },
       set(val) {
-        console.log(val, 'val')
         this.$store.commit('saveLanguageCode', val)
       }
     }

@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import zhCN from './zhCN'
+import zhTW from './zhTW'
 import en from './en'
 
 const messages = {
   zhCN,
+  zhTW,
   en
 }
 
