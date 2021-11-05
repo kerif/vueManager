@@ -129,7 +129,7 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
-      <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName === '1'">
+      <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName">
         <template slot-scope="scope">
           <el-button @click="packageDetails(scope.row.id)" class="btn-deep-purple">
             {{ $t('详情') }}

@@ -1308,7 +1308,25 @@ export default {
       return params
     },
     updatePackages() {
-      const params = this.computedParams()
+      const searchData = this.searchFieldData
+      let params = {
+        ...searchData,
+        page: this.page_params.page,
+        size: this.page_params.size,
+        status: this.activeName,
+        keyword: this.searchFieldData.keyword,
+        begin_date: searchData.date ? searchData.date[0] : '',
+        end_date: searchData.date ? searchData.date[1] : '',
+        order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
+        country_id:
+          searchData.countryArr.length > 1
+            ? searchData.countryArr[0]
+            : searchData.countryArr[searchData.countryArr.length - 1],
+        area_id:
+          searchData.countryArr.length > 1
+            ? searchData.countryArr[searchData.countryArr.length - 1]
+            : ''
+      }
       if (this.uploadRadio === 2) {
         params.type = 1
       } else if (this.uploadRadio === 3) {
