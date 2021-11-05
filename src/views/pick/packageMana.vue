@@ -12,7 +12,7 @@
       <el-form ref="form" :model="form" label-width="100px" label-position="right">
         <el-row class="container-center" :gutter="20">
           <el-col :span="7">
-            <span class="leftWidth">{{ $t('所属国家/地区') }}</span>
+            <span class="leftWidth">{{ $t('所属国家地区') }}</span>
             <span>{{ form.country && form.country.name }}</span>
           </el-col>
           <el-col :span="7" :offset="1">
@@ -300,7 +300,7 @@
         :disabled="form.edit_notice_jurisdiction === 0"
         type="textarea"
         :rows="4"
-        :placeholder="$t('例：周一至周六 08:00 ～ 20:00')"
+        :placeholder="$t('例周一至周六08:0020:00')"
       >
       </el-input>
       <span>{{ $t('公告') }}</span>
@@ -543,7 +543,7 @@ export default {
     },
     // 收货
     goReceive(id) {
-      this.$confirm(this.$t('您确认进行收货吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您确认进行收货吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -574,7 +574,7 @@ export default {
     },
     // 出库
     goShip(id) {
-      this.$confirm(this.$t('您确认进行出库吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您确认进行出库吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

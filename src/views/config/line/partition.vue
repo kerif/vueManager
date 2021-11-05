@@ -48,7 +48,7 @@
             <span v-else>{{ $t('国家邮编') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('启用国家/地区')" :show-overflow-tooltip="true" width="150">
+        <el-table-column :label="$t('启用国家地区')" :show-overflow-tooltip="true" width="150">
           <template slot-scope="scope">
             <span v-if="scope.row.type === 1">
               <span v-for="item in scope.row.areas" :key="item.id"
@@ -60,7 +60,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('启用国家/地区总数量')" prop="areas_count"></el-table-column>
+        <el-table-column :label="$t('启用国家地区总数量')" prop="areas_count"></el-table-column>
         <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
             <el-switch
@@ -110,7 +110,7 @@
     ></nle-pagination>
     <el-dialog :title="$t('选择模版')" :visible.sync="dialogVisible" width="35%" @close="clearTmp">
       <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item :label="$t('*请选择预设模版')">
+        <el-form-item :label="$t('请选择预设模版')">
           <el-select v-model="form.templateId" :placeholder="$t('请选择')">
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
@@ -130,7 +130,7 @@
       @close="clearPreset"
     >
       <div class="remark">
-        {{ $t('*选用预设分区表后，将在当前渠道增加分区，需设置价格表后再启用分区') }}
+        {{ $t('选用预设分区表后将在当前渠道增加分区需设置价格表后再启用分区') }}
       </div>
       <el-form ref="form" :model="form" label-width="120px">
         <el-radio-group v-model="radio">
@@ -264,7 +264,7 @@ export default {
     },
     // 删除
     deletePart(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

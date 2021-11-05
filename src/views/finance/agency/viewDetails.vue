@@ -48,7 +48,7 @@
             </el-col>
             <!-- 提现金额¥ -->
             <el-col :span="8" :offset="4">
-              <span class="withdrawal">{{ $t('提现金额¥') }}</span>
+              <span class="withdrawal">{{ $t('提现金额') }}</span>
               <span>{{ detailData.amount }}</span>
             </el-col>
           </el-row>
@@ -60,7 +60,7 @@
             </el-col>
             <!-- 客户备注 -->
             <el-col :span="8" :offset="4">
-              <span class="withdrawal">{{ $t('客户备注：') }}</span>
+              <span class="withdrawal">{{ $t('客户备注') }}</span>
               <span>{{ detailData.remark }}</span>
             </el-col>
           </el-row>
@@ -159,7 +159,7 @@
             </el-col>
             <!-- 提现金额¥ -->
             <el-col :span="8" :offset="4">
-              <span class="withdrawal">{{ $t('提现金额¥') }}</span>
+              <span class="withdrawal">{{ $t('提现金额') }}</span>
               <span>{{ detailData.amount }}</span>
             </el-col>
           </el-row>
@@ -171,7 +171,7 @@
             </el-col>
             <!-- 客户备注 -->
             <el-col :span="8" :offset="4">
-              <span class="withdrawal">{{ $t('客户备注：') }}</span>
+              <span class="withdrawal">{{ $t('客户备注') }}</span>
               <span>{{ detailData.remark }}</span>
             </el-col>
           </el-row>
@@ -275,9 +275,8 @@
             <el-table-column type="index" label="#" width="120"></el-table-column>
             <el-table-column prop="order_number" :label="$t('订单号')"></el-table-column>
             <el-table-column prop="order_status" :label="$t('状态')"></el-table-column>
-            <el-table-column prop="order_amount" :label="$t('总金额￥')"></el-table-column>
-            <!-- <el-table-column prop="proportion" label="$t('佣金方式"></el-table-column> -->
-            <el-table-column prop="commission_amount" :label="$t('可得佣金￥')"></el-table-column>
+            <el-table-column prop="order_amount" :label="$t('总金额')"></el-table-column>
+            <el-table-column prop="commission_amount" :label="$t('可得佣金')"></el-table-column>
           </el-table>
         </div>
       </el-card>

@@ -7,14 +7,14 @@
       </p>
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
-      <el-form-item label="*标题">
+      <el-form-item label="标题">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="params.title"></el-input
           ></el-col>
         </el-row>
       </el-form-item>
-      <el-form-item :label="$t('*内容')">
+      <el-form-item :label="$t('内容')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>

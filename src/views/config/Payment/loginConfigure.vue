@@ -2,7 +2,7 @@
   <div class="Features-container">
     <el-form>
       <!-- 开启短信邮件验证 -->
-      <el-form-item :label="$t('开启邮箱登录验证：')">
+      <el-form-item :label="$t('开启邮箱登录验证')">
         <el-switch
           v-model="validateList.validate_email"
           :active-text="$t('开')"
@@ -15,7 +15,7 @@
         </el-switch>
       </el-form-item>
       <!-- 开启短信邮件验证 -->
-      <el-form-item :label="$t('开启短信登录验证：')">
+      <el-form-item :label="$t('开启短信登录验证')">
         <el-switch
           v-model="validateList.validate_phone"
           :active-text="$t('开')"
@@ -28,7 +28,7 @@
         </el-switch>
       </el-form-item>
       <!-- 仅登录状态可分享领券验证 -->
-      <el-form-item :label="$t('开启仅登录状态可分享领券：')">
+      <el-form-item :label="$t('开启仅登录状态可分享领券')">
         <el-switch
           v-model="validateList.validate_status"
           :active-text="$t('开')"

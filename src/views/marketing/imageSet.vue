@@ -648,8 +648,7 @@ export default {
           res.data.license_image && (this.licenseList[0] = res.data.license_image)
           res.data.agent_approve_image && (this.approveList[0] = res.data.agent_approve_image)
           res.data.backup_img1 && (this.backupOnce[0] = res.data.backup_img1)
-          res.data.backup_img2 && (this.backupSecond = res.data.backup_img2)
-          console.log(this.backupSecond, 'this.backupSecond')
+          res.data.backup_img2 && (this.backupSecond[0] = res.data.backup_img2)
           res.data.backup_img3 && (this.backupThird[0] = res.data.backup_img3)
           res.data.backup_img4 && (this.backupFourth[0] = res.data.backup_img4)
         }

@@ -61,7 +61,7 @@
     ></nle-pagination>
     <el-dialog :title="$t('新增')" :visible.sync="dialogVisible" width="35%" @close="clearTmp">
       <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item :label="$t('*请输入模版名称')">
+        <el-form-item :label="$t('请输入模版名称')">
           <el-input v-model="form.name" :placeholder="$t('请输入')"></el-input>
         </el-form-item>
       </el-form>
@@ -139,7 +139,7 @@ export default {
     },
     // 删除
     deletePart(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

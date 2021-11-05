@@ -9,7 +9,7 @@
           >
         </el-row>
       </el-form-item>
-      <el-form-item :label="$t('*标签')" v-if="this.status === 'origin'">
+      <el-form-item :label="$t('标签')" v-if="this.status === 'origin'">
         <el-row>
           <el-col :span="10"
             ><el-input :placeholder="$t('请输入标签')" v-model="params.description"></el-input

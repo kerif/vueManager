@@ -25,7 +25,7 @@
                 >
               </p>
             </div>
-            <p class="font-sty">{{ $t('邀请新人达成要求后，邀请人可获券') }}</p>
+            <p class="font-sty">{{ $t('邀请新人达成要求后邀请人可获券') }}</p>
           </div>
           <!-- 被邀请人送券 -->
           <div v-if="item.type === 3">
@@ -38,7 +38,7 @@
               </p>
             </div>
             <p class="font-sty">
-              {{ $t('新人通过老客户链接注册登录即可获券（与“新用户送券”同时享受）') }}
+              {{ $t('新人通过老客户链接注册登录即可获券与新用户送券同时享受') }}
             </p>
           </div>
           <!-- 下单返券 -->
@@ -51,7 +51,7 @@
                 >
               </p>
             </div>
-            <p class="font-sty">{{ $t('客户订单支付成功后，即可返券') }}</p>
+            <p class="font-sty">{{ $t('客户订单支付成功后即可返券') }}</p>
           </div>
           <div class="user-bottom">
             <div class="bottom-left">
@@ -83,7 +83,7 @@
               <el-tooltip
                 class="item code-sty"
                 effect="dark"
-                :content="$t('与“新用户送券”同时开启时，仅享受“被邀请人券”；不勾选则两券共享。')"
+                :content="$t('与新用户送券同时开启时仅享受被邀请人券不勾选则两券共享')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>

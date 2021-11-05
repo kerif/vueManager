@@ -10,12 +10,12 @@
         </el-col>
         <!-- 手机/联系电话 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{ $t('手机/联系电话') }}</span>
+          <span class="leftWidth">{{ $t('手机联系电话') }}</span>
           <span>{{ form.address && form.address.phone }}</span>
         </el-col>
         <!-- 国家/地区 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{ $t('国家/地区') }}</span>
+          <span class="leftWidth">{{ $t('国家地区') }}</span>
           <span>{{ form.address && form.address.country.cn_name }}</span>
         </el-col>
       </el-row>
@@ -254,7 +254,7 @@
         <!-- 重量 -->
         <el-row :gutter="20" v-if="user.box_type === 1">
           <el-col :span="11">
-            <el-form-item :label="$t('*重量')" prop="weight">
+            <el-form-item :label="$t('重量')" prop="weight">
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
                 <template slot="append">{{ this.localization.weight_unit }}</template>
               </el-input>
@@ -265,7 +265,7 @@
           </el-col>
           <!-- 尺寸 -->
           <el-col :span="10" :offset="2" v-if="$route.params.parent == 0">
-            <el-form-item :label="$t('*尺寸')">
+            <el-form-item :label="$t('尺寸')">
               <el-input
                 v-model="user.length"
                 class="sizeLength"
@@ -501,11 +501,11 @@
         <div v-if="freightData.length === 0" class="text">请填写重量体积后，点击计算核算价格</div>
         <div style="margin-left: 100px">
           <div class="total">
-            {{ $t('合计:') }}<span class="color_fee">{{ this.total_fee }}</span>
+            {{ $t('合计') }}<span class="color_fee">{{ this.total_fee }}</span>
           </div>
           <div class="changePrice">
             <el-checkbox-group v-model="final_price">
-              <el-checkbox v-model="is_checked"> {{ $t('改价:') }} </el-checkbox>
+              <el-checkbox v-model="is_checked"> {{ $t('改价') }} </el-checkbox>
               <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
             </el-checkbox-group>
           </div>

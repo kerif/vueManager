@@ -123,9 +123,9 @@
       <div class="remarks-card">
         <div class="condition" v-if="invoiceStatus.state === 1">{{ $t('该申请还未开票') }}</div>
         <div class="invoice-remark" v-if="invoiceStatus.state === 2">
-          <div class="text">{{ $t('开票金额:') }}{{ invoiceStatus.money }}</div>
-          <div class="text">{{ $t('发票号码:') }}{{ invoiceStatus.invoices_number }}</div>
-          <div class="text">{{ $t('备注:') }}{{ invoiceStatus.remarks }}</div>
+          <div class="text">{{ $t('开票金额') }}{{ invoiceStatus.money }}</div>
+          <div class="text">{{ $t('发票号码') }}{{ invoiceStatus.invoices_number }}</div>
+          <div class="text">{{ $t('备注') }}{{ invoiceStatus.remarks }}</div>
           <div class="screenshot">
             <!-- <span
               style="cursor: pointer"
@@ -166,7 +166,7 @@
         <el-row :gutter="20">
           <!-- 订单金额¥ -->
           <el-col :span="5">
-            <span class="withdrawal">{{ $t('订单金额¥') }}</span>
+            <span class="withdrawal">{{ $t('订单金额') }}</span>
             <span class="withdrawal_amount">{{ invoiceStatus.money }}</span>
           </el-col>
           <!-- 添加明细 -->
@@ -195,22 +195,22 @@
                 <el-input v-model="scope.row.quantity"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="unit_price" :label="$t('单价（¥）')" width="180">
+            <el-table-column prop="unit_price" :label="$t('单价')" width="180">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.unit_price"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="money" :label="$t('金额（¥）')" width="180">
+            <el-table-column prop="money" :label="$t('金额')" width="180">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.money"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="tax_rate" :label="$t('税率（%）')">
+            <el-table-column prop="tax_rate" :label="$t('税率')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.tax_rate"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="taxes" :label="$t('税款（¥）')">
+            <el-table-column prop="taxes" :label="$t('税款')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.taxes"></el-input>
               </template>
@@ -374,7 +374,7 @@ export default {
       rows.splice(index, 1)
     },
     recovery() {
-      this.$confirm(this.$t('您确认要恢复该开票申请吗？'), this.$t('恢复申请'), {
+      this.$confirm(this.$t('您确认要恢复该开票申请吗'), this.$t('恢复申请'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

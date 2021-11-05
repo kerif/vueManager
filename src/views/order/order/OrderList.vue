@@ -507,7 +507,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要批量发送通知吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -564,7 +564,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(this.$t('您真的要删除这个包裹吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除这个包裹吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -630,7 +630,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(this.$t('您真的要彻底删除？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要彻底删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -662,7 +662,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(this.$t('您真的要恢复包裹吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要恢复包裹吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

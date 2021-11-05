@@ -15,7 +15,7 @@
               v-model="searchFieldData.express_num"
               :autosize="{ minRows: 4, maxRows: 5 }"
               type="textarea"
-              :placeholder="$t('请输入快递单号搜索，多个单号请用回车区分')"
+              :placeholder="$t('请输入快递单号搜索多个单号请用回车区分')"
             ></el-input>
           </el-form-item>
         </el-col>

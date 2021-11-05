@@ -18,7 +18,7 @@
       <!-- 收货人 -->
       <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
       <!-- 收货国家/地区 -->
-      <el-table-column :label="$t('收货国家/地区')" prop="address.country_name"></el-table-column>
+      <el-table-column :label="$t('收货国家地区')" prop="address.country_name"></el-table-column>
       <!-- 包裹数 -->
       <el-table-column :label="$t('包裹数')" prop="package_count"></el-table-column>
       <!-- 实际重量 -->
@@ -93,7 +93,7 @@ export default {
     },
     // 移除发货单
     removeShip(id) {
-      this.$confirm(this.$t('您真的要移除发货单吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要移除发货单吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

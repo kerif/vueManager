@@ -82,7 +82,7 @@ export default {
     // 作废优惠券
     failCoupon(id) {
       this.show = false
-      this.$confirm(this.$t('确定要作废优惠券吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('确定要作废优惠券吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

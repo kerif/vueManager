@@ -27,7 +27,7 @@
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
         <el-table-column :label="$t('自提点编号')" prop="code"></el-table-column>
-        <el-table-column :label="$t('所属国家/地区')">
+        <el-table-column :label="$t('所属国家地区')">
           <template slot-scope="scope">
             <span>{{ scope.row.country && scope.row.country.name }}</span>
           </template>
@@ -132,7 +132,7 @@
       @close="clear"
       :title="$t('查看自提点支持线路')"
     >
-      <div class="self-sty">{{ $t('自提点名称：') }}{{ this.lineName }}</div>
+      <div class="self-sty">{{ $t('自提点名称') }}{{ this.lineName }}</div>
       <div class="self-sty">{{ $t('支持线路') }}</div>
       <el-table :data="tableData" border stripe style="width: 100%">
         <el-table-column type="index"> </el-table-column>
@@ -344,7 +344,7 @@ export default {
     },
     // 删除单条转账支付
     deleteSelf(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

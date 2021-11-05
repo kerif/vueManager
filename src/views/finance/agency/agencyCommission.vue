@@ -64,8 +64,7 @@
         <el-table-column prop="user_name" :label="$t('下单人')" width="140"> </el-table-column>
         <el-table-column prop="order_number" :label="$t('订单号')"> </el-table-column>
         <el-table-column prop="order_status" :label="$t('订单状态')" width="100"> </el-table-column>
-        <el-table-column prop="order_amount" :label="$t('计佣金额¥')" width="100">
-        </el-table-column>
+        <el-table-column prop="order_amount" :label="$t('计佣金额')" width="100"> </el-table-column>
         <el-table-column prop="agent_name" :label="$t('代理')"> </el-table-column>
         <el-table-column prop="commission_amount" :label="$t('可获佣金')" width="100">
         </el-table-column>
@@ -161,7 +160,7 @@ export default {
     oneSettlement() {
       this.unsettleId = this.settleData.filter(item => item.settled === 0)
       this.ids = this.unsettleId.map(item => item.id)
-      this.$confirm(this.$t('您真的确认要一键结算吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的确认要一键结算吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

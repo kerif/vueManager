@@ -721,7 +721,7 @@ export default {
     },
     // 提交结算
     sumbitSettlement(id) {
-      this.$confirm(this.$t('您是否已确认佣金，申请结算吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您是否已确认佣金申请结算吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

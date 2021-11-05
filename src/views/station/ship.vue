@@ -70,7 +70,7 @@
           </el-radio-group> -->
         </el-dropdown>
         <el-button class="btn-deep-purple" size="small" @click="batchNum">{{
-          $t('批量更新单号-二程')
+          $t('批量更新单号二程')
         }}</el-button>
         <el-button size="small" type="success" plain @click="deleteData">{{
           $t('导出清单')
@@ -141,7 +141,7 @@
         <!-- 发货时间 -->
         <el-table-column :label="$t('发货时间')" prop="shipped_at" width="155"></el-table-column>
 
-        <el-table-column :label="$t('转运快递单号-头程')" width="155">
+        <el-table-column :label="$t('转运快递单号头程')" width="155">
           <template slot-scope="scope">
             <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
           </template>
@@ -270,7 +270,7 @@
     </el-dialog>
     <!-- 轨迹 -->
     <el-dialog :visible.sync="showDialog" width="45%" :title="$t('更新物流状态')" @close="clearSn">
-      <div class="table-sty">{{ $t('发货单号：') }}{{ this.tableSn }}</div>
+      <div class="table-sty">{{ $t('发货单号') }}{{ this.tableSn }}</div>
       <el-table :data="tableData" stripe border style="width: 100%">
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column :label="$t('物流轨迹')" prop="context"></el-table-column>
@@ -645,7 +645,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认导出'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -730,7 +730,7 @@ export default {
     },
     // 取消发货
     cancelShip(id) {
-      this.$confirm(this.$t('您真的要取消发货吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要取消发货吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -775,7 +775,7 @@ export default {
     },
     // 删除发货单
     deleteShip(id) {
-      this.$confirm(this.$t('您真的要删除发货单吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除发货单吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -819,7 +819,7 @@ export default {
       })
     },
     goInvoice(id) {
-      this.$confirm(this.$t('您真的要发货吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要发货吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

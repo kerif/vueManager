@@ -73,7 +73,7 @@
           class="item"
           effect="dark"
           :content="
-            $t('开启后，若预报包裹超过设定时间未入库，将会在包裹列表进行提示，表示包裹有丢失风险')
+            $t('开启后若预报包裹超过设定时间未入库将会在包裹列表进行提示表示包裹有丢失风险')
           "
           placement="top"
         >
@@ -246,7 +246,7 @@ export default {
     },
     handleClose(id) {
       this.$confirm(
-        this.$t('您真的要删除物品属性吗？会影响到系统内的包裹，请谨慎操作。'),
+        this.$t('您真的要删除物品属性吗会影响到系统内的包裹请谨慎操作。'),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),

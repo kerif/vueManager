@@ -239,7 +239,7 @@ export default {
     },
     // 删除单条转账支付
     deleteTransfer(id) {
-      this.$confirm(this.$t('您真的要删除转账支付吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除转账支付吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

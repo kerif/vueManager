@@ -12,7 +12,7 @@
       </div>
       <div class="bullshit__headline">{{ $t('神说这个页面不存在') }}......</div>
       <div class="bullshit__info">
-        {{ $t('请检查您输入的网址是否正确，') }}<br />{{ $t('点击以下按钮返回主页') }}
+        {{ $t('请检查您输入的网址是否正确') }}<br />{{ $t('点击以下按钮返回主页') }}
       </div>
       <div @click="back" class="bullshit__return-home">{{ $t('返回首页') }}</div>
     </div>

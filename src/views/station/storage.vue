@@ -7,7 +7,7 @@
           <!-- 重量 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item :label="$t('*重量')" class="weight-style">
+              <el-form-item :label="$t('重量')" class="weight-style">
                 <el-input v-model="user.package_weight" :placeholder="$t('请输入重量')">
                   <template slot="append">{{ this.localization.weight_unit }}</template>
                 </el-input>
@@ -18,7 +18,7 @@
           <!-- 快递单号 -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item :label="$t('*快递单号')">
+              <el-form-item :label="$t('快递单号')">
                 <el-input
                   v-model="user.express_num"
                   :placeholder="$t('请输入快递单号')"
@@ -32,7 +32,7 @@
           <!-- :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" -->
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item :label="$t('*寄往仓库')">
+              <el-form-item :label="$t('寄往仓库')">
                 <el-select
                   v-model="user.warehouse_id"
                   clearable
@@ -247,7 +247,7 @@
                   <el-tooltip
                     effect="dark"
                     :content="
-                      $t('当您为仓库添加了货位，系统会自动分配货位，同时您也可以自定义填写货位')
+                      $t('当您为仓库添加了货位系统会自动分配货位同时您也可以自定义填写货位')
                     "
                     placement="top"
                   >
@@ -304,7 +304,7 @@
                   v-if="user.is_exceptional === 1"
                   type="textarea"
                   v-model="user.exceptional_remark"
-                  :placeholder="$t('请输入异常件备注,不能超过250个字')"
+                  :placeholder="$t('请输入异常件备注不能超过250个字')"
                   style="width: 100%"
                 ></el-input>
               </el-form-item>
@@ -339,7 +339,7 @@
       </div>
       <el-row :gutter="20" class="id-style">
         <el-col :span="6">
-          <p class="upload-top">{{ $t('原始上传清单：') }}</p>
+          <p class="upload-top">{{ $t('原始上传清单') }}</p>
           <div v-if="user.item_pictures">
             <div class="left-img" v-for="(item, index) in user.item_pictures" :key="index">
               <span
@@ -352,9 +352,9 @@
           </div>
           <div v-else class="nullProduct">{{ $t('无') }}</div>
           <p>
-            {{ $t('原始商品数量：') }}<span class="remark-font">{{ user.qty }}</span>
+            {{ $t('原始商品数量') }}<span class="remark-font">{{ user.qty }}</span>
           </p>
-          <p>{{ $t('原始商品备注：') }}</p>
+          <p>{{ $t('原始商品备注') }}</p>
           <p v-if="user.remark" class="remark-font">{{ user.remark }}</p>
           <p v-else class="noDate">{{ $t('暂无数据') }}</p>
         </el-col>
@@ -701,7 +701,7 @@ export default {
     },
     // 删除商品清单
     deleteProduct(ele) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -934,15 +934,11 @@ export default {
               this.shipNum = ''
               console.log(this.hasStore, 'this.hasStore')
             } else if (res.ret === 2) {
-              this.$confirm(
-                this.$t('快递单号不存在或客户未预报，请确认是否入库'),
-                this.$t('提示'),
-                {
-                  confirmButtonText: this.$t('确定'),
-                  cancelButtonText: this.$t('取消'),
-                  type: 'warning'
-                }
-              ).then(() => {
+              this.$confirm(this.$t('快递单号不存在或客户未预报请确认是否入库'), this.$t('提示'), {
+                confirmButtonText: this.$t('确定'),
+                cancelButtonText: this.$t('取消'),
+                type: 'warning'
+              }).then(() => {
                 this.$request.addShipment(this.user).then(res => {
                   if (res.ret) {
                     this.$notify({

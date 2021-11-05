@@ -8,7 +8,7 @@
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
       <!-- 单页详情 -->
-      <el-form-item :label="$t('*内容详情')">
+      <el-form-item :label="$t('内容详情')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.content" @input="changeText"></div>

@@ -4,7 +4,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*线路名称') }}</div>
+            <div>{{ $t('线路名称') }}</div>
             <el-input :placeholder="$t('请输入内容')" v-model="form.name"></el-input>
           </el-col>
         </el-row>
@@ -12,7 +12,7 @@
       <el-form-item>
         <el-row :gutter="20">
           <el-col :span="10">
-            <div>{{ $t('*支持仓库') }}</div>
+            <div>{{ $t('支持仓库') }}</div>
             <el-select
               v-model="form.warehouses"
               multiple
@@ -35,32 +35,26 @@
       <el-form-item>
         <el-row :gutter="20">
           <el-col :span="10">
-            <div>{{ $t('*支持国家/地区') }}</div>
+            <div>{{ $t('支持国家地区') }}</div>
             <el-select
               v-model="form.countries"
               :disabled="!this.form.warehouses.length"
               multiple
               filterable
               class="country-select"
-              :placeholder="$t('请选择国家/地区')"
+              :placeholder="$t('请选择国家地区')"
             >
               <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </el-col>
-          <!-- <el-col :span="10" class="country-btn">
-            <el-button type="primary" @click="onAddCountry">+ 新增国家/地区</el-button>
-          </el-col> -->
         </el-row>
       </el-form-item>
       <el-form-item>
-        <div>{{ $t('*参考时效') }}</div>
+        <div>{{ $t('参考时效') }}</div>
         <el-row>
           <el-col :span="10">
-            <el-input
-              v-model="form.reference_time"
-              :placeholder="$t('例：5-12工作日/日')"
-            ></el-input>
+            <el-input v-model="form.reference_time" :placeholder="$t('例512工作日日')"></el-input>
           </el-col>
         </el-row>
       </el-form-item>
@@ -73,7 +67,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('当包裹重量不足最小重量时，按最小重量来计算。')"
+                :content="$t('当包裹重量不足最小重量时按最小重量来计算。')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -101,7 +95,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('仅对多箱出库时生效，关闭按统一的重量计算价格。')"
+                :content="$t('仅对多箱出库时生效关闭按统一的重量计算价格')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -122,7 +116,7 @@
       </el-form-item>
       <!-- 计费价格模式 -->
       <el-form-item>
-        <div>{{ $t('*计费价格模式') }}</div>
+        <div>{{ $t('计费价格模式') }}</div>
         <el-row>
           <el-col :span="10">
             <el-select
@@ -147,11 +141,11 @@
         <el-form-item>
           <el-row :gutter="10">
             <el-col :span="5">
-              <div>{{ $t('*首重') + this.localization.weight_unit }}</div>
+              <div>{{ $t('首重') + this.localization.weight_unit }}</div>
               <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
             <el-col :span="5">
-              <div>{{ $t('*首费') + this.localization.currency_unit }}</div>
+              <div>{{ $t('首费') + this.localization.currency_unit }}</div>
               <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
             <el-col :span="5">
@@ -163,11 +157,11 @@
         <el-form-item>
           <el-row :gutter="10">
             <el-col :span="5">
-              <div>{{ $t('*续重') + this.localization.weight_unit }}</div>
+              <div>{{ $t('续重') + this.localization.weight_unit }}</div>
               <el-input v-model="form.next_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
             <el-col :span="5">
-              <div>{{ $t('*续费') + this.localization.currency_unit }}</div>
+              <div>{{ $t('续费') + this.localization.currency_unit }}</div>
               <el-input v-model="form.next_money" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
             <el-col :span="5">
@@ -179,11 +173,11 @@
         <el-form-item>
           <el-row :gutter="10">
             <el-col :span="5">
-              <div>{{ $t('*最小重量') + this.localization.weight_unit }}</div>
+              <div>{{ $t('最小重量') + this.localization.weight_unit }}</div>
               <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
             <el-col :span="5">
-              <div>{{ $t('*最大重量') + this.localization.weight_unit }}</div>
+              <div>{{ $t('最大重量') + this.localization.weight_unit }}</div>
               <el-input v-model="form.max_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
           </el-row>
@@ -246,7 +240,7 @@
         <el-form-item>
           <el-row :gutter="10">
             <el-col :span="5">
-              <div>{{ $t('*最小重量') + this.localization.weight_unit }}</div>
+              <div>{{ $t('最小重量') + this.localization.weight_unit }}</div>
               <el-input
                 v-model="form.multi_box_min_weight"
                 :placeholder="$t('请输入内容')"
@@ -262,7 +256,7 @@
             <el-col :span="5">
               <div>
                 {{
-                  $t('*首重价格') +
+                  $t('首重价格') +
                   this.localization.currency_unit +
                   '/' +
                   this.localization.weight_unit
@@ -270,10 +264,6 @@
               </div>
               <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
-            <!-- <el-col :span="5">
-              <div>{{$t('*首费') + this.localization.currency_unit}}</div>
-              <el-input v-model="form.first_money" :placeholder="$t('请输入内容')"></el-input>
-            </el-col> -->
             <el-col :span="5">
               <div>
                 {{
@@ -328,7 +318,7 @@
         <el-form-item>
           <el-row :gutter="10">
             <el-col :span="5">
-              <div>{{ $t('*最小重量') + this.localization.weight_unit }}</div>
+              <div>{{ $t('最小重量') + this.localization.weight_unit }}</div>
               <el-input
                 v-model="form.multi_box_min_weight"
                 :placeholder="$t('请输入内容')"
@@ -379,7 +369,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('订单多箱打包时，每个打包箱重量分别上浮，而不是整个上浮。')"
+                :content="$t('订单多箱打包时每个打包箱重量分别上浮而不是整个上浮')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -406,11 +396,11 @@
         <el-row :gutter="10">
           <el-col :span="10">
             <div>
-              <span>{{ $t('*体积系数') }}</span>
+              <span>{{ $t('体积系数') }}</span>
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('主要用于计算包裹体积重量（5000或6000），如：长*高*宽/系数')"
+                :content="$t('主要用于计算包裹体积重量5000或6000如长高宽系数')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -439,16 +429,6 @@
           </el-col>
           <el-col :span="5" v-if="form.has_factor">
             <div style="margin-top: 38px"></div>
-            <!-- <el-switch
-              v-model="form.is_avg_weight"
-              :active-text="$t('半抛')"
-              :active-value="1"
-              :inactive-value="0"
-              :inactive-text="$t('全抛')"
-              active-color="#13ce66"
-              inactive-color="gray"
-            >
-            </el-switch> -->
             <el-button @click="set">{{ $t('配置') }}</el-button>
           </el-col>
         </el-row>
@@ -456,7 +436,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*线路类型') }}</div>
+            <div>{{ $t('线路类型') }}</div>
             <el-checkbox-group v-model="form.types">
               <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
                 {{ item.name }}</el-checkbox
@@ -477,7 +457,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('设为推荐后，该路线标为推荐路线。')"
+                :content="$t('设为推荐后该路线标为推荐路线')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -500,7 +480,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('开启表示需要提供收件人清关编码。')"
+                :content="$t('开启表示需要提供收件人清关编码')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -553,9 +533,6 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('下单是否需要身份证') }}</span>
-              <!-- <el-tooltip class="item" effect="dark" content="开启表示需要提供收件人清关编码。" placement="top">
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
             </div>
             <el-switch
               v-model="form.need_id_card"
@@ -636,7 +613,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*备注') }}</div>
+            <div>{{ $t('备注') }}</div>
             <el-input
               v-model="form.remark"
               :placeholder="$t('请输入内容')"
@@ -696,7 +673,7 @@
             <el-tooltip
               class="item"
               effect="dark"
-              :content="$t('在满足免抛条件情况下，不考虑体积重，仅以实重计费')"
+              :content="$t('在满足免抛条件情况下不考虑体积重仅以实重计费')"
               placement="top"
             >
               <span class="el-icon-question icon-info"></span>

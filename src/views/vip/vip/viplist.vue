@@ -155,7 +155,7 @@
         </el-autocomplete>
       </div>
       <div style="margin-top: 40px">
-        <span>{{ $t('合并规则：') }}</span> <br />
+        <span>{{ $t('合并规则') }}</span> <br />
         <span>1、{{ $t('合并客户ID时，保留当前客户ID下所有信息；') }}</span
         ><br />
         <span
@@ -291,7 +291,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择客户'))
       }
-      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -371,7 +371,7 @@ export default {
       this.staffStatus = status
       this.dialogStaff = true
       this.getStaff()
-      // this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+      // this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
       //   confirmButtonText: this.$t('确定'),
       //   cancelButtonText: this.$t('取消'),
       //   type: 'warning'

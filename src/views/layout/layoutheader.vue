@@ -6,22 +6,15 @@
           :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
           style="font-size: 24px"
         ></i>
-        <el-select v-model="isSimple" style="margin-left: 25px">
+        <el-select v-model="languageCode" style="margin-left: 25px">
           <el-option
-            v-for="item in language"
+            v-for="item in languageList"
             :key="item.id"
             :label="item.label"
             :value="item.value"
           ></el-option>
         </el-select>
       </div>
-      <!-- <el-switch
-      v-model="isSimple"
-      :active-text="$t('简')"
-      :inactive-text="$t('繁')"
-      inactive-color="#13ce66" /> -->
-      <!-- <el-button class="upload-btn">{{$t('下载管理')}}</el-button> -->
-      <!-- <div>关于我们</div> -->
       <el-popover placement="top" width="800" trigger="click">
         <el-table :data="gridData">
           <el-table-column label="文件名">
@@ -82,10 +75,12 @@ export default {
   },
   data() {
     return {
-      language: [
-        { label: '简体', value: 1 },
-        { label: '繁体', value: 2 }
+      languageList: [
+        { label: '简体', value: 'zhCN' },
+        { label: '繁体', value: 'zhTW' }
+        // { label: 'English', value: 'en' }
       ],
+      language: '',
       gridData: [],
       aboutDialog: false,
       form: {
@@ -106,7 +101,7 @@ export default {
       })
     },
     onLogout() {
-      this.$confirm(this.$t('是否确认退出登录？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认退出登录'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -169,20 +164,12 @@ export default {
     isCollapse() {
       return this.$store.state.isCollapse
     },
-    isSimple: {
+    languageCode: {
       get() {
-        if (this.$store.state.languageCode === 'simple') {
-          return 1
-        }
-        return 2
+        return this.$store.state.languageCode
       },
       set(val) {
-        console.log('valu', val)
-        if (val === 1) {
-          this.$store.commit('saveLanguageCode', 'simple')
-        } else {
-          this.$store.commit('saveLanguageCode', 'tradition')
-        }
+        this.$store.commit('saveLanguageCode', val)
       }
     }
   }

@@ -34,7 +34,7 @@
       <el-form-item>
         <el-row :gutter="20">
           <el-col :span="10">
-            <div>{{ $t('*支持仓库') }}</div>
+            <div>{{ $t('支持仓库') }}</div>
             <el-select
               v-model="form.warehouse_ids"
               multiple
@@ -56,7 +56,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*渠道属性') }}</div>
+            <div>{{ $t('渠道属性') }}</div>
             <el-checkbox-group v-model="form.prop_ids">
               <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
                 {{ item.name }}</el-checkbox
@@ -71,7 +71,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*送货方式') }}</div>
+            <div>{{ $t('送货方式') }}</div>
             <el-radio @change="changeDelivery" v-model="form.is_delivery" :label="0">{{
               $t('仅送货上门')
             }}</el-radio>
@@ -102,34 +102,6 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <!-- 设为推荐 -->
-      <!-- <el-form-item>
-        <el-row>
-          <el-col :span="10">
-            <div>
-              <span>{{ $t('设为推荐') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('设为推荐后，该路线标为推荐路线。')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
-            </div>
-            <el-switch
-              v-model="form.is_great_value"
-              :active-text="$t('开')"
-              :active-value="1"
-              :inactive-value="0"
-              :inactive-text="$t('关')"
-              active-color="#13ce66"
-              inactive-color="gray"
-            >
-            </el-switch>
-          </el-col>
-        </el-row>
-      </el-form-item> -->
       <!-- 清关编码 -->
       <el-form-item>
         <el-row :gutter="10">
@@ -140,7 +112,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('开启表示需要提供收件人清关编码。')"
+                :content="$t('开启表示需要提供收件人清关编码')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -193,9 +165,6 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('下单是否需要身份证') }}</span>
-              <!-- <el-tooltip class="item" effect="dark" content="开启表示需要提供收件人清关编码。" placement="top">
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
             </div>
             <el-switch
               v-model="form.need_id_card"
@@ -277,7 +246,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('渠道标签在客户端仅作展示，无特定功能')"
+                :content="$t('渠道标签在客户端仅作展示无特定功能')"
                 placement="top"
               >
                 <span class="el-icon-warning-outline icon-info"></span>
@@ -297,7 +266,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*备注') }}</div>
+            <div>{{ $t('备注') }}</div>
             <el-input
               v-model="form.remark"
               :placeholder="$t('请输入内容')"

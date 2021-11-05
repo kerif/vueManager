@@ -59,7 +59,7 @@
               v-if="['3', '4'].includes(activeName)"
               @click.native="batchEditCompany"
             >
-              {{ $t('更新物流单号 - 二程') }}
+              {{ $t('更新物流单号二程') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -212,7 +212,7 @@
         ></el-table-column>
         <el-table-column
           width="115"
-          :label="$t('收货国家/地区')"
+          :label="$t('收货国家地区')"
           prop="address.country_name"
           key="address.country_name"
         ></el-table-column>
@@ -555,7 +555,7 @@
               </el-table-column>
               <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
               <el-table-column
-                :label="$t('收货国家/地区')"
+                :label="$t('收货国家地区')"
                 prop="address.country_name"
               ></el-table-column>
               <el-table-column :label="$t('包裹数与件数')">
@@ -803,7 +803,7 @@
     </el-dialog>
     <!-- 轨迹 -->
     <el-dialog :visible.sync="showDialog" width="45%" :title="$t('轨迹')" @close="clearSn">
-      <div class="table-sty">{{ $t('发货单号：') }}{{ this.tableSn }}</div>
+      <div class="table-sty">{{ $t('发货单号') }}{{ this.tableSn }}</div>
       <el-table :data="tableData" stripe border style="width: 100%">
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column :label="$t('物流轨迹')" prop="context"></el-table-column>
@@ -820,12 +820,12 @@
     </el-dialog>
     <!-- 改价 -->
     <el-dialog :visible.sync="priceDialog" width="35%" :title="$t('改价')" @close="clearPrice">
-      <div class="table-sty">{{ $t('订单号：') }}{{ this.priceSn }}</div>
+      <div class="table-sty">{{ $t('订单号') }}{{ this.priceSn }}</div>
       <el-form :model="priceForm" ref="form">
-        <el-form-item :label="$t('*最终价格') + localization.currency_unit">
+        <el-form-item :label="$t('最终价格') + localization.currency_unit">
           <el-input v-model="priceForm.actual_payment_fee"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('*备注')">
+        <el-form-item :label="$t('备注')">
           <el-input
             type="textarea"
             v-model="priceForm.remark"
@@ -839,7 +839,7 @@
       </el-form>
       <div class="change-sty">
         <p>
-          {{ $t('*您的改价操作记录将会保存在日志记录中') }}
+          {{ $t('您的改价操作记录将会保存在日志记录中') }}
         </p>
       </div>
       <div slot="footer">
@@ -905,7 +905,7 @@
             <el-tooltip placement="top">
               <span slot="content">
                 <span>
-                  {{ $t('如有合箱操作，请勿填写此项，填入实际尺寸即可') }}
+                  {{ $t('如有合箱操作请勿填写此项填入实际尺寸即可') }}
                 </span>
               </span>
               <i class="el-icon-question" style="font-size: 18px; color: '#35B85A'"></i>
@@ -1015,7 +1015,7 @@
     <!-- 导出清单 -->
     <el-dialog :title="$t('导出清单')" :visible.sync="dialogPackages" width="40%">
       <div class="excel-date">
-        <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单（含包裹信息）') }}</el-radio>
+        <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单含包裹信息') }}</el-radio>
         <el-radio :label="2" v-model="uploadRadio">{{ $t('导出清单') }}</el-radio>
         <el-radio :label="3" v-model="uploadRadio">{{ $t('美中国际定制') }}</el-radio>
       </div>
@@ -1486,7 +1486,7 @@ export default {
         return this.$message.error(this.$t('请选择'))
       }
       if (this.orderInfo[0].status === 11) {
-        return this.$message.error(this.$t('该订单为待审核状态，无法更改付款状态，请操作审核'))
+        return this.$message.error(this.$t('该订单为待审核状态无法更改付款状态请操作审核'))
       }
       if (this.selectIDs.length > 1) {
         return this.$message.error(this.$t('请选择单个订单进行操作'))
@@ -1514,7 +1514,7 @@ export default {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('您真的确认更改状态为已付款吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的确认更改状态为已付款吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1544,7 +1544,7 @@ export default {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('您真的确认更改状态为已签收吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的确认更改状态为已签收吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1582,7 +1582,7 @@ export default {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要批量发送通知吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1827,7 +1827,7 @@ export default {
       if (!ids.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认导出'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -2001,7 +2001,7 @@ export default {
       if (!this.selectIDs || !this.selectIDs.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('您真的要批量改成货到付款吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要批量改成货到付款吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
