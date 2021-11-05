@@ -77,6 +77,10 @@
           <el-input v-model="backgroundList.avatar_size" @blur="changeSize"> </el-input>px
           <p class="slogan-height">{{ $t('高和宽一致只需要填写一个参数') }}</p>
         </el-form-item>
+        <!-- 颜色选择 -->
+        <el-form-item :label="$t('背景色选择')">
+          <el-color-picker v-model="backgroundList.background_images_rgb"></el-color-picker>
+        </el-form-item>
         <!-- 背景图像 -->
         <el-form-item :label="$t('背景图像')">
           <span class="img-item" v-for="(item, index) in backgroundImg" :key="index">
@@ -158,7 +162,8 @@ export default {
         avatar_size: '',
         background_images: [],
         share_image: '',
-        share_info: ''
+        share_info: '',
+        background_images_rgb: ''
       },
       params: {
         instruction: ''
@@ -207,7 +212,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.$router.go(-1)
+          this.getBackground()
         } else {
           this.$message({
             message: res.msg,
@@ -491,7 +496,6 @@ export default {
     display: inline-block;
     background-color: #fff;
     padding: 15px;
-    height: 1080px;
     box-sizing: border-box;
   }
   .background-btn {

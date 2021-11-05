@@ -11,7 +11,6 @@ import baseUrl from './lib/axios/baseApi'
 import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
-// import { JSEncrypt } from 'jsencrypt'
 
 Vue.use(VXETable)
 Vue.use(Element)
