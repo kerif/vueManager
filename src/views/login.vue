@@ -246,11 +246,11 @@
       <div class="login-footer">
         <div class="language-sty">
           <p>
-            <span :class="{ active: active === 'simple' }" @click="languageCut('simple')"
+            <span :class="{ active: active === 'zhCN' }" @click="languageCut('zhCN')"
               >简体中文</span
             >
             |
-            <span :class="{ active: active === 'tradition' }" @click="languageCut('tradition')"
+            <span :class="{ active: active === 'zhTW' }" @click="languageCut('zhTW')"
               >繁体中文</span
             >
           </p>
@@ -385,7 +385,7 @@ export default {
     if (this.userInfo.username && this.userInfo.password) this.keep = true
   },
   created() {
-    this.active = localStorage.getItem('language') || 'simple'
+    this.active = localStorage.getItem('language') || 'zhCN'
     this.languageCut(this.active)
     this.getCaptcha() // 获取图型验证码
   },
