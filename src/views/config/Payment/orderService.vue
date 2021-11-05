@@ -375,7 +375,7 @@ export default {
     },
     // 订单 删除 增值服务
     deleteService(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -461,7 +461,7 @@ export default {
     },
     // 关税服务 删除
     deleteTariff(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

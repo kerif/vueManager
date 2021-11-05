@@ -78,7 +78,7 @@
           </el-select>
         </el-form-item>
         <div style="margin-left: 20px">
-          *{{ $t('货区可多选，当包裹为无人认领时，强制放入专区，不受其他规则限制') }}
+          *{{ $t('货区可多选当包裹为无人认领时强制放入专区不受其他规则限制') }}
         </div>
       </el-form>
       <div slot="footer">
@@ -277,7 +277,7 @@ export default {
     },
     // 删除单条转账支付
     deleteWarehouse(areaId) {
-      this.$confirm(this.$t('您真的要删除此货位吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除此货位吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

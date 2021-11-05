@@ -78,7 +78,7 @@
         ></el-table-column>
         <!-- 转化率% -->
         <el-table-column
-          :label="$t('转化率%')"
+          :label="$t('转化率')"
           v-if="activeName === '1'"
           prop="conversion_ratio"
         ></el-table-column>

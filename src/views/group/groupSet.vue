@@ -9,7 +9,7 @@
         <div class="clear"></div>
         <div class="tips-sty">
           <span class="el-icon-warning-outline icon-info"></span>
-          {{ $t('提示：仅“阶梯计价”模式路线可开启拼团') }}
+          {{ $t('提示仅阶梯计价模式路线可开启拼团') }}
         </div>
         <el-table
           border
@@ -22,7 +22,7 @@
         >
           <el-table-column type="index" :index="1"></el-table-column>
           <el-table-column :label="$t('线路名称')" prop="name"></el-table-column>
-          <el-table-column :label="$t('支持国家/地区')" :show-overflow-tooltip="true" width="150">
+          <el-table-column :label="$t('支持国家地区')" :show-overflow-tooltip="true" width="150">
             <template slot-scope="scope">
               <span v-for="item in scope.row.countries" :key="item.id">
                 {{ item.name }}&nbsp;

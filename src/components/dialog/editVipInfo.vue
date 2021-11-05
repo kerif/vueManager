@@ -14,13 +14,13 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item :label="$t('国家/地区')" class="label-sty">
+          <el-form-item :label="$t('国家地区')" class="label-sty">
             <!-- <span>{{form.country_name}}</span> -->
             <el-select
               v-model="form.country_id"
               filterable
               class="country-select"
-              :placeholder="$t('请选择国家/地区')"
+              :placeholder="$t('请选择国家地区')"
             >
               <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
               </el-option>

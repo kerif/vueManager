@@ -241,7 +241,7 @@ export default {
     },
     // 删除
     deleteWarehouse(id) {
-      this.$confirm(this.$t('您真的要删除此仓库吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除此仓库吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

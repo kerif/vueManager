@@ -10,12 +10,12 @@
         </el-col>
         <!-- 手机/联系电话 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{ $t('手机/联系电话') }}</span>
+          <span class="leftWidth">{{ $t('手机联系电话') }}</span>
           <span>{{ form.address && form.address.phone }}</span>
         </el-col>
         <!-- 国家/地区 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{ $t('国家/地区') }}</span>
+          <span class="leftWidth">{{ $t('国家地区') }}</span>
           <span>{{ form.address && form.address.country.cn_name }}</span>
         </el-col>
       </el-row>
@@ -178,7 +178,7 @@
         <!-- 重量 -->
         <el-row :gutter="20" v-if="this.user.box_type === 1">
           <el-col :span="11">
-            <el-form-item :label="$t('*重量')" prop="weight">
+            <el-form-item :label="$t('重量')" prop="weight">
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
                 <template slot="append">{{ this.localization.weight_unit }}</template>
               </el-input>
@@ -186,7 +186,7 @@
           </el-col>
           <!-- 尺寸 -->
           <el-col :span="10" :offset="2">
-            <el-form-item :label="$t('*尺寸')">
+            <el-form-item :label="$t('尺寸')">
               <el-input
                 v-model="user.length"
                 class="sizeLength"
@@ -263,7 +263,7 @@
         <!-- 上传打包照片 -->
         <el-row :gutter="20">
           <el-col :span="11">
-            <el-form-item :label="$t('*上传打包照片')" class="updateChe">
+            <el-form-item :label="$t('上传打包照片')" class="updateChe">
               <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
                 <img :src="$baseUrl.IMAGE_URL + item.url" alt class="goods-img" />
                 <span class="model-box"></span>
@@ -400,7 +400,7 @@
         }}</el-button>
         <span class="save-btn" v-if="form.group_name && form.is_parent === 0"
           >*{{
-            $t('不管数据有无更改，点击保存后，请务必重新操作总订单“编辑-保存“，以重新计算正确价格')
+            $t('不管数据有无更改点击保存后请务必重新操作总订单编辑保存以重新计算正确价格')
           }}！</span
         >
       </el-col>

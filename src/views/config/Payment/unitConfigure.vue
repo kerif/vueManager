@@ -2,7 +2,7 @@
   <div class="settings-container">
     <el-form>
       <!-- 重量单位： -->
-      <el-form-item :label="$t('重量单位：')">
+      <el-form-item :label="$t('重量单位')">
         <el-select v-model="weightName" :placeholder="$t('请选择')">
           <el-option
             v-for="item in weightList"
@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <!-- 货币单位： -->
-      <el-form-item :label="$t('货币单位：')">
+      <el-form-item :label="$t('货币单位')">
         <el-select v-model="currencyName" :placeholder="$t('请选择')">
           <el-option
             v-for="item in currencyList"
@@ -26,7 +26,7 @@
         </el-select>
       </el-form-item>
       <!-- 长度单位 -->
-      <el-form-item :label="$t('长度单位：')">
+      <el-form-item :label="$t('长度单位')">
         <el-select v-model="lengthName" :placeholder="$t('请选择')">
           <el-option
             v-for="(item, index) in lengthList"
@@ -37,7 +37,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('结算货币：')">
+      <el-form-item :label="$t('结算货币')">
         <el-select v-model="currency" :placeholder="$t('请选择')">
           <el-option v-for="item in rateList" :key="item.id" :value="item.code" :label="item.name">
           </el-option>

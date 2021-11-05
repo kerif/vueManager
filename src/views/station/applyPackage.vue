@@ -30,7 +30,7 @@
             <el-option v-for="item in propsData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
-          <el-select v-model="country_id" filterable :placeholder="$t('请选择国家/地区')" clearable>
+          <el-select v-model="country_id" filterable :placeholder="$t('请选择国家地区')" clearable>
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
@@ -39,7 +39,7 @@
           <el-input
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 8 }"
-            :placeholder="this.radio === 1 ? $t('多个包裹单号，请用回车分割') : $t('请输入会员ID')"
+            :placeholder="this.radio === 1 ? $t('多个包裹单号请用回车分割') : $t('请输入会员ID')"
             v-model="textarea2"
           >
           </el-input>
@@ -100,7 +100,7 @@
       <template slot="append">
         <div class="append-box">
           <el-button size="small" class="btn-deep-purple" @click="boxing">{{
-            $t('申请打包&合箱')
+            $t('申请打包合箱')
           }}</el-button>
         </div>
       </template>

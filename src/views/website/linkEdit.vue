@@ -3,7 +3,7 @@
     <div class="lang-sty">
       <p>
         <span class="el-icon-warning icon-info"></span>
-        {{ $t('建议添加3～5条链接（限制最多添加10条链接）') }}
+        {{ $t('建议添加35条链接限制最多添加10条链接') }}
       </p>
     </div>
     <el-form label-position="top" ref="ruleForm" class="demo-ruleForm">
@@ -101,7 +101,7 @@ export default {
     },
     // 删除
     deleteLink(id) {
-      this.$confirm(this.$t('您是否确认批量删除？'), this.$t('提示'), {
+      this.$confirm(this.$t('您是否确认批量删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

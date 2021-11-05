@@ -2690,6 +2690,11 @@ crypto-browserify@^3.11.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
+crypto-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+
 css-color-names@0.0.4, css-color-names@^0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
@@ -9367,6 +9372,11 @@ vue-eslint-parser@^7.0.0:
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
+
+vue-i18n@^8.26.7:
+  version "8.26.7"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.26.7.tgz#adfd48373449fe31438c48e3b3bd43044dc3a681"
+  integrity sha512-7apa5PvRg1YCLoraE3lOgpCG8hJGupLCtywQWedWsgBbvF0TOgFvhitqK9xRH0PBGG1G8aiJz9oklyNDFfDxLg==
 
 vue-jest@^3.0.4:
   version "3.0.7"

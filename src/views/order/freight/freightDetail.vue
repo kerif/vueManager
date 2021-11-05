@@ -59,25 +59,25 @@
                   <div v-if="expressData.base === 0">
                     <span v-if="expressData.mode === 1"
                       >{{ $t('价格表') }}：{{
-                        $t('根据阶梯拆分总体积，每一部分按对应价格计算，相加为总价')
+                        $t('根据阶梯拆分总体积每一部分按对应价格计算相加为总价')
                       }}</span
                     >
                     <span v-if="expressData.mode === 4">{{ $t('价格表') }}：</span>
                     <span v-if="expressData.mode === 2 || expressData.mode === 5"
                       >{{ $t('价格表') }}：{{
-                        $t('总重量属于哪一个区间，即按照该区间价格计算总价')
+                        $t('总重量属于哪一个区间即按照该区间价格计算总价')
                       }}</span
                     >
                   </div>
                   <div v-else>
                     <span v-if="expressData.mode === 1"
                       >{{ $t('价格表') }}：{{
-                        $t('根据阶梯拆分总体积，每一部分按对应价格计算，相加为总价')
+                        $t('根据阶梯拆分总体积每一部分按对应价格计算相加为总价')
                       }}</span
                     >
                     <span v-else-if="expressData.mode === 2"
                       >{{ $t('价格表') }}：{{
-                        $t('总体积属于哪一个区间，即按照该区间价格计算总价')
+                        $t('总体积属于哪一个区间即按照该区间价格计算总价')
                       }}</span
                     >
                     <span v-else>{{ $t('价格表') }}：</span>
@@ -96,12 +96,7 @@
                     v-if="expressData.base_mode === 0"
                   >
                   </el-table-column>
-                  <el-table-column
-                    :label="$t('体积范围(立方米)')"
-                    align="center"
-                    prop="range"
-                    v-else
-                  >
+                  <el-table-column :label="$t('体积范围立方米')" align="center" prop="range" v-else>
                   </el-table-column>
                   <el-table-column
                     :label="$t('价格类型')"
@@ -135,11 +130,11 @@
                       >
                       <span v-else-if="ele.type === 4"
                         >{{ priceSymbol }}{{ (ele.value / 100).toFixed(2) }}/{{ weightSymbol
-                        }}{{ $t('（计费重）') }}</span
+                        }}{{ $t('计费重') }}</span
                       >
                       <span v-else-if="ele.type === 5"
                         >{{ priceSymbol }}{{ (ele.value / 100).toFixed(2) }}/{{ weightSymbol
-                        }}{{ $t('（实重）') }}</span
+                        }}{{ $t('实重') }}</span
                       >
                       <span v-else>{{ $t('申报价值') }}{{ ele.value / 100 }}%</span>
                     </div>

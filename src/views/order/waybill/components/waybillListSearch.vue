@@ -9,7 +9,7 @@
               v-model="searchFieldData.order_sn"
               :autosize="{ minRows: 5, maxRows: 10 }"
               type="textarea"
-              :placeholder="$t('请输入订单号搜索，多个单号请用回车区分')"
+              :placeholder="$t('请输入订单号搜索多个单号请用回车区分')"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -158,7 +158,7 @@
           <!--收货国家地区-->
           <el-form-item prop="countryArr">
             <el-cascader
-              :placeholder="$t('收货国家/地区')"
+              :placeholder="$t('收货国家地区')"
               :show-all-levels="false"
               :props="countryProps"
               v-model="searchFieldData.countryArr"

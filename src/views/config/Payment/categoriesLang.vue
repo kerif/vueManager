@@ -7,7 +7,7 @@
       </p>
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
-      <el-form-item :label="$t('*分类名称')">
+      <el-form-item :label="$t('分类名称')">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="params.name"></el-input
@@ -15,7 +15,7 @@
         </el-row>
       </el-form-item>
       <!-- 邮件标题 -->
-      <el-form-item :label="$t('*标题')">
+      <el-form-item :label="$t('标题')">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="params.risk_warning_title"></el-input
@@ -23,7 +23,7 @@
         </el-row>
       </el-form-item>
       <!-- 邮件内容 -->
-      <el-form-item :label="$t('*内容')">
+      <el-form-item :label="$t('内容')">
         <el-row>
           <el-col :span="20">
             <div id="editor" :value="params.risk_warning_content" @input="changeText"></div>

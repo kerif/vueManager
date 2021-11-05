@@ -6,7 +6,7 @@
           <div class="add-btns-l">
             <el-select
               size="mini"
-              :placeholder="$t('支持国家/地区')"
+              :placeholder="$t('支持国家地区')"
               v-model="query.countries"
               multiple
               collapse-tags
@@ -386,9 +386,7 @@
             <span class="el-icon-question icon-info"></span>
           </el-tooltip>
           <el-radio v-model="company.order_mode" :label="0">{{ $t('标准模式') }}</el-radio>
-          <el-radio v-model="company.order_mode" :label="1">{{
-            $t('快速下单（无需合箱）')
-          }}</el-radio>
+          <el-radio v-model="company.order_mode" :label="1">{{ $t('快速下单无需合箱') }}</el-radio>
         </el-form-item>
         <el-form-item :label="$t('线路送货方式')">
           <!-- <el-radio-group></el-radio-group> -->
@@ -448,7 +446,7 @@
     <!-- 复制线路 -->
     <el-dialog :title="$t('复制')" :visible.sync="copyDialog" width="45%" @close="clear">
       <el-form ref="form" :model="copyData" label-width="100px">
-        <el-form-item :label="$t('*新线路名称')">
+        <el-form-item :label="$t('新线路名称')">
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
       </el-form>
@@ -714,7 +712,7 @@ export default {
     },
     // 删除
     deleteLine(id) {
-      this.$confirm(this.$t('该操作无法恢复，请确认该路线彻底弃用后再删除'), this.$t('提示'), {
+      this.$confirm(this.$t('该操作无法恢复请确认该路线彻底弃用后再删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

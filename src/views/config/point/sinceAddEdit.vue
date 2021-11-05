@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item>
         <el-row :gutter="20">
-          <div>{{ $t('*所属国家/地区') }}</div>
+          <div>{{ $t('所属国家地区') }}</div>
           <el-col :span="5">
             <el-select
               v-model="form.country_id"
@@ -99,7 +99,7 @@
       </el-form-item>
       <!-- 详细地址 -->
       <el-form-item>
-        <div>{{ $t('*详细地址') }}</div>
+        <div>{{ $t('详细地址') }}</div>
         <el-row :gutter="20">
           <el-col :span="10">
             <el-input v-model="form.address" :placeholder="$t('请输入')"></el-input>
@@ -129,7 +129,7 @@
       </el-form-item>
       <!-- 联系人 -->
       <el-form-item>
-        <div>{{ $t('*联系人') }}</div>
+        <div>{{ $t('联系人') }}</div>
         <el-row>
           <el-col :span="10">
             <el-input v-model="form.contactor" :placeholder="$t('请输入')"></el-input>
@@ -138,7 +138,7 @@
       </el-form-item>
       <!-- 联系电话 -->
       <el-form-item>
-        <div>{{ $t('*联系电话') }}</div>
+        <div>{{ $t('联系电话') }}</div>
         <el-row>
           <el-col :span="10">
             <el-input v-model="form.contact_info" :placeholder="$t('请输入')"></el-input>
@@ -146,13 +146,12 @@
         </el-row>
       </el-form-item>
       <el-form-item>
-        <!-- <div>{{ $t('*联系电话') }}</div> -->
         <div>
           <span>{{ $t('自提点规则') }}</span>
           <el-tooltip
             class="item"
             effect="dark"
-            :content="$t('申请集包时如超过限制条件，则无法选择该自提点。不填写则不启用')"
+            :content="$t('申请集包时如超过限制条件则无法选择该自提点不填写则不启用')"
             placement="top"
           >
             <span class="el-icon-question icon-info"></span>
@@ -287,7 +286,7 @@
         v-model="announcementData.opening_hours"
         type="textarea"
         :rows="4"
-        :placeholder="$t('例：周一至周六 08:00 ～ 20:00')"
+        :placeholder="$t('例周一至周六08002000')"
       >
       </el-input>
       <span>{{ $t('公告') }}</span>

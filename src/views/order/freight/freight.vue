@@ -56,7 +56,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('包裹尺寸（选填）')">
+          <el-form-item :label="$t('包裹尺寸选填')">
             <el-input
               :placeholder="$t('长')"
               type="number"
@@ -76,7 +76,7 @@
               v-model="queryInfo.height"
             ></el-input>
             <div class="calc-info">
-              {{ $t('包裹尺寸为商品打包后，实际包裹箱的长宽高用于某些体积重量的线路运费计算') }}
+              {{ $t('包裹尺寸为商品打包后实际包裹箱的长宽高用于某些体积重量的线路运费计算') }}
             </div>
           </el-form-item>
         </el-form>
@@ -91,7 +91,7 @@
         <div class="right-text">{{ $t('查询结果') }}</div>
         <div class="none-box" v-show="isEmpty">
           <img src="../../../assets/wu.png" />
-          <div class="right-text">{{ $t('您可以在这里估算运费,请在左边输入相关参数') }}!</div>
+          <div class="right-text">{{ $t('您可以在这里估算运费请在左边输入相关参数') }}!</div>
         </div>
         <div class="result-list">
           <div

@@ -19,7 +19,7 @@
           style="margin-left: 10px"
           >{{ $t('导出') }}</el-button
         >
-        <span class="tips">{{ $t('可导出价格表批量修改后，再导入表格') }}</span>
+        <span class="tips">{{ $t('可导出价格表批量修改后再导入表格') }}</span>
       </div>
       <div class="calculation-btn">
         <div style="flex-shrink: 0">{{ $t('运费试算') }}</div>
@@ -62,16 +62,14 @@
         <vxe-table-colgroup>
           <vxe-table-colgroup
             field="range"
-            :title="
-              baseMode === 0 ? $t('重量范围') + localization.weight_unit : $t('体积范围(立方)')
-            "
+            :title="baseMode === 0 ? $t('重量范围') + localization.weight_unit : $t('体积范围立方')"
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
         <vxe-table-colgroup v-if="type === 5">
           <vxe-table-colgroup
             field="type_weight"
-            :title="$t('首重/单位续重') + localization.weight_unit"
+            :title="$t('首重单位续重') + localization.weight_unit"
             min-width="120"
           >
           </vxe-table-colgroup>
@@ -79,9 +77,7 @@
         <vxe-table-colgroup v-if="type === 1 || type === 4">
           <vxe-table-colgroup
             field="unit_weight"
-            :title="
-              baseMode === 0 ? $t('单位重量') + localization.weight_unit : $t('单位体积(立方)')
-            "
+            :title="baseMode === 0 ? $t('单位重量') + localization.weight_unit : $t('单位体积立方')"
             min-width="120"
           ></vxe-table-colgroup
         ></vxe-table-colgroup>
@@ -318,7 +314,7 @@ export default {
             const areas = item.areas
               .map(item => item.country_name + item.area_name + item.sub_area_name)
               .join('、')
-            const name = item.enabled ? item.name : `${item.name}${this.$t('（未启用）')}`
+            const name = item.enabled ? item.name : `${item.name}${this.$t('未启用')}`
             const field = `${item.id}_price`
             let editRender = { name: 'input', attrs: { type: 'text' } }
             return {

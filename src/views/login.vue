@@ -149,7 +149,7 @@
               <div class="happy-img">
                 <img src="../assets/happy.png" />
               </div>
-              <p class="account-btn">{{ $t('修改密码成功！') }}</p>
+              <p class="account-btn">{{ $t('修改密码成功') }}</p>
               <div class="register">
                 <p @click="changeWelcome(1)">{{ $t('去登录') }}</p>
               </div>
@@ -182,7 +182,7 @@
               <el-form-item prop="password">
                 <el-input
                   type="password"
-                  :placeholder="$t('请输入8-20位密码，区分大小写')"
+                  :placeholder="$t('请输入820位密码区分大小写')"
                   prefix-icon="el-icon-unlock"
                   v-model="reAccount.password"
                 ></el-input>

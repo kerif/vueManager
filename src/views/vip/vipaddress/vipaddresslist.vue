@@ -17,7 +17,7 @@
       <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
       <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
       <el-table-column :label="$t('联系电话')" prop="phone"></el-table-column>
-      <el-table-column :label="$t('国家/地区')" prop="country.cn_name"></el-table-column>
+      <el-table-column :label="$t('国家地区')" prop="country.cn_name"></el-table-column>
       <el-table-column :label="$t('城市')" prop="city"></el-table-column>
       <el-table-column :label="$t('街道')" prop="street"></el-table-column>
       <el-table-column :label="$t('门牌号')" prop="door_no"></el-table-column>

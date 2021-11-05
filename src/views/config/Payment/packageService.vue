@@ -168,7 +168,7 @@ export default {
     },
     // 包裹 删除增值服务
     deleteParcel(id) {
-      this.$confirm(this.$t('您真的要删除增值服务吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除增值服务吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

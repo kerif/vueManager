@@ -95,7 +95,7 @@
       </el-table>
     </el-form>
     <!-- <div style="margin-bottom: 20px">
-      {{ $t('支持国家/地区') }}
+      {{ $t('支持国家地区') }}
     </div>
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column type="index"> </el-table-column>

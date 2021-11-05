@@ -19,7 +19,7 @@
           <el-col :span="10">
             <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
             <el-checkbox v-model="form.ceil_weight"
-              >{{ $t('包裹重量不足最小，') }}{{ billingName }}{{ $t('时') }}{{ $t('按最小')
+              >{{ $t('包裹重量不足最小') }}{{ billingName }}{{ $t('时') }}{{ $t('按最小')
               }}{{ billingName }}{{ $t('计算') }}</el-checkbox
             >
           </el-col>
@@ -28,7 +28,7 @@
       <!-- 计费价格模式 -->
       <el-form-item>
         <div>
-          {{ $t('*计费价格模式')
+          {{ $t('计费价格模式')
           }}<el-button style="margin-left: 10px" class="btn-green" @click="goIntroduction">{{
             $t('说明')
           }}</el-button>
@@ -76,7 +76,7 @@
                 {{ $t('*首重') + unitName }}
               </div>
               <div v-if="form.base_mode === 1 && form.mode === 1">
-                {{ $t('*首费体积') + localization.currency_unit + '/' + unitName }}
+                {{ $t('首费体积') + localization.currency_unit + '/' + unitName }}
               </div>
               <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
@@ -91,7 +91,7 @@
         <el-form-item>
           <el-row :gutter="10">
             <el-col :span="16">
-              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
+              <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
               <div class="add-row">
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
               </div>
@@ -178,7 +178,7 @@
         <el-form-item>
           <el-row>
             <el-col :span="16">
-              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
+              <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
               <div class="add-row">
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
               </div>
@@ -220,7 +220,7 @@
         <el-form-item>
           <el-row>
             <el-col :span="18">
-              <div class="remark">{{ $t('注意：修改计费重量后,对应的价格表要重新设置') }}</div>
+              <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
               <div class="add-row">
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
               </div>
@@ -459,9 +459,9 @@
       <div>
         <h3>【{{ $t('价格配置方式') }}】</h3>
         <div>{{ $t('价格设置需再在三个选项卡中配置') }}:</div>
-        <div>1、{{ $t('"计费设置"页面配置计费类型与首重、续重、重量阶梯等基础数据') }}</div>
-        <div>2、{{ $t('"分区表"中设置不同区域分组') }}</div>
-        <div>3、{{ $t('在1、2步骤完成后，系统生成空白"价格表"，在价格表中配置具体价格') }}</div>
+        <div>1、{{ $t('计费设置页面配置计费类型与首重续重重量阶梯等基础数据') }}</div>
+        <div>2、{{ $t('分区表中设置不同区域分组') }}</div>
+        <div>3、{{ $t('在12步骤完成后系统生成空白价格表在价格表中配置具体价格') }}</div>
         <img src="../../../assets/table1.png" />
       </div>
       <div>
@@ -477,9 +477,9 @@
       <div>
         <h3>【{{ $t('计费模式') }}】</h3>
         <h4>a) {{ $t('首重续重模式') }}</h4>
-        <div>{{ $t('例：生成价格表样式如下时') }}:</div>
+        <div>{{ $t('例生成价格表样式如下时') }}:</div>
         <img src="../../../assets/table2.png" />
-        <div>{{ $t('计算方式（以分区一为例）') }}:</div>
+        <div>{{ $t('计算方式以分区一为例') }}:</div>
         <div>0～5KG：{{ $t('总价') }}50</div>
         <div>
           5～10KG：{{ $t('首费') }}50+（{{ $t('总重量') }}-{{ $t('首重') }}5KG）*
@@ -494,16 +494,16 @@
             $t('总重量')
           }}-100）/5 * 35
         </div>
-        <div>{{ $t('注：灰色部分向上取整') }}</div>
+        <div>{{ $t('注灰色部分向上取整') }}</div>
         <h4>b) {{ $t('阶梯价格模式') }}</h4>
-        <div>{{ $t('例：生成价格表样式如下时') }}:</div>
+        <div>{{ $t('例生成价格表样式如下时') }}:</div>
         <img src="../../../assets/table3.png" />
         <div>
-          {{ $t('计算方式：重量处于哪一个区间，即采用该区间对应的“基价”“单价”计算费用：') }}
+          {{ $t('计算方式重量处于哪一个区间即采用该区间对应的基价单价计算费用') }}
         </div>
         <div>{{ $t('总费用= 基价 + 总重量 * 该区间单价') }}</div>
         <h4>c) {{ $t('多级续重模式') }}</h4>
-        <div>{{ $t('例：生成价格表样式如下时') }}:</div>
+        <div>{{ $t('例生成价格表样式如下时') }}:</div>
         <img src="../../../assets/table4.png" />
         <div>{{ $t('计算方式') }}：</div>
         <div>
@@ -522,10 +522,10 @@
           }}0.3，{{ $t('计费为首费') }}50 + 4元
         </div>
         <h4>d) {{ $t('阶梯首重续重模式') }}</h4>
-        <div>{{ $t('例：生成价格表样式如下时') }}:</div>
+        <div>{{ $t('例生成价格表样式如下时') }}:</div>
         <img src="../../../assets/table5.png" />
         <div>
-          {{ $t('计算方式：重量处于哪一个区间，即采用该区间对应的“首费”“续单价”计算费用：') }}
+          {{ $t('计算方式重量处于哪一个区间即采用该区间对应的首费续单价计算费用') }}
         </div>
         <div>
           {{ $t('总费用') }} = {{ $t('首费') }} + （{{ $t('总重量') }}-{{ $t('首重') }}） *
@@ -613,15 +613,15 @@ export default {
       ceilData: [
         {
           id: 0,
-          name: `${this.$t('不开启多箱计价(按总重量/体积计算价格)')}`
+          name: `${this.$t('不开启多箱计价按总重量体积计算价格')}`
         },
         {
           id: 2,
-          name: `${this.$t('多箱单独计算计费重量(重量/体积相加后计算价格)')}`
+          name: `${this.$t('多箱单独计算计费重量重量体积相加后计算价格')}`
         },
         {
           id: 1,
-          name: this.$t('多箱单独计算价格后，相加为总价')
+          name: this.$t('多箱单独计算价格后相加为总价')
         }
       ],
       localization: {},
@@ -670,7 +670,7 @@ export default {
     'form.base_mode': function (val) {
       console.log(val, 'val')
       this.billingName = val === 0 ? this.$t('重量') : this.$t('体积')
-      this.unitName = val === 0 ? this.localization.weight_unit : this.$t('(立方)')
+      this.unitName = val === 0 ? this.localization.weight_unit : this.$t('立方')
       console.log(this.billingName, 'this.billingName')
       console.log(this.unitName, 'this.unitName')
     }

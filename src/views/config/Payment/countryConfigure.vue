@@ -20,7 +20,7 @@
             </template>
           </el-table-column>
           <!-- 前缀字符 -->
-          <el-table-column prop="name" :label="$t('国家/地区')"> </el-table-column>
+          <el-table-column prop="name" :label="$t('国家地区')"> </el-table-column>
           <!-- 状态 -->
           <el-table-column :label="$t('状态')">
             <template slot-scope="scope">
@@ -60,9 +60,7 @@
       </el-col>
       <el-col :span="14">
         <div class="tips-sty">
-          {{
-            $t('提示：系统仅支持三级区域，对上一级地址操作启用/关闭，或删除时，对下级所有区域生效')
-          }}
+          {{ $t('提示系统仅支持三级区域，对上一级地址操作启用关闭或删除时对下级所有区域生效') }}
         </div>
         <div style="margin-top: 15px; overflow: hidden">
           <!-- <el-switch
@@ -193,7 +191,7 @@
         <el-col :span="21">
           <div class="tips-main">
             <i class="el-icon-warning code-sty"></i>
-            {{ $t('添加通知信息后，客户在下单选择该地区的地址时，会弹出对应提示') }}
+            {{ $t('添加通知信息后客户在下单选择该地区的地址时会弹出对应提示') }}
           </div>
         </el-col>
         <el-col :span="3">
@@ -340,7 +338,7 @@ export default {
     },
     // 删除国家地区
     deleteCountry(ids) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -368,7 +366,7 @@ export default {
       console.log(event, 'event')
       if (event === 0) {
         this.$confirm(
-          this.$t('停止支持该国家后，再次开启时需重新添加支持仓库与路线'),
+          this.$t('停止支持该国家后再次开启时需重新添加支持仓库与路线'),
           this.$t('提示'),
           {
             confirmButtonText: this.$t('确定'),
@@ -546,7 +544,7 @@ export default {
     deleteLOwLevel(id) {
       console.log(id, 'id')
       this.$confirm(
-        this.$t('您是否确认批量删除？如果是批量删除二级地址的话，该分级下所有的三级地址也会删除'),
+        this.$t('您是否确认批量删除如果是批量删除二级地址的话该分级下所有的三级地址也会删除'),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),
@@ -710,7 +708,7 @@ export default {
     },
     // 删除地域
     deleteRegional(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

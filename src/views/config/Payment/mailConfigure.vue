@@ -202,7 +202,7 @@
                 inactive-color="gray">
               </el-switch>
             </el-form-item> -->
-      <!-- <div class="form-title">{{ $t("短信配置——聚合") }}</div>
+      <!-- <div class="form-title">{{ $t("短信配置聚合") }}</div>
         <el-form-item label="Appkey" prop="juhe_key">
           <el-input
             v-model="logisticsData.juhe_key"
@@ -382,7 +382,7 @@ export default {
     },
     // 删除单条邮件模版
     deleteEmail(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

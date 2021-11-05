@@ -1,7 +1,7 @@
 <template>
   <div>
     <h5 style="color: #f40b00">
-      *{{ $t('可在此界面设置渠道专用增值服务，如加固费、打包费、保价费、偏远地区配送费等。') }}
+      *{{ $t('可在此界面设置渠道专用增值服务如加固费打包费保价费偏远地区配送费等。') }}
     </h5>
     <div class="added-services">
       <vxe-grid
@@ -101,7 +101,7 @@
                 <vxe-table-column field="areas" title="国家/地区"></vxe-table-column>
                 <vxe-table-column
                   field="value"
-                  :title="$t('值(点击修改)')"
+                  :title="$t('值点击修改')"
                   :edit-render="{
                     name: 'input',
                     attrs: { type: 'text', placeholder: $t('请输入') }
@@ -110,7 +110,7 @@
               </vxe-table>
             </el-form-item>
           </el-form>
-          <h5>{{ $t('增值费用名称（多语言）') }}：</h5>
+          <h5>{{ $t('增值费用名称多语言') }}：</h5>
           <el-form ref="langForm" :model="langForm" label-width="120px">
             <el-form-item v-for="item in languageData" :key="item.code" :label="item.name">
               <el-input
@@ -127,7 +127,7 @@
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="save">{{ $t('确 定') }}</el-button>
+          <el-button type="primary" @click="save">{{ $t('确定') }}</el-button>
         </span>
       </el-dialog>
     </div>
@@ -284,31 +284,31 @@ export default {
               item.service.forEach(ele => {
                 item[`service_${ele.id}`] = ele.value
                 if (ele.type === 1 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：运费比例 收取方式：强制收取')
+                  this.content = this.$t('类型运费比例收取方式强制收取')
                 } else if (ele.type === 2 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：整票固定费用 收取方式：强制收取')
+                  this.content = this.$t('类型整票固定费用收取方式强制收取')
                 } else if (ele.type === 3 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：单箱固定费用 收取方式：强制收取')
+                  this.content = this.$t('类型单箱固定费用收取方式强制收取')
                 } else if (ele.type === 4 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：单位计费重量固定费用 收取方式：强制收取')
+                  this.content = this.$t('类型单位计费重量固定费用收取方式强制收取')
                 } else if (ele.type === 5 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：单位实际重量固定费用 收取方式：强制收取')
+                  this.content = this.$t('类型单位实际重量固定费用 收取方式强制收取')
                 } else if (ele.type === 6 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：申报价值比例 收取方式：强制收取')
+                  this.content = this.$t('类型申报价值比例 收取方式强制收取')
                 } else if (ele.type === 1 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：运费比例 收取方式：自愿勾选')
+                  this.content = this.$t('类型运费比例 收取方式自愿勾选')
                 } else if (ele.type === 2 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：整票固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型：整票固定费用 收取方式自愿勾选')
                 } else if (ele.type === 3 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单箱固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型单箱固定费用 收取方式自愿勾选')
                 } else if (ele.type === 4 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单位计费重量固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型单位计费重量固定费用收取方式自愿勾选')
                 } else if (ele.type === 5 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单位实际重量固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型单位实际重量固定费用收取方式自愿勾选')
                 } else if (ele.type === 6 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：申报价值比例 收取方式：自愿勾选')
+                  this.content = this.$t('类型申报价值比例收取方式自愿勾选')
                 } else {
-                  this.content = this.$t(' ')
+                  this.content = ' '
                 }
                 this.gridOptions.columns.push({
                   field: `service_${ele.id}`,
@@ -373,7 +373,7 @@ export default {
     },
     // 删除增值服务
     deleteServices(column) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

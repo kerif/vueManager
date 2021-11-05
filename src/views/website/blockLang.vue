@@ -7,7 +7,7 @@
       </p>
     </div>
     <el-form label-position="top" :model="params" ref="ruleForm" class="demo-ruleForm">
-      <el-form-item label="*标题" v-if="this.status === 'origin'">
+      <el-form-item label="标题" v-if="this.status === 'origin'">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="params.title"></el-input
@@ -30,7 +30,7 @@
         </el-row>
       </el-form-item>
       <!-- 标签 -->
-      <el-form-item label="*标签" v-if="this.status === 'origin'">
+      <el-form-item label="标签" v-if="this.status === 'origin'">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="params.tags"></el-input
