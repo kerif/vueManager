@@ -733,7 +733,21 @@ export default {
     },
     // 导出清单
     uploadList() {
-      const params = this.computedParams()
+      // const params = this.computedParams()
+      const searchData = this.searchFieldData
+      let param = {
+        page: this.page_params.page,
+        size: this.page_params.size,
+        status: this.activeName === '6' ? 19 : this.activeName,
+        keyword: this.searchFieldData.keyword
+      }
+      let params = {
+        ...param,
+        ...searchData,
+        express_num: searchData.express_num.split(/[(\r\n)\r\n]+/),
+        begin_date: searchData.date ? searchData.date[0] : '',
+        end_date: searchData.date ? searchData.date[1] : ''
+      }
       this.$request.uploadPackage(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url

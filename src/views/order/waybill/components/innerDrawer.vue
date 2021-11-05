@@ -32,7 +32,8 @@
               v-for="item in orderInfo"
               :key="item.id"
               :label="item.id"
-              :disabled="item.id.includes[('user_id', 'username', 'express_line_name')]"
+              :disabled="item.id.includes('user_id', 'username', 'express_line_name')"
+              @click="select"
               >{{ item.name }}</el-checkbox
             >
           </el-checkbox-group>
@@ -152,7 +153,8 @@ export default {
       shipInfo: [],
       operationInfo: [],
       customerInfo: [],
-      feeInfo: []
+      feeInfo: [],
+      tmpsData: []
     }
   },
   props: {
@@ -188,6 +190,7 @@ export default {
       let code = this.tmpCode
       this.$request.getListTemplate(code).then(res => {
         console.log(res)
+        this.tmpsData = res.data
         this.orderInfo.push(
           { id: 'user_id', name: '客户ID' },
           { id: 'username', name: '用户名' },
@@ -206,14 +209,11 @@ export default {
           { id: 'station_name', name: '自提点' },
           { id: 'station_address', name: '自提点地址' }
         )
-        console.log(this.receiveInfo)
         this.warehouseInfo.push(
           { id: 'packages_count', name: '包裹数' },
           { id: 'package_value_sum', name: '申报价值' }
         )
-        console.log(this.warehouseInfo)
         this.outboundInfo.push({ id: 'box_logistics_sn', name: '分箱物流单号' })
-        console.log(this.outboundInfo)
         this.payInfo.push(
           { id: 'payment_method', name: '付款方式' },
           { id: 'value_added_amount', name: '增值服务费用' },
@@ -226,9 +226,8 @@ export default {
           { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
           { id: 'point_amount', name: '积分抵扣金额' }
         )
-        console.log(this.payInfo)
         this.shipInfo.push({ id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' })
-        console.log(this.shipInfo)
+
         this.operationInfo.push(
           { id: 'created_at', name: '提交时间' },
           { id: 'packed_at', name: '打包（拣货）时间' },
@@ -236,15 +235,23 @@ export default {
           { id: 'shipped_at', name: '发货时间' },
           { id: 'signed_at', name: '签收时间' }
         )
-        console.log(this.operationInfo)
         // this.customerInfo.push()
         // console.log(this.customerInfo)
       })
     },
     confirm() {
+      this.tmpsData.forEach(item => {
+        this.info.order.forEach(ele => {
+          if (item.id === ele || (item.id !== ele && item.checked)) {
+            item.checked = 1
+          } else {
+            item.checked = 0
+          }
+        })
+      })
       let param = {
         name: this.ruleForm.name,
-        ...this.info
+        header: this.tmpsData
       }
       if (this.status === 'add') {
         param.code = this.tmpCode
@@ -288,6 +295,7 @@ export default {
         })
       }
     },
+    select() {},
     clear() {
       this.ruleForm.name = ''
       this.ruleForm.remark = ''
