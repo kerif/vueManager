@@ -285,7 +285,7 @@
           </el-col>
         </el-row>
         <!-- 子订单单价 -->
-        <el-row :gutter="20">
+        <el-row :gutter="20" v-if="$route.params.parent !== 0">
           <el-col :span="10">
             <el-form-item :label="$t('子订单单价(选填)')">
               <el-input v-model="user.unit_price" :placeholder="$t('请输入子订单单价')"></el-input>
