@@ -311,17 +311,11 @@
                 <!-- 支付状态 -->
                 <el-table-column :label="$t('支付状态')">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status >= 3 || scope.row.status < 11" class="packaged">{{
-                      $t('已支付')
-                    }}</span>
-                    <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
-                    <router-link
+                    <div
                       v-if="scope.row.status === 12"
-                      class="choose-order"
-                      :to="`/order/review/?id=${scope.row.id}`"
-                    >
-                      {{ $t('审核拒绝') }}
-                    </router-link>
+                      @click="$router.push(`/order/review/?id=${scope.row.id}`)"
+                    ></div>
+                    <div v-else>{{ scope.row.status_name }}</div>
                   </template>
                 </el-table-column>
                 <!-- 转运快递单号 -->
