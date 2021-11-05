@@ -32,7 +32,9 @@
               v-for="item in orderInfo"
               :key="item.id"
               :label="item.id"
-              :disabled="item.id.includes('user_id', 'username', 'express_line_name')"
+              :disabled="
+                item.id === 'user_id' || item.id === 'username' || item.id === 'express_line_name'
+              "
               @click="select"
               >{{ item.name }}</el-checkbox
             >
