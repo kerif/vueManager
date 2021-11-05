@@ -1,6 +1,6 @@
 <template>
   <el-drawer
-    :title="$t('编辑默认模板')"
+    :title="this.status === 'add' ? $t('新增默认模板') : $t('编辑默认模板')"
     class="inner-container"
     :size="size"
     :visible.sync="editTmpDrawer"
@@ -8,7 +8,7 @@
     :before-close="close"
     @opened="open()"
   >
-    <el-form class="inner-form">
+    <el-form class="inner-form" :model="ruleForm">
       <el-form-item :label="$t('模板名称')" style="margin-left: 20px">
         <el-input
           v-model="ruleForm.name"
@@ -28,9 +28,13 @@
       <el-collapse v-model="activeNames" @change="handleChange" style="margin: 20px">
         <el-collapse-item :title="$t('订单信息')" name="1">
           <el-checkbox-group v-model="info.order">
-            <el-checkbox v-for="item in orderInfo" :key="item.id" :label="item.id">{{
-              item.name
-            }}</el-checkbox>
+            <el-checkbox
+              v-for="item in orderInfo"
+              :key="item.id"
+              :label="item.id"
+              :disabled="item.id.includes[('user_id', 'username', 'express_line_name')]"
+              >{{ item.name }}</el-checkbox
+            >
           </el-checkbox-group>
         </el-collapse-item>
         <el-collapse-item :title="$t('收件信息')" name="2">
@@ -110,7 +114,7 @@
         </el-checkbox-group>
       </el-form-item>
       <div style="float: right">
-        <el-button>{{ $t('保存模板') }}</el-button>
+        <el-button @click="confirm">{{ $t('保存模板') }}</el-button>
       </div>
     </el-form>
   </el-drawer>
@@ -125,19 +129,20 @@ export default {
         remark: ''
       },
       info: {
-        order: '',
-        receive: '',
-        warehouse: '',
-        outbound: '',
-        operation: '',
-        pay: '',
-        ship: '',
-        customer: '',
-        fee: ''
+        order: ['user_id', 'username', 'express_line_name'],
+        receive: [],
+        warehouse: [],
+        outbound: [],
+        operation: [],
+        pay: [],
+        ship: [],
+        customer: [],
+        fee: []
       },
       size: '50%',
+      code: '',
       activeNames: ['1'],
-      checkList: [],
+      checkList: ['禁用', '选中且禁用'],
       order: 1,
       orderInfo: [],
       receiveInfo: [],
@@ -158,6 +163,14 @@ export default {
     tmpCode: {
       type: String,
       required: true
+    },
+    status: {
+      type: String,
+      required: true
+    },
+    id: {
+      type: Number,
+      required: true
     }
   },
   created() {
@@ -173,7 +186,6 @@ export default {
     },
     getTmpData() {
       let code = this.tmpCode
-      console.log(code)
       this.$request.getListTemplate(code).then(res => {
         console.log(res)
         this.orderInfo.push(
@@ -184,7 +196,6 @@ export default {
           { id: 'agent_name', name: '所属代理' },
           { id: 'clearance_code', name: '清关编码' }
         )
-        console.log(this.orderInfo)
         this.receiveInfo.push(
           { id: 'receiver_name', name: '收货人' },
           { id: 'phone', name: '手机/联系电话' },
@@ -198,22 +209,22 @@ export default {
         console.log(this.receiveInfo)
         this.warehouseInfo.push(
           { id: 'packages_count', name: '包裹数' },
-          { id: 'package_value_sum', name: '申报价值 ($currency)' }
+          { id: 'package_value_sum', name: '申报价值' }
         )
         console.log(this.warehouseInfo)
         this.outboundInfo.push({ id: 'box_logistics_sn', name: '分箱物流单号' })
         console.log(this.outboundInfo)
         this.payInfo.push(
           { id: 'payment_method', name: '付款方式' },
-          { id: 'value_added_amount', name: '增值服务费用 ($currency)' },
-          { id: 'insurance_fee', name: '保险费用 ($currency)' },
-          { id: 'tariff_fee', name: '关税费用 ($currency)' },
-          { id: 'line_service_fee', name: '渠道增值服务费用 ($currency)' },
-          { id: 'line_rule_fee', name: '渠道规则费用 ($currency)' },
-          { id: 'actual_payment_fee', name: '实际费用 ($currency)' },
+          { id: 'value_added_amount', name: '增值服务费用' },
+          { id: 'insurance_fee', name: '保险费用' },
+          { id: 'tariff_fee', name: '关税费用' },
+          { id: 'line_service_fee', name: '渠道增值服务费用' },
+          { id: 'line_rule_fee', name: '渠道规则费用' },
+          { id: 'actual_payment_fee', name: '实际费用' },
           { id: 'pay_out_serial_no', name: '支付单号' },
-          { id: 'coupon_discount_fee', name: '优惠券抵扣金额 ($currency)' },
-          { id: 'point_amount', name: '积分抵扣金额 ($currency)' }
+          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
+          { id: 'point_amount', name: '积分抵扣金额' }
         )
         console.log(this.payInfo)
         this.shipInfo.push({ id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' })
@@ -229,6 +240,53 @@ export default {
         // this.customerInfo.push()
         // console.log(this.customerInfo)
       })
+    },
+    confirm() {
+      let param = {
+        name: this.ruleForm.name,
+        ...this.info
+      }
+      if (this.status === 'add') {
+        param.code = this.tmpCode
+      } else {
+        param.id = this.id
+      }
+      if (this.status === 'add') {
+        //新增
+        this.$request.addTemplate(param).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('成功'),
+              message: res.msg
+            })
+            this.editTmpDrawer = false
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      } else {
+        //编辑
+        this.$request.editTemplate(param).then(res => {
+          console.log(res)
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('成功'),
+              message: res.msg
+            })
+            this.editTmpDrawer = false
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
     }
   }
 }

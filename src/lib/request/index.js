@@ -18,6 +18,26 @@ exports.aboutUs = () => $form.get('about-us')
 exports.aboutMe = () => $form.get('me')
 // 下载管理 获取列表
 exports.exportsDownloads = () => $form.get('export-downloads')
+// 常见问题
+exports.problemList = () => {
+  return $form.get('problems')
+}
+// 常见问题 详情
+exports.problemDetail = id => {
+  return $form.get(`problems/${id}`)
+}
+// 常见问题 分类列表
+exports.categoryList = () => {
+  return $form.get('problems/categories')
+}
+// 系统消息 列表
+exports.messageList = params => {
+  return $form.get('push-messages', params)
+}
+// 系统消息 详情
+exports.messageDetail = id => {
+  return $form.get(`push-messages/${id}`)
+}
 // 配置 路线
 exports.getLines = params => {
   return $form.get('express-lines', { params })

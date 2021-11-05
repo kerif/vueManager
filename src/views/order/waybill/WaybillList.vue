@@ -1322,7 +1322,7 @@ export default {
             type: 'success'
           })
           this.dialogPackages = false
-          this.getList()
+          // this.getList()
         } else {
           this.$notify({
             title: this.$t('操作失败'),

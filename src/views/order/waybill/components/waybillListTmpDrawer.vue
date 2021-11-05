@@ -13,8 +13,10 @@
     <el-row
       v-for="item in tmpList"
       :key="item.id"
+      class="tmp"
       style="background: #ccc; margin: 20px; padding: 10px"
       :gutter="20"
+      @click="activeFun"
     >
       <el-col>
         <div style="height: 180px">
@@ -29,10 +31,10 @@
             >
             <el-col :span="4">
               <div style="margin-top: 10px">
-                <el-button @click="editTmp('edit')">{{ $t('编辑') }}</el-button>
+                <el-button @click="editTmp('edit', item.id)">{{ $t('编辑') }}</el-button>
               </div>
               <div style="margin-top: 20px">
-                <el-button @click="deleteTmpDrawer">{{ $t('删除') }}</el-button>
+                <el-button @click="deleteTmpDrawer(item.id)">{{ $t('删除') }}</el-button>
               </div>
             </el-col>
           </el-row>
@@ -41,6 +43,8 @@
     </el-row>
     <inner-drawer
       :editTmpDrawer="editTmpDrawer"
+      :status="status"
+      :id="id"
       @receiveInner="receiveInner"
       :tmpCode="tmpCode"
     ></inner-drawer>
@@ -60,6 +64,8 @@ export default {
       name: '',
       tmpName: '',
       tmpCode: '',
+      status: 'add',
+      id: '',
       tmpList: []
     }
   },
@@ -80,35 +86,39 @@ export default {
     open() {},
     addTmp() {
       this.editTmpDrawer = true
+      this.status = 'add'
     },
-    editTmp() {
+    editTmp(id) {
       this.editTmpDrawer = true
+      this.status = 'edit'
+      id
     },
     receiveInner() {
       this.editTmpDrawer = false
     },
-    deleteTmpDrawer() {
-      // this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
-      //   confirmButtonText: this.$t('确定'),
-      //   cancelButtonText: this.$t('取消'),
-      //   type: 'warning'
-      // }).then(() => {
-      //   this.$request.deleteTemplate().then(res => {
-      //     if (res.ret) {
-      //       this.$notify({
-      //         title: this.$t('操作成功'),
-      //         message: res.msg,
-      //         type: 'success'
-      //       })
-      //     } else {
-      //       this.$notify({
-      //         title: this.$t('操作失败'),
-      //         message: res.msg,
-      //         type: 'warning'
-      //       })
-      //     }
-      //   })
-      // })
+    activeFun() {},
+    deleteTmpDrawer(id) {
+      this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteTemplate(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
     },
     getTmpList() {
       let code = this.code
@@ -134,6 +144,11 @@ export default {
   font-size: 14px;
   .el-drawer.rtl {
     overflow: scroll;
+  }
+  /deep/.tmp {
+    background: #ccc;
+    margin: 20px;
+    padding: 10px;
   }
   .el-drawer__header {
     margin-bottom: 0;
