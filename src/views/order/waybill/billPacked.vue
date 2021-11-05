@@ -96,7 +96,7 @@
     </div>
     <!-- 打包清单 -->
     <h4>{{ $t('包裹清单') }}</h4>
-    <div class="add-sty" v-if="this.$route.params.activeName">
+    <div class="add-sty" v-if="this.$route.params.activeName === '1'">
       <el-button class="btn-blue" @click="addPackages">{{ $t('添加包裹') }}</el-button>
     </div>
     <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
@@ -129,7 +129,7 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
-      <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName">
+      <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName === '1'">
         <template slot-scope="scope">
           <el-button @click="packageDetails(scope.row.id)" class="btn-deep-purple">
             {{ $t('详情') }}
@@ -285,7 +285,7 @@
           </el-col>
         </el-row>
         <!-- 子订单单价 -->
-        <el-row :gutter="20" v-if="$route.params.parent !== 0">
+        <!-- <el-row :gutter="20" v-if="$route.params.parent !== 0">
           <el-col :span="10">
             <el-form-item :label="$t('子订单单价(选填)')">
               <el-input v-model="user.unit_price" :placeholder="$t('请输入子订单单价')"></el-input>
@@ -294,7 +294,7 @@
               }}</span>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row :gutter="20" v-if="user.box_type === 2">
           <el-form-item>
             <el-col :span="18">
