@@ -163,8 +163,7 @@ export default {
       operationInfo: [],
       customerInfo: [],
       feeInfo: [],
-      tmpsData: [],
-      id: this.ids
+      tmpsData: []
     }
   },
   props: {
@@ -311,8 +310,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
-            this.$emit('passVal')
             this.editTmpDrawer = false
+            this.$emit('passVal')
           } else {
             this.$message({
               message: res.msg,
@@ -331,8 +330,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
-            this.$emit('passVal')
             this.editTmpDrawer = false
+            this.$emit('passVal')
           } else {
             this.$message({
               message: res.msg,
@@ -343,7 +342,7 @@ export default {
       }
     },
     getList() {
-      this.$request.listDetail(this.id).then(res => {
+      this.$request.listDetail(this.ids).then(res => {
         console.log(res, '9999')
         this.ruleForm.name = res.data.name
         this.ruleForm.remark = res.data.remark
