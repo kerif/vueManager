@@ -1,5 +1,6 @@
 <template>
   <div class="vip-address-container">
+    <el-button type="danger" @click="uploadList" size="mini">{{ $t('导出清单') }}</el-button>
     <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
@@ -85,6 +86,23 @@ export default {
     editVip(id, userId) {
       dialog({ type: 'addressEdit', id: id, userId: userId }, () => {
         this.getList()
+      })
+    },
+    uploadList() {
+      this.$request.exportList().then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     }
   }

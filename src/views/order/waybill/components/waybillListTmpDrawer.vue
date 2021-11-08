@@ -4,19 +4,22 @@
     :visible.sync="showTmpDrawer"
     class="exportTmp-container"
     :before-close="close"
-    @opened="open()"
   >
     <div style="margin: 20px">
       <el-button @click="addTmp('add')">{{ $t('新增模板') }}</el-button>
-      <el-button>{{ $t('确定导出') }}</el-button>
+      <el-button style="background-color: #3540a5; color: #fff" @click="updatePackages">{{
+        $t('确定导出')
+      }}</el-button>
     </div>
     <el-row
       v-for="item in tmpList"
       :key="item.id"
       class="tmp"
-      style="background: #ccc; margin: 20px; padding: 10px"
+      style="padding: 10px; margin: 20px"
+      :style="{ background: colorStr }"
       :gutter="20"
-      @click="activeFun"
+      @click.native="activeFun(item.id)"
+      @passVal="getTmpList"
     >
       <el-col>
         <div style="height: 180px">
@@ -44,7 +47,7 @@
     <inner-drawer
       :editTmpDrawer="editTmpDrawer"
       :status="status"
-      :id="id"
+      :ids="ids"
       @receiveInner="receiveInner"
       :tmpCode="tmpCode"
     ></inner-drawer>
@@ -66,13 +69,18 @@
 //       tmpCode: '',
 //       status: 'add',
 //       id: '',
-//       tmpList: []
+//       ids: '',
+//       tmpList: [],
+//       colorStr: '#ccc'
 //     }
 //   },
 //   props: {
 //     showTmpDrawer: {
 //       type: Boolean,
 //       default: false
+//     },
+//     searchFieldData: {
+//       type: Object
 //     }
 //   },
 //   created() {
@@ -83,20 +91,49 @@
 //     close() {
 //       this.$emit('receiveTmp', false)
 //     },
-//     open() {},
 //     addTmp() {
 //       this.editTmpDrawer = true
 //       this.status = 'add'
 //     },
-//     editTmp(id) {
+//     editTmp(status, ids) {
 //       this.editTmpDrawer = true
 //       this.status = 'edit'
-//       id
+//       this.ids = ids
 //     },
 //     receiveInner() {
 //       this.editTmpDrawer = false
 //     },
-//     activeFun() {},
+//     activeFun(id) {
+//       console.log(id)
+//       let params = {
+//         ...this.searchFieldData
+//       }
+//       this.tmpList.forEach(ele => {
+//         console.log(ele.id)
+//         console.log(id)
+//         console.log(ele.id === id)
+//         if (ele.id === id) {
+//           this.colorStr = 'red'
+//         } else {
+//           this.colorStr = '#ccc'
+//         }
+//       })
+//       this.$request.orderExport(id, params).then(res => {
+//         if (res.ret) {
+//           this.$notify({
+//             title: this.$t('操作成功'),
+//             message: res.msg,
+//             type: 'success'
+//           })
+//         } else {
+//           this.$notify({
+//             title: this.$t('操作失败'),
+//             message: res.msg,
+//             type: 'warning'
+//           })
+//         }
+//       })
+//     },
 //     deleteTmpDrawer(id) {
 //       this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
 //         confirmButtonText: this.$t('确定'),
@@ -134,7 +171,8 @@
 //         this.code = res.data[0].id
 //         this.name = res.data[0].name
 //       })
-//     }
+//     },
+//     updatePackages() {}
 //   }
 // }
 </script>
@@ -145,10 +183,10 @@
   .el-drawer.rtl {
     overflow: scroll;
   }
-  /deep/.tmp {
-    background: #ccc;
+  .el-row {
     margin: 20px;
     padding: 10px;
+    cursor: pointer;
   }
   .el-drawer__header {
     margin-bottom: 0;

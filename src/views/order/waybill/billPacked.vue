@@ -96,7 +96,7 @@
     </div>
     <!-- 打包清单 -->
     <h4>{{ $t('包裹清单') }}</h4>
-    <div class="add-sty" v-if="this.$route.params.activeName === '1'">
+    <div class="add-sty" v-if="this.$route.params.activeName">
       <el-button class="btn-blue" @click="addPackages">{{ $t('添加包裹') }}</el-button>
     </div>
     <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
@@ -129,7 +129,7 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
-      <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName === '1'">
+      <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName">
         <template slot-scope="scope">
           <el-button @click="packageDetails(scope.row.id)" class="btn-deep-purple">
             {{ $t('详情') }}
@@ -285,7 +285,7 @@
           </el-col>
         </el-row>
         <!-- 子订单单价 -->
-        <!-- <el-row :gutter="20" v-if="$route.params.parent !== 0">
+        <el-row :gutter="20" v-if="$route.params.parent !== 0">
           <el-col :span="10">
             <el-form-item :label="$t('子订单单价(选填)')">
               <el-input v-model="user.unit_price" :placeholder="$t('请输入子订单单价')"></el-input>
@@ -294,7 +294,7 @@
               }}</span>
             </el-form-item>
           </el-col>
-        </el-row> -->
+        </el-row>
         <el-row :gutter="20" v-if="user.box_type === 2">
           <el-form-item>
             <el-col :span="18">
@@ -504,10 +504,10 @@
             {{ $t('合计') }}<span class="color_fee">{{ this.total_fee }}</span>
           </div>
           <div class="changePrice">
-            <el-checkbox-group v-model="final_price">
-              <el-checkbox v-model="is_checked"> {{ $t('改价') }} </el-checkbox>
-              <el-input v-model="changePrice" clearable placeholder="" class="inpLength"></el-input>
-            </el-checkbox-group>
+            <!-- <el-checkbox-group v-model="final_price"> -->
+            <el-checkbox v-model="is_checked"> {{ $t('改价') }} </el-checkbox>
+            <el-input v-model="mod_fee" clearable class="inpLength"></el-input>
+            <!-- </el-checkbox-group> -->
           </div>
         </div>
       </div>
@@ -586,7 +586,7 @@ export default {
       },
       factor: '',
       freightData: [],
-      changePrice: '',
+      mod_fee: '',
       is_checked: false,
       total_fee: '',
       line_rules_fee: '',
@@ -753,38 +753,45 @@ export default {
           weight: this.user.weight || ''
         })
         .then(res => {
-          this.total_fee = res.data.total_fee
-          let line_services = res.data.line_services.services.map(item => {
-            let name = item.name
-            let value = item.price
-            return { name, value }
-          })
-          let order_services = res.data.order_services.services.map(item => {
-            let name = item.name
-            let value = item.price
-            return { name, value }
-          })
-          this.freightData = []
-          this.freightData.push(
-            {
-              name: '运费',
-              value: res.data.freight.first + res.data.freight.next
-            },
-            {
-              name: '关税费',
-              value: res.data.tariff_fee
-            },
-            {
-              name: '保险费',
-              value: res.data.insurance_fee
-            },
-            ...order_services,
-            ...line_services,
-            {
-              name: '渠道限制费',
-              value: res.data.line_rules.fee
-            }
-          )
+          if (res.ret) {
+            this.total_fee = res.data.total_fee
+            let line_services = res.data.line_services.services.map(item => {
+              let name = item.name
+              let value = item.price
+              return { name, value }
+            })
+            let order_services = res.data.order_services.services.map(item => {
+              let name = item.name
+              let value = item.price
+              return { name, value }
+            })
+            this.freightData = []
+            this.freightData.push(
+              {
+                name: '运费',
+                value: res.data.freight.first + res.data.freight.next
+              },
+              {
+                name: '关税费',
+                value: res.data.tariff_fee
+              },
+              {
+                name: '保险费',
+                value: res.data.insurance_fee
+              },
+              ...order_services,
+              ...line_services,
+              {
+                name: '渠道限制费',
+                value: res.data.line_rules.fee
+              }
+            )
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
         })
     },
     //仅保存和保存并提交

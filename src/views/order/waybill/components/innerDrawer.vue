@@ -6,9 +6,8 @@
     :visible.sync="editTmpDrawer"
     :append-to-body="true"
     :before-close="close"
-    @opened="open()"
   >
-    <el-form class="inner-form" :model="ruleForm">
+    <el-form class="inner-form" :model="ruleForm" @close="clear">
       <el-form-item :label="$t('模板名称')" style="margin-left: 20px">
         <el-input
           v-model="ruleForm.name"
@@ -112,12 +111,14 @@
       </el-collapse>
       <el-form-item style="margin-left: 20px" :label="$t('同时导出附表')">
         <el-checkbox-group v-model="checkList">
-          <el-checkbox :label="$t('禁用')" disabled></el-checkbox>
-          <el-checkbox :label="$t('选中且禁用')" disabled></el-checkbox>
+          <el-checkbox :label="$t('用户汇总数据')" disabled></el-checkbox>
+          <el-checkbox :label="$t('商品明细')" disabled></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <div style="float: right">
-        <el-button @click="confirm">{{ $t('保存模板') }}</el-button>
+        <el-button @click="confirm" style="background-color: #3540a5; color: #fff">{{
+          $t('保存模板')
+        }}</el-button>
       </div>
     </el-form>
   </el-drawer>
@@ -145,7 +146,7 @@
 //       size: '50%',
 //       code: '',
 //       activeNames: ['1'],
-//       checkList: ['禁用', '选中且禁用'],
+//       checkList: ['用户汇总数据', '商品明细'],
 //       order: 1,
 //       orderInfo: [],
 //       receiveInfo: [],
@@ -156,7 +157,8 @@
 //       operationInfo: [],
 //       customerInfo: [],
 //       feeInfo: [],
-//       tmpsData: []
+//       tmpsData: [],
+//       id: this.ids
 //     }
 //   },
 //   props: {
@@ -172,8 +174,8 @@
 //       type: String,
 //       required: true
 //     },
-//     id: {
-//       type: String,
+//     ids: {
+//       type: Number,
 //       required: true
 //     }
 //   },
@@ -181,7 +183,6 @@
 //     this.getTmpData()
 //   },
 //   methods: {
-//     open() {},
 //     close() {
 //       this.$emit('receiveInner', false)
 //     },
@@ -213,9 +214,18 @@
 //         )
 //         this.warehouseInfo.push(
 //           { id: 'packages_count', name: '包裹数' },
-//           { id: 'package_value_sum', name: '申报价值' }
+//           { id: 'package_value_sum', name: '申报价值' },
+//           { id: 'package_value_sum', name: '总申报价值 (¥)' },
+//           { id: 'package_actual_weight_sum', name: '入库实际重量 (KG)' },
+//           { id: 'package_volume_weight_sum', name: '入库体积重量 (KG)' }
 //         )
-//         this.outboundInfo.push({ id: 'box_logistics_sn', name: '分箱物流单号' })
+//         this.outboundInfo.push(
+//           { id: 'box_logistics_sn', name: '分箱物流单号' },
+//           { id: 'box_payment_weight_sum', name: '出库计费重量' },
+//           { id: 'box_actual_weight_sum', name: '出库实际重量' },
+//           { id: 'box_volume_weight_sum', name: '出库体积重量' },
+//           { id: 'box_volume_sum', name: '出库体积' }
+//         )
 //         this.payInfo.push(
 //           { id: 'payment_method', name: '付款方式' },
 //           { id: 'value_added_amount', name: '增值服务费用' },
@@ -257,8 +267,6 @@
 //       }
 //       if (this.status === 'add') {
 //         param.code = this.tmpCode
-//       } else {
-//         param.id = this.id
 //       }
 //       if (this.status === 'add') {
 //         //新增
@@ -270,6 +278,7 @@
 //               message: res.msg
 //             })
 //             this.editTmpDrawer = false
+//             this.$emit('passVal')
 //           } else {
 //             this.$message({
 //               message: res.msg,
@@ -279,7 +288,7 @@
 //         })
 //       } else {
 //         //编辑
-//         this.$request.editTemplate(param).then(res => {
+//         this.$request.editTemplate(this.id, param).then(res => {
 //           console.log(res)
 //           if (res.ret) {
 //             this.$notify({
@@ -288,6 +297,7 @@
 //               message: res.msg
 //             })
 //             this.editTmpDrawer = false
+//             this.$emit('passVal')
 //           } else {
 //             this.$message({
 //               message: res.msg,
@@ -298,6 +308,16 @@
 //       }
 //     },
 //     select() {},
+//     init() {
+//       if (this.status === 'edit') {
+//         this.getList()
+//       }
+//     },
+//     getList() {
+//       this.$request.listDetail(this.id).then(res => {
+//         console.log(res)
+//       })
+//     },
 //     clear() {
 //       this.ruleForm.name = ''
 //       this.ruleForm.remark = ''

@@ -549,6 +549,10 @@ exports.voucherUser = (id, params) => {
 exports.deleteCoupons = (id, ids) => {
   return $form.put(`users/${id}/coupons/${ids}/disabled`)
 }
+// 客户 客户地址 导出清单
+exports.exportList = () => {
+  return $form.get('user-addresses/export')
+}
 // 员工列表允许登录
 exports.allowUser = ids => {
   return $form.put('admins/allow-login', ids)

@@ -1035,11 +1035,12 @@
       @receive="receive"
     ></waybill-list-drawer>
     <!-- 导出清单抽屉 -->
-    <waybill-list-tmp-drawer
+    <!-- <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
+      :searchFieldData="searchFieldData"
       @receiveTmp="receiveTmp"
       class="tmp"
-    ></waybill-list-tmp-drawer>
+    ></waybill-list-tmp-drawer> -->
   </div>
 </template>
 
