@@ -90,6 +90,11 @@ export default {
       }
     }
   },
+  created() {
+    if (!localStorage.getItem('language') || localStorage.getItem('language') === 'simple') {
+      this.$store.commit('saveLanguageCode', 'zhCN')
+    }
+  },
   methods: {
     checkUser() {
       this.$request.aboutMe().then(res => {
