@@ -276,7 +276,7 @@ exports.lineRegionsDetail = (id, regionId) => {
 }
 // 配置 分区 新建线路分区
 exports.newLineRegions = (id, params) => {
-  return $form.post(`express-lines/${id}/regions`, params)
+  return $json.post(`express-lines/${id}/regions`, params)
 }
 // 配置 分区 更新线路分区信息
 exports.updateRegions = (id, regionId, params) => {
@@ -364,7 +364,7 @@ exports.regionTmpDetails = (tmpId, id) => {
 }
 // 模版 更新
 exports.updateRegionTmpDetails = (tmpId, id, params) => {
-  return $form.put(`express-lines/region-templates/${tmpId}/regions/${id}`, params)
+  return $json.put(`express-lines/region-templates/${tmpId}/regions/${id}`, params)
 }
 // 模版 删除
 exports.deleteRegionTmp = (tmpId, id) => {
@@ -372,7 +372,7 @@ exports.deleteRegionTmp = (tmpId, id) => {
 }
 // 模版 新建
 exports.newRegionTmp = (id, params) => {
-  return $form.post(`express-lines/region-templates/${id}/regions`, params)
+  return $json.post(`express-lines/region-templates/${id}/regions`, params)
 }
 // 分区 模版列表
 exports.lineRegion = params => {
@@ -3417,6 +3417,10 @@ exports.uploadOrder = ids => {
 // 订单列表 导出清单
 exports.orderExport = params => {
   return $form.get('orders/export', { params })
+}
+// 订单列表 导出清单
+exports.ordersExport = id => {
+  return $form.get(`orders/export/${id}`)
 }
 // 订单列表 详情 移除包裹清单
 exports.removePackage = (orderId, packageId) => {

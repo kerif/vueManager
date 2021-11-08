@@ -7,16 +7,15 @@
   >
     <div style="margin: 20px">
       <el-button @click="addTmp('add')">{{ $t('新增模板') }}</el-button>
-      <el-button style="background-color: #3540a5; color: #fff" @click="updatePackages">{{
+      <el-button style="background-color: #87cefa; color: #fff" @click="updatePackages">{{
         $t('确定导出')
       }}</el-button>
     </div>
     <el-row
       v-for="item in tmpList"
       :key="item.id"
-      class="tmp"
-      style="padding: 10px; margin: 20px"
-      :style="{ background: colorStr }"
+      style="padding: 10px; margin: 20px; background: #ccc"
+      :class="{ active: ind === item.id }"
       :gutter="20"
       @click.native="activeFun(item.id)"
       @passVal="getTmpList"
@@ -48,6 +47,7 @@
       :editTmpDrawer="editTmpDrawer"
       :status="status"
       :ids="ids"
+      v-if="status"
       @receiveInner="receiveInner"
       :tmpCode="tmpCode"
     ></inner-drawer>
@@ -55,126 +55,117 @@
 </template>
 
 <script>
-// import InnerDrawer from './innerDrawer'
-// export default {
-//   components: {
-//     InnerDrawer
-//   },
-//   data() {
-//     return {
-//       editTmpDrawer: false,
-//       code: '',
-//       name: '',
-//       tmpName: '',
-//       tmpCode: '',
-//       status: 'add',
-//       id: '',
-//       ids: '',
-//       tmpList: [],
-//       colorStr: '#ccc'
-//     }
-//   },
-//   props: {
-//     showTmpDrawer: {
-//       type: Boolean,
-//       default: false
-//     },
-//     searchFieldData: {
-//       type: Object
-//     }
-//   },
-//   created() {
-//     this.getCodeList()
-//     this.getTmpList()
-//   },
-//   methods: {
-//     close() {
-//       this.$emit('receiveTmp', false)
-//     },
-//     addTmp() {
-//       this.editTmpDrawer = true
-//       this.status = 'add'
-//     },
-//     editTmp(status, ids) {
-//       this.editTmpDrawer = true
-//       this.status = 'edit'
-//       this.ids = ids
-//     },
-//     receiveInner() {
-//       this.editTmpDrawer = false
-//     },
-//     activeFun(id) {
-//       console.log(id)
-//       let params = {
-//         ...this.searchFieldData
-//       }
-//       this.tmpList.forEach(ele => {
-//         console.log(ele.id)
-//         console.log(id)
-//         console.log(ele.id === id)
-//         if (ele.id === id) {
-//           this.colorStr = 'red'
-//         } else {
-//           this.colorStr = '#ccc'
-//         }
-//       })
-//       this.$request.orderExport(id, params).then(res => {
-//         if (res.ret) {
-//           this.$notify({
-//             title: this.$t('操作成功'),
-//             message: res.msg,
-//             type: 'success'
-//           })
-//         } else {
-//           this.$notify({
-//             title: this.$t('操作失败'),
-//             message: res.msg,
-//             type: 'warning'
-//           })
-//         }
-//       })
-//     },
-//     deleteTmpDrawer(id) {
-//       this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
-//         confirmButtonText: this.$t('确定'),
-//         cancelButtonText: this.$t('取消'),
-//         type: 'warning'
-//       }).then(() => {
-//         this.$request.deleteTemplate(id).then(res => {
-//           if (res.ret) {
-//             this.$notify({
-//               title: this.$t('操作成功'),
-//               message: res.msg,
-//               type: 'success'
-//             })
-//           } else {
-//             this.$notify({
-//               title: this.$t('操作失败'),
-//               message: res.msg,
-//               type: 'warning'
-//             })
-//           }
-//         })
-//       })
-//     },
-//     getTmpList() {
-//       let code = this.code
-//       this.$request.listQuery(code).then(res => {
-//         console.log(res.data)
-//         this.tmpList = res.data
-//         this.tmpCode = res.data[0].code
-//         console.log(this.tmpCode)
-//       })
-//     },
-//     getCodeList() {
-//       this.$request.getCodeList().then(res => {
-//         this.code = res.data[0].id
-//         this.name = res.data[0].name
-//       })
-//     },
-//     updatePackages() {}
-//   }
-// }
+import InnerDrawer from './innerDrawer'
+export default {
+  components: {
+    InnerDrawer
+  },
+  data() {
+    return {
+      editTmpDrawer: false,
+      code: '',
+      name: '',
+      tmpName: '',
+      tmpCode: '',
+      status: 'add',
+      id: '',
+      ids: '',
+      tmpList: [],
+      ind: 0,
+      activeId: ''
+    }
+  },
+  props: {
+    showTmpDrawer: {
+      type: Boolean,
+      default: false
+    },
+    searchFieldData: {
+      type: Object
+    }
+  },
+  created() {
+    this.getCodeList()
+    this.getTmpList()
+  },
+  methods: {
+    close() {
+      this.$emit('receiveTmp', false)
+    },
+    addTmp() {
+      this.status = 'add'
+      this.editTmpDrawer = true
+    },
+    editTmp(status, ids) {
+      this.status = 'edit'
+      this.ids = ids
+      this.editTmpDrawer = true
+    },
+    receiveInner() {
+      this.editTmpDrawer = false
+    },
+    activeFun(id) {
+      console.log(id)
+      this.ind = id
+      this.activeId = id
+    },
+    deleteTmpDrawer(id) {
+      this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteTemplate(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
+    getTmpList() {
+      let code = this.code
+      this.$request.listQuery(code).then(res => {
+        console.log(res.data)
+        this.tmpList = res.data
+        this.tmpCode = res.data[0].code
+        console.log(this.tmpCode)
+      })
+    },
+    getCodeList() {
+      this.$request.getCodeList().then(res => {
+        this.code = res.data[0].id
+        this.name = res.data[0].name
+      })
+    },
+    updatePackages(id) {
+      this.$request.ordersExport(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -182,6 +173,9 @@
   font-size: 14px;
   .el-drawer.rtl {
     overflow: scroll;
+  }
+  .active {
+    background: #87cefa !important;
   }
   .el-row {
     margin: 20px;
