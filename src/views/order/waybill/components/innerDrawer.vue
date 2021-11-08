@@ -226,7 +226,12 @@ export default {
           { id: 'packages_count', name: '包裹数' },
           { id: 'package_value_sum', name: '总申报价值 (¥)' },
           { id: 'package_actual_weight_sum', name: '入库实际重量 (KG)' },
-          { id: 'package_volume_weight_sum', name: '入库体积重量 (KG)' }
+          { id: 'package_volume_weight_sum', name: '入库体积重量 (KG)' },
+          { id: 'express_num', name: '包裹单号' },
+          { id: 'package_name', name: '包裹物品名称' },
+          { id: 'package_props_name', name: '包裹物品属性' },
+          { id: 'package_categories_name', name: '包裹物品类型' },
+          { id: 'package_volume', name: '包裹体积 (m³)' }
         ]
         this.warehouseSum = [
           { id: 'package_value_sum', name: '总申报价值 (¥)' },
@@ -281,13 +286,34 @@ export default {
     },
     confirm() {
       this.tmpsData.forEach(item => {
-        this.info.order.forEach(ele => {
-          if (item.id === ele || (item.id !== ele && item.checked)) {
-            item.checked = 1
-          } else {
-            item.checked = 0
-          }
-        })
+        item.checked = 0
+        if (this.info.order.includes(item.id)) {
+          item.checked = 1
+        }
+        if (this.info.receive.includes(item.id)) {
+          item.checked = 1
+        }
+        if (this.info.warehouse.includes(item.id)) {
+          item.checked = 1
+        }
+        if (this.info.outbound.includes(item.id)) {
+          item.checked = 1
+        }
+        if (this.info.pay.includes(item.id)) {
+          item.checked = 1
+        }
+        if (this.info.fee.includes(item.id)) {
+          item.checked = 1
+        }
+        if (this.info.ship.includes(item.id)) {
+          item.checked = 1
+        }
+        if (this.info.operation.includes(item.id)) {
+          item.checked = 1
+        }
+        if (this.info.customer.includes(item.id)) {
+          item.checked = 1
+        }
       })
       let param = {
         name: this.ruleForm.name,
