@@ -305,8 +305,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
-            this.editTmpDrawer = false
             this.$emit('passVal')
+            this.editTmpDrawer = false
           } else {
             this.$message({
               message: res.msg,
@@ -325,8 +325,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
-            this.editTmpDrawer = false
             this.$emit('passVal')
+            this.editTmpDrawer = false
           } else {
             this.$message({
               message: res.msg,
