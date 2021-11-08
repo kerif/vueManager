@@ -18,7 +18,6 @@
       :class="{ active: ind === item.id }"
       :gutter="20"
       @click.native="activeFun(item.id)"
-      @passVal="getTmpList"
     >
       <el-col>
         <div style="height: 180px">
@@ -50,6 +49,7 @@
       v-if="status"
       @receiveInner="receiveInner"
       :tmpCode="tmpCode"
+      @passVal="getTmpList"
     ></inner-drawer>
   </el-drawer>
 </template>

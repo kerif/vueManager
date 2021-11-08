@@ -53,7 +53,7 @@
         <el-collapse-item :title="$t('入库信息')" name="3">
           <div>{{ $t('总计') }}</div>
           <el-checkbox-group v-model="info.warehouse">
-            <el-checkbox v-for="item in warehouseInfo" :key="item.id" :label="item.id">{{
+            <el-checkbox v-for="item in warehouseSum" :key="item.id" :label="item.id">{{
               item.name
             }}</el-checkbox>
           </el-checkbox-group>
@@ -67,7 +67,7 @@
         <el-collapse-item :title="$t('出库信息')" name="4">
           <div>{{ $t('总计') }}</div>
           <el-checkbox-group v-model="info.outbound">
-            <el-checkbox v-for="item in outboundInfo" :key="item.id" :label="item.id">{{
+            <el-checkbox v-for="item in outboundSum" :key="item.id" :label="item.id">{{
               item.name
             }}</el-checkbox>
           </el-checkbox-group>
@@ -155,7 +155,9 @@ export default {
       orderInfo: [],
       receiveInfo: [],
       warehouseInfo: [], //入库信息
+      warehouseSum: [],
       outboundInfo: [], //出库信息
+      outboundSum: [],
       payInfo: [],
       shipInfo: [],
       operationInfo: [],
@@ -185,12 +187,10 @@ export default {
   },
   created() {
     this.getTmpData()
-    console.log(this.status, 'hhh')
   },
   methods: {
     close() {
       this.$emit('receiveInner', false)
-      this.$emit('passVal')
     },
     open() {
       if (this.status === 'edit') {
@@ -205,15 +205,15 @@ export default {
       this.$request.getListTemplate(code).then(res => {
         console.log(res)
         this.tmpsData = res.data
-        this.orderInfo.push(
+        this.orderInfo = [
           { id: 'user_id', name: '客户ID' },
           { id: 'username', name: '用户名' },
           { id: 'express_line_name', name: '线路名称' },
           { id: 'order_sn', name: '订单号' },
           { id: 'agent_name', name: '所属代理' },
           { id: 'clearance_code', name: '清关编码' }
-        )
-        this.receiveInfo.push(
+        ]
+        this.receiveInfo = [
           { id: 'receiver_name', name: '收货人' },
           { id: 'phone', name: '手机/联系电话' },
           { id: 'country', name: '收货国家' },
@@ -222,14 +222,20 @@ export default {
           { id: 'info_address', name: '详细地址' },
           { id: 'station_name', name: '自提点' },
           { id: 'station_address', name: '自提点地址' }
-        )
-        this.warehouseInfo.push(
+        ]
+        this.warehouseInfo = [
           { id: 'packages_count', name: '包裹数' },
           { id: 'package_value_sum', name: '总申报价值 (¥)' },
           { id: 'package_actual_weight_sum', name: '入库实际重量 (KG)' },
           { id: 'package_volume_weight_sum', name: '入库体积重量 (KG)' }
-        )
-        this.outboundInfo.push(
+        ]
+        this.warehouseSum = [
+          { id: 'package_value_sum', name: '总申报价值 (¥)' },
+          { id: 'package_actual_weight_sum', name: '入库实际重量 (KG)' },
+          { id: 'package_volume_weight_sum', name: '入库体积重量 (KG)' }
+        ]
+
+        this.outboundInfo = [
           { id: 'box_logistics_sn', name: '分箱物流单号' },
           { id: 'box_payment_weight_sum', name: '出库计费重量' },
           { id: 'box_actual_weight_sum', name: '出库实际重量' },
@@ -238,8 +244,19 @@ export default {
           { id: 'box_length', name: '长 (CM)' },
           { id: 'box_width', name: '宽 (CM)' },
           { id: 'box_height', name: '高 (CM)' }
-        )
-        this.payInfo.push(
+        ]
+
+        this.outboundSum = [
+          { id: 'box_payment_weight_sum', name: '出库计费重量' },
+          { id: 'box_actual_weight_sum', name: '出库实际重量' },
+          { id: 'box_volume_weight_sum', name: '出库体积重量' },
+          { id: 'box_volume_sum', name: '出库体积' },
+          { id: 'box_length', name: '长 (CM)' },
+          { id: 'box_width', name: '宽 (CM)' },
+          { id: 'box_height', name: '高 (CM)' }
+        ]
+
+        this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
           { id: 'value_added_amount', name: '增值服务费用' },
           { id: 'insurance_fee', name: '保险费用' },
@@ -250,20 +267,21 @@ export default {
           { id: 'pay_out_serial_no', name: '支付单号' },
           { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
           { id: 'point_amount', name: '积分抵扣金额' }
-        )
-        this.shipInfo.push({ id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' })
+        ]
 
-        this.operationInfo.push(
+        this.shipInfo = [{ id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' }]
+
+        this.operationInfo = [
           { id: 'created_at', name: '提交时间' },
           { id: 'packed_at', name: '打包（拣货）时间' },
           { id: 'paid_at', name: '支付时间' },
           { id: 'shipped_at', name: '发货时间' },
           { id: 'signed_at', name: '签收时间' }
-        )
-        this.customerInfo.push(
+        ]
+        this.customerInfo = [
           { id: 'username', name: '用户名' },
           { id: 'user_profile_address', name: '个人信息地址' }
-        )
+        ]
         console.log(this.customerInfo)
       })
     },
@@ -293,6 +311,7 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
+            this.$emit('passVal')
             this.editTmpDrawer = false
           } else {
             this.$message({
@@ -303,7 +322,8 @@ export default {
         })
       } else {
         //编辑
-        this.$request.editTemplate(this.id, param).then(res => {
+        console.log(this.ids)
+        this.$request.editTemplate(this.ids, param).then(res => {
           console.log(res)
           if (res.ret) {
             this.$notify({
@@ -311,6 +331,7 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
+            this.$emit('passVal')
             this.editTmpDrawer = false
           } else {
             this.$message({
@@ -324,14 +345,24 @@ export default {
     getList() {
       this.$request.listDetail(this.id).then(res => {
         console.log(res, '9999')
-        this.ruleForm.name = res.data[0].name
-        this.ruleForm.remark = res.data[0].remark
-        this.info = res.data[0].header
+        this.ruleForm.name = res.data.name
+        this.ruleForm.remark = res.data.remark
       })
     },
     clear() {
       this.ruleForm.name = ''
       this.ruleForm.remark = ''
+      this.info = {
+        order: ['user_id', 'username', 'express_line_name', 'order_sn'],
+        receive: [],
+        warehouse: [],
+        outbound: [],
+        operation: [],
+        pay: [],
+        ship: [],
+        customer: [],
+        fee: []
+      }
     }
   }
 }

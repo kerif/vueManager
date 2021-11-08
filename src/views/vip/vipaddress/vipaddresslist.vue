@@ -1,6 +1,8 @@
 <template>
   <div class="vip-address-container">
-    <el-button type="danger" @click="uploadList" size="mini">{{ $t('导出清单') }}</el-button>
+    <el-button class="btn-light-red" @click="uploadList" size="mini">{{
+      $t('导出清单')
+    }}</el-button>
     <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div>
