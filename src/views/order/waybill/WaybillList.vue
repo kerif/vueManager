@@ -1050,12 +1050,12 @@ import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import WaybillListSearch from './components/waybillListSearch'
 import WaybillListDrawer from './components/waybillListDrawer'
-import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
+// import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
 export default {
   components: {
     WaybillListSearch,
     WaybillListDrawer,
-    WaybillListTmpDrawer,
+    // WaybillListTmpDrawer,
     NlePagination
   },
   mixins: [pagination],
