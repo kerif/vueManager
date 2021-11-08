@@ -244,7 +244,6 @@ export default {
           { id: 'box_width', name: '宽 (CM)' },
           { id: 'box_height', name: '高 (CM)' }
         ]
-
         this.outboundSum = [
           { id: 'box_payment_weight_sum', name: '出库计费重量' },
           { id: 'box_actual_weight_sum', name: '出库实际重量' },
@@ -254,7 +253,6 @@ export default {
           { id: 'box_width', name: '宽 (CM)' },
           { id: 'box_height', name: '高 (CM)' }
         ]
-
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
           { id: 'value_added_amount', name: '增值服务费用' },
@@ -267,9 +265,7 @@ export default {
           { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
           { id: 'point_amount', name: '积分抵扣金额' }
         ]
-
         this.shipInfo = [{ id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' }]
-
         this.operationInfo = [
           { id: 'created_at', name: '提交时间' },
           { id: 'packed_at', name: '打包（拣货）时间' },
@@ -281,7 +277,6 @@ export default {
           { id: 'username', name: '用户名' },
           { id: 'user_profile_address', name: '个人信息地址' }
         ]
-        console.log(this.customerInfo)
       })
     },
     confirm() {
