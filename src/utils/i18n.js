@@ -14,7 +14,8 @@ Vue.use(VueI18n)
 
 const i18n = new VueI18n({
   messages,
-  lazy: true
+  lazy: true,
+  silentTranslationWarn: true
 })
 
 export default i18n
