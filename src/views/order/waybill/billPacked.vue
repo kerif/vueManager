@@ -814,6 +814,7 @@ export default {
           url: item.url
         }
       })
+      this.user.unit_price = this.user.unit_price || ''
       let res = {}
       if (type === 1) {
         res = await this.$request.saveOrderData(this.$route.params.id, this.user)
