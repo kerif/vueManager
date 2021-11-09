@@ -3419,8 +3419,8 @@ exports.orderExport = params => {
   return $form.get('orders/export', { params })
 }
 // 订单列表 导出清单
-exports.ordersExport = id => {
-  return $form.get(`orders/export/${id}`)
+exports.ordersExport = params => {
+  return $form.get(`orders/export`, { params })
 }
 // 订单列表 详情 移除包裹清单
 exports.removePackage = (orderId, packageId) => {

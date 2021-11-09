@@ -76,7 +76,8 @@ export default {
       ids: '',
       tmpList: [],
       ind: 0,
-      activeId: ''
+      activeId: '',
+      template_id: ''
     }
   },
   props: {
@@ -154,7 +155,7 @@ export default {
     },
     updatePackages() {
       console.log(this.activeId)
-      this.$request.ordersExport(this.activeId).then(res => {
+      this.$request.ordersExport({ template_id: this.activeId }).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
