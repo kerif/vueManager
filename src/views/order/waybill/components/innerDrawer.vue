@@ -329,6 +329,7 @@ export default {
               message: res.msg
             })
             this.$emit('passVal')
+            this.$emit('receiveInner', false)
           } else {
             this.$message({
               message: res.msg,
@@ -348,6 +349,7 @@ export default {
               message: res.msg
             })
             this.$emit('passVal')
+            this.$emit('receiveInner', false)
           } else {
             this.$message({
               message: res.msg,
