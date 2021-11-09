@@ -504,10 +504,8 @@
             {{ $t('合计') }}<span class="color_fee">{{ this.total_fee }}</span>
           </div>
           <div class="changePrice">
-            <!-- <el-checkbox-group v-model="final_price"> -->
             <el-checkbox v-model="is_checked"> {{ $t('改价') }} </el-checkbox>
             <el-input v-model="mod_fee" clearable class="inpLength"></el-input>
-            <!-- </el-checkbox-group> -->
           </div>
         </div>
       </div>
@@ -822,7 +820,8 @@ export default {
       } else {
         let params = {}
         params = {
-          ...this.user
+          ...this.user,
+          mod_fee: this.mod_fee
         }
         if (this.user.box_type === 1) {
           params.width = this.user.width || ''

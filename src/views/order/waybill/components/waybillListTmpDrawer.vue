@@ -32,10 +32,14 @@
             >
             <el-col :span="4">
               <div style="margin-top: 10px">
-                <el-button @click="editTmp('edit', item.id)">{{ $t('编辑') }}</el-button>
+                <el-button @click="editTmp('edit', item.id)" class="btn-blue-green">{{
+                  $t('编辑')
+                }}</el-button>
               </div>
               <div style="margin-top: 20px">
-                <el-button @click="deleteTmpDrawer(item.id)">{{ $t('删除') }}</el-button>
+                <el-button @click="deleteTmpDrawer(item.id)" class="btn-light-red">{{
+                  $t('删除')
+                }}</el-button>
               </div>
             </el-col>
           </el-row>
@@ -122,7 +126,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.tmpList()
+            this.getTmpList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -148,8 +152,9 @@ export default {
         this.name = res.data[0].name
       })
     },
-    updatePackages(id) {
-      this.$request.ordersExport(id).then(res => {
+    updatePackages() {
+      console.log(this.activeId)
+      this.$request.ordersExport(this.activeId).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),

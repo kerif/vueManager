@@ -26,7 +26,7 @@
           style="width: 40%"
         ></el-input>
       </el-form-item>
-      <el-collapse v-model="activeNames" @change="handleChange" style="margin: 20px">
+      <el-collapse v-model="activeNames" style="margin: 20px">
         <el-collapse-item :title="$t('订单信息')" name="1">
           <el-checkbox-group v-model="info.order">
             <el-checkbox
@@ -196,9 +196,6 @@ export default {
         this.getList()
       }
     },
-    handleChange(val) {
-      console.log(val)
-    },
     getTmpData() {
       let code = this.tmpCode
       this.$request.getListTemplate(code).then(res => {
@@ -331,8 +328,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
+            this.$emit('receiveInner', false)
             this.$emit('passVal')
-            this.editTmpDrawer = false
           } else {
             this.$message({
               message: res.msg,
@@ -342,7 +339,6 @@ export default {
         })
       } else {
         //编辑
-        console.log(this.ids)
         this.$request.editTemplate(this.ids, param).then(res => {
           console.log(res)
           if (res.ret) {
@@ -351,8 +347,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
+            this.$emit('receiveInner', false)
             this.$emit('passVal')
-            this.editTmpDrawer = false
           } else {
             this.$message({
               message: res.msg,
