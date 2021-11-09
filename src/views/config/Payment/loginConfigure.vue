@@ -30,7 +30,7 @@
       <!-- 仅登录状态可分享领券验证 -->
       <el-form-item :label="$t('开启仅登录状态可分享领券')">
         <el-switch
-          v-model="validateList.validate_status"
+          v-model="validateList.login_coupon_status"
           :active-text="$t('开')"
           :active-value="1"
           :inactive-value="0"
@@ -53,8 +53,7 @@ export default {
         // 功能配置
         validate_phone: '',
         validate_email: '',
-        validate_status: '',
-        login_coupon_status: 0
+        login_coupon_status: ''
       }
     }
   },
@@ -64,7 +63,7 @@ export default {
   methods: {
     // 获取功能配置
     getValidate() {
-      this.$request.getValidate(this.login_coupon_status).then(res => {
+      this.$request.getValidate().then(res => {
         if (res.ret) {
           this.validateList = res.data
         }
