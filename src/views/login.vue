@@ -246,11 +246,11 @@
       <div class="login-footer">
         <div class="language-sty">
           <p>
-            <span :class="{ active: active === 'zhCN' }" @click="languageCut('zhCN')"
+            <span :class="{ active: languageCode === 'zhCN' }" @click="languageCut('zhCN')"
               >简体中文</span
             >
             |
-            <span :class="{ active: active === 'zhTW' }" @click="languageCut('zhTW')"
+            <span :class="{ active: languageCode === 'zhTW' }" @click="languageCut('zhTW')"
               >繁体中文</span
             >
           </p>
@@ -347,7 +347,6 @@ export default {
       welcome: 1,
       forgetStep: 1,
       groupBuy: '',
-      active: '',
       rules: {
         email: [
           { required: true, message: this.$t('请输入邮箱地址'), trigger: 'blur' },
@@ -375,6 +374,9 @@ export default {
     }
   },
   computed: {
+    languageCode() {
+      return this.$store.state.languageCode
+    },
     year: function () {
       return new Date().getFullYear()
     }
@@ -385,24 +387,17 @@ export default {
     if (this.userInfo.username && this.userInfo.password) this.keep = true
   },
   created() {
-    this.active = localStorage.getItem('language') || 'zhCN'
-    this.languageCut(this.active)
     this.getCaptcha() // 获取图型验证码
   },
   methods: {
     languageCut(locale) {
-      this.active = locale
-      // this.$i18n.locale = locale
-      localStorage.setItem('language', locale)
-      this.$store.commit('saveLanguageCode', locale)
-      // this.$store.commit('switchLang', { lang: locale })
+      this.$store.commit('saveLanguageCode', { locale, reload: false })
     },
     // 获取是否显示拼团配置
     getMe() {
       this.$request.getMe().then(res => {
         if (res.ret) {
           this.groupBuy = Number(res.data.group_buying_config)
-          console.log(this.groupBuy, 'this.groupBuy')
         }
       })
     },
