@@ -85,15 +85,18 @@
           {{ $t('导出发票') }}
         </el-button>
       </div>
-      <div
+      <!-- <div
         style="margin-left: 5px"
-        v-if="oderData.length && ['0', '1', '2', '3', '5'].includes(activeName)"
+        v-if="oderData.length && ['0', '1', '2', '3', '4', '5'].includes(activeName)"
       >
         <el-button @click="uploadList" size="small" type="success" plain>{{
           $t('导出清单')
         }}</el-button>
-      </div>
-      <div style="margin-left: 5px" v-if="oderData.length && ['4'].includes(activeName)">
+      </div> -->
+      <div
+        style="margin-left: 5px"
+        v-if="oderData.length && ['0', '1', '2', '3', '4', '5'].includes(activeName)"
+      >
         <el-button size="small" type="success" @click="showTmpDrawer = true" plain>{{
           $t('导出清单')
         }}</el-button>

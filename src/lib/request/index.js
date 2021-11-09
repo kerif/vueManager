@@ -2976,6 +2976,11 @@ exports.deleteChannel = id => {
 exports.getChannelsData = (id, params) => {
   return $form.get(`channels/${id}/data`, { params })
 }
+// 营销管理  渠道管理 引流列表 下载二维码
+exports.getCodeImg = (id, config) => {
+  return $form.get(`channels/${id}/hd-wxa-code`, config)
+}
+
 // 获取结算方式
 exports.getSettlement = () => {
   return $form.get('channels/settlement-methods')

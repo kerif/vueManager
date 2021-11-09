@@ -564,7 +564,7 @@ export default {
     },
     // 获取员工数据
     getStaff() {
-      this.$request.getStaff().then(res => {
+      this.$request.getStaff({ size: 1000 }).then(res => {
         if (res.ret) {
           this.options = res.data
         }

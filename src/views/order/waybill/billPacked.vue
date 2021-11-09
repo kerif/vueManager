@@ -285,7 +285,7 @@
           </el-col>
         </el-row>
         <!-- 子订单单价 -->
-        <el-row :gutter="20" v-if="$route.params.parent !== 0">
+        <el-row :gutter="20" v-if="$route.params.parent != 0">
           <el-col :span="10">
             <el-form-item :label="$t('子订单单价(选填)')">
               <el-input v-model="user.unit_price" :placeholder="$t('请输入子订单单价')"></el-input>
@@ -505,7 +505,7 @@
           </div>
           <div class="changePrice">
             <el-checkbox v-model="is_checked"> {{ $t('改价') }} </el-checkbox>
-            <el-input v-model="mod_fee" clearable class="inpLength"></el-input>
+            <el-input v-model="final_price" clearable class="inpLength"></el-input>
           </div>
         </div>
       </div>
@@ -584,15 +584,14 @@ export default {
       },
       factor: '',
       freightData: [],
-      mod_fee: '',
+      final_price: '',
       is_checked: false,
       total_fee: '',
       line_rules_fee: '',
       freight: '',
       first: '',
       next: '',
-      service: [],
-      final_price: ''
+      service: []
     }
   },
   created() {
@@ -814,14 +813,17 @@ export default {
           url: item.url
         }
       })
+      this.user.unit_price = this.user.unit_price || ''
       let res = {}
       if (type === 1) {
         res = await this.$request.saveOrderData(this.$route.params.id, this.user)
       } else {
         let params = {}
         params = {
-          ...this.user,
-          mod_fee: this.mod_fee
+          ...this.user
+        }
+        if (this.is_checked) {
+          params.final_price = this.final_price || ''
         }
         if (this.user.box_type === 1) {
           params.width = this.user.width || ''
@@ -936,6 +938,7 @@ export default {
         this.user.location = res.data.location
         this.user.in_warehouse_item = res.data.in_warehouse_item
         this.user.weight = res.data.weight
+        this.user.unit_price = res.data.unit_price
         this.user.length = res.data.length
         this.user.height = res.data.height
         this.user.width = res.data.width
