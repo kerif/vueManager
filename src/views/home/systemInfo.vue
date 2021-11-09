@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="systemInfo-container">
     <el-select v-model="message" :placeholder="$t('全部')">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
       </el-option>
@@ -9,7 +9,7 @@
         <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
       </el-input>
     </div>
-    <el-table :data="messageData" border style="width: 100%">
+    <el-table :data="messageData" border style="width: 100%; margin-top: 10px">
       <el-table-column prop="title" :label="$t('标题')" width="180"> </el-table-column>
       <el-table-column prop="name" :label="$t('内容')" width="180"> </el-table-column>
       <el-table-column prop="creator" :label="$t('发件人')" width="180"> </el-table-column>
@@ -39,7 +39,17 @@ export default {
       message: '',
       keyword: '',
       dialogVisible: false,
-      messageData: []
+      messageData: [],
+      options: [
+        {
+          value: '选项1',
+          label: '未读'
+        },
+        {
+          value: '选项2',
+          label: '已读'
+        }
+      ]
     }
   },
   created() {
@@ -54,6 +64,10 @@ export default {
     },
     goSearch() {
       this.getList()
+    },
+    edit(id) {
+      console.log(id)
+      this.dialogVisible = true
     }
   }
 }
@@ -65,15 +79,22 @@ export default {
     float: right;
     width: 200px;
   }
-  /deep/ .el-table tr th.is-leaf {
+  .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
     background-color: #fff;
   }
-  /deep/ .el-table th > .cell {
+  .el-table th > .cell {
     text-align: center;
   }
-  /deep/ .el-table .cell {
+  .el-table .cell {
     text-align: center;
+  }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
   }
 }
 </style>

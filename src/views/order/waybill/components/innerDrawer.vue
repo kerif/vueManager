@@ -163,7 +163,8 @@ export default {
       operationInfo: [],
       customerInfo: [],
       feeInfo: [],
-      tmpsData: []
+      tmpsData: [],
+      headerData: []
     }
   },
   props: {
@@ -363,6 +364,16 @@ export default {
         console.log(res, '9999')
         this.ruleForm.name = res.data.name
         this.ruleForm.remark = res.data.remark
+        this.headerData = res.data.header
+        this.headerData.forEach(item => {
+          if (item.checked === '1' && this.info.order.includes(item.id)) {
+            this.info.order.push(item.id)
+            console.log(this.info.order, '555')
+          }
+          if (item.checked === '1' && this.info.receive.includes(item.id)) {
+            this.info.receive.push(item.id)
+          }
+        })
       })
     },
     clear() {

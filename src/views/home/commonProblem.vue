@@ -2,6 +2,7 @@
   <div class="commonProblem-container">
     <el-select v-model="category" :placeholder="$t('请选择分类')">
       <el-option v-for="item in categoryData" :key="item.id" :label="item.id" :value="item.name">
+        {{ item.name }}
       </el-option>
     </el-select>
     <div class="header-search">
@@ -20,12 +21,12 @@
       <el-table-column prop="updated_at" :label="$t('创建时间')"> </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button @click="edit(scope.row)" size="mini">{{ $t('查看') }}</el-button>
+          <el-button @click="edit(scope.row.id)" size="mini">{{ $t('查看') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :title="$t('提示')" :visible.sync="dialogVisible" width="30%"> </el-dialog>
+    <el-dialog :title="$t('标题')" :visible.sync="dialogVisible" width="30%"> </el-dialog>
   </div>
 </template>
 
@@ -43,6 +44,7 @@ export default {
       keyword: '',
       category: '',
       dialogVisible: false,
+      categoryData: [],
       problemData: []
     }
   },
@@ -65,6 +67,10 @@ export default {
     },
     goSearch() {
       this.getList()
+    },
+    edit(id) {
+      console.log(id)
+      this.dialogVisible = true
     }
   }
 }
@@ -76,15 +82,22 @@ export default {
     float: right;
     width: 200px;
   }
-  /deep/ .el-table tr th.is-leaf {
+  .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
     background-color: #fff;
   }
-  /deep/ .el-table th > .cell {
+  .el-table th > .cell {
     text-align: center;
   }
-  /deep/ .el-table .cell {
+  .el-table .cell {
     text-align: center;
+  }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
   }
 }
 </style>
