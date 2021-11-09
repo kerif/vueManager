@@ -26,7 +26,9 @@
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :title="$t('标题')" :visible.sync="dialogVisible" width="30%"> </el-dialog>
+    <el-dialog :title="$t('标题')" :visible.sync="dialogVisible" width="30%">
+      <div>{{}}</div>
+    </el-dialog>
   </div>
 </template>
 
