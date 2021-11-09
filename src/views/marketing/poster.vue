@@ -184,6 +184,7 @@ export default {
     getBackground() {
       this.$request.getProgramShare().then(res => {
         this.backgroundList = res.data
+        this.backgroundList.background_images_rgb = res.data.background_images_rgb || '#fec6a7'
         res.data.background_images && (this.backgroundImg = res.data.background_images)
         res.data.share_image && (this.shareImg[0] = res.data.share_image)
       })
