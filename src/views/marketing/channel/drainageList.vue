@@ -67,6 +67,7 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import { downloadStreamFile } from '@/utils/index'
 export default {
   mixins: [pagination],
   name: 'drainageList',
@@ -143,6 +144,12 @@ export default {
       // console.log('aki', aLink.href, aLink.download)
       // aLink.click()
       // aLink.dispatchEvent(new MouseEvent('click', {}))
+      let param = {
+        responseType: 'blob'
+      }
+      this.$request.getCodeImg(this.$route.params.id, param).then(res => {
+        downloadStreamFile(res, 'codes', 'jpg')
+      })
     },
     copyNumber(orderSn) {
       const input = document.createElement('input')

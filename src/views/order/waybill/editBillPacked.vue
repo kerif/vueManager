@@ -610,6 +610,7 @@ export default {
           url: item.url
         }
       })
+      this.user.unit_price = this.user.unit_price || ''
       this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
         if (res.ret) {
           this.$notify({
