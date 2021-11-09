@@ -4,7 +4,11 @@
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
       </el-option>
     </el-select>
-    <el-input v-model="keyword" @click="goSearch" :placeholder="$t('请输入关键词')"></el-input>
+    <div class="header-search">
+      <el-input v-model="keyword" :placeholder="$t('请输入关键词')">
+        <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
+      </el-input>
+    </div>
     <el-table :data="messageData" border style="width: 100%">
       <el-table-column prop="title" :label="$t('标题')" width="180"> </el-table-column>
       <el-table-column prop="name" :label="$t('内容')" width="180"> </el-table-column>
@@ -55,4 +59,21 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.systemInfo-container {
+  .header-search {
+    float: right;
+    width: 200px;
+  }
+  /deep/ .el-table tr th.is-leaf {
+    border-bottom: 1px #ecedf0 solid;
+    background-color: #fff;
+  }
+  /deep/ .el-table th > .cell {
+    text-align: center;
+  }
+  /deep/ .el-table .cell {
+    text-align: center;
+  }
+}
+</style>

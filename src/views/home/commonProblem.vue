@@ -5,8 +5,8 @@
       </el-option>
     </el-select>
     <div class="header-search">
-      <el-input v-model="keyword" @click="goSearch" :placeholder="$t('请输入关键词')">
-        <i slot="suffix" class="el-input__icon el-icon-search"></i>
+      <el-input v-model="keyword" :placeholder="$t('请输入关键词')">
+        <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
       </el-input>
     </div>
     <el-table :data="problemData" border style="width: 100%; margin-top: 10px">
