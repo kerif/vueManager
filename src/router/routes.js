@@ -359,7 +359,7 @@ export default [
           //   meta: {
           //     level: 3,
           //     group: '首页',
-          //     name: '常见问题',
+          //     name: '系统消息',
           //     parent: '/home/panel'
           //   }
           // }

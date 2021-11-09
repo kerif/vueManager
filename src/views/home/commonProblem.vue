@@ -1,11 +1,15 @@
 <template>
-  <div>
+  <div class="commonProblem-container">
     <el-select v-model="category" :placeholder="$t('请选择分类')">
       <el-option v-for="item in categoryData" :key="item.id" :label="item.id" :value="item.name">
       </el-option>
     </el-select>
-    <el-input v-model="keyword" @click="goSearch" :placeholder="$t('请输入关键词')"></el-input>
-    <el-table :data="problemData" border style="width: 100%">
+    <div class="header-search">
+      <el-input v-model="keyword" @click="goSearch" :placeholder="$t('请输入关键词')">
+        <i slot="suffix" class="el-input__icon el-icon-search"></i>
+      </el-input>
+    </div>
+    <el-table :data="problemData" border style="width: 100%; margin-top: 10px">
       <el-table-column prop="title" :label="$t('标题')" width="180"> </el-table-column>
       <el-table-column prop="tag" :label="$t('tag')" width="180"> </el-table-column>
       <el-table-column :label="$t('类型')" width="180">
@@ -16,7 +20,7 @@
       <el-table-column prop="updated_at" :label="$t('创建时间')"> </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button @click="edit(scope.row)">{{ $t('查看') }}</el-button>
+          <el-button @click="edit(scope.row)" size="mini">{{ $t('查看') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -66,4 +70,21 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.commonProblem-container {
+  .header-search {
+    float: right;
+    width: 200px;
+  }
+  /deep/ .el-table tr th.is-leaf {
+    border-bottom: 1px #ecedf0 solid;
+    background-color: #fff;
+  }
+  /deep/ .el-table th > .cell {
+    text-align: center;
+  }
+  /deep/ .el-table .cell {
+    text-align: center;
+  }
+}
+</style>
