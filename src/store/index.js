@@ -37,6 +37,7 @@ export default new Vuex.Store({
     removeToken(state) {
       state.token = ''
       localStorage.removeItem('TOKEN')
+      localStorage.removeItem('language')
     },
     savePagePath(state, data) {
       state.pagePath = data
@@ -54,7 +55,6 @@ export default new Vuex.Store({
     saveMe(state, data) {
       state.groupMe = data
       localStorage.setItem('me', data)
-      console.log(localStorage.setItem, 'localStorage.setItem')
     },
     savePermissionStatus(state, data) {
       state.isPermissionFilter = data
@@ -64,13 +64,19 @@ export default new Vuex.Store({
       state.isPermissionFilterArr = data.isPermissionFilterArr
     },
     saveLanguageCode(state, data) {
-      state.languageCode = data
-      $i18n.locale = data
-      localStorage.setItem('language', data)
+      state.languageCode = data.locale
+      $i18n.locale = data.locale
+      sessionStorage.setItem('language', data.locale)
+      if (data.reload) {
+        window.location.reload()
+      }
     },
     initLanguageCode(state) {
-      state.languageCode = localStorage.getItem('language') || 'zhCN'
-      $i18n.locale = localStorage.getItem('language') || 'zhCN'
+      state.languageCode = sessionStorage.getItem('language') || 'zhCN'
+      $i18n.locale = sessionStorage.getItem('language') || 'zhCN'
+      if (localStorage.getItem('language')) {
+        localStorage.removeItem('language')
+      }
     }
   },
   actions: {}

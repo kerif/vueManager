@@ -90,11 +90,6 @@ export default {
       }
     }
   },
-  created() {
-    if (!localStorage.getItem('language') || localStorage.getItem('language') === 'simple') {
-      this.$store.commit('saveLanguageCode', 'zhCN')
-    }
-  },
   methods: {
     checkUser() {
       this.$request.aboutMe().then(res => {
@@ -174,7 +169,7 @@ export default {
         return this.$store.state.languageCode
       },
       set(val) {
-        this.$store.commit('saveLanguageCode', val)
+        this.$store.commit('saveLanguageCode', { locale: val, reload: true })
       }
     }
   }
