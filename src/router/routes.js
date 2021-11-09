@@ -8,6 +8,10 @@ const homeNotice = loadonDemand('home/notice')
 
 // 修改密码
 const ResetPassword = loadonDemand('home/reset-password')
+// 常见问题
+// const CommonProblem = loadonDemand('home/commonProblem')
+// 系统消息
+// const SystemInfo = loadonDemand('home/systemInfo')
 // 员工列表
 const StaffList = loadonDemand('staff/stafflist')
 // 员工组列表
@@ -335,6 +339,30 @@ export default [
               name: '修改密码'
             }
           }
+          // {
+          //   path: '/home/commonProblem',
+          //   name: 'commonProblem',
+          //   component: CommonProblem,
+          //   id: 101,
+          //   meta: {
+          //     level: 3,
+          //     group: '首页',
+          //     name: '常见问题',
+          //     parent: '/home/panel'
+          //   }
+          // },
+          // {
+          //   path: '/home/systemInfo',
+          //   name: 'systemInfo',
+          //   component: SystemInfo,
+          //   id: 101,
+          //   meta: {
+          //     level: 3,
+          //     group: '首页',
+          //     name: '常见问题',
+          //     parent: '/home/panel'
+          //   }
+          // }
         ]
       },
       {
