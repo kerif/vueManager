@@ -673,6 +673,7 @@ export default {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
         this.PackageData = res.data.packages
+        this.user.unit_price = res.data.unit_price
         this.user.tariff_fee = res.data.payment.tariff_fee
         this.user.insurance_fee = res.data.payment.insurance_fee
         this.user.line_rule_fee = res.data.payment.line_rule_fee

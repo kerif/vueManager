@@ -936,6 +936,7 @@ export default {
         this.user.location = res.data.location
         this.user.in_warehouse_item = res.data.in_warehouse_item
         this.user.weight = res.data.weight
+        this.user.unit_price = res.data.unit_price
         this.user.length = res.data.length
         this.user.height = res.data.height
         this.user.width = res.data.width
