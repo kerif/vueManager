@@ -87,17 +87,17 @@
       </div>
       <div
         style="margin-left: 5px"
-        v-if="oderData.length && ['0', '1', '2', '3', '5'].includes(activeName)"
+        v-if="oderData.length && ['0', '1', '2', '3', '4', '5'].includes(activeName)"
       >
         <el-button @click="uploadList" size="small" type="success" plain>{{
           $t('导出清单')
         }}</el-button>
       </div>
-      <div style="margin-left: 5px" v-if="oderData.length && ['4'].includes(activeName)">
+      <!-- <div style="margin-left: 5px" v-if="oderData.length && ['4'].includes(activeName)">
         <el-button size="small" type="success" @click="showTmpDrawer = true" plain>{{
           $t('导出清单')
         }}</el-button>
-      </div>
+      </div> -->
       <div style="margin-left: 5px" v-if="['0', '1', '2', '3', '4', '5'].includes(activeName)">
         <el-button size="small" type="danger" @click="showDrawer = true" plain>{{
           $t('货量统计')
@@ -1035,12 +1035,12 @@
       @receive="receive"
     ></waybill-list-drawer>
     <!-- 导出清单抽屉 -->
-    <waybill-list-tmp-drawer
+    <!-- <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
       :searchFieldData="searchFieldData"
       @receiveTmp="receiveTmp"
       class="tmp"
-    ></waybill-list-tmp-drawer>
+    ></waybill-list-tmp-drawer> -->
   </div>
 </template>
 
@@ -1050,12 +1050,12 @@ import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import WaybillListSearch from './components/waybillListSearch'
 import WaybillListDrawer from './components/waybillListDrawer'
-import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
+// import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
 export default {
   components: {
     WaybillListSearch,
     WaybillListDrawer,
-    WaybillListTmpDrawer,
+    // WaybillListTmpDrawer,
     NlePagination
   },
   mixins: [pagination],

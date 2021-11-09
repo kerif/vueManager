@@ -67,7 +67,7 @@
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
-import { downloadStreamFile } from '@/utils/index'
+// import { downloadStreamFile } from '@/utils/index'
 export default {
   mixins: [pagination],
   name: 'drainageList',
@@ -137,19 +137,19 @@ export default {
     },
     // 下载小程序码
     uploadImg() {
-      // window.open(this.urlImg, '_black')
+      window.open(this.urlImg, '_black')
       // const aLink = document.createElement('a')
       // aLink.download = '1.jpg'
       // aLink.href = this.urlImg
       // console.log('aki', aLink.href, aLink.download)
       // aLink.click()
       // aLink.dispatchEvent(new MouseEvent('click', {}))
-      let param = {
-        responseType: 'blob'
-      }
-      this.$request.getCodeImg(this.$route.params.id, param).then(res => {
-        downloadStreamFile(res, 'codes', 'jpg')
-      })
+      // let param = {
+      //   responseType: 'blob'
+      // }
+      // this.$request.getCodeImg(this.$route.params.id, param).then(res => {
+      //   downloadStreamFile(res, 'codes', 'jpg')
+      // })
     },
     copyNumber(orderSn) {
       const input = document.createElement('input')
