@@ -6,7 +6,7 @@
       </el-option>
     </el-select>
     <div class="header-search">
-      <el-input v-model="keyword" :placeholder="$t('请输入关键词')">
+      <el-input v-model="keyword" :placeholder="$t('请输入关键词')" @keyup.enter.native="goSearch">
         <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
       </el-input>
     </div>
@@ -15,7 +15,7 @@
       <el-table-column prop="tag" :label="$t('tag')" width="180"> </el-table-column>
       <el-table-column :label="$t('类型')" width="180">
         <template slot-scope="scope">
-          <span v-for="item in scope.row.category" :key="item.id">{{ item.name }}</span>
+          <span>{{ scope.row.category.name }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="updated_at" :label="$t('创建时间')"> </el-table-column>
@@ -26,8 +26,8 @@
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :title="$t('标题')" :visible.sync="dialogVisible" width="30%">
-      <div>{{}}</div>
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
+      <div v-html="content"></div>
     </el-dialog>
   </div>
 </template>
@@ -46,6 +46,8 @@ export default {
       keyword: '',
       category: '',
       dialogVisible: false,
+      title: '',
+      content: '',
       categoryData: [],
       problemData: []
     }
@@ -73,6 +75,11 @@ export default {
     edit(id) {
       console.log(id)
       this.dialogVisible = true
+      this.$request.problemDetail(id).then(res => {
+        console.log(res, 'ty')
+        this.title = res.data.title
+        this.content = res.data.content
+      })
     }
   }
 }

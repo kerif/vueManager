@@ -5,7 +5,7 @@
       </el-option>
     </el-select>
     <div class="header-search">
-      <el-input v-model="keyword" :placeholder="$t('请输入关键词')">
+      <el-input v-model="keywords" :placeholder="$t('请输入关键词')" @keyup.enter.native="goSearch">
         <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
       </el-input>
     </div>
@@ -16,12 +16,14 @@
       <el-table-column prop="created_at" :label="$t('时间')"> </el-table-column>
       <el-table-column prop="address" :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button @click="edit(scope.row.id)">{{ $t('查看') }}</el-button>
+          <el-button @click="edit(scope.row.id)" size="mini">{{ $t('查看') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :title="$t('标题')" :visible.sync="dialogVisible" width="30%"> </el-dialog>
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
+      <div v-html="content"></div>
+    </el-dialog>
   </div>
 </template>
 
@@ -37,9 +39,11 @@ export default {
   data() {
     return {
       message: '',
-      keyword: '',
+      keywords: '',
       dialogVisible: false,
       messageData: [],
+      title: '',
+      content: '',
       options: [
         {
           value: '选项1',
@@ -57,7 +61,10 @@ export default {
   },
   methods: {
     getList() {
-      this.$request.messageList().then(res => {
+      let params = {
+        keyword: this.keywords
+      }
+      this.$request.messageList(params).then(res => {
         console.log(res)
         this.messageData = res.data
       })
@@ -68,6 +75,11 @@ export default {
     edit(id) {
       console.log(id)
       this.dialogVisible = true
+      this.$request.messageDetail(id).then(res => {
+        console.log(res, 'jk')
+        this.title = res.data.title
+        this.content = res.data.content
+      })
     }
   }
 }

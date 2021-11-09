@@ -32,7 +32,7 @@ exports.categoryList = () => {
 }
 // 系统消息 列表
 exports.messageList = params => {
-  return $form.get('push-messages', params)
+  return $form.get('push-messages', { params })
 }
 // 系统消息 详情
 exports.messageDetail = id => {
