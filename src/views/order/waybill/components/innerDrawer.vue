@@ -328,8 +328,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
-            this.$emit('passVal')
             this.$emit('receiveInner', false)
+            this.$emit('passVal')
           } else {
             this.$message({
               message: res.msg,
@@ -339,7 +339,6 @@ export default {
         })
       } else {
         //编辑
-        console.log(this.ids)
         this.$request.editTemplate(this.ids, param).then(res => {
           console.log(res)
           if (res.ret) {
@@ -348,8 +347,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
-            this.$emit('passVal')
             this.$emit('receiveInner', false)
+            this.$emit('passVal')
           } else {
             this.$message({
               message: res.msg,
