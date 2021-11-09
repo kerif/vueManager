@@ -17,6 +17,7 @@
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :title="$t('提示')" :visible.sync="dialogVisible" width="30%"> </el-dialog>
   </div>
 </template>
 
@@ -33,6 +34,7 @@ export default {
     return {
       message: '',
       keyword: '',
+      dialogVisible: false,
       messageData: []
     }
   },

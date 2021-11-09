@@ -122,7 +122,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.tmpList()
+            this.getTmpList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
