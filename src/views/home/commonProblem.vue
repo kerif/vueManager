@@ -1,10 +1,22 @@
 <template>
   <div class="commonProblem-container">
-    <el-select v-model="category" :placeholder="$t('请选择分类')">
+    <!-- <el-select
+      v-model="category"
+      :placeholder="$t('请选择分类')"
+      @change="changeVal"
+      :clearable="true"
+      :disabled="disabled"
+    >
       <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id">
         {{ item.name }}
       </el-option>
-    </el-select>
+    </el-select> -->
+    <search-select
+      @search="changeVal"
+      v-model="page_params.category"
+      :placeholder="$t('请选择分类')"
+      :selectArr="categoryData"
+    ></search-select>
     <div class="header-search">
       <el-input v-model="keyword" :placeholder="$t('请输入关键词')" @keyup.enter.native="goSearch">
         <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
@@ -33,12 +45,14 @@
 </template>
 
 <script>
+import { SearchSelect } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   name: 'commonProblem',
   components: {
-    NlePagination
+    NlePagination,
+    SearchSelect
   },
   mixins: [pagination],
   data() {
@@ -48,6 +62,10 @@ export default {
       dialogVisible: false,
       title: '',
       content: '',
+      disabled: false,
+      page_params: {
+        category: ''
+      },
       categoryData: [],
       localization: {},
       problemData: []
@@ -75,7 +93,13 @@ export default {
     getCategoryList() {
       this.$request.categoryList().then(res => {
         console.log(res, '1111')
-        this.categoryData = res.data
+        // this.categoryData = res.data
+        res.data.forEach(item => {
+          this.categoryData.push({
+            value: item.id,
+            label: item.name
+          })
+        })
       })
     },
     goSearch() {
@@ -87,6 +111,10 @@ export default {
         this.title = res.data.title
         this.content = res.data.content
       })
+    },
+    changeVal() {
+      this.page_params.handleQueryChange('category', this.page_params.category)
+      this.getList()
     }
   }
 }
@@ -94,6 +122,7 @@ export default {
 
 <style lang="scss">
 .commonProblem-container {
+  // background-color: #fff !important;
   .header-search {
     float: right;
     width: 200px;

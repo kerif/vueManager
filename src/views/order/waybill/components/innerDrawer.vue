@@ -6,7 +6,7 @@
     :visible.sync="editTmpDrawer"
     :append-to-body="true"
     :before-close="close"
-    @opened="open()"
+    @open="open()"
     @close="clear"
   >
     <el-form class="inner-form" :model="ruleForm">
@@ -366,12 +366,34 @@ export default {
         this.ruleForm.remark = res.data.remark
         this.headerData = res.data.header
         this.headerData.forEach(item => {
-          if (item.checked === '1' && this.info.order.includes(item.id)) {
-            this.info.order.push(item.id)
-            console.log(this.info.order, '555')
-          }
-          if (item.checked === '1' && this.info.receive.includes(item.id)) {
-            this.info.receive.push(item.id)
+          if (item.checked === '1') {
+            if (this.info.order) {
+              this.info.order.push(item.id)
+            }
+            if (this.info.receive) {
+              this.info.receive.push(item.id)
+            }
+            if (this.info.warehouse) {
+              this.info.warehouse.push(item.id)
+            }
+            if (this.info.outbound) {
+              this.info.outbound.push(item.id)
+            }
+            if (this.info.pay) {
+              this.info.pay.push(item.id)
+            }
+            if (this.info.fee) {
+              this.info.fee.push(item.id)
+            }
+            if (this.info.ship) {
+              this.info.ship.push(item.id)
+            }
+            if (this.info.operation) {
+              this.info.operation.push(item.id)
+            }
+            if (this.info.customer) {
+              this.info.customer.push(item.id)
+            }
           }
         })
       })

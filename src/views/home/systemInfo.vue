@@ -1,6 +1,12 @@
 <template>
   <div class="systemInfo-container">
-    <el-select v-model="message" :placeholder="$t('全部')">
+    <el-select
+      v-model="message"
+      :placeholder="$t('全部')"
+      @change="changeVal"
+      :clearable="true"
+      :disabled="disabled"
+    >
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
       </el-option>
     </el-select>
@@ -16,7 +22,7 @@
           <span v-else-if="this.is_read === 1">{{ scope.row.title }}</span>
         </template> -->
       </el-table-column>
-      <el-table-column prop="name" :label="$t('内容')" width="180"> </el-table-column>
+      <!-- <el-table-column prop="name" :label="$t('内容')" width="180"> </el-table-column> -->
       <el-table-column prop="creator" :label="$t('发件人')" width="180"> </el-table-column>
       <el-table-column prop="created_at" :label="$t('时间')"> </el-table-column>
       <el-table-column prop="address" :label="$t('操作')">
@@ -50,14 +56,15 @@ export default {
       title: '',
       content: '',
       is_read: '',
+      disabled: false,
       localization: {},
       options: [
         {
-          value: '选项1',
+          value: '0',
           label: '未读'
         },
         {
-          value: '选项2',
+          value: '1',
           label: '已读'
         }
       ]
@@ -92,6 +99,10 @@ export default {
         this.is_read = res.data.is_read
         console.log(this.is_read)
       })
+    },
+    changeVal(val) {
+      console.log(val)
+      this.getList()
     }
   }
 }
@@ -99,6 +110,7 @@ export default {
 
 <style lang="scss">
 .systemInfo-container {
+  // background-color: #fff !important;
   .header-search {
     float: right;
     width: 200px;
