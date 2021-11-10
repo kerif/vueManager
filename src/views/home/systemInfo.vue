@@ -16,14 +16,14 @@
       </el-input>
     </div>
     <el-table :data="messageData" border style="width: 100%; margin-top: 10px">
-      <el-table-column :label="$t('标题')" width="180" prop="title">
+      <el-table-column :label="$t('标题')" prop="title">
         <!-- <template slot-scope="scope">
           <span v-if="this.is_read === 0">{{ scope.row.title }}</span>
           <span v-else-if="this.is_read === 1">{{ scope.row.title }}</span>
         </template> -->
       </el-table-column>
       <!-- <el-table-column prop="name" :label="$t('内容')" width="180"> </el-table-column> -->
-      <el-table-column prop="creator" :label="$t('发件人')" width="180"> </el-table-column>
+      <el-table-column prop="creator" :label="$t('发件人')"> </el-table-column>
       <el-table-column prop="created_at" :label="$t('时间')"> </el-table-column>
       <el-table-column prop="address" :label="$t('操作')">
         <template slot-scope="scope">

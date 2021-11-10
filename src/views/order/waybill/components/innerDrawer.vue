@@ -164,7 +164,8 @@ export default {
       customerInfo: [],
       feeInfo: [],
       tmpsData: [],
-      headerData: []
+      headerData: [],
+      localization: {}
     }
   },
   props: {
@@ -202,6 +203,7 @@ export default {
       this.$request.getListTemplate(code).then(res => {
         console.log(res)
         this.tmpsData = res.data
+        this.localization = res.localization
         this.orderInfo = [
           { id: 'user_id', name: '客户ID' },
           { id: 'username', name: '用户名' },
@@ -222,9 +224,15 @@ export default {
         ]
         this.warehouseInfo = [
           { id: 'packages_count', name: '包裹数' },
-          { id: 'package_value_sum', name: '总申报价值 (¥)' },
-          { id: 'package_actual_weight_sum', name: '入库实际重量 (KG)' },
-          { id: 'package_volume_weight_sum', name: '入库体积重量 (KG)' },
+          { id: 'package_value_sum', name: `总申报价值(${this.localization.currency_unit})` },
+          {
+            id: 'package_actual_weight_sum',
+            name: `入库实际重量(${this.localization.weight_unit})`
+          },
+          {
+            id: 'package_volume_weight_sum',
+            name: `入库体积重量(${this.localization.weight_unit})`
+          },
           { id: 'express_num', name: '包裹单号' },
           { id: 'package_name', name: '包裹物品名称' },
           { id: 'package_props_name', name: '包裹物品属性' },
@@ -232,9 +240,15 @@ export default {
           { id: 'package_volume', name: '包裹体积 (m³)' }
         ]
         this.warehouseSum = [
-          { id: 'package_value_sum', name: '总申报价值 (¥)' },
-          { id: 'package_actual_weight_sum', name: '入库实际重量 (KG)' },
-          { id: 'package_volume_weight_sum', name: '入库体积重量 (KG)' }
+          { id: 'package_value_sum', name: `总申报价值(${this.localization.currency_unit})` },
+          {
+            id: 'package_actual_weight_sum',
+            name: `入库实际重量(${this.localization.weight_unit})`
+          },
+          {
+            id: 'package_volume_weight_sum',
+            name: `入库体积重量(${this.localization.weight_unit})`
+          }
         ]
 
         this.outboundInfo = [
@@ -243,18 +257,18 @@ export default {
           { id: 'box_actual_weight_sum', name: '出库实际重量' },
           { id: 'box_volume_weight_sum', name: '出库体积重量' },
           { id: 'box_volume_sum', name: '出库体积' },
-          { id: 'box_length', name: '长 (CM)' },
-          { id: 'box_width', name: '宽 (CM)' },
-          { id: 'box_height', name: '高 (CM)' }
+          { id: 'box_length', name: `长(${this.localization.length_unit})` },
+          { id: 'box_width', name: `宽(${this.localization.length_unit})` },
+          { id: 'box_height', name: `高(${this.localization.length_unit})` }
         ]
         this.outboundSum = [
           { id: 'box_payment_weight_sum', name: '出库计费重量' },
           { id: 'box_actual_weight_sum', name: '出库实际重量' },
           { id: 'box_volume_weight_sum', name: '出库体积重量' },
           { id: 'box_volume_sum', name: '出库体积' },
-          { id: 'box_length', name: '长 (CM)' },
-          { id: 'box_width', name: '宽 (CM)' },
-          { id: 'box_height', name: '高 (CM)' }
+          { id: 'box_length', name: `长(${this.localization.length_unit})` },
+          { id: 'box_width', name: `宽(${this.localization.length_unit})` },
+          { id: 'box_height', name: `高(${this.localization.length_unit})` }
         ]
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
@@ -329,8 +343,10 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
+            // this.$emit('passVal')
             this.$emit('receiveInner', false)
-            this.$emit('passVal')
+            // this.$emit('receiveInner','passVal', false)
+            // this.$emit('receiveInner', false,'passVal')
           } else {
             this.$message({
               message: res.msg,
@@ -348,8 +364,8 @@ export default {
               title: this.$t('成功'),
               message: res.msg
             })
-            this.$emit('receiveInner', false)
             this.$emit('passVal')
+            this.$emit('receiveInner', false)
           } else {
             this.$message({
               message: res.msg,
@@ -361,7 +377,6 @@ export default {
     },
     getList() {
       this.$request.listDetail(this.ids).then(res => {
-        console.log(res, '9999')
         this.ruleForm.name = res.data.name
         this.ruleForm.remark = res.data.remark
         this.headerData = res.data.header

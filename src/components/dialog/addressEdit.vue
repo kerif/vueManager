@@ -14,15 +14,14 @@
         </el-col>
         <el-col :span="10">
           <el-form-item :label="'*' + $t('国家地区')">
-            <el-select
+            <el-cascader
               v-model="form.country_id"
-              filterable
+              :options="options"
+              :props="{ checkStrictly: true }"
+              clearable
               class="country-select"
-              :placeholder="$t('请选择国家地区')"
             >
-              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-              </el-option>
-            </el-select>
+            </el-cascader>
           </el-form-item>
         </el-col>
       </el-row>
@@ -82,7 +81,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item :label="$t('区域')">
-            <el-input v-model="form.area"></el-input>
+            <el-input v-model="form.address_area"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -114,7 +113,8 @@ export default {
         receiver_name: '',
         phone: '',
         timezone: '',
-        country_id: '',
+        // country_id: '',
+        country_id: [],
         door_no: '',
         province: '',
         district: '',
@@ -125,10 +125,11 @@ export default {
         wechat_id: '',
         clearance_code: '',
         id_card: '',
-        area: ''
+        address_area: ''
       },
       supplierId: '',
       options: [],
+      countryList: [],
       id: '',
       userId: ''
     }
@@ -164,7 +165,13 @@ export default {
       } else if (this.form.phone === '') {
         return this.$message.error(this.$t('请输入联系电话'))
       }
-      this.$request.updateSingleAddress(this.id, this.form).then(res => {
+      let param = {
+        ...this.form,
+        country_id: this.form.country_id[0],
+        area: this.form.country_id[1] || '',
+        sub_area: this.form.country_id[2] || ''
+      }
+      this.$request.updateSingleAddress(this.id, param).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -178,15 +185,37 @@ export default {
             type: 'error'
           })
         }
-        this.show = false
+        // this.show = false
       })
     },
     // 获取支持国家数据
     searchCountry() {
-      console.log('111')
       this.$request.countryLocation().then(res => {
         if (res.ret) {
-          this.options = res.data
+          this.options = res.data.map(item => {
+            return {
+              value: item.id,
+              label: item.name,
+              children:
+                item.areas < 1
+                  ? undefined
+                  : item.areas.map(item => {
+                      return {
+                        value: item.id,
+                        label: item.name,
+                        children:
+                          item.areas < 1
+                            ? undefined
+                            : item.areas.map(item => {
+                                return {
+                                  value: item.id,
+                                  label: item.name
+                                }
+                              })
+                      }
+                    })
+            }
+          })
         } else {
           this.$message({
             message: res.msg,

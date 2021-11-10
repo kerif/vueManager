@@ -11,7 +11,7 @@
         $t('确定导出')
       }}</el-button>
     </div>
-    <el-row
+    <el-card
       v-for="item in tmpList"
       :key="item.id"
       style="padding: 10px; margin: 20px; background: #f5f5f5"
@@ -45,7 +45,7 @@
           </el-row>
         </div>
       </el-col>
-    </el-row>
+    </el-card>
     <inner-drawer
       :editTmpDrawer="editTmpDrawer"
       :status="status"
@@ -93,6 +93,9 @@ export default {
     this.getCodeList()
     this.getTmpList()
   },
+  activated() {
+    this.getTmpList()
+  },
   methods: {
     close() {
       this.$emit('receiveTmp', false)
@@ -107,6 +110,7 @@ export default {
       this.editTmpDrawer = true
     },
     receiveInner() {
+      this.getTmpList()
       this.editTmpDrawer = false
     },
     activeFun(id) {

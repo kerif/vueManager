@@ -23,9 +23,9 @@
       </el-input>
     </div>
     <el-table :data="problemData" border style="width: 100%; margin-top: 10px">
-      <el-table-column prop="title" :label="$t('标题')" width="180"> </el-table-column>
-      <el-table-column prop="tag" :label="$t('tag')" width="180"> </el-table-column>
-      <el-table-column :label="$t('类型')" width="180">
+      <el-table-column prop="title" :label="$t('标题')"> </el-table-column>
+      <el-table-column prop="tag" :label="$t('tag')"> </el-table-column>
+      <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
           <span>{{ scope.row.category.name }}</span>
         </template>

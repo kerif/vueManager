@@ -550,8 +550,8 @@ exports.deleteCoupons = (id, ids) => {
   return $form.put(`users/${id}/coupons/${ids}/disabled`)
 }
 // 客户 客户地址 导出清单
-exports.exportList = () => {
-  return $form.get('user-addresses/export')
+exports.exportList = params => {
+  return $form.get('user-addresses/export', { params })
 }
 // 员工列表允许登录
 exports.allowUser = ids => {
