@@ -1,11 +1,24 @@
 <template>
   <div class="commonProblem-container">
-    <el-select v-model="category" :placeholder="$t('请选择分类')">
-      <el-option v-for="item in categoryData" :key="item.id" :label="item.id" :value="item.name">
+    <!-- <el-select
+      v-model="category"
+      :placeholder="$t('请选择分类')"
+      @change="changeVal"
+      :clearable="true"
+      :disabled="disabled"
+    >
+      <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id">
+        {{ item.name }}
       </el-option>
-    </el-select>
+    </el-select> -->
+    <search-select
+      @search="changeVal"
+      v-model="page_params.category"
+      :placeholder="$t('请选择分类')"
+      :selectArr="categoryData"
+    ></search-select>
     <div class="header-search">
-      <el-input v-model="keyword" :placeholder="$t('请输入关键词')">
+      <el-input v-model="keyword" :placeholder="$t('请输入关键词')" @keyup.enter.native="goSearch">
         <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
       </el-input>
     </div>
@@ -14,28 +27,32 @@
       <el-table-column prop="tag" :label="$t('tag')" width="180"> </el-table-column>
       <el-table-column :label="$t('类型')" width="180">
         <template slot-scope="scope">
-          <span v-for="item in scope.row.category" :key="item.id">{{ item.name }}</span>
+          <span>{{ scope.row.category.name }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="updated_at" :label="$t('创建时间')"> </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button @click="edit(scope.row)" size="mini">{{ $t('查看') }}</el-button>
+          <el-button @click="edit(scope.row.id)" size="mini">{{ $t('查看') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :title="$t('提示')" :visible.sync="dialogVisible" width="30%"> </el-dialog>
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
+      <div v-html="content"></div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { SearchSelect } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   name: 'commonProblem',
   components: {
-    NlePagination
+    NlePagination,
+    SearchSelect
   },
   mixins: [pagination],
   data() {
@@ -43,6 +60,14 @@ export default {
       keyword: '',
       category: '',
       dialogVisible: false,
+      title: '',
+      content: '',
+      disabled: false,
+      page_params: {
+        category: ''
+      },
+      categoryData: [],
+      localization: {},
       problemData: []
     }
   },
@@ -52,18 +77,43 @@ export default {
   },
   methods: {
     getList() {
-      this.$request.problemList().then(res => {
+      let param = {
+        keyword: this.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
+      }
+      this.$request.problemList(param).then(res => {
         console.log(res)
         this.problemData = res.data
+        this.localization = res.localization
+        this.page_params.page = res.meta.current_page
+        this.page_params.total = res.meta.total
       })
     },
     getCategoryList() {
       this.$request.categoryList().then(res => {
         console.log(res, '1111')
-        this.categoryData = res.data
+        // this.categoryData = res.data
+        res.data.forEach(item => {
+          this.categoryData.push({
+            value: item.id,
+            label: item.name
+          })
+        })
       })
     },
     goSearch() {
+      this.getList()
+    },
+    edit(id) {
+      this.dialogVisible = true
+      this.$request.problemDetail(id).then(res => {
+        this.title = res.data.title
+        this.content = res.data.content
+      })
+    },
+    changeVal() {
+      this.page_params.handleQueryChange('category', this.page_params.category)
       this.getList()
     }
   }
@@ -72,19 +122,27 @@ export default {
 
 <style lang="scss">
 .commonProblem-container {
+  // background-color: #fff !important;
   .header-search {
     float: right;
     width: 200px;
   }
-  /deep/ .el-table tr th.is-leaf {
+  .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
     background-color: #fff;
   }
-  /deep/ .el-table th > .cell {
+  .el-table th > .cell {
     text-align: center;
   }
-  /deep/ .el-table .cell {
+  .el-table .cell {
     text-align: center;
+  }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
   }
 }
 </style>

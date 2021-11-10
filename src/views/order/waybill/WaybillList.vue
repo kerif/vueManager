@@ -2297,7 +2297,7 @@ export default {
   width: 90% !important;
 }
 /deep/ .tmp .el-drawer__open .el-drawer.rtl {
-  width: 50% !important;
+  width: 30% !important;
 }
 .add-box {
   margin-bottom: 10px;

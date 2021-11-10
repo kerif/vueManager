@@ -6,7 +6,7 @@
     :visible.sync="editTmpDrawer"
     :append-to-body="true"
     :before-close="close"
-    @opened="open()"
+    @open="open()"
     @close="clear"
   >
     <el-form class="inner-form" :model="ruleForm">
@@ -147,7 +147,7 @@ export default {
         customer: [],
         fee: []
       },
-      size: '50%',
+      size: '30%',
       code: '',
       activeNames: ['1'],
       order: '',
@@ -163,7 +163,8 @@ export default {
       operationInfo: [],
       customerInfo: [],
       feeInfo: [],
-      tmpsData: []
+      tmpsData: [],
+      headerData: []
     }
   },
   props: {
@@ -363,6 +364,38 @@ export default {
         console.log(res, '9999')
         this.ruleForm.name = res.data.name
         this.ruleForm.remark = res.data.remark
+        this.headerData = res.data.header
+        this.headerData.forEach(item => {
+          if (item.checked === '1') {
+            if (this.info.order) {
+              this.info.order.push(item.id)
+            }
+            if (this.info.receive) {
+              this.info.receive.push(item.id)
+            }
+            if (this.info.warehouse) {
+              this.info.warehouse.push(item.id)
+            }
+            if (this.info.outbound) {
+              this.info.outbound.push(item.id)
+            }
+            if (this.info.pay) {
+              this.info.pay.push(item.id)
+            }
+            if (this.info.fee) {
+              this.info.fee.push(item.id)
+            }
+            if (this.info.ship) {
+              this.info.ship.push(item.id)
+            }
+            if (this.info.operation) {
+              this.info.operation.push(item.id)
+            }
+            if (this.info.customer) {
+              this.info.customer.push(item.id)
+            }
+          }
+        })
       })
     },
     clear() {

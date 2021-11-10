@@ -14,7 +14,7 @@
     <el-row
       v-for="item in tmpList"
       :key="item.id"
-      style="padding: 10px; margin: 20px; background: #ccc"
+      style="padding: 10px; margin: 20px; background: #f5f5f5"
       :class="{ active: ind === item.id }"
       :gutter="20"
       @click.native="activeFun(item.id)"
