@@ -147,7 +147,7 @@ export default {
         customer: [],
         fee: []
       },
-      size: '50%',
+      size: '30%',
       code: '',
       activeNames: ['1'],
       order: '',
