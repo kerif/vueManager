@@ -49,6 +49,7 @@ export default {
       title: '',
       content: '',
       categoryData: [],
+      localization: {},
       problemData: []
     }
   },
@@ -58,9 +59,17 @@ export default {
   },
   methods: {
     getList() {
-      this.$request.problemList().then(res => {
+      let param = {
+        keyword: this.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size
+      }
+      this.$request.problemList(param).then(res => {
         console.log(res)
         this.problemData = res.data
+        this.localization = res.localization
+        this.page_params.page = res.meta.current_page
+        this.page_params.total = res.meta.total
       })
     },
     getCategoryList() {

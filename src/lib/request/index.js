@@ -19,8 +19,8 @@ exports.aboutMe = () => $form.get('me')
 // 下载管理 获取列表
 exports.exportsDownloads = () => $form.get('export-downloads')
 // 常见问题
-exports.problemList = () => {
-  return $form.get('problems')
+exports.problemList = params => {
+  return $form.get('problems', { params })
 }
 // 常见问题 详情
 exports.problemDetail = id => {

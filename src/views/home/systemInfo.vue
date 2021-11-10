@@ -10,7 +10,12 @@
       </el-input>
     </div>
     <el-table :data="messageData" border style="width: 100%; margin-top: 10px">
-      <el-table-column prop="title" :label="$t('标题')" width="180"> </el-table-column>
+      <el-table-column :label="$t('标题')" width="180" prop="title">
+        <!-- <template slot-scope="scope">
+          <span v-if="this.is_read === 0">{{ scope.row.title }}</span>
+          <span v-else-if="this.is_read === 1">{{ scope.row.title }}</span>
+        </template> -->
+      </el-table-column>
       <el-table-column prop="name" :label="$t('内容')" width="180"> </el-table-column>
       <el-table-column prop="creator" :label="$t('发件人')" width="180"> </el-table-column>
       <el-table-column prop="created_at" :label="$t('时间')"> </el-table-column>
@@ -44,6 +49,8 @@ export default {
       messageData: [],
       title: '',
       content: '',
+      is_read: '',
+      localization: {},
       options: [
         {
           value: '选项1',
@@ -62,11 +69,16 @@ export default {
   methods: {
     getList() {
       let params = {
-        keyword: this.keywords
+        keyword: this.keywords,
+        page: this.page_params.page,
+        size: this.page_params.size
       }
       this.$request.messageList(params).then(res => {
         console.log(res)
         this.messageData = res.data
+        this.localization = res.localization
+        this.page_params.page = res.meta.current_page
+        this.page_params.total = res.meta.total
       })
     },
     goSearch() {
@@ -79,6 +91,8 @@ export default {
         console.log(res, 'jk')
         this.title = res.data.title
         this.content = res.data.content
+        this.is_read = res.data.is_read
+        console.log(this.is_read)
       })
     }
   }
