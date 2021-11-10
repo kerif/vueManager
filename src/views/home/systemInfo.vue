@@ -85,10 +85,8 @@ export default {
       this.getList()
     },
     edit(id) {
-      console.log(id)
       this.dialogVisible = true
       this.$request.messageDetail(id).then(res => {
-        console.log(res, 'jk')
         this.title = res.data.title
         this.content = res.data.content
         this.is_read = res.data.is_read

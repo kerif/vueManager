@@ -1,7 +1,7 @@
 <template>
   <div class="commonProblem-container">
     <el-select v-model="category" :placeholder="$t('请选择分类')">
-      <el-option v-for="item in categoryData" :key="item.id" :label="item.id" :value="item.name">
+      <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id">
         {{ item.name }}
       </el-option>
     </el-select>
@@ -82,10 +82,8 @@ export default {
       this.getList()
     },
     edit(id) {
-      console.log(id)
       this.dialogVisible = true
       this.$request.problemDetail(id).then(res => {
-        console.log(res, 'ty')
         this.title = res.data.title
         this.content = res.data.content
       })
