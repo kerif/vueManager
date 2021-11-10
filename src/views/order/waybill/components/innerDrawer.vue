@@ -315,6 +315,7 @@ export default {
       })
       let param = {
         name: this.ruleForm.name,
+        remark: this.ruleForm.remark,
         header: this.tmpsData
       }
       if (this.status === 'add') {
@@ -330,7 +331,6 @@ export default {
               message: res.msg
             })
             this.$emit('receiveInner', false)
-            this.$emit('passVal')
           } else {
             this.$message({
               message: res.msg,
@@ -341,7 +341,6 @@ export default {
       } else {
         //编辑
         this.$request.editTemplate(this.ids, param).then(res => {
-          console.log(res)
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -349,7 +348,6 @@ export default {
               message: res.msg
             })
             this.$emit('receiveInner', false)
-            this.$emit('passVal')
           } else {
             this.$message({
               message: res.msg,
@@ -421,7 +419,7 @@ export default {
 .inner-container {
   font-size: 14px;
   .el-drawer.rtl {
-    overflow: scroll;
+    overflow: auto;
   }
 }
 </style>
