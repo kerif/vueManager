@@ -67,6 +67,9 @@
           <p class="transfer-right">{{ $t('外部交易号') }}</p>
           <span>{{ form.outer_sn }}</span
           ><br />
+          <p class="transfer-right">{{ $t('备注') }}</p>
+          <span>{{ form.remark }}</span
+          ><br />
           <!-- <p class="transfer-right">备注</p>
           <span>{{form.remark}}</span><br/> -->
           <!-- <p class="transfer-right">创建时间</p>
