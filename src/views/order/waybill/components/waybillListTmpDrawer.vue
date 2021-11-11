@@ -107,7 +107,7 @@ export default {
       this.activeId = id
     },
     deleteTmpDrawer(id) {
-      this.$confirm(this.$t('您真的要删除此菜单？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除此模板？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

@@ -1,6 +1,6 @@
 <template>
   <div class="commonProblem-container">
-    <!-- <el-select
+    <el-select
       v-model="category"
       :placeholder="$t('请选择分类')"
       @change="changeVal"
@@ -10,19 +10,24 @@
       <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id">
         {{ item.name }}
       </el-option>
-    </el-select> -->
-    <search-select
-      @search="changeVal"
-      v-model="page_params.category"
-      :placeholder="$t('请选择分类')"
-      :selectArr="categoryData"
-    ></search-select>
+    </el-select>
+    <!-- <search-select
+        @search="changeVal"
+        v-model="page_params.category"
+        :placeholder="$t('请选择分类')"
+        :selectArr="categoryData"
+      ></search-select> -->
     <div class="header-search">
       <el-input v-model="keyword" :placeholder="$t('请输入关键词')" @keyup.enter.native="goSearch">
         <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
       </el-input>
     </div>
-    <el-table :data="problemData" border style="width: 100%; margin-top: 10px">
+    <el-table
+      :data="problemData"
+      border
+      class="top-side"
+      style="width: 100%; height: calc(100vh - 275px); margin-top: 10px"
+    >
       <el-table-column prop="title" :label="$t('标题')"> </el-table-column>
       <el-table-column prop="tag" :label="$t('tag')"> </el-table-column>
       <el-table-column :label="$t('类型')">
@@ -33,7 +38,12 @@
       <el-table-column prop="updated_at" :label="$t('创建时间')"> </el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button @click="edit(scope.row.id)" size="mini">{{ $t('查看') }}</el-button>
+          <el-button
+            @click="edit(scope.row.id)"
+            size="mini"
+            style="background: #3540a5; color: #fff"
+            >{{ $t('查看') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -45,14 +55,14 @@
 </template>
 
 <script>
-import { SearchSelect } from '@/components/searchs'
+// import { SearchSelect } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   name: 'commonProblem',
   components: {
-    NlePagination,
-    SearchSelect
+    NlePagination
+    // SearchSelect
   },
   mixins: [pagination],
   data() {
@@ -93,13 +103,13 @@ export default {
     getCategoryList() {
       this.$request.categoryList().then(res => {
         console.log(res, '1111')
-        // this.categoryData = res.data
-        res.data.forEach(item => {
-          this.categoryData.push({
-            value: item.id,
-            label: item.name
-          })
-        })
+        this.categoryData = res.data
+        // res.data.forEach(item => {
+        //   this.categoryData.push({
+        //     value: item.id,
+        //     label: item.name
+        //   })
+        // })
       })
     },
     goSearch() {
@@ -122,10 +132,12 @@ export default {
 
 <style lang="scss">
 .commonProblem-container {
-  // background-color: #fff !important;
   .header-search {
     float: right;
     width: 200px;
+  }
+  /deep/.el_table .top-side {
+    margin-top: 10px;
   }
   .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;

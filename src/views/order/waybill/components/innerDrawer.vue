@@ -120,7 +120,7 @@
         </el-checkbox-group>
       </el-form-item>
       <div style="float: right">
-        <el-button @click="confirm" style="background-color: #87cefa; color: #fff">{{
+        <el-button @click="confirm" style="background-color: #3540a5; color: #fff">{{
           $t('保存模板')
         }}</el-button>
       </div>

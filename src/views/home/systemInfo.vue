@@ -15,19 +15,30 @@
         <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
       </el-input>
     </div>
-    <el-table :data="messageData" border style="width: 100%; margin-top: 10px">
+    <el-table
+      :data="messageData"
+      border
+      style="width: 100%; margin-top: 10px; height: calc(100vh - 275px)"
+    >
       <el-table-column :label="$t('标题')" prop="title">
-        <!-- <template slot-scope="scope">
-          <span v-if="this.is_read === 0">{{ scope.row.title }}</span>
-          <span v-else-if="this.is_read === 1">{{ scope.row.title }}</span>
-        </template> -->
+        <template slot-scope="scope">
+          <span v-if="scope.row.is_read === 0" class="el-icon-message message-icon">{{
+            scope.row.title
+          }}</span>
+          <span v-else class="el-icon-postcard postcard-icon">{{ scope.row.title }}</span>
+        </template>
       </el-table-column>
       <!-- <el-table-column prop="name" :label="$t('内容')" width="180"> </el-table-column> -->
       <el-table-column prop="creator" :label="$t('发件人')"> </el-table-column>
       <el-table-column prop="created_at" :label="$t('时间')"> </el-table-column>
       <el-table-column prop="address" :label="$t('操作')">
         <template slot-scope="scope">
-          <el-button @click="edit(scope.row.id)" size="mini">{{ $t('查看') }}</el-button>
+          <el-button
+            @click="edit(scope.row.id)"
+            size="mini"
+            style="background: #3540a5; color: #fff"
+            >{{ $t('查看') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -55,7 +66,7 @@ export default {
       messageData: [],
       title: '',
       content: '',
-      is_read: '',
+      is_read: null,
       disabled: false,
       localization: {},
       options: [
@@ -83,6 +94,8 @@ export default {
       this.$request.messageList(params).then(res => {
         console.log(res)
         this.messageData = res.data
+        // this.is_read = res.data.is_read
+        // console.log(this.is_read, '33')
         this.localization = res.localization
         this.page_params.page = res.meta.current_page
         this.page_params.total = res.meta.total
@@ -96,8 +109,6 @@ export default {
       this.$request.messageDetail(id).then(res => {
         this.title = res.data.title
         this.content = res.data.content
-        this.is_read = res.data.is_read
-        console.log(this.is_read)
       })
     },
     changeVal(val) {
@@ -114,6 +125,12 @@ export default {
   .header-search {
     float: right;
     width: 200px;
+  }
+  .message-icon {
+    cursor: pointer;
+  }
+  .postcard-icon {
+    cursor: pointer;
   }
   .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
