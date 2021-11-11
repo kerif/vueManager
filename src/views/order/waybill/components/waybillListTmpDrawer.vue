@@ -39,7 +39,6 @@
       v-if="state"
       @receiveInner="receiveInner"
       :tmpCode="tmpCode"
-      @passVal="getTmpList"
     ></inner-drawer>
   </el-drawer>
 </template>
@@ -133,10 +132,11 @@ export default {
     getTmpList() {
       let code = this.code
       this.$request.listQuery(code).then(res => {
-        console.log(res.data)
+        // this.$set(this.tmpList, res.data)
         this.tmpList = res.data
+        this.$nextTick()
+        console.log(this.tmpList, 'this.tmplist')
         this.tmpCode = res.data[0].code
-        console.log(this.tmpCode)
       })
     },
     getCodeList() {

@@ -142,6 +142,7 @@ export default {
           this.form.phone = res.data.phone
           this.form.timezone = res.data.timezone
           this.form.country_id = [res.data.country.id, res.data.area_id, res.data.sub_area_id]
+          console.log(this.form.country_id, 'this.form.country_id')
           this.form.door_no = res.data.door_no
           this.form.province = res.data.province
           this.form.city = res.data.city
