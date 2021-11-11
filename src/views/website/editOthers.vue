@@ -28,7 +28,7 @@
         >
           <i class="el-icon-plus"> </i> </el-upload
         ><br />
-        <span>{{ $t('建议尺寸') }}&nbsp;80px*40px</span>
+        <span>{{ $t('建议尺寸') }}&nbsp;{{ size }}</span>
       </el-form-item>
       <!-- 编辑颜色1 -->
       <el-form-item :label="$t('主色调1')" class="updateChe" v-if="type === 'color'">
@@ -100,6 +100,7 @@ export default {
         lat: '' // 纬度
       },
       type: '',
+      size: '',
       baleImgList: [],
       activeName: '',
       map: null,
@@ -168,6 +169,7 @@ export default {
       this.$request.getBlocksDetails(this.$route.params.id).then(res => {
         if (res.ret) {
           this.description = res.data.description
+          this.size = res.data.size
           res.data.content && (this.baleImgList[0] = res.data.content)
           this.params.color1 = res.data.content && res.data.content.color1
           this.params.color2 = res.data.content && res.data.content.color2

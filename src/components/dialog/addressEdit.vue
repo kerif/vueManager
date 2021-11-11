@@ -113,7 +113,6 @@ export default {
         receiver_name: '',
         phone: '',
         timezone: '',
-        // country_id: '',
         country_id: [],
         door_no: '',
         province: '',
@@ -142,7 +141,7 @@ export default {
           this.form.receiver_name = res.data.receiver_name
           this.form.phone = res.data.phone
           this.form.timezone = res.data.timezone
-          this.form.country_id = res.data.country.id
+          this.form.country_id = [res.data.country.id, res.data.area_id, res.data.sub_area_id]
           this.form.door_no = res.data.door_no
           this.form.province = res.data.province
           this.form.city = res.data.city
@@ -158,9 +157,7 @@ export default {
       })
     },
     submit() {
-      if (this.form.country_id === '') {
-        return this.$message.error(this.$t('请选择国家地区'))
-      } else if (this.form.receiver_name === '') {
+      if (this.form.receiver_name === '') {
         return this.$message.error(this.$t('请输入收件人'))
       } else if (this.form.phone === '') {
         return this.$message.error(this.$t('请输入联系电话'))
@@ -168,8 +165,8 @@ export default {
       let param = {
         ...this.form,
         country_id: this.form.country_id[0],
-        area: this.form.country_id[1] || '',
-        sub_area: this.form.country_id[2] || ''
+        area_id: this.form.country_id[1] || '',
+        sub_area_id: this.form.country_id[2] || ''
       }
       this.$request.updateSingleAddress(this.id, param).then(res => {
         if (res.ret) {
@@ -179,6 +176,7 @@ export default {
             message: res.msg
           })
           this.show = false
+          this.success()
         } else {
           this.$message({
             message: res.msg,
@@ -196,24 +194,22 @@ export default {
             return {
               value: item.id,
               label: item.name,
-              children:
-                item.areas < 1
-                  ? undefined
-                  : item.areas.map(item => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                        children:
-                          item.areas < 1
-                            ? undefined
-                            : item.areas.map(item => {
-                                return {
-                                  value: item.id,
-                                  label: item.name
-                                }
-                              })
-                      }
-                    })
+              children: item.areas.length
+                ? item.areas.map(item2 => {
+                    return {
+                      value: item2.id,
+                      label: item2.name,
+                      children: item2.areas.length
+                        ? item2.areas.map(item3 => {
+                            return {
+                              value: item3.id,
+                              label: item3.name
+                            }
+                          })
+                        : []
+                    }
+                  })
+                : []
             }
           })
         } else {

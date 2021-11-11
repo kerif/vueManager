@@ -1,6 +1,6 @@
 <template>
   <el-drawer
-    :title="this.status === 'add' ? $t('新增默认模板') : $t('编辑默认模板')"
+    :title="this.state === 'add' ? $t('新增默认模板') : $t('编辑默认模板')"
     class="inner-container"
     :size="size"
     :visible.sync="editTmpDrawer"
@@ -177,7 +177,7 @@ export default {
       type: String,
       required: true
     },
-    status: {
+    state: {
       type: String,
       required: true
     },
@@ -194,7 +194,7 @@ export default {
       this.$emit('receiveInner', false)
     },
     open() {
-      if (this.status === 'edit') {
+      if (this.state === 'edit') {
         this.getList()
       }
     },
@@ -329,12 +329,13 @@ export default {
       })
       let param = {
         name: this.ruleForm.name,
+        remark: this.ruleForm.remark,
         header: this.tmpsData
       }
-      if (this.status === 'add') {
+      if (this.state === 'add') {
         param.code = this.tmpCode
       }
-      if (this.status === 'add') {
+      if (this.state === 'add') {
         //新增
         this.$request.addTemplate(param).then(res => {
           if (res.ret) {
@@ -345,8 +346,6 @@ export default {
             })
             // this.$emit('passVal')
             this.$emit('receiveInner', false)
-            // this.$emit('receiveInner','passVal', false)
-            // this.$emit('receiveInner', false,'passVal')
           } else {
             this.$message({
               message: res.msg,
@@ -357,14 +356,13 @@ export default {
       } else {
         //编辑
         this.$request.editTemplate(this.ids, param).then(res => {
-          console.log(res)
           if (res.ret) {
             this.$notify({
               type: 'success',
               title: this.$t('成功'),
               message: res.msg
             })
-            this.$emit('passVal')
+            // this.$emit('passVal')
             this.$emit('receiveInner', false)
           } else {
             this.$message({
@@ -436,7 +434,7 @@ export default {
 .inner-container {
   font-size: 14px;
   .el-drawer.rtl {
-    overflow: scroll;
+    overflow: auto;
   }
 }
 </style>

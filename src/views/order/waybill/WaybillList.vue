@@ -1041,6 +1041,7 @@
     <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
       :searchFieldData="searchFieldData"
+      :activeName="activeName"
       @receiveTmp="receiveTmp"
       class="tmp"
     ></waybill-list-tmp-drawer>
