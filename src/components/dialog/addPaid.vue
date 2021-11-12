@@ -179,6 +179,7 @@ export default {
         confirm_amount: this.ruleForm.confirm_amount,
         transfer_account: this.ruleForm.transfer_account,
         remark: this.ruleForm.remark,
+        payStatus: this.ruleForm.payStatus,
         images: this.images
       }
       this.$request.paid(this.id, { ...info }).then(res => {

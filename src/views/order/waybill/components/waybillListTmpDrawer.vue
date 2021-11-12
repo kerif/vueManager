@@ -32,9 +32,11 @@
       </div>
       <div class="template-remark">{{ item.remark }}</div>
     </div>
+    <div></div>
     <inner-drawer
       :editTmpDrawer="editTmpDrawer"
       :state="state"
+      ref="inner"
       :ids="ids"
       v-if="state"
       @receiveInner="receiveInner"
@@ -99,6 +101,7 @@ export default {
     },
     receiveInner() {
       this.editTmpDrawer = false
+      this.$refs.inner.clear()
       this.getTmpList()
     },
     activeFun(id) {
@@ -130,13 +133,12 @@ export default {
       })
     },
     getTmpList() {
-      let code = this.code
-      this.$request.listQuery(code).then(res => {
-        // this.$set(this.tmpList, res.data)
+      // let code = this.code
+      this.$request.listQuery({ code: this.code }).then(res => {
         this.tmpList = res.data
-        this.$nextTick()
         console.log(this.tmpList, 'this.tmplist')
         this.tmpCode = res.data[0].code
+        console.log(this.tmpCode)
       })
     },
     getCodeList() {

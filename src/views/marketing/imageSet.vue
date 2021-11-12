@@ -651,6 +651,7 @@ export default {
           res.data.backup_img2 && (this.backupSecond[0] = res.data.backup_img2)
           res.data.backup_img3 && (this.backupThird[0] = res.data.backup_img3)
           res.data.backup_img4 && (this.backupFourth[0] = res.data.backup_img4)
+          res.data.warehouse_image && (this.warehouseList[0] = res.data.warehouse_image)
         }
       })
     },
