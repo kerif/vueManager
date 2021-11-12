@@ -162,7 +162,6 @@ export default {
     },
     // 修改权限
     changePre(id) {
-      console.log(id, 'id')
       this.$router.push({
         name: 'modifyPermissions',
         params: {
@@ -172,7 +171,6 @@ export default {
     },
     // 删除
     deleteData() {
-      console.log(this.deleteNum, 'this.deleteNum')
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择员工组'))
       }
@@ -181,7 +179,6 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteNum, '2222')
         this.$request
           .deleteGroup({
             DELETE: this.deleteNum
@@ -205,20 +202,17 @@ export default {
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
-      console.log(this.deleteNum, 'this.deleteNum')
     }
   },
   watch: {
     // 监听已选择的行
     selection(newValue) {
       if (newValue.length) {
-        console.log(newValue)
         if (newValue.every(item => item.normal === 1)) {
           this.normal = 1
         } else {
           this.normal = 0
         }
-        console.log(this.normal)
       }
     }
   }
