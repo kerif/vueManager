@@ -6,7 +6,7 @@
     :visible.sync="editTmpDrawer"
     :append-to-body="true"
     :before-close="close"
-    @open="open()"
+    @opened="open()"
   >
     <el-form class="inner-form" :model="ruleForm">
       <el-form-item :label="$t('模板名称')" style="margin-left: 20px">
@@ -15,6 +15,7 @@
           :placeholder="$t('请输入模板名称')"
           class="input-sty"
           style="width: 40%"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item :label="$t('模板备注')" style="margin-left: 20px">
@@ -23,6 +24,7 @@
           :placeholder="$t('请输入模板备注')"
           class="input-sty"
           style="width: 40%"
+          clearable
         ></el-input>
       </el-form-item>
       <el-collapse v-model="activeNames" style="margin: 20px">
@@ -203,10 +205,10 @@ export default {
       this.$emit('receiveInner', false)
     },
     open() {
+      this.getTmpData()
       if (this.state === 'edit') {
         this.getList()
       }
-      this.getTmpData()
     },
     getTmpData() {
       let code = this.tmpCode
@@ -214,6 +216,99 @@ export default {
         console.log(res)
         this.tmpsData = res.data
         this.localization = res.localization
+        this.orderInfo = [
+          { id: 'user_id', name: '客户ID' },
+          { id: 'username', name: '用户名' },
+          { id: 'express_line_name', name: '线路名称' },
+          { id: 'line_extra_remark', name: '线路额外信息' },
+          { id: 'order_sn', name: '订单号' },
+          { id: 'agent_name', name: '所属代理' },
+          { id: 'clearance_code', name: '清关编码' },
+          { id: 'length', name: '长' },
+          { id: 'width', name: '宽' },
+          { id: 'height', name: '高' }
+        ]
+        this.receiveInfo = [
+          { id: 'receiver_name', name: '收货人' },
+          { id: 'phone', name: '手机/联系电话' },
+          { id: 'country', name: '收货国家' },
+          { id: 'city', name: '城市' },
+          { id: 'street_door_no', name: '街道/门牌号' },
+          { id: 'info_address', name: '详细地址' },
+          { id: 'station_name', name: '自提点' },
+          { id: 'user_address', name: '客户地址' },
+          { id: 'station_address', name: '自提点地址' }
+        ]
+        // 入库信息
+        this.warehouseInfo = [
+          { id: 'express_num', name: '包裹单号' },
+          { id: 'package_name', name: '包裹物品名称' },
+          { id: 'package_props_name', name: '包裹物品属性' },
+          { id: 'package_categories_name', name: '包裹物品类型' },
+          { id: 'package_volume', name: '包裹体积 (m³)' },
+          { id: 'package_size', name: '包裹尺寸(长宽高)' }
+        ]
+        // 入库信息 总计
+        this.warehouseSum = [
+          { id: 'package_value_sum', name: `总申报价值(${this.localization.currency_unit})` },
+          {
+            id: 'package_actual_weight_sum',
+            name: `入库实际重量(${this.localization.weight_unit})`
+          },
+          {
+            id: 'package_volume_weight_sum',
+            name: `入库体积重量(${this.localization.weight_unit})`
+          },
+          { id: 'packages_count', name: '包裹数' },
+          { id: 'package_number', name: '包裹总件数' }
+        ]
+        // 出库信息
+        this.outboundInfo = [
+          { id: 'box_count', name: '分箱箱数' },
+          { id: 'box_sn', name: '分箱箱号' },
+          { id: 'box_packages', name: '分箱所含包裹' },
+          { id: 'box_logistics_sn', name: '分箱物流单号' },
+          { id: 'box_length', name: `长(${this.localization.length_unit})` },
+          { id: 'box_width', name: `宽(${this.localization.length_unit})` },
+          { id: 'box_height', name: `高(${this.localization.length_unit})` },
+          { id: 'box_weight', name: `分箱称重重量(${this.localization.weight_unit})` },
+          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` }
+        ]
+        // 出库信息总计
+        this.outboundSum = [
+          { id: 'box_payment_weight_sum', name: '出库计费重量' },
+          { id: 'box_actual_weight_sum', name: '出库实际重量' },
+          { id: 'box_volume_weight_sum', name: '出库体积重量' },
+          { id: 'box_volume_sum', name: '出库体积' }
+        ]
+        this.payInfo = [
+          { id: 'payment_method', name: '付款方式' },
+          { id: 'value_added_amount', name: '增值服务费用' },
+          { id: 'insurance_fee', name: '保险费用' },
+          { id: 'tariff_fee', name: '关税费用' },
+          { id: 'line_service_fee', name: '渠道增值服务费用' },
+          { id: 'line_rule_fee', name: '渠道规则费用' },
+          { id: 'actual_payment_fee', name: '实际费用' },
+          { id: 'pay_out_serial_no', name: '支付单号' },
+          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
+          { id: 'point_amount', name: '积分抵扣金额' }
+        ]
+        this.shipInfo = [
+          { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
+          { id: 'order_logistics_sn', name: '物流单号 (订单)' }
+        ]
+        this.operationInfo = [
+          { id: 'created_at', name: '提交时间' },
+          { id: 'packed_at', name: '打包（拣货）时间' },
+          { id: 'paid_at', name: '支付时间' },
+          { id: 'shipped_at', name: '发货时间' },
+          { id: 'signed_at', name: '签收时间' }
+        ]
+        this.customerInfo = [
+          { id: 'username', name: '用户名' },
+          { id: 'email', name: '邮箱' },
+          { id: 'user_profile_address', name: '个人信息地址' }
+        ]
       })
     },
     confirm() {
