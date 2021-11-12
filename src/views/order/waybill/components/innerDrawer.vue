@@ -309,7 +309,10 @@ export default {
           { id: 'line_extra_remark', name: '线路额外信息' },
           { id: 'order_sn', name: '订单号' },
           { id: 'agent_name', name: '所属代理' },
-          { id: 'clearance_code', name: '清关编码' }
+          { id: 'clearance_code', name: '清关编码' },
+          { id: 'length', name: '长' },
+          { id: 'width', name: '宽' },
+          { id: 'height', name: '高' }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: '收货人' },
