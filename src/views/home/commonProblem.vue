@@ -102,7 +102,6 @@ export default {
     },
     getCategoryList() {
       this.$request.categoryList().then(res => {
-        console.log(res, '1111')
         this.categoryData = res.data
         // res.data.forEach(item => {
         //   this.categoryData.push({

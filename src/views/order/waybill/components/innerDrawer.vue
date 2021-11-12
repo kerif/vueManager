@@ -362,10 +362,7 @@ export default {
           { id: 'box_payment_weight_sum', name: '出库计费重量' },
           { id: 'box_actual_weight_sum', name: '出库实际重量' },
           { id: 'box_volume_weight_sum', name: '出库体积重量' },
-          { id: 'box_volume_sum', name: '出库体积' },
-          { id: 'box_length', name: `长(${this.localization.length_unit})` },
-          { id: 'box_width', name: `宽(${this.localization.length_unit})` },
-          { id: 'box_height', name: `高(${this.localization.length_unit})` }
+          { id: 'box_volume_sum', name: '出库体积' }
         ]
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
