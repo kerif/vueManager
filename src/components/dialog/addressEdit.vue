@@ -130,7 +130,10 @@ export default {
       options: [],
       countryList: [],
       id: '',
-      userId: ''
+      userId: '',
+      country: {},
+      area_id: '',
+      sub_area_id: ''
     }
   },
   methods: {
@@ -213,6 +216,15 @@ export default {
                 : []
             }
           })
+          if (this.country.id) {
+            this.form.country_id.push(+this.country.id)
+          }
+          if (this.area_id) {
+            this.form.country_id.push(+this.area_id)
+          }
+          if (this.sub_area_id) {
+            this.form.country_id.push(+this.sub_area_id)
+          }
         } else {
           this.$message({
             message: res.msg,

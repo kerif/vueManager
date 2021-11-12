@@ -324,9 +324,6 @@ export default {
         ]
         // 入库信息
         this.warehouseInfo = [
-          { id: 'box_count', name: '分箱箱数' },
-          { id: 'box_sn', name: '分箱箱号' },
-          { id: 'box_packages', name: '分箱所含包裹' },
           { id: 'express_num', name: '包裹单号' },
           { id: 'package_name', name: '包裹物品名称' },
           { id: 'package_props_name', name: '包裹物品属性' },
@@ -400,57 +397,57 @@ export default {
         ]
         this.headerData.forEach(item => {
           if (item.checked === '1') {
-            this.orderInfo.map(ele => {
+            this.orderInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.order.push(item.id)
               }
             })
-            this.receiveInfo.map(ele => {
+            this.receiveInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.receive.push(item.id)
               }
             })
-            this.warehouseSum.map(ele => {
+            this.warehouseSum.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.warehouse.push(item.id)
               }
             })
-            this.warehouseInfo.map(ele => {
+            this.warehouseInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.warehouseinfo.push(item.id)
               }
             })
-            this.outboundSum.map(ele => {
+            this.outboundSum.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.outbound.push(item.id)
               }
             })
-            this.outboundInfo.map(ele => {
+            this.outboundInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.outboundinfo.push(item.id)
               }
             })
-            this.payInfo.map(ele => {
+            this.payInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.pay.push(item.id)
               }
             })
-            this.feeInfo.map(ele => {
+            this.feeInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.fee.push(item.id)
               }
             })
-            this.shipInfo.map(ele => {
+            this.shipInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.ship.push(item.id)
               }
             })
-            this.operationInfo.map(ele => {
+            this.operationInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.operation.push(item.id)
               }
             })
-            this.customerInfo.map(ele => {
+            this.customerInfo.forEach(ele => {
               if (ele.id === item.id) {
                 this.info.customer.push(item.id)
               }

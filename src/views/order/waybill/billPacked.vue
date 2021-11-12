@@ -295,6 +295,32 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 打包图片 -->
+        <el-row :gutter="20" v-if="$route.params.parent != 0">
+          <el-col :span="11">
+            <el-form-item :label="$t('上传打包照片')" class="updateChe">
+              <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt class="goods-img" />
+                <span class="model-box"></span>
+                <span class="operat-box">
+                  <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                  <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i>
+                </span>
+              </span>
+              <el-upload
+                class="avatar-uploader"
+                action
+                list-type="picture-card"
+                :before-upload="beforeUploadImg"
+                :http-request="uploadBaleImg"
+                :show-file-list="false"
+              >
+                <i class="el-icon-plus"></i>
+              </el-upload>
+              <div class="updateImg">{{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M') }}</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row :gutter="20" v-if="user.box_type === 2">
           <el-form-item>
             <el-col :span="18">
@@ -487,7 +513,7 @@
       </el-form>
     </div>
     <!-- 运费计算 -->
-    <div class="receiver-msg">
+    <div class="receiver-msg" v-if="$route.params.parent == 0">
       <div class="leftBtn">
         <el-button type="danger" @click="getCalOrderPrice">{{ $t('计算') }}</el-button>
       </div>
@@ -982,6 +1008,8 @@ export default {
         this.baleImgList.splice(index, 1)
       } else if (type === 'goods') {
         this.goodsImgList.splice(index, 1)
+      } else if (type === 'pack') {
+        this.packImgList.splice(index, 1)
       }
     },
     beforeUploadImg(file) {
@@ -1022,6 +1050,21 @@ export default {
         }
       })
     },
+    // 上传打包照片
+    uploadPackImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.packImgList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+
     // 上传图片
     onUpload(file) {
       let params = new FormData()
