@@ -72,6 +72,9 @@ export default new Vuex.Store({
       }
     },
     initLanguageCode(state) {
+      if (!sessionStorage.getItem('language')) {
+        sessionStorage.setItem('language', 'zhCN')
+      }
       state.languageCode = sessionStorage.getItem('language') || 'zhCN'
       $i18n.locale = sessionStorage.getItem('language') || 'zhCN'
       if (localStorage.getItem('language')) {

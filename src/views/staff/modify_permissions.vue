@@ -70,7 +70,6 @@ export default {
               id: `${item.id}-1`
             }
           })
-          console.log(this.permissionMenu, 'permissionMenu')
         } else {
           this.$message.error(res.msg)
         }
@@ -95,14 +94,12 @@ export default {
   },
   watch: {
     filterText(val) {
-      console.log(val, 'val')
       this.$refs.tree.filter(val)
     },
     permissionMenu: {
       handler() {
         this.permissionMenu.forEach(item => {
           this.defaultShowNodes.push(item.id)
-          console.log(this.defaultShowNodes, 'this.defaultShowNodes')
         })
       }
     }
