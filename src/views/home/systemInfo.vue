@@ -17,6 +17,7 @@
     </div>
     <el-table
       :data="messageData"
+      ref="table"
       border
       style="width: 100%; margin-top: 10px; height: calc(100vh - 275px)"
     >
@@ -86,20 +87,29 @@ export default {
   },
   methods: {
     getList() {
+      this.tableLoading = true
       let params = {
         keyword: this.keywords,
         page: this.page_params.page,
         size: this.page_params.size
       }
-      this.$request.messageList(params).then(res => {
-        console.log(res)
-        this.messageData = res.data
-        // this.is_read = res.data.is_read
-        // console.log(this.is_read, '33')
-        this.localization = res.localization
-        this.page_params.page = res.meta.current_page
-        this.page_params.total = res.meta.total
-      })
+      this.$request
+        .messageList(params)
+        .then(res => {
+          if (res.ret) {
+            console.log(res)
+            this.messageData = res.data
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          }
+        })
+        .finally(() => {
+          this.tableLoading = false
+        })
     },
     goSearch() {
       this.getList()

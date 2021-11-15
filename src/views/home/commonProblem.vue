@@ -25,6 +25,8 @@
     <el-table
       :data="problemData"
       border
+      ref="table"
+      v-loading="tableLoading"
       class="top-side"
       style="width: 100%; height: calc(100vh - 275px); margin-top: 10px"
     >
@@ -73,6 +75,7 @@ export default {
       title: '',
       content: '',
       disabled: false,
+      tableLoading: false,
       page_params: {
         category: ''
       },
@@ -87,18 +90,29 @@ export default {
   },
   methods: {
     getList() {
+      this.tableLoading = true
       let param = {
         keyword: this.keyword,
         page: this.page_params.page,
         size: this.page_params.size
       }
-      this.$request.problemList(param).then(res => {
-        console.log(res)
-        this.problemData = res.data
-        this.localization = res.localization
-        this.page_params.page = res.meta.current_page
-        this.page_params.total = res.meta.total
-      })
+      this.$request
+        .problemList(param)
+        .then(res => {
+          if (res.ret) {
+            // console.log(res)
+            this.problemData = res.data
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          }
+        })
+        .finally(() => {
+          this.tableLoading = false
+        })
     },
     getCategoryList() {
       this.$request.categoryList().then(res => {

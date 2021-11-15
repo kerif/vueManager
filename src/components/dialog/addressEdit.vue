@@ -144,8 +144,13 @@ export default {
           this.form.receiver_name = res.data.receiver_name
           this.form.phone = res.data.phone
           this.form.timezone = res.data.timezone
-          this.form.country_id = [res.data.country.id, res.data.area_id, res.data.sub_area_id]
-          console.log(this.form.country_id, 'this.form.country_id')
+          this.form.country_id = [res.data.country.id]
+          if (res.data.area_id) {
+            this.form.country_id.push(+res.data.area_id)
+          }
+          if (res.data.sub_area_id) {
+            this.form.country_id.push(+res.data.sub_area_id)
+          }
           this.form.door_no = res.data.door_no
           this.form.province = res.data.province
           this.form.city = res.data.city
@@ -216,15 +221,6 @@ export default {
                 : []
             }
           })
-          if (this.country.id) {
-            this.form.country_id.push(+this.country.id)
-          }
-          if (this.area_id) {
-            this.form.country_id.push(+this.area_id)
-          }
-          if (this.sub_area_id) {
-            this.form.country_id.push(+this.sub_area_id)
-          }
         } else {
           this.$message({
             message: res.msg,
