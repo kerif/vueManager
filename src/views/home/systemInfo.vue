@@ -141,7 +141,8 @@ export default {
   .postcard-icon {
     cursor: pointer;
   }
-  .el-icon-postcard:before {
+  .el-icon-postcard:before,
+  .el-icon-message:before {
     font-size: 20px;
     top: 2px;
     right: 5px;
