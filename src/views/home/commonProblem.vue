@@ -50,9 +50,7 @@
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
-      <div>
-        <div v-html="content">{{ content }}</div>
-      </div>
+      <div v-html="content" ref="html" class="content">{{ content }}</div>
     </el-dialog>
     <el-dialog :visible.sync="imgDialog">
       <div style="text-align: center">
@@ -152,6 +150,20 @@ export default {
       this.page_params.handleQueryChange('category', this.category)
       this.getList()
     }
+  },
+  watch: {
+    content: function () {
+      const template = this.$refs.html
+      this.$nextTick(() => {
+        const img = template.querySelector('.content p img')
+        const imgSrc = template.querySelector('.content p img').src
+        console.log(imgSrc)
+        img.onclick = () => {
+          this.imgDialog = true
+          this.imgUrl = imgSrc
+        }
+      })
+    }
   }
 }
 </script>
@@ -177,6 +189,7 @@ export default {
   }
   .el-dialog__header {
     background-color: #0e102a;
+    height: 20px;
   }
   .el-dialog__title {
     font-size: 14px;
