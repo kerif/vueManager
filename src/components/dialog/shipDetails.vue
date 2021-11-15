@@ -1,117 +1,117 @@
 <template>
-  <el-dialog
-    :visible.sync="show"
-    :title="$t('发货单详情')"
-    width="80%"
-    class="ship-details-container"
-    @close="clear"
-  >
-    <el-dialog width="40%" :title="$t('发货单详情')" :visible.sync="showInner" append-to-body>
-      <div class="excel-date">
-        <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单含包裹信息') }}</el-radio>
-        <el-radio :label="2" v-model="uploadRadio">{{ $t('导出清单') }}</el-radio>
-        <el-radio :label="3" v-model="uploadRadio">{{ $t('发货单详情') }}</el-radio>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="showInner = false" class="cancel-btn">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="getDispatchList" :loading="$store.state.btnLoading">{{
-          $t('确定')
-        }}</el-button>
-      </div>
-    </el-dialog>
-    <div class="import-list">
-      <el-button class="btn-deep-purple" @click="exportList">{{ $t('导出清单') }}</el-button>
-    </div>
-    <el-table :data="shipData" border @selection-change="selectionChange">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column :label="$t('客户ID')" prop="user_id" width="100"></el-table-column>
-      <el-table-column :label="$t('客户昵称')" prop="user_name" width="155"></el-table-column>
-      <el-table-column :label="$t('付款状态')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.on_delivery_status === 0">{{ $t('已付款') }}</span>
-          <span v-if="scope.row.on_delivery_status === 1">{{ $t('货到付款') }}</span>
-          <span v-if="scope.row.on_delivery_status === 2">{{ $t('货到付款（已付款）') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('订单号')" width="155">
-        <template slot-scope="scope">
-          <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{
-            scope.row.order_sn
-          }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('收货方式')" width="155">
-        <template slot-scope="scope">
-          <span v-if="scope.row.station_name">{{
-            $t('自提收货') + '(' + scope.row.station_name + ')'
-          }}</span>
-          <span v-else>{{ $t('送货上门') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('转运快递单号-二程')"
-        prop="logistics_sn"
-        width="155"
-      ></el-table-column>
-      <el-table-column
-        :label="$t('线路名称')"
-        prop="express_line.cn_name"
-        width="155"
-      ></el-table-column>
-      <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
-      <el-table-column :label="$t('收货国家地区')" prop="address.country_name"></el-table-column>
-      <el-table-column :label="$t('包裹数与件数')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('出库箱数')" prop="boxes_count"></el-table-column>
-      <el-table-column
-        :label="$t('实际重量') + localization.weight_unit"
-        prop="actual_weight"
-      ></el-table-column>
-      <el-table-column
-        :label="$t('实际费用') + localization.currency_unit"
-        prop="actual_payment_fee"
-      ></el-table-column>
-      <el-table-column
-        :label="$t('申报价值') + localization.currency_unit"
-        prop="declare_value"
-      ></el-table-column>
-      <el-table-column :label="$t('操作')" width="130" v-if="status === 0">
-        <template slot-scope="scope">
-          <el-button @click="removeShip(scope.row.id)" class="btn-light-red">{{
-            $t('移除发货单')
-          }}</el-button>
-        </template>
-      </el-table-column>
-      <template slot="append">
-        <div class="append-box">
-          <el-button size="small" @click="deleteData">{{ $t('导出发货单') }}</el-button>
-          <el-button size="small" @click="removeBatch">{{ $t('批量移除发货单') }}</el-button>
+  <div>
+    <el-dialog
+      :visible.sync="show"
+      :title="$t('发货单详情')"
+      width="80%"
+      class="ship-details-container"
+      @close="clear"
+    >
+      <el-dialog width="40%" :title="$t('发货单详情')" :visible.sync="showInner" append-to-body>
+        <div class="excel-date">
+          <el-radio :label="1" v-model="uploadRadio">{{ $t('导出清单含包裹信息') }}</el-radio>
+          <el-radio :label="2" v-model="uploadRadio">{{ $t('导出清单') }}</el-radio>
+          <el-radio :label="3" v-model="uploadRadio">{{ $t('发货单详情') }}</el-radio>
         </div>
-      </template>
-    </el-table>
-    <!-- <div class="pagination-box">
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="showInner = false" class="cancel-btn">{{ $t('取消') }}</el-button>
+          <el-button type="primary" @click="getDispatchList" :loading="$store.state.btnLoading">{{
+            $t('确定')
+          }}</el-button>
+        </div>
+      </el-dialog>
+      <div class="import-list">
+        <el-button class="btn-deep-purple" @click="exportList">{{ $t('导出清单') }}</el-button>
+      </div>
+      <el-table :data="shipData" border @selection-change="selectionChange">
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column :label="$t('客户ID')" prop="user_id" width="100"></el-table-column>
+        <el-table-column :label="$t('客户昵称')" prop="user_name" width="155"></el-table-column>
+        <el-table-column :label="$t('付款状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.on_delivery_status === 0">{{ $t('已付款') }}</span>
+            <span v-if="scope.row.on_delivery_status === 1">{{ $t('货到付款') }}</span>
+            <span v-if="scope.row.on_delivery_status === 2">{{ $t('货到付款（已付款）') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('订单号')" width="155">
+          <template slot-scope="scope">
+            <span @click="goOrder(scope.row.order_sn, scope.row.status)" class="chooseOrder">{{
+              scope.row.order_sn
+            }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('收货方式')" width="155">
+          <template slot-scope="scope">
+            <span v-if="scope.row.station_name">{{
+              $t('自提收货') + '(' + scope.row.station_name + ')'
+            }}</span>
+            <span v-else>{{ $t('送货上门') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('转运快递单号-二程')"
+          prop="logistics_sn"
+          width="155"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('线路名称')"
+          prop="express_line.cn_name"
+          width="155"
+        ></el-table-column>
+        <el-table-column :label="$t('收货人')" prop="address.receiver_name"></el-table-column>
+        <el-table-column :label="$t('收货国家地区')" prop="address.country_name"></el-table-column>
+        <el-table-column :label="$t('包裹数与件数')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('出库箱数')" prop="boxes_count"></el-table-column>
+        <el-table-column
+          :label="$t('实际重量') + localization.weight_unit"
+          prop="actual_weight"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('实际费用') + localization.currency_unit"
+          prop="actual_payment_fee"
+        ></el-table-column>
+        <el-table-column
+          :label="$t('申报价值') + localization.currency_unit"
+          prop="declare_value"
+        ></el-table-column>
+        <el-table-column :label="$t('操作')" width="130" v-if="status === 0">
+          <template slot-scope="scope">
+            <el-button @click="removeShip(scope.row.id)" class="btn-light-red">{{
+              $t('移除发货单')
+            }}</el-button>
+          </template>
+        </el-table-column>
+        <template slot="append">
+          <div class="append-box">
+            <el-button size="small" @click="deleteData">{{ $t('导出发货单') }}</el-button>
+            <el-button size="small" @click="removeBatch">{{ $t('批量移除发货单') }}</el-button>
+          </div>
+        </template>
+      </el-table>
+      <!-- <div class="pagination-box">
     <nle-pagination :pageParams="page_params"></nle-pagination>
      </div> -->
-    <!-- <waybill-list-tmp-drawer
+    </el-dialog>
+    <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
-      :searchFieldData="searchFieldData"
-      :activeName="activeName"
       @receiveTmp="receiveTmp"
       class="tmp"
-    ></waybill-list-tmp-drawer> -->
-  </el-dialog>
+    ></waybill-list-tmp-drawer>
+  </div>
 </template>
 <script>
 // import NlePagination from '@/components/pagination'
-// import WaybillListTmpDrawer from '@/components/waybillListTmpDrawer'
+import WaybillListTmpDrawer from '@/views/order/waybill/components/waybillListTmpDrawer'
 import { pagination } from '@/mixin'
 export default {
   components: {
     // NlePagination
-    // WaybillListTmpDrawer
+    WaybillListTmpDrawer
   },
   mixins: [pagination],
   data() {
@@ -123,7 +123,8 @@ export default {
       urlExcel: '',
       show: false,
       showInner: false,
-      uploadRadio: 1
+      uploadRadio: 1,
+      showTmpDrawer: false
     }
   },
   mounted() {
@@ -308,7 +309,11 @@ export default {
     },
     exportList() {
       this.show = false
-      this.showInner = true
+      // this.showInner = true
+      this.showTmpDrawer = true
+    },
+    receiveTmp() {
+      this.showTmpDrawer = false
     },
     init() {
       console.log(this.id, '我是接收的id')

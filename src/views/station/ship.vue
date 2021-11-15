@@ -72,7 +72,7 @@
         <el-button class="btn-deep-purple" size="small" @click="batchNum">{{
           $t('批量更新单号二程')
         }}</el-button>
-        <el-button size="small" type="success" plain @click="deleteData">{{
+        <el-button size="small" type="success" plain @click="uploadListExcel">{{
           $t('导出清单')
         }}</el-button>
       </div>
@@ -336,6 +336,11 @@
         <el-button type="primary" @click="confirmBatch">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <waybill-list-tmp-drawer
+      :showTmpDrawer="showTmpDrawer"
+      @receiveTmp="receiveTmp"
+      class="tmp"
+    ></waybill-list-tmp-drawer>
   </div>
 </template>
 <script>
@@ -344,11 +349,13 @@ import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
+import WaybillListTmpDrawer from '@/views/order/waybill/components/waybillListTmpDrawer'
 export default {
   components: {
     SearchGroup,
     NlePagination,
-    AddBtn
+    AddBtn,
+    WaybillListTmpDrawer
   },
   mixins: [pagination],
   name: 'shipContainer',
@@ -394,7 +401,8 @@ export default {
       fileList: [],
       hasFilterCondition: false,
       radio: '',
-      type: 1
+      type: 1,
+      showTmpDrawer: false
     }
   },
   created() {},
@@ -479,6 +487,9 @@ export default {
             })
           }
         })
+    },
+    uploadListExcel() {
+      this.showTmpDrawer = true
     },
     uploadBaleImg(item) {
       let file = item.file
@@ -630,6 +641,9 @@ export default {
     clearSn() {
       this.tableSn = ''
       this.tableId = ''
+    },
+    receiveTmp() {
+      this.showTmpDrawer = false
     },
     // 更新物流状态
     updateTracking() {
