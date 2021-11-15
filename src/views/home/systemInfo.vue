@@ -119,8 +119,8 @@ export default {
         }
       })
     },
-    changeVal() {
-      // console.log(val)
+    changeVal(val) {
+      console.log(val, 'val')
       this.page_params.handleQueryChange('message', this.message)
       this.getList()
     }

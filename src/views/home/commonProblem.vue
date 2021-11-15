@@ -40,7 +40,7 @@
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
           <el-button
-            @click="edit(scope.row.id)"
+            @click="$router.push({ name: 'problemDetails', params: { id: scope.row.id } })"
             size="mini"
             style="background: #3540a5; color: #fff"
             >{{ $t('查看') }}</el-button
@@ -52,9 +52,9 @@
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
       <div v-html="content" ref="html" class="content">{{ content }}</div>
     </el-dialog>
-    <el-dialog :visible.sync="imgDialog">
-      <div style="text-align: center">
-        <img :src="imgUrl" style="max-width: 100%" />
+    <el-dialog :visible.sync="imgDialog" size="small">
+      <div class="img_box">
+        <img :src="imgUrl" class="imgDialog" />
       </div>
     </el-dialog>
   </div>
@@ -87,7 +87,8 @@ export default {
       localization: {},
       problemData: [],
       imgDialog: false,
-      imgUrl: ''
+      imgUrl: '',
+      imgSrc: ''
     }
   },
   created() {
@@ -156,11 +157,14 @@ export default {
       const template = this.$refs.html
       this.$nextTick(() => {
         const img = template.querySelector('.content p img')
-        const imgSrc = template.querySelector('.content p img').src
-        console.log(imgSrc)
-        img.onclick = () => {
-          this.imgDialog = true
-          this.imgUrl = imgSrc
+        if (img) {
+          this.imgSrc = template.querySelector('.content p img').src
+          console.log(this.imgSrc)
+          img.onclick = () => {
+            // this.imgDialog = true
+            // this.imgUrl = imgSrc
+            window.open(this.imgSrc)
+          }
         }
       })
     }
@@ -176,6 +180,12 @@ export default {
   }
   /deep/.el_table .top-side {
     margin-top: 10px;
+  }
+  .img_box {
+    text-align: center;
+    .imgDialog {
+      width: 100%;
+    }
   }
   .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
