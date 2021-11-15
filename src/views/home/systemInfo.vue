@@ -141,6 +141,12 @@ export default {
   .postcard-icon {
     cursor: pointer;
   }
+  .el-icon-postcard:before {
+    font-size: 20px;
+    top: 2px;
+    right: 5px;
+    position: relative;
+  }
   .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
     background-color: #fff;
