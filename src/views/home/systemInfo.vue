@@ -39,7 +39,7 @@
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
-      <div v-html="content"></div>
+      <div v-html="content">{{ content }}</div>
     </el-dialog>
   </div>
 </template>

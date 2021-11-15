@@ -50,7 +50,14 @@
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
-      <div v-html="content"></div>
+      <div>
+        <div v-html="content">{{ content }}</div>
+      </div>
+    </el-dialog>
+    <el-dialog :visible.sync="imgDialog">
+      <div style="text-align: center">
+        <img :src="imgUrl" style="max-width: 100%" />
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -80,7 +87,9 @@ export default {
       },
       categoryData: [],
       localization: {},
-      problemData: []
+      problemData: [],
+      imgDialog: false,
+      imgUrl: ''
     }
   },
   created() {
@@ -125,6 +134,10 @@ export default {
         // })
       })
     },
+    // checkImg($event) {
+    //   this.imgDialog = true
+    //   this.imgUrl = this.$baseUrl.IMAGE_URL + url
+    // },
     goSearch() {
       this.getList()
     },
