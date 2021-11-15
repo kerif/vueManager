@@ -223,10 +223,7 @@ export default {
           { id: 'line_extra_remark', name: '线路额外信息' },
           { id: 'order_sn', name: '订单号' },
           { id: 'agent_name', name: '所属代理' },
-          { id: 'clearance_code', name: '清关编码' },
-          { id: 'length', name: '长' },
-          { id: 'width', name: '宽' },
-          { id: 'height', name: '高' }
+          { id: 'clearance_code', name: '清关编码' }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: '收货人' },
@@ -279,7 +276,10 @@ export default {
           { id: 'box_payment_weight_sum', name: '出库计费重量' },
           { id: 'box_actual_weight_sum', name: '出库实际重量' },
           { id: 'box_volume_weight_sum', name: '出库体积重量' },
-          { id: 'box_volume_sum', name: '出库体积' }
+          { id: 'box_volume_sum', name: '出库体积' },
+          { id: 'length', name: `长(${this.localization.length_unit})` },
+          { id: 'width', name: `宽(${this.localization.length_unit})` },
+          { id: 'height', name: `高(${this.localization.length_unit})` }
         ]
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },

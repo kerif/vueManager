@@ -5,7 +5,6 @@
       :placeholder="$t('请选择分类')"
       @change="changeVal"
       :clearable="true"
-      :disabled="disabled"
     >
       <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id">
         {{ item.name }}
@@ -94,7 +93,8 @@ export default {
       let param = {
         keyword: this.keyword,
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.page_params.size,
+        category: this.category
       }
       this.$request
         .problemList(param)
@@ -136,7 +136,7 @@ export default {
       })
     },
     changeVal() {
-      this.page_params.handleQueryChange('category', this.page_params.category)
+      this.page_params.handleQueryChange('category', this.category)
       this.getList()
     }
   }

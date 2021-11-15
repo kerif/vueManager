@@ -95,14 +95,23 @@
     <!-- <div class="pagination-box">
     <nle-pagination :pageParams="page_params"></nle-pagination>
      </div> -->
+    <!-- <waybill-list-tmp-drawer
+      :showTmpDrawer="showTmpDrawer"
+      :searchFieldData="searchFieldData"
+      :activeName="activeName"
+      @receiveTmp="receiveTmp"
+      class="tmp"
+    ></waybill-list-tmp-drawer> -->
   </el-dialog>
 </template>
 <script>
 // import NlePagination from '@/components/pagination'
+// import WaybillListTmpDrawer from '@/components/waybillListTmpDrawer'
 import { pagination } from '@/mixin'
 export default {
   components: {
     // NlePagination
+    // WaybillListTmpDrawer
   },
   mixins: [pagination],
   data() {

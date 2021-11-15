@@ -1,13 +1,7 @@
 <template>
   <div class="systemInfo-container">
-    <el-select
-      v-model="message"
-      :placeholder="$t('全部')"
-      @change="changeVal"
-      :clearable="true"
-      :disabled="disabled"
-    >
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+    <el-select v-model="message" :placeholder="$t('全部')" @change="changeVal" :clearable="true">
+      <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
       </el-option>
     </el-select>
     <div class="header-search">
@@ -72,12 +66,12 @@ export default {
       localization: {},
       options: [
         {
-          value: '0',
-          label: '未读'
+          id: 0,
+          name: '未读'
         },
         {
-          value: '1',
-          label: '已读'
+          id: 1,
+          name: '已读'
         }
       ]
     }
@@ -91,7 +85,8 @@ export default {
       let params = {
         keyword: this.keywords,
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.page_params.size,
+        message: this.message
       }
       this.$request
         .messageList(params)
@@ -117,12 +112,16 @@ export default {
     edit(id) {
       this.dialogVisible = true
       this.$request.messageDetail(id).then(res => {
-        this.title = res.data.title
-        this.content = res.data.content
+        if (res.ret) {
+          this.title = res.data.title
+          this.content = res.data.content
+          this.getList()
+        }
       })
     },
-    changeVal(val) {
-      console.log(val)
+    changeVal() {
+      // console.log(val)
+      this.page_params.handleQueryChange('message', this.message)
       this.getList()
     }
   }
