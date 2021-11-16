@@ -338,6 +338,8 @@
     </el-dialog>
     <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
+      :deleteNum="deleteNum"
+      :uploadType="uploadType"
       @receiveTmp="receiveTmp"
       class="tmp"
     ></waybill-list-tmp-drawer>
@@ -402,7 +404,8 @@ export default {
       hasFilterCondition: false,
       radio: '',
       type: 1,
-      showTmpDrawer: false
+      showTmpDrawer: false,
+      uploadType: 3
     }
   },
   created() {},

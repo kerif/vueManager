@@ -9,7 +9,7 @@
       <el-button @click="addTmp('add')" size="small" class="btn-purple">{{
         $t('新增模板')
       }}</el-button>
-      <el-button size="small" type="primary" @click="updatePackages">{{
+      <el-button size="small" type="primary" @click="updatePackages(uploadType)">{{
         $t('确定导出')
       }}</el-button>
     </div>
@@ -77,6 +77,15 @@ export default {
     },
     activeName: {
       type: String
+    },
+    uploadType: {
+      type: Number
+    },
+    uploadId: {
+      type: Number
+    },
+    deleteNum: {
+      type: Array
     }
   },
   created() {
@@ -147,36 +156,79 @@ export default {
         this.name = res.data[0].name
       })
     },
-    updatePackages() {
+    updatePackages(uploadType) {
       console.log(this.activeId)
-      const searchData = this.searchFieldData
-      let param = {
-        ...searchData,
-        status: this.activeName,
-        template_id: this.activeId,
-        begin_date: searchData.date ? searchData.date[0] : '',
-        end_date: searchData.date ? searchData.date[1] : '',
-        order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
-        country_id:
-          searchData.countryArr.length > 1
-            ? searchData.countryArr[0]
-            : searchData.countryArr[searchData.countryArr.length - 1]
-      }
-      this.$request.ordersExport(param).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
+      if (uploadType === 2) {
+        const searchData = this.searchFieldData
+        let param = {
+          ...searchData,
+          status: this.activeName,
+          template_id: this.activeId,
+          begin_date: searchData.date ? searchData.date[0] : '',
+          end_date: searchData.date ? searchData.date[1] : '',
+          order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
+          country_id:
+            searchData.countryArr.length > 1
+              ? searchData.countryArr[0]
+              : searchData.countryArr[searchData.countryArr.length - 1]
         }
-      })
+        this.$request.ordersExport(param).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (uploadType === 1) {
+        let id = this.uploadId
+        this.$request.uploadShipExcel(id, { template_id: this.activeId }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        console.log(this.deleteNum, 'this.deleteNum')
+        if (!this.deleteNum || !this.deleteNum.length) {
+          return this.$message.error(this.$t('请选择发货单号'))
+        }
+        this.$request
+          .uploadExcel({
+            shipment_ids: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              // this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      }
     }
   }
 }

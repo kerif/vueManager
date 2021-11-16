@@ -99,6 +99,8 @@
     </el-dialog>
     <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
+      :uploadId="id"
+      :uploadType="uploadType"
       @receiveTmp="receiveTmp"
       class="tmp"
     ></waybill-list-tmp-drawer>
@@ -124,7 +126,8 @@ export default {
       show: false,
       showInner: false,
       uploadRadio: 1,
-      showTmpDrawer: false
+      showTmpDrawer: false,
+      uploadType: 1
     }
   },
   mounted() {

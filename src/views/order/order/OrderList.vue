@@ -126,7 +126,7 @@
           <template slot-scope="scope">
             <el-button
               v-if="activeName === '2'"
-              :class="scope.row.is_claimed === 0 ? 'colorsty' : ''"
+              :class="scope.row.is_claimed === 1 ? 'colorsty' : ''"
               @click="oderDetails(scope.row.id)"
               type="text"
               >{{ scope.row.express_num }}

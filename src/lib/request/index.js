@@ -3468,8 +3468,8 @@ exports.uploadAloneExcel = id => {
   return $form.get(`shipments/${id}/order-export`)
 }
 // 发货单 发货单详情 导出清单
-exports.uploadShipExcel = id => {
-  return $form.get(`shipments/${id}/order-export`)
+exports.uploadShipExcel = (id, params) => {
+  return $form.get(`shipments/${id}/order-export`, params)
 }
 // 运单 获取审核
 exports.getTransfer = id => {
