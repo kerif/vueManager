@@ -211,7 +211,8 @@ export default {
         }
         this.$request
           .uploadExcel({
-            shipment_ids: this.deleteNum
+            shipment_ids: this.deleteNum,
+            template_id: this.activeId
           })
           .then(res => {
             if (res.ret) {

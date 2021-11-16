@@ -3412,8 +3412,8 @@ exports.shipmentCompanies = () => {
   return $form.get(`shipments/company-expresses`)
 }
 // 发货单 导出清单
-exports.uploadExcel = ids => {
-  return $form.post(`shipments/order-export-batch`, ids)
+exports.uploadExcel = (ids, params) => {
+  return $form.post(`shipments/order-export-batch`, ids, params)
 }
 // 订单列表 导出发票
 exports.uploadOrder = ids => {
