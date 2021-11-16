@@ -234,7 +234,8 @@ export default {
           { id: 'info_address', name: '详细地址' },
           { id: 'station_name', name: '自提点' },
           { id: 'user_address', name: '客户地址' },
-          { id: 'station_address', name: '自提点地址' }
+          { id: 'station_address', name: '自提点地址' },
+          { id: 'address', name: '附加地址' }
         ]
         // 入库信息
         this.warehouseInfo = [
@@ -299,7 +300,8 @@ export default {
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
-          { id: 'order_logistics_sn', name: '物流单号 (订单)' }
+          { id: 'order_logistics_sn', name: '物流单号 (订单)' },
+          { id: 'shipment_sn', name: '所属发货单' }
         ]
         this.operationInfo = [
           { id: 'created_at', name: '提交时间' },
@@ -419,7 +421,8 @@ export default {
           { id: 'info_address', name: '详细地址' },
           { id: 'station_name', name: '自提点' },
           { id: 'user_address', name: '客户地址' },
-          { id: 'station_address', name: '自提点地址' }
+          { id: 'station_address', name: '自提点地址' },
+          { id: 'address', name: '附加地址' }
         ]
         // 入库信息
         this.warehouseInfo = [
@@ -481,7 +484,8 @@ export default {
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
-          { id: 'order_logistics_sn', name: '物流单号 (订单)' }
+          { id: 'order_logistics_sn', name: '物流单号 (订单)' },
+          { id: 'shipment_sn', name: '所属发货单' }
         ]
         this.operationInfo = [
           { id: 'created_at', name: '提交时间' },
