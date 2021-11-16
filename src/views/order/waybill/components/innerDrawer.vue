@@ -288,15 +288,18 @@ export default {
         ]
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
+          { id: 'actual_payment_fee', name: '实际费用' },
+          { id: 'pay_out_serial_no', name: '支付单号' },
+          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
+          { id: 'point_amount', name: '积分抵扣金额' },
+          { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` }
+        ]
+        this.feeInfo = [
           { id: 'value_added_amount', name: '增值服务费用' },
           { id: 'insurance_fee', name: '保险费用' },
           { id: 'tariff_fee', name: '关税费用' },
           { id: 'line_service_fee', name: '渠道增值服务费用' },
-          { id: 'line_rule_fee', name: '渠道规则费用' },
-          { id: 'actual_payment_fee', name: '实际费用' },
-          { id: 'pay_out_serial_no', name: '支付单号' },
-          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
-          { id: 'point_amount', name: '积分抵扣金额' }
+          { id: 'line_rule_fee', name: '渠道规则费用' }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
@@ -472,15 +475,18 @@ export default {
         ]
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
+          { id: 'actual_payment_fee', name: '实际费用' },
+          { id: 'pay_out_serial_no', name: '支付单号' },
+          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
+          { id: 'point_amount', name: '积分抵扣金额' },
+          { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` }
+        ]
+        this.feeInfo = [
           { id: 'value_added_amount', name: '增值服务费用' },
           { id: 'insurance_fee', name: '保险费用' },
           { id: 'tariff_fee', name: '关税费用' },
           { id: 'line_service_fee', name: '渠道增值服务费用' },
-          { id: 'line_rule_fee', name: '渠道规则费用' },
-          { id: 'actual_payment_fee', name: '实际费用' },
-          { id: 'pay_out_serial_no', name: '支付单号' },
-          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
-          { id: 'point_amount', name: '积分抵扣金额' }
+          { id: 'line_rule_fee', name: '渠道规则费用' }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
