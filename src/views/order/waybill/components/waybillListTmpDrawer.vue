@@ -143,7 +143,7 @@ export default {
     },
     getTmpList() {
       // let code = this.code
-      this.$request.listQuery({ code: this.code }).then(res => {
+      this.$request.listQuery({ code: this.code, size: 100 }).then(res => {
         this.tmpList = res.data
         console.log(this.tmpList, 'this.tmplist')
         this.tmpCode = res.data[0].code
