@@ -151,7 +151,7 @@ export default {
     position: relative;
   }
   .el-icon-message:before {
-    color: #0e102a !important;
+    color: red !important;
   }
   .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;
