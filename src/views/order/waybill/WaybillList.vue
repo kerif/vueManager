@@ -257,6 +257,8 @@
             <span>({{ scope.row.agent_commission }}%)</span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
+        <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
         <el-table-column
           :label="$t('支付方式')"
           key="payment_type_name"

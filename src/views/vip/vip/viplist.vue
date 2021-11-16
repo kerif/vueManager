@@ -1,5 +1,63 @@
 <template>
   <div class="vip-list-container">
+    <div class="advanced-search" v-if="hasFilterCondition">
+      <div class="search-item">
+        <div>{{ $t('VIP等级') }}</div>
+        <el-select v-model="searchParams.level_id" :placeholder="$t('请选择VIP等级')">
+          <el-option v-for="item in gradeList" :key="item.id" :value="item.id" :label="item.name">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('客户组') }}</div>
+        <el-select v-model="searchParams.user_group_id" :placeholder="$t('请选择客户组')">
+          <el-option
+            v-for="item in groupList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name_cn"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('所属客服') }}</div>
+        <el-select v-model="searchParams.customer_id" :placeholder="$t('请选择所属客服')">
+          <el-option
+            v-for="item in customerList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('所属销售') }}</div>
+        <el-select v-model="searchParams.sale_id" :placeholder="$t('请选择所属销售')">
+          <el-option v-for="item in saleList" :key="item.id" :value="item.id" :label="item.name">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('邀请人') }}</div>
+        <el-select
+          v-model="searchParams.invite_id"
+          filterable
+          remote
+          :placeholder="$t('请输入邀请人')"
+          :remote-method="inviteMethod"
+          :loading="inviteLoading"
+        >
+          <el-option v-for="item in inviteList" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
+        <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
+        <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
+      </div>
+    </div>
     <div class="bottom-sty">
       <div>
         <el-button class="btn-orangey-red" size="small" @click="forbidLogin(0)">{{
@@ -24,7 +82,9 @@
         </div>
       </div>
       <div class="addUser">
-        <add-btn size="small" plain @click.native="addUser">{{ $t('添加客户') }}</add-btn>
+        <add-btn style="margin-right: 10px" size="small" plain @click.native="addUser">{{
+          $t('添加客户')
+        }}</add-btn>
         <search-select
           :selectArr="clientGroupList"
           v-model="page_params.group"
@@ -34,10 +94,11 @@
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
+        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+          >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+        ></el-button>
       </div>
     </div>
-    <!-- <div class="select-box">
-    </div> -->
     <el-table
       class="data-list"
       border
@@ -78,6 +139,7 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('客户昵称')" prop="name" width="150"></el-table-column>
+      <el-table-column :label="$t('订单数')" prop="order_count"></el-table-column>
       <el-table-column
         :label="$t('VIP等级')"
         prop="member_level_name"
@@ -225,7 +287,22 @@ export default {
       options: [],
       saleId: '',
       dialogStaff: false,
-      staffStatus: ''
+      staffStatus: '',
+      searchParams: {
+        level_id: '',
+        user_group_id: '',
+        invite_id: '',
+        customer_id: '',
+        sale_id: ''
+      },
+      gradeList: [],
+      groupList: [],
+      staffList: [],
+      inviteList: [],
+      customerList: [],
+      saleList: [],
+      inviteLoading: false,
+      hasFilterCondition: false
     }
   },
   mixins: [pagination],
@@ -237,6 +314,9 @@ export default {
   },
   mounted() {
     this.getList()
+    this.getGradeList()
+    this.getUserGroup()
+    this.getStaff()
   },
   activated() {
     this.getList()
@@ -246,14 +326,14 @@ export default {
   },
   methods: {
     getList() {
-      console.log('page', JSON.stringify(this.page_params))
       this.tableLoading = true
       this.$request
         .getUsers({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          user_group_id: this.page_params.group
+          user_group_id: this.page_params.group,
+          ...this.searchParams
         })
         .then(res => {
           this.tableLoading = false
@@ -276,6 +356,53 @@ export default {
             })
           }
         })
+    },
+    reset() {
+      this.searchParams.level_id = ''
+      this.searchParams.user_group_id = ''
+      this.searchParams.invite_id = ''
+      this.searchParams.customer_id = ''
+      this.searchParams.sale_id = ''
+      this.getList()
+    },
+    // 搜索等级列表
+    getGradeList() {
+      this.$request.getGradeList().then(res => {
+        if (res.ret) {
+          this.gradeList = res.data.map(item => {
+            return {
+              id: item.id,
+              name: item.name
+            }
+          })
+        }
+      })
+    },
+    // 搜索客户组列表
+    getUserGroup() {
+      this.$request.getUserGroup().then(res => {
+        if (res.ret) {
+          this.groupList = res.data
+        }
+      })
+    },
+    inviteMethod(keyword) {
+      this.inviteLoading = true
+      this.$request.getUsers({ keyword }).then(res => {
+        if (res.ret) {
+          this.inviteLoading = false
+          this.inviteList = res.data.map(item => {
+            return {
+              id: item.id,
+              name: item.name
+            }
+          })
+          this.inviteList.push({
+            id: -1,
+            name: this.$t('无邀请人')
+          })
+        }
+      })
     },
     // 操作日志
     getLogs(id) {
@@ -371,31 +498,6 @@ export default {
       this.staffStatus = status
       this.dialogStaff = true
       this.getStaff()
-      // this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
-      //   confirmButtonText: this.$t('确定'),
-      //   cancelButtonText: this.$t('取消'),
-      //   type: 'warning'
-      // }).then(() => {
-      //   this.$request
-      //     .deleteUser({
-      //       DELETE: this.deleteNum
-      //     })
-      //     .then(res => {
-      //       if (res.ret) {
-      //         this.$notify({
-      //           title: this.$t('操作成功'),
-      //           message: res.msg,
-      //           type: 'success'
-      //         })
-      //         this.getList()
-      //       } else {
-      //         this.$message({
-      //           message: res.msg,
-      //           type: 'error'
-      //         })
-      //       }
-      //     })
-      // })
     },
     // 获取客户组
     getCategory() {
@@ -503,9 +605,7 @@ export default {
       })
     },
     selectionChange(selection) {
-      console.log(selection, 'selection')
       this.deleteNum = selection.map(item => item.id)
-      console.log(this.deleteNum, 'this.deleteNum')
     },
     // 禁止/允许登录
     forbidLogin(type) {
@@ -567,6 +667,16 @@ export default {
       this.$request.getStaff({ size: 1000 }).then(res => {
         if (res.ret) {
           this.options = res.data
+          this.customerList = [...res.data]
+          this.customerList.push({
+            id: -1,
+            name: this.$t('未选客服')
+          })
+          this.saleList = [...res.data]
+          this.saleList.push({
+            id: -1,
+            name: this.$t('未选销售')
+          })
         }
       })
     }
@@ -582,6 +692,21 @@ export default {
 
 <style lang="scss">
 .vip-list-container {
+  .advanced-search {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #fff;
+    .search-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+  }
   .balance {
     color: red;
   }

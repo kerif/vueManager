@@ -62,9 +62,11 @@
             <el-button class="btn-green" @click="editChannel(scope.row.id)">{{
               $t('渠道')
             }}</el-button>
-            <el-button class="btn-blue" @click="editLine(scope.row.id, scope.row.name, 'edit')">{{
-              $t('编辑')
-            }}</el-button>
+            <el-button
+              class="btn-blue"
+              @click="editLine(scope.row.id, scope.row.name, scope.row.only_for_group, 'edit')"
+              >{{ $t('编辑') }}</el-button
+            >
             <el-button class="btn-deep-purple" @click="copyLine(scope.row.id, 'copy')">{{
               $t('复制')
             }}</el-button>
@@ -73,11 +75,6 @@
             }}</el-button>
           </template>
         </el-table-column>
-        <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
-        </div>
-      </template> -->
       </el-table>
     </div>
     <nle-pagination
@@ -87,6 +84,7 @@
     ></nle-pagination>
     <!-- 复制线路 -->
     <el-dialog
+      class="dialog-line-lang"
       :title="lineStatus === 'edit' ? $t('编辑路线') : $t('复制路线')"
       :visible.sync="copyDialog"
       width="45%"
@@ -95,6 +93,10 @@
       <el-form ref="form" :model="copyData" label-width="100px">
         <el-form-item :label="lineStatus === 'edit' ? $t('线路名称') : $t('新线路名称')">
           <el-input v-model="copyData.name"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('路线类型')">
+          <el-radio v-model="copyData.only_for_group" :label="0">{{ $t('普通路线') }}</el-radio>
+          <el-radio v-model="copyData.only_for_group" :label="1">{{ $t('仅拼团路线') }}</el-radio>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -127,7 +129,8 @@ export default {
       transCode: '',
       copyId: '',
       copyData: {
-        name: ''
+        name: '',
+        only_for_group: 0
       },
       copyDialog: false,
       lineStatus: ''
@@ -225,10 +228,11 @@ export default {
       this.lineStatus = status
     },
     // 编辑
-    editLine(id, name, status) {
+    editLine(id, name, type, status) {
       this.copyId = id
       this.copyDialog = true
       this.copyData.name = name
+      this.copyData.only_for_group = type
       this.lineStatus = status
     },
     clear() {

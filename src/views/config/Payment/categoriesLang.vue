@@ -26,26 +26,17 @@
       <el-form-item :label="$t('内容')">
         <el-row>
           <el-col :span="20">
-            <div id="editor" :value="params.risk_warning_content" @input="changeText"></div>
+            <editor :content="params.content" @submit="saveNotice" />
           </el-col>
         </el-row>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          class="save-btn"
-          @click="saveNotice()"
-          :loading="$store.state.btnLoading"
-          >{{ $t('保存') }}</el-button
-        >
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
-import Wangeditor from 'wangeditor'
-import baseApi from '@/lib/axios/baseApi'
+import editor from '@/components/editor.vue'
 export default {
+  components: { editor },
   data() {
     return {
       params: {
@@ -66,58 +57,11 @@ export default {
       transCode: ''
     }
   },
-  mounted() {
-    this.editor = new Wangeditor('#editor')
-    this.editor.customConfig.menus = [
-      'head',
-      'fontSize',
-      'fontName',
-      'bold',
-      'italic',
-      'underline',
-      'strikeThrough',
-      'foreColor',
-      'backColor',
-      'link',
-      'list',
-      'justify',
-      'quote',
-      'video',
-      'image',
-      'table'
-    ]
-    this.editor.customConfig.onchange = html => {
-      this.params.risk_warning_content = html
-    }
-    this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
-    this.editor.customConfig.uploadImgParams = {}
-    this.editor.customConfig.uploadImgHeaders = {
-      Authorization: this.$store.state.token
-    }
-    this.editor.customConfig.uploadFileName = `images[${0}][file]`
-    this.editor.customConfig.uploadImgHooks = {
-      customInsert: (insertImg, result) => {
-        console.log(result)
-        if (result.ret === 1) {
-          this.$message.success(this.$t('上传成功'))
-          let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
-          insertImg(url)
-        }
-      }
-    }
-    this.editor.customConfig.showLinkImg = true
-    this.editor.create()
-    console.log(this.editor, 'this.editor')
-  },
   created() {
-    // console.log(JSON.parse(this.$route.params.line), 'line')
-    // console.log(JSON.parse(this.$route.params.lang), 'lang')
-    // console.log(this.$route.params.transCode, 'transCode')
     this.line = JSON.parse(this.$route.params.line)
     this.lang = JSON.parse(this.$route.params.lang)
     this.transCode = this.$route.params.transCode
     this.params.language = this.lang.language_code
-    console.log(typeof this.transCode, ' this.$route.params.transCode')
     if (this.transCode === 1) {
       this.getList()
     }
@@ -133,15 +77,11 @@ export default {
             this.params.name = res.data.name
             this.params.risk_warning_title = res.data.risk_warning_title
             this.params.risk_warning_content = res.data.risk_warning_content
-            this.editor.txt.html(this.params.risk_warning_content)
           }
         })
     },
-    // 判断是新增 还是 编辑
-    changeText() {
-      this.$emit('input', this.editor.txt.html())
-    },
-    saveNotice() {
+    saveNotice(data) {
+      this.params.content = data
       if (this.params.name === '') {
         return this.$message.error(this.$t('请输入一级分类名称'))
       } else if (this.params.risk_warning_title === '') {
@@ -156,7 +96,6 @@ export default {
             message: res.tips,
             type: 'success'
           })
-          // this.$router.push({ name: 'noticelist' })
           this.$router.go(-1)
         } else {
           this.$notify({

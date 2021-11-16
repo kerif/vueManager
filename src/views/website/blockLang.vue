@@ -21,14 +21,6 @@
           >
         </el-row>
       </el-form-item>
-      <!-- 单页详情 -->
-      <el-form-item :label="status === 'origin' ? $t('单页详情') : $t('内容')">
-        <el-row>
-          <el-col :span="20">
-            <div id="editor" :value="params.content" @input="changeText"></div>
-          </el-col>
-        </el-row>
-      </el-form-item>
       <!-- 标签 -->
       <el-form-item label="标签" v-if="this.status === 'origin'">
         <el-row>
@@ -37,22 +29,21 @@
           ></el-col>
         </el-row>
       </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          class="save-btn"
-          @click="saveNotice()"
-          :loading="$store.state.btnLoading"
-          >{{ $t('保存') }}</el-button
-        >
+      <!-- 单页详情 -->
+      <el-form-item :label="status === 'origin' ? $t('单页详情') : $t('内容')">
+        <el-row>
+          <el-col :span="20">
+            <editor :content="params.content" @submit="saveNotice" />
+          </el-col>
+        </el-row>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
-import Wangeditor from 'wangeditor'
-import baseApi from '@/lib/axios/baseApi'
+import editor from '@/components/editor.vue'
 export default {
+  components: { editor },
   data() {
     return {
       params: {
@@ -74,65 +65,15 @@ export default {
       status: ''
     }
   },
-  mounted() {
-    this.editor = new Wangeditor('#editor')
-    this.editor.customConfig.menus = [
-      'head',
-      'fontSize',
-      'fontName',
-      'bold',
-      'italic',
-      'underline',
-      'strikeThrough',
-      'foreColor',
-      'backColor',
-      'link',
-      'list',
-      'justify',
-      'quote',
-      'video',
-      'image',
-      'table'
-    ]
-    this.editor.customConfig.onchange = html => {
-      this.params.content = html
-    }
-    this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
-    this.editor.customConfig.uploadImgParams = {}
-    this.editor.customConfig.uploadImgHeaders = {
-      Authorization: this.$store.state.token
-    }
-    this.editor.customConfig.uploadFileName = `images[${0}][file]`
-    this.editor.customConfig.uploadImgHooks = {
-      customInsert: (insertImg, result) => {
-        console.log(result)
-        if (result.ret === 1) {
-          this.$message.success('上传成功')
-          let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
-          insertImg(url)
-        }
-      }
-    }
-    this.editor.customConfig.zIndex = 500
-    this.editor.customConfig.showLinkImg = true
-    this.editor.create()
-    console.log(this.editor, 'this.editor')
-  },
   created() {
-    // console.log(JSON.parse(this.$route.params.line), 'line')
-    // console.log(JSON.parse(this.$route.params.lang), 'lang')
-    // console.log(this.$route.params.transCode, 'transCode')
     this.line = JSON.parse(this.$route.params.line)
     this.lang = JSON.parse(this.$route.params.lang)
     this.transCode = this.$route.params.transCode
     this.params.language = this.lang.language_code
-    console.log(typeof this.transCode, ' this.$route.params.transCode')
     if (this.transCode === 1) {
       this.getList()
     }
-    console.log(this.line, 'line')
     this.status = this.$route.query.status
-    console.log(this.status, 'this.status')
   },
   methods: {
     getList() {
@@ -145,15 +86,11 @@ export default {
             this.params.title = res.data.title
             this.params.content = res.data.content
             this.params.tags = res.data.tags
-            this.editor.txt.html(this.params.content)
           }
         })
     },
-    // 判断是新增 还是 编辑
-    changeText() {
-      this.$emit('input', this.editor.txt.html())
-    },
-    saveNotice() {
+    saveNotice(data) {
+      this.params.content = data
       if (this.params.title === '' && this.status === 'origin') {
         return this.$message.error(this.$t('请输入标题'))
       } else if (this.params.content === '') {
