@@ -230,6 +230,7 @@ export default {
           { id: 'phone', name: '手机/联系电话' },
           { id: 'country', name: '收货国家' },
           { id: 'city', name: '城市' },
+          { id: 'postcode', name: '邮编' },
           { id: 'street_door_no', name: '街道/门牌号' },
           { id: 'info_address', name: '详细地址' },
           { id: 'station_name', name: '自提点' },
@@ -243,6 +244,7 @@ export default {
           { id: 'package_name', name: '包裹物品名称' },
           { id: 'package_props_name', name: '包裹物品属性' },
           { id: 'package_categories_name', name: '包裹物品类型' },
+          { id: 'package_qty', name: '包裹物品数量' },
           { id: 'package_volume', name: '包裹体积 (m³)' },
           { id: 'package_size', name: '包裹尺寸(长宽高)' }
         ]
@@ -292,7 +294,8 @@ export default {
           { id: 'pay_out_serial_no', name: '支付单号' },
           { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
           { id: 'point_amount', name: '积分抵扣金额' },
-          { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` }
+          { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` },
+          { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
         ]
         this.feeInfo = [
           { id: 'value_added_amount', name: '增值服务费用' },
@@ -420,6 +423,7 @@ export default {
           { id: 'phone', name: '手机/联系电话' },
           { id: 'country', name: '收货国家' },
           { id: 'city', name: '城市' },
+          { id: 'postcode', name: '邮编' },
           { id: 'street_door_no', name: '街道/门牌号' },
           { id: 'info_address', name: '详细地址' },
           { id: 'station_name', name: '自提点' },
@@ -433,6 +437,7 @@ export default {
           { id: 'package_name', name: '包裹物品名称' },
           { id: 'package_props_name', name: '包裹物品属性' },
           { id: 'package_categories_name', name: '包裹物品类型' },
+          { id: 'package_qty', name: '包裹物品数量' },
           { id: 'package_volume', name: '包裹体积 (m³)' },
           { id: 'package_size', name: '包裹尺寸(长宽高)' }
         ]
@@ -479,7 +484,8 @@ export default {
           { id: 'pay_out_serial_no', name: '支付单号' },
           { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
           { id: 'point_amount', name: '积分抵扣金额' },
-          { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` }
+          { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` },
+          { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
         ]
         this.feeInfo = [
           { id: 'value_added_amount', name: '增值服务费用' },

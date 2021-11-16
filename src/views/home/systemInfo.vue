@@ -1,6 +1,6 @@
 <template>
   <div class="systemInfo-container">
-    <el-select v-model="message" :placeholder="$t('全部')" @change="changeVal" :clearable="true">
+    <el-select v-model="is_read" :placeholder="$t('全部')" @change="changeVal" :clearable="true">
       <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
       </el-option>
     </el-select>
@@ -55,13 +55,13 @@ export default {
   mixins: [pagination],
   data() {
     return {
-      message: '',
+      is_read: '',
       keywords: '',
       dialogVisible: false,
       messageData: [],
       title: '',
       content: '',
-      is_read: null,
+      // is_read: null,
       disabled: false,
       localization: {},
       options: [
@@ -86,7 +86,7 @@ export default {
         keyword: this.keywords,
         page: this.page_params.page,
         size: this.page_params.size,
-        message: this.message
+        is_read: this.is_read
       }
       this.$request
         .messageList(params)
@@ -123,7 +123,7 @@ export default {
       console.log(val, 'val')
       const checkedItem = this.messageData.filter(item => item.is_read === val)
       console.log(checkedItem)
-      this.page_params.handleQueryChange('message', this.message)
+      this.page_params.handleQueryChange('is_read', this.is_read)
       this.getList()
     }
   }
