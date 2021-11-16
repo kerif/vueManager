@@ -127,7 +127,8 @@ export default {
       showInner: false,
       uploadRadio: 1,
       showTmpDrawer: false,
-      uploadType: 1
+      uploadType: 1,
+      id: null
     }
   },
   mounted() {
