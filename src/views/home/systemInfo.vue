@@ -121,6 +121,8 @@ export default {
     },
     changeVal(val) {
       console.log(val, 'val')
+      const checkedItem = this.messageData.filter(item => item.is_read === val)
+      console.log(checkedItem)
       this.page_params.handleQueryChange('message', this.message)
       this.getList()
     }

@@ -408,10 +408,7 @@ export default {
           { id: 'line_extra_remark', name: '线路额外信息' },
           { id: 'order_sn', name: '订单号' },
           { id: 'agent_name', name: '所属代理' },
-          { id: 'clearance_code', name: '清关编码' },
-          { id: 'length', name: '长' },
-          { id: 'width', name: '宽' },
-          { id: 'height', name: '高' }
+          { id: 'clearance_code', name: '清关编码' }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: '收货人' },
@@ -457,7 +454,11 @@ export default {
           { id: 'box_width', name: `宽(${this.localization.length_unit})` },
           { id: 'box_height', name: `高(${this.localization.length_unit})` },
           { id: 'box_weight', name: `分箱称重重量(${this.localization.weight_unit})` },
-          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` }
+          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` },
+          { id: 'box_package_number', name: '分箱货品数量' },
+          { id: 'box_package_names', name: '分箱包裹名称' },
+          { id: 'box_package_props', name: '分箱包裹属性' },
+          { id: 'box_package_categories', name: '分箱包裹类型' }
         ]
         // 出库信息总计
         this.outboundSum = [

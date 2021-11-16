@@ -108,7 +108,6 @@ export default {
         .problemList(param)
         .then(res => {
           if (res.ret) {
-            // console.log(res)
             this.problemData = res.data
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
@@ -133,10 +132,6 @@ export default {
         // })
       })
     },
-    // checkImg($event) {
-    //   this.imgDialog = true
-    //   this.imgUrl = this.$baseUrl.IMAGE_URL + url
-    // },
     goSearch() {
       this.getList()
     },
