@@ -29,7 +29,7 @@
       <el-table-column prop="address" :label="$t('操作')">
         <template slot-scope="scope">
           <el-button
-            @click="edit(scope.row.id)"
+            @click="$router.push({ name: 'infoDetails', params: { id: scope.row.id } })"
             size="mini"
             style="background: #3540a5; color: #fff"
             >{{ $t('查看') }}</el-button

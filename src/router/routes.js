@@ -14,6 +14,8 @@ const CommonProblem = loadonDemand('home/commonProblem')
 const ProblemDetails = loadonDemand('home/problemDetails')
 // 系统消息
 const SystemInfo = loadonDemand('home/systemInfo')
+// 系统消息详情
+const InfoDetails = loadonDemand('home/infoDetails')
 // 员工列表
 const StaffList = loadonDemand('staff/stafflist')
 // 员工组列表
@@ -374,6 +376,18 @@ export default [
               level: 3,
               group: '首页',
               name: '系统消息',
+              parent: '/home'
+            }
+          },
+          {
+            path: '/home/infoDetails/:id',
+            name: 'infoDetails',
+            component: InfoDetails,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '系统消息详情',
               parent: '/home'
             }
           }
