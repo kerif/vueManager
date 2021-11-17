@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div :class="['message', { 'on-progress': onProgress }]">
+      <el-progress :text-inside="true" :stroke-width="26" :percentage="progress"></el-progress>
+    </div>
     <div id="editor" :value="textContent"></div>
     <el-button class="save" type="primary" @click="submit">{{ $t('保存') }}</el-button>
   </div>
@@ -14,7 +17,9 @@ export default {
     return {
       editor: '',
       textContent: '',
-      params: {}
+      progress: 0,
+      params: {},
+      onProgress: false
     }
   },
   props: {
@@ -30,7 +35,18 @@ export default {
     }
   },
   created() {
-    this.getTempKeys()
+    if (localStorage.getItem('secret')) {
+      const params = JSON.parse(localStorage.getItem('secret'))
+      const time = new Date(params.configs.expiration)
+      const currentTime = new Date()
+      if (currentTime > time) {
+        this.getTempKeys()
+      } else {
+        this.params = params
+      }
+    } else {
+      this.getTempKeys()
+    }
   },
   mounted() {
     this.editor = new E('#editor')
@@ -68,6 +84,7 @@ export default {
       this.$request.getTempKeys().then(res => {
         if (res.ret) {
           this.params = res.data
+          localStorage.setItem('secret', JSON.stringify(res.data))
         }
       })
     },
@@ -80,6 +97,7 @@ export default {
           StartTime: this.params.configs.startTime,
           ExpiredTime: this.params.configs.expiredTime
         })
+        const that = this
         cos.uploadFile(
           {
             Bucket: this.params.bucket,
@@ -87,7 +105,19 @@ export default {
             Key: `${this.params.base_path}/${data[0].name}${Math.random()}`,
             Body: data[0],
             onProgress: function (progressData) {
-              console.log(JSON.stringify(progressData))
+              that.onProgress = true
+              that.progress = +Number(
+                (progressData.loaded / 1024 / (progressData.total / 1024)) * 100
+              ).toFixed(2)
+              if (that.progress === 100) {
+                that.onProgress = false
+              }
+            },
+            onFileFinish: function () {
+              const timer = setTimeout(() => {
+                that.progress = 0
+                clearTimeout(timer)
+              }, 2000)
             }
           },
           function (err, data) {
@@ -108,6 +138,21 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.message {
+  position: fixed;
+  top: -10px;
+  left: 0;
+  right: 0;
+  width: 35%;
+  margin: 0 auto;
+  z-index: 99;
+  opacity: 0;
+  transition: all 2s;
+}
+.on-progress {
+  opacity: 1;
+  transform: translateY(125px);
+}
 .save {
   margin-top: 20px;
 }
