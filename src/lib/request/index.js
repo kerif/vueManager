@@ -3647,6 +3647,9 @@ exports.getMe = () => $form.get('me')
 // 获取视频上传临时 token
 exports.getVideoUploadToken = () => $form.get('videos/upload-token')
 
+// 获取获取临时密钥
+exports.getTempKeys = () => $form.get('upload/temp-keys')
+
 // 新建视频
 exports.addVideo = params => $json.post('videos', params)
 // 修改视频

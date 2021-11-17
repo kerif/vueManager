@@ -13,7 +13,7 @@
       <el-form-item :label="$t('公告详情')">
         <el-row>
           <el-col :span="20">
-            <div id="editor" :value="params.content" @input="changeText"></div>
+            <editor :content="params.content" @submit="saveNotice" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -37,22 +37,13 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          class="save-btn"
-          @click="saveNotice"
-          :loading="$store.state.btnLoading"
-          >{{ $t('保存') }}</el-button
-        >
-      </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
-import Wangeditor from 'wangeditor'
-import baseApi from '@/lib/axios/baseApi'
+import editor from '@/components/editor.vue'
 export default {
+  components: { editor },
   data() {
     return {
       params: {
@@ -62,50 +53,6 @@ export default {
       fileList: [],
       editor: null
     }
-  },
-  mounted() {
-    this.editor = new Wangeditor('#editor')
-    this.editor.customConfig.menus = [
-      'head',
-      'fontSize',
-      'fontName',
-      'bold',
-      'italic',
-      'underline',
-      'strikeThrough',
-      'foreColor',
-      'backColor',
-      'link',
-      'list',
-      'justify',
-      'quote',
-      'video',
-      'image',
-      'table'
-    ]
-    this.editor.customConfig.onchange = html => {
-      this.params.content = html
-    }
-    this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
-    this.editor.customConfig.uploadImgParams = {}
-    this.editor.customConfig.uploadImgHeaders = {
-      Authorization: this.$store.state.token
-    }
-    this.editor.customConfig.uploadFileName = `images[${0}][file]`
-    this.editor.customConfig.uploadImgHooks = {
-      customInsert: (insertImg, result) => {
-        console.log(result)
-        if (result.ret === 1) {
-          this.$message.success(this.$t('上传成功'))
-          let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
-          insertImg(url)
-        }
-      }
-    }
-    this.editor.customConfig.zIndex = 500
-    this.editor.customConfig.showLinkImg = true
-    this.editor.create()
-    console.log(this.editor, 'this.editor')
   },
   created() {
     if (this.$route.params.id) {
@@ -118,7 +65,6 @@ export default {
         if (res.ret) {
           this.params.title = res.data.title
           this.params.content = res.data.content
-          this.editor.txt.html(this.params.content)
           this.fileList = res.data.attachments.map(item => {
             const arr = item.split('/')
             return {
@@ -126,13 +72,8 @@ export default {
               url: item
             }
           })
-          console.log(this.fileList, 'this.fileList')
         }
       })
-    },
-    // 判断是新增 还是 编辑
-    changeText() {
-      this.$emit('input', this.editor.txt.html())
     },
     uploadBaleImg(item) {
       let file = item.file
@@ -153,19 +94,14 @@ export default {
       return this.$request.uploadFiles(params)
     },
     beforeUploadImg(file) {
-      console.log(file)
-      // const mimeList = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/wps-writer']
-      // if (mimeList.indexOf(file.type) === -1) {
-      //   this.$message.error(this.$t('请上传格式正确的文件'))
-      //   return false
-      // }
       if (file.size > 1024 * 1024 * 4) {
         this.$message.error(this.$t('上传图片大小不能超过4MB'))
         return false
       }
       return true
     },
-    saveNotice() {
+    saveNotice(data) {
+      this.params.content = data
       if (this.fileList.length) {
         this.params.attachments = this.fileList.map(item => item.url)
       }

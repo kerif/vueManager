@@ -74,7 +74,6 @@ export default {
           this.ruleForm.receiver_name = res.data.receiver_name
           this.ruleForm.address = res.data.address
           this.ruleForm.tips = res.data.tips
-          console.log(this.ruleForm, 'this.ruleForm')
         })
     },
     confirm(formName) {
@@ -112,14 +111,7 @@ export default {
       this.show = false
     },
     init() {
-      // this.line = this.line
-      // this.lang = this.lang
       this.ruleForm.language = this.lang.language_code
-      // this.transCode = this.transCode
-      console.log(this.line, 'line')
-      console.log(this.lang, 'lang')
-      console.log(this.transCode, 'this.transCode')
-      console.log(this.ruleForm.language, 'this.ruleForm.language')
       if (this.transCode === 1) {
         this.getLang()
       }
@@ -131,11 +123,9 @@ export default {
 .dialog-line-lang {
   .el-input {
     width: 40% !important;
-    margin-left: 50px;
   }
   .el-textarea {
     width: 40% !important;
-    margin-left: 50px;
   }
   .el-form-item__label {
     width: 200px;
