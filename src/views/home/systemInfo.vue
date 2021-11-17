@@ -62,7 +62,6 @@ export default {
       messageData: [],
       title: '',
       content: '',
-      // is_read: null,
       disabled: false,
       localization: {},
       options: [

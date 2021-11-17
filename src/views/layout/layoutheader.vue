@@ -50,7 +50,7 @@
       <el-tooltip :content="$t('常见问题')" placement="top">
         <span class="el-icon-question quest-icon" @click="getCommonProblem"></span>
       </el-tooltip>
-      <el-badge :value="unread === 0 ? '' : unread" class="item">
+      <el-badge :value="unread > 0 ? unread : ''" class="item">
         <el-tooltip :content="$t('系统消息')" placement="top">
           <span class="el-icon-message info-icon" @click="getSystemInfo"></span>
         </el-tooltip>
