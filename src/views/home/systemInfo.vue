@@ -58,6 +58,7 @@ export default {
       is_read: '',
       keywords: '',
       dialogVisible: false,
+      tableLoading: false,
       messageData: [],
       title: '',
       content: '',

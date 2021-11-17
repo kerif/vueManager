@@ -38,6 +38,10 @@ exports.messageList = params => {
 exports.messageDetail = id => {
   return $form.get(`push-messages/${id}`)
 }
+// 系统消息 未读计数的
+exports.countMessage = () => {
+  return $form.get('push-messages/count')
+}
 // 配置 路线
 exports.getLines = params => {
   return $form.get('express-lines', { params })

@@ -9,9 +9,13 @@
       <el-button @click="addTmp('add')" size="small" class="btn-purple">{{
         $t('新增模板')
       }}</el-button>
-      <el-button size="small" type="primary" @click="updatePackages(uploadType)">{{
-        $t('确定导出')
-      }}</el-button>
+      <el-button
+        size="small"
+        type="primary"
+        :loading="$store.state.btnLoading"
+        @click="updatePackages(uploadType)"
+        >{{ $t('确定导出') }}</el-button
+      >
     </div>
     <div
       v-for="item in tmpList"
@@ -64,7 +68,8 @@ export default {
       tmpList: [],
       ind: 0,
       activeId: '',
-      template_id: ''
+      template_id: '',
+      tableLoading: false
     }
   },
   props: {
