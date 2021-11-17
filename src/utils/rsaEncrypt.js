@@ -10,7 +10,7 @@ hWqK3IKADSiLcvrO25crz89bkPq2jgmi2QOsKEIATOErrkyFTxRVYqw8/UB0q5Za
 HwIDAQAB
 -----END PUBLIC KEY-----`
 
-// 加密
+// 公钥加密
 export function excrypt(txt) {
   const encryptor = new JSEncrypt()
   encryptor.setPublicKey(publicKey)
