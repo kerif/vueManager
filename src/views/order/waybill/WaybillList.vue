@@ -1043,6 +1043,7 @@
     <waybill-list-tmp-drawer
       :showTmpDrawer="showTmpDrawer"
       :searchFieldData="searchFieldData"
+      :uploadType="uploadType"
       :activeName="activeName"
       @receiveTmp="receiveTmp"
       class="tmp"
@@ -1170,7 +1171,8 @@ export default {
       showDrawer: false,
       showTmpDrawer: false,
       keyData: {},
-      lineId: ''
+      lineId: '',
+      uploadType: 2
     }
   },
   activated() {

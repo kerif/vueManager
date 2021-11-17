@@ -613,7 +613,7 @@ export default {
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       this.orderSnNum = selection.map(item => item.order_sn)
-      console.log(this.deleteNum, 'this.deleteNum')
+      // console.log(this.deleteNum, 'this.deleteNum')
     },
     goExpress(orderSn) {
       console.log(orderSn, 'orderSn')
@@ -622,7 +622,7 @@ export default {
     // 确认下载标签
     updateLabel() {
       this.show = false
-      console.log(this.labelId, 'this.labelId')
+      // console.log(this.labelId, 'this.labelId')
       this.$request.updatePackagePdf(this.labelId).then(res => {
         if (res.ret) {
           window.open(res.data.url)

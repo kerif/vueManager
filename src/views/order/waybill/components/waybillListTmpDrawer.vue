@@ -9,9 +9,13 @@
       <el-button @click="addTmp('add')" size="small" class="btn-purple">{{
         $t('新增模板')
       }}</el-button>
-      <el-button size="small" type="primary" @click="updatePackages">{{
-        $t('确定导出')
-      }}</el-button>
+      <el-button
+        size="small"
+        type="primary"
+        :loading="$store.state.btnLoading"
+        @click="updatePackages(uploadType)"
+        >{{ $t('确定导出') }}</el-button
+      >
     </div>
     <div
       v-for="item in tmpList"
@@ -64,7 +68,8 @@ export default {
       tmpList: [],
       ind: 0,
       activeId: '',
-      template_id: ''
+      template_id: '',
+      tableLoading: false
     }
   },
   props: {
@@ -77,6 +82,15 @@ export default {
     },
     activeName: {
       type: String
+    },
+    uploadType: {
+      type: Number
+    },
+    uploadId: {
+      type: Number
+    },
+    deleteNum: {
+      type: Array
     }
   },
   created() {
@@ -134,7 +148,7 @@ export default {
     },
     getTmpList() {
       // let code = this.code
-      this.$request.listQuery({ code: this.code }).then(res => {
+      this.$request.listQuery({ code: this.code, size: 100 }).then(res => {
         this.tmpList = res.data
         console.log(this.tmpList, 'this.tmplist')
         this.tmpCode = res.data[0].code
@@ -147,36 +161,80 @@ export default {
         this.name = res.data[0].name
       })
     },
-    updatePackages() {
+    updatePackages(uploadType) {
       console.log(this.activeId)
-      const searchData = this.searchFieldData
-      let param = {
-        ...searchData,
-        status: this.activeName,
-        template_id: this.activeId,
-        begin_date: searchData.date ? searchData.date[0] : '',
-        end_date: searchData.date ? searchData.date[1] : '',
-        order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
-        country_id:
-          searchData.countryArr.length > 1
-            ? searchData.countryArr[0]
-            : searchData.countryArr[searchData.countryArr.length - 1]
-      }
-      this.$request.ordersExport(param).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
+      if (uploadType === 2) {
+        const searchData = this.searchFieldData
+        let param = {
+          ...searchData,
+          status: this.activeName,
+          template_id: this.activeId,
+          begin_date: searchData.date ? searchData.date[0] : '',
+          end_date: searchData.date ? searchData.date[1] : '',
+          order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
+          country_id:
+            searchData.countryArr.length > 1
+              ? searchData.countryArr[0]
+              : searchData.countryArr[searchData.countryArr.length - 1]
         }
-      })
+        this.$request.ordersExport(param).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (uploadType === 1) {
+        let id = this.uploadId
+        this.$request.uploadShipExcel(id, { template_id: this.activeId }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        console.log(this.deleteNum, 'this.deleteNum')
+        if (!this.deleteNum || !this.deleteNum.length) {
+          return this.$message.error(this.$t('请选择发货单号'))
+        }
+        this.$request
+          .uploadExcel({
+            shipment_ids: this.deleteNum,
+            template_id: this.activeId
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              // this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      }
     }
   }
 }

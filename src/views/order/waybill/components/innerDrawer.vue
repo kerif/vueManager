@@ -223,21 +223,20 @@ export default {
           { id: 'line_extra_remark', name: '线路额外信息' },
           { id: 'order_sn', name: '订单号' },
           { id: 'agent_name', name: '所属代理' },
-          { id: 'clearance_code', name: '清关编码' },
-          { id: 'length', name: '长' },
-          { id: 'width', name: '宽' },
-          { id: 'height', name: '高' }
+          { id: 'clearance_code', name: '清关编码' }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: '收货人' },
           { id: 'phone', name: '手机/联系电话' },
           { id: 'country', name: '收货国家' },
           { id: 'city', name: '城市' },
+          { id: 'postcode', name: '邮编' },
           { id: 'street_door_no', name: '街道/门牌号' },
           { id: 'info_address', name: '详细地址' },
           { id: 'station_name', name: '自提点' },
           { id: 'user_address', name: '客户地址' },
-          { id: 'station_address', name: '自提点地址' }
+          { id: 'station_address', name: '自提点地址' },
+          { id: 'address', name: '附加地址' }
         ]
         // 入库信息
         this.warehouseInfo = [
@@ -245,6 +244,7 @@ export default {
           { id: 'package_name', name: '包裹物品名称' },
           { id: 'package_props_name', name: '包裹物品属性' },
           { id: 'package_categories_name', name: '包裹物品类型' },
+          { id: 'package_qty', name: '包裹物品数量' },
           { id: 'package_volume', name: '包裹体积 (m³)' },
           { id: 'package_size', name: '包裹尺寸(长宽高)' }
         ]
@@ -272,30 +272,42 @@ export default {
           { id: 'box_width', name: `宽(${this.localization.length_unit})` },
           { id: 'box_height', name: `高(${this.localization.length_unit})` },
           { id: 'box_weight', name: `分箱称重重量(${this.localization.weight_unit})` },
-          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` }
+          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` },
+          { id: 'box_package_number', name: '分箱货品数量' },
+          { id: 'box_package_names', name: '分箱包裹名称' },
+          { id: 'box_package_props', name: '分箱包裹属性' },
+          { id: 'box_package_categories', name: '分箱包裹类型' }
         ]
         // 出库信息总计
         this.outboundSum = [
           { id: 'box_payment_weight_sum', name: '出库计费重量' },
           { id: 'box_actual_weight_sum', name: '出库实际重量' },
           { id: 'box_volume_weight_sum', name: '出库体积重量' },
-          { id: 'box_volume_sum', name: '出库体积' }
+          { id: 'box_volume_sum', name: '出库体积' },
+          { id: 'length', name: `长(${this.localization.length_unit})` },
+          { id: 'width', name: `宽(${this.localization.length_unit})` },
+          { id: 'height', name: `高(${this.localization.length_unit})` }
         ]
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
+          { id: 'actual_payment_fee', name: '实际费用' },
+          { id: 'pay_out_serial_no', name: '支付单号' },
+          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
+          { id: 'point_amount', name: '积分抵扣金额' },
+          { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` },
+          { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
+        ]
+        this.feeInfo = [
           { id: 'value_added_amount', name: '增值服务费用' },
           { id: 'insurance_fee', name: '保险费用' },
           { id: 'tariff_fee', name: '关税费用' },
           { id: 'line_service_fee', name: '渠道增值服务费用' },
-          { id: 'line_rule_fee', name: '渠道规则费用' },
-          { id: 'actual_payment_fee', name: '实际费用' },
-          { id: 'pay_out_serial_no', name: '支付单号' },
-          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
-          { id: 'point_amount', name: '积分抵扣金额' }
+          { id: 'line_rule_fee', name: '渠道规则费用' }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
-          { id: 'order_logistics_sn', name: '物流单号 (订单)' }
+          { id: 'order_logistics_sn', name: '物流单号 (订单)' },
+          { id: 'shipment_sn', name: '所属发货单' }
         ]
         this.operationInfo = [
           { id: 'created_at', name: '提交时间' },
@@ -404,21 +416,20 @@ export default {
           { id: 'line_extra_remark', name: '线路额外信息' },
           { id: 'order_sn', name: '订单号' },
           { id: 'agent_name', name: '所属代理' },
-          { id: 'clearance_code', name: '清关编码' },
-          { id: 'length', name: '长' },
-          { id: 'width', name: '宽' },
-          { id: 'height', name: '高' }
+          { id: 'clearance_code', name: '清关编码' }
         ]
         this.receiveInfo = [
           { id: 'receiver_name', name: '收货人' },
           { id: 'phone', name: '手机/联系电话' },
           { id: 'country', name: '收货国家' },
           { id: 'city', name: '城市' },
+          { id: 'postcode', name: '邮编' },
           { id: 'street_door_no', name: '街道/门牌号' },
           { id: 'info_address', name: '详细地址' },
           { id: 'station_name', name: '自提点' },
           { id: 'user_address', name: '客户地址' },
-          { id: 'station_address', name: '自提点地址' }
+          { id: 'station_address', name: '自提点地址' },
+          { id: 'address', name: '附加地址' }
         ]
         // 入库信息
         this.warehouseInfo = [
@@ -426,6 +437,7 @@ export default {
           { id: 'package_name', name: '包裹物品名称' },
           { id: 'package_props_name', name: '包裹物品属性' },
           { id: 'package_categories_name', name: '包裹物品类型' },
+          { id: 'package_qty', name: '包裹物品数量' },
           { id: 'package_volume', name: '包裹体积 (m³)' },
           { id: 'package_size', name: '包裹尺寸(长宽高)' }
         ]
@@ -453,7 +465,11 @@ export default {
           { id: 'box_width', name: `宽(${this.localization.length_unit})` },
           { id: 'box_height', name: `高(${this.localization.length_unit})` },
           { id: 'box_weight', name: `分箱称重重量(${this.localization.weight_unit})` },
-          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` }
+          { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` },
+          { id: 'box_package_number', name: '分箱货品数量' },
+          { id: 'box_package_names', name: '分箱包裹名称' },
+          { id: 'box_package_props', name: '分箱包裹属性' },
+          { id: 'box_package_categories', name: '分箱包裹类型' }
         ]
         // 出库信息总计
         this.outboundSum = [
@@ -464,19 +480,24 @@ export default {
         ]
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
+          { id: 'actual_payment_fee', name: '实际费用' },
+          { id: 'pay_out_serial_no', name: '支付单号' },
+          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
+          { id: 'point_amount', name: '积分抵扣金额' },
+          { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` },
+          { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
+        ]
+        this.feeInfo = [
           { id: 'value_added_amount', name: '增值服务费用' },
           { id: 'insurance_fee', name: '保险费用' },
           { id: 'tariff_fee', name: '关税费用' },
           { id: 'line_service_fee', name: '渠道增值服务费用' },
-          { id: 'line_rule_fee', name: '渠道规则费用' },
-          { id: 'actual_payment_fee', name: '实际费用' },
-          { id: 'pay_out_serial_no', name: '支付单号' },
-          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
-          { id: 'point_amount', name: '积分抵扣金额' }
+          { id: 'line_rule_fee', name: '渠道规则费用' }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
-          { id: 'order_logistics_sn', name: '物流单号 (订单)' }
+          { id: 'order_logistics_sn', name: '物流单号 (订单)' },
+          { id: 'shipment_sn', name: '所属发货单' }
         ]
         this.operationInfo = [
           { id: 'created_at', name: '提交时间' },

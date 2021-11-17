@@ -124,7 +124,14 @@
         </el-table-column>
         <el-table-column :label="$t('快递单号')" key="express_num" width="180">
           <template slot-scope="scope">
-            <el-button @click="oderDetails(scope.row.id)" type="text"
+            <el-button
+              v-if="activeName === '2'"
+              :class="scope.row.is_claimed === 1 ? 'colorsty' : ''"
+              @click="oderDetails(scope.row.id)"
+              type="text"
+              >{{ scope.row.express_num }}
+            </el-button>
+            <el-button v-else @click="oderDetails(scope.row.id)" type="text"
               >{{ scope.row.express_num }}
             </el-button>
             <span v-if="scope.row.code != ''" style="color: #66666">({{ scope.row.code }})</span>
@@ -847,5 +854,8 @@ export default {
   // .el-button--text {
   //   color: blue;
   // }
+  .colorsty {
+    color: #3cb371;
+  }
 }
 </style>

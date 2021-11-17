@@ -1,13 +1,7 @@
 <template>
   <div class="systemInfo-container">
-    <el-select
-      v-model="message"
-      :placeholder="$t('全部')"
-      @change="changeVal"
-      :clearable="true"
-      :disabled="disabled"
-    >
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+    <el-select v-model="is_read" :placeholder="$t('全部')" @change="changeVal" :clearable="true">
+      <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
       </el-option>
     </el-select>
     <div class="header-search">
@@ -45,7 +39,7 @@
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
-      <div v-html="content"></div>
+      <div v-html="content">{{ content }}</div>
     </el-dialog>
   </div>
 </template>
@@ -61,23 +55,24 @@ export default {
   mixins: [pagination],
   data() {
     return {
-      message: '',
+      is_read: '',
       keywords: '',
       dialogVisible: false,
+      tableLoading: false,
       messageData: [],
       title: '',
       content: '',
-      is_read: null,
+      // is_read: null,
       disabled: false,
       localization: {},
       options: [
         {
-          value: '0',
-          label: '未读'
+          id: 0,
+          name: '未读'
         },
         {
-          value: '1',
-          label: '已读'
+          id: 1,
+          name: '已读'
         }
       ]
     }
@@ -91,7 +86,8 @@ export default {
       let params = {
         keyword: this.keywords,
         page: this.page_params.page,
-        size: this.page_params.size
+        size: this.page_params.size,
+        is_read: this.is_read
       }
       this.$request
         .messageList(params)
@@ -117,12 +113,18 @@ export default {
     edit(id) {
       this.dialogVisible = true
       this.$request.messageDetail(id).then(res => {
-        this.title = res.data.title
-        this.content = res.data.content
+        if (res.ret) {
+          this.title = res.data.title
+          this.content = res.data.content
+          this.getList()
+        }
       })
     },
     changeVal(val) {
-      console.log(val)
+      console.log(val, 'val')
+      const checkedItem = this.messageData.filter(item => item.is_read === val)
+      console.log(checkedItem)
+      this.page_params.handleQueryChange('is_read', this.is_read)
       this.getList()
     }
   }
@@ -141,6 +143,16 @@ export default {
   }
   .postcard-icon {
     cursor: pointer;
+  }
+  .el-icon-postcard:before,
+  .el-icon-message:before {
+    font-size: 20px;
+    top: 2px;
+    right: 5px;
+    position: relative;
+  }
+  .el-icon-message:before {
+    color: red !important;
   }
   .el-table tr th.is-leaf {
     border-bottom: 1px #ecedf0 solid;

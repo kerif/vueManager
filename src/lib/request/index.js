@@ -38,6 +38,10 @@ exports.messageList = params => {
 exports.messageDetail = id => {
   return $form.get(`push-messages/${id}`)
 }
+// 系统消息 未读计数的
+exports.countMessage = () => {
+  return $form.get('push-messages/count')
+}
 // 配置 路线
 exports.getLines = params => {
   return $form.get('express-lines', { params })
@@ -3412,8 +3416,8 @@ exports.shipmentCompanies = () => {
   return $form.get(`shipments/company-expresses`)
 }
 // 发货单 导出清单
-exports.uploadExcel = ids => {
-  return $form.post(`shipments/order-export-batch`, ids)
+exports.uploadExcel = (ids, params) => {
+  return $form.post(`shipments/order-export-batch`, ids, params)
 }
 // 订单列表 导出发票
 exports.uploadOrder = ids => {
@@ -3466,6 +3470,10 @@ exports.getAloneShip = id => {
 // 详情里的导出
 exports.uploadAloneExcel = id => {
   return $form.get(`shipments/${id}/order-export`)
+}
+// 发货单 发货单详情 导出清单
+exports.uploadShipExcel = (id, params) => {
+  return $form.get(`shipments/${id}/order-export`, { params })
 }
 // 运单 获取审核
 exports.getTransfer = id => {

@@ -10,6 +10,8 @@ const homeNotice = loadonDemand('home/notice')
 const ResetPassword = loadonDemand('home/reset-password')
 // 常见问题
 const CommonProblem = loadonDemand('home/commonProblem')
+// 常见问题详情
+const ProblemDetails = loadonDemand('home/problemDetails')
 // 系统消息
 const SystemInfo = loadonDemand('home/systemInfo')
 // 员工列表
@@ -348,7 +350,19 @@ export default [
               level: 3,
               group: '首页',
               name: '常见问题',
-              parent: '/home/panel'
+              parent: '/home'
+            }
+          },
+          {
+            path: '/home/problemDetails/:id',
+            name: 'problemDetails',
+            component: ProblemDetails,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '常见问题详情',
+              parent: '/home'
             }
           },
           {
@@ -360,7 +374,7 @@ export default [
               level: 3,
               group: '首页',
               name: '系统消息',
-              parent: '/home/panel'
+              parent: '/home'
             }
           }
         ]
