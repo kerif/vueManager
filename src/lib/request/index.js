@@ -1346,6 +1346,10 @@ exports.importData = name => {
 exports.updateImport = params => {
   return $json.post('packages/import', params)
 }
+// 预报包裹列表 批量更新包裹属性
+exports.batchUpdate = params => {
+  return $form.put(`packages/batch-update`, params)
+}
 // 无人认领包裹
 exports.getNoOwner = params => {
   return $form.get('packages/no-owner', { params })

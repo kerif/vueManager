@@ -341,18 +341,21 @@
         <el-button type="primary" @click="updateLabel">{{ $t('下载') }}</el-button>
       </div>
     </el-dialog>
+    <batch-modify :showBatch="showBatch" :deleteNum="deleteNum" @passVal="passVal"></batch-modify>
   </div>
 </template>
 
 <script>
 import OrderListSearch from './components/orderListSearch'
+import BatchModify from './components/batchModify'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
     OrderListSearch,
-    NlePagination
+    NlePagination,
+    BatchModify
   },
   name: 'orderlist',
   mixins: [pagination],
@@ -383,7 +386,8 @@ export default {
         value_end: '',
         keyword: '',
         is_warning: 0
-      }
+      },
+      showBatch: false
     }
   },
   activated() {
@@ -418,6 +422,9 @@ export default {
           })
         }
       })
+    },
+    passVal() {
+      this.showBatch = false
     },
     goMatch() {
       this.page_params.page = 1
@@ -793,6 +800,9 @@ export default {
     onTabChange() {
       this.page_params.page = 1
       this.getList()
+    },
+    batchModify() {
+      this.showBatch = true
     }
   }
 }
