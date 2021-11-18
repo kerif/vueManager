@@ -202,7 +202,7 @@
 
                   <tr>
                     <td>{{ $t('区域') }}</td>
-                    <th>{{ form.address.area.name }}</th>
+                    <th>{{ form.address.area.name }}&nbsp;{{ form.address.sub_area.name }}</th>
                     <td>{{ $t('邮编') }}</td>
                     <th>{{ form.address.postcode }}</th>
                   </tr>
