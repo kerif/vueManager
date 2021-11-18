@@ -161,6 +161,7 @@ export default {
       })
     },
     getSystemInfo() {
+      this.getCount()
       this.$router.push({
         name: 'systemInfo'
       })

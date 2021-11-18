@@ -121,14 +121,13 @@ export default {
     },
     changeVal(val) {
       console.log(val, 'val')
-      const checkedItem = this.messageData.filter(item => item.is_read === val)
-      console.log(checkedItem)
       this.page_params.handleQueryChange('is_read', this.is_read)
       this.getList()
     },
     goDeatils(id) {
-      this.$router.push({ name: 'infoDetails', params: { id: id } })
       this.getList()
+      this.$router.push({ name: 'infoDetails', params: { id: id } })
+      // this.getList()
     }
   }
 }
