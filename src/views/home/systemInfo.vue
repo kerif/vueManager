@@ -126,14 +126,7 @@ export default {
     },
     goDeatils(id) {
       this.getList()
-      // this.getCount()
       this.$router.push({ name: 'infoDetails', params: { id: id } })
-      // this.getList()
-    },
-    getCount() {
-      this.$request.countMessage().then(res => {
-        this.unread = res.data.unread
-      })
     }
   }
 }

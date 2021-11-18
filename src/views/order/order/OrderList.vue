@@ -76,7 +76,7 @@
         >
           {{ $t('批量上架') }}
         </el-button>
-        <el-button
+        <!-- <el-button
           class="btn-light-red"
           v-if="activeName === '2'"
           @click="batchModify"
@@ -84,7 +84,7 @@
           plain
         >
           {{ $t('批量修改') }}
-        </el-button>
+        </el-button> -->
       </div>
       <div class="header-search">
         <el-input
@@ -341,21 +341,21 @@
         <el-button type="primary" @click="updateLabel">{{ $t('下载') }}</el-button>
       </div>
     </el-dialog>
-    <batch-modify :showBatch="showBatch" :deleteNum="deleteNum" @passVal="passVal"></batch-modify>
+    <!-- <batch-modify :showBatch="showBatch" :deleteNum="deleteNum" @passVal="passVal"></batch-modify> -->
   </div>
 </template>
 
 <script>
 import OrderListSearch from './components/orderListSearch'
-import BatchModify from './components/batchModify'
+// import BatchModify from './components/batchModify'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
     OrderListSearch,
-    NlePagination,
-    BatchModify
+    NlePagination
+    // BatchModify
   },
   name: 'orderlist',
   mixins: [pagination],

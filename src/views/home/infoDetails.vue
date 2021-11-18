@@ -33,7 +33,6 @@ export default {
           this.content = res.data.content
           // this.$router.go(-1)
           this.getCount()
-          // this.$store.commit('changeUnread', res.data.unread)
         }
       })
     },
