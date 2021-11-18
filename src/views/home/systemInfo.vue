@@ -29,7 +29,7 @@
       <el-table-column prop="address" :label="$t('操作')">
         <template slot-scope="scope">
           <el-button
-            @click="edit(scope.row.id)"
+            @click="goDeatils(scope.row.id)"
             size="mini"
             style="background: #3540a5; color: #fff"
             >{{ $t('查看') }}</el-button
@@ -62,7 +62,6 @@ export default {
       messageData: [],
       title: '',
       content: '',
-      // is_read: null,
       disabled: false,
       localization: {},
       options: [
@@ -122,10 +121,19 @@ export default {
     },
     changeVal(val) {
       console.log(val, 'val')
-      const checkedItem = this.messageData.filter(item => item.is_read === val)
-      console.log(checkedItem)
       this.page_params.handleQueryChange('is_read', this.is_read)
       this.getList()
+    },
+    goDeatils(id) {
+      this.getList()
+      // this.getCount()
+      this.$router.push({ name: 'infoDetails', params: { id: id } })
+      // this.getList()
+    },
+    getCount() {
+      this.$request.countMessage().then(res => {
+        this.unread = res.data.unread
+      })
     }
   }
 }
