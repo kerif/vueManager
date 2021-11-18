@@ -45,13 +45,9 @@
           v-if="1 === form.status"
           >{{ $t('打包') }}</el-button
         >
-        <el-button
-          @click="edit"
-          icon="el-icon-edit"
-          @click.native="editPacked()"
-          v-if="2 === form.status"
-          >{{ $t('编辑') }}</el-button
-        >
+        <el-button icon="el-icon-edit" @click="editPacked()" v-if="form.status === 2">{{
+          $t('编辑')
+        }}</el-button>
 
         <el-button @click="batchEditCompany" v-if="[3, 4].includes(form.status)">{{
           $t('更新二程单号')
@@ -89,12 +85,12 @@
           <el-col :span="6">
             <div class="panel-bg">
               <h4>
-                {{
+                <!-- {{
                   form.express_line &&
                   (form.express_line.cn_name === undefined
                     ? form.express_line.name
                     : form.express_line.cn_name)
-                }}
+                }} -->
                 <span class="group-text">{{ form.group_name }}</span>
               </h4>
               <span style="color: blue; font-weight: bold">
@@ -202,7 +198,11 @@
 
                   <tr>
                     <td>{{ $t('区域') }}</td>
-                    <th>{{ form.address.area.name }}&nbsp;{{ form.address.sub_area.name }}</th>
+                    <th>
+                      {{ form.address && form.address.area && form.address.area.name }}&nbsp;{{
+                        form.address && form.address.sub_area && form.address.sub_area.name
+                      }}
+                    </th>
                     <td>{{ $t('邮编') }}</td>
                     <th>{{ form.address.postcode }}</th>
                   </tr>
