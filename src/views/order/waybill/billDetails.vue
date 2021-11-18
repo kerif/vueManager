@@ -85,12 +85,12 @@
           <el-col :span="6">
             <div class="panel-bg">
               <h4>
-                <!-- {{
+                {{
                   form.express_line &&
                   (form.express_line.cn_name === undefined
                     ? form.express_line.name
                     : form.express_line.cn_name)
-                }} -->
+                }}
                 <span class="group-text">{{ form.group_name }}</span>
               </h4>
               <span style="color: blue; font-weight: bold">
