@@ -28,13 +28,7 @@ export default {
         if (res.ret) {
           this.title = res.data.title
           this.content = res.data.content
-          this.getCount()
         }
-      })
-    },
-    getCount() {
-      this.$request.countMessage().then(res => {
-        this.unread = res.data.unread
       })
     }
   }
