@@ -19,6 +19,7 @@ export default new Vuex.Store({
     isCollapse: false,
     languageCode: 'zhCN', // 默认简体中文
     pagePath: '', // 路径列表
+    unread: 0,
     orderListFieldData: [] // 订单列表显示字段
   },
   mutations: {
@@ -44,6 +45,9 @@ export default new Vuex.Store({
     },
     switchBtnLoading(state, data) {
       state.btnLoading = data.status
+    },
+    changeUnread(state, data) {
+      state.unread = data
     },
     switchCollapse(state, isCollapse) {
       state.isCollapse = isCollapse

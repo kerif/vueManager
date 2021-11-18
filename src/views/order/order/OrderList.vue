@@ -76,6 +76,15 @@
         >
           {{ $t('批量上架') }}
         </el-button>
+        <el-button
+          class="btn-light-red"
+          v-if="activeName === '2'"
+          @click="batchModify"
+          size="small"
+          plain
+        >
+          {{ $t('批量修改') }}
+        </el-button>
       </div>
       <div class="header-search">
         <el-input
