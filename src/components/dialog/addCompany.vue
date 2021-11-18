@@ -28,7 +28,7 @@
         }}</el-button>
       </el-form-item>
       <el-form-item :label="$t('*转运快递单号-二程：')" v-if="state == 'edit'">
-        <el-input v-model="company.sn" class="input-select"></el-input>
+        <el-input v-model="company.sn" class="input-select" @input="companySn"></el-input>
       </el-form-item>
       <div v-else>
         <div v-if="boxType === 1">
@@ -90,6 +90,9 @@ export default {
           this.company.company = res.data.code
         }
       })
+    },
+    companySn() {
+      this.company.sn = this.company.sn.replace(/\s+/g, '')
     },
     getOrderDetails() {
       this.$request.getOrderDetails(this.orderId).then(res => {

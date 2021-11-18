@@ -111,7 +111,7 @@
             <el-tooltip
               style="color: #74b34f"
               effect="dark"
-              :content="$t('常规下单不可选该路线，仅拼团可选用')"
+              :content="$t('常规下单不可选该路线仅拼团可选用')"
               placement="top"
             >
               <span class="el-icon-question icon-info"></span> </el-tooltip
