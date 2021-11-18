@@ -96,6 +96,9 @@ export default {
   created() {
     this.getCount()
   },
+  activated() {
+    this.getCount()
+  },
   methods: {
     checkUser() {
       this.$request.aboutMe().then(res => {

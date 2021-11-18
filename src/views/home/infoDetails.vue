@@ -22,6 +22,9 @@ export default {
   created() {
     this.getDetails()
   },
+  activated() {
+    this.getCount()
+  },
   methods: {
     getDetails() {
       this.$request.messageDetail(this.$route.params.id).then(res => {
@@ -29,7 +32,13 @@ export default {
           this.title = res.data.title
           this.content = res.data.content
           // this.$router.go(-1)
+          this.getCount()
         }
+      })
+    },
+    getCount() {
+      this.$request.countMessage().then(res => {
+        this.unread = res.data.unread
       })
     }
   }
