@@ -95,8 +95,27 @@
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
         <el-form-item :label="$t('路线类型')">
-          <el-radio v-model="copyData.only_for_group" :label="0">{{ $t('普通路线') }}</el-radio>
-          <el-radio v-model="copyData.only_for_group" :label="1">{{ $t('仅拼团路线') }}</el-radio>
+          <el-radio v-model="copyData.only_for_group" :label="0">
+            {{ $t('普通路线') }}
+            <el-tooltip
+              style="color: #74b34f"
+              effect="dark"
+              :content="$t('常规下单与拼团下单都可选')"
+              placement="top"
+            >
+              <span class="el-icon-question icon-info"></span>
+            </el-tooltip>
+          </el-radio>
+          <el-radio v-model="copyData.only_for_group" :label="1">
+            {{ $t('仅拼团路线') }}
+            <el-tooltip
+              style="color: #74b34f"
+              effect="dark"
+              :content="$t('常规下单不可选该路线，仅拼团可选用')"
+              placement="top"
+            >
+              <span class="el-icon-question icon-info"></span> </el-tooltip
+          ></el-radio>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -186,8 +205,6 @@ export default {
     },
     // 修改开关
     changeTransfer(event, enabled, id) {
-      console.log(typeof event, '我是event')
-      console.log(event, 'event')
       this.$request.lineGroupEnabled(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
@@ -246,49 +263,41 @@ export default {
         return this.$message.error(this.$t('请输入新线路名称'))
       }
       if (this.lineStatus === 'edit') {
-        this.$request
-          .editLineGroup(this.copyId, {
-            name: this.copyData.name
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.copyDialog = false
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
+        this.$request.editLineGroup(this.copyId, { ...this.copyData }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.copyDialog = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       } else {
-        this.$request
-          .copyGroupLine(this.copyId, {
-            name: this.copyData.name
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.copyDialog = false
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
+        this.$request.copyGroupLine(this.copyId, { ...this.copyData }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.copyDialog = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       }
     },
     selectionChange(selection) {

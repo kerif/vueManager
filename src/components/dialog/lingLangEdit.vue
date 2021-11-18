@@ -17,8 +17,27 @@
         <el-input v-model="ruleForm.name" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('路线类型')">
-        <el-radio v-model="ruleForm.only_for_group" :label="0">{{ $t('普通路线') }}</el-radio>
-        <el-radio v-model="ruleForm.only_for_group" :label="1">{{ $t('仅拼团路线') }}</el-radio>
+        <el-radio v-model="ruleForm.only_for_group" :label="0">
+          {{ $t('普通路线') }}
+          <el-tooltip
+            style="color: #74b34f"
+            effect="dark"
+            :content="$t('常规下单与拼团下单都可选')"
+            placement="top"
+          >
+            <span class="el-icon-question icon-info"></span>
+          </el-tooltip>
+        </el-radio>
+        <el-radio v-model="ruleForm.only_for_group" :label="1">
+          {{ $t('仅拼团路线') }}
+          <el-tooltip
+            style="color: #74b34f"
+            effect="dark"
+            :content="$t('常规下单不可选该路线，仅拼团可选用')"
+            placement="top"
+          >
+            <span class="el-icon-question icon-info"></span> </el-tooltip
+        ></el-radio>
       </el-form-item>
     </el-form>
     <div slot="footer">
