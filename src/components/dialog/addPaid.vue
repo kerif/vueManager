@@ -15,11 +15,11 @@
         <span class="right-padding">{{ order_sn }}</span>
       </el-form-item>
       <!-- 应付金额￥ -->
-      <el-form-item :label="$t('应付金额￥')">
+      <el-form-item :label="$t(`应付金额${localization.currency_unit}`)">
         <span class="right-padding">{{ actual_payment_fee }}</span>
       </el-form-item>
       <!-- *实付金额￥ -->
-      <el-form-item :label="$t('实付金额￥')" prop="confirm_amount">
+      <el-form-item :label="$t(`实付金额${localization.currency_unit}`)" prop="confirm_amount">
         <el-input
           class="input-sty"
           v-model="ruleForm.confirm_amount"
@@ -27,7 +27,7 @@
         ></el-input>
       </el-form-item>
       <!-- *支付方式￥ -->
-      <el-form-item :label="$t('*支付方式￥')">
+      <el-form-item :label="$t('*支付方式')">
         <el-select
           style="margin-left: 50px"
           v-model="ruleForm.payment_id"
@@ -113,6 +113,7 @@ export default {
         payment_id: '',
         payStatus: 0
       },
+      localization: {},
       payment_id: '',
       images: [],
       user_id: '',
@@ -127,9 +128,9 @@ export default {
   methods: {
     getPayMethod() {
       this.$request.payMethod().then(res => {
-        console.log(res)
         if (res.ret) {
           this.methodData = res.data
+          this.localization = res.localization
         }
       })
     },
@@ -162,12 +163,12 @@ export default {
       return this.$request.uploadImg(params)
     },
     clear() {
-      this.$refs['ruleForm'].resetFields()
-      this.$refs['ruleForm'].clearValidate()
+      this.ruleForm.payment_id = ''
       this.ruleForm.confirm_amount = ''
       this.ruleForm.remark = ''
       this.ruleForm.transfer_account = ''
       this.ruleForm.external_number = ''
+      this.ruleForm.payStatus = 0
       this.images = []
     },
     init() {
@@ -179,12 +180,11 @@ export default {
         confirm_amount: this.ruleForm.confirm_amount,
         transfer_account: this.ruleForm.transfer_account,
         remark: this.ruleForm.remark,
-        payStatus: this.ruleForm.payStatus,
+        pay_status: this.ruleForm.payStatus,
         images: this.images
       }
       this.$request.paid(this.id, { ...info }).then(res => {
         if (res.ret) {
-          console.log(res)
           this.$notify({
             type: 'success',
             title: this.$t('操作成功'),
