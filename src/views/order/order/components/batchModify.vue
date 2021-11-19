@@ -7,9 +7,32 @@
     @close="clear"
   >
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
+      <el-form-item :label="$t('寄送仓库')">
+        <el-select
+          v-model="ruleForm.warehouse_id"
+          @change="getAreaData"
+          :placeholder="$t('请选择')"
+          filterable
+          clearable
+        >
+          <el-option
+            v-for="item in agentData"
+            :key="item.id"
+            :value="item.id"
+            :label="item.warehouse_name"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item :label="$t('寄送国家')">
-        <el-select v-model="ruleForm.country" :placeholder="$t('请选择国家')" filterable clearable>
-          <el-option v-for="item in countryList" :key="item.id" :label="item.name" :value="item.id">
+        <el-select
+          v-model="ruleForm.country"
+          :placeholder="$t('请选择')"
+          :disabled="this.ruleForm.warehouse_id === ''"
+          filterable
+          clearable
+        >
+          <el-option v-for="item in shipData" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
       </el-form-item>
@@ -21,17 +44,33 @@
         </el-checkbox-group>
       </el-form-item>
       <div class="remark">{{ $t('修改数据将应用于以下全部包裹') }}</div>
-      <el-table :data="PackageData" border style="width: 100%">
-        <el-table-column prop="date" :label="$t('快递单号')" width="180"> </el-table-column>
-        <el-table-column prop="name" :label="$t('寄送国家')" width="180"> </el-table-column>
-        <el-table-column prop="address" :label="$t('包裹属性')"> </el-table-column>
+      <el-table :data="orderData" border style="width: 100%">
+        <el-table-column :label="$t('快递单号')" width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.express_num }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="destination_country.cn_name" :label="$t('寄送国家')" width="180">
+        </el-table-column>
+        <el-table-column :label="$t('包裹属性')">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.props" :key="item.id">
+              {{ item.cn_name }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column prop="address" :label="$t('操作')">
-          <i class="el-icon-delete"></i>
+          <template slot-scope="scope">
+            <i
+              class="el-icon-delete delete-icon"
+              @click="deleteExpressNum(scope.$index, orderData)"
+            ></i>
+          </template>
         </el-table-column>
       </el-table>
     </el-form>
     <div slot="footer">
-      <el-button @click="showBatch = false">{{ $t('取消') }}</el-button>
+      <el-button @click="close">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
@@ -42,18 +81,20 @@ export default {
   data() {
     return {
       typeList: [],
-      PackageData: [],
       countryList: [],
+      agentData: [],
+      shipData: [],
+      areaId: '',
       ruleForm: {
         checkList: [],
+        warehouse_id: '',
         country: ''
       }
     }
   },
   created() {
     this.getProp()
-    this.getCountry()
-    this.getList()
+    this.getAgentData()
   },
   props: {
     showBatch: {
@@ -62,42 +103,28 @@ export default {
     },
     deleteNum: {
       type: Array
+    },
+    orderData: {
+      type: Array
     }
   },
   methods: {
-    //获取国家
-    getCountry() {
-      this.$request.countryLocation().then(res => {
+    // 获取仓库
+    getAgentData() {
+      this.$request.getSimpleWarehouse().then(res => {
+        this.agentData = res.data
+      })
+    },
+    // 通过仓库id拉取相对应的地区
+    getAreaData(id) {
+      this.$request.getArea(id).then(res => {
         if (res.ret) {
-          this.countryList = res.data
-          this.options = res.data.map(item => {
-            return {
-              value: item.id,
-              label: item.name,
-              children:
-                item.areas < 1
-                  ? undefined
-                  : item.areas.map(item => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                        children:
-                          item.areas < 1
-                            ? undefined
-                            : item.areas.map(item => {
-                                return {
-                                  value: item.id,
-                                  label: item.name
-                                }
-                              })
-                      }
-                    })
-            }
-          })
-          console.log(this.options)
+          this.shipData = res.data
+          console.log(this.shipData)
         }
       })
     },
+
     // 获取渠道属性
     getProp() {
       this.$request.getProps().then(res => {
@@ -108,30 +135,44 @@ export default {
         }
       })
     },
-    getList() {},
     clear() {
       this.ruleForm.checkList = []
       this.ruleForm.country = ''
+      this.ruleForm.warehouse_id = ''
     },
     close() {
       this.$emit('passVal', false)
     },
+    deleteExpressNum(index, rows) {
+      rows.splice(index, 1)
+    },
     submit() {
-      this.$request.batchUpdate().then(res => {
-        if (res.ret) {
-          console.log(res)
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
+      let param = {
+        ids: this.deleteNum,
+        country_id: this.ruleForm.country,
+        prop_ids: this.ruleForm.checkList
+      }
+      this.$confirm(this.$t('确定进行批量修改操作吗？'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.batchUpdate(param).then(res => {
+          if (res.ret) {
+            console.log(res)
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     }
   }
@@ -156,6 +197,9 @@ export default {
   }
   .el-form-item__content {
     margin-left: 100px;
+  }
+  .delete-icon {
+    color: red;
   }
 }
 </style>
