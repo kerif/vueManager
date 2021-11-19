@@ -489,14 +489,6 @@
         :visible.sync="innerVisible"
         append-to-body
       >
-        <!-- <el-popover
-        width="30%"
-        placement="bottom"
-        trigger="hover"
-        :title="
-          uplodaStatus === 'ios' ? $t('集运系统运营APP（iOS版）') : $t('集运系统运营APP（安卓版）')
-        "
-      > -->
         <div style="text-align: center">
           <img v-if="uplodaStatus === 'ios'" src="../../assets/ios.png" />
           <div v-else>
@@ -509,7 +501,6 @@
             </div>
           </div>
         </div>
-        <!-- </el-popover> -->
       </el-dialog>
     </el-dialog>
   </div>

@@ -40,12 +40,12 @@
         </el-select>
       </el-form-item>
       <!-- 支付状态 -->
-      <!-- <el-form-item :label="$t('支付状态')">
+      <el-form-item :label="$t('支付状态')">
         <el-radio-group v-model="ruleForm.payStatus" style="margin-left: 50px">
           <el-radio :label="0">{{ $t('待审核') }}</el-radio>
           <el-radio :label="1">{{ $t('审核通过') }}</el-radio>
         </el-radio-group>
-      </el-form-item> -->
+      </el-form-item>
       <!-- 备注 -->
       <el-form-item :label="$t('备注')">
         <el-input

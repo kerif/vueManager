@@ -25,7 +25,9 @@
         <el-table-column prop="date" :label="$t('快递单号')" width="180"> </el-table-column>
         <el-table-column prop="name" :label="$t('寄送国家')" width="180"> </el-table-column>
         <el-table-column prop="address" :label="$t('包裹属性')"> </el-table-column>
-        <el-table-column prop="address" :label="$t('操作')"> </el-table-column>
+        <el-table-column prop="address" :label="$t('操作')">
+          <i class="el-icon-delete"></i>
+        </el-table-column>
       </el-table>
     </el-form>
     <div slot="footer">
@@ -106,12 +108,11 @@ export default {
         }
       })
     },
-    getList() {
-      this.$request.getOrderDetails({ id: this.deleteNum }).then(res => {
-        console.log(res)
-      })
+    getList() {},
+    clear() {
+      this.ruleForm.checkList = []
+      this.ruleForm.country = ''
     },
-    clear() {},
     close() {
       this.$emit('passVal', false)
     },
@@ -119,6 +120,17 @@ export default {
       this.$request.batchUpdate().then(res => {
         if (res.ret) {
           console.log(res)
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
         }
       })
     }
@@ -141,6 +153,9 @@ export default {
   }
   .remark {
     color: red;
+  }
+  .el-form-item__content {
+    margin-left: 100px;
   }
 }
 </style>

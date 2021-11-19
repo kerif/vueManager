@@ -77,7 +77,7 @@
             >
           </div>
           <div class="number-top">
-            {{ $t('转运单号') }}：<span>{{ form.order_sn }}</span
+            {{ $t('转运单号') }}：<span>{{ form.logistics_sn }}</span
             ><span>({{ form.logistics_company }})</span>
           </div>
         </div>
