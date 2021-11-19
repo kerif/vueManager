@@ -8,7 +8,11 @@
   >
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
       <el-form-item :label="$t('申报价值')">
-        <el-input v-model="ruleForm.package_value" :placeholder="$t('请申报价值')"></el-input>
+        <el-input
+          v-model="ruleForm.package_value"
+          class="input-sty"
+          :placeholder="$t('请申报价值')"
+        ></el-input>
       </el-form-item>
       <el-form-item :label="$t('寄送仓库')">
         <el-select
@@ -156,7 +160,8 @@ export default {
       let param = {
         ids: this.deleteNum,
         country_id: this.ruleForm.country,
-        prop_ids: this.ruleForm.checkList
+        prop_ids: this.ruleForm.checkList,
+        package_value: this.ruleForm.package_value
       }
       this.$confirm(this.$t('确定进行批量修改操作吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
@@ -171,6 +176,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
+            this.$emit('passVal', false)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -190,6 +196,9 @@ export default {
   font-size: 14px;
   .el-dialog__header {
     background-color: #0e102a;
+  }
+  .input-sty {
+    width: 40% !important;
   }
   .el-dialog__title {
     font-size: 14px;
