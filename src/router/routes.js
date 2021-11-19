@@ -5,6 +5,7 @@ const Layout = loadonDemand('layout/layouttop')
 const LayoutContainer = loadonDemand('layout/layoutcontainer')
 const Panel = loadonDemand('home/panel')
 const homeNotice = loadonDemand('home/notice')
+const updateList = loadonDemand('home/updateList')
 
 // 修改密码
 const ResetPassword = loadonDemand('home/reset-password')
@@ -321,6 +322,18 @@ export default [
             }
           },
           {
+            path: '/home/update_list',
+            name: 'updateList',
+            component: updateList,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '更新日志',
+              parent: '/home/panel'
+            }
+          },
+          {
             path: '/home/notice/:id',
             name: 'systemNotice',
             component: homeNotice,
@@ -328,7 +341,7 @@ export default [
             meta: {
               level: 3,
               group: '首页',
-              name: '更新日志',
+              name: '更新日志详情',
               parent: '/home/panel'
             }
           },

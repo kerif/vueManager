@@ -332,7 +332,9 @@
       </el-col>
       <el-col :span="7" style="padding-left: 0 !important">
         <div class="system">
-          <span class="title">{{ $t('系统通知') }}</span>
+          <span class="title" @click="$router.push({ name: 'updateList' })">{{
+            $t('更新日志')
+          }}</span>
           <div class="system-notice">
             <ul class="notice">
               <li
@@ -1404,6 +1406,7 @@ export default {
       .title {
         font-size: 16px;
         font-weight: bold;
+        cursor: pointer;
       }
       .process-content {
         padding: 5px 0;
