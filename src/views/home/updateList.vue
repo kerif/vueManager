@@ -38,6 +38,12 @@ export default {
   created() {
     this.getList()
   },
+  mounted() {
+    let div = document.querySelector('.el-main')
+    if (div) {
+      div.scrollTo(0, 0)
+    }
+  },
   methods: {
     getList() {
       this.$request.getSystem().then(res => {
@@ -59,7 +65,7 @@ export default {
 </script>
 <style lang="scss">
 .updates-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 110px);
   background-color: #fff !important;
   .timeline-box {
     padding: 50px 0 0 70px;
