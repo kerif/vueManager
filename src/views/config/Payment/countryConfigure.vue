@@ -4,6 +4,9 @@
       <el-col :span="10">
         <div class="select-box">
           <el-button @click="regionalMana">{{ $t('地域通知管理') }}</el-button>
+          <!-- <el-button class="btn-light-red" style="margin: 0 10px" @click="batchToImport">{{
+            $t('批量导入')
+          }}</el-button> -->
           <add-btn @click.native="addCountry">{{ $t('添加国家') }}</add-btn>
         </div>
         <el-table
@@ -257,6 +260,7 @@
         </div>
       </el-dialog>
     </el-dialog>
+    <!-- <batch-import :showImport="showImport" @passavl="passavl"></batch-import> -->
   </div>
 </template>
 
@@ -267,10 +271,12 @@ import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import { downloadStreamFile } from '@/utils/index'
+// import batchImport from './components/batchImport'
 export default {
   components: {
     AddBtn,
     NlePagination
+    // batchImport
   },
   mixins: [pagination],
   data() {
@@ -299,7 +305,8 @@ export default {
       state: '',
       areasId: '',
       fileList: [],
-      file: ''
+      file: '',
+      showImport: false
     }
   },
   created() {
@@ -845,6 +852,13 @@ export default {
       this.form.content_translations = {}
       this.innerVisible = false
       this.outerVisible = true
+    },
+    // 批量导入
+    batchToImport() {
+      this.showImport = true
+    },
+    passavl() {
+      this.showImport = false
     }
   }
 }

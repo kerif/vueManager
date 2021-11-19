@@ -23,7 +23,8 @@
         <el-input
           class="input-sty"
           v-model="ruleForm.confirm_amount"
-          :placeholder="$t('请输入支付金额')"
+          :disabled="true"
+          :placeholder="actual_payment_fee"
         ></el-input>
       </el-form-item>
       <!-- *支付方式￥ -->
