@@ -71,7 +71,7 @@
           <template slot-scope="scope">
             <i
               class="el-icon-delete delete-icon"
-              @click="deleteExpressNum(scope.$index, orderData)"
+              @click="deleteExpressNum(scope.$index, packageData)"
             ></i>
           </template>
         </el-table-column>
@@ -215,6 +215,7 @@ export default {
   }
   .delete-icon {
     color: red;
+    cursor: pointer;
   }
 }
 </style>

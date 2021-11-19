@@ -231,6 +231,7 @@ export default {
     position: relative;
     top: 4px;
     margin-left: 20px;
+    vertical-align: middle;
   }
   .info-icon {
     font-size: 20px;
@@ -238,6 +239,7 @@ export default {
     position: relative;
     top: 4px;
     margin-left: 20px;
+    vertical-align: middle;
   }
   .logout-icon {
     font-size: 20px;
