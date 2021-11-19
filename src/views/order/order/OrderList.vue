@@ -344,7 +344,7 @@
     <batch-modify
       :showBatch="showBatch"
       :deleteNum="deleteNum"
-      :orderData="orderData"
+      :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
   </div>
@@ -392,7 +392,8 @@ export default {
         keyword: '',
         is_warning: 0
       },
-      showBatch: false
+      showBatch: false,
+      packageData: []
     }
   },
   activated() {
@@ -525,7 +526,10 @@ export default {
       this.$router.push({ name: 'applyPackage', query: { userId: userId } })
     },
     selectionChange(selection) {
+      console.log(selection, 'selection-change')
       this.deleteNum = selection.map(item => item.id)
+      console.log(this.deleteNum)
+      this.packageData = selection
     },
     goExpress(expressNum) {
       window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)

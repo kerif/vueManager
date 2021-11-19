@@ -7,6 +7,9 @@
     @close="clear"
   >
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
+      <el-form-item :label="$t('申报价值')">
+        <el-input v-model="ruleForm.package_value" :placeholder="$t('请申报价值')"></el-input>
+      </el-form-item>
       <el-form-item :label="$t('寄送仓库')">
         <el-select
           v-model="ruleForm.warehouse_id"
@@ -44,7 +47,7 @@
         </el-checkbox-group>
       </el-form-item>
       <div class="remark">{{ $t('修改数据将应用于以下全部包裹') }}</div>
-      <el-table :data="orderData" border style="width: 100%">
+      <el-table :data="packageData" border style="width: 100%">
         <el-table-column :label="$t('快递单号')" width="180">
           <template slot-scope="scope">
             <span>{{ scope.row.express_num }}</span>
@@ -59,7 +62,8 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="address" :label="$t('操作')">
+        <el-table-column :label="$t('申报价值')" prop="package_value"> </el-table-column>
+        <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
             <i
               class="el-icon-delete delete-icon"
@@ -88,7 +92,8 @@ export default {
       ruleForm: {
         checkList: [],
         warehouse_id: '',
-        country: ''
+        country: '',
+        package_value: ''
       }
     }
   },
@@ -104,7 +109,7 @@ export default {
     deleteNum: {
       type: Array
     },
-    orderData: {
+    packageData: {
       type: Array
     }
   },
@@ -139,6 +144,7 @@ export default {
       this.ruleForm.checkList = []
       this.ruleForm.country = ''
       this.ruleForm.warehouse_id = ''
+      this.ruleForm.package_value = ''
     },
     close() {
       this.$emit('passVal', false)

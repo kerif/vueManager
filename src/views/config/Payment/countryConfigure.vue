@@ -260,7 +260,7 @@
         </div>
       </el-dialog>
     </el-dialog>
-    <!-- <batch-import :showImport="showImport" @passavl="passavl"></batch-import> -->
+    <batch-import :showImport="showImport" @passavl="passavl"></batch-import>
   </div>
 </template>
 
@@ -271,12 +271,12 @@ import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import { downloadStreamFile } from '@/utils/index'
-// import batchImport from './components/batchImport'
+import batchImport from './components/batchImport'
 export default {
   components: {
     AddBtn,
-    NlePagination
-    // batchImport
+    NlePagination,
+    batchImport
   },
   mixins: [pagination],
   data() {
