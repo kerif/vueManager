@@ -43,7 +43,11 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button icon="el-icon-download" slot="reference" round @click="uploadManagenent"
+        <el-button
+          icon="el-icon-download download-icon"
+          slot="reference"
+          round
+          @click="uploadManagenent"
           >{{ $t('下载管理') }}
         </el-button>
       </el-popover>
@@ -246,10 +250,14 @@ export default {
     position: relative;
     top: 4px;
     cursor: pointer;
+    vertical-align: middle;
     &:hover {
       color: #3540a5;
       animation: move 0.3s ease-in 2;
     }
+  }
+  .download-icon {
+    vertical-align: middle;
   }
   .transfer-left {
     float: left;
