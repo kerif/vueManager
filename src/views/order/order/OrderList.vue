@@ -76,7 +76,7 @@
         >
           {{ $t('批量上架') }}
         </el-button>
-        <!-- <el-button
+        <el-button
           class="btn-light-red"
           v-if="activeName === '2'"
           @click="batchModify"
@@ -84,7 +84,7 @@
           plain
         >
           {{ $t('批量修改') }}
-        </el-button> -->
+        </el-button>
       </div>
       <div class="header-search">
         <el-input
@@ -352,15 +352,15 @@
 
 <script>
 import OrderListSearch from './components/orderListSearch'
-// import BatchModify from './components/batchModify'
+import BatchModify from './components/batchModify'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
     OrderListSearch,
-    NlePagination
-    // BatchModify
+    NlePagination,
+    BatchModify
   },
   name: 'orderlist',
   mixins: [pagination],
@@ -805,13 +805,13 @@ export default {
     onTabChange() {
       this.page_params.page = 1
       this.getList()
+    },
+    batchModify() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.showBatch = true
     }
-    // batchModify() {
-    //   if (!this.deleteNum || !this.deleteNum.length) {
-    //     return this.$message.error(this.$t('请选择'))
-    //   }
-    //   this.showBatch = true
-    // }
   }
 }
 </script>

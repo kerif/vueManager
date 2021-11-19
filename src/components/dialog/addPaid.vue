@@ -24,7 +24,7 @@
           class="input-sty"
           v-model="ruleForm.confirm_amount"
           :disabled="true"
-          :placeholder="actual_payment_fee"
+          :placeholder="$t('请输入实付金额')"
         ></el-input>
       </el-form-item>
       <!-- *支付方式￥ -->
@@ -174,6 +174,7 @@ export default {
     },
     init() {
       this.getPayMethod()
+      this.ruleForm.confirm_amount = this.actual_payment_fee
     },
     submit() {
       let info = {
