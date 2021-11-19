@@ -32,7 +32,7 @@
         <el-select
           style="margin-left: 50px"
           v-model="ruleForm.payment_id"
-          placeholder="请选择支付方式"
+          :placeholder="$t('请选择支付方式')"
           clearable
         >
           <el-option v-for="item in methodData" :key="item.id" :label="item.name" :value="item.id"
@@ -41,7 +41,7 @@
         </el-select>
       </el-form-item>
       <!-- 支付状态 -->
-      <el-form-item :label="$t('支付状态')">
+      <el-form-item :label="$t('支付状态')" v-if="this.ruleForm.payment_id !== 0">
         <el-radio-group v-model="ruleForm.payStatus" style="margin-left: 50px">
           <el-radio :label="0">{{ $t('待审核') }}</el-radio>
           <el-radio :label="1">{{ $t('审核通过') }}</el-radio>
