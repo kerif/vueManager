@@ -23,15 +23,15 @@
                 $t('下载对应模版，如实填写批量下单表后，请以Excel形式保存，点击第二步上传')
               }}</span
               ><br />
-              <el-row>
-                <el-col :span="10">
-                  <el-button
-                    @click="uploadList"
-                    size="small"
+              <el-row :gutter="20">
+                <el-col :span="20">
+                  <div
                     v-for="item in tmpData"
                     :key="item.id"
-                    >{{ item.name }}</el-button
+                    style="display: inline-block; margin: 0 5px 0 0"
                   >
+                    <el-button @click="uploadList" size="small">{{ item.name }}</el-button>
+                  </div>
                 </el-col>
               </el-row>
             </el-form-item>

@@ -404,7 +404,10 @@ export default {
     },
     // 登录
     onLogin() {
-      this.userInfo.password = this.excrypt(this.userInfo.password)
+      let params = {
+        ...this.userInfo
+      }
+      params.password = this.excrypt(this.userInfo.password)
       if (!this.userInfo.username.trim()) {
         return this.$message.info(this.$t('请输入邮箱或手机号'))
       } else if (!this.userInfo.password.trim()) {
@@ -416,7 +419,7 @@ export default {
         localStorage.setItem('USERNAME', this.userInfo.username.trim())
         localStorage.setItem('PASSWORD', this.userInfo.password.trim())
         this.$request
-          .login(this.userInfo)
+          .login(params)
           .then(res => {
             if (res.ret) {
               this.$notify({
@@ -448,7 +451,7 @@ export default {
         localStorage.removeItem('USERNAME')
         localStorage.removeItem('PASSWORD')
         this.$request
-          .login(this.userInfo)
+          .login(params)
           .then(res => {
             if (res.ret) {
               this.$notify({
