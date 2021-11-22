@@ -1611,6 +1611,10 @@ exports.deleteWarehouseAddress = id => {
 exports.AutoCountry = params => {
   return $form.get('countries/search', { params })
 }
+// 配置 批量导入国家 获取模板类型列表
+exports.getTmpTypeList = () => {
+  return $form.get('countries/import-template-types')
+}
 // 仓库地址 获取单条仓库管理
 exports.locationArea = (id, params) => {
   return $form.get(`warehouse-address/${id}/goods-allocation-areas`, { params })
@@ -1964,8 +1968,8 @@ exports.getImportTemplate = config => {
   return $form.get('countries/import-template', config)
 }
 // 配置 批量导入
-exports.batchImport = file => {
-  return $file.post('countries/import', file)
+exports.batchImport = (file, params) => {
+  return $file.post('countries/import', file, params)
 }
 // 配置 设置功能状态
 exports.setFunctionStatus = (func, status) => {

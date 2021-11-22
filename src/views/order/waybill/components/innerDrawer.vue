@@ -246,7 +246,8 @@ export default {
           { id: 'package_categories_name', name: '包裹物品类型' },
           { id: 'package_qty', name: '包裹物品数量' },
           { id: 'package_volume', name: '包裹体积 (m³)' },
-          { id: 'package_size', name: '包裹尺寸(长宽高)' }
+          { id: 'package_size', name: '包裹尺寸(长宽高)' },
+          { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` }
         ]
         // 入库信息 总计
         this.warehouseSum = [
@@ -439,7 +440,8 @@ export default {
           { id: 'package_categories_name', name: '包裹物品类型' },
           { id: 'package_qty', name: '包裹物品数量' },
           { id: 'package_volume', name: '包裹体积 (m³)' },
-          { id: 'package_size', name: '包裹尺寸(长宽高)' }
+          { id: 'package_size', name: '包裹尺寸(长宽高)' },
+          { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` }
         ]
         // 入库信息 总计
         this.warehouseSum = [

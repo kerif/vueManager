@@ -4,9 +4,7 @@
       <el-col :span="10">
         <div class="select-box">
           <el-button @click="regionalMana">{{ $t('地域通知管理') }}</el-button>
-          <!-- <el-button class="btn-light-red" style="margin: 0 10px" @click="batchToImport">{{
-            $t('批量导入')
-          }}</el-button> -->
+          <!-- <el-button style="margin: 0 10px" @click="batchToImport">{{ $t('批量导入') }}</el-button> -->
           <add-btn @click.native="addCountry">{{ $t('添加国家') }}</add-btn>
         </div>
         <el-table
@@ -260,7 +258,7 @@
         </div>
       </el-dialog>
     </el-dialog>
-    <batch-import :showImport="showImport" @passavl="passavl"></batch-import>
+    <batch-import :showImport="showImport" @passVal="passVal"></batch-import>
   </div>
 </template>
 
@@ -857,7 +855,7 @@ export default {
     batchToImport() {
       this.showImport = true
     },
-    passavl() {
+    passVal() {
       this.showImport = false
     }
   }

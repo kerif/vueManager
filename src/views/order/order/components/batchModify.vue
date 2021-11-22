@@ -200,6 +200,9 @@ export default {
   .input-sty {
     width: 40% !important;
   }
+  .el-select {
+    width: 40% !important;
+  }
   .el-dialog__title {
     font-size: 14px;
     color: #fff;
