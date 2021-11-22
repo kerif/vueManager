@@ -407,6 +407,7 @@ export default {
       let params = {
         ...this.userInfo
       }
+      // 加密
       params.password = this.excrypt(this.userInfo.password)
       if (!this.userInfo.username.trim()) {
         return this.$message.info(this.$t('请输入邮箱或手机号'))
