@@ -84,6 +84,7 @@ export default {
   data() {
     return {
       options: [],
+      show: false,
       value: '',
       userRules: {
         prefix: ''
