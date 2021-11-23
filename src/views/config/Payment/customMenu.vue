@@ -30,6 +30,7 @@
                 <span v-if="scope.row.type === 2">图片消息</span>
                 <span v-if="scope.row.type === 3">跳转网页</span>
                 <span v-if="scope.row.type === 4">跳转小程序</span>
+                <span v-if="scope.row.type === 5">图文消息</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('操作')" width="300">
@@ -59,6 +60,7 @@
           <span v-if="scope.row.type === 2">图片消息</span>
           <span v-if="scope.row.type === 3">跳转网页</span>
           <span v-if="scope.row.type === 4">跳转小程序</span>
+          <span v-if="scope.row.type === 5">图文消息</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
