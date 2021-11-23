@@ -22,6 +22,7 @@
           <el-radio :label="2">{{ $t('发送图片消息') }}</el-radio>
           <el-radio :label="3">{{ $t('跳转网页') }}</el-radio>
           <el-radio :label="4">{{ $t('跳转小程序') }}</el-radio>
+          <el-radio :label="5">{{ $t('图文消息') }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item v-if="this.ruleForm.radio === 1">
@@ -98,6 +99,54 @@
           </el-input>
         </el-form-item>
       </div>
+      <div v-if="this.ruleForm.radio === 5">
+        <el-form-item :label="$t('标题')" style="margin-left: 70px" prop="title">
+          <el-input
+            v-model="ruleForm.title"
+            style="width: 50%"
+            :placeholder="$t('请输入图文消息标题')"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item :label="$t('图片')" style="margin-left: 70px" prop="picUrl">
+          <div class="img-item" v-if="this.ruleForm.picUrl">
+            <img :src="$baseUrl.IMAGE_URL + this.ruleForm.picUrl" alt="" class="goods-img" />
+            <span class="model-box"></span>
+            <span class="operat-box">
+              <i class="el-icon-zoom-in" @click="onPreview(this.ruleForm.picUrl)"></i>
+              <i class="el-icon-delete" @click="onDeleteImg"></i>
+            </span>
+          </div>
+          <el-upload
+            v-show="!this.ruleForm.picUrl"
+            class="avatar-uploader"
+            action=""
+            list-type="picture-card"
+            :http-request="uploadBaleImg"
+            :show-file-list="false"
+          >
+            <i class="el-icon-plus"> </i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item :label="$t('图文描述')" style="margin-left: 70px" prop="content">
+          <el-input
+            type="textarea"
+            v-model="ruleForm.content"
+            style="width: 50%"
+            :rows="5"
+            :placeholder="$t('请输入图文描述')"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item :label="$t('跳转连接')" style="margin-left: 70px" prop="pageAddress">
+          <el-input
+            v-model="ruleForm.pageAddress"
+            style="width: 50%"
+            :placeholder="$t('请输入图文消息跳转连接')"
+          >
+          </el-input>
+        </el-form-item>
+      </div>
     </el-form>
     <div slot="footer">
       <el-button
@@ -125,7 +174,9 @@ export default {
         content: '',
         appid: '',
         appPath: '',
-        webPage: ''
+        webPage: '',
+        title: '',
+        picUrl: ''
       },
       rules: {
         appid: [{ required: true, message: '请输入小程序的appid', trigger: 'blur' }],
@@ -143,7 +194,11 @@ export default {
       })
     },
     onDeleteImg() {
-      this.image = ''
+      if (this.ruleForm.radio === 2) {
+        this.image = ''
+      } else if (this.ruleForm.radio === 5) {
+        this.ruleForm.picUrl = ''
+      }
     },
     // 上传打包照片
     uploadBaleImg(item) {
@@ -151,7 +206,11 @@ export default {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
-          this.image = res.data[0].path
+          if (this.ruleForm.radio === 2) {
+            this.image = res.data[0].path
+          } else if (this.ruleForm.radio === 5) {
+            this.ruleForm.picUrl = res.data[0].path
+          }
           this.$message.success(this.$t('上传成功'))
         } else {
           this.$message({
@@ -192,6 +251,8 @@ export default {
         this.ruleForm.pageAddress = res.data.url
         this.ruleForm.webPage = res.data.url
         this.ruleForm.appid = res.data.appid
+        this.ruleForm.title = res.data.title
+        this.ruleForm.picUrl = res.data.pic_url
         this.image = res.data.image
       })
     },
@@ -200,22 +261,28 @@ export default {
         if (valid) {
           let param = {
             name: this.ruleForm.menuName,
-            content: this.ruleForm.content,
-            appid: this.ruleForm.appid,
-            page_path: this.ruleForm.appPath,
-            parent_id: this.id,
-            image: this.image
+            type: this.ruleForm.radio,
+            parent_id: this.id
+            // content: this.ruleForm.content,
+            // appid: this.ruleForm.appid,
+            // page_path: this.ruleForm.appPath,
+            // image: this.image
           }
           if (this.ruleForm.radio === 1) {
-            param.type = 1
+            param.content = this.ruleForm.content
           } else if (this.ruleForm.radio === 2) {
-            param.type = 2
+            param.image = this.image
           } else if (this.ruleForm.radio === 3) {
-            param.type = 3
             param.url = this.ruleForm.pageAddress
-          } else {
-            param.type = 4
+          } else if (this.ruleForm.radio === 4) {
+            param.appid = this.ruleForm.appid
+            param.page_path = this.ruleForm.appPath
             param.url = this.ruleForm.webPage
+          } else {
+            param.title = this.ruleForm.title
+            param.pic_url = this.ruleForm.picUrl
+            param.url = this.ruleForm.pageAddress
+            param.content = this.ruleForm.content
           }
           if (this.state === 'add') {
             this.$request.getNewMenu(param).then(res => {
@@ -265,6 +332,8 @@ export default {
       this.ruleForm.app = ''
       this.ruleForm.appPath = ''
       this.ruleForm.webPage = ''
+      this.ruleForm.title = ''
+      this.ruleForm.picUrl = ''
       this.id = ''
       this.image = ''
     }
