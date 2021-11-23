@@ -29,7 +29,11 @@
         <el-table-column :label="$t('自提点编号')" prop="code"></el-table-column>
         <el-table-column :label="$t('所属国家地区')">
           <template slot-scope="scope">
-            <span>{{ scope.row.country && scope.row.country.name }}</span>
+            <span
+              >{{ scope.row.country && scope.row.country.name
+              }}{{ scope.row.area && scope.row.area.name
+              }}{{ scope.row.sub_area && scope.row.sub_area.name }}</span
+            >
           </template>
         </el-table-column>
         <el-table-column :label="$t('详细地址')" prop="address"></el-table-column>

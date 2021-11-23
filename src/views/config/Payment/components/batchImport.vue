@@ -25,13 +25,13 @@
               ><br />
               <el-row :gutter="20">
                 <el-col :span="20">
-                  <!-- <div
+                  <div
                     v-for="item in tmpData"
                     :key="item.id"
                     style="display: inline-block; margin: 0 5px 0 0"
                   >
                     <el-button @click="uploadList" size="small">{{ item.name }}</el-button>
-                  </div> -->
+                  </div>
                 </el-col>
               </el-row>
             </el-form-item>
@@ -56,13 +56,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer">
-            <el-button
-              type="primary"
-              @click="submit"
-              size="small"
-              :loading="$store.state.btnLoading"
-              >{{ $t('保存') }}</el-button
-            >
+            <el-button type="primary" @click="submit" size="small">{{ $t('保存') }}</el-button>
           </div>
         </div>
       </el-col>
@@ -76,7 +70,8 @@ export default {
   data() {
     return {
       tmpData: [],
-      fileList: []
+      fileList: [],
+      type: []
     }
   },
   props: {
@@ -94,6 +89,8 @@ export default {
       //   if (res.ret) {
       //     console.log(res.data)
       //     this.tmpData = res.data
+      //     this.type = res.data.map(item => item.id)
+      //     console.log(this.type)
       //   }
       // })
     },
@@ -152,7 +149,7 @@ export default {
       //       message: res.tips,
       //       type: 'success'
       //     })
-      //     this.$emit('passVal', false)
+      this.$emit('passVal', false)
       //   } else {
       //     this.$notify({
       //       title: this.$t('操作失败'),

@@ -137,6 +137,7 @@ export default {
   created() {
     this.getList()
   },
+  watch: {},
   methods: {
     // 表格数据
     getPriceTable() {
@@ -325,6 +326,7 @@ export default {
               editRender
             }
           })
+          console.log(this.ctableColumn)
         }
       })
     },
