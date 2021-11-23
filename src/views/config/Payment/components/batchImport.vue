@@ -25,13 +25,13 @@
               ><br />
               <el-row :gutter="20">
                 <el-col :span="20">
-                  <div
+                  <!-- <div
                     v-for="item in tmpData"
                     :key="item.id"
                     style="display: inline-block; margin: 0 5px 0 0"
                   >
                     <el-button @click="uploadList" size="small">{{ item.name }}</el-button>
-                  </div>
+                  </div> -->
                 </el-col>
               </el-row>
             </el-form-item>
@@ -90,12 +90,12 @@ export default {
   },
   methods: {
     getList() {
-      this.$request.getTmpTypeList().then(res => {
-        if (res.ret) {
-          console.log(res.data)
-          this.tmpData = res.data
-        }
-      })
+      // this.$request.getTmpTypeList().then(res => {
+      //   if (res.ret) {
+      //     console.log(res.data)
+      //     this.tmpData = res.data
+      //   }
+      // })
     },
     close() {
       this.$emit('passVal', false)

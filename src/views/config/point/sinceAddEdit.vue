@@ -24,6 +24,7 @@
             <el-select
               v-model="form.country_id"
               @change="changeCountry"
+              @blur="trigger"
               filterable
               :disabled="!!this.$route.params.id && !hasStore"
               class="country-select"
@@ -510,6 +511,7 @@ export default {
       this.newWarehouseList = selectList ? selectList.children : []
       console.log(this.areas, 'this.areas')
     },
+    trigger() {},
     editSet() {
       this.announcementDailog = true
       this.announcementData.opening_hours = this.form.opening_hours
@@ -634,6 +636,13 @@ export default {
       rows.splice(index, 1)
     },
     handleChange() {
+      // if (this.areaData) {
+      //   this.newWarehouseList.forEach(item => {
+      //     if (item.label && !item.children) {
+      //       item.checkStrictly = true
+      //     }
+      //   })
+      // }
       this.form.area_id = this.areaData[0]
       this.form.sub_area_id = this.areaData[1]
     },
