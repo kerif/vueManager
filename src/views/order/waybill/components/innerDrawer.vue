@@ -320,7 +320,12 @@ export default {
         this.customerInfo = [
           { id: 'username', name: '用户名' },
           { id: 'email', name: '邮箱' },
-          { id: 'user_profile_address', name: '个人信息地址' }
+          { id: 'user_profile_address', name: '个人信息地址' },
+          { id: 'address_email', name: '地址邮箱' },
+          { id: 'address_wechat_id', name: '地址微信号' },
+          { id: 'wechat_id', name: '微信号' },
+          { id: 'profile_wechat_id', name: '个人信息微信号' },
+          { id: 'id_card', name: '身份证号' }
         ]
       })
     },
@@ -511,7 +516,12 @@ export default {
         this.customerInfo = [
           { id: 'username', name: '用户名' },
           { id: 'email', name: '邮箱' },
-          { id: 'user_profile_address', name: '个人信息地址' }
+          { id: 'user_profile_address', name: '个人信息地址' },
+          { id: 'address_email', name: '地址邮箱' },
+          { id: 'address_wechat_id', name: '地址微信号' },
+          { id: 'wechat_id', name: '微信号' },
+          { id: 'profile_wechat_id', name: '个人信息微信号' },
+          { id: 'id_card', name: '身份证号' }
         ]
         this.headerData.forEach(item => {
           if (item.checked === '1') {

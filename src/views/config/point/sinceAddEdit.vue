@@ -551,6 +551,7 @@ export default {
       this.form.expressLines = []
       const selectList = this.countryList.find(item => item.value === this.form.country_id)
       this.newWarehouseList = selectList ? selectList.children : []
+      console.log(this.newWarehouseList)
       console.log(this.areas, 'this.areas')
     },
     trigger() {},
