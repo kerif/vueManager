@@ -30,7 +30,7 @@
                     :key="item.id"
                     style="display: inline-block; margin: 0 5px 0 0"
                   >
-                    <el-button @click="uploadList" size="small">{{ item.name }}</el-button>
+                    <el-button @click="uploadList(item.id)" size="small">{{ item.name }}</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -71,7 +71,8 @@ export default {
     return {
       tmpData: [],
       fileList: [],
-      type: []
+      type: '',
+      params: ''
     }
   },
   props: {
@@ -97,9 +98,10 @@ export default {
     close() {
       this.$emit('passVal', false)
     },
-    uploadList() {
+    uploadList(id) {
       let param = {
-        responseType: 'blob'
+        responseType: 'blob',
+        type: id
       }
       this.$request.getImportTemplate(param).then(res => {
         downloadStreamFile(res, 'file', 'xlsx')
@@ -119,9 +121,9 @@ export default {
     },
     onUpload(file) {
       // 通过FormData对象上传文件
-      let params = new FormData()
-      params.append(`file`, file)
-      return this.$request.batchImport(params)
+      this.params = new FormData()
+      this.params.append(`file`, file)
+      return this.$request.uploadFiles(this.params)
     },
     uploadExcel(item) {
       let file = item.file
@@ -142,14 +144,14 @@ export default {
       })
     },
     submit() {
-      // this.$request.batchImport().then(res => {
+      // this.$request.batchImport(this.params).then(res => {
       //   if (res.ret) {
       //     this.$notify({
       //       title: this.$t('操作成功'),
       //       message: res.tips,
       //       type: 'success'
       //     })
-      this.$emit('passVal', false)
+      //     this.$emit('passVal', false)
       //   } else {
       //     this.$notify({
       //       title: this.$t('操作失败'),

@@ -75,11 +75,12 @@
             inactive-color="gray">
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
-          <!-- <el-color-picker
+          <el-color-picker
             v-model="color"
             size="mini"
             style="position: absoulte; top: 10px; right: 0px"
-          ></el-color-picker> -->
+            @change="updateBgColor"
+          ></el-color-picker>
           <div class="top-right">
             <el-upload
               class="upload-demo"
@@ -615,12 +616,31 @@ export default {
       })
     },
     // 背景色
-    // updateBgColor() {
-    //   this.$request.updateColor().then(res => {
-    //     console.log(res)
-    //     this.color = res.data
-    //   })
-    // },
+    updateBgColor() {
+      console.log(this.color, 'color')
+      const bgColor = this.color.slice(1)
+      const arr = [
+        Number(`0x${bgColor.slice(0, 2)}`),
+        Number(`0x${bgColor.slice(2, 4)}`),
+        Number(`0x${bgColor.slice(4)}`)
+      ]
+      let id = this.countryId
+      this.$request.updateColor(id, { rgb_color: arr }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     onUpload(file) {
       let params = new FormData()
       params.append(`file`, file)

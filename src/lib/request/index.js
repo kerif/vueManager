@@ -1964,16 +1964,16 @@ exports.verifyJuhe = params => {
   return $form.post(`configs/verify-juhe`, params)
 }
 // 配置 下载国际导入模板
-exports.getImportTemplate = config => {
-  return $form.get('countries/import-template', config)
+exports.getImportTemplate = params => {
+  return $form.get('countries/import-template', { params })
 }
 // 配置 批量导入
-exports.batchImport = (file, params) => {
-  return $file.post('countries/import', file, params)
+exports.batchImport = file => {
+  return $file.post('countries/import', file)
 }
 // 配置 更新国家背景颜色
-exports.updateColor = id => {
-  return $form.put(`countries/${id}/rgb-color`)
+exports.updateColor = (id, params) => {
+  return $form.put(`countries/${id}/rgb-color`, params)
 }
 // 配置 设置功能状态
 exports.setFunctionStatus = (func, status) => {
