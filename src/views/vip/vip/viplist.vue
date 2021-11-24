@@ -54,6 +54,61 @@
         </el-select>
       </div>
       <div class="search-item">
+        <div>{{ $t('余额范围') }}</div>
+        <el-input
+          v-model="searchParams.min_balance"
+          :placeholder="$t('请输入最小余额')"
+          style="width: 35%"
+        ></el-input>
+        -
+        <el-input
+          v-model="searchParams.max_balance"
+          :placeholder="$t('请输入最大余额')"
+          style="width: 35%"
+        ></el-input>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('积分范围') }}</div>
+        <el-input
+          v-model="searchParams.min_point"
+          :placeholder="$t('请输入最小积分')"
+          style="width: 35%"
+        ></el-input>
+        -
+        <el-input
+          v-model="searchParams.max_point"
+          :placeholder="$t('请输入最大积分')"
+          style="width: 35%"
+        ></el-input>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('订单数范围') }}</div>
+        <el-input
+          v-model="searchParams.min_order_count"
+          :placeholder="$t('请输入最小订单数')"
+          style="width: 35%"
+        ></el-input>
+        -
+        <el-input
+          v-model="searchParams.max_order_count"
+          :placeholder="$t('请输入最大订单数')"
+          style="width: 35%"
+        ></el-input>
+      </div>
+      <div class="search-item">
+        <div>{{ $t('注册时间') }}</div>
+        <el-date-picker
+          v-model="searchTime"
+          type="daterange"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        >
+        </el-date-picker>
+      </div>
+      <div class="search-item">
         <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
         <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
       </div>
@@ -293,8 +348,15 @@ export default {
         user_group_id: '',
         invite_id: '',
         customer_id: '',
-        sale_id: ''
+        sale_id: '',
+        max_balance: '',
+        min_balance: '',
+        max_point: '',
+        min_point: '',
+        max_order_count: '',
+        min_order_count: ''
       },
+      searchTime: [],
       gradeList: [],
       groupList: [],
       staffList: [],
@@ -327,13 +389,20 @@ export default {
   methods: {
     getList() {
       this.tableLoading = true
+      if (!this.searchTime) {
+        this.searchTime = []
+      }
       this.$request
         .getUsers({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
           user_group_id: this.page_params.group,
-          ...this.searchParams
+          ...this.searchParams,
+          min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
+          max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
+          begin_date: this.searchTime[0],
+          end_date: this.searchTime[1]
         })
         .then(res => {
           this.tableLoading = false
@@ -363,6 +432,13 @@ export default {
       this.searchParams.invite_id = ''
       this.searchParams.customer_id = ''
       this.searchParams.sale_id = ''
+      this.searchParams.min_balance = ''
+      this.searchParams.max_balance = ''
+      this.searchParams.min_point = ''
+      this.searchParams.max_point = ''
+      this.searchParams.min_order_count = ''
+      this.searchParams.max_order_count = ''
+      this.searchTime = []
       this.getList()
     },
     // 搜索等级列表
