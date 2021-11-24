@@ -126,13 +126,13 @@
           @click="bacthDelivery"
           >{{ $t('批量出库') }}</el-button
         >
-        <el-button
+        <!-- <el-button
           class="btn-dark-green"
           v-if="activeName === '1'"
           size="small"
           @click="bacthTransport"
           >{{ $t('批量转运') }}</el-button
-        >
+        > -->
         <el-button size="small" type="success" plain @click="uploadList(status)">{{
           $t('导出清单')
         }}</el-button>
