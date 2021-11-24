@@ -75,6 +75,11 @@
             inactive-color="gray">
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
+          <!-- <el-color-picker
+            v-model="color"
+            size="mini"
+            style="position: absoulte; top: 10px; right: 0px"
+          ></el-color-picker> -->
           <div class="top-right">
             <el-upload
               class="upload-demo"
@@ -304,11 +309,14 @@ export default {
       areasId: '',
       fileList: [],
       file: '',
-      showImport: false
+      showImport: false,
+      color: '#000',
+      cid: ''
     }
   },
   created() {
     this.getCountryList()
+    // this.updateBgColor()
   },
   methods: {
     // 获取国家/地区数据
@@ -459,6 +467,8 @@ export default {
     // 详情
     goDeatils(name, id) {
       this.countryId = id
+      this.cid = id
+      console.log(this.cid, 'this.cid')
       console.log(this.countryId, 'this.countryId111')
       this.countryName = name
       this.$request.superiorArea(this.countryId).then(res => {
@@ -604,6 +614,13 @@ export default {
         }
       })
     },
+    // 背景色
+    // updateBgColor() {
+    //   this.$request.updateColor().then(res => {
+    //     console.log(res)
+    //     this.color = res.data
+    //   })
+    // },
     onUpload(file) {
       let params = new FormData()
       params.append(`file`, file)
@@ -882,6 +899,7 @@ export default {
   .top-right {
     display: inline-block;
     float: right;
+    margin-top: 10px;
   }
   .code-sty {
     padding-left: 5px;

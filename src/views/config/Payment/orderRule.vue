@@ -48,6 +48,7 @@
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <!-- <order-box-num :show="show" @passVal="passVal"></order-box-num> -->
   </div>
 </template>
 
@@ -55,9 +56,11 @@
 import NlePagination from '@/components/pagination'
 import dialog from '@/components/dialog'
 import { pagination } from '@/mixin'
+// import OrderBoxNum from './components/orderBoxNum'
 export default {
   components: {
     NlePagination
+    // OrderBoxNum
   },
   mixins: [pagination],
   data() {
@@ -66,7 +69,8 @@ export default {
         type: ''
       },
       tableLoading: false,
-      rulesData: []
+      rulesData: [],
+      show: false
     }
   },
   created() {
@@ -114,6 +118,9 @@ export default {
       dialog({ type: 'rulesEdit', id: id, name: name }, () => {
         this.getRules()
       })
+    },
+    passVal() {
+      this.show = false
     },
     regenerate() {
       this.$confirm(

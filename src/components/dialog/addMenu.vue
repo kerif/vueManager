@@ -113,7 +113,7 @@
             <img :src="$baseUrl.IMAGE_URL + this.ruleForm.picUrl" alt="" class="goods-img" />
             <span class="model-box"></span>
             <span class="operat-box">
-              <i class="el-icon-zoom-in" @click="onPreview(this.ruleForm.picUrl)"></i>
+              <i class="el-icon-zoom-in" @click="onPreview(ruleForm.picUrl)"></i>
               <i class="el-icon-delete" @click="onDeleteImg"></i>
             </span>
           </div>

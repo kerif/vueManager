@@ -56,6 +56,60 @@
         </el-table-column>
       </el-table>
     </el-form>
+    <!-- <el-form ref="form" :model="boxRules" label-width="140px"> -->
+    <!-- 连接符 -->
+    <!-- <el-form-item :label="$t('连接符')">
+        <el-select v-model="boxRules.connector" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item> -->
+    <!-- 分箱号 -->
+    <!-- <el-form-item :label="$t('分箱号')">
+        <el-select v-model="boxRules.boxNum" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item> -->
+    <!-- 拼团订单后缀 -->
+    <!-- <el-form-item :label="$t('拼团订单后缀')">
+        <el-select v-model="boxRules.suffix" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item> -->
+    <!-- 子订单号-->
+    <!-- <el-form-item :label="$t('子订单号')">
+        <el-select v-model="boxRules.subOrederNum" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item> -->
+    <!-- 发货单前缀-->
+    <!-- <el-form-item :label="$t('发货单前缀')">
+        <el-input v-model="boxRules.prefix" :placeholder="$t('最多输入5个字符')"></el-input>
+      </el-form-item>
+    </el-form> -->
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
@@ -119,7 +173,16 @@ export default {
       },
       name: '',
       warehouseName: '',
-      id: ''
+      id: '',
+      options: [],
+      value: '',
+      boxRules: {
+        prefix: '',
+        connector: '',
+        boxNum: '',
+        subOrederNum: '',
+        suffix: ''
+      }
     }
   },
   mixins: [pagination],
@@ -224,6 +287,9 @@ export default {
   }
   .el-dialog__close {
     color: #fff;
+  }
+  .input-sty {
+    width: 40% !important;
   }
   .tips {
     margin-bottom: 30px;

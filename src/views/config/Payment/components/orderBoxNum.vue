@@ -9,7 +9,7 @@
     <el-form ref="form" :model="userRules" label-width="140px">
       <!-- 连接符 -->
       <el-form-item :label="$t('连接符')">
-        <el-select v-model="value" :placeholder="$t('请选择')">
+        <el-select v-model="userRules.connector" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -21,7 +21,7 @@
       </el-form-item>
       <!-- 分箱号 -->
       <el-form-item :label="$t('分箱号')">
-        <el-select v-model="value" :placeholder="$t('请选择')">
+        <el-select v-model="userRules.boxNum" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -33,19 +33,7 @@
       </el-form-item>
       <!-- 拼团订单后缀 -->
       <el-form-item :label="$t('拼团订单后缀')">
-        <el-select v-model="value" :placeholder="$t('请选择')">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <!-- 连接符 -->
-      <el-form-item :label="$t('连接符')">
-        <el-select v-model="value" :placeholder="$t('请选择')">
+        <el-select v-model="userRules.suffix" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -57,7 +45,7 @@
       </el-form-item>
       <!-- 子订单号-->
       <el-form-item :label="$t('子订单号')">
-        <el-select v-model="value" :placeholder="$t('请选择')">
+        <el-select v-model="userRules.subOrederNum" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -73,7 +61,7 @@
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="show = false">{{ $t('取消') }}</el-button>
+      <el-button @click="close">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
@@ -84,16 +72,35 @@ export default {
   data() {
     return {
       options: [],
-      show: false,
       value: '',
       userRules: {
-        prefix: ''
+        prefix: '',
+        connector: '',
+        boxNum: '',
+        subOrederNum: '',
+        suffix: ''
       }
+    }
+  },
+  props: {
+    show: {
+      type: Boolean,
+      default: false
     }
   },
   created() {},
   methods: {
-    confirm() {}
+    confirm() {},
+    close() {
+      this.$emit('passVal', false)
+    },
+    clear() {
+      this.userRules.prefix = ''
+      this.userRules.connector = ''
+      this.userRules.boxNum = ''
+      this.userRules.subOrederNum = ''
+      this.userRules.suffix = ''
+    }
   }
 }
 </script>

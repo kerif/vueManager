@@ -1971,6 +1971,10 @@ exports.getImportTemplate = config => {
 exports.batchImport = (file, params) => {
   return $file.post('countries/import', file, params)
 }
+// 配置 更新国家背景颜色
+exports.updateColor = id => {
+  return $form.put(`countries/${id}/rgb-color`)
+}
 // 配置 设置功能状态
 exports.setFunctionStatus = (func, status) => {
   return $form.put(`wechat-oa-config/${func}/status/${status}`)
