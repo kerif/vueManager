@@ -710,6 +710,14 @@
                       <el-dropdown-item class="item-sty" @click.native="addCompany(scope.row.id)">
                         <span size="small" v-if="activeName === '3'">{{ $t('添加物流信息') }}</span>
                       </el-dropdown-item>
+                      <el-dropdown-item
+                        class="item-sty"
+                        @click.native="multiLogisticsDialog(scope.row.id)"
+                      >
+                        <span size="small" v-if="activeName === '3' || activeName === '4'">{{
+                          $t('更新多箱物流')
+                        }}</span>
+                      </el-dropdown-item>
                       <el-dropdown-item class="item-sty">
                         <span
                           @click="
