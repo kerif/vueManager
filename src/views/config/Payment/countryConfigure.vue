@@ -321,7 +321,6 @@ export default {
   },
   created() {
     this.getCountryList()
-    // this.updateBgColor()
   },
   methods: {
     // 获取国家/地区数据
@@ -332,6 +331,7 @@ export default {
         if (res.ret) {
           this.countryData = res.data
           this.countryId = res.data[0].id
+          this.color = 'rgb(' + res.data[0].rgb_color.join(',') + ')'
           if (this.countryId) {
             this.goDeatils(res.data[0].name, this.countryId, this.color)
           }
