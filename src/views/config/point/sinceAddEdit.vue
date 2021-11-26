@@ -183,48 +183,56 @@
           ></el-input>
         </div>
       </el-form-item>
-      <!--<el-form-item>
-          {{ $t('允许所有订单入库') }}
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="
-              $t('开启时,可签收所有订单;关闭时,筛选仅签收目的地为本自提点的订单,其他订单自动忽略')
-            "
-            placement="top"
-          >
-            <span class="el-icon-warning-outline icon-info"></span>
-          </el-tooltip>
-          <el-switch v-model="warehouse" :active-text="$t('开启')"
+      <!-- <el-form-item>
+        {{ $t('允许所有订单入库') }}
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="
+            $t('开启时,可签收所有订单;关闭时,筛选仅签收目的地为本自提点的订单,其他订单自动忽略')
+          "
+          placement="top"
+        >
+          <span class="el-icon-warning-outline icon-info"></span>
+        </el-tooltip>
+        <el-switch
+          v-model="warehouse"
+          :active-text="$t('开启')"
           :active-value="1"
           :inactive-value="0"
           :inactive-text="$t('关闭')"
           active-color="#13ce66"
-          inactive-color="gray">
-          </el-switch>
-        </el-form-item>
-        <el-form-item>
-          {{ $t('入库即触发取件通知') }}
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="
-              $t(
-                '开启时,订单入库即触发取件信息;关闭时,需要匹配当前自提点为客户选择自提点才会推送取件通知'
-              )
-            "
-            placement="top"
-          >
-            <span class="el-icon-warning-outline icon-info"></span>
-          </el-tooltip>
-          <el-switch v-model="pick" :active-text="$t('开启')"
+          inactive-color="gray"
+          class="warehouse"
+        >
+        </el-switch>
+      </el-form-item>
+      <el-form-item>
+        {{ $t('入库即触发取件通知') }}
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="
+            $t(
+              '开启时,订单入库即触发取件信息;关闭时,需要匹配当前自提点为客户选择自提点才会推送取件通知'
+            )
+          "
+          placement="top"
+        >
+          <span class="el-icon-warning-outline icon-info"></span>
+        </el-tooltip>
+        <el-switch
+          v-model="pick"
+          :active-text="$t('开启')"
           :active-value="1"
           :inactive-value="0"
           :inactive-text="$t('关闭')"
           active-color="#13ce66"
-          inactive-color="gray"> </el-switch>
-        </el-form-item> -->
-
+          inactive-color="gray"
+          class="pick"
+        >
+        </el-switch>
+      </el-form-item> -->
       <div>
         <el-form-item>
           <div>{{ $t('支持线路') }}</div>
@@ -834,6 +842,12 @@ export default {
   .input-sty {
     margin-left: 10px;
     width: 10% !important;
+  }
+  .warehouse {
+    margin-left: 30px;
+  }
+  .pick {
+    margin-left: 15px;
   }
 }
 </style>

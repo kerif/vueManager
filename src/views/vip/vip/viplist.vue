@@ -3,14 +3,14 @@
     <div class="advanced-search" v-if="hasFilterCondition">
       <div class="search-item">
         <div>{{ $t('VIP等级') }}</div>
-        <el-select v-model="searchParams.level_id" :placeholder="$t('请选择VIP等级')">
+        <el-select v-model="searchParams.level_id" :placeholder="$t('请选择VIP等级')" clearable>
           <el-option v-for="item in gradeList" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
       </div>
       <div class="search-item">
         <div>{{ $t('客户组') }}</div>
-        <el-select v-model="searchParams.user_group_id" :placeholder="$t('请选择客户组')">
+        <el-select v-model="searchParams.user_group_id" clearable :placeholder="$t('请选择客户组')">
           <el-option
             v-for="item in groupList"
             :key="item.id"
@@ -22,7 +22,7 @@
       </div>
       <div class="search-item">
         <div>{{ $t('所属客服') }}</div>
-        <el-select v-model="searchParams.customer_id" :placeholder="$t('请选择所属客服')">
+        <el-select v-model="searchParams.customer_id" clearable :placeholder="$t('请选择所属客服')">
           <el-option
             v-for="item in customerList"
             :key="item.id"
@@ -34,7 +34,7 @@
       </div>
       <div class="search-item">
         <div>{{ $t('所属销售') }}</div>
-        <el-select v-model="searchParams.sale_id" :placeholder="$t('请选择所属销售')">
+        <el-select v-model="searchParams.sale_id" clearable :placeholder="$t('请选择所属销售')">
           <el-option v-for="item in saleList" :key="item.id" :value="item.id" :label="item.name">
           </el-option>
         </el-select>
@@ -45,6 +45,7 @@
           v-model="searchParams.invite_id"
           filterable
           remote
+          clearable
           :placeholder="$t('请输入邀请人')"
           :remote-method="inviteMethod"
           :loading="inviteLoading"
@@ -58,12 +59,14 @@
         <el-input
           v-model="searchParams.min_balance"
           :placeholder="$t('请输入最小余额')"
+          clearable
           style="width: 35%"
         ></el-input>
         -
         <el-input
           v-model="searchParams.max_balance"
           :placeholder="$t('请输入最大余额')"
+          clearable
           style="width: 35%"
         ></el-input>
       </div>
@@ -72,12 +75,14 @@
         <el-input
           v-model="searchParams.min_point"
           :placeholder="$t('请输入最小积分')"
+          clearable
           style="width: 35%"
         ></el-input>
         -
         <el-input
           v-model="searchParams.max_point"
           :placeholder="$t('请输入最大积分')"
+          clearable
           style="width: 35%"
         ></el-input>
       </div>
@@ -86,12 +91,14 @@
         <el-input
           v-model="searchParams.min_order_count"
           :placeholder="$t('请输入最小订单数')"
+          clearable
           style="width: 35%"
         ></el-input>
         -
         <el-input
           v-model="searchParams.max_order_count"
           :placeholder="$t('请输入最大订单数')"
+          clearable
           style="width: 35%"
         ></el-input>
       </div>

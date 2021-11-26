@@ -315,8 +315,7 @@ export default {
       file: '',
       showImport: false,
       color: 'rgb(0,0,0)',
-      cid: '',
-      bgCol: []
+      cid: ''
     }
   },
   created() {
@@ -473,15 +472,18 @@ export default {
     goDeatils(name, id, rgb) {
       this.countryId = id
       this.cid = id
-      console.log(this.cid, 'this.cid')
-      console.log(this.countryId, 'this.countryId111')
       this.countryName = name
-      this.bgCol = rgb
-      this.color = 'rgb(' + this.bgCol.join(',') + ')'
-      console.log(this.color, typeof this.color)
+      console.log(rgb, typeof rgb)
+      console.log(Array.isArray(rgb))
+      let bgCol = rgb
+      if (Array.isArray(rgb)) {
+        this.color = 'rgb(' + bgCol.join(',') + ')'
+        console.log(this.color, typeof this.color)
+      }
       this.$request.superiorArea(this.countryId).then(res => {
         if (res.ret) {
           this.currentCountryList = res.data
+          console.log(this.currentCountryList)
         }
       })
     },
@@ -628,7 +630,6 @@ export default {
       //   Number(`0x${bgColor.slice(2, 4)}`),
       //   Number(`0x${bgColor.slice(4)}`)
       // ]
-      console.log(this.color)
       let id = this.countryId
       this.$request.updateColor(id, { rgb_color: arr }).then(res => {
         if (res.ret) {
@@ -639,7 +640,6 @@ export default {
           })
           this.color = 'rgb(' + arr.join(',') + ')'
           this.getCountryList()
-          this.goDeatils(this.countryName, this.countryId, this.color)
         } else {
           this.$notify({
             title: this.$t('操作失败'),
