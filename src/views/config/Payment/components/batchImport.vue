@@ -66,6 +66,7 @@
 
 <script>
 import { downloadStreamFile } from '@/utils/index'
+
 export default {
   data() {
     return {
@@ -86,14 +87,12 @@ export default {
   },
   methods: {
     getList() {
-      // this.$request.getTmpTypeList().then(res => {
-      //   if (res.ret) {
-      //     console.log(res.data)
-      //     this.tmpData = res.data
-      //     this.type = res.data.map(item => item.id)
-      //     console.log(this.type)
-      //   }
-      // })
+      this.$request.getTmpTypeList().then(res => {
+        if (res.ret) {
+          console.log(res.data)
+          this.tmpData = res.data
+        }
+      })
     },
     close() {
       this.$emit('passVal', false)
@@ -101,10 +100,12 @@ export default {
     uploadList(id) {
       let param = {
         responseType: 'blob',
-        type: id
+        params: {
+          type: id
+        }
       }
       this.$request.getImportTemplate(param).then(res => {
-        downloadStreamFile(res, 'file', 'xlsx')
+        downloadStreamFile(res, 'sheet', 'xlsx')
       })
     },
     // 文件删除

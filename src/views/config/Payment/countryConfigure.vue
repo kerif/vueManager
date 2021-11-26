@@ -45,9 +45,11 @@
                 $t('删除')
               }}</el-button>
               <!-- 详情 -->
-              <el-button class="btn-purple" @click="goDeatils(scope.row.name, scope.row.id)">{{
-                $t('详情')
-              }}</el-button>
+              <el-button
+                class="btn-purple"
+                @click="goDeatils(scope.row.name, scope.row.id, scope.row.rgb_color)"
+                >{{ $t('详情') }}</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -78,11 +80,12 @@
           <el-color-picker
             v-model="color"
             size="mini"
-            style="position: absoulte; top: 10px; right: 0px"
+            class="color-sty"
+            color-format="rgb"
             @change="updateBgColor"
           ></el-color-picker>
           <div class="top-right">
-            <el-upload
+            <!-- <el-upload
               class="upload-demo"
               action=""
               :show-file-list="false"
@@ -93,10 +96,10 @@
               }}</el-button>
               <el-button class="btn-light-red" style="margin: 0 10px" slot="trigger">{{
                 $t('批量导入')
-              }}</el-button>
-              <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
-              <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
-            </el-upload>
+              }}</el-button> -->
+            <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
+            <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
+            <!-- </el-upload> -->
             <!-- <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
             <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button> -->
           </div>
@@ -274,7 +277,7 @@ import dialog from '@/components/dialog'
 import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
-import { downloadStreamFile } from '@/utils/index'
+// import { downloadStreamFile } from '@/utils/index'
 import batchImport from './components/batchImport'
 export default {
   components: {
@@ -311,8 +314,9 @@ export default {
       fileList: [],
       file: '',
       showImport: false,
-      color: '#000',
-      cid: ''
+      color: 'rgb(0,0,0)',
+      cid: '',
+      bgCol: []
     }
   },
   created() {
@@ -329,7 +333,7 @@ export default {
           this.countryData = res.data
           this.countryId = res.data[0].id
           if (this.countryId) {
-            this.goDeatils(res.data[0].name, this.countryId)
+            this.goDeatils(res.data[0].name, this.countryId, this.color)
           }
           this.countrySendData = [...res.data]
           console.log('countryData')
@@ -466,12 +470,15 @@ export default {
       })
     },
     // 详情
-    goDeatils(name, id) {
+    goDeatils(name, id, rgb) {
       this.countryId = id
       this.cid = id
       console.log(this.cid, 'this.cid')
       console.log(this.countryId, 'this.countryId111')
       this.countryName = name
+      this.bgCol = rgb
+      this.color = 'rgb(' + this.bgCol.join(',') + ')'
+      console.log(this.color, typeof this.color)
       this.$request.superiorArea(this.countryId).then(res => {
         if (res.ret) {
           this.currentCountryList = res.data
@@ -547,7 +554,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.goDeatils(this.countryName, this.countryId)
+          this.goDeatils(this.countryName, this.countryId, this.color)
         } else {
           this.$message({
             message: res.msg,
@@ -579,7 +586,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
-              this.goDeatils(this.countryName, this.countryId)
+              this.goDeatils(this.countryName, this.countryId, this.color)
             } else {
               this.$notify({
                 title: this.$t('操作成功'),
@@ -590,22 +597,13 @@ export default {
           })
       })
     },
-    // 下载模板
-    uploadList() {
-      let param = {
-        responseType: 'blob'
-      }
-      this.$request.getImportTemplate(param).then(res => {
-        downloadStreamFile(res, 'file', 'xlsx')
-      })
-    },
     // 批量导入
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
         if (res.ret) {
           this.currentCountryList = res.data
-          this.goDeatils(this.countryName, this.countryId)
+          this.goDeatils(this.countryName, this.countryId, this.color)
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -617,13 +615,20 @@ export default {
     },
     // 背景色
     updateBgColor() {
-      console.log(this.color, 'color')
-      const bgColor = this.color.slice(1)
-      const arr = [
-        Number(`0x${bgColor.slice(0, 2)}`),
-        Number(`0x${bgColor.slice(2, 4)}`),
-        Number(`0x${bgColor.slice(4)}`)
-      ]
+      console.log(this.color, 'this.color')
+      const bgColor = this.color.slice(4, -1).split(',')
+      console.log(bgColor, typeof bgColor)
+      const arr = bgColor.map(item => {
+        return +item
+      })
+      console.log(arr)
+      // const bgColor = this.color.slice(1)
+      // const arr = [
+      //   Number(`0x${bgColor.slice(0, 2)}`),
+      //   Number(`0x${bgColor.slice(2, 4)}`),
+      //   Number(`0x${bgColor.slice(4)}`)
+      // ]
+      console.log(this.color)
       let id = this.countryId
       this.$request.updateColor(id, { rgb_color: arr }).then(res => {
         if (res.ret) {
@@ -632,6 +637,9 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          this.color = 'rgb(' + arr.join(',') + ')'
+          this.getCountryList()
+          this.goDeatils(this.countryName, this.countryId, this.color)
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -676,7 +684,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.goDeatils(this.countryName, this.countryId)
+            this.goDeatils(this.countryName, this.countryId, this.color)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -690,7 +698,7 @@ export default {
     // 新增二三级国家
     addLowLevelCountry() {
       dialog({ type: 'superiorAddEdit', state: 'add', countryId: this.countryId }, () => {
-        this.goDeatils(this.countryName, this.countryId)
+        this.goDeatils(this.countryName, this.countryId, this.color)
       })
     },
     // 编辑二三级国家
@@ -931,6 +939,11 @@ export default {
     background-color: #f5f5f5;
     line-height: 30px;
     padding-right: 20px;
+  }
+  .color-sty {
+    position: absoulte;
+    top: 10px;
+    right: 0px;
   }
   // .upload-demo .el-upload-list {
   //   display: inline-block;

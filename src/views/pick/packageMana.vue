@@ -8,6 +8,7 @@
           </el-option>
         </el-select>
         <el-button class="location-sty" @click="goWarehouse">{{ $t('仓位管理') }}</el-button>
+        <!-- <el-button class="location-sty" @click="goAnnouncement">{{ $t('公告设置') }}</el-button> -->
       </div>
       <el-form ref="form" :model="form" label-width="100px" label-position="right">
         <el-row class="container-center" :gutter="20">
@@ -31,7 +32,6 @@
           </el-col>
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{ $t('联系电话') }}</span>
-            <!-- <span>{{111}}</span> -->
             <span>{{ form.contact_info }}</span>
           </el-col>
           <el-col :span="7" :offset="1">
@@ -62,6 +62,9 @@
         <el-col :span="5" :offset="1">
           <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>
         </el-col>
+        <!-- <el-col :span="5" :offset="1">
+          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>
+        </el-col> -->
         <el-col :span="5" :offset="1">
           <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>
         </el-col>
@@ -132,6 +135,13 @@
           size="small"
           @click="bacthTransport"
           >{{ $t('批量转运') }}</el-button
+        >
+        <el-button
+          class="btn-dark-green"
+          v-if="activeName === '1'"
+          size="small"
+          @click="bacthInform"
+          >{{ $t('批量通知') }}</el-button
         > -->
         <el-button size="small" type="success" plain @click="uploadList(status)">{{
           $t('导出清单')
@@ -228,6 +238,10 @@
           <span v-if="scope.row.station_status === 4">{{ $t('自提签收') }}</span>
         </template>
       </el-table-column>
+      <!-- 收货方式 -->
+      <!-- <el-table-column :label="$t('收货方式')" prop="shipment_sn"> </el-table-column> -->
+      <!-- 收货自提点 -->
+      <!-- <el-table-column :label="$t('收货自提点')" prop="shipment_sn"> </el-table-column> -->
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
@@ -261,6 +275,12 @@
             @click="goDetails(scope.row.id)"
             >{{ $t('详情') }}</el-button
           >
+          <!-- <el-button
+            v-if="activeName === '1'"
+            class="btn-blue-green btn-com"
+            @click="goTransport(scope.row.id)"
+            >{{ $t('转运') }}</el-button
+          > -->
         </template>
       </el-table-column>
       <!-- <template slot="append" v-if="activeName === '0' || activeName === '1'">
@@ -326,6 +346,17 @@
         <el-button type="primary" @click="updateAnnoucement">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="showOrder" :title="$t('转运订单')" class="order-dialog" width="45%">
+      <el-form>
+        <el-form-item :label="$t('转往自提点')">
+          <el-input class="input-sty"> </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="showOrder = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="updateLabel">{{ $t('下载') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -377,7 +408,8 @@ export default {
         announcement: ''
       },
       textarea: '',
-      XStationId: ''
+      XStationId: '',
+      showOrder: false
     }
   },
   methods: {
@@ -543,12 +575,20 @@ export default {
       )
     },
     // 批量转运
-    bacthTransport() {},
+    bacthTransport() {
+      dialog({
+        type: 'batchToTransport'
+      })
+    },
+    bacthInform() {},
     // 详情
     goDetails(id) {
       dialog({ type: 'pickDetails', id: id, transferId: this.transferId }, () => {
         this.getList()
       })
+    },
+    goTransport() {
+      this.showOrder = true
     },
     // 收货
     goReceive(id) {
@@ -792,6 +832,16 @@ export default {
       width: 50%;
     }
   }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
+  }
+  .el-dialog__close {
+    color: #fff;
+  }
   .chooseOrder {
     cursor: pointer;
     color: blue;
@@ -862,6 +912,9 @@ export default {
   .auto-sty {
     display: inline-block;
     margin-right: 20px;
+  }
+  .btn-com {
+    margin: 10px 0 0 0;
   }
   .searchGroup {
     display: flex;

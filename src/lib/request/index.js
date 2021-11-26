@@ -1965,7 +1965,7 @@ exports.verifyJuhe = params => {
 }
 // 配置 下载国际导入模板
 exports.getImportTemplate = params => {
-  return $form.get('countries/import-template', { params })
+  return $form.get(`countries/import-template`, params)
 }
 // 配置 批量导入
 exports.batchImport = file => {
