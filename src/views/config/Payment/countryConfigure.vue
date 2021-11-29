@@ -435,9 +435,7 @@ export default {
     },
     // 确定拖拽 国家地区
     rowUpdate() {
-      // eslint-disable-next-line camelcase
       const ids = this.countrySendData.map(({ id, name }, index) => ({ id, index, name }))
-      console.log(ids)
       this.countryData = []
       this.$request.countryLocationIndex(ids).then(res => {
         if (res.ret) {
@@ -473,8 +471,8 @@ export default {
       this.countryId = id
       this.cid = id
       this.countryName = name
-      console.log(rgb, typeof rgb)
-      console.log(Array.isArray(rgb))
+      // console.log(rgb, typeof rgb)
+      // console.log(Array.isArray(rgb))
       let bgCol = rgb
       if (Array.isArray(rgb)) {
         this.color = 'rgb(' + bgCol.join(',') + ')'
