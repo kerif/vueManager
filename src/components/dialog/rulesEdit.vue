@@ -1,7 +1,17 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="name === 1 ? $t('编辑会员编号规则') : $t('编辑订单编号规则')"
+    :title="
+      name === 1
+        ? $t('编辑会员编号规则')
+        : name === 2
+        ? $t('编辑订单编号规则')
+        : name === 3
+        ? $t('编辑订单分箱号规则')
+        : name === 4
+        ? $t('编辑拼团订单编号规则')
+        : $t('编辑发货单编号规则')
+    "
     class="dialog-edit-rules"
     @close="clear"
     width="60%"
@@ -56,9 +66,9 @@
         </el-table-column>
       </el-table>
     </el-form>
-    <!-- <el-form ref="form" :model="boxRules" label-width="140px"> -->
-    <!-- 连接符 -->
-    <!-- <el-form-item :label="$t('连接符')">
+    <el-form ref="form" :model="boxRules" label-width="140px" v-if="this.name === 3">
+      <!-- 连接符 -->
+      <el-form-item :label="$t('连接符')">
         <el-select v-model="boxRules.connector" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
@@ -68,9 +78,9 @@
           >
           </el-option>
         </el-select>
-      </el-form-item> -->
-    <!-- 分箱号 -->
-    <!-- <el-form-item :label="$t('分箱号')">
+      </el-form-item>
+      <!-- 分箱号 -->
+      <el-form-item :label="$t('分箱号')">
         <el-select v-model="boxRules.boxNum" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
@@ -80,9 +90,11 @@
           >
           </el-option>
         </el-select>
-      </el-form-item> -->
-    <!-- 拼团订单后缀 -->
-    <!-- <el-form-item :label="$t('拼团订单后缀')">
+      </el-form-item>
+    </el-form>
+    <el-form :model="boxRules" label-width="140px" v-if="this.name === 4">
+      <!-- 拼团订单后缀 -->
+      <el-form-item :label="$t('拼团订单后缀')">
         <el-select v-model="boxRules.suffix" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
@@ -92,9 +104,21 @@
           >
           </el-option>
         </el-select>
-      </el-form-item> -->
-    <!-- 子订单号-->
-    <!-- <el-form-item :label="$t('子订单号')">
+      </el-form-item>
+      <!-- 连接符 -->
+      <el-form-item :label="$t('连接符')">
+        <el-select v-model="boxRules.connector" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 子订单号-->
+      <el-form-item :label="$t('子订单号')">
         <el-select v-model="boxRules.subOrederNum" :placeholder="$t('请选择')">
           <el-option
             v-for="item in options"
@@ -104,12 +128,14 @@
           >
           </el-option>
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
+    </el-form>
     <!-- 发货单前缀-->
-    <!-- <el-form-item :label="$t('发货单前缀')">
+    <el-form :model="boxRules" label-width="140px" v-if="this.name === 5">
+      <el-form-item :label="$t('发货单前缀')">
         <el-input v-model="boxRules.prefix" :placeholder="$t('最多输入5个字符')"></el-input>
       </el-form-item>
-    </el-form> -->
+    </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
