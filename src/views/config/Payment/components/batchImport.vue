@@ -145,22 +145,22 @@ export default {
       })
     },
     submit() {
-      // this.$request.batchImport(this.params).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.tips,
-      //       type: 'success'
-      //     })
-      //     this.$emit('passVal', false)
-      //   } else {
-      //     this.$notify({
-      //       title: this.$t('操作失败'),
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      this.$request.batchImport(this.params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.tips,
+            type: 'success'
+          })
+          this.$emit('passVal', false)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     clear() {}
   }

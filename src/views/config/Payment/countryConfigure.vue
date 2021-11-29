@@ -267,7 +267,7 @@
         </div>
       </el-dialog>
     </el-dialog>
-    <batch-import :showImport="showImport" @passVal="passVal"></batch-import>
+    <batch-import :showImport="showImport" @passVal="passVal" ref="batch"></batch-import>
   </div>
 </template>
 
@@ -897,6 +897,7 @@ export default {
     // 批量导入
     batchToImport() {
       this.showImport = true
+      this.$refs.batch.getList()
     },
     passVal() {
       this.showImport = false

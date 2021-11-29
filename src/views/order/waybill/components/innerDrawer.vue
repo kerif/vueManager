@@ -229,6 +229,7 @@ export default {
           { id: 'receiver_name', name: '收货人' },
           { id: 'phone', name: '手机/联系电话' },
           { id: 'country', name: '收货国家' },
+          { id: 'province', name: '省份' },
           { id: 'city', name: '城市' },
           { id: 'postcode', name: '邮编' },
           { id: 'street_door_no', name: '街道/门牌号' },
@@ -236,7 +237,8 @@ export default {
           { id: 'station_name', name: '自提点' },
           { id: 'user_address', name: '客户地址' },
           { id: 'station_address', name: '自提点地址' },
-          { id: 'address', name: '附加地址' }
+          { id: 'address', name: '附加地址' },
+          { id: 'remark', name: '备注' }
         ]
         // 入库信息
         this.warehouseInfo = [
@@ -429,6 +431,7 @@ export default {
           { id: 'receiver_name', name: '收货人' },
           { id: 'phone', name: '手机/联系电话' },
           { id: 'country', name: '收货国家' },
+          { id: 'province', name: '省份' },
           { id: 'city', name: '城市' },
           { id: 'postcode', name: '邮编' },
           { id: 'street_door_no', name: '街道/门牌号' },
@@ -436,7 +439,8 @@ export default {
           { id: 'station_name', name: '自提点' },
           { id: 'user_address', name: '客户地址' },
           { id: 'station_address', name: '自提点地址' },
-          { id: 'address', name: '附加地址' }
+          { id: 'address', name: '附加地址' },
+          { id: 'remark', name: '备注' }
         ]
         // 入库信息
         this.warehouseInfo = [
