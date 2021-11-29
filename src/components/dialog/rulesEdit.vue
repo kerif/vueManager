@@ -71,10 +71,10 @@
       <el-form-item :label="$t('连接符')">
         <el-select v-model="boxRules.connector" :placeholder="$t('请选择')">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in connectOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           >
           </el-option>
         </el-select>
@@ -83,57 +83,52 @@
       <el-form-item :label="$t('分箱号')">
         <el-select v-model="boxRules.boxNum" :placeholder="$t('请选择')">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in boxNumOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           >
           </el-option>
         </el-select>
       </el-form-item>
     </el-form>
-    <el-form :model="boxRules" label-width="140px" v-if="this.name === 4">
+    <el-form :model="groupRules" label-width="140px" v-if="this.name === 4">
       <!-- 拼团订单后缀 -->
       <el-form-item :label="$t('拼团订单后缀')">
-        <el-select v-model="boxRules.suffix" :placeholder="$t('请选择')">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
+        <el-input
+          v-model="groupRules.suffix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
       </el-form-item>
       <!-- 连接符 -->
       <el-form-item :label="$t('连接符')">
-        <el-select v-model="boxRules.connector" :placeholder="$t('请选择')">
+        <el-select v-model="groupRules.connector" :placeholder="$t('请选择')">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in connectOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           >
           </el-option>
         </el-select>
       </el-form-item>
       <!-- 子订单号-->
       <el-form-item :label="$t('子订单号')">
-        <el-select v-model="boxRules.subOrederNum" :placeholder="$t('请选择')">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+        <el-select v-model="groupRules.subOrederNum" :placeholder="$t('请选择')">
+          <el-option v-for="item in subOptions" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
     </el-form>
     <!-- 发货单前缀-->
-    <el-form :model="boxRules" label-width="140px" v-if="this.name === 5">
+    <el-form :model="invoiceRules" label-width="140px" v-if="this.name === 5">
       <el-form-item :label="$t('发货单前缀')">
-        <el-input v-model="boxRules.prefix" :placeholder="$t('最多输入5个字符')"></el-input>
+        <el-input
+          v-model="invoiceRules.prefix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -202,12 +197,70 @@ export default {
       id: '',
       options: [],
       value: '',
+      connectOptions: [
+        {
+          id: '1',
+          name: '无'
+        },
+        {
+          id: '2',
+          name: '-'
+        },
+        {
+          id: '3',
+          name: '/'
+        },
+        {
+          id: '4',
+          name: '()'
+        },
+        {
+          id: '5',
+          name: '_'
+        }
+      ],
+      boxNumOptions: [
+        {
+          id: '1',
+          name: '数字(1,2,3,4,5......)'
+        },
+        {
+          id: '2',
+          name: '小写字母(a,b,c,d,e......)'
+        },
+        {
+          id: '3',
+          name: '大写字母(A,B,C,D,E......)'
+        }
+      ],
+      subOptions: [
+        {
+          id: '1',
+          name: '数字(1,2,3,4,5......)'
+        },
+        {
+          id: '2',
+          name: '小写字母(a,b,c,d,e......)'
+        },
+        {
+          id: '3',
+          name: '大写字母(A,B,C,D,E......)'
+        },
+        {
+          id: '4',
+          name: '客户ID'
+        }
+      ],
       boxRules: {
-        prefix: '',
+        boxNum: ''
+      },
+      groupRules: {
+        suffix: '',
         connector: '',
-        boxNum: '',
-        subOrederNum: '',
-        suffix: ''
+        subOrederNum: ''
+      },
+      invoiceRules: {
+        prefix: ''
       }
     }
   },
@@ -225,6 +278,15 @@ export default {
           } else if (this.name === 2) {
             this.orderRules.prefix = res.data.prefix
             this.orderRules.tableData = res.data.warehouse_prefix
+          } else if (this.name === 3) {
+            this.boxRules.connector = res.data.link
+            this.boxRules.boxNum = res.data.sn
+          } else if (this.name === 4) {
+            this.groupRules.connector = res.data.link
+            this.groupRules.subOrederNum = res.data.sn
+            this.groupRules.suffix = res.data.suffix
+          } else {
+            this.invoiceRules.prefix = res.data.prefix
           }
         }
       })
@@ -260,7 +322,7 @@ export default {
             }
             this.show = false
           })
-      } else {
+      } else if (this.name === 2) {
         console.log(this.orderRules, 'orderRules')
         this.$request
           .updateRules(this.id, {
@@ -283,10 +345,79 @@ export default {
               })
             }
           })
+      } else if (this.name === 3) {
+        this.$request
+          .updateRules(this.id, {
+            link: this.boxRules.connector,
+            sn: this.boxRules.boxNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else if (this.name === 4) {
+        this.$request
+          .updateRules(this.id, {
+            suffix: this.groupRules.suffix,
+            link: this.groupRules.connector,
+            sn: this.groupRules.subOrederNum,
+            for_new_user: Number(this.userRules.for_new_user)
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .updateRules(this.id, {
+            prefix: this.invoiceRules.prefix
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       }
     },
     init() {
       this.getList()
+      // this.groupRules.suffix = 'G'
+      // this.boxRules.prefix = 'SH'
       console.log(this.id, 'id')
       console.log(this.name, 'name')
     },
@@ -295,6 +426,12 @@ export default {
       this.userRules.length = ''
       this.userRules.system = ''
       this.userRules.for_new_user = ''
+      this.invoiceRules.prefix = ''
+      this.groupRules.connector = ''
+      this.boxRules.connector = ''
+      this.boxRules.boxNum = ''
+      this.groupRules.subOrederNum = ''
+      this.groupRules.suffix = ''
     }
   }
 }
@@ -335,6 +472,12 @@ export default {
   .bottom-btn {
     margin-left: 70px;
     margin-bottom: 20px;
+  }
+  .input-sty {
+    width: 40% !important;
+  }
+  .el-select {
+    width: 40% !important;
   }
 }
 </style>

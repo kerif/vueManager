@@ -50,22 +50,19 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <!-- <order-box-num :show="show" @passVal="passVal"></order-box-num> -->
+    <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
   </div>
 </template>
 
 <script>
-import NlePagination from '@/components/pagination'
+// import NlePagination from '@/components/pagination'
 import dialog from '@/components/dialog'
-import { pagination } from '@/mixin'
-// import OrderBoxNum from './components/orderBoxNum'
+// import { pagination } from '@/mixin'
 export default {
   components: {
-    NlePagination
-    // OrderBoxNum
+    // NlePagination
   },
-  mixins: [pagination],
+  // mixins: [pagination],
   data() {
     return {
       page_params: {
@@ -77,7 +74,7 @@ export default {
     }
   },
   created() {
-    this.page_params.page = 1
+    // this.page_params.page = 1
     this.getRules()
   },
   methods: {
@@ -88,10 +85,7 @@ export default {
     getRules() {
       this.tableLoading = true
       this.$request
-        .getRules({
-          page: this.page_params.page,
-          size: this.page_params.size
-        })
+        .getRules({ page: this.page_params.page, size: this.page_params.size })
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
