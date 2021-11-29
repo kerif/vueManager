@@ -123,7 +123,7 @@ export default {
     onUpload(file) {
       // 通过FormData对象上传文件
       this.params = new FormData()
-      this.params.append(`file`, file)
+      this.params.append(`files[${0}][file]`, file)
       return this.$request.uploadFiles(this.params)
     },
     uploadExcel(item) {
