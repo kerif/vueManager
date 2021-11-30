@@ -252,12 +252,13 @@ export default {
         }
       ],
       boxRules: {
-        boxNum: 1
+        boxNum: 1,
+        connector: '2'
       },
       groupRules: {
-        suffix: '',
-        connector: '',
-        subOrederNum: ''
+        suffix: 'G',
+        connector: '2',
+        subOrederNum: 1
       },
       invoiceRules: {
         prefix: 'SH'
@@ -416,8 +417,6 @@ export default {
     },
     init() {
       this.getList()
-      // this.groupRules.suffix = 'G'
-      // this.boxRules.prefix = 'SH'
       console.log(this.id, 'id')
       console.log(this.name, 'name')
     },
