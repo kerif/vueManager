@@ -2414,7 +2414,7 @@ exports.getRulesDetails = id => {
 }
 // 单号规则 更新详细
 exports.updateRules = (id, params) => {
-  return $form.put(`serial-numbers/${id}`, params)
+  return $json.put(`serial-numbers/${id}`, params)
 }
 // 更多配置 其余配置 获取
 exports.getWebsite = () => {

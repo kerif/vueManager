@@ -222,42 +222,42 @@ export default {
       boxNumOptions: [
         {
           id: 1,
-          name: '数字(1,2,3,4,5......)'
+          name: this.$t('数字(1,2,3,4,5......)')
         },
         {
           id: 2,
-          name: '小写字母(a,b,c,d,e......)'
+          name: this.$t('小写字母(a,b,c,d,e......)')
         },
         {
           id: 3,
-          name: '大写字母(A,B,C,D,E......)'
+          name: this.$t('大写字母(A,B,C,D,E......)')
         }
       ],
       subOptions: [
         {
           id: 1,
-          name: '数字(1,2,3,4,5......)'
+          name: this.$t('数字(1,2,3,4,5......)')
         },
         {
           id: 2,
-          name: '小写字母(a,b,c,d,e......)'
+          name: this.$t('小写字母(a,b,c,d,e......)')
         },
         {
           id: 3,
-          name: '大写字母(A,B,C,D,E......)'
+          name: this.$t('大写字母(A,B,C,D,E......)')
         },
         {
           id: 4,
-          name: '客户ID'
+          name: this.$t('客户ID')
         }
       ],
       boxRules: {
         boxNum: 1,
-        connector: '2'
+        connector: 2
       },
       groupRules: {
         suffix: 'G',
-        connector: '2',
+        connector: 2,
         subOrederNum: 1
       },
       invoiceRules: {
@@ -349,7 +349,7 @@ export default {
       } else if (this.name === 3) {
         this.$request
           .updateRules(this.id, {
-            link: this.boxRules.connector,
+            link: String(this.groupRules.connector),
             sn: this.boxRules.boxNum
           })
           .then(res => {
@@ -372,7 +372,7 @@ export default {
         this.$request
           .updateRules(this.id, {
             suffix: this.groupRules.suffix,
-            link: this.groupRules.connector,
+            link: String(this.groupRules.connector),
             sn: this.groupRules.subOrederNum,
             for_new_user: Number(this.userRules.for_new_user)
           })

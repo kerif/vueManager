@@ -67,11 +67,11 @@ export default {
       options: [
         {
           id: 0,
-          name: '未读'
+          name: this.$t('未读')
         },
         {
           id: 1,
-          name: '已读'
+          name: this.$t('已读')
         }
       ]
     }
