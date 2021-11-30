@@ -221,38 +221,38 @@ export default {
       ],
       boxNumOptions: [
         {
-          id: '1',
+          id: 1,
           name: '数字(1,2,3,4,5......)'
         },
         {
-          id: '2',
+          id: 2,
           name: '小写字母(a,b,c,d,e......)'
         },
         {
-          id: '3',
+          id: 3,
           name: '大写字母(A,B,C,D,E......)'
         }
       ],
       subOptions: [
         {
-          id: '1',
+          id: 1,
           name: '数字(1,2,3,4,5......)'
         },
         {
-          id: '2',
+          id: 2,
           name: '小写字母(a,b,c,d,e......)'
         },
         {
-          id: '3',
+          id: 3,
           name: '大写字母(A,B,C,D,E......)'
         },
         {
-          id: '4',
+          id: 4,
           name: '客户ID'
         }
       ],
       boxRules: {
-        boxNum: ''
+        boxNum: 1
       },
       groupRules: {
         suffix: '',
@@ -260,7 +260,7 @@ export default {
         subOrederNum: ''
       },
       invoiceRules: {
-        prefix: ''
+        prefix: 'SH'
       }
     }
   },
