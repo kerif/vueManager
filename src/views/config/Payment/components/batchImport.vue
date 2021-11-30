@@ -26,7 +26,9 @@
               <el-row :gutter="20">
                 <el-col :span="20">
                   <div v-for="item in tmpData" :key="item.id" class="uploadData">
-                    <el-button @click="uploadList(item.id)" size="small">{{ item.name }}</el-button>
+                    <el-button @click="downloadList(item.id, item.name)" size="small">{{
+                      item.name
+                    }}</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -93,7 +95,7 @@ export default {
     close() {
       this.$emit('passVal', false)
     },
-    uploadList(id) {
+    downloadList(id, name) {
       let param = {
         responseType: 'blob',
         params: {
@@ -101,7 +103,7 @@ export default {
         }
       }
       this.$request.getImportTemplate(param).then(res => {
-        downloadStreamFile(res, 'sheet', 'xlsx')
+        downloadStreamFile(res, name, 'xlsx')
       })
     },
     // 文件删除
