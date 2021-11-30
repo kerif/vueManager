@@ -369,13 +369,14 @@ export default {
     }
   },
   created() {
-    this.getWarehouse()
     this.getRules()
   },
   mounted() {
     this.initMap()
     if (this.$route.params.id) {
       this.getList()
+    } else {
+      this.getWarehouse()
     }
   },
   methods: {
@@ -456,6 +457,7 @@ export default {
         // const warehouses = res.data.warehouses.map(item => item.id)
         // this.form = res.data
         this.form.country_id = res.data.country_id
+        this.getWarehouse()
         this.form.name = res.data.name
         this.form.code = res.data.code
         this.form.announcement = res.data.announcement
