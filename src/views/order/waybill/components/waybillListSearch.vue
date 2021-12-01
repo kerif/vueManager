@@ -346,7 +346,6 @@ export default {
         wareHouseList: this.wareHouseList,
         countryName: this.countryName
       }
-      console.log(param)
       this.$emit('info', param)
     },
     submitForm() {
@@ -361,7 +360,6 @@ export default {
     handleSel() {
       if (this.$refs['getCountryName'].getCheckedNodes()[0]) {
         this.countryName = this.$refs['getCountryName'].getCheckedNodes()[0].pathLabels
-        console.log(this.countryName)
       }
     },
     // 获得客户下拉列表
@@ -382,14 +380,12 @@ export default {
     getPaymentType() {
       this.$request.paymentType().then(res => {
         this.paymentData = res.data
-        console.log(res.data)
       })
     },
     // 获取筛选线路列表
     getLineType() {
       this.$request.lineType().then(res => {
         this.lineData = res.data
-        console.log(res.data)
       })
     }
   }

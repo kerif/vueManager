@@ -213,7 +213,6 @@ export default {
     getTmpData() {
       let code = this.tmpCode
       this.$request.getListTemplate(code).then(res => {
-        console.log(res)
         this.tmpsData = res.data
         this.localization = res.localization
         this.orderInfo = [

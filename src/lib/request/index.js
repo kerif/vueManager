@@ -3803,3 +3803,15 @@ exports.onGeocoder = params => {
     baseURL: 'https://apis.map.qq.com'
   })
 }
+// 自定义显示列 获取模板code
+exports.getTemplateCode = () => {
+  return $form.get('list-templates/codes')
+}
+// 自定义显示列字段
+exports.getTemplateColumn = code => {
+  return $form.get(`list-templates/template/${code}`)
+}
+// 修改自定义显示列字段模板
+exports.updateTemplate = (code, params) => {
+  return $form.put(`list-templates/template/${code}`, params)
+}

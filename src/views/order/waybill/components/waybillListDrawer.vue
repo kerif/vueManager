@@ -151,7 +151,6 @@ export default {
     getPie() {
       this.arr = []
       const searchData = this.searchFieldData
-      console.log(searchData)
       // 时间
       this.time = this.timeOptions
         .filter(item => item.value === this.searchFieldData.date_type)
@@ -195,7 +194,6 @@ export default {
       }
       //线路
       if (this.tag.lineData) {
-        console.log(this.tag.lineData, 'this.tag.lineData')
         this.line = this.tag.lineData
           .filter(item => item.id === this.searchFieldData.express_line_id)
           .map(item => item.name)[0]
@@ -206,7 +204,6 @@ export default {
       }
       // 支付方式
       if (this.tag.paymentData) {
-        console.log(typeof this.tag.paymentData, 'this.tag.paymentData')
         this.payMethods = this.tag.paymentData
           .filter(item => item.id === this.searchFieldData.payment_type)
           .map(item => item.name)[0]

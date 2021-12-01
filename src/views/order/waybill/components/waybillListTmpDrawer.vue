@@ -150,9 +150,7 @@ export default {
       // let code = this.code
       this.$request.listQuery({ code: this.code, size: 100 }).then(res => {
         this.tmpList = res.data
-        console.log(this.tmpList, 'this.tmplist')
         this.tmpCode = res.data[0].code
-        console.log(this.tmpCode)
       })
     },
     getCodeList() {
@@ -162,7 +160,6 @@ export default {
       })
     },
     updatePackages(uploadType) {
-      console.log(this.activeId)
       if (uploadType === 2) {
         const searchData = this.searchFieldData
         let param = {
@@ -210,7 +207,6 @@ export default {
           }
         })
       } else {
-        console.log(this.deleteNum, 'this.deleteNum')
         if (!this.deleteNum || !this.deleteNum.length) {
           return this.$message.error(this.$t('请选择发货单号'))
         }

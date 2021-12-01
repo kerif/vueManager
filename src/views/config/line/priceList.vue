@@ -326,7 +326,6 @@ export default {
               editRender
             }
           })
-          console.log(this.ctableColumn)
         }
       })
     },
