@@ -72,9 +72,9 @@
         <el-select v-model="boxRules.connector" :placeholder="$t('请选择')">
           <el-option
             v-for="item in connectOptions"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
+            :key="item.label"
+            :label="item.label"
+            :value="item.label"
           >
           </el-option>
         </el-select>
@@ -106,9 +106,9 @@
         <el-select v-model="groupRules.connector" :placeholder="$t('请选择')">
           <el-option
             v-for="item in connectOptions"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
+            :key="item.label"
+            :label="item.label"
+            :value="item.label"
           >
           </el-option>
         </el-select>
@@ -199,65 +199,60 @@ export default {
       value: '',
       connectOptions: [
         {
-          id: '1',
-          name: '无'
+          label: '无'
         },
         {
-          id: '2',
-          name: '-'
+          label: '-'
         },
         {
-          id: '3',
-          name: '/'
+          label: '/'
         },
         {
-          id: '4',
-          name: '()'
+          label: '()'
         },
         {
-          id: '5',
-          name: '_'
+          label: '_'
         }
       ],
       boxNumOptions: [
         {
-          id: 1,
+          id: 0,
           name: this.$t('数字(1,2,3,4,5......)')
         },
         {
-          id: 2,
+          id: 1,
           name: this.$t('小写字母(a,b,c,d,e......)')
         },
         {
-          id: 3,
+          id: 2,
           name: this.$t('大写字母(A,B,C,D,E......)')
         }
       ],
       subOptions: [
         {
-          id: 1,
+          id: 0,
           name: this.$t('数字(1,2,3,4,5......)')
         },
         {
-          id: 2,
+          id: 1,
           name: this.$t('小写字母(a,b,c,d,e......)')
         },
         {
-          id: 3,
+          id: 2,
           name: this.$t('大写字母(A,B,C,D,E......)')
         },
         {
-          id: 4,
+          id: 3,
           name: this.$t('客户ID')
         }
       ],
       boxRules: {
         boxNum: 1,
-        connector: 2
+        connector: '-'
       },
       groupRules: {
         suffix: 'G',
-        connector: 2,
+        connector: '-',
         subOrederNum: 1
       },
       invoiceRules: {
@@ -349,7 +344,7 @@ export default {
       } else if (this.name === 3) {
         this.$request
           .updateRules(this.id, {
-            link: String(this.groupRules.connector),
+            link: this.groupRules.connector,
             sn: this.boxRules.boxNum
           })
           .then(res => {
@@ -372,7 +367,7 @@ export default {
         this.$request
           .updateRules(this.id, {
             suffix: this.groupRules.suffix,
-            link: String(this.groupRules.connector),
+            link: this.groupRules.connector,
             sn: this.groupRules.subOrederNum,
             for_new_user: Number(this.userRules.for_new_user)
           })

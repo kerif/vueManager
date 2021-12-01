@@ -2414,7 +2414,7 @@ exports.getRulesDetails = id => {
 }
 // 单号规则 更新详细
 exports.updateRules = (id, params) => {
-  return $json.put(`serial-numbers/${id}`, params)
+  return $form.put(`serial-numbers/${id}`, params)
 }
 // 更多配置 其余配置 获取
 exports.getWebsite = () => {
@@ -3674,6 +3674,14 @@ export default exports
 // 自提点 转运包裹管理 获取自提点信息筛选
 exports.packagePick = () => {
   return $form.get('stations')
+}
+// 自提点 转运包裹管理 获取自提点信息筛选
+exports.getPackagePick = params => {
+  return $form.get('stations', { params })
+}
+// 自提点 转运订单
+exports.transformOrder = params => {
+  return $form.put('/stations/transport', params)
 }
 // 自提点 自提点概览 获取佣金报表
 exports.commissionRecords = params => {

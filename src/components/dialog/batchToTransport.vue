@@ -72,7 +72,12 @@
     <el-row :gutter="20" style="margin-top: 20px">
       <el-col :span="12">
         {{ $t('转运至:')
-        }}<el-autocomplete :placeholder="$t('请选择转往自提点')" v-model="transport">
+        }}<el-autocomplete
+          :fetch-suggestions="queryCNSearch"
+          :placeholder="$t('请选择转往自提点')"
+          @select="handleSelect"
+          v-model="transport"
+        >
         </el-autocomplete>
       </el-col>
       <el-col :span="6" :offset="6">
@@ -80,7 +85,9 @@
           {{ $t('订单数') }}：
           {{ tableData.length }}
         </span>
-        <el-button type="primary" @click="confirmShip">{{ $t('确定出库') }}</el-button>
+        <el-button type="primary" @click="confirmShip"
+          >{{ $t('确定出库') }}&nbsp;({{ tableData.length }})</el-button
+        >
       </el-col>
     </el-row>
   </el-dialog>
@@ -92,28 +99,59 @@ export default {
     return {
       innerVisible: false,
       tableLoading: false,
-      invoiceList: [],
-      invoice: {
-        sn: ''
-      },
-      country: [],
       tableData: [],
       textarea2: '',
       form: {},
       id: '',
       transport: '',
       localization: {},
-      orderSnNum: [],
-      state: ''
+      state: '',
+      station_id: ''
     }
   },
   methods: {
     // 查询单号数据
-    search() {},
+    search() {
+      this.$request
+        .signData({
+          XStationId: this.id,
+          sn: this.textarea2
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableData = res.data
+            this.localization = res.localization
+          }
+        })
+    },
     // 确认出库
-    confirmShip() {},
+    confirmShip() {
+      let param = {}
+      this.$request.transformOrder(param).then(res => {
+        console.log(res)
+      })
+    },
     deleteRow(index, rows) {
       rows.splice(index, 1)
+    },
+    queryCNSearch(queryString, callback) {
+      var list = [{}]
+      this.$request
+        .getPackagePick({
+          keyword: this.transport
+        })
+        .then(res => {
+          for (let i of res.data) {
+            i.value = i.name
+          }
+          list = res.data
+          callback(list)
+        })
+    },
+    handleSelect(item) {
+      console.log(item)
+      console.log(item.id)
+      this.station_id = item.id
     },
     clear() {
       this.textarea2 = ''

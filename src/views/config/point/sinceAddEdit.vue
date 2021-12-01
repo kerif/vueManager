@@ -196,7 +196,7 @@
           <span class="el-icon-warning-outline icon-info"></span>
         </el-tooltip>
         <el-switch
-          v-model="warehouse"
+          v-model="form.warehouse"
           :active-text="$t('开启')"
           :active-value="1"
           :inactive-value="0"
@@ -222,7 +222,7 @@
           <span class="el-icon-warning-outline icon-info"></span>
         </el-tooltip>
         <el-switch
-          v-model="pick"
+          v-model="form.pick"
           :active-text="$t('开启')"
           :active-value="1"
           :inactive-value="0"
@@ -379,7 +379,9 @@ export default {
         contactor: '',
         expressLines: [],
         announcement: '',
-        opening_hours: ''
+        opening_hours: '',
+        warehouse: '',
+        pick: ''
       },
       areaData: null,
       referenceTime: {
@@ -510,6 +512,8 @@ export default {
         this.getWarehouse()
         this.form.name = res.data.name
         this.form.code = res.data.code
+        this.form.warehouse = res.data.allow_all_order
+        this.form.pick = res.data.notify_after_received
         this.form.announcement = res.data.announcement
         this.form.opening_hours = res.data.opening_hours
         this.form.edit_notice_jurisdiction = res.data.edit_notice_jurisdiction

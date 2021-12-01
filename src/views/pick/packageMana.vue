@@ -63,7 +63,7 @@
           <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>
         </el-col>
         <!-- <el-col :span="5" :offset="1">
-          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>
+          <div class="middle-left" @click="bacthTransport">{{ $t('快速转运') }}</div>
         </el-col> -->
         <el-col :span="5" :offset="1">
           <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>
@@ -137,7 +137,7 @@
           >{{ $t('批量转运') }}</el-button
         >
         <el-button
-          class="btn-dark-green"
+          class="btn-deep-purple"
           v-if="activeName === '1'"
           size="small"
           @click="bacthInform"
@@ -239,9 +239,9 @@
         </template>
       </el-table-column>
       <!-- 收货方式 -->
-      <!-- <el-table-column :label="$t('收货方式')" prop="shipment_sn"> </el-table-column> -->
+      <!-- <el-table-column :label="$t('收货方式')" v-if="activeName === '1'"> </el-table-column> -->
       <!-- 收货自提点 -->
-      <!-- <el-table-column :label="$t('收货自提点')" prop="shipment_sn"> </el-table-column> -->
+      <!-- <el-table-column :label="$t('收货自提点')" v-if="activeName === '1'"> </el-table-column> -->
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
@@ -349,12 +349,18 @@
     <el-dialog :visible.sync="showOrder" :title="$t('转运订单')" class="order-dialog" width="45%">
       <el-form>
         <el-form-item :label="$t('转往自提点')">
-          <el-input class="input-sty"> </el-input>
+          <el-autocomplete
+            :fetch-suggestions="queryCNSearch"
+            :placeholder="$t('请选择转往自提点')"
+            @select="handleSelect"
+            v-model="transport"
+          >
+          </el-autocomplete>
         </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="showOrder = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="updateLabel">{{ $t('下载') }}</el-button>
+        <el-button type="primary" @click="confirmTransport">{{ $t('确认') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -409,7 +415,10 @@ export default {
       },
       textarea: '',
       XStationId: '',
-      showOrder: false
+      showOrder: false,
+      transport: '',
+      station_id: '',
+      order_ids: []
     }
   },
   methods: {
@@ -576,19 +585,42 @@ export default {
     },
     // 批量转运
     bacthTransport() {
-      dialog({
-        type: 'batchToTransport'
-      })
+      if (!this.orderSnNum || !this.orderSnNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog(
+        {
+          type: 'batchToTransport',
+          id: this.transferId,
+          orderSnNum: this.orderSnNum,
+          state: 'batch'
+        },
+        () => {
+          this.getList()
+          this.getCounts()
+        }
+      )
     },
     bacthInform() {},
+    // 确认转运
+    confirmTransport() {
+      let param = {
+        station_id: this.station_id,
+        order_ids: this.order_ids
+      }
+      this.$request.transformOrder(param).then(res => {
+        console.log(res)
+      })
+    },
     // 详情
     goDetails(id) {
       dialog({ type: 'pickDetails', id: id, transferId: this.transferId }, () => {
         this.getList()
       })
     },
-    goTransport() {
+    goTransport(id) {
       this.showOrder = true
+      this.order_ids = id
     },
     // 收货
     goReceive(id) {
@@ -735,6 +767,24 @@ export default {
     clearAnnouncement() {
       this.announcementData.opening_hours = ''
       this.announcementData.announcement = ''
+    },
+    queryCNSearch(queryString, callback) {
+      var list = [{}]
+      this.$request
+        .getPackagePick({
+          keyword: this.transport
+        })
+        .then(res => {
+          for (let i of res.data) {
+            i.value = i.name
+          }
+          list = res.data
+          callback(list)
+        })
+    },
+    handleSelect(item) {
+      console.log(item)
+      this.station_id = item.id
     },
     // 更新 公告设置
     updateAnnoucement() {
