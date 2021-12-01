@@ -7,6 +7,9 @@
         <template slot-scope="scope">
           <span v-if="scope.row.type === 1">{{ $t('会员编号') }}</span>
           <span v-if="scope.row.type === 2">{{ $t('订单编号') }}</span>
+          <span v-if="scope.row.type === 3">{{ $t('订单分箱号') }}</span>
+          <span v-if="scope.row.type === 4">{{ $t('拼团订单编号') }}</span>
+          <span v-if="scope.row.type === 5">{{ $t('发货单编号') }}</span>
         </template>
       </el-table-column>
       <!-- 状态 -->
@@ -47,22 +50,19 @@
         </template>
       </el-table-column>
     </el-table>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <!-- <order-box-num :show="show" @passVal="passVal"></order-box-num> -->
+    <!-- <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination> -->
   </div>
 </template>
 
 <script>
-import NlePagination from '@/components/pagination'
+// import NlePagination from '@/components/pagination'
 import dialog from '@/components/dialog'
-import { pagination } from '@/mixin'
-// import OrderBoxNum from './components/orderBoxNum'
+// import { pagination } from '@/mixin'
 export default {
   components: {
-    NlePagination
-    // OrderBoxNum
+    // NlePagination
   },
-  mixins: [pagination],
+  // mixins: [pagination],
   data() {
     return {
       page_params: {
@@ -74,7 +74,7 @@ export default {
     }
   },
   created() {
-    this.page_params.page = 1
+    // this.page_params.page = 1
     this.getRules()
   },
   methods: {
@@ -85,10 +85,7 @@ export default {
     getRules() {
       this.tableLoading = true
       this.$request
-        .getRules({
-          page: this.page_params.page,
-          size: this.page_params.size
-        })
+        .getRules({ page: this.page_params.page, size: this.page_params.size })
         .then(res => {
           this.tableLoading = false
           if (res.ret) {

@@ -18,19 +18,17 @@
       <el-col :span="20">
         <div>
           <el-form label-position="top">
-            <el-form-item :label="$t('下载模版')" style="height: 150px; margin-top: -10px">
+            <el-form-item :label="$t('下载模版')" class="uploadTmp">
               <span class="import-sty">{{
                 $t('下载对应模版，如实填写批量下单表后，请以Excel形式保存，点击第二步上传')
               }}</span
               ><br />
               <el-row :gutter="20">
                 <el-col :span="20">
-                  <div
-                    v-for="item in tmpData"
-                    :key="item.id"
-                    style="display: inline-block; margin: 0 5px 0 0"
-                  >
-                    <el-button @click="uploadList(item.id)" size="small">{{ item.name }}</el-button>
+                  <div v-for="item in tmpData" :key="item.id" class="uploadData">
+                    <el-button @click="downloadList(item.id, item.name)" size="small">{{
+                      item.name
+                    }}</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -66,13 +64,15 @@
 
 <script>
 import { downloadStreamFile } from '@/utils/index'
+
 export default {
   data() {
     return {
       tmpData: [],
       fileList: [],
       type: '',
-      params: ''
+      params: '',
+      param: ''
     }
   },
   props: {
@@ -86,25 +86,24 @@ export default {
   },
   methods: {
     getList() {
-      // this.$request.getTmpTypeList().then(res => {
-      //   if (res.ret) {
-      //     console.log(res.data)
-      //     this.tmpData = res.data
-      //     this.type = res.data.map(item => item.id)
-      //     console.log(this.type)
-      //   }
-      // })
+      this.$request.getTmpTypeList().then(res => {
+        if (res.ret) {
+          this.tmpData = res.data
+        }
+      })
     },
     close() {
       this.$emit('passVal', false)
     },
-    uploadList(id) {
+    downloadList(id, name) {
       let param = {
         responseType: 'blob',
-        type: id
+        params: {
+          type: id
+        }
       }
       this.$request.getImportTemplate(param).then(res => {
-        downloadStreamFile(res, 'file', 'xlsx')
+        downloadStreamFile(res, name, 'xlsx')
       })
     },
     // 文件删除
@@ -120,9 +119,12 @@ export default {
       return this.$confirm(this.$t(`确定移除 ${file.name}？`))
     },
     onUpload(file) {
+      console.log(file)
       // 通过FormData对象上传文件
       this.params = new FormData()
-      this.params.append(`file`, file)
+      this.params.append(`files[${0}][file]`, file)
+      this.param = new FormData()
+      this.param.append(`file`, file)
       return this.$request.uploadFiles(this.params)
     },
     uploadExcel(item) {
@@ -131,7 +133,7 @@ export default {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
-            message: res.tips,
+            message: res.msg,
             type: 'success'
           })
         } else {
@@ -144,24 +146,28 @@ export default {
       })
     },
     submit() {
-      // this.$request.batchImport(this.params).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.tips,
-      //       type: 'success'
-      //     })
-      //     this.$emit('passVal', false)
-      //   } else {
-      //     this.$notify({
-      //       title: this.$t('操作失败'),
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      let file = this.param
+      console.log(file)
+      this.$request.batchImport(file).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.tips,
+            type: 'success'
+          })
+          this.$emit('passVal', false)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
-    clear() {}
+    clear() {
+      this.fileList = []
+    }
   }
 }
 </script>
@@ -177,6 +183,14 @@ export default {
   }
   .el-dialog__close {
     color: #fff;
+  }
+  .uploadTmp {
+    height: 150px;
+    margin-top: -10px;
+  }
+  .uploadData {
+    display: inline-block;
+    margin: 0 5px 0 0;
   }
 }
 </style>

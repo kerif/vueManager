@@ -37,6 +37,7 @@
       </el-form-item>
       <el-form-item :label="$t('转义符号')" v-if="this.ruleForm.radio === 1">
         <p v-text="'{{user_id}} = ' + $t('用户id')" style="margin-top: 0px"></p>
+        <p v-text="'{{user_name}} = ' + $t('用户名')" style="margin-top: 0px"></p>
       </el-form-item>
       <!-- 图片 -->
       <el-form-item class="updateChe" v-if="this.ruleForm.radio === 2">

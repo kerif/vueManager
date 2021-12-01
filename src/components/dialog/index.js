@@ -124,6 +124,7 @@ import addLabel from './addLabel.vue'
 import addPaid from './addPaid.vue'
 import addMenu from './addMenu.vue'
 import addRule from './addRule.vue'
+import batchToTransport from './batchToTransport.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -247,7 +248,7 @@ const AddLabelController = Vue.extend(addLabel)
 const AddPaidController = Vue.extend(addPaid)
 const AddMenuController = Vue.extend(addMenu)
 const AddRuleController = Vue.extend(addRule)
-
+const BatchToTransportController = Vue.extend(batchToTransport)
 const mixin = {
   data() {
     return {
@@ -668,6 +669,13 @@ function initInstance(type) {
     // 仓库自提 设为自提
     case 'warehouseSelf':
       instance = new WarehouseSelfController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自提点 转运包裹管理
+    case 'batchToTransport':
+      instance = new BatchToTransportController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

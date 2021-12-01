@@ -82,20 +82,20 @@ export default {
       begin: '',
       end: '',
       timeOptions: [
-        { value: 'created_at', name: '订单提交时间' },
-        { value: 'packed_at', name: '打包称重时间' },
-        { value: 'paid_at', name: '支付时间' },
-        { value: 'shipped_at', name: '发货时间' },
-        { value: 'signed_at', name: '签收时间' }
+        { value: 'created_at', name: this.$t('订单提交时间') },
+        { value: 'packed_at', name: this.$t('打包称重时间') },
+        { value: 'paid_at', name: this.$t('支付时间') },
+        { value: 'shipped_at', name: this.$t('发货时间') },
+        { value: 'signed_at', name: this.$t('签收时间') }
       ],
       priceRangeOptions: [
-        { value: 'actual_payment_fee', name: '应付总费用' },
-        { value: 'actual_pay', name: '实际支付' },
-        { value: 'declare_value', name: '申报价值' }
+        { value: 'actual_payment_fee', name: this.$t('应付总费用') },
+        { value: 'actual_pay', name: this.$t('实际支付') },
+        { value: 'declare_value', name: this.$t('申报价值') }
       ],
       receiverOptions: [
-        { value: 1, name: '自提' },
-        { value: 2, name: '非自提' }
+        { value: 1, name: this.$t('自提') },
+        { value: 2, name: this.$t('非自提') }
       ],
       paymentStatusData: [
         {

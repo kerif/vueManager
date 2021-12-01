@@ -8,6 +8,7 @@
           </el-option>
         </el-select>
         <el-button class="location-sty" @click="goWarehouse">{{ $t('仓位管理') }}</el-button>
+        <!-- <el-button class="location-sty" @click="goAnnouncement">{{ $t('公告设置') }}</el-button> -->
       </div>
       <el-form ref="form" :model="form" label-width="100px" label-position="right">
         <el-row class="container-center" :gutter="20">
@@ -31,7 +32,6 @@
           </el-col>
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{ $t('联系电话') }}</span>
-            <!-- <span>{{111}}</span> -->
             <span>{{ form.contact_info }}</span>
           </el-col>
           <el-col :span="7" :offset="1">
@@ -62,6 +62,9 @@
         <el-col :span="5" :offset="1">
           <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>
         </el-col>
+        <!-- <el-col :span="5" :offset="1">
+          <div class="middle-left" @click="bacthTransport">{{ $t('快速转运') }}</div>
+        </el-col> -->
         <el-col :span="5" :offset="1">
           <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>
         </el-col>
@@ -132,6 +135,13 @@
           size="small"
           @click="bacthTransport"
           >{{ $t('批量转运') }}</el-button
+        >
+        <el-button
+          class="btn-deep-purple"
+          v-if="activeName === '1'"
+          size="small"
+          @click="bacthInform"
+          >{{ $t('批量通知') }}</el-button
         > -->
         <el-button size="small" type="success" plain @click="uploadList(status)">{{
           $t('导出清单')
@@ -228,6 +238,10 @@
           <span v-if="scope.row.station_status === 4">{{ $t('自提签收') }}</span>
         </template>
       </el-table-column>
+      <!-- 收货方式 -->
+      <!-- <el-table-column :label="$t('收货方式')" v-if="activeName === '1'"> </el-table-column> -->
+      <!-- 收货自提点 -->
+      <!-- <el-table-column :label="$t('收货自提点')" v-if="activeName === '1'"> </el-table-column> -->
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
         <template slot-scope="scope">
@@ -261,6 +275,12 @@
             @click="goDetails(scope.row.id)"
             >{{ $t('详情') }}</el-button
           >
+          <!-- <el-button
+            v-if="activeName === '1'"
+            class="btn-blue-green btn-com"
+            @click="goTransport(scope.row.id)"
+            >{{ $t('转运') }}</el-button
+          > -->
         </template>
       </el-table-column>
       <!-- <template slot="append" v-if="activeName === '0' || activeName === '1'">
@@ -326,6 +346,23 @@
         <el-button type="primary" @click="updateAnnoucement">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="showOrder" :title="$t('转运订单')" class="order-dialog" width="45%">
+      <el-form>
+        <el-form-item :label="$t('转往自提点')">
+          <el-autocomplete
+            :fetch-suggestions="queryCNSearch"
+            :placeholder="$t('请选择转往自提点')"
+            @select="handleSelect"
+            v-model="transport"
+          >
+          </el-autocomplete>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="showOrder = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirmTransport">{{ $t('确认') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -377,7 +414,11 @@ export default {
         announcement: ''
       },
       textarea: '',
-      XStationId: ''
+      XStationId: '',
+      showOrder: false,
+      transport: '',
+      station_id: '',
+      order_ids: []
     }
   },
   methods: {
@@ -543,12 +584,43 @@ export default {
       )
     },
     // 批量转运
-    bacthTransport() {},
+    bacthTransport() {
+      if (!this.orderSnNum || !this.orderSnNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog(
+        {
+          type: 'batchToTransport',
+          id: this.transferId,
+          orderSnNum: this.orderSnNum,
+          state: 'batch'
+        },
+        () => {
+          this.getList()
+          this.getCounts()
+        }
+      )
+    },
+    bacthInform() {},
+    // 确认转运
+    confirmTransport() {
+      let param = {
+        station_id: this.station_id,
+        order_ids: this.order_ids
+      }
+      this.$request.transformOrder(param).then(res => {
+        console.log(res)
+      })
+    },
     // 详情
     goDetails(id) {
       dialog({ type: 'pickDetails', id: id, transferId: this.transferId }, () => {
         this.getList()
       })
+    },
+    goTransport(id) {
+      this.showOrder = true
+      this.order_ids = id
     },
     // 收货
     goReceive(id) {
@@ -696,6 +768,24 @@ export default {
       this.announcementData.opening_hours = ''
       this.announcementData.announcement = ''
     },
+    queryCNSearch(queryString, callback) {
+      var list = [{}]
+      this.$request
+        .getPackagePick({
+          keyword: this.transport
+        })
+        .then(res => {
+          for (let i of res.data) {
+            i.value = i.name
+          }
+          list = res.data
+          callback(list)
+        })
+    },
+    handleSelect(item) {
+      console.log(item)
+      this.station_id = item.id
+    },
     // 更新 公告设置
     updateAnnoucement() {
       this.$request.updatePickData(this.transferId, this.announcementData).then(res => {
@@ -792,6 +882,16 @@ export default {
       width: 50%;
     }
   }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
+  }
+  .el-dialog__close {
+    color: #fff;
+  }
   .chooseOrder {
     cursor: pointer;
     color: blue;
@@ -862,6 +962,9 @@ export default {
   .auto-sty {
     display: inline-block;
     margin-right: 20px;
+  }
+  .btn-com {
+    margin: 10px 0 0 0;
   }
   .searchGroup {
     display: flex;

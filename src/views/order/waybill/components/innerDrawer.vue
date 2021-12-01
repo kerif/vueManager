@@ -216,26 +216,28 @@ export default {
         this.tmpsData = res.data
         this.localization = res.localization
         this.orderInfo = [
-          { id: 'user_id', name: '客户ID' },
-          { id: 'username', name: '用户名' },
-          { id: 'express_line_name', name: '线路名称' },
-          { id: 'line_extra_remark', name: '线路额外信息' },
-          { id: 'order_sn', name: '订单号' },
-          { id: 'agent_name', name: '所属代理' },
-          { id: 'clearance_code', name: '清关编码' }
+          { id: 'user_id', name: this.$t('客户ID') },
+          { id: 'username', name: this.$t('用户名') },
+          { id: 'express_line_name', name: this.$t('线路名称') },
+          { id: 'line_extra_remark', name: this.$t('线路额外信息') },
+          { id: 'order_sn', name: this.$t('订单号') },
+          { id: 'agent_name', name: this.$t('所属代理') },
+          { id: 'clearance_code', name: this.$t('清关编码') }
         ]
         this.receiveInfo = [
-          { id: 'receiver_name', name: '收货人' },
-          { id: 'phone', name: '手机/联系电话' },
-          { id: 'country', name: '收货国家' },
-          { id: 'city', name: '城市' },
-          { id: 'postcode', name: '邮编' },
-          { id: 'street_door_no', name: '街道/门牌号' },
-          { id: 'info_address', name: '详细地址' },
-          { id: 'station_name', name: '自提点' },
-          { id: 'user_address', name: '客户地址' },
-          { id: 'station_address', name: '自提点地址' },
-          { id: 'address', name: '附加地址' }
+          { id: 'receiver_name', name: this.$t('收货人') },
+          { id: 'phone', name: this.$t('手机/联系电话') },
+          { id: 'country', name: this.$t('收货国家') },
+          { id: 'province', name: this.$t('省份') },
+          { id: 'city', name: this.$t('城市') },
+          { id: 'postcode', name: this.$t('邮编') },
+          { id: 'street_door_no', name: this.$t('街道/门牌号') },
+          { id: 'info_address', name: this.$t('详细地址') },
+          { id: 'station_name', name: this.$t('自提点') },
+          { id: 'user_address', name: this.$t('客户地址') },
+          { id: 'station_address', name: this.$t('自提点地址') },
+          { id: 'address', name: this.$t('附加地址') },
+          { id: 'remark', name: this.$t('备注') }
         ]
         // 入库信息
         this.warehouseInfo = [
@@ -246,7 +248,8 @@ export default {
           { id: 'package_qty', name: '包裹物品数量' },
           { id: 'package_volume', name: '包裹体积 (m³)' },
           { id: 'package_size', name: '包裹尺寸(长宽高)' },
-          { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` }
+          { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` },
+          { id: 'package_value', name: '包裹申报价值' }
         ]
         // 入库信息 总计
         this.warehouseSum = [
@@ -415,26 +418,28 @@ export default {
         this.ruleForm.remark = res.data.remark
         this.headerData = res.data.header
         this.orderInfo = [
-          { id: 'user_id', name: '客户ID' },
-          { id: 'username', name: '用户名' },
-          { id: 'express_line_name', name: '线路名称' },
-          { id: 'line_extra_remark', name: '线路额外信息' },
-          { id: 'order_sn', name: '订单号' },
-          { id: 'agent_name', name: '所属代理' },
-          { id: 'clearance_code', name: '清关编码' }
+          { id: 'user_id', name: this.$t('客户ID') },
+          { id: 'username', name: this.$t('用户名') },
+          { id: 'express_line_name', name: this.$t('线路名称') },
+          { id: 'line_extra_remark', name: this.$t('线路额外信息') },
+          { id: 'order_sn', name: this.$t('订单号') },
+          { id: 'agent_name', name: this.$t('所属代理') },
+          { id: 'clearance_code', name: this.$t('清关编码') }
         ]
         this.receiveInfo = [
-          { id: 'receiver_name', name: '收货人' },
-          { id: 'phone', name: '手机/联系电话' },
-          { id: 'country', name: '收货国家' },
-          { id: 'city', name: '城市' },
-          { id: 'postcode', name: '邮编' },
-          { id: 'street_door_no', name: '街道/门牌号' },
-          { id: 'info_address', name: '详细地址' },
-          { id: 'station_name', name: '自提点' },
-          { id: 'user_address', name: '客户地址' },
-          { id: 'station_address', name: '自提点地址' },
-          { id: 'address', name: '附加地址' }
+          { id: 'receiver_name', name: this.$t('收货人') },
+          { id: 'phone', name: this.$t('手机/联系电话') },
+          { id: 'country', name: this.$t('收货国家') },
+          { id: 'province', name: this.$t('省份') },
+          { id: 'city', name: this.$t('城市') },
+          { id: 'postcode', name: this.$t('邮编') },
+          { id: 'street_door_no', name: this.$t('街道/门牌号') },
+          { id: 'info_address', name: this.$t('详细地址') },
+          { id: 'station_name', name: this.$t('自提点') },
+          { id: 'user_address', name: this.$t('客户地址') },
+          { id: 'station_address', name: this.$t('自提点地址') },
+          { id: 'address', name: this.$t('附加地址') },
+          { id: 'remark', name: this.$t('备注') }
         ]
         // 入库信息
         this.warehouseInfo = [
@@ -445,7 +450,8 @@ export default {
           { id: 'package_qty', name: '包裹物品数量' },
           { id: 'package_volume', name: '包裹体积 (m³)' },
           { id: 'package_size', name: '包裹尺寸(长宽高)' },
-          { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` }
+          { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` },
+          { id: 'package_value', name: '包裹申报价值' }
         ]
         // 入库信息 总计
         this.warehouseSum = [
