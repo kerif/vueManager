@@ -63,7 +63,7 @@
           <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>
         </el-col>
         <!-- <el-col :span="5" :offset="1">
-          <div class="middle-left" @click="bacthTransport">{{ $t('快速转运') }}</div>
+          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>
         </el-col> -->
         <el-col :span="5" :offset="1">
           <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>
@@ -583,9 +583,25 @@ export default {
         }
       )
     },
-    fastTransport() {},
+    // 快速转运
+    fastTransport() {
+      dialog(
+        {
+          type: 'batchToTransport',
+          id: this.transferId,
+          state: 'add'
+        },
+        () => {
+          this.getList()
+          this.getCounts()
+        }
+      )
+    },
     // 批量转运
     bacthTransport() {
+      if (!this.orderSnNum || !this.orderSnNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
       dialog(
         {
           type: 'batchToTransport',
@@ -602,13 +618,13 @@ export default {
     bacthInform() {},
     // 确认转运
     confirmTransport() {
-      let param = {
-        station_id: this.station_id,
-        order_ids: this.order_ids
-      }
-      this.$request.transformOrder(param).then(res => {
-        console.log(res)
-      })
+      // let param = {
+      //   station_id: this.station_id,
+      //   order_ids: this.order_ids
+      // }
+      // this.$request.transformOrder(param).then(res => {
+      //   console.log(res)
+      // })
     },
     // 详情
     goDetails(id) {
