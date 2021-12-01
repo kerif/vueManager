@@ -583,6 +583,7 @@ export default {
         }
       )
     },
+    fastTransport() {},
     // 批量转运
     bacthTransport() {
       dialog(
