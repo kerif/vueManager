@@ -585,9 +585,6 @@ export default {
     },
     // 批量转运
     bacthTransport() {
-      if (!this.orderSnNum || !this.orderSnNum.length) {
-        return this.$message.error(this.$t('请选择'))
-      }
       dialog(
         {
           type: 'batchToTransport',
