@@ -125,6 +125,7 @@ export default {
         })
         .then(res => {
           if (res.ret) {
+            console.log(this.tableData)
             this.tableData = res.data
             this.localization = res.localization
           }
