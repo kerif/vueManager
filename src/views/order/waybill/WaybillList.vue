@@ -186,7 +186,7 @@
         <template v-for="(item, idx) in checkColumn">
           <el-table-column
             :key="idx"
-            :prop="item.id"
+            :prop="item.idx"
             :label="item.name"
             v-if="item.checked"
             :width="item.width"
@@ -241,11 +241,15 @@
                 {{ scope.row.address.country_name }}
               </template>
               <template v-else-if="item.id === 'weight'">
-                <span v-if="item.name === '预计重量'">{{ scope.row.except_weight }}</span>
+                <span v-if="item.name === '预计重量' + localization.weight_unit">{{
+                  scope.row.except_weight
+                }}</span>
                 <span v-else>{{ scope.row.actual_weight }}</span>
               </template>
               <template v-else-if="item.id === 'fee'">
-                <span v-if="item.name === '预计费用'">{{ scope.row.payment_fee }}</span>
+                <span v-if="item.name === '预计费用' + localization.currency_unit">{{
+                  scope.row.payment_fee
+                }}</span>
                 <span v-else>{{ scope.row.actual_payment_fee }}</span>
               </template>
               <template v-else-if="item.id === 'agent'">
@@ -1134,26 +1138,24 @@ export default {
     this.getOrderFieldList()
     this.getCounts()
     this.initQuery()
-    this.getTemplateColumn()
   },
   methods: {
     // 获取排序模板
     getTemplateColumn() {
+      this.tableLoading = true
       this.$request.getTemplateColumn('ORDER').then(res => {
         if (res.ret) {
           if (res.data) {
-            if (this.$refs.table) {
-              this.tableColumn = res.data.filed.map(item => ({
-                id: item.id,
-                name: item.name,
-                width: item.width,
-                checked: Boolean(+item.checked)
-              }))
-            }
+            this.tableColumn = res.data.filed.map(item => ({
+              id: item.id,
+              name: item.name,
+              width: item.width,
+              checked: Boolean(+item.checked)
+            }))
           } else {
             this.tableColumn = JSON.parse(JSON.stringify(columnData))
           }
-          this.$refs.table.doLayout()
+          this.handleColumn()
         }
       })
     },
@@ -1280,6 +1282,7 @@ export default {
           }
         }
       })
+      this.getList()
     },
     changeSort() {
       this.checkColumn.forEach(item => {
@@ -1303,6 +1306,7 @@ export default {
           this.tableColumn.splice(newTabIndex, 0, item)
           const columnItem = this.checkColumn.splice(oldIndex, 1)[0]
           this.checkColumn.splice(newIndex, 0, columnItem)
+          this.getList()
         }
       })
     },
@@ -1335,7 +1339,7 @@ export default {
           query: { ...this.$route.query, order_sn: '' }
         })
       }
-      this.getList()
+      this.getTemplateColumn()
     },
     // 货量统计
     receive() {
@@ -1380,43 +1384,39 @@ export default {
     getList() {
       this.tableLoading = true
       const params = this.computedParams()
-      this.$request
-        .getOrder(params)
-        .then(res => {
+      this.$request.getOrder(params).then(res => {
+        if (res.ret) {
           this.tableLoading = false
-          if (res.ret) {
-            // 待发货列表的转运快递单号添加
-            this.oderData = res.data.map(item => {
-              return {
-                ...item,
-                secondData: []
-              }
-            })
-            this.oderData.forEach(item => {
-              item.disabled = true
-              item.copySN = item.logistics_sn
-              if (this.expands.includes(item.id)) {
-                this.groupBuy(item, false)
-              }
-            })
-            this.localization.weight_unit = res.localization.weight_unit
-            this.localization.currency_unit = res.localization.currency_unit
-            this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
-            this.sumData = res.sum
-            this.handleColumn()
-            this.$nextTick(() => {
-              this.$refs.table.doLayout()
-            })
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-        .catch(() => (this.tableLoading = false))
+          // 待发货列表的转运快递单号添加
+          this.oderData = res.data.map(item => {
+            return {
+              ...item,
+              secondData: []
+            }
+          })
+          this.oderData.forEach(item => {
+            item.disabled = true
+            item.copySN = item.logistics_sn
+            if (this.expands.includes(item.id)) {
+              this.groupBuy(item, false)
+            }
+          })
+          this.localization.weight_unit = res.localization.weight_unit
+          this.localization.currency_unit = res.localization.currency_unit
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+          this.sumData = res.sum
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 导出清单
     uploadList() {

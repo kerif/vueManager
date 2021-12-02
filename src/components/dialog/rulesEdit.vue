@@ -71,8 +71,8 @@
       <el-form-item :label="$t('连接符')">
         <el-select v-model="boxRules.connector" :placeholder="$t('请选择')">
           <el-option
-            v-for="item in connectOptions"
-            :key="item.label"
+            v-for="(item, index) in linkOptions"
+            :key="index"
             :label="item.label"
             :value="item.label"
           >
@@ -105,8 +105,8 @@
       <el-form-item :label="$t('连接符')">
         <el-select v-model="groupRules.connector" :placeholder="$t('请选择')">
           <el-option
-            v-for="item in connectOptions"
-            :key="item.label"
+            v-for="(item, index) in connectOptions"
+            :key="index"
             :label="item.label"
             :value="item.label"
           >
@@ -199,8 +199,19 @@ export default {
       value: '',
       connectOptions: [
         {
-          label: '无'
+          label: '-'
         },
+        {
+          label: '/'
+        },
+        {
+          label: '()'
+        },
+        {
+          label: '_'
+        }
+      ],
+      linkOptions: [
         {
           label: '-'
         },
@@ -344,7 +355,7 @@ export default {
       } else if (this.name === 3) {
         this.$request
           .updateRules(this.id, {
-            link: this.groupRules.connector,
+            link: this.boxRules.connector,
             sn: this.boxRules.boxNum
           })
           .then(res => {

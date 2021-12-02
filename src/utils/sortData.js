@@ -35,16 +35,19 @@ export default [
   {
     id: 'country_name',
     name: '收货国家地区',
+    width: '110',
     checked: true
   },
   {
     id: 'package_count',
     name: '包裹数与件数',
+    width: '110',
     checked: true
   },
   {
     id: 'declare_value',
     name: '申报价值',
+    width: '90',
     checked: true
   },
   {
@@ -65,11 +68,13 @@ export default [
   {
     id: 'weight', // 1: 预计重量 其他: 实际重量
     name: '',
+    width: '100',
     checked: true
   },
   {
     id: 'fee', // 1: 预计费用 其他: 实际费用
     name: '',
+    width: '90',
     checked: true
   },
   {
