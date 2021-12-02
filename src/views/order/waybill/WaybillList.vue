@@ -1155,6 +1155,7 @@ export default {
           } else {
             this.tableColumn = JSON.parse(JSON.stringify(columnData))
           }
+          this.localization = res.localization
           this.handleColumn()
         }
       })
@@ -1378,7 +1379,6 @@ export default {
             }
           })
         }
-        this.localization = res.localization
       })
     },
     getList() {
@@ -1401,8 +1401,6 @@ export default {
               this.groupBuy(item, false)
             }
           })
-          this.localization.weight_unit = res.localization.weight_unit
-          this.localization.currency_unit = res.localization.currency_unit
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
           this.sumData = res.sum
