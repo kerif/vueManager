@@ -605,14 +605,16 @@ export default {
     },
     // 批量转运
     bacthTransport() {
-      if (!this.orderSnNum || !this.orderSnNum.length) {
+      if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
+      console.log(this.orderSnNum)
       dialog(
         {
           type: 'batchToTransport',
           id: this.transferId,
           orderSnNum: this.orderSnNum,
+          deleteNum: this.deleteNum,
           state: 'batch'
         },
         () => {
@@ -622,7 +624,7 @@ export default {
       )
     },
     bacthInform() {
-      if (!this.orderSnNum || !this.orderSnNum.length) {
+      if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
       this.$confirm(this.$t('确定要通知吗'), this.$t('提示'), {
@@ -630,8 +632,7 @@ export default {
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        let ids = this.orderSnNum
-        this.$request.batchNotify(ids).then(res => {
+        this.$request.batchNotify({ ids: this.deleteNum }).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',

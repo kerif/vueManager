@@ -3685,7 +3685,7 @@ exports.getPackagePick = params => {
 }
 // 自提点 转运订单
 exports.transformOrder = params => {
-  return $form.put('/stations/transport', params)
+  return $form.put('stations/transport', params)
 }
 // 自提点 自提点概览 获取佣金报表
 exports.commissionRecords = params => {
