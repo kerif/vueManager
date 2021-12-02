@@ -75,6 +75,10 @@
           prop="props"
           width="155"
         ></el-table-column>
+        <!-- 操作仓库 -->
+        <el-table-column :label="$t('操作仓库')" prop="warehouse"></el-table-column>
+        <!-- 所属客户 -->
+        <el-table-column :label="$t('所属客户')" prop="user_id"></el-table-column>
         <!-- 备注 -->
         <el-table-column :label="$t('备注')" prop="remark" width="200"></el-table-column>
         <!-- 打包图片 -->

@@ -137,7 +137,6 @@ export default {
         station_id: this.station_id
       }
       this.$request.transformOrder(param).then(res => {
-        console.log(res)
         if (res.ret) {
           this.$notify({
             type: 'success',
