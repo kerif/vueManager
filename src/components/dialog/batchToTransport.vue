@@ -57,9 +57,14 @@
       <!-- 所属发货单 -->
       <el-table-column prop="shipment_sn" :label="$t('所属发货单')"> </el-table-column>
       <!-- 收货方式 -->
-      <el-table-column prop="shipment_sn" :label="$t('收货方式')"> </el-table-column>
+      <el-table-column :label="$t('收货方式')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.station_name">{{ $t('自提收货') }}</span>
+          <span v-else>{{ $t('送货上门') }}</span>
+        </template>
+      </el-table-column>
       <!-- 收货自提点 -->
-      <el-table-column prop="shipment_sn" :label="$t('收货自提点')"> </el-table-column>
+      <el-table-column prop="station_name" :label="$t('收货自提点')"> </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="190px">
         <template slot-scope="scope">
@@ -85,7 +90,7 @@
           {{ $t('订单数') }}：
           {{ tableData.length }}
         </span>
-        <el-button type="primary" @click="confirmShip"
+        <el-button type="primary" @click="confirmToShip"
           >{{ $t('确定出库') }}&nbsp;({{ tableData.length }})</el-button
         >
       </el-col>
@@ -106,7 +111,8 @@ export default {
       transport: '',
       localization: {},
       state: '',
-      station_id: ''
+      station_id: '',
+      orderSnNum: []
     }
   },
   methods: {
@@ -125,10 +131,27 @@ export default {
         })
     },
     // 确认出库
-    confirmShip() {
-      let param = {}
+    confirmToShip() {
+      let param = {
+        order_ids: this.orderSnNum,
+        station_id: this.station_id
+      }
       this.$request.transformOrder(param).then(res => {
         console.log(res)
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.show = false
+          this.success()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     deleteRow(index, rows) {
@@ -157,7 +180,13 @@ export default {
       this.textarea2 = ''
       this.tableData = []
     },
-    init() {}
+    init() {
+      if (this.state === 'batch') {
+        this.textarea2 = this.orderSnNum.join('\n')
+        this.search()
+        console.log(this.orderSnNum, '1111')
+      }
+    }
   }
 }
 </script>

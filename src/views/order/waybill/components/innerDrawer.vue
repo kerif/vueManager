@@ -241,15 +241,15 @@ export default {
         ]
         // 入库信息
         this.warehouseInfo = [
-          { id: 'express_num', name: '包裹单号' },
-          { id: 'package_name', name: '包裹物品名称' },
-          { id: 'package_props_name', name: '包裹物品属性' },
-          { id: 'package_categories_name', name: '包裹物品类型' },
-          { id: 'package_qty', name: '包裹物品数量' },
+          { id: 'express_num', name: this.$t('包裹单号') },
+          { id: 'package_name', name: this.$t('包裹物品名称') },
+          { id: 'package_props_name', name: this.$t('包裹物品属性') },
+          { id: 'package_categories_name', name: this.$t('包裹物品类型') },
+          { id: 'package_qty', name: this.$t('包裹物品数量') },
           { id: 'package_volume', name: '包裹体积 (m³)' },
-          { id: 'package_size', name: '包裹尺寸(长宽高)' },
+          { id: 'package_size', name: this.$t('包裹尺寸(长宽高)') },
           { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` },
-          { id: 'package_value', name: '包裹申报价值' }
+          { id: 'package_value', name: this.$t('包裹申报价值') }
         ]
         // 入库信息 总计
         this.warehouseSum = [
@@ -301,33 +301,33 @@ export default {
           { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
         ]
         this.feeInfo = [
-          { id: 'value_added_amount', name: '增值服务费用' },
-          { id: 'insurance_fee', name: '保险费用' },
-          { id: 'tariff_fee', name: '关税费用' },
-          { id: 'line_service_fee', name: '渠道增值服务费用' },
-          { id: 'line_rule_fee', name: '渠道规则费用' }
+          { id: 'value_added_amount', name: this.$t('增值服务费用') },
+          { id: 'insurance_fee', name: this.$t('保险费用') },
+          { id: 'tariff_fee', name: this.$t('关税费用') },
+          { id: 'line_service_fee', name: this.$t('渠道增值服务费用') },
+          { id: 'line_rule_fee', name: this.$t('渠道规则费用') }
         ]
         this.shipInfo = [
-          { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
-          { id: 'order_logistics_sn', name: '物流单号 (订单)' },
-          { id: 'shipment_sn', name: '所属发货单' }
+          { id: 'shipment_logistics_sn', name: this.$t('物流单号 (头程 - 发货单)') },
+          { id: 'order_logistics_sn', name: this.$t('物流单号 (订单)') },
+          { id: 'shipment_sn', name: this.$t('所属发货单') }
         ]
         this.operationInfo = [
-          { id: 'created_at', name: '提交时间' },
-          { id: 'packed_at', name: '打包（拣货）时间' },
-          { id: 'paid_at', name: '支付时间' },
-          { id: 'shipped_at', name: '发货时间' },
-          { id: 'signed_at', name: '签收时间' }
+          { id: 'created_at', name: this.$t('提交时间') },
+          { id: 'packed_at', name: this.$t('打包（拣货）时间') },
+          { id: 'paid_at', name: this.$t('支付时间') },
+          { id: 'shipped_at', name: this.$t('发货时间') },
+          { id: 'signed_at', name: this.$t('签收时间') }
         ]
         this.customerInfo = [
-          { id: 'username', name: '用户名' },
-          { id: 'email', name: '邮箱' },
-          { id: 'user_profile_address', name: '个人信息地址' },
-          { id: 'address_email', name: '地址邮箱' },
-          { id: 'address_wechat_id', name: '地址微信号' },
-          { id: 'wechat_id', name: '微信号' },
-          { id: 'profile_wechat_id', name: '个人信息微信号' },
-          { id: 'id_card', name: '身份证号' }
+          { id: 'username', name: this.$t('用户名') },
+          { id: 'email', name: this.$t('邮箱') },
+          { id: 'user_profile_address', name: this.$t('个人信息地址') },
+          { id: 'address_email', name: this.$t('地址邮箱') },
+          { id: 'address_wechat_id', name: this.$t('地址微信号') },
+          { id: 'wechat_id', name: this.$t('微信号') },
+          { id: 'profile_wechat_id', name: this.$t('个人信息微信号') },
+          { id: 'id_card', name: this.$t('身份证号') }
         ]
       })
     },
@@ -485,10 +485,10 @@ export default {
         ]
         // 出库信息总计
         this.outboundSum = [
-          { id: 'box_payment_weight_sum', name: '出库计费重量' },
-          { id: 'box_actual_weight_sum', name: '出库实际重量' },
-          { id: 'box_volume_weight_sum', name: '出库体积重量' },
-          { id: 'box_volume_sum', name: '出库体积' }
+          { id: 'box_payment_weight_sum', name: this.$t('出库计费重量') },
+          { id: 'box_actual_weight_sum', name: this.$t('出库实际重量') },
+          { id: 'box_volume_weight_sum', name: this.$t('出库体积重量') },
+          { id: 'box_volume_sum', name: this.$t('出库体积') }
         ]
         this.payInfo = [
           { id: 'payment_method', name: '付款方式' },
@@ -500,11 +500,11 @@ export default {
           { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
         ]
         this.feeInfo = [
-          { id: 'value_added_amount', name: '增值服务费用' },
-          { id: 'insurance_fee', name: '保险费用' },
-          { id: 'tariff_fee', name: '关税费用' },
-          { id: 'line_service_fee', name: '渠道增值服务费用' },
-          { id: 'line_rule_fee', name: '渠道规则费用' }
+          { id: 'value_added_amount', name: this.$t('增值服务费用') },
+          { id: 'insurance_fee', name: this.$t('保险费用') },
+          { id: 'tariff_fee', name: this.$t('关税费用') },
+          { id: 'line_service_fee', name: this.$t('渠道增值服务费用') },
+          { id: 'line_rule_fee', name: this.$t('渠道规则费用') }
         ]
         this.shipInfo = [
           { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
@@ -512,21 +512,21 @@ export default {
           { id: 'shipment_sn', name: '所属发货单' }
         ]
         this.operationInfo = [
-          { id: 'created_at', name: '提交时间' },
-          { id: 'packed_at', name: '打包（拣货）时间' },
-          { id: 'paid_at', name: '支付时间' },
-          { id: 'shipped_at', name: '发货时间' },
-          { id: 'signed_at', name: '签收时间' }
+          { id: 'created_at', name: this.$t('提交时间') },
+          { id: 'packed_at', name: this.$t('打包（拣货）时间') },
+          { id: 'paid_at', name: this.$t('支付时间') },
+          { id: 'shipped_at', name: this.$t('发货时间') },
+          { id: 'signed_at', name: this.$t('签收时间') }
         ]
         this.customerInfo = [
-          { id: 'username', name: '用户名' },
-          { id: 'email', name: '邮箱' },
-          { id: 'user_profile_address', name: '个人信息地址' },
-          { id: 'address_email', name: '地址邮箱' },
-          { id: 'address_wechat_id', name: '地址微信号' },
-          { id: 'wechat_id', name: '微信号' },
-          { id: 'profile_wechat_id', name: '个人信息微信号' },
-          { id: 'id_card', name: '身份证号' }
+          { id: 'username', name: this.$t('用户名') },
+          { id: 'email', name: this.$t('邮箱') },
+          { id: 'user_profile_address', name: this.$t('个人信息地址') },
+          { id: 'address_email', name: this.$t('地址邮箱') },
+          { id: 'address_wechat_id', name: this.$t('地址微信号') },
+          { id: 'wechat_id', name: this.$t('微信号') },
+          { id: 'profile_wechat_id', name: this.$t('个人信息微信号') },
+          { id: 'id_card', name: this.$t('身份证号') }
         ]
         this.headerData.forEach(item => {
           if (item.checked === '1') {
