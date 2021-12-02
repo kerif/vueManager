@@ -1107,6 +1107,7 @@ export default {
         receive_type: '',
         countryArr: [],
         country_id: '',
+        station: '',
         keyword: ''
       },
       hasFilterCondition: false,

@@ -184,6 +184,23 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <!-- 自提点名称 -->
+          <el-form-item prop="station">
+            <el-select
+              v-model="searchFieldData.station"
+              clearable
+              filterable
+              :placeholder="$t('自提点名称')"
+            >
+              <el-option
+                v-for="item in pickList"
+                :key="item.id"
+                :value="item.id"
+                :label="item.name"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="4" :xl="3">
           <!--收货方式-->
@@ -318,7 +335,8 @@ export default {
       paymentData: [],
       lineData: [],
       wareHouseList: [],
-      countryName: []
+      countryName: [],
+      pickList: []
     }
   },
   created() {
@@ -327,6 +345,7 @@ export default {
     this.getLineType()
     this.initQuery()
     this.getSimpleList()
+    this.getPackagePick()
   },
   activated() {
     this.initQuery()
@@ -386,6 +405,13 @@ export default {
     getLineType() {
       this.$request.lineType().then(res => {
         this.lineData = res.data
+      })
+    },
+    getPackagePick() {
+      this.$request.getPackagePick().then(res => {
+        if (res.ret) {
+          this.pickList = res.data
+        }
       })
     }
   }

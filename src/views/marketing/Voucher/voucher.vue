@@ -128,16 +128,9 @@
               @click="recoding(scope.row.id)"
               >{{ $t('记录') }}</el-button
             >
-            <el-button
-              size="small"
-              v-if="
-                (activeName === '1' || activeName === '2' || activeName === '3') &&
-                scope.row.share_status !== 0
-              "
-              class="btn-pink detailsBtn"
-              @click="share(scope.row.id)"
-              >{{ $t('分享') }}</el-button
-            >
+            <el-button size="small" class="btn-pink detailsBtn" @click="share(scope.row.id)">{{
+              $t('分享')
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>
