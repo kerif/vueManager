@@ -2516,6 +2516,10 @@ exports.addSelf = params => {
 exports.deleteSelf = id => {
   return $form.delete(`self-pickup-stations/${id}`)
 }
+// 自提点 批量通知
+exports.batchNotify = ids => {
+  return $form.post('stations/notify', ids)
+}
 //自定义标签 列表查询
 exports.lineLabel = () => {
   return $form.get('express-line-labels')

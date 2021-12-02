@@ -60,10 +60,11 @@
           <span class="leftWidth">{{ $t('发货时间') }}</span>
           <span>{{ form.shipped_at }}</span>
         </el-col>
-        <!-- <el-col :span="7" :offset="1">
+        <!-- 目的自提点 -->
+        <el-col :span="7" :offset="1">
           <span class="leftWidth">{{ $t('目的自提点') }}</span>
-          <span></span>
-        </el-col> -->
+          <span>{{ form.station_name }}</span>
+        </el-col>
         <!-- 邮编 -->
         <!-- <el-col :span="7" :offset="1">
               <span class="leftWidth">{{$t('自提点到货时间')}}</span>
@@ -172,7 +173,7 @@
       <el-col :span="7" :offset="1">
         <span class="leftWidth">{{ $t('状态') }}</span>
         <span v-if="form.station_status === 3">{{ $t('直接出库') }}</span>
-        <!-- <span v-if="form.station_status === 3">{{ $t('转运出库') }}</span> -->
+        <span v-if="form.station_status === 1">{{ $t('转运出库') }}-{{ form.station_name }}</span>
         <span v-if="form.station_status === 4">{{ $t('自提签收') }}</span>
       </el-col>
     </el-row>
