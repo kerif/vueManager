@@ -2170,8 +2170,8 @@ export default {
       this.page_params.handleQueryChange('activeName', tab.name)
       this.timeList = []
       this.packed_end_date = ''
-      this.getList()
       this.getCounts()
+      this.handleColumn()
       this.selectIDs = []
     },
     // 订单日志

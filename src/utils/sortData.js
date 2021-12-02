@@ -85,16 +85,19 @@ export default [
   {
     id: 'logistics_company', // 3,4,5,6
     name: '头程物流信息',
+    width: '110',
     checked: true
   },
   {
     id: 'logistics_sn', // 3,4,5,6
     name: '二程物流信息',
+    width: '110',
     checked: true
   },
   {
     id: 'coupon_amount', // 3,4,5
     name: '抵用券金额',
+    width: '110',
     checked: true
   },
   {
@@ -118,6 +121,7 @@ export default [
   {
     id: 'shipment_sn', // 3,4,5
     name: '所属发货单',
+    width: '140',
     checked: true
   }
 ]
