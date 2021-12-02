@@ -605,7 +605,7 @@ export default {
     },
     // 批量转运
     bacthTransport() {
-      if (!this.orderSnNum || !this.orderSnNum.length) {
+      if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
       console.log(this.orderSnNum)
@@ -614,6 +614,7 @@ export default {
           type: 'batchToTransport',
           id: this.transferId,
           orderSnNum: this.orderSnNum,
+          deleteNum: this.deleteNum,
           state: 'batch'
         },
         () => {

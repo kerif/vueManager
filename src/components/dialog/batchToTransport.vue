@@ -112,7 +112,8 @@ export default {
       localization: {},
       state: '',
       station_id: '',
-      orderSnNum: []
+      orderSnNum: [],
+      deleteNum: []
     }
   },
   methods: {
@@ -134,7 +135,7 @@ export default {
     // 确认出库
     confirmToShip() {
       let param = {
-        order_ids: this.orderSnNum,
+        order_ids: this.deleteNum,
         station_id: this.station_id
       }
       this.$request.transformOrder(param).then(res => {
