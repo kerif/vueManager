@@ -1142,15 +1142,18 @@ export default {
       this.$request.getTemplateColumn('ORDER').then(res => {
         if (res.ret) {
           if (res.data) {
-            this.tableColumn = res.data.filed.map(item => ({
-              id: item.id,
-              name: item.name,
-              width: item.width,
-              checked: Boolean(+item.checked)
-            }))
+            if (this.$refs.table) {
+              this.tableColumn = res.data.filed.map(item => ({
+                id: item.id,
+                name: item.name,
+                width: item.width,
+                checked: Boolean(+item.checked)
+              }))
+            }
           } else {
             this.tableColumn = JSON.parse(JSON.stringify(columnData))
           }
+          this.$refs.table.doLayout()
         }
       })
     },
