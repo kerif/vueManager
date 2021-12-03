@@ -64,6 +64,7 @@
         <p>{{ $t('公司') }}：{{ form.company_name }}</p>
         <p>{{ $t('系统有效期') }}：{{ form.expired_at }}</p>
         <p>{{ $t('所属员工组') }}：{{ form.group_name }}</p>
+        <p>{{ $t('uuid') }}：{{ form.uuid }}</p>
         <el-button slot="reference" @click="checkUser">{{ $store.state.userName }}</el-button>
       </el-popover>
       <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
@@ -110,6 +111,7 @@ export default {
           this.form.company_name = res.data.company_name
           this.form.expired_at = res.data.expired_at
           this.form.group_name = res.data.group_name
+          this.form.uuid = res.data.uuid
         }
       })
     },

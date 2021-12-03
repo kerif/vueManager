@@ -88,7 +88,7 @@
         </el-table-column>
       </el-table>
       <div slot="footer">
-        <el-button @click="this.withdrawVisible = false">{{ $t('取消') }}</el-button>
+        <el-button @click="close">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="confirm(form, tableData)">{{ $t('确定') }}</el-button>
       </div>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
@@ -237,6 +237,9 @@ export default {
       this.form.mode = ''
       this.form.type = ''
       this.form.value = ''
+    },
+    close() {
+      this.withdrawVisible = false
     },
     confirm(form, tableData) {
       let arr = tableData.map(item => {
