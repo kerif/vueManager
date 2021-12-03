@@ -183,7 +183,7 @@
           ></el-input>
         </div>
       </el-form-item>
-      <el-form-item>
+      <!-- <el-form-item>
         {{ $t('允许所有订单入库') }}
         <el-tooltip
           class="item"
@@ -232,7 +232,7 @@
           class="pick"
         >
         </el-switch>
-      </el-form-item>
+      </el-form-item> -->
       <div>
         <el-form-item>
           <div>{{ $t('支持线路') }}</div>
