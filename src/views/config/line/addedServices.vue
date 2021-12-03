@@ -36,7 +36,7 @@
         <template #num1_header="{ column }">
           <el-tooltip class="item" effect="dark" :content="column.params.tips" placement="top">
             <div class="function">
-              <span>{{ column.title }}</span>
+              <span style="overflow: hidden">{{ column.title }}</span>
               <span class="func-icon">
                 <i class="el-icon-edit-outline" @click="editRowEvent(column)"></i>
                 <i class="el-icon-delete" @click="deleteServices(column)"></i>
