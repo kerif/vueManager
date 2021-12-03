@@ -38,6 +38,7 @@
             <span v-if="scope.row.type === 3">{{ $t('弃件') }}</span>
             <span v-if="scope.row.type === 4">{{ $t('彻底删除') }}</span>
             <span v-if="scope.row.type === 5">{{ $t('恢复') }}</span>
+            <span v-if="scope.row.type === 6">{{ $t('包裹变更') }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -76,9 +77,17 @@
           width="155"
         ></el-table-column>
         <!-- 操作仓库 -->
-        <el-table-column :label="$t('操作仓库')" prop="warehouse"></el-table-column>
+        <el-table-column
+          :label="$t('操作仓库')"
+          prop="warehouse"
+          v-if="activeName === '1'"
+        ></el-table-column>
         <!-- 所属客户 -->
-        <el-table-column :label="$t('所属客户')" prop="user_id"></el-table-column>
+        <el-table-column
+          :label="$t('所属客户')"
+          prop="user_id"
+          v-if="activeName === '1'"
+        ></el-table-column>
         <!-- 备注 -->
         <el-table-column :label="$t('备注')" prop="remark" width="200"></el-table-column>
         <!-- 打包图片 -->
