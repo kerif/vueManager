@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="$t('快速出库')"
+    :title="$t('快速转运')"
     class="fast-transport-container"
     @close="clear"
     width="85%"
@@ -120,7 +120,7 @@ export default {
     // 查询单号数据
     search() {
       this.$request
-        .signData({
+        .shipData({
           XStationId: this.id,
           sn: this.textarea2
         })
