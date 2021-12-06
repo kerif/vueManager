@@ -1506,7 +1506,7 @@ exports.getTemplate = () => {
   return $form.get('mini-program/templates')
 }
 // 更新 消息模版
-exports.updateTemplate = params => {
+exports.updateTemplates = params => {
   return $form.put('mini-program/templates', params)
 }
 // 获取公众号消息模版

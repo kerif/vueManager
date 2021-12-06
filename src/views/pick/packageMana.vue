@@ -608,7 +608,6 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      console.log(this.orderSnNum)
       dialog(
         {
           type: 'batchToTransport',
