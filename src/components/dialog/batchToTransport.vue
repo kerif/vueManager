@@ -91,7 +91,7 @@
           {{ tableData.length }}
         </span>
         <el-button type="primary" @click="confirmToShip"
-          >{{ $t('确定出库') }}&nbsp;({{ tableData.length }})</el-button
+          >{{ $t('确定转运') }}&nbsp;({{ tableData.length }})</el-button
         >
       </el-col>
     </el-row>
