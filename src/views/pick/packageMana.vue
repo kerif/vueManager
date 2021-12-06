@@ -236,6 +236,7 @@
         <template slot-scope="scope">
           <span v-if="scope.row.station_status === 3">{{ $t('直接出库') }}</span>
           <span v-if="scope.row.station_status === 4">{{ $t('自提签收') }}</span>
+          <span v-if="scope.row.station_status === 5">{{ $t('转运出库') }}</span>
         </template>
       </el-table-column>
       <!-- 收货方式 -->
