@@ -63,10 +63,10 @@
           <div class="middle-left" @click="fastSign">{{ $t('快速签收') }}</div>
         </el-col>
         <el-col :span="5" :offset="1">
-          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>
+          <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>
         </el-col>
         <el-col :span="5" :offset="1">
-          <div class="middle-left" @click="fastDelivery">{{ $t('快速出库') }}</div>
+          <div class="middle-left" @click="fastTransport">{{ $t('快速转运') }}</div>
         </el-col>
       </el-row>
     </div>
