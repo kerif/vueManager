@@ -31,7 +31,6 @@ export default {
         if (res.ret) {
           this.title = res.data.title
           this.content = res.data.content
-          // this.$router.go(-1)
           this.getCount()
         }
       })
