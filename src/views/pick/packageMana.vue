@@ -249,6 +249,9 @@
       </el-table-column>
       <!-- 收货自提点 -->
       <el-table-column :label="$t('收货自提点')" prop="station_name" v-if="activeName === '1'">
+        <template slot-scope="scope">
+          <span>{{ scope.row.station_name }}</span>
+        </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column :label="$t('操作')" width="160px" fixed="right">
