@@ -128,6 +128,40 @@
           ></el-button>
         </div>
       </div>
+      <el-popover
+        popper-class="sort"
+        placement="bottom"
+        width="200"
+        trigger="hover"
+        @show="rowDrop"
+      >
+        <div>
+          <el-checkbox-group
+            v-model="sortResult"
+            @change="changeSort"
+            style="display: flex; flex-direction: column"
+          >
+            <el-checkbox
+              v-for="item in checkColumn"
+              :key="item.id"
+              :label="item.id"
+              style="padding: 5px 0; margin-right: 0; display: flex; align-items: center"
+            >
+              <div style="display: flex; align-items: center; justify-content: space-between">
+                <div style="color: #000">{{ item.name }}</div>
+                <i class="el-icon-rank"></i>
+              </div>
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <div style="padding-top: 10px; display: flex; justify-content: center">
+          <el-button type="warning" size="mini" plain @click="remarkSort">{{
+            $t('重置')
+          }}</el-button>
+          <el-button type="primary" size="mini" plain @click="saveSort">{{ $t('保存') }}</el-button>
+        </div>
+        <i slot="reference" class="el-icon-s-grid" style="cursor: pointer; color: #3540a5"> </i>
+      </el-popover>
     </div>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -149,203 +183,109 @@
           :type="['1', '2', '3', '4', '5'].includes(activeName) ? 'selection' : 'index'"
           :key="['1', '2', '3', '4', '5'].includes(activeName) ? 'selection' : 'index'"
         ></el-table-column>
-        <el-table-column key="user_id" :label="$t('客户ID')" prop="user_id"></el-table-column>
-        <el-table-column
-          :label="$t('用户名')"
-          prop="user_name"
-          key="user_name"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column key="order_sn" :label="$t('订单号')" width="250">
-          <template slot-scope="scope">
-            <el-button @click="details(scope.row.id, activeName)" type="text">{{
-              scope.row.order_sn
-            }}</el-button>
-            <div :title="$t('复制单号')" class="copy-sty" @click="copyNumber(scope.row.order_sn)">
-              <i class="el-icon-copy-document"></i>
-            </div>
-            <el-button
-              type="text"
-              v-if="scope.row.is_parent === 1"
-              @click.native="groupBuy(scope.row)"
-            >
-              <img class="group-sty" src="../../../assets/group.jpg"
-            /></el-button>
-            <span>
-              <el-button
-                style="color: red; font-weight: bolder"
-                type="text"
-                v-if="scope.row.status === 11"
-                @click.native="reviewPackage(scope.row.id)"
-                >{{ $t('待审核') }}</el-button
-              >
-              <router-link
-                v-if="scope.row.status === 12"
-                class="choose-order"
-                :to="`/order/review/?id=${scope.row.id}`"
-              >
-                {{ $t('审核拒绝') }}
-              </router-link>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('状态')"
-          v-if="activeName === '1'"
-          key="is_saved"
-          prop="is_saved"
-        >
-          <template slot-scope="scope">
-            <span v-if="scope.row.is_saved === 1">{{ $t('待提交') }}</span>
-            <span v-else></span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('线路名称')"
-          key="express_line.cn_name"
-          prop="express_line.cn_name"
-          width="150"
-          show-overflow-tooltip
-        >
-        </el-table-column>
-        <el-table-column
-          :label="$t('收货人')"
-          prop="address.receiver_name"
-          key="address.receiver_name"
-        ></el-table-column>
-        <el-table-column
-          width="115"
-          :label="$t('收货国家地区')"
-          prop="address.country_name"
-          key="address.country_name"
-        ></el-table-column>
-        <el-table-column :label="$t('包裹数与件数')" key="package_count">
-          <template slot-scope="scope">
-            <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          width="98"
-          :label="
-            activeName === '1'
-              ? $t('预计重量') + localization.weight_unit
-              : $t('实际重量') + localization.weight_unit
-          "
-          :prop="activeName === '1' ? 'except_weight' : 'actual_weight'"
-          :key="activeName === '1' ? 'except_weight' : 'actual_weight'"
-        ></el-table-column>
-        <!-- 详见产品图 -->
-        <el-table-column
-          width="88"
-          :label="
-            activeName === '1'
-              ? $t('预计费用') + localization.currency_unit
-              : $t('实际费用') + localization.currency_unit
-          "
-          :prop="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"
-          :key="activeName === '1' ? 'payment_fee' : 'actual_payment_fee'"
-        ></el-table-column>
-        <el-table-column
-          width="88"
-          :label="$t('申报价值') + localization.currency_unit"
-          prop="declare_value"
-          key="declare_value"
-        ></el-table-column>
-        <el-table-column :label="$t('所属代理')" key="agent" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.agent }}</span>
-            <span>({{ scope.row.agent_commission }}%)</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('所属销售')" prop="sale_name"></el-table-column>
-        <el-table-column :label="$t('所属客服')" prop="customer_name"></el-table-column>
-        <el-table-column
-          :label="$t('支付方式')"
-          key="payment_type_name"
-          v-if="['3', '4', '5'].includes(activeName)"
-        >
-          <template slot-scope="scope">
-            <div class="payment-sty" v-if="scope.row.payment_type_name === '货到付款'">
-              {{ scope.row.payment_type_name }}
-              <p v-if="scope.row.on_delivery_status === 2">({{ $t('已付款') }})</p>
-            </div>
-            <div v-else>
-              {{ scope.row.payment_type_name }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('头程物流信息')"
-          key="logistics_company"
-          v-if="['3', '4', '5', '6'].includes(activeName)"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.shipment && scope.row.shipment.logistics_company }}&nbsp;{{
-                scope.row.shipment && scope.row.shipment.logistics_sn
-              }}</span
-            >
-          </template>
-        </el-table-column>
-        <!-- 转运快递单号 -->
-        <el-table-column
-          :label="$t('二程物流信息')"
-          key="logistics_sn"
-          v-if="['3', '4', '5', '6'].includes(activeName)"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('抵用券金额') + localization.currency_unit"
-          v-if="['3', '4', '5'].includes(activeName)"
-          prop="coupon_amount"
-          key="coupon_amount"
-        >
-        </el-table-column>
-        <el-table-column
-          width="155"
-          :label="timeLabel"
-          prop="updated_at"
-          key="updated_at"
-          v-if="['1', '2', '3', '4'].includes(activeName)"
-        >
-          <template slot-scope="scope">
-            <span v-if="activeName === '2'">{{ scope.row.created_at }}</span>
-            <span v-else-if="activeName === '3'">{{ scope.row.paid_at }}</span>
-            <span v-else-if="activeName === '4'">{{ scope.row.shipped_at }}</span>
-            <span v-else>{{ scope.row.updated_at }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          width="155"
-          :label="$t('拣货时间')"
-          prop="packed_at"
-          key="packed_at"
-          v-if="['2', '3'].includes(activeName)"
-        ></el-table-column>
-        <el-table-column
-          width="155"
-          :label="$t('签收时间')"
-          prop="signed_at"
-          key="signed_at"
-          v-if="activeName === '5'"
-        >
-        </el-table-column>
-        <el-table-column
-          :label="$t('所属发货单')"
-          key="shipment_sn"
-          v-if="['3', '4', '5'].includes(activeName)"
-        >
-          <template slot-scope="scope">
-            <span @click="goShip(scope.row.shipment_sn)" class="choose-order">{{
-              scope.row.shipment_sn
-            }}</span>
-          </template>
-        </el-table-column>
+        <template v-for="(item, idx) in checkColumn">
+          <el-table-column
+            :key="idx"
+            :prop="item.idx"
+            :label="item.name"
+            v-if="item.checked"
+            :width="item.width"
+          >
+            <template slot-scope="scope">
+              <template v-if="item.id === 'order_sn'">
+                <el-button @click="details(scope.row.id, activeName)" type="text">{{
+                  scope.row.order_sn
+                }}</el-button>
+                <div
+                  :title="$t('复制单号')"
+                  class="copy-sty"
+                  @click="copyNumber(scope.row.order_sn)"
+                >
+                  <i class="el-icon-copy-document"></i>
+                </div>
+                <el-button
+                  type="text"
+                  v-if="scope.row.is_parent === 1"
+                  @click.native="groupBuy(scope.row)"
+                >
+                  <img class="group-sty" src="../../../assets/group.jpg"
+                /></el-button>
+                <span>
+                  <el-button
+                    style="color: red; font-weight: bolder"
+                    type="text"
+                    v-if="scope.row.status === 11"
+                    @click.native="reviewPackage(scope.row.id)"
+                    >{{ $t('待审核') }}</el-button
+                  >
+                  <router-link
+                    v-if="scope.row.status === 12"
+                    class="choose-order"
+                    :to="`/order/review/?id=${scope.row.id}`"
+                  >
+                    {{ $t('审核拒绝') }}
+                  </router-link>
+                </span>
+              </template>
+              <template v-else-if="item.id === 'is_saved'">
+                <span v-if="scope.row.is_saved === 1">{{ $t('待提交') }}</span>
+                <span v-else></span>
+              </template>
+              <template v-else-if="item.id === 'express_line'">
+                {{ scope.row.express_line.cn_name }}
+              </template>
+              <template v-else-if="item.id === 'receiver_name'">
+                {{ scope.row.address.receiver_name }}
+              </template>
+              <template v-else-if="item.id === 'country_name'">
+                {{ scope.row.address.country_name }}
+              </template>
+              <template v-else-if="item.id === 'weight'">
+                <span v-if="item.name === '预计重量' + localization.weight_unit">{{
+                  scope.row.except_weight
+                }}</span>
+                <span v-else>{{ scope.row.actual_weight }}</span>
+              </template>
+              <template v-else-if="item.id === 'fee'">
+                <span v-if="item.name === '预计费用' + localization.currency_unit">{{
+                  scope.row.payment_fee
+                }}</span>
+                <span v-else>{{ scope.row.actual_payment_fee }}</span>
+              </template>
+              <template v-else-if="item.id === 'agent'">
+                {{ scope.row.agent }}({{ scope.row.agent_commission }}%)
+              </template>
+              <template v-else-if="item.id === 'payment_type_name'">
+                <div class="payment-sty" v-if="scope.row.payment_type_name === $t('货到付款')">
+                  {{ scope.row.payment_type_name }}
+                  <p v-if="scope.row.on_delivery_status === 2">({{ $t('已付款') }})</p>
+                </div>
+                <div v-else>
+                  {{ scope.row.payment_type_name }}
+                </div>
+              </template>
+              <template v-else-if="item.id === 'logistics_company'">
+                {{ scope.row.shipment && scope.row.shipment.logistics_company }}&nbsp;
+                {{ scope.row.shipment && scope.row.shipment.logistics_sn }}
+              </template>
+              <template v-else-if="item.id === 'logistics_sn'">
+                {{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}
+              </template>
+              <template v-else-if="item.id === 'updated_at'">
+                <span v-if="activeName === '2'">{{ scope.row.created_at }}</span>
+                <span v-else-if="activeName === '3'">{{ scope.row.paid_at }}</span>
+                <span v-else-if="activeName === '4'">{{ scope.row.shipped_at }}</span>
+                <span v-else>{{ scope.row.updated_at }}</span>
+              </template>
+              <template v-else-if="item.id === 'shipment_sn'">
+                <span @click="goShip(scope.row.shipment_sn)" class="choose-order">
+                  {{ scope.row.shipment_sn }}
+                </span>
+              </template>
+              <template v-else>{{ scope.row[item.id] }}</template>
+            </template>
+          </el-table-column>
+        </template>
         <el-table-column
           v-if="activeName !== '0'"
           key="operator"
@@ -538,7 +478,7 @@
               <!-- 转运快递单号 -->
               <el-table-column
                 :label="$t('头程物流信息')"
-                v-if="['3', '4', '5', '6'].includes(activeName)"
+                v-if="['3', '4', '5', '19'].includes(activeName)"
               >
                 <template slot-scope="scope">
                   <span
@@ -550,7 +490,7 @@
               </el-table-column>
               <el-table-column
                 :label="$t('二程物流信息')"
-                v-if="['3', '4', '5', '6'].includes(activeName)"
+                v-if="['3', '4', '5', '19'].includes(activeName)"
               >
                 <template slot-scope="scope">
                   <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
@@ -779,7 +719,6 @@
         </div>
       </nle-pagination>
     </div>
-
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
       <div class="dialog-sty">
         <iframe class="iframe" :src="urlHtml"></iframe>
@@ -1066,6 +1005,8 @@ import dialog from '@/components/dialog'
 import WaybillListSearch from './components/waybillListSearch'
 import WaybillListDrawer from './components/waybillListDrawer'
 import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
+import columnData from '../../../utils/sortData.js'
+import Sortable from 'sortablejs'
 export default {
   components: {
     WaybillListSearch,
@@ -1077,6 +1018,9 @@ export default {
   name: 'wayBillList',
   data() {
     return {
+      tableColumn: [],
+      checkColumn: [],
+      sortResult: [],
       timeList: [],
       uploadRadio: 1,
       sumData: {},
@@ -1084,7 +1028,10 @@ export default {
       activeName: '1',
       oderData: [],
       secondData: [],
-      localization: {},
+      localization: {
+        weight_unit: '',
+        currency_unit: ''
+      },
       selectIDs: [],
       agent_name: '',
       payment_type: '',
@@ -1160,6 +1107,7 @@ export default {
         receive_type: '',
         countryArr: [],
         country_id: '',
+        station: '',
         keyword: ''
       },
       hasFilterCondition: false,
@@ -1180,25 +1128,208 @@ export default {
       showTmpDrawer: false,
       keyData: {},
       lineId: '',
-      uploadType: 2
+      uploadType: 2,
+      sortDialog: false
     }
   },
   activated() {
-    console.log('activated')
     this.initQuery()
-    // this.getList()
-    if (this.expands.length) {
-      console.log(this.expands, 'this.expands get')
-      // this.groupBuy()
-    }
   },
   created() {
-    console.log('created')
     this.getOrderFieldList()
     this.getCounts()
     this.initQuery()
   },
   methods: {
+    // 获取排序模板
+    getTemplateColumn() {
+      this.tableLoading = true
+      this.$request.getTemplateColumn('ORDER').then(res => {
+        if (res.ret) {
+          if (res.data) {
+            this.tableColumn = res.data.filed.map(item => ({
+              id: item.id,
+              name: item.name,
+              width: item.width,
+              checked: Boolean(+item.checked)
+            }))
+          } else {
+            this.tableColumn = JSON.parse(JSON.stringify(columnData))
+          }
+          this.localization = res.localization
+          this.handleColumn()
+        }
+      })
+    },
+    handleColumn() {
+      const column = [
+        'user_id',
+        'user_name',
+        'order_sn',
+        'express_line',
+        'receiver_name',
+        'country_name',
+        'package_count',
+        'declare_value',
+        'agent',
+        'sale_name',
+        'customer_name',
+        'weight',
+        'fee'
+      ]
+      this.checkColumn = []
+      this.tableColumn.forEach(item => {
+        if (item.id === 'weight') {
+          item.name = this.$t('实际重量') + this.localization.weight_unit
+        }
+        if (item.id === 'fee') {
+          item.name = this.$t('实际费用') + this.localization.currency_unit
+        }
+        if (item.id === 'declare_value') {
+          item.name = this.$t('申报价值') + this.localization.currency_unit
+        }
+        switch (this.activeName) {
+          case '0':
+            if ([...column].includes(item.id)) {
+              this.checkColumn.push(item)
+            }
+            break
+          case '1':
+            if (item.id === 'weight') {
+              item.name = this.$t('预计重量') + this.localization.weight_unit
+            }
+            if (item.id === 'fee') {
+              item.name = this.$t('预计费用') + this.localization.currency_unit
+            }
+            if (item.id === 'updated_at') {
+              item.name = this.timeLabel
+            }
+            if ([...column, 'is_saved', 'updated_at'].includes(item.id)) {
+              this.checkColumn.push(item)
+            }
+            break
+          case '2':
+            if (item.id === 'updated_at') {
+              item.name = this.timeLabel
+            }
+            if ([...column, 'updated_at', 'packed_at'].includes(item.id)) {
+              this.checkColumn.push(item)
+            }
+            break
+          case '3':
+            if (item.id === 'updated_at') {
+              item.name = this.timeLabel
+            }
+            if (
+              [
+                ...column,
+                'payment_type_name',
+                'logistics_company',
+                'logistics_sn',
+                'coupon_amount',
+                'updated_at',
+                'packed_at',
+                'shipment_sn'
+              ].includes(item.id)
+            ) {
+              this.checkColumn.push(item)
+            }
+            break
+          case '4':
+            if (item.id === 'updated_at') {
+              item.name = this.timeLabel
+            }
+            if (
+              [
+                ...column,
+                'payment_type_name',
+                'logistics_company',
+                'logistics_sn',
+                'coupon_amount',
+                'updated_at',
+                'shipment_sn'
+              ].includes(item.id)
+            ) {
+              this.checkColumn.push(item)
+            }
+            break
+          case '5':
+            if (
+              [
+                ...column,
+                'payment_type_name',
+                'logistics_company',
+                'logistics_sn',
+                'coupon_amount',
+                'signed_at',
+                'shipment_sn'
+              ].includes(item.id)
+            ) {
+              this.checkColumn.push(item)
+            }
+            break
+          case '19':
+            if ([...column, 'logistics_company', 'logistics_sn'].includes(item.id)) {
+              this.checkColumn.push(item)
+            }
+            break
+          default:
+            break
+        }
+      })
+      this.checkColumn.forEach(item => {
+        if (item.checked) {
+          if (!this.sortResult.includes(item.id)) {
+            this.sortResult.push(item.id)
+          }
+        }
+      })
+      this.getList()
+    },
+    changeSort() {
+      this.checkColumn.forEach(item => {
+        if (!this.sortResult.includes(item.id)) {
+          item.checked = false
+        } else {
+          item.checked = true
+        }
+      })
+    },
+    rowDrop() {
+      const tbody = document.querySelector('.el-checkbox-group')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          if (newIndex === oldIndex) return false
+          const oldField = this.checkColumn[oldIndex].id
+          const newField = this.checkColumn[newIndex].id
+          const oldTabIndex = this.tableColumn.findIndex(item => item.id === oldField)
+          const newTabIndex = this.tableColumn.findIndex(item => item.id === newField)
+          const item = this.tableColumn.splice(oldTabIndex, 1)[0]
+          this.tableColumn.splice(newTabIndex, 0, item)
+          const columnItem = this.checkColumn.splice(oldIndex, 1)[0]
+          this.checkColumn.splice(newIndex, 0, columnItem)
+          this.getList()
+        }
+      })
+    },
+    saveSort() {
+      const params = this.tableColumn.map((item, idx) => ({
+        ...item,
+        checked: item.checked ? 1 : 0,
+        sort_id: idx + 1
+      }))
+      this.$request.updateTemplate('ORDER', { filed: params }).then(res => {
+        if (res.ret) {
+          this.$message.success(res.msg)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    remarkSort() {
+      this.tableColumn = JSON.parse(JSON.stringify(columnData))
+      this.handleColumn()
+    },
     initQuery() {
       if (this.$route.query.activeName) {
         this.activeName = this.$route.query.activeName
@@ -1210,7 +1341,7 @@ export default {
           query: { ...this.$route.query, order_sn: '' }
         })
       }
-      this.getList()
+      this.getTemplateColumn()
     },
     // 货量统计
     receive() {
@@ -1227,7 +1358,6 @@ export default {
     toogleExpand(row) {
       let $table = this.$refs.table
       $table.toggleRowExpansion(row)
-      console.log('toogleExpand')
     },
     onFilterChange() {
       this.hasFilterCondition = !this.hasFilterCondition
@@ -1250,48 +1380,42 @@ export default {
             }
           })
         }
-        this.localization = res.localization
       })
     },
     getList() {
       this.tableLoading = true
       const params = this.computedParams()
-      this.$request
-        .getOrder(params)
-        .then(res => {
+      this.$request.getOrder(params).then(res => {
+        if (res.ret) {
           this.tableLoading = false
-          if (res.ret) {
-            // 待发货列表的转运快递单号添加
-            this.oderData = res.data.map(item => {
-              return {
-                ...item,
-                secondData: []
-              }
-            })
-            this.oderData.forEach(item => {
-              item.disabled = true
-              item.copySN = item.logistics_sn
-              if (this.expands.includes(item.id)) {
-                // console.log('我在二级')
-                this.groupBuy(item, false)
-              }
-            })
-            this.localization = res.localization
-            this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
-            this.sumData = res.sum
-            this.$nextTick(() => {
-              this.$refs.table.doLayout()
-            })
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-        .catch(() => (this.tableLoading = false))
+          // 待发货列表的转运快递单号添加
+          this.oderData = res.data.map(item => {
+            return {
+              ...item,
+              secondData: []
+            }
+          })
+          this.oderData.forEach(item => {
+            item.disabled = true
+            item.copySN = item.logistics_sn
+            if (this.expands.includes(item.id)) {
+              this.groupBuy(item, false)
+            }
+          })
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+          this.sumData = res.sum
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 导出清单
     uploadList() {
@@ -1378,7 +1502,6 @@ export default {
     },
     getVal(param) {
       this.keyData = param
-      console.log(this.keyData, 'this.keyData')
     },
     // 更新物流状态
     updateTracking() {
@@ -1718,7 +1841,6 @@ export default {
     },
     // 待支付 编辑打包数据
     editPacked(id, activeName, parent, lineId) {
-      console.log(lineId, 'lineId')
       this.$router.push({
         name: 'editPacked',
         params: {
@@ -1788,10 +1910,7 @@ export default {
       this.orderInfo = selection
     },
     exChange(row, expandedRows) {
-      console.log(expandedRows, 'expandedRows')
       this.expands = expandedRows.map(item => item.id)
-      // this.expands.push(...expandedRows.map(item => item.id))
-      console.log(this.expands, 'this.expands')
     },
     // 完成支付
     finishPay(id) {
@@ -2052,8 +2171,8 @@ export default {
       this.page_params.handleQueryChange('activeName', tab.name)
       this.timeList = []
       this.packed_end_date = ''
-      this.getList()
       this.getCounts()
+      this.handleColumn()
       this.selectIDs = []
     },
     // 订单日志
@@ -2155,7 +2274,6 @@ export default {
                 exceptWidth: 0
               }
             })
-            console.log(this.boxDialogData, 'boxDialogData')
           }
         })
     },
@@ -2221,7 +2339,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.sort {
+  padding: 5px 15px;
+  .el-checkbox__label {
+    flex: 1;
+  }
+}
 .way-list-container {
   .header-range {
     display: flex;
