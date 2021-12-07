@@ -234,6 +234,7 @@
       <!-- 状态 -->
       <el-table-column :label="$t('状态')" v-if="activeName === '2'">
         <template slot-scope="scope">
+          <span v-if="scope.row.station_status === 1">{{ $t('收货') }}</span>
           <span v-if="scope.row.station_status === 3">{{ $t('直接出库') }}</span>
           <span v-if="scope.row.station_status === 4">{{ $t('自提签收') }}</span>
           <span v-if="scope.row.station_status === 5">{{ $t('转运出库') }}</span>
