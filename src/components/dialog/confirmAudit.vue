@@ -145,7 +145,7 @@ export default {
 
 <style lang="scss" scoped>
 .dialog-confirmAudit {
-  .el-dialog__header {
+  /deep/.el-dialog__header {
     background-color: #0e102a;
   }
   .el-input {
@@ -154,7 +154,7 @@ export default {
   .el-textarea {
     width: 50%;
   }
-  .el-dialog__title {
+  /deep/.el-dialog__title {
     font-size: 14px;
     color: #fff;
   }

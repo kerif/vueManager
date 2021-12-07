@@ -130,6 +130,9 @@ export default {
   .pagination-box {
     margin-top: 10px;
   }
+  .el-dialog {
+    width: 70%;
+  }
   .el-dialog__header {
     background-color: #0e102a;
   }

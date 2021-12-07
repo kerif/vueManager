@@ -262,41 +262,41 @@ export default {
             id: 'package_volume_weight_sum',
             name: `入库体积重量(${this.localization.weight_unit})`
           },
-          { id: 'packages_count', name: '包裹数' },
-          { id: 'package_number', name: '包裹总件数' }
+          { id: 'packages_count', name: this.$t('包裹数') },
+          { id: 'package_number', name: this.$t('包裹总件数') }
         ]
         // 出库信息
         this.outboundInfo = [
-          { id: 'box_count', name: '分箱箱数' },
-          { id: 'box_sn', name: '分箱箱号' },
-          { id: 'box_packages', name: '分箱所含包裹' },
-          { id: 'box_logistics_sn', name: '分箱物流单号' },
+          { id: 'box_count', name: this.$t('分箱箱数') },
+          { id: 'box_sn', name: this.$t('分箱箱号') },
+          { id: 'box_packages', name: this.$t('分箱所含包裹') },
+          { id: 'box_logistics_sn', name: this.$t('分箱物流单号') },
           { id: 'box_length', name: `长(${this.localization.length_unit})` },
           { id: 'box_width', name: `宽(${this.localization.length_unit})` },
           { id: 'box_height', name: `高(${this.localization.length_unit})` },
           { id: 'box_weight', name: `分箱称重重量(${this.localization.weight_unit})` },
           { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` },
-          { id: 'box_package_number', name: '分箱货品数量' },
-          { id: 'box_package_names', name: '分箱包裹名称' },
-          { id: 'box_package_props', name: '分箱包裹属性' },
-          { id: 'box_package_categories', name: '分箱包裹类型' }
+          { id: 'box_package_number', name: this.$t('分箱货品数量') },
+          { id: 'box_package_names', name: this.$t('分箱包裹名称') },
+          { id: 'box_package_props', name: this.$t('分箱包裹属性') },
+          { id: 'box_package_categories', name: this.$t('分箱包裹类型') }
         ]
         // 出库信息总计
         this.outboundSum = [
-          { id: 'box_payment_weight_sum', name: '出库计费重量' },
-          { id: 'box_actual_weight_sum', name: '出库实际重量' },
-          { id: 'box_volume_weight_sum', name: '出库体积重量' },
-          { id: 'box_volume_sum', name: '出库体积' },
+          { id: 'box_payment_weight_sum', name: this.$t('出库计费重量') },
+          { id: 'box_actual_weight_sum', name: this.$t('出库实际重量') },
+          { id: 'box_volume_weight_sum', name: this.$t('出库体积重量') },
+          { id: 'box_volume_sum', name: this.$t('出库体积') },
           { id: 'length', name: `长(${this.localization.length_unit})` },
           { id: 'width', name: `宽(${this.localization.length_unit})` },
           { id: 'height', name: `高(${this.localization.length_unit})` }
         ]
         this.payInfo = [
-          { id: 'payment_method', name: '付款方式' },
-          { id: 'actual_payment_fee', name: '实际费用' },
-          { id: 'pay_out_serial_no', name: '支付单号' },
-          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
-          { id: 'point_amount', name: '积分抵扣金额' },
+          { id: 'payment_method', name: this.$t('付款方式') },
+          { id: 'actual_payment_fee', name: this.$t('实际费用') },
+          { id: 'pay_out_serial_no', name: this.$t('支付单号') },
+          { id: 'coupon_discount_fee', name: this.$t('优惠券抵扣金额') },
+          { id: 'point_amount', name: this.$t('积分抵扣金额') },
           { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` },
           { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
         ]
@@ -443,15 +443,15 @@ export default {
         ]
         // 入库信息
         this.warehouseInfo = [
-          { id: 'express_num', name: '包裹单号' },
-          { id: 'package_name', name: '包裹物品名称' },
-          { id: 'package_props_name', name: '包裹物品属性' },
-          { id: 'package_categories_name', name: '包裹物品类型' },
-          { id: 'package_qty', name: '包裹物品数量' },
+          { id: 'express_num', name: this.$t('包裹单号') },
+          { id: 'package_name', name: this.$t('包裹物品名称') },
+          { id: 'package_props_name', name: this.$t('包裹物品属性') },
+          { id: 'package_categories_name', name: this.$t('包裹物品类型') },
+          { id: 'package_qty', name: this.$t('包裹物品数量') },
           { id: 'package_volume', name: '包裹体积 (m³)' },
-          { id: 'package_size', name: '包裹尺寸(长宽高)' },
+          { id: 'package_size', name: this.$t('包裹尺寸(长宽高)') },
           { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` },
-          { id: 'package_value', name: '包裹申报价值' }
+          { id: 'package_value', name: this.$t('包裹申报价值') }
         ]
         // 入库信息 总计
         this.warehouseSum = [
@@ -464,24 +464,24 @@ export default {
             id: 'package_volume_weight_sum',
             name: `入库体积重量(${this.localization.weight_unit})`
           },
-          { id: 'packages_count', name: '包裹数' },
-          { id: 'package_number', name: '包裹总件数' }
+          { id: 'packages_count', name: this.$t('包裹数') },
+          { id: 'package_number', name: this.$t('包裹总件数') }
         ]
         // 出库信息
         this.outboundInfo = [
-          { id: 'box_count', name: '分箱箱数' },
-          { id: 'box_sn', name: '分箱箱号' },
-          { id: 'box_packages', name: '分箱所含包裹' },
-          { id: 'box_logistics_sn', name: '分箱物流单号' },
+          { id: 'box_count', name: this.$t('分箱箱数') },
+          { id: 'box_sn', name: this.$t('分箱箱号') },
+          { id: 'box_packages', name: this.$t('分箱所含包裹') },
+          { id: 'box_logistics_sn', name: this.$t('分箱物流单号') },
           { id: 'box_length', name: `长(${this.localization.length_unit})` },
           { id: 'box_width', name: `宽(${this.localization.length_unit})` },
           { id: 'box_height', name: `高(${this.localization.length_unit})` },
           { id: 'box_weight', name: `分箱称重重量(${this.localization.weight_unit})` },
           { id: 'box_volume_weight', name: `分箱体积重量(${this.localization.weight_unit})` },
-          { id: 'box_package_number', name: '分箱货品数量' },
-          { id: 'box_package_names', name: '分箱包裹名称' },
-          { id: 'box_package_props', name: '分箱包裹属性' },
-          { id: 'box_package_categories', name: '分箱包裹类型' }
+          { id: 'box_package_number', name: this.$t('分箱货品数量') },
+          { id: 'box_package_names', name: this.$t('分箱包裹名称') },
+          { id: 'box_package_props', name: this.$t('分箱包裹属性') },
+          { id: 'box_package_categories', name: this.$t('分箱包裹类型') }
         ]
         // 出库信息总计
         this.outboundSum = [
@@ -491,11 +491,11 @@ export default {
           { id: 'box_volume_sum', name: this.$t('出库体积') }
         ]
         this.payInfo = [
-          { id: 'payment_method', name: '付款方式' },
-          { id: 'actual_payment_fee', name: '实际费用' },
-          { id: 'pay_out_serial_no', name: '支付单号' },
-          { id: 'coupon_discount_fee', name: '优惠券抵扣金额' },
-          { id: 'point_amount', name: '积分抵扣金额' },
+          { id: 'payment_method', name: this.$t('付款方式') },
+          { id: 'actual_payment_fee', name: this.$t('实际费用') },
+          { id: 'pay_out_serial_no', name: this.$t('支付单号') },
+          { id: 'coupon_discount_fee', name: this.$t('优惠券抵扣金额') },
+          { id: 'point_amount', name: this.$t('积分抵扣金额') },
           { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` },
           { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
         ]
@@ -507,9 +507,9 @@ export default {
           { id: 'line_rule_fee', name: this.$t('渠道规则费用') }
         ]
         this.shipInfo = [
-          { id: 'shipment_logistics_sn', name: '物流单号 (头程 - 发货单)' },
-          { id: 'order_logistics_sn', name: '物流单号 (订单)' },
-          { id: 'shipment_sn', name: '所属发货单' }
+          { id: 'shipment_logistics_sn', name: this.$t('物流单号 (头程 - 发货单)') },
+          { id: 'order_logistics_sn', name: this.$t('物流单号 (订单)') },
+          { id: 'shipment_sn', name: this.$t('所属发货单') }
         ]
         this.operationInfo = [
           { id: 'created_at', name: this.$t('提交时间') },

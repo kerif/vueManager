@@ -51,6 +51,7 @@
             <span v-if="scope.row.order_status === 3">{{ $t('待发货') }}</span>
             <span v-if="scope.row.order_status === 4">{{ $t('已发货') }}</span>
             <span v-if="scope.row.order_status === 5">{{ $t('已签收') }}</span>
+            <span v-if="scope.row.order_status === 19">{{ $t('已作废') }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('客户ID')" width="160">
@@ -134,6 +135,10 @@ export default {
         {
           id: 5,
           name: this.$t('已签收')
+        },
+        {
+          id: 19,
+          name: this.$t('已作废')
         }
       ],
       stateData: [
