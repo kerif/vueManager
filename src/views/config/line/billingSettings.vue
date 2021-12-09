@@ -642,6 +642,10 @@ export default {
         {
           id: 3,
           name: this.$t('三边之和')
+        },
+        {
+          id: 4,
+          name: this.$t('长宽高乘积')
         }
       ],
       conditionOptions: [
