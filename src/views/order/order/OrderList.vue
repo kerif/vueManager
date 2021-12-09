@@ -36,9 +36,13 @@
         <el-button class="btn-green" size="small" @click="batchPackage" v-if="activeName === '2'">{{
           $t('批量集包')
         }}</el-button>
-        <el-button class="btn-pink" size="small" @click="goNotify" v-if="activeName === '2'">{{
-          $t('批量发送通知')
-        }}</el-button>
+        <el-button
+          class="btn-pink notify"
+          size="small"
+          @click="goNotify"
+          v-if="activeName === '2'"
+          >{{ $t('批量发送通知') }}</el-button
+        >
         <el-button class="btn-dark-green" size="small" v-if="activeName === '6'" @click="restore">{{
           $t('恢复')
         }}</el-button>
@@ -887,6 +891,13 @@ export default {
   // }
   .colorsty {
     color: #3cb371;
+  }
+  .notify {
+    &:focus {
+      background: pink !important;
+      border: 1px solid pink !important;
+      color: white !important;
+    }
   }
 }
 </style>
