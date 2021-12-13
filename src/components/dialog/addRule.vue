@@ -112,11 +112,11 @@ export default {
       options: [
         {
           value: '0',
-          label: '半匹配'
+          label: this.$t('半匹配')
         },
         {
           value: '1',
-          label: '全匹配'
+          label: this.$t('全匹配')
         }
       ],
       show: false,

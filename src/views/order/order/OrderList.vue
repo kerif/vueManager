@@ -11,6 +11,7 @@
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
       <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
+      <el-tab-pane :label="$t('无人认领')" name="7"> </el-tab-pane>
     </el-tabs>
     <order-list-search
       v-show="hasFilterCondition"
@@ -55,7 +56,7 @@
         >
         <el-button
           class="btn-purple"
-          v-if="activeName !== '6'"
+          v-if="activeName !== '6' && activeName !== '7'"
           @click="importOrder"
           size="small"
           plain
@@ -63,7 +64,7 @@
         >
         <el-button
           class="btn-yellow"
-          v-if="activeName !== '6'"
+          v-if="activeName !== '6' && activeName !== '7'"
           @click="uploadList"
           size="small"
           type="success"
@@ -73,7 +74,7 @@
         </el-button>
         <el-button
           class="btn-light-red"
-          v-if="activeName !== '1' && activeName !== '6'"
+          v-if="activeName !== '1' && activeName !== '6' && activeName !== '7'"
           @click="batchShelves"
           size="small"
           plain
@@ -90,7 +91,7 @@
           {{ $t('批量修改') }}
         </el-button>
       </div>
-      <div class="header-search">
+      <div class="header-search" v-if="activeName !== '7'">
         <el-input
           class="header-keyword"
           v-model="searchFieldData.keyword"
@@ -113,7 +114,7 @@
         </div>
       </div>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 270px)" v-if="activeName !== '7'">
       <el-table
         border
         stripe
@@ -125,17 +126,29 @@
         class="order-data-list"
       >
         <el-table-column
+          v-if="activeName !== '7'"
           :type="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
           :key="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
           width="55"
           align="center"
         ></el-table-column>
-        <el-table-column :label="$t('客户ID')" key="user_id" width="120" show-overflow-tooltip>
+        <el-table-column
+          :label="$t('客户ID')"
+          v-if="activeName !== '7'"
+          key="user_id"
+          width="120"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
             <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('快递单号')" key="express_num" width="180">
+        <el-table-column
+          v-if="activeName !== '7'"
+          :label="$t('快递单号')"
+          key="express_num"
+          width="180"
+        >
           <template slot-scope="scope">
             <el-button
               v-if="activeName === '2'"
@@ -157,7 +170,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('状态')" key="status">
+        <el-table-column :label="$t('状态')" key="status" v-if="activeName !== '7'">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>
             <span v-if="scope.row.status === 2">{{ $t('已入库') }}</span>
@@ -191,20 +204,23 @@
           prop="package_name"
           key="package_name"
           width="150"
+          v-if="activeName !== '7'"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('物品价值') + localization.currency_unit"
+          v-if="activeName !== '7'"
           prop="package_value"
           key="package_value"
         ></el-table-column>
         <el-table-column
           :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"
+          v-if="activeName !== '7'"
           prop="unit_value"
           key="unit_value"
           min-width="100"
         ></el-table-column>
-        <el-table-column :label="$t('物品属性')" key="props">
+        <el-table-column :label="$t('物品属性')" key="props" v-if="activeName !== '7'">
           <template slot-scope="scope">
             <span v-for="item in scope.row.props" :key="item.id">
               {{ item.cn_name }}
@@ -242,11 +258,13 @@
           :label="$t('寄往国家')"
           prop="destination_country.cn_name"
           key="destination_country.cn_name"
+          v-if="activeName !== '7'"
         ></el-table-column>
         <el-table-column
           :label="$t('仓库')"
           prop="warehouse.warehouse_name"
           key="warehouse.warehouse_name"
+          v-if="activeName !== '7'"
           width="155"
         >
         </el-table-column>
@@ -275,9 +293,21 @@
           key="in_storage_at"
           v-if="activeName === '2' || activeName === '3'"
         ></el-table-column>
-        <el-table-column :label="$t('提交时间')" prop="created_at" key="created_at" width="155">
+        <el-table-column
+          :label="$t('提交时间')"
+          prop="created_at"
+          v-if="activeName !== '7'"
+          key="created_at"
+          width="155"
+        >
         </el-table-column>
-        <el-table-column :label="$t('操作')" fixed="right" key="operator" width="116px">
+        <el-table-column
+          :label="$t('操作')"
+          fixed="right"
+          v-if="activeName !== '7'"
+          key="operator"
+          width="116px"
+        >
           <template slot-scope="scope">
             <el-dropdown>
               <el-button type="primary" plain>
@@ -325,7 +355,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
+      <nle-pagination
+        style="margin-top: 5px"
+        v-if="activeName !== '7'"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+      >
         <div class="remark-text">
           <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
         </div>
@@ -351,6 +386,7 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
+    <no-owner v-if="activeName === '7'"></no-owner>
   </div>
 </template>
 
@@ -360,11 +396,13 @@ import BatchModify from './components/batchModify'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
+import noOwner from '../noOwner/noOwner'
 export default {
   components: {
     OrderListSearch,
     NlePagination,
-    BatchModify
+    BatchModify,
+    noOwner
   },
   name: 'orderlist',
   mixins: [pagination],

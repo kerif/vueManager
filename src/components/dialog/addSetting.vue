@@ -349,7 +349,7 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
+          // this.show = false
         })
       } else {
         this.$request.updatePayments(this.id, this.ruleForm).then(res => {
@@ -367,7 +367,7 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
+          // this.show = false
         })
       }
     },
