@@ -730,7 +730,11 @@ export default {
       this.boxDialog = true
       this.getAddressDialog()
     },
-    changeAdd() {},
+    changeAdd() {
+      this.box.express_line_id = ''
+      this.options = []
+      this.getExpress()
+    },
     // 确定 更改地址
     selectAddress() {
       if (!this.chooseId) {

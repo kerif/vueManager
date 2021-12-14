@@ -90,8 +90,30 @@
         >
           {{ $t('批量修改') }}
         </el-button>
+        <!-- <el-button
+          class="btn-light-red"
+          size="small"
+          v-if="activeName === '7'"
+          @click="deleteDatas"
+          >{{ $t('删除') }}</el-button
+        >
+        <el-button
+          class="btn-blue-green"
+          size="small"
+          v-if="activeName === '7'"
+          @click="claimList"
+          >{{ $t('认领记录') }}</el-button
+        >
+        <el-button
+          type="success"
+          plain
+          size="small"
+          v-if="activeName === '7'"
+          @click="uploadList"
+          >{{ $t('导出清单') }}</el-button
+        > -->
       </div>
-      <div class="header-search" v-if="activeName !== '7'">
+      <div class="header-search">
         <el-input
           class="header-keyword"
           v-model="searchFieldData.keyword"
@@ -386,7 +408,7 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
-    <!-- <no-owner v-if="activeName === '7'" :activeName="activeName"> </no-owner> -->
+    <!-- <no-owner-package v-if="activeName === '7'" ref="noOwner"></no-owner-package> -->
   </div>
 </template>
 
@@ -396,13 +418,13 @@ import BatchModify from './components/batchModify'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
-// import noOwner from '../noOwner/noOwner'
+// import NoOwnerPackage from './components/noOwnerPackage'
 export default {
   components: {
     OrderListSearch,
     NlePagination,
     BatchModify
-    // noOwner
+    // NoOwnerPackage
   },
   name: 'orderlist',
   mixins: [pagination],
@@ -479,6 +501,7 @@ export default {
       this.page_params.size = 10
       this.getList()
       this.getCounts()
+      this.$refs.noOwner.getList()
     },
     computedParams() {
       let params = {
@@ -562,6 +585,13 @@ export default {
     // 已入库编辑
     editWarehoused(id) {
       this.$router.push({ name: 'editWarehouse', params: { id: id, state: 'editWarehouse' } })
+    },
+    // 认领记录
+    claimList() {
+      dialog({ type: 'claimRecord' })
+    },
+    deleteDatas() {
+      this.$refs.noOwner.deleteData()
     },
     // 快速合箱
     fastClosing(userId) {
