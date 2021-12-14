@@ -50,56 +50,56 @@
             </div>
             <div class="line-sty"></div>
             <!-- 收件地址 -->
-            <div>
-              <div class="express-left">
-                <p>{{ $t('收件地址') }}</p>
-              </div>
-              <el-table
-                :data="addressList"
-                stripe
-                border
-                class="data-list"
-                v-loading="tableLoading"
-              >
-                <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
-                <el-table-column :label="$t('选择包裹数与件数')">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
-                  </template>
-                </el-table-column>
-                <el-table-column :label="$t('默认收货信息')">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.address && scope.row.address.receiver_name }}</span
-                    >&nbsp;
-                    <span>{{ scope.row.address && scope.row.address.timezone }}</span>
-                    <span v-if="scope.row.address && scope.row.address.timezone">-</span>
-                    <span>{{ scope.row.address && scope.row.address.phone }}</span
-                    >&nbsp; <span>{{ scope.row.address && scope.row.address.country_name }}</span
-                    >&nbsp; <span>{{ scope.row.address && scope.row.address.postcode }}</span
-                    >&nbsp; <span>{{ scope.row.address && scope.row.address.city }}</span
-                    >&nbsp; <span>{{ scope.row.address && scope.row.address.street }}</span
-                    >&nbsp;
-                    <span>{{ scope.row.address && scope.row.address.door_no }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column :label="$t('操作')">
-                  <template slot-scope="scope">
-                    <!-- 更改地址 -->
-                    <el-button
-                      class="btn-green"
-                      @click="changeAddress(scope.row.user_id, scope.row, addressList)"
-                      >{{ $t('更改地址') }}</el-button
-                    >
-                    <!-- 删除 -->
-                    <el-button
-                      class="btn-light-red"
-                      @click="deleteAddress(scope.$index, addressList, scope.row.user_id)"
-                      >{{ $t('删除') }}</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-              <!-- <div v-if="this.userData && this.userData.user_id">
+            <div class="express-left">
+              <p>{{ $t('收件地址') }}</p>
+            </div>
+            <!-- <div class="express-left right-margin">
+              <el-radio-group v-model="address_type" @change="changeAdd">
+                <el-radio :label="1">{{ $t('使用客户地址') }}</el-radio>
+                <el-radio :label="2">{{ $t('使用自提点地址') }}</el-radio>
+              </el-radio-group>
+            </div> -->
+            <div class="line-sty"></div>
+            <el-table :data="addressList" stripe border class="data-list" v-loading="tableLoading">
+              <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+              <el-table-column :label="$t('选择包裹数与件数')">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('默认收货信息')">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.address && scope.row.address.receiver_name }}</span
+                  >&nbsp;
+                  <span>{{ scope.row.address && scope.row.address.timezone }}</span>
+                  <span v-if="scope.row.address && scope.row.address.timezone">-</span>
+                  <span>{{ scope.row.address && scope.row.address.phone }}</span
+                  >&nbsp; <span>{{ scope.row.address && scope.row.address.country_name }}</span
+                  >&nbsp; <span>{{ scope.row.address && scope.row.address.postcode }}</span
+                  >&nbsp; <span>{{ scope.row.address && scope.row.address.city }}</span
+                  >&nbsp; <span>{{ scope.row.address && scope.row.address.street }}</span
+                  >&nbsp;
+                  <span>{{ scope.row.address && scope.row.address.door_no }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('操作')">
+                <template slot-scope="scope">
+                  <!-- 更改地址 -->
+                  <el-button
+                    class="btn-green"
+                    @click="changeAddress(scope.row.user_id, scope.row, addressList)"
+                    >{{ $t('更改地址') }}</el-button
+                  >
+                  <!-- 删除 -->
+                  <el-button
+                    class="btn-light-red"
+                    @click="deleteAddress(scope.$index, addressList, scope.row.user_id)"
+                    >{{ $t('删除') }}</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- <div v-if="this.userData && this.userData.user_id">
                   <p>{{userData.receiver_name}}</p>
                   <p>{{userData.phone}}</p>
                   <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.city}}
@@ -111,10 +111,9 @@
                   <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.address}}
                   </p>
                 </div> -->
-              <!-- <div class="express-left express-right">
+            <!-- <div class="express-left express-right">
                 <p class="express-sty" @click="chooseUser">{{$t('请选择')}} ></p>
               </div> -->
-            </div>
             <div class="line-sty"></div>
             <div class="express-left">
               <p>{{ $t('快递方式') }}</p>
@@ -535,6 +534,7 @@ export default {
       userData: {},
       optionsId: [],
       radio: 1,
+      address_type: 1,
       servicesData: [],
       localization: {},
       insurance: {},
@@ -723,6 +723,7 @@ export default {
       this.boxDialog = true
       this.getAddressDialog()
     },
+    changeAdd() {},
     // 确定 更改地址
     selectAddress() {
       if (!this.chooseId) {

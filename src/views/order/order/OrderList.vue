@@ -11,7 +11,7 @@
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
       <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
-      <el-tab-pane :label="$t('无人认领')" name="7"> </el-tab-pane>
+      <!-- <el-tab-pane :label="$t('无人认领')" name="7"> </el-tab-pane> -->
     </el-tabs>
     <order-list-search
       v-show="hasFilterCondition"
@@ -386,7 +386,7 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
-    <no-owner v-if="activeName === '7'"></no-owner>
+    <!-- <no-owner v-if="activeName === '7'" :activeName="activeName"> </no-owner> -->
   </div>
 </template>
 
@@ -396,13 +396,13 @@ import BatchModify from './components/batchModify'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
-import noOwner from '../noOwner/noOwner'
+// import noOwner from '../noOwner/noOwner'
 export default {
   components: {
     OrderListSearch,
     NlePagination,
-    BatchModify,
-    noOwner
+    BatchModify
+    // noOwner
   },
   name: 'orderlist',
   mixins: [pagination],

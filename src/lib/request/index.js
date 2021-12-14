@@ -2075,6 +2075,10 @@ exports.getLanguageList = () => {
 exports.deleteLG = id => {
   return $form.delete(`languages/${id}`)
 }
+// 语言包 删除字符串
+exports.deleteLg = id => {
+  return $form.delete(`string-translations/${id}`)
+}
 // 语言包 设为默认
 exports.defaultLg = id => {
   return $form.put(`languages/${id}/set-default`)

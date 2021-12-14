@@ -1,38 +1,40 @@
 <template>
   <div class="no-owner-container">
-    <div class="order-list-search" v-show="hasFilterCondition">
-      <div>
-        <div class="changeTime">
-          <el-date-picker
-            size="mini"
-            class="timeStyle"
-            v-model="timeList"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :range-separator="$t('至')"
-            :start-placeholder="$t('提交开始日期')"
-            :end-placeholder="$t('提交结束日期')"
-          >
-          </el-date-picker>
-        </div>
-        <div class="chooseStatus">
-          <el-select v-model="agent_name" size="mini" clearable :placeholder="$t('请选择仓库')">
-            <el-option
-              v-for="item in agentData"
-              :key="item.id"
-              :value="item.id"
-              :label="item.warehouse_name"
+    <div>
+      <div class="order-list-search" v-show="hasFilterCondition">
+        <div>
+          <div class="changeTime">
+            <el-date-picker
+              size="mini"
+              class="timeStyle"
+              v-model="timeList"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              :range-separator="$t('至')"
+              :start-placeholder="$t('提交开始日期')"
+              :end-placeholder="$t('提交结束日期')"
             >
-            </el-option>
-          </el-select>
+            </el-date-picker>
+          </div>
+          <div class="chooseStatus">
+            <el-select v-model="agent_name" size="mini" clearable :placeholder="$t('请选择仓库')">
+              <el-option
+                v-for="item in agentData"
+                :key="item.id"
+                :value="item.id"
+                :label="item.warehouse_name"
+              >
+              </el-option>
+            </el-select>
+          </div>
         </div>
-      </div>
-      <div class="submit">
-        <el-button type="primary" plain size="small" @click="submitForm">{{
-          $t('搜索')
-        }}</el-button>
-        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+        <div class="submit">
+          <el-button type="primary" plain size="small" @click="submitForm">{{
+            $t('搜索')
+          }}</el-button>
+          <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+        </div>
       </div>
     </div>
     <div class="headerList">
@@ -169,6 +171,7 @@
 </template>
 
 <script>
+// import OrderListSearch from '../order/components/orderListSearch'
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
@@ -177,9 +180,16 @@ export default {
   components: {
     SearchGroup,
     NlePagination
+    // OrderListSearch
   },
   name: 'noOwner',
   mixins: [pagination],
+  props: {
+    activeName: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       tableLoading: false,
@@ -199,7 +209,8 @@ export default {
       show: false,
       labelId: '',
       imgSrc: '',
-      hasFilterCondition: false
+      hasFilterCondition: false,
+      express_num: ''
     }
   },
   methods: {
@@ -407,7 +418,8 @@ export default {
     submitForm() {
       this.onTime(this.timeList)
       this.onAgentChange()
-    }
+    },
+    goMatch() {}
   },
   activated() {
     this.getAgentData()
