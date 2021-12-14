@@ -44,7 +44,9 @@
             </div>
             <div class="express-left right-margin">
               <el-radio-group v-model="radio" @change="changeRadio">
-                <el-radio :label="1">{{ $t('送货上门') }}</el-radio>
+                <el-radio :label="1" :disabled="this.address_type === 2">{{
+                  $t('送货上门')
+                }}</el-radio>
                 <el-radio :label="2">{{ $t('自提点提货') }}</el-radio>
               </el-radio-group>
             </div>
@@ -56,7 +58,9 @@
             <div class="express-left right-margin">
               <el-radio-group v-model="address_type" @change="changeAdd">
                 <el-radio :label="1">{{ $t('使用客户地址') }}</el-radio>
-                <el-radio :label="2">{{ $t('使用自提点地址') }}</el-radio>
+                <el-radio :label="2" :disabled="this.radio === 1">{{
+                  $t('使用自提点地址')
+                }}</el-radio>
               </el-radio-group>
             </div>
             <div class="line-sty"></div>
@@ -987,12 +991,16 @@ export default {
           address_id: item.address ? item.address.id : ''
         }
       })
+      let address
+      if (this.address_type === 1) {
+        address = params
+      }
       if (this.changeUpdate === 1) {
         this.$request
           .savePacksUser({
             ...this.box,
             station_id: this.radio === 2 ? this.box.address_id : '',
-            address: params,
+            address: address,
             package_ids: this.packageId,
             address_type: this.radio === 2 ? 2 : 1,
             batch_mode: this.$route.query.packageId ? 1 : '',
@@ -1019,7 +1027,7 @@ export default {
           .savePacksAlone({
             ...this.box,
             station_id: this.radio === 2 ? this.box.address_id : '',
-            address: params,
+            address: address,
             package_ids: this.packageId,
             address_type: this.radio === 2 ? 2 : 1,
             batch_mode: this.$route.query.packageId ? 1 : '',
