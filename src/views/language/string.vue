@@ -55,9 +55,9 @@
             <el-button class="btn-dark-green" @click="editString(scope.row.id)">{{
               $t('编辑')
             }}</el-button>
-            <!--<el-button class="btn-light-red" @click="deleteString(scope.row.id)">{{
+            <el-button class="btn-light-red" @click="deleteString(scope.row.id)">{{
               $t('删除')
-            }}</el-button>-->
+            }}</el-button>
             <!-- <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{
               $t('删除')
             }}</el-button> -->

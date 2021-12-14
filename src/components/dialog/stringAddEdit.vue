@@ -15,12 +15,9 @@
         <span>{{ user.key }}</span>
       </el-form-item>
       <el-form-item :label="$t('分组')" v-if="state === 'edit'">
-        <!-- <el-radio v-model="user.source" :label="1">{{ $t('网站') }}</el-radio>
+        <el-radio v-model="user.source" :label="1">{{ $t('网站') }}</el-radio>
         <el-radio v-model="user.source" :label="3">{{ $t('H5/小程序') }}</el-radio>
-        <el-radio v-model="user.source" :label="2">{{ $t('API') }}</el-radio> -->
-        <span v-if="user.source === 1">{{ $t('网站') }}</span>
-        <span v-if="user.source === 3">{{ $t('H5/小程序') }}</span>
-        <span v-if="user.source === 2">{{ $t('API') }}</span>
+        <el-radio v-model="user.source" :label="2">{{ $t('API') }}</el-radio>
       </el-form-item>
       <el-form-item :label="$t('分组')" v-else>
         <el-radio v-model="user.source" :label="1">{{ $t('网站') }}</el-radio>
