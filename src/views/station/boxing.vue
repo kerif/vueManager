@@ -145,7 +145,7 @@
             <div v-if="this.radio === 2">
               <div class="express-left">
                 <p>{{ $t('自提点地址') }}</p>
-                <div class="choose-sty" v-if="this.selfData.id">
+                <div class="choose-sty" v-if="this.selfData && this.selfData.id">
                   <p>{{ selfData.address }}</p>
                 </div>
               </div>
@@ -597,7 +597,9 @@ export default {
       changeUpdate: 1,
       tipsDialog: false,
       tipsContent: [],
-      addressIds: []
+      addressIds: [],
+      address_ids: [],
+      id: ''
     }
   },
   created() {
@@ -785,35 +787,34 @@ export default {
     },
     // 获取快递方式
     getExpress() {
-      let address_ids = []
       // address_ids = this.addressList.map(item => item.address.id)
-      address_ids = this.addressList.map(item => {
+      this.address_ids = this.addressList.map(item => {
         if (item.address) {
           return item.address.id
         }
       })
-      this.$request
-        .usableLines({
-          address_ids,
-          package_ids: this.optionsId,
-          type: this.radio
-        })
-        .then(res => {
-          if (res.ret) {
-            this.options = res.data
-            console.log(this.options)
-            this.box.express_line_id = res.data[0].id
-            this.lineId = this.box.express_line_id
-            this.lineStations()
-            this.getId()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      let params = {
+        package_ids: this.optionsId,
+        type: this.radio
+      }
+      if (this.address_type === 1) {
+        params.address_ids = this.address_ids
+      }
+      this.$request.usableLines(params).then(res => {
+        if (res.ret) {
+          this.options = res.data
+          this.box.express_line_id = res.data[0].id
+          this.lineId = this.box.express_line_id
+          this.lineStations()
+          this.getId()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 更换快递方式
     changeExpress() {
@@ -853,7 +854,9 @@ export default {
       this.$request.lineStations(this.lineId).then(res => {
         if (res.ret) {
           this.stationsData = res.data
+          console.log(this.stationsData)
           this.selfData = res.data[0]
+          console.log(this.selfData)
           if (this.selfData) {
             this.box.address_id = this.selfData.id
           }
@@ -1073,7 +1076,9 @@ export default {
         return this.$message.error(this.$t('请选择'))
       }
       this.selfData = this.selfAddress
-      this.box.address_id = this.selfData.id
+      if (this.selfData) {
+        this.box.address_id = this.selfData.id
+      }
       this.addressDialog = false
     },
     clearSelf() {
