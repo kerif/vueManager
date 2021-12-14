@@ -7,7 +7,6 @@
       <el-tab-pane :label="$t('审核拒绝')" name="2"></el-tab-pane>
     </el-tabs>
     <el-table
-      v-if="oderData.length"
       class="data-list"
       border
       stripe
@@ -89,7 +88,6 @@
         </div>
       </template> -->
     </el-table>
-    <div class="noDate" v-else>{{ $t('暂无数据') }}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>

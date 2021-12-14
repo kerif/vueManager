@@ -22,7 +22,7 @@
           <el-select size="mini" v-model="page_params.agent_id" clearable :placeholder="$t('代理')">
             <el-option
               v-for="item in agentList"
-              :key="item.user_id"
+              :key="item.id"
               :value="item.user_id"
               :label="item.agent_name"
             >
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <div style="height: calc(100vh - 330px)">
+    <div>
       <el-table
         :data="tableShip"
         stripe
@@ -68,7 +68,7 @@
         class="data-list"
         ref="table"
         @selection-change="selectionChange"
-        height="calc(100vh - 350px)"
+        height="calc(100vh - 255px)"
         v-loading="tableLoading"
       >
         <el-table-column type="selection" width="55" align="center"></el-table-column>
