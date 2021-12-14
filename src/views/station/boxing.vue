@@ -782,7 +782,12 @@ export default {
     // 获取快递方式
     getExpress() {
       let address_ids = []
-      address_ids = this.addressList.map(item => item.address.id)
+      // address_ids = this.addressList.map(item => item.address.id)
+      address_ids = this.addressList.map(item => {
+        if (item.address) {
+          return item.address.id
+        }
+      })
       this.$request
         .usableLines({
           address_ids,
@@ -792,6 +797,7 @@ export default {
         .then(res => {
           if (res.ret) {
             this.options = res.data
+            console.log(this.options)
             this.box.express_line_id = res.data[0].id
             this.lineId = this.box.express_line_id
             this.lineStations()
