@@ -22,7 +22,7 @@
       <div v-if="form.group_leader_id > 0" class="group-text">=======拼团订单=======</div>
       <el-alert
         v-if="form.status === 19"
-        title="提示"
+        :title="$t('提示')"
         type="warning"
         description="订单已作废"
         show-icon
