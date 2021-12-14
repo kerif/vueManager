@@ -53,14 +53,21 @@
             <div class="express-left">
               <p>{{ $t('收件地址') }}</p>
             </div>
-            <!-- <div class="express-left right-margin">
+            <div class="express-left right-margin">
               <el-radio-group v-model="address_type" @change="changeAdd">
                 <el-radio :label="1">{{ $t('使用客户地址') }}</el-radio>
                 <el-radio :label="2">{{ $t('使用自提点地址') }}</el-radio>
               </el-radio-group>
-            </div> -->
+            </div>
             <div class="line-sty"></div>
-            <el-table :data="addressList" stripe border class="data-list" v-loading="tableLoading">
+            <el-table
+              :data="addressList"
+              stripe
+              border
+              class="data-list"
+              v-loading="tableLoading"
+              v-if="this.address_type === 1"
+            >
               <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
               <el-table-column :label="$t('选择包裹数与件数')">
                 <template slot-scope="scope">
