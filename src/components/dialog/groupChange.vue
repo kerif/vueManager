@@ -83,7 +83,7 @@
         </el-table-column>
         <el-table-column :label="$t('国家')" v-if="status === 'address'">
           <template slot-scope="scope">
-            <span>{{ scope.row.country && scope.row.country.cn_name }}</span>
+            <span>{{ scope.row.country && scope.row.country.name }}</span>
           </template>
         </el-table-column>
         <el-table-column
