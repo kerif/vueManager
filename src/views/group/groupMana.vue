@@ -1,7 +1,7 @@
 <template>
   <div class="group-list-container">
     <div class="bottom-sty">
-      <el-tabs v-model="status" @tab-click="handleClick">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane :label="$t('进行中')" name="0"></el-tab-pane>
         <el-tab-pane :label="$t('已结束')" name="1"></el-tab-pane>
       </el-tabs>
@@ -80,14 +80,14 @@
       <el-table-column
         :label="$t('开始时间')"
         prop="created_at"
-        v-if="status === '0'"
+        v-if="activeName === '0'"
       ></el-table-column>
       <el-table-column
         :label="$t('剩余时间')"
         prop="remaining_time"
-        v-if="status === '0'"
+        v-if="activeName === '0'"
       ></el-table-column>
-      <el-table-column :label="$t('订单状态')" v-if="status === '1'">
+      <el-table-column :label="$t('订单状态')" v-if="activeName === '1'">
         <template slot-scope="scope">
           <span v-if="scope.row.order_status === 1">{{ $t('待处理') }}</span>
           <span v-if="scope.row.order_status === 2">{{ $t('待支付') }}</span>
@@ -96,7 +96,7 @@
           <span v-if="scope.row.order_status === 5">{{ $t('已签收') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="status === '0'">
+      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="activeName === '0'">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary" plain>
@@ -132,7 +132,7 @@
           </el-dropdown>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="status === '1'">
+      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="activeName === '1'">
         <template slot-scope="scope">
           <el-button
             class="btn-deep-purple"
@@ -235,7 +235,8 @@ export default {
       localization: {},
       clientGroupList: [],
       page_params: {
-        group: ''
+        group: '',
+        status: ''
       },
       urlExcel: '',
       dialogVisible: false,
@@ -247,7 +248,7 @@ export default {
       days: '',
       dialogDays: false,
       proId: '',
-      status: '0'
+      activeName: '0'
     }
   },
   mixins: [pagination],
@@ -255,9 +256,10 @@ export default {
     if (this.$route.query.group) {
       this.page_params.group = Number(this.$route.query.group)
     }
+    this.initQuery()
   },
   mounted() {
-    this.getList()
+    this.getList(this.activeName)
   },
   activated() {
     this.getList()
@@ -314,8 +316,15 @@ export default {
       console.log(orderStatus)
       this.$router.push({
         name: 'wayBillList',
-        query: { order_sn: orderSn, activeName: orderStatus.toString() }
+        query: {
+          order_sn: orderSn,
+          activeName: orderStatus.toString()
+        }
       })
+    },
+    goSearch() {
+      this.page_params.page = 1
+      this.getList(this.activeName)
     },
     // 延长拼团时间
     submitTimes() {
@@ -381,10 +390,17 @@ export default {
       this.dialogVisible = true
       this.getDetails()
     },
+    initQuery() {
+      if (this.$route.query.activeName) {
+        this.activeName = this.$route.query.activeName
+      }
+    },
     handleClick(tab) {
       console.log(tab)
       console.log(tab.name)
       this.page_params.page = 1
+      this.page_params.handleQueryChange('page', 1)
+      this.page_params.handleQueryChange('activeName', tab.name)
       this.getList(tab.name)
     },
     // 获取参团详情数据

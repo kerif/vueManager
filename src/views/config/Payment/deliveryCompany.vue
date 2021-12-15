@@ -4,16 +4,21 @@
       <el-row :gutter="20">
         <el-col :span="8"></el-col>
         <el-col :span="16">
-          <el-row>名称</el-row>
-          <el-row>网址</el-row>
-          <el-row>电话</el-row>
+          <el-row>{{ $t('名称') }}</el-row>
+          <el-row>{{ $t('网址') }}</el-row>
+          <el-row>{{ $t('电话') }}</el-row>
         </el-col>
       </el-row>
     </div>
     <el-button>{{ $t('新增') }}</el-button>
     <el-table :data="ruleData" border style="width: 100%">
       <el-table-column type="index" width="180"> </el-table-column>
-      <el-table-column prop="name" :label="$t('操作')"> </el-table-column>
+      <el-table-column :label="$t('操作')">
+        <template slot-scope="scope">
+          <el-button @click="edit(scope.row.id)">{{ $t('修改') }}</el-button>
+          <el-button @click="del(scope.row.id)">{{ $t('删除') }}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column prop="address" :label="$t('规则名称')"> </el-table-column>
       <el-table-column prop="date" :label="$t('关键词')"> </el-table-column>
       <el-table-column prop="name" :label="$t('行为')"> </el-table-column>
@@ -28,6 +33,25 @@ export default {
     return {
       ruleData: []
     }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.$request.deliveryCompanyList(this.$route.query.id).then(res => {
+        if (res.ret) {
+          console.log(res)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    edit() {},
+    del() {}
   }
 }
 </script>

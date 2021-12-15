@@ -9,7 +9,7 @@
       class="data-list"
       border
       stripe
-      height="550"
+      height="calc(100vh - 360px)"
     >
       <el-table-column type="index"></el-table-column>
       <!-- 状态 -->
@@ -232,7 +232,7 @@ export default {
       })
     },
     replaceTrack(id) {
-      this.$router.push({ name: 'deliveryCompany', id })
+      this.$router.push({ name: 'deliveryCompany', query: { id } })
     }
   }
 }

@@ -1775,6 +1775,26 @@ exports.getCustomSystem = () => {
 exports.serviceType = id => {
   return $form.get(`api-services/${id}/products`)
 }
+// 更多配置 发货快递公司 列表
+exports.deliveryCompanyList = id => {
+  return $form.get(`company-expresses/${id}/replacements`)
+}
+// 更多配置 发货快递公司 详情
+exports.deliveryCompanyDetail = id => {
+  return $form.get(`company-expresses/replacements/${id}`)
+}
+// 更多配置 发货快递公司 删除
+exports.deliveryCompanyDel = id => {
+  return $form.delete(`company-expresses/replacements/${id}`)
+}
+// 更多配置 发货快递公司 新建
+exports.deliveryCompanyNew = id => {
+  return $form.post(`company-expresses/${id}/replacements`)
+}
+// 更多配置 发货快递公司 更新
+exports.deliveryCompanyUpdate = (id, params) => {
+  return $form.put(`company-expresses/replacements/${id}`, params)
+}
 // 获取支付二维码
 exports.productsImg = (id, params) => {
   return $form.post(`api-services/${id}/ordering`, params)
