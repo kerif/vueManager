@@ -7,10 +7,10 @@
     @close="clear"
   >
     <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
-      <el-from-item :label="$t('规则名称:')">
-        <el-input v-model="ruleForm.ruleName" :placeholder="$t('请输入')" />
-      </el-from-item>
-      <div v-for="(item, index) in ruleForm.dynamicItem" :key="index">
+      <el-form-item :label="$t('规则名称:')">
+        <el-input v-model="ruleForm.name" :placeholder="$t('请输入')" />
+      </el-form-item>
+      <div v-for="(item, index) in ruleForm.rules" :key="index">
         <el-form-item :label="$t('关键词')">
           <el-select v-model="item.match" style="width: 20%" :placeholder="$t('请选择')">
             <el-option
@@ -28,18 +28,18 @@
         </el-form-item>
       </div>
       <el-form-item :label="$t('行为')">
-        <el-radio-group v-model="ruleForm.behavior">
+        <el-radio-group v-model="ruleForm.action">
           <el-radio :label="1">{{ $t('替换') }}</el-radio>
           <el-radio :label="2">{{ $t('隐藏') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-from-item :label="$t('替换内容')">
-        <el-input :placeholder="$t('请输入')" v-model="ruleForm.replaceContent" />
-      </el-from-item>
+      <el-form-item :label="$t('替换内容')">
+        <el-input :placeholder="$t('请输入')" v-model="ruleForm.replace" />
+      </el-form-item>
     </el-form>
     <div slot="footer" style="text-align: center">
       <el-button style="background-color: #3540a5; color: #fff" @click="confirm">{{
-        $t('保存')
+        $t('确定')
       }}</el-button>
     </div>
   </el-dialog>
@@ -49,11 +49,10 @@
 export default {
   data() {
     return {
-      show: false,
       ruleForm: {
-        ruleName: '',
-        behavior: '',
-        replaceContent: '',
+        name: '',
+        action: 1,
+        replace: '',
         dynamicItem: [
           {
             match: '',
@@ -73,24 +72,62 @@ export default {
       ]
     }
   },
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    },
+    id: {
+      type: Number,
+      required: true
+    },
+    state: {
+      type: String,
+      required: true
+    }
+  },
   methods: {
     addItem() {
-      this.ruleForm.dynamicItem.push({
+      this.ruleForm.rules.push({
         match: '',
         keyword: ''
       })
     },
     deleteItem(item) {
-      var index = this.ruleForm.dynamicItem.indexOf(item)
+      var index = this.ruleForm.rules.indexOf(item)
       if (index !== -1) {
-        this.ruleForm.dynamicItem.splice(index, 1)
+        this.ruleForm.rules.splice(index, 1)
       }
     },
-    confirm() {},
+    confirm() {
+      // let param = {
+      //   ...this.ruleForm
+      // }
+      // if (this.state === 'add') {
+      //   this.$request.deliveryCompanyNew(param).then(res => {
+      //     if (res.ret) {
+      //       console.log(res)
+      //       this.$notify({
+      //         type: 'success',
+      //         title: this.$t('操作成功'),
+      //         message: res.msg
+      //       })
+      //     } else {
+      //       this.$message({
+      //         message: res.msg,
+      //         type: 'error'
+      //       })
+      //     }
+      //   })
+      // }
+    },
+    close() {
+      this.$emit('passVal', false)
+    },
     clear() {
-      this.ruleForm.ruleName = ''
-      this.ruleForm.behavior = ''
-      this.ruleForm.replaceContent = ''
+      this.ruleForm.name = ''
+      this.ruleForm.action = 1
+      this.ruleForm.replace = ''
     }
   }
 }

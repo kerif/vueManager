@@ -305,7 +305,7 @@ export default {
     },
     changeMsg(id) {
       dialog({ type: 'groupChange', id: id }, () => {
-        this.getList()
+        this.getList(this.activeName)
       })
     },
     proLong(id) {
@@ -343,7 +343,7 @@ export default {
               type: 'success'
             })
             this.dialogDays = false
-            this.getList()
+            this.getList(this.activeName)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -461,7 +461,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getList()
+            this.getList(this.activeName)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -491,7 +491,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
-              this.getList()
+              this.getList(this.activeName)
             } else {
               this.$notify({
                 title: this.$t('操作失败'),
@@ -514,7 +514,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
-              this.getList()
+              this.getList(this.activeName)
             } else {
               this.$notify({
                 title: this.$t('操作失败'),
