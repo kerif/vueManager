@@ -1,6 +1,10 @@
 <template>
   <div class="group-list-container">
     <div class="bottom-sty">
+      <el-tabs v-model="status" @tab-click="handleClick">
+        <el-tab-pane :label="$t('进行中')" name="0"></el-tab-pane>
+        <el-tab-pane :label="$t('已结束')" name="1"></el-tab-pane>
+      </el-tabs>
       <div class="addUser">
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
@@ -73,9 +77,26 @@
         :label="$t('体积重量') + `${localization.weight_unit ? localization.weight_unit : ''}`"
         prop="package_volume_weight"
       ></el-table-column>
-      <el-table-column :label="$t('开始时间')" prop="created_at"></el-table-column>
-      <el-table-column :label="$t('剩余时间')" prop="remaining_time"></el-table-column>
-      <el-table-column :label="$t('操作')" width="116px" fixed="right">
+      <el-table-column
+        :label="$t('开始时间')"
+        prop="created_at"
+        v-if="status === '0'"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('剩余时间')"
+        prop="remaining_time"
+        v-if="status === '0'"
+      ></el-table-column>
+      <el-table-column :label="$t('订单状态')" v-if="status === '1'">
+        <template slot-scope="scope">
+          <span v-if="scope.row.order_status === 1">{{ $t('待处理') }}</span>
+          <span v-if="scope.row.order_status === 2">{{ $t('待支付') }}</span>
+          <span v-if="scope.row.order_status === 3">{{ $t('待发货') }}</span>
+          <span v-if="scope.row.order_status === 4">{{ $t('已发货') }}</span>
+          <span v-if="scope.row.order_status === 5">{{ $t('已签收') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="status === '0'">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary" plain>
@@ -109,6 +130,15 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="status === '1'">
+        <template slot-scope="scope">
+          <el-button
+            class="btn-deep-purple"
+            @click="goDetail(scope.row.sn, scope.row.order_status)"
+            >{{ $t('详情') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -216,7 +246,8 @@ export default {
       packagesCount: '',
       days: '',
       dialogDays: false,
-      proId: ''
+      proId: '',
+      status: '0'
     }
   },
   mixins: [pagination],
@@ -235,13 +266,14 @@ export default {
     })
   },
   methods: {
-    getList() {
+    getList(tab) {
       this.tableLoading = true
       this.$request
         .groupList({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          status: tab
         })
         .then(res => {
           this.tableLoading = false
@@ -277,6 +309,13 @@ export default {
     proLong(id) {
       this.proId = id
       this.dialogDays = true
+    },
+    goDetail(orderSn, orderStatus) {
+      console.log(orderStatus)
+      this.$router.push({
+        name: 'wayBillList',
+        query: { order_sn: orderSn, activeName: orderStatus.toString() }
+      })
     },
     // 延长拼团时间
     submitTimes() {
@@ -341,6 +380,12 @@ export default {
       this.detailsId = id
       this.dialogVisible = true
       this.getDetails()
+    },
+    handleClick(tab) {
+      console.log(tab)
+      console.log(tab.name)
+      this.page_params.page = 1
+      this.getList(tab.name)
     },
     // 获取参团详情数据
     getDetails() {

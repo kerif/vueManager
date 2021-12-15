@@ -1,12 +1,14 @@
 <template>
   <div class="delivery-container">
     <div>
-      <div></div>
-      <div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+      <el-row :gutter="20">
+        <el-col :span="8"></el-col>
+        <el-col :span="16">
+          <el-row>名称</el-row>
+          <el-row>网址</el-row>
+          <el-row>电话</el-row>
+        </el-col>
+      </el-row>
     </div>
     <el-button>{{ $t('新增') }}</el-button>
     <el-table :data="ruleData" border style="width: 100%">

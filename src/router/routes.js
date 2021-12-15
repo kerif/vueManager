@@ -147,6 +147,8 @@ const emailLang = loadonDemand('config/Payment/emailLang')
 const categoriesLang = loadonDemand('config/Payment/categoriesLang')
 // 更多配置 邮件配置
 const mailConfigure = loadonDemand('config/Payment/mailConfigure')
+// 更多配置 发货快递公司
+const deliveryCompany = loadonDemand('config/Payment/deliveryCompany')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
 // 自提点 转运包裹管理
@@ -1450,6 +1452,18 @@ export default [
               group: '配置',
               level: 3,
               name: '修改邮件模版',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/deliveryCompany/:id',
+            component: deliveryCompany,
+            name: 'deliveryCompany',
+            id: 606,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '公司详情',
               parent: '/config/configuration-more'
             }
           }

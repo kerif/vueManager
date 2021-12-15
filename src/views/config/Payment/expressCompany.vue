@@ -83,9 +83,12 @@
             v-if="scope.row.is_default === 0"
             >{{ $t('删除') }}</el-button
           >
-          <!-- <el-button class="btn-light-red" style="margin: 10px 0 0 0" @click="replaceTrack">{{
-            $t('轨迹替换')
-          }}</el-button> -->
+          <!-- <el-button
+            class="btn-light-red"
+            style="margin: 10px 0 0 0"
+            @click="replaceTrack(scope.row.id)"
+            >{{ $t('轨迹替换') }}</el-button
+          > -->
         </template>
       </el-table-column>
     </el-table>
@@ -228,7 +231,9 @@ export default {
         })
       })
     },
-    replaceTrack() {}
+    replaceTrack(id) {
+      this.$router.push({ name: 'deliveryCompany', id })
+    }
   }
 }
 </script>
