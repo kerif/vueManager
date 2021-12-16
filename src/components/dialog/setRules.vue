@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="$t('规则设置')"
+    :title="this.state === 'add' ? $t('规则设置') : $t('修改规则设置')"
     class="set-rule"
     width="45%"
     @close="clear"
@@ -37,7 +37,7 @@
         <el-input :placeholder="$t('请输入')" v-model="ruleForm.replace" />
       </el-form-item>
     </el-form>
-    <div slot="footer" style="text-align: center">
+    <div slot="footer">
       <el-button style="background-color: #3540a5; color: #fff" @click="confirm">{{
         $t('确定')
       }}</el-button>
@@ -53,7 +53,7 @@ export default {
         name: '',
         action: 1,
         replace: '',
-        dynamicItem: [
+        rules: [
           {
             match: '',
             keyword: ''
@@ -69,21 +69,11 @@ export default {
           value: '1',
           label: this.$t('全匹配')
         }
-      ]
-    }
-  },
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    },
-    id: {
-      type: Number,
-      required: true
-    },
-    state: {
-      type: String,
-      required: true
+      ],
+      show: false,
+      id: '',
+      ids: '',
+      state: ''
     }
   },
   methods: {
@@ -99,27 +89,65 @@ export default {
         this.ruleForm.rules.splice(index, 1)
       }
     },
+    init() {
+      if (this.state === 'edit') {
+        this.getDetail()
+      }
+    },
+    getDetail() {
+      this.$request.deliveryCompanyDetail(this.ids).then(res => {
+        if (res.ret) {
+          this.ruleForm.name = res.data.name
+          this.ruleForm.action = res.data.action
+          this.ruleForm.replace = res.data.replace
+          this.ruleForm.rules = res.data.rules
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     confirm() {
-      // let param = {
-      //   ...this.ruleForm
-      // }
-      // if (this.state === 'add') {
-      //   this.$request.deliveryCompanyNew(param).then(res => {
-      //     if (res.ret) {
-      //       console.log(res)
-      //       this.$notify({
-      //         type: 'success',
-      //         title: this.$t('操作成功'),
-      //         message: res.msg
-      //       })
-      //     } else {
-      //       this.$message({
-      //         message: res.msg,
-      //         type: 'error'
-      //       })
-      //     }
-      //   })
-      // }
+      let param = {
+        ...this.ruleForm
+      }
+      if (this.state === 'add') {
+        this.$request.deliveryCompanyNew(this.id, param).then(res => {
+          if (res.ret) {
+            console.log(res)
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.show = false
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      } else {
+        this.$request.deliveryCompanyUpdate(this.ids, param).then(res => {
+          if (res.ret) {
+            console.log(res)
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.show = false
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
     },
     close() {
       this.$emit('passVal', false)
@@ -128,6 +156,7 @@ export default {
       this.ruleForm.name = ''
       this.ruleForm.action = 1
       this.ruleForm.replace = ''
+      this.ruleForm.rules = []
     }
   }
 }

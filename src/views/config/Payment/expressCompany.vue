@@ -69,7 +69,7 @@
           <span v-else class="el-icon-plus icon-sty" @click="onExpress(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('操作')" width="140">
         <template slot-scope="scope">
           <el-button
             class="btn-dark-green"
@@ -83,12 +83,20 @@
             v-if="scope.row.is_default === 0"
             >{{ $t('删除') }}</el-button
           >
-          <!-- <el-button
+          <el-button
             class="btn-light-red"
             style="margin: 10px 0 0 0"
-            @click="replaceTrack(scope.row.id)"
+            @click="
+              replaceTrack(
+                scope.row.id,
+                scope.row.name,
+                scope.row.logo,
+                scope.row.contact_phone,
+                scope.row.website
+              )
+            "
             >{{ $t('轨迹替换') }}</el-button
-          > -->
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -231,8 +239,17 @@ export default {
         })
       })
     },
-    replaceTrack(id) {
-      this.$router.push({ name: 'deliveryCompany', query: { id } })
+    replaceTrack(id, name, logo, contactPhone, website) {
+      this.$router.push({
+        name: 'deliveryCompany',
+        query: { id },
+        params: {
+          name,
+          logo,
+          contactPhone,
+          website
+        }
+      })
     }
   }
 }

@@ -125,6 +125,7 @@ import addPaid from './addPaid.vue'
 import addMenu from './addMenu.vue'
 import addRule from './addRule.vue'
 import batchToTransport from './batchToTransport.vue'
+import setRules from './setRules.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -249,6 +250,7 @@ const AddPaidController = Vue.extend(addPaid)
 const AddMenuController = Vue.extend(addMenu)
 const AddRuleController = Vue.extend(addRule)
 const BatchToTransportController = Vue.extend(batchToTransport)
+const SetRulesController = Vue.extend(setRules)
 const mixin = {
   data() {
     return {
@@ -746,6 +748,13 @@ function initInstance(type) {
     // 更多配置 系统物流类型 更改语言
     case 'trackingLang':
       instance = new TrackingLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //更多配置 发货快递公司 规则设置
+    case 'setRules':
+      instance = new SetRulesController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

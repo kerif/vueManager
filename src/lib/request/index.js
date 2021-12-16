@@ -1788,8 +1788,8 @@ exports.deliveryCompanyDel = id => {
   return $form.delete(`company-expresses/replacements/${id}`)
 }
 // 更多配置 发货快递公司 新建
-exports.deliveryCompanyNew = id => {
-  return $form.post(`company-expresses/${id}/replacements`)
+exports.deliveryCompanyNew = (id, params) => {
+  return $form.post(`company-expresses/${id}/replacements`, params)
 }
 // 更多配置 发货快递公司 更新
 exports.deliveryCompanyUpdate = (id, params) => {
