@@ -156,7 +156,12 @@ export default {
       this.ruleForm.name = ''
       this.ruleForm.action = 0
       this.ruleForm.replace = ''
-      this.ruleForm.rules = []
+      this.ruleForm.rules = [
+        {
+          match: '',
+          keyword: ''
+        }
+      ]
     }
   }
 }

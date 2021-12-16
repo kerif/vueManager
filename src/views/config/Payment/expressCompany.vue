@@ -9,7 +9,7 @@
       class="data-list"
       border
       stripe
-      height="550"
+      style="width: 100%"
     >
       <el-table-column type="index"></el-table-column>
       <!-- 状态 -->
@@ -59,6 +59,7 @@
         v-for="item in formatLangData"
         :key="item.id"
         align="center"
+        width="100"
       >
         <template slot-scope="scope">
           <span
@@ -243,12 +244,7 @@ export default {
       this.$router.push({
         name: 'deliveryCompany',
         query: { id },
-        params: {
-          name,
-          logo,
-          contactPhone,
-          website
-        }
+        params: { name: name, logo: logo, contactPhone: contactPhone, website: website }
       })
     }
   }

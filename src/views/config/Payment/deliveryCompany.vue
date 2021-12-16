@@ -2,8 +2,8 @@
   <div class="delivery-container">
     <div>
       <el-row :gutter="20">
-        <el-col :span="4">
-          <div style="width: 100px; height: 100px">
+        <el-col :span="3" :offset="2">
+          <div style="width: 100px; height: 100px; padding: 10px 0">
             <span
               style="cursor: pointer"
               v-if="this.$route.params.logo"
@@ -13,24 +13,18 @@
             </span>
           </div>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="19">
           <div style="padding: 10px">{{ $t('名称') }}:{{ this.$route.params.name }}</div>
           <div style="padding: 10px">{{ $t('网址') }}:{{ this.$route.params.website }}</div>
           <div style="padding: 10px">{{ $t('电话') }}:{{ this.$route.params.contactPhone }}</div>
         </el-col>
       </el-row>
     </div>
-    <el-button @click="addRule" style="background-color: #3540a5; color: #fff">{{
-      $t('新增')
-    }}</el-button>
-    <el-table :data="ruleData" border style="width: 80%; margin-top: 10px">
+    <div class="add-row">
+      <el-button @click="addRule" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+    </div>
+    <el-table :data="ruleData" border style="width: 100%; margin-top: 10px">
       <el-table-column type="index"> </el-table-column>
-      <el-table-column :label="$t('操作')" width="180">
-        <template slot-scope="scope">
-          <el-button class="btn-dark-green" @click="edit(scope.row.id)">{{ $t('修改') }}</el-button>
-          <el-button class="btn-light-red" @click="del(scope.row.id)">{{ $t('删除') }}</el-button>
-        </template>
-      </el-table-column>
       <el-table-column prop="name" :label="$t('规则名称')"> </el-table-column>
       <el-table-column :label="$t('关键词')">
         <template slot-scope="scope">
@@ -39,6 +33,12 @@
       </el-table-column>
       <el-table-column prop="action" :label="$t('行为')"> </el-table-column>
       <el-table-column prop="replace" :label="$t('结果')"> </el-table-column>
+      <el-table-column :label="$t('操作')" width="180">
+        <template slot-scope="scope">
+          <el-button class="btn-dark-green" @click="edit(scope.row.id)">{{ $t('修改') }}</el-button>
+          <el-button class="btn-light-red" @click="del(scope.row.id)">{{ $t('删除') }}</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -130,11 +130,16 @@ export default {
 <style lang="scss">
 .delivery-container {
   font-size: 14px;
+  background-color: #fff !important;
   .el-table tr th.is-leaf div {
     text-align: center;
   }
   .el-table td div {
     text-align: center;
+  }
+  .add-row {
+    margin-bottom: 10px;
+    float: right;
   }
 }
 </style>

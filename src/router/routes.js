@@ -1456,14 +1456,14 @@ export default [
             }
           },
           {
-            path: '/config/delivery-company',
+            path: '/config/payment/delivery-company',
             component: deliveryCompany,
             name: 'deliveryCompany',
             id: 606,
             meta: {
               group: '配置',
               level: 3,
-              name: '公司详情',
+              name: '详情',
               parent: '/config/configuration-more'
             }
           }
