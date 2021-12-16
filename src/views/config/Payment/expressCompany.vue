@@ -254,10 +254,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .express-company {
-  /deep/ .el-table__fixed {
-    height: 550px !important;
-  }
 }
 </style>

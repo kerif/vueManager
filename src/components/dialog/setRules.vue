@@ -29,8 +29,8 @@
       </div>
       <el-form-item :label="$t('行为')">
         <el-radio-group v-model="ruleForm.action">
-          <el-radio :label="1">{{ $t('替换') }}</el-radio>
-          <el-radio :label="2">{{ $t('隐藏') }}</el-radio>
+          <el-radio :label="0">{{ $t('替换') }}</el-radio>
+          <el-radio :label="1">{{ $t('隐藏') }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('替换内容')">
@@ -62,11 +62,11 @@ export default {
       },
       options: [
         {
-          value: '0',
+          value: 0,
           label: this.$t('半匹配')
         },
         {
-          value: '1',
+          value: 1,
           label: this.$t('全匹配')
         }
       ],
@@ -154,7 +154,7 @@ export default {
     },
     clear() {
       this.ruleForm.name = ''
-      this.ruleForm.action = 1
+      this.ruleForm.action = 0
       this.ruleForm.replace = ''
       this.ruleForm.rules = []
     }
