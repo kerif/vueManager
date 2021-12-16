@@ -184,12 +184,12 @@ export default {
   },
   name: 'noOwner',
   mixins: [pagination],
-  props: {
-    activeName: {
-      type: String,
-      required: true
-    }
-  },
+  // props: {
+  //   activeName: {
+  //     type: String,
+  //     required: true
+  //   }
+  // },
   data() {
     return {
       tableLoading: false,

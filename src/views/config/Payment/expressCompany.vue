@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="express-company">
     <div class="select-box">
       <add-btn @click.native="addExpress">{{ $t('添加') }}</add-btn>
     </div>
@@ -9,7 +9,7 @@
       class="data-list"
       border
       stripe
-      height="calc(100vh - 360px)"
+      height="550"
     >
       <el-table-column type="index"></el-table-column>
       <!-- 状态 -->
@@ -254,4 +254,10 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style lang="scss" scoped>
+.express-company {
+  /deep/ .el-table__fixed {
+    height: 550px !important;
+  }
+}
+</style>

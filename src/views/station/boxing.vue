@@ -804,6 +804,9 @@ export default {
       if (this.address_type === 1) {
         params.address_ids = this.address_ids
       }
+      if (this.radio === 1) {
+        params.is_delivery = 0
+      }
       this.$request.usableLines(params).then(res => {
         if (res.ret) {
           this.options = res.data
