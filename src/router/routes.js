@@ -1456,7 +1456,7 @@ export default [
             }
           },
           {
-            path: '/config/payment/delivery-company',
+            path: '/config/payment/delivery-company/:id/:name',
             component: deliveryCompany,
             name: 'deliveryCompany',
             id: 606,

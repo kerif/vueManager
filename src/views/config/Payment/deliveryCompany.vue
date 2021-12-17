@@ -6,19 +6,17 @@
           <div style="width: 100px; height: 100px; padding: 10px 0">
             <span
               style="cursor: pointer"
-              v-if="this.$route.params.logo"
-              @click.stop=";(imgSrc = this.$route.params.logo), (imgVisible = true)"
+              v-if="this.logo"
+              @click.stop=";(imgSrc = this.logo), (imgVisible = true)"
             >
-              <img :src="this.$route.params.logo" style="width: 70px; height: 80px" />
+              <img :src="this.logo" style="width: 70px; height: 80px" />
             </span>
           </div>
         </el-col>
         <el-col :span="19">
-          <div style="padding: 10px 5px">{{ $t('名称') }}:{{ this.$route.params.name }}</div>
-          <div style="padding: 10px 5px">{{ $t('网址') }}:{{ this.$route.params.website }}</div>
-          <div style="padding: 10px 5px">
-            {{ $t('电话') }}:{{ this.$route.params.contactPhone }}
-          </div>
+          <div style="padding: 10px 5px">{{ $t('名称') }}:{{ name }}</div>
+          <div style="padding: 10px 5px">{{ $t('网址') }}:{{ website }}</div>
+          <div style="padding: 10px 5px">{{ $t('电话') }}:{{ contactPhone }}</div>
         </el-col>
       </el-row>
     </div>
@@ -59,6 +57,10 @@ export default {
       show: false,
       id: '',
       state: '',
+      name: '',
+      logo: '',
+      contactPhone: '',
+      website: '',
       imgSrc: '',
       imgVisible: false
     }
@@ -69,9 +71,13 @@ export default {
   },
   methods: {
     getList() {
-      this.id = this.$route.query.id
+      this.id = this.$route.params.id
+      this.logo = this.$route.params.logo
+      this.name = this.$route.params.name
+      this.contactPhone = this.$route.params.contactPhone
+      this.website = this.$route.params.website
       console.log(this.id)
-      this.$request.deliveryCompanyList(this.$route.query.id).then(res => {
+      this.$request.deliveryCompanyList(this.$route.params.id).then(res => {
         if (res.ret) {
           this.ruleData = res.data
           console.log(this.ruleData)

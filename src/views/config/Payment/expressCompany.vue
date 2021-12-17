@@ -243,8 +243,13 @@ export default {
     replaceTrack(id, name, logo, contactPhone, website) {
       this.$router.push({
         name: 'deliveryCompany',
-        query: { id },
-        params: { name: name, logo: logo, contactPhone: contactPhone, website: website }
+        params: {
+          id: id,
+          name: name,
+          logo: logo,
+          contactPhone: contactPhone,
+          website: website
+        }
       })
     }
   }
