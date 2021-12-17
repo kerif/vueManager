@@ -41,7 +41,9 @@
       <el-table-column :label="$t('操作')" width="180">
         <template slot-scope="scope">
           <el-button class="btn-dark-green" @click="edit(scope.row.id)">{{ $t('修改') }}</el-button>
-          <el-button class="btn-light-red" @click="del(scope.row.id)">{{ $t('删除') }}</el-button>
+          <el-button class="btn-light-red" @click="delRule(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -111,7 +113,7 @@ export default {
         }
       )
     },
-    del(id) {
+    delRule(id) {
       this.$confirm(this.$t('您真的要删除此规则'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
