@@ -26,11 +26,7 @@
     <el-table :data="ruleData" border style="width: 100%; margin-top: 10px">
       <el-table-column type="index" :label="$t('#')"> </el-table-column>
       <el-table-column prop="name" :label="$t('规则名称')"> </el-table-column>
-      <el-table-column :label="$t('关键词')">
-        <template slot-scope="scope">
-          <span v-for="item in scope.row.rules" :key="item.index">{{ item.keyword }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column :label="$t('关键词')" props="rules" :formatter="fileData"> </el-table-column>
       <el-table-column :label="$t('行为')">
         <template slot-scope="scope">
           <span v-if="scope.row.action === 0">{{ $t('替换') }}</span>
@@ -135,6 +131,16 @@ export default {
           }
         })
       })
+    },
+    fileData(row) {
+      let arr = []
+      row.rules.forEach((item, match) => {
+        if (match > 10) {
+          return
+        }
+        arr.push(item.keyword)
+      })
+      return arr.join(',')
     }
   }
 }
