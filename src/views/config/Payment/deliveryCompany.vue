@@ -6,17 +6,17 @@
           <div style="width: 100px; height: 100px; padding: 10px 0">
             <span
               style="cursor: pointer"
-              v-if="this.logo"
-              @click.stop=";(imgSrc = this.logo), (imgVisible = true)"
+              v-if="this.info.logo"
+              @click.stop=";(imgSrc = this.info.logo), (imgVisible = true)"
             >
-              <img :src="this.logo" style="width: 70px; height: 80px" />
+              <img :src="this.info.logo" style="width: 70px; height: 80px" />
             </span>
           </div>
         </el-col>
         <el-col :span="19">
           <div style="padding: 10px 5px">{{ $t('名称') }}:{{ name }}</div>
-          <div style="padding: 10px 5px">{{ $t('网址') }}:{{ website }}</div>
-          <div style="padding: 10px 5px">{{ $t('电话') }}:{{ contactPhone }}</div>
+          <div style="padding: 10px 5px">{{ $t('网址') }}:{{ info.website }}</div>
+          <div style="padding: 10px 5px">{{ $t('电话') }}:{{ info.contactPhone }}</div>
         </el-col>
       </el-row>
     </div>
@@ -24,7 +24,7 @@
       <el-button @click="addRule" class="btn-deep-purple">{{ $t('新增') }}</el-button>
     </div>
     <el-table :data="ruleData" border style="width: 100%; margin-top: 10px">
-      <el-table-column type="index"> </el-table-column>
+      <el-table-column type="index" :label="$t('#')"> </el-table-column>
       <el-table-column prop="name" :label="$t('规则名称')"> </el-table-column>
       <el-table-column :label="$t('关键词')">
         <template slot-scope="scope">
@@ -62,7 +62,8 @@ export default {
       contactPhone: '',
       website: '',
       imgSrc: '',
-      imgVisible: false
+      imgVisible: false,
+      info: {}
     }
   },
   components: {},
@@ -72,11 +73,8 @@ export default {
   methods: {
     getList() {
       this.id = this.$route.params.id
-      this.logo = this.$route.params.logo
       this.name = this.$route.params.name
-      this.contactPhone = this.$route.params.contactPhone
-      this.website = this.$route.params.website
-      console.log(this.id)
+      this.info = JSON.parse(this.$route.query.info)
       this.$request.deliveryCompanyList(this.$route.params.id).then(res => {
         if (res.ret) {
           this.ruleData = res.data

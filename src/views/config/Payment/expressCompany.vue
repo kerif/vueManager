@@ -241,14 +241,19 @@ export default {
       })
     },
     replaceTrack(id, name, logo, contactPhone, website) {
+      let obj = {
+        logo: logo,
+        contactPhone: contactPhone,
+        website: website
+      }
       this.$router.push({
         name: 'deliveryCompany',
         params: {
           id: id,
-          name: name,
-          logo: logo,
-          contactPhone: contactPhone,
-          website: website
+          name: name
+        },
+        query: {
+          info: JSON.stringify(obj)
         }
       })
     }
