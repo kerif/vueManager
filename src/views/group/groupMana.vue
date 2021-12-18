@@ -236,7 +236,7 @@ export default {
       clientGroupList: [],
       page_params: {
         group: '',
-        status: 0
+        status: ''
       },
       urlExcel: '',
       dialogVisible: false,
@@ -257,20 +257,23 @@ export default {
       this.page_params.group = Number(this.$route.query.group)
     }
     this.initQuery()
+    this.getList()
+    this.handleClick(this.activeName)
   },
   mounted() {
-    this.getList(this.activeName)
+    this.getList()
+    // this.handleClick(this.activeName)
   },
   activated() {
-    this.getList(this.activeName)
+    this.getList()
+    // this.handleClick(this.activeName)
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
   },
   methods: {
-    getList(status) {
+    getList() {
       this.tableLoading = true
-      console.log(status)
       this.$request
         .groupList({
           keyword: this.page_params.keyword,
@@ -306,7 +309,7 @@ export default {
     },
     changeMsg(id) {
       dialog({ type: 'groupChange', id: id }, () => {
-        this.getList(this.activeName)
+        this.getList()
       })
     },
     proLong(id) {
@@ -325,7 +328,7 @@ export default {
     },
     goSearch() {
       this.page_params.page = 1
-      this.getList(this.activeName)
+      this.getList()
     },
     // 延长拼团时间
     submitTimes() {
@@ -344,7 +347,7 @@ export default {
               type: 'success'
             })
             this.dialogDays = false
-            this.getList(this.activeName)
+            this.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -378,13 +381,13 @@ export default {
     // 券包
     voucher(id) {
       dialog({ type: 'inviteList', state: 'voucher', id }, () => {
-        this.getList(this.activeName)
+        this.getList()
       })
     },
     // 选择客户组
     onGroupChange() {
       this.page_params.handleQueryChange('group', this.page_params.group)
-      this.getList(this.activeName)
+      this.getList()
     },
     detailsGroup(id) {
       this.detailsId = id
@@ -398,10 +401,10 @@ export default {
     },
     handleClick(tab) {
       this.page_params.page = 1
-      this.page_params.status = tab.name == 0 ? 0 : tab.name
+      this.page_params.status = tab.name ? tab.name : tab
       this.page_params.handleQueryChange('page', 1)
       this.page_params.handleQueryChange('activeName', tab.name)
-      this.getList(tab.name)
+      this.getList()
     },
     // 获取参团详情数据
     getDetails() {
@@ -461,7 +464,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.getList(this.activeName)
+            this.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -491,7 +494,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
-              this.getList(this.activeName)
+              this.getList()
             } else {
               this.$notify({
                 title: this.$t('操作失败'),
@@ -514,7 +517,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
-              this.getList(this.activeName)
+              this.getList()
             } else {
               this.$notify({
                 title: this.$t('操作失败'),
