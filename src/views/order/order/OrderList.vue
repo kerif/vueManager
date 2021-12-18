@@ -109,11 +109,11 @@
           plain
           size="small"
           v-if="activeName === '7'"
-          @click="uploadList"
+          @click="uploadLists"
           >{{ $t('导出清单') }}</el-button
         > -->
       </div>
-      <div class="header-search">
+      <div class="header-search" v-if="activeName !== '7'">
         <el-input
           class="header-keyword"
           v-model="searchFieldData.keyword"
@@ -408,7 +408,7 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
-    <!-- <no-owner-package v-if="activeName === '7'" ref="noOwner"></no-owner-package> -->
+    <!-- <no-owner-package v-if="activeName === '7'" :activeName="activeName"></no-owner-package> -->
   </div>
 </template>
 
@@ -419,6 +419,7 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 // import NoOwnerPackage from './components/noOwnerPackage'
+// import NoOwnerPackage from './noOwnerPackage'
 export default {
   components: {
     OrderListSearch,
@@ -501,7 +502,7 @@ export default {
       this.page_params.size = 10
       this.getList()
       this.getCounts()
-      this.$refs.noOwner.getList()
+      // this.$refs.noOwner.getList()
     },
     computedParams() {
       let params = {
@@ -590,8 +591,11 @@ export default {
     claimList() {
       dialog({ type: 'claimRecord' })
     },
+    uploadLists() {
+      // this.$refs.noOwner.uploadList()
+    },
     deleteDatas() {
-      this.$refs.noOwner.deleteData()
+      // this.$refs.noOwner.deleteData()
     },
     // 快速合箱
     fastClosing(userId) {

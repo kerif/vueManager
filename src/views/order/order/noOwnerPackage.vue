@@ -1,5 +1,58 @@
 <template>
   <div class="no-owner-container">
+    <order-list-search
+      v-show="hasFilterCondition"
+      :searchFieldData="searchFieldData"
+      v-on:submit="goMatch"
+    ></order-list-search>
+    <div class="header-range">
+      <div class="header-btns">
+        <el-button
+          class="btn-light-red"
+          size="small"
+          v-if="activeName === '7'"
+          @click="deleteData"
+          >{{ $t('删除') }}</el-button
+        >
+        <el-button
+          class="btn-blue-green"
+          size="small"
+          v-if="activeName === '7'"
+          @click="claimList"
+          >{{ $t('认领记录') }}</el-button
+        >
+        <el-button
+          type="success"
+          plain
+          size="small"
+          v-if="activeName === '7'"
+          @click="uploadList"
+          >{{ $t('导出清单') }}</el-button
+        >
+      </div>
+      <div class="header-search">
+        <el-input
+          class="header-keyword"
+          v-model="searchFieldData.keyword"
+          clearable
+          :placeholder="$t('请输入')"
+          size="medium"
+          @keyup.enter.native="goMatch"
+        >
+          <el-button
+            slot="append"
+            @click="goMatch"
+            :loading="$store.state.btnLoading"
+            icon="el-icon-search"
+          ></el-button>
+        </el-input>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
+      </div>
+    </div>
     <el-table
       class="data-list"
       border
@@ -145,7 +198,10 @@ export default {
       labelId: '',
       imgSrc: '',
       hasFilterCondition: false,
-      express_num: ''
+      express_num: '',
+      searchFieldData: {
+        express_num: ''
+      }
     }
   },
   methods: {
@@ -203,6 +259,7 @@ export default {
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
     },
+    goMatch() {},
     // 打印标签
     getLabel(id) {
       this.labelId = id
@@ -353,8 +410,7 @@ export default {
     submitForm() {
       this.onTime(this.timeList)
       this.onAgentChange()
-    },
-    goMatch() {}
+    }
   },
   activated() {
     this.getAgentData()
@@ -377,22 +433,24 @@ export default {
     width: 300px !important;
     display: inline-block;
   }
-  .headerList {
+  .header-range {
     display: flex;
-    align-items: center;
+    // flex-direction: row;
     justify-content: space-between;
-    .headr-r {
-      flex: 1;
+    align-items: center;
+    margin-bottom: 1px;
+    .header-search {
       display: flex;
-      justify-content: flex-end;
       align-items: center;
-      .searchGroup {
-        width: 25%;
-        margin-right: 10px;
+      // margin: 0 0 0 auto;
+      .header-keyword {
+        max-width: 300px;
+      }
+      .filter {
+        margin: 0 20px;
       }
     }
   }
-
   .agentRight {
     // display: inline-block;
     float: right;

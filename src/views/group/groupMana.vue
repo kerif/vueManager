@@ -236,7 +236,7 @@ export default {
       clientGroupList: [],
       page_params: {
         group: '',
-        status: ''
+        status: '0'
       },
       urlExcel: '',
       dialogVisible: false,
@@ -262,20 +262,21 @@ export default {
     this.getList(this.activeName)
   },
   activated() {
-    this.getList()
+    this.getList(this.activeName)
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
   },
   methods: {
-    getList(tab) {
+    getList(status) {
       this.tableLoading = true
+      console.log(status)
       this.$request
         .groupList({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          status: tab
+          status: this.page_params.status
         })
         .then(res => {
           this.tableLoading = false
@@ -377,13 +378,13 @@ export default {
     // 券包
     voucher(id) {
       dialog({ type: 'inviteList', state: 'voucher', id }, () => {
-        this.getList()
+        this.getList(this.activeName)
       })
     },
     // 选择客户组
     onGroupChange() {
       this.page_params.handleQueryChange('group', this.page_params.group)
-      this.getList()
+      this.getList(this.activeName)
     },
     detailsGroup(id) {
       this.detailsId = id
@@ -399,6 +400,7 @@ export default {
       console.log(tab)
       console.log(tab.name)
       this.page_params.page = 1
+      this.page_params.status = tab.name == 0 ? 0 : tab.name
       this.page_params.handleQueryChange('page', 1)
       this.page_params.handleQueryChange('activeName', tab.name)
       this.getList(tab.name)
