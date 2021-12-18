@@ -236,7 +236,7 @@ export default {
       clientGroupList: [],
       page_params: {
         group: '',
-        status: '0'
+        status: ''
       },
       urlExcel: '',
       dialogVisible: false,
@@ -257,6 +257,7 @@ export default {
       this.page_params.group = Number(this.$route.query.group)
     }
     this.initQuery()
+    this.getList(this.activeName)
   },
   mounted() {
     this.getList(this.activeName)
