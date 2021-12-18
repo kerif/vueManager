@@ -82,11 +82,11 @@
         prop="created_at"
         v-if="activeName === '0'"
       ></el-table-column>
-      <el-table-column
-        :label="$t('剩余时间')"
-        prop="remaining_time"
-        v-if="activeName === '0'"
-      ></el-table-column>
+      <el-table-column :label="$t('剩余时间')" v-if="activeName === '0'">
+        <template slot-scope="scope">
+          <span>{{ scope.row.remaining_time }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('订单状态')" v-if="activeName === '1'">
         <template slot-scope="scope">
           <span v-if="scope.row.order_status === 1">{{ $t('待处理') }}</span>
@@ -236,7 +236,7 @@ export default {
       clientGroupList: [],
       page_params: {
         group: '',
-        status: ''
+        status: 0
       },
       urlExcel: '',
       dialogVisible: false,
@@ -257,7 +257,6 @@ export default {
       this.page_params.group = Number(this.$route.query.group)
     }
     this.initQuery()
-    this.getList(this.activeName)
   },
   mounted() {
     this.getList(this.activeName)
@@ -398,8 +397,6 @@ export default {
       }
     },
     handleClick(tab) {
-      console.log(tab)
-      console.log(tab.name)
       this.page_params.page = 1
       this.page_params.status = tab.name == 0 ? 0 : tab.name
       this.page_params.handleQueryChange('page', 1)
