@@ -99,7 +99,16 @@
             }}</el-button>
             <el-button
               class="btn-deep-purple"
-              @click="positionAdd(scope.row.id, scope.row.warehouse_name)"
+              @click="
+                positionAdd(
+                  scope.row.id,
+                  scope.row.warehouse_name,
+                  scope.row.receiver_name,
+                  scope.row.phone,
+                  scope.row.address,
+                  scope.row.support_countries
+                )
+              "
               >{{ $t('仓位管理') }}</el-button
             >
             <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{
@@ -226,12 +235,21 @@ export default {
       })
     },
     // 仓位管理
-    positionAdd(id, warehouseName) {
+    positionAdd(id, warehouseName, receiverName, phone, address, supportCountries) {
+      let obj = {
+        receiverName: receiverName,
+        phone: phone,
+        address: address,
+        supportCountries: supportCountries
+      }
       this.$router.push({
         name: 'position',
         params: {
           id: id,
           warehouseName: warehouseName
+        },
+        query: {
+          info: JSON.stringify(obj)
         }
       })
     },

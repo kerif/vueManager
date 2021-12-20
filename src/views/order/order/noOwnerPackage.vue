@@ -159,7 +159,7 @@
 </template>
 
 <script>
-// import OrderListSearch from '../order/components/orderListSearch'
+import OrderListSearch from '../order/components/orderListSearch'
 // import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
@@ -167,16 +167,16 @@ import dialog from '@/components/dialog'
 export default {
   components: {
     // SearchGroup,
-    NlePagination
-    // OrderListSearch
+    NlePagination,
+    OrderListSearch
   },
   name: 'noOwner',
   mixins: [pagination],
   props: {
-    activeName: {
-      type: String,
-      required: true
-    }
+    // activeName: {
+    //   type: String,
+    //   required: true
+    // }
   },
   data() {
     return {
@@ -198,9 +198,11 @@ export default {
       labelId: '',
       imgSrc: '',
       hasFilterCondition: false,
-      express_num: '',
       searchFieldData: {
-        express_num: ''
+        express_num: '',
+        keyword: '',
+        begin_date: '',
+        end_date: ''
       }
     }
   },
@@ -259,7 +261,11 @@ export default {
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
     },
-    goMatch() {},
+    goMatch() {
+      this.page_params.page = 1
+      this.page_params.size = 10
+      this.getList()
+    },
     // 打印标签
     getLabel(id) {
       this.labelId = id
@@ -299,9 +305,6 @@ export default {
       this.end_date && (params.end_date = this.end_date)
       this.$request.uploadNoOwner(params).then(res => {
         if (res.ret) {
-          // this.urlExcel = res.data.url
-          // window.location.href = this.urlExcel
-          // window.open(this.urlExcel)
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
@@ -344,12 +347,12 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        warehouse: this.agent_name
+        warehouse: this.agent_name,
+        express_num: this.searchFieldData.express_num.split(/[(\r\n)\r\n]+/),
+        keyword: this.searchFieldData.keyword,
+        begin_date: this.searchFieldData.date ? this.searchFieldData.date[0] : '',
+        end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : ''
       }
-      this.page_params.keyword && (params.keyword = this.page_params.keyword)
-      // 提交时间
-      this.begin_date && (params.begin_date = this.begin_date)
-      this.end_date && (params.end_date = this.end_date)
       this.$request.getNoOwner(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
@@ -405,11 +408,6 @@ export default {
         this.$message.success(this.$t('复制成功'))
       }
       document.body.removeChild(input)
-    },
-    // 搜索
-    submitForm() {
-      this.onTime(this.timeList)
-      this.onAgentChange()
     }
   },
   activated() {

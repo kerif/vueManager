@@ -1,5 +1,60 @@
 <template>
   <div class="position-container">
+    <h3>{{ $t('基本信息') }}</h3>
+    <div class="box-card">
+      <el-row :gutter="20">
+        <el-col :span="16">
+          <div class="leftWidth">
+            <span class="leftSide">{{ $t('仓库名称') }}</span>
+            <span class="rightBold">{{ this.$route.params.warehouseName }}</span>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <el-button class="btn-deep-purple" style="margin-top: 20px" @click="editWarehouse">{{
+            $t('修改')
+          }}</el-button>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <div class="leftWidth">
+            <span class="leftSide">{{ $t('收件人') }}</span>
+            <span class="rightSide">{{ this.info.receiverName }}</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <div class="leftWidth">
+            <span class="leftSide">{{ $t('联系电话') }}</span>
+            <span class="rightSide">{{ this.info.phone }}</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <div class="leftWidth">
+            <span class="leftSide">{{ $t('地址') }}</span>
+            <span class="rightSide">{{ this.info.address }}</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <div class="leftWidth">
+            <span class="leftSide">{{ $t('支持国家/地区') }}</span>
+            <el-tag
+              class="rightTag"
+              closable
+              v-for="item in this.info.supportCountries"
+              :key="item.id"
+              >{{ item.name }}</el-tag
+            >
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <h3>{{ $t('仓库信息') }}</h3>
     <div class="select-box">
       <el-button type="danger" plain @click.native="addShelfRules">{{ $t('上架规则') }}</el-button>
       <add-btn @click.native="addLocation">{{ $t('新增货位') }}</add-btn>
@@ -114,7 +169,8 @@ export default {
       unClaimed: '',
       areaNumber: [],
       noAreaNumber: [],
-      show: false
+      show: false,
+      info: {}
     }
   },
   created() {
@@ -147,6 +203,8 @@ export default {
             })
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+            this.info = JSON.parse(this.$route.query.info)
+            console.log(this.info)
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -213,11 +271,11 @@ export default {
       })
     },
     // 修改仓库
-    editWarehouse(id) {
+    editWarehouse() {
       this.$router.push({
         name: 'warehouseEdit',
         params: {
-          id: id
+          id: this.$route.params.id
         }
       })
     },
@@ -330,6 +388,29 @@ export default {
 </script>
 <style lang="scss">
 .position-container {
+  .box-card {
+    font-size: 14px;
+    background: #fff;
+    height: 280px;
+    .leftWidth {
+      padding: 20px 0 5px 50px;
+      width: 800px;
+      .leftSide {
+        display: inline-block;
+        width: 120px;
+      }
+      .rightSide {
+        font-size: 14px;
+      }
+      .rightTag {
+        margin-right: 5px;
+      }
+      .rightBold {
+        font-size: 18px;
+        font-weight: 700;
+      }
+    }
+  }
   .select-box {
     float: right;
     overflow: hidden;
