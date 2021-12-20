@@ -43,13 +43,9 @@
         <el-col :span="24">
           <div class="leftWidth">
             <span class="leftSide">{{ $t('支持国家/地区') }}</span>
-            <el-tag
-              class="rightTag"
-              closable
-              v-for="item in this.info.supportCountries"
-              :key="item.id"
-              >{{ item.name }}</el-tag
-            >
+            <el-tag class="rightTag" v-for="item in this.info.supportCountries" :key="item.id">{{
+              item.name
+            }}</el-tag>
           </div>
         </el-col>
       </el-row>
