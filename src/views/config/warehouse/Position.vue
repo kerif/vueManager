@@ -387,10 +387,10 @@ export default {
   .box-card {
     font-size: 14px;
     background: #fff;
-    height: 280px;
+    // height: 300px;
     .leftWidth {
       padding: 20px 0 5px 50px;
-      width: 800px;
+      width: 1000px;
       .leftSide {
         display: inline-block;
         width: 120px;
@@ -399,7 +399,7 @@ export default {
         font-size: 14px;
       }
       .rightTag {
-        margin-right: 5px;
+        margin: 5px 5px 5px 0;
       }
       .rightBold {
         font-size: 18px;
