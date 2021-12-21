@@ -272,7 +272,8 @@
                 {{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}
               </template>
               <template v-else-if="item.id === 'updated_at'">
-                <span v-if="activeName === '2'">{{ scope.row.created_at }}</span>
+                <span v-if="activeName === '1'">{{ scope.row.created_at }}</span>
+                <span v-else-if="activeName === '2'">{{ scope.row.created_at }}</span>
                 <span v-else-if="activeName === '3'">{{ scope.row.paid_at }}</span>
                 <span v-else-if="activeName === '4'">{{ scope.row.shipped_at }}</span>
                 <span v-else>{{ scope.row.updated_at }}</span>
@@ -566,15 +567,21 @@
               <!-- 提交时间 -->
               <el-table-column
                 :label="$t('提交时间')"
-                prop="created_at"
                 v-if="['1', '2', '3', '4'].includes(activeName)"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <span>{{ scope.row.created_at }}</span>
+                </template>
+              </el-table-column>
               <el-table-column
                 :label="$t('拣货时间')"
                 prop="packed_at"
                 v-if="activeName === '2' || activeName === '3'"
               ></el-table-column>
-              <el-table-column :label="$t('签收时间')" prop="updated_at" v-if="activeName === '5'">
+              <el-table-column :label="$t('签收时间')" v-if="activeName === '5'">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.updated_at }}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 :label="$t('所属发货单')"

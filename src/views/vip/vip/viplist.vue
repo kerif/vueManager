@@ -175,6 +175,25 @@
       <el-table-column :label="$t('序号')" type="index" :index="1" width="60"></el-table-column>
       <el-table-column :label="$t('客户ID')">
         <template slot-scope="scope">
+          <!-- <span
+            @click="
+              details(
+                scope.row.id,
+                scope.row.member_level_name,
+                scope.row.customer_name,
+                scope.row.balance,
+                scope.row.created_at,
+                scope.row.name,
+                scope.row.email,
+                scope.row.point,
+                scope.row.sale_name,
+                scope.row.last_login_at,
+                scope.row.phone
+              )
+            "
+            style="cursor: pointer"
+            >{{ scope.row.id }}</span
+          > -->
           <span>{{ scope.row.id }}</span>
           <i class="el-icon-lock" v-if="scope.row.forbid_login"></i>
         </template>
@@ -495,6 +514,39 @@ export default {
     checkInfo(id, name) {
       dialog({ type: 'editInfo', id: id, name: name }, () => {
         this.getList()
+      })
+    },
+    details(
+      id,
+      memberLevelName,
+      customerName,
+      balance,
+      createdAt,
+      name,
+      email,
+      point,
+      saleName,
+      lastLogin,
+      phone
+    ) {
+      let obj = {
+        memberLevelName: memberLevelName,
+        customerName: customerName,
+        balance: balance,
+        createdAt: createdAt,
+        name: name,
+        email: email,
+        point: point,
+        saleName: saleName,
+        lastLogin: lastLogin,
+        phone: phone
+      }
+      this.$router.push({
+        name: 'vipListDetails',
+        params: { id: id },
+        query: {
+          info: JSON.stringify(obj)
+        }
       })
     },
     deleteData() {

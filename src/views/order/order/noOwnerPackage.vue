@@ -123,10 +123,6 @@
           </span>
         </template>
       </el-table-column>
-      <!-- <template slot="append">
-        <div class="append-box">
-        </div>
-      </template> -->
       <el-table-column :label="$t('操作')" width="220" fixed="right">
         <template slot-scope="scope">
           <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
@@ -135,11 +131,9 @@
           <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">{{
             $t('认领')
           }}</el-button>
-          <!-- <el-button class="btn-deep-purple">详细</el-button> -->
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div class="noDate" v-else>{{$t('暂无数据')}}</div> -->
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     <el-dialog :visible.sync="show" :title="$t('预览打印标签')" class="props-dialog" width="45%">
       <div class="dialogSty">
@@ -159,24 +153,22 @@
 </template>
 
 <script>
-import OrderListSearch from '../order/components/orderListSearch'
-// import { SearchGroup } from '@/components/searchs'
+import OrderListSearch from './components/orderListSearch'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
-    // SearchGroup,
     NlePagination,
     OrderListSearch
   },
   name: 'noOwner',
   mixins: [pagination],
   props: {
-    // activeName: {
-    //   type: String,
-    //   required: true
-    // }
+    activeName: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
@@ -198,19 +190,22 @@ export default {
       labelId: '',
       imgSrc: '',
       hasFilterCondition: false,
+      express_num: '',
       searchFieldData: {
         express_num: '',
         keyword: '',
+        value_start: '',
+        value_end: '',
+        is_warning: 0,
         begin_date: '',
-        end_date: ''
+        end_date: '',
+        date_type: '',
+        date: [],
+        warehouse: ''
       }
     }
   },
   methods: {
-    // storage (id, expressNum, userId, userName, props, warehouseName) {
-    //   console.log(warehouseName, 'warehouseName')
-    //   this.$router.push({ name: 'editStorage', params: { id: id, express_num: expressNum, user_id: userId, user_name: userName, warehouse_id: warehouseName }, query: { props: JSON.stringify(props) } })
-    // },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
@@ -261,11 +256,6 @@ export default {
       this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
     },
-    goMatch() {
-      this.page_params.page = 1
-      this.page_params.size = 10
-      this.getList()
-    },
     // 打印标签
     getLabel(id) {
       this.labelId = id
@@ -297,9 +287,9 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        warehouse: this.agent_name
+        warehouse: this.agent_name,
+        keyword: this.searchFieldData.keyword
       }
-      this.page_params.keyword && (params.keyword = this.page_params.keyword)
       // 提交时间
       this.begin_date && (params.begin_date = this.begin_date)
       this.end_date && (params.end_date = this.end_date)
@@ -347,11 +337,14 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        warehouse: this.agent_name,
-        express_num: this.searchFieldData.express_num.split(/[(\r\n)\r\n]+/),
         keyword: this.searchFieldData.keyword,
+        express_num: this.searchFieldData.express_num.split(/[(\r\n)\r\n]+/),
+        value_start: this.searchFieldData.value_start,
+        value_end: this.searchFieldData.value_end,
+        data_type: this.searchFieldData.date_type,
         begin_date: this.searchFieldData.date ? this.searchFieldData.date[0] : '',
-        end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : ''
+        end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : '',
+        warehouse: this.searchFieldData.warehouse
       }
       this.$request.getNoOwner(params).then(res => {
         this.tableLoading = false
@@ -408,6 +401,12 @@ export default {
         this.$message.success(this.$t('复制成功'))
       }
       document.body.removeChild(input)
+    },
+    goMatch() {
+      this.page_params.page = 1
+      this.page_params.size = 10
+      // this.page_params.handleQueryChange('agent', this.agent_name)
+      this.getList()
     }
   },
   activated() {

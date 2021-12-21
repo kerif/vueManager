@@ -27,6 +27,8 @@ const StaffEdit = loadonDemand('staff/staffaddedit')
 const modifyPre = loadonDemand('staff/modify_permissions')
 // 客户列表
 const VipList = loadonDemand('vip/vip/viplist')
+// 客户列表详情
+const vipListDetails = loadonDemand('vip/vip/vipListDetails')
 // 客户组列表
 const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
 // 客户 代理申请管理
@@ -489,6 +491,17 @@ export default [
               group: '客户',
               level: 2,
               name: '客户'
+            }
+          },
+          {
+            path: '/vip/vipListDetails/:id',
+            name: 'vipListDetails',
+            component: vipListDetails,
+            id: 301,
+            meta: {
+              group: '客户',
+              level: 3,
+              name: '客户详情'
             }
           },
           {
