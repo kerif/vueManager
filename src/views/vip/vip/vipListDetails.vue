@@ -7,7 +7,7 @@
         </el-col>
         <el-col :span="4">
           <el-button class="btn-light-red">{{ $t('合并') }}</el-button>
-          <el-button class="btn-deep-blue">{{ $t('修改') }}</el-button>
+          <el-button class="btn-deep-blue" @click="editInfo">{{ $t('修改') }}</el-button>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -138,7 +138,8 @@ export default {
       this.info = JSON.parse(this.$route.query.info)
       console.log(this.info)
     },
-    handleClick() {}
+    handleClick() {},
+    editInfo() {}
   }
 }
 </script>

@@ -1,58 +1,5 @@
 <template>
   <div class="no-owner-container">
-    <order-list-search
-      v-show="hasFilterCondition"
-      :searchFieldData="searchFieldData"
-      v-on:submit="goMatch"
-    ></order-list-search>
-    <div class="header-range">
-      <div class="header-btns">
-        <el-button
-          class="btn-light-red"
-          size="small"
-          v-if="activeName === '7'"
-          @click="deleteData"
-          >{{ $t('删除') }}</el-button
-        >
-        <el-button
-          class="btn-blue-green"
-          size="small"
-          v-if="activeName === '7'"
-          @click="claimList"
-          >{{ $t('认领记录') }}</el-button
-        >
-        <el-button
-          type="success"
-          plain
-          size="small"
-          v-if="activeName === '7'"
-          @click="uploadList"
-          >{{ $t('导出清单') }}</el-button
-        >
-      </div>
-      <div class="header-search">
-        <el-input
-          class="header-keyword"
-          v-model="searchFieldData.keyword"
-          clearable
-          :placeholder="$t('请输入')"
-          size="medium"
-          @keyup.enter.native="goMatch"
-        >
-          <el-button
-            slot="append"
-            @click="goMatch"
-            :loading="$store.state.btnLoading"
-            icon="el-icon-search"
-          ></el-button>
-        </el-input>
-        <div class="filter">
-          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
-            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
-          ></el-button>
-        </div>
-      </div>
-    </div>
     <el-table
       class="data-list"
       border
@@ -153,14 +100,12 @@
 </template>
 
 <script>
-import OrderListSearch from './components/orderListSearch'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
-    NlePagination,
-    OrderListSearch
+    NlePagination
   },
   name: 'noOwner',
   mixins: [pagination],
@@ -180,8 +125,6 @@ export default {
       claimData: [],
       storageList: [],
       timeList: [],
-      in_storage_end_date: '',
-      in_storage_begin_date: '',
       begin_date: '',
       end_date: '',
       imgVisible: false,
@@ -213,10 +156,6 @@ export default {
     // 详情
     oderDetails(id) {
       this.$router.push({ name: 'oderDetails', params: { id: id } })
-    },
-    goExpress(expressNum) {
-      console.log(expressNum)
-      window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
     },
     // 删除
     deleteData() {
@@ -251,11 +190,6 @@ export default {
           })
       })
     },
-    onAgentChange() {
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('agent', this.agent_name)
-      this.getList()
-    },
     // 打印标签
     getLabel(id) {
       this.labelId = id
@@ -263,7 +197,6 @@ export default {
       this.$request.checkPackageLabel(id).then(res => {
         if (res.ret) {
           this.urlHtml = res.data.url
-          // this.urlImport = res.data.url
           this.$notify({
             title: this.$t('操作成功'),
             message: res.msg,
@@ -312,7 +245,6 @@ export default {
     // 确认下载标签
     updateLabel() {
       this.show = false
-      console.log(this.labelId, 'this.labelId')
       this.$request.updatePackagePdf(this.labelId).then(res => {
         if (res.ret) {
           window.open(res.data.url)
@@ -377,19 +309,6 @@ export default {
         this.agentData = res.data
       })
     },
-    // 提交时间
-    onTime(val) {
-      this.begin_date = val ? val[0] : ''
-      this.end_date = val ? val[1] : ''
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('times', `${this.begin_date} ${this.end_date}`)
-      // this.getList()
-    },
-    // 重置筛选
-    resetForm() {
-      this.timeList = []
-      this.agent_name = ''
-    },
     //复制单号
     copyNumber(orderSn) {
       const input = document.createElement('input')
@@ -405,7 +324,6 @@ export default {
     goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
-      // this.page_params.handleQueryChange('agent', this.agent_name)
       this.getList()
     }
   },

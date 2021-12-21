@@ -11,15 +11,14 @@
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
       <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
-      <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane>
+      <!-- <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane> -->
     </el-tabs>
     <order-list-search
       v-show="hasFilterCondition"
       :searchFieldData="searchFieldData"
       v-on:submit="goMatch"
-      v-if="activeName !== '7'"
     ></order-list-search>
-    <div class="header-range" v-if="activeName !== '7'">
+    <div class="header-range">
       <div class="header-btns">
         <el-button
           class="btn-light-red"
@@ -91,6 +90,28 @@
         >
           {{ $t('批量修改') }}
         </el-button>
+        <!-- <el-button
+          class="btn-light-red"
+          size="small"
+          v-if="activeName === '7'"
+          @click="deleteDatas"
+          >{{ $t('删除') }}</el-button
+        >
+        <el-button
+          class="btn-blue-green"
+          size="small"
+          v-if="activeName === '7'"
+          @click="claimList"
+          >{{ $t('认领记录') }}</el-button
+        >
+        <el-button
+          type="success"
+          plain
+          size="small"
+          v-if="activeName === '7'"
+          @click="uploadLists"
+          >{{ $t('导出清单') }}</el-button
+        > -->
       </div>
       <div class="header-search">
         <el-input
@@ -178,7 +199,7 @@
             <span v-if="scope.row.status === 3 || scope.row.status === 4">{{ $t('已集包') }}</span>
             <span v-if="scope.row.status === 5">{{ $t('已发货') }}</span>
             <span v-if="scope.row.status === 6">{{ $t('已收货') }}</span>
-            <span v-if="scope.row.status === 999">{{ $t('无人认领') }}</span>
+            <!-- <span v-if="scope.row.status === 999">{{ $t('无人认领') }}</span> -->
 
             <el-tooltip
               v-if="scope.row.status === 1 && scope.row.is_warning === 1"
@@ -388,11 +409,11 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
-    <no-owner-package
+    <!-- <no-owner-package
       v-if="activeName === '7'"
       ref="noOwner"
       :activeName="activeName"
-    ></no-owner-package>
+    ></no-owner-package> -->
   </div>
 </template>
 
@@ -403,13 +424,13 @@ import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 // import NoOwnerPackage from './components/noOwnerPackage'
-import NoOwnerPackage from './noOwnerPackage'
+// import NoOwnerPackage from './noOwnerPackage'
 export default {
   components: {
     OrderListSearch,
     NlePagination,
-    BatchModify,
-    NoOwnerPackage
+    BatchModify
+    // NoOwnerPackage
   },
   name: 'orderlist',
   mixins: [pagination],
@@ -440,6 +461,7 @@ export default {
         value_end: '',
         keyword: '',
         is_warning: 0
+        // warehouse: ''
       },
       showBatch: false,
       packageData: []
@@ -486,8 +508,11 @@ export default {
       this.page_params.size = 10
       this.getList()
       this.getCounts()
-      // this.$refs.noOwner.getList()
     },
+    // getVal(param) {
+    //   console.log(param)
+    //   this.searchFieldData = param
+    // },
     computedParams() {
       let params = {
         page: this.page_params.page,
@@ -536,6 +561,40 @@ export default {
         })
         .catch(() => (this.tableLoading = false))
     },
+    // getNoOwnerList() {
+    //   this.tableLoading = true
+    //   this.ownerData = []
+    //   let params = {
+    //     page: this.page_params.page,
+    //     size: this.page_params.size,
+    //     keyword: this.searchFieldData.keyword,
+    //     express_num: this.searchFieldData.express_num.split(/[(\r\n)\r\n]+/),
+    //     value_start: this.searchFieldData.value_start,
+    //     value_end: this.searchFieldData.value_end,
+    //     data_type: this.searchFieldData.date_type,
+    //     begin_date: this.searchFieldData.date ? this.searchFieldData.date[0] : '',
+    //     end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : '',
+    //     warehouse: this.searchFieldData.warehouse
+    //   }
+    //   this.$request.getNoOwner(params).then(res => {
+    //     this.tableLoading = false
+    //     if (res.ret) {
+    //       this.ownerData = res.data
+    //       this.localization = res.localization
+    //       this.page_params.page = res.meta.current_page
+    //       this.page_params.total = res.meta.total
+    //       this.$nextTick(() => {
+    //         this.$refs.table.doLayout()
+    //       })
+    //     } else {
+    //       this.$notify({
+    //         title: this.$t('操作失败'),
+    //         message: res.msg,
+    //         type: 'warning'
+    //       })
+    //     }
+    //   })
+    // },
     importOrder() {
       this.$router.push({ name: 'ImportOrder' })
     },
@@ -575,12 +634,8 @@ export default {
     claimList() {
       dialog({ type: 'claimRecord' })
     },
-    uploadLists() {
-      this.$refs.noOwner.uploadList()
-    },
-    deleteDatas() {
-      this.$refs.noOwner.deleteData()
-    },
+    uploadLists() {},
+    deleteDatas() {},
     // 快速合箱
     fastClosing(userId) {
       this.$router.push({ name: 'applyPackage', query: { userId: userId } })
