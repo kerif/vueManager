@@ -611,11 +611,15 @@ export default {
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
-            this.orderData = res.data
+            this.orderData = res.data.filter(item => item.user_id !== 0)
             this.sumData = res.sum
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
+            if (this.orderData.length) {
+              this.page_params.total = res.meta.total
+            } else {
+              this.page_params.total = 0
+            }
             this.$nextTick(() => {
               this.$refs.table.doLayout()
             })
@@ -675,13 +679,15 @@ export default {
       })
     },
     uploadListData() {
+      const searchData = this.searchFieldData
       let params = {
+        ...searchData,
+        express_num: searchData.express_num.split(/[(\r\n)\r\n]+/),
+        begin_date: searchData.date ? searchData.date[0] : '',
+        end_date: searchData.date ? searchData.date[1] : '',
         page: this.page_params.page,
         size: this.page_params.size,
-        warehouse: this.agent_name,
-        keyword: this.searchFieldData.keyword,
-        begin_date: this.searchFieldData.date ? this.searchFieldData.date[0] : '',
-        end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : ''
+        keyword: searchData.keyword
       }
       this.$request.uploadNoOwner(params).then(res => {
         if (res.ret) {
@@ -734,17 +740,15 @@ export default {
     getNoOwnerList() {
       this.tableLoading = true
       this.ownerData = []
+      const searchData = this.searchFieldData
       let params = {
+        ...searchData,
+        express_num: searchData.express_num.split(/[(\r\n)\r\n]+/),
+        begin_date: searchData.date ? searchData.date[0] : '',
+        end_date: searchData.date ? searchData.date[1] : '',
         page: this.page_params.page,
         size: this.page_params.size,
-        keyword: this.searchFieldData.keyword,
-        express_num: this.searchFieldData.express_num.split(/[(\r\n)\r\n]+/),
-        value_start: this.searchFieldData.value_start,
-        value_end: this.searchFieldData.value_end,
-        data_type: this.searchFieldData.date_type,
-        begin_date: this.searchFieldData.date ? this.searchFieldData.date[0] : '',
-        end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : '',
-        warehouse: this.searchFieldData.warehouse
+        keyword: searchData.keyword
       }
       this.$request.getNoOwner(params).then(res => {
         this.tableLoading = false
