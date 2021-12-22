@@ -11,7 +11,7 @@
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
       <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
-      <!-- <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane> -->
+      <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane>
     </el-tabs>
     <order-list-search
       v-show="hasFilterCondition"
@@ -90,11 +90,11 @@
         >
           {{ $t('批量修改') }}
         </el-button>
-        <!-- <el-button
+        <el-button
           class="btn-light-red"
           size="small"
           v-if="activeName === '7'"
-          @click="deleteDatas"
+          @click="deleteListData"
           >{{ $t('删除') }}</el-button
         >
         <el-button
@@ -109,9 +109,9 @@
           plain
           size="small"
           v-if="activeName === '7'"
-          @click="uploadLists"
+          @click="uploadListData"
           >{{ $t('导出清单') }}</el-button
-        > -->
+        >
       </div>
       <div class="header-search">
         <el-input
@@ -378,16 +378,93 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination
-        style="margin-top: 5px"
-        v-if="activeName !== '7'"
-        :pageParams="page_params"
-        :notNeedInitQuery="false"
-      >
+      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
         <div class="remark-text">
           <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
         </div>
       </nle-pagination>
+    </div>
+    <div style="height: calc(100vh - 270px)" v-if="activeName === '7'">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        :data="ownerData"
+        @selection-change="selectionChange"
+        v-loading="tableLoading"
+        height="calc(100vh - 275px)"
+        ref="table"
+      >
+        <!-- height="550" -->
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <!-- 快递单号 -->
+        <el-table-column :label="$t('快递单号')" width="155">
+          <template slot-scope="scope">
+            <el-button @click="oderDetails(scope.row.id)" type="text">{{
+              scope.row.express_num
+            }}</el-button>
+            <span
+              :title="$t('复制单号')"
+              class="copy-number"
+              @click="copyNumber(scope.row.express_num)"
+            >
+              <i class="el-icon-copy-document"></i>
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 包裹编码 -->
+        <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
+        <!-- 物品价值 -->
+        <el-table-column
+          :label="$t('包裹重量') + this.localization.weight_unit"
+          prop="package_weight"
+          width="155"
+        ></el-table-column>
+        <!-- 物品属性 -->
+        <el-table-column :label="$t('物品属性')">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.props" :key="item.id">
+              {{ item.cn_name }}
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 规格 -->
+        <el-table-column
+          :label="$t('规格') + this.localization.length_unit"
+          prop="dimension"
+          width="120px"
+        ></el-table-column>
+        <!-- 提交时间 -->
+        <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
+        <!-- 仓库 -->
+        <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name" width="155">
+        </el-table-column>
+        <el-table-column :label="$t('货位')" prop="location"> </el-table-column>
+        <!-- 包裹图片 -->
+        <el-table-column :label="$t('包裹图片')" prop="package_pictures" width="150">
+          <template slot-scope="scope">
+            <span
+              v-for="(item, index) in scope.row.package_pictures"
+              :key="index"
+              style="cursor: pointer"
+              @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
+            >
+              <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 40px; margin-right: 5px" />
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')" width="220" fixed="right">
+          <template slot-scope="scope">
+            <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
+              $t('打印标签')
+            }}</el-button>
+            <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">{{
+              $t('认领')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img-box">
@@ -409,11 +486,6 @@
       :packageData="packageData"
       @passVal="passVal"
     ></batch-modify>
-    <!-- <no-owner-package
-      v-if="activeName === '7'"
-      ref="noOwner"
-      :activeName="activeName"
-    ></no-owner-package> -->
   </div>
 </template>
 
@@ -423,14 +495,11 @@ import BatchModify from './components/batchModify'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
-// import NoOwnerPackage from './components/noOwnerPackage'
-// import NoOwnerPackage from './noOwnerPackage'
 export default {
   components: {
     OrderListSearch,
     NlePagination,
     BatchModify
-    // NoOwnerPackage
   },
   name: 'orderlist',
   mixins: [pagination],
@@ -450,6 +519,7 @@ export default {
       urlExcel: '',
       hasFilterCondition: false,
       sumData: {},
+      ownerData: [],
       searchFieldData: {
         begin_date: '',
         end_date: '',
@@ -461,7 +531,6 @@ export default {
         value_end: '',
         keyword: '',
         is_warning: 0
-        // warehouse: ''
       },
       showBatch: false,
       packageData: []
@@ -509,10 +578,6 @@ export default {
       this.getList()
       this.getCounts()
     },
-    // getVal(param) {
-    //   console.log(param)
-    //   this.searchFieldData = param
-    // },
     computedParams() {
       let params = {
         page: this.page_params.page,
@@ -535,6 +600,9 @@ export default {
     getList() {
       if (this.activeName === '6') {
         return this.getDiscard()
+      }
+      if (this.activeName === '7') {
+        return this.getNoOwnerList()
       }
       this.tableLoading = true
       const params = this.computedParams()
@@ -561,40 +629,6 @@ export default {
         })
         .catch(() => (this.tableLoading = false))
     },
-    // getNoOwnerList() {
-    //   this.tableLoading = true
-    //   this.ownerData = []
-    //   let params = {
-    //     page: this.page_params.page,
-    //     size: this.page_params.size,
-    //     keyword: this.searchFieldData.keyword,
-    //     express_num: this.searchFieldData.express_num.split(/[(\r\n)\r\n]+/),
-    //     value_start: this.searchFieldData.value_start,
-    //     value_end: this.searchFieldData.value_end,
-    //     data_type: this.searchFieldData.date_type,
-    //     begin_date: this.searchFieldData.date ? this.searchFieldData.date[0] : '',
-    //     end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : '',
-    //     warehouse: this.searchFieldData.warehouse
-    //   }
-    //   this.$request.getNoOwner(params).then(res => {
-    //     this.tableLoading = false
-    //     if (res.ret) {
-    //       this.ownerData = res.data
-    //       this.localization = res.localization
-    //       this.page_params.page = res.meta.current_page
-    //       this.page_params.total = res.meta.total
-    //       this.$nextTick(() => {
-    //         this.$refs.table.doLayout()
-    //       })
-    //     } else {
-    //       this.$notify({
-    //         title: this.$t('操作失败'),
-    //         message: res.msg,
-    //         type: 'warning'
-    //       })
-    //     }
-    //   })
-    // },
     importOrder() {
       this.$router.push({ name: 'ImportOrder' })
     },
@@ -634,8 +668,103 @@ export default {
     claimList() {
       dialog({ type: 'claimRecord' })
     },
-    uploadLists() {},
-    deleteDatas() {},
+    // 认领包裹
+    goClaim(id) {
+      dialog({ type: 'claim', id: id }, () => {
+        this.getNoOwnerList()
+      })
+    },
+    uploadListData() {
+      let params = {
+        page: this.page_params.page,
+        size: this.page_params.size,
+        warehouse: this.agent_name,
+        keyword: this.searchFieldData.keyword,
+        begin_date: this.searchFieldData.date ? this.searchFieldData.date[0] : '',
+        end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : ''
+      }
+      this.$request.uploadNoOwner(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    deleteListData() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择包裹'))
+      }
+      this.$confirm(this.$t('您真的要删除这个包裹吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        console.log(this.deleteNum, '2222')
+        this.$request
+          .deleteNoOwner({
+            DELETE: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      })
+    },
+    // 获取无人认领列表
+    getNoOwnerList() {
+      this.tableLoading = true
+      this.ownerData = []
+      let params = {
+        page: this.page_params.page,
+        size: this.page_params.size,
+        keyword: this.searchFieldData.keyword,
+        express_num: this.searchFieldData.express_num.split(/[(\r\n)\r\n]+/),
+        value_start: this.searchFieldData.value_start,
+        value_end: this.searchFieldData.value_end,
+        data_type: this.searchFieldData.date_type,
+        begin_date: this.searchFieldData.date ? this.searchFieldData.date[0] : '',
+        end_date: this.searchFieldData.date ? this.searchFieldData.date[1] : '',
+        warehouse: this.searchFieldData.warehouse
+      }
+      this.$request.getNoOwner(params).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.ownerData = res.data
+          this.localization = res.localization
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 快速合箱
     fastClosing(userId) {
       this.$router.push({ name: 'applyPackage', query: { userId: userId } })
