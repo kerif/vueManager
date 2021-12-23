@@ -27,7 +27,7 @@
       ref="table"
       v-loading="tableLoading"
       class="top-side"
-      style="width: 100%; height: calc(100vh - 275px); margin-top: 10px"
+      style="width: 100%; height: calc(100vh - 275px); margin-top: 10px; overflow: auto"
     >
       <el-table-column prop="title" :label="$t('标题')"> </el-table-column>
       <el-table-column prop="tag" :label="$t('tag')"> </el-table-column>

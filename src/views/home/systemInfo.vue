@@ -13,7 +13,7 @@
       :data="messageData"
       ref="table"
       border
-      style="width: 100%; margin-top: 10px; height: calc(100vh - 275px)"
+      style="width: 100%; margin-top: 10px; height: calc(100vh - 275px); overflow: auto"
     >
       <el-table-column :label="$t('标题')" prop="title">
         <template slot-scope="scope">
