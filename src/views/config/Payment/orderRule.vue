@@ -29,17 +29,22 @@
         </template>
       </el-table-column>
       <!-- 前缀字符 -->
-      <el-table-column :label="$t('示例')">
+      <!-- <el-table-column :label="$t('示例')">
         <template slot-scope="scope">
           <span
             >{{ scope.row.prefix }}<span v-if="scope.row.prefix !== ''">{{ num }}</span></span
           >
         </template>
+      </el-table-column> -->
+      <el-table-column :label="$t('前缀字符')">
+        <template slot-scope="scope">
+          <span>{{ scope.row.prefix }}</span>
+        </template>
       </el-table-column>
       <!-- 单号长度 -->
-      <!-- <el-table-column prop="length" :label="$t('单号长度')"></el-table-column> -->
+      <el-table-column prop="length" :label="$t('单号长度')"></el-table-column>
       <!-- 数字增值 -->
-      <!-- <el-table-column prop="system" :label="$t('数字增值')"></el-table-column> -->
+      <el-table-column prop="system" :label="$t('数字增值')"></el-table-column>
       <el-table-column :label="$t('操作')">
         <template slot-scope="scope">
           <!-- 编辑 -->
