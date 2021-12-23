@@ -126,6 +126,7 @@ import addMenu from './addMenu.vue'
 import addRule from './addRule.vue'
 import batchToTransport from './batchToTransport.vue'
 import setRules from './setRules.vue'
+import batchAllocate from './batchAllocate.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -251,6 +252,7 @@ const AddMenuController = Vue.extend(addMenu)
 const AddRuleController = Vue.extend(addRule)
 const BatchToTransportController = Vue.extend(batchToTransport)
 const SetRulesController = Vue.extend(setRules)
+const BatchAllocateController = Vue.extend(batchAllocate)
 const mixin = {
   data() {
     return {
@@ -881,6 +883,13 @@ function initInstance(type) {
     // 员工组列表 自提点权限
     case 'pickPoint':
       instance = new PickPiontController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量分配员工
+    case 'batchAllocate':
+      instance = new BatchAllocateController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

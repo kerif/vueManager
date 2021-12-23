@@ -537,6 +537,14 @@ exports.assignCustomer = params => {
 exports.assignSale = params => {
   return $form.put('users/assign-sale', params)
 }
+// 客户 客户模板导出
+exports.customerTmp = () => {
+  return $form.get(`users/user-template`)
+}
+// 客户 批量分配
+exports.batchAllocate = file => {
+  return $form.post('users/template-assign', file)
+}
 // 客户允许登录
 exports.customerLogin = ids => {
   return $form.put('users/allow-login', ids)
