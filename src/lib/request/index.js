@@ -543,7 +543,7 @@ exports.customerTmp = () => {
 }
 // 客户 批量分配
 exports.batchAllocate = file => {
-  return $form.post('users/template-assign', file)
+  return $file.post('users/template-assign', file)
 }
 // 客户允许登录
 exports.customerLogin = ids => {

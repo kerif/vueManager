@@ -293,7 +293,7 @@ export default {
       })
     },
     clear() {
-      this.ruleForm.day = ''
+      // this.ruleForm.day = ''
     }
   }
 }

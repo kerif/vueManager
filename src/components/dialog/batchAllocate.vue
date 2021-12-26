@@ -80,7 +80,8 @@ export default {
       // 通过FormData对象上传文件
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
-      this.files = params
+      this.files = new FormData()
+      this.files.append(`file`, file)
       console.log(this.files)
       return this.$request.uploadFiles(params)
     },
@@ -124,7 +125,8 @@ export default {
       })
     },
     submit() {
-      this.$request.batchAllocate(this.files).then(res => {
+      let file = this.files
+      this.$request.batchAllocate(file).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
