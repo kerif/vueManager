@@ -1,6 +1,6 @@
 <template>
   <div class="landing-container">
-    <el-form ref="form" :model="landing" label-width="120px">
+    <el-form ref="form" :model="landing" label-width="130px">
       <el-form-item :label="$t('落地配配置')">
         <el-select
           @change="changeChannel"
@@ -32,6 +32,32 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <!-- <el-form-item :label="$t('多箱订单推送方式')">
+        <el-radio-group v-model="order">
+          <el-radio :label="1">{{ $t('按订单推送') }}</el-radio>
+          <el-radio :label="2">{{ $t('按箱数推送') }}</el-radio>
+        </el-radio-group>
+      </el-form-item> -->
+      <!-- <el-form-item :label="$t('报关信息审核')">
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="$t('开启时,订单推送前需要后台进行报关信息审核;关闭时,客户支付后直接推送订单')"
+          placement="top"
+        >
+          <span class="el-icon-warning-outline icon-info"></span>
+        </el-tooltip>
+        <el-switch
+          v-model="info"
+          :active-text="$t('开')"
+          :active-value="1"
+          :inactive-value="0"
+          active-color="#13ce66"
+          inactive-color="gray"
+          :inactive-text="$t('关')"
+        >
+        </el-switch>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
       </el-form-item>
@@ -48,7 +74,9 @@ export default {
         channel_code: ''
       },
       dockingList: [],
-      channelList: []
+      channelList: [],
+      order: 1,
+      info: false
     }
   },
   created() {
@@ -108,4 +136,13 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.icon-info {
+  color: #74b34f;
+  font-size: 18px;
+  position: relative;
+  top: 2px;
+  right: 5px;
+  cursor: pointer;
+}
+</style>

@@ -47,6 +47,7 @@
         <el-button size="small" class="unsettled" type="primary" @click="oneSettlement">
           {{ $t('一键结算') }}
         </el-button>
+        <el-button class="btn-light-red" @click="orderSettle">{{ $t('预约结算') }}</el-button>
       </div>
       <div class="head-search">
         <el-input
@@ -98,6 +99,25 @@
         ><span>{{ this.settle_amount }}</span>
       </div>
     </nle-pagination>
+    <el-dialog :visible.sync="show" width="45%" :title="$t('预约结算')" @close="clear">
+      <el-form ref="form" :model="ruleForm">
+        <el-form-item>
+          <div>
+            {{ $t('订单发货后')
+            }}<el-input
+              style="width: 120px"
+              :placeholder="$t('请输入天数')"
+              v-model="ruleForm.day"
+            ></el-input>
+            {{ $t('天，系统自动结算') }}
+          </div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="this.show = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -123,7 +143,11 @@ export default {
       unsettleId: '',
       ids: [],
       settle_amount: '',
-      unsettle_amount: ''
+      unsettle_amount: '',
+      show: false,
+      ruleForm: {
+        day: ''
+      }
     }
   },
   components: {
@@ -234,11 +258,40 @@ export default {
     },
     goInit() {
       this.$request.initSettle().then(res => {
-        this.settledData = res.data.status_list
+        if (res.ret) {
+          this.settledData = res.data.status_list
+        }
       })
     },
     fm() {
       console.log(this.timeList)
+    },
+    // 预约结算
+    orderSettle() {
+      this.show = true
+    },
+    confirm() {
+      let days = this.ruleForm.day
+      this.$request.reserveSettle(days).then(res => {
+        if (res.ret) {
+          this.$notify({
+            message: res.msg,
+            type: 'success',
+            title: this.$t('操作成功')
+          })
+          this.show = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    clear() {
+      this.ruleForm.day = ''
     }
   }
 }
@@ -285,6 +338,16 @@ export default {
     font-size: 14px;
     font-weight: bold;
     color: red;
+  }
+  /deep/.el-dialog__header {
+    background-color: #0e102a;
+  }
+  /deep/.el-dialog__title {
+    font-size: 14px;
+    color: #fff;
+  }
+  /deep/.el-dialog__close {
+    color: #fff;
   }
 }
 </style>

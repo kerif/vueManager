@@ -141,13 +141,13 @@
           <el-button class="btn-purple" size="small" @click="goServies('services')">{{
             $t('分配客服')
           }}</el-button>
-          <el-button class="btn-purple" @click="batchAllocate">...</el-button>
+          <el-button class="btn-purple" size="small" @click="batchAllocate">...</el-button>
         </el-button-group>
         <el-button-group style="margin: 0 0 0 10px">
           <el-button class="btn-deep-blue" size="small" @click="goServies('sale')">{{
             $t('分配销售')
           }}</el-button>
-          <el-button class="btn-deep-blue" @click="batchAllocate">...</el-button>
+          <el-button class="btn-deep-blue" size="small" @click="batchAllocate">...</el-button>
         </el-button-group>
         <div class="import-list">
           <el-button size="small" type="success" plain @click="uploadList">{{

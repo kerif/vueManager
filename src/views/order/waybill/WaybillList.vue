@@ -7,6 +7,7 @@
       <el-tab-pane :label="`${$t('待发货')} (${countData.delivered || 0})`" name="3"></el-tab-pane>
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已签收')} (${countData.received || 0})`" name="5"></el-tab-pane>
+      <!-- <el-tab-pane :label="$t('异常件')" name="6"></el-tab-pane> -->
       <el-tab-pane :label="`${$t('作废订单')} (${countData.invalid || 0})`" name="19"></el-tab-pane>
     </el-tabs>
     <waybill-list-search
@@ -76,6 +77,13 @@
         <el-button class="btn-purple" v-if="activeName === '4'" size="small" @click="signed"
           >{{ $t('改为已签收') }}
         </el-button>
+        <!-- <el-button
+          class="btn-purple"
+          v-if="['1', '2', '3', '4'].includes(activeName)"
+          @click="goAbnormal"
+        >
+          {{ $t('转为异常件') }}
+        </el-button> -->
         <el-button
           class="btn-deep-purple"
           v-if="['3', '4', '5'].includes(activeName)"
@@ -1002,6 +1010,7 @@
       @receiveTmp="receiveTmp"
       class="tmp"
     ></waybill-list-tmp-drawer>
+    <abnormal :showAbnormal="showAbnormal" @passval="passval"></abnormal>
   </div>
 </template>
 
@@ -1012,6 +1021,7 @@ import dialog from '@/components/dialog'
 import WaybillListSearch from './components/waybillListSearch'
 import WaybillListDrawer from './components/waybillListDrawer'
 import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
+import Abnormal from './components/abnormal'
 import columnData from '../../../utils/sortData.js'
 import Sortable from 'sortablejs'
 export default {
@@ -1019,7 +1029,8 @@ export default {
     WaybillListSearch,
     WaybillListDrawer,
     WaybillListTmpDrawer,
-    NlePagination
+    NlePagination,
+    Abnormal
   },
   mixins: [pagination],
   name: 'wayBillList',
@@ -1136,7 +1147,8 @@ export default {
       keyData: {},
       lineId: '',
       uploadType: 2,
-      sortDialog: false
+      sortDialog: false,
+      showAbnormal: false
     }
   },
   activated() {
@@ -1356,6 +1368,9 @@ export default {
     },
     receiveTmp() {
       this.showTmpDrawer = false
+    },
+    passval() {
+      this.showAbnormal = false
     },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {
@@ -2329,6 +2344,9 @@ export default {
     },
     clearPayment() {
       this.payment_mode = ''
+    },
+    goAbnormal() {
+      this.showAbnormal = true
     }
     // 饼图
   },
@@ -2380,7 +2398,7 @@ export default {
     overflow-y: auto !important;
   }
   .tab-length {
-    width: 870px !important;
+    width: 950px !important;
   }
   .dialog-sty {
     margin-left: 30px;

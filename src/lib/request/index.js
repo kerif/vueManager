@@ -780,6 +780,10 @@ exports.uploadRecordsCommissions = (id, params) => {
 exports.commissionsRecords = (id, params) => {
   return $form.get(`station-commissions/${id}/records`, { params })
 }
+// 财务 预约结算
+exports.reserveSettle = params => {
+  return $form.put('agents/auto-settled-days', params)
+}
 // 自提点佣金结算 结算明细
 exports.recordsDetails = (id, params) => {
   return $form.get(`station-commissions/records/${id}/commissions`, { params })

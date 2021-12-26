@@ -41,7 +41,8 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('所属客服:') }}</span>
-              <span>{{ this.info.customerName }}</span>
+              <!-- <span>{{ this.info.customerName }}</span> -->
+              <el-input v-model="this.info.customerName" style="width: 120px"></el-input>
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -73,7 +74,7 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('所属销售:') }}</span>
-              <span>{{ this.info.saleName }}</span>
+              <el-input v-model="this.info.saleName" style="width: 120px"></el-input>
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -87,7 +88,8 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('客户组:') }}</span>
-              <span></span>
+              <el-input v-model="this.info.saleName" style="width: 120px"></el-input>
+              <!-- <span></span> -->
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -137,6 +139,7 @@
               </template>
             </el-table-column>
           </el-table>
+          <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
         <el-tab-pane :label="$t('邀请记录')" name="5">
           <el-table class="data-list" :data="tableData" border style="width: 100%">
@@ -149,6 +152,7 @@
             <!-- 最后登录时间 -->
             <el-table-column prop="last_login_at" :label="$t('最后登录时间')"> </el-table-column>
           </el-table>
+          <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -196,8 +200,14 @@
 </template>
 
 <script>
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   name: 'vipListDetails',
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   data() {
     return {
       activeName: '1',
@@ -213,6 +223,8 @@ export default {
   },
   created() {
     this.getInfo()
+    this.getInviteList()
+    this.getCardList()
   },
   methods: {
     getInfo() {
@@ -267,6 +279,60 @@ export default {
           })
           this.dialogVisible = false
         }
+      })
+    },
+    getInviteList() {
+      this.$request
+        .invitations(this.$route.params.id, {
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableData = res.data
+            console.log(this.tableData)
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
+    },
+    getCardList() {
+      this.$request
+        .voucherUser(this.$route.params.id, {
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            this.inviteData = res.data
+            console.log(this.inviteData)
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+          }
+        })
+    },
+    failCoupon(id) {
+      this.$confirm(this.$t('确定要作废优惠券吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteCoupons(this.id, id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.success()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     }
   }

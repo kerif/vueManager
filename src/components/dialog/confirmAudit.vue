@@ -14,6 +14,7 @@
           :autosize="{ minRows: 2, maxRows: 4 }"
           v-model="ruleForm.customer_remark"
           :placeholder="$t('请输入备注')"
+          class="text"
         ></el-input>
       </el-form-item>
       <!--上传照片-->
