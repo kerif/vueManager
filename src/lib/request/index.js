@@ -565,6 +565,18 @@ exports.deleteCoupons = (id, ids) => {
 exports.exportList = params => {
   return $form.get('user-addresses/export', { params })
 }
+// 客户 客户包裹列表
+exports.packageList = id => {
+  return $form.get(`users/${id}/packages`)
+}
+// 客户 客户订单列表
+exports.orderList = id => {
+  return $form.get(`users/${id}/orders`)
+}
+// 客户 客户地址列表
+exports.addressList = id => {
+  return $form.get(`users/${id}/addresses`)
+}
 // 员工列表允许登录
 exports.allowUser = ids => {
   return $form.put('admins/allow-login', ids)

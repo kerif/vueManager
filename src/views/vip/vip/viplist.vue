@@ -343,7 +343,7 @@
       <span>{{ $t('选择员工') }}</span
       >&nbsp;&nbsp;
       <el-select v-model="saleId" :placeholder="$t('请选择')">
-        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+        <el-option v-for="item in options" :key="item.id" :label="item.username" :value="item.id">
         </el-option>
       </el-select>
       <div slot="footer">

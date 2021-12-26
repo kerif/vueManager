@@ -41,8 +41,8 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('所属客服:') }}</span>
-              <!-- <span>{{ this.info.customerName }}</span> -->
-              <el-input v-model="this.info.customerName" style="width: 120px"></el-input>
+              <span>{{ this.info.customerName }}</span>
+              <!-- <el-input v-model="this.info.customerName" style="width: 120px"></el-input> -->
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -74,7 +74,8 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('所属销售:') }}</span>
-              <el-input v-model="this.info.saleName" style="width: 120px"></el-input>
+              <span>{{ this.info.saleName }}</span>
+              <!-- <el-input v-model="this.info.saleName" style="width: 120px"></el-input> -->
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -88,8 +89,8 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('客户组:') }}</span>
-              <el-input v-model="this.info.saleName" style="width: 120px"></el-input>
-              <!-- <span></span> -->
+              <!-- <el-input v-model="this.info.saleName" style="width: 120px"></el-input> -->
+              <span></span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -115,9 +116,55 @@
     </div>
     <div style="margin-top: 30px">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane :label="$t('包裹列表')" name="1"></el-tab-pane>
-        <el-tab-pane :label="$t('订单列表')" name="2"></el-tab-pane>
-        <el-tab-pane :label="$t('地址')" name="3"></el-tab-pane>
+        <el-tab-pane :label="$t('包裹列表')" name="1">
+          <el-table :data="packageData" border style="width: 100%">
+            <el-table-column type="index" label="#"></el-table-column>
+            <el-table-column :label="$t('客户ID')">
+              <template slot-scope="scope">
+                <span>{{ scope.row.user_id }}-{{ scope.row.user_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="express_num" :label="$t('快递单号')"></el-table-column>
+            <el-table-column prop="status_name" :label="$t('状态')"></el-table-column>
+            <el-table-column prop="package_name" :label="$t('物品名称')"></el-table-column>
+            <el-table-column prop="package_value" :label="$t('物品价值')"></el-table-column>
+            <el-table-column prop="package_weight" :label="$t('物品单价')"></el-table-column>
+            <!-- <el-table-column :label="$t('物品属性')">
+              <span v-for="(item, index) in props" :key="index">{{ item.name }}</span>
+            </el-table-column> -->
+            <el-table-column prop="destination_country" :label="$t('寄往国家')"></el-table-column>
+            <el-table-column prop="express_company" :label="$t('仓库')"></el-table-column>
+            <el-table-column prop="created_at" :label="$t('提交时间')"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('订单列表')" name="2">
+          <el-table :data="orderData" border style="width: 100%">
+            <el-table-column type="index" label="#"></el-table-column>
+            <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
+            <el-table-column prop="user_name" :label="$t('用户名')"></el-table-column>
+            <el-table-column prop="order_sn" :label="$t('订单号')"></el-table-column>
+            <el-table-column prop="express_line" :label="$t('线路名称')"></el-table-column>
+            <el-table-column prop="receiver_name" :label="$t('收货人')"></el-table-column>
+            <el-table-column prop="country_name" :label="$t('收货国家地区')"></el-table-column>
+            <el-table-column prop="payment_weight" :label="$t('预计重量')"></el-table-column>
+            <el-table-column prop="payment_fee" :label="$t('预计费用')"></el-table-column>
+            <el-table-column prop="created_at" :label="$t('提交时间')"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('地址')" name="3">
+          <el-table :data="addressData" border style="width: 100%">
+            <el-table-column type="index" label="#"></el-table-column>
+            <el-table-column prop="user_id" :label="$t('客户ID')"></el-table-column>
+            <el-table-column prop="receiver_name" :label="$t('收件人')"></el-table-column>
+            <el-table-column prop="phone" :label="$t('联系电话')"></el-table-column>
+            <el-table-column prop="country.name" :label="$t('国家地区')"></el-table-column>
+            <el-table-column prop="address_area" :label="$t('区域')"></el-table-column>
+            <el-table-column prop="city" :label="$t('城市')"></el-table-column>
+            <el-table-column prop="street" :label="$t('街道')"></el-table-column>
+            <el-table-column prop="door_no" :label="$t('门牌号')"></el-table-column>
+            <el-table-column prop="postcode" :label="$t('邮编')"></el-table-column>
+          </el-table>
+        </el-tab-pane>
         <el-tab-pane :label="$t('券包')" name="4">
           <el-table class="data-list" :data="inviteData" border style="width: 100%">
             <el-table-column type="index"> </el-table-column>
@@ -127,17 +174,6 @@
             <el-table-column prop="status" :label="$t('状态')"> </el-table-column>
             <el-table-column prop="created_at" :label="$t('发放时间')"> </el-table-column>
             <el-table-column prop="used_at" :label="$t('使用时间')"> </el-table-column>
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <!-- 作废 -->
-                <el-button
-                  class="btn-light-red"
-                  v-if="scope.row.usable === true"
-                  @click="failCoupon(scope.row.id)"
-                  >{{ $t('作废') }}</el-button
-                >
-              </template>
-            </el-table-column>
           </el-table>
           <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
@@ -218,13 +254,15 @@ export default {
       dialogVisible: false,
       target: '',
       tableData: [],
-      inviteData: []
+      inviteData: [],
+      packageData: [],
+      orderData: [],
+      addressData: []
     }
   },
   created() {
     this.getInfo()
-    this.getInviteList()
-    this.getCardList()
+    this.getPackageList()
   },
   methods: {
     getInfo() {
@@ -255,7 +293,19 @@ export default {
     handleSelect(item) {
       console.log(item)
     },
-    handleClick() {},
+    handleClick() {
+      if (this.activeName === '1') {
+        this.getPackageList()
+      } else if (this.activeName === '2') {
+        this.getOrderList()
+      } else if (this.activeName === '3') {
+        this.getAddressList()
+      } else if (this.activeName === '4') {
+        this.getCardList()
+      } else {
+        this.getInviteList()
+      }
+    },
     editInfo() {},
     //确定合并
     mergeConfirm() {
@@ -311,28 +361,28 @@ export default {
           }
         })
     },
-    failCoupon(id) {
-      this.$confirm(this.$t('确定要作废优惠券吗'), this.$t('提示'), {
-        confirmButtonText: this.$t('确定'),
-        cancelButtonText: this.$t('取消'),
-        type: 'warning'
-      }).then(() => {
-        this.$request.deleteCoupons(this.id, id).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.success()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+    getPackageList() {
+      this.$request.packageList(this.$route.params.id).then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.packageData = res.data
+        }
+      })
+    },
+    getOrderList() {
+      this.$request.orderList(this.$route.params.id).then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.orderData = res.data
+        }
+      })
+    },
+    getAddressList() {
+      this.$request.addressList(this.$route.params.id).then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.addressData = res.data
+        }
       })
     }
   }
@@ -344,7 +394,7 @@ export default {
   font-size: 14px;
   background-color: #fff !important;
   .leftWidth {
-    width: 120px;
+    width: 100px;
     padding: 10px 0;
     display: inline-block;
   }
