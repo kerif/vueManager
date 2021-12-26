@@ -271,8 +271,10 @@ export default {
       this.show = true
     },
     confirm() {
-      let days = this.ruleForm.day
-      this.$request.reserveSettle(days).then(res => {
+      let params = {
+        days: this.ruleForm.day
+      }
+      this.$request.reserveSettle(params).then(res => {
         if (res.ret) {
           this.$notify({
             message: res.msg,

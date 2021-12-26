@@ -59,7 +59,7 @@ export default {
     return {
       fileList: [],
       url: '',
-      param: ''
+      files: null
     }
   },
   created() {},
@@ -80,8 +80,8 @@ export default {
       // 通过FormData对象上传文件
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
-      // this.param = new FormData()
-      // this.param.append(`file`, file)
+      this.files = params
+      console.log(this.files)
       return this.$request.uploadFiles(params)
     },
     uploadExcel(item) {
@@ -123,10 +123,8 @@ export default {
         }
       })
     },
-    submit(file) {
-      // let file = this.param
-      // console.log(file)
-      this.$request.batchAllocate(file).then(res => {
+    submit() {
+      this.$request.batchAllocate(this.files).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
