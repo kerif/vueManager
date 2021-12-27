@@ -6,14 +6,14 @@
     class="abnormal-container"
     @close="clear"
   >
-    <el-form>
+    <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
       <el-form-item :label="$t('异常说明')">
         <el-input
           type="textarea"
           :rows="2"
           :placeholder="$t('请输入内容')"
           :autosize="{ minRows: 2, maxRows: 4 }"
-          v-model="textarea"
+          v-model="ruleForm.textarea"
           class="text"
         >
         </el-input>
@@ -51,7 +51,9 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      textarea: '',
+      ruleForm: {
+        textarea: ''
+      },
       baleImgList: []
     }
   },
@@ -59,6 +61,10 @@ export default {
     showAbnormal: {
       type: Boolean,
       default: false
+    },
+    selectIDs: {
+      type: Array,
+      required: true
     }
   },
   created() {},
@@ -69,8 +75,8 @@ export default {
         image
       })
     },
-    onDeleteImg() {
-      // this.baleImgList.splice(index, 1)
+    onDeleteImg(index) {
+      this.baleImgList.splice(index, 1)
     },
     // 上传图片
     onUpload(file) {
@@ -100,9 +106,30 @@ export default {
     closeAbnormal() {
       this.$emit('passval', false)
     },
-    confirm() {},
+    confirm() {
+      let params = {
+        remark: this.ruleForm.textarea,
+        ids: this.selectIDs,
+        images: this.baleImgList
+      }
+      this.$request.AbnormalPiece(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.$emit('passval', false)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     clear() {
-      this.textarea = ''
+      this.ruleForm.textarea = ''
       this.baleImgList = []
     }
   }

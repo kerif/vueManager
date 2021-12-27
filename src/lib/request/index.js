@@ -796,6 +796,10 @@ exports.commissionsRecords = (id, params) => {
 exports.reserveSettle = params => {
   return $form.put('agents/auto-settled-days', params)
 }
+// 财务 预约结算数据
+exports.getReserve = () => {
+  return $form.get('agents/auto-settled-days')
+}
 // 自提点佣金结算 结算明细
 exports.recordsDetails = (id, params) => {
   return $form.get(`station-commissions/records/${id}/commissions`, { params })
@@ -3250,6 +3254,14 @@ exports.paid = (id, params) => {
 //订单列表 待支付 获取支付方式
 exports.payMethod = () => {
   return $form.get('orders/pay-method')
+}
+// 订单列表 将异常订单恢复
+exports.restoreOrder = params => {
+  return $form.put('orders/exceptional/restore', params)
+}
+// 订单列表 订单设置成异常件
+exports.AbnormalPiece = params => {
+  return $form.put('orders/exceptional', params)
 }
 // 发货单 获取弹窗里可使用的物流状态
 exports.getOrderStatus = () => {

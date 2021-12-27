@@ -2,18 +2,17 @@
   <el-dialog
     :visible.sync="showHandExcept"
     :title="$t('处理异常')"
-    :before-close="close"
     class="handExcept-container"
     @close="clear"
   >
-    <el-form>
+    <el-form :model="ruleForm" ref="ruleForm">
       <el-form-item :label="$t('处理说明')">
         <el-input
           type="textarea"
           :rows="2"
           :placeholder="$t('请输入处理说明')"
           :autosize="{ minRows: 2, maxRows: 4 }"
-          v-model="textarea"
+          v-model="ruleForm.textarea"
           class="text"
         >
         </el-input>
@@ -31,24 +30,48 @@
 export default {
   data() {
     return {
-      textarea: ''
+      ruleForm: {
+        textarea: ''
+      }
     }
   },
   props: {
     showHandExcept: {
       type: Boolean,
       default: false
+    },
+    selectIDs: {
+      type: Array,
+      required: true
     }
   },
   created() {},
   methods: {
-    close() {},
     closeHandExcept() {
-      this.$emit('passval', false)
+      this.$emit('reserve', false)
     },
-    confirm() {},
+    confirm() {
+      let params = {
+        remark: this.ruleForm.textarea
+      }
+      this.$request.restoreOrder(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.$emit('reserve', false)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     clear() {
-      this.textarea = ''
+      this.ruleForm.textarea = ''
     }
   }
 }

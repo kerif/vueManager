@@ -114,7 +114,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button @click="this.show = false">{{ $t('取消') }}</el-button>
+        <el-button @click="cancel">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
@@ -157,6 +157,7 @@ export default {
     this.getList()
     this.getSettleStatistics()
     this.goInit()
+    this.getOrderSettle()
   },
   mixins: [pagination],
   methods: {
@@ -270,6 +271,14 @@ export default {
     orderSettle() {
       this.show = true
     },
+    getOrderSettle() {
+      this.$request.getReserve().then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.ruleForm.day = res.data.days
+        }
+      })
+    },
     confirm() {
       let params = {
         days: this.ruleForm.day
@@ -294,6 +303,9 @@ export default {
     },
     clear() {
       // this.ruleForm.day = ''
+    },
+    cancel() {
+      this.show = false
     }
   }
 }

@@ -7,7 +7,7 @@
       <el-tab-pane :label="`${$t('待发货')} (${countData.delivered || 0})`" name="3"></el-tab-pane>
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已签收')} (${countData.received || 0})`" name="5"></el-tab-pane>
-      <!-- <el-tab-pane :label="$t('异常件')" name="6"></el-tab-pane> -->
+      <el-tab-pane :label="$t('异常件')" name="6"></el-tab-pane>
       <el-tab-pane :label="`${$t('作废订单')} (${countData.invalid || 0})`" name="19"></el-tab-pane>
     </el-tabs>
     <waybill-list-search
@@ -77,13 +77,16 @@
         <el-button class="btn-purple" v-if="activeName === '4'" size="small" @click="signed"
           >{{ $t('改为已签收') }}
         </el-button>
-        <!-- <el-button
+        <el-button
           class="btn-purple"
           v-if="['1', '2', '3', '4'].includes(activeName)"
           @click="goAbnormal"
         >
           {{ $t('转为异常件') }}
-        </el-button> -->
+        </el-button>
+        <el-button class="btn-purple" v-if="activeName === '6'" @click="handleException">
+          {{ $t('处理异常') }}
+        </el-button>
         <el-button
           class="btn-deep-purple"
           v-if="['3', '4', '5'].includes(activeName)"
@@ -103,7 +106,7 @@
       </div> -->
       <div
         style="margin-left: 5px"
-        v-if="oderData.length && ['0', '1', '2', '3', '4', '5'].includes(activeName)"
+        v-if="oderData.length && ['0', '1', '2', '3', '4', '5', '6'].includes(activeName)"
       >
         <el-button size="small" type="success" @click="showTmpDrawer = true" plain>{{
           $t('导出清单')
@@ -188,8 +191,8 @@
         <el-table-column
           width="55"
           align="center"
-          :type="['1', '2', '3', '4', '5'].includes(activeName) ? 'selection' : 'index'"
-          :key="['1', '2', '3', '4', '5'].includes(activeName) ? 'selection' : 'index'"
+          :type="['1', '2', '3', '4', '5', '6'].includes(activeName) ? 'selection' : 'index'"
+          :key="['1', '2', '3', '4', '5', '6'].includes(activeName) ? 'selection' : 'index'"
         ></el-table-column>
         <template v-for="(item, idx) in checkColumn">
           <el-table-column
@@ -404,6 +407,9 @@
                   v-if="['2', '3', '4', '5'].includes(activeName)"
                   @click.native="onLogs(scope.row.id)"
                 >
+                  {{ $t('日志') }}
+                </el-dropdown-item>
+                <el-dropdown-item v-if="activeName === '6'" @click.native="onLog(scope.row.id)">
                   {{ $t('日志') }}
                 </el-dropdown-item>
                 <el-dropdown-item
@@ -1010,7 +1016,12 @@
       @receiveTmp="receiveTmp"
       class="tmp"
     ></waybill-list-tmp-drawer>
-    <abnormal :showAbnormal="showAbnormal" @passval="passval"></abnormal>
+    <abnormal :showAbnormal="showAbnormal" :selectIDs="selectIDs" @passval="passval"></abnormal>
+    <hand-except
+      :showHandExcept="showHandExcept"
+      @reserve="reserve"
+      :selectIDs="selectIDs"
+    ></hand-except>
   </div>
 </template>
 
@@ -1022,6 +1033,7 @@ import WaybillListSearch from './components/waybillListSearch'
 import WaybillListDrawer from './components/waybillListDrawer'
 import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
 import Abnormal from './components/abnormal'
+import HandExcept from './components/handExcept'
 import columnData from '../../../utils/sortData.js'
 import Sortable from 'sortablejs'
 export default {
@@ -1030,7 +1042,8 @@ export default {
     WaybillListDrawer,
     WaybillListTmpDrawer,
     NlePagination,
-    Abnormal
+    Abnormal,
+    HandExcept
   },
   mixins: [pagination],
   name: 'wayBillList',
@@ -1148,7 +1161,8 @@ export default {
       lineId: '',
       uploadType: 2,
       sortDialog: false,
-      showAbnormal: false
+      showAbnormal: false,
+      showHandExcept: false
     }
   },
   activated() {
@@ -1287,6 +1301,32 @@ export default {
               this.checkColumn.push(item)
             }
             break
+          case '6':
+            if (item.id === 'weight') {
+              item.name = this.$t('预计重量') + this.localization.weight_unit
+            }
+            if (item.id === 'fee') {
+              item.name = this.$t('预计费用') + this.localization.currency_unit
+            }
+            if (item.id === 'updated_at') {
+              item.name = this.timeLabel
+            }
+            if (
+              [
+                ...column,
+                'is_saved',
+                'updated_at',
+                'payment_type_name',
+                'logistics_company',
+                'logistics_sn',
+                'coupon_amount',
+                'packed_at',
+                'shipment_sn'
+              ].includes(item.id)
+            ) {
+              this.checkColumn.push(item)
+            }
+            break
           case '19':
             if ([...column, 'logistics_company', 'logistics_sn'].includes(item.id)) {
               this.checkColumn.push(item)
@@ -1372,6 +1412,9 @@ export default {
     passval() {
       this.showAbnormal = false
     },
+    reserve() {
+      this.showHandExcept = false
+    },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {
         this.orderFieldList = res.data
@@ -1447,7 +1490,7 @@ export default {
       let params = {
         page: this.page_params.page,
         size: this.page_params.size,
-        status: this.activeName,
+        status: this.activeName === '6' ? 999 : this.activeName,
         keyword: this.searchFieldData.keyword
       }
       if (this.hasFilterCondition) {
@@ -1476,7 +1519,7 @@ export default {
         ...searchData,
         page: this.page_params.page,
         size: this.page_params.size,
-        status: this.activeName,
+        status: this.activeName === '6' ? 999 : this.activeName,
         keyword: this.searchFieldData.keyword,
         begin_date: searchData.date ? searchData.date[0] : '',
         end_date: searchData.date ? searchData.date[1] : '',
@@ -2346,7 +2389,16 @@ export default {
       this.payment_mode = ''
     },
     goAbnormal() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
       this.showAbnormal = true
+    },
+    handleException() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.showHandExcept = true
     }
     // 饼图
   },
