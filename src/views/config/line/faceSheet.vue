@@ -32,13 +32,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item :label="$t('多箱订单推送方式')">
+      <el-form-item :label="$t('多箱订单推送方式')">
         <el-radio-group v-model="order">
           <el-radio :label="1">{{ $t('按订单推送') }}</el-radio>
           <el-radio :label="2">{{ $t('按箱数推送') }}</el-radio>
         </el-radio-group>
-      </el-form-item> -->
-      <!-- <el-form-item :label="$t('报关信息审核')">
+      </el-form-item>
+      <el-form-item :label="$t('报关信息审核')">
         <el-tooltip
           class="item"
           effect="dark"
@@ -57,7 +57,7 @@
           :inactive-text="$t('关')"
         >
         </el-switch>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveDocking">{{ $t('保存') }}</el-button>
       </el-form-item>

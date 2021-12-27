@@ -2,7 +2,6 @@
   <el-dialog
     :visible.sync="showAbnormal"
     :title="$t('转为异常件')"
-    :before-close="close"
     class="abnormal-container"
     @close="clear"
   >
@@ -87,12 +86,9 @@ export default {
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
-        console.log(res)
         if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
+          res.data.forEach(item => {
+            this.baleImgList.push(item.path)
           })
         } else {
           this.$message({
@@ -102,7 +98,6 @@ export default {
         }
       })
     },
-    close() {},
     closeAbnormal() {
       this.$emit('passval', false)
     },
@@ -151,6 +146,36 @@ export default {
   }
   .text {
     width: 80%;
+  }
+  .avatar-uploader {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 50px;
+  }
+  .goods-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+  .img-item {
+    display: inline-block;
+    border: 1px dashed #d9d9d9;
+    width: 148px;
+    height: 148px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      .model-box,
+      .operat-box {
+        opacity: 1;
+        transition: all 0.5s ease-in;
+      }
+    }
   }
 }
 </style>

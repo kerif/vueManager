@@ -78,7 +78,7 @@
           >{{ $t('改为已签收') }}
         </el-button>
         <el-button
-          class="btn-purple"
+          class="btn-light-red"
           v-if="['1', '2', '3', '4'].includes(activeName)"
           @click="goAbnormal"
         >
@@ -409,7 +409,10 @@
                 >
                   {{ $t('日志') }}
                 </el-dropdown-item>
-                <el-dropdown-item v-if="activeName === '6'" @click.native="onLog(scope.row.id)">
+                <el-dropdown-item
+                  v-if="activeName === '6'"
+                  @click.native="operateLog(scope.row.id)"
+                >
                   {{ $t('日志') }}
                 </el-dropdown-item>
                 <el-dropdown-item
@@ -1022,6 +1025,7 @@
       @reserve="reserve"
       :selectIDs="selectIDs"
     ></hand-except>
+    <abnormal-log :showExplain="showExplain"></abnormal-log>
   </div>
 </template>
 
@@ -1034,6 +1038,7 @@ import WaybillListDrawer from './components/waybillListDrawer'
 import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
 import Abnormal from './components/abnormal'
 import HandExcept from './components/handExcept'
+import AbnormalLog from './components/abnormalLog'
 import columnData from '../../../utils/sortData.js'
 import Sortable from 'sortablejs'
 export default {
@@ -1043,7 +1048,8 @@ export default {
     WaybillListTmpDrawer,
     NlePagination,
     Abnormal,
-    HandExcept
+    HandExcept,
+    AbnormalLog
   },
   mixins: [pagination],
   name: 'wayBillList',
@@ -1162,7 +1168,9 @@ export default {
       uploadType: 2,
       sortDialog: false,
       showAbnormal: false,
-      showHandExcept: false
+      showHandExcept: false,
+      showExplain: false,
+      logId: ''
     }
   },
   activated() {
@@ -2251,6 +2259,11 @@ export default {
           this.getList()
         }
       )
+    },
+    operateLog(id) {
+      console.log(id)
+      this.logId = id
+      this.showExplain = true
     },
     copyNumber(orderSn) {
       const input = document.createElement('input')

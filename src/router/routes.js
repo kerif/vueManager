@@ -206,7 +206,7 @@ const Freight = loadonDemand('order/freight/freight')
 // 订单 运费查询 路线详情
 const freightDetail = loadonDemand('order/freight/freightDetail')
 // 订单 申报信息
-// const declareInfo = loadonDemand('order/declare/declareInfo')
+const declareInfo = loadonDemand('order/declare/declareInfo')
 // 订单 包裹订单概览
 const orderEcharts = loadonDemand('order/echarts/orderEcharts')
 // 营销管理 会员体制
@@ -815,17 +815,17 @@ export default [
               parent: '/order/waybill_list'
             }
           },
-          // {
-          //   path: '/order/declareInfo',
-          //   name: 'declareInfo',
-          //   component: declareInfo,
-          //   id: 405,
-          //   meta: {
-          //     level: 2,
-          //     group: '订单',
-          //     name: '申报信息'
-          //   }
-          // },
+          {
+            path: '/order/declareInfo',
+            name: 'declareInfo',
+            component: declareInfo,
+            id: 405,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '申报信息'
+            }
+          },
           {
             path: '/order/orderEcharts',
             name: 'orderEcharts',
