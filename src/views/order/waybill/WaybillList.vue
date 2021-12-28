@@ -17,7 +17,7 @@
       v-on:submit="goMatch"
     ></waybill-list-search>
     <div class="header-range">
-      <div v-if="oderData.length && ['1', '2', '3', '4', '5'].includes(activeName)">
+      <div v-if="oderData.length && ['1', '2', '3', '4', '5', '6'].includes(activeName)">
         <el-button class="btn-yellow" v-if="activeName === '1'" @click="oneBatch" size="small">{{
           $t('一键批量打包')
         }}</el-button>
@@ -84,7 +84,12 @@
         >
           {{ $t('转为异常件') }}
         </el-button>
-        <el-button class="btn-purple" v-if="activeName === '6'" @click="handleException">
+        <el-button
+          class="btn-purple"
+          v-if="activeName === '6'"
+          size="small"
+          @click="handleException"
+        >
           {{ $t('处理异常') }}
         </el-button>
         <el-button
@@ -376,7 +381,7 @@
                   {{ $t('团购') }}
                 </el-dropdown-item>
                 <el-dropdown-item
-                  v-if="['1', '2', '3'].includes(activeName)"
+                  v-if="['1', '2', '3', '6'].includes(activeName)"
                   @click.native="
                     invalidOrder(
                       scope.row.id,

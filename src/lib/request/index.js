@@ -2380,6 +2380,26 @@ exports.orderCompare = params => {
 exports.packageCompare = params => {
   return $form.get('order-overviews/package/compare-data', { params })
 }
+// 订单 申报信息 列表查询
+exports.declareList = params => {
+  return $form.get('declare', { params })
+}
+// 订单 申报信息 获取详情
+exports.declareDetail = id => {
+  return $form.get(`declare/${id}`)
+}
+// 订单 申报信息 编辑
+exports.editDeclare = (id, params) => {
+  return $form.put(`declare/${id}`, params)
+}
+// 订单 申报信息 提交
+exports.submitDecalre = ids => {
+  return $form.put('declare/commit', ids)
+}
+// 订单 申报信息 获取编辑初始化信息
+exports.initDeclare = () => {
+  return $form.get('declare/init')
+}
 // 财务 财务概览 柱状图
 exports.financeColumnar = params => {
   return $form.get('transaction-overviews/trade-count', { params })
