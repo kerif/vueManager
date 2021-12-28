@@ -1024,7 +1024,7 @@
       @receiveTmp="receiveTmp"
       class="tmp"
     ></waybill-list-tmp-drawer>
-    <abnormal :showAbnormal="showAbnormal" :selectIDs="selectIDs" @passval="passval"></abnormal>
+    <abnormal :showAbnormal="showAbnormal" :selectIDs="selectIDs" @passVal="passVal"></abnormal>
     <hand-except
       :showHandExcept="showHandExcept"
       @reserve="reserve"
@@ -1422,7 +1422,7 @@ export default {
     receiveTmp() {
       this.showTmpDrawer = false
     },
-    passval() {
+    passVal() {
       this.showAbnormal = false
     },
     reserve() {

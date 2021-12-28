@@ -1152,6 +1152,10 @@ exports.getLocationList = (id, areaId, params) => {
 exports.getExpressLine = id => {
   return $form.get(`express-lines/${id}`)
 }
+// 货站 拣货日志 列表查询
+exports.getPackageLog = params => {
+  return $form.get('package-process-logs', { params })
+}
 // 路线 获取语言详情
 exports.lineLang = (id, params) => {
   return $form.get(`express-lines/${id}`, { params })

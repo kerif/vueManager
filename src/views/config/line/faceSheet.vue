@@ -77,7 +77,7 @@ export default {
         docking_type: '',
         channel_code: '',
         push_type: 1,
-        third_push_now: false
+        third_push_now: 0
       },
       dockingList: [],
       channelList: []

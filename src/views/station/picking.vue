@@ -13,6 +13,7 @@
       <el-tab-pane :label="$t('入库日志')" name="1"></el-tab-pane>
       <!-- 拣货日志 -->
       <el-tab-pane :label="$t('拣货日志')" name="2"></el-tab-pane>
+      <el-tab-pane :label="$t('包裹日志')" name="3"></el-tab-pane>
     </el-tabs>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -225,6 +226,20 @@ export default {
               message: res.msg,
               type: 'warning'
             })
+          }
+        })
+    },
+    getPackage() {
+      // this.tableLoading = true
+      this.$request
+        .getPackageLog({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          if (res.ret) {
+            console.log(res.data)
           }
         })
     }

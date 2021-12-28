@@ -2,6 +2,7 @@
   <el-dialog
     :visible.sync="showAbnormal"
     :title="$t('转为异常件')"
+    :before-close="close"
     class="abnormal-container"
     @close="clear"
   >
@@ -39,7 +40,7 @@
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button @click="closeAbnormal">{{ $t('取消') }}</el-button>
+      <el-button @click="close">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
     </div>
   </el-dialog>
@@ -98,8 +99,8 @@ export default {
         }
       })
     },
-    closeAbnormal() {
-      this.$emit('passval', false)
+    close() {
+      this.$emit('passVal', false)
     },
     confirm() {
       let params = {
@@ -114,7 +115,7 @@ export default {
             title: this.$t('成功'),
             message: res.msg
           })
-          this.$emit('passval', false)
+          this.$emit('passVal', false)
         } else {
           this.$message({
             message: res.msg,
