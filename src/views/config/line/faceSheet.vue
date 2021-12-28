@@ -33,7 +33,7 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('多箱订单推送方式')">
-        <el-radio-group v-model="order">
+        <el-radio-group v-model="landing.push_type">
           <el-radio :label="1">{{ $t('按订单推送') }}</el-radio>
           <el-radio :label="2">{{ $t('按箱数推送') }}</el-radio>
         </el-radio-group>
@@ -42,13 +42,17 @@
         <el-tooltip
           class="item"
           effect="dark"
-          :content="$t('开启时,订单推送前需要后台进行报关信息审核;关闭时,客户支付后直接推送订单')"
+          :content="
+            $t(
+              '开启直接提交：开启时，客户支付后直接推送订单；关闭时，订单需要后台在尽心报关信息审核'
+            )
+          "
           placement="top"
         >
           <span class="el-icon-warning-outline icon-info"></span>
         </el-tooltip>
         <el-switch
-          v-model="info"
+          v-model="landing.third_push_now"
           :active-text="$t('开')"
           :active-value="1"
           :inactive-value="0"
@@ -71,12 +75,12 @@ export default {
     return {
       landing: {
         docking_type: '',
-        channel_code: ''
+        channel_code: '',
+        push_type: 1,
+        third_push_now: false
       },
       dockingList: [],
-      channelList: [],
-      order: 1,
-      info: false
+      channelList: []
     }
   },
   created() {
@@ -111,6 +115,8 @@ export default {
           this.landing.docking_type = res.data.express_company_id
           this.getChannel()
           this.landing.channel_code = res.data.channel_code
+          this.landing.push_type = res.data.push_type
+          this.landing.third_push_now = res.data.third_push_now
         }
       })
     },

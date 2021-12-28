@@ -132,9 +132,9 @@
         </el-table>
       </div>
       <div v-else>
-        <div v-for="item in this.infoData" :key="item.id">
+        <div v-for="item in infoData" :key="item.id">
           <div>{{ item.box_sn }}</div>
-          <add-btn @click.native="addNewLine">{{ $t('新增') }}</add-btn>
+          <add-btn @click.native="addNewLine(item.items)">{{ $t('新增') }}</add-btn>
           <el-table :data="item.items" border style="width: 100%">
             <el-table-column type="index" label="#" width="60"> </el-table-column>
             <el-table-column :label="$t('中文品名')">
@@ -192,7 +192,7 @@
               <el-button
                 size="small"
                 class="btn-light-red"
-                @click="deleteInfo(scope.$index, item.items)"
+                @click="deleteInfoList(scope.$index, item.items)"
                 >{{ $t('删除') }}</el-button
               >
             </el-table-column>
@@ -313,8 +313,13 @@ export default {
     addNew() {
       this.infoData.push({})
     },
-    addNewLine() {},
+    addNewLine(list) {
+      list.push({})
+    },
     deleteInfo(index, rows) {
+      rows.splice(index, 1)
+    },
+    deleteInfoList(index, rows) {
       rows.splice(index, 1)
     },
     selectionChange(selection) {
