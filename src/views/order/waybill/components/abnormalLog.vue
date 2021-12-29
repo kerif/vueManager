@@ -6,24 +6,18 @@
     class="abnormalLog-container"
     @close="clear"
   >
-    <div>
-      <el-row :gutter="20">
-        <el-col :span="6">{{ $t('操作记录') }}</el-col>
-        <el-col :span="18"></el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="6">{{ $t('操作说明') }}</el-col>
-        <el-col :span="18"></el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="6">{{ $t('操作人') }}</el-col>
-        <el-col :span="18"></el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="6">{{ $t('时间') }}</el-col>
-        <el-col :span="18"></el-col>
-      </el-row>
-    </div>
+    <el-table :data="operatorData" border style="width: 100%">
+      <el-table-column type="index" width="50"></el-table-column>
+      <!-- 操作 -->
+      <el-table-column
+        :label="$t('操作')"
+        prop="log"
+        :show-overflow-tooltip="true"
+        width="400"
+      ></el-table-column>
+      <!-- 时间 -->
+      <el-table-column :label="$t('时间')" prop="created_at"></el-table-column>
+    </el-table>
     <div slot="footer">
       <el-button @click="close">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('去处理') }}</el-button>
@@ -34,7 +28,10 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      operatorData: [],
+      localization: {}
+    }
   },
   props: {
     showExplain: {
@@ -50,6 +47,17 @@ export default {
   methods: {
     close() {
       this.$emit('getLog', false)
+    },
+    getList() {
+      this.$request.getOperate(this.logId).then(res => {
+        if (res.ret) {
+          this.operatorData = res.data.logs
+          this.localization = res.localization
+        }
+      })
+    },
+    init() {
+      this.getList()
     },
     confirm() {
       this.$request.exceptDescription(this.logId).then(res => {
@@ -68,7 +76,6 @@ export default {
         }
       })
     },
-    cancel() {},
     clear() {}
   }
 }

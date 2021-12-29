@@ -197,7 +197,7 @@ export default {
         },
         {
           value: 3,
-          label: this.$t('单箱固定费用')
+          label: this.$t('单箱固定费用(总箱数-1)')
         },
         {
           value: 4,

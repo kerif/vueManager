@@ -40,6 +40,14 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('第三方对接状态')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.third_status === 0">{{ $t('待对接') }}</span>
+          <span v-if="scope.row.third_status === 1">{{ $t('对接中') }}</span>
+          <span v-if="scope.row.third_status === 2">{{ $t('对接成功') }}</span>
+          <span v-if="scope.row.third_status === 3">{{ $t('对接失败') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="express_line_name" :label="$t('线路名称')"> </el-table-column>
       <el-table-column prop="country_name" :label="$t('收货国家')"> </el-table-column>
       <el-table-column prop="value" :label="$t('申报价值')"> </el-table-column>
@@ -56,9 +64,16 @@
           <el-button
             size="small"
             class="btn-deep-blue"
-            v-else
+            v-if="scope.row.status === 1"
             @click="getInfo(scope.row.id, scope.row.status)"
             >{{ $t('查看') }}</el-button
+          >
+          <el-button
+            size="small"
+            class="btn-light-red"
+            v-if="scope.row.third_status === 3"
+            @click="resubmit(scope.row.id)"
+            >{{ $t('重新提交') }}</el-button
           >
         </template>
       </el-table-column>
@@ -108,7 +123,7 @@
               <el-input v-model="scope.row.value"></el-input>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('币种')">
+          <el-table-column :label="$t('币种')" width="140">
             <template slot-scope="scope">
               <el-select v-model="scope.row.currency_name" :placeholder="$t('请选择币种')">
                 <el-option
@@ -135,7 +150,7 @@
         <div v-for="item in infoData" :key="item.id">
           <div>{{ item.box_sn }}</div>
           <add-btn @click.native="addNewLine(item.items)">{{ $t('新增') }}</add-btn>
-          <el-table :data="item.items" border style="width: 100%">
+          <el-table :data="item.items" border style="width: 100%; margin: 10px 0">
             <el-table-column type="index" label="#" width="60"> </el-table-column>
             <el-table-column :label="$t('中文品名')">
               <template slot-scope="scope">
@@ -175,7 +190,7 @@
                 <el-input v-model="scope.row.value"></el-input>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('币种')">
+            <el-table-column :label="$t('币种')" width="140">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.currency_name" :placeholder="$t('请选择币种')">
                   <el-option
@@ -201,7 +216,7 @@
       </div>
       <div slot="footer">
         <el-button @click="cancel">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="submit">{{ $t('提交') }}</el-button>
+        <el-button type="primary" @click="submit">{{ $t('保存') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -297,6 +312,25 @@ export default {
             message: res.msg,
             type: 'success'
           })
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    resubmit(id) {
+      this.$request.submitDecalre({ ids: [id] }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.getList()
         } else {
           this.$notify({
             title: this.$t('操作失败'),

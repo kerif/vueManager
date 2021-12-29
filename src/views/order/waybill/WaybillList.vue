@@ -1185,7 +1185,7 @@ export default {
       showAbnormal: false,
       showHandExcept: false,
       showExplain: false,
-      logId: null
+      logId: ''
     }
   },
   activated() {
@@ -2281,7 +2281,6 @@ export default {
       )
     },
     operateLog(id) {
-      console.log(id)
       this.logId = id
       this.showExplain = true
     },
