@@ -7,7 +7,10 @@
       <el-tab-pane :label="`${$t('待发货')} (${countData.delivered || 0})`" name="3"></el-tab-pane>
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已签收')} (${countData.received || 0})`" name="5"></el-tab-pane>
-      <el-tab-pane :label="$t('异常件')" name="6"></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('异常件')} (${countData.exceptional || 0})`"
+        name="6"
+      ></el-tab-pane>
       <el-tab-pane :label="`${$t('作废订单')} (${countData.invalid || 0})`" name="19"></el-tab-pane>
     </el-tabs>
     <waybill-list-search
@@ -79,6 +82,7 @@
         </el-button>
         <el-button
           class="btn-light-red"
+          size="small"
           v-if="['1', '2', '3', '4'].includes(activeName)"
           @click="goAbnormal"
         >
@@ -1030,7 +1034,7 @@
       @reserve="reserve"
       :selectIDs="selectIDs"
     ></hand-except>
-    <abnormal-log :showExplain="showExplain"></abnormal-log>
+    <abnormal-log :showExplain="showExplain" @getLog="getLog"></abnormal-log>
   </div>
 </template>
 
@@ -1424,6 +1428,9 @@ export default {
     },
     passVal() {
       this.showAbnormal = false
+    },
+    getLog() {
+      this.showExplain = false
     },
     reserve() {
       this.showHandExcept = false

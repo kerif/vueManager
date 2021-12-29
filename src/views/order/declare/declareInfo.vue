@@ -87,7 +87,7 @@
           </el-table-column>
           <el-table-column :label="$t('单位')">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.unit_name" placeholder="请选择单位">
+              <el-select v-model="scope.row.unit_name" :placeholder="$t('请选择单位')">
                 <el-option
                   v-for="item in unitList"
                   :key="item.id"
@@ -110,7 +110,7 @@
           </el-table-column>
           <el-table-column :label="$t('币种')">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.currency_name" placeholder="请选择币种">
+              <el-select v-model="scope.row.currency_name" :placeholder="$t('请选择币种')">
                 <el-option
                   v-for="item in currencyList"
                   :key="item.id"
@@ -154,7 +154,7 @@
             </el-table-column>
             <el-table-column :label="$t('单位')">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.unit_name" placeholder="请选择单位">
+                <el-select v-model="scope.row.unit_name" :placeholder="$t('请选择单位')">
                   <el-option
                     v-for="item in unitList"
                     :key="item.id"
@@ -177,7 +177,7 @@
             </el-table-column>
             <el-table-column :label="$t('币种')">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.currency_name" placeholder="请选择币种">
+                <el-select v-model="scope.row.currency_name" :placeholder="$t('请选择币种')">
                   <el-option
                     v-for="item in currencyList"
                     :key="item.id"

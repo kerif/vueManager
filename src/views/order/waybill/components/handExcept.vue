@@ -2,6 +2,7 @@
   <el-dialog
     :visible.sync="showHandExcept"
     :title="$t('处理异常')"
+    :before-close="close"
     class="handExcept-container"
     @close="clear"
   >
@@ -20,7 +21,7 @@
       <div class="remark">{{ $t('注：处理完成后，订单将恢复到异常前的状态，继续正常流转') }}</div>
     </el-form>
     <div slot="footer">
-      <el-button @click="closeHandExcept">{{ $t('取消') }}</el-button>
+      <el-button @click="close">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('处理完成') }}</el-button>
     </div>
   </el-dialog>
@@ -47,7 +48,7 @@ export default {
   },
   created() {},
   methods: {
-    closeHandExcept() {
+    close() {
       this.$emit('reserve', false)
     },
     confirm() {

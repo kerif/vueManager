@@ -63,11 +63,13 @@
         <!-- 重量kg -->
         <el-table-column
           :label="'重量' + this.localization.weight_unit"
+          v-if="activeName !== '3'"
           prop="weight"
         ></el-table-column>
         <!-- 长宽高cm -->
         <el-table-column
           :label="$t('长宽高') + this.localization.length_unit"
+          v-if="activeName !== '3'"
           prop="dimension"
         ></el-table-column>
         <!-- 物品属性 -->
@@ -89,8 +91,31 @@
           prop="user_id"
           v-if="activeName === '1'"
         ></el-table-column>
+        <!-- 包裹id -->
+        <el-table-column :label="$t('包裹ID')" v-if="activeName === '3'">
+          <template slot-scope="scope">
+            <span>{{ scope.row.package_id }}</span>
+          </template>
+        </el-table-column>
+        <!-- 内容 -->
+        <el-table-column
+          :label="$t('内容')"
+          prop="content"
+          v-if="activeName === '3'"
+        ></el-table-column>
+        <!-- 操作人ID -->
+        <el-table-column :label="$t('操作人ID')" v-if="activeName === '3'">
+          <template slot-scope="scope">
+            <span>{{ scope.row.operator_id }}</span>
+          </template>
+        </el-table-column>
         <!-- 备注 -->
-        <el-table-column :label="$t('备注')" prop="remark" width="200"></el-table-column>
+        <el-table-column
+          :label="$t('备注')"
+          v-if="activeName !== '3'"
+          prop="remark"
+          width="200"
+        ></el-table-column>
         <!-- 打包图片 -->
         <el-table-column :label="$t('打包图片')" v-if="activeName === '2'" prop="pictures">
           <template slot-scope="scope">
@@ -167,8 +192,10 @@ export default {
     getList() {
       if (this.activeName === '1') {
         this.getOrder()
-      } else {
+      } else if (this.activeName === '2') {
         this.getPick()
+      } else {
+        this.getPackage()
       }
     },
     // 入库日志
@@ -230,7 +257,7 @@ export default {
         })
     },
     getPackage() {
-      // this.tableLoading = true
+      this.tableLoading = true
       this.$request
         .getPackageLog({
           keyword: this.page_params.keyword,
@@ -238,8 +265,21 @@ export default {
           size: this.page_params.size
         })
         .then(res => {
+          this.tableLoading = false
           if (res.ret) {
-            console.log(res.data)
+            this.oderData = res.data
+            this.localization = res.localization
+            this.page_params.page = res.data.current_page
+            this.page_params.total = res.data.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
           }
         })
     }
@@ -265,7 +305,7 @@ export default {
     overflow-y: auto !important;
   }
   .tabLength {
-    width: 200px !important;
+    width: 300px !important;
   }
   .img_box {
     text-align: center;

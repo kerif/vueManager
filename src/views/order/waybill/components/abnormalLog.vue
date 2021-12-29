@@ -2,6 +2,7 @@
   <el-dialog
     :visible.sync="showExplain"
     :title="$t('异常说明')"
+    :before-close="close"
     class="abnormalLog-container"
     @close="clear"
   >
@@ -24,7 +25,7 @@
       </el-row>
     </div>
     <div slot="footer">
-      <el-button @click="cancel">{{ $t('取消') }}</el-button>
+      <el-button @click="close">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('去处理') }}</el-button>
     </div>
   </el-dialog>
@@ -47,8 +48,8 @@ export default {
   },
   created() {},
   methods: {
-    closeAbnormal() {
-      this.$emit('passval', false)
+    close() {
+      this.$emit('getLog', false)
     },
     confirm() {},
     cancel() {},
