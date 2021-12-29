@@ -1040,7 +1040,7 @@
       @reserve="reserve"
       :selectIDs="selectIDs"
     ></hand-except>
-    <abnormal-log :showExplain="showExplain" @getLog="getLog"></abnormal-log>
+    <abnormal-log :showExplain="showExplain" @getLog="getLog" :logId="logId"></abnormal-log>
   </div>
 </template>
 
@@ -1185,7 +1185,7 @@ export default {
       showAbnormal: false,
       showHandExcept: false,
       showExplain: false,
-      logId: ''
+      logId: null
     }
   },
   activated() {

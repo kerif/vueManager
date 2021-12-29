@@ -2404,6 +2404,10 @@ exports.submitDecalre = ids => {
 exports.initDeclare = () => {
   return $form.get('declare/init')
 }
+// 订单 异常件 异常说明
+exports.exceptDescription = id => {
+  return $form.get(`orders/${id}/exception`)
+}
 // 财务 财务概览 柱状图
 exports.financeColumnar = params => {
   return $form.get('transaction-overviews/trade-count', { params })

@@ -40,18 +40,34 @@ export default {
     showExplain: {
       type: Boolean,
       default: false
+    },
+    logId: {
+      type: [Number, String],
+      required: true
     }
-    // logId: {
-    //   type: Number,
-    //   required: true
-    // }
   },
   created() {},
   methods: {
     close() {
       this.$emit('getLog', false)
     },
-    confirm() {},
+    confirm() {
+      this.$request.exceptDescription(this.logId).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.$emit('getLog', false)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     cancel() {},
     clear() {}
   }
