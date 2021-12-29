@@ -303,6 +303,12 @@
                   {{ scope.row.shipment_sn }}
                 </span>
               </template>
+              <template v-else-if="item.id === 'exceptional_at'">
+                <span>{{ scope.row.exceptional_at }}</span>
+              </template>
+              <template v-else-if="item.id === 'exceptional_operator'">
+                <span>{{ scope.row.exceptional_operator }}</span>
+              </template>
               <template v-else>{{ scope.row[item.id] }}</template>
             </template>
           </el-table-column>
@@ -1338,6 +1344,8 @@ export default {
                 'logistics_sn',
                 'coupon_amount',
                 'packed_at',
+                'exceptional_at',
+                'exceptional_operator',
                 'shipment_sn'
               ].includes(item.id)
             ) {

@@ -368,7 +368,10 @@ export default {
       })
     },
     submit() {
-      this.$request.editDeclare(this.orderId, this.infoData).then(res => {
+      let params = {
+        items: this.infoData
+      }
+      this.$request.editDeclare(this.orderId, params).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),

@@ -123,5 +123,17 @@ export default [
     name: '所属发货单',
     width: '140',
     checked: true
+  },
+  {
+    id: 'exceptional_at',
+    name: '异常时间',
+    width: '140',
+    checked: true
+  },
+  {
+    id: 'exceptional_operator',
+    name: '操作人',
+    width: '140',
+    checked: true
   }
 ]

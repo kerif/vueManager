@@ -79,7 +79,7 @@ export default {
 </script>
 
 <style lang="scss">
-.abnormal-container {
+.handExcept-container {
   font-size: 14px;
   .el-dialog__header {
     background-color: #0e102a;
