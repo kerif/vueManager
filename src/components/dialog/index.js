@@ -127,6 +127,7 @@ import addRule from './addRule.vue'
 import batchToTransport from './batchToTransport.vue'
 import setRules from './setRules.vue'
 import batchAllocate from './batchAllocate.vue'
+import abnormalLog from './abnormalLog.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -253,6 +254,7 @@ const AddRuleController = Vue.extend(addRule)
 const BatchToTransportController = Vue.extend(batchToTransport)
 const SetRulesController = Vue.extend(setRules)
 const BatchAllocateController = Vue.extend(batchAllocate)
+const AbnormalLogController = Vue.extend(abnormalLog)
 const mixin = {
   data() {
     return {
@@ -519,6 +521,13 @@ function initInstance(type) {
     // 订单 拣货日志
     case 'pickingLog':
       instance = new PickingLogController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 订单 异常件 异常说明
+    case 'abnormalLog':
+      instance = new AbnormalLogController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

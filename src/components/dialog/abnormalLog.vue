@@ -1,8 +1,7 @@
 <template>
   <el-dialog
-    :visible.sync="showExplain"
+    :visible.sync="show"
     :title="$t('异常说明')"
-    :before-close="close"
     class="abnormalLog-container"
     @close="clear"
   >
@@ -33,23 +32,10 @@ export default {
       localization: {}
     }
   },
-  props: {
-    showExplain: {
-      type: Boolean,
-      default: false
-    },
-    logId: {
-      type: [Number, String],
-      required: true
-    }
-  },
   created() {},
   methods: {
-    close() {
-      this.$emit('getLog', false)
-    },
     getList() {
-      this.$request.getOperate(this.logId).then(res => {
+      this.$request.getOperate(this.id).then(res => {
         if (res.ret) {
           this.operatorData = res.data.logs
           this.localization = res.localization
@@ -60,14 +46,14 @@ export default {
       this.getList()
     },
     confirm() {
-      this.$request.exceptDescription(this.logId).then(res => {
+      this.$request.exceptDescription(this.id).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
             title: this.$t('成功'),
             message: res.msg
           })
-          this.$emit('getLog', false)
+          this.show = false
         } else {
           this.$message({
             message: res.msg,
@@ -76,7 +62,10 @@ export default {
         }
       })
     },
-    clear() {}
+    clear() {},
+    close() {
+      this.show = false
+    }
   }
 }
 </script>

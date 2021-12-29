@@ -251,6 +251,9 @@
                 <span v-if="scope.row.is_saved === 1">{{ $t('待提交') }}</span>
                 <span v-else></span>
               </template>
+              <template v-else-if="item.id === 'status_name'">
+                {{ scope.row.status_name }}
+              </template>
               <template v-else-if="item.id === 'express_line'">
                 {{ scope.row.express_line.cn_name }}
               </template>
@@ -1040,7 +1043,6 @@
       @reserve="reserve"
       :selectIDs="selectIDs"
     ></hand-except>
-    <abnormal-log :showExplain="showExplain" @getLog="getLog" :logId="logId"></abnormal-log>
   </div>
 </template>
 
@@ -1053,7 +1055,6 @@ import WaybillListDrawer from './components/waybillListDrawer'
 import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
 import Abnormal from './components/abnormal'
 import HandExcept from './components/handExcept'
-import AbnormalLog from './components/abnormalLog'
 import columnData from '../../../utils/sortData.js'
 import Sortable from 'sortablejs'
 export default {
@@ -1063,8 +1064,7 @@ export default {
     WaybillListTmpDrawer,
     NlePagination,
     Abnormal,
-    HandExcept,
-    AbnormalLog
+    HandExcept
   },
   mixins: [pagination],
   name: 'wayBillList',
@@ -1184,7 +1184,6 @@ export default {
       sortDialog: false,
       showAbnormal: false,
       showHandExcept: false,
-      showExplain: false,
       logId: ''
     }
   },
@@ -1337,7 +1336,7 @@ export default {
             if (
               [
                 ...column,
-                'is_saved',
+                'status_name',
                 'updated_at',
                 'payment_type_name',
                 'logistics_company',
@@ -2281,8 +2280,15 @@ export default {
       )
     },
     operateLog(id) {
-      this.logId = id
-      this.showExplain = true
+      dialog(
+        {
+          type: 'abnormalLog',
+          id: id
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     copyNumber(orderSn) {
       const input = document.createElement('input')

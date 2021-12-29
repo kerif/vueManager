@@ -135,5 +135,11 @@ export default [
     name: '操作人',
     width: '140',
     checked: true
+  },
+  {
+    id: 'status_name',
+    name: '状态',
+    width: '140',
+    checked: true
   }
 ]
