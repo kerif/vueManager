@@ -55,7 +55,7 @@ export default {
     confirm() {
       let params = {
         ids: this.selectIDs,
-        remark: this.ruleForm.textarea
+        restore_remark: this.ruleForm.textarea
       }
       this.$request.restoreOrder(params).then(res => {
         if (res.ret) {

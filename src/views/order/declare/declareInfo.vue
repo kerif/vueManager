@@ -216,7 +216,7 @@
       </div>
       <div slot="footer">
         <el-button @click="cancel">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="submit">{{ $t('保存') }}</el-button>
+        <el-button type="primary" @click="submit(item)">{{ $t('保存') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -347,8 +347,8 @@ export default {
     addNew() {
       this.infoData.push({})
     },
-    addNewLine(list) {
-      list.push({})
+    addNewLine(item) {
+      item.push({})
     },
     deleteInfo(index, rows) {
       rows.splice(index, 1)
@@ -402,10 +402,11 @@ export default {
       })
     },
     submit() {
-      let params = {
-        items: this.infoData
-      }
-      this.$request.editDeclare(this.orderId, params).then(res => {
+      // this.currencyList.forEach(ele => {
+      //   if(ele.id === item.id){
+      //   }
+      // })
+      this.$request.editDeclare(this.orderId, { items: this.infoData }).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
