@@ -197,23 +197,23 @@ export default {
         },
         {
           value: 3,
-          label: this.$t('单箱固定费用')
+          label: this.$t('单箱固定费用(总箱数)')
         },
         {
           value: 4,
-          label: this.$t('单箱固定费用(总箱数-1)')
-        },
-        {
-          value: 5,
           label: this.$t('单位计费重量固定费用')
         },
         {
-          value: 6,
+          value: 5,
           label: this.$t('单位实际重量固定费用')
         },
         {
-          value: 7,
+          value: 6,
           label: this.$t('申报价值比例')
+        },
+        {
+          value: 7,
+          label: this.$t('单箱固定费用(总箱数-1)')
         }
       ],
       forcedList: [

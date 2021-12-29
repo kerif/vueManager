@@ -46,21 +46,7 @@ export default {
       this.getList()
     },
     confirm() {
-      this.$request.exceptDescription(this.id).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('成功'),
-            message: res.msg
-          })
-          this.show = false
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.show = false
     },
     clear() {},
     close() {

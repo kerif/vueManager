@@ -1020,6 +1020,24 @@
         }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="showExplain" :title="$t('异常说明')" class="abnormalLog-container">
+      <el-table :data="operatorData" border style="width: 100%">
+        <el-table-column type="index" width="50"></el-table-column>
+        <!-- 操作 -->
+        <el-table-column
+          :label="$t('操作')"
+          prop="log"
+          :show-overflow-tooltip="true"
+          width="400"
+        ></el-table-column>
+        <!-- 时间 -->
+        <el-table-column :label="$t('时间')" prop="created_at"></el-table-column>
+      </el-table>
+      <div slot="footer">
+        <el-button @click="showExplain = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirmExcept">{{ $t('去处理') }}</el-button>
+      </div>
+    </el-dialog>
     <!-- 货量统计 -->
     <waybill-list-drawer
       :showDrawer="showDrawer"
@@ -1184,7 +1202,9 @@ export default {
       sortDialog: false,
       showAbnormal: false,
       showHandExcept: false,
-      logId: ''
+      logId: '',
+      showExplain: false,
+      operatorData: []
     }
   },
   activated() {
@@ -1435,9 +1455,6 @@ export default {
     },
     passVal() {
       this.showAbnormal = false
-    },
-    getLog() {
-      this.showExplain = false
     },
     reserve() {
       this.showHandExcept = false
@@ -2280,15 +2297,17 @@ export default {
       )
     },
     operateLog(id) {
-      dialog(
-        {
-          type: 'abnormalLog',
-          id: id
-        },
-        () => {
-          this.getList()
+      this.showExplain = true
+      this.$request.getOperate(id).then(res => {
+        if (res.ret) {
+          this.operatorData = res.data.logs
+          this.localization = res.localization
         }
-      )
+      })
+    },
+    confirmExcept() {
+      this.showExplain = false
+      this.showHandExcept = true
     },
     copyNumber(orderSn) {
       const input = document.createElement('input')

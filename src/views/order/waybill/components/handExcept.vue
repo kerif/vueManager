@@ -29,6 +29,7 @@
 
 <script>
 export default {
+  name: 'handExcept',
   data() {
     return {
       ruleForm: {
@@ -53,6 +54,7 @@ export default {
     },
     confirm() {
       let params = {
+        ids: this.selectIDs,
         remark: this.ruleForm.textarea
       }
       this.$request.restoreOrder(params).then(res => {
