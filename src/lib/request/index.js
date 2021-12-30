@@ -2408,6 +2408,10 @@ exports.initDeclare = () => {
 exports.exceptDescription = id => {
   return $form.get(`orders/${id}/exception`)
 }
+// 订单 申报信息 对接日志
+exports.dockingLog = id => {
+  return $form.get(`declare/${id}/third-logs`)
+}
 // 财务 财务概览 柱状图
 exports.financeColumnar = params => {
   return $form.get('transaction-overviews/trade-count', { params })

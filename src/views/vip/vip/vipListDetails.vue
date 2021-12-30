@@ -266,13 +266,13 @@ export default {
   },
   methods: {
     getInfo() {
-      this.info = JSON.parse(this.$route.query.info)
-      console.log(this.info)
+      // this.info = JSON.parse(this.$route.query.info)
+      // console.log(this.info)
     },
     customerMerge() {
-      this.customerId = this.$route.params.id
-      this.customerName = this.info.name
-      this.dialogVisible = true
+      // this.customerId = this.$route.params.id
+      // this.customerName = this.info.name
+      // this.dialogVisible = true
     },
     // 客户id
     queryCNSearch(queryString, callback) {
@@ -294,96 +294,96 @@ export default {
       console.log(item)
     },
     handleClick() {
-      if (this.activeName === '1') {
-        this.getPackageList()
-      } else if (this.activeName === '2') {
-        this.getOrderList()
-      } else if (this.activeName === '3') {
-        this.getAddressList()
-      } else if (this.activeName === '4') {
-        this.getCardList()
-      } else {
-        this.getInviteList()
-      }
+      // if (this.activeName === '1') {
+      //   this.getPackageList()
+      // } else if (this.activeName === '2') {
+      //   this.getOrderList()
+      // } else if (this.activeName === '3') {
+      //   this.getAddressList()
+      // } else if (this.activeName === '4') {
+      //   this.getCardList()
+      // } else {
+      //   this.getInviteList()
+      // }
     },
     editInfo() {},
     //确定合并
     mergeConfirm() {
-      if (!this.target) {
-        return this.$message.error(this.$t('请输入目标客户ID'))
-      }
-      this.targetID = this.target.split('---')[0]
-      this.$request.mergeCustomer(this.customerId, this.targetID).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.dialogVisible = false
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-          this.dialogVisible = false
-        }
-      })
+      // if (!this.target) {
+      //   return this.$message.error(this.$t('请输入目标客户ID'))
+      // }
+      // this.targetID = this.target.split('---')[0]
+      // this.$request.mergeCustomer(this.customerId, this.targetID).then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       title: this.$t('操作成功'),
+      //       message: res.msg,
+      //       type: 'success'
+      //     })
+      //     this.dialogVisible = false
+      //   } else {
+      //     this.$notify({
+      //       title: this.$t('操作失败'),
+      //       message: res.msg,
+      //       type: 'warning'
+      //     })
+      //     this.dialogVisible = false
+      //   }
+      // })
     },
     getInviteList() {
-      this.$request
-        .invitations(this.$route.params.id, {
-          page: this.page_params.page,
-          size: this.page_params.size
-        })
-        .then(res => {
-          if (res.ret) {
-            this.tableData = res.data
-            console.log(this.tableData)
-            this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
-          }
-        })
+      // this.$request
+      //   .invitations(this.$route.params.id, {
+      //     page: this.page_params.page,
+      //     size: this.page_params.size
+      //   })
+      //   .then(res => {
+      //     if (res.ret) {
+      //       this.tableData = res.data
+      //       console.log(this.tableData)
+      //       this.page_params.page = res.meta.current_page
+      //       this.page_params.total = res.meta.total
+      //     }
+      //   })
     },
     getCardList() {
-      this.$request
-        .voucherUser(this.$route.params.id, {
-          page: this.page_params.page,
-          size: this.page_params.size
-        })
-        .then(res => {
-          if (res.ret) {
-            this.inviteData = res.data
-            console.log(this.inviteData)
-            this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
-          }
-        })
+      // this.$request
+      //   .voucherUser(this.$route.params.id, {
+      //     page: this.page_params.page,
+      //     size: this.page_params.size
+      //   })
+      //   .then(res => {
+      //     if (res.ret) {
+      //       this.inviteData = res.data
+      //       console.log(this.inviteData)
+      //       this.page_params.page = res.meta.current_page
+      //       this.page_params.total = res.meta.total
+      //     }
+      //   })
     },
     getPackageList() {
-      this.$request.packageList(this.$route.params.id).then(res => {
-        if (res.ret) {
-          console.log(res)
-          this.packageData = res.data
-        }
-      })
+      // this.$request.packageList(this.$route.params.id).then(res => {
+      //   if (res.ret) {
+      //     console.log(res)
+      //     this.packageData = res.data
+      //   }
+      // })
     },
     getOrderList() {
-      this.$request.orderList(this.$route.params.id).then(res => {
-        if (res.ret) {
-          console.log(res)
-          this.orderData = res.data
-        }
-      })
+      // this.$request.orderList(this.$route.params.id).then(res => {
+      //   if (res.ret) {
+      //     console.log(res)
+      //     this.orderData = res.data
+      //   }
+      // })
     },
     getAddressList() {
-      this.$request.addressList(this.$route.params.id).then(res => {
-        if (res.ret) {
-          console.log(res)
-          this.addressData = res.data
-        }
-      })
+      // this.$request.addressList(this.$route.params.id).then(res => {
+      //   if (res.ret) {
+      //     console.log(res)
+      //     this.addressData = res.data
+      //   }
+      // })
     }
   }
 }

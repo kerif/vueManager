@@ -34,9 +34,9 @@
       <el-table-column :label="$t('订单号')">
         <template slot-scope="scope">
           <div>
-            <router-link class="choose-order" :to="`/order/waybill_list`">
+            <span class="choose-order" @click="goOrderDetail(scope.row.order_id)">
               {{ scope.row.order_sn }}
-            </router-link>
+            </span>
           </div>
         </template>
       </el-table-column>
@@ -44,28 +44,28 @@
         <template slot-scope="scope">
           <span v-if="scope.row.third_status === 0">{{ $t('待对接') }}</span>
           <span v-if="scope.row.third_status === 1">{{ $t('对接中') }}</span>
-          <span v-if="scope.row.third_status === 2">{{ $t('对接成功') }}</span>
-          <span v-if="scope.row.third_status === 3">{{ $t('对接失败') }}</span>
+          <span v-if="scope.row.third_status === 2" class="pass_color">{{ $t('对接成功') }}</span>
+          <span v-if="scope.row.third_status === 3" class="reject_color">{{ $t('对接失败') }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="express_line_name" :label="$t('线路名称')"> </el-table-column>
       <el-table-column prop="country_name" :label="$t('收货国家')"> </el-table-column>
       <el-table-column prop="value" :label="$t('申报价值')"> </el-table-column>
       <el-table-column prop="created_at" :label="$t('提交时间')"> </el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('操作')" width="180">
         <template slot-scope="scope">
           <el-button
             size="small"
             class="btn-blue-green"
             v-if="scope.row.status === 0"
-            @click="getDeclareInfo(scope.row.id)"
+            @click="getDeclareInfo(scope.row.id, scope.row.third_status)"
             >{{ $t('报关信息') }}</el-button
           >
           <el-button
             size="small"
             class="btn-deep-blue"
             v-if="scope.row.status === 1"
-            @click="getInfo(scope.row.id, scope.row.status)"
+            @click="getInfo(scope.row.id, scope.row.status, scope.row.third_status)"
             >{{ $t('查看') }}</el-button
           >
           <el-button
@@ -75,6 +75,14 @@
             @click="resubmit(scope.row.id)"
             >{{ $t('重新提交') }}</el-button
           >
+          <el-button
+            size="small"
+            style="margin: 5px 0 0 0"
+            class="btn-light-red"
+            v-if="scope.row.third_status === 3"
+            @click="getLog(scope.row.id)"
+            >{{ $t('对接日志') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -82,7 +90,9 @@
     <el-dialog :visible.sync="show" :title="$t('报关信息')" @close="clear">
       <div v-if="this.type === 1">
         <div>{{ this.orderSn }}</div>
-        <add-btn @click.native="addNew">{{ $t('新增') }}</add-btn>
+        <add-btn @click.native="addNew" v-show="thirdStatus === 0 || thirdStatus === 3">{{
+          $t('新增')
+        }}</add-btn>
         <el-table :data="infoData" border style="width: 100%">
           <el-table-column type="index" label="#" width="60"> </el-table-column>
           <el-table-column :label="$t('中文品名')">
@@ -97,16 +107,12 @@
           </el-table-column>
           <el-table-column :label="$t('数量')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.quantity"></el-input>
+              <el-input v-model="scope.row.quantity" @input="changeNum"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('单位')">
             <template slot-scope="scope">
-              <el-select
-                v-model="scope.row.unit"
-                :placeholder="$t('请选择单位')"
-                @change="changeVal"
-              >
+              <el-select v-model="scope.row.unit" :placeholder="$t('请选择单位')">
                 <el-option
                   v-for="item in unitList"
                   :key="item.id"
@@ -119,12 +125,12 @@
           </el-table-column>
           <el-table-column :label="$t('单价')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unit_value"></el-input>
+              <el-input v-model="scope.row.unit_value" @input="changeVal"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('总价值')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.value"></el-input>
+              <el-input v-model="scope.row.value" @input="changeSum"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('币种')" width="140">
@@ -155,7 +161,11 @@
       <div v-else>
         <div v-for="item in infoData" :key="item.id">
           <div>{{ item.box_sn }}</div>
-          <add-btn @click.native="addNewLine(item.items)">{{ $t('新增') }}</add-btn>
+          <add-btn
+            @click.native="addNewLine(item.items)"
+            v-show="thirdStatus === 0 || thirdStatus === 3"
+            >{{ $t('新增') }}</add-btn
+          >
           <el-table :data="items" border style="width: 100%; margin: 10px 0">
             <el-table-column type="index" label="#" width="60"> </el-table-column>
             <el-table-column :label="$t('中文品名')">
@@ -224,8 +234,15 @@
       </div>
       <div slot="footer">
         <el-button @click="cancel">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="submit">{{ $t('保存') }}</el-button>
+        <el-button type="primary" @click="submit" v-show="thirdStatus === 0 || thirdStatus === 3">{{
+          $t('保存')
+        }}</el-button>
       </div>
+    </el-dialog>
+    <el-dialog :visible.sync="showLog" :title="$t('对接日志')" @close="clearLog">
+      <el-table :data="logData" border style="width: 100%">
+        <el-table-column prop="content" :label="$t('内容')"></el-table-column>
+      </el-table>
     </el-dialog>
   </div>
 </template>
@@ -255,7 +272,10 @@ export default {
       orderId: '',
       currencyList: [],
       unitList: [],
-      items: []
+      items: [],
+      showLog: false,
+      logData: [],
+      thirdStatus: null
     }
   },
   components: {
@@ -349,22 +369,41 @@ export default {
         }
       })
     },
-    changeVal(val) {
-      console.log(val)
-    },
     cancel() {
       this.show = false
     },
-    clear() {},
+    getLog(id) {
+      this.showLog = true
+      this.$request.dockingLog(id).then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.logData = res.data
+        }
+      })
+    },
+    goOrderDetail(id) {
+      this.$router.push({
+        name: 'billDetails',
+        params: {
+          id
+        }
+      })
+    },
+    clearLog() {
+      this.showLog = false
+    },
+    clear() {
+      this.show = false
+    },
     addNew() {
       this.infoData.push({
         cn_name: '',
         en_name: '',
         quantity: '',
-        unit_name: '',
+        unit: '',
         unit_value: '',
         value: '',
-        currency_name: ''
+        currency: ''
       })
     },
     addNewLine(item) {
@@ -372,10 +411,10 @@ export default {
         cn_name: '',
         en_name: '',
         quantity: '',
-        unit_name: '',
+        unit: '',
         unit_value: '',
         value: '',
-        currency_name: ''
+        currency: ''
       })
     },
     deleteInfo(index, rows) {
@@ -387,17 +426,21 @@ export default {
     selectionChange(selection) {
       this.declareNum = selection.map(item => item.id)
     },
-    getInfo(id, status) {
+    getInfo(id, status, third_status) {
+      this.show = true
       this.id = id
       this.onStatus = status
       console.log(this.onStatus)
-      this.show = true
+      this.thirdStatus = third_status
+      console.log(this.thirdStatus)
       this.getDeclareDetail()
       this.getInit()
     },
-    getDeclareInfo(id) {
-      this.id = id
+    getDeclareInfo(id, third_status) {
       this.show = true
+      this.id = id
+      this.thirdStatus = third_status
+      console.log(this.thirdStatus)
       this.getDeclareDetail()
       this.getInit()
     },
@@ -438,6 +481,8 @@ export default {
     submit() {
       let params = {}
       if (this.type === 1) {
+        // let arr = []
+        // this.infoData.map(item => {})
         params.items = this.infoData
       } else {
         params.items = this.items
@@ -484,6 +529,17 @@ export default {
     .head-search {
       width: 200px;
     }
+  }
+  .reject_color {
+    color: red;
+  }
+  .pass_color {
+    color: green;
+  }
+  .choose-order {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
   }
 }
 </style>

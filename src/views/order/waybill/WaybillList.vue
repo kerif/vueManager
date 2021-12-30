@@ -394,7 +394,7 @@
                   {{ $t('团购') }}
                 </el-dropdown-item>
                 <el-dropdown-item
-                  v-if="['1', '2', '3', '6'].includes(activeName)"
+                  v-if="['1', '2', '3'].includes(activeName)"
                   @click.native="
                     invalidOrder(
                       scope.row.id,
@@ -422,7 +422,7 @@
                   {{ $t('改价') }}
                 </el-dropdown-item>
                 <el-dropdown-item
-                  v-if="['2', '3', '4', '5'].includes(activeName)"
+                  v-if="['2', '3', '4', '5', '6'].includes(activeName)"
                   @click.native="onLogs(scope.row.id)"
                 >
                   {{ $t('日志') }}
@@ -431,7 +431,7 @@
                   v-if="activeName === '6'"
                   @click.native="operateLog(scope.row.id)"
                 >
-                  {{ $t('日志') }}
+                  {{ $t('异常说明') }}
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="activeName === '4'"
@@ -1021,18 +1021,31 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="showExplain" :title="$t('异常说明')" class="abnormalLog-container">
-      <el-table :data="operatorData" border style="width: 100%">
-        <el-table-column type="index" width="50"></el-table-column>
-        <!-- 操作 -->
-        <el-table-column
-          :label="$t('操作')"
-          prop="log"
-          :show-overflow-tooltip="true"
-          width="400"
-        ></el-table-column>
-        <!-- 时间 -->
-        <el-table-column :label="$t('时间')" prop="created_at"></el-table-column>
-      </el-table>
+      <el-row :gutter="20">
+        <el-col :span="4">{{ $t('操作人') }}</el-col>
+        <el-col :span="20">{{ operator }}</el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="4">{{ $t('备注') }}</el-col>
+        <el-col :span="20">{{ remark }}</el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="4">{{ $t('恢复备注') }}</el-col>
+        <el-col :span="20">{{ restoreRemark }}</el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="4">{{ $t('图片') }}</el-col>
+        <el-col :span="20">
+          <span
+            v-for="(item, index) in images"
+            :key="index"
+            style="cursor: pointer"
+            @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
+          >
+            <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px" />
+          </span>
+        </el-col>
+      </el-row>
       <div slot="footer">
         <el-button @click="showExplain = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="confirmExcept">{{ $t('去处理') }}</el-button>
@@ -1204,7 +1217,10 @@ export default {
       showHandExcept: false,
       logId: '',
       showExplain: false,
-      operatorData: []
+      operator: '',
+      remark: '',
+      restoreRemark: '',
+      images: []
     }
   },
   activated() {
@@ -2298,10 +2314,12 @@ export default {
     },
     operateLog(id) {
       this.showExplain = true
-      this.$request.getOperate(id).then(res => {
+      this.$request.exceptDescription(id).then(res => {
         if (res.ret) {
-          this.operatorData = res.data.logs
-          this.localization = res.localization
+          this.operator = res.data.operator
+          this.remark = res.data.remark
+          this.restoreRemark = res.data.restore_remark
+          this.images = res.data.images
         }
       })
     },

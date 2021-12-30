@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="$t('批量分配员工')"
+    :title="$t('批量分配客服/销售')"
     class="dialog-batchAllocate"
     @close="clear"
   >
