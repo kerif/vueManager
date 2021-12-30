@@ -358,7 +358,8 @@ export default {
         {
           type: 'confirmAudit',
           userid: this.detailData.user.id,
-          withdrawsId: this.$route.params.id
+          withdrawsId: this.$route.params.id,
+          amount: this.detailData.amount
         },
         () => {
           this.$router.go(-1)

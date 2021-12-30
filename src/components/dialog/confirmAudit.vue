@@ -74,7 +74,8 @@ export default {
       withdrawsId: '',
       baleImgList: [],
       confirm_amount: '',
-      customer_remark: ''
+      customer_remark: '',
+      amount: ''
     }
   },
   methods: {
@@ -132,6 +133,9 @@ export default {
         }
         this.show = false
       })
+    },
+    init() {
+      this.ruleForm.confirm_amount = this.amount
     },
     clear() {
       this.$refs['ruleForm'].resetFields()
