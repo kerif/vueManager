@@ -65,6 +65,7 @@ export default {
             message: res.msg
           })
           this.$emit('reserve', false)
+          this.$parent.getList()
         } else {
           this.$message({
             message: res.msg,

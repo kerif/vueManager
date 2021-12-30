@@ -102,7 +102,11 @@
           </el-table-column>
           <el-table-column :label="$t('单位')">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.unit_name" :placeholder="$t('请选择单位')">
+              <el-select
+                v-model="scope.row.unit_name"
+                :placeholder="$t('请选择单位')"
+                @change="changeVal"
+              >
                 <el-option
                   v-for="item in unitList"
                   :key="item.id"
@@ -137,12 +141,14 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('操作')">
-            <el-button
-              size="small"
-              class="btn-light-red"
-              @click="deleteInfo(scope.$index, infoData)"
-              >{{ $t('删除') }}</el-button
-            >
+            <template slot-scope="scope">
+              <el-button
+                size="small"
+                class="btn-light-red"
+                @click="deleteInfo(scope.$index, infoData)"
+                >{{ $t('删除') }}</el-button
+              >
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -150,7 +156,7 @@
         <div v-for="item in infoData" :key="item.id">
           <div>{{ item.box_sn }}</div>
           <add-btn @click.native="addNewLine(item.items)">{{ $t('新增') }}</add-btn>
-          <el-table :data="item.items" border style="width: 100%; margin: 10px 0">
+          <el-table :data="items" border style="width: 100%; margin: 10px 0">
             <el-table-column type="index" label="#" width="60"> </el-table-column>
             <el-table-column :label="$t('中文品名')">
               <template slot-scope="scope">
@@ -204,19 +210,21 @@
               </template>
             </el-table-column>
             <el-table-column :label="$t('操作')">
-              <el-button
-                size="small"
-                class="btn-light-red"
-                @click="deleteInfoList(scope.$index, item.items)"
-                >{{ $t('删除') }}</el-button
-              >
+              <template slot-scope="scope">
+                <el-button
+                  size="small"
+                  class="btn-light-red"
+                  @click="deleteInfoList(scope.$index, item.items)"
+                  >{{ $t('删除') }}</el-button
+                >
+              </template>
             </el-table-column>
           </el-table>
         </div>
       </div>
       <div slot="footer">
         <el-button @click="cancel">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="submit(item)">{{ $t('保存') }}</el-button>
+        <el-button type="primary" @click="submit">{{ $t('保存') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -246,7 +254,8 @@ export default {
       onStatus: '',
       orderId: '',
       currencyList: [],
-      unitList: []
+      unitList: [],
+      items: []
     }
   },
   components: {
@@ -340,15 +349,39 @@ export default {
         }
       })
     },
+    changeVal(val) {
+      console.log(val)
+      this.unitList.forEach(ele => {
+        if (ele.id === val) {
+          console.log(ele.id, val)
+        }
+      })
+    },
     cancel() {
       this.show = false
     },
     clear() {},
     addNew() {
-      this.infoData.push({})
+      this.infoData.push({
+        cn_name: '',
+        en_name: '',
+        quantity: '',
+        unit_name: '',
+        unit_value: '',
+        value: '',
+        currency_name: ''
+      })
     },
     addNewLine(item) {
-      item.push({})
+      item.push({
+        cn_name: '',
+        en_name: '',
+        quantity: '',
+        unit_name: '',
+        unit_value: '',
+        value: '',
+        currency_name: ''
+      })
     },
     deleteInfo(index, rows) {
       rows.splice(index, 1)
@@ -378,12 +411,18 @@ export default {
         if (res.ret) {
           this.type = res.data.push_type
           this.orderId = res.data.id
+          this.orderSn = res.data.order_sn
           if (this.type === 1) {
             this.infoData = res.data.items
           } else {
             this.infoData = res.data.boxes
+            for (let i = 0; i < this.infoData.length; i++) {
+              if (this.infoData[i].items) {
+                this.items = this.infoData[i].items
+                console.log(this.items)
+              }
+            }
           }
-          this.orderSn = res.data.order_sn
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -402,11 +441,13 @@ export default {
       })
     },
     submit() {
-      // this.currencyList.forEach(ele => {
-      //   if(ele.id === item.id){
-      //   }
-      // })
-      this.$request.editDeclare(this.orderId, { items: this.infoData }).then(res => {
+      let params = {}
+      if (this.type === 1) {
+        params.items = this.infoData
+      } else {
+        // params.items = this.items
+      }
+      this.$request.editDeclare(this.orderId, params).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
