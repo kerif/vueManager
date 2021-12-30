@@ -241,6 +241,7 @@
     </el-dialog>
     <el-dialog :visible.sync="showLog" :title="$t('对接日志')" @close="clearLog">
       <el-table :data="logData" border style="width: 100%">
+        <el-table-column prop="created_at" :label="$t('时间')"></el-table-column>
         <el-table-column prop="content" :label="$t('内容')"></el-table-column>
       </el-table>
     </el-dialog>
