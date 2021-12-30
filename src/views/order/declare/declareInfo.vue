@@ -166,7 +166,7 @@
             v-show="thirdStatus === 0 || thirdStatus === 3"
             >{{ $t('新增') }}</add-btn
           >
-          <el-table :data="items" border style="width: 100%; margin: 10px 0">
+          <el-table :data="item.items" border style="width: 100%; margin: 10px 0">
             <el-table-column type="index" label="#" width="60"> </el-table-column>
             <el-table-column :label="$t('中文品名')">
               <template slot-scope="scope">
@@ -407,8 +407,8 @@ export default {
         currency: ''
       })
     },
-    addNewLine(item) {
-      item.push({
+    addNewLine(items) {
+      items.push({
         cn_name: '',
         en_name: '',
         quantity: '',
@@ -455,12 +455,12 @@ export default {
             this.infoData = res.data.items
           } else {
             this.infoData = res.data.boxes
-            for (let i = 0; i < this.infoData.length; i++) {
-              if (this.infoData[i].items) {
-                this.items = this.infoData[i].items
-                console.log(this.items)
-              }
-            }
+            // for (let i = 0; i < this.infoData.length; i++) {
+            //   if (this.infoData[i].items) {
+            //     this.items = this.infoData[i].items
+            //     console.log(this.items)
+            //   }
+            // }
           }
         } else {
           this.$notify({
@@ -480,13 +480,20 @@ export default {
       })
     },
     submit() {
-      let params = {}
+      let params = {
+        items: []
+      }
       if (this.type === 1) {
-        // let arr = []
-        // this.infoData.map(item => {})
         params.items = this.infoData
       } else {
-        params.items = this.items
+        this.infoData.forEach(item => {
+          item.items.forEach(ele => {
+            ele.declare_box_id = item.id
+            params.items.push(ele)
+          })
+          return item.items
+        })
+        console.log(params.items)
       }
       this.$request.editDeclare(this.orderId, params).then(res => {
         if (res.ret) {
