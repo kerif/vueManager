@@ -1051,7 +1051,7 @@
         <el-button type="primary" @click="confirmExcept">{{ $t('去处理') }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="showHandExcept" :title="$t('处理异常')">
+    <el-dialog :visible.sync="showHandExcept" :title="$t('处理异常')" @close="clearFinish">
       <el-form :model="ruleForm" ref="ruleForm">
         <el-form-item :label="$t('处理说明')">
           <el-input
@@ -1493,9 +1493,6 @@ export default {
     passVal() {
       this.showAbnormal = false
     },
-    // reserve() {
-    //   this.showHandExcept = false
-    // },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {
         this.orderFieldList = res.data
@@ -1503,7 +1500,7 @@ export default {
     },
     confirmFinish() {
       let params = {
-        ids: this.selectIDs,
+        ids: this.selectIDs.length ? this.selectIDs : [this.logId],
         restore_remark: this.ruleForm.textarea
       }
       this.$request.restoreOrder(params).then(res => {
@@ -1524,6 +1521,7 @@ export default {
       })
     },
     clearFinish() {
+      this.showHandExcept = false
       this.ruleForm.textarea = ''
     },
     toogleExpand(row) {
@@ -2360,6 +2358,7 @@ export default {
     },
     operateLog(id) {
       this.showExplain = true
+      this.logId = id
       this.$request.exceptDescription(id).then(res => {
         if (res.ret) {
           this.operator = res.data.operator
