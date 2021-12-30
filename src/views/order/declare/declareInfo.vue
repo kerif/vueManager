@@ -103,7 +103,7 @@
           <el-table-column :label="$t('单位')">
             <template slot-scope="scope">
               <el-select
-                v-model="scope.row.unit_name"
+                v-model="scope.row.unit"
                 :placeholder="$t('请选择单位')"
                 @change="changeVal"
               >
@@ -129,7 +129,7 @@
           </el-table-column>
           <el-table-column :label="$t('币种')" width="140">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.currency_name" :placeholder="$t('请选择币种')">
+              <el-select v-model="scope.row.currency" :placeholder="$t('请选择币种')">
                 <el-option
                   v-for="item in currencyList"
                   :key="item.id"
@@ -175,7 +175,7 @@
             </el-table-column>
             <el-table-column :label="$t('单位')">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.unit_name" :placeholder="$t('请选择单位')">
+                <el-select v-model="scope.row.unit" :placeholder="$t('请选择单位')">
                   <el-option
                     v-for="item in unitList"
                     :key="item.id"
@@ -198,7 +198,7 @@
             </el-table-column>
             <el-table-column :label="$t('币种')" width="140">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.currency_name" :placeholder="$t('请选择币种')">
+                <el-select v-model="scope.row.currency" :placeholder="$t('请选择币种')">
                   <el-option
                     v-for="item in currencyList"
                     :key="item.id"
@@ -351,11 +351,6 @@ export default {
     },
     changeVal(val) {
       console.log(val)
-      this.unitList.forEach(ele => {
-        if (ele.id === val) {
-          console.log(ele.id, val)
-        }
-      })
     },
     cancel() {
       this.show = false
@@ -445,7 +440,7 @@ export default {
       if (this.type === 1) {
         params.items = this.infoData
       } else {
-        // params.items = this.items
+        params.items = this.items
       }
       this.$request.editDeclare(this.orderId, params).then(res => {
         if (res.ret) {
