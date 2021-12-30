@@ -1051,6 +1051,26 @@
         <el-button type="primary" @click="confirmExcept">{{ $t('去处理') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="showHandExcept" :title="$t('处理异常')">
+      <el-form :model="ruleForm" ref="ruleForm">
+        <el-form-item :label="$t('处理说明')">
+          <el-input
+            type="textarea"
+            :rows="2"
+            :placeholder="$t('请输入处理说明')"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            v-model="ruleForm.textarea"
+            class="text"
+          >
+          </el-input>
+        </el-form-item>
+        <div class="remark">{{ $t('注：处理完成后，订单将恢复到异常前的状态，继续正常流转') }}</div>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="showHandExcept = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirmFinish">{{ $t('处理完成') }}</el-button>
+      </div>
+    </el-dialog>
     <!-- 货量统计 -->
     <waybill-list-drawer
       :showDrawer="showDrawer"
@@ -1069,11 +1089,11 @@
       class="tmp"
     ></waybill-list-tmp-drawer>
     <abnormal :showAbnormal="showAbnormal" :selectIDs="selectIDs" @passVal="passVal"></abnormal>
-    <hand-except
+    <!-- <hand-except
       :showHandExcept="showHandExcept"
       @reserve="reserve"
       :selectIDs="selectIDs"
-    ></hand-except>
+    ></hand-except> -->
   </div>
 </template>
 
@@ -1085,7 +1105,6 @@ import WaybillListSearch from './components/waybillListSearch'
 import WaybillListDrawer from './components/waybillListDrawer'
 import WaybillListTmpDrawer from './components/waybillListTmpDrawer'
 import Abnormal from './components/abnormal'
-import HandExcept from './components/handExcept'
 import columnData from '../../../utils/sortData.js'
 import Sortable from 'sortablejs'
 export default {
@@ -1094,8 +1113,7 @@ export default {
     WaybillListDrawer,
     WaybillListTmpDrawer,
     NlePagination,
-    Abnormal,
-    HandExcept
+    Abnormal
   },
   mixins: [pagination],
   name: 'wayBillList',
@@ -1220,7 +1238,10 @@ export default {
       operator: '',
       remark: '',
       restoreRemark: '',
-      images: []
+      images: [],
+      ruleForm: {
+        textarea: ''
+      }
     }
   },
   activated() {
@@ -1472,13 +1493,38 @@ export default {
     passVal() {
       this.showAbnormal = false
     },
-    reserve() {
-      this.showHandExcept = false
-    },
+    // reserve() {
+    //   this.showHandExcept = false
+    // },
     getOrderFieldList() {
       this.$request.getOrderFieldList().then(res => {
         this.orderFieldList = res.data
       })
+    },
+    confirmFinish() {
+      let params = {
+        ids: this.selectIDs,
+        restore_remark: this.ruleForm.textarea
+      }
+      this.$request.restoreOrder(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('成功'),
+            message: res.msg
+          })
+          this.showHandExcept = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    clearFinish() {
+      this.ruleForm.textarea = ''
     },
     toogleExpand(row) {
       let $table = this.$refs.table
@@ -2519,6 +2565,9 @@ export default {
     font-size: 14px;
     font-weight: bold;
     color: red;
+  }
+  .remark {
+    font-size: 14px;
   }
   .waybill-data-list {
     background-color: inherit;
