@@ -247,6 +247,7 @@
       style="margin-top: 5px"
       :pageParams="page_params"
       :notNeedInitQuery="false"
+      saveSize="ship"
     ></nle-pagination>
     <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
       <el-form label-position="top" :model="form" ref="form">
@@ -408,8 +409,11 @@ export default {
       uploadType: 3
     }
   },
-  created() {},
+  created() {
+    this.initSize()
+  },
   activated() {
+    this.initSize()
     if (this.$route.query.shipment_sn) {
       this.page_params.keyword = this.$route.query.shipment_sn
       this.getList()
@@ -426,6 +430,11 @@ export default {
     this.getList()
   },
   methods: {
+    initSize() {
+      if (localStorage.getItem('ship_size')) {
+        this.page_params.size = Number(localStorage.getItem('ship_size'))
+      }
+    },
     getList() {
       this.tableLoading = true
       let params = {

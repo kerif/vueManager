@@ -378,7 +378,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
+      <nle-pagination
+        style="margin-top: 5px"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+        saveSize="package"
+      >
         <div class="remark-text">
           <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
         </div>
@@ -537,6 +542,7 @@ export default {
     }
   },
   activated() {
+    this.initSize()
     this.getList()
     this.getCounts()
     this.$nextTick(() => {
@@ -544,6 +550,7 @@ export default {
     })
   },
   created() {
+    this.initSize()
     this.getList()
     this.getCounts()
     this.$nextTick(() => {
@@ -555,6 +562,11 @@ export default {
   },
   mounted() {},
   methods: {
+    initSize() {
+      if (localStorage.getItem('package_size')) {
+        this.page_params.size = Number(localStorage.getItem('package_size'))
+      }
+    },
     // 获取订单统计数据
     getCounts() {
       const params = this.computedParams()

@@ -755,7 +755,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
+      <nle-pagination
+        style="margin-top: 5px"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+        saveSize="order"
+      >
         <div class="remark-text">
           <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
         </div>
@@ -1476,6 +1481,9 @@ export default {
     initQuery() {
       if (this.$route.query.activeName) {
         this.activeName = this.$route.query.activeName
+      }
+      if (localStorage.getItem('order_size')) {
+        this.page_params.size = Number(localStorage.getItem('order_size'))
       }
       if (this.$route.query.order_sn) {
         this.searchFieldData.keyword = this.$route.query.order_sn

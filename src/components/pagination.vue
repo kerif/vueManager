@@ -31,6 +31,9 @@ export default {
     notNeedInitQuery: {
       type: Boolean,
       default: true
+    },
+    saveSize: {
+      type: String
     }
   },
   created() {
@@ -58,6 +61,21 @@ export default {
     },
     handleSizeChange(size) {
       this.handlePageSizeChange('size', size)
+      if (this.saveSize) {
+        let key
+        switch (this.saveSize) {
+          case 'order':
+            key = 'order_size'
+            break
+          case 'package':
+            key = 'package_size'
+            break
+          case 'ship':
+            key = 'ship_size'
+            break
+        }
+        key && localStorage.setItem(key, size)
+      }
       this.pageParams.handleSizeChange(size)
     },
     handleCurrentChange(page) {
