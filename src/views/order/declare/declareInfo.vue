@@ -90,11 +90,25 @@
     <el-dialog :visible.sync="show" :title="$t('报关信息')" @close="clear">
       <div v-if="this.type === 1">
         <div>{{ this.orderSn }}</div>
+        <el-button
+          @click="deleteRow"
+          v-show="thirdStatus === 0 || thirdStatus === 3"
+          size="small"
+          class="btn-light-red"
+          style="margin: 10px 0"
+          >{{ $t('全选删除') }}</el-button
+        >
         <add-btn @click.native="addNew" v-show="thirdStatus === 0 || thirdStatus === 3">{{
           $t('新增')
         }}</add-btn>
-        <el-table :data="infoData" border style="width: 100%">
-          <el-table-column type="index" label="#" width="60"> </el-table-column>
+        <el-table
+          :data="infoData"
+          ref="multipleTable"
+          border
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="60"> </el-table-column>
           <el-table-column :label="$t('中文品名')">
             <template slot-scope="scope">
               <el-input v-model="scope.row.cn_name"></el-input>
@@ -107,7 +121,7 @@
           </el-table-column>
           <el-table-column :label="$t('数量')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.quantity" @change="changeNum()"></el-input>
+              <el-input v-model="scope.row.quantity" @blur="changeNum(scope.row)"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('单位')">
@@ -125,7 +139,7 @@
           </el-table-column>
           <el-table-column :label="$t('单价')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unit_value" @change="changeVal()"></el-input>
+              <el-input v-model="scope.row.unit_value" @blur="changeVal(scope.row)"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('总价值')">
@@ -161,13 +175,27 @@
       <div v-else>
         <div v-for="item in infoData" :key="item.id">
           <div>{{ item.box_sn }}</div>
+          <el-button
+            @click="deleteRows"
+            v-show="thirdStatus === 0 || thirdStatus === 3"
+            size="small"
+            class="btn-light-red"
+            style="margin: 10px 0"
+            >{{ $t('全选删除') }}</el-button
+          >
           <add-btn
             @click.native="addNewLine(item.items)"
             v-show="thirdStatus === 0 || thirdStatus === 3"
             >{{ $t('新增') }}</add-btn
           >
-          <el-table :data="item.items" border style="width: 100%; margin: 10px 0">
-            <el-table-column type="index" label="#" width="60"> </el-table-column>
+          <el-table
+            :data="item.items"
+            ref="multipleTables"
+            @selection-change="handleSelectionChange"
+            border
+            style="width: 100%; margin: 10px 0"
+          >
+            <el-table-column type="selection" width="60"> </el-table-column>
             <el-table-column :label="$t('中文品名')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.cn_name"></el-input>
@@ -278,7 +306,8 @@ export default {
       logData: [],
       thirdStatus: null,
       num: '',
-      value: ''
+      value: '',
+      sels: []
     }
   },
   components: {
@@ -393,11 +422,47 @@ export default {
         }
       })
     },
+    deleteRow() {
+      let val = this.sels
+      console.log(val)
+      if (val) {
+        val.forEach((va, index) => {
+          console.log(index)
+          this.infoData.forEach((v, i) => {
+            console.log(i)
+            if (va.id === v.id) {
+              this.infoData.splice(i, 1)
+            }
+          })
+        })
+      }
+      this.$refs.multipleTable.clearSelection()
+    },
+    deleteRows() {
+      let val = this.sels
+      console.log(val)
+      if (val) {
+        val.forEach((va, index) => {
+          console.log(index)
+          this.infoData.forEach(item => {
+            item.items.forEach((v, i) => {
+              console.log(i)
+              if (va.id === v.id) {
+                item.items.splice(i, 1)
+              }
+            })
+          })
+        })
+      }
+    },
     clearLog() {
       this.showLog = false
     },
     clear() {
       this.show = false
+    },
+    handleSelectionChange(val) {
+      this.sels = val
     },
     addNew() {
       this.infoData.push({
@@ -432,11 +497,9 @@ export default {
     },
     changeNum(val) {
       console.log(val)
-      this.num = val
     },
     changeVal(val) {
       console.log(val)
-      this.value = val
     },
     getInfo(id, status, third_status) {
       this.show = true

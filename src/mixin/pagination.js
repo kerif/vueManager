@@ -22,6 +22,7 @@ export default {
     handleSizeChange(pageSize) {
       this.page_params.page = 1
       this.handleQueryChange('page', this.page_params.page)
+      localStorage.setItem('size', this.page_params.size)
       this.page_params.size = pageSize
       this.getList()
     },

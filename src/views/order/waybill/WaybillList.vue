@@ -1485,6 +1485,7 @@ export default {
         })
       }
       this.getTemplateColumn()
+      this.getCounts()
     },
     // 货量统计
     receive() {
