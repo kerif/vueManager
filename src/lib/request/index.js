@@ -604,6 +604,18 @@ exports.submitSuggest = (id, params) => {
 exports.getComments = params => {
   return $form.get('order-comments', { params })
 }
+// 客服中心 获取评价管理列表详情
+exports.getCommentDetails = id => {
+  return $form.get(`order-comments/${id}`)
+}
+// 客服中心 回复评论
+exports.addReply = (id, params) => {
+  return $form.post(`order-comments/${id}/reply`, params)
+}
+// 客服中心 回复评论
+exports.addTime = (id, params) => {
+  return $form.put(`order-comments/${id}`, params)
+}
 // 客服中心 评价管理 新增评价
 exports.getAddEvaluate = params => {
   return $form.post('order-comments', params)
