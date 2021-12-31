@@ -61,6 +61,13 @@
             @click="getDeclareInfo(scope.row.id, scope.row.third_status)"
             >{{ $t('报关信息') }}</el-button
           >
+          <!-- <el-button
+            size="small"
+            class="btn-purple"
+            v-if="scope.row.third_status === 0 || scope.row.third_status === 3"
+            @click="editDeclareInfo(scope.row.id, scope.row.push_type)"
+            >{{ $t('编辑') }}</el-button
+          > -->
           <el-button
             size="small"
             class="btn-deep-blue"
@@ -96,7 +103,7 @@
           size="small"
           class="btn-light-red"
           style="margin: 10px 0"
-          >{{ $t('全选删除') }}</el-button
+          >{{ $t('多选删除') }}</el-button
         >
         <add-btn @click.native="addNew" v-show="thirdStatus === 0 || thirdStatus === 3">{{
           $t('新增')
@@ -121,7 +128,10 @@
           </el-table-column>
           <el-table-column :label="$t('数量')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.quantity" @blur="changeNum(scope.row)"></el-input>
+              <el-input
+                v-model="scope.row.quantity"
+                @blur="changeNum(scope.$index, scope.row.quantity)"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('单位')">
@@ -139,7 +149,10 @@
           </el-table-column>
           <el-table-column :label="$t('单价')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unit_value" @blur="changeVal(scope.row)"></el-input>
+              <el-input
+                v-model="scope.row.unit_value"
+                @blur="changeVal(scope.$index, scope.row.unit_value)"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('总价值')">
@@ -181,7 +194,7 @@
             size="small"
             class="btn-light-red"
             style="margin: 10px 0"
-            >{{ $t('全选删除') }}</el-button
+            >{{ $t('多选删除') }}</el-button
           >
           <add-btn
             @click.native="addNewLine(item.items)"
@@ -208,7 +221,10 @@
             </el-table-column>
             <el-table-column :label="$t('数量')">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.quantity"></el-input>
+                <el-input
+                  v-model="scope.row.quantity"
+                  @blur="changeNum(scope.$index, scope.row.quantity)"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="$t('单位')">
@@ -226,7 +242,10 @@
             </el-table-column>
             <el-table-column :label="$t('单价')">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.unit_value"></el-input>
+                <el-input
+                  v-model="scope.row.unit_value"
+                  @blur="changeVal(scope.$index, scope.row.unit_value)"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="$t('总价值')">
@@ -273,6 +292,48 @@
         <el-table-column prop="content" :label="$t('内容')"></el-table-column>
       </el-table>
     </el-dialog>
+    <!-- <el-dialog :visible.sync="showFill" :title="$t('编辑申报')" @close="clearFill">
+      <div v-if="this.pushType === 1">
+        <el-form :model="ruleForm" ref="ruleForm">
+          <el-form-item :label="$t('税号')">
+            <el-input
+              :placeholder="$t('请输入税号')"
+              class="input-sty"
+              v-model="ruleForm.tax_number"
+            ></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('重量')">
+            <el-input
+              :placeholder="$t('请输入重量')"
+              class="input-sty"
+              v-model="ruleForm.weight"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-else>
+        <el-form v-for="item in boxes" :key="item.id">
+          <el-form-item :label="$t('税号')">
+            <el-input
+              :placeholder="$t('请输入税号')"
+              class="input-sty"
+              v-model="item.tax_number"
+            ></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('重量')">
+            <el-input
+              :placeholder="$t('请输入重量')"
+              class="input-sty"
+              v-model="item.weight"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer">
+        <el-button @click="showFill = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="save">{{ $t('保存') }}</el-button>
+      </div>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -307,7 +368,19 @@ export default {
       thirdStatus: null,
       num: '',
       value: '',
-      sels: []
+      sels: [],
+      showFill: false,
+      ids: '',
+      boxes: [
+        {
+          tax_number: '',
+          weight: ''
+        }
+      ],
+      ruleForm: {
+        tax_number: '',
+        weight: ''
+      }
     }
   },
   components: {
@@ -405,6 +478,71 @@ export default {
     cancel() {
       this.show = false
     },
+    clearFill() {
+      this.showFill = false
+      this.ruleForm.tax_number = ''
+      this.ruleForm.weight = ''
+      this.boxes = [
+        {
+          tax_number: '',
+          weight: ''
+        }
+      ]
+    },
+    // save() {
+    //   if (this.pushType === 1) {
+    //     let params = {
+    //       ids: [this.ids],
+    //       tax_number: this.ruleForm.tax_number,
+    //       weight: this.ruleForm.weight
+    //     }
+    //     this.$request.fillDeclare(this.ids, params).then(res => {
+    //       if (res.ret) {
+    //         this.$notify({
+    //           title: this.$t('操作成功'),
+    //           message: res.msg,
+    //           type: 'success'
+    //         })
+    //         this.getList()
+    //         this.showFill = false
+    //       } else {
+    //         this.$notify({
+    //           title: this.$t('操作失败'),
+    //           message: res.msg,
+    //           type: 'warning'
+    //         })
+    //       }
+    //     })
+    //   } else {
+    //     let params = {
+    //       boxes: this.boxes
+    //     }
+    //     this.$request.fillDeclareBox(this.ids, params).then(res => {
+    //       if (res.ret) {
+    //         this.$notify({
+    //           title: this.$t('操作成功'),
+    //           message: res.msg,
+    //           type: 'success'
+    //         })
+    //         this.getList()
+    //         this.showFill = false
+    //       } else {
+    //         this.$notify({
+    //           title: this.$t('操作失败'),
+    //           message: res.msg,
+    //           type: 'warning'
+    //         })
+    //       }
+    //     })
+    //   }
+    // },
+    editDeclareInfo(id, type) {
+      console.log(type)
+      this.pushType = type
+      console.log(this.pushType)
+      this.ids = id
+      this.showFill = true
+    },
     getLog(id) {
       this.showLog = true
       this.$request.dockingLog(id).then(res => {
@@ -495,10 +633,12 @@ export default {
     selectionChange(selection) {
       this.declareNum = selection.map(item => item.id)
     },
-    changeNum(val) {
+    changeNum(ind, val) {
+      console.log(ind)
       console.log(val)
     },
-    changeVal(val) {
+    changeVal(ind, val) {
+      console.log(ind)
       console.log(val)
     },
     getInfo(id, status, third_status) {
@@ -528,6 +668,9 @@ export default {
           if (this.type === 1) {
             this.infoData = res.data.items
           } else {
+            if (res.data.boxes) {
+              this.boxes = res.data.boxes
+            }
             this.infoData = res.data.boxes
           }
         } else {
@@ -597,6 +740,9 @@ export default {
   }
   .el-dialog__close {
     color: #fff;
+  }
+  .input-sty {
+    width: 40% !important;
   }
   .headline {
     display: flex;

@@ -2412,6 +2412,14 @@ exports.exceptDescription = id => {
 exports.dockingLog = id => {
   return $form.get(`declare/${id}/third-logs`)
 }
+// 订单 申报信息 申报单填充
+exports.fillDeclare = (id, params) => {
+  return $form.put(`declare/${id}/update-party`, params)
+}
+// 订单 申报信息 申报多箱填充
+exports.fillDeclareBox = (id, params) => {
+  return $form.put(`declare/${id}/update-boxes-party`, params)
+}
 // 财务 财务概览 柱状图
 exports.financeColumnar = params => {
   return $form.get('transaction-overviews/trade-count', { params })
