@@ -1021,31 +1021,39 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="showExplain" :title="$t('异常说明')" class="abnormalLog-container">
-      <el-row :gutter="20">
-        <el-col :span="4">{{ $t('操作人') }}</el-col>
-        <el-col :span="20">{{ operator }}</el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="4">{{ $t('备注') }}</el-col>
-        <el-col :span="20">{{ remark }}</el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="4">{{ $t('恢复备注') }}</el-col>
-        <el-col :span="20">{{ restoreRemark }}</el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="4">{{ $t('图片') }}</el-col>
-        <el-col :span="20">
-          <span
-            v-for="(item, index) in images"
-            :key="index"
-            style="cursor: pointer"
-            @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
-          >
-            <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px" />
-          </span>
-        </el-col>
-      </el-row>
+      <div style="margin: 10px 0">
+        <el-row :gutter="20">
+          <el-col :span="4">{{ $t('操作人') }}</el-col>
+          <el-col :span="20">{{ operator }}</el-col>
+        </el-row>
+      </div>
+      <div style="margin: 10px 0">
+        <el-row :gutter="20">
+          <el-col :span="4">{{ $t('备注') }}</el-col>
+          <el-col :span="20">{{ remark }}</el-col>
+        </el-row>
+      </div>
+      <div style="margin: 10px 0">
+        <el-row :gutter="20">
+          <el-col :span="4">{{ $t('恢复备注') }}</el-col>
+          <el-col :span="20">{{ restoreRemark }}</el-col>
+        </el-row>
+      </div>
+      <div style="margin: 10px 0">
+        <el-row :gutter="20">
+          <el-col :span="4">{{ $t('图片') }}</el-col>
+          <el-col :span="20">
+            <span
+              v-for="(item, index) in images"
+              :key="index"
+              style="cursor: pointer"
+              @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
+            >
+              <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px" />
+            </span>
+          </el-col>
+        </el-row>
+      </div>
       <div slot="footer">
         <el-button @click="showExplain = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="confirmExcept">{{ $t('去处理') }}</el-button>
@@ -2666,6 +2674,16 @@ export default {
 }
 .expand-table {
   width: 80%;
+}
+.el-dialog__header {
+  background-color: #0e102a;
+}
+.el-dialog__title {
+  font-size: 14px;
+  color: #fff;
+}
+.el-dialog__close {
+  color: #fff;
 }
 @media (min-width: 1550px) {
   .expand-table {
