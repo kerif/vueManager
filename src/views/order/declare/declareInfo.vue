@@ -107,7 +107,7 @@
           </el-table-column>
           <el-table-column :label="$t('数量')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.quantity" @input="changeNum"></el-input>
+              <el-input v-model="scope.row.quantity" @change="changeNum()"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('单位')">
@@ -125,12 +125,12 @@
           </el-table-column>
           <el-table-column :label="$t('单价')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unit_value" @input="changeVal"></el-input>
+              <el-input v-model="scope.row.unit_value" @change="changeVal()"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('总价值')">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.value" @input="changeSum"></el-input>
+              <el-input v-model="scope.row.value"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('币种')" width="140">
@@ -276,7 +276,9 @@ export default {
       items: [],
       showLog: false,
       logData: [],
-      thirdStatus: null
+      thirdStatus: null,
+      num: '',
+      value: ''
     }
   },
   components: {
@@ -293,6 +295,7 @@ export default {
       this.$refs.table.doLayout()
     })
   },
+  computed: {},
   methods: {
     getList() {
       this.tableLoading = true
@@ -427,6 +430,14 @@ export default {
     selectionChange(selection) {
       this.declareNum = selection.map(item => item.id)
     },
+    changeNum(val) {
+      console.log(val)
+      this.num = val
+    },
+    changeVal(val) {
+      console.log(val)
+      this.value = val
+    },
     getInfo(id, status, third_status) {
       this.show = true
       this.id = id
@@ -455,12 +466,6 @@ export default {
             this.infoData = res.data.items
           } else {
             this.infoData = res.data.boxes
-            // for (let i = 0; i < this.infoData.length; i++) {
-            //   if (this.infoData[i].items) {
-            //     this.items = this.infoData[i].items
-            //     console.log(this.items)
-            //   }
-            // }
           }
         } else {
           this.$notify({

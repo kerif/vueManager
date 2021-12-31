@@ -15,7 +15,7 @@
         </el-row>
       </el-form-item>
       <!-- 邮件标题 -->
-      <el-form-item :label="$t('标题')">
+      <el-form-item :label="$t('风险提示 标题')">
         <el-row>
           <el-col :span="10">
             <el-input :placeholder="$t('请输入内容')" v-model="params.risk_warning_title"></el-input
@@ -23,7 +23,7 @@
         </el-row>
       </el-form-item>
       <!-- 邮件内容 -->
-      <el-form-item :label="$t('内容')">
+      <el-form-item :label="$t('风险提示 内容')">
         <el-row>
           <el-col :span="20">
             <editor :content="params.content" @submit="saveNotice" />
@@ -84,11 +84,12 @@ export default {
       this.params.content = data
       if (this.params.name === '') {
         return this.$message.error(this.$t('请输入一级分类名称'))
-      } else if (this.params.risk_warning_title === '') {
-        return this.$message.error(this.$t('请输入标题'))
-      } else if (this.params.risk_warning_content === '') {
-        return this.$message.error(this.$t('请输入内容'))
       }
+      // } else if (this.params.risk_warning_title === '') {
+      //   return this.$message.error(this.$t('请输入标题'))
+      // } else if (this.params.risk_warning_content === '') {
+      //   return this.$message.error(this.$t('请输入内容'))
+      // }
       this.$request.updateCategoriesLang(this.line.id, this.params).then(res => {
         if (res.ret) {
           this.$notify({

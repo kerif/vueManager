@@ -1089,11 +1089,6 @@
       class="tmp"
     ></waybill-list-tmp-drawer>
     <abnormal :showAbnormal="showAbnormal" :selectIDs="selectIDs" @passVal="passVal"></abnormal>
-    <!-- <hand-except
-      :showHandExcept="showHandExcept"
-      @reserve="reserve"
-      :selectIDs="selectIDs"
-    ></hand-except> -->
   </div>
 </template>
 
@@ -1500,8 +1495,13 @@ export default {
     },
     confirmFinish() {
       let params = {
-        ids: this.selectIDs.length ? this.selectIDs : [this.logId],
         restore_remark: this.ruleForm.textarea
+      }
+      if (this.logId) {
+        this.selectIDs = []
+        params.ids = [this.logId]
+      } else {
+        params.ids = this.selectIDs
       }
       this.$request.restoreOrder(params).then(res => {
         if (res.ret) {
