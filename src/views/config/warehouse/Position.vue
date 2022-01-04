@@ -189,11 +189,11 @@ export default {
             this.ruleForm.number = res.data
               .filter(item => item.no_package_special)
               .map(item => item.id)
-            this.areaNumber = res.data.map(item => {
-              let id = item.id
-              let numbers = item.number
-              return { id, numbers }
-            })
+            // this.areaNumber = res.data.map(item => {
+            //   let id = item.id
+            //   let numbers = item.number
+            //   return { id, numbers }
+            // })
             this.$nextTick(() => {
               this.typeRowDrop()
             })
@@ -296,6 +296,15 @@ export default {
     // 上架规则
     addShelfRules() {
       this.show = true
+      this.$request.locationArea(this.$route.params.id, { size: 999 }).then(res => {
+        if (res.ret) {
+          this.areaNumber = res.data.map(item => {
+            let id = item.id
+            let numbers = item.number
+            return { id, numbers }
+          })
+        }
+      })
     },
     // 新增货位
     addLocation() {
