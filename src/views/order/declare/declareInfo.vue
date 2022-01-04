@@ -633,6 +633,7 @@ export default {
           this.type = res.data.push_type
           this.orderId = res.data.id
           this.orderSn = res.data.order_sn
+          this.ruleForm.tax_number = res.data.tax_number
           this.ruleForm.weight = res.data.weight
           if (this.type === 1) {
             this.infoData = res.data.items
