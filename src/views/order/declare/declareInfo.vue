@@ -54,42 +54,38 @@
       <el-table-column prop="created_at" :label="$t('提交时间')"> </el-table-column>
       <el-table-column :label="$t('操作')" width="180">
         <template slot-scope="scope">
-          <el-button
-            size="small"
-            class="btn-blue-green"
-            v-if="scope.row.status === 0"
-            @click="getDeclareInfo(scope.row.id, scope.row.third_status)"
-            >{{ $t('报关信息') }}</el-button
-          >
-          <el-button
-            size="small"
-            class="btn-purple"
-            v-if="scope.row.third_status === 0 || scope.row.third_status === 3"
-            @click="editDeclareInfo(scope.row.id, scope.row.push_type)"
-            >{{ $t('编辑') }}</el-button
-          >
-          <el-button
-            size="small"
-            class="btn-deep-blue"
-            v-if="scope.row.status === 1"
-            @click="getInfo(scope.row.id, scope.row.status, scope.row.third_status)"
-            >{{ $t('查看') }}</el-button
-          >
-          <el-button
-            size="small"
-            class="btn-light-red"
-            v-if="scope.row.third_status === 3"
-            @click="resubmit(scope.row.id)"
-            >{{ $t('重新提交') }}</el-button
-          >
-          <el-button
-            size="small"
-            style="margin: 5px 0 0 0"
-            class="btn-light-red"
-            v-if="scope.row.third_status === 3"
-            @click="getLog(scope.row.id)"
-            >{{ $t('对接日志') }}</el-button
-          >
+          <el-dropdown>
+            <el-button type="primary" plain>
+              {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-if="scope.row.status === 0"
+                @click.native="getDeclareInfo(scope.row.id, scope.row.third_status)"
+                >{{ $t('报关信息') }}</el-dropdown-item
+              >
+              <el-dropdown-item
+                v-if="scope.row.third_status === 0 || scope.row.third_status === 3"
+                @click.native="editDeclareInfo(scope.row.id, scope.row.push_type)"
+                >{{ $t('编辑') }}</el-dropdown-item
+              >
+              <el-dropdown-item
+                v-if="scope.row.status === 1"
+                @click.native="getInfo(scope.row.id, scope.row.status, scope.row.third_status)"
+                >{{ $t('查看') }}</el-dropdown-item
+              >
+              <el-dropdown-item
+                v-if="scope.row.third_status === 3"
+                @click.native="resubmit(scope.row.id)"
+                >{{ $t('重新提交') }}</el-dropdown-item
+              >
+              <el-dropdown-item
+                v-if="scope.row.third_status === 3"
+                @click.native="getLog(scope.row.id)"
+                >{{ $t('对接日志') }}</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -639,25 +635,20 @@ export default {
           this.orderSn = res.data.order_sn
           if (this.type === 1) {
             this.infoData = res.data.items
+            if (res.data.items.length) {
+              this.ruleForm.weight = res.data.items[0].weight
+            }
           } else {
             this.infoData = res.data.boxes
-          }
-          if (res.data.boxes.length) {
-            this.boxes = res.data.boxes.map(item => {
-              return {
-                id: item.id,
-                tax_number: item.tax_number,
-                weight: item.weight
-              }
-            })
-          }
-          if (res.data.items.length) {
-            this.ruleForm.weight = res.data.items.map(item => {
-              return {
-                id: item.id,
-                weight: item.weight
-              }
-            })
+            if (res.data.boxes.length) {
+              this.boxes = res.data.boxes.map(item => {
+                return {
+                  id: item.id,
+                  tax_number: item.tax_number,
+                  weight: item.weight
+                }
+              })
+            }
           }
         } else {
           this.$notify({
