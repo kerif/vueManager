@@ -61,86 +61,125 @@
       </div>
     </div>
     <div v-if="evaluationData.length">
-      <ul>
-        <li v-for="(item, index) in evaluationData" :key="index" class="evaluation-list">
-          <div class="order-num">{{ $t('订单号') }}{{ item.order }}</div>
-          <el-row :gutter="20">
-            <!-- 头像 -->
-            <el-col :span="2">
-              <div class="list-img">
-                <img :src="item.user.avatar" />
-              </div>
-            </el-col>
-            <el-col :span="15" :offset="1">
-              <div class="list-font">
-                <span>{{ item.user.id }}---{{ item.user.name }}</span
-                >&nbsp;&nbsp;
-                <span class="font-order">{{ item.created_at }}</span>
-                <!-- 评价 -->
-                <div class="list-evaluation" v-if="item.content">
-                  {{ item.content }}
-                </div>
-                <div v-else class="noDate">
-                  {{ $t('暂无数据') }}
-                </div>
-                <div class="left-img" v-for="(ele, index) in item.images" :key="index">
-                  <span
-                    style="cursor: pointer"
-                    @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${ele}`), (imgVisible = true)"
-                  >
-                    <img :src="`${$baseUrl.IMAGE_URL}${ele}`" class="productImg" />
-                  </span>
-                </div>
-                <div class="location-sty">
-                  <i class="el-icon-map-location"></i><span>{{ item.country }}</span>
-                </div>
-              </div>
-            </el-col>
-            <el-col :span="5" :offset="1">
-              <!-- 星级 -->
-              <div class="star">
-                <span>{{ $t('综合评分') }}</span
-                ><el-rate v-model="item.score" disabled> </el-rate>
-              </div>
-              <div class="star" v-if="item.logistics_score">
-                <span>{{ $t('物流评分') }}</span
-                ><el-rate v-model="item.logistics_score" disabled> </el-rate>
-              </div>
-              <div class="star" v-if="item.customer_score">
-                <span>{{ $t('客服评分') }}</span
-                ><el-rate v-model="item.customer_score" disabled> </el-rate>
-              </div>
-              <div class="star" v-if="item.pack_score">
-                <span>{{ $t('打包评分') }}</span
-                ><el-rate v-model="item.pack_score" disabled> </el-rate>
-              </div>
-              <!-- 精选 -->
-              <div class="featured" v-if="item.is_recommend === 1">
-                <span class="featured-font">
-                  {{ $t('精选') }}
-                </span>
-              </div>
-            </el-col>
-          </el-row>
-          <div class="bottom-btn">
-            <el-button
-              class="btn-light-red"
-              v-if="item.is_recommend === 1"
-              @click="resetRecommend(item.id, 0)"
-              >{{ $t('取消精选') }}</el-button
-            >
-            <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">{{
-              $t('设为精选')
-            }}</el-button>
-            <el-button
-              class="btn-light-red"
-              v-if="item.is_admin_add === 1"
-              @click="deleteRecommend(item.id)"
-              >{{ $t('删除') }}</el-button
-            >
+      <div class="comment-item" v-for="(item, index) in evaluationData" :key="index">
+        <div class="comment-top">
+          <span>{{ $t('订单号') }}：{{ item.order }}</span>
+        </div>
+        <div class="comment-center">
+          <div class="list-img">
+            <img :src="item.user.avatar" />
           </div>
-        </li>
-      </ul>
+          <div>
+            <div class="info">
+              <span>{{ item.user.id }}---{{ item.user.name }}</span>
+              <span class="font-order">{{ item.created_at }}</span>
+            </div>
+            <div class="content">{{ item.content }}</div>
+            <div class="img-list">
+              <img
+                v-for="(ele, index) in item.images"
+                :key="index"
+                :src="`${$baseUrl.IMAGE_URL}${ele}`"
+                style="cursor: pointer"
+                @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${ele}`), (imgVisible = true)"
+              />
+            </div>
+          </div>
+          <div>
+            <div class="star">
+              <span>{{ $t('综合评分') }}</span
+              ><el-rate v-model="item.score" disabled> </el-rate>
+            </div>
+            <div class="star" v-if="item.logistics_score">
+              <span>{{ $t('物流评分') }}</span
+              ><el-rate v-model="item.logistics_score" disabled> </el-rate>
+            </div>
+            <div class="star" v-if="item.customer_score">
+              <span>{{ $t('客服评分') }}</span
+              ><el-rate v-model="item.customer_score" disabled> </el-rate>
+            </div>
+            <div class="star" v-if="item.pack_score">
+              <span>{{ $t('打包评分') }}</span
+              ><el-rate v-model="item.pack_score" disabled> </el-rate>
+            </div>
+            <!-- 精选 -->
+            <div class="featured" v-if="item.is_recommend === 1">
+              <span class="featured-font">
+                {{ $t('精选') }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="comment-footer">
+          <div></div>
+          <div>
+            <div class="city">
+              <i class="el-icon-map-location">{{ item.country }}</i>
+            </div>
+            <div class="reply">
+              <el-input
+                v-model="item.replyContent"
+                type="textarea"
+                :placeholder="$t('写评论...')"
+              ></el-input>
+              <el-button
+                size="mini"
+                type="primary"
+                class="release"
+                @click="release(item.id, item.user.id, item.replyContent)"
+                >{{ $t('发布') }}</el-button
+              >
+            </div>
+            <div class="bottom-btn">
+              <el-button
+                class="btn-light-red"
+                v-if="item.is_recommend === 1"
+                @click="resetRecommend(item.id, 0)"
+                >{{ $t('取消精选') }}</el-button
+              >
+              <el-button class="btn-deep-purple" v-else @click="resetRecommend(item.id, 1)">{{
+                $t('设为精选')
+              }}</el-button>
+              <el-button
+                class="btn-light-red"
+                v-if="item.is_admin_add === 1"
+                @click="deleteRecommend(item.id)"
+                >{{ $t('删除') }}</el-button
+              >
+              <el-button
+                size="mini"
+                type="primary"
+                class="btn-deep-blue"
+                @click="addTime(item.id, item.reference_time)"
+                >{{ $t('时效') }}</el-button
+              >
+            </div>
+            <div class="reply-content">
+              <div v-for="ele in item.reply" :key="ele.id">
+                <div v-if="ele.at_user" style="padding: 10px 0">
+                  <span v-if="ele.user.id === -1" class="red-text">{{ $t('Beegoplus小二') }}</span>
+                  <span v-else>{{ ele.user.name }}</span>
+                  {{ $t('回复') }}
+                  <span v-if="ele.at_user.id === -1" class="red-text">{{
+                    $t('Beegoplus小二')
+                  }}</span>
+                  <span v-else>{{ ele.at_user.name }}</span>
+                  ：
+                  {{ ele.content }}
+                </div>
+
+                <div style="padding: 10px 0" v-else>
+                  <span v-if="ele.user.id === -1" class="red-text"
+                    >{{ $t('Beegoplus小二') }}：</span
+                  >
+                  <span v-else>{{ ele.user.name }}：</span>
+                  {{ ele.content }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div v-else class="noDate">
       {{ $t('暂无数据') }}
@@ -255,6 +294,24 @@
         <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      :visible.sync="timeDialog"
+      class="dialog-comment"
+      :title="$t('填写时效')"
+      size="small"
+    >
+      <div v-for="item in languageList" :key="item.id">
+        <div style="margin: 10px 0">{{ item.name }}</div>
+        <el-input
+          :placeholder="$t('请填写时效')"
+          v-model="timeContent[item.language_code]"
+        ></el-input>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="timeDialog = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="save">{{ $t('确定') }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -311,10 +368,29 @@ export default {
           id: 1,
           name: this.$t('精选')
         }
-      ]
+      ],
+      commentId: '',
+      timeDialog: false,
+      languageList: [],
+      timeContent: {}
     }
   },
+  created() {
+    this.getlanguage()
+    this.getList()
+    this.getCountry()
+    this.getConfig()
+  },
   methods: {
+    getlanguage() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageList = res.data.filter(
+            item => item.enabled && item.language_code !== 'zh_CN'
+          )
+        }
+      })
+    },
     getList() {
       this.tableLoading = true
       this.evaluationData = []
@@ -504,6 +580,38 @@ export default {
         }
       })
     },
+    release(id, userId, content) {
+      if (!content) return
+      this.$request
+        .addReply(id, {
+          at_user_id: userId,
+          content,
+          id
+        })
+        .then(res => {
+          if (res.ret) {
+            console.log(res.data)
+            this.getList()
+          }
+        })
+    },
+    addTime(id) {
+      this.$request.getCommentDetails(id).then(res => {
+        if (res.ret) {
+          this.commentId = id
+          this.timeDialog = true
+        }
+      })
+    },
+    save() {
+      this.$request.addTime(this.commentId, { reference_time: this.timeContent }).then(res => {
+        if (res.ret) {
+          this.getList()
+        }
+        this.timeDialog = false
+        this.commentId = ''
+      })
+    },
     // 重置表单
     resetForm() {
       this.timeList = []
@@ -560,12 +668,6 @@ export default {
         }
       })
     }
-  },
-  created() {
-    // this.getAgentData()
-    this.getList()
-    this.getCountry()
-    this.getConfig()
   }
 }
 </script>
@@ -573,8 +675,82 @@ export default {
 <style lang="scss">
 .evaluation-management-container {
   .agentRight {
-    // display: inline-block;
     float: right;
+  }
+  .font-order {
+    color: #7f7f7f;
+  }
+  .red-text {
+    color: #ff4444;
+  }
+  .comment-item {
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+    .comment-top {
+      padding: 20px;
+    }
+    .comment-center {
+      display: grid;
+      gap: 50px;
+      grid-template-columns: 80px 65% 20%;
+      padding: 10px;
+      .list-img {
+        width: 80px;
+        img {
+          height: 80px;
+          width: 80px;
+          border-radius: 50%;
+          border: 1px solid #ececec;
+        }
+      }
+      .info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .content {
+        padding: 10px 0;
+      }
+      .img-list {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(5, 1fr);
+        img {
+          width: 120px;
+          height: 120px;
+        }
+      }
+    }
+    .comment-footer {
+      padding: 20px;
+      display: grid;
+      gap: 50px;
+      grid-template-columns: 80px 1fr;
+      .city {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .reply {
+        padding: 20px 0;
+        overflow: hidden;
+        .release {
+          float: right;
+          margin-top: 10px;
+        }
+      }
+      .bottom-btn {
+        text-align: right;
+      }
+      .reply-content {
+        margin-top: 10px;
+        padding: 0 10px;
+        border-radius: 5px;
+        background-color: #f8f8f8;
+      }
+    }
   }
   .star {
     display: flex;
@@ -639,10 +815,6 @@ export default {
         border: 1px solid #ececec;
       }
     }
-    .font-order {
-      // font-size: 14px;
-      color: #7f7f7f;
-    }
     .list-font {
       .list-evaluation {
         margin-top: 10px;
@@ -698,12 +870,6 @@ export default {
       padding: 0 5px;
       border-radius: 5px;
     }
-  }
-  .bottom-btn {
-    border-top: 1px solid #ebeef5;
-    padding-top: 10px;
-    text-align: right;
-    padding-right: 20px;
   }
   .searchGroup {
     overflow: hidden;
