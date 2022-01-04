@@ -382,7 +382,6 @@ export default {
       this.$refs.table.doLayout()
     })
   },
-  computed: {},
   methods: {
     getList() {
       this.tableLoading = true
@@ -472,11 +471,11 @@ export default {
     save() {
       if (this.pushType === 1) {
         let params = {
-          ids: [this.ids],
+          ids: [this.id],
           tax_number: this.ruleForm.tax_number,
           weight: this.ruleForm.weight
         }
-        this.$request.fillDeclare(this.ids, params).then(res => {
+        this.$request.fillDeclare(this.id, params).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
@@ -497,7 +496,7 @@ export default {
         let params = {
           boxes: this.boxes
         }
-        this.$request.fillDeclareBox(this.ids, params).then(res => {
+        this.$request.fillDeclareBox(this.id, params).then(res => {
           if (res.ret) {
             this.$notify({
               title: this.$t('操作成功'),
@@ -518,7 +517,7 @@ export default {
     },
     editDeclareInfo(id, type) {
       this.pushType = type
-      this.ids = id
+      this.id = id
       this.showFill = true
       this.getDeclareDetail()
     },
