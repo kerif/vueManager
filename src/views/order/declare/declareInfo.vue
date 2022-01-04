@@ -633,11 +633,9 @@ export default {
           this.type = res.data.push_type
           this.orderId = res.data.id
           this.orderSn = res.data.order_sn
+          this.ruleForm.weight = res.data.weight
           if (this.type === 1) {
             this.infoData = res.data.items
-            if (res.data.items.length) {
-              this.ruleForm.weight = res.data.items[0].weight
-            }
           } else {
             this.infoData = res.data.boxes
             if (res.data.boxes.length) {
