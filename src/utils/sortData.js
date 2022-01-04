@@ -142,4 +142,10 @@ export default [
     width: '140',
     checked: true
   }
+  // {
+  //   id: 'address_type',
+  //   name: '收货方式',
+  //   width: '140',
+  //   checked: true
+  // }
 ]

@@ -92,9 +92,9 @@
           v-if="activeName === '1'"
         ></el-table-column>
         <!-- 包裹id -->
-        <el-table-column :label="$t('包裹ID')" v-if="activeName === '3'">
+        <el-table-column :label="$t('包裹单号')" v-if="activeName === '3'">
           <template slot-scope="scope">
-            <span>{{ scope.row.package_id }}</span>
+            <span>{{ scope.row.package.express_num }}</span>
           </template>
         </el-table-column>
         <!-- 内容 -->
@@ -104,11 +104,11 @@
           v-if="activeName === '3'"
         ></el-table-column>
         <!-- 操作人ID -->
-        <el-table-column :label="$t('操作人ID')" v-if="activeName === '3'">
+        <!-- <el-table-column :label="$t('操作人ID')" v-if="activeName === '3'">
           <template slot-scope="scope">
             <span>{{ scope.row.operator_id }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <!-- 备注 -->
         <el-table-column
           :label="$t('备注')"
