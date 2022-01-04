@@ -61,13 +61,13 @@
             @click="getDeclareInfo(scope.row.id, scope.row.third_status)"
             >{{ $t('报关信息') }}</el-button
           >
-          <!-- <el-button
+          <el-button
             size="small"
             class="btn-purple"
             v-if="scope.row.third_status === 0 || scope.row.third_status === 3"
             @click="editDeclareInfo(scope.row.id, scope.row.push_type)"
             >{{ $t('编辑') }}</el-button
-          > -->
+          >
           <el-button
             size="small"
             class="btn-deep-blue"
@@ -128,10 +128,7 @@
           </el-table-column>
           <el-table-column :label="$t('数量')">
             <template slot-scope="scope">
-              <el-input
-                v-model="scope.row.quantity"
-                @blur="changeNum(scope.$index, scope.row.quantity)"
-              ></el-input>
+              <el-input v-model="scope.row.quantity" @blur="changeVal(scope.row)"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('单位')">
@@ -149,10 +146,7 @@
           </el-table-column>
           <el-table-column :label="$t('单价')">
             <template slot-scope="scope">
-              <el-input
-                v-model="scope.row.unit_value"
-                @blur="changeVal(scope.$index, scope.row.unit_value)"
-              ></el-input>
+              <el-input v-model="scope.row.unit_value" @blur="changeVal(scope.row)"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('总价值')">
@@ -221,10 +215,7 @@
             </el-table-column>
             <el-table-column :label="$t('数量')">
               <template slot-scope="scope">
-                <el-input
-                  v-model="scope.row.quantity"
-                  @blur="changeNum(scope.$index, scope.row.quantity)"
-                ></el-input>
+                <el-input v-model="scope.row.quantity" @blur="changeVal(scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="$t('单位')">
@@ -242,10 +233,7 @@
             </el-table-column>
             <el-table-column :label="$t('单价')">
               <template slot-scope="scope">
-                <el-input
-                  v-model="scope.row.unit_value"
-                  @blur="changeVal(scope.$index, scope.row.unit_value)"
-                ></el-input>
+                <el-input v-model="scope.row.unit_value" @blur="changeVal(scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="$t('总价值')">
@@ -292,7 +280,7 @@
         <el-table-column prop="content" :label="$t('内容')"></el-table-column>
       </el-table>
     </el-dialog>
-    <!-- <el-dialog :visible.sync="showFill" :title="$t('编辑申报')" @close="clearFill">
+    <el-dialog :visible.sync="showFill" :title="$t('编辑申报')" @close="clearFill">
       <div v-if="this.pushType === 1">
         <el-form :model="ruleForm" ref="ruleForm">
           <el-form-item :label="$t('税号')">
@@ -333,7 +321,7 @@
         <el-button @click="showFill = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="save">{{ $t('保存') }}</el-button>
       </div>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -371,12 +359,9 @@ export default {
       sels: [],
       showFill: false,
       ids: '',
-      boxes: [
-        {
-          tax_number: '',
-          weight: ''
-        }
-      ],
+      box: [],
+      boxes: [],
+      pushType: '',
       ruleForm: {
         tax_number: '',
         weight: ''
@@ -482,66 +467,60 @@ export default {
       this.showFill = false
       this.ruleForm.tax_number = ''
       this.ruleForm.weight = ''
-      this.boxes = [
-        {
-          tax_number: '',
-          weight: ''
-        }
-      ]
+      this.boxes = []
     },
-    // save() {
-    //   if (this.pushType === 1) {
-    //     let params = {
-    //       ids: [this.ids],
-    //       tax_number: this.ruleForm.tax_number,
-    //       weight: this.ruleForm.weight
-    //     }
-    //     this.$request.fillDeclare(this.ids, params).then(res => {
-    //       if (res.ret) {
-    //         this.$notify({
-    //           title: this.$t('操作成功'),
-    //           message: res.msg,
-    //           type: 'success'
-    //         })
-    //         this.getList()
-    //         this.showFill = false
-    //       } else {
-    //         this.$notify({
-    //           title: this.$t('操作失败'),
-    //           message: res.msg,
-    //           type: 'warning'
-    //         })
-    //       }
-    //     })
-    //   } else {
-    //     let params = {
-    //       boxes: this.boxes
-    //     }
-    //     this.$request.fillDeclareBox(this.ids, params).then(res => {
-    //       if (res.ret) {
-    //         this.$notify({
-    //           title: this.$t('操作成功'),
-    //           message: res.msg,
-    //           type: 'success'
-    //         })
-    //         this.getList()
-    //         this.showFill = false
-    //       } else {
-    //         this.$notify({
-    //           title: this.$t('操作失败'),
-    //           message: res.msg,
-    //           type: 'warning'
-    //         })
-    //       }
-    //     })
-    //   }
-    // },
+    save() {
+      if (this.pushType === 1) {
+        let params = {
+          ids: [this.ids],
+          tax_number: this.ruleForm.tax_number,
+          weight: this.ruleForm.weight
+        }
+        this.$request.fillDeclare(this.ids, params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+            this.showFill = false
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        let params = {
+          boxes: this.boxes
+        }
+        this.$request.fillDeclareBox(this.ids, params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+            this.showFill = false
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
+    },
     editDeclareInfo(id, type) {
-      console.log(type)
       this.pushType = type
-      console.log(this.pushType)
       this.ids = id
       this.showFill = true
+      this.getDeclareDetail()
     },
     getLog(id) {
       this.showLog = true
@@ -633,21 +612,16 @@ export default {
     selectionChange(selection) {
       this.declareNum = selection.map(item => item.id)
     },
-    changeNum(ind, val) {
-      console.log(ind)
-      console.log(val)
-    },
-    changeVal(ind, val) {
-      console.log(ind)
-      console.log(val)
+    changeVal(row) {
+      if (row.quantity && row.unit_value) {
+        row.value = row.quantity * row.unit_value
+      }
     },
     getInfo(id, status, third_status) {
       this.show = true
       this.id = id
       this.onStatus = status
-      console.log(this.onStatus)
       this.thirdStatus = third_status
-      console.log(this.thirdStatus)
       this.getDeclareDetail()
       this.getInit()
     },
@@ -655,7 +629,6 @@ export default {
       this.show = true
       this.id = id
       this.thirdStatus = third_status
-      console.log(this.thirdStatus)
       this.getDeclareDetail()
       this.getInit()
     },
@@ -668,10 +641,24 @@ export default {
           if (this.type === 1) {
             this.infoData = res.data.items
           } else {
-            if (res.data.boxes) {
-              this.boxes = res.data.boxes
-            }
             this.infoData = res.data.boxes
+          }
+          if (res.data.boxes.length) {
+            this.boxes = res.data.boxes.map(item => {
+              return {
+                id: item.id,
+                tax_number: item.tax_number,
+                weight: item.weight
+              }
+            })
+          }
+          if (res.data.items.length) {
+            this.ruleForm.weight = res.data.items.map(item => {
+              return {
+                id: item.id,
+                weight: item.weight
+              }
+            })
           }
         } else {
           this.$notify({

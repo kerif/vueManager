@@ -237,7 +237,8 @@ export default {
           { id: 'user_address', name: this.$t('客户地址') },
           { id: 'station_address', name: this.$t('自提点地址') },
           { id: 'address', name: this.$t('附加地址') },
-          { id: 'remark', name: this.$t('备注') }
+          { id: 'remark', name: this.$t('备注') },
+          { id: 'address_type', name: this.$t('收货方式') }
         ]
         // 入库信息
         this.warehouseInfo = [
@@ -440,7 +441,8 @@ export default {
           { id: 'user_address', name: this.$t('客户地址') },
           { id: 'station_address', name: this.$t('自提点地址') },
           { id: 'address', name: this.$t('附加地址') },
-          { id: 'remark', name: this.$t('备注') }
+          { id: 'remark', name: this.$t('备注') },
+          { id: 'address_type', name: this.$t('收货方式') }
         ]
         // 入库信息
         this.warehouseInfo = [

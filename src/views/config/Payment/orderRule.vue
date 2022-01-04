@@ -10,6 +10,7 @@
           <span v-if="scope.row.type === 3">{{ $t('订单分箱号') }}</span>
           <span v-if="scope.row.type === 4">{{ $t('拼团订单编号') }}</span>
           <span v-if="scope.row.type === 5">{{ $t('发货单编号') }}</span>
+          <span v-if="scope.row.type === 7">{{ $t('盘点单编号') }}</span>
         </template>
       </el-table-column>
       <!-- 状态 -->
