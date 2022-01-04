@@ -133,6 +133,16 @@
         ></el-input>
       </el-form-item>
     </el-form>
+    <!-- 盘点单编号 -->
+    <el-form :model="inventoryRules" label-width="140px" v-if="this.name === 7">
+      <el-form-item :label="$t('盘点单前缀')">
+        <el-input
+          v-model="inventoryRules.prefix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
+    </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
@@ -270,6 +280,9 @@ export default {
       },
       invoiceRules: {
         prefix: 'SH'
+      },
+      inventoryRules: {
+        prefix: ''
       }
     }
   },
@@ -294,8 +307,10 @@ export default {
             this.groupRules.connector = res.data.link
             this.groupRules.subOrederNum = res.data.sn
             this.groupRules.suffix = res.data.suffix
-          } else {
+          } else if (this.name === 5) {
             this.invoiceRules.prefix = res.data.prefix
+          } else {
+            this.inventoryRules.prefix = res.data.prefix
           }
         }
       })
@@ -400,10 +415,31 @@ export default {
               })
             }
           })
-      } else {
+      } else if (this.name === 5) {
         this.$request
           .updateRules(this.id, {
             prefix: this.invoiceRules.prefix
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .updateRules(this.id, {
+            prefix: this.inventoryRules.prefix
           })
           .then(res => {
             if (res.ret) {
@@ -434,6 +470,7 @@ export default {
       this.userRules.system = ''
       this.userRules.for_new_user = ''
       this.invoiceRules.prefix = ''
+      this.inventoryRules.prefix = ''
       this.groupRules.connector = ''
       this.boxRules.connector = ''
       this.boxRules.boxNum = ''
