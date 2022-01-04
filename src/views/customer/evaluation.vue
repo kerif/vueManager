@@ -385,9 +385,7 @@ export default {
     getlanguage() {
       this.$request.languageList().then(res => {
         if (res.ret) {
-          this.languageList = res.data.filter(
-            item => item.enabled && item.language_code !== 'zh_CN'
-          )
+          this.languageList = res.data
         }
       })
     },
@@ -600,6 +598,10 @@ export default {
         if (res.ret) {
           this.commentId = id
           this.timeDialog = true
+          this.timeContent = {}
+          if (res.data.reference_time) {
+            this.timeContent = res.data.reference_time
+          }
         }
       })
     },
