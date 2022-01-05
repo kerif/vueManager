@@ -1,7 +1,7 @@
 <template>
   <div class="picking-list-container">
     <div class="select">
-      <el-select
+      <!-- <el-select
         v-model="category"
         :placeholder="$t('请选择')"
         @change="changeVal"
@@ -10,7 +10,7 @@
         <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
           {{ item.name }}
         </el-option>
-      </el-select>
+      </el-select> -->
       <!-- <search-select :selectArr="typeList" v-model="type" @search="onTypeChange"></search-select> -->
       <div class="searchGroup">
         <search-group
