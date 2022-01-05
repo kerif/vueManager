@@ -33,7 +33,7 @@
       <el-table-column prop="tag" :label="$t('tag')"> </el-table-column>
       <el-table-column :label="$t('类型')">
         <template slot-scope="scope">
-          <span>{{ scope.row.category.name }}</span>
+          <span>{{ scope.row.category && scope.row.category.name }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="updated_at" :label="$t('创建时间')"> </el-table-column>

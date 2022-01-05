@@ -618,5 +618,8 @@ export default {
   .el-drawer.rtl {
     overflow: auto;
   }
+  .el-icon-close:before {
+    color: black;
+  }
 }
 </style>

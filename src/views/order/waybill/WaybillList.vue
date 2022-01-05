@@ -2658,6 +2658,12 @@ export default {
 /deep/ .tmp .el-drawer__open .el-drawer.rtl {
   width: 30% !important;
 }
+/deep/.el-dialog__close {
+  color: black !important;
+}
+/deep/.el-icon-close:before {
+  color: black !important;
+}
 .add-box {
   margin-bottom: 10px;
   margin-right: 5px;
@@ -2696,9 +2702,9 @@ export default {
   font-size: 14px;
   color: #fff;
 }
-.el-dialog__close {
-  color: #fff;
-}
+// .el-dialog__close {
+//   color: #fff;
+// }
 @media (min-width: 1550px) {
   .expand-table {
     width: 100%;

@@ -147,15 +147,15 @@ export default {
       })
     },
     getTmpList() {
-      // let code = this.code
-      this.$request.listQuery({ code: this.code, size: 100 }).then(res => {
+      this.$request.listQuery({ code: this.tmpCode, size: 100 }).then(res => {
         this.tmpList = res.data
-        this.tmpCode = res.data[0].code
+        // this.tmpCode = res.data[0].code
       })
     },
     getCodeList() {
       this.$request.getCodeList().then(res => {
-        this.code = res.data[0].id
+        this.tmpCode = res.data[0].id
+        console.log(this.tmpCode)
         this.name = res.data[0].name
       })
     },
@@ -222,7 +222,6 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
-              // this.getList()
             } else {
               this.$message({
                 message: res.msg,
@@ -249,6 +248,12 @@ export default {
   }
   .active {
     border: 1px solid #3540a5 !important;
+  }
+  /deep/.el-dialog__close {
+    color: black !important;
+  }
+  /deep/.el-icon-close:before {
+    color: black;
   }
   .template-item {
     cursor: pointer;

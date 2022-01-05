@@ -2,6 +2,7 @@
   <el-drawer
     :visible.sync="showDrawer"
     class="volume-echarts-container"
+    :size="size"
     :before-close="close"
     @opened="open()"
   >
@@ -81,6 +82,7 @@ export default {
       receiveType: '',
       begin: '',
       end: '',
+      size: '90%',
       timeOptions: [
         { value: 'created_at', name: this.$t('订单提交时间') },
         { value: 'packed_at', name: this.$t('打包称重时间') },

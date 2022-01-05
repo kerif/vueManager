@@ -1,11 +1,14 @@
 <template>
   <div class="picking-list-container">
-    <div class="searchGroup">
-      <search-group
-        :placeholder="$t('请输入关键字')"
-        v-model="page_params.keyword"
-        @search="goSearch"
-      ></search-group>
+    <div class="select">
+      <search-select :selectArr="typeList" v-model="type" @search="onTypeChange"></search-select>
+      <div class="searchGroup">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        ></search-group>
+      </div>
     </div>
     <div class="clear"></div>
     <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
@@ -154,12 +157,13 @@
 </template>
 
 <script>
-import { SearchGroup } from '@/components/searchs'
+import { SearchSelect, SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   components: {
     SearchGroup,
+    SearchSelect,
     NlePagination
   },
   mixins: [pagination],
@@ -171,7 +175,34 @@ export default {
       imgVisible: false,
       imgSrc: '',
       tableLoading: false,
-      localization: {}
+      localization: {},
+      typeList: [
+        {
+          value: 1,
+          label: this.$t('包裹入库')
+        },
+        {
+          value: 2,
+          label: this.$t('退回未入库')
+        },
+        {
+          value: 3,
+          label: this.$t('弃件')
+        },
+        {
+          value: 4,
+          label: this.$t('彻底删除')
+        },
+        {
+          value: 5,
+          label: this.$t('恢复')
+        },
+        {
+          value: 6,
+          label: this.$t('包裹变更')
+        }
+      ],
+      type: ''
     }
   },
   methods: {
@@ -206,12 +237,19 @@ export default {
         .getStorage({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          type: this.type
         })
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
             this.oderData = res.data
+            // res.data.forEach(item => {
+            //   this.typeList.push({
+            //     value: item.id,
+            //     label: item.type
+            //   })
+            // })
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
@@ -282,6 +320,10 @@ export default {
             })
           }
         })
+    },
+    onTypeChange() {
+      this.page_params.handleQueryChange('type', this.type)
+      this.getOrder()
     }
   },
   created() {
@@ -313,10 +355,16 @@ export default {
       width: 50%;
     }
   }
-  .searchGroup {
-    width: 21.5%;
-    float: right;
+  .select {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+    .searchGroup {
+      width: 21.5%;
+      float: right;
+    }
   }
+
   .clear {
     clear: both;
   }
