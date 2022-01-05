@@ -94,7 +94,7 @@
         <!-- 包裹id -->
         <el-table-column :label="$t('包裹单号')" v-if="activeName === '3'">
           <template slot-scope="scope">
-            <span>{{ scope.row.package.express_num }}</span>
+            <span>{{ scope.row.package && scope.row.package.express_num }}</span>
           </template>
         </el-table-column>
         <!-- 内容 -->
@@ -269,8 +269,8 @@ export default {
           if (res.ret) {
             this.oderData = res.data
             this.localization = res.localization
-            this.page_params.page = res.data.current_page
-            this.page_params.total = res.data.total
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
             this.$nextTick(() => {
               this.$refs.table.doLayout()
             })
