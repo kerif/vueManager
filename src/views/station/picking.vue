@@ -1,7 +1,17 @@
 <template>
   <div class="picking-list-container">
     <div class="select">
-      <search-select :selectArr="typeList" v-model="type" @search="onTypeChange"></search-select>
+      <el-select
+        v-model="category"
+        :placeholder="$t('请选择')"
+        @change="changeVal"
+        :clearable="true"
+      >
+        <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
+          {{ item.name }}
+        </el-option>
+      </el-select>
+      <!-- <search-select :selectArr="typeList" v-model="type" @search="onTypeChange"></search-select> -->
       <div class="searchGroup">
         <search-group
           :placeholder="$t('请输入关键字')"
@@ -157,13 +167,13 @@
 </template>
 
 <script>
-import { SearchSelect, SearchGroup } from '@/components/searchs'
+import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
   components: {
     SearchGroup,
-    SearchSelect,
+    // SearchSelect,
     NlePagination
   },
   mixins: [pagination],
@@ -178,28 +188,28 @@ export default {
       localization: {},
       typeList: [
         {
-          value: 1,
-          label: this.$t('包裹入库')
+          id: 1,
+          name: this.$t('包裹入库')
         },
         {
-          value: 2,
-          label: this.$t('退回未入库')
+          id: 2,
+          name: this.$t('退回未入库')
         },
         {
-          value: 3,
-          label: this.$t('弃件')
+          id: 3,
+          name: this.$t('弃件')
         },
         {
-          value: 4,
-          label: this.$t('彻底删除')
+          id: 4,
+          name: this.$t('彻底删除')
         },
         {
-          value: 5,
-          label: this.$t('恢复')
+          id: 5,
+          name: this.$t('恢复')
         },
         {
-          value: 6,
-          label: this.$t('包裹变更')
+          id: 6,
+          name: this.$t('包裹变更')
         }
       ],
       type: ''
@@ -321,7 +331,7 @@ export default {
           }
         })
     },
-    onTypeChange() {
+    changeVal() {
       this.page_params.handleQueryChange('type', this.type)
       this.getOrder()
     }
