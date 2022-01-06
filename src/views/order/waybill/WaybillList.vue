@@ -2630,8 +2630,6 @@ export default {
     color: red;
   }
   .group-sty {
-    // color: #ff4b3d;
-    // margin-right: 5px;
     width: 20px;
   }
   .no-package {
@@ -2645,9 +2643,6 @@ export default {
     margin-left: 5px;
     cursor: pointer;
   }
-  // .el-icon {
-  //   display: block !important;
-  // }
 }
 .dialog-input {
   width: 30% !important;
@@ -2702,9 +2697,6 @@ export default {
   font-size: 14px;
   color: #fff;
 }
-// .el-dialog__close {
-//   color: #fff;
-// }
 @media (min-width: 1550px) {
   .expand-table {
     width: 100%;

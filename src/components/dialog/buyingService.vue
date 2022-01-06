@@ -61,8 +61,11 @@
         </el-col>
       </el-row>
     </div>
-    <div style="color: red">
+    <div style="color: red" v-if="state === 'sms'">
       {{ $t('注:国际短信发送以服务商实际扣除次数为准，不同国家间计费存在差额') }}
+    </div>
+    <div style="color: red" v-else>
+      {{ $t('注:国际物流查询以服务商实际扣除次数为准，不同国家间计费存在差额') }}
     </div>
     <div class="count-sty">
       {{ $t('购买数量') }}

@@ -122,6 +122,11 @@
               <el-input v-model="scope.row.en_name"></el-input>
             </template>
           </el-table-column>
+          <el-table-column label="sku">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.sku"></el-input>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('数量')">
             <template slot-scope="scope">
               <el-input v-model="scope.row.quantity" @blur="changeVal(scope.row)"></el-input>
@@ -163,7 +168,7 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('操作')">
+          <el-table-column :label="$t('操作')" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="small"
@@ -207,6 +212,11 @@
             <el-table-column :label="$t('英文品名')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.en_name"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="sku">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.sku"></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="$t('数量')">

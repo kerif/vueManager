@@ -2,16 +2,17 @@
   <div class="picking-list-container">
     <div class="select">
       <!-- <el-select
-        v-model="category"
+        v-model="type"
+        v-if="activeName === '1'"
         :placeholder="$t('请选择')"
         @change="changeVal"
         :clearable="true"
+        class="selected"
       >
         <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
           {{ item.name }}
         </el-option>
       </el-select> -->
-      <!-- <search-select :selectArr="typeList" v-model="type" @search="onTypeChange"></search-select> -->
       <div class="searchGroup">
         <search-group
           :placeholder="$t('请输入关键字')"
@@ -116,12 +117,6 @@
           prop="content"
           v-if="activeName === '3'"
         ></el-table-column>
-        <!-- 操作人ID -->
-        <!-- <el-table-column :label="$t('操作人ID')" v-if="activeName === '3'">
-          <template slot-scope="scope">
-            <span>{{ scope.row.operator_id }}</span>
-          </template>
-        </el-table-column> -->
         <!-- 备注 -->
         <el-table-column
           :label="$t('备注')"
@@ -145,11 +140,6 @@
             </span>
           </template>
         </el-table-column>
-        <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small">删除</el-button>
-        </div>
-      </template> -->
       </el-table>
       <nle-pagination
         style="margin-top: 5px"
@@ -173,7 +163,6 @@ import { pagination } from '@/mixin'
 export default {
   components: {
     SearchGroup,
-    // SearchSelect,
     NlePagination
   },
   mixins: [pagination],
@@ -254,12 +243,6 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.oderData = res.data
-            // res.data.forEach(item => {
-            //   this.typeList.push({
-            //     value: item.id,
-            //     label: item.type
-            //   })
-            // })
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
@@ -330,11 +313,11 @@ export default {
             })
           }
         })
-    },
-    changeVal() {
-      this.page_params.handleQueryChange('type', this.type)
-      this.getOrder()
     }
+    // changeVal() {
+    //   this.page_params.handleQueryChange('type', this.type)
+    //   this.getOrder()
+    // }
   },
   created() {
     if (this.$route.query.active) {
@@ -372,6 +355,9 @@ export default {
     .searchGroup {
       width: 21.5%;
       float: right;
+    }
+    .selected {
+      width: 150px;
     }
   }
 

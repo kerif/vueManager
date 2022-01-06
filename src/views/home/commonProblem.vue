@@ -124,12 +124,6 @@ export default {
     getCategoryList() {
       this.$request.categoryList().then(res => {
         this.categoryData = res.data
-        // res.data.forEach(item => {
-        //   this.categoryData.push({
-        //     value: item.id,
-        //     label: item.name
-        //   })
-        // })
       })
     },
     goSearch() {

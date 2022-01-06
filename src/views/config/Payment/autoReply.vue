@@ -10,7 +10,7 @@
             $t('添加新规则')
           }}</el-button>
         </div>
-        <el-table :data="tableData" border style="width: 70%">
+        <el-table :data="tableData" border style="width: 100%">
           <el-table-column label="#" type="index"> </el-table-column>
           <el-table-column prop="name" :label="$t('规则名称')"> </el-table-column>
           <el-table-column prop="keywords" :formatter="fileData" :label="$t('关键词')">
@@ -33,6 +33,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <nle-pagination :pageParams="page_params" style="margin-top: 10px"></nle-pagination>
       </el-tab-pane>
       <el-tab-pane :label="$t('被关注回复')" name="2">
         <div>
@@ -147,6 +148,8 @@
 
 <script>
 import dialog from '@/components/dialog'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -172,6 +175,10 @@ export default {
       ]
     }
   },
+  components: {
+    NlePagination
+  },
+  mixins: [pagination],
   created() {
     this.getList()
   },
@@ -326,11 +333,16 @@ export default {
     getList() {
       let param = {
         type: this.activeName,
-        keyword: this.expressName
+        keyword: this.expressName,
+        page: this.page_params.page,
+        size: this.page_params.size
       }
       this.$request.replyMessageList(param).then(res => {
-        this.tableData = res.data
-        console.log(this.tableData)
+        if (res.ret) {
+          this.tableData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        }
       })
     },
     search() {
