@@ -26,7 +26,6 @@
               @change="changeCountry"
               @blur="trigger"
               filterable
-              :disabled="!!this.$route.params.id && !hasStore"
               class="country-select"
               :placeholder="$t('请选择')"
             >
@@ -45,7 +44,6 @@
               :props="{ checkStrictly: true }"
               :key="keyValue"
               class="country-select"
-              :disabled="!!this.$route.params.id && !hasStore"
               v-model="areaData"
               :options="newWarehouseList"
               @change="handleChange"

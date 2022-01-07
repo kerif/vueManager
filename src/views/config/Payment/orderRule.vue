@@ -36,9 +36,9 @@
             >{{ scope.row.prefix
             }}<span v-if="scope.row.prefix !== ''"
               >{{ num }}<span v-if="scope.row.type === 3">{{ scope.row.link }}</span>
-              <span v-if="scope.row.sn === 0">1</span>
-              <span v-if="scope.row.sn === 1">a</span>
-              <span v-if="scope.row.sn === 2">A</span>
+              <span v-if="scope.row.sn === 0 && scope.row.type === 3">1</span>
+              <span v-if="scope.row.sn === 1 && scope.row.type === 3">a</span>
+              <span v-if="scope.row.sn === 2 && scope.row.type === 3">A</span>
             </span></span
           >
         </template>
