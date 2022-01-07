@@ -12,9 +12,10 @@
           :placeholder="$t('分区表名称')"
           v-model="name"
           class="edit"
-          style="width: 200px"
         ></el-input>
-        <el-button type="primary" @click="saveName">{{ $t('保存') }}</el-button>
+        <el-button type="primary" size="mini" @click="saveName" style="margin-left: 5px">{{
+          $t('保存')
+        }}</el-button>
       </div>
       <div class="addUser">
         <div class="searchGroup">
@@ -442,15 +443,13 @@ export default {
   }
   .bottom-sty {
     width: 100%;
-    // margin-top: 20px;
     margin-bottom: 10px;
     float: left;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .edit .el-input__inner {
-      border: 1px solid #f5f5f5;
-      background-color: #f5f5f5;
+    .edit {
+      width: 150px;
     }
   }
   .searchGroup {

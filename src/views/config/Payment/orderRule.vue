@@ -33,7 +33,10 @@
       <el-table-column :label="$t('示例')">
         <template slot-scope="scope">
           <span
-            >{{ scope.row.prefix }}<span v-if="scope.row.prefix !== ''">{{ num }}</span></span
+            >{{ scope.row.prefix
+            }}<span v-if="scope.row.prefix !== ''"
+              >{{ num }}<span v-if="scope.row.type === 3">-G</span></span
+            ></span
           >
         </template>
       </el-table-column>

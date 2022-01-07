@@ -404,11 +404,9 @@ export default {
           this.localization = res.localization
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
-          setTimeout(() => {
-            this.$nextTick(() => {
-              this.$refs.table.doLayout()
-            })
-          }, 300)
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
