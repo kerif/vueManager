@@ -157,21 +157,17 @@
             <div class="reply-content">
               <div v-for="ele in item.reply" :key="ele.id">
                 <div v-if="ele.at_user" style="padding: 10px 0">
-                  <span v-if="ele.user.id === -1" class="red-text">{{ $t('Beegoplus小二') }}</span>
+                  <span v-if="ele.user.id === -1" class="red-text">{{ ele.user.name }}</span>
                   <span v-else>{{ ele.user.name }}</span>
                   {{ $t('回复') }}
-                  <span v-if="ele.at_user.id === -1" class="red-text">{{
-                    $t('Beegoplus小二')
-                  }}</span>
+                  <span v-if="ele.at_user.id === -1" class="red-text">{{ ele.at_user.name }}</span>
                   <span v-else>{{ ele.at_user.name }}</span>
                   ：
                   {{ ele.content }}
                 </div>
 
                 <div style="padding: 10px 0" v-else>
-                  <span v-if="ele.user.id === -1" class="red-text"
-                    >{{ $t('Beegoplus小二') }}：</span
-                  >
+                  <span v-if="ele.user.id === -1" class="red-text">{{ ele.user.name }}：</span>
                   <span v-else>{{ ele.user.name }}：</span>
                   {{ ele.content }}
                 </div>
