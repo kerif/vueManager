@@ -1,16 +1,16 @@
 <template>
   <div class="invoice-container">
     <el-tabs v-model="activeName" @tab-click="onTabChange">
-      <el-tab-pane :label="`${$t('全部')} (${this.countData.whole || 0})`" name="0">
+      <el-tab-pane :label="`${$t('全部')} (${countData.whole || 0})`" name="0">
         <invoice-data :allData="all" @transVal="fn" @passval="onSearch"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('待处理')} (${this.countData.stay || 0})`" name="1">
+      <el-tab-pane :label="`${$t('待处理')} (${countData.stay || 0})`" name="1">
         <invoice-data :allData="all" @transVal="fn" @passval="onSearch"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('已开票')} (${this.countData.complete || 0})`" name="2">
+      <el-tab-pane :label="`${$t('已开票')} (${countData.complete || 0})`" name="2">
         <invoice-data :allData="all" @transVal="fn" @passval="onSearch"></invoice-data>
       </el-tab-pane>
-      <el-tab-pane :label="`${$t('已作废')} (${this.countData.reopen || 0})`" name="3">
+      <el-tab-pane :label="`${$t('已作废')} (${countData.reopen || 0})`" name="3">
         <invoice-data :allData="all" @transVal="fn" @passval="onSearch"></invoice-data>
       </el-tab-pane>
     </el-tabs>

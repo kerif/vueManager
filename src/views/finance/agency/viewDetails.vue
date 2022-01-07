@@ -10,8 +10,8 @@
                 <span class="leftWidth">{{ $t('客户ID') }}</span
                 >&nbsp;&nbsp;&nbsp;&nbsp;
                 <span
-                  ><i class="idNum">{{ detailData.user.id }}</i
-                  >&nbsp;&nbsp;&nbsp;{{ detailData.user.name }}</span
+                  ><i class="idNum">{{ detailData.user && detailData.user.id }}</i
+                  >&nbsp;&nbsp;&nbsp;{{ detailData.user && detailData.user.name }}</span
                 >
               </el-col>
             </el-row>

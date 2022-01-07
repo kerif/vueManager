@@ -1,7 +1,7 @@
 <template>
   <div class="picking-list-container">
     <div class="select">
-      <!-- <el-select
+      <el-select
         v-model="type"
         v-if="activeName === '1'"
         :placeholder="$t('请选择')"
@@ -12,7 +12,7 @@
         <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
           {{ item.name }}
         </el-option>
-      </el-select> -->
+      </el-select>
       <div class="searchGroup">
         <search-group
           :placeholder="$t('请输入关键字')"
@@ -313,11 +313,11 @@ export default {
             })
           }
         })
+    },
+    changeVal() {
+      this.page_params.handleQueryChange('type', this.type)
+      this.getOrder()
     }
-    // changeVal() {
-    //   this.page_params.handleQueryChange('type', this.type)
-    //   this.getOrder()
-    // }
   },
   created() {
     if (this.$route.query.active) {
