@@ -118,7 +118,22 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <span class="red-sty">*{{ $t('修改邀请人的操作将会被日志记录,请谨慎操作') }}</span>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <span class="red-sty">*{{ $t('修改邀请人的操作将会被日志记录,请谨慎操作') }}</span>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="$t('备注')" class="label-sty">
+            <el-input
+              type="textarea"
+              :rows="3"
+              class="input-sty"
+              :placeholder="$t('请输入内容')"
+              v-model="form.remark"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -144,7 +159,8 @@ export default {
         wechat_id: '',
         clearance_code: '',
         id_card: '',
-        area: ''
+        area: '',
+        remark: ''
       },
       remarkName: '',
       invitorId: '',
@@ -177,6 +193,7 @@ export default {
           this.remarkName = res.data.remark_name
           this.invitorId = res.data.invitor_id.toString()
           console.log(typeof this.invitorId, 'this.invitorId')
+          this.form.remark = res.data.profile && res.data.profile.remark
         }
       })
     },

@@ -134,9 +134,6 @@
             <el-table-column prop="package_name" :label="$t('物品名称')"></el-table-column>
             <el-table-column prop="package_value" :label="$t('物品价值')"></el-table-column>
             <el-table-column prop="package_weight" :label="$t('物品单价')"></el-table-column>
-            <!-- <el-table-column :label="$t('物品属性')">
-              <span v-for="(item, index) in props" :key="index">{{ item.name }}</span>
-            </el-table-column> -->
             <el-table-column prop="destination_country" :label="$t('寄往国家')"></el-table-column>
             <el-table-column prop="express_company" :label="$t('仓库')"></el-table-column>
             <el-table-column prop="created_at" :label="$t('提交时间')"></el-table-column>
