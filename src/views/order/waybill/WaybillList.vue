@@ -313,8 +313,8 @@
                 <span>{{ scope.row.exceptional_operator }}</span>
               </template>
               <template v-else-if="item.id === 'address_type'">
-                <span>{{ scope.row.address_type }}</span
-                ><span v-if="scope.row.station_name !== ''">--{{ scope.row.station_name }}</span>
+                <span>{{ scope.row.address_type }}</span>
+                <!-- <span v-if="scope.row.station_name !== ''">--{{ scope.row.station_name }}</span> -->
               </template>
               <template v-else>{{ scope.row[item.id] }}</template>
             </template>

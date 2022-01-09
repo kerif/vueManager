@@ -7,7 +7,12 @@
         </el-col>
         <el-col :span="4">
           <el-button class="btn-light-red" @click="customerMerge">{{ $t('合并') }}</el-button>
-          <el-button class="btn-deep-blue" @click="editInfo">{{ $t('修改') }}</el-button>
+          <el-button v-show="!edit" class="btn-deep-blue" @click="editInfo">{{
+            $t('修改')
+          }}</el-button>
+          <el-button v-show="edit" class="btn-deep-blue" @click="saveInfo">{{
+            $t('保存')
+          }}</el-button>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -29,26 +34,26 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('VIP等级:') }}</span>
-              <span>{{ this.info.memberLevelName }}</span>
+              <span>{{ info.memberLevelName }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('余额:') }}</span>
-              <span>{{ this.info.balance }}</span>
+              <span>{{ info.balance }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('所属客服:') }}</span>
-              <span>{{ this.info.customerName }}</span>
-              <!-- <el-input v-model="this.info.customerName" style="width: 120px"></el-input> -->
+              <span v-show="!edit">{{ info.customerName }}</span>
+              <el-input v-show="edit" v-model="info.customerName" style="width: 120px"></el-input>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('注册日期:') }}</span>
-              <span>{{ this.info.createdAt }}</span>
+              <span>{{ info.createdAt }}</span>
             </el-col>
           </el-row>
         </el-col>
@@ -56,32 +61,32 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('客户昵称:') }}</span>
-              <span>{{ this.info.name }}</span>
+              <span>{{ info.name }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('EMAIL:') }}</span>
-              <span>{{ this.info.email }}</span>
+              <span>{{ info.email }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('积分:') }}</span>
-              <span>{{ this.info.point }}</span>
+              <span>{{ info.point }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('所属销售:') }}</span>
-              <span>{{ this.info.saleName }}</span>
-              <!-- <el-input v-model="this.info.saleName" style="width: 120px"></el-input> -->
+              <span v-show="!edit">{{ info.saleName }}</span>
+              <el-input v-show="edit" v-model="info.saleName" style="width: 120px"></el-input>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('最后登录时间:') }}</span>
-              <span>{{ this.info.lastLogin }}</span>
+              <span>{{ info.lastLogin }}</span>
             </el-col>
           </el-row>
         </el-col>
@@ -89,14 +94,14 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('客户组:') }}</span>
-              <!-- <el-input v-model="this.info.saleName" style="width: 120px"></el-input> -->
-              <span></span>
+              <span v-show="!edit">{{ info.name_cn }}</span>
+              <el-input v-show="edit" v-model="info.name_cn" style="width: 120px"></el-input>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('手机号:') }}</span>
-              <span>{{ this.info.phone }}</span>
+              <span>{{ info.phone }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -136,6 +141,7 @@
             <el-table-column prop="express_company" :label="$t('仓库')"></el-table-column>
             <el-table-column prop="created_at" :label="$t('提交时间')"></el-table-column>
           </el-table>
+          <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
         <el-tab-pane :label="$t('订单列表')" name="2">
           <el-table :data="orderData" border style="width: 100%">
@@ -150,6 +156,7 @@
             <el-table-column prop="payment_fee" :label="$t('预计费用')"></el-table-column>
             <el-table-column prop="created_at" :label="$t('提交时间')"></el-table-column>
           </el-table>
+          <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
         <el-tab-pane :label="$t('地址')" name="3">
           <el-table :data="addressData" border style="width: 100%">
@@ -164,6 +171,7 @@
             <el-table-column prop="door_no" :label="$t('门牌号')"></el-table-column>
             <el-table-column prop="postcode" :label="$t('邮编')"></el-table-column>
           </el-table>
+          <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
         <el-tab-pane :label="$t('券包')" name="4">
           <el-table class="data-list" :data="inviteData" border style="width: 100%">
@@ -252,6 +260,7 @@ export default {
       customerId: '',
       customerName: '',
       dialogVisible: false,
+      edit: false,
       target: '',
       tableData: [],
       inviteData: [],
@@ -266,13 +275,13 @@ export default {
   },
   methods: {
     getInfo() {
-      // this.info = JSON.parse(this.$route.query.info)
-      // console.log(this.info)
+      this.info = JSON.parse(this.$route.query.info)
+      console.log(this.info)
     },
     customerMerge() {
-      // this.customerId = this.$route.params.id
-      // this.customerName = this.info.name
-      // this.dialogVisible = true
+      this.customerId = this.$route.params.id
+      this.customerName = this.info.name
+      this.dialogVisible = true
     },
     // 客户id
     queryCNSearch(queryString, callback) {
@@ -306,7 +315,26 @@ export default {
       //   this.getInviteList()
       // }
     },
-    editInfo() {},
+    editInfo() {
+      this.edit = true
+    },
+    saveInfo() {
+      // this.$request.updateVipInfo(this.$route.params.id, {}).then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       title: this.$t('操作成功'),
+      //       message: res.msg,
+      //       type: 'success'
+      //     })
+      //   } else {
+      //     this.$notify({
+      //       title: this.$t('操作失败'),
+      //       message: res.msg,
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
+    },
     //确定合并
     mergeConfirm() {
       // if (!this.target) {
@@ -362,28 +390,46 @@ export default {
       //   })
     },
     getPackageList() {
-      // this.$request.packageList(this.$route.params.id).then(res => {
-      //   if (res.ret) {
-      //     console.log(res)
-      //     this.packageData = res.data
-      //   }
-      // })
+      // this.$request
+      //   .packageList(this.$route.params.id, {
+      //     page: this.page_params.page,
+      //     size: this.page_params.size
+      //   })
+      //   .then(res => {
+      //     if (res.ret) {
+      //       this.packageData = res.data
+      //       this.page_params.page = res.meta.current_page
+      //       this.page_params.total = res.meta.total
+      //     }
+      //   })
     },
     getOrderList() {
-      // this.$request.orderList(this.$route.params.id).then(res => {
-      //   if (res.ret) {
-      //     console.log(res)
-      //     this.orderData = res.data
-      //   }
-      // })
+      // this.$request
+      //   .orderList(this.$route.params.id, {
+      //     page: this.page_params.page,
+      //     size: this.page_params.size
+      //   })
+      //   .then(res => {
+      //     if (res.ret) {
+      //       this.orderData = res.data
+      //       this.page_params.page = res.meta.current_page
+      //       this.page_params.total = res.meta.total
+      //     }
+      //   })
     },
     getAddressList() {
-      // this.$request.addressList(this.$route.params.id).then(res => {
-      //   if (res.ret) {
-      //     console.log(res)
-      //     this.addressData = res.data
-      //   }
-      // })
+      // this.$request
+      //   .addressList(this.$route.params.id, {
+      //     page: this.page_params.page,
+      //     size: this.page_params.size
+      //   })
+      //   .then(res => {
+      //     if (res.ret) {
+      //       this.addressData = res.data
+      //       this.page_params.page = res.meta.current_page
+      //       this.page_params.total = res.meta.total
+      //     }
+      //   })
     }
   }
 }

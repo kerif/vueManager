@@ -200,7 +200,8 @@
                 scope.row.point,
                 scope.row.sale_name,
                 scope.row.last_login_at,
-                scope.row.phone
+                scope.row.phone,
+                scope.row.user_group.name_cn
               )
             "
             style="cursor: pointer"
@@ -549,7 +550,8 @@ export default {
       point,
       saleName,
       lastLogin,
-      phone
+      phone,
+      name_cn
     ) {
       let obj = {
         memberLevelName: memberLevelName,
@@ -561,7 +563,8 @@ export default {
         point: point,
         saleName: saleName,
         lastLogin: lastLogin,
-        phone: phone
+        phone: phone,
+        name_cn: name_cn
       }
       this.$router.push({
         name: 'vipListDetails',
