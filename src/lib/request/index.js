@@ -2019,6 +2019,10 @@ exports.verifyKd100 = params => {
 exports.verifyTrackingMore = params => {
   return $form.post(`configs/verify-trackingmore`, params)
 }
+// 更多配置 服务配置 检测trackmore 配置
+exports.verifyTrackMore = params => {
+  return $form.post(`/api-services/tracking/verify/17-track`, params)
+}
 // 更多配置 服务配置 检测邮件发件信息配置
 exports.verifySmtp = params => {
   return $form.post(`configs/verify-smtp`, params)

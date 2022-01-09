@@ -48,11 +48,23 @@
             <el-input v-model="ruleForm.kuaidi100_key" class="input-sty"></el-input>
             <el-button class="buy-sty" @click="testExpress">{{ $t('测试') }}</el-button>
           </div>
-          <div class="message-main">
+          <div style="margin: 10px 0">
+            <el-radio-group v-model="ruleForm.tracking_provider">
+              <el-radio :label="0">51tracking</el-radio>
+              <el-radio :label="1">17track</el-radio>
+            </el-radio-group>
+          </div>
+          <div class="message-main" v-if="ruleForm.tracking_provider === 0">
             <p>{{ $t('Tracking more配置') }}</p>
             <span>{{ $t('Appkey') }}：</span><br />
             <el-input v-model="ruleForm.tracking_app_key" class="input-sty"></el-input>
             <el-button class="buy-sty" @click="testTracking">{{ $t('测试') }}</el-button>
+          </div>
+          <div class="message-main" v-else>
+            <p>{{ $t('17Track more配置') }}</p>
+            <span>{{ $t('Appkey') }}：</span><br />
+            <el-input v-model="ruleForm.track_app_key" class="input-sty"></el-input>
+            <el-button class="buy-sty" @click="testTrack">{{ $t('测试') }}</el-button>
           </div>
         </div>
       </el-col>
@@ -87,7 +99,9 @@ export default {
         tracking_count: '',
         kuaidi100_customer_id: '',
         kuaidi100_key: '',
-        kuaidi100_count: ''
+        kuaidi100_count: '',
+        track_app_key: '',
+        tracking_provider: 0
       },
       radio: 1
     }
@@ -104,6 +118,7 @@ export default {
         this.ruleForm.kuaidi100_count = res.data.kuaidi100_count
         this.ruleForm.kuaidi100_key = res.data.kuaidi100_key
         this.ruleForm.kuaidi100_customer_id = res.data.kuaidi100_customer_id
+        this.ruleForm.track_app_key = res.data['17track_app_key']
       })
     },
     // 检测快递100
@@ -159,12 +174,37 @@ export default {
           }
         })
     },
+    testTrack() {
+      if (this.ruleForm.track_app_key === '') {
+        return this.$message.error('请输入17Track more的AppKey')
+      }
+      this.$request
+        .verifyTrackMore({
+          '17track_app_key': this.ruleForm.track_app_key
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
     saveTemplate() {
       this.$request
         .updateTrackingSystem({
           ...this.ruleForm,
           '51tracking_app_key': this.ruleForm.tracking_app_key,
-          '51tracking_count': this.ruleForm.tracking_count
+          '51tracking_count': this.ruleForm.tracking_count,
+          '17track_app_key': this.ruleForm.track_app_key
         })
         .then(res => {
           if (res.ret) {

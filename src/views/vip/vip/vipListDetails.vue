@@ -19,7 +19,7 @@
         <el-col :span="3">
           <div class="demo-basic--circle">
             <div class="block">
-              <el-avatar :size="80" :src="circleUrl"></el-avatar>
+              <el-avatar :size="80" :src="info.avatar"></el-avatar>
               <div class="title">{{ $t('头像') }}</div>
             </div>
           </div>
@@ -34,7 +34,7 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('VIP等级:') }}</span>
-              <span>{{ info.memberLevelName }}</span>
+              <span>{{ info.member_level_name }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -46,14 +46,14 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('所属客服:') }}</span>
-              <span v-show="!edit">{{ info.customerName }}</span>
-              <el-input v-show="edit" v-model="info.customerName" style="width: 120px"></el-input>
+              <span v-show="!edit">{{ info.customer_name }}</span>
+              <el-input v-show="edit" v-model="info.customer_name" style="width: 120px"></el-input>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('注册日期:') }}</span>
-              <span>{{ info.createdAt }}</span>
+              <span>{{ info.created_at }}</span>
             </el-col>
           </el-row>
         </el-col>
@@ -79,14 +79,14 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('所属销售:') }}</span>
-              <span v-show="!edit">{{ info.saleName }}</span>
-              <el-input v-show="edit" v-model="info.saleName" style="width: 120px"></el-input>
+              <span v-show="!edit">{{ info.sale_name }}</span>
+              <el-input v-show="edit" v-model="info.sale_name" style="width: 120px"></el-input>
             </el-col>
           </el-row>
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('最后登录时间:') }}</span>
-              <span>{{ info.lastLogin }}</span>
+              <span>{{ info.last_login_at }}</span>
             </el-col>
           </el-row>
         </el-col>
@@ -107,7 +107,7 @@
           <el-row :gutter="24">
             <el-col :span="24">
               <span class="leftWidth">{{ $t('订单数:') }}</span>
-              <span></span>
+              <span>{{ info.order_count }}</span>
             </el-col>
           </el-row>
           <el-row :gutter="24">
@@ -255,7 +255,6 @@ export default {
   data() {
     return {
       activeName: '1',
-      circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       info: {},
       customerId: '',
       customerName: '',
@@ -319,21 +318,28 @@ export default {
       this.edit = true
     },
     saveInfo() {
-      // this.$request.updateVipInfo(this.$route.params.id, {}).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.msg,
-      //       type: 'success'
-      //     })
-      //   } else {
-      //     this.$notify({
-      //       title: this.$t('操作失败'),
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      // this.$request
+      //   .updateVipInfo(this.$route.params.id, {
+      //     sale_name: this.info.sale_name,
+      //     name_cn: this.info.name_cn,
+      //     customer_name: this.info.customer_name
+      //   })
+      //   .then(res => {
+      //     if (res.ret) {
+      //       this.$notify({
+      //         title: this.$t('操作成功'),
+      //         message: res.msg,
+      //         type: 'success'
+      //       })
+      //       this.edit = false
+      //     } else {
+      //       this.$notify({
+      //         title: this.$t('操作失败'),
+      //         message: res.msg,
+      //         type: 'warning'
+      //       })
+      //     }
+      //   })
     },
     //确定合并
     mergeConfirm() {

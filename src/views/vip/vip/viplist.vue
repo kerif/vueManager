@@ -201,7 +201,9 @@
                 scope.row.sale_name,
                 scope.row.last_login_at,
                 scope.row.phone,
-                scope.row.user_group.name_cn
+                scope.row.user_group.name_cn,
+                scope.row.order_count,
+                scope.row.avatar
               )
             "
             style="cursor: pointer"
@@ -541,30 +543,34 @@ export default {
     },
     details(
       id,
-      memberLevelName,
-      customerName,
+      member_level_name,
+      customer_name,
       balance,
-      createdAt,
+      created_at,
       name,
       email,
       point,
-      saleName,
-      lastLogin,
+      sale_name,
+      last_login_at,
       phone,
-      name_cn
+      name_cn,
+      order_count,
+      avatar
     ) {
       let obj = {
-        memberLevelName: memberLevelName,
-        customerName: customerName,
+        member_level_name: member_level_name,
+        customer_name: customer_name,
         balance: balance,
-        createdAt: createdAt,
+        created_at: created_at,
         name: name,
         email: email,
         point: point,
-        saleName: saleName,
-        lastLogin: lastLogin,
+        sale_name: sale_name,
+        last_login_at: last_login_at,
         phone: phone,
-        name_cn: name_cn
+        name_cn: name_cn,
+        order_count: order_count,
+        avatar: avatar
       }
       this.$router.push({
         name: 'vipListDetails',
