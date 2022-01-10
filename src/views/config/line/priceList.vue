@@ -299,8 +299,17 @@ export default {
               })
             } else {
               arr.forEach((ele, index) => {
-                if (ele.range === item.range) {
-                  flag = index
+                // if (ele.range === item.range) {
+                //   flag = index
+                // }
+                if (ele.type === 0) {
+                  if (ele.type === item.type) {
+                    flag = index
+                  }
+                } else {
+                  if (ele.range === item.range) {
+                    flag = index
+                  }
                 }
               })
             }

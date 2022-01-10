@@ -61,7 +61,7 @@
             <el-button class="buy-sty" @click="testTracking">{{ $t('测试') }}</el-button>
           </div>
           <div class="message-main" v-else>
-            <p>{{ $t('17Track more配置') }}</p>
+            <p>{{ $t('17Track 配置') }}</p>
             <span>{{ $t('Appkey') }}：</span><br />
             <el-input v-model="ruleForm.track_app_key" class="input-sty"></el-input>
             <el-button class="buy-sty" @click="testTrack">{{ $t('测试') }}</el-button>
