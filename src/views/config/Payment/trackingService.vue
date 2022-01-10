@@ -101,7 +101,7 @@ export default {
         kuaidi100_key: '',
         kuaidi100_count: '',
         track_app_key: '',
-        tracking_provider: 0
+        tracking_provider: 1
       },
       radio: 1
     }
