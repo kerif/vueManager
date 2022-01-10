@@ -101,7 +101,7 @@ export default {
         kuaidi100_key: '',
         kuaidi100_count: '',
         track_app_key: '',
-        tracking_provider: 1
+        tracking_provider: 0
       },
       radio: 1
     }
@@ -119,6 +119,7 @@ export default {
         this.ruleForm.kuaidi100_key = res.data.kuaidi100_key
         this.ruleForm.kuaidi100_customer_id = res.data.kuaidi100_customer_id
         this.ruleForm.track_app_key = res.data['17track_app_key']
+        this.ruleForm.tracking_provider = res.data.tracking_provider
       })
     },
     // 检测快递100
