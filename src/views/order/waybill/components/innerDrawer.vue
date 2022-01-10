@@ -327,8 +327,6 @@ export default {
           { id: 'username', name: this.$t('用户名') },
           { id: 'email', name: this.$t('邮箱') },
           { id: 'user_profile_address', name: this.$t('个人信息地址') },
-          { id: 'address_email', name: this.$t('地址邮箱') },
-          { id: 'address_wechat_id', name: this.$t('地址微信号') },
           { id: 'wechat_id', name: this.$t('微信号') },
           { id: 'profile_wechat_id', name: this.$t('个人信息微信号') },
           { id: 'id_card', name: this.$t('身份证号') }
@@ -530,8 +528,6 @@ export default {
           { id: 'username', name: this.$t('用户名') },
           { id: 'email', name: this.$t('邮箱') },
           { id: 'user_profile_address', name: this.$t('个人信息地址') },
-          { id: 'address_email', name: this.$t('地址邮箱') },
-          { id: 'address_wechat_id', name: this.$t('地址微信号') },
           { id: 'wechat_id', name: this.$t('微信号') },
           { id: 'profile_wechat_id', name: this.$t('个人信息微信号') },
           { id: 'id_card', name: this.$t('身份证号') }
