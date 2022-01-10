@@ -796,7 +796,7 @@
           </template>
         </el-table-column>
         <!-- 国家 -->
-        <el-table-column prop="country.cn_name" :label="$t('国家')"> </el-table-column>
+        <el-table-column prop="country.name" :label="$t('国家')"> </el-table-column>
         <!-- 收件人 -->
         <el-table-column prop="receiver_name" :label="$t('收件人')"> </el-table-column>
         <!-- 收件电话 -->

@@ -854,7 +854,7 @@
     <el-dialog :visible.sync="boxDialog" :title="$t('一键批量打包')" width="80%">
       <div class="add-box">
         <!-- 一键将预计重量改成实际重量 -->
-        <el-tooltip
+        <!-- <el-tooltip
           :content="
             $t(
               '一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹重量直接相加，数据误差较大时请手动更改'
@@ -863,8 +863,8 @@
           placement="top"
         >
           <el-button @click="changeWeight">{{ $t('一键将预计重量改成实际重量') }}</el-button>
-        </el-tooltip>
-        <el-tooltip
+        </el-tooltip> -->
+        <!-- <el-tooltip
           :content="
             $t(
               '一键更改数据时，如订单中包裹数量大于1，计算方式为该订单中所有包裹体积重量相加，数据误差较大时请手动更改'
@@ -875,7 +875,7 @@
           <el-button @click="changeVolume">{{
             $t('一键将预计体积重量设为实际体积重量')
           }}</el-button>
-        </el-tooltip>
+        </el-tooltip> -->
         <el-button @click="goCreated">{{ $t('批量改支付方式') }}</el-button>
       </div>
       <el-table :data="boxDialogData" border style="width: 100%">
@@ -891,15 +891,21 @@
           </template>
         </el-table-column>
         <el-table-column prop="package_count" :label="$t('包裹数量')"> </el-table-column>
-        <el-table-column prop="except_weight" :label="$t('预计重量') + localization.weight_unit">
+        <el-table-column prop="boxes_count" :label="$t('出库箱数')"></el-table-column>
+        <el-table-column prop="except_package_weight" :label="$t('实际重量')"></el-table-column>
+        <el-table-column
+          prop="except_package_volume_weight"
+          :label="$t('体积重量')"
+        ></el-table-column>
+        <!-- <el-table-column prop="except_weight" :label="$t('预计重量') + localization.weight_unit">
         </el-table-column>
         <el-table-column :label="$t('实际重量') + localization.weight_unit">
           <template slot-scope="scope">
             <el-input v-model="scope.row.actual_weight"></el-input>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <!-- 实际体积重量 -->
-        <el-table-column>
+        <!-- <el-table-column>
           <template slot-scope="scope">
             <el-input v-model="scope.row.volume_weight"></el-input>
           </template>
@@ -933,7 +939,7 @@
               v-model="scope.row.exceptHeight"
             ></el-input>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
             <el-button class="btn-light-red" @click="deleteTrack(scope.$index, boxDialogData)">{{
