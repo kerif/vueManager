@@ -525,6 +525,10 @@ exports.customerForbid = ids => {
 exports.noUsers = params => {
   return $form.get(`users/agent-search`, { params })
 }
+// 客户 个人详细信息
+exports.infoCount = id => {
+  return $form.get(`users/${id}/info-counts`)
+}
 // 客户 合并客户
 exports.mergeCustomer = (id, targetId) => {
   return $form.put(`users/merge/${id}/target/${targetId}`)

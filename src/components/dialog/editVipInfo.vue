@@ -128,7 +128,7 @@
               type="textarea"
               :rows="3"
               class="input-sty"
-              :placeholder="$t('请输入内容')"
+              :placeholder="$t('请输入备注')"
               v-model="form.remark"
             ></el-input>
           </el-form-item>
