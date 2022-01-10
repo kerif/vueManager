@@ -19,6 +19,13 @@
         <el-col :span="3">
           <div class="demo-basic--circle">
             <div class="block">
+              <!-- <span
+                v-if="info.avatar"
+                style="cursor: pointer"
+                @click.stop=";(imgSrc = info.avatar), (imgVisible = true)"
+              >
+                <img :src="info.avatar" />
+              </span> -->
               <el-avatar :size="80" :src="info.avatar"></el-avatar>
               <div class="title">{{ $t('头像') }}</div>
             </div>
@@ -121,8 +128,8 @@
     </div>
     <div style="margin-top: 30px">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane :label="$t('包裹列表')" name="1">
-          <el-table :data="packageData" border style="width: 100%">
+        <el-tab-pane :label="`${$t('包裹列表')} (${count.package || 0})`" name="1">
+          <el-table :data="packageData" border style="width: 100%" height="calc(100vh - 270px)">
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column :label="$t('客户ID')">
               <template slot-scope="scope">
@@ -140,8 +147,8 @@
           </el-table>
           <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
-        <el-tab-pane :label="$t('订单列表')" name="2">
-          <el-table :data="orderData" border style="width: 100%">
+        <el-tab-pane :label="`${$t('订单列表')} (${count.order || 0})`" name="2">
+          <el-table :data="orderData" border style="width: 100%" height="calc(100vh - 270px)">
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column prop="user_id" :label="$t('客户ID')"> </el-table-column>
             <el-table-column prop="user_name" :label="$t('用户名')"></el-table-column>
@@ -155,8 +162,8 @@
           </el-table>
           <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
-        <el-tab-pane :label="$t('地址')" name="3">
-          <el-table :data="addressData" border style="width: 100%">
+        <el-tab-pane :label="`${$t('地址')} (${count.address || 0})`" name="3">
+          <el-table :data="addressData" border style="width: 100%" height="calc(100vh - 270px)">
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column prop="user_id" :label="$t('客户ID')"></el-table-column>
             <el-table-column prop="receiver_name" :label="$t('收件人')"></el-table-column>
@@ -170,8 +177,14 @@
           </el-table>
           <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
-        <el-tab-pane :label="$t('券包')" name="4">
-          <el-table class="data-list" :data="inviteData" border style="width: 100%">
+        <el-tab-pane :label="`${$t('券包')} (${count.coupon || 0})`" name="4">
+          <el-table
+            class="data-list"
+            :data="inviteData"
+            border
+            style="width: 100%"
+            height="calc(100vh - 270px)"
+          >
             <el-table-column type="index"> </el-table-column>
             <el-table-column prop="name" :label="$t('券名称')"> </el-table-column>
             <el-table-column prop="code" :label="$t('券码')"> </el-table-column>
@@ -182,8 +195,14 @@
           </el-table>
           <nle-pagination :pageParams="page_params"></nle-pagination>
         </el-tab-pane>
-        <el-tab-pane :label="$t('邀请记录')" name="5">
-          <el-table class="data-list" :data="tableData" border style="width: 100%">
+        <el-tab-pane :label="`${$t('邀请记录')} (${count.invite || 0})`" name="5">
+          <el-table
+            class="data-list"
+            :data="tableData"
+            border
+            style="width: 100%"
+            height="calc(100vh - 270px)"
+          >
             <el-table-column type="index"> </el-table-column>
             <!-- 客户ID -->
             <el-table-column prop="id" :label="$t('客户ID')"> </el-table-column>
@@ -237,6 +256,11 @@
         <el-button type="primary" @click="mergeConfirm">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img-box">
+        <img :src="imgSrc" class="img-dialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -262,12 +286,16 @@ export default {
       inviteData: [],
       packageData: [],
       orderData: [],
-      addressData: []
+      addressData: [],
+      imgVisible: false,
+      imgSrc: '',
+      count: {}
     }
   },
   created() {
     this.getInfo()
     this.getPackageList()
+    this.getCount()
   },
   methods: {
     getInfo() {
@@ -278,6 +306,13 @@ export default {
       this.customerId = this.$route.params.id
       this.customerName = this.info.name
       this.dialogVisible = true
+    },
+    getCount() {
+      // this.$request.infoCount(this.$route.params.id).then(res => {
+      //   if (res.ret) {
+      //     this.count = res.data
+      //   }
+      // })
     },
     // 客户id
     queryCNSearch(queryString, callback) {
@@ -393,18 +428,18 @@ export default {
       //   })
     },
     getPackageList() {
-      // this.$request
-      //   .packageList(this.$route.params.id, {
-      //     page: this.page_params.page,
-      //     size: this.page_params.size
-      //   })
-      //   .then(res => {
-      //     if (res.ret) {
-      //       this.packageData = res.data
-      //       this.page_params.page = res.meta.current_page
-      //       this.page_params.total = res.meta.total
-      //     }
-      //   })
+      //   this.$request
+      //     .packageList(this.$route.params.id, {
+      //       page: this.page_params.page,
+      //       size: this.page_params.size
+      //     })
+      //     .then(res => {
+      //       if (res.ret) {
+      //         this.packageData = res.data
+      //         this.page_params.page = res.meta.current_page
+      //         this.page_params.total = res.meta.total
+      //       }
+      //     })
     },
     getOrderList() {
       // this.$request

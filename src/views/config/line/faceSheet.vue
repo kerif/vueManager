@@ -38,7 +38,7 @@
           <el-radio :label="2">{{ $t('按箱数推送') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item :label="$t('报关信息审核')">
+      <el-form-item :label="$t('开启直接提交')">
         <el-tooltip
           class="item"
           effect="dark"
