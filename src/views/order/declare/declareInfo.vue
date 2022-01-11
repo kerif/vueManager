@@ -64,11 +64,11 @@
                 @click.native="getDeclareInfo(scope.row.id, scope.row.third_status)"
                 >{{ $t('报关信息') }}</el-dropdown-item
               >
-              <el-dropdown-item
+              <!-- <el-dropdown-item
                 v-if="scope.row.third_status === 0 || scope.row.third_status === 3"
                 @click.native="editDeclareInfo(scope.row.id, scope.row.push_type)"
                 >{{ $t('编辑') }}</el-dropdown-item
-              >
+              > -->
               <el-dropdown-item
                 v-if="scope.row.status === 1"
                 @click.native="getInfo(scope.row.id, scope.row.status, scope.row.third_status)"
@@ -93,6 +93,22 @@
     <el-dialog :visible.sync="show" :title="$t('报关信息')" @close="clear">
       <div v-if="this.type === 1">
         <div>{{ this.orderSn }}</div>
+        <el-form :model="ruleForm" ref="ruleForm" style="margin-top: 10px">
+          <el-form-item :label="$t('税号')">
+            <el-input
+              :placeholder="$t('请输入税号')"
+              class="input-sty"
+              v-model="ruleForm.tax_number"
+            ></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('重量')">
+            <el-input
+              :placeholder="$t('请输入重量')"
+              class="input-sty"
+              v-model="ruleForm.weight"
+            ></el-input>
+          </el-form-item>
+        </el-form>
         <el-button
           @click="deleteRow"
           v-show="thirdStatus === 0 || thirdStatus === 3"
@@ -183,6 +199,22 @@
       <div v-else>
         <div v-for="item in infoData" :key="item.id">
           <div>{{ item.box_sn }}</div>
+          <el-form style="margin-top: 10px">
+            <el-form-item :label="$t('税号')">
+              <el-input
+                :placeholder="$t('请输入税号')"
+                class="input-sty"
+                v-model="item.tax_number"
+              ></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('重量')">
+              <el-input
+                :placeholder="$t('请输入重量')"
+                class="input-sty"
+                v-model="item.weight"
+              ></el-input>
+            </el-form-item>
+          </el-form>
           <el-button
             @click="deleteRows"
             v-show="thirdStatus === 0 || thirdStatus === 3"
@@ -286,7 +318,7 @@
         <el-table-column prop="content" :label="$t('内容')"></el-table-column>
       </el-table>
     </el-dialog>
-    <el-dialog :visible.sync="showFill" :title="$t('编辑申报')" @close="clearFill">
+    <!-- <el-dialog :visible.sync="showFill" :title="$t('编辑申报')" @close="clearFill">
       <div v-if="this.pushType === 1">
         <el-form :model="ruleForm" ref="ruleForm">
           <el-form-item :label="$t('税号')">
@@ -327,7 +359,7 @@
         <el-button @click="showFill = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="save">{{ $t('保存') }}</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -472,53 +504,53 @@ export default {
       this.ruleForm.weight = ''
       this.boxes = []
     },
-    save() {
-      if (this.pushType === 1) {
-        let params = {
-          ids: [this.id],
-          tax_number: this.ruleForm.tax_number,
-          weight: this.ruleForm.weight
-        }
-        this.$request.fillDeclare(this.id, params).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-            this.showFill = false
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-      } else {
-        let params = {
-          boxes: this.boxes
-        }
-        this.$request.fillDeclareBox(this.id, params).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-            this.getList()
-            this.showFill = false
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-      }
-    },
+    // save() {
+    //   if (this.pushType === 1) {
+    //     let params = {
+    //       ids: [this.id],
+    //       tax_number: this.ruleForm.tax_number,
+    //       weight: this.ruleForm.weight
+    //     }
+    //     this.$request.fillDeclare(this.id, params).then(res => {
+    //       if (res.ret) {
+    //         this.$notify({
+    //           title: this.$t('操作成功'),
+    //           message: res.msg,
+    //           type: 'success'
+    //         })
+    //         this.getList()
+    //         this.showFill = false
+    //       } else {
+    //         this.$notify({
+    //           title: this.$t('操作失败'),
+    //           message: res.msg,
+    //           type: 'warning'
+    //         })
+    //       }
+    //     })
+    //   } else {
+    //     let params = {
+    //       boxes: this.boxes
+    //     }
+    //     this.$request.fillDeclareBox(this.id, params).then(res => {
+    //       if (res.ret) {
+    //         this.$notify({
+    //           title: this.$t('操作成功'),
+    //           message: res.msg,
+    //           type: 'success'
+    //         })
+    //         this.getList()
+    //         this.showFill = false
+    //       } else {
+    //         this.$notify({
+    //           title: this.$t('操作失败'),
+    //           message: res.msg,
+    //           type: 'warning'
+    //         })
+    //       }
+    //     })
+    //   }
+    // },
     editDeclareInfo(id, type) {
       this.pushType = type
       this.id = id
@@ -529,7 +561,6 @@ export default {
       this.showLog = true
       this.$request.dockingLog(id).then(res => {
         if (res.ret) {
-          console.log(res)
           this.logData = res.data
         }
       })
@@ -680,7 +711,11 @@ export default {
       }
       if (this.type === 1) {
         params.items = this.infoData
+        params.order = [
+          { ids: this.id, weight: this.ruleForm.weight, tax_number: this.ruleForm.tax_number }
+        ]
       } else {
+        params.boxes = this.boxes
         this.infoData.forEach(item => {
           item.items.forEach(ele => {
             ele.declare_box_id = item.id
@@ -688,7 +723,6 @@ export default {
           })
           return item.items
         })
-        console.log(params.items)
       }
       this.$request.editDeclare(this.orderId, params).then(res => {
         if (res.ret) {
@@ -726,7 +760,7 @@ export default {
     color: #fff;
   }
   .input-sty {
-    width: 40% !important;
+    width: 35% !important;
   }
   .headline {
     display: flex;
