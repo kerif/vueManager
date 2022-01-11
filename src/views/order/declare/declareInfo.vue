@@ -380,7 +380,12 @@ export default {
       tableLoading: false,
       id: '',
       localization: {},
-      infoData: [],
+      infoData: [
+        {
+          weight: '',
+          tax_number: ''
+        }
+      ],
       orderSn: '',
       type: null,
       declareNum: [],
