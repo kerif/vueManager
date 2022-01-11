@@ -53,7 +53,7 @@
             <p>{{ $t('国际物流查询') }}</p>
             <el-radio-group v-model="ruleForm.tracking_provider">
               <el-radio :label="0">51tracking</el-radio>
-              <el-radio :label="1">17tracking</el-radio>
+              <el-radio :label="1">17track</el-radio>
             </el-radio-group>
           </div>
           <div class="message-main" v-if="ruleForm.tracking_provider === 0">

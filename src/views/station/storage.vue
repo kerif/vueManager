@@ -155,9 +155,17 @@
             <el-col>
               <el-form-item :label="$t('服务')" class="service-style">
                 <el-checkbox-group v-model="user.chosen_services">
-                  <el-checkbox v-for="item in updateService" :key="item.id" :label="item.id"
-                    >{{ item.name }}
-                  </el-checkbox>
+                  <div v-for="item in updateService" :key="item.id" class="service">
+                    <div class="serviceLeft">
+                      <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
+                      <el-tooltip effect="dark" :content="item.remark" placement="top">
+                        <span class="el-icon-warning icon-info"></span>
+                      </el-tooltip>
+                    </div>
+                    <div class="serviceRight">
+                      <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                    </div>
+                  </div>
                 </el-checkbox-group>
               </el-form-item>
             </el-col>
@@ -1118,7 +1126,8 @@ export default {
   .remark-font {
     color: #ff9a20;
   }
-  .icon-question {
+  .icon-question,
+  .icon-info {
     margin-left: 5px;
     font-size: 18px;
     color: #67c23a;
@@ -1130,6 +1139,18 @@ export default {
   }
   .change-btn {
     margin-left: 10px;
+  }
+  .service {
+    width: 350px;
+    overflow: hidden;
+    .serviceLeft {
+      display: inline-block;
+      float: left;
+    }
+    .serviceRight {
+      display: inline-block;
+      float: right;
+    }
   }
 }
 </style>

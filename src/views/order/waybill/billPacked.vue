@@ -510,6 +510,23 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 包裹增值服务 -->
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
+          <el-col>
+            <el-form-item :label="$t('包裹增值服务')">
+              <div class="service">
+                <div class="serviceLeft">
+                  <span>{{ localization.currency_unit }}</span>
+                  <el-input
+                    v-model="user.package_service_fee"
+                    class="add-value-ipt"
+                    disabled
+                  ></el-input>
+                </div>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
     <!-- 运费计算 -->
@@ -807,6 +824,10 @@ export default {
               {
                 name: '渠道限制费',
                 value: res.data.line_rules.fee
+              },
+              {
+                name: '包裹增值服务',
+                value: res.data.package_service_fee
               }
             )
           } else {
@@ -979,6 +1000,7 @@ export default {
         this.user.express_line_id = this.form.express_line.id
         this.user.warehouse_id = this.form.warehouse.id
         this.user.line_rule_fee = res.data.payment.line_rule_fee
+        this.user.package_service_fee = res.data.payment.package_service_fee
         this.warehouse.warehouse_name = this.form.warehouse.warehouse_name
         this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
         this.localization = res.localization

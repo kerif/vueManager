@@ -1132,6 +1132,11 @@ export default {
             name: this.$t('积分抵扣'),
             amount: +res.data.payment.point_amount,
             remark: ''
+          },
+          {
+            name: this.$t('包裹增值服务'),
+            amount: +res.data.payment.package_service_fee,
+            remark: ''
           }
         ]
         this.TrackingData = [
