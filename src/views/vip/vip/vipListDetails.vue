@@ -296,6 +296,7 @@ export default {
     this.getInfo()
     this.getPackageList()
     this.getCount()
+    this.getList()
   },
   methods: {
     getInfo() {
@@ -306,6 +307,13 @@ export default {
       this.customerId = this.$route.params.id
       this.customerName = this.info.name
       this.dialogVisible = true
+    },
+    getList() {
+      // this.$request.getUsers().then(res => {
+      //   if (res.ret) {
+      //     console.log(res)
+      //   }
+      // })
     },
     getCount() {
       // this.$request.infoCount(this.$route.params.id).then(res => {

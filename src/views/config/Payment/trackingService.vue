@@ -41,6 +41,7 @@
             $t('第三方物流查询服务')
           }}</el-radio>
           <div class="message-main">
+            <p>{{ $t('国内物流查询(快递100)') }}</p>
             <p>{{ $t('快递100配置') }}</p>
             <span>{{ $t('Customer ID') }}：</span><br />
             <el-input v-model="ruleForm.kuaidi100_customer_id" class="input-sty"></el-input><br />
@@ -48,10 +49,11 @@
             <el-input v-model="ruleForm.kuaidi100_key" class="input-sty"></el-input>
             <el-button class="buy-sty" @click="testExpress">{{ $t('测试') }}</el-button>
           </div>
-          <div style="margin: 10px 0">
+          <div style="margin: 25px 0 10px 0">
+            <p>{{ $t('国际物流查询') }}</p>
             <el-radio-group v-model="ruleForm.tracking_provider">
               <el-radio :label="0">51tracking</el-radio>
-              <el-radio :label="1">17track</el-radio>
+              <el-radio :label="1">17tracking</el-radio>
             </el-radio-group>
           </div>
           <div class="message-main" v-if="ruleForm.tracking_provider === 0">
@@ -248,7 +250,7 @@ export default {
     margin-bottom: 10px;
     padding: 20px;
     background: #fff;
-    height: 350px;
+    height: 425px;
     .top-img {
       margin-top: 50px;
       margin-bottom: 40px;
@@ -293,7 +295,7 @@ export default {
     }
   }
   .message-main {
-    margin-top: 25px;
+    margin-top: 15px;
     .input-sty {
       margin-top: 5px;
       width: 60%;
