@@ -1,343 +1,349 @@
 /* eslint-disable no-array-constructor */
 <template>
   <div class="storage-container">
-    <el-row class="container-top">
+    <div class="container-top">
       <el-form ref="user" :model="user" label-width="140px" label-position="left">
-        <el-col :lg="12">
-          <!-- 重量 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('重量')" class="weight-style">
-                <el-input v-model="user.package_weight" :placeholder="$t('请输入重量')">
-                  <template slot="append">{{ this.localization.weight_unit }}</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <div class="line-center"></div>
-          <!-- 快递单号 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('快递单号')">
-                <el-input
-                  v-model="user.express_num"
-                  :placeholder="$t('请输入快递单号')"
-                  @blur="getNum(user.express_num)"
-                  :disabled="!!this.$route.params.id && !hasStore"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 寄往仓库 -->
-          <!-- :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('寄往仓库')">
-                <el-select
-                  v-model="user.warehouse_id"
-                  clearable
-                  @change="getAreaData"
-                  :placeholder="$t('请选择')"
-                >
-                  <el-option
-                    v-for="item in agentData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="item.warehouse_name"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 客户id -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('客户ID')" class="changeQuery">
-                <el-autocomplete
-                  :fetch-suggestions="queryCNSearch"
-                  @select="handleSelect"
-                  :placeholder="$t('请输入客户ID，不填则默认无人认领包裹')"
-                  v-model="user.user_id"
-                  @change="changeSelect"
-                  :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
-                >
-                </el-autocomplete>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品名称 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品名称')">
-                <el-input
-                  v-model="user.package_name"
-                  :placeholder="$t('请输入物品名称')"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 品牌 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('品牌')">
-                <el-input v-model="user.brand_name" :placeholder="$t('请输入品牌')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品总价值 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品总价值') + this.localization.currency_unit">
-                <el-input
-                  v-model="user.package_value"
-                  :placeholder="$t('请输入物品总价值')"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 备注 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('备注')">
-                <el-input
-                  v-model="user.remark"
-                  :placeholder="$t('请输入备注')"
-                  type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 4 }"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品照片 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item prop="password_confirmation" class="updateChe" :label="$t('物品照片')">
-                <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
-                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
-                  <span class="model-box"></span>
-                  <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-                  </span>
-                </span>
-                <el-upload
-                  v-show="goodsImgList.length < 3"
-                  class="avatar-uploader"
-                  list-type="picture-card"
-                  action=""
-                  :before-upload="beforeUploadImg"
-                  :http-request="uploadGoodsImg"
-                  :show-file-list="false"
-                >
-                  <i class="el-icon-plus"> </i>
-                </el-upload>
-                <div class="updateImg">
-                  {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 保存 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item class="saveBtn">
-                <el-button @click="submitStorage" :loading="$store.state.btnLoading">{{
-                  $t('保存')
-                }}</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :lg="12">
-          <!-- 服务 -->
-          <el-row :gutter="20">
-            <el-col>
-              <el-form-item :label="$t('服务')" class="service-style">
-                <el-checkbox-group v-model="user.chosen_services">
-                  <div v-for="item in updateService" :key="item.id" class="service">
-                    <div class="serviceLeft">
-                      <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
-                      <el-tooltip effect="dark" :content="item.remark" placement="top">
-                        <span class="el-icon-warning icon-info"></span>
-                      </el-tooltip>
-                    </div>
-                    <div class="serviceRight">
-                      <el-input v-model="item.price" class="add-value-ipt"></el-input>
-                    </div>
+        <!-- 重量 -->
+        <el-row :gutter="20">
+          <el-col :span="10">
+            <el-form-item :label="$t('重量')" class="weight-style">
+              <el-input v-model="user.package_weight" :placeholder="$t('请输入重量')">
+                <template slot="append">{{ this.localization.weight_unit }}</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :offset="2">
+            <el-form-item :label="$t('服务')" class="service-style">
+              <el-checkbox-group v-model="user.chosen_services">
+                <div v-for="item in updateService" :key="item.id" class="service">
+                  <div class="serviceLeft">
+                    <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
+                    <el-tooltip effect="dark" :content="item.remark" placement="top">
+                      <span class="el-icon-warning icon-info"></span>
+                    </el-tooltip>
                   </div>
-                </el-checkbox-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <div class="line-center"></div>
-          <!-- 快递公司 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('快递公司')">
-                <el-select v-model="user.express_company_id" clearable :placeholder="$t('请选择')">
-                  <el-option
-                    v-for="item in expressData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="item.name"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 寄往地区 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('寄往地区')">
-                <el-select
-                  v-model="user.country_id"
-                  :disabled="this.user.warehouse_id === '' || this.shipNum != ''"
-                  clearable
-                  :placeholder="$t('请选择')"
-                >
-                  <el-option
-                    v-for="item in shipData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="item.name"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 尺寸 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('尺寸')">
-                <el-input
-                  v-model="user.length"
-                  class="sizeLength"
-                  :placeholder="$t('长') + this.localization.length_unit"
-                ></el-input>
-                <el-input
-                  v-model="user.width"
-                  class="sizeLength"
-                  :placeholder="$t('宽') + this.localization.length_unit"
-                ></el-input>
-                <el-input
-                  v-model="user.height"
-                  class="sizeLength"
-                  :placeholder="$t('高') + this.localization.length_unit"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 商品数量 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('商品数量')">
-                <el-input v-model="user.qty" :placeholder="$t('请输入件数')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 件数 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('件数')">
-                <el-input v-model="user.number" :placeholder="$t('请输入件数')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 存放货位 -->
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item>
-                <div slot="label">
-                  <span>{{ $t('存放货位') }}</span>
-                  <el-tooltip
-                    effect="dark"
-                    :content="
-                      $t('当您为仓库添加了货位系统会自动分配货位同时您也可以自定义填写货位')
-                    "
-                    placement="top"
-                  >
-                    <span class="el-icon-question icon-question"></span>
-                  </el-tooltip>
+                  <div class="serviceRight">
+                    <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                  </div>
                 </div>
-                <el-autocomplete
-                  :disabled="this.user.warehouse_id === ''"
-                  :fetch-suggestions="locationCNSearch"
-                  ref="autocompleteRef"
-                  @select="locationSelect"
-                  :placeholder="$t('请输入存放货位')"
-                  v-model="user.location"
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div class="line-center"></div>
+        <!-- 快递单号 -->
+        <el-row>
+          <el-col :lg="12">
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('快递单号')">
+                  <el-input
+                    v-model="user.express_num"
+                    :placeholder="$t('请输入快递单号')"
+                    @blur="getNum(user.express_num)"
+                    :disabled="!!this.$route.params.id && !hasStore"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 寄往仓库 -->
+            <!-- :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('寄往仓库')">
+                  <el-select
+                    v-model="user.warehouse_id"
+                    clearable
+                    @change="getAreaData"
+                    :placeholder="$t('请选择')"
+                  >
+                    <el-option
+                      v-for="item in agentData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.warehouse_name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 客户id -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('客户ID')" class="changeQuery">
+                  <el-autocomplete
+                    :fetch-suggestions="queryCNSearch"
+                    @select="handleSelect"
+                    :placeholder="$t('请输入客户ID，不填则默认无人认领包裹')"
+                    v-model="user.user_id"
+                    @change="changeSelect"
+                    :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
+                  >
+                  </el-autocomplete>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品名称 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('物品名称')">
+                  <el-input
+                    v-model="user.package_name"
+                    :placeholder="$t('请输入物品名称')"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 品牌 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('品牌')">
+                  <el-input v-model="user.brand_name" :placeholder="$t('请输入品牌')"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品总价值 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('物品总价值') + this.localization.currency_unit">
+                  <el-input
+                    v-model="user.package_value"
+                    :placeholder="$t('请输入物品总价值')"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 备注 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('备注')">
+                  <el-input
+                    v-model="user.remark"
+                    :placeholder="$t('请输入备注')"
+                    type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 4 }"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品照片 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item
+                  prop="password_confirmation"
+                  class="updateChe"
+                  :label="$t('物品照片')"
                 >
-                </el-autocomplete>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8" v-if="locationCode">
-              <p style="margin-top: 8px">
-                {{ $t('推荐货位') }}
-                <span>{{ locationCode }}</span>
-              </p>
-            </el-col>
-          </el-row>
-          <!-- 包裹编码 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('包裹编码')">
-                <el-input v-model="user.code" :placeholder="$t('请输入包裹编码')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20" v-if="this.$route.params.id && this.user.express_line">
-            <el-col :span="18">
-              <el-form-item :label="$t('更改线路')" class="express">
-                <span class="change-line"
-                  >{{ user.CName }}---{{ $t('限重') }}{{ user.MaxWeight }}KG</span
-                >
-                <el-button class="btn-main change-btn" @click="changeLine">{{
-                  $t('更改')
-                }}</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 异常件 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('异常件')" class="service-style">
-                <el-radio-group v-model="user.is_exceptional">
-                  <el-radio :label="0">{{ $t('正常件') }}</el-radio>
-                  <el-radio :label="1">{{ $t('异常件') }}</el-radio>
-                </el-radio-group>
-                <el-input
-                  v-if="user.is_exceptional === 1"
-                  type="textarea"
-                  v-model="user.exceptional_remark"
-                  :placeholder="$t('请输入异常件备注不能超过250个字')"
-                  style="width: 100%"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品属性 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品属性')" class="service-style">
-                <el-checkbox-group v-model="user.props">
-                  <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id"
-                    >{{ item.cn_name }}
-                  </el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-        <!-- <el-form-item class="saveBtn"> -->
-        <!-- </el-form-item> -->
-        <!-- <div class="save-btn">
+                  <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
+                    <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                    <span class="model-box"></span>
+                    <span class="operat-box">
+                      <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                      <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                    </span>
+                  </span>
+                  <el-upload
+                    v-show="goodsImgList.length < 3"
+                    class="avatar-uploader"
+                    list-type="picture-card"
+                    action=""
+                    :before-upload="beforeUploadImg"
+                    :http-request="uploadGoodsImg"
+                    :show-file-list="false"
+                  >
+                    <i class="el-icon-plus"> </i>
+                  </el-upload>
+                  <div class="updateImg">
+                    {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 保存 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item class="saveBtn">
+                  <el-button @click="submitStorage" :loading="$store.state.btnLoading">{{
+                    $t('保存')
+                  }}</el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :lg="12">
+            <!-- 快递公司 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('快递公司')">
+                  <el-select
+                    v-model="user.express_company_id"
+                    clearable
+                    :placeholder="$t('请选择')"
+                  >
+                    <el-option
+                      v-for="item in expressData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 寄往地区 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('寄往地区')">
+                  <el-select
+                    v-model="user.country_id"
+                    :disabled="this.user.warehouse_id === '' || this.shipNum != ''"
+                    clearable
+                    :placeholder="$t('请选择')"
+                  >
+                    <el-option
+                      v-for="item in shipData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 尺寸 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('尺寸')">
+                  <el-input
+                    v-model="user.length"
+                    class="sizeLength"
+                    :placeholder="$t('长') + this.localization.length_unit"
+                  ></el-input>
+                  <el-input
+                    v-model="user.width"
+                    class="sizeLength"
+                    :placeholder="$t('宽') + this.localization.length_unit"
+                  ></el-input>
+                  <el-input
+                    v-model="user.height"
+                    class="sizeLength"
+                    :placeholder="$t('高') + this.localization.length_unit"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 商品数量 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('商品数量')">
+                  <el-input v-model="user.qty" :placeholder="$t('请输入件数')"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 件数 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('件数')">
+                  <el-input v-model="user.number" :placeholder="$t('请输入件数')"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 存放货位 -->
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item>
+                  <div slot="label">
+                    <span>{{ $t('存放货位') }}</span>
+                    <el-tooltip
+                      effect="dark"
+                      :content="
+                        $t('当您为仓库添加了货位系统会自动分配货位同时您也可以自定义填写货位')
+                      "
+                      placement="top"
+                    >
+                      <span class="el-icon-question icon-question"></span>
+                    </el-tooltip>
+                  </div>
+                  <el-autocomplete
+                    :disabled="this.user.warehouse_id === ''"
+                    :fetch-suggestions="locationCNSearch"
+                    ref="autocompleteRef"
+                    @select="locationSelect"
+                    :placeholder="$t('请输入存放货位')"
+                    v-model="user.location"
+                  >
+                  </el-autocomplete>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="locationCode">
+                <p style="margin-top: 8px">
+                  {{ $t('推荐货位') }}
+                  <span>{{ locationCode }}</span>
+                </p>
+              </el-col>
+            </el-row>
+            <!-- 包裹编码 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('包裹编码')">
+                  <el-input v-model="user.code" :placeholder="$t('请输入包裹编码')"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20" v-if="this.$route.params.id && this.user.express_line">
+              <el-col :span="18">
+                <el-form-item :label="$t('更改线路')" class="express">
+                  <span class="change-line"
+                    >{{ user.CName }}---{{ $t('限重') }}{{ user.MaxWeight }}KG</span
+                  >
+                  <el-button class="btn-main change-btn" @click="changeLine">{{
+                    $t('更改')
+                  }}</el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 异常件 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('异常件')" class="service-style">
+                  <el-radio-group v-model="user.is_exceptional">
+                    <el-radio :label="0">{{ $t('正常件') }}</el-radio>
+                    <el-radio :label="1">{{ $t('异常件') }}</el-radio>
+                  </el-radio-group>
+                  <el-input
+                    v-if="user.is_exceptional === 1"
+                    type="textarea"
+                    v-model="user.exceptional_remark"
+                    :placeholder="$t('请输入异常件备注不能超过250个字')"
+                    style="width: 100%"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品属性 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('物品属性')" class="service-style">
+                  <el-checkbox-group v-model="user.props">
+                    <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id"
+                      >{{ item.cn_name }}
+                    </el-checkbox>
+                  </el-checkbox-group>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+          <!-- <el-form-item class="saveBtn"> -->
+          <!-- </el-form-item> -->
+          <!-- <div class="save-btn">
       <el-button @click="submitStorage" type="primary" :loading="$store.state.btnLoading">保存</el-button>
     </div> -->
+        </el-row>
       </el-form>
-    </el-row>
+    </div>
     <div class="noExpress" v-if="this.shipNum || this.$route.params.id">
       <div class="select-box">
         <h4>{{ $t('商品清单') }}</h4>
@@ -1016,6 +1022,7 @@ export default {
   .weight-style {
     .el-form-item__content .el-input-group {
       height: 80px !important;
+      // width: 450px;
     }
     .el-input-group--append .el-input__inner {
       height: 80px !important;
