@@ -1025,7 +1025,7 @@ export default {
   }
   .service-style {
     .el-checkbox-group {
-      height: 80px !important;
+      // height: 120px !important;
     }
   }
   .line-center {

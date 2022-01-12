@@ -197,7 +197,7 @@
         </el-table>
       </div>
       <div v-else>
-        <div v-for="item in infoData" :key="item.id">
+        <div v-for="item in boxData" :key="item.id">
           <div>{{ item.box_sn }}</div>
           <el-form style="margin-top: 10px">
             <el-form-item :label="$t('税号')">
@@ -380,7 +380,8 @@ export default {
       tableLoading: false,
       id: '',
       localization: {},
-      infoData: [
+      infoData: [],
+      boxData: [
         {
           weight: '',
           tax_number: ''
@@ -502,6 +503,9 @@ export default {
     },
     cancel() {
       this.show = false
+      this.ruleForm.tax_number = ''
+      this.ruleForm.weight = ''
+      this.boxes = []
     },
     clearFill() {
       this.showFill = false
@@ -600,7 +604,7 @@ export default {
       if (val) {
         val.forEach((va, index) => {
           console.log(index)
-          this.infoData.forEach(item => {
+          this.boxData.forEach(item => {
             item.items.forEach((v, i) => {
               console.log(i)
               if (va.id === v.id) {
@@ -682,16 +686,7 @@ export default {
           if (this.type === 1) {
             this.infoData = res.data.items
           } else {
-            this.infoData = res.data.boxes
-            if (res.data.boxes.length) {
-              this.boxes = res.data.boxes.map(item => {
-                return {
-                  id: item.id,
-                  tax_number: item.tax_number,
-                  weight: item.weight
-                }
-              })
-            }
+            this.boxData = res.data.boxes
           }
         } else {
           this.$notify({
@@ -720,8 +715,17 @@ export default {
           { ids: this.id, weight: this.ruleForm.weight, tax_number: this.ruleForm.tax_number }
         ]
       } else {
+        if (this.boxData) {
+          this.boxes = this.boxData.map(item => {
+            return {
+              id: item.id,
+              tax_number: item.tax_number,
+              weight: item.weight
+            }
+          })
+        }
         params.boxes = this.boxes
-        this.infoData.forEach(item => {
+        this.boxData.forEach(item => {
           item.items.forEach(ele => {
             ele.declare_box_id = item.id
             params.items.push(ele)
