@@ -1148,7 +1148,9 @@ export default {
     margin-left: 10px;
   }
   .service {
-    width: 350px;
+    float: left;
+    width: 240px;
+    margin-right: 25px;
     overflow: hidden;
     .serviceLeft {
       display: inline-block;
@@ -1157,6 +1159,9 @@ export default {
     .serviceRight {
       display: inline-block;
       float: right;
+      .add-value-ipt {
+        width: 100px;
+      }
     }
   }
 }
