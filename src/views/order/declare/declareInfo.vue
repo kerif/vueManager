@@ -707,13 +707,14 @@ export default {
     },
     submit() {
       let params = {
-        items: []
+        items: [],
+        order: {}
       }
       if (this.type === 1) {
         params.items = this.infoData
-        params.order = [
-          { ids: this.id, weight: this.ruleForm.weight, tax_number: this.ruleForm.tax_number }
-        ]
+        params.order.id = this.id
+        params.order.weight = this.ruleForm.weight
+        params.order.tax_number = this.ruleForm.tax_number
       } else {
         if (this.boxData) {
           this.boxes = this.boxData.map(item => {
