@@ -94,26 +94,6 @@
         </el-table-column>
       </el-table>
     </el-form>
-    <!-- <div style="margin-bottom: 20px">
-      {{ $t('支持国家地区') }}
-    </div>
-    <el-table :data="tableData" border style="width: 100%">
-      <el-table-column type="index"> </el-table-column>
-      <el-table-column :label="$t('国家')" style="width: 100%">
-        <template slot-scope="scope">
-          <el-cascader
-            style="width: 100%"
-            @change="chooseAres(scope.row.areaData)"
-            v-model="scope.row.areaData"
-            :options="options"
-            :props="props"
-            collapse-tags
-            clearable
-          ></el-cascader>
-        </template>
-      </el-table-column>
-    </el-table> -->
-
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
       <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
@@ -143,7 +123,7 @@ export default {
       state: '',
       id: '',
       status: '',
-      areaData: null,
+      areaData: [],
       newWarehouseList: [],
       keyValue: 0,
       areaIds: [],
@@ -174,9 +154,17 @@ export default {
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
         if (res.data.areas) {
-          this.areaData = res.data.areas.map(item =>
-            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
-          )
+          // this.areaData = res.data.areas.map(item =>
+          //   [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
+          // )
+          this.areaData = res.data.areas.map(item => {
+            return {
+              country_id: item.country_id,
+              area_id: item.area_id,
+              sub_area_id: item.sub_area_id
+            }
+          })
+          console.log(this.areaData)
         }
         this.ruleForm.country_id = res.data.country_id
         this.ruleForm.radio = res.data.type
@@ -193,6 +181,14 @@ export default {
           this.areaData = res.data.areas.map(item =>
             [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
           )
+          // this.areaData = res.data.areas.map(item => {
+          //   return {
+          //     country_id: item.country_id,
+          //     area_id: item.area_id,
+          //     sub_area_id: item.sub_area_id
+          //   }
+          // })
+          console.log(this.areasData)
         }
         this.ruleForm.country_id = res.data.country_id
         this.ruleForm.radio = res.data.type
@@ -277,7 +273,6 @@ export default {
     changeCountry(item) {
       // this.areaData = []
       console.log(item, 'item')
-      // ++this.keyValue
       // const selectList = this.countryList.find(item => item.value === this.form.country_id)
       // this.newWarehouseList = selectList ? selectList.children : []
     },
@@ -310,13 +305,6 @@ export default {
       rows.splice(index, 1)
     },
     confirm() {
-      // if (this.tableData[0].areaData.length) {
-      //   this.areasData = this.tableData[0].areaData.map(item => ({
-      //     country_id: item[0],
-      //     area_id: item[1],
-      //     sub_area_id: item[2]
-      //   }))
-      // }
       if (this.areaData.length) {
         this.areasData = this.areaData.map(item => ({
           country_id: item[0],
@@ -430,6 +418,7 @@ export default {
         this.getCountry()
       } else {
         this.getAllCountries()
+        // this.getCountry()
       }
       if (this.id) {
         this.getList()

@@ -128,9 +128,13 @@
               @click="recoding(scope.row.id)"
               >{{ $t('记录') }}</el-button
             >
-            <el-button size="small" class="btn-pink detailsBtn" @click="share(scope.row.id)">{{
-              $t('分享')
-            }}</el-button>
+            <el-button
+              size="small"
+              class="btn-pink detailsBtn"
+              v-if="scope.row.type === $t('用户抢券')"
+              @click="share(scope.row.id)"
+              >{{ $t('分享') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -474,6 +478,7 @@ export default {
     },
     // 选择不同类型优惠券
     onVocherTypeChange() {
+      console.log(this.type)
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },
