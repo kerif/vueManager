@@ -16,15 +16,15 @@
             <el-form-item :label="$t('服务')" class="service-style">
               <el-checkbox-group v-model="user.chosen_services">
                 <div v-for="item in updateService" :key="item.id" class="service">
-                  <div class="serviceLeft">
-                    <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
-                    <el-tooltip effect="dark" :content="item.remark" placement="top">
-                      <span class="el-icon-warning icon-info"></span>
-                    </el-tooltip>
-                  </div>
-                  <div class="serviceRight">
-                    <el-input v-model="item.price" class="add-value-ipt"></el-input>
-                  </div>
+                  <!-- <div class="serviceLeft"> -->
+                  <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
+                  <el-tooltip effect="dark" :content="item.remark" placement="top">
+                    <span class="el-icon-warning icon-info"></span>
+                  </el-tooltip>
+                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                  <!-- </div> -->
+                  <!-- <div class="serviceRight"> -->
+                  <!-- </div> -->
                 </div>
               </el-checkbox-group>
             </el-form-item>
@@ -536,6 +536,17 @@ export default {
     getService() {
       this.$request.getAllService().then(res => {
         this.updateService = res.data
+        // let ids = res.data.map(item => item.id)
+        // arr.forEach(item => {
+        //   let index = ids.indexOf(item.service_id)
+        //   if (index !== -1) {
+        //     this.updateService[index].checked = true
+        //     this.updateService[index].price = item.price
+        //     this.user.chosen_services.push(this.updateService[index].id)
+        //   } else {
+        //     this.updateService[index].checked = false
+        //   }
+        // })
       })
     },
     getNum(num) {
@@ -596,6 +607,9 @@ export default {
           this.user.user_id = res.data.user_id + '---' + res.data.user_name
           this.user.props = res.data.props.map(item => item.id)
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
+          console.log(this.user.chosen_services)
+          // this.user.chosen_services = res.data.chosen_services
+          // this.getService(res.data.chosen_services)
           this.user.warehouse_id = res.data.warehouse.id
           this.getAreaLocation()
           if (res.data.express_line) {
@@ -862,6 +876,15 @@ export default {
           if (this.$route.params.state === 'editWarehouse') {
             this.tableLoading = true
             this.user.user_id = this.user.user_id.split('---')[0]
+            this.user.chosen_services = this.updateService
+              .filter(item => this.user.chosen_services.includes(item.id))
+              .map(item => {
+                return {
+                  id: item.id,
+                  price: item.price
+                }
+              })
+            console.log(this.user.chosen_services)
             this.$request.submitEditPackage(this.$route.params.id, this.user).then(res => {
               this.tableLoading = false
               if (res.ret) {
@@ -893,6 +916,15 @@ export default {
           } else {
             this.tableLoading = true
             this.user.user_id = this.user.user_id.split('---')[0]
+            this.user.chosen_services = this.updateService
+              .filter(item => this.user.chosen_services.includes(item.id))
+              .map(item => {
+                return {
+                  id: item.id,
+                  price: item.price
+                }
+              })
+            console.log(this.user.chosen_services)
             this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
               this.tableLoading = false
               if (res.ret) {
@@ -927,6 +959,15 @@ export default {
           this.tableLoading = true
           this.user.user_id = this.user.user_id.split('---')[0]
           console.log(this.user.user_id, 'this.user.user_id')
+          this.user.chosen_services = this.updateService
+            .filter(item => this.user.chosen_services.includes(item.id))
+            .map(item => {
+              return {
+                id: item.id,
+                price: item.price
+              }
+            })
+          console.log(this.user.chosen_services)
           this.$request.getExpress(this.user).then(res => {
             this.tableLoading = false
             if (res.ret === 1) {
@@ -1149,20 +1190,24 @@ export default {
   }
   .service {
     float: left;
-    width: 300px;
+    width: 310px;
     margin-right: 25px;
     overflow: hidden;
-    .serviceLeft {
-      display: inline-block;
-      float: left;
+    .add-value-ipt {
+      width: 100px;
+      margin-left: 5px;
     }
-    .serviceRight {
-      display: inline-block;
-      float: right;
-      .add-value-ipt {
-        width: 100px;
-      }
-    }
+    // .serviceLeft {
+    //   display: inline-block;
+    //   float: left;
+    // }
+    // .serviceRight {
+    //   display: inline-block;
+    //   float: right;
+    //   .add-value-ipt {
+    //     width: 100px;
+    //   }
+    // }
   }
 }
 </style>
