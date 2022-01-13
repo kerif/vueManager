@@ -12,7 +12,24 @@
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12" :offset="2">
+          <el-col :span="12" :offset="2" v-if="this.$route.params.id">
+            <el-form-item :label="$t('服务')" class="service-style">
+              <el-checkbox-group v-model="user.chosen_services">
+                <div v-for="item in updateService" :key="item.id" class="service">
+                  <!-- <div class="serviceLeft"> -->
+                  <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
+                  <el-tooltip effect="dark" :content="item.remark" placement="top">
+                    <span class="el-icon-warning icon-info"></span>
+                  </el-tooltip>
+                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                  <!-- </div> -->
+                  <!-- <div class="serviceRight"> -->
+                  <!-- </div> -->
+                </div>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :offset="2" v-else>
             <el-form-item :label="$t('服务')" class="service-style">
               <el-checkbox-group v-model="user.chosen_services">
                 <div v-for="item in updateService" :key="item.id" class="service">
@@ -515,6 +532,7 @@ export default {
     if (this.$route.params.id) {
       this.getList() // 获取商品详细
       this.getPackageList() // 获取表格数据
+      // this.getService()
       // this.user.warehouse_id = this.$route.params.warehouse_id
       // this.user.express_num = this.$route.params.express_num
       // this.user.user_id = this.$route.params.user_id + '---' + this.$route.params.user_name
@@ -522,6 +540,8 @@ export default {
       //   let props = JSON.parse(this.$route.query.props)
       //   this.user.props = props.map(item => item.id)
       // }
+    } else {
+      this.getServices()
     }
   },
   methods: {
@@ -548,6 +568,11 @@ export default {
             price
           }
         })
+      })
+    },
+    getServices() {
+      this.$request.getAllService().then(res => {
+        this.updateService = res.data
       })
     },
     getNum(num) {
