@@ -1149,7 +1149,7 @@ export default {
   }
   .service {
     float: left;
-    width: 240px;
+    width: 300px;
     margin-right: 25px;
     overflow: hidden;
     .serviceLeft {
