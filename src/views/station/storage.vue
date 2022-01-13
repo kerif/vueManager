@@ -33,15 +33,11 @@
             <el-form-item :label="$t('服务')" class="service-style">
               <el-checkbox-group v-model="user.chosen_services">
                 <div v-for="item in updateService" :key="item.id" class="service">
-                  <!-- <div class="serviceLeft"> -->
                   <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
                   <el-tooltip effect="dark" :content="item.remark" placement="top">
                     <span class="el-icon-warning icon-info"></span>
                   </el-tooltip>
                   <el-input v-model="item.price" class="add-value-ipt"></el-input>
-                  <!-- </div> -->
-                  <!-- <div class="serviceRight"> -->
-                  <!-- </div> -->
                 </div>
               </el-checkbox-group>
             </el-form-item>
@@ -532,7 +528,6 @@ export default {
     if (this.$route.params.id) {
       this.getList() // 获取商品详细
       this.getPackageList() // 获取表格数据
-      // this.getService()
       // this.user.warehouse_id = this.$route.params.warehouse_id
       // this.user.express_num = this.$route.params.express_num
       // this.user.user_id = this.$route.params.user_id + '---' + this.$route.params.user_name
@@ -1013,7 +1008,15 @@ export default {
                 cancelButtonText: this.$t('取消'),
                 type: 'warning'
               }).then(() => {
-                this.$request.addShipment(this.user).then(res => {
+                const chosen_services = this.updateService
+                  .filter(item => this.user.chosen_services.includes(item.id))
+                  .map(item => {
+                    return {
+                      id: item.id,
+                      price: item.price
+                    }
+                  })
+                this.$request.addShipment({ ...this.user, chosen_services }).then(res => {
                   if (res.ret) {
                     this.$notify({
                       title: this.$t('操作成功'),
