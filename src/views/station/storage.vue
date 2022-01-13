@@ -509,7 +509,7 @@ export default {
   },
   created() {
     this.getProp() // 获取物品属性
-    this.getService() // 获取全部服务
+    // this.getService() // 获取全部服务
     this.getAgentData()
     this.getExpressData() // 获取全部快递公司
     if (this.$route.params.id) {
@@ -533,20 +533,21 @@ export default {
       })
     },
     // 获取全部服务
-    getService() {
+    getService(arr) {
+      console.log('aarr', arr)
       this.$request.getAllService().then(res => {
-        this.updateService = res.data
-        // let ids = res.data.map(item => item.id)
-        // arr.forEach(item => {
-        //   let index = ids.indexOf(item.service_id)
-        //   if (index !== -1) {
-        //     this.updateService[index].checked = true
-        //     this.updateService[index].price = item.price
-        //     this.user.chosen_services.push(this.updateService[index].id)
-        //   } else {
-        //     this.updateService[index].checked = false
-        //   }
-        // })
+        this.updateService = res.data.map(item => {
+          let price = item.price
+          arr.forEach(ele => {
+            if (ele.service_id === item.id) {
+              price = ele.price
+            }
+          })
+          return {
+            ...item,
+            price
+          }
+        })
       })
     },
     getNum(num) {
@@ -598,18 +599,15 @@ export default {
       }
       this.$request.getProductDetails(id).then(res => {
         if (res.ret) {
+          const services = JSON.parse(JSON.stringify(res.data.chosen_services))
           this.user = res.data
           if (res.data.user_id) {
             this.userId = res.data.user_id
-            console.log(this.userId, 'userId')
           }
-          // this.user.express_num = this.$route.params.express_num
           this.user.user_id = res.data.user_id + '---' + res.data.user_name
           this.user.props = res.data.props.map(item => item.id)
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
-          console.log(this.user.chosen_services)
-          // this.user.chosen_services = res.data.chosen_services
-          // this.getService(res.data.chosen_services)
+          this.getService(services)
           this.user.warehouse_id = res.data.warehouse.id
           this.getAreaLocation()
           if (res.data.express_line) {
@@ -819,7 +817,6 @@ export default {
           console.log(res.data, 'res data')
           for (let i of res.data) {
             i.value = i.code
-            // i.value = i.id + '---' + i.name
           }
           if (!this.user.location) {
             this.user.location = res.data[0].code
@@ -843,23 +840,14 @@ export default {
       this.getAreaLocation()
       this.locationCNSearch()
     },
-    // changeSelect() {
-    //   if (!this.user.user_id) {
-    //     this.user_id = ''
-    //   }
-    // },
     changeSelect() {
       if (!this.user.user_id) {
-        // this.user_id = ''
         this.locationCNSearch()
       }
     },
     // 货位
     locationSelect(item) {
-      // this.ruleForm.en_name = item.name
       console.log(item)
-      // this.supplierId = item.id
-      // this.supplierName = item.name
     },
     // 保存
     submitStorage() {
@@ -876,7 +864,7 @@ export default {
           if (this.$route.params.state === 'editWarehouse') {
             this.tableLoading = true
             this.user.user_id = this.user.user_id.split('---')[0]
-            this.user.chosen_services = this.updateService
+            const chosen_services = this.updateService
               .filter(item => this.user.chosen_services.includes(item.id))
               .map(item => {
                 return {
@@ -884,39 +872,43 @@ export default {
                   price: item.price
                 }
               })
-            console.log(this.user.chosen_services)
-            this.$request.submitEditPackage(this.$route.params.id, this.user).then(res => {
-              this.tableLoading = false
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
-                  ''
-                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
-                  ''
-                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
-                  ''
-                this.goodsImgList = []
-                this.user.props = []
-                this.user.chosen_services = []
-                this.user.location = this.user.country_id = ''
-                this.hasStore = true
-                this.$router.replace('/station/storage')
-              } else {
-                this.$message({
-                  title: this.$t('操作失败'),
-                  message: res.msg,
-                  type: 'warning'
-                })
-              }
-            })
+            this.$request
+              .submitEditPackage(this.$route.params.id, {
+                ...this.user,
+                chosen_services
+              })
+              .then(res => {
+                this.tableLoading = false
+                if (res.ret) {
+                  this.$notify({
+                    type: 'success',
+                    title: this.$t('操作成功'),
+                    message: res.msg
+                  })
+                  this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
+                    ''
+                  this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
+                    ''
+                  this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
+                    ''
+                  this.goodsImgList = []
+                  this.user.props = []
+                  this.user.chosen_services = []
+                  this.user.location = this.user.country_id = ''
+                  this.hasStore = true
+                  this.$router.replace('/station/storage')
+                } else {
+                  this.$message({
+                    title: this.$t('操作失败'),
+                    message: res.msg,
+                    type: 'warning'
+                  })
+                }
+              })
           } else {
             this.tableLoading = true
             this.user.user_id = this.user.user_id.split('---')[0]
-            this.user.chosen_services = this.updateService
+            const chosen_services = this.updateService
               .filter(item => this.user.chosen_services.includes(item.id))
               .map(item => {
                 return {
@@ -924,42 +916,45 @@ export default {
                   price: item.price
                 }
               })
-            console.log(this.user.chosen_services)
-            this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
-              this.tableLoading = false
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
-                  ''
-                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
-                  ''
-                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
-                  ''
-                this.goodsImgList = []
-                this.user.props = []
-                this.user.chosen_services = []
-                this.user.location = this.user.country_id = ''
-                this.hasStore = true
-                this.$router.replace('/station/storage')
-              } else {
-                this.$message({
-                  title: this.$t('操作失败'),
-                  message: res.msg,
-                  type: 'warning'
-                })
-              }
-            })
+            this.$request
+              .submitPackage(this.$route.params.id, {
+                ...this.user,
+                chosen_services
+              })
+              .then(res => {
+                this.tableLoading = false
+                if (res.ret) {
+                  this.$notify({
+                    type: 'success',
+                    title: this.$t('操作成功'),
+                    message: res.msg
+                  })
+                  this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
+                    ''
+                  this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
+                    ''
+                  this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
+                    ''
+                  this.goodsImgList = []
+                  this.user.props = []
+                  this.user.chosen_services = []
+                  this.user.location = this.user.country_id = ''
+                  this.hasStore = true
+                  this.$router.replace('/station/storage')
+                } else {
+                  this.$message({
+                    title: this.$t('操作失败'),
+                    message: res.msg,
+                    type: 'warning'
+                  })
+                }
+              })
           }
         } else {
           // 如果是添加
           this.tableLoading = true
           this.user.user_id = this.user.user_id.split('---')[0]
-          console.log(this.user.user_id, 'this.user.user_id')
-          this.user.chosen_services = this.updateService
+          const chosen_services = this.updateService
             .filter(item => this.user.chosen_services.includes(item.id))
             .map(item => {
               return {
@@ -967,8 +962,7 @@ export default {
                 price: item.price
               }
             })
-          console.log(this.user.chosen_services)
-          this.$request.getExpress(this.user).then(res => {
+          this.$request.getExpress({ ...this.user, chosen_services }).then(res => {
             this.tableLoading = false
             if (res.ret === 1) {
               this.$notify({
