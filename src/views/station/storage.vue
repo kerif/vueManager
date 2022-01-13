@@ -1023,6 +1023,7 @@ export default {
                       message: res.msg,
                       type: 'success'
                     })
+                    this.getServices()
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = this.user.brand_name =
                       ''
                     this.user.user_id = this.user.warehouse_id = ''
