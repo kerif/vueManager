@@ -133,8 +133,7 @@ export default {
       areaNum: [],
       postcodes: [],
       start: '',
-      end: '',
-      country_id: ''
+      end: ''
     }
   },
   created() {
@@ -153,19 +152,13 @@ export default {
         console.log(res.data)
         this.ruleForm.reference_time = res.data.reference_time
         this.ruleForm.name = res.data.name
+        console.log(res.data.areas)
         if (res.data.areas) {
-          // this.areaData = res.data.areas.map(item =>
-          //   [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
-          // )
-          this.areaData = res.data.areas.map(item => {
-            return {
-              country_id: item.country_id,
-              area_id: item.area_id,
-              sub_area_id: item.sub_area_id
-            }
-          })
-          console.log(this.areaData)
+          this.areaData = res.data.areas.map(item =>
+            [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
+          )
         }
+        console.log(this.areaData)
         this.ruleForm.country_id = res.data.country_id
         this.ruleForm.radio = res.data.type
         this.postData = res.data.postcode_areas
@@ -181,15 +174,8 @@ export default {
           this.areaData = res.data.areas.map(item =>
             [item.country_id, item.area_id, item.sub_area_id].filter(item => item)
           )
-          // this.areaData = res.data.areas.map(item => {
-          //   return {
-          //     country_id: item.country_id,
-          //     area_id: item.area_id,
-          //     sub_area_id: item.sub_area_id
-          //   }
-          // })
-          console.log(this.areasData)
         }
+        console.log(this.areaData)
         this.ruleForm.country_id = res.data.country_id
         this.ruleForm.radio = res.data.type
         this.postData = res.data.postcode_areas
@@ -271,14 +257,7 @@ export default {
     },
     // 切换国家
     changeCountry(item) {
-      // this.areaData = []
       console.log(item, 'item')
-      // const selectList = this.countryList.find(item => item.value === this.form.country_id)
-      // this.newWarehouseList = selectList ? selectList.children : []
-    },
-    handleChange() {
-      // this.form.area_id = this.areaData[0]
-      // this.form.sub_area_id = this.areaData[1]
     },
     editPartition(id) {
       console.log(id)
@@ -414,12 +393,12 @@ export default {
       }
     },
     init() {
-      if (this.status === 'partition') {
-        this.getCountry()
-      } else {
-        this.getAllCountries()
-        // this.getCountry()
-      }
+      this.getCountry()
+      // if (this.status === 'partition') {
+      //   this.getCountry()
+      // } else {
+      //   this.getAllCountries()
+      // }
       if (this.id) {
         this.getList()
       }

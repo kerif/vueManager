@@ -386,7 +386,6 @@ export default {
             message: res.msg,
             type: 'error'
           })
-          // this.getList()
         }
       })
     },
@@ -436,8 +435,6 @@ export default {
     justify-content: flex-end;
     flex: 1;
     .searchGroup {
-      // width: 29.42%;
-      // float: left;
       margin-right: 10px;
     }
   }

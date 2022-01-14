@@ -7,14 +7,21 @@
     @close="clear"
   >
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
+      <el-form-item :label="$t('物品名称')">
+        <el-input
+          v-model="ruleForm.package_name"
+          class="input-sty"
+          :placeholder="$t('请输入物品名称')"
+        ></el-input>
+      </el-form-item>
       <el-form-item :label="$t('申报价值')">
         <el-input
           v-model="ruleForm.package_value"
           class="input-sty"
-          :placeholder="$t('请申报价值')"
+          :placeholder="$t('请输入申报价值')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('寄送仓库')">
+      <el-form-item :label="$t('始发仓库')">
         <el-select
           v-model="ruleForm.warehouse_id"
           @change="getAreaData"
@@ -57,6 +64,7 @@
             <span>{{ scope.row.express_num }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="package_name" :label="$t('物品名称')"></el-table-column>
         <el-table-column prop="destination_country.cn_name" :label="$t('寄送国家')" width="180">
         </el-table-column>
         <el-table-column :label="$t('包裹属性')">
@@ -161,7 +169,8 @@ export default {
         ids: this.deleteNum,
         country_id: this.ruleForm.country,
         prop_ids: this.ruleForm.checkList,
-        package_value: this.ruleForm.package_value
+        package_value: this.ruleForm.package_value,
+        package_name: this.ruleForm.package_name
       }
       this.$confirm(this.$t('确定进行批量修改操作吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
