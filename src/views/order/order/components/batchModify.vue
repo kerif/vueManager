@@ -105,7 +105,8 @@ export default {
         checkList: [],
         warehouse_id: '',
         country: '',
-        package_value: ''
+        package_value: '',
+        package_name: ''
       }
     }
   },
@@ -130,6 +131,7 @@ export default {
     getAgentData() {
       this.$request.getSimpleWarehouse().then(res => {
         this.agentData = res.data
+        console.log(this.agentData)
       })
     },
     // 通过仓库id拉取相对应的地区
@@ -171,7 +173,8 @@ export default {
         country_id: this.ruleForm.country,
         prop_ids: this.ruleForm.checkList,
         package_value: this.ruleForm.package_value,
-        package_name: this.ruleForm.package_name
+        package_name: this.ruleForm.package_name,
+        warehouse_id: this.ruleForm.warehouse_id
       }
       this.$confirm(this.$t('确定进行批量修改操作吗？'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
