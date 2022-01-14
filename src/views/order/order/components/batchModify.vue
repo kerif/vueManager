@@ -157,6 +157,7 @@ export default {
       this.ruleForm.country = ''
       this.ruleForm.warehouse_id = ''
       this.ruleForm.package_value = ''
+      this.ruleForm.package_name = ''
     },
     close() {
       this.$emit('passVal', false)
@@ -186,6 +187,7 @@ export default {
               type: 'success'
             })
             this.$emit('passVal', false)
+            this.$parent.getList()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
