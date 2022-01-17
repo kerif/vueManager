@@ -396,7 +396,6 @@ export default {
   .box-card {
     font-size: 14px;
     background: #fff;
-    // height: 300px;
     .leftWidth {
       padding: 20px 0 5px 50px;
       width: 1000px;
