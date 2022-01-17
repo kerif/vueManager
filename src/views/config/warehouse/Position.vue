@@ -117,8 +117,7 @@
     >
       <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
         <!--无人认领专区  -->
-        <el-form-item :label="$t('无人认领专区')"
-          >{{ ruleForm.number }}
+        <el-form-item :label="$t('无人认领专区')">
           <el-select :placeholder="$t('请选择')" v-model="ruleForm.number" multiple>
             <el-option
               v-for="item in areaNumber"
