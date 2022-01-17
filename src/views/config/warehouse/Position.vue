@@ -117,7 +117,8 @@
     >
       <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
         <!--无人认领专区  -->
-        <el-form-item :label="$t('无人认领专区')">
+        <el-form-item :label="$t('无人认领专区')"
+          >{{ ruleForm.number }}
           <el-select :placeholder="$t('请选择')" v-model="ruleForm.number" multiple>
             <el-option
               v-for="item in areaNumber"
@@ -186,9 +187,6 @@ export default {
           if (res.ret) {
             this.positionList = res.data
             this.typeSendData = [...res.data]
-            this.ruleForm.number = res.data
-              .filter(item => item.no_package_special)
-              .map(item => item.id)
             // this.areaNumber = res.data.map(item => {
             //   let id = item.id
             //   let numbers = item.number
@@ -298,6 +296,9 @@ export default {
       this.show = true
       this.$request.locationArea(this.$route.params.id, { size: 999 }).then(res => {
         if (res.ret) {
+          this.ruleForm.number = res.data
+            .filter(item => item.no_package_special)
+            .map(item => item.id)
           this.areaNumber = res.data.map(item => {
             let id = item.id
             let numbers = item.number
