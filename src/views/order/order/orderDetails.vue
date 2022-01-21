@@ -158,7 +158,7 @@
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{ $t('物品分类') }}</span>
             <span v-for="item in form.categories" :key="item.id">
-              {{ item.name }}
+              {{ item.name_cn }}
             </span>
           </el-col>
           <!-- <el-col :span="7" :offset="1">
