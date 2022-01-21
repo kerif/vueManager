@@ -90,7 +90,7 @@
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :visible.sync="show" :title="$t('报关信息')" @close="clear">
+    <el-dialog :visible.sync="show" :title="$t('报关信息')" @close="clear" width="60%">
       <div v-if="this.type === 1">
         <div>{{ this.orderSn }}</div>
         <el-form :model="ruleForm" ref="ruleForm" style="margin-top: 10px">
@@ -141,6 +141,11 @@
           <el-table-column label="sku">
             <template slot-scope="scope">
               <el-input v-model="scope.row.sku"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('海关编码')">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.hs_code"></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('数量')">
@@ -249,6 +254,11 @@
             <el-table-column label="sku">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.sku"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('海关编码')">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.hs_code"></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="$t('数量')">
