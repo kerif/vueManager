@@ -1615,6 +1615,9 @@ exports.warehouseLocationIndex = params => {
 exports.unclaimedArea = (id, params) => {
   return $form.put(`warehouse-address/${id}/goods-allocation-areas/set-nps-area`, params)
 }
+exports.offShelfStatus = (warehouseId, params) => {
+  return $form.put(`warehouse-address/${warehouseId}/goods-allocation-areas/config`, params)
+}
 // 仓位管理 锁定或开锁
 exports.updateLocks = (id, status) => {
   return $form.put(`warehouse-address/area-Unlock/${id}/status/${status}`)

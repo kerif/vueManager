@@ -165,6 +165,20 @@
           @search="onGroupChange"
         >
         </search-select>
+        <!-- <el-select
+          v-model="page_params.group"
+          clearable
+          :placeholder="$t('请选择')"
+          @change="onGroupChange"
+        >
+          <el-option
+            v-for="item in clientGroupList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name_cn"
+          >
+          </el-option>
+        </el-select> -->
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
@@ -433,13 +447,14 @@ export default {
       if (!this.searchTime) {
         this.searchTime = []
       }
+      console.log(this.page_params.group)
       this.$request
         .getUsers({
+          ...this.searchParams,
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
           user_group_id: this.page_params.group,
-          ...this.searchParams,
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
           max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
           begin_date: this.searchTime[0],
@@ -668,6 +683,9 @@ export default {
     // 获取客户组
     getCategory() {
       this.$request.getSimple().then(res => {
+        // if (res.ret) {
+        //   this.clientGroupList = res.data
+        // }
         res.data.forEach(item => {
           this.clientGroupList.push({
             value: item.id,
@@ -826,6 +844,7 @@ export default {
     // 选择客户组
     onGroupChange() {
       this.page_params.handleQueryChange('group', this.page_params.group)
+      console.log(this.page_params.group)
       this.getList()
     },
     // 获取员工数据

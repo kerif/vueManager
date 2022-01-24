@@ -270,7 +270,7 @@
             <el-input
               v-model="form.remark"
               :placeholder="$t('请输入内容')"
-              :rows="4"
+              :rows="8"
               type="textarea"
             ></el-input>
           </el-col>

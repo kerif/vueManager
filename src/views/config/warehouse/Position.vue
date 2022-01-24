@@ -128,6 +128,16 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item :label="$t('包裹下架节点')">
+          <el-select :placeholder="$t('请选择')" v-model="ruleForm.off_shelf_status">
+            <el-option
+              v-for="item in nodeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <div style="margin-left: 20px">
           *{{ $t('货区可多选当包裹为无人认领时强制放入专区不受其他规则限制') }}
         </div>
@@ -156,7 +166,8 @@ export default {
   data() {
     return {
       ruleForm: {
-        number: ''
+        number: '',
+        off_shelf_status: ''
       },
       positionList: [],
       typeSendData: [],
@@ -166,7 +177,11 @@ export default {
       areaNumber: [],
       noAreaNumber: [],
       show: false,
-      info: {}
+      info: {},
+      nodeList: [
+        { id: 0, name: '打包完成' },
+        { id: 1, name: '拣货完成' }
+      ]
     }
   },
   created() {
@@ -303,6 +318,7 @@ export default {
             let numbers = item.number
             return { id, numbers }
           })
+          this.getOffShelf()
         }
       })
     },
@@ -363,9 +379,19 @@ export default {
         })
       })
     },
+    getOffShelf() {
+      this.$request.aloneWarehouseAddress(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.ruleForm.off_shelf_status = res.data.off_shelf_status
+        }
+      })
+    },
     submit() {
       this.$request
-        .unclaimedArea(this.$route.params.id, { area_ids: this.ruleForm.number })
+        .offShelfStatus(this.$route.params.id, {
+          area_ids: this.ruleForm.number,
+          off_shelf_status: this.ruleForm.off_shelf_status
+        })
         .then(res => {
           if (res.ret) {
             this.$notify({
@@ -387,6 +413,7 @@ export default {
     clear() {
       this.getList()
       this.ruleForm.number = ''
+      this.ruleForm.off_shelf_status = ''
     }
   }
 }
