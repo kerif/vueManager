@@ -101,18 +101,26 @@ export default {
           this.boxType = res.data.box_type
           if (this.boxType === 1) {
             this.company.company = res.data.logistics_company_code
+            this.company.sn = res.data.logistics_sn
           } else {
             this.company.company = res.data.box[0].logistics_company_code
+            this.box = res.data.box.map(item => {
+              return {
+                id: item.id,
+                sn: item.sn,
+                logistics_sn: item.logistics_sn
+              }
+            })
           }
-          res.data.box.length
-            ? (this.box = res.data.box.map(item => {
-                return {
-                  id: item.id,
-                  sn: item.sn,
-                  logistics_sn: item.logistics_sn
-                }
-              }))
-            : (this.company.sn = res.data.order_sn)
+          //   res.data.box.length
+          //     ? (this.box = res.data.box.map(item => {
+          //         return {
+          //           id: item.id,
+          //           sn: item.sn,
+          //           logistics_sn: item.logistics_sn
+          //         }
+          //       }))
+          //     : (this.company.sn = res.data.logistics_sn)
         }
       })
     },
