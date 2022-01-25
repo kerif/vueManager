@@ -98,7 +98,7 @@ export default {
       this.$request.getOrderDetails(this.orderId).then(res => {
         if (res.ret) {
           this.orderSn = res.data.order_sn
-          this.company.company = res.data.logistics_company_code
+          this.company.company = res.data.box[0].logistics_company_code
           this.boxType = res.data.box_type
           res.data.box.length
             ? (this.box = res.data.box.map(item => {
