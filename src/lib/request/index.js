@@ -2443,6 +2443,14 @@ exports.fillDeclare = (id, params) => {
 exports.fillDeclareBox = (id, params) => {
   return $form.put(`declare/${id}/update-boxes-party`, params)
 }
+// 订单 申报信息 设置默认值
+exports.setDefaultValue = params => {
+  return $form.put(`declare-settings`, params)
+}
+//订单 申报信息 获取默认值详情
+exports.getDefaultValue = () => {
+  return $form.get('declare-settings')
+}
 // 财务 财务概览 柱状图
 exports.financeColumnar = params => {
   return $form.get('transaction-overviews/trade-count', { params })

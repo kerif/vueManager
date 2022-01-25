@@ -10,14 +10,19 @@
           $t('批量提交')
         }}</el-button>
       </div>
-      <div class="head-search">
-        <el-input
-          v-model="page_params.keyword"
-          :placeholder="$t('请输入内容')"
-          @keyup.enter.native="goSearch"
-        >
-          <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
-        </el-input>
+      <div class="btn-left">
+        <el-button size="mini" class="btn-light-red" @click="setNormal">{{
+          $t('设置默认值')
+        }}</el-button>
+        <div class="head-search">
+          <el-input
+            v-model="page_params.keyword"
+            :placeholder="$t('请输入内容')"
+            @keyup.enter.native="goSearch"
+          >
+            <i slot="suffix" class="el-input__icon el-icon-search" @click="goSearch"></i>
+          </el-input>
+        </div>
       </div>
     </div>
     <el-table
@@ -90,7 +95,7 @@
       </el-table-column>
     </el-table>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-    <el-dialog :visible.sync="show" :title="$t('报关信息')" @close="clear" width="60%">
+    <el-dialog :visible.sync="show" :title="$t('报关信息')" @close="clear" width="80%">
       <div v-if="this.type === 1">
         <div>{{ this.orderSn }}</div>
         <el-form :model="ruleForm" ref="ruleForm" style="margin-top: 10px">
@@ -328,6 +333,38 @@
         <el-table-column prop="content" :label="$t('内容')"></el-table-column>
       </el-table>
     </el-dialog>
+    <el-dialog :visible.sync="showNormal" :title="$t('设置默认值')" @close="clearNormal">
+      <el-form :model="declareForm" label-width="100px">
+        <el-form-item :label="$t('税号')">
+          <el-input
+            class="input-sty"
+            v-model="declareForm.declare_tax_number"
+            :placeholder="$t('请输入税号')"
+          ></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('请选择币种')">
+          <el-select v-model="declareForm.declare_currency">
+            <el-option
+              v-for="item in currencyList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('请选择单位')">
+          <el-select v-model="declareForm.declare_unit">
+            <el-option v-for="item in unitList" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="cancelNormal">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="saveNormal">{{ $t('保存') }}</el-button>
+      </div>
+    </el-dialog>
     <!-- <el-dialog :visible.sync="showFill" :title="$t('编辑申报')" @close="clearFill">
       <div v-if="this.pushType === 1">
         <el-form :model="ruleForm" ref="ruleForm">
@@ -412,6 +449,7 @@ export default {
       value: '',
       sels: [],
       showFill: false,
+      showNormal: false,
       ids: '',
       box: [],
       boxes: [],
@@ -419,6 +457,11 @@ export default {
       ruleForm: {
         tax_number: '',
         weight: ''
+      },
+      declareForm: {
+        declare_tax_number: '',
+        declare_currency: '',
+        declare_unit: ''
       }
     }
   },
@@ -430,6 +473,7 @@ export default {
   created() {
     this.handleClick(this.activeName)
     this.getList()
+    this.getNormal()
   },
   activated() {
     this.$nextTick(() => {
@@ -493,6 +537,10 @@ export default {
         }
       })
     },
+    setNormal() {
+      this.showNormal = true
+      this.getInit()
+    },
     resubmit(id) {
       this.$request.submitDecalre({ ids: [id] }).then(res => {
         if (res.ret) {
@@ -516,6 +564,12 @@ export default {
       this.ruleForm.tax_number = ''
       this.ruleForm.weight = ''
       this.boxes = []
+    },
+    cancelNormal() {
+      this.showNormal = false
+      this.declareForm.declare_tax_number = ''
+      this.declareForm.declare_currency = ''
+      this.declareForm.declare_unit = ''
     },
     clearFill() {
       this.showFill = false
@@ -628,6 +682,9 @@ export default {
     clearLog() {
       this.showLog = false
     },
+    clearNormal() {
+      this.showNormal = false
+    },
     clear() {
       this.show = false
     },
@@ -698,6 +755,39 @@ export default {
           } else {
             this.boxData = res.data.boxes
           }
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    getNormal() {
+      this.$request.getDefaultValue().then(res => {
+        if (res.ret) {
+          this.declareForm.declare_tax_number = res.data.declare_tax_number
+          this.declareForm.declare_currency = res.data.declare_currency
+          this.declareForm.declare_unit = res.data.declare_unit
+        }
+      })
+    },
+    saveNormal() {
+      let params = {
+        declare_tax_number: this.declareForm.declare_tax_number,
+        declare_currency: this.declareForm.declare_currency,
+        declare_unit: this.declareForm.declare_unit
+      }
+      this.$request.setDefaultValue(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.showNormal = false
+          this.getList()
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -786,8 +876,12 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .head-search {
-      width: 200px;
+    .btn-left {
+      display: flex;
+      .head-search {
+        width: 200px;
+        margin-left: 10px;
+      }
     }
   }
   .reject_color {
