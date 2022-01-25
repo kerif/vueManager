@@ -112,7 +112,7 @@ export default {
                   logistics_sn: item.logistics_sn
                 }
               }))
-            : (this.company.sn = res.data.logistics_sn)
+            : (this.company.sn = res.data.order_sn)
         }
       })
     },
@@ -125,7 +125,7 @@ export default {
           return this.$message.error(this.$t('请输入转运快递单号二程'))
         this.box.forEach(item => {
           if (!item.logistics_sn) {
-            return this.$message.error(this.$t('请输入转运快递单号'))
+            // return this.$message.error(this.$t('请输入转运快递单号'))
           }
         })
       } else {
