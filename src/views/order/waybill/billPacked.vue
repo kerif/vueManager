@@ -940,6 +940,7 @@ export default {
         // this.warehouse.warehouse_id = data.id
         this.user.warehouse_id = data.id
         this.warehouse.warehouse_name = data.warehouse_name
+        this.getPackage()
       })
     },
     // 更改线路
@@ -949,6 +950,7 @@ export default {
         this.express.CName = data.name
         this.express.MaxWeight = data.max_weight
         this.user.express_line_id = data.id
+        this.getPackage()
       })
     },
     // 原箱出库
