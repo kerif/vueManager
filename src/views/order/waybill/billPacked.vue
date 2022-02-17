@@ -620,7 +620,7 @@ export default {
       weightName: '',
       express: {
         MaxWeight: '',
-        cName: ''
+        CName: ''
       },
       warehouse: {
         warehouse_name: ''
@@ -982,8 +982,9 @@ export default {
     changeLine() {
       dialog({ type: 'lineChange', state: 'line', id: this.user.warehouse_id }, data => {
         console.log(data, 'data')
-        this.express.CName = data.name
-        console.log(data.name, this.express.CName)
+        // this.express.CName = data.name
+        this.$set(this.express, 'CName', data.name)
+        console.log(this.express)
         this.express.MaxWeight = data.max_weight
         this.user.express_line_id = data.id
       })
