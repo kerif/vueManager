@@ -933,48 +933,6 @@ export default {
       this._onTotalWeight()
       this.unitVolume()
     },
-    // 更改仓库
-    changeWarehouse() {
-      dialog({ type: 'lineChange', state: 'warehouse' }, data => {
-        console.log(data, 'data')
-        // this.warehouse.warehouse_id = data.id
-        this.user.warehouse_id = data.id
-        this.warehouse.warehouse_name = data.warehouse_name
-        this.getPackage()
-      })
-    },
-    // 更改线路
-    changeLine() {
-      dialog({ type: 'lineChange', state: 'line', id: this.user.warehouse_id }, data => {
-        console.log(data, 'data')
-        this.express.CName = data.name
-        this.express.MaxWeight = data.max_weight
-        this.user.express_line_id = data.id
-        this.getPackage()
-      })
-    },
-    // 原箱出库
-    originalBox() {
-      if (this.PackageData.length > 1) {
-        this.user.box_type = 2
-        this.user.box = this.PackageData.map(item => {
-          return {
-            length: item.length,
-            width: item.width,
-            height: item.height,
-            weight: item.package_weight,
-            volume_weight: ((item.length * item.width * item.height) / this.factor).toFixed(3)
-          }
-        })
-        this._onTotalWeight()
-        this.unitVolume()
-      } else {
-        this.user.weight = this.PackageData[0].package_weight
-        this.user.length = this.PackageData[0].length
-        this.user.width = this.PackageData[0].width
-        this.user.height = this.PackageData[0].height
-      }
-    },
     getPackage() {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
@@ -1010,6 +968,47 @@ export default {
         this.baseMode = this.form.express_line.base_mode
         this.getExpressServes()
       })
+    },
+    // 更改仓库
+    changeWarehouse() {
+      dialog({ type: 'lineChange', state: 'warehouse' }, data => {
+        console.log(data, 'data')
+        // this.warehouse.warehouse_id = data.id
+        this.user.warehouse_id = data.id
+        this.warehouse.warehouse_name = data.warehouse_name
+      })
+    },
+    // 更改线路
+    changeLine() {
+      dialog({ type: 'lineChange', state: 'line', id: this.user.warehouse_id }, data => {
+        console.log(data, 'data')
+        this.express.CName = data.name
+        console.log(data.name, this.express.CName)
+        this.express.MaxWeight = data.max_weight
+        this.user.express_line_id = data.id
+      })
+    },
+    // 原箱出库
+    originalBox() {
+      if (this.PackageData.length > 1) {
+        this.user.box_type = 2
+        this.user.box = this.PackageData.map(item => {
+          return {
+            length: item.length,
+            width: item.width,
+            height: item.height,
+            weight: item.package_weight,
+            volume_weight: ((item.length * item.width * item.height) / this.factor).toFixed(3)
+          }
+        })
+        this._onTotalWeight()
+        this.unitVolume()
+      } else {
+        this.user.weight = this.PackageData[0].package_weight
+        this.user.length = this.PackageData[0].length
+        this.user.width = this.PackageData[0].width
+        this.user.height = this.PackageData[0].height
+      }
     },
     // 获取全部线路详情
     getExpress() {
