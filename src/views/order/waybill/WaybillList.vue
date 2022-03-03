@@ -316,6 +316,9 @@
                 <span>{{ scope.row.address_type }}</span>
                 <!-- <span v-if="scope.row.station_name !== ''">--{{ scope.row.station_name }}</span> -->
               </template>
+              <template v-else-if="item.id === 'boxes_count'">
+                <span>{{ scope.row.boxes_count }}</span>
+              </template>
               <template v-else>{{ scope.row[item.id] }}</template>
             </template>
           </el-table-column>
@@ -1343,7 +1346,7 @@ export default {
             if (item.id === 'updated_at') {
               item.name = this.timeLabel
             }
-            if ([...column, 'updated_at', 'packed_at'].includes(item.id)) {
+            if ([...column, 'updated_at', 'packed_at', 'boxes_count'].includes(item.id)) {
               this.checkColumn.push(item)
             }
             break
@@ -1360,7 +1363,8 @@ export default {
                 'coupon_amount',
                 'updated_at',
                 'packed_at',
-                'shipment_sn'
+                'shipment_sn',
+                'boxes_count'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)
@@ -1378,7 +1382,8 @@ export default {
                 'logistics_sn',
                 'coupon_amount',
                 'updated_at',
-                'shipment_sn'
+                'shipment_sn',
+                'boxes_count'
               ].includes(item.id)
             ) {
               this.checkColumn.push(item)

@@ -869,6 +869,9 @@ export default {
   .country-select {
     width: 100%;
   }
+  /deep/.el-select-dropdown__list .el-select-dropdown__item {
+    width: 100% !important;
+  }
   .billing-settings-dialog {
     img {
       max-width: 100%;

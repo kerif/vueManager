@@ -147,5 +147,11 @@ export default [
     name: '收货方式',
     width: '140',
     checked: true
+  },
+  {
+    id: 'boxes_count',
+    name: '出库箱数',
+    width: '100',
+    checked: true
   }
 ]

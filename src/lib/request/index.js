@@ -3958,3 +3958,38 @@ exports.getTemplateColumn = code => {
 exports.updateTemplate = (code, params) => {
   return $form.put(`list-templates/template/${code}`, params)
 }
+
+// 弹窗广告图管理 列表
+exports.advertiseList = params => {
+  return $form.get('ads-picture/alert-ads', { params })
+}
+
+// 弹窗广告图管理 选择数据
+exports.getDropData = () => {
+  return $form.get('ads-picture/alert-ads/selects')
+}
+
+// 弹窗广告图管理 新增
+exports.newAdvertise = params => {
+  return $form.post('ads-picture/alert-ads', params)
+}
+
+// 弹窗广告图管理 更新
+exports.updateAdvertise = (id, params) => {
+  return $form.put(`ads-picture/alert-ads/${id}`, params)
+}
+
+// 弹窗广告图管理 删除
+exports.deleteAdvertise = id => {
+  return $form.delete(`ads-picture/alert-ads/${id}`)
+}
+
+// 弹窗广告图管理 更新翻译数据
+exports.updateTranslateData = (id, params) => {
+  return $form.put(`ads-picture/alert-ads/${id}/translate-data`, params)
+}
+
+// 弹窗广告图管理 详情
+exports.advertiseDetail = id => {
+  return $form.get(`ads-picture/alert-ads/${id}`)
+}

@@ -62,6 +62,17 @@
               onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
             ></el-input>
           </el-form-item>
+          <!-- 物品属性 -->
+          <el-form-item :label="$t('物品属性')" prop="prop">
+            <el-select v-model="searchFieldData.prop" clearable :placeholder="$t('请选择')">
+              <el-option
+                v-for="item in propList"
+                :key="item.id"
+                :value="item.id"
+                :label="item.cn_name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="5" :xl="6">
           <!--包裹号搜索-->
@@ -138,12 +149,14 @@ export default {
           name: this.$t('审核拒绝')
         }
       ],
-      simpleList: []
+      simpleList: [],
+      propList: []
     }
   },
   created() {
     this.initQuery()
     this.getSimpleList()
+    this.getPropList()
   },
   activated() {
     this.initQuery()
@@ -163,6 +176,11 @@ export default {
     getSimpleList() {
       this.$request.getSimpleList().then(res => {
         this.simpleList = res.data
+      })
+    },
+    getPropList() {
+      this.$request.getProps().then(res => {
+        this.propList = res.data
       })
     }
   }

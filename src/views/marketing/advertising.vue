@@ -67,6 +67,25 @@
         </div>
       </el-col>
     </el-row>
+    <el-row :gutter="20">
+      <el-col :span="7" class="user-left">
+        <div class="new-top">
+          <div class="top-img">
+            <img src="../../assets/carousel.png" />
+            <p>
+              <strong
+                ><span>{{ $t('弹窗广告管理') }}</span></strong
+              >
+            </p>
+          </div>
+          <div class="user-bottom">
+            <div class="bottom-left">
+              <el-button class="btn-deep-purple" @click="goAdvertise">{{ $t('管理') }}</el-button>
+            </div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -120,6 +139,9 @@ export default {
     // 页面广告管理
     goImage() {
       this.$router.push({ name: 'imageSet' })
+    },
+    goAdvertise() {
+      this.$router.push({ name: 'advertiseList' })
     }
   }
 }

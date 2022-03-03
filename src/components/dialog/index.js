@@ -55,7 +55,9 @@ import videoLang from './videoLang.vue'
 import pcLang from './pcLang.vue'
 import propsLang from './propsLang.vue'
 import bannerList from './bannerAddEdit.vue'
+import advertiseList from './advertiseAddEdit.vue'
 import bannerLang from './bannerLang.vue'
+import advertiseLang from './advertiseLang.vue'
 import warehouseSelf from './warehouseSelf.vue'
 import paypalSet from './paypalSet.vue'
 import expressEditAdd from './expressAddEdit.vue'
@@ -182,7 +184,9 @@ const VideoLangController = Vue.extend(videoLang)
 const PcLangController = Vue.extend(pcLang)
 const PropsLangController = Vue.extend(propsLang)
 const BannerListController = Vue.extend(bannerList)
+const AdvertiseListController = Vue.extend(advertiseList)
 const BannerLangController = Vue.extend(bannerLang)
+const AdvertiseLangController = Vue.extend(advertiseLang)
 const WarehouseSelfController = Vue.extend(warehouseSelf)
 const PayPalSetController = Vue.extend(paypalSet)
 const ExpressDetailsController = Vue.extend(expressEditAdd)
@@ -672,9 +676,21 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    case 'advertiseList':
+      instance = new AdvertiseListController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 营销管理 广告图语言修改
     case 'bannerLang':
       instance = new BannerLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'advertiseLang':
+      instance = new AdvertiseLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
