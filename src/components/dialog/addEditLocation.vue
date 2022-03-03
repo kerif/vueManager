@@ -55,10 +55,18 @@
           <el-form-item :label="$t('仓位数量')">
             <el-input v-model="qty" disabled></el-input>
           </el-form-item>
-          <el-form-item>
-            <el-checkbox v-model="location.reusable">{{
+          <el-form-item :label="$t('允许同一个用户使用相同货位')">
+            <!-- <el-checkbox v-model="location.reusable">{{
               $t('允许同一个用户使用相同货位')
-            }}</el-checkbox>
+            }}</el-checkbox> -->
+            <el-select v-model="location.reusable" :placeholder="$t('请选择')">
+              <el-option
+                v-for="item in capacityData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -159,7 +167,21 @@ export default {
       innerVisible: false,
       finishId: '',
       finishCode: '',
-      finishData: []
+      finishData: [],
+      capacityData: [
+        {
+          id: 0,
+          name: this.$t('关闭')
+        },
+        {
+          id: 1,
+          name: this.$t('开启不受容量限制')
+        },
+        {
+          id: 2,
+          name: this.$t('开启受容量限制')
+        }
+      ]
     }
   },
   components: {
@@ -188,7 +210,7 @@ export default {
         if (res.ret) {
           this.location = res.data
           this.qty = res.data.column * res.data.row
-          this.location.reusable = Boolean(res.data.reusable)
+          this.location.reusable = res.data.reusable
         } else {
           return this.$message.error(res.msg)
         }
