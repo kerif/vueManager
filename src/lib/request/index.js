@@ -3993,3 +3993,8 @@ exports.updateTranslateData = (id, params) => {
 exports.advertiseDetail = id => {
   return $form.get(`ads-picture/alert-ads/${id}`)
 }
+
+// 员工 导出员工数据
+exports.exportEmployData = params => {
+  return $form.post(`admins/work-count-export`, params)
+}
