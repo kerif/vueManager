@@ -13,9 +13,9 @@
         <el-button class="btn-light-red" size="small" @click="deleteData">{{
           $t('删除')
         }}</el-button>
-        <!-- <el-button class="btn-main" size="small" @click="exportData">{{
+        <el-button class="btn-main" size="small" @click="exportData">{{
           $t('导出数据')
-        }}</el-button> -->
+        }}</el-button>
       </div>
       <div class="headerList">
         <div class="searchGroup">
