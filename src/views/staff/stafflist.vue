@@ -14,7 +14,7 @@
           $t('删除')
         }}</el-button>
         <el-button class="btn-main" size="small" @click="exportData">{{
-          $t('导出数据')
+          $t('导出产能')
         }}</el-button>
       </div>
       <div class="headerList">
