@@ -3998,3 +3998,8 @@ exports.advertiseDetail = id => {
 exports.exportEmployData = params => {
   return $form.post(`admins/work-count-export`, params)
 }
+
+// 客户  修改密码
+exports.editCustomPwd = (id, params) => {
+  return $form.put(`users/${id}/password`, params)
+}
