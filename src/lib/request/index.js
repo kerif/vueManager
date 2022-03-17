@@ -3096,8 +3096,8 @@ exports.addCoupons = params => {
   return $form.post('coupons', params)
 }
 // 营销管理 渠道管理列表
-exports.getChannel = () => {
-  return $form.get('channels')
+exports.getChannel = params => {
+  return $form.get('channels', { params })
 }
 // 新增 渠道管理
 exports.addChannel = params => {
