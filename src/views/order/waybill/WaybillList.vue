@@ -210,6 +210,7 @@
             :label="item.name"
             v-if="item.checked"
             :width="item.width"
+            show-overflow-tooltip
           >
             <template slot-scope="scope">
               <template v-if="item.id === 'order_sn'">
@@ -292,7 +293,14 @@
                 {{ scope.row.shipment && scope.row.shipment.logistics_sn }}
               </template>
               <template v-else-if="item.id === 'logistics_sn'">
-                {{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}
+                <span v-if="scope.row.boxes_count === 1">
+                  {{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}
+                </span>
+                <span v-else>
+                  <span v-for="item in scope.row.boxes" :key="item.id">
+                    {{ item.logistics_company }} &nbsp; {{ item.logistics_sn }}
+                  </span>
+                </span>
               </template>
               <template v-else-if="item.id === 'updated_at'">
                 <span v-if="activeName === '1'">{{ scope.row.created_at }}</span>

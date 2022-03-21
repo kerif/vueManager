@@ -336,6 +336,7 @@
               v-model="form.multi_boxes"
               filterable
               class="country-select"
+              popper-class="billing-select"
               :placeholder="$t('请选择')"
             >
               <el-option
@@ -862,15 +863,12 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .billing-setting-container {
   background-color: #fff !important;
   padding: 20px;
   .country-select {
     width: 100%;
-  }
-  /deep/.el-select-dropdown__list .el-select-dropdown__item {
-    width: 100% !important;
   }
   .billing-settings-dialog {
     img {
@@ -938,6 +936,12 @@ export default {
   .remark {
     float: left;
     color: red;
+  }
+}
+.billing-select {
+  .el-select-dropdown__item {
+    width: 100%;
+    overflow: auto;
   }
 }
 </style>
