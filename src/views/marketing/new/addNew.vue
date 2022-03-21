@@ -33,12 +33,44 @@
           v-model="ruleForm.threshold"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('有效期')" prop="days">
+      <el-form-item
+        :label="$t('有效期')"
+        prop="days"
+        v-if="$route.params.type === 2 || $route.params.type === 3"
+      >
         <el-input
           class="input-sty"
           :placeholder="$t('请输入有效期例如78而不是20200101')"
           v-model="ruleForm.days"
         ></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('有效期')" prop="radio" v-if="$route.params.type === 1">
+        <el-radio-group v-model="ruleForm.radio">
+          <div style="margin: 0 0 10px 0">
+            <el-radio :label="1">{{ $t('到账后有效天数') }}</el-radio>
+            <el-input v-model="ruleForm.days" style="width: 340px"></el-input>
+          </div>
+          <div>
+            <el-radio :label="2">{{ $t('具体日期范围') }}</el-radio>
+            <el-date-picker
+              v-model="ruleForm.begin_at"
+              value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd"
+              type="date"
+              :placeholder="$t('请选择开始日期')"
+            >
+            </el-date-picker>
+            <span style="display: inline-block; width: 10px"></span>
+            <el-date-picker
+              v-model="ruleForm.end_at"
+              value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd"
+              type="date"
+              :placeholder="$t('请选择结束日期')"
+            >
+            </el-date-picker>
+          </div>
+        </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('使用范围')" prop="scope">
         <el-radio-group v-model="ruleForm.scope">
@@ -86,7 +118,9 @@ export default {
         name: '',
         amount: '',
         threshold: '',
+        radio: 1,
         begin_at: '',
+        end_at: '',
         days: '',
         scope: 0,
         trigger_condition: 1,
@@ -98,7 +132,7 @@ export default {
         amount: [{ required: true, message: this.$t('请输入金额'), trigger: 'blur' }],
         threshold: [{ required: true, message: this.$t('请输入最低消费'), trigger: 'blur' }],
         days: [{ required: true, message: this.$t('请输入有效期'), trigger: 'blur' }],
-        begin_at: [{ required: true, message: this.$t('请输入生效时间'), trigger: 'blur' }],
+        radio: [{ required: true, message: this.$t('请选择'), trigger: 'change' }],
         scope: [{ required: true, message: this.$t('请选择使用范围'), trigger: 'blur' }],
         trigger_condition: [{ required: true, message: this.$t('请选择获券条件'), trigger: 'blur' }]
       },
