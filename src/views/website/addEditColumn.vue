@@ -81,7 +81,7 @@
         </div> -->
       </el-form-item>
       <!-- 栏目URL -->
-      <el-form-item :label="$t('栏目URL')" v-if="ruleForm.type === 2">
+      <el-form-item :label="$t('栏目URL')" v-if="ruleForm.type === 2" prop="value">
         <el-input
           class="input-sty"
           :placeholder="$t('请输入栏目URL')"
@@ -108,7 +108,8 @@ export default {
     return {
       rules: {
         type: [{ required: true, message: this.$t('请选择'), trigger: 'change' }],
-        article_type: [{ required: true, message: this.$t('请选择'), trigger: 'change' }]
+        article_type: [{ required: true, message: this.$t('请选择'), trigger: 'change' }],
+        value: [{ required: true, message: '请输入', trigger: 'blur' }]
       },
       options: [],
       ruleForm: {
