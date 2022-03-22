@@ -181,20 +181,36 @@
       <!-- 所属包裹 -->
       <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
     </el-table>
-    <!-- <h4>{{ $t('预申报信息') }}</h4> -->
-    <!-- <div>
-      <el-form>
+    <h4 style="margin-bottom: 25px">
+      {{ $t('预申报信息') }}
+      <i
+        :class="showDeclare ? 'el-icon-arrow-down' : 'el-icon-arrow-up'"
+        @click="showDeclare = !showDeclare"
+      >
+      </i>
+    </h4>
+    <div v-show="showDeclare">
+      <el-form :model="infoForm">
         <el-form-item :label="$t('税号')">
           <el-input
             :placeholder="$t('请输入税号')"
             class="input-sty"
-            v-model="ruleForm.tax_number"
+            v-model="infoForm.tax_number"
           ></el-input>
         </el-form-item>
       </el-form>
-      <el-button size="small" style="margin: 10px 0">{{ $t('多选删除') }} </el-button>
-      <add-btn>{{ $t('新增') }}</add-btn>
-      <el-table :data="infoData" ref="multipleTable" border style="width: 100%">
+      <el-button size="small" @click="deleteRowData" class="btn-light-red" style="margin: 5px 0">
+        {{ $t('多选删除') }}
+      </el-button>
+      <add-btn @click.native="addNew">{{ $t('新增') }}</add-btn>
+      <el-table
+        :data="infoData"
+        ref="multipleTable"
+        border
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        class="data-list"
+      >
         <el-table-column type="selection" width="60"> </el-table-column>
         <el-table-column :label="$t('中文品名')">
           <template slot-scope="scope">
@@ -257,13 +273,19 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('操作')" fixed="right">
-          <template>
-            <el-button size="small" class="btn-light-red">{{ $t('删除') }}</el-button>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button
+              size="small"
+              class="btn-light-red"
+              @click="deleteInfo(scope.$index, infoData)"
+            >
+              {{ $t('删除') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
-    </div> -->
+    </div>
     <div class="receiver-msg">
       <el-form
         ref="params"
@@ -654,6 +676,7 @@
 </template>
 <script>
 import dialog from '@/components/dialog'
+import AddBtn from '@/components/addBtn'
 export default {
   data() {
     return {
@@ -717,13 +740,24 @@ export default {
       freight: '',
       first: '',
       next: '',
-      service: []
+      service: [],
+      infoData: [],
+      infoForm: {
+        tax_number: ''
+      },
+      currencyList: [],
+      unitList: [],
+      showDeclare: false
     }
+  },
+  components: {
+    AddBtn
   },
   created() {
     this.getPackage()
     this.getExpress()
     this.getProduct()
+    this.getInit()
     // this.getProp() // 获取多选框数据
   },
   methods: {
@@ -948,9 +982,14 @@ export default {
       if (type === 1) {
         res = await this.$request.saveOrderData(this.$route.params.id, this.user)
       } else {
-        let params = {}
+        let params = {
+          items: [],
+          order: {}
+        }
         params = {
-          ...this.user
+          ...this.user,
+          items: this.infoData,
+          tax_number: this.infoForm.tax_number
         }
         if (this.is_checked) {
           params.final_price = this.final_price || ''
@@ -1016,22 +1055,47 @@ export default {
       this._onTotalWeight()
       this.unitVolume()
     },
-    // deleteRowData() {
-    //   let val = this.sels
-    //   console.log(val)
-    //   if (val) {
-    //     val.forEach((va, index) => {
-    //       console.log(index)
-    //       this.infoData.forEach((v, i) => {
-    //         console.log(i)
-    //         if (va.id === v.id) {
-    //           this.infoData.splice(i, 1)
-    //         }
-    //       })
-    //     })
-    //   }
-    //   this.$refs.multipleTable.clearSelection()
-    // },
+    addNew() {
+      this.infoData.push({
+        cn_name: '',
+        en_name: '',
+        sku: '',
+        hs_code: '',
+        quantity: '',
+        unit: '',
+        unit_value: '',
+        value: '',
+        currency: ''
+      })
+    },
+    handleSelectionChange(val) {
+      this.sels = val
+    },
+    deleteRowData() {
+      let val = this.sels
+      if (val) {
+        val.forEach((va, index) => {
+          console.log(index)
+          this.infoData.forEach((v, i) => {
+            if (va.id === v.id) {
+              this.infoData.splice(i, 1)
+            }
+          })
+        })
+      }
+      this.$refs.multipleTable.clearSelection()
+    },
+    getInit() {
+      this.$request.initDeclare().then(res => {
+        if (res.ret) {
+          this.currencyList = res.data.currency_list
+          this.unitList = res.data.unit_list
+        }
+      })
+    },
+    deleteInfo(index, rows) {
+      rows.splice(index, 1)
+    },
     getPackage() {
       this.$request.getOrderDetails(this.$route.params.id).then(res => {
         this.form = res.data
@@ -1411,6 +1475,9 @@ export default {
   }
   /deep/.el-checkbox-group {
     font-size: 14px;
+  }
+  .input-sty {
+    width: 35% !important;
   }
 }
 </style>

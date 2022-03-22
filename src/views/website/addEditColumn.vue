@@ -250,6 +250,9 @@ export default {
       if (!this.ruleForm.name) {
         return this.$message.error(this.$t('请输入栏目名称'))
       }
+      if (this.ruleForm.parent_id && !this.ruleForm.type) {
+        return this.$message.error(this.$t('请选择栏目类型'))
+      }
       // if (!this.customerList[0]) {
       //   return this.$message.error(this.$t('请上传pc端客户二维码'))
       // }
