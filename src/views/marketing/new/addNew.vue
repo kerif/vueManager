@@ -60,7 +60,7 @@
               :placeholder="$t('请选择开始日期')"
             >
             </el-date-picker>
-            <span style="display: inline-block; width: 10px"></span>
+            &nbsp;&nbsp;<span style="display: inline-block; width: 10px">-</span>&nbsp;&nbsp;
             <el-date-picker
               v-model="ruleForm.end_at"
               value-format="yyyy-MM-dd"

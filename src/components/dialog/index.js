@@ -130,6 +130,7 @@ import batchToTransport from './batchToTransport.vue'
 import setRules from './setRules.vue'
 import batchAllocate from './batchAllocate.vue'
 import abnormalLog from './abnormalLog.vue'
+import batchImportInvoice from './batchImportInvoice.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -259,6 +260,7 @@ const BatchToTransportController = Vue.extend(batchToTransport)
 const SetRulesController = Vue.extend(setRules)
 const BatchAllocateController = Vue.extend(batchAllocate)
 const AbnormalLogController = Vue.extend(abnormalLog)
+const BatchImportInvoiceController = Vue.extend(batchImportInvoice)
 const mixin = {
   data() {
     return {
@@ -915,6 +917,13 @@ function initInstance(type) {
     // 批量分配员工
     case 'batchAllocate':
       instance = new BatchAllocateController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量导入发货单
+    case 'batchImportInvoice':
+      instance = new BatchImportInvoiceController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

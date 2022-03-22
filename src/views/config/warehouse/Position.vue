@@ -115,9 +115,27 @@
       class="dialog-shelfRules"
       @close="clear"
     >
-      <el-form :model="ruleForm" ref="ruleForm" label-width="120px">
+      <el-form :model="ruleForm" ref="ruleForm" label-width="160px">
         <!--无人认领专区  -->
-        <el-form-item :label="$t('无人认领专区')">
+        <el-form-item :label="$t('规则一:包裹下架节点')">
+          <el-select :placeholder="$t('请选择')" v-model="ruleForm.off_shelf_status">
+            <el-option
+              v-for="item in nodeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('规则二:无人认领专区')">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="$t('*货区可多选当包裹为无人认领时强制放入专区不受其他规则限制')"
+            placement="top"
+          >
+            <span class="el-icon-question question-icon" style="margin-left: -14px"></span>
+          </el-tooltip>
           <el-select :placeholder="$t('请选择')" v-model="ruleForm.number" multiple>
             <el-option
               v-for="item in areaNumber"
@@ -128,19 +146,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('包裹下架节点')">
-          <el-select :placeholder="$t('请选择')" v-model="ruleForm.off_shelf_status">
-            <el-option
-              v-for="item in nodeList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <div style="margin-left: 20px">
-          *{{ $t('货区可多选当包裹为无人认领时强制放入专区不受其他规则限制') }}
-        </div>
       </el-form>
       <div slot="footer">
         <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -466,15 +471,21 @@ export default {
     font-size: 13px;
   }
   .dialog-shelfRules {
-    /deep/ .el-dialog__header {
+    .el-dialog__header {
       background-color: #0e102a;
     }
-    /deep/.el-dialog__title {
+    .el-dialog__title {
       font-size: 14px;
       color: #fff;
     }
-    /deep/.el-dialog__close {
+    .el-dialog__close {
       color: #fff;
+    }
+    .el-form-item__label {
+      text-align: left;
+    }
+    .question-icon {
+      color: #74b34f;
     }
   }
 }
