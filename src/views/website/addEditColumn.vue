@@ -1,6 +1,12 @@
 <template>
   <div class="add-edit-column">
-    <el-form label-position="top" class="voucher-form" :model="ruleForm" ref="ruleForm">
+    <el-form
+      label-position="top"
+      class="voucher-form"
+      :rules="rules"
+      :model="ruleForm"
+      ref="ruleForm"
+    >
       <!-- 上级栏目 -->
       <el-form-item :label="$t('上级栏目')" v-if="this.$route.params.state === 'second'">
         <el-select v-model="ruleForm.parent_id" :placeholder="$t('上级栏目')">
@@ -46,7 +52,7 @@
           <i class="el-icon-plus"> </i>
         </el-upload>
       </el-form-item>
-      <el-form-item :label="$t('栏目类型')">
+      <el-form-item :label="$t('栏目类型')" prop="type">
         <el-select
           v-model="ruleForm.type"
           :placeholder="$t('栏目类型')"
@@ -58,13 +64,17 @@
         </el-select>
       </el-form-item>
       <!-- 文章类型 -->
-      <el-form-item :label="$t('文章类型')" v-if="ruleForm.type === 1 || ruleForm.type === 4">
+      <el-form-item
+        :label="$t('文章类型')"
+        prop="article_type"
+        v-if="ruleForm.type === 1 || ruleForm.type === 4"
+      >
         <el-select v-model="ruleForm.article_type" :placeholder="$t('文章类型')">
           <el-option v-for="item in articleType" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('标题列表')" v-if="ruleForm.type === 1 || ruleForm.type === 3">
+      <el-form-item :label="$t('*' + '标题列表')" v-if="ruleForm.type === 1 || ruleForm.type === 3">
         <el-button class="btn-deep-blue" @click="chooseLine">{{ $t('选择标题') }}</el-button>
         <p>{{ ruleForm.title }}</p>
         <!-- <div class="display-line" v-if="this.lineName">
@@ -82,7 +92,7 @@
         <el-button
           type="primary"
           class="save-btn"
-          @click="submit"
+          @click="submit('ruleForm')"
           :loading="$store.state.btnLoading"
           >{{ $t('保存') }}</el-button
         >
@@ -96,6 +106,10 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
+      rules: {
+        type: [{ required: true, message: this.$t('请选择'), trigger: 'change' }],
+        article_type: [{ required: true, message: this.$t('请选择'), trigger: 'change' }]
+      },
       options: [],
       ruleForm: {
         name: '',
@@ -240,7 +254,7 @@ export default {
       return this.$request.uploadImg(params)
     },
     // 保存
-    submit() {
+    submit(formName) {
       console.log(this.ruleForm.article_type, 'article_type')
       if (this.customerList[0]) {
         this.ruleForm.image = this.customerList[0]
@@ -256,41 +270,47 @@ export default {
       // if (!this.customerList[0]) {
       //   return this.$message.error(this.$t('请上传pc端客户二维码'))
       // }
-      if (this.$route.params.id) {
-        // 编辑
-        this.$request.editArticle(this.$route.params.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.$route.params.id) {
+            // 编辑
+            this.$request.editArticle(this.$route.params.id, this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.$router.go(-1)
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
             })
-            this.$router.go(-1)
           } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
+            // 新建
+            this.$request.addArticle(this.ruleForm).then(res => {
+              if (res.ret) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.$router.go(-1)
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'error'
+                })
+              }
             })
           }
-        })
-      } else {
-        // 新建
-        this.$request.addArticle(this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.$router.go(-1)
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
-      }
+        } else {
+          return false
+        }
+      })
     }
   }
 }
