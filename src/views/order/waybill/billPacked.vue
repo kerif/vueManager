@@ -181,7 +181,7 @@
       <!-- 所属包裹 -->
       <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
     </el-table>
-    <!-- <h4 style="margin-bottom: 25px">
+    <h4 style="margin-bottom: 25px">
       {{ $t('预申报信息') }}
       <i
         :class="showDeclare ? 'el-icon-arrow-down' : 'el-icon-arrow-up'"
@@ -285,7 +285,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div> -->
+    </div>
     <div class="receiver-msg">
       <el-form
         ref="params"
@@ -676,7 +676,7 @@
 </template>
 <script>
 import dialog from '@/components/dialog'
-// import AddBtn from '@/components/addBtn'
+import AddBtn from '@/components/addBtn'
 export default {
   data() {
     return {
@@ -751,7 +751,7 @@ export default {
     }
   },
   components: {
-    // AddBtn
+    AddBtn
   },
   created() {
     this.getPackage()
@@ -983,13 +983,13 @@ export default {
         res = await this.$request.saveOrderData(this.$route.params.id, this.user)
       } else {
         let params = {
-          // items: [],
-          // order: {}
+          items: [],
+          order: {}
         }
         params = {
-          ...this.user
-          // items: this.infoData,
-          // tax_number: this.infoForm.tax_number
+          ...this.user,
+          items: this.infoData,
+          tax_number: this.infoForm.tax_number
         }
         if (this.is_checked) {
           params.final_price = this.final_price || ''
