@@ -72,6 +72,9 @@
         <el-button class="btn-deep-purple" size="small" @click="batchNum">{{
           $t('批量更新单号二程')
         }}</el-button>
+        <el-button size="small" class="btn-blue" @click="batchInvoice">{{
+          $t('批量导入发货单')
+        }}</el-button>
         <el-button size="small" type="success" plain @click="uploadListExcel">{{
           $t('导出清单')
         }}</el-button>
@@ -499,6 +502,16 @@ export default {
             })
           }
         })
+    },
+    batchInvoice() {
+      dialog(
+        {
+          type: 'batchImportInvoice'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     uploadListExcel() {
       this.showTmpDrawer = true

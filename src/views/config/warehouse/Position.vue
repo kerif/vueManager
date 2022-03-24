@@ -117,7 +117,7 @@
     >
       <el-form :model="ruleForm" ref="ruleForm" label-width="160px">
         <!--无人认领专区  -->
-        <el-form-item :label="$t('规则一:包裹下架节点')">
+        <el-form-item :label="$t('规则一: 包裹下架节点')">
           <el-select :placeholder="$t('请选择')" v-model="ruleForm.off_shelf_status">
             <el-option
               v-for="item in nodeList"
@@ -127,7 +127,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('规则二:无人认领专区')">
+        <el-form-item :label="$t('规则二: 无人认领专区')">
           <el-tooltip
             class="item"
             effect="dark"
@@ -136,7 +136,7 @@
           >
             <span class="el-icon-question question-icon" style="margin-left: -14px"></span>
           </el-tooltip>
-          <el-select :placeholder="$t('请选择')" v-model="ruleForm.number" multiple>
+          <el-select :placeholder="$t('请选择货区')" v-model="ruleForm.number" multiple>
             <el-option
               v-for="item in areaNumber"
               :key="item.id"
@@ -145,6 +145,57 @@
             >
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('规则三: 大货专区')">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="$t('*货区可多选, 大货专区, 不存放其他包裹')"
+            placement="top"
+          >
+            <span class="el-icon-question question-icon" style="margin-left: -14px"></span>
+          </el-tooltip>
+          <el-select :placeholder="$t('请选择货区')" v-model="ruleForm.number">
+            <el-option
+              v-for="item in areaNumber"
+              :key="item.id"
+              :label="item.numbers"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('大货判断方式')">
+          <el-checkbox-group v-model="selectList">
+            <el-checkbox :label="$t('手动勾选')" class="select-sty"> </el-checkbox>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="$t('在入库时,可勾选该货物上架大货专区')"
+              placement="top"
+            >
+              <span
+                class="el-icon-question question-icon"
+                style="font-size: 18px; position: absolute; top: 10px; left: 85px"
+              ></span>
+            </el-tooltip>
+            <el-checkbox
+              :label="$t('尺寸判断')"
+              class="select-sty"
+              style="margin-left: 10px"
+            ></el-checkbox>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="$t('当包裹入库尺寸三边任意一边大于限制尺寸时, 自动判断为大货')"
+              placement="top"
+            >
+              <span
+                class="el-icon-question question-icon"
+                style="font-size: 18px; position: absolute; top: 10px; left: 210px"
+              ></span>
+            </el-tooltip>
+          </el-checkbox-group>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -184,9 +235,10 @@ export default {
       show: false,
       info: {},
       nodeList: [
-        { id: 0, name: '打包完成' },
-        { id: 1, name: '拣货完成' }
-      ]
+        { id: 0, name: this.$t('打包完成') },
+        { id: 1, name: this.$t('拣货完成') }
+      ],
+      selectList: []
     }
   },
   created() {
@@ -486,6 +538,10 @@ export default {
     }
     .question-icon {
       color: #74b34f;
+      font-size: 18px;
+    }
+    .select-sty {
+      position: relative;
     }
   }
 }

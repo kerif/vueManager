@@ -4003,3 +4003,18 @@ exports.exportEmployData = params => {
 exports.editCustomPwd = (id, params) => {
   return $form.put(`users/${id}/password`, params)
 }
+
+// 下载发货单模板
+exports.downLoadInvoiceTmp = () => {
+  return $form.get('shipments/import/template')
+}
+
+// 批量加入发货单
+exports.importInvoiceTmp = params => {
+  return $file.post('shipments/import', params)
+}
+
+// 货位参数配置
+exports.allocationConfig = (id, params) => {
+  return $form.put(`admin/warehouse-address/${id}/goods-allocation-areas/config`, params)
+}

@@ -113,6 +113,14 @@
           $t('导出清单')
         }}</el-button>
       </div> -->
+      <el-button
+        style="margin-left: 5px"
+        size="small"
+        v-if="activeName === '3'"
+        class="btn-blue"
+        @click="batchInvoice"
+        >{{ $t('批量导入发货单') }}</el-button
+      >
       <div
         style="margin-left: 5px"
         v-if="oderData.length && ['0', '1', '2', '3', '4', '5', '6'].includes(activeName)"
@@ -2123,6 +2131,16 @@ export default {
     },
     exChange(row, expandedRows) {
       this.expands = expandedRows.map(item => item.id)
+    },
+    batchInvoice() {
+      dialog(
+        {
+          type: 'batchImportInvoice'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     // 完成支付
     finishPay(id) {

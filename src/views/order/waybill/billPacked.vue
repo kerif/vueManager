@@ -204,7 +204,7 @@
       </el-button>
       <add-btn @click.native="addNew">{{ $t('新增') }}</add-btn>
       <el-table
-        :data="infoData"
+        :data="items"
         ref="multipleTable"
         border
         style="width: 100%"
@@ -275,11 +275,7 @@
         </el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
-            <el-button
-              size="small"
-              class="btn-light-red"
-              @click="deleteInfo(scope.$index, infoData)"
-            >
+            <el-button size="small" class="btn-light-red" @click="deleteInfo(scope.$index, items)">
               {{ $t('删除') }}
             </el-button>
           </template>
@@ -741,7 +737,7 @@ export default {
       first: '',
       next: '',
       service: [],
-      infoData: [],
+      items: [],
       infoForm: {
         tax_number: ''
       },
@@ -982,15 +978,16 @@ export default {
       if (type === 1) {
         res = await this.$request.saveOrderData(this.$route.params.id, this.user)
       } else {
-        let params = {
-          items: [],
-          order: {}
-        }
+        let params = {}
         params = {
-          ...this.user,
-          items: this.infoData,
-          tax_number: this.infoForm.tax_number
+          ...this.user
         }
+        params.declare = {
+          items: [],
+          tax_number: ''
+        }
+        params.declare.items = this.items
+        params.declare.tax_number = this.infoForm.tax_number
         if (this.is_checked) {
           params.final_price = this.final_price || ''
         }
@@ -1056,7 +1053,7 @@ export default {
       this.unitVolume()
     },
     addNew() {
-      this.infoData.push({
+      this.items.push({
         cn_name: '',
         en_name: '',
         sku: '',
@@ -1076,9 +1073,9 @@ export default {
       if (val) {
         val.forEach((va, index) => {
           console.log(index)
-          this.infoData.forEach((v, i) => {
+          this.items.forEach((v, i) => {
             if (va.id === v.id) {
-              this.infoData.splice(i, 1)
+              this.items.splice(i, 1)
             }
           })
         })
