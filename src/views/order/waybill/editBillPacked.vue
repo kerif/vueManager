@@ -105,6 +105,107 @@
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
     </el-table>
+    <h4 style="margin-bottom: 25px">
+      {{ $t('预申报信息') }}
+      <i
+        :class="showDeclare ? 'el-icon-arrow-down' : 'el-icon-arrow-up'"
+        @click="showDeclare = !showDeclare"
+      >
+      </i>
+    </h4>
+    <div v-show="showDeclare">
+      <el-form :model="infoForm">
+        <el-form-item :label="$t('税号')">
+          <el-input
+            :placeholder="$t('请输入税号')"
+            class="input-sty"
+            v-model="infoForm.tax_number"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button size="small" @click="deleteRowData" class="btn-light-red" style="margin: 5px 0">
+        {{ $t('多选删除') }}
+      </el-button>
+      <add-btn @click.native="addNew">{{ $t('新增') }}</add-btn>
+      <el-table
+        :data="items"
+        ref="multipleTable"
+        border
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        class="data-list"
+      >
+        <el-table-column type="selection" width="60"> </el-table-column>
+        <el-table-column :label="$t('中文品名')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.cn_name"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('英文品名')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.en_name"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="sku">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.sku"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('海关编码')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.hs_code"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('数量')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.quantity"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('单位')">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.unit" :placeholder="$t('请选择单位')">
+              <el-option
+                v-for="item in unitList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('单价')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.unit_value"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('总价值')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.value"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('币种')" width="140">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.currency" :placeholder="$t('请选择币种')">
+              <el-option
+                v-for="item in currencyList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button size="small" class="btn-light-red" @click="deleteInfo(scope.$index, items)">
+              {{ $t('删除') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <div class="receiverMSg">
       <el-form
         ref="params"
@@ -425,6 +526,7 @@
 </template>
 <script>
 import dialog from '@/components/dialog'
+import AddBtn from '@/components/addBtn'
 export default {
   data() {
     return {
@@ -478,12 +580,23 @@ export default {
       warehouse: {
         warehouse_name: ''
       },
-      factor: ''
+      factor: '',
+      showDeclare: false,
+      items: [],
+      infoForm: {
+        tax_number: ''
+      },
+      currencyList: [],
+      unitList: []
     }
   },
   created() {
     this.getPackage()
     this.getExpress()
+    this.getInit()
+  },
+  components: {
+    AddBtn
   },
   methods: {
     // 获取多选框
@@ -590,6 +703,47 @@ export default {
         this.user.width = this.PackageData[0].width
         this.user.height = this.PackageData[0].height
       }
+    },
+    handleSelectionChange(val) {
+      this.sels = val
+    },
+    addNew() {
+      this.items.push({
+        cn_name: '',
+        en_name: '',
+        sku: '',
+        hs_code: '',
+        quantity: '',
+        unit: '',
+        unit_value: '',
+        value: '',
+        currency: ''
+      })
+    },
+    deleteRowData() {
+      let val = this.sels
+      if (val) {
+        val.forEach((va, index) => {
+          console.log(index)
+          this.items.forEach((v, i) => {
+            if (va.id === v.id) {
+              this.items.splice(i, 1)
+            }
+          })
+        })
+      }
+      this.$refs.multipleTable.clearSelection()
+    },
+    getInit() {
+      this.$request.initDeclare().then(res => {
+        if (res.ret) {
+          this.currencyList = res.data.currency_list
+          this.unitList = res.data.unit_list
+        }
+      })
+    },
+    deleteInfo(index, rows) {
+      rows.splice(index, 1)
     },
     savePacked() {
       this.user.services = this.updateProp

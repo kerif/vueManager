@@ -4016,5 +4016,5 @@ exports.importInvoiceTmp = params => {
 
 // 货位参数配置
 exports.allocationConfig = (id, params) => {
-  return $form.put(`admin/warehouse-address/${id}/goods-allocation-areas/config`, params)
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/config`, params)
 }

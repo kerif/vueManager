@@ -754,6 +754,7 @@
               </div>
             </div>
           </el-tab-pane>
+          <el-tab-pane :label="$t('预申报信息')" name="4"> </el-tab-pane>
         </el-tabs>
       </el-col>
       <el-col :span="3" style="padding: 25px 0px 0px 20px">

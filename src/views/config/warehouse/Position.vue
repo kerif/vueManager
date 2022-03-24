@@ -146,7 +146,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('规则三: 大货专区')">
+        <el-form-item :label="$t('规则三: 大货专区')" prop="for_big">
           <el-tooltip
             class="item"
             effect="dark"
@@ -155,7 +155,7 @@
           >
             <span class="el-icon-question question-icon" style="margin-left: -14px"></span>
           </el-tooltip>
-          <el-select :placeholder="$t('请选择货区')" v-model="ruleForm.number">
+          <el-select :placeholder="$t('请选择货区')" v-model="ruleForm.for_big" multiple>
             <el-option
               v-for="item in areaNumber"
               :key="item.id"
@@ -166,8 +166,8 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('大货判断方式')">
-          <el-checkbox-group v-model="selectList">
-            <el-checkbox :label="$t('手动勾选')" class="select-sty"> </el-checkbox>
+          <el-radio-group v-model="ruleForm.big_rule">
+            <el-radio :label="0" class="select-sty">{{ $t('手动勾选') }} </el-radio>
             <el-tooltip
               class="item"
               effect="dark"
@@ -179,11 +179,9 @@
                 style="font-size: 18px; position: absolute; top: 10px; left: 85px"
               ></span>
             </el-tooltip>
-            <el-checkbox
-              :label="$t('尺寸判断')"
-              class="select-sty"
-              style="margin-left: 10px"
-            ></el-checkbox>
+            <el-radio :label="1" class="select-sty" style="margin-left: 10px">{{
+              $t('尺寸判断')
+            }}</el-radio>
             <el-tooltip
               class="item"
               effect="dark"
@@ -195,7 +193,24 @@
                 style="font-size: 18px; position: absolute; top: 10px; left: 210px"
               ></span>
             </el-tooltip>
-          </el-checkbox-group>
+          </el-radio-group>
+          <div v-if="ruleForm.big_rule === 1">
+            <el-input
+              v-model="ruleForm.location_size.length"
+              class="ipt"
+              :placeholder="$t('请输入长')"
+            ></el-input>
+            <el-input
+              v-model="ruleForm.location_size.width"
+              class="ipt"
+              :placeholder="$t('请输入宽')"
+            ></el-input>
+            <el-input
+              v-model="ruleForm.location_size.height"
+              class="ipt"
+              :placeholder="$t('请输入高')"
+            ></el-input>
+          </div>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -223,7 +238,14 @@ export default {
     return {
       ruleForm: {
         number: '',
-        off_shelf_status: ''
+        off_shelf_status: '',
+        big_rule: 0,
+        location_size: {
+          length: '',
+          width: '',
+          height: ''
+        },
+        for_big: ''
       },
       positionList: [],
       typeSendData: [],
@@ -375,6 +397,9 @@ export default {
             let numbers = item.number
             return { id, numbers }
           })
+          this.ruleForm.for_big = res.data
+            .filter(item => item.no_package_special)
+            .map(item => item.id)
           this.getOffShelf()
         }
       })
@@ -447,7 +472,10 @@ export default {
       this.$request
         .offShelfStatus(this.$route.params.id, {
           area_ids: this.ruleForm.number,
-          off_shelf_status: this.ruleForm.off_shelf_status
+          off_shelf_status: this.ruleForm.off_shelf_status,
+          location_size: this.ruleForm.location_size,
+          big_rule: this.ruleForm.big_rule,
+          big_area_ids: this.ruleForm.for_big
         })
         .then(res => {
           if (res.ret) {
@@ -471,6 +499,11 @@ export default {
       this.getList()
       this.ruleForm.number = ''
       this.ruleForm.off_shelf_status = ''
+      this.ruleForm.for_big = ''
+      this.ruleForm.location_size.length = ''
+      this.ruleForm.location_size.width = ''
+      this.ruleForm.location_size.height = ''
+      this.ruleForm.big_rule = 0
     }
   }
 }
@@ -542,6 +575,10 @@ export default {
     }
     .select-sty {
       position: relative;
+    }
+    .ipt {
+      width: 20%;
+      margin-right: 5px;
     }
   }
 }

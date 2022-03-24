@@ -976,7 +976,16 @@ export default {
       this.user.unit_price = this.user.unit_price || ''
       let res = {}
       if (type === 1) {
-        res = await this.$request.saveOrderData(this.$route.params.id, this.user)
+        let params = {
+          ...this.user
+        }
+        params.declare = {
+          items: [],
+          tax_number: ''
+        }
+        params.declare.items = this.items
+        params.declare.tax_number = this.infoForm.tax_number
+        res = await this.$request.saveOrderData(this.$route.params.id, params)
       } else {
         let params = {}
         params = {
