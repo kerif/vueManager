@@ -157,7 +157,7 @@
           </el-tooltip>
           <el-select :placeholder="$t('请选择货区')" v-model="ruleForm.for_big" multiple>
             <el-option
-              v-for="item in areaNumber"
+              v-for="item in allocation"
               :key="item.id"
               :label="item.numbers"
               :value="item.id"
@@ -253,6 +253,7 @@ export default {
       deleteNum: [],
       unClaimed: '',
       areaNumber: [],
+      allocation: [],
       noAreaNumber: [],
       show: false,
       info: {},
@@ -397,9 +398,12 @@ export default {
             let numbers = item.number
             return { id, numbers }
           })
-          this.ruleForm.for_big = res.data
-            .filter(item => item.no_package_special)
-            .map(item => item.id)
+          this.ruleForm.for_big = res.data.filter(item => item.for_big).map(item => item.id)
+          this.allocation = res.data.map(item => {
+            let id = item.id
+            let numbers = item.number
+            return { id, numbers }
+          })
           this.getOffShelf()
         }
       })
@@ -465,6 +469,8 @@ export default {
       this.$request.aloneWarehouseAddress(this.$route.params.id).then(res => {
         if (res.ret) {
           this.ruleForm.off_shelf_status = res.data.off_shelf_status
+          this.ruleForm.big_rule = res.data.big_rule
+          this.ruleForm.location_size = res.data.location_size
         }
       })
     },
