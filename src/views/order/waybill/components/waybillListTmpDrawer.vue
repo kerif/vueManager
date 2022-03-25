@@ -25,7 +25,7 @@
     >
       <div class="template-top">
         <div class="template-name">{{ item.name }}</div>
-        <div>
+        <div v-if="item.custom_code === ''">
           <el-button @click="editTmp('edit', item.id)" class="btn-blue-green">{{
             $t('编辑')
           }}</el-button>

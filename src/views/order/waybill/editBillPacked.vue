@@ -883,10 +883,12 @@ export default {
         this.user.width = res.data.width
         this.user.height = res.data.height
         this.user.base_mode = res.data.base_mode
-        this.infoForm.tax_number = res.data.pre_declare.tax_number
-        this.infoForm.type = res.data.declare.type
-        this.infoForm.hs_code = res.data.declare.hs_code
-        this.items = res.data.pre_declare.items
+        if (res.data.pre_declare) {
+          this.infoForm.tax_number = res.data.pre_declare.tax_number
+          this.infoForm.type = res.data.pre_declare.type
+          this.infoForm.hs_code = res.data.pre_declare.hs_code
+          this.items = res.data.pre_declare.items
+        }
         this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
         this.getExpressServes()
         if (res.data.box_type === 2) {
