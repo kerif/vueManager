@@ -114,6 +114,19 @@
         >
         </el-switch>
       </el-form-item>
+      <el-form-item :label="$t('入库自动生成包裹编码')">
+        <el-switch
+          v-model="basic.package_auto_code"
+          @change="changeBasic($event)"
+          :active-text="$t('开')"
+          :inactive-text="$t('关')"
+          :active-value="1"
+          :inactive-value="0"
+          active-color="#13ce66"
+          inactive-color="gray"
+        >
+        </el-switch>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -133,7 +146,8 @@ export default {
         size: '',
         location: '',
         package_warning: 0,
-        prop_type: 0
+        prop_type: 0,
+        package_auto_code: ''
       }
     }
   },
@@ -215,7 +229,8 @@ export default {
           size: this.basic.size,
           location: this.basic.location,
           package_warning: this.basic.package_warning,
-          prop_type: this.basic.prop_type
+          prop_type: this.basic.prop_type,
+          package_auto_code: this.basic.package_auto_code
         })
         .then(res => {
           if (res.ret) {
@@ -241,6 +256,7 @@ export default {
           this.basic.location = res.data.location
           this.basic.package_warning = res.data.package_warning
           this.basic.prop_type = res.data.prop_type
+          this.basic.package_auto_code = res.data.package_auto_code
         }
       })
     },

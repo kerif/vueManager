@@ -20,9 +20,7 @@
           :file-list="fileList"
           :http-request="uploadTmp"
         >
-          <el-button size="small" type="primary" plain @click="uploadTmp">{{
-            $t('点击上传')
-          }}</el-button>
+          <el-button size="small" type="primary" plain>{{ $t('点击上传') }}</el-button>
         </el-upload>
       </el-form-item>
       <div>{{ $t('*提交前请核实订单状态，不是待发货状态订单无法加入发货单') }}</div>
@@ -41,7 +39,8 @@ export default {
       fileList: [],
       template: '',
       url: '',
-      files: null
+      files: null,
+      data: null
     }
   },
   methods: {
@@ -84,20 +83,19 @@ export default {
       })
     },
     onUpload(file) {
-      let params = new FormData()
-      params.append(`files[${0}][file]`, file)
+      this.data = file
       this.files = new FormData()
-      this.files.append(`file`, file)
-      return this.$request.uploadFiles(params)
+      this.files.append(`files[${0}][file]`, file)
+      return this.$request.uploadFiles(this.files)
     },
     // 文件删除
     onFileRemove(file, fileList) {
       this.fileList = fileList
     },
     confirm() {
-      let template = this.files
-      console.log(this.files)
-      this.$request.importInvoiceTmp({ template }).then(res => {
+      const params = new FormData()
+      params.append('template', this.data)
+      this.$request.importInvoiceTmp(params).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),

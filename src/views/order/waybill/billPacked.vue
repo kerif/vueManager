@@ -190,13 +190,30 @@
       </i>
     </h4>
     <div v-show="showDeclare">
-      <el-form :model="infoForm">
+      <el-form :model="infoForm" label-width="100px">
         <el-form-item :label="$t('税号')">
           <el-input
             :placeholder="$t('请输入税号')"
             class="input-sty"
             v-model="infoForm.tax_number"
           ></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('hs_code')">
+          <el-input
+            :placeholder="$t('请输入')"
+            class="input-sty"
+            v-model="infoForm.hs_code"
+          ></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('申报类型')">
+          <el-select v-model="infoForm.type">
+            <el-option
+              v-for="item in declareType"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <el-button size="small" @click="deleteRowData" class="btn-light-red" style="margin: 5px 0">
@@ -739,11 +756,31 @@ export default {
       service: [],
       items: [],
       infoForm: {
-        tax_number: ''
+        tax_number: '',
+        hs_code: '',
+        type: ''
       },
       currencyList: [],
       unitList: [],
-      showDeclare: false
+      showDeclare: false,
+      declareType: [
+        {
+          id: 1,
+          name: this.$t('个人')
+        },
+        {
+          id: 2,
+          name: this.$t('公司')
+        },
+        {
+          id: 3,
+          name: this.$t('个人简易')
+        },
+        {
+          id: 4,
+          name: this.$t('公司简易')
+        }
+      ]
     }
   },
   components: {
@@ -985,6 +1022,8 @@ export default {
         }
         params.declare.items = this.items
         params.declare.tax_number = this.infoForm.tax_number
+        params.declare.hs_code = this.infoForm.hs_code
+        params.declare.type = this.infoForm.type
         res = await this.$request.saveOrderData(this.$route.params.id, params)
       } else {
         let params = {}
@@ -997,6 +1036,8 @@ export default {
         }
         params.declare.items = this.items
         params.declare.tax_number = this.infoForm.tax_number
+        params.declare.hs_code = this.infoForm.hs_code
+        params.declare.type = this.infoForm.type
         if (this.is_checked) {
           params.final_price = this.final_price || ''
         }

@@ -754,7 +754,33 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane :label="$t('预申报信息')" name="4"> </el-tab-pane>
+          <el-tab-pane :label="$t('预申报信息')" name="4">
+            <div class="declare-info">
+              <el-form label-width="100px">
+                <el-form-item :label="$t('税号')">
+                  <span>{{ declare.tax_number }}</span>
+                </el-form-item>
+                <el-form-item :label="$t('hs_code')">
+                  <span>{{ declare.hs_code }}</span>
+                </el-form-item>
+                <el-form-item :label="$t('申报类型')">
+                  <span>{{ declare.type_name }}</span>
+                </el-form-item>
+              </el-form>
+              <el-table :data="declare.items" border stripe class="data-list">
+                <el-table-column type="index"></el-table-column>
+                <el-table-column :label="$t('中文品名')" prop="cn_name"></el-table-column>
+                <el-table-column :label="$t('英文品名')" prop="en_name"></el-table-column>
+                <el-table-column :label="$t('sku')" prop="sku"></el-table-column>
+                <el-table-column :label="$t('海关编码')" prop="hs_code"></el-table-column>
+                <el-table-column :label="$t('数量')" prop="quantity"></el-table-column>
+                <el-table-column :label="$t('单位')" prop="unit"></el-table-column>
+                <el-table-column :label="$t('单价')" prop="unit_value"></el-table-column>
+                <el-table-column :label="$t('总价值')" prop="value"></el-table-column>
+                <el-table-column :label="$t('币种')" prop="currency"></el-table-column>
+              </el-table>
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </el-col>
       <el-col :span="3" style="padding: 25px 0px 0px 20px">
@@ -1003,7 +1029,8 @@ export default {
       dialogInfo: false,
       groupDataList: [],
       options: [],
-      countryList: []
+      countryList: [],
+      declare: {}
     }
   },
   created() {
@@ -1081,6 +1108,7 @@ export default {
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization
+        this.declare = res.data.pre_declare
         let groupStatusName = ['进行中', '已结束', '已取消']
         this.form.group_status_name = groupStatusName[this.form.group_status]
         this.paymentData = [
@@ -1435,7 +1463,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .bill-details-container {
   .container-center {
     margin-bottom: 20px;
@@ -1744,6 +1772,13 @@ export default {
   }
   .input-sty {
     width: 60%;
+  }
+  .declare-info {
+    background: #fff;
+    padding: 10px;
+    .el-form-item {
+      margin-bottom: 0;
+    }
   }
 }
 </style>

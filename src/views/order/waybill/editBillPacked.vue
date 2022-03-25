@@ -114,13 +114,30 @@
       </i>
     </h4>
     <div v-show="showDeclare">
-      <el-form :model="infoForm">
+      <el-form :model="infoForm" label-width="100px">
         <el-form-item :label="$t('税号')">
           <el-input
             :placeholder="$t('请输入税号')"
             class="input-sty"
             v-model="infoForm.tax_number"
           ></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('hs_code')">
+          <el-input
+            :placeholder="$t('请输入')"
+            class="input-sty"
+            v-model="infoForm.hs_code"
+          ></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('申报类型')">
+          <el-select v-model="infoForm.type">
+            <el-option
+              v-for="item in declareType"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <el-button size="small" @click="deleteRowData" class="btn-light-red" style="margin: 5px 0">
@@ -584,10 +601,30 @@ export default {
       showDeclare: false,
       items: [],
       infoForm: {
-        tax_number: ''
+        tax_number: '',
+        hs_code: '',
+        type: ''
       },
       currencyList: [],
-      unitList: []
+      unitList: [],
+      declareType: [
+        {
+          id: 1,
+          name: this.$t('个人')
+        },
+        {
+          id: 2,
+          name: this.$t('公司')
+        },
+        {
+          id: 3,
+          name: this.$t('个人简易')
+        },
+        {
+          id: 4,
+          name: this.$t('公司简易')
+        }
+      ]
     }
   },
   created() {
@@ -765,6 +802,14 @@ export default {
         }
       })
       this.user.unit_price = this.user.unit_price || ''
+      this.user.declare = {
+        items: [],
+        tax_number: ''
+      }
+      this.user.declare.items = this.items
+      this.user.declare.tax_number = this.infoForm.tax_number
+      this.user.declare.hs_code = this.infoForm.hs_code
+      this.user.declare.type = this.infoForm.type
       this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
         if (res.ret) {
           this.$notify({
@@ -838,6 +883,10 @@ export default {
         this.user.width = res.data.width
         this.user.height = res.data.height
         this.user.base_mode = res.data.base_mode
+        this.infoForm.tax_number = res.data.pre_declare.tax_number
+        this.infoForm.type = res.data.declare.type
+        this.infoForm.hs_code = res.data.declare.hs_code
+        this.items = res.data.pre_declare.items
         this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
         this.getExpressServes()
         if (res.data.box_type === 2) {
