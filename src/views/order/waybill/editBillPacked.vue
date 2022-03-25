@@ -110,6 +110,7 @@
       <i
         :class="showDeclare ? 'el-icon-arrow-down' : 'el-icon-arrow-up'"
         @click="showDeclare = !showDeclare"
+        style="cursor: pointer"
       >
       </i>
     </h4>
@@ -175,7 +176,7 @@
         </el-table-column>
         <el-table-column :label="$t('数量')">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.quantity"></el-input>
+            <el-input v-model="scope.row.quantity" @blur="changeVal(scope.row)"></el-input>
           </template>
         </el-table-column>
         <el-table-column :label="$t('单位')">
@@ -193,7 +194,7 @@
         </el-table-column>
         <el-table-column :label="$t('单价')">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.unit_value"></el-input>
+            <el-input v-model="scope.row.unit_value" @blur="changeVal(scope.row)"></el-input>
           </template>
         </el-table-column>
         <el-table-column :label="$t('总价值')">
@@ -656,6 +657,11 @@ export default {
           })
         }
       })
+    },
+    changeVal(row) {
+      if (row.quantity && row.unit_value) {
+        row.value = row.quantity * row.unit_value
+      }
     },
     //获取渠道增值服务
     getExpressServes() {
@@ -1172,6 +1178,9 @@ export default {
   }
   .add-sty {
     text-align: right;
+  }
+  .input-sty {
+    width: 35%;
   }
 }
 </style>
