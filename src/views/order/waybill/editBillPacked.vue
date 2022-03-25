@@ -122,9 +122,9 @@
             v-model="infoForm.tax_number"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="$t('hs_code')">
+        <el-form-item :label="$t('海关编码')">
           <el-input
-            :placeholder="$t('请输入')"
+            :placeholder="$t('请输入海关编码')"
             class="input-sty"
             v-model="infoForm.hs_code"
           ></el-input>

@@ -760,7 +760,7 @@
                 <el-form-item :label="$t('税号')">
                   <span>{{ declare.tax_number }}</span>
                 </el-form-item>
-                <el-form-item :label="$t('hs_code')">
+                <el-form-item :label="$t('海关编码')">
                   <span>{{ declare.hs_code }}</span>
                 </el-form-item>
                 <el-form-item :label="$t('申报类型')">
@@ -1108,7 +1108,9 @@ export default {
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization
-        this.declare = res.data.pre_declare
+        if (res.data.pre_declare) {
+          this.declare = res.data.pre_declare
+        }
         let groupStatusName = ['进行中', '已结束', '已取消']
         this.form.group_status_name = groupStatusName[this.form.group_status]
         this.paymentData = [
