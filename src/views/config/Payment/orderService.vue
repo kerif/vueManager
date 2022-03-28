@@ -249,13 +249,6 @@ export default {
       this.$request.languageList().then(res => {
         if (res.ret) {
           this.languageData = res.data
-            .filter(item => item.language_code !== 'zh_CN')
-            .map(item => {
-              return {
-                name: item.name,
-                code: item.language_code
-              }
-            })
         }
       })
     },
@@ -437,14 +430,15 @@ export default {
     // 订单增值服务 修改语言
     onService(line, lang) {
       console.log(line, lang)
-      this.serviceCode = line['trans_' + lang.language_code]
+      this.transCode = line['trans_' + lang.language_code]
+      console.log(this.transCode)
       // console.log(line['trans_' + lang.language_code])
       dialog(
         {
           type: 'serviceLang',
           line: line,
           lang: lang,
-          transCode: this.serviceCode,
+          transCode: this.transCode,
           state: 'service'
         },
         () => {
