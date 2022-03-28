@@ -258,8 +258,8 @@
               </template>
               <template v-else-if="item.id === 'is_saved'">
                 <span v-if="scope.row.is_saved === 1">{{ $t('待提交') }}</span>
-                <span v-else-if="scope.row.pick_status === 2">{{ $t('待拣货') }}</span>
-                <span v-else-if="scope.row.pick_status === 3">{{ $t('待打包') }}</span>
+                <span v-else-if="scope.row.pick_status === 0">{{ $t('待拣货') }}</span>
+                <span v-else-if="scope.row.pick_status === 1">{{ $t('待打包') }}</span>
               </template>
               <template v-else-if="item.id === 'status_name'">
                 {{ scope.row.status_name }}
