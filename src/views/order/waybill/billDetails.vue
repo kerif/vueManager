@@ -766,6 +766,9 @@
                 <el-form-item :label="$t('申报类型')">
                   <span>{{ declare.type_name }}</span>
                 </el-form-item>
+                <el-form-item :label="$t('付费方式')">
+                  <span>{{ declare.payment_mode }}</span>
+                </el-form-item>
               </el-form>
               <el-table :data="declare.items" border stripe class="data-list">
                 <el-table-column type="index"></el-table-column>

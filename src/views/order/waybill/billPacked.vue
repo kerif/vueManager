@@ -216,6 +216,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item :label="$t('付费方式')">
+          <el-input
+            v-model="infoForm.payment_mode"
+            class="input-sty"
+            :placeholder="$t('请输入付费方式')"
+          ></el-input>
+        </el-form-item>
       </el-form>
       <el-button size="small" @click="deleteRowData" class="btn-light-red" style="margin: 5px 0">
         {{ $t('多选删除') }}
@@ -759,7 +766,8 @@ export default {
       infoForm: {
         tax_number: '',
         hs_code: '',
-        type: ''
+        type: '',
+        payment_mode: ''
       },
       currencyList: [],
       unitList: [],
@@ -1030,6 +1038,7 @@ export default {
         params.declare.tax_number = this.infoForm.tax_number
         params.declare.hs_code = this.infoForm.hs_code
         params.declare.type = this.infoForm.type
+        params.declare.payment_mode = this.infoForm.payment_mode
         res = await this.$request.saveOrderData(this.$route.params.id, params)
       } else {
         let params = {}
@@ -1044,6 +1053,7 @@ export default {
         params.declare.tax_number = this.infoForm.tax_number
         params.declare.hs_code = this.infoForm.hs_code
         params.declare.type = this.infoForm.type
+        params.declare.payment_mode = this.infoForm.payment_mode
         if (this.is_checked) {
           params.final_price = this.final_price || ''
         }

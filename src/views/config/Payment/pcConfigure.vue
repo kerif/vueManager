@@ -26,7 +26,7 @@
             effect="dark"
             :content="
               $t(
-                '主要用于集运插件识别（非常重要,多个用英文逗号切分，例如http.www.baidu.com,http.www.google.com'
+                '主要用于集运插件识别（非常重要,多个用英文逗号切分，例如www.baidu.com,www.google.com'
               )
             "
             placement="top"
