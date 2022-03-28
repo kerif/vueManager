@@ -231,6 +231,7 @@ export default {
     this.getValue()
     this.getInsurance()
     this.getTariffEnabled() // 获取关税服务开关
+    this.getLanguageList()
   },
   computed: {
     formatLangData() {
@@ -242,6 +243,21 @@ export default {
       this.getValue()
       this.getInsurance()
       this.getTariffEnabled() // 获取关税服务开关
+    },
+    // 获取支持语言
+    getLanguageList() {
+      this.$request.languageList().then(res => {
+        if (res.ret) {
+          this.languageData = res.data
+            .filter(item => item.language_code !== 'zh_CN')
+            .map(item => {
+              return {
+                name: item.name,
+                code: item.language_code
+              }
+            })
+        }
+      })
     },
     // 获取全部重量及货币配置
     confirmSetting() {
