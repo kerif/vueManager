@@ -155,7 +155,12 @@
               <div slot="header" class="clearfix">
                 <span>{{ $t('收货人信息') }}</span>
                 <el-button
-                  v-if="this.form.status === 1 || this.form.status === 2 || this.form.status === 3"
+                  v-if="
+                    this.form.status === 1 ||
+                    this.form.status === 2 ||
+                    this.form.status === 3 ||
+                    this.form.status === 4
+                  "
                   class="change-sty msg-sty btn-deep-purple"
                   @click="changeReceive"
                   >{{ $t('更换收货人信息') }}</el-button
@@ -163,7 +168,12 @@
                 <el-button
                   class="btn-deep-blue change-sty msg-sty"
                   @click="goEdit"
-                  v-if="this.form.status === 1 || this.form.status === 2 || this.form.status === 3"
+                  v-if="
+                    this.form.status === 1 ||
+                    this.form.status === 2 ||
+                    this.form.status === 3 ||
+                    this.form.status === 4
+                  "
                   >{{ $t('编辑收货人') }}</el-button
                 >
               </div>
