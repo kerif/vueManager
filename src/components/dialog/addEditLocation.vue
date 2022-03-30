@@ -55,7 +55,7 @@
           <el-form-item :label="$t('仓位数量')">
             <el-input v-model="qty" disabled></el-input>
           </el-form-item>
-          <el-form-item :label="$t('允许同一个用户使用相同货位')">
+          <el-form-item :label="$t('同一客户包裹货位规则')">
             <!-- <el-checkbox v-model="location.reusable">{{
               $t('允许同一个用户使用相同货位')
             }}</el-checkbox> -->
@@ -171,15 +171,15 @@ export default {
       capacityData: [
         {
           id: 0,
-          name: this.$t('关闭')
+          name: this.$t('优先推荐同一/相邻货位(受货位容量限制)')
         },
         {
           id: 1,
-          name: this.$t('开启不受容量限制')
+          name: this.$t('专用货位(不受货位容量限制)')
         },
         {
           id: 2,
-          name: this.$t('开启受容量限制')
+          name: this.$t('专用货位(受货位容量限制)')
         }
       ]
     }

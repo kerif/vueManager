@@ -67,7 +67,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
+    <el-row :gutter="20" v-if="this.enabled === 1">
       <el-col :span="7" class="user-left">
         <div class="new-top">
           <div class="top-img">
@@ -93,11 +93,13 @@
 export default {
   data() {
     return {
-      validate_email: ''
+      validate_email: '',
+      enabled: 0
     }
   },
   created() {
     this.getList()
+    this.getConfig()
   },
   methods: {
     getList() {},
@@ -139,6 +141,11 @@ export default {
     // 页面广告管理
     goImage() {
       this.$router.push({ name: 'imageSet' })
+    },
+    getConfig() {
+      this.$request.getFunConfig().then(res => {
+        this.enabled = res.data[1].enabled
+      })
     },
     goAdvertise() {
       this.$router.push({ name: 'advertiseList' })

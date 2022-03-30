@@ -102,6 +102,31 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+            <div>
+              <span>{{ $t('线路下单类型') }}</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="
+                  $t(
+                    '标准模式:包裹入库并经客户提交后,还需仓库合箱打包,称量出库(计费)数据,再生成待支付订单; 快速下单模式: 包裹入库经客户提交,即生成待支付订单(每个包裹为独立订单),入库称量数据即为出库(计费)数据'
+                  )
+                "
+                placement="top"
+              >
+                <span class="el-icon-question icon-info"></span>
+              </el-tooltip>
+            </div>
+            <el-radio-group v-model="form.order_mode">
+              <el-radio :label="0">{{ $t('标准模式') }}</el-radio>
+              <el-radio :label="1">{{ $t('快速下单(无需合箱)') }}</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 清关编码 -->
       <el-form-item>
         <el-row :gutter="10">
@@ -335,7 +360,8 @@ export default {
         // multi_boxes: 0,
         default_pickup_station_id: '',
         is_delivery: 0,
-        label_ids: []
+        label_ids: [],
+        order_mode: 0
       },
       referenceTime: {
         minTime: '',
@@ -498,6 +524,7 @@ export default {
         this.form.need_personal_code = res.data.need_personal_code
         this.form.need_id_card = res.data.need_id_card
         this.form.is_delivery = res.data.is_delivery
+        this.form.order_mode = res.data.order_mode
         this.form.default_pickup_station_id = res.data.default_pickup_station_id
         this.form.label_ids = res.data.labels.map(item => item.id)
       })
