@@ -238,6 +238,22 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <!-- 状态 -->
+          <el-form-item prop="status">
+            <el-select
+              v-model="searchFieldData.status"
+              clearable
+              filterable
+              :placeholder="$t('请选择状态')"
+            >
+              <el-option
+                v-for="item in statusData"
+                :key="item.id"
+                :value="item.id"
+                :label="item.name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <div class="submit">
             <el-button type="primary" plain size="small" @click="submitForm">{{
               $t('搜索')
@@ -300,6 +316,14 @@ export default {
         {
           id: 12,
           name: this.$t('审核拒绝')
+        }
+      ],
+      statusData: [
+        { id: 120, name: this.$t('待拣货') },
+        { id: 121, name: this.$t('待打包') },
+        {
+          id: 131,
+          name: this.$t('待提交')
         }
       ],
       countryProps: {
@@ -375,6 +399,7 @@ export default {
       this.searchFieldData.start = ''
       this.searchFieldData.end = ''
       this.searchFieldData.agent = ''
+      this.searchFieldData.status = ''
     },
     handleSel() {
       if (this.$refs['getCountryName'].getCheckedNodes()[0]) {

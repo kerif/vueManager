@@ -1249,7 +1249,8 @@ export default {
         countryArr: [],
         country_id: '',
         station: '',
-        keyword: ''
+        keyword: '',
+        status: ''
       },
       hasFilterCondition: false,
       page_params: {

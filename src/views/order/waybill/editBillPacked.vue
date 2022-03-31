@@ -616,6 +616,8 @@ export default {
       },
       currencyList: [],
       unitList: [],
+      unit: '',
+      currency: '',
       declareType: [
         {
           id: 1,
@@ -640,6 +642,7 @@ export default {
     this.getPackage()
     this.getExpress()
     this.getInit()
+    this.getNormal()
   },
   components: {
     AddBtn
@@ -765,10 +768,10 @@ export default {
         sku: '',
         hs_code: '',
         quantity: '',
-        unit: '',
+        unit: this.unit,
         unit_value: '',
         value: '',
-        currency: ''
+        currency: this.currency
       })
     },
     deleteRowData() {
@@ -954,6 +957,15 @@ export default {
       this.$request.getUsable(this.$route.params.id).then(res => {
         if (res.ret) {
           this.expressData = res.data
+        }
+      })
+    },
+    getNormal() {
+      this.$request.getDefaultValue().then(res => {
+        if (res.ret) {
+          this.infoForm.tax_number = res.data.declare_tax_number
+          this.unit = res.data.declare_unit
+          this.currency = res.data.declare_currency
         }
       })
     },

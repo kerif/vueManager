@@ -772,6 +772,8 @@ export default {
       currencyList: [],
       unitList: [],
       showDeclare: false,
+      unit: '',
+      currency: '',
       declareType: [
         {
           id: 1,
@@ -800,6 +802,7 @@ export default {
     this.getExpress()
     this.getProduct()
     this.getInit()
+    this.getNormal()
     // this.getProp() // 获取多选框数据
   },
   methods: {
@@ -911,6 +914,15 @@ export default {
         })
         this.unitVolume()
       }
+    },
+    getNormal() {
+      this.$request.getDefaultValue().then(res => {
+        if (res.ret) {
+          this.infoForm.tax_number = res.data.declare_tax_number
+          this.unit = res.data.declare_unit
+          this.currency = res.data.declare_currency
+        }
+      })
     },
     // 计算实际总重量
     _onTotalWeight() {
@@ -1125,10 +1137,10 @@ export default {
         sku: '',
         hs_code: '',
         quantity: '',
-        unit: '',
+        unit: this.unit,
         unit_value: '',
         value: '',
-        currency: ''
+        currency: this.currency
       })
     },
     handleSelectionChange(val) {
