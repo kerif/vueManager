@@ -787,10 +787,10 @@
                 <el-table-column :label="$t('sku')" prop="sku"></el-table-column>
                 <el-table-column :label="$t('海关编码')" prop="hs_code"></el-table-column>
                 <el-table-column :label="$t('数量')" prop="quantity"></el-table-column>
-                <el-table-column :label="$t('单位')" prop="unit"></el-table-column>
+                <el-table-column :label="$t('单位')" prop="unit_name"> </el-table-column>
                 <el-table-column :label="$t('单价')" prop="unit_value"></el-table-column>
                 <el-table-column :label="$t('总价值')" prop="value"></el-table-column>
-                <el-table-column :label="$t('币种')" prop="currency"></el-table-column>
+                <el-table-column :label="$t('币种')" prop="currency_name"></el-table-column>
               </el-table>
             </div>
           </el-tab-pane>

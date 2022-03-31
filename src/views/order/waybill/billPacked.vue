@@ -181,11 +181,11 @@
       <!-- 所属包裹 -->
       <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
     </el-table>
-    <h4 style="margin-bottom: 25px">
+    <h4 style="margin-bottom: 45px">
       {{ $t('预申报信息') }}
       <i
         :class="showDeclare ? 'el-icon-arrow-down' : 'el-icon-arrow-up'"
-        @click="showDeclare = !showDeclare"
+        @click="displayInfo"
         style="cursor: pointer"
       >
       </i>
@@ -802,7 +802,6 @@ export default {
     this.getExpress()
     this.getProduct()
     this.getInit()
-    this.getNormal()
     // this.getProp() // 获取多选框数据
   },
   methods: {
@@ -913,6 +912,12 @@ export default {
           return item
         })
         this.unitVolume()
+      }
+    },
+    displayInfo() {
+      this.showDeclare = !this.showDeclare
+      if (this.showDeclare) {
+        this.getNormal()
       }
     },
     getNormal() {

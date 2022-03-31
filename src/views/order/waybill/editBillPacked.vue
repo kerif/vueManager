@@ -105,11 +105,11 @@
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
     </el-table>
-    <h4 style="margin-bottom: 25px">
+    <h4 style="margin-bottom: 45px">
       {{ $t('预申报信息') }}
       <i
         :class="showDeclare ? 'el-icon-arrow-down' : 'el-icon-arrow-up'"
-        @click="showDeclare = !showDeclare"
+        @click="displayInfo"
         style="cursor: pointer"
       >
       </i>
@@ -642,7 +642,6 @@ export default {
     this.getPackage()
     this.getExpress()
     this.getInit()
-    this.getNormal()
   },
   components: {
     AddBtn
@@ -959,6 +958,12 @@ export default {
           this.expressData = res.data
         }
       })
+    },
+    displayInfo() {
+      this.showDeclare = !this.showDeclare
+      if (this.showDeclare) {
+        this.getNormal()
+      }
     },
     getNormal() {
       this.$request.getDefaultValue().then(res => {
