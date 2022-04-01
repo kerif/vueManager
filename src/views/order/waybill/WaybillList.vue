@@ -1655,6 +1655,7 @@ export default {
         params = {
           ...params,
           ...searchData,
+          status: searchData.status ? searchData.status : params.status,
           begin_date: searchData.date ? searchData.date[0] : '',
           end_date: searchData.date ? searchData.date[1] : '',
           order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
