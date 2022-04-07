@@ -775,7 +775,7 @@ export default {
     },
     confirmExport() {
       this.$request
-        .exportEmployData({
+        .exportOrderData({
           begin_date: this.time[0],
           end_date: this.time[1]
         })

@@ -4033,3 +4033,8 @@ exports.parseData = params => {
 exports.importForecast = params => {
   return $json.post('packages/forecast-import', params)
 }
+
+// 导出产能
+exports.exportOrderData = params => {
+  return $form.post(`orders/work-count-export`, params)
+}
