@@ -59,7 +59,12 @@
             <!-- <el-checkbox v-model="location.reusable">{{
               $t('允许同一个用户使用相同货位')
             }}</el-checkbox> -->
-            <el-select v-model="location.reusable" :placeholder="$t('请选择')">
+            <el-select
+              v-model="location.reusable"
+              popper-class="billing-select"
+              style="width: 100%"
+              :placeholder="$t('请选择')"
+            >
               <el-option
                 v-for="item in capacityData"
                 :key="item.id"
@@ -372,6 +377,12 @@ export default {
   }
   .click-sty {
     cursor: pointer;
+  }
+}
+.billing-select {
+  .el-select-dropdown__item {
+    width: 100%;
+    overflow: auto;
   }
 }
 </style>
