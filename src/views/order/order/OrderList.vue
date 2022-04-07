@@ -63,6 +63,15 @@
           >{{ $t('批量入库') }}</el-button
         >
         <el-button
+          class="btn-blue"
+          v-if="activeName !== '6' && activeName !== '7'"
+          @click="batchForecast"
+          size="small"
+          plain
+        >
+          {{ $t('批量预报') }}
+        </el-button>
+        <el-button
           class="btn-yellow"
           v-if="activeName !== '6' && activeName !== '7'"
           @click="uploadList"
@@ -650,6 +659,9 @@ export default {
     },
     batchShelves() {
       this.$router.push({ name: 'BatchShelves' })
+    },
+    batchForecast() {
+      this.$router.push({ name: 'BatchForecast' })
     },
     getDiscard() {
       this.tableLoading = true

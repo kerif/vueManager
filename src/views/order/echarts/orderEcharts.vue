@@ -33,6 +33,9 @@
           :end-placeholder="$t('结束日期')"
         >
         </el-date-picker>
+        <el-button class="btn-main" size="small" @click="exportData">{{
+          $t('导出产能')
+        }}</el-button>
       </div>
       <h3>{{ $t('包裹概览') }}</h3>
       <div class="package-main">
@@ -243,6 +246,21 @@
         <el-table-column prop="invalid"></el-table-column>
       </el-table>
     </div>
+    <el-dialog :visible.sync="show" :title="$t('请选择导出范围')" @close="clear">
+      <el-date-picker
+        type="daterange"
+        v-model="time"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <div slot="footer">
+        <el-button type="primary" @click="confirmExport">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -280,7 +298,9 @@ export default {
       oderData: [],
       unShow: false,
       packageCompare: [],
-      orderCompare: []
+      orderCompare: [],
+      show: false,
+      time: []
     }
   },
   created() {
@@ -749,6 +769,35 @@ export default {
           })
         }
       })
+    },
+    exportData() {
+      this.show = true
+    },
+    confirmExport() {
+      this.$request
+        .exportEmployData({
+          begin_date: this.time[0],
+          end_date: this.time[1]
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.show = false
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
+    clear() {
+      this.time = []
     }
   }
 }

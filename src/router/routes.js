@@ -187,6 +187,8 @@ const oderDetails = loadonDemand('order/order/orderDetails')
 const ImportOrder = loadonDemand('order/order/importOrder')
 // 订单 预报包裹列表 批量上架
 const BatchShelves = loadonDemand('order/order/batchShelves')
+// 订单 预报包裹列表 批量预报
+const BatchForecast = loadonDemand('order/order/batchForecast')
 // // 订单 订单列表 货量统计
 // const VolumeStatistics = loadonDemand('order/order/volumeStatistics')
 // 订单 无人认领包裹
@@ -686,6 +688,18 @@ export default [
               level: 3,
               group: '订单',
               name: '批量入库',
+              parent: '/order/orderlist'
+            }
+          },
+          {
+            path: '/order/orderlist/batchForecast',
+            component: BatchForecast,
+            name: 'BatchForecast',
+            id: 401,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '批量预报',
               parent: '/order/orderlist'
             }
           },
@@ -1687,7 +1701,7 @@ export default [
             }
           },
           {
-            path: '/finance/agency/agencyCommission/:id',
+            path: '/finance/agency/agencyCommission',
             name: 'agencyCommission',
             component: agencyCommission,
             id: 708,

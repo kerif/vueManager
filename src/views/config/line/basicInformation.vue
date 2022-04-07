@@ -127,6 +127,19 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+            <div>
+              <span>{{ $t('打包必填尺寸') }}</span>
+            </div>
+            <el-radio-group v-model="form.require_size">
+              <el-radio :label="1">{{ $t('开启') }}</el-radio>
+              <el-radio :label="0">{{ $t('关闭') }}</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 清关编码 -->
       <el-form-item>
         <el-row :gutter="10">
@@ -361,7 +374,8 @@ export default {
         default_pickup_station_id: '',
         is_delivery: 0,
         label_ids: [],
-        order_mode: 0
+        order_mode: 0,
+        require_size: 0
       },
       referenceTime: {
         minTime: '',
@@ -525,6 +539,7 @@ export default {
         this.form.need_id_card = res.data.need_id_card
         this.form.is_delivery = res.data.is_delivery
         this.form.order_mode = res.data.order_mode
+        this.form.require_size = res.data.require_size
         this.form.default_pickup_station_id = res.data.default_pickup_station_id
         this.form.label_ids = res.data.labels.map(item => item.id)
       })

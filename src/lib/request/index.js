@@ -4018,3 +4018,18 @@ exports.importInvoiceTmp = params => {
 exports.allocationConfig = (id, params) => {
   return $form.put(`warehouse-address/${id}/goods-allocation-areas/config`, params)
 }
+
+// 预报包裹 批量预报 获取模板
+exports.getForecastTemplate = () => {
+  return $form.get('packages/forecast-template')
+}
+
+// 预报包裹 批量预报 解析数据
+exports.parseData = params => {
+  return $file.post('packages/forecast-parse', params)
+}
+
+// 预报包裹 批量预报
+exports.importForecast = params => {
+  return $json.post('packages/forecast-import', params)
+}
