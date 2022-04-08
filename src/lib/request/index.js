@@ -4038,3 +4038,13 @@ exports.importForecast = params => {
 exports.exportOrderData = params => {
   return $form.post(`orders/work-count-export`, params)
 }
+
+// 获取
+exports.getCountryDetail = id => {
+  return $form.get(`countries/${id}`)
+}
+
+// 更新
+exports.updateCountryLang = (id, params) => {
+  return $form.put(`countries/${id}/translation`, params)
+}

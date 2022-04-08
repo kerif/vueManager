@@ -50,6 +50,9 @@
                 @click="goDeatils(scope.row.name, scope.row.id, scope.row.rgb_color)"
                 >{{ $t('详情') }}</el-button
               >
+              <el-button class="btn-green btn-sty" @click="editCountryLang(scope.row.id)">{{
+                $t('编辑')
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -705,6 +708,9 @@ export default {
         this.goDeatils(this.countryName, this.countryId)
       })
     },
+    editCountryLang(id) {
+      dialog({ type: 'countryLang', id: id })
+    },
     // 地域通知管理
     regionalMana() {
       this.outerVisible = true
@@ -950,6 +956,9 @@ export default {
   // }
   .el-upload-list__item-name {
     // display: none;
+  }
+  .btn-sty {
+    margin-left: 0;
   }
 }
 .innnerClass {

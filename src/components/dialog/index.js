@@ -131,6 +131,7 @@ import setRules from './setRules.vue'
 import batchAllocate from './batchAllocate.vue'
 import abnormalLog from './abnormalLog.vue'
 import batchImportInvoice from './batchImportInvoice.vue'
+import countryLang from './countryLang.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -261,6 +262,7 @@ const SetRulesController = Vue.extend(setRules)
 const BatchAllocateController = Vue.extend(batchAllocate)
 const AbnormalLogController = Vue.extend(abnormalLog)
 const BatchImportInvoiceController = Vue.extend(batchImportInvoice)
+const countryLangController = Vue.extend(countryLang)
 const mixin = {
   data() {
     return {
@@ -1106,6 +1108,13 @@ function initInstance(type) {
     // 路线 新路线 编辑多语言
     case 'LingLang':
       instance = new LineLangAddEdit({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 语言
+    case 'countryLang':
+      instance = new countryLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
