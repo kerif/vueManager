@@ -24,9 +24,9 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" size="small" @click="saveRules">{{ $t('保存') }}</el-button>
-          <!-- <el-button class="btn-light-red" @click="addExplain" size="small">{{
+          <el-button class="btn-light-red" @click="addExplain" size="small">{{
             $t('添加说明')
-          }}</el-button> -->
+          }}</el-button>
         </el-form-item>
       </el-form>
       <div class="add-sty">
@@ -414,7 +414,8 @@ export default {
     },
     addExplain() {
       dialog({
-        type: 'addExplain'
+        type: 'addExplain',
+        id: this.$route.params.id
       })
     },
     // 新增

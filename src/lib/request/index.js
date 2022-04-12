@@ -4068,3 +4068,13 @@ exports.deleteAnswer = id => {
 exports.setFeatured = (id, status) => {
   return $form.put(`qa/${id}/featured/${status}`)
 }
+
+// 更新渠道规则备注
+exports.updateRuleRemark = (id, params) => {
+  return $form.put(`express-lines/${id}/rule-remark`, params)
+}
+
+// 获取渠道规则备注
+exports.getRuleRemark = id => {
+  return $form.get(`express-lines/${id}/rule-remark`)
+}

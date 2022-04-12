@@ -27,18 +27,56 @@
 export default {
   data() {
     return {
-      stringData: []
+      id: '',
+      stringData: [],
+      ruleForm: {}
     }
   },
-  created() {
-    this.getLanguage()
-  },
   methods: {
+    init() {
+      this.getLanguage()
+      if (this.id) {
+        this.getDetail()
+      }
+    },
     getLanguage() {
       this.$request.getString().then(res => {
         this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
       })
-    }
+    },
+    getDetail() {
+      this.$request.getRuleRemark(this.id).then(res => {
+        this.stringData = this.stringData.map(item => {
+          const value = res.data.remark_trans[item.language_code]
+          return {
+            ...item,
+            value
+          }
+        })
+      })
+    },
+    confirm() {
+      let translation = {}
+      this.stringData.forEach(item => {
+        translation[item.language_code] = item.value
+      })
+      this.$request.updateRuleRemark(this.id, { remark_trans: translation }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.show = false
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    clear() {}
   }
 }
 </script>
