@@ -132,6 +132,7 @@ import batchAllocate from './batchAllocate.vue'
 import abnormalLog from './abnormalLog.vue'
 import batchImportInvoice from './batchImportInvoice.vue'
 import countryLang from './countryLang.vue'
+import addExplain from './addExplain.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -263,6 +264,7 @@ const BatchAllocateController = Vue.extend(batchAllocate)
 const AbnormalLogController = Vue.extend(abnormalLog)
 const BatchImportInvoiceController = Vue.extend(batchImportInvoice)
 const countryLangController = Vue.extend(countryLang)
+const addExplainController = Vue.extend(addExplain)
 const mixin = {
   data() {
     return {
@@ -905,6 +907,13 @@ function initInstance(type) {
     // 语言包 字符串翻译
     case 'stringAddEdit':
       instance = new StringController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 添加说明
+    case 'addExplain':
+      instance = new addExplainController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

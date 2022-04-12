@@ -4048,3 +4048,23 @@ exports.getCountryDetail = id => {
 exports.updateCountryLang = (id, params) => {
   return $form.put(`countries/${id}/translation`, params)
 }
+
+// 客服中心 问答管理 列表
+exports.qaList = params => {
+  return $form.get('qa', { params })
+}
+
+// 客服中心 问答管理 删除问题
+exports.deleteQuestion = id => {
+  return $form.delete(`qa/${id}`)
+}
+
+// 客服中心 问答管理 删除回答
+exports.deleteAnswer = id => {
+  return $form.delete(`qa/answers/${id}`)
+}
+
+// 客服中心 问答管理 设置推荐
+exports.setFeatured = (id, status) => {
+  return $form.put(`qa/${id}/featured/${status}`)
+}

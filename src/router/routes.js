@@ -254,6 +254,8 @@ const SuggestList = loadonDemand('customer/suggest/Suggest')
 const Evaluation = loadonDemand('customer/evaluation')
 // 客服中心 公告管理
 const PublicList = loadonDemand('customer/public')
+// 客服中心 问答管理
+const QuestionAndAnswer = loadonDemand('customer/question')
 // 公告新增或编辑
 const AddEditPublic = loadonDemand('customer/publicAddEdit')
 // 公告管理 语言详情
@@ -2150,6 +2152,17 @@ export default [
               level: 3,
               name: '公告管理的翻译内容',
               parent: '/customer/Public'
+            }
+          },
+          {
+            path: '/customer/question',
+            name: 'question',
+            component: QuestionAndAnswer,
+            id: 904,
+            meta: {
+              level: 2,
+              group: '客服中心',
+              name: '问答管理'
             }
           }
         ]

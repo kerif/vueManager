@@ -24,6 +24,9 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" size="small" @click="saveRules">{{ $t('保存') }}</el-button>
+          <!-- <el-button class="btn-light-red" @click="addExplain" size="small">{{
+            $t('添加说明')
+          }}</el-button> -->
         </el-form-item>
       </el-form>
       <div class="add-sty">
@@ -236,6 +239,7 @@
 
 <script>
 import { clone } from '@/router/utils'
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -406,6 +410,11 @@ export default {
         if (res.ret) {
           this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
         }
+      })
+    },
+    addExplain() {
+      dialog({
+        type: 'addExplain'
       })
     },
     // 新增
