@@ -35,13 +35,13 @@ export default {
   methods: {
     init() {
       this.getLanguage()
-      if (this.id) {
-        this.getDetail()
-      }
     },
     getLanguage() {
       this.$request.getString().then(res => {
         this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
+        if (this.id) {
+          this.getDetail()
+        }
       })
     },
     getDetail() {
