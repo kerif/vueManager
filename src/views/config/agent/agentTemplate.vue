@@ -81,7 +81,7 @@
           </template>
         </el-table-column>
         <!-- 值 -->
-        <el-table-column :label="$t('值')">
+        <el-table-column :label="`${$t('值')}(${$t('比例%/金额￥/单位金额￥')})`">
           <template slot-scope="scope">
             <el-input v-model="scope.row.value"></el-input>
           </template>
