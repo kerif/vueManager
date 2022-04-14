@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="$t('添加商品')">
+  <el-dialog :visible.sync="showGoods" :title="$t('添加商品')" :before-close="close" @close="clear">
     <h5>{{ $t('基础信息') }}</h5>
     <el-form>
       <el-form-item :label="$t('中文名称')">
@@ -47,7 +47,7 @@
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button>{{ $t('提交') }}</el-button>
+      <el-button type="primary">{{ $t('提交') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -59,6 +59,16 @@ export default {
       radio: 1,
       value: ''
     }
+  },
+  props: {
+    showGoods: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    close() {},
+    clear() {}
   }
 }
 </script>

@@ -2,10 +2,10 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="12">
-        <h4>基本信息</h4>
+        <h4>{{ $t('基本信息') }}</h4>
       </el-col>
       <el-col :span="12">
-        <h4>发货信息</h4>
+        <h4>{{ $t('发货信息') }}</h4>
       </el-col>
     </el-row>
     <el-form label-width="120px">
@@ -69,23 +69,23 @@
     </el-form>
     <div style="margin-top: 20px">
       <div style="display: flex; justify-content: space-between; align-items: center">
-        <h4>采购清单</h4>
-        <el-button size="small">添加</el-button>
+        <h4>{{ $t('采购清单') }}</h4>
+        <el-button size="small">{{ $t('添加') }}</el-button>
       </div>
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="index"></el-table-column>
-        <el-table-column prop="date" label="操作"> </el-table-column>
-        <el-table-column prop="name" label="物品中文名称"> </el-table-column>
-        <el-table-column prop="address" label="物品英文名称"> </el-table-column>
-        <el-table-column label="品牌"></el-table-column>
-        <el-table-column label="商品分类"></el-table-column>
-        <el-table-column label="属性"></el-table-column>
-        <el-table-column label="物品单价"></el-table-column>
-        <el-table-column label="物品明细数量"></el-table-column>
-        <el-table-column label="物品总箱数"></el-table-column>
-        <el-table-column label="物品箱规"></el-table-column>
-        <el-table-column label="条码"></el-table-column>
-        <el-table-column label="物品照片"></el-table-column>
+        <el-table-column prop="date" :label="$t('操作')"> </el-table-column>
+        <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
+        <el-table-column prop="address" :label="$t('物品英文名称')"> </el-table-column>
+        <el-table-column :label="$t('品牌')"></el-table-column>
+        <el-table-column :label="$t('商品分类')"></el-table-column>
+        <el-table-column :label="$t('属性')"></el-table-column>
+        <el-table-column :label="$t('物品单价')"></el-table-column>
+        <el-table-column :label="$t('物品明细数量')"></el-table-column>
+        <el-table-column :label="$t('物品总箱数')"></el-table-column>
+        <el-table-column :label="$t('物品箱规')"></el-table-column>
+        <el-table-column :label="$t('条码')"></el-table-column>
+        <el-table-column :label="$t('物品照片')"></el-table-column>
       </el-table>
     </div>
   </div>

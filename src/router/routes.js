@@ -270,6 +270,8 @@ const stringTranslate = loadonDemand('language/string')
 // const addEditPurchase = loadonDemand('purchase/addPurchase')
 // // 采购单详情
 // const purchaseDetail = loadonDemand('purchase/purchaseDetail')
+// // 分货详情
+// const distributeDetail = loadonDemand('purchase/distributeDetail')
 // 官网管理 栏目管理
 const website = loadonDemand('website/column')
 // 官网管理 新增 编辑 栏目管理
@@ -2237,6 +2239,18 @@ export default [
       //         level: 3,
       //         group: '采购',
       //         name: '采购单详情',
+      //         parent: '/purchase'
+      //       }
+      //     },
+      //     {
+      //       path: '/purchase/distributeDetail',
+      //       name: 'distributeDetail',
+      //       component: distributeDetail,
+      //       id: 1102,
+      //       meta: {
+      //         level: 3,
+      //         group: '采购',
+      //         name: '分货详情',
       //         parent: '/purchase'
       //       }
       //     }

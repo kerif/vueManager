@@ -145,8 +145,12 @@
             v-model="ruleForm.support_countries"
             multiple
             filterable
+            ref="select"
+            collapse-tags
             class="country-select"
+            @change="handleSelect"
             :placeholder="$t('请选择国家地区')"
+            @remove-tag="removeTag"
           >
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
@@ -186,8 +190,14 @@ export default {
         auto_location: 0,
         free_store_days: 0,
         ignore_lon_lat: 1,
-        support_countries: ''
+        support_countries: []
       },
+      all: [
+        {
+          id: -1,
+          name: '全选'
+        }
+      ],
       options: [],
       localization: {},
       rules: {
@@ -234,8 +244,25 @@ export default {
     getCountry() {
       this.$request.getEnabledCountry().then(res => {
         this.options = res.data
+        this.options.unshift({ id: -1, name: '全选' })
         this.localization = res.localization
       })
+    },
+    handleSelect(val) {
+      if (val.includes(-1)) {
+        this.ruleForm.support_countries = this.options.map(item => {
+          return item.id
+        })
+      } else if (val.includes(-1) && val.length - 1 < this.options.length) {
+        this.ruleForm.support_countries = this.ruleForm.support_countries.filter(item => {
+          return item !== '全选'
+        })
+      }
+    },
+    removeTag(tag) {
+      if (tag === -1) {
+        this.ruleForm.support_countries = []
+      }
     },
     submit(formName) {
       // 编辑状态
