@@ -255,7 +255,7 @@ export default {
         })
       } else if (val.includes(-1) && val.length - 1 < this.options.length) {
         this.ruleForm.support_countries = this.ruleForm.support_countries.filter(item => {
-          return item !== '全选'
+          return item.id !== -1
         })
       }
     },
@@ -266,26 +266,31 @@ export default {
     },
     submit(formName) {
       // 编辑状态
+      this.ruleForm.support_countries = this.ruleForm.support_countries.filter(
+        item => item.id !== -1
+      )
       if (this.$route.params.id) {
-        this.$request.editWarehouseAddress(this.$route.params.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.$router.push({ name: 'warehouse' })
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .editWarehouseAddress(this.$route.params.id, { ...this.ruleForm })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.$router.push({ name: 'warehouse' })
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       } else {
         this.$refs[formName].validate(valid => {
           if (valid) {
-            this.$request.addWarehouseAddress(this.ruleForm).then(res => {
+            this.$request.addWarehouseAddress({ ...this.ruleForm }).then(res => {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
