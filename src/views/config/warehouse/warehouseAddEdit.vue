@@ -266,9 +266,7 @@ export default {
     },
     submit(formName) {
       // 编辑状态
-      this.ruleForm.support_countries = this.ruleForm.support_countries.filter(
-        item => item.id !== -1
-      )
+      this.ruleForm.support_countries = this.ruleForm.support_countries.filter(item => item !== -1)
       if (this.$route.params.id) {
         this.$request
           .editWarehouseAddress(this.$route.params.id, { ...this.ruleForm })
