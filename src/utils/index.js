@@ -87,3 +87,11 @@ export const getIds = (arr, result = []) => {
   console.log(result)
   return result
 }
+
+// export const targetIds = arr => {
+//   let newArr = []
+//   arr.forEach(item => {
+//     newArr.push(Object.values(item.id))
+//   })
+//   return newArr
+// }

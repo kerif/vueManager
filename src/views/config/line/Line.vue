@@ -25,6 +25,12 @@
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('路线')" prop="name"></el-table-column>
+        <el-table-column :label="$t('路线类型')" prop="only_for_group">
+          <template slot-scope="scope">
+            <span v-if="scope.row.only_for_group === 1">{{ $t('仅拼团路线') }}</span>
+            <span v-else>{{ $t('普通路线') }}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('渠道数量')" prop="express_lines_count"></el-table-column>
         <!-- 是否启用 -->
         <el-table-column :label="$t('是否启用')" width="120">
