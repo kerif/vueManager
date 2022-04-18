@@ -80,9 +80,10 @@ export const downloadStreamFile = (data, name = 'file', type = 'xlsx') => {
 export const getIds = (arr, result = []) => {
   arr.forEach(item => {
     result.push(item.id)
-    if (item.areas.length) {
+    if (item.areas) {
       return getIds(item.areas, result)
     }
   })
+  console.log(result)
   return result
 }

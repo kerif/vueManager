@@ -29,7 +29,7 @@
         <el-cascader
           v-if="ruleForm.radio === 1"
           style="width: 30%; margin-left: 70px"
-          @change="chooseAres(areaData)"
+          @change="chooseAres"
           v-model="areaData"
           :options="options"
           ref="country"
@@ -190,12 +190,10 @@ export default {
         area_id: item[1],
         sub_area_id: item[2]
       }))
-      console.log(this.areaIds, 'form.area_ids')
       // for (var v = 0; v < area.length; v++) {
       //   if (area[v][0] === -1) {
       //     console.log(1)
       //     console.log(this.countryList)
-      //     console.log(this.areaData)
       //     this.areaData = getIds(this.countryList)
       //     console.log(this.areaData)
       //   } else if (area[v][0] === -1 && area.length - 1 < this.countryList.length) {
@@ -204,8 +202,9 @@ export default {
       // }
     },
     removeTag(tag) {
-      console.log(tag)
-      this.areaData = []
+      if (tag === -1) {
+        this.areaData = []
+      }
     },
     // 获取多级区域数据 编辑渠道时
     getAllCountries() {
