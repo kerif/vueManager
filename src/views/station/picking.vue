@@ -45,7 +45,7 @@
         <el-table-column :label="$t('操作人')" prop="operator" width="155"></el-table-column>
         <el-table-column :label="$t('操作类型')" prop="type" v-if="activeName === '2'">
           <template slot-scope="scope">
-            <span v-if="scope.row.typw === 1">{{ $t('订单打包') }}</span>
+            <span v-if="scope.row.type === 1">{{ $t('订单打包') }}</span>
             <span v-else>{{ $t('订单拣货') }}</span>
           </template>
         </el-table-column>
