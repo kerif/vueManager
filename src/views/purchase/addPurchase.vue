@@ -1,27 +1,146 @@
 <template>
   <div class="addPurchase-container">
-    <purchase-info></purchase-info>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <h4>{{ $t('基本信息') }}</h4>
+      </el-col>
+      <el-col :span="12">
+        <h4>{{ $t('发货信息') }}</h4>
+      </el-col>
+    </el-row>
+    <el-form label-width="120px" :model="ruleForm" :rules="rules">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="$t('PO单号')" prop="number">
+            <el-input
+              v-model="ruleForm.number"
+              style="width: 50%"
+              :placeholder="$t('单号仅限字母、数字、或下划线，长度限制15个字符')"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('发货公司')">
+            <el-select :placeholder="$t('请选择发货公司')" style="width: 50%">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="$t('PO单号名称')" prop="name">
+            <el-input
+              v-model="ruleForm.name"
+              style="width: 50%"
+              :placeholder="$t('长度限制30个字符')"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('物流单号')">
+            <el-input
+              v-model="value"
+              style="width: 50%"
+              :placeholder="$t('请输入物流单号')"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="$t('采购总金额')" prop="money">
+            <el-input
+              v-model="ruleForm.money"
+              style="width: 50%"
+              :placeholder="$t('请输入')"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="$t('采购备注')">
+            <el-input
+              v-model="value"
+              type="textarea"
+              style="width: 50%"
+              :placeholder="$t('请输入')"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <div style="margin-top: 20px">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <h4>{{ $t('采购清单') }}</h4>
+        <el-button type="primary" size="small" @click="addGoods">{{ $t('添加') }}</el-button>
+      </div>
+      <el-table :data="tableData" border style="width: 100%">
+        <el-table-column type="index"></el-table-column>
+        <el-table-column prop="date" :label="$t('操作')"> </el-table-column>
+        <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
+        <el-table-column prop="address" :label="$t('物品英文名称')"> </el-table-column>
+        <el-table-column prop="name" :label="$t('品牌')"></el-table-column>
+        <el-table-column prop="name" :label="$t('商品分类')"></el-table-column>
+        <el-table-column prop="name" :label="$t('属性')"></el-table-column>
+        <el-table-column prop="name" :label="$t('物品单价')"></el-table-column>
+        <el-table-column prop="name" :label="$t('物品明细数量')"></el-table-column>
+        <el-table-column prop="name" :label="$t('物品总箱数')"></el-table-column>
+        <el-table-column prop="name" :label="$t('物品箱规')"></el-table-column>
+        <el-table-column prop="name" :label="$t('条码')"></el-table-column>
+        <el-table-column prop="name" :label="$t('物品照片')"></el-table-column>
+      </el-table>
+    </div>
     <div style="margin-top: 20px">
       <el-button>{{ $t('取消') }}</el-button>
-      <el-button>{{ $t('保存') }}</el-button>
-      <el-button>{{ $t('保存并提交') }}</el-button>
+      <el-button type="primary" :loading="$store.state.btnLoading">{{ $t('保存') }}</el-button>
+      <el-button type="primary" :loading="$store.state.btnLoading">{{
+        $t('保存并提交')
+      }}</el-button>
     </div>
+    <add-goods :showGoods="showGoods" @passVal="passVal"></add-goods>
   </div>
 </template>
 
 <script>
-import PurchaseInfo from './components/purchaseInfo.vue'
+import AddGoods from './components/addGoods.vue'
 export default {
   data() {
     return {
       value: '',
-      tableData: []
+      tableData: [],
+      showGoods: false,
+      ruleForm: {},
+      rules: {
+        number: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
+        name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
+        money: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }]
+      },
+      options: [
+        {
+          value: '选项1',
+          label: '黄金糕'
+        }
+      ]
     }
   },
   components: {
-    PurchaseInfo
+    AddGoods
   },
-  methods: {}
+  methods: {
+    addGoods() {
+      this.showGoods = true
+    },
+    passVal() {
+      this.showGoods = false
+    }
+  }
 }
 </script>
 

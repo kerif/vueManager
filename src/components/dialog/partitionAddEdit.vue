@@ -32,6 +32,7 @@
           @change="chooseAres(areaData)"
           v-model="areaData"
           :options="options"
+          ref="country"
           :props="props"
           collapse-tags
           clearable
@@ -101,6 +102,7 @@
   </el-dialog>
 </template>
 <script>
+// import { getIds } from '@/utils/index'
 export default {
   data() {
     return {
@@ -182,12 +184,28 @@ export default {
       })
     },
     chooseAres(area) {
+      console.log(area)
       this.areaIds = area.map(item => ({
         country_id: item[0],
         area_id: item[1],
         sub_area_id: item[2]
       }))
       console.log(this.areaIds, 'form.area_ids')
+      // for (var v = 0; v < area.length; v++) {
+      //   if (area[v][0] === -1) {
+      //     console.log(1)
+      //     console.log(this.countryList)
+      //     console.log(this.areaData)
+      //     this.areaData = getIds(this.countryList)
+      //     console.log(this.areaData)
+      //   } else if (area[v][0] === -1 && area.length - 1 < this.countryList.length) {
+      //     console.log(2)
+      //   }
+      // }
+    },
+    removeTag(tag) {
+      console.log(tag)
+      this.areaData = []
     },
     // 获取多级区域数据 编辑渠道时
     getAllCountries() {
@@ -227,6 +245,12 @@ export default {
       this.$request.countryLocation().then(res => {
         if (res.ret) {
           this.countryList = res.data
+          // res.data.unshift({
+          //   id: -1,
+          //   name: '全选',
+          //   areas: []
+          // })
+          console.log(this.countryList)
           this.options = res.data.map(item => {
             return {
               value: item.id,

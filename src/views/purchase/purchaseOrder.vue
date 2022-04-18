@@ -10,6 +10,7 @@
       <el-tab-pane :label="$t('已转运')" name="6"></el-tab-pane>
       <el-tab-pane :label="$t('作废')" name="7"></el-tab-pane>
     </el-tabs>
+    <purchase-search></purchase-search>
     <div>
       <el-button class="btn-deep-blue" @click="$router.push({ name: 'addPurchase' })">{{
         $t('新增采购单')
@@ -82,6 +83,7 @@
 </template>
 
 <script>
+import PurchaseSearch from './components/purchaseSearch.vue'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 export default {
@@ -97,7 +99,8 @@ export default {
     }
   },
   components: {
-    NlePagination
+    NlePagination,
+    PurchaseSearch
   },
   mixins: [pagination],
   methods: {

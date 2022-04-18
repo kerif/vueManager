@@ -76,3 +76,13 @@ export const downloadStreamFile = (data, name = 'file', type = 'xlsx') => {
   link.click()
   document.body.removeChild(link)
 }
+
+export const getIds = (arr, result = []) => {
+  arr.forEach(item => {
+    result.push(item.id)
+    if (item.areas.length) {
+      return getIds(item.areas, result)
+    }
+  })
+  return result
+}

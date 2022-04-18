@@ -308,6 +308,9 @@
           <el-button @click="uploadList(2)" type="warning" plain size="small">
             {{ $t('分箱模版下载') }}</el-button
           >
+          <el-button @click="uploadList(3)" type="warning" plain size="small">{{
+            $t('简单模板下载')
+          }}</el-button>
           <div class="batch-sty">1，{{ $t('请根据需求选择模板并下载') }}</div>
           <div class="batch-sty">2，{{ $t('根据模版内容填充物流信息') }}</div>
           <div class="batch-sty">3，{{ $t('上传') }}</div>
@@ -316,6 +319,7 @@
           <el-radio-group v-model="type">
             <el-radio :label="1">{{ $t('标准模版下载') }}</el-radio>
             <el-radio :label="2">{{ $t('分箱模版下载') }}</el-radio>
+            <el-radio :label="3">{{ $t('简单模板下载') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('模版上传')">

@@ -4,7 +4,89 @@
       <h3>{{ $t('采购单详细') }}</h3>
       <div style="margin-left: 30px"><span>状态:</span><span>未发货</span></div>
     </div>
-    <div>
+    <div v-if="status !== 1">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <h4>{{ $t('基本信息') }}</h4>
+        </el-col>
+        <el-col :span="12">
+          <h4>{{ $t('发货信息') }}</h4>
+        </el-col>
+      </el-row>
+      <el-form label-width="120px" :model="ruleForm" :rules="rules">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('PO单号')" prop="number">
+              <el-input
+                v-model="ruleForm.number"
+                style="width: 50%"
+                :placeholder="$t('单号仅限字母、数字、或下划线，长度限制15个字符')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('发货公司')">
+              <el-select
+                :placeholder="$t('请选择发货公司')"
+                v-model="ruleForm.value"
+                style="width: 50%"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('PO单号名称')" prop="name">
+              <el-input
+                v-model="ruleForm.name"
+                style="width: 50%"
+                :placeholder="$t('长度限制30个字符')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('物流单号')">
+              <el-input
+                v-model="value"
+                style="width: 50%"
+                :placeholder="$t('请输入物流单号')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('采购总金额')" prop="money">
+              <el-input
+                v-model="ruleForm.money"
+                style="width: 50%"
+                :placeholder="$t('请输入')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('采购备注')">
+              <el-input
+                v-model="value"
+                type="textarea"
+                style="width: 50%"
+                :placeholder="$t('请输入')"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+    <div v-else>
       <div class="purchase-title">
         <div style="width: 50%">
           <h4>{{ $t('基本信息') }}</h4>
@@ -95,14 +177,14 @@
         </el-table-column>
         <el-table-column prop="number" :label="$t('打包单号')"> </el-table-column>
         <el-table-column prop="address" :label="$t('转运单状态')"> </el-table-column>
-        <el-table-column :label="$t('商品数量')"></el-table-column>
-        <el-table-column :label="$t('总价值')"></el-table-column>
-        <el-table-column :label="$t('目的地')"></el-table-column>
-        <el-table-column :label="$t('收件人')"></el-table-column>
-        <el-table-column :label="$t('下单渠道')"></el-table-column>
-        <el-table-column :label="$t('付款方式')"></el-table-column>
-        <el-table-column :label="$t('创建时间')"></el-table-column>
-        <el-tabel-column :label="$t('创建人')"></el-tabel-column>
+        <el-table-column prop="address" :label="$t('商品数量')"></el-table-column>
+        <el-table-column prop="address" :label="$t('总价值')"></el-table-column>
+        <el-table-column prop="address" :label="$t('目的地')"></el-table-column>
+        <el-table-column prop="address" :label="$t('收件人')"></el-table-column>
+        <el-table-column prop="address" :label="$t('下单渠道')"></el-table-column>
+        <el-table-column prop="address" :label="$t('付款方式')"></el-table-column>
+        <el-table-column prop="address" :label="$t('创建时间')"></el-table-column>
+        <el-tabel-column prop="address" :label="$t('创建人')"></el-tabel-column>
       </el-table>
     </div>
     <div style="margin-top: 20px">
@@ -141,7 +223,19 @@ export default {
           number: 1
         }
       ],
-      showGoods: false
+      ruleForm: {
+        value: '',
+        number: '',
+        money: '',
+        name: ''
+      },
+      rules: {
+        number: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
+        money: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
+        name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }]
+      },
+      showGoods: false,
+      status: 1
     }
   },
   components: {
