@@ -93,7 +93,11 @@
                   <span>{{ scope.row.address && scope.row.address.door_no }}</span>
                 </template>
               </el-table-column>
-              <el-table-column :label="$t('清关编码')" prop="clearance_code"></el-table-column>
+              <el-table-column :label="$t('清关编码')" prop="clearance_code">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.address && scope.row.address.clearance_code }}</span>
+                </template>
+              </el-table-column>
               <el-table-column :label="$t('操作')">
                 <template slot-scope="scope">
                   <!-- 更改地址 -->
