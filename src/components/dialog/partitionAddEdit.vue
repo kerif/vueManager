@@ -26,9 +26,12 @@
           <el-radio :label="2">{{ $t('国家邮编') }}</el-radio>
         </el-radio-group>
         <br />
+        <el-checkbox v-if="ruleForm.radio === 1" v-model="check" @change="onCheck">{{
+          $t('全选')
+        }}</el-checkbox>
         <el-cascader
           v-if="ruleForm.radio === 1"
-          style="width: 30%; margin-left: 70px"
+          style="width: 30%; margin-left: 20px"
           @change="chooseAres"
           v-model="areaData"
           :options="options"
@@ -102,7 +105,7 @@
   </el-dialog>
 </template>
 <script>
-// import { getIds } from '@/utils/index'
+import { getIds } from '@/utils/index'
 export default {
   data() {
     return {
@@ -135,7 +138,10 @@ export default {
       areaNum: [],
       postcodes: [],
       start: '',
-      end: ''
+      end: '',
+      check: false,
+      checkLength: '',
+      newArr: []
     }
   },
   created() {
@@ -184,27 +190,21 @@ export default {
       })
     },
     chooseAres(area) {
-      console.log(area)
       this.areaIds = area.map(item => ({
         country_id: item[0],
         area_id: item[1],
         sub_area_id: item[2]
       }))
-      // for (var v = 0; v < area.length; v++) {
-      //   if (area[v][0] === -1) {
-      //     console.log(1)
-      //     console.log(this.countryList)
-      //     this.areaData = getIds(this.countryList)
-      //     console.log(this.areaData)
-      //   } else if (area[v][0] === -1 && area.length - 1 < this.countryList.length) {
-      //     console.log(2)
-      //   }
-      // }
-    },
-    removeTag(tag) {
-      if (tag === -1) {
-        this.areaData = []
+      if (this.checkLength !== this.areaData.length) {
+        this.check = false
+      } else {
+        this.check = true
       }
+    },
+    onCheck(v) {
+      getIds(this.countryList, this.newArr)
+      this.areaData = v ? this.newArr : []
+      this.checkLength = this.newArr.length
     },
     // 获取多级区域数据 编辑渠道时
     getAllCountries() {
@@ -244,12 +244,6 @@ export default {
       this.$request.countryLocation().then(res => {
         if (res.ret) {
           this.countryList = res.data
-          // res.data.unshift({
-          //   id: -1,
-          //   name: '全选',
-          //   areas: []
-          // })
-          console.log(this.countryList)
           this.options = res.data.map(item => {
             return {
               value: item.id,

@@ -133,6 +133,8 @@ import abnormalLog from './abnormalLog.vue'
 import batchImportInvoice from './batchImportInvoice.vue'
 import countryLang from './countryLang.vue'
 import addExplain from './addExplain.vue'
+import qaCumulative from './qaCumulative.vue'
+import supplementSheet from './supplementSheet.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -265,6 +267,8 @@ const AbnormalLogController = Vue.extend(abnormalLog)
 const BatchImportInvoiceController = Vue.extend(batchImportInvoice)
 const countryLangController = Vue.extend(countryLang)
 const addExplainController = Vue.extend(addExplain)
+const qaCumulativeController = Vue.extend(qaCumulative)
+const supplementSheetController = Vue.extend(supplementSheet)
 const mixin = {
   data() {
     return {
@@ -695,6 +699,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 营销管理 问答累积积分
+    case 'qaCumulative':
+      instance = new qaCumulativeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     case 'advertiseLang':
       instance = new AdvertiseLangController({
         el: document.createElement('div'),
@@ -858,6 +869,13 @@ function initInstance(type) {
     // 财务 发票管理 开票完成
     case 'toAddInvoicing':
       instance = new ToAddInvoicingController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 财务 订单补款
+    case 'supplementSheet':
+      instance = new supplementSheetController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

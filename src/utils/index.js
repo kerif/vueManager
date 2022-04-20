@@ -77,13 +77,13 @@ export const downloadStreamFile = (data, name = 'file', type = 'xlsx') => {
   document.body.removeChild(link)
 }
 
-export const getIds = (arr, result = []) => {
-  arr.forEach(item => {
-    result.push(item.id)
-    if (item.areas) {
-      return getIds(item.areas, result)
+export const getIds = (arr, result = [], newResult = []) => {
+  for (let i = 0; i < arr.length; i++) {
+    let ids = newResult.concat([arr[i].id])
+    if (arr[i].areas && arr[i].areas.length > 0) {
+      getIds(arr[i].areas, result, ids)
+    } else {
+      result.push(ids)
     }
-  })
-  console.log(result)
-  return result
+  }
 }
