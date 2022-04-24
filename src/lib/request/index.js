@@ -4094,6 +4094,11 @@ exports.createReplenish = params => {
   return $form.post('order-additional-fees', params)
 }
 
+// 财务 订单补款 详情
+exports.getReplenishDeatil = id => {
+  return $form.get(`order-additional-fees/${id}`)
+}
+
 // 财务 订单补款 更新
 exports.updateReplenish = (id, params) => {
   return $form.put(`order-additional-fees/${id}`, params)
@@ -4137,4 +4142,9 @@ exports.updateCustomData = (id, params) => {
 // 申报信息 更新自定义选择数据
 exports.updateSelectData = id => {
   return $form.get(`declare/${id}/custom-configs/data`)
+}
+
+// 统计 订单补款
+exports.getReplenishCount = () => {
+  return $form.get(`order-additional-fees/counts`)
 }

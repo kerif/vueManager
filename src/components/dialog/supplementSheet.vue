@@ -67,6 +67,22 @@ export default {
     }
   },
   methods: {
+    init() {
+      this.getSupplementDetail()
+    },
+    getSupplementDetail() {
+      this.$request.getReplenishDeatil(this.id).then(res => {
+        console.log(res)
+        this.options.forEach(item => {
+          if (item.name === res.data.type_name) {
+            this.form.type_id = item.id
+          }
+        })
+        this.form.amount = res.data.amount
+        this.form.remark = res.data.remark
+        this.form.order_value = res.data.order_value
+      })
+    },
     submit() {
       if (this.id) {
         this.$request.updateReplenish(this.id, this.form).then(res => {

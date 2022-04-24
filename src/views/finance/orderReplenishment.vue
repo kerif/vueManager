@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-tabs v-model="activeName" class="tab-length" @tab-click="handleClick">
-      <el-tab-pane :label="$t('全部')" name="0"></el-tab-pane>
-      <el-tab-pane :label="$t('待付款')" name="1"></el-tab-pane>
-      <el-tab-pane :label="$t('已付款')" name="10"></el-tab-pane>
-      <el-tab-pane :label="$t('作废')" name="99"></el-tab-pane>
+      <el-tab-pane :label="`${$t('全部')}(${statusList['0'] || 0})`" name="0"></el-tab-pane>
+      <el-tab-pane :label="`${$t('待付款')}(${statusList['1'] || 0})`" name="1"></el-tab-pane>
+      <el-tab-pane :label="`${$t('已付款')}(${statusList['10'] || 0})`" name="10"></el-tab-pane>
+      <el-tab-pane :label="`${$t('作废')}(${statusList['99'] || 0})`" name="99"></el-tab-pane>
     </el-tabs>
     <div class="order-replenishment-search" v-show="hasFilterCondition">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -210,6 +210,7 @@ export default {
           name: this.$t('已作废')
         }
       ],
+      statusList: {},
       replenishmentList: [],
       paymentList: []
     }
@@ -222,6 +223,7 @@ export default {
   created() {
     this.getList()
     this.getPaymentType()
+    this.getCounts()
   },
   methods: {
     handleClick(tab) {
@@ -255,6 +257,11 @@ export default {
             })
           }
         })
+    },
+    getCounts() {
+      this.$request.getReplenishCount().then(res => {
+        this.statusList = res.data
+      })
     },
     getPaymentType() {
       this.$request.paymentData().then(res => {

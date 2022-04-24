@@ -55,10 +55,10 @@ const Recharge = loadonDemand('finance/recharge')
 const balance = loadonDemand('finance/balance')
 // 财务 审核跟详情页面
 const RechargeDetails = loadonDemand('finance/rechargeDetails')
-// // 财务 订单补款
-// const orderReplenishment = loadonDemand('finance/orderReplenishment')
-// // 财务 订单补款详情页面
-// const orderReplenishDetail = loadonDemand('finance/orderReplenishDetail')
+// 财务 订单补款
+const orderReplenishment = loadonDemand('finance/orderReplenishment')
+// 财务 订单补款详情页面
+const orderReplenishDetail = loadonDemand('finance/orderReplenishDetail')
 // 财务 财务概览
 const financeCharts = loadonDemand('finance/financeCharts')
 // 财务 订单财务审核
@@ -1612,29 +1612,29 @@ export default [
               name: '余额扣款处理'
             }
           },
-          // {
-          //   path: '/finance/orderReplenishment',
-          //   name: 'orderReplenishment',
-          //   component: orderReplenishment,
-          //   id: 704,
-          //   meta: {
-          //     group: '财务',
-          //     level: 2,
-          //     name: '订单补款'
-          //   }
-          // },
-          // {
-          //   path: '/finance/orderReplenishDetail/:id',
-          //   name: 'orderReplenishDetail',
-          //   component: orderReplenishDetail,
-          //   id: 704,
-          //   meta: {
-          //     group: '财务',
-          //     level: 3,
-          //     name: '订单补款详情',
-          //     parent: '/finance/orderReplenishment'
-          //   }
-          // },
+          {
+            path: '/finance/orderReplenishment',
+            name: 'orderReplenishment',
+            component: orderReplenishment,
+            id: 704,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '订单补款'
+            }
+          },
+          {
+            path: '/finance/orderReplenishDetail/:id',
+            name: 'orderReplenishDetail',
+            component: orderReplenishDetail,
+            id: 704,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '订单补款详情',
+              parent: '/finance/orderReplenishment'
+            }
+          },
           {
             path: '/finance/financeCharts',
             name: 'financeCharts',
