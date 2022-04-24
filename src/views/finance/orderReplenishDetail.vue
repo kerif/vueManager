@@ -51,7 +51,7 @@
         </el-col>
       </el-row>
     </div>
-    <div>
+    <div v-if="form.status === 1">
       <el-button size="small" type="danger" @click="review('reject')">{{
         $t('审核拒绝')
       }}</el-button>

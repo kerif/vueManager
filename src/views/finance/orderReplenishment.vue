@@ -87,10 +87,12 @@
         <el-table-column prop="status" :label="$t('状态')">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0" style="color: red">{{ $t('待支付') }}</span>
-            <span v-else-if="scope.row.status === 1">{{ $t('待审核') }}</span>
+            <span v-else-if="scope.row.status === 1" style="color: blue">{{ $t('待审核') }}</span>
             <span v-else-if="scope.row.status === 2">{{ $t('审核失败') }}</span>
             <span v-else-if="scope.row.status === 11">{{ $t('已支付') }}</span>
-            <span v-else-if="scope.row.status === 12">{{ $t('审核完成') }}</span>
+            <span v-else-if="scope.row.status === 12" style="color: green">{{
+              $t('审核完成')
+            }}</span>
             <span v-else-if="scope.row.status === 99">{{ $t('已作废') }}</span>
           </template>
         </el-table-column>
@@ -111,26 +113,21 @@
             <el-button
               class="btn-green"
               v-if="scope.row.status === 0"
-              @click="
-                editSupplement(
-                  scope.row.id,
-                  scope.row.order_sn,
-                  scope.row.amount,
-                  scope.row.confirm_amount,
-                  scope.row.remark
-                )
-              "
+              @click="editSupplement(scope.row.id, scope.row.order_sn)"
               >{{ $t('修改') }}</el-button
             >
             <el-button
               class="btn-main"
               @click="onDetail(scope.row.id)"
-              v-if="scope.row.status === 0 || scope.row.status === 12"
+              v-if="scope.row.status === 0 || scope.row.status === 12 || scope.row.status === 11"
               >{{ $t('详情') }}</el-button
             >
-            <el-button class="btn-deep-purple" v-if="scope.row.status === 1">{{
-              $t('审核')
-            }}</el-button>
+            <el-button
+              class="btn-deep-purple"
+              v-if="scope.row.status === 1"
+              @click="onVerify(scope.row.id)"
+              >{{ $t('审核') }}</el-button
+            >
             <el-button
               class="btn-light-red"
               v-if="scope.row.status === 0"
@@ -269,15 +266,17 @@ export default {
         this.form.checkList = res.data.filter(item => item.selected === 1).map(item => item.id)
       })
     },
-    editSupplement(id, order_sn, amount, confirm_amount, remark) {
-      dialog({
-        type: 'supplementSheet',
-        id,
-        order_sn,
-        amount,
-        confirm_amount,
-        remark
-      })
+    editSupplement(id, order_sn) {
+      dialog(
+        {
+          type: 'supplementSheet',
+          id,
+          order_sn
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     setSupplement() {
       this.showConfig = true
@@ -297,6 +296,12 @@ export default {
             type: 'error'
           })
         }
+      })
+    },
+    onVerify(id) {
+      this.$router.push({
+        name: 'orderReplenishDetail',
+        params: { id }
       })
     },
     onDetail(id) {
@@ -330,9 +335,14 @@ export default {
       this.formInline.timeList = []
     },
     addSupplement() {
-      dialog({
-        type: 'supplementSheet'
-      })
+      dialog(
+        {
+          type: 'supplementSheet'
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     submit() {
       this.$request.updatePaymentType({ ids: this.form }).then(res => {

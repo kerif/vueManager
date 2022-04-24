@@ -4148,3 +4148,8 @@ exports.updateSelectData = id => {
 exports.getReplenishCount = () => {
   return $form.get(`order-additional-fees/counts`)
 }
+
+// 问答管理 回复
+exports.answerInfo = (id, params) => {
+  return $form.post(`qa/${id}/answers`, params)
+}

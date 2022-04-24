@@ -136,6 +136,7 @@ import addExplain from './addExplain.vue'
 import qaCumulative from './qaCumulative.vue'
 import supplementSheet from './supplementSheet.vue'
 import replenishMsg from './replenishMsg.vue'
+import replyInfo from './replyInfo.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -271,6 +272,7 @@ const addExplainController = Vue.extend(addExplain)
 const qaCumulativeController = Vue.extend(qaCumulative)
 const supplementSheetController = Vue.extend(supplementSheet)
 const replenishMsgController = Vue.extend(replenishMsg)
+const replyInfoController = Vue.extend(replyInfo)
 const mixin = {
   data() {
     return {
@@ -419,6 +421,13 @@ function initInstance(type) {
     // 审核
     case 'replenishMsg':
       instance = new replenishMsgController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 回复
+    case 'replyInfo':
+      instance = new replyInfoController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -12,10 +12,10 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('订单保价价值')" prop="amount" v-if="form.type_id === 1">
-        <el-input v-model="form.amount"></el-input>
+        <el-input v-model="form.order_value"></el-input>
       </el-form-item>
       <el-form-item :label="$t('保险金额')" prop="order_value" v-if="form.type_id === 1">
-        <el-input v-model="form.order_value"></el-input>
+        <el-input v-model="form.amount"></el-input>
       </el-form-item>
       <el-form-item :label="$t('补款金额')" prop="amount" v-if="form.type_id !== 1">
         <el-input v-model="form.amount"></el-input>
