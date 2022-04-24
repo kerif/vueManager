@@ -82,7 +82,7 @@
           <el-table-column prop="date" label="字数>="> </el-table-column>
           <el-table-column prop="name" label="图片>="> </el-table-column>
           <el-table-column prop="address" label="积分"> </el-table-column>
-          <el-table-column label="操作"> </el-table-column>
+          <el-table-column :label="$t('操作')"> </el-table-column>
         </el-table>
       </div>
     </el-form>

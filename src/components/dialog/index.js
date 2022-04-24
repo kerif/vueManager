@@ -135,6 +135,7 @@ import countryLang from './countryLang.vue'
 import addExplain from './addExplain.vue'
 import qaCumulative from './qaCumulative.vue'
 import supplementSheet from './supplementSheet.vue'
+import replenishMsg from './replenishMsg.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -269,6 +270,7 @@ const countryLangController = Vue.extend(countryLang)
 const addExplainController = Vue.extend(addExplain)
 const qaCumulativeController = Vue.extend(qaCumulative)
 const supplementSheetController = Vue.extend(supplementSheet)
+const replenishMsgController = Vue.extend(replenishMsg)
 const mixin = {
   data() {
     return {
@@ -410,6 +412,13 @@ function initInstance(type) {
       break
     case 'reviewMsg':
       instance = new ReviewMsgController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 审核
+    case 'replenishMsg':
+      instance = new replenishMsgController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

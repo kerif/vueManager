@@ -4078,3 +4078,63 @@ exports.updateRuleRemark = (id, params) => {
 exports.getRuleRemark = id => {
   return $form.get(`express-lines/${id}/rule-remark`)
 }
+
+// 财务 订单补款 列表
+exports.replenishmentList = params => {
+  return $form.get('order-additional-fees', { params })
+}
+
+// 财务 订单补款 获取支付类型
+exports.paymentData = () => {
+  return $form.get('order-additional-fees/payment-types')
+}
+
+// 财务 订单补款 创建
+exports.createReplenish = params => {
+  return $form.post('order-additional-fees', params)
+}
+
+// 财务 订单补款 更新
+exports.updateReplenish = (id, params) => {
+  return $form.put(`order-additional-fees/${id}`, params)
+}
+
+// 财务 订单补款 更新支付类型
+exports.updatePaymentType = ids => {
+  return $form.put('order-additional-fees/payment-types', ids)
+}
+
+// 财务 订单补款  审核通过
+exports.orderApproved = (id, params) => {
+  return $form.put(`order-additional-fees/${id}/accepted`, params)
+}
+
+// 财务 订单补款 审核拒绝
+exports.orderRefused = (id, params) => {
+  return $form.put(`order-additional-fees/${id}/refused`, params)
+}
+
+// 财务 订单补款 详情
+exports.replenishDetail = id => {
+  return $form.get(`order-additional-fees/${id}`)
+}
+
+// 财务 订单补款 作废
+exports.invalidOrder = id => {
+  return $form.put(`order-additional-fees/${id}/invalid`)
+}
+
+// 申报信息 获取自定义数据
+exports.customData = id => {
+  return $form.get(`declare/${id}/custom-configs`)
+}
+
+// 申报信息 更新自定义数据
+exports.updateCustomData = (id, params) => {
+  return $form.put(`declare/${id}/custom-configs`, params)
+}
+
+// 申报信息 更新自定义选择数据
+exports.updateSelectData = id => {
+  return $form.get(`declare/${id}/custom-configs/data`)
+}

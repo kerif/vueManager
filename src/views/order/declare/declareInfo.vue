@@ -14,6 +14,20 @@
         <el-button size="mini" class="btn-light-red" @click="setNormal">{{
           $t('设置默认值')
         }}</el-button>
+        <el-select
+          v-model="third_status"
+          clearable
+          style="margin-left: 10px"
+          :placeholder="$t('第三方对接状态')"
+          @change="getStatus"
+        >
+          <el-option
+            v-for="item in statusData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
         <div class="head-search">
           <el-input
             v-model="page_params.keyword"
@@ -69,11 +83,6 @@
                 @click.native="getDeclareInfo(scope.row.id, scope.row.third_status)"
                 >{{ $t('报关信息') }}</el-dropdown-item
               >
-              <!-- <el-dropdown-item
-                v-if="scope.row.third_status === 0 || scope.row.third_status === 3"
-                @click.native="editDeclareInfo(scope.row.id, scope.row.push_type)"
-                >{{ $t('编辑') }}</el-dropdown-item
-              > -->
               <el-dropdown-item
                 v-if="scope.row.status === 1"
                 @click.native="getInfo(scope.row.id, scope.row.status, scope.row.third_status)"
@@ -114,17 +123,24 @@
             ></el-input>
           </el-form-item>
         </el-form>
-        <el-button
-          @click="deleteRow"
-          v-show="thirdStatus === 0 || thirdStatus === 3"
-          size="small"
-          class="btn-light-red"
-          style="margin: 10px 0"
-          >{{ $t('多选删除') }}</el-button
-        >
-        <add-btn @click.native="addNew" v-show="thirdStatus === 0 || thirdStatus === 3">{{
-          $t('新增')
-        }}</add-btn>
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <el-button
+            @click="deleteRow"
+            v-show="thirdStatus === 0 || thirdStatus === 3"
+            size="small"
+            class="btn-light-red"
+            style="margin: 10px 0"
+            >{{ $t('多选删除') }}</el-button
+          >
+          <div>
+            <el-button class="btn-main" style="margin: 5px 10px 0 0" @click="customConfig">{{
+              $t('自定义配置')
+            }}</el-button>
+            <add-btn @click.native="addNew" v-show="thirdStatus === 0 || thirdStatus === 3">{{
+              $t('新增')
+            }}</add-btn>
+          </div>
+        </div>
         <el-table
           :data="infoData"
           ref="multipleTable"
@@ -365,48 +381,64 @@
         <el-button type="primary" @click="saveNormal">{{ $t('保存') }}</el-button>
       </div>
     </el-dialog>
-    <!-- <el-dialog :visible.sync="showFill" :title="$t('编辑申报')" @close="clearFill">
-      <div v-if="this.pushType === 1">
-        <el-form :model="ruleForm" ref="ruleForm">
-          <el-form-item :label="$t('税号')">
-            <el-input
-              :placeholder="$t('请输入税号')"
-              class="input-sty"
-              v-model="ruleForm.tax_number"
-            ></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('重量')">
-            <el-input
-              :placeholder="$t('请输入重量')"
-              class="input-sty"
-              v-model="ruleForm.weight"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div v-else>
-        <el-form v-for="item in boxes" :key="item.id">
-          <el-form-item :label="$t('税号')">
-            <el-input
-              :placeholder="$t('请输入税号')"
-              class="input-sty"
-              v-model="item.tax_number"
-            ></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('重量')">
-            <el-input
-              :placeholder="$t('请输入重量')"
-              class="input-sty"
-              v-model="item.weight"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
+    <el-dialog :visible.sync="showCustom" :title="$t('自定义配置')" @close="clearCustom">
+      <el-form label-position="left" :model="form">
+        <el-form-item label="deliveryType">
+          <el-select v-model="form.deliveryType">
+            <el-option
+              v-for="item in deliveryData"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="expressType">
+          <el-select v-model="form.expressType">
+            <el-option
+              v-for="item in expressData"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="packageType">
+          <el-select v-model="form.packageType">
+            <el-option
+              v-for="item in packageData"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="payType">
+          <el-select v-model="form.payType">
+            <el-option
+              v-for="item in payData"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="shipType">
+          <el-select v-model="form.shipType">
+            <el-option
+              v-for="item in shipData"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
       <div slot="footer">
-        <el-button @click="showFill = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="save">{{ $t('保存') }}</el-button>
+        <el-button @click="showCustom = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="onConfirm">{{ $t('保存') }}</el-button>
       </div>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -454,6 +486,20 @@ export default {
       box: [],
       boxes: [],
       pushType: '',
+      third_status: '',
+      showCustom: false,
+      deliveryData: [],
+      expressData: [],
+      packageData: [],
+      payData: [],
+      shipData: [],
+      form: {
+        deliveryType: '',
+        expressType: '',
+        packageType: '',
+        payType: '',
+        shipType: ''
+      },
       ruleForm: {
         tax_number: '',
         weight: ''
@@ -462,7 +508,25 @@ export default {
         declare_tax_number: '',
         declare_currency: '',
         declare_unit: ''
-      }
+      },
+      statusData: [
+        {
+          id: 0,
+          name: this.$t('待对接')
+        },
+        {
+          id: 1,
+          name: this.$t('对接中')
+        },
+        {
+          id: 2,
+          name: this.$t('对接成功')
+        },
+        {
+          id: 3,
+          name: this.$t('对接失败')
+        }
+      ]
     }
   },
   components: {
@@ -474,6 +538,9 @@ export default {
     this.handleClick(this.activeName)
     this.getList()
     this.getNormal()
+    if (this.id) {
+      this.customConfig()
+    }
   },
   activated() {
     this.$nextTick(() => {
@@ -485,6 +552,7 @@ export default {
       this.tableLoading = true
       let params = {
         status: this.page_params.status,
+        third_status: this.third_status,
         keyword: this.page_params.keyword,
         page: this.page_params.page,
         size: this.page_params.size
@@ -577,53 +645,6 @@ export default {
       this.ruleForm.weight = ''
       this.boxes = []
     },
-    // save() {
-    //   if (this.pushType === 1) {
-    //     let params = {
-    //       ids: [this.id],
-    //       tax_number: this.ruleForm.tax_number,
-    //       weight: this.ruleForm.weight
-    //     }
-    //     this.$request.fillDeclare(this.id, params).then(res => {
-    //       if (res.ret) {
-    //         this.$notify({
-    //           title: this.$t('操作成功'),
-    //           message: res.msg,
-    //           type: 'success'
-    //         })
-    //         this.getList()
-    //         this.showFill = false
-    //       } else {
-    //         this.$notify({
-    //           title: this.$t('操作失败'),
-    //           message: res.msg,
-    //           type: 'warning'
-    //         })
-    //       }
-    //     })
-    //   } else {
-    //     let params = {
-    //       boxes: this.boxes
-    //     }
-    //     this.$request.fillDeclareBox(this.id, params).then(res => {
-    //       if (res.ret) {
-    //         this.$notify({
-    //           title: this.$t('操作成功'),
-    //           message: res.msg,
-    //           type: 'success'
-    //         })
-    //         this.getList()
-    //         this.showFill = false
-    //       } else {
-    //         this.$notify({
-    //           title: this.$t('操作失败'),
-    //           message: res.msg,
-    //           type: 'warning'
-    //         })
-    //       }
-    //     })
-    //   }
-    // },
     editDeclareInfo(id, type) {
       this.pushType = type
       this.id = id
@@ -727,6 +748,10 @@ export default {
         row.value = row.quantity * row.unit_value
       }
     },
+    getStatus() {
+      this.page_params.handleQueryChange('third_status', this.third_status)
+      this.getList()
+    },
     getInfo(id, status, third_status) {
       this.show = true
       this.id = id
@@ -772,6 +797,98 @@ export default {
           this.declareForm.declare_unit = res.data.declare_unit
         }
       })
+    },
+    customConfig() {
+      this.show = false
+      this.showCustom = true
+      this.$request.updateSelectData(this.id).then(res => {
+        if (res.ret) {
+          let deliver = res.data.deliveryType
+          let express = res.data.expressType
+          let packages = res.data.packageType
+          let pay = res.data.payType
+          let ship = res.data.shipType
+          this.deliveryData = Object.keys(deliver).map(item => {
+            return {
+              value: item,
+              label: deliver[item]
+            }
+          })
+          this.expressData = Object.keys(express).map(item => {
+            return {
+              value: item,
+              label: express[item]
+            }
+          })
+          this.packageData = Object.keys(packages).map(item => {
+            return {
+              value: +item,
+              label: packages[item]
+            }
+          })
+          this.payData = Object.keys(pay).map(item => {
+            return {
+              value: item,
+              label: pay[item]
+            }
+          })
+          this.shipData = Object.keys(ship).map(item => {
+            return {
+              value: +item,
+              label: ship[item]
+            }
+          })
+          this.getSelectData()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    getSelectData() {
+      this.$request.customData(this.id).then(res => {
+        this.shipData.forEach(item => {
+          if (item.value === +res.data.shipType) {
+            this.form.shipType = item.label
+          }
+        })
+        this.packageData.forEach(item => {
+          if (item.value === +res.data.packageType) {
+            this.form.packageType = item.label
+          }
+        })
+        this.form.deliveryType = res.data.deliveryType
+        this.form.expressType = res.data.expressType
+        this.form.payType = res.data.payType
+      })
+    },
+    onConfirm() {
+      this.$request.updateCustomData(this.id, this.form).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.showCustom = false
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    clearCustom() {
+      this.form.deliveryType = ''
+      this.form.expressType = ''
+      this.form.packageType = ''
+      this.form.payType = ''
+      this.form.shipType = ''
     },
     saveNormal() {
       let params = {
@@ -868,6 +985,9 @@ export default {
   }
   .el-dialog__close {
     color: #fff;
+  }
+  .el-form-item__label {
+    width: 100px;
   }
   .input-sty {
     width: 35% !important;

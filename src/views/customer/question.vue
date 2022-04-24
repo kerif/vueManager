@@ -74,7 +74,12 @@
         </div>
       </div>
       <div class="question-item question-title">
-        <div style="font-weight: bold">{{ $t('提问:') }} {{ item.content }}</div>
+        <div style="font-weight: bold">
+          <span>{{ $t('提问:') }} {{ item.content }}</span>
+          <!-- <el-button class="btn-light-red" style="margin-left: 10px" @click="reply">{{
+            $t('回复')
+          }}</el-button> -->
+        </div>
         <div style="color: #3540a5; cursor: pointer" @click="changeShow">
           {{ show ? $t('收起') : $t('展开') }}
         </div>
@@ -95,6 +100,12 @@
           </div>
         </div>
       </div>
+      <!-- <div v-if="showInfo" style="display: flex; padding-top: 20px">
+        <div style="padding: 10px; width: 300px">
+          <span>{{ $t('客服小二') }}</span>
+        </div>
+        <editor style="width: 60%" />
+      </div> -->
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
@@ -104,14 +115,17 @@
 import { SearchGroup } from '@/components/searchs'
 import { pagination } from '@/mixin'
 import NlePagination from '@/components/pagination'
+// import editor from '@/components/editor.vue'
 export default {
   data() {
     return {
       featured: '',
       timeList: [],
       show: true,
+      showInfo: false,
       hasFilterCondition: false,
       questionList: [],
+      editor: null,
       statusList: [
         {
           id: 0,
@@ -127,6 +141,7 @@ export default {
   components: {
     SearchGroup,
     NlePagination
+    // editor
   },
   mixins: [pagination],
   created() {
@@ -241,6 +256,9 @@ export default {
           }
         })
       })
+    },
+    reply() {
+      this.showInfo = true
     }
   }
 }
