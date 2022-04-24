@@ -81,6 +81,7 @@
             <span v-if="scope.row.type === 4">{{ $t('提现') }}</span>
             <span v-if="scope.row.type === 5">{{ $t('扣款') }}</span>
             <span v-if="scope.row.type === 6">{{ $t('充值赠送') }}</span>
+            <span v-if="scope.row.type === 7">{{ $t('补款') }}</span>
           </template>
         </el-table-column>
         <!-- 支付类型 -->
