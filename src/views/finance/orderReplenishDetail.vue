@@ -49,6 +49,17 @@
           <span>{{ form.remark }}</span
           ><br />
         </el-col>
+        <el-col :span="9" :offset="3">
+          <div>
+            <img
+              v-for="item in form.images"
+              :key="item.index"
+              class="image"
+              :src="$baseUrl.IMAGE_URL + item"
+              @click="checkImg(item)"
+            />
+          </div>
+        </el-col>
       </el-row>
     </div>
     <div v-if="form.status === 1">
@@ -59,6 +70,12 @@
         $t('审核通过')
       }}</el-button>
     </div>
+    <!-- 查看图片 -->
+    <el-dialog :visible.sync="imgDialog">
+      <div style="text-align: center">
+        <img :src="imgUrl" style="max-width: 100%" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -69,7 +86,9 @@ export default {
     return {
       form: {},
       localization: {},
-      currencyUnit: ''
+      currencyUnit: '',
+      imgDialog: false,
+      imgUrl: ''
     }
   },
   created() {
@@ -84,6 +103,10 @@ export default {
         this.localization = res.localization
         this.currencyUnit = res.localization.currency_unit
       })
+    },
+    checkImg(url) {
+      this.imgDialog = true
+      this.imgUrl = this.$baseUrl.IMAGE_URL + url
     },
     review(status) {
       dialog({
@@ -113,5 +136,10 @@ export default {
 .leftWidth {
   display: inline-block;
   width: 120px;
+}
+.image {
+  max-width: 100px;
+  cursor: pointer;
+  text-align: center;
 }
 </style>
