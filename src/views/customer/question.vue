@@ -53,7 +53,7 @@
     <div class="question-list" v-for="item in questionList" :key="item.id">
       <div style="display: flex">
         <div class="title-item">
-          <span style="font-weight: bold">{{ item.user.id }} --- {{ item.user.user_name }}</span
+          <span style="font-weight: bold">{{ item.user.id }} --- {{ item.user.name }}</span
           ><span>{{ item.created_at }}</span>
           <div>
             <span class="featured" v-if="item.featured === 1">{{ $t('精选') }}</span>
@@ -137,6 +137,9 @@ export default {
   },
   mixins: [pagination],
   created() {
+    this.getList()
+  },
+  activated() {
     this.getList()
   },
   methods: {
