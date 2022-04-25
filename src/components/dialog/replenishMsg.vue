@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('审核')" width="35%" @close="clear">
     <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm" label-position="top">
-      <el-form-item :label="$t('金额')" prop="confirm_amount">
+      <el-form-item :label="$t('金额')" prop="confirm_amount" v-if="this.state === 'pass'">
         <el-input v-model="ruleForm.confirm_amount" :placeholder="$t('请输入')">
           <template slot="append">{{ this.currencyUnit }}</template>
         </el-input>
@@ -18,7 +18,9 @@
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
+      <el-button type="primary" :loading="$store.state.btnLoading" @click="submit">{{
+        $t('确定')
+      }}</el-button>
     </div>
   </el-dialog>
 </template>

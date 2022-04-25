@@ -119,7 +119,12 @@
             <el-button
               class="btn-main"
               @click="onDetail(scope.row.id)"
-              v-if="scope.row.status === 0 || scope.row.status === 12 || scope.row.status === 11"
+              v-if="
+                scope.row.status === 0 ||
+                scope.row.status === 12 ||
+                scope.row.status === 11 ||
+                scope.row.status === 2
+              "
               >{{ $t('详情') }}</el-button
             >
             <el-button
@@ -221,6 +226,9 @@ export default {
     this.getList()
     this.getPaymentType()
     this.getCounts()
+  },
+  activated() {
+    this.getList()
   },
   methods: {
     handleClick(tab) {

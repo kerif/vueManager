@@ -109,12 +109,17 @@ export default {
       this.imgUrl = this.$baseUrl.IMAGE_URL + url
     },
     review(status) {
-      dialog({
-        type: 'replenishMsg',
-        id: this.$route.params.id,
-        state: status,
-        currencyUnit: this.currencyUnit
-      })
+      dialog(
+        {
+          type: 'replenishMsg',
+          id: this.$route.params.id,
+          state: status,
+          currencyUnit: this.currencyUnit
+        },
+        () => {
+          this.$router.go(-1)
+        }
+      )
     }
   }
 }
