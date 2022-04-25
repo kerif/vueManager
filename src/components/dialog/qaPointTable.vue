@@ -34,7 +34,9 @@ export default {
   },
   methods: {
     init() {
-      this.getPointDetail()
+      if (this.id) {
+        this.getPointDetail()
+      }
     },
     getPointDetail() {
       this.$request.getQaCumulativeDetail(this.id).then(res => {
@@ -43,7 +45,6 @@ export default {
           this.form.pic_count = res.data.pic_count
           this.form.point = res.data.point
           this.type = res.data.type
-          this.success(this.type)
         }
       })
     },
@@ -57,6 +58,7 @@ export default {
               message: res.msg
             })
             this.show = false
+            this.success()
           } else {
             this.$message({
               message: res.msg,
@@ -73,6 +75,7 @@ export default {
               message: res.msg
             })
             this.show = false
+            this.success()
           } else {
             this.$message({
               message: res.msg,

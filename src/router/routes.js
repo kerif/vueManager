@@ -1616,7 +1616,7 @@ export default [
             path: '/finance/orderReplenishment',
             name: 'orderReplenishment',
             component: orderReplenishment,
-            id: 704,
+            id: 710,
             meta: {
               group: '财务',
               level: 2,
@@ -1627,7 +1627,7 @@ export default [
             path: '/finance/orderReplenishDetail/:id',
             name: 'orderReplenishDetail',
             component: orderReplenishDetail,
-            id: 704,
+            id: 710,
             meta: {
               group: '财务',
               level: 3,

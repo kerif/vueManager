@@ -51,7 +51,7 @@
           <el-table-column prop="point" :label="$t('积分')"> </el-table-column>
           <el-table-column :label="$t('操作')">
             <template slot-scope="scope">
-              <el-button class="btn-deep-blue" @click="editPoint(scope.row.id)">{{
+              <el-button class="btn-deep-blue" @click="editPoint(scope.row.id, scope.row.type)">{{
                 $t('编辑')
               }}</el-button>
               <el-button class="btn-light-red" @click="deltePoint(scope.row.id, scope.row.type)">{{
@@ -93,7 +93,7 @@
           <el-table-column prop="point" :label="$t('积分')"> </el-table-column>
           <el-table-column :label="$t('操作')">
             <template slot-scope="scope">
-              <el-button class="btn-deep-blue" @click="editPoint(scope.row.id)">{{
+              <el-button class="btn-deep-blue" @click="editPoint(scope.row.id, scope.row.type)">{{
                 $t('编辑')
               }}</el-button>
               <el-button class="btn-light-red" @click="deltePoint(scope.row.id, scope.row.type)">{{
@@ -177,6 +177,7 @@ export default {
       dialog(
         {
           type: 'qaPointTable',
+          id: '',
           types
         },
         () => {
@@ -184,18 +185,14 @@ export default {
         }
       )
     },
-    editPoint(id) {
+    editPoint(id, types) {
       dialog(
         {
           type: 'qaPointTable',
           id
         },
-        data => {
-          if (data === 1) {
-            this.getPointListQ()
-          } else {
-            this.getPointListA()
-          }
+        () => {
+          types === 1 ? this.getPointListQ() : this.getPointListA()
         }
       )
     },
