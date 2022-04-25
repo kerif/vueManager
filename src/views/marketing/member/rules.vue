@@ -107,6 +107,16 @@ export default {
         dialog({ type: 'creditConsumption' }, () => {
           this.getInOutRule()
         })
+      } else if (code === 'QA_POINT_INCREASE') {
+        // 问答积累积分
+        dialog(
+          {
+            type: 'qaCumulative'
+          },
+          () => {
+            this.getInOutRule()
+          }
+        )
       }
     }
   }

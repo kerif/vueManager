@@ -4153,3 +4153,43 @@ exports.getReplenishCount = () => {
 exports.answerInfo = (id, params) => {
   return $form.post(`qa/${id}/answers`, params)
 }
+
+// 问答积累积分 详情
+exports.getqaDetail = () => {
+  return $form.get('in-out-rule/point-qa-config/show')
+}
+
+// 问答积累积分 获取初始化信息
+exports.qaInitConfig = () => {
+  return $form.get('in-out-rule/point-qa-config/init')
+}
+
+// 问答积累积分 更新
+exports.updateQa = params => {
+  return $form.post('in-out-rule/point-qa-config', params)
+}
+
+// 问答积累积分 获取详情
+exports.getQaCumulativeDetail = id => {
+  return $form.get(`in-out-rule/point-qa/${id}`)
+}
+
+// 问答积累积分 新增
+exports.addQa = params => {
+  return $form.post('in-out-rule/point-qa', params)
+}
+
+// 问答积累积分 删除
+exports.deleteQa = id => {
+  return $form.delete(`in-out-rule/point-qa/${id}`)
+}
+
+// 问答积累积分 列表查询
+exports.QaListSearch = params => {
+  return $form.get('in-out-rule/point-qa', { params })
+}
+
+// 问答积累积分 修改
+exports.editQa = (id, params) => {
+  return $form.put(`in-out-rule/point-qa/${id}`, params)
+}

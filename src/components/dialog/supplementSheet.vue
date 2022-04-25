@@ -2,7 +2,7 @@
   <el-dialog :title="id ? $t('修改补款单') : $t('创建补款单')" :visible.sync="show" @close="clear">
     <el-form ref="form" :model="form" label-width="100px">
       <el-form-item :label="$t('关联订单号')" prop="order_sn">
-        <span v-if="id">{{ order_sn }}</span>
+        <span v-if="id">{{ form.order_sn }}</span>
         <el-input v-else v-model="form.order_sn" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('补款类型')" prop="type_id">
@@ -78,6 +78,7 @@ export default {
             this.form.type_id = item.id
           }
         })
+        this.form.order_sn = res.data.order_sn
         this.form.amount = res.data.amount
         this.form.remark = res.data.remark
         this.form.order_value = res.data.order_value

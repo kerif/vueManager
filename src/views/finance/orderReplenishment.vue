@@ -345,7 +345,10 @@ export default {
       )
     },
     submit() {
-      this.$request.updatePaymentType({ ids: this.form }).then(res => {
+      let params = {
+        ids: this.form.checkList
+      }
+      this.$request.updatePaymentType(params).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',

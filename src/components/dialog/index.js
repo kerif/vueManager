@@ -137,6 +137,8 @@ import qaCumulative from './qaCumulative.vue'
 import supplementSheet from './supplementSheet.vue'
 import replenishMsg from './replenishMsg.vue'
 import replyInfo from './replyInfo.vue'
+import qaPointTable from './qaPointTable.vue'
+import qaExplain from './qaExplain.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -273,6 +275,8 @@ const qaCumulativeController = Vue.extend(qaCumulative)
 const supplementSheetController = Vue.extend(supplementSheet)
 const replenishMsgController = Vue.extend(replenishMsg)
 const replyInfoController = Vue.extend(replyInfo)
+const qaPointTableController = Vue.extend(qaPointTable)
+const qaExplainController = Vue.extend(qaExplain)
 const mixin = {
   data() {
     return {
@@ -428,6 +432,20 @@ function initInstance(type) {
     // 回复
     case 'replyInfo':
       instance = new replyInfoController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 问答积累积分
+    case 'qaPointTable':
+      instance = new qaPointTableController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 问答规则说明
+    case 'qaExplain':
+      instance = new qaExplainController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
