@@ -388,64 +388,6 @@
         <el-button type="primary" @click="saveNormal">{{ $t('保存') }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="showCustom" :title="$t('自定义配置')" @close="clearCustom">
-      <el-form label-position="left" :model="form" v-if="config.length">
-        <el-form-item label="deliveryType">
-          <el-select v-model="form.deliveryType">
-            <el-option
-              v-for="item in deliveryData"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="expressType">
-          <el-select v-model="form.expressType">
-            <el-option
-              v-for="item in expressData"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="packageType">
-          <el-select v-model="form.packageType">
-            <el-option
-              v-for="item in packageData"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="payType">
-          <el-select v-model="form.payType">
-            <el-option
-              v-for="item in payData"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="shipType">
-          <el-select v-model="form.shipType">
-            <el-option
-              v-for="item in shipData"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="showCustom = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="onConfirm">{{ $t('保存') }}</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -453,6 +395,7 @@
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import AddBtn from '@/components/addBtn'
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -494,19 +437,6 @@ export default {
       boxes: [],
       pushType: '',
       third_status: '',
-      showCustom: false,
-      deliveryData: [],
-      expressData: [],
-      packageData: [],
-      payData: [],
-      shipData: [],
-      form: {
-        deliveryType: '',
-        expressType: '',
-        packageType: '',
-        payType: '',
-        shipType: ''
-      },
       ruleForm: {
         tax_number: '',
         weight: ''
@@ -516,7 +446,6 @@ export default {
         declare_currency: '',
         declare_unit: ''
       },
-      config: [],
       statusData: [
         {
           id: 0,
@@ -808,98 +737,10 @@ export default {
     },
     customConfig() {
       this.show = false
-      this.showCustom = true
-      this.$request.updateSelectData(this.id).then(res => {
-        if (res.ret) {
-          if (res.data.length) {
-            this.config = res.data
-            let deliver = res.data.deliveryType
-            let express = res.data.expressType
-            let packages = res.data.packageType
-            let pay = res.data.payType
-            let ship = res.data.shipType
-            this.deliveryData = Object.keys(deliver).map(item => {
-              return {
-                value: item,
-                label: deliver[item]
-              }
-            })
-            this.expressData = Object.keys(express).map(item => {
-              return {
-                value: item,
-                label: express[item]
-              }
-            })
-            this.packageData = Object.keys(packages).map(item => {
-              return {
-                value: +item,
-                label: packages[item]
-              }
-            })
-            this.payData = Object.keys(pay).map(item => {
-              return {
-                value: item,
-                label: pay[item]
-              }
-            })
-            this.shipData = Object.keys(ship).map(item => {
-              return {
-                value: +item,
-                label: ship[item]
-              }
-            })
-            this.getSelectData()
-          }
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
+      dialog({
+        type: 'customConfig',
+        id: this.id
       })
-    },
-    getSelectData() {
-      this.$request.customData(this.id).then(res => {
-        this.shipData.forEach(item => {
-          if (item.value === +res.data.shipType) {
-            this.form.shipType = item.label
-          }
-        })
-        this.packageData.forEach(item => {
-          if (item.value === +res.data.packageType) {
-            this.form.packageType = item.label
-          }
-        })
-        this.form.deliveryType = res.data.deliveryType
-        this.form.expressType = res.data.expressType
-        this.form.payType = res.data.payType
-      })
-    },
-    onConfirm() {
-      this.$request.updateCustomData(this.id, this.form).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.showCustom = false
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
-    },
-    clearCustom() {
-      this.form.deliveryType = ''
-      this.form.expressType = ''
-      this.form.packageType = ''
-      this.form.payType = ''
-      this.form.shipType = ''
     },
     saveNormal() {
       let params = {

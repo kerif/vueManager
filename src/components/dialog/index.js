@@ -139,6 +139,7 @@ import replenishMsg from './replenishMsg.vue'
 import replyInfo from './replyInfo.vue'
 import qaPointTable from './qaPointTable.vue'
 import qaExplain from './qaExplain.vue'
+import customConfig from './customConfig.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -277,6 +278,7 @@ const replenishMsgController = Vue.extend(replenishMsg)
 const replyInfoController = Vue.extend(replyInfo)
 const qaPointTableController = Vue.extend(qaPointTable)
 const qaExplainController = Vue.extend(qaExplain)
+const customConfigController = Vue.extend(customConfig)
 const mixin = {
   data() {
     return {
@@ -446,6 +448,13 @@ function initInstance(type) {
     // 问答规则说明
     case 'qaExplain':
       instance = new qaExplainController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自定义配置
+    case 'customConfig':
+      instance = new customConfigController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
