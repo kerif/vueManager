@@ -25,9 +25,9 @@
         <el-select v-model="form.packageType">
           <el-option
             v-for="item in packageData"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -45,9 +45,9 @@
         <el-select v-model="form.shipType">
           <el-option
             v-for="item in shipData"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -113,8 +113,8 @@ export default {
             })
             this.packageData = Object.keys(packages).map(item => {
               return {
-                value: +item,
-                label: packages[+item]
+                id: item,
+                name: packages[item]
               }
             })
             this.payData = Object.keys(pay).map(item => {
@@ -125,8 +125,8 @@ export default {
             })
             this.shipData = Object.keys(ship).map(item => {
               return {
-                value: +item,
-                label: ship[+item]
+                id: item,
+                name: ship[item]
               }
             })
             this.getSelectData()
@@ -143,13 +143,13 @@ export default {
     getSelectData() {
       this.$request.customData(this.id).then(res => {
         this.shipData.forEach(item => {
-          if (item.value === +res.data.shipType) {
-            this.form.shipType = item.label
+          if (item.id === res.data.shipType) {
+            this.form.shipType = item.name
           }
         })
         this.packageData.forEach(item => {
-          if (item.value === +res.data.packageType) {
-            this.form.packageType = item.label
+          if (item.id === res.data.packageType) {
+            this.form.packageType = item.name
           }
         })
         this.form.deliveryType = res.data.deliveryType
@@ -158,7 +158,17 @@ export default {
       })
     },
     onConfirm() {
-      this.$request.updateCustomData(this.id, this.form).then(res => {
+      this.form.packageType = this.packageData
+        .filter(item => item.name === this.form.packageType)
+        .map(item => item.id)
+      console.log(this.form.packageType)
+      this.form.shipType = this.shipData
+        .filter(item => item.name === this.form.shipType)
+        .map(item => item.id)
+      let params = {
+        ...this.form
+      }
+      this.$request.updateCustomData(this.id, params).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
