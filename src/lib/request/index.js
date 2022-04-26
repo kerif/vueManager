@@ -4193,3 +4193,13 @@ exports.QaListSearch = params => {
 exports.editQa = (id, params) => {
   return $form.put(`in-out-rule/point-qa/${id}`, params)
 }
+
+// 采购 采购列表
+exports.purchaseList = params => {
+  return $form.get('purchase-orders', { params })
+}
+
+// 采购 获取详情
+exports.purchaseDetail = id => {
+  return $form.get(`purchase-orders/${id}`)
+}

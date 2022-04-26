@@ -27,32 +27,30 @@
     </div>
     <div style="margin-top: 20px">
       <el-table
-        :data="tableData"
+        :data="purchaseData"
         style="width: 100%"
         border
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection"></el-table-column>
-        <el-table-column prop="date" :label="$t('PO单号')"> </el-table-column>
-        <el-table-column prop="status" :label="$t('状态')"> </el-table-column>
-        <el-table-column :label="$t('PO单名称')"> </el-table-column>
-        <el-table-column :label="$t('发货物流公司')"> </el-table-column>
-        <el-table-column :label="$t('发货物流单号')"></el-table-column>
-        <el-table-column :label="$t('采购总金额')"></el-table-column>
-        <el-tabel-column :label="$t('采购总件/总箱数')"></el-tabel-column>
-        <el-table-column :label="$t('创建时间')"></el-table-column>
-        <el-tabel-column :label="$t('创建人')"></el-tabel-column>
+        <el-table-column prop="sn" :label="$t('PO单号')"> </el-table-column>
+        <el-table-column prop="status_name" :label="$t('状态')"> </el-table-column>
+        <el-table-column prop="name" :label="$t('PO单名称')"> </el-table-column>
+        <el-table-column prop="logistics_company" :label="$t('发货物流公司')"> </el-table-column>
+        <el-table-column prop="logistics_sn" :label="$t('发货物流单号')"></el-table-column>
+        <el-table-column prop="amount" :label="$t('采购总金额')"></el-table-column>
+        <el-tabel-column :label="$t('采购总件/总箱数')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.quantity }} - {{ scope.row.box_count }}</span>
+          </template>
+        </el-tabel-column>
+        <el-table-column prop="created_at" :label="$t('创建时间')"></el-table-column>
+        <el-tabel-column prop="creator" :label="$t('创建人')"></el-tabel-column>
         <el-table-column :label="$t('操作')" fixed="right">
-          <template>
-            <el-button
-              class="btn-purple"
-              @click="
-                $router.push({
-                  name: 'purchaseDetail'
-                })
-              "
-              >{{ $t('详情') }}</el-button
-            >
+          <template slot-scope="scope">
+            <el-button class="btn-purple" @click="onDetail(scope.row.id)">{{
+              $t('详情')
+            }}</el-button>
             <el-button class="btn-blue-green" v-if="['4', '5'].includes(activeName)">{{
               $t('分货')
             }}</el-button>
@@ -64,7 +62,7 @@
             <el-button
               class="btn-deep-blue"
               v-if="['1', '2'].includes(activeName)"
-              @click="editPurchase"
+              @click="editPurchase(scope.row.id)"
               >{{ $t('编辑') }}</el-button
             >
             <el-button class="btn-light-red" v-if="['1', '2', '3'].includes(activeName)">{{
@@ -90,12 +88,7 @@ export default {
   data() {
     return {
       activeName: '0',
-      tableData: [
-        {
-          id: 1,
-          status: 2
-        }
-      ]
+      purchaseData: []
     }
   },
   components: {
@@ -103,7 +96,22 @@ export default {
     PurchaseSearch
   },
   mixins: [pagination],
+  created() {
+    this.getList()
+  },
   methods: {
+    getList() {
+      this.$request.purchaseList().then(res => {
+        console.log(res)
+        this.purchaseData = res.data
+      })
+    },
+    onDetail(id) {
+      this.$router.push({
+        name: 'purchaseDetail',
+        params: { id }
+      })
+    },
     handleClick(tab) {
       console.log(tab)
     },

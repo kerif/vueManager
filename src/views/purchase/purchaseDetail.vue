@@ -2,9 +2,12 @@
   <div class="purchaseDetail-container">
     <div class="purchase-top">
       <h3>{{ $t('采购单详细') }}</h3>
-      <div style="margin-left: 30px"><span>状态:</span><span>未发货</span></div>
+      <div style="margin-left: 30px">
+        <span>{{ $t('状态') + ':' }}</span
+        ><span>{{ ruleForm.status_name }}</span>
+      </div>
     </div>
-    <div v-if="status !== 1">
+    <div v-if="ruleForm.status_name === '草稿'">
       <el-row :gutter="20">
         <el-col :span="12">
           <h4>{{ $t('基本信息') }}</h4>
@@ -16,19 +19,19 @@
       <el-form label-width="120px" :model="ruleForm" :rules="rules">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="$t('PO单号')" prop="number">
+            <el-form-item :label="$t('PO单号')" prop="sn">
               <el-input
-                v-model="ruleForm.number"
+                v-model="ruleForm.sn"
                 style="width: 50%"
                 :placeholder="$t('单号仅限字母、数字、或下划线，长度限制15个字符')"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('发货公司')">
+            <el-form-item :label="$t('发货公司')" prop="logistics_company">
               <el-select
                 :placeholder="$t('请选择发货公司')"
-                v-model="ruleForm.value"
+                v-model="ruleForm.logistics_company"
                 style="width: 50%"
               >
                 <el-option
@@ -52,9 +55,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('物流单号')">
+            <el-form-item :label="$t('物流单号')" prop="logistics_sn">
               <el-input
-                v-model="value"
+                v-model="ruleForm.logistics_sn"
                 style="width: 50%"
                 :placeholder="$t('请输入物流单号')"
               ></el-input>
@@ -63,9 +66,9 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="$t('采购总金额')" prop="money">
+            <el-form-item :label="$t('采购总金额')" prop="amount">
               <el-input
-                v-model="ruleForm.money"
+                v-model="ruleForm.amount"
                 style="width: 50%"
                 :placeholder="$t('请输入')"
               ></el-input>
@@ -74,9 +77,9 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="$t('采购备注')">
+            <el-form-item :label="$t('采购备注')" prop="remark">
               <el-input
-                v-model="value"
+                v-model="ruleForm.remark"
                 type="textarea"
                 style="width: 50%"
                 :placeholder="$t('请输入')"
@@ -104,13 +107,13 @@
         <el-col :span="12">
           <div>
             <span class="purchase-item"><span class="icon">*</span>{{ $t('PO单号') }}</span
-            ><span>po123456</span>
+            ><span>{{ ruleForm.sn }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div>
             <span class="purchase-item">{{ $t('发货公司') }}</span
-            ><span>{{ $t('无') }}</span>
+            ><span>{{ ruleForm.logistics_company }}</span>
           </div>
         </el-col>
       </el-row>
@@ -118,13 +121,13 @@
         <el-col :span="12">
           <div>
             <span class="purchase-item"><span class="icon">*</span>{{ $t('PO单号名称') }}</span
-            ><span>{{ $t('电饭煲采购单') }}</span>
+            ><span>{{ ruleForm.name }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div>
             <span class="purchase-item">{{ $t('物流单号') }}</span
-            ><span>{{ $t('无') }}</span>
+            ><span>{{ ruleForm.logistics_sn }}</span>
           </div>
         </el-col>
       </el-row>
@@ -132,7 +135,7 @@
         <el-col :span="12">
           <div>
             <span class="purchase-item"><span class="icon">*</span>{{ $t('采购总金额') }}</span
-            ><span>9999.00</span>
+            ><span>{{ ruleForm.amount }}</span>
           </div>
         </el-col>
       </el-row>
@@ -140,7 +143,7 @@
         <el-col :span="12">
           <div>
             <span class="purchase-item">{{ $t('采购备注') }}</span
-            ><span>{{ $t('电饭煲采购单') }}</span>
+            ><span>{{ ruleForm.remark }}</span>
           </div>
         </el-col>
       </el-row>
@@ -246,7 +249,16 @@ export default {
   components: {
     AddGoods
   },
+  created() {
+    this.getList()
+  },
   methods: {
+    getList() {
+      this.$request.purchaseDetail(this.$route.params.id).then(res => {
+        console.log(res)
+        this.ruleForm = res.data
+      })
+    },
     viewDetail() {
       this.$router.push({
         name: 'distributeDetail'

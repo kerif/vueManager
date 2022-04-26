@@ -114,7 +114,7 @@ export default {
             this.packageData = Object.keys(packages).map(item => {
               return {
                 value: +item,
-                label: packages[item]
+                label: packages[+item]
               }
             })
             this.payData = Object.keys(pay).map(item => {
@@ -126,7 +126,7 @@ export default {
             this.shipData = Object.keys(ship).map(item => {
               return {
                 value: +item,
-                label: ship[item]
+                label: ship[+item]
               }
             })
             this.getSelectData()

@@ -2258,7 +2258,7 @@ export default [
       //       }
       //     },
       //     {
-      //       path: '/purchase/purchaseDetail',
+      //       path: '/purchase/purchaseDetail/:id',
       //       name: 'purchaseDetail',
       //       component: purchaseDetail,
       //       id: 1102,
