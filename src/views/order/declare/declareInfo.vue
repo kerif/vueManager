@@ -133,7 +133,7 @@
             >{{ $t('多选删除') }}</el-button
           >
           <div>
-            <el-button class="btn-main" style="margin: 5px 10px 0 0" @click="customConfig">{{
+            <el-button class="btn-main" style="margin: 5px 10px 2px 0" @click="customConfig">{{
               $t('自定义配置')
             }}</el-button>
             <add-btn @click.native="addNew" v-show="thirdStatus === 0 || thirdStatus === 3">{{
@@ -241,19 +241,26 @@
               ></el-input>
             </el-form-item>
           </el-form>
-          <el-button
-            @click="deleteRows"
-            v-show="thirdStatus === 0 || thirdStatus === 3"
-            size="small"
-            class="btn-light-red"
-            style="margin: 10px 0"
-            >{{ $t('多选删除') }}</el-button
-          >
-          <add-btn
-            @click.native="addNewLine(item.items)"
-            v-show="thirdStatus === 0 || thirdStatus === 3"
-            >{{ $t('新增') }}</add-btn
-          >
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <el-button
+              @click="deleteRows"
+              v-show="thirdStatus === 0 || thirdStatus === 3"
+              size="small"
+              class="btn-light-red"
+              style="margin: 10px 0"
+              >{{ $t('多选删除') }}</el-button
+            >
+            <div>
+              <el-button class="btn-main" style="margin: 5px 10px 2px 0" @click="customConfig">{{
+                $t('自定义配置')
+              }}</el-button>
+              <add-btn
+                @click.native="addNewLine(item.items)"
+                v-show="thirdStatus === 0 || thirdStatus === 3"
+                >{{ $t('新增') }}</add-btn
+              >
+            </div>
+          </div>
           <el-table
             :data="item.items"
             ref="multipleTables"
@@ -382,7 +389,7 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="showCustom" :title="$t('自定义配置')" @close="clearCustom">
-      <el-form label-position="left" :model="form">
+      <el-form label-position="left" :model="form" v-if="config.length">
         <el-form-item label="deliveryType">
           <el-select v-model="form.deliveryType">
             <el-option
@@ -509,6 +516,7 @@ export default {
         declare_currency: '',
         declare_unit: ''
       },
+      config: [],
       statusData: [
         {
           id: 0,
@@ -803,42 +811,45 @@ export default {
       this.showCustom = true
       this.$request.updateSelectData(this.id).then(res => {
         if (res.ret) {
-          let deliver = res.data.deliveryType
-          let express = res.data.expressType
-          let packages = res.data.packageType
-          let pay = res.data.payType
-          let ship = res.data.shipType
-          this.deliveryData = Object.keys(deliver).map(item => {
-            return {
-              value: item,
-              label: deliver[item]
-            }
-          })
-          this.expressData = Object.keys(express).map(item => {
-            return {
-              value: item,
-              label: express[item]
-            }
-          })
-          this.packageData = Object.keys(packages).map(item => {
-            return {
-              value: +item,
-              label: packages[item]
-            }
-          })
-          this.payData = Object.keys(pay).map(item => {
-            return {
-              value: item,
-              label: pay[item]
-            }
-          })
-          this.shipData = Object.keys(ship).map(item => {
-            return {
-              value: +item,
-              label: ship[item]
-            }
-          })
-          this.getSelectData()
+          if (res.data.length) {
+            this.config = res.data
+            let deliver = res.data.deliveryType
+            let express = res.data.expressType
+            let packages = res.data.packageType
+            let pay = res.data.payType
+            let ship = res.data.shipType
+            this.deliveryData = Object.keys(deliver).map(item => {
+              return {
+                value: item,
+                label: deliver[item]
+              }
+            })
+            this.expressData = Object.keys(express).map(item => {
+              return {
+                value: item,
+                label: express[item]
+              }
+            })
+            this.packageData = Object.keys(packages).map(item => {
+              return {
+                value: +item,
+                label: packages[item]
+              }
+            })
+            this.payData = Object.keys(pay).map(item => {
+              return {
+                value: item,
+                label: pay[item]
+              }
+            })
+            this.shipData = Object.keys(ship).map(item => {
+              return {
+                value: +item,
+                label: ship[item]
+              }
+            })
+            this.getSelectData()
+          }
         } else {
           this.$notify({
             title: this.$t('操作失败'),

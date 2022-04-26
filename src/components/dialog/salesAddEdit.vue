@@ -31,9 +31,9 @@
           v-if="ruleForm.scope === 1 || ruleForm.scope === 2"
           class="checked-list"
         >
-          <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
-            item.name
-          }}</el-checkbox>
+          <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id"
+            >{{ item.name }}
+          </el-checkbox>
         </el-checkbox-group>
         <div v-if="ruleForm.scope === 3">
           <div class="search">
@@ -55,6 +55,7 @@
           <div class="customer checked-list">
             <div class="customer-item" v-for="item in customerList" :key="item.id">
               {{ item.id }}---{{ item.name }}
+              <i class="el-icon-delete" style="color: red" @click="delCustomer(index)"></i>
             </div>
           </div>
         </div>
@@ -265,6 +266,9 @@ export default {
           }
         })
         .catch(() => cb([]))
+    },
+    delCustomer(ind) {
+      this.customerList.splice(ind, 1)
     },
     handleSelect(item) {
       if (this.customerList.map(item => item.id).includes(item.id)) {

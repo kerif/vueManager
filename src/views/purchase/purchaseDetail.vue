@@ -207,6 +207,11 @@
       <el-button size="small" class="btn-deep-purple">{{ $t('添加发货信息') }}</el-button>
       <el-button size="small" class="btn-blue-green">{{ $t('入库') }}</el-button>
       <el-button size="small" class="btn-green">{{ $t('修改发货信息') }}</el-button>
+      <el-button size="small" class="btn-deep-red">{{ $t('作废') }}</el-button>
+      <el-button size="small" class="btn-blue-green">{{ $t('入库信息') }}</el-button>
+      <el-button size="small" class="btn-green">{{ $t('分货') }}</el-button>
+      <el-button size="small" class="btn-green">{{ $t('编辑分货') }}</el-button>
+      <el-button size="small" class="btn-green">{{ $t('提交为转运单') }}</el-button>
     </div>
     <add-goods :showGoods="showGoods" @passVal="passVal"></add-goods>
   </div>
