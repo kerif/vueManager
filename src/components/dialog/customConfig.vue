@@ -82,16 +82,18 @@ export default {
   methods: {
     init() {
       this.getList()
-      if (this.id) {
-        this.getSelectData()
-      }
     },
     getList() {
       this.$request.updateSelectData(this.id).then(res => {
         if (res.ret) {
           this.config = res.data
-          if (this.config) {
-            console.log(res)
+          if (
+            res.data.deliveryType ||
+            res.data.expressType ||
+            res.data.packageType ||
+            res.data.payType ||
+            res.data.shipType
+          ) {
             let deliver = res.data.deliveryType
             let express = res.data.expressType
             let packages = res.data.packageType
@@ -127,6 +129,7 @@ export default {
                 label: ship[item]
               }
             })
+            this.getSelectData()
           }
         } else {
           this.$notify({
