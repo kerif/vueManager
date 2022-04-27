@@ -100,13 +100,11 @@
               </el-table-column>
               <el-table-column :label="$t('操作')">
                 <template slot-scope="scope">
-                  <!-- 更改地址 -->
                   <el-button
                     class="btn-green"
                     @click="changeAddress(scope.row.user_id, scope.row, addressList)"
                     >{{ $t('更改地址') }}</el-button
                   >
-                  <!-- 删除 -->
                   <el-button
                     class="btn-light-red"
                     @click="deleteAddress(scope.$index, addressList, scope.row.user_id)"
@@ -120,7 +118,6 @@
               <p>{{ $t('快递方式') }}</p>
             </div>
             <div class="express-left right-margin">
-              <!-- <p>请选择快递方式</p> -->
               <el-select
                 v-model="box.express_line_id"
                 :placeholder="$t('请选择')"
@@ -147,7 +144,6 @@
                 <p class="express-sty" @click="selectStation">{{ $t('请选择') }} ></p>
               </div>
             </div>
-            <!-- 清关编码 -->
             <div class="express-left" v-if="this.needCode">
               <p>{{ $t('清关编码') }}&nbsp;&nbsp;&nbsp;</p>
             </div>
@@ -155,7 +151,6 @@
               <el-input v-model="box.clearance_code" :placeholder="$t('请输入')"></el-input>
             </div>
             <div class="line-sty" v-if="this.needCode"></div>
-            <!-- 身份证号码 -->
             <div class="express-left" v-if="this.idCode">
               <p>{{ $t('身份证号码') }}</p>
             </div>
@@ -163,7 +158,6 @@
               <el-input v-model="box.id_card" :placeholder="$t('请输入')"></el-input>
             </div>
             <div class="line-sty" v-if="this.idCode"></div>
-            <!-- 个人通关码 -->
             <div class="express-left" v-if="this.personalCode">
               <p>{{ $t('个人通关码') }}</p>
             </div>
@@ -175,7 +169,6 @@
         </div>
         <div class="recipient-address">
           <h3>{{ $t('增值服务') }}</h3>
-          <!-- 保险服务 -->
           <div class="express-left">
             <span>{{ $t('保险服务') }}</span>
             <el-tooltip class="item" effect="dark" :content="explanation" placement="top">
@@ -189,7 +182,6 @@
           </div>
         </div>
         <div class="line-sty"></div>
-        <!-- 增值服务 -->
         <span>{{ $t('增值服务') }}</span>
         <el-checkbox-group v-model="box.add_service" class="radio-select-sty">
           <el-checkbox
@@ -225,30 +217,6 @@
           </div>
         </div>
         <div class="line-sty"></div>
-        <div class="recipient-address">
-          <h3>{{ $t('批量集包方式') }}</h3>
-          <div class="express-left">
-            <el-radio-group v-model="changeUpdate" class="radio-select-sty">
-              <el-radio :label="1" class="radio-main">{{ $t('按客户ID集包') }}</el-radio>
-              <el-radio :label="2" class="radio-main">{{ $t('快速下单') }}</el-radio>
-            </el-radio-group>
-          </div>
-          <div class="tips-sty" v-if="multiBoxes === 1 && changeUpdate == 2">
-            {{
-              $t(
-                '注：当前线路多箱出库结算方式为 ：每个包裹单独计费后，价格相加汇总。（如需修改，请在路线配置中进行设置）'
-              )
-            }}
-          </div>
-          <div class="tips-sty" v-if="multiBoxes === 0 && changeUpdate == 2">
-            {{
-              $t(
-                '注：当前线路多箱出库结算方式为 ：多个包裹重量相加后，按照总重量计算价格。（如需修改，请在路线配置中进行设置）'
-              )
-            }}
-          </div>
-        </div>
-        <div class="line-sty"></div>
         <div class="save-main">
           <el-button
             type="primary"
@@ -257,12 +225,6 @@
             @click="saveBoxing"
             >{{ $t('提交') }}</el-button
           >
-          <p v-if="this.box.payment_mode === 1" class="save-tips">
-            {{ $t('在仓库打包完成后再进行支付') }}
-          </p>
-          <p v-if="this.box.payment_mode === 2" class="save-tips">
-            {{ $t('到达目的地后再进行支付') }}
-          </p>
         </div>
       </div>
     </div>
@@ -277,20 +239,15 @@
             <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
           </template>
         </el-table-column>
-        <!-- 国家 -->
         <el-table-column prop="country.name" :label="$t('国家')"> </el-table-column>
-        <!-- 邮编 -->
         <el-table-column prop="postcode" :label="$t('邮编')"> </el-table-column>
         <el-table-column prop="timezone" :label="$t('区号')"> </el-table-column>
-        <!-- 收件人 -->
         <el-table-column prop="receiver_name" :label="$t('收件人')"> </el-table-column>
-        <!-- 收件电话 -->
         <el-table-column :label="$t('收件电话')">
           <template slot-scope="scope">
             <span>{{ scope.row.timezone }}-{{ scope.row.phone }}</span>
           </template>
         </el-table-column>
-        <!-- 详细地址 -->
         <el-table-column :label="$t('详细地址')">
           <template slot-scope="scope">
             <span
@@ -300,9 +257,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <!-- <div class="choose-self">
-      <el-button @click="pickPoint">{{$t('选择自提点')}}</el-button>
-    </div> -->
       <div slot="footer">
         <el-button @click="boxDialog = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="selectAddress">{{ $t('确定') }}</el-button>
@@ -325,7 +279,6 @@
       >
         <el-row :gutter="20">
           <el-col :span="10">
-            <!-- 员工组中文名 -->
             <el-form-item :label="$t('国家')">
               <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')" filterable>
                 <el-option
@@ -339,7 +292,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <!-- 收件电话 -->
             <el-form-item :label="$t('收件电话')">
               <el-input
                 v-model="ruleForm.phone"
@@ -349,7 +301,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <!-- 城市 -->
             <el-form-item :label="$t('城市')">
               <el-input
                 v-model="ruleForm.city"
@@ -359,7 +310,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <!-- 收件人 -->
             <el-form-item :label="$t('收件人')">
               <el-input
                 v-model="ruleForm.receiver_name"
@@ -369,7 +319,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <!-- 门牌号 -->
             <el-form-item :label="$t('门牌号')">
               <el-input
                 v-model="ruleForm.door_no"
@@ -379,7 +328,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <!-- 员工组中文名 -->
             <el-form-item :label="$t('区号')">
               <el-select v-model="ruleForm.timezone" :placeholder="$t('请选择区号')" filterable>
                 <el-option
@@ -393,7 +341,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <!-- 街道 -->
             <el-form-item :label="$t('邮编')">
               <el-input
                 v-model="ruleForm.postcode"
@@ -403,7 +350,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <!-- 附加地址 -->
             <el-form-item :label="$t('附加地址')">
               <el-input
                 v-model="ruleForm.address"
@@ -413,7 +359,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <!-- 街道 -->
             <el-form-item :label="$t('街道')">
               <el-input
                 v-model="ruleForm.street"
@@ -437,9 +382,7 @@
             <el-radio v-model="box.station_id" :label="scope.row.id"></el-radio>
           </template>
         </el-table-column>
-        <!-- 国家 -->
         <el-table-column prop="name" :label="$t('自提点名称')"> </el-table-column>
-        <!-- 详细地址 -->
         <el-table-column :label="$t('详细地址')" prop="address"> </el-table-column>
       </el-table>
       <div slot="footer">
@@ -455,13 +398,9 @@
             <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
           </template>
         </el-table-column>
-        <!-- 国家 -->
         <el-table-column prop="country.cn_name" :label="$t('国家')"> </el-table-column>
-        <!-- 收件人 -->
         <el-table-column prop="contactor" :label="$t('收件人')"> </el-table-column>
-        <!-- 联系电话 -->
         <el-table-column :label="$t('联系电话')" prop="contact_info"> </el-table-column>
-        <!-- 详细地址 -->
         <el-table-column :label="$t('详细地址')">
           <template slot-scope="scope">
             <span
@@ -477,11 +416,11 @@
       </div>
     </el-dialog>
     <!-- 提示 -->
-    <el-dialog :visible.sync="tipsDialog" :title="$t('提示')" @close="tipsClear">
+    <!-- <el-dialog :visible.sync="tipsDialog" :title="$t('提示')" @close="tipsClear">
       <div v-for="(item, index) in tipsContent" :key="index">
         <span>{{ item }}</span>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -489,7 +428,6 @@
 export default {
   data() {
     return {
-      value: '',
       options: [],
       boxDialog: false,
       selfDialog: false,
@@ -559,8 +497,8 @@ export default {
       clientId: '',
       addressData: [],
       changeUpdate: 1,
-      tipsDialog: false,
-      tipsContent: [],
+      // tipsDialog: false,
+      // tipsContent: [],
       addressIds: [],
       address_ids: [],
       id: ''
@@ -668,20 +606,20 @@ export default {
         })
     },
     // 获取提示
-    getTips() {
-      this.$request
-        .getNotify({
-          ids: this.addressIds
-        })
-        .then(res => {
-          if (res.ret) {
-            this.tipsContent = res.data.content
-            if (this.tipsContent.length) {
-              this.tipsDialog = true
-            }
-          }
-        })
-    },
+    // getTips() {
+    //   this.$request
+    //     .getNotify({
+    //       ids: this.addressIds
+    //     })
+    //     .then(res => {
+    //       if (res.ret) {
+    //         this.tipsContent = res.data.content
+    //         if (this.tipsContent.length) {
+    //           this.tipsDialog = true
+    //         }
+    //       }
+    //     })
+    // },
     // 表格删除
     deleteAddress(index, rows, userId) {
       this.addressList = this.addressList.filter(item => item.user_id !== userId)
@@ -784,13 +722,10 @@ export default {
     },
     // 更换快递方式
     changeExpress() {
-      // this.options = []
       this.selfData = {}
       this.lineId = this.box.express_line_id
-
       this.lineStations()
       this.getId() // 获取身份证号码跟清关编码
-
       this.box.clearance_code = ''
       this.box.id_card = ''
       this.personal_code = ''
@@ -1050,7 +985,7 @@ export default {
       this.chooseId = ''
       this.user = {}
     },
-    tipsClear() {},
+    // tipsClear() {},
     // 收件地址弹窗
     clearAddress() {
       this.chooseId = ''

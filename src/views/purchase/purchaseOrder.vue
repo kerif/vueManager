@@ -261,7 +261,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .purchase-list {
   .tab-length {
     width: 950px !important;

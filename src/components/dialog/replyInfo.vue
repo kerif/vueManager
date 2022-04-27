@@ -3,10 +3,15 @@
     <el-form label-position="left" :model="form">
       <el-form-item :label="$t('回复名称')" prop="user_name">
         <el-input
+          v-if="edit"
           v-model="form.user_name"
           style="width: 45%"
-          :placeholder="$t('请输入')"
+          :placeholder="$t('客服小二')"
         ></el-input>
+        <div v-else>
+          <span>{{ $t('客服小二') }}</span>
+          <i class="el-icon-edit" @click="edit = !edit"></i>
+        </div>
       </el-form-item>
       <el-form-item :label="$t('上传图片')" prop="images">
         <span class="img-item" v-for="(item, index) in form.images" :key="index">
@@ -52,6 +57,7 @@ export default {
   data() {
     return {
       id: '',
+      edit: false,
       form: {
         images: [],
         user_name: '',
@@ -92,7 +98,11 @@ export default {
       })
     },
     submit() {
-      this.$request.answerInfo(this.id, this.form).then(res => {
+      let params = {
+        ...this.form
+      }
+      params.user_name = params.user_name !== '' ? this.form.user_name : this.$t('客服小二')
+      this.$request.answerInfo(this.id, params).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',

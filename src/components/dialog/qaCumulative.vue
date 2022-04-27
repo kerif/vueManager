@@ -26,7 +26,8 @@
           v-model="qaList.q_count"
           style="width: 30%"
           :placeholder="$t('请填写次数')"
-        ></el-input>
+        ></el-input
+        >{{ $t('次') }}
         /
         <el-select v-model="qaList.q_frequency" :placeholder="$t('请选择频率')">
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
@@ -68,7 +69,8 @@
           v-model="qaList.a_count"
           style="width: 30%"
           :placeholder="$t('请填写次数')"
-        ></el-input>
+        ></el-input
+        >{{ $t('次') }}
         /
         <el-select v-model="qaList.a_frequency" :placeholder="$t('请选择频率')">
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">

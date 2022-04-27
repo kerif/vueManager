@@ -93,7 +93,7 @@
             <el-input v-model="number"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button>{{ $t('确定') }}</el-button>
+            <el-button @click="onConfirm">{{ $t('确定') }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -102,11 +102,11 @@
         <div>{{ $t('未分货数量') }}</div>
       </div>
     </div>
-    <div class="goods" v-for="item in goodData" :key="item.id">
+    <div class="goods" v-for="(item, index) in goodData" :key="index">
       <div class="left-box">
         <div style="font-size: 24px; font-weight: bold">#1</div>
         <div style="margin-top: 80px">
-          <el-button type="text">{{ $t('删除') }}</el-button>
+          <el-button type="text" @click="delbox(index)">{{ $t('删除') }}</el-button>
         </div>
       </div>
       <div class="right-box">
@@ -116,21 +116,31 @@
             <el-button size="small">{{ $t('选择...') }}</el-button>
           </div>
         </div>
-        <el-form :inline="true" size="small">
+        <el-form :inline="true" size="small" v-if="!item.tableData">
           <el-form-item>
-            <el-input v-model="code"></el-input>
+            <el-input v-model="code" style="width: 100%"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button>{{ $t('确定') }}</el-button>
+            <el-button type="primary">{{ $t('确定') }}</el-button>
           </el-form-item>
         </el-form>
-        <el-table :data="tableData" border style="width: 100%">
-          <el-table-column type="index" label="#"></el-table-column>
-          <el-table-column prop="date" label="日期" width="180"> </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
-          <el-table-column prop="address" label="地址"> </el-table-column>
-        </el-table>
+        <div v-else style="margin-top: 10px">
+          <el-table :data="item.tableData" border style="width: 100%">
+            <el-table-column type="index" label="#"></el-table-column>
+            <el-table-column prop="date" :label="$t('操作')">
+              <template>
+                <el-button type="text">{{ $t('移除') }}</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
+            <el-table-column prop="address" :label="$t('品牌')"> </el-table-column>
+            <el-table-column prop="address" :label="$t('装箱数量')"> </el-table-column>
+          </el-table>
+        </div>
       </div>
+    </div>
+    <div style="text-align: center; margin-top: 10px">
+      <el-button type="primary" size="small">{{ $t('下一步') }}</el-button>
     </div>
   </div>
 </template>
@@ -144,32 +154,22 @@ export default {
       },
       number: '',
       code: '',
-      goodData: [{ id: 1 }],
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ]
+      nextStep: false,
+      goodData: []
     }
   },
-  methods: {}
+  methods: {
+    onConfirm() {
+      for (let i = 1; i <= this.number; i++) {
+        this.goodData.push({
+          tableData: []
+        })
+      }
+    },
+    delbox(index) {
+      this.goodData.splice(index, 1)
+    }
+  }
 }
 </script>
 
@@ -205,7 +205,7 @@ export default {
   border: 1px solid #eee;
   padding: 20px;
   width: 1200px;
-  margin: 0 auto;
+  margin: 10px auto;
   .left-box {
     display: flex;
     flex-direction: column;
