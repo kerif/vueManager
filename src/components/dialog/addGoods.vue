@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="show" :title="id ? $t('修改商品') : $t('添加商品')" @close="clear">
+  <el-dialog :visible.sync="show" :title="row.id ? $t('修改商品') : $t('添加商品')" @close="clear">
     <h3>{{ $t('基础信息') }}</h3>
     <el-form label-position="right" :rules="rules" label-width="120px" :model="ruleForm">
       <el-form-item :label="$t('中文名称')" prop="cn_name">
@@ -118,7 +118,7 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      id: '',
+      row: {},
       ruleForm: {
         cn_name: '',
         en_name: '',
@@ -182,10 +182,9 @@ export default {
       })
     },
     submit() {
-      if (this.id) {
-        this.$request.updateGoodsList(this.id, this.ruleForm).then(res => {
-          console.log(res)
-        })
+      if (this.row.id) {
+        this.show = false
+        this.success(this.ruleForm)
       } else {
         this.show = false
         this.success(this.ruleForm)

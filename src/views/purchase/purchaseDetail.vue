@@ -164,12 +164,12 @@
         <h4>{{ $t('采购清单') }}</h4>
         <el-button type="primary" size="small" @click="addGoods">{{ $t('添加') }}</el-button>
       </div>
-      <el-table :data="ruleForm.goods" border style="width: 100%">
+      <el-table :data="ruleForm.goods" border style="width: 100%" @row-click="getRowData">
         <el-table-column type="index"></el-table-column>
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
             <el-button class="btn-light-red">{{ $t('删除') }}</el-button>
-            <el-button class="btn-main">{{ $t('编辑') }}</el-button>
+            <el-button class="btn-main" @click="editGoods(scope.row)">{{ $t('编辑') }}</el-button>
             <el-button class="btn-deep-blue" @click="editDetail(scope.row.id)">{{
               $t('详情')
             }}</el-button>
@@ -334,6 +334,20 @@ export default {
     editDetail(id) {
       console.log(id)
     },
+    getRowData(row) {
+      console.log(row)
+    },
+    editGoods(row) {
+      dialog(
+        {
+          type: 'addGoods',
+          row
+        },
+        data => {
+          console.log(data)
+        }
+      )
+    },
     onDelete() {
       this.$request.deletPurchase(this.$route.params.id).then(res => {
         if (res.ret) {
@@ -367,9 +381,14 @@ export default {
       })
     },
     addGoods() {
-      dialog({
-        type: 'addGoods'
-      })
+      dialog(
+        {
+          type: 'addGoods'
+        },
+        data => {
+          this.ruleForm.goods.push({ ...data })
+        }
+      )
     }
   }
 }

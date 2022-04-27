@@ -90,7 +90,7 @@
         <h4>{{ $t('采购清单') }}</h4>
         <el-button type="primary" size="small" @click="addGoods">{{ $t('添加') }}</el-button>
       </div>
-      <el-table :data="ruleForm.goods" border style="width: 100%">
+      <el-table :data="ruleForm.goods" border style="width: 100%" @row-click="getRowData">
         <el-table-column type="index"></el-table-column>
         <el-table-column prop="date" :label="$t('操作')">
           <template slot-scope="scope">
@@ -174,10 +174,18 @@ export default {
     },
     editGoods(id) {
       console.log(id)
-      dialog({
-        type: 'addGoods',
-        id
-      })
+      dialog(
+        {
+          type: 'addGoods',
+          id
+        },
+        data => {
+          console.log(data)
+        }
+      )
+    },
+    getRowData(row) {
+      console.log(row)
     },
     delGoods(index, rows) {
       rows.splice(index, 1)

@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('自定义配置')" @close="clear">
-    <el-form label-position="left" :model="form" label-width="120px">
+    <el-form label-position="left" :model="form">
       <el-form-item label="deliveryType" v-if="this.config.deliveryType">
         <el-select v-model="form.deliveryType">
           <el-option
@@ -196,4 +196,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.el-form-item__label {
+  width: 120px;
+}
+</style>

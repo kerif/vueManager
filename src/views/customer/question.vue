@@ -88,7 +88,9 @@
         <div class="answer-item" v-show="show" v-for="ele in item.answers" :key="ele.id">
           <div class="question-item">
             <div>
-              <span style="font-weight: bold">{{ ele.user.id }}-{{ ele.user.name }}:</span>
+              <span style="font-weight: bold"
+                >{{ ele.user.id === 0 ? '' : ele.user.id }} {{ ele.user.name }}:</span
+              >
               {{ ele.content }}
             </div>
             <div>
