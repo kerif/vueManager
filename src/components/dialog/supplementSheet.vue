@@ -32,7 +32,9 @@
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="submit">{{ $t('确定') }}</el-button>
+      <el-button type="primary" :loading="$store.state.btnLoading" @click="submit">{{
+        $t('确定')
+      }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -94,6 +96,7 @@ export default {
               message: res.msg
             })
             this.show = false
+            this.success()
           } else {
             this.$message({
               message: res.msg,
@@ -110,6 +113,7 @@ export default {
               message: res.msg
             })
             this.show = false
+            this.success()
           } else {
             this.$message({
               message: res.msg,

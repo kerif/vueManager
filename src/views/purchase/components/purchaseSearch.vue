@@ -1,26 +1,26 @@
 <template>
-  <div>
-    <el-form :inline="true" :model="ruleForm" size="small">
+  <div class="search-container">
+    <el-form :inline="true" :model="searchData" size="small">
       <el-form-item>
-        <el-input v-model="ruleForm.value" :placeholder="$t('请输入采购单号')"></el-input>
+        <el-input v-model="searchData.sn" :placeholder="$t('请输入采购单号')"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="ruleForm.value" :placeholder="$t('请输入发货物流单号')"></el-input>
+        <el-input
+          v-model="searchData.logistics_sn"
+          :placeholder="$t('请输入发货物流单号')"
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="ruleForm.value" :placeholder="$t('请选择创建时间')">
-          <el-date-picker
-            v-model="ruleForm.time"
-            type="daterange"
-            :range-separator="$t('至')"
-            :start-placeholder="$t('开始日期')"
-            :end-placeholder="$t('结束日期')"
-          >
-          </el-date-picker>
-        </el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="ruleForm.value" :placeholder="$t('请输入关键字')"></el-input>
+        <el-date-picker
+          v-model="searchData.time"
+          type="daterange"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :range-separator="$t('至')"
+          :start-placeholder="$t('开始日期')"
+          :end-placeholder="$t('结束日期')"
+        >
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">{{ $t('搜索') }}</el-button>
@@ -35,18 +35,29 @@
 <script>
 export default {
   data() {
-    return {
-      ruleForm: {
-        value: '',
-        time: ''
-      }
+    return {}
+  },
+  props: {
+    searchData: {
+      type: Object
     }
   },
   methods: {
-    onSubmit() {},
-    onReset() {}
+    onSubmit() {
+      this.$emit('submit')
+    },
+    onReset() {
+      this.ruleForm.sn = ''
+      this.ruleForm.timeList = []
+      this.ruleForm.logistics_sn = ''
+    }
   }
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.search-container {
+  padding: 10px;
+  background: #fff !important;
+}
+</style>

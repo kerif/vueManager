@@ -37,10 +37,10 @@
           <span>{{ form.amount }}</span
           ><br />
           <p class="transfer-right">{{ $t('支付金额') + this.localization.currency_unit }}</p>
-          <span>{{ form.pay_amount }}</span>
+          <span>{{ form.confirm_amount }}</span>
           <br />
           <p class="transfer-right">{{ $t('关联单号') }}</p>
-          <span>{{ form.order_sn }}</span
+          <span>{{ form.order_sn !== '' ? form.order_sn : form.express_num }}</span
           ><br />
           <p class="transfer-right">{{ $t('外部交易号') }}</p>
           <span>{{ form.outer_sn }}</span

@@ -85,23 +85,34 @@
         </div>
       </div>
       <div>
-        <div
-          class="question-item answer-item"
-          v-show="show"
-          v-for="ele in item.answers"
-          :key="ele.id"
-        >
-          <div>
-            <span style="font-weight: bold">{{ ele.user.id }}-{{ ele.user.name }}:</span>
-            {{ ele.content }}
+        <div class="answer-item" v-show="show" v-for="ele in item.answers" :key="ele.id">
+          <div class="question-item">
+            <div>
+              <span style="font-weight: bold">{{ ele.user.id }}-{{ ele.user.name }}:</span>
+              {{ ele.content }}
+            </div>
+            <div>
+              <el-button size="small" @click="delAnswer(ele.id)">{{ $t('删除') }}</el-button>
+            </div>
           </div>
-          <div>
-            <el-button size="small" @click="delAnswer(ele.id)">{{ $t('删除') }}</el-button>
+          <div class="imgList">
+            <img
+              v-for="(pic, index) in ele.images"
+              :key="index"
+              :src="`${$baseUrl.IMAGE_URL}${pic}`"
+              style="cursor: pointer"
+              @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${pic}`), (imgVisible = true)"
+            />
           </div>
         </div>
       </div>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -119,6 +130,8 @@ export default {
       hasFilterCondition: false,
       questionList: [],
       editor: null,
+      imgSrc: '',
+      imgVisible: false,
       statusList: [
         {
           id: 0,
@@ -305,7 +318,7 @@ export default {
   .question-list {
     background: #fff;
     border-radius: 5px;
-    padding: 20px;
+    padding: 25px;
     margin-bottom: 10px;
     box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
     .title-item {
@@ -329,22 +342,31 @@ export default {
       justify-content: flex-end;
     }
     .question-item {
-      background: #f5f5f5;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 2px solid #fff;
-      &:last-child {
-        border-bottom: none;
-      }
     }
     .question-title {
       padding: 10px;
       margin-top: 10px;
     }
     .answer-item {
+      background: #fff !important;
+      border: 1px solid #eee;
+      border-radius: 5px;
       padding: 5px 10px;
       font-size: 14px;
+      margin-bottom: 10px;
+      .imgList img {
+        width: 50px;
+      }
+    }
+  }
+  .img_box {
+    text-align: center;
+    .imgDialog {
+      width: 50%;
     }
   }
 }

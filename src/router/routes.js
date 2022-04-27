@@ -274,6 +274,8 @@ const stringTranslate = loadonDemand('language/string')
 // const addEditPurchase = loadonDemand('purchase/addPurchase')
 // // 采购单详情
 // const purchaseDetail = loadonDemand('purchase/purchaseDetail')
+// // 编辑分货
+// const distributionGoods = loadonDemand('purchase/distributionGoods')
 // // 分货详情
 // const distributeDetail = loadonDemand('purchase/distributeDetail')
 // 官网管理 栏目管理
@@ -2246,7 +2248,7 @@ export default [
       //       meta: { level: 2, group: '采购', name: '采购单' }
       //     },
       //     {
-      //       path: '/purchase/addPurchase',
+      //       path: '/purchase/addPurchase/:id',
       //       name: 'addPurchase',
       //       component: addEditPurchase,
       //       id: 1102,
@@ -2266,6 +2268,18 @@ export default [
       //         level: 3,
       //         group: '采购',
       //         name: '采购单详情',
+      //         parent: '/purchase'
+      //       }
+      //     },
+      //     {
+      //       path: '/purchase/distributionGoods/:id',
+      //       name: 'distributionGoods',
+      //       component: distributionGoods,
+      //       id: 1102,
+      //       meta: {
+      //         level: 3,
+      //         group: '采购',
+      //         name: '编辑分货',
       //         parent: '/purchase'
       //       }
       //     },

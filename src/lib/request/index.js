@@ -4203,3 +4203,43 @@ exports.purchaseList = params => {
 exports.purchaseDetail = id => {
   return $form.get(`purchase-orders/${id}`)
 }
+
+// 采购 新增
+exports.addPurchase = params => {
+  return $form.post('purchase-orders', params)
+}
+
+// 采购 修改
+exports.editPurchase = (id, params) => {
+  return $form.post(`purchase-orders/${id}`, params)
+}
+
+// 采购 更新商品列表
+exports.updateGoodsList = (id, params) => {
+  return $form.put(`purchase-orders/${id}/update-goods`, params)
+}
+
+// 采购 提交采购单
+exports.submitPurchase = id => {
+  return $form.put(`purchase-orders/${id}/approved`)
+}
+
+// 采购 发货
+exports.deliverGoods = (id, params) => {
+  return $form.put(`purchase-orders/${id}/delivery`, params)
+}
+
+// 采购 删除
+exports.deletPurchase = id => {
+  return $form.delete(`purchase-orders/${id}`)
+}
+
+// 采购 作废
+exports.invalidPurchase = id => {
+  return $form.put(`purchase-orders/${id}/quit`)
+}
+
+// 采购 分货
+exports.dividePurchase = (id, params) => {
+  return $form.put(`purchase-orders/${id}/divide`, params)
+}

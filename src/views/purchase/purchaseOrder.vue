@@ -1,29 +1,61 @@
 <template>
   <div class="purchase-list">
     <el-tabs v-model="activeName" stretch @tab-click="handleClick" class="tab-length">
-      <el-tab-pane :label="$t('全部')" name="0"></el-tab-pane>
-      <el-tab-pane :label="$t('草稿')" name="1"></el-tab-pane>
-      <el-tab-pane :label="$t('未发货')" name="2"></el-tab-pane>
-      <el-tab-pane :label="$t('已发货')" name="3"></el-tab-pane>
-      <el-tab-pane :label="$t('已入库')" name="4"></el-tab-pane>
-      <el-tab-pane :label="$t('已分货')" name="5"></el-tab-pane>
-      <el-tab-pane :label="$t('已转运')" name="6"></el-tab-pane>
-      <el-tab-pane :label="$t('作废')" name="7"></el-tab-pane>
+      <el-tab-pane :label="$t('全部')" name="-1"></el-tab-pane>
+      <el-tab-pane :label="$t('草稿')" name="0"></el-tab-pane>
+      <el-tab-pane :label="$t('未发货')" name="1"></el-tab-pane>
+      <el-tab-pane :label="$t('已发货')" name="2"></el-tab-pane>
+      <el-tab-pane :label="$t('已入库')" name="3"></el-tab-pane>
+      <el-tab-pane :label="$t('已分货')" name="4"></el-tab-pane>
+      <el-tab-pane :label="$t('已转运')" name="5"></el-tab-pane>
+      <el-tab-pane :label="$t('作废')" name="10"></el-tab-pane>
     </el-tabs>
-    <purchase-search></purchase-search>
-    <div>
-      <el-button class="btn-deep-blue" @click="$router.push({ name: 'addPurchase' })">{{
-        $t('新增采购单')
-      }}</el-button>
-      <el-button class="btn-green" v-if="activeName !== '7'">{{ $t('导出清单') }}</el-button>
-      <el-button class="btn-deep-purple" v-if="activeName === '1'">{{ $t('提交采购') }}</el-button>
-      <el-button class="btn-light-red" v-if="['1', '2', '3'].includes(activeName)">{{
-        $t('删除')
-      }}</el-button>
-      <el-button class="btn-main" v-if="['4', '5'].includes(activeName)">{{
-        $t('作废')
-      }}</el-button>
-      <el-button class="btn-blue-green" v-if="activeName === '5'">{{ $t('提交转运') }}</el-button>
+    <purchase-search
+      v-show="hasFilterCondition"
+      :searchData="searchData"
+      v-on:submit="goSearch"
+    ></purchase-search>
+    <div style="display: flex; margin-top: 10px">
+      <div style="flex: 1">
+        <el-button class="btn-deep-blue" @click="$router.push({ name: 'addPurchase' })">{{
+          $t('新增采购单')
+        }}</el-button>
+        <el-button class="btn-green" v-if="activeName !== '7'">{{ $t('导出清单') }}</el-button>
+        <el-button
+          class="btn-deep-purple"
+          v-if="activeName === '1'"
+          @click="onPurchase(selectIDs)"
+          >{{ $t('提交采购') }}</el-button
+        >
+        <el-button
+          class="btn-light-red"
+          v-if="['1', '2', '3'].includes(activeName)"
+          @click="onDelete(selectIDs)"
+          >{{ $t('删除') }}</el-button
+        >
+        <el-button
+          class="btn-main"
+          v-if="['4', '5'].includes(activeName)"
+          @click="onInvild(selectIDs)"
+          >{{ $t('作废') }}</el-button
+        >
+        <el-button class="btn-blue-green" v-if="activeName === '5'">{{ $t('提交转运') }}</el-button>
+      </div>
+      <div class="headr-r" style="display: flex">
+        <div class="searchGroup">
+          <search-group
+            :placeholder="$t('请输入关键字')"
+            v-model="page_params.keyword"
+            @search="goSearch"
+          >
+          </search-group>
+        </div>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
+      </div>
     </div>
     <div style="margin-top: 20px">
       <el-table
@@ -41,12 +73,20 @@
         <el-table-column prop="amount" :label="$t('采购总金额')"></el-table-column>
         <el-tabel-column :label="$t('采购总件/总箱数')">
           <template slot-scope="scope">
-            <span>{{ scope.row.quantity }} - {{ scope.row.box_count }}</span>
+            <span>{{ scope.row.quantity }} / {{ scope.row.box_count }}</span>
           </template>
         </el-tabel-column>
-        <el-table-column prop="created_at" :label="$t('创建时间')"></el-table-column>
-        <el-tabel-column prop="creator" :label="$t('创建人')"></el-tabel-column>
-        <el-table-column :label="$t('操作')" fixed="right">
+        <el-table-column prop="created_at" :label="$t('创建时间')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.created_at }}</span>
+          </template>
+        </el-table-column>
+        <el-tabel-column prop="creator" :label="$t('创建人')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.creator }}</span>
+          </template>
+        </el-tabel-column>
+        <el-table-column :label="$t('操作')" fixed="right" width="220">
           <template slot-scope="scope">
             <el-button class="btn-purple" @click="onDetail(scope.row.id)">{{
               $t('详情')
@@ -55,23 +95,37 @@
               $t('分货')
             }}</el-button>
             <el-button class="btn-green" v-if="activeName === '4'">{{ $t('入库信息') }}</el-button>
-            <el-button class="btn-light-red" v-if="activeName === '5'">{{ $t('作废') }}</el-button>
-            <el-button class="btn-deep-purple" v-if="['2', '3'].includes(activeName)">{{
-              $t('发货信息')
-            }}</el-button>
+            <el-button
+              class="btn-light-red"
+              v-if="activeName === '5'"
+              @click="onInvild([scope.row.id])"
+              >{{ $t('作废') }}</el-button
+            >
+            <el-button
+              class="btn-deep-purple"
+              v-if="['2', '3'].includes(activeName)"
+              @click="addShipInfo(scope.row.id)"
+              >{{ $t('发货信息') }}</el-button
+            >
             <el-button
               class="btn-deep-blue"
               v-if="['1', '2'].includes(activeName)"
               @click="editPurchase(scope.row.id)"
               >{{ $t('编辑') }}</el-button
             >
-            <el-button class="btn-light-red" v-if="['1', '2', '3'].includes(activeName)">{{
-              $t('删除')
-            }}</el-button>
+            <el-button
+              class="btn-light-red"
+              v-if="['1', '2', '3'].includes(activeName)"
+              @click="onDelete([scope.row.id])"
+              >{{ $t('删除') }}</el-button
+            >
             <el-button class="btn-main" v-if="activeName === '5'">{{ $t('提交转运') }}</el-button>
-            <el-button class="btn-deep-purple" v-if="activeName === '1'">{{
-              $t('提交采购')
-            }}</el-button>
+            <el-button
+              class="btn-deep-purple"
+              v-if="activeName === '1'"
+              @click="onPurchase([scope.row.id])"
+              >{{ $t('提交采购') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -81,19 +135,29 @@
 </template>
 
 <script>
+import { SearchGroup } from '@/components/searchs'
 import PurchaseSearch from './components/purchaseSearch.vue'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      activeName: '0',
-      purchaseData: []
+      activeName: '-1',
+      hasFilterCondition: false,
+      selectIDs: [],
+      purchaseData: [],
+      searchData: {
+        sn: '',
+        timeList: [],
+        logistics_sn: ''
+      }
     }
   },
   components: {
     NlePagination,
-    PurchaseSearch
+    PurchaseSearch,
+    SearchGroup
   },
   mixins: [pagination],
   created() {
@@ -101,26 +165,96 @@ export default {
   },
   methods: {
     getList() {
-      this.$request.purchaseList().then(res => {
-        console.log(res)
-        this.purchaseData = res.data
-      })
+      this.$request
+        .purchaseList({
+          status: this.activeName === '-1' ? '' : this.activeName,
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.purchaseData = res.data
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+        })
     },
+    goSearch() {},
     onDetail(id) {
       this.$router.push({
         name: 'purchaseDetail',
         params: { id }
       })
     },
+    onPurchase(ids) {
+      if (!ids.length) return this.$message.error(this.$t('请选择'))
+      this.$request.submitPurchase(ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    onDelete(ids) {
+      if (!ids.length) return this.$message.error(this.$t('请选择'))
+      this.$request.deletPurchase(ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    onInvild(ids) {
+      if (!ids.length) return this.$message.error(this.$t('请选择'))
+      this.$request.invalidPurchase(ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    addShipInfo(id) {
+      dialog({
+        type: 'addShip',
+        id
+      })
+    },
     handleClick(tab) {
       console.log(tab)
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('page', 1)
+      this.getList()
     },
     handleSelectionChange(val) {
-      console.log(val)
+      this.selectIDs = val.map(item => item.id)
     },
-    editPurchase() {
+    editPurchase(id) {
       this.$router.push({
-        name: 'addPurchase'
+        name: 'addPurchase',
+        params: { id }
       })
     }
   }

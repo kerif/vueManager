@@ -4,10 +4,10 @@
       <h3>{{ $t('采购单详细') }}</h3>
       <div style="margin-left: 30px">
         <span>{{ $t('状态') + ':' }}</span
-        ><span>{{ ruleForm.status_name }}</span>
+        ><span style="font-weight: bold; font-size: 24px">{{ ruleForm.status_name }}</span>
       </div>
     </div>
-    <div v-if="ruleForm.status_name === '草稿'">
+    <div v-if="ruleForm.status === 1">
       <el-row :gutter="20">
         <el-col :span="12">
           <h4>{{ $t('基本信息') }}</h4>
@@ -97,9 +97,20 @@
         <div style="width: 50%">
           <div>
             <h4 style="display: inline-block">{{ $t('发货信息') }}</h4>
-            <el-button size="small" class="btn-deep-blue" style="margin-left: 40px">{{
-              $t('修改')
-            }}</el-button>
+            <el-button
+              size="small"
+              v-if="ruleForm.status === 2"
+              class="btn-deep-blue"
+              style="margin-left: 40px"
+              >{{ $t('添加') }}</el-button
+            >
+            <el-button
+              size="small"
+              v-if="ruleForm.status === 3"
+              class="btn-deep-blue"
+              style="margin-left: 40px"
+              >{{ $t('修改') }}</el-button
+            >
           </div>
         </div>
       </div>
@@ -153,29 +164,46 @@
         <h4>{{ $t('采购清单') }}</h4>
         <el-button type="primary" size="small" @click="addGoods">{{ $t('添加') }}</el-button>
       </div>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="ruleForm.goods" border style="width: 100%">
         <el-table-column type="index"></el-table-column>
-        <el-table-column prop="date" :label="$t('操作')"> </el-table-column>
-        <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
-        <el-table-column prop="address" :label="$t('物品英文名称')"> </el-table-column>
-        <el-table-column :label="$t('品牌')"></el-table-column>
-        <el-table-column :label="$t('商品分类')"></el-table-column>
-        <el-table-column :label="$t('属性')"></el-table-column>
-        <el-table-column :label="$t('物品单价')"></el-table-column>
-        <el-table-column :label="$t('物品明细数量')"></el-table-column>
-        <el-table-column :label="$t('物品总箱数')"></el-table-column>
-        <el-table-column :label="$t('物品箱规')"></el-table-column>
-        <el-table-column :label="$t('条码')"></el-table-column>
-        <el-table-column :label="$t('物品照片')"></el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-light-red">{{ $t('删除') }}</el-button>
+            <el-button class="btn-main">{{ $t('编辑') }}</el-button>
+            <el-button class="btn-deep-blue" @click="editDetail(scope.row.id)">{{
+              $t('详情')
+            }}</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
+        <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
+        <el-table-column prop="brand" :label="$t('品牌')"></el-table-column>
+        <el-table-column prop="category_name" :label="$t('商品分类')"></el-table-column>
+        <el-table-column prop="prop_name" :label="$t('属性')"></el-table-column>
+        <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
+        <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
+        <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
+        <el-table-column prop="box_spec" :label="$t('物品箱规')"></el-table-column>
+        <el-table-column prop="barcode" :label="$t('条码')"></el-table-column>
+        <el-table-column prop="image" :label="$t('物品照片')">
+          <template slot-scope="scope">
+            <img :src="$baseUrl.IMAGE_URL + scope.row.image" />
+          </template>
+        </el-table-column>
       </el-table>
     </div>
-    <div style="margin-top: 20px">
+    <div
+      style="margin-top: 20px"
+      v-if="ruleForm.status === 5 || ruleForm.status === 10 || ruleForm.status === ''"
+    >
       <h4>{{ $t('分货清单') }}</h4>
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column :label="$t('操作')">
           <template>
             <el-button size="small" @click="viewDetail">{{ $t('详情') }}</el-button>
+            <el-button size="small" @click="viewDetail">{{ $t('恢复') }}</el-button>
+            <el-button size="small" @click="viewDetail">{{ $t('删除') }}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="number" :label="$t('打包单号')"> </el-table-column>
@@ -192,63 +220,97 @@
     </div>
     <div style="margin-top: 20px">
       <h4>{{ $t('操作日志') }}</h4>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="ruleForm.logs" border style="width: 100%">
         <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column prop="date" :label="$t('行为')"> </el-table-column>
-        <el-table-column prop="name" :label="$t('日期')"> </el-table-column>
-        <el-table-column prop="address" :label="$t('操作人')"> </el-table-column>
+        <el-table-column prop="action_name" :label="$t('行为')"> </el-table-column>
+        <el-table-column prop="created_at" :label="$t('日期')"> </el-table-column>
       </el-table>
     </div>
     <div style="margin-top: 20px">
-      <el-button size="small" class="btn-light-red">{{ $t('删除') }}</el-button>
-      <el-button size="small" class="btn-deep-blue" :loading="$store.state.btnLoading">{{
-        $t('保存')
+      <el-button
+        size="small"
+        v-if="ruleForm.status === 0 || ruleForm.status === 1 || ruleForm.status === 2"
+        class="btn-light-red"
+        @click="onDelete"
+        >{{ $t('删除') }}</el-button
+      >
+      <el-button
+        size="small"
+        v-if="ruleForm.status === 0"
+        class="btn-deep-blue"
+        :loading="$store.state.btnLoading"
+        >{{ $t('保存') }}</el-button
+      >
+      <el-button
+        size="small"
+        v-if="ruleForm.status === 0"
+        class="btn-deep-blue"
+        :loading="$store.state.btnLoading"
+        >{{ $t('保存并提交') }}</el-button
+      >
+      <el-button size="small" v-if="ruleForm.status === 1" class="btn-deep-purple">{{
+        $t('添加发货信息')
       }}</el-button>
-      <el-button size="small" class="btn-deep-blue" :loading="$store.state.btnLoading">{{
-        $t('保存并提交')
+      <el-button size="small" v-if="ruleForm.status === 2" class="btn-blue-green">{{
+        $t('入库')
       }}</el-button>
-      <el-button size="small" class="btn-deep-purple">{{ $t('添加发货信息') }}</el-button>
-      <el-button size="small" class="btn-blue-green">{{ $t('入库') }}</el-button>
-      <el-button size="small" class="btn-green">{{ $t('修改发货信息') }}</el-button>
-      <el-button size="small" class="btn-deep-red">{{ $t('作废') }}</el-button>
-      <el-button size="small" class="btn-blue-green">{{ $t('入库信息') }}</el-button>
-      <el-button size="small" class="btn-green">{{ $t('分货') }}</el-button>
-      <el-button size="small" class="btn-green">{{ $t('编辑分货') }}</el-button>
-      <el-button size="small" class="btn-green">{{ $t('提交为转运单') }}</el-button>
+      <el-button size="small" v-if="ruleForm.status === 2" class="btn-green">{{
+        $t('修改发货信息')
+      }}</el-button>
+      <el-button
+        size="small"
+        v-if="ruleForm.status === 3 || ruleForm.status === 4"
+        class="btn-light-red"
+        @click="onInvalid"
+        >{{ $t('作废') }}</el-button
+      >
+      <el-button size="small" v-if="ruleForm.status === 3" class="btn-blue-green">{{
+        $t('入库信息')
+      }}</el-button>
+      <el-button size="small" v-if="ruleForm.status === 3" class="btn-green">{{
+        $t('分货')
+      }}</el-button>
+      <el-button
+        size="small"
+        v-if="ruleForm.status === 4"
+        @click="editDistributionGoods"
+        class="btn-green"
+        >{{ $t('编辑分货') }}</el-button
+      >
+      <el-button size="small" v-if="ruleForm.status === 4" class="btn-green">{{
+        $t('提交为转运单')
+      }}</el-button>
+      <el-button size="small" v-if="ruleForm.status === 10" class="btn-main">{{
+        $t('恢复')
+      }}</el-button>
     </div>
-    <add-goods :showGoods="showGoods" @passVal="passVal"></add-goods>
   </div>
 </template>
 
 <script>
-import AddGoods from './components/addGoods.vue'
+import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          number: 1
-        }
-      ],
+      tableData: [],
       ruleForm: {
-        value: '',
-        number: '',
-        money: '',
-        name: ''
+        sn: '',
+        logistics_company: '',
+        amount: '',
+        name: '',
+        remark: '',
+        logs: [],
+        goods: []
       },
       rules: {
-        number: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
-        money: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
+        sn: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
+        amount: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
         name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }]
       },
-      showGoods: false,
-      status: 1
+      showGoods: false
     }
   },
-  components: {
-    AddGoods
-  },
+  components: {},
   created() {
     this.getList()
   },
@@ -264,11 +326,50 @@ export default {
         name: 'distributeDetail'
       })
     },
-    addGoods() {
-      this.showGoods = true
+    editDistributionGoods() {
+      this.$router.push({
+        name: 'distributionGoods'
+      })
     },
-    passVal() {
-      this.showGoods = false
+    editDetail(id) {
+      console.log(id)
+    },
+    onDelete() {
+      this.$request.deletPurchase(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    onInvalid() {
+      this.$request.invalidPurchase(this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    addGoods() {
+      dialog({
+        type: 'addGoods'
+      })
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-tabs v-model="activeName" class="tab-length" @tab-click="handleClick">
-      <el-tab-pane :label="`${$t('全部')}(${statusList['0'] || 0})`" name="0"></el-tab-pane>
+      <el-tab-pane :label="`${$t('全部')}(${statusList['0'] || 0})`" name="-1"></el-tab-pane>
       <el-tab-pane :label="`${$t('待付款')}(${statusList['1'] || 0})`" name="1"></el-tab-pane>
       <el-tab-pane :label="`${$t('已付款')}(${statusList['10'] || 0})`" name="10"></el-tab-pane>
       <el-tab-pane :label="`${$t('作废')}(${statusList['99'] || 0})`" name="99"></el-tab-pane>
@@ -123,6 +123,7 @@
                 scope.row.status === 0 ||
                 scope.row.status === 12 ||
                 scope.row.status === 11 ||
+                scope.row.status === 99 ||
                 scope.row.status === 2
               "
               >{{ $t('详情') }}</el-button
@@ -170,7 +171,7 @@ import { pagination } from '@/mixin'
 export default {
   data() {
     return {
-      activeName: '0',
+      activeName: '-1',
       showConfig: false,
       hasFilterCondition: false,
       form: {
@@ -232,17 +233,16 @@ export default {
   },
   methods: {
     handleClick(tab) {
+      console.log(tab)
       this.page_params.page = 1
-      this.status = tab ? tab.name : tab
       this.page_params.handleQueryChange('page', 1)
-      this.page_params.handleQueryChange('activeName', tab.name)
       this.getList()
     },
     getList() {
       this.$request
         .replenishmentList({
           state: this.formInline.state,
-          status: this.status,
+          status: this.activeName === '-1' ? '' : this.activeName,
           pay: this.formInline.pay,
           keyword: this.page_params.keyword,
           page: this.page_params.page,
@@ -291,19 +291,26 @@ export default {
       this.getPaymentType()
     },
     onInvalid(id) {
-      this.$request.invalidOrder(id).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
+      this.$confirm(this.$t('您真的要作废吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.invalidOrder(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     onVerify(id) {
