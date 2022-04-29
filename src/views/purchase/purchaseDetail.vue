@@ -7,7 +7,7 @@
         ><span style="font-weight: bold; font-size: 24px">{{ ruleForm.status_name }}</span>
       </div>
     </div>
-    <div v-if="ruleForm.status === 0 || ruleForm.status === 1">
+    <div v-if="ruleForm.status === 0">
       <el-row :gutter="20">
         <el-col :span="12">
           <h4>{{ $t('基本信息') }}</h4>

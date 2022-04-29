@@ -70,6 +70,14 @@
           <el-radio :label="0" @change="changeRadio">{{ $t('团员自付') }}</el-radio>
           <el-radio :label="1" @change="changeRadio">{{ $t('团长代付') }}</el-radio>
         </el-radio-group>
+        <br />
+        <div style="margin-top: 10px"></div>
+        <span>{{ $t('最小拼团人数') }}</span>
+        <el-input
+          v-model="min_member"
+          style="margin-left: 20px; width: 240px"
+          :placeholder="$t('请输入最小拼团人数')"
+        ></el-input>
       </el-tab-pane>
     </el-tabs>
     <el-dialog
@@ -137,7 +145,8 @@ export default {
       // is_ignore_warehouse: 0,
       group_raise_factor: '',
       group_raise_threshold: '',
-      mode: 0
+      mode: 0,
+      min_member: ''
     }
   },
   components: {
@@ -256,6 +265,7 @@ export default {
       this.$request.getGlobal().then(res => {
         if (res.ret) {
           this.mode = res.data.mode
+          this.min_member = res.data.min_member
         } else {
           this.$message({
             message: res.msg,
