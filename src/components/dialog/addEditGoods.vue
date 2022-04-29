@@ -146,6 +146,7 @@ export default {
         image: ''
       },
       propList: [],
+      level: [],
       props: { checkStrictly: false },
       classifyList: [],
       rules: {
@@ -193,9 +194,8 @@ export default {
     },
     handleVal(val) {
       console.log(val)
-      console.log(this.$refs['good'].getCheckedNodes())
-      console.log(this.$refs['good'].getCheckedNodes()[0].value)
-      console.log(this.$refs['good'].getCheckedNodes()[0].label)
+      this.level = val
+      console.log(this.level)
     },
     handleClick(v) {
       console.log(v)
@@ -246,8 +246,12 @@ export default {
       })
     },
     submit() {
-      this.ruleForm.category_id = this.$refs['good'].getCheckedNodes()[0].value
-      this.ruleForm.category_name = this.$refs['good'].getCheckedNodes()[0].label
+      if (this.level.length) {
+        console.log(this.level[this.level.length - 1])
+        this.ruleForm.category_id = this.level[this.level.length - 1]
+      }
+      console.log(this.ruleForm.category_id)
+      this.ruleForm.category_name = this.$refs.good.getCheckedNodes()[0].label
       this.propList.forEach(item => {
         if (item.id === this.ruleForm.prop_id) {
           this.ruleForm.prop_name = item.name

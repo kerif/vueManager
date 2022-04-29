@@ -94,9 +94,12 @@
             <el-button class="btn-purple" @click="onDetail(scope.row.id)">{{
               $t('详情')
             }}</el-button>
-            <el-button class="btn-blue-green" v-if="['4', '5'].includes(activeName)">{{
-              $t('分货')
-            }}</el-button>
+            <el-button
+              class="btn-blue-green"
+              @click="goDistribution(scope.row.id)"
+              v-if="['4', '5'].includes(activeName)"
+              >{{ $t('分货') }}</el-button
+            >
             <el-button class="btn-green" v-if="activeName === '4'">{{ $t('入库信息') }}</el-button>
             <el-button
               class="btn-light-red"
@@ -198,6 +201,12 @@ export default {
     },
     goSearch() {
       this.getList()
+    },
+    goDistribution(id) {
+      this.$router.push({
+        name: 'distributionGoods',
+        params: { id }
+      })
     },
     exportList(ids) {
       if (!ids.length) return this.$message.error(this.$t('请选择'))

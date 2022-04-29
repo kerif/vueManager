@@ -249,9 +249,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$route.push({
-              name: 'purchaseOrder'
-            })
+            this.$router.go(-1)
           } else {
             this.$message({
               message: res.msg,

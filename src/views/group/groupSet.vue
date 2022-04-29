@@ -83,9 +83,13 @@
         </el-tooltip>
         <el-input
           v-model="min_member"
+          size="small"
           style="margin-left: 20px; width: 240px"
           :placeholder="$t('请输入最小拼团人数')"
         ></el-input>
+        <el-button style="margin-left: 5px" class="btn-main" @click="saveNumber">{{
+          $t('保存')
+        }}</el-button>
       </el-tab-pane>
     </el-tabs>
     <el-dialog
@@ -303,6 +307,23 @@ export default {
             })
           }
         })
+    },
+    saveNumber() {
+      this.$request.updateGlobal({ mode: this.mode, min_member: this.min_member }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getGlobal()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   },
   watch: {

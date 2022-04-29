@@ -131,7 +131,7 @@
         </div>
         <el-table :data="ruleForm.goods" border style="width: 100%">
           <el-table-column type="index"></el-table-column>
-          <el-table-column :label="$t('操作')">
+          <el-table-column :label="$t('操作')" width="180">
             <template slot-scope="scope">
               <el-button class="btn-light-red" v-if="ruleForm.status === 0">{{
                 $t('删除')
@@ -215,7 +215,7 @@
       >
       <el-button
         size="small"
-        v-if="ruleForm.status === 0 || ruleForm.status === 1"
+        v-if="ruleForm.status === 1"
         class="btn-deep-blue"
         @click="saveGoods"
         :loading="$store.state.btnLoading"
@@ -442,6 +442,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
+          this.$router.go(-1)
         } else {
           this.$message({
             message: res.msg,

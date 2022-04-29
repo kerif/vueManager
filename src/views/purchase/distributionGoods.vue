@@ -992,6 +992,35 @@ export default {
         }
       })
     },
+    clear() {
+      this.chooseId = ''
+      this.user = {}
+    },
+    // 创建发货单 取消
+    returnShip() {
+      this.innerVisible = false
+      this.boxDialog = true
+    },
+    // 收件地址
+    onRowChange(row) {
+      this.chooseId = row.id
+      this.box.address_id = this.chooseId
+      this.user = row
+    },
+    // 确认自提地址
+    confirmSelf() {
+      if (!this.box.station_id) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.selfData = this.selfAddress
+      if (this.selfData) {
+        this.box.address_id = this.selfData.id
+      }
+      this.addressDialog = false
+    },
+    clearAddress() {
+      this.chooseId = ''
+    },
     selectStation() {},
     changeExpress() {},
     changeAdd() {}
