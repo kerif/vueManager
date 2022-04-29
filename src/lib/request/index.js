@@ -4211,7 +4211,7 @@ exports.addPurchase = params => {
 
 // 采购 修改
 exports.editPurchase = (id, params) => {
-  return $form.post(`purchase-orders/${id}`, params)
+  return $form.put(`purchase-orders/${id}`, params)
 }
 
 // 采购 更新商品列表
@@ -4228,7 +4228,10 @@ exports.submitPurchase = id => {
 exports.deliverGoods = (id, params) => {
   return $form.put(`purchase-orders/${id}/delivery`, params)
 }
-
+// 采购 发货
+exports.addGoods = (id, params) => {
+  return $form.post(`purchase-orders/${id}/delivery`, params)
+}
 // 采购 删除
 exports.deletPurchase = id => {
   return $form.delete(`purchase-orders/${id}`)
@@ -4242,4 +4245,14 @@ exports.invalidPurchase = id => {
 // 采购 分货
 exports.dividePurchase = (id, params) => {
   return $form.put(`purchase-orders/${id}/divide`, params)
+}
+
+// 采购 导出清单
+exports.exportPurchase = ids => {
+  return $form.post(`purchase-orders/export`, ids)
+}
+
+// 采购 统计
+exports.purchaseCount = () => {
+  return $form.get('purchase-orders/status-counts')
 }

@@ -140,7 +140,7 @@ import replyInfo from './replyInfo.vue'
 import qaPointTable from './qaPointTable.vue'
 import qaExplain from './qaExplain.vue'
 import customConfig from './customConfig.vue'
-import addGoods from './addGoods.vue'
+import addEditGoods from './addEditGoods.vue'
 import addShip from './addShip.vue'
 
 const InviteController = Vue.extend(inviteList)
@@ -281,7 +281,7 @@ const replyInfoController = Vue.extend(replyInfo)
 const qaPointTableController = Vue.extend(qaPointTable)
 const qaExplainController = Vue.extend(qaExplain)
 const customConfigController = Vue.extend(customConfig)
-const addGoodsController = Vue.extend(addGoods)
+const addEditGoodsController = Vue.extend(addEditGoods)
 const addShipController = Vue.extend(addShip)
 const mixin = {
   data() {
@@ -465,7 +465,7 @@ function initInstance(type) {
       break
     // 添加商品
     case 'addGoods':
-      instance = new addGoodsController({
+      instance = new addEditGoodsController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -12,7 +12,7 @@
       </el-form-item>
       <el-form-item>
         <el-date-picker
-          v-model="searchData.time"
+          v-model="searchData.timeList"
           type="daterange"
           format="yyyy-MM-dd"
           value-format="yyyy-MM-dd"
@@ -47,9 +47,9 @@ export default {
       this.$emit('submit')
     },
     onReset() {
-      this.ruleForm.sn = ''
-      this.ruleForm.timeList = []
-      this.ruleForm.logistics_sn = ''
+      this.searchData.sn = ''
+      this.searchData.timeList = []
+      this.searchData.logistics_sn = ''
     }
   }
 }

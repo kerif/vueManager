@@ -1,5 +1,9 @@
 <template>
-  <el-dialog :visible.sync="show" :title="row.id ? $t('修改商品') : $t('添加商品')" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="state === 'edit' ? $t('修改商品') : $t('添加商品')"
+    @close="clear"
+  >
     <h3>{{ $t('基础信息') }}</h3>
     <el-form label-position="right" :rules="rules" label-width="120px" :model="ruleForm">
       <el-form-item :label="$t('中文名称')" prop="cn_name">
@@ -20,11 +24,11 @@
         <el-input class="input-sty" v-model="ruleForm.brand" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('商品分类')" prop="category_id">
-        <el-input
-          class="input-sty"
+        <el-cascader
           v-model="ruleForm.category_id"
-          :placeholder="$t('请输入')"
-        ></el-input>
+          :options="classifyList"
+          :props="props"
+        ></el-cascader>
       </el-form-item>
       <el-form-item :label="$t('商品属性')" prop="prop_id">
         <el-radio-group v-model="ruleForm.prop_id">
@@ -118,12 +122,13 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      row: {},
+      purchase: {},
+      state: '',
       ruleForm: {
         cn_name: '',
         en_name: '',
         brand: '',
-        category_name: '',
+        category_id: '',
         barcode: '',
         prop_id: '',
         distributor: '',
@@ -135,6 +140,8 @@ export default {
         image: ''
       },
       propList: [],
+      props: { multiple: true, checkStrictly: false },
+      classifyList: [],
       rules: {
         cn_name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
         en_name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
@@ -147,6 +154,10 @@ export default {
   methods: {
     init() {
       this.getProp()
+      this.getGoods()
+      if (this.state === 'edit') {
+        this.ruleForm = this.purchase
+      }
     },
     // 上传打包照片
     uploadBaleImg(item) {
@@ -174,6 +185,43 @@ export default {
     onDeleteImg() {
       this.ruleForm.image = ''
     },
+    getGoods() {
+      this.$request.getAllTree().then(res => {
+        if (res.ret) {
+          if (res.data.length) {
+            this.classifyList = res.data.map(item => {
+              return {
+                value: item.id,
+                label: item.name,
+                children:
+                  item.children < 1
+                    ? undefined
+                    : item.children.map(item => {
+                        return {
+                          value: item.id,
+                          label: item.name,
+                          children:
+                            item.children < 1
+                              ? undefined
+                              : item.children.map(item => {
+                                  return {
+                                    value: item.id,
+                                    label: item.name
+                                  }
+                                })
+                        }
+                      })
+              }
+            })
+          }
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     getProp() {
       this.$request.getProps().then(res => {
         if (res.ret) {
@@ -182,15 +230,16 @@ export default {
       })
     },
     submit() {
-      if (this.row.id) {
+      if (this.state === 'edit') {
+        this.success(JSON.parse(JSON.stringify(this.ruleForm)))
         this.show = false
-        this.success(this.ruleForm)
       } else {
         this.show = false
         this.success(this.ruleForm)
       }
     },
     clear() {
+      this.purchase = {}
       this.ruleForm.cn_name = ''
       this.ruleForm.en_name = ''
       this.ruleForm.brand = ''

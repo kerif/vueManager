@@ -217,15 +217,6 @@
           </div>
         </div>
         <div class="line-sty"></div>
-        <div class="save-main">
-          <el-button
-            type="primary"
-            class="sava-btn"
-            :loading="$store.state.btnLoading"
-            @click="saveBoxing"
-            >{{ $t('提交') }}</el-button
-          >
-        </div>
       </div>
     </div>
     <!-- 收件地址弹窗 -->
@@ -415,12 +406,6 @@
         <el-button type="primary" @click="realPick">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
-    <!-- 提示 -->
-    <!-- <el-dialog :visible.sync="tipsDialog" :title="$t('提示')" @close="tipsClear">
-      <div v-for="(item, index) in tipsContent" :key="index">
-        <span>{{ item }}</span>
-      </div>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -497,8 +482,6 @@ export default {
       clientId: '',
       addressData: [],
       changeUpdate: 1,
-      // tipsDialog: false,
-      // tipsContent: [],
       addressIds: [],
       address_ids: [],
       id: ''
@@ -599,27 +582,11 @@ export default {
                 this.addressIds = item.address.sub_area_id
                   ? [item.address.sub_area_id]
                   : [item.address.area_id]
-                this.getTips()
               }
             })
           }
         })
     },
-    // 获取提示
-    // getTips() {
-    //   this.$request
-    //     .getNotify({
-    //       ids: this.addressIds
-    //     })
-    //     .then(res => {
-    //       if (res.ret) {
-    //         this.tipsContent = res.data.content
-    //         if (this.tipsContent.length) {
-    //           this.tipsDialog = true
-    //         }
-    //       }
-    //     })
-    // },
     // 表格删除
     deleteAddress(index, rows, userId) {
       this.addressList = this.addressList.filter(item => item.user_id !== userId)
@@ -673,7 +640,6 @@ export default {
               this.addressIds = item.address.sub_area_id
                 ? [item.address.sub_area_id]
                 : [item.address.area_id]
-              this.getTips()
             }
           })
         } else {
@@ -871,74 +837,6 @@ export default {
           this.selfForm = res.data
         }
       })
-    },
-    // 提交
-    saveBoxing() {
-      let params = this.addressList.map(item => {
-        return {
-          user_id: item.user_id,
-          address_id: item.address ? item.address.id : ''
-        }
-      })
-      let address
-      if (this.address_type === 1) {
-        address = params
-      }
-      if (this.changeUpdate === 1) {
-        this.$request
-          .savePacksUser({
-            ...this.box,
-            station_id: this.radio === 2 ? this.box.address_id : '',
-            address: address,
-            package_ids: this.packageId,
-            address_type: this.radio === 2 ? 2 : 1,
-            batch_mode: this.$route.query.packageId ? 1 : '',
-            type: this.radio === 2 ? 2 : ''
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('保存成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.$router.push({ name: 'wayBillList' })
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
-      } else if (this.changeUpdate === 2) {
-        this.$request
-          .savePacksAlone({
-            ...this.box,
-            station_id: this.radio === 2 ? this.box.address_id : '',
-            address: address,
-            package_ids: this.packageId,
-            address_type: this.radio === 2 ? 2 : 1,
-            batch_mode: this.$route.query.packageId ? 1 : '',
-            type: this.radio === 2 ? 2 : ''
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('保存成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.$router.push({ name: 'wayBillList' })
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
-      }
     },
     // 收件地址 自提确认
     realPick() {

@@ -29,9 +29,9 @@
             >
               <el-option
                 v-for="item in companyList"
-                :key="item.id"
+                :key="item.num"
                 :label="item.name"
-                :value="item.id"
+                :value="item.num"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -86,42 +86,52 @@
       </el-form-item>
     </el-form>
     <div style="margin-top: 20px">
-      <div style="display: flex; justify-content: space-between; align-items: center">
-        <h4>{{ $t('采购清单') }}</h4>
-        <el-button type="primary" size="small" @click="addGoods">{{ $t('添加') }}</el-button>
-      </div>
-      <el-table :data="ruleForm.goods" border style="width: 100%" @row-click="getRowData">
-        <el-table-column type="index"></el-table-column>
-        <el-table-column prop="date" :label="$t('操作')">
-          <template slot-scope="scope">
-            <el-button class="btn-light-red" @click="delGoods(scope.$index, ruleForm.goods)">{{
-              $t('删除')
-            }}</el-button>
-            <el-button class="btn-main" @click="editGoods(scope.row.id)">{{
-              $t('编辑')
-            }}</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
-        <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
-        <el-table-column prop="brand" :label="$t('品牌')"></el-table-column>
-        <el-table-column prop="category_id" :label="$t('商品分类')"></el-table-column>
-        <el-table-column prop="prop_id" :label="$t('属性')"></el-table-column>
-        <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
-        <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
-        <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
-        <el-table-column prop="box_spec" :label="$t('物品箱规')"></el-table-column>
-        <el-table-column prop="barcode" :label="$t('条码')"></el-table-column>
-        <el-table-column prop="image" :label="$t('物品照片')">
-          <template slot-scope="scope">
-            <img :src="$baseUrl.IMAGE_URL + scope.row.image" class="img" />
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-card class="box-card" shadow="never">
+        <div slot="header" class="clearfix">
+          <span>{{ $t('采购清单') }}</span>
+          <el-button
+            style="float: right"
+            v-if="$route.params.id"
+            type="primary"
+            size="small"
+            @click="saveGoods"
+            >{{ $t('保存') }}</el-button
+          >
+          <el-button class="btn-main" @click="addGood('add')">{{ $t('添加') }}</el-button>
+        </div>
+        <el-table :data="ruleForm.goods" border style="width: 100%">
+          <el-table-column type="index"></el-table-column>
+          <el-table-column prop="date" :label="$t('操作')">
+            <template slot-scope="scope">
+              <el-button class="btn-light-red" @click="delGoods(scope.$index, ruleForm.goods)">{{
+                $t('删除')
+              }}</el-button>
+              <el-button class="btn-main" @click="editGoods(scope.$index, scope.row, 'edit')">{{
+                $t('编辑')
+              }}</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
+          <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
+          <el-table-column prop="brand" :label="$t('品牌')"></el-table-column>
+          <el-table-column prop="category_id" :label="$t('商品分类')"></el-table-column>
+          <el-table-column prop="prop_id" :label="$t('属性')"></el-table-column>
+          <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
+          <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
+          <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
+          <el-table-column prop="box_spec" :label="$t('物品箱规')"></el-table-column>
+          <el-table-column prop="barcode" :label="$t('条码')"></el-table-column>
+          <el-table-column prop="image" :label="$t('物品照片')">
+            <template slot-scope="scope">
+              <img :src="$baseUrl.IMAGE_URL + scope.row.image" class="img" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-card>
     </div>
-    <div style="margin-top: 20px">
+    <div style="margin-top: 20px" v-if="!$route.params.id">
       <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSave">{{
-        $t('保存并提交')
+        $t('提交')
       }}</el-button>
     </div>
   </div>
@@ -142,6 +152,7 @@ export default {
         goods: []
       },
       companyList: [],
+      state: '',
       rules: {
         sn: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
         name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
@@ -164,7 +175,7 @@ export default {
       })
     },
     getCompany() {
-      this.$request.getCompanies().then(res => {
+      this.$request.getExpressData().then(res => {
         if (res.ret) {
           if (res.data.length) {
             this.companyList = res.data
@@ -172,20 +183,19 @@ export default {
         }
       })
     },
-    editGoods(id) {
-      console.log(id)
+    editGoods(index, row, state) {
+      console.log(row)
       dialog(
         {
           type: 'addGoods',
-          id
+          purchase: JSON.parse(JSON.stringify(row)),
+          state
         },
         data => {
           console.log(data)
+          this.ruleForm.goods[index] = data
         }
       )
-    },
-    getRowData(row) {
-      console.log(row)
     },
     delGoods(index, rows) {
       rows.splice(index, 1)
@@ -209,6 +219,22 @@ export default {
         }
       })
     },
+    saveGoods() {
+      this.$request.editPurchase(this.$route.params.id, this.ruleForm.goods).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     onSave() {
       if (!this.$route.params.id) {
         this.$request.addPurchase(this.ruleForm).then(res => {
@@ -217,6 +243,9 @@ export default {
               type: 'success',
               title: this.$t('操作成功'),
               message: res.msg
+            })
+            this.$route.push({
+              name: 'purchaseOrder'
             })
           } else {
             this.$message({
@@ -227,10 +256,11 @@ export default {
         })
       }
     },
-    addGoods() {
+    addGood(state) {
       dialog(
         {
-          type: 'addGoods'
+          type: 'addGoods',
+          state
         },
         data => {
           this.ruleForm.goods.push({ ...data })

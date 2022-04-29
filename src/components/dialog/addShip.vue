@@ -2,12 +2,12 @@
   <el-dialog :visible.sync="show" :title="$t('添加发货信息')" @close="clear">
     <el-form :model="form">
       <el-form-item :label="$t('发货公司')">
-        <el-select v-model="form.logistics_company" :placeholder="$t('请选择')">
+        <el-select v-model="form.logistics_company_code" :placeholder="$t('请选择')">
           <el-option
             v-for="item in companyList"
-            :key="item.id"
+            :key="item.num"
             :label="item.name"
-            :value="item.id"
+            :value="item.num"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -17,7 +17,7 @@
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('确认发货') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -28,7 +28,7 @@ export default {
     return {
       id: '',
       form: {
-        logistics_company: '',
+        logistics_company_code: '',
         logistics_sn: ''
       },
       companyList: []
@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     getCompany() {
-      this.$request.getCompanies().then(res => {
+      this.$request.getExpressData().then(res => {
         if (res.ret) {
           if (res.data.length) {
             this.companyList = res.data
@@ -57,6 +57,7 @@ export default {
           })
           this.show = false
           this.success()
+          this.$route.push({ name: 'purchaseOrder' })
         } else {
           this.$message({
             message: res.msg,

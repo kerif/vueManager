@@ -1,26 +1,28 @@
 <template>
   <div class="purchase-list">
     <el-tabs v-model="activeName" stretch @tab-click="handleClick" class="tab-length">
-      <el-tab-pane :label="$t('全部')" name="-1"></el-tab-pane>
-      <el-tab-pane :label="$t('草稿')" name="0"></el-tab-pane>
-      <el-tab-pane :label="$t('未发货')" name="1"></el-tab-pane>
-      <el-tab-pane :label="$t('已发货')" name="2"></el-tab-pane>
-      <el-tab-pane :label="$t('已入库')" name="3"></el-tab-pane>
-      <el-tab-pane :label="$t('已分货')" name="4"></el-tab-pane>
-      <el-tab-pane :label="$t('已转运')" name="5"></el-tab-pane>
-      <el-tab-pane :label="$t('作废')" name="10"></el-tab-pane>
+      <el-tab-pane :label="`${$t('全部')}(${statusList[7].counts})`" name="all"></el-tab-pane>
+      <el-tab-pane :label="`${$t('草稿')}(${statusList[0].counts})`" name="0"></el-tab-pane>
+      <el-tab-pane :label="`${$t('未发货')}(${statusList[1].counts})`" name="1"></el-tab-pane>
+      <el-tab-pane :label="`${$t('已发货')}(${statusList[2].counts})`" name="2"></el-tab-pane>
+      <el-tab-pane :label="`${$t('已入库')}(${statusList[3].counts})`" name="3"></el-tab-pane>
+      <el-tab-pane :label="`${$t('已分货')}(${statusList[4].counts})`" name="4"></el-tab-pane>
+      <el-tab-pane :label="`${$t('已转运')}(${statusList[5].counts})`" name="5"></el-tab-pane>
+      <el-tab-pane :label="`${$t('作废')}(${statusList[6].counts})`" name="10"></el-tab-pane>
     </el-tabs>
     <purchase-search
       v-show="hasFilterCondition"
       :searchData="searchData"
       v-on:submit="goSearch"
     ></purchase-search>
-    <div style="display: flex; margin-top: 10px">
-      <div style="flex: 1">
+    <div class="flex-btn">
+      <div class="flex-1">
         <el-button class="btn-deep-blue" @click="$router.push({ name: 'addPurchase' })">{{
           $t('新增采购单')
         }}</el-button>
-        <el-button class="btn-green" v-if="activeName !== '7'">{{ $t('导出清单') }}</el-button>
+        <el-button class="btn-green" v-if="activeName !== '7'" @click="exportList(selectIDs)">{{
+          $t('导出清单')
+        }}</el-button>
         <el-button
           class="btn-deep-purple"
           v-if="activeName === '1'"
@@ -41,7 +43,7 @@
         >
         <el-button class="btn-blue-green" v-if="activeName === '5'">{{ $t('提交转运') }}</el-button>
       </div>
-      <div class="headr-r" style="display: flex">
+      <div class="headr-r flex">
         <div class="searchGroup">
           <search-group
             :placeholder="$t('请输入关键字')"
@@ -63,6 +65,7 @@
         style="width: 100%"
         border
         @selection-change="handleSelectionChange"
+        v-loading="tableLoading"
       >
         <el-table-column type="selection"></el-table-column>
         <el-table-column prop="sn" :label="$t('PO单号')"> </el-table-column>
@@ -86,7 +89,7 @@
             <span>{{ scope.row.creator }}</span>
           </template>
         </el-tabel-column>
-        <el-table-column :label="$t('操作')" fixed="right" width="220">
+        <el-table-column :label="$t('操作')" width="220">
           <template slot-scope="scope">
             <el-button class="btn-purple" @click="onDetail(scope.row.id)">{{
               $t('详情')
@@ -105,7 +108,7 @@
               class="btn-deep-purple"
               v-if="['2', '3'].includes(activeName)"
               @click="addShipInfo(scope.row.id)"
-              >{{ $t('发货信息') }}</el-button
+              >{{ $t('确认发货') }}</el-button
             >
             <el-button
               class="btn-deep-blue"
@@ -143,14 +146,18 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      activeName: '-1',
+      activeName: 'all',
       hasFilterCondition: false,
+      tableLoading: false,
       selectIDs: [],
       purchaseData: [],
+      statusList: [],
       searchData: {
         sn: '',
         timeList: [],
-        logistics_sn: ''
+        logistics_sn: '',
+        begin_date: '',
+        end_date: ''
       }
     }
   },
@@ -162,23 +169,53 @@ export default {
   mixins: [pagination],
   created() {
     this.getList()
+    this.getCounts()
   },
   methods: {
     getList() {
+      this.tableLoading = true
       this.$request
         .purchaseList({
-          status: this.activeName === '-1' ? '' : this.activeName,
+          begin_date: this.searchData.timeList ? this.searchData.timeList[0] : '',
+          end_date: this.searchData.timeList ? this.searchData.timeList[1] : '',
+          status: this.activeName === 'all' ? '' : this.activeName,
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          ...this.searchData
         })
         .then(res => {
+          this.tableLoading = false
           this.purchaseData = res.data
           this.page_params.page = res.meta.current_page
           this.page_params.total = res.meta.total
         })
     },
-    goSearch() {},
+    getCounts() {
+      this.$request.purchaseCount().then(res => {
+        this.statusList = res.data
+      })
+    },
+    goSearch() {
+      this.getList()
+    },
+    exportList(ids) {
+      if (!ids.length) return this.$message.error(this.$t('请选择'))
+      this.$request.exportPurchase(ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     onDetail(id) {
       this.$router.push({
         name: 'purchaseDetail',
@@ -194,6 +231,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -211,6 +249,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -228,6 +267,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
+          this.getList()
         } else {
           this.$message({
             message: res.msg,
@@ -242,8 +282,7 @@ export default {
         id
       })
     },
-    handleClick(tab) {
-      console.log(tab)
+    handleClick() {
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)
       this.getList()
@@ -265,6 +304,16 @@ export default {
 .purchase-list {
   .tab-length {
     width: 950px !important;
+  }
+  .flex-btn {
+    display: flex;
+    margin-top: 10px;
+    .flex-1 {
+      flex: 1;
+    }
+    .flex {
+      display: flex;
+    }
   }
 }
 </style>
