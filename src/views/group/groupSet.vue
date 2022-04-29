@@ -65,31 +65,33 @@
       </el-tab-pane>
       <!-- 审核拒绝 -->
       <el-tab-pane :label="$t('其他配置')" name="1">
-        <span>{{ $t('默认支付模式') }}</span>
-        <el-radio-group v-model="mode" style="margin-left: 20px">
-          <el-radio :label="0" @change="changeRadio">{{ $t('团员自付') }}</el-radio>
-          <el-radio :label="1" @change="changeRadio">{{ $t('团长代付') }}</el-radio>
-        </el-radio-group>
-        <br />
-        <div style="margin-top: 10px"></div>
-        <span>{{ $t('最小拼团人数') }}</span>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="$t('当参团人数(包括团长)小于最小人数时, 团长无法提交拼团')"
-          placement="top-start"
-        >
-          <i class="el-icon-warning-outline" style="font-size: 18px"></i>
-        </el-tooltip>
-        <el-input
-          v-model="min_member"
-          size="small"
-          style="margin-left: 20px; width: 240px"
-          :placeholder="$t('请输入最小拼团人数')"
-        ></el-input>
-        <el-button style="margin-left: 5px" class="btn-main" @click="saveNumber">{{
-          $t('保存')
-        }}</el-button>
+        <div style="background: #fff; padding: 20px 10px">
+          <span>{{ $t('默认支付模式') }}</span>
+          <el-radio-group v-model="mode" style="margin-left: 20px">
+            <el-radio :label="0" @change="changeRadio">{{ $t('团员自付') }}</el-radio>
+            <el-radio :label="1" @change="changeRadio">{{ $t('团长代付') }}</el-radio>
+          </el-radio-group>
+          <br />
+          <div style="margin-top: 10px"></div>
+          <span>{{ $t('最小拼团人数') }}</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="$t('当参团人数(包括团长)小于最小人数时, 团长无法提交拼团')"
+            placement="top-start"
+          >
+            <i class="el-icon-warning-outline" style="font-size: 18px"></i>
+          </el-tooltip>
+          <el-input
+            v-model="min_member"
+            size="small"
+            style="margin-left: 20px; width: 240px"
+            :placeholder="$t('请输入最小拼团人数')"
+          ></el-input>
+          <el-button style="margin-left: 5px" class="btn-main" @click="saveNumber">{{
+            $t('保存')
+          }}</el-button>
+        </div>
       </el-tab-pane>
     </el-tabs>
     <el-dialog

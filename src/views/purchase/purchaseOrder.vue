@@ -89,7 +89,7 @@
             <span>{{ scope.row.creator }}</span>
           </template>
         </el-tabel-column>
-        <el-table-column :label="$t('操作')" width="220">
+        <el-table-column :label="$t('操作')" width="280" fixed="right">
           <template slot-scope="scope">
             <el-button class="btn-purple" @click="onDetail(scope.row.id)">{{
               $t('详情')

@@ -92,7 +92,7 @@
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>{{ $t('采购清单') }}</span>
-          <el-button
+          <!-- <el-button
             style="float: right"
             v-if="$route.params.id"
             type="primary"
@@ -101,6 +101,9 @@
             >{{ $t('保存') }}</el-button
           >
           <el-button class="btn-main" style="margin-left: 5px" @click="addGood('add')">{{
+            $t('添加')
+          }}</el-button> -->
+          <el-button class="btn-main" style="float: right" @click="addGood('add')">{{
             $t('添加')
           }}</el-button>
         </div>

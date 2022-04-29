@@ -122,12 +122,21 @@
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>{{ $t('采购清单') }}</span>
-          <el-button style="float: right" type="primary" size="small" @click="saveGoods">{{
-            $t('保存')
-          }}</el-button>
-          <el-button class="btn-main" style="margin-left: 5px" @click="addGood('add')">{{
-            $t('添加')
-          }}</el-button>
+          <el-button
+            style="float: right"
+            v-if="!ruleForm.status === 4"
+            type="primary"
+            size="small"
+            @click="saveGoods"
+            >{{ $t('保存') }}</el-button
+          >
+          <el-button
+            class="btn-main"
+            v-if="!ruleForm.status === 4"
+            style="margin-left: 5px"
+            @click="addGood('add')"
+            >{{ $t('添加') }}</el-button
+          >
         </div>
         <el-table :data="ruleForm.goods" border style="width: 100%">
           <el-table-column type="index"></el-table-column>
@@ -187,9 +196,12 @@
               @click="viewDetail"
               >{{ $t('恢复') }}</el-button
             >
-            <el-button size="small" class="btn-light-red" @click="viewDetail">{{
-              $t('删除')
-            }}</el-button>
+            <el-button
+              size="small"
+              class="btn-light-red"
+              @click="deleteTable(scope.$index, ruleForm.orders)"
+              >{{ $t('删除') }}</el-button
+            >
           </template>
         </el-table-column>
         <el-table-column prop="order_sn" :label="$t('打包单号')"> </el-table-column>
@@ -259,16 +271,6 @@
         @click="editDistributionGoods"
         >{{ $t('分货') }}</el-button
       >
-      <el-button
-        size="small"
-        v-if="ruleForm.status === 4"
-        @click="editDistributionGoods"
-        class="btn-green"
-        >{{ $t('编辑分货') }}</el-button
-      >
-      <el-button size="small" v-if="ruleForm.status === 4" class="btn-green">{{
-        $t('提交为转运单')
-      }}</el-button>
       <el-button size="small" v-if="ruleForm.status === 10" class="btn-main">{{
         $t('恢复')
       }}</el-button>
@@ -323,6 +325,9 @@ export default {
       this.$router.push({
         name: 'distributeDetail'
       })
+    },
+    deleteTable(index, rows) {
+      rows.splice(index, 1)
     },
     saveGoods() {
       this.$request.updateGoodsList(this.$route.params.id, this.ruleForm.goods).then(res => {

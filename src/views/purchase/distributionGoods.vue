@@ -16,7 +16,7 @@
       <el-table-column prop="category_id" :label="$t('商品分类')"></el-table-column>
       <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
       <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
-      <el-table-column prop="quantity" :label="$t('剩余可拆数量')"></el-table-column>
+      <el-table-column prop="remain" :label="$t('剩余可拆数量')"></el-table-column>
       <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
       <el-table-column prop="box_spec" :label="$t('物品箱规')"></el-table-column>
       <el-table-column prop="barcode" :label="$t('条码')"></el-table-column>
@@ -80,7 +80,12 @@
           </div>
           <div v-if="!item.tableData.length">
             <div style="margin-top: 10px">
-              <el-input v-model="item.code" size="small" style="width: 45%"></el-input>
+              <el-input
+                v-model="item.code"
+                :placeholder="$t('请扫商品条码')"
+                size="small"
+                style="width: 45%"
+              ></el-input>
               <el-button type="primary" size="small" style="margin-left: 5px">{{
                 $t('确定')
               }}</el-button>
@@ -100,7 +105,7 @@
               <el-table-column prop="brand" :label="$t('品牌')"> </el-table-column>
               <el-table-column prop="quantity" :label="$t('装箱数量')">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.quantity"></el-input>
+                  <el-input v-model="scope.row.quantity" @blur="getNumber(scope.row.id)"></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -114,16 +119,14 @@
       }}</el-button>
     </div>
     <div v-if="prevStep">
-      <div style="width: 80%; margin: 0 auto">
+      <div style="width: 70%; margin: 0 auto">
         <div class="express-left">
           <p>{{ $t('收货形式') }}</p>
         </div>
-        <div class="express-left right-margin">
-          <el-radio-group v-model="radio" @change="changeRadio">
-            <el-radio :label="1">{{ $t('送货上门') }}</el-radio>
-            <el-radio :label="2" :disabled="address_type === 2">{{ $t('自提点提货') }}</el-radio>
-          </el-radio-group>
-        </div>
+        <el-radio-group v-model="radio" @change="changeRadio">
+          <el-radio :label="1">{{ $t('送货上门') }}</el-radio>
+          <el-radio :label="2" :disabled="address_type === 2">{{ $t('自提点提货') }}</el-radio>
+        </el-radio-group>
       </div>
       <div class="boxing-container" v-for="(item, index) in divides" :key="index">
         <div class="apply-main">
@@ -131,7 +134,7 @@
             <div class="choose-sty key"># {{ index + 1 }}</div>
             <div class="left-top">
               <ul>
-                <li class="main-sty" v-for="ele in item.packageData" :key="ele.id">
+                <li class="main-sty" v-for="ele in item.goods" :key="ele.id">
                   <div class="apply-express">
                     <div class="express-left">
                       <p>
@@ -534,7 +537,6 @@ export default {
       ],
       ind: '',
       i: '',
-      user_id: '',
       needCode: '',
       options: [],
       explanation: '',
@@ -551,7 +553,7 @@ export default {
       addressDialog: false,
       tableData: [],
       chooseId: 0,
-      packageData: [],
+      goods: [],
       radio: 1,
       address_type: 1,
       servicesData: [],
@@ -585,7 +587,7 @@ export default {
           station_id: '',
           batch_mode: '',
           single_mode: '',
-          packageData: [],
+          goods: [],
           selfData: {}
         }
       ],
@@ -607,6 +609,7 @@ export default {
         address_id: ''
       },
       countryData: [],
+      ids: '',
       rules: {
         country_id: [{ required: true, message: this.$t('请选择国家'), trigger: 'blur' }],
         phone: [{ required: true, message: this.$t('请输入电话'), trigger: 'blur' }],
@@ -628,50 +631,6 @@ export default {
     }
   },
   methods: {
-    getList() {
-      this.$request
-        .preview({
-          package_ids: this.packageId
-        })
-        .then(res => {
-          if (res.ret) {
-            this.divides.forEach(item => {
-              if (item.packageData) {
-                return (item.packageData = res.data.packages)
-              }
-            })
-            this.userId = res.data.packages[0].user_id
-            this.clientId = res.data.packages[0].user_id
-            if (this.userId) {
-              this.getAddressDialog() // 获取收件地址
-              this.getCountry() // 获取新建收件地址的国家
-            }
-            this.optionsId = res.data.packages.map(item => item.id)
-            this.localization = res.localization
-            if (res.data.items.added_service.length) {
-              this.divides.forEach(item => {
-                return (item.add_service = res.data.items.added_service)
-              })
-            }
-            this.divides.forEach(item => {
-              return (item.is_insurance = res.data.items.insurance)
-            })
-            this.divides.forEach(item => {
-              return (item.is_tariff = res.data.items.is_tariff)
-            })
-            this.divides.forEach(item => {
-              return (item.payment_mode = res.data.items.payment_mode)
-            })
-            this.getExpress()
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-    },
     // 获取快递方式
     getExpress() {
       this.address_ids = this.divides.forEach(item => {
@@ -728,6 +687,14 @@ export default {
           this.multiBoxes = res.data.multi_boxes
         }
       })
+    },
+    // 更改地址
+    changeAddress(userId, counts, addressList) {
+      this.clientId = userId // 客户ID
+      this.counts = counts // 选择包裹数
+      this.addressData = addressList // 收件地址数据
+      this.boxDialog = true
+      this.getAddressDialog()
     },
     //  收件地址 选择自提点弹窗
     onPickChange(row) {
@@ -808,13 +775,13 @@ export default {
         }
       })
       this.divides.forEach(item => {
-        if (item.packageData) {
-          item.packageData = item.packageData.filter(ele => ele.user_id !== userId)
+        if (item.goods) {
+          item.goods = item.goods.filter(ele => ele.user_id !== userId)
         }
       })
       this.packageId = this.divides.forEach(item => {
-        if (item.packageData) {
-          item.packageData.map(ele => ele.id)
+        if (item.goods) {
+          item.goods.map(ele => ele.id)
         }
       })
     },
@@ -839,6 +806,28 @@ export default {
         this.form = res.data
       })
     },
+    getNumber(id) {
+      console.log(id)
+      let number = 0
+      this.goodData.forEach(item => {
+        console.log(item)
+        if (item.tableData) {
+          item.tableData.forEach(ele => {
+            if (ele.id === id) {
+              number = item.quantity + number
+              console.log(number)
+            }
+          })
+        }
+      })
+      this.form.goods.forEach((val, i) => {
+        if (val.id === this.id) {
+          console.log(id, number)
+          val.remain = val.quantity - number
+          this.$set(this.form.goods[i], 'remain', val.remain)
+        }
+      })
+    },
     onConfirm() {
       this.nextStep = true
       this.goodData = []
@@ -855,9 +844,6 @@ export default {
     goNext() {
       this.nextStep = false
       this.prevStep = true
-      if (this.packageId) {
-        this.getList()
-      }
       this.divides = []
       for (let i = 1; i <= this.number; i++) {
         this.divides.push({
@@ -877,7 +863,7 @@ export default {
           station_id: '',
           batch_mode: '',
           single_mode: '',
-          packageData: []
+          goods: []
         })
       }
     },
@@ -1046,12 +1032,13 @@ export default {
 .key {
   font-size: 24px;
   font-weight: bold;
+  color: black;
 }
 .goods {
   display: flex;
   border: 1px solid #eee;
   padding: 10px 20px 20px;
-  width: 1200px;
+  width: 70%;
   margin: 10px auto;
   .left-box {
     display: flex;
@@ -1071,8 +1058,8 @@ export default {
   }
 }
 .boxing-container {
-  width: 80%;
-  margin: 0 auto;
+  width: 70%;
+  margin: 10px auto;
   border: 1px solid #eee;
   .apply-main {
     padding: 20px 0 0 0;
@@ -1103,7 +1090,6 @@ export default {
   }
   .choose-sty {
     text-align: left;
-    color: #b6b6b6;
   }
   .top-sty {
     padding-bottom: 20px;
@@ -1163,7 +1149,7 @@ export default {
   width: -moz-calc(100% - 342px);
   width: -webkit-calc(100% - 342px);
   padding: 15px;
-  height: 750px;
+  height: 700px;
   box-sizing: border-box;
 }
 </style>
