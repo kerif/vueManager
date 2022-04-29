@@ -15,7 +15,9 @@
             <el-input
               v-model="ruleForm.sn"
               :disabled="$route.params.id"
+              maxlength="15"
               style="width: 50%"
+              onkeyup="ruleForm.sn = ruleForm.sn.replace(/[^_A-Za-z0-9-]/,'')"
               :placeholder="$t('单号仅限字母、数字、或下划线，长度限制15个字符')"
             ></el-input>
           </el-form-item>
@@ -43,6 +45,7 @@
             <el-input
               v-model="ruleForm.name"
               :disabled="$route.params.id"
+              maxlength="30"
               style="width: 50%"
               :placeholder="$t('长度限制30个字符')"
             ></el-input>
@@ -97,11 +100,13 @@
             @click="saveGoods"
             >{{ $t('保存') }}</el-button
           >
-          <el-button class="btn-main" @click="addGood('add')">{{ $t('添加') }}</el-button>
+          <el-button class="btn-main" style="margin-left: 5px" @click="addGood('add')">{{
+            $t('添加')
+          }}</el-button>
         </div>
         <el-table :data="ruleForm.goods" border style="width: 100%">
           <el-table-column type="index"></el-table-column>
-          <el-table-column prop="date" :label="$t('操作')">
+          <el-table-column prop="date" :label="$t('操作')" width="150">
             <template slot-scope="scope">
               <el-button class="btn-light-red" @click="delGoods(scope.$index, ruleForm.goods)">{{
                 $t('删除')
@@ -114,8 +119,8 @@
           <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
           <el-table-column prop="brand" :label="$t('品牌')"></el-table-column>
-          <el-table-column prop="category_id" :label="$t('商品分类')"></el-table-column>
-          <el-table-column prop="prop_id" :label="$t('属性')"></el-table-column>
+          <el-table-column prop="category_name" :label="$t('商品分类')"></el-table-column>
+          <el-table-column prop="prop_name" :label="$t('属性')"></el-table-column>
           <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
           <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
           <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
@@ -263,6 +268,7 @@ export default {
           state
         },
         data => {
+          console.log(data)
           this.ruleForm.goods.push({ ...data })
         }
       )

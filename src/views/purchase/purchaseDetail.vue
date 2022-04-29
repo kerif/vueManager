@@ -23,6 +23,8 @@
               <el-input
                 v-model="ruleForm.sn"
                 style="width: 50%"
+                maxlength="15"
+                onkeyup="ruleForm.sn = ruleForm.sn.replace(/[^_A-Za-z0-9-]/,'')"
                 disabled
                 :placeholder="$t('单号仅限字母、数字、或下划线，长度限制15个字符')"
               ></el-input>
@@ -51,6 +53,7 @@
               <el-input
                 v-model="ruleForm.name"
                 style="width: 50%"
+                maxlength="30"
                 disabled
                 :placeholder="$t('长度限制30个字符')"
               ></el-input>
@@ -122,7 +125,9 @@
           <el-button style="float: right" type="primary" size="small" @click="saveGoods">{{
             $t('保存')
           }}</el-button>
-          <el-button class="btn-main" @click="addGood('add')">{{ $t('添加') }}</el-button>
+          <el-button class="btn-main" style="margin-left: 5px" @click="addGood('add')">{{
+            $t('添加')
+          }}</el-button>
         </div>
         <el-table :data="ruleForm.goods" border style="width: 100%">
           <el-table-column type="index"></el-table-column>

@@ -87,3 +87,11 @@ export const getIds = (arr, result = [], newResult = []) => {
     }
   }
 }
+
+export const getId = (arr, result = []) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].areas && arr[i].areas.length > 0) {
+      getId(arr[i].areas, result)
+    }
+  }
+}

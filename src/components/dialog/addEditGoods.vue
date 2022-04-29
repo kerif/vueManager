@@ -27,11 +27,14 @@
         <el-cascader
           v-model="ruleForm.category_id"
           :options="classifyList"
+          ref="good"
           :props="props"
+          :show-all-levels="false"
+          @change="handleVal"
         ></el-cascader>
       </el-form-item>
       <el-form-item :label="$t('商品属性')" prop="prop_id">
-        <el-radio-group v-model="ruleForm.prop_id">
+        <el-radio-group v-model="ruleForm.prop_id" @change="handleClick">
           <el-radio v-for="item in propList" :key="item.id" :label="item.id">{{
             item.name
           }}</el-radio>
@@ -124,13 +127,16 @@ export default {
     return {
       purchase: {},
       state: '',
+      options: [],
       ruleForm: {
         cn_name: '',
         en_name: '',
         brand: '',
         category_id: '',
+        category_name: '',
         barcode: '',
         prop_id: '',
+        prop_name: '',
         distributor: '',
         sku: '',
         hs_code: '',
@@ -140,14 +146,14 @@ export default {
         image: ''
       },
       propList: [],
-      props: { multiple: true, checkStrictly: false },
+      props: { checkStrictly: false },
       classifyList: [],
       rules: {
-        cn_name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
-        en_name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
-        prop_id: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
-        quantity: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
-        radio: [{ required: true, message: this.$t('请选择'), trigger: 'change' }]
+        cn_name: [{ required: true, message: this.$t('请输入中文名称'), trigger: 'blur' }],
+        en_name: [{ required: true, message: this.$t('请输入英文名称'), trigger: 'blur' }],
+        prop_id: [{ required: true, message: this.$t('请输入商品属性'), trigger: 'change' }],
+        quantity: [{ required: true, message: this.$t('请输入物品总数量'), trigger: 'blur' }],
+        category_id: [{ required: true, message: this.$t('请选择商品分类'), trigger: 'change' }]
       }
     }
   },
@@ -185,10 +191,20 @@ export default {
     onDeleteImg() {
       this.ruleForm.image = ''
     },
+    handleVal(val) {
+      console.log(val)
+      console.log(this.$refs['good'].getCheckedNodes())
+      console.log(this.$refs['good'].getCheckedNodes()[0].value)
+      console.log(this.$refs['good'].getCheckedNodes()[0].label)
+    },
+    handleClick(v) {
+      console.log(v)
+    },
     getGoods() {
       this.$request.getAllTree().then(res => {
         if (res.ret) {
           if (res.data.length) {
+            this.options = res.data
             this.classifyList = res.data.map(item => {
               return {
                 value: item.id,
@@ -230,12 +246,22 @@ export default {
       })
     },
     submit() {
+      this.ruleForm.category_id = this.$refs['good'].getCheckedNodes()[0].value
+      this.ruleForm.category_name = this.$refs['good'].getCheckedNodes()[0].label
+      this.propList.forEach(item => {
+        if (item.id === this.ruleForm.prop_id) {
+          this.ruleForm.prop_name = item.name
+        }
+      })
+      let params = {
+        ...this.ruleForm
+      }
       if (this.state === 'edit') {
-        this.success(JSON.parse(JSON.stringify(this.ruleForm)))
+        this.success(JSON.parse(JSON.stringify(params)))
         this.show = false
       } else {
         this.show = false
-        this.success(this.ruleForm)
+        this.success(params)
       }
     },
     clear() {
