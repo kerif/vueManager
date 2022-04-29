@@ -73,6 +73,14 @@
         <br />
         <div style="margin-top: 10px"></div>
         <span>{{ $t('最小拼团人数') }}</span>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="$t('当参团人数(包括团长)小于最小人数时, 团长无法提交拼团')"
+          placement="top-start"
+        >
+          <i class="el-icon-warning-outline" style="font-size: 18px"></i>
+        </el-tooltip>
         <el-input
           v-model="min_member"
           style="margin-left: 20px; width: 240px"
