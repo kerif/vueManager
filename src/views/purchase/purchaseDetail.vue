@@ -142,7 +142,7 @@
               >
               <el-button
                 class="btn-deep-blue"
-                v-if="ruleForm.status !== 0 || ruleForm.status !== ''"
+                v-if="ruleForm.status !== 0"
                 @click="editDetail(scope.row.id)"
                 >{{ $t('详情') }}</el-button
               >
@@ -267,7 +267,9 @@
       <el-button size="small" v-if="ruleForm.status === 10" class="btn-main">{{
         $t('恢复')
       }}</el-button>
-      <el-button size="small" type="primary">{{ $t('提交为转运单') }}</el-button>
+      <el-button size="small" type="primary" v-if="ruleForm.status === 4">{{
+        $t('提交为转运单')
+      }}</el-button>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -400,6 +402,7 @@ export default {
         data => {
           console.log(data)
           this.ruleForm.goods[index] = data
+          this.$set(this.ruleForm.goods, index, data)
         }
       )
     },

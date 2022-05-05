@@ -11,7 +11,7 @@
     <el-form label-width="120px" :model="ruleForm" :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('PO单号')" prop="sn">
+          <!-- <el-form-item :label="$t('PO单号')" prop="sn">
             <el-input
               v-model="ruleForm.sn"
               :disabled="$route.params.id"
@@ -19,6 +19,15 @@
               style="width: 50%"
               onkeyup="ruleForm.sn = ruleForm.sn.replace(/[^_A-Za-z0-9-]/,'')"
               :placeholder="$t('单号仅限字母、数字、或下划线，长度限制15个字符')"
+            ></el-input>
+          </el-form-item> -->
+          <el-form-item :label="$t('PO单号名称')" prop="name">
+            <el-input
+              v-model="ruleForm.name"
+              :disabled="$route.params.id"
+              maxlength="30"
+              style="width: 50%"
+              :placeholder="$t('长度限制30个字符')"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -41,13 +50,11 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('PO单号名称')" prop="name">
+          <el-form-item :label="$t('采购总金额')" prop="amount">
             <el-input
-              v-model="ruleForm.name"
-              :disabled="$route.params.id"
-              maxlength="30"
+              v-model="ruleForm.amount"
               style="width: 50%"
-              :placeholder="$t('长度限制30个字符')"
+              :placeholder="$t('请输入')"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -57,17 +64,6 @@
               v-model="ruleForm.logistics_sn"
               style="width: 50%"
               :placeholder="$t('请输入物流单号')"
-            ></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="$t('采购总金额')" prop="amount">
-            <el-input
-              v-model="ruleForm.amount"
-              style="width: 50%"
-              :placeholder="$t('请输入')"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -127,7 +123,7 @@
         </el-table>
       </el-card>
     </div>
-    <div style="margin-top: 20px" v-if="!$route.params.id">
+    <div style="margin-top: 20px">
       <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSave">{{
         $t('保存')
       }}</el-button>
