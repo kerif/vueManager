@@ -65,6 +65,7 @@
         style="width: 100%"
         border
         @selection-change="handleSelectionChange"
+        @row-click="getRow"
         v-loading="tableLoading"
       >
         <el-table-column type="selection"></el-table-column>
@@ -161,6 +162,7 @@ export default {
       selectIDs: [],
       purchaseData: [],
       statusList: [],
+      logistics_sn: '',
       searchData: {
         sn: '',
         timeList: [],
@@ -277,6 +279,10 @@ export default {
       console.log(id)
       this.$router.push({ name: 'editStorage', params: { id: id } })
     },
+    getRow(row) {
+      console.log(row)
+      this.logistics_sn = row.logistics_sn
+    },
     onInvild(ids) {
       if (!ids.length) return this.$message.error(this.$t('请选择'))
       this.$request.invalidPurchase(ids).then(res => {
@@ -299,7 +305,8 @@ export default {
       dialog(
         {
           type: 'addShip',
-          id
+          id,
+          logistics_sn: this.logistics_sn
         },
         () => {
           this.getList()

@@ -11,16 +11,6 @@
     <el-form label-width="120px" :model="ruleForm" :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-          <!-- <el-form-item :label="$t('PO单号')" prop="sn">
-            <el-input
-              v-model="ruleForm.sn"
-              :disabled="$route.params.id"
-              maxlength="15"
-              style="width: 50%"
-              onkeyup="ruleForm.sn = ruleForm.sn.replace(/[^_A-Za-z0-9-]/,'')"
-              :placeholder="$t('单号仅限字母、数字、或下划线，长度限制15个字符')"
-            ></el-input>
-          </el-form-item> -->
           <el-form-item :label="$t('PO单号名称')" prop="name">
             <el-input
               v-model="ruleForm.name"
@@ -32,9 +22,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="$t('发货公司')" prop="logistics_company">
+          <el-form-item :label="$t('发货公司')" prop="logitics_company_code">
             <el-select
-              v-model="ruleForm.logistics_company"
+              v-model="ruleForm.logitics_company_code"
               :placeholder="$t('请选择发货公司')"
               style="width: 50%"
             >
@@ -147,7 +137,7 @@ export default {
       ruleForm: {
         sn: '',
         logistics_sn: '',
-        logistics_company: '',
+        logitics_company_code: '',
         name: '',
         remark: '',
         amount: '',

@@ -524,6 +524,11 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.addressList = res.data
+            this.divides.forEach(item => {
+              if (item.addressList) {
+                item.addressList = res.data
+              }
+            })
             res.data.map(item => {
               if (item.address) {
                 this.addressIds = item.address.sub_area_id
@@ -544,18 +549,24 @@ export default {
       this.getExpress()
     },
     getExpress() {
-      this.address_ids = this.addressList.map(item => {
-        if (item.address) {
-          return item.address.id
+      this.address_ids = this.divides.forEach(item => {
+        if (item.addressList) {
+          item.addressList.map(ele => {
+            if (ele.address) {
+              return ele.address.id
+            }
+          })
         }
       })
       let params = {
         package_ids: this.optionsId,
         type: this.radio
       }
-      if (this.address_type === 1) {
-        params.address_ids = this.address_ids
-      }
+      this.divides.forEach(item => {
+        if (item.address_type === 1) {
+          params.address_ids = this.address_ids
+        }
+      })
       if (this.radio === 1) {
         params.is_delivery = 0
       }
@@ -649,10 +660,11 @@ export default {
       })
       this.form.goods.forEach((val, i) => {
         if (val.id === id) {
-          val.remain = val.quantity - number
-          if (val.remain > 0) {
-            this.$set(this.form.goods[i], 'remain', val.remain)
+          if (number < 0 || number > val.quantity) {
+            return this.$message.error(this.$t('装箱数量不能为负值'))
           }
+          val.remain = val.quantity - number
+          this.$set(this.form.goods[i], 'remain', val.remain)
         }
       })
     },
@@ -771,6 +783,9 @@ export default {
       this.goodData.forEach(item => {
         if (item.code) {
           item.tableData = this.form.goods.filter(ele => ele.barcode === item.code)
+          item.tableData.forEach(val => {
+            this.getNumber(val.id)
+          })
         }
       })
     },

@@ -31,10 +31,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('发货公司')" prop="logistics_company">
+            <el-form-item :label="$t('发货公司')" prop="logitics_company_code">
               <el-select
                 :placeholder="$t('请选择发货公司')"
-                v-model="ruleForm.logistics_company"
+                v-model="ruleForm.logitics_company_code"
                 style="width: 50%"
               >
                 <el-option
@@ -278,7 +278,7 @@ export default {
     return {
       ruleForm: {
         sn: '',
-        logistics_company: '',
+        logitics_company_code: '',
         amount: '',
         name: '',
         remark: '',

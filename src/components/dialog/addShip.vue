@@ -31,6 +31,7 @@ export default {
         logistics_company_code: '',
         logistics_sn: ''
       },
+      logistics_sn: '',
       companyList: []
     }
   },
@@ -38,6 +39,11 @@ export default {
     this.getCompany()
   },
   methods: {
+    init() {
+      if (this.id) {
+        this.form.logistics_sn = this.logistics_sn
+      }
+    },
     getCompany() {
       this.$request.getExpressData().then(res => {
         if (res.ret) {
