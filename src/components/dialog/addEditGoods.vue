@@ -153,7 +153,7 @@ export default {
       rules: {
         cn_name: [{ required: true, message: this.$t('请输入中文名称'), trigger: 'blur' }],
         en_name: [{ required: true, message: this.$t('请输入英文名称'), trigger: 'blur' }],
-        prop_id: [{ required: true, message: this.$t('请输入商品属性'), trigger: 'change' }],
+        prop_id: [{ required: true, message: this.$t('请选择商品属性'), trigger: 'change' }],
         quantity: [{ required: true, message: this.$t('请输入物品总数量'), trigger: 'blur' }],
         category_id: [{ required: true, message: this.$t('请选择商品分类'), trigger: 'change' }]
       }
@@ -279,6 +279,7 @@ export default {
       this.ruleForm.prop_id = ''
       this.ruleForm.distributor = ''
       this.ruleForm.sku = ''
+      this.ruleForm.box_count = ''
       this.ruleForm.hs_code = ''
       this.ruleForm.quantity = ''
       this.ruleForm.purchase_price = ''
@@ -289,8 +290,48 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .input-sty {
   width: 40%;
+}
+.img-item {
+  display: inline-block;
+  border: 1px dashed #d9d9d9;
+  width: 148px;
+  height: 148px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+  &:hover {
+    .model-box,
+    .operat-box {
+      opacity: 1;
+      transition: all 0.5s ease-in;
+    }
+  }
+}
+.model-box {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.operat-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  i {
+    font-size: 20px;
+    color: #fff;
+    margin-right: 10px;
+  }
 }
 </style>
