@@ -105,13 +105,6 @@
             style="margin-left: 40px"
             >{{ $t('添加') }}</el-button
           >
-          <el-button
-            size="small"
-            v-if="ruleForm.status === 2"
-            class="btn-deep-blue"
-            style="margin-left: 40px"
-            >{{ $t('修改') }}</el-button
-          >
         </template>
       </purchase-info>
     </div>
@@ -243,9 +236,6 @@
       >
       <el-button size="small" v-if="ruleForm.status === 2" class="btn-blue-green">{{
         $t('入库')
-      }}</el-button>
-      <el-button size="small" v-if="ruleForm.status === 2" class="btn-green">{{
-        $t('修改发货信息')
       }}</el-button>
       <el-button
         size="small"

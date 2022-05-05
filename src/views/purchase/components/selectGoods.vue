@@ -11,7 +11,7 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55"> </el-table-column>
+      <el-table-column type="selection" width="55" :selectable="checkNum"> </el-table-column>
       <el-table-column :label="$t('物品中文名称')" prop="cn_name" width="120"> </el-table-column>
       <el-table-column prop="brand" :label="$t('品牌')" width="120"> </el-table-column>
       <el-table-column prop="remain" :label="$t('剩余明细数量')"> </el-table-column>
@@ -45,6 +45,13 @@ export default {
     },
     close() {
       this.$emit('passVal', false)
+    },
+    checkNum(row) {
+      if (row.remain === 0 || row.remain < 0) {
+        return 0
+      } else {
+        return 1
+      }
     },
     confirm() {
       this.$emit('passVal', false)

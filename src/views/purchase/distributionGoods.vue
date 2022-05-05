@@ -20,7 +20,15 @@
       <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
       <el-table-column prop="box_spec" :label="$t('物品箱规')"></el-table-column>
       <el-table-column prop="barcode" :label="$t('条码')"></el-table-column>
-      <el-table-column prop="image" :label="$t('物品照片')"></el-table-column>
+      <el-table-column prop="image" :label="$t('物品照片')">
+        <template slot-scope="scope">
+          <img
+            :src="$baseUrl.IMAGE_URL + scope.row.image"
+            @click="checkImg(scope.row.image)"
+            class="img"
+          />
+        </template>
+      </el-table-column>
     </el-table>
     <div style="width: 70%; margin: 20px auto">
       <el-steps :active="1" finish-status="success">
@@ -368,6 +376,11 @@
         <el-button type="primary" @click="confirmSelf">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -432,6 +445,8 @@ export default {
       station_id: '',
       selfData: {},
       clientId: '',
+      imgVisible: false,
+      imgSrc: '',
       divides: [
         {
           addressList: [],
@@ -479,7 +494,6 @@ export default {
   created() {
     this.getRadio()
     this.getInsurance()
-    this.getRecipeAddress()
     if (this.$route.params.id) {
       this.getDetail()
     }
@@ -504,7 +518,7 @@ export default {
       this.tableLoading = true
       this.$request
         .recipeAddress({
-          package_ids: this.packageId
+          package_ids: [this.packageId]
         })
         .then(res => {
           this.tableLoading = false
@@ -615,6 +629,9 @@ export default {
         // this.user_id = res.data.package.user_id
         this.location = res.data.package.location
         console.log(res.data.package.location)
+        this.packageId = res.data.package.id
+        console.log(this.packageId)
+        this.getRecipeAddress()
       })
     },
     getNumber(id) {
@@ -633,7 +650,9 @@ export default {
       this.form.goods.forEach((val, i) => {
         if (val.id === id) {
           val.remain = val.quantity - number
-          this.$set(this.form.goods[i], 'remain', val.remain)
+          if (val.remain > 0) {
+            this.$set(this.form.goods[i], 'remain', val.remain)
+          }
         }
       })
     },
@@ -713,11 +732,11 @@ export default {
       this.showSelectGoods = true
     },
     getVal(selection) {
-      console.log(1, selection)
       let selections = JSON.parse(JSON.stringify(selection))
-      // this.goodData[this.ind].tableData = []
       this.$set(this.goodData[this.ind], 'tableData', selections)
-      console.log(this.goodData)
+      selections.forEach(item => {
+        this.getNumber(item.id)
+      })
     },
     deleterow(index, rows) {
       rows.splice(index, 1)
@@ -750,14 +769,17 @@ export default {
     },
     onSearch() {
       this.goodData.forEach(item => {
-        if (item.code === '') {
-          this.$message.warning('商品条码不能为空')
-          return
+        if (item.code) {
+          item.tableData = this.form.goods.filter(ele => ele.barcode === item.code)
         }
       })
     },
     selectStation() {
       this.addressDialog = true
+    },
+    checkImg(url) {
+      this.imgVisible = true
+      this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
     changeExpress() {
       this.selfData = {}
@@ -951,5 +973,14 @@ export default {
   padding: 15px;
   height: 780px;
   box-sizing: border-box;
+}
+.img {
+  width: 30px;
+}
+.img_box {
+  text-align: center;
+  .imgDialog {
+    width: 50%;
+  }
 }
 </style>
