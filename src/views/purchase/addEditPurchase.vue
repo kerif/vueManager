@@ -127,7 +127,7 @@
         </el-table>
       </el-card>
     </div>
-    <div style="margin-top: 20px" v-if="!$route.params.id">
+    <div style="margin-top: 20px">
       <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSave">{{
         $t('保存')
       }}</el-button>
