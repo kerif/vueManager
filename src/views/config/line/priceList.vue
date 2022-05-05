@@ -69,7 +69,9 @@
         <vxe-table-colgroup v-if="type === 5">
           <vxe-table-colgroup
             field="type_weight"
-            :title="$t('首重单位续重') + localization.weight_unit"
+            :title="`${$t('首重单位续重')}${
+              baseMode === 0 ? localization.weight_unit : $t('立方')
+            }`"
             min-width="120"
           >
           </vxe-table-colgroup>
