@@ -92,9 +92,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item v-if="this.$route.params.id">
-          <el-button size="small" type="primary" @click="saveInfo">{{ $t('保存') }}</el-button>
-        </el-form-item>
       </el-form>
     </div>
     <div v-else>
@@ -123,17 +120,9 @@
         <div slot="header" class="clearfix">
           <span>{{ $t('采购清单') }}</span>
           <el-button
-            style="float: right"
-            v-if="!ruleForm.status === 4"
-            type="primary"
-            size="small"
-            @click="saveGoods"
-            >{{ $t('保存') }}</el-button
-          >
-          <el-button
             class="btn-main"
-            v-if="!ruleForm.status === 4"
-            style="margin-left: 5px"
+            v-if="ruleForm.status === 0"
+            style="float: right"
             @click="addGood('add')"
             >{{ $t('添加') }}</el-button
           >
@@ -171,7 +160,11 @@
           <el-table-column prop="barcode" :label="$t('条码')"></el-table-column>
           <el-table-column prop="image" :label="$t('物品照片')">
             <template slot-scope="scope">
-              <img :src="$baseUrl.IMAGE_URL + scope.row.image" />
+              <img
+                :src="$baseUrl.IMAGE_URL + scope.row.image"
+                @click="checkImg(scope.row.image)"
+                class="img"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -227,7 +220,7 @@
       >
       <el-button
         size="small"
-        v-if="ruleForm.status === 1"
+        v-if="ruleForm.status === 1 || ruleForm.status === 0"
         class="btn-deep-blue"
         @click="saveGoods"
         :loading="$store.state.btnLoading"
@@ -239,7 +232,7 @@
         class="btn-deep-blue"
         @click="onSubmit"
         :loading="$store.state.btnLoading"
-        >{{ $t('提交') }}</el-button
+        >{{ $t('保存并提交') }}</el-button
       >
       <el-button
         size="small"
@@ -274,7 +267,13 @@
       <el-button size="small" v-if="ruleForm.status === 10" class="btn-main">{{
         $t('恢复')
       }}</el-button>
+      <el-button size="small" type="primary">{{ $t('提交为转运单') }}</el-button>
     </div>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -301,7 +300,9 @@ export default {
         name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }]
       },
       showGoods: false,
-      companyList: []
+      companyList: [],
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   components: {
@@ -321,6 +322,10 @@ export default {
         this.ruleForm = res.data
       })
     },
+    checkImg(url) {
+      this.imgVisible = true
+      this.imgSrc = this.$baseUrl.IMAGE_URL + url
+    },
     viewDetail() {
       this.$router.push({
         name: 'distributeDetail'
@@ -330,7 +335,10 @@ export default {
       rows.splice(index, 1)
     },
     saveGoods() {
-      this.$request.updateGoodsList(this.$route.params.id, this.ruleForm.goods).then(res => {
+      delete this.ruleForm.logs
+      let params = { ...this.ruleForm, is_approved: 0 }
+      console.log(params)
+      this.$request.editPurchase(this.$route.params.id, params).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -346,9 +354,8 @@ export default {
       })
     },
     saveInfo() {
-      delete this.ruleForm.goods
       delete this.ruleForm.logs
-      let params = { ...this.ruleForm }
+      let params = { ...this.ruleForm, is_approved: 1 }
       console.log(params)
       this.$request.editPurchase(this.$route.params.id, params).then(res => {
         if (res.ret) {
@@ -473,6 +480,15 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+  }
+  .img {
+    width: 30px;
+  }
+  .img_box {
+    text-align: center;
+    .imgDialog {
+      width: 50%;
+    }
   }
 }
 </style>

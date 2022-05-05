@@ -381,31 +381,6 @@
         <el-button type="primary" @click="confirmSelf">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
-    <!-- 选择自提点地址 -->
-    <el-dialog :visible.sync="selfDialog" :title="$t('收件地址列表')" @close="clear">
-      <el-table :data="selfForm" border @row-click="onPickChange" style="width: 100%">
-        <el-table-column>
-          <template slot-scope="scope">
-            <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
-          </template>
-        </el-table-column>
-        <el-table-column prop="country.cn_name" :label="$t('国家')"> </el-table-column>
-        <el-table-column prop="contactor" :label="$t('收件人')"> </el-table-column>
-        <el-table-column :label="$t('联系电话')" prop="contact_info"> </el-table-column>
-        <el-table-column :label="$t('详细地址')">
-          <template slot-scope="scope">
-            <span
-              >{{ scope.row.street }}&nbsp;{{ scope.row.door_no }}&nbsp;{{ scope.row.city }}
-              <span v-if="scope.row.address">({{ scope.row.address }})</span>
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div slot="footer">
-        <el-button @click="returnPick">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="realPick">{{ $t('确定') }}</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -469,7 +444,6 @@ export default {
         street: '',
         address: ''
       },
-      countryData: [],
       rules: {
         country_id: [{ required: true, message: this.$t('请选择国家'), trigger: 'blur' }],
         phone: [{ required: true, message: this.$t('请输入电话'), trigger: 'blur' }],
@@ -480,7 +454,6 @@ export default {
       tableLoading: false,
       counts: '',
       clientId: '',
-      addressData: [],
       changeUpdate: 1,
       addressIds: [],
       address_ids: [],
@@ -593,14 +566,6 @@ export default {
       this.packageData = this.packageData.filter(item => item.user_id !== userId)
       this.packageId = this.packageData.map(item => item.id)
     },
-    // 更改地址
-    changeAddress(userId, counts, addressList) {
-      this.clientId = userId // 客户ID
-      this.counts = counts // 选择包果数
-      this.addressData = addressList // 收件地址数据
-      this.boxDialog = true
-      this.getAddressDialog()
-    },
     changeAdd() {
       this.box.express_line_id = ''
       this.options = []
@@ -649,9 +614,7 @@ export default {
             type: 'warning'
           })
         }
-        this.boxDialog = false
       })
-      this.boxDialog = false
     },
     // 获取快递方式
     getExpress() {
@@ -718,9 +681,7 @@ export default {
       this.$request.lineStations(this.lineId).then(res => {
         if (res.ret) {
           this.stationsData = res.data
-          console.log(this.stationsData)
           this.selfData = res.data[0]
-          console.log(this.selfData)
           if (this.selfData) {
             this.box.address_id = this.selfData.id
           }
@@ -751,30 +712,11 @@ export default {
         }
       })
     },
-    // 获取地址数据
-    getAddressDialog() {
-      this.$request
-        .previewAddress({
-          user_id: this.clientId
-        })
-        .then(res => {
-          if (res.ret) {
-            this.tableData = res.data
-            this.userData = this.tableData[0]
-            if (this.userData) {
-              this.box.address_id = this.userData.id
-            }
-          }
-        })
-    },
     // 获取所有可选择的国家
     getCountry() {
       this.$request.getCountry().then(res => {
         this.countryData = res.data
       })
-    },
-    chooseUser() {
-      this.boxDialog = true
     },
     // 确认新建地址
     confirmCreated(formName) {
@@ -818,46 +760,11 @@ export default {
       this.innerVisible = false
       this.boxDialog = true
     },
-    // 选择自提点
-    pickPoint() {
-      this.innerVisible = false
-      this.boxDialog = false
-      this.selfDialog = true
-      this.getSelfAddress()
-    },
-    // 收件地址 取消自提点
-    returnPick() {
-      this.selfDialog = false
-      this.boxDialog = true
-    },
-    // 收件地址 获取自提点数据
-    getSelfAddress() {
-      this.$request.selfData().then(res => {
-        if (res.ret) {
-          this.selfForm = res.data
-        }
-      })
-    },
-    // 收件地址 自提确认
-    realPick() {
-      if (!this.chooseId) {
-        return this.$message.error(this.$t('请选择'))
-      }
-      this.userData = this.user
-      this.boxDialog = false
-      this.selfDialog = false
-    },
     // 收件地址
     onRowChange(row) {
       this.chooseId = row.id
       this.box.address_id = this.chooseId
       this.user = row
-    },
-    //  收件地址 选择自提点弹窗
-    onPickChange(row) {
-      this.chooseId = row.id
-      this.user = row
-      this.box.address_id = this.chooseId
     },
     // 自提点地址
     onRowAddress(row) {
@@ -879,11 +786,6 @@ export default {
       this.box.station_id = ''
       this.selfAddress = {}
     },
-    clear() {
-      this.chooseId = ''
-      this.user = {}
-    },
-    // tipsClear() {},
     // 收件地址弹窗
     clearAddress() {
       this.chooseId = ''

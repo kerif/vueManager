@@ -148,6 +148,7 @@ export default {
       propList: [],
       level: [],
       props: { checkStrictly: false },
+      label: '',
       classifyList: [],
       rules: {
         cn_name: [{ required: true, message: this.$t('请输入中文名称'), trigger: 'blur' }],
@@ -195,7 +196,7 @@ export default {
     handleVal(val) {
       console.log(val)
       this.level = val
-      console.log(this.level)
+      this.label = this.$refs.good.getCheckedNodes()[0].label
     },
     handleClick(v) {
       console.log(v)
@@ -251,7 +252,7 @@ export default {
         this.ruleForm.category_id = this.level[this.level.length - 1]
       }
       console.log(this.ruleForm.category_id)
-      this.ruleForm.category_name = this.$refs.good.getCheckedNodes()[0].label
+      this.ruleForm.category_name = this.label
       this.propList.forEach(item => {
         if (item.id === this.ruleForm.prop_id) {
           this.ruleForm.prop_name = item.name
@@ -282,7 +283,7 @@ export default {
       this.ruleForm.quantity = ''
       this.ruleForm.purchase_price = ''
       this.ruleForm.box_spec = ''
-      this.ruleForm.image = []
+      this.ruleForm.image = ''
     }
   }
 }

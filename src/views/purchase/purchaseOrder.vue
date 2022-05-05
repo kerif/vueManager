@@ -15,8 +15,8 @@
       :searchData="searchData"
       v-on:submit="goSearch"
     ></purchase-search>
-    <div class="flex-btn">
-      <div class="flex-1">
+    <div class="header-range">
+      <div>
         <el-button class="btn-deep-blue" @click="$router.push({ name: 'addPurchase' })">{{
           $t('新增采购单')
         }}</el-button>
@@ -43,7 +43,7 @@
         >
         <el-button class="btn-blue-green" v-if="activeName === '5'">{{ $t('提交转运') }}</el-button>
       </div>
-      <div class="headr-r flex">
+      <div class="header-search">
         <div class="searchGroup">
           <search-group
             :placeholder="$t('请输入关键字')"
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div style="margin-top: 20px">
+    <div style="margin-top: 10px">
       <el-table
         :data="purchaseData"
         style="width: 100%"
@@ -97,38 +97,38 @@
             <el-button
               class="btn-blue-green"
               @click="goDistribution(scope.row.id)"
-              v-if="['4', '5'].includes(activeName)"
+              v-if="['3'].includes(activeName)"
               >{{ $t('分货') }}</el-button
             >
-            <el-button class="btn-green" v-if="activeName === '4'">{{ $t('入库信息') }}</el-button>
+            <el-button class="btn-green" v-if="activeName === '3'">{{ $t('入库信息') }}</el-button>
             <el-button
               class="btn-light-red"
-              v-if="activeName === '5'"
+              v-if="['3', '4', '5'].includes(activeName)"
               @click="onInvild([scope.row.id])"
               >{{ $t('作废') }}</el-button
             >
             <el-button
               class="btn-deep-purple"
-              v-if="['2', '3'].includes(activeName)"
+              v-if="['1', '2'].includes(activeName)"
               @click="addShipInfo(scope.row.id)"
               >{{ $t('确认发货') }}</el-button
             >
             <el-button
               class="btn-deep-blue"
-              v-if="['1', '2'].includes(activeName)"
+              v-if="['0', '1'].includes(activeName)"
               @click="editPurchase(scope.row.id)"
               >{{ $t('编辑') }}</el-button
             >
             <el-button
               class="btn-light-red"
-              v-if="['1', '2', '3'].includes(activeName)"
+              v-if="['0', '1', '2'].includes(activeName)"
               @click="onDelete([scope.row.id])"
               >{{ $t('删除') }}</el-button
             >
-            <el-button class="btn-main" v-if="activeName === '5'">{{ $t('提交转运') }}</el-button>
+            <el-button class="btn-main" v-if="activeName === '4'">{{ $t('提交转运') }}</el-button>
             <el-button
               class="btn-deep-purple"
-              v-if="activeName === '1'"
+              v-if="activeName === '0'"
               @click="onPurchase([scope.row.id])"
               >{{ $t('提交采购') }}</el-button
             >
@@ -142,11 +142,12 @@
 
 <script>
 import { SearchGroup } from '@/components/searchs'
-import PurchaseSearch from './components/purchaseSearch.vue'
+import purchaseSearch from './components/purchaseSearch.vue'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
+  name: 'purchaseOrder',
   data() {
     return {
       activeName: 'all',
@@ -166,7 +167,7 @@ export default {
   },
   components: {
     NlePagination,
-    PurchaseSearch,
+    purchaseSearch,
     SearchGroup
   },
   mixins: [pagination],
@@ -314,14 +315,20 @@ export default {
   .tab-length {
     width: 950px !important;
   }
-  .flex-btn {
+  .header-range {
     display: flex;
-    margin-top: 10px;
-    .flex-1 {
-      flex: 1;
-    }
-    .flex {
+    align-items: center;
+    justify-content: space-between;
+    .header-search {
       display: flex;
+      align-items: center;
+      margin: 0 0 0 auto;
+      .header-keyword {
+        max-width: 300px;
+      }
+      .filter {
+        margin: 0 20px;
+      }
     }
   }
 }

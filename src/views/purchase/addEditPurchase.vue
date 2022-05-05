@@ -84,25 +84,11 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item v-if="this.$route.params.id">
-        <el-button size="small" type="primary" @click="saveInfo">{{ $t('保存') }}</el-button>
-      </el-form-item>
     </el-form>
     <div style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>{{ $t('采购清单') }}</span>
-          <!-- <el-button
-            style="float: right"
-            v-if="$route.params.id"
-            type="primary"
-            size="small"
-            @click="saveGoods"
-            >{{ $t('保存') }}</el-button
-          >
-          <el-button class="btn-main" style="margin-left: 5px" @click="addGood('add')">{{
-            $t('添加')
-          }}</el-button> -->
           <el-button class="btn-main" style="float: right" @click="addGood('add')">{{
             $t('添加')
           }}</el-button>
@@ -131,7 +117,11 @@
           <el-table-column prop="barcode" :label="$t('条码')"></el-table-column>
           <el-table-column prop="image" :label="$t('物品照片')">
             <template slot-scope="scope">
-              <img :src="$baseUrl.IMAGE_URL + scope.row.image" class="img" />
+              <img
+                :src="$baseUrl.IMAGE_URL + scope.row.image"
+                @click="checkImg(scope.row.image)"
+                class="img"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -139,9 +129,17 @@
     </div>
     <div style="margin-top: 20px" v-if="!$route.params.id">
       <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSave">{{
-        $t('提交')
+        $t('保存')
+      }}</el-button>
+      <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSubmit">{{
+        $t('保存并提交')
       }}</el-button>
     </div>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -160,6 +158,8 @@ export default {
         goods: []
       },
       companyList: [],
+      imgVisible: false,
+      imgSrc: '',
       state: '',
       rules: {
         sn: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
@@ -191,6 +191,10 @@ export default {
         }
       })
     },
+    checkImg(url) {
+      this.imgVisible = true
+      this.imgSrc = this.$baseUrl.IMAGE_URL + url
+    },
     editGoods(index, row, state) {
       console.log(row)
       dialog(
@@ -202,50 +206,69 @@ export default {
         data => {
           console.log(data)
           this.ruleForm.goods[index] = data
+          this.$set(this.ruleForm.goods, index, data)
         }
       )
     },
     delGoods(index, rows) {
       rows.splice(index, 1)
     },
-    saveInfo() {
-      delete this.ruleForm.goods
-      let params = { ...this.ruleForm }
-      console.log(params)
-      this.$request.editPurchase(this.$route.params.id, params).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
-    saveGoods() {
-      this.$request.editPurchase(this.$route.params.id, this.ruleForm.goods).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
     onSave() {
+      let params = { ...this.ruleForm, is_approved: 0 }
       if (!this.$route.params.id) {
-        this.$request.addPurchase(this.ruleForm).then(res => {
+        this.$request.addPurchase(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.$router.go(-1)
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      } else {
+        this.$request.editPurchase(this.$route.params.id, params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.$router.go(-1)
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
+    },
+    onSubmit() {
+      let params = { ...this.ruleForm, is_approved: 1 }
+      if (!this.$route.params.id) {
+        this.$request.addPurchase(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.$router.go(-1)
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      } else {
+        this.$request.editPurchase(this.$route.params.id, params).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -284,5 +307,11 @@ export default {
 }
 .img {
   width: 30px;
+}
+.img_box {
+  text-align: center;
+  .imgDialog {
+    width: 50%;
+  }
 }
 </style>

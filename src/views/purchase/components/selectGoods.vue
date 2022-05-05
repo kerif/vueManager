@@ -14,7 +14,7 @@
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column :label="$t('物品中文名称')" prop="cn_name" width="120"> </el-table-column>
       <el-table-column prop="brand" :label="$t('品牌')" width="120"> </el-table-column>
-      <el-table-column prop="quantity" :label="$t('剩余明细数量')"> </el-table-column>
+      <el-table-column prop="remain" :label="$t('剩余明细数量')"> </el-table-column>
     </el-table>
     <div slot="footer">
       <el-button @click="close">{{ $t('取消') }}</el-button>
@@ -48,10 +48,11 @@ export default {
     },
     confirm() {
       this.$emit('passVal', false)
-      this.$emit('getVal', this.selection)
+      this.$emit('getVal', JSON.parse(JSON.stringify(this.selection)))
     },
     clear() {
       this.selection = []
+      this.$refs.multipleTable.clearSelection()
     }
   }
 }
