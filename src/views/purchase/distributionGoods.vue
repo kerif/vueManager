@@ -105,9 +105,9 @@
               </el-table-column>
               <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
               <el-table-column prop="brand" :label="$t('品牌')"> </el-table-column>
-              <el-table-column prop="quantity" :label="$t('装箱数量')">
+              <el-table-column prop="remain" :label="$t('装箱数量')">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.quantity" @blur="getNumber(scope.row.id)"></el-input>
+                  <el-input v-model="scope.row.remain" @blur="getNumber(scope.row.id)"></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -624,7 +624,7 @@ export default {
         if (item.tableData) {
           item.tableData.forEach(ele => {
             if (ele.id === id) {
-              number = Number(ele.quantity) + number
+              number = Number(ele.remain) + number
               console.log(number)
             }
           })
@@ -713,8 +713,10 @@ export default {
       this.showSelectGoods = true
     },
     getVal(selection) {
+      console.log(1, selection)
       let selections = JSON.parse(JSON.stringify(selection))
-      this.goodData[this.ind].tableData = selections
+      // this.goodData[this.ind].tableData = []
+      this.$set(this.goodData[this.ind], 'tableData', selections)
       console.log(this.goodData)
     },
     deleterow(index, rows) {

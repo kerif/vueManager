@@ -219,7 +219,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.go(-1)
+            this.$router.push({ name: 'purchaseOrder' })
           } else {
             this.$message({
               message: res.msg,
@@ -235,7 +235,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.go(-1)
+            this.$router.push({ name: 'purchaseOrder' })
           } else {
             this.$message({
               message: res.msg,
@@ -255,7 +255,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.go(-1)
+            this.$router.push({ name: 'purchaseOrder' })
           } else {
             this.$message({
               message: res.msg,
@@ -271,7 +271,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.go(-1)
+            this.$router.push({ name: 'purchaseOrder' })
           } else {
             this.$message({
               message: res.msg,

@@ -100,7 +100,9 @@
               v-if="['3'].includes(activeName)"
               >{{ $t('分货') }}</el-button
             >
-            <el-button class="btn-green" v-if="activeName === '3'">{{ $t('入库信息') }}</el-button>
+            <el-button class="btn-green" v-if="activeName === '3'" @click="goStorage">{{
+              $t('入库信息')
+            }}</el-button>
             <el-button
               class="btn-light-red"
               v-if="['3', '4', '5'].includes(activeName)"
@@ -109,7 +111,7 @@
             >
             <el-button
               class="btn-deep-purple"
-              v-if="['1', '2'].includes(activeName)"
+              v-if="['1'].includes(activeName)"
               @click="addShipInfo(scope.row.id)"
               >{{ $t('确认发货') }}</el-button
             >
@@ -211,7 +213,7 @@ export default {
     },
     exportList(ids) {
       if (!ids.length) return this.$message.error(this.$t('请选择'))
-      this.$request.exportPurchase(ids).then(res => {
+      this.$request.exportPurchase({ ids: ids }).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -287,10 +289,15 @@ export default {
       })
     },
     addShipInfo(id) {
-      dialog({
-        type: 'addShip',
-        id
-      })
+      dialog(
+        {
+          type: 'addShip',
+          id
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     handleClick() {
       this.page_params.page = 1
