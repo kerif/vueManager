@@ -130,9 +130,6 @@ export default {
 </script>
 
 <style lang="scss">
-.el-form-item__label {
-  width: 80px;
-}
 .avatar-uploader {
   display: inline-block;
   vertical-align: top;

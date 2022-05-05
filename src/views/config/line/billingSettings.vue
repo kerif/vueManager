@@ -350,6 +350,54 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item>
+        <el-row>
+          <el-col :span="10">
+            <div>
+              <span>{{ $t('开启超重换算') }}</span>
+              <el-tooltip
+                style="color: #7bc764; padding: 0 20px 0 5px"
+                effect="dark"
+                :content="$t('开启超重换算时，可考虑超重订单比大计费，如果超过会进行计费换算')"
+                placement="top-end"
+              >
+                <i class="el-icon-info"></i>
+              </el-tooltip>
+            </div>
+            <el-switch
+              v-model="form.weight_trans"
+              :active-text="$t('开')"
+              :active-value="1"
+              :inactive-value="0"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray"
+            >
+            </el-switch>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
+        <el-row>
+          <el-col :span="10">
+            <div>
+              <span>{{ $t('重量系数') }}</span>
+              <el-tooltip
+                style="color: #7bc764; padding: 0 20px 0 5px"
+                effect="dark"
+                :content="
+                  $t(`计算方式：超重体积=实重/重量系数。当•1超重体积一大于“出库体积”时，以超垂体积计费。
+【例：设置重量系数为500,则当一个订单出库体积为2立方米”，但出库实更为“1800KG-时，超重体积为1800/500=3.6立方米。此时超垂体积大于出库体积，以超重体积3.6立方米计费】`)
+                "
+                placement="top-end"
+              >
+                <i class="el-icon-info"></i>
+              </el-tooltip>
+            </div>
+            <el-input v-model="form.weight_factor" :placeholder="$t('请输入内容')"></el-input>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 开启体积重 -->
       <el-form-item v-if="form.base_mode === 0">
         <el-row :gutter="10">
@@ -595,6 +643,10 @@ export default {
         {
           id: 2,
           name: this.$t('阶梯价格模式')
+        },
+        {
+          id: 5,
+          name: this.$t('阶梯首重续重模式')
         }
       ],
       priceData: [
