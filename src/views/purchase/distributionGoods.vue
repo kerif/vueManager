@@ -94,6 +94,7 @@
                 v-model="item.code"
                 :placeholder="$t('请扫商品条码')"
                 size="small"
+                clearable
                 style="width: 45%"
               ></el-input>
               <el-button type="primary" @click="onSearch" size="small" style="margin-left: 5px">{{
@@ -227,12 +228,12 @@
                     <template slot-scope="scope">
                       <el-button
                         class="btn-green"
-                        @click="changeAddress(scope.row.user_id, scope.row, item.addressList)"
+                        @click="changeAddress(scope.row.user_id, scope.row, item.address)"
                         >{{ $t('更改地址') }}</el-button
                       >
                       <el-button
                         class="btn-light-red"
-                        @click="deleteAddress(scope.$index, item.addressList, scope.row.user_id)"
+                        @click="deleteAddress(scope.$index, item.address, scope.row.user_id)"
                         >{{ $t('删除') }}</el-button
                       >
                     </template>
@@ -562,7 +563,7 @@ export default {
     },
     // 更改地址
     changeAddress(userId, counts, addressList) {
-      this.clientId = userId // 客户ID
+      this.clientId = userId
       dialog(
         {
           type: 'addEditAddress',
@@ -626,6 +627,7 @@ export default {
         if (item.tableData) {
           item.tableData.forEach(ele => {
             if (ele.id === id) {
+              console.log(ele.remain, ele.id, id)
               number = Number(ele.remain) + number
               console.log(number)
             }
@@ -725,10 +727,35 @@ export default {
     },
     getVal(selection) {
       let selections = JSON.parse(JSON.stringify(selection))
-      this.$set(this.goodData[this.ind], 'tableData', selections)
-      selections.forEach(item => {
-        this.getNumber(item.id)
+      let selectionId = selections.map(item => item.id)
+      this.goodData.forEach(item => {
+        if (item.tableData.length) {
+          let result = item.tableData.filter(ele => ele.id !== selectionId)
+          this.$set(this.goodData[this.ind].tableData, 'tableData', result)
+        } else {
+          this.$set(this.goodData[this.ind], 'tableData', selections)
+          selections.forEach(item => {
+            this.getNumber(item.id)
+          })
+        }
       })
+      // this.goodData.forEach(item => {
+      //   if (item.tableData.length) {
+      //     item.tableData.forEach(ele => {
+      //       selections.forEach(val => {
+      //         if (val.id !== ele.id) {
+      //           this.getNumber(val.id)
+      //           item.tableData = [...item.tableData, val]
+      //         }
+      //       })
+      //     })
+      //   } else {
+      //     this.$set(this.goodData[this.ind], 'tableData', selections)
+      //     selections.forEach(item => {
+      //       this.getNumber(item.id)
+      //     })
+      //   }
+      // })
     },
     deleterow(index, rows) {
       rows.splice(index, 1)
@@ -764,7 +791,9 @@ export default {
     onSearch() {
       this.goodData.forEach(item => {
         if (item.code) {
-          item.tableData = this.form.goods.filter(ele => ele.barcode === item.code)
+          item.tableData = JSON.parse(
+            JSON.stringify(this.form.goods.filter(ele => ele.barcode === item.code))
+          )
           item.tableData.forEach(val => {
             this.getNumber(val.id)
           })
