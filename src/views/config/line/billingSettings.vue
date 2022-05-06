@@ -378,7 +378,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="form.weight_trans === 1">
         <el-row>
           <el-col :span="10">
             <div>

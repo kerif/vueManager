@@ -175,7 +175,7 @@
                 <div class="express-left right-margin">
                   <el-autocomplete
                     :fetch-suggestions="queryCNSearch"
-                    @select="handleSelect"
+                    @select="data => handleSelect(index, data)"
                     :placeholder="$t('请输入客户ID')"
                     v-model="item.user_id"
                   >
@@ -488,7 +488,7 @@ export default {
       this.getExpress()
     },
     // 获取收件地址列表数据
-    getRecipeAddress() {
+    getRecipeAddress(index) {
       this.tableLoading = true
       let params = {
         country_id: this.country_id
@@ -498,9 +498,7 @@ export default {
         this.tableLoading = false
         if (res.ret) {
           let addressData = JSON.parse(JSON.stringify(res.data[0]))
-          this.divides.forEach(item => {
-            item.address = [addressData]
-          })
+          this.divides[index].address = [addressData]
         }
       })
     },
@@ -589,10 +587,11 @@ export default {
       })
     },
     // 客户id
-    handleSelect(item) {
+    handleSelect(index, item) {
+      console.log(index, item)
       if (item.id) {
         this.user_id = item.id
-        this.getRecipeAddress()
+        this.getRecipeAddress(index)
       }
     },
     getDetail() {
