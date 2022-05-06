@@ -669,7 +669,6 @@ export default {
         })
       }
       this.goodData.forEach(item => {
-        console.log(item, 123)
         if (item.tableData) {
           this.divides.forEach(ele => {
             ele.goods = item.tableData.map(item => {
@@ -679,10 +678,13 @@ export default {
                 quantity: item.remain
               }
             })
-            console.log(ele.goods, 'good')
           })
         }
       })
+      // this.divides.forEach(ele => {
+      //   if(ele.goods) {
+      //   }
+      // })
     },
     getId() {
       this.$request.idCards(this.lineId).then(res => {

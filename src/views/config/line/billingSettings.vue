@@ -350,7 +350,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="form.base_mode !== 0">
         <el-row>
           <el-col :span="10">
             <div>
@@ -369,7 +369,6 @@
               :active-text="$t('开')"
               :active-value="1"
               :inactive-value="0"
-              @change="changeVal($event)"
               :inactive-text="$t('关')"
               active-color="#13ce66"
               inactive-color="gray"
@@ -378,7 +377,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item v-if="form.weight_trans === 1">
+      <el-form-item v-if="form.weight_trans === 1 && form.base_mode !== 0">
         <el-row>
           <el-col :span="10">
             <div>
@@ -592,6 +591,7 @@ export default {
     return {
       // is_avg_weight: 0,
       form: {
+        weight_factor: '',
         factor: '',
         base_mode: '',
         min_weight: '',
@@ -613,6 +613,7 @@ export default {
         clearance_code_remark: '',
         multi_boxes: 0,
         grades: [],
+        weight_trans: 0,
         has_factor: 0,
         range: 0
       },
@@ -793,6 +794,7 @@ export default {
         this.form.is_avg_weight = res.data.is_avg_weight
         this.form.range = res.data.range
         this.form.weight_trans = res.data.weight_trans
+        this.form.weight_factor = res.data.weight_factor
         this.weight_factor = res.data.weight_factor
         if (res.data.no_throw_condition) {
           console.log(res.data.no_throw_condition.checked, 'res.data.no_throw_condition.checked')
@@ -802,13 +804,6 @@ export default {
           this.form.condition = res.data.no_throw_condition.condition
         }
       })
-    },
-    changeVal(val) {
-      if (val) {
-        this.form.weight_factor = this.weight_factor
-      } else {
-        this.form.weight_factor = ''
-      }
     },
     changeBase() {
       this.form.mode = ''
