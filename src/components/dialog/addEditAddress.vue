@@ -219,8 +219,6 @@ export default {
       if (!this.chooseId) {
         return this.$message.error(this.$t('请选择'))
       }
-      console.log(222, this.counts)
-      console.log(333, this.addressList)
       let params = this.addressList.map(item => {
         if (item.user_id === this.counts.user_id) {
           return {
@@ -243,7 +241,7 @@ export default {
             message: res.msg
           })
           this.show = false
-          this.success(res.data)
+          this.success(JSON.parse(JSON.stringify(res.data)))
         } else {
           this.$notify({
             title: this.$t('操作失败'),

@@ -192,14 +192,22 @@
         </el-table-column>
         <el-table-column prop="order_sn" :label="$t('打包单号')"> </el-table-column>
         <el-table-column prop="status" :label="$t('转运单状态')"> </el-table-column>
-        <el-table-column prop="" :label="$t('商品数量')"></el-table-column>
+        <el-table-column prop="qty" :label="$t('商品数量')"></el-table-column>
         <el-table-column prop="value" :label="$t('总价值')"></el-table-column>
-        <el-table-column prop="" :label="$t('目的地')"></el-table-column>
-        <el-table-column prop="" :label="$t('收件人')"></el-table-column>
+        <el-table-column prop="country_name" :label="$t('目的地')">
+          <template slot-scope="scope">
+            {{ scope.row.address && scope.row.address.country_name }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="receiver_name" :label="$t('收件人')">
+          <template slot-scope="scope">
+            {{ scope.row.address && scope.row.address.receiver_name }}
+          </template>
+        </el-table-column>
         <el-table-column prop="" :label="$t('下单渠道')"></el-table-column>
         <el-table-column prop="" :label="$t('付款方式')"></el-table-column>
         <el-table-column prop="create_at" :label="$t('创建时间')"></el-table-column>
-        <el-tabel-column prop="" :label="$t('创建人')"></el-tabel-column>
+        <el-table-column prop="customer_name" :label="$t('创建人')"></el-table-column>
       </el-table>
     </div>
     <operate-log :logs="ruleForm.logs"></operate-log>

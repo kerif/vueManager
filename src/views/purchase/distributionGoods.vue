@@ -497,17 +497,10 @@ export default {
       this.$request.getAddress(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
-          let addressData = res.data[0]
+          let addressData = JSON.parse(JSON.stringify(res.data[0]))
           this.divides.forEach(item => {
             item.address = [addressData]
           })
-          // res.data.map(item => {
-          //   if (item.address) {
-          //     this.addressIds = item.address.sub_area_id
-          //       ? [item.address.sub_area_id]
-          //       : [item.address.area_id]
-          //   }
-          // })
         }
       })
     },
@@ -572,16 +565,10 @@ export default {
           counts
         },
         data => {
+          console.log(data)
           this.divides.forEach(item => {
-            item.address = data
+            item.address = JSON.parse(JSON.stringify(data))
           })
-          // data.map(item => {
-          //   if (item.address) {
-          //     this.addressIds = item.address.sub_area_id
-          //       ? [item.address.sub_area_id]
-          //       : [item.address.area_id]
-          //   }
-          // })
           this.getExpress()
         }
       )
@@ -683,6 +670,7 @@ export default {
         })
       }
       this.goodData.forEach(item => {
+        console.log(item, 123)
         if (item.tableData) {
           this.divides.forEach(ele => {
             ele.goods = item.tableData.map(item => {
@@ -692,6 +680,7 @@ export default {
                 quantity: item.remain
               }
             })
+            console.log(ele.goods, 'good')
           })
         }
       })

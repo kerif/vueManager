@@ -369,6 +369,7 @@
               :active-text="$t('开')"
               :active-value="1"
               :inactive-value="0"
+              @change="changeVal($event)"
               :inactive-text="$t('关')"
               active-color="#13ce66"
               inactive-color="gray"
@@ -686,6 +687,7 @@ export default {
       itemArr: {},
       dialogVisible: false,
       status: true,
+      weight_factor: '',
       paramsOptions: [
         {
           id: 1,
@@ -790,9 +792,8 @@ export default {
         this.form.first_weight = res.data.first_weight
         this.form.is_avg_weight = res.data.is_avg_weight
         this.form.range = res.data.range
-        if (res.data.weight_trans === 1) {
-          this.form.weight_factor = res.data.weight_factor
-        }
+        this.form.weight_trans = res.data.weight_trans
+        this.weight_factor = res.data.weight_factor
         if (res.data.no_throw_condition) {
           console.log(res.data.no_throw_condition.checked, 'res.data.no_throw_condition.checked')
           this.form.type = res.data.no_throw_condition.type
@@ -801,6 +802,13 @@ export default {
           this.form.condition = res.data.no_throw_condition.condition
         }
       })
+    },
+    changeVal(val) {
+      if (val) {
+        this.form.weight_factor = this.weight_factor
+      } else {
+        this.form.weight_factor = ''
+      }
     },
     changeBase() {
       this.form.mode = ''
