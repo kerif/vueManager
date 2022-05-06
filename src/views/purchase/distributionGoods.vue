@@ -501,6 +501,7 @@ export default {
         if (res.ret) {
           let addressData = JSON.parse(JSON.stringify(res.data[0]))
           this.divides[index].address = [addressData]
+          this.getExpress()
         }
       })
     },
@@ -649,7 +650,14 @@ export default {
       this.nextStep = false
       this.prevStep = true
       this.divides = []
-      for (let i = 1; i <= this.number; i++) {
+      this.goodData.forEach(item => {
+        let goods = item.tableData.map(val => {
+          return {
+            goods_id: val.id,
+            cn_name: val.cn_name,
+            quantity: val.remain
+          }
+        })
         this.divides.push({
           address_type: 1,
           location: '',
@@ -667,19 +675,7 @@ export default {
           station_id: '',
           batch_mode: '',
           single_mode: '',
-          goods: []
-        })
-      }
-      this.divides.forEach(ele => {
-        this.goodData.forEach(item => {
-          ele.goods = item.tableData.map(val => {
-            return {
-              goods_id: val.id,
-              cn_name: val.cn_name,
-              quantity: val.remain
-            }
-          })
-          console.log(ele.goods)
+          goods: goods
         })
       })
     },
@@ -726,23 +722,6 @@ export default {
           })
         }
       })
-      // this.goodData.forEach(item => {
-      //   if (item.tableData.length) {
-      //     item.tableData.forEach(ele => {
-      //       selections.forEach(val => {
-      //         if (val.id !== ele.id) {
-      //           this.getNumber(val.id)
-      //           item.tableData = [...item.tableData, val]
-      //         }
-      //       })
-      //     })
-      //   } else {
-      //     this.$set(this.goodData[this.ind], 'tableData', selections)
-      //     selections.forEach(item => {
-      //       this.getNumber(item.id)
-      //     })
-      //   }
-      // })
     },
     deleterow(index, rows) {
       rows.splice(index, 1)
