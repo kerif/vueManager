@@ -268,18 +268,18 @@ const publicLang = loadonDemand('customer/publicLang')
 const LanguageSupport = loadonDemand('language/support')
 // 字符串翻译
 const stringTranslate = loadonDemand('language/string')
-// // 采购
-// const purchase = loadonDemand('purchase/purchaseOrder')
-// // 新增采购单
-// const addPurchase = loadonDemand('purchase/addEditPurchase')
-// // 编辑采购单
-// const editPurchase = loadonDemand('purchase/addEditPurchase')
-// // 采购单详情
-// const purchaseDetail = loadonDemand('purchase/purchaseDetail')
-// // 编辑分货
-// const distributionGoods = loadonDemand('purchase/distributionGoods')
-// // 分货详情
-// const distributeDetail = loadonDemand('purchase/distributeDetail')
+// 采购
+const purchase = loadonDemand('purchase/purchaseOrder')
+// 新增采购单
+const addPurchase = loadonDemand('purchase/addEditPurchase')
+// 编辑采购单
+const editPurchase = loadonDemand('purchase/addEditPurchase')
+// 采购单详情
+const purchaseDetail = loadonDemand('purchase/purchaseDetail')
+// 编辑分货
+const distributionGoods = loadonDemand('purchase/distributionGoods')
+// 分货详情
+const distributeDetail = loadonDemand('purchase/distributeDetail')
 // 官网管理 栏目管理
 const website = loadonDemand('website/column')
 // 官网管理 新增 编辑 栏目管理
@@ -2236,81 +2236,81 @@ export default [
           }
         ]
       },
-      // {
-      //   path: 'purchase',
-      //   component: LayoutContainer,
-      //   icon: 'icon-shuju',
-      //   id: 1100,
-      //   children: [
-      //     {
-      //       path: '/purchase/purchaseOrder',
-      //       name: 'purchaseOrder',
-      //       component: purchase,
-      //       id: 1101,
-      //       meta: { level: 2, group: '采购', name: '采购单' }
-      //     },
-      //     {
-      //       path: '/purchase/addEditPurchase',
-      //       name: 'addPurchase',
-      //       component: addPurchase,
-      //       id: 1102,
-      //       meta: {
-      //         level: 3,
-      //         group: '采购',
-      //         name: '新增采购单',
-      //         parent: '/purchase'
-      //       }
-      //     },
-      //     {
-      //       path: '/purchase/addEditPurchase/:id',
-      //       name: 'editPurchase',
-      //       component: editPurchase,
-      //       id: 1102,
-      //       meta: {
-      //         level: 3,
-      //         group: '采购',
-      //         name: '编辑采购单',
-      //         parent: '/purchase'
-      //       }
-      //     },
-      //     {
-      //       path: '/purchase/purchaseDetail/:id',
-      //       name: 'purchaseDetail',
-      //       component: purchaseDetail,
-      //       id: 1102,
-      //       meta: {
-      //         level: 3,
-      //         group: '采购',
-      //         name: '采购单详情',
-      //         parent: '/purchase'
-      //       }
-      //     },
-      //     {
-      //       path: '/purchase/distributionGoods/:id',
-      //       name: 'distributionGoods',
-      //       component: distributionGoods,
-      //       id: 1102,
-      //       meta: {
-      //         level: 3,
-      //         group: '采购',
-      //         name: '编辑分货',
-      //         parent: '/purchase'
-      //       }
-      //     },
-      //     {
-      //       path: '/purchase/distributeDetail/:id',
-      //       name: 'distributeDetail',
-      //       component: distributeDetail,
-      //       id: 1102,
-      //       meta: {
-      //         level: 3,
-      //         group: '采购',
-      //         name: '分货详情',
-      //         parent: '/purchase'
-      //       }
-      //     }
-      //   ]
-      // },
+      {
+        path: 'purchase',
+        component: LayoutContainer,
+        icon: 'icon-shuju',
+        id: 1100,
+        children: [
+          {
+            path: '/purchase/purchaseOrder',
+            name: 'purchaseOrder',
+            component: purchase,
+            id: 1101,
+            meta: { level: 2, group: '采购', name: '采购单' }
+          },
+          {
+            path: '/purchase/addEditPurchase',
+            name: 'addPurchase',
+            component: addPurchase,
+            id: 1102,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '新增采购单',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/addEditPurchase/:id',
+            name: 'editPurchase',
+            component: editPurchase,
+            id: 1102,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '编辑采购单',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/purchaseDetail/:id',
+            name: 'purchaseDetail',
+            component: purchaseDetail,
+            id: 1102,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '采购单详情',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/distributionGoods/:id',
+            name: 'distributionGoods',
+            component: distributionGoods,
+            id: 1102,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '编辑分货',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/distributeDetail/:id',
+            name: 'distributeDetail',
+            component: distributeDetail,
+            id: 1102,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '分货详情',
+              parent: '/purchase'
+            }
+          }
+        ]
+      },
       {
         path: 'website',
         component: LayoutContainer,
