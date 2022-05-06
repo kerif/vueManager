@@ -40,9 +40,8 @@ export default {
   },
   methods: {
     init() {
-      if (this.id) {
-        this.form.logistics_sn = this.logistics_sn
-      }
+      this.form.logistics_sn = this.logistics_sn
+      this.form.logistics_company_code = this.logistics_company_code
     },
     getCompany() {
       this.$request.getExpressData().then(res => {

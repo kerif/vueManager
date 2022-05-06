@@ -75,21 +75,21 @@
         <el-table-column prop="logistics_company" :label="$t('发货物流公司')"> </el-table-column>
         <el-table-column prop="logistics_sn" :label="$t('发货物流单号')"></el-table-column>
         <el-table-column prop="amount" :label="$t('采购总金额')"></el-table-column>
-        <el-tabel-column :label="$t('采购总件/总箱数')">
+        <el-table-column :label="$t('采购总件/总箱数')" prop="quantity,box_count">
           <template slot-scope="scope">
-            <span>{{ scope.row.quantity }} / {{ scope.row.box_count }}</span>
+            <span
+              >{{ scope.row.quantity }}
+              <span v-if="scope.row.quantity && scope.row.box_count">/</span>
+              {{ scope.row.box_count }}</span
+            >
           </template>
-        </el-tabel-column>
+        </el-table-column>
         <el-table-column prop="created_at" :label="$t('创建时间')">
           <template slot-scope="scope">
             <span>{{ scope.row.created_at }}</span>
           </template>
         </el-table-column>
-        <el-tabel-column prop="creator" :label="$t('创建人')">
-          <template slot-scope="scope">
-            <span>{{ scope.row.creator }}</span>
-          </template>
-        </el-tabel-column>
+        <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
         <el-table-column :label="$t('操作')" width="280" fixed="right">
           <template slot-scope="scope">
             <el-button class="btn-purple" @click="onDetail(scope.row.id)">{{
@@ -116,7 +116,9 @@
             <el-button
               class="btn-deep-purple"
               v-if="['1'].includes(activeName)"
-              @click="addShipInfo(scope.row.id)"
+              @click="
+                addShipInfo(scope.row.id, scope.row.logistics_company_code, scope.row.logistics_sn)
+              "
               >{{ $t('确认发货') }}</el-button
             >
             <el-button
@@ -163,6 +165,7 @@ export default {
       purchaseData: [],
       statusList: [],
       logistics_sn: '',
+      logistics_company_code: '',
       searchData: {
         sn: '',
         timeList: [],
@@ -281,7 +284,6 @@ export default {
     },
     getRow(row) {
       console.log(row)
-      this.logistics_sn = row.logistics_sn
     },
     onInvild(ids) {
       if (!ids.length) return this.$message.error(this.$t('请选择'))
@@ -301,12 +303,13 @@ export default {
         }
       })
     },
-    addShipInfo(id) {
+    addShipInfo(id, logistics_company_code, logistics_sn) {
       dialog(
         {
           type: 'addShip',
           id,
-          logistics_sn: this.logistics_sn
+          logistics_sn,
+          logistics_company_code
         },
         () => {
           this.getList()

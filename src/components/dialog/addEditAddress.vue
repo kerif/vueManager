@@ -161,6 +161,8 @@ export default {
       box: {
         address_id: ''
       },
+      counts: {},
+      addressList: [],
       ruleForm: {
         receiver_name: '',
         phone: '',
@@ -185,6 +187,7 @@ export default {
       if (this.clientId) {
         this.getAddressDialog()
       }
+      this.getCountry()
     },
     // 获取地址数据
     getAddressDialog() {
@@ -216,17 +219,19 @@ export default {
       if (!this.chooseId) {
         return this.$message.error(this.$t('请选择'))
       }
+      console.log(222, this.counts)
+      console.log(333, this.addressList)
       let params = this.addressList.map(item => {
         if (item.user_id === this.counts.user_id) {
           return {
             address_id: this.chooseId,
-            package_count: item.package_count,
+            package_count: 1,
             user_id: item.user_id
           }
         }
         return {
           user_id: item.user_id,
-          package_count: item.package_count,
+          package_count: 1,
           address_id: item.address.id
         }
       })
@@ -272,7 +277,6 @@ export default {
                 })
                 this.innerVisible = false
                 this.show = true
-
                 this.getAddressDialog()
               } else {
                 this.$message({
@@ -309,4 +313,9 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.add-box {
+  text-align: right;
+  margin-bottom: 10px;
+}
+</style>

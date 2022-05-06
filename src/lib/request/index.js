@@ -4256,3 +4256,8 @@ exports.exportPurchase = ids => {
 exports.purchaseCount = () => {
   return $form.get('purchase-orders/status-counts')
 }
+
+// 采购 获取地址
+exports.getAddress = params => {
+  return $form.post('package-packs/user-first-address-by-id', params)
+}
