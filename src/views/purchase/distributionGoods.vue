@@ -228,7 +228,9 @@
                     <template slot-scope="scope">
                       <el-button
                         class="btn-green"
-                        @click="changeAddress(scope.row.user_id, scope.row, item.address)"
+                        @click="
+                          changeAddress(scope.$index, scope.row.user_id, scope.row, item.address)
+                        "
                         >{{ $t('更改地址') }}</el-button
                       >
                       <el-button
@@ -668,23 +670,18 @@ export default {
           goods: []
         })
       }
-      this.goodData.forEach(item => {
-        if (item.tableData) {
-          this.divides.forEach(ele => {
-            ele.goods = item.tableData.map(item => {
-              return {
-                goods_id: item.id,
-                cn_name: item.cn_name,
-                quantity: item.remain
-              }
-            })
+      this.divides.forEach(ele => {
+        this.goodData.forEach(item => {
+          ele.goods = item.tableData.map(val => {
+            return {
+              goods_id: val.id,
+              cn_name: val.cn_name,
+              quantity: val.remain
+            }
           })
-        }
+          console.log(ele.goods)
+        })
       })
-      // this.divides.forEach(ele => {
-      //   if(ele.goods) {
-      //   }
-      // })
     },
     getId() {
       this.$request.idCards(this.lineId).then(res => {
