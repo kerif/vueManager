@@ -790,6 +790,9 @@ export default {
         this.form.first_weight = res.data.first_weight
         this.form.is_avg_weight = res.data.is_avg_weight
         this.form.range = res.data.range
+        if (res.data.weight_trans === 1) {
+          this.form.weight_factor = res.data.weight_factor
+        }
         if (res.data.no_throw_condition) {
           console.log(res.data.no_throw_condition.checked, 'res.data.no_throw_condition.checked')
           this.form.type = res.data.no_throw_condition.type

@@ -206,22 +206,22 @@
                   <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
                   <el-table-column :label="$t('默认收货信息')">
                     <template slot-scope="scope">
-                      <span>{{ scope.row.receiver_name }}</span
+                      <span>{{ scope.row.address && scope.row.address.receiver_name }}</span
                       >&nbsp;
-                      <span>{{ scope.row.timezone }}</span>
-                      <span v-if="scope.row.timezone">-</span>
-                      <span>{{ scope.row.phone }}</span
-                      >&nbsp; <span>{{ scope.row.country_name }}</span
-                      >&nbsp; <span>{{ scope.row.postcode }}</span
-                      >&nbsp; <span>{{ scope.row.city }}</span
-                      >&nbsp; <span>{{ scope.row.street }}</span
+                      <span>{{ scope.row.address && scope.row.address.timezone }}</span>
+                      <span v-if="scope.row.address && scope.row.address.timezone">-</span>
+                      <span>{{ scope.row.address && scope.row.address.phone }}</span
+                      >&nbsp; <span>{{ scope.row.address && scope.row.address.country_name }}</span
+                      >&nbsp; <span>{{ scope.row.address && scope.row.address.postcode }}</span
+                      >&nbsp; <span>{{ scope.row.address && scope.row.address.city }}</span
+                      >&nbsp; <span>{{ scope.row.address && scope.row.address.street }}</span
                       >&nbsp;
-                      <span>{{ scope.row.door_no }}</span>
+                      <span>{{ scope.row.address && scope.row.address.door_no }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column :label="$t('清关编码')" prop="clearance_code">
                     <template slot-scope="scope">
-                      <span>{{ scope.row.clearance_code }}</span>
+                      <span>{{ scope.row.address && scope.row.address.clearance_code }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column :label="$t('操作')">
