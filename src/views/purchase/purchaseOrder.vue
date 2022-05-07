@@ -31,17 +31,17 @@
         >
         <el-button
           class="btn-light-red"
-          v-if="['1', '2', '3'].includes(activeName)"
+          v-if="['1', '3'].includes(activeName)"
           @click="onDelete(selectIDs)"
           >{{ $t('删除') }}</el-button
         >
         <el-button
           class="btn-main"
-          v-if="['4', '5'].includes(activeName)"
+          v-if="['5'].includes(activeName)"
           @click="onInvild(selectIDs)"
           >{{ $t('作废') }}</el-button
         >
-        <el-button class="btn-blue-green" v-if="activeName === '5'">{{ $t('提交转运') }}</el-button>
+        <!-- <el-button class="btn-blue-green">{{ $t('提交转运') }}</el-button> -->
       </div>
       <div class="header-search">
         <div class="searchGroup">
@@ -109,7 +109,7 @@
             >
             <el-button
               class="btn-light-red"
-              v-if="['3', '4', '5'].includes(activeName)"
+              v-if="['2', '3', '5'].includes(activeName)"
               @click="onInvild([scope.row.id])"
               >{{ $t('作废') }}</el-button
             >
@@ -129,11 +129,11 @@
             >
             <el-button
               class="btn-light-red"
-              v-if="['0', '1', '2'].includes(activeName)"
+              v-if="['0', '1'].includes(activeName)"
               @click="onDelete([scope.row.id])"
               >{{ $t('删除') }}</el-button
             >
-            <el-button class="btn-main" v-if="activeName === '4'">{{ $t('提交转运') }}</el-button>
+            <!-- <el-button class="btn-main" v-if="activeName === '4'">{{ $t('提交转运') }}</el-button> -->
             <el-button
               class="btn-deep-purple"
               v-if="activeName === '0'"

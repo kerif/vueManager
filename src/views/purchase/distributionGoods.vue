@@ -142,7 +142,7 @@
             <p>{{ $t('收货形式') }}</p>
           </div>
           <div class="express-left right-margin">
-            <el-radio-group v-model="radio" @change="changeRadio">
+            <el-radio-group v-model="radio" @change="changeRadio" :disabled="isAble">
               <el-radio :label="1">{{ $t('送货上门') }}</el-radio>
               <el-radio :label="2">{{ $t('自提点提货') }}</el-radio>
             </el-radio-group>
@@ -188,12 +188,25 @@
                   </el-autocomplete>
                 </div>
               </div>
+              <br />
+              <div class="address-main">
+                <div class="express-left">{{ $t('存放货位') }}</div>
+                <div class="express-left right-margin">
+                  <el-autocomplete
+                    :fetch-suggestions="locationCNSearch"
+                    ref="autocompleteRef"
+                    :placeholder="$t('请输入存放货位')"
+                    v-model="item.location"
+                  >
+                  </el-autocomplete>
+                </div>
+              </div>
               <div class="address-main">
                 <div class="express-left">
                   <p>{{ $t('收件地址') }}</p>
                 </div>
                 <div class="express-left right-margin">
-                  <el-radio-group v-model="item.address_type" @change="changeAdd">
+                  <el-radio-group v-model="item.address_type" @change="changeAdd(index)">
                     <el-radio :label="1">{{ $t('使用客户地址') }}</el-radio>
                     <el-radio :label="2" :disabled="radio === 1">{{
                       $t('使用自提点地址')
@@ -433,13 +446,14 @@ export default {
       multiBoxes: '',
       location: '',
       coupon_id: '',
-      payment_mode: '',
       station_id: '',
       selfData: {},
       clientId: '',
       imgVisible: false,
       imgSrc: '',
       country_id: '',
+      locationId: '',
+      isAble: false,
       divides: [
         {
           address_type: 1,
@@ -454,7 +468,7 @@ export default {
           is_insurance: 0,
           is_tariff: 0,
           add_service: [],
-          payment_mode: '',
+          payment_mode: 1,
           station_id: '',
           batch_mode: '',
           single_mode: '',
@@ -505,22 +519,50 @@ export default {
       this.$request.getAddress(params).then(res => {
         this.tableLoading = false
         if (res.ret) {
+          console.log(res)
           let addressData = JSON.parse(JSON.stringify(res.data[0]))
           this.divides[index].address = [addressData]
           this.getExpress()
         }
       })
     },
-    changeAdd() {
-      this.divides.forEach(item => {
-        if (item.express_line_id) {
-          item.express_line_id = ''
-        }
-      })
+    changeAdd(index) {
+      this.divides[index].express_line_id = ''
       this.options = []
       this.getExpress()
     },
+    locationCNSearch(queryString, callback) {
+      var list = [{}]
+      let params = {}
+      this.divides.forEach(item => {
+        params.keyword = item.location
+        params.user_id = item.user_id.substring(0, 6)
+      })
+      this.$request
+        .AutoLocation(this.locationId, params)
+        .then(res => {
+          for (let i of res.data) {
+            i.value = i.code
+          }
+          // this.divides.forEach(item => {
+          //   if (item.location === '') {
+          //     item.location = res.data[0].code
+          //   }
+          // })
+          list = res.data
+          callback && callback(list)
+        })
+        .catch(() => {
+          // eslint-disable-next-line no-array-constructor
+          callback && callback(new Array())
+        })
+    },
     getExpress() {
+      // this.address_ids = this.divides[index].address.map(item => {
+      //   if (item.address) {
+      //     return item.address.id
+      //   }
+      // })
       this.address_ids = this.divides.forEach(item => {
         if (item.address) {
           item.address.map(ele => {
@@ -539,6 +581,9 @@ export default {
           params.address_ids = this.address_ids
         }
       })
+      // if (this.divides[index].address_type === 1) {
+      //   params.address_ids = this.address_ids
+      // }
       if (this.radio === 1) {
         params.is_delivery = 0
       }
@@ -550,6 +595,8 @@ export default {
             item.express_line_id = res.data[0].id
             this.lineId = item.express_line_id
           })
+          // this.divides[index].express_line_id = res.data[0].id
+          // this.lineId = this.divides[index].express_line_id
           this.lineStations()
           this.getId()
         } else {
@@ -599,6 +646,7 @@ export default {
       if (item.id) {
         this.user_id = item.id
         this.getRecipeAddress(index)
+        this.locationCNSearch()
       }
     },
     changeInput() {
@@ -622,6 +670,7 @@ export default {
         this.location = res.data.package.location
         this.packageId = res.data.package.id
         this.country_id = res.data.package.country_id
+        this.locationId = res.data.package.warehouse_id
       })
     },
     getNumber(id) {
@@ -698,10 +747,10 @@ export default {
           personal_code: '',
           id_card: '',
           coupon_id: '',
-          is_insurance: '',
+          is_insurance: 0,
           is_tariff: 0,
           add_service: [],
-          payment_mode: '',
+          payment_mode: 1,
           station_id: '',
           batch_mode: '',
           single_mode: '',
@@ -777,7 +826,13 @@ export default {
       }
       this.selfData = this.selfAddress
       if (this.selfData) {
-        this.box.address_id = this.selfData.id
+        this.divides.forEach(item => {
+          if (item.address) {
+            item.address.forEach(ele => {
+              ele.address_id = this.selfData.id
+            })
+          }
+        })
       }
       this.addressDialog = false
     },
@@ -843,17 +898,16 @@ export default {
       let params = {
         divides: []
       }
-      params.divides = this.divides
-      params.divides.forEach(item => {
-        item.user_id = this.user_id
-        item.location = this.location
-      })
-      params.divides.forEach(item => {
-        item.address = item.address.map(ele => {
-          return {
-            user_id: ele.user_id,
-            address_id: ele.id
-          }
+      this.divides.forEach(item => {
+        params.divides.push({
+          ...item,
+          user_id: this.user_id,
+          address: item.address.map(ele => {
+            return {
+              user_id: ele.user_id,
+              address_id: ele.address ? ele.address.id : ''
+            }
+          })
         })
       })
       this.$request.dividePurchase(this.$route.params.id, params).then(res => {
@@ -863,6 +917,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
+          this.$router.push({ name: 'purchaseOrder' })
         } else {
           this.$notify({
             title: this.$t('操作失败'),
