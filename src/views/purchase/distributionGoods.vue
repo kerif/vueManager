@@ -142,8 +142,8 @@
             <p>{{ $t('收货形式') }}</p>
           </div>
           <div class="express-left right-margin">
-            <el-radio-group v-model="radio" @change="changeRadio" :disabled="isAble">
-              <el-radio :label="1">{{ $t('送货上门') }}</el-radio>
+            <el-radio-group v-model="radio" @change="changeRadio">
+              <el-radio :label="1" :disabled="isAble">{{ $t('送货上门') }}</el-radio>
               <el-radio :label="2">{{ $t('自提点提货') }}</el-radio>
             </el-radio-group>
           </div>
@@ -511,11 +511,6 @@ export default {
         }
         this.getExpress(index)
       })
-      this.divides.forEach(item => {
-        if (item.address_type === 2) {
-          this.isAble = true
-        }
-      })
     },
     // 获取收件地址列表数据
     getRecipeAddress(index) {
@@ -538,6 +533,13 @@ export default {
       this.divides[index].express_line_id = ''
       this.divides[index].options = []
       this.getExpress(index)
+      this.divides.forEach(item => {
+        if (item.address_type === 2) {
+          this.isAble = true
+        } else {
+          this.isAble = false
+        }
+      })
     },
     changeSelect(index) {
       if (!this.divides[index].user_id) {
