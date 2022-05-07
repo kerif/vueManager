@@ -454,7 +454,6 @@ export default {
       country_id: '',
       locationId: '',
       isAble: false,
-      goodId: '',
       divides: [
         {
           address_type: 1,
@@ -629,7 +628,7 @@ export default {
         data => {
           console.log(data)
           this.divides[index].address = JSON.parse(JSON.stringify(data))
-          this.getExpress()
+          this.getExpress(index)
         }
       )
     },
@@ -682,7 +681,6 @@ export default {
       })
     },
     getNumber(id) {
-      // this.goodId = id
       let number = 0
       this.goodData.forEach(item => {
         console.log(item)
@@ -698,13 +696,10 @@ export default {
       })
       this.form.goods.forEach((val, i) => {
         if (val.id === id) {
-          console.log(val.quantity)
-          // if (val.remain < 0) {
-          //   val.remain = 0
+          console.log(val.id, val.quantity)
+          // if (number > val.quantity) {
+          //   return
           // }
-          if (number > val.quantity) {
-            return
-          }
           val.remain = val.quantity - number
           console.log(705, val.remain)
           this.$set(this.form.goods[i], 'remain', val.remain)
@@ -738,7 +733,6 @@ export default {
     },
     delbox(index) {
       this.goodData.splice(index, 1)
-      // this.getNumber(this.goodId)
     },
     goNext() {
       this.nextStep = false
@@ -809,7 +803,9 @@ export default {
       this.goodData.forEach(item => {
         if (item.tableData.length) {
           let result = item.tableData.filter(ele => ele.id !== selectionId)
-          this.$set(this.goodData[this.ind], 'tableData', result)
+          console.log(result)
+          let resultData = [...item.tableData, ...result]
+          this.$set(this.goodData[this.ind], 'tableData', resultData)
         } else {
           this.$set(this.goodData[this.ind], 'tableData', selections)
           selections.forEach(item => {

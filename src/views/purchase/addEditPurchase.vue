@@ -22,9 +22,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="$t('发货公司')" prop="logitics_company_code">
+          <el-form-item :label="$t('发货公司')" prop="logistics_company_code">
             <el-select
-              v-model="ruleForm.logitics_company_code"
+              v-model="ruleForm.logistics_company_code"
               :placeholder="$t('请选择发货公司')"
               style="width: 50%"
               @change="changeCode"
@@ -178,6 +178,9 @@ export default {
         }
       })
     },
+    changeCode(val) {
+      console.log(val)
+    },
     checkImg(url) {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
@@ -201,7 +204,11 @@ export default {
       rows.splice(index, 1)
     },
     onSave() {
-      let params = { ...this.ruleForm, is_approved: 0 }
+      console.log(this.ruleForm.logitics_company_code)
+      let params = {
+        ...this.ruleForm,
+        is_approved: 0
+      }
       if (!this.$route.params.id) {
         this.$request.addPurchase(params).then(res => {
           if (res.ret) {
