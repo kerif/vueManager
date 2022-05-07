@@ -193,7 +193,7 @@
         <el-table-column prop="order_sn" :label="$t('打包单号')"> </el-table-column>
         <el-table-column prop="status" :label="$t('转运单状态')"> </el-table-column>
         <el-table-column prop="qty" :label="$t('商品数量')"></el-table-column>
-        <el-table-column prop="value" :label="$t('总价值')"></el-table-column>
+        <el-table-column prop="declare_value" :label="$t('总价值')"></el-table-column>
         <el-table-column prop="country_name" :label="$t('目的地')">
           <template slot-scope="scope">
             {{ scope.row.address && scope.row.address.country_name }}
@@ -204,9 +204,9 @@
             {{ scope.row.address && scope.row.address.receiver_name }}
           </template>
         </el-table-column>
-        <el-table-column prop="" :label="$t('下单渠道')"></el-table-column>
-        <el-table-column prop="" :label="$t('付款方式')"></el-table-column>
-        <el-table-column prop="create_at" :label="$t('创建时间')"></el-table-column>
+        <el-table-column prop="express_line.name" :label="$t('下单渠道')"></el-table-column>
+        <el-table-column prop="payment_mode" :label="$t('付款方式')"></el-table-column>
+        <el-table-column prop="created_at" :label="$t('创建时间')"></el-table-column>
         <el-table-column prop="customer_name" :label="$t('创建人')"></el-table-column>
       </el-table>
     </div>
@@ -264,9 +264,6 @@
       >
       <el-button size="small" v-if="ruleForm.status === 10" class="btn-main">{{
         $t('恢复')
-      }}</el-button>
-      <el-button size="small" type="primary" v-if="ruleForm.status === 4">{{
-        $t('提交为转运单')
       }}</el-button>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">

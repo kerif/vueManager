@@ -27,6 +27,7 @@
               v-model="ruleForm.logitics_company_code"
               :placeholder="$t('请选择发货公司')"
               style="width: 50%"
+              @change="changeCode"
             >
               <el-option
                 v-for="item in companyList"

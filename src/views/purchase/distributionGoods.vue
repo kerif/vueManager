@@ -503,15 +503,20 @@ export default {
       }
     },
     changeRadio() {
-      this.divides.forEach(item => {
+      this.divides.forEach((item, index) => {
         if (item.express_line_id) {
           item.express_line_id = ''
         }
         if (item.options) {
           item.options = []
         }
+        this.getExpress(index)
       })
-      this.getExpress()
+      this.divides.forEach(item => {
+        if (item.address_type === 2) {
+          this.isAble = true
+        }
+      })
     },
     // 获取收件地址列表数据
     getRecipeAddress(index) {
@@ -533,7 +538,7 @@ export default {
     changeAdd(index) {
       this.divides[index].express_line_id = ''
       this.divides[index].options = []
-      this.getExpress()
+      this.getExpress(index)
     },
     changeSelect(index) {
       if (!this.divides[index].user_id) {
@@ -553,11 +558,6 @@ export default {
           for (let i of res.data) {
             i.value = i.code
           }
-          // this.divides.forEach(item => {
-          //   if (item.location === '') {
-          //     item.location = res.data[0].code
-          //   }
-          // })
           list = res.data
           callback && callback(list)
         })
@@ -682,7 +682,7 @@ export default {
       })
     },
     getNumber(id) {
-      this.goodId = id
+      // this.goodId = id
       let number = 0
       this.goodData.forEach(item => {
         console.log(item)
@@ -698,10 +698,15 @@ export default {
       })
       this.form.goods.forEach((val, i) => {
         if (val.id === id) {
-          if (number < 0 || number > val.quantity) {
-            return this.$message.error(this.$t('装箱数量不能为负值'))
+          console.log(val.quantity)
+          // if (val.remain < 0) {
+          //   val.remain = 0
+          // }
+          if (number > val.quantity) {
+            return
           }
           val.remain = val.quantity - number
+          console.log(705, val.remain)
           this.$set(this.form.goods[i], 'remain', val.remain)
         }
       })
@@ -733,7 +738,7 @@ export default {
     },
     delbox(index) {
       this.goodData.splice(index, 1)
-      this.getNumber(this.goodId)
+      // this.getNumber(this.goodId)
     },
     goNext() {
       this.nextStep = false
@@ -804,7 +809,7 @@ export default {
       this.goodData.forEach(item => {
         if (item.tableData.length) {
           let result = item.tableData.filter(ele => ele.id !== selectionId)
-          this.$set(this.goodData[this.ind].tableData, 'tableData', result)
+          this.$set(this.goodData[this.ind], 'tableData', result)
         } else {
           this.$set(this.goodData[this.ind], 'tableData', selections)
           selections.forEach(item => {
@@ -878,9 +883,9 @@ export default {
       this.selfData = {}
       this.divides.forEach(item => {
         this.lineId = item.express_line_id
+        this.lineStations()
+        this.getId() // 获取身份证号码跟清关编码
       })
-      this.lineStations()
-      this.getId() // 获取身份证号码跟清关编码
       this.divides.forEach(item => {
         item.clearance_code = ''
         item.id_card = ''
@@ -910,6 +915,7 @@ export default {
         divides: []
       }
       this.divides.forEach(item => {
+        delete item.options
         params.divides.push({
           ...item,
           user_id: item.user_id.substring(0, 6),
