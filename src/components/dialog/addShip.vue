@@ -62,7 +62,6 @@ export default {
           })
           this.show = false
           this.success()
-          this.$router.go(-1)
           this.$router.push({ name: 'purchaseOrder' })
         } else {
           this.$message({

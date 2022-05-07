@@ -183,6 +183,7 @@
                     :fetch-suggestions="queryCNSearch"
                     @select="data => handleSelect(index, data)"
                     :placeholder="$t('请输入客户ID')"
+                    @change="changeSelect(index)"
                     v-model="item.user_id"
                   >
                   </el-autocomplete>
@@ -271,10 +272,10 @@
                     @change="changeExpress"
                   >
                     <el-option
-                      v-for="item in options"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id"
+                      v-for="val in item.options"
+                      :key="val.id"
+                      :label="val.name"
+                      :value="val.id"
                     >
                     </el-option>
                   </el-select>
@@ -425,7 +426,6 @@ export default {
       i: '',
       user_id: '',
       needCode: '',
-      options: [],
       explanation: '',
       tariffExplanation: '',
       packageId: [],
@@ -454,6 +454,7 @@ export default {
       country_id: '',
       locationId: '',
       isAble: false,
+      goodId: '',
       divides: [
         {
           address_type: 1,
@@ -479,6 +480,7 @@ export default {
       box: {
         station_id: ''
       },
+      address_ids: [],
       ids: '',
       tableLoading: false
     }
@@ -505,8 +507,10 @@ export default {
         if (item.express_line_id) {
           item.express_line_id = ''
         }
+        if (item.options) {
+          item.options = []
+        }
       })
-      this.options = []
       this.getExpress()
     },
     // 获取收件地址列表数据
@@ -522,14 +526,19 @@ export default {
           console.log(res)
           let addressData = JSON.parse(JSON.stringify(res.data[0]))
           this.divides[index].address = [addressData]
-          this.getExpress()
+          this.getExpress(index)
         }
       })
     },
     changeAdd(index) {
       this.divides[index].express_line_id = ''
-      this.options = []
+      this.divides[index].options = []
       this.getExpress()
+    },
+    changeSelect(index) {
+      if (!this.divides[index].user_id) {
+        this.locationCNSearch()
+      }
     },
     locationCNSearch(queryString, callback) {
       var list = [{}]
@@ -557,12 +566,13 @@ export default {
           callback && callback(new Array())
         })
     },
-    getExpress() {
+    getExpress(index) {
       // this.address_ids = this.divides[index].address.map(item => {
       //   if (item.address) {
       //     return item.address.id
       //   }
       // })
+      console.log(this.divides)
       this.address_ids = this.divides.forEach(item => {
         if (item.address) {
           item.address.map(ele => {
@@ -576,27 +586,25 @@ export default {
         package_ids: [this.packageId],
         type: this.radio
       }
-      this.divides.forEach(item => {
-        if (item.address_type === 1) {
-          params.address_ids = this.address_ids
-        }
-      })
-      // if (this.divides[index].address_type === 1) {
-      //   params.address_ids = this.address_ids
-      // }
+      // this.divides.forEach(item => {
+      //   if (item.address_type === 1) {
+      //     console.log(item.address_type === 1)
+      //     params.address_ids = [this.address_ids]
+      //     console.log(params.address_ids)
+      //   }
+      // })
+      if (this.divides[index].address_type === 1) {
+        params.address_ids = this.address_ids
+      }
       if (this.radio === 1) {
         params.is_delivery = 0
       }
       this.$request.usableLines(params).then(res => {
         if (res.ret) {
           console.log(res.data)
-          this.options = res.data
-          this.divides.forEach(item => {
-            item.express_line_id = res.data[0].id
-            this.lineId = item.express_line_id
-          })
-          // this.divides[index].express_line_id = res.data[0].id
-          // this.lineId = this.divides[index].express_line_id
+          this.divides[index].options = res.data
+          this.divides[index].express_line_id = res.data[0].id
+          this.lineId = this.divides[index].express_line_id
           this.lineStations()
           this.getId()
         } else {
@@ -674,6 +682,7 @@ export default {
       })
     },
     getNumber(id) {
+      this.goodId = id
       let number = 0
       this.goodData.forEach(item => {
         console.log(item)
@@ -724,6 +733,7 @@ export default {
     },
     delbox(index) {
       this.goodData.splice(index, 1)
+      this.getNumber(this.goodId)
     },
     goNext() {
       this.nextStep = false
@@ -742,6 +752,7 @@ export default {
           location: '',
           user_id: '',
           address: [],
+          options: [],
           express_line_id: '',
           clearance_code: '',
           personal_code: '',
@@ -901,7 +912,7 @@ export default {
       this.divides.forEach(item => {
         params.divides.push({
           ...item,
-          user_id: this.user_id,
+          user_id: item.user_id.substring(0, 6),
           address: item.address.map(ele => {
             return {
               user_id: ele.user_id,
