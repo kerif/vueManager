@@ -50,7 +50,7 @@
         <el-col :span="9" :offset="3">
           <el-form :inline="true" size="small">
             <el-form-item :label="$t('拆单数量')">
-              <el-input v-model="number" type="number" clearable></el-input>
+              <el-input v-model="number" type="number" @input="changeInput" clearable></el-input>
             </el-form-item>
             <el-form-item>
               <el-button @click="onConfirm" :disabled="prevStep" type="primary">{{
@@ -107,16 +107,22 @@
               <el-table-column type="index" label="#"></el-table-column>
               <el-table-column prop="date" :label="$t('操作')">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="deleterow(scope.$index, item.tableData)">{{
-                    $t('移除')
-                  }}</el-button>
+                  <el-button
+                    type="text"
+                    @click="deleterow(scope.$index, scope.row.id, item.tableData)"
+                    >{{ $t('移除') }}</el-button
+                  >
                 </template>
               </el-table-column>
               <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
               <el-table-column prop="brand" :label="$t('品牌')"> </el-table-column>
               <el-table-column prop="remain" :label="$t('装箱数量')">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.remain" @blur="getNumber(scope.row.id)"></el-input>
+                  <el-input
+                    v-model="scope.row.remain"
+                    @input="changeRemain(scope.$index, scope.row)"
+                    @blur="getNumber(scope.row.id)"
+                  ></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -556,7 +562,7 @@ export default {
       })
     },
     // 更改地址
-    changeAddress(userId, counts, addressList) {
+    changeAddress(index, userId, counts, addressList) {
       this.clientId = userId
       dialog(
         {
@@ -567,9 +573,7 @@ export default {
         },
         data => {
           console.log(data)
-          this.divides.forEach(item => {
-            item.address = JSON.parse(JSON.stringify(data))
-          })
+          this.divides[index].address = JSON.parse(JSON.stringify(data))
           this.getExpress()
         }
       )
@@ -595,6 +599,17 @@ export default {
       if (item.id) {
         this.user_id = item.id
         this.getRecipeAddress(index)
+      }
+    },
+    changeInput() {
+      let pattern = /^[1-9][0-9]*$/
+      if (!pattern.test(this.number)) {
+        this.number = ''
+      }
+      if (this.number > 1000) {
+        this.number = 1000
+      } else {
+        this.number
       }
     },
     getDetail() {
@@ -632,6 +647,21 @@ export default {
           this.$set(this.form.goods[i], 'remain', val.remain)
         }
       })
+    },
+    changeRemain(index, row) {
+      let patternRemain = /^[1-9][0-9]*$/
+      if (!patternRemain.test(row.remain)) {
+        row.remain = ''
+      }
+      // this.form.goods.forEach(item => {
+      //   if (item.id === row.id) {
+      //     if (row.remain > item.quantity) {
+      //       row.remain = item.quantity
+      //     } else {
+      //       row.remain
+      //     }
+      //   }
+      // })
     },
     onConfirm() {
       this.nextStep = true
@@ -723,8 +753,9 @@ export default {
         }
       })
     },
-    deleterow(index, rows) {
+    deleterow(index, id, rows) {
       rows.splice(index, 1)
+      this.getNumber(id)
     },
     getInsurance() {
       this.$request.packsConfig().then(res => {

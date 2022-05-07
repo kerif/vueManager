@@ -10,9 +10,9 @@
           <el-radio v-model="chooseId" :label="scope.row.id"></el-radio>
         </template>
       </el-table-column>
-      <el-table-column prop="country_name" :label="$t('国家')">
+      <el-table-column prop="country.name" :label="$t('国家')">
         <template slot-scope="scope">
-          {{ scope.row.address && scope.row.address.country_name }}
+          {{ scope.row.country.name }}
         </template>
       </el-table-column>
       <el-table-column prop="postcode" :label="$t('邮编')"> </el-table-column>
@@ -20,22 +20,14 @@
       <el-table-column prop="receiver_name" :label="$t('收件人')"> </el-table-column>
       <el-table-column :label="$t('收件电话')">
         <template slot-scope="scope">
-          <span
-            >{{ scope.row.address && scope.row.address.timezone }}-{{
-              scope.row.address && scope.row.address.phone
-            }}</span
-          >
+          <span>{{ scope.row.timezone }}-{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('详细地址')">
         <template slot-scope="scope">
           <span
-            >{{ scope.row.address && scope.row.address.street }}&nbsp;{{
-              scope.row.address && scope.row.address.door_no
-            }}&nbsp;{{ scope.row.address && scope.row.address.city }}
-            <span v-if="scope.row.address && scope.row.address.address"
-              >({{ scope.row.address && scope.row.address.address }})</span
-            >
+            >{{ scope.row.street }}&nbsp;{{ scope.row.door_no }}&nbsp;{{ scope.row.city }}
+            <span v-if="scope.row.address">({{ scope.row.address }})</span>
           </span>
         </template>
       </el-table-column>
@@ -196,6 +188,7 @@ export default {
   },
   methods: {
     init() {
+      console.log(this.clientId, 'client')
       if (this.clientId) {
         this.getAddressDialog()
       }
@@ -210,7 +203,7 @@ export default {
         .then(res => {
           if (res.ret) {
             this.tableData = res.data
-            console.log(res.data)
+            console.log(res.data, 333)
             this.userData = this.tableData[0]
             if (this.userData) {
               this.box.address_id = this.userData.id
