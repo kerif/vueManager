@@ -183,7 +183,6 @@ export default {
   mixins: [pagination],
   created() {
     this.getList()
-    this.getCounts()
   },
   methods: {
     getList() {
@@ -199,15 +198,19 @@ export default {
           ...this.searchData
         })
         .then(res => {
-          this.tableLoading = false
-          this.purchaseData = res.data
-          this.page_params.page = res.meta.current_page
-          this.page_params.total = res.meta.total
+          if (res.ret) {
+            this.tableLoading = false
+            this.purchaseData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.getCounts()
+          }
         })
     },
     getCounts() {
       this.$request.purchaseCount().then(res => {
         this.statusList = res.data
+        console.log(this.statusList[0].counts)
       })
     },
     goSearch() {

@@ -144,6 +144,7 @@ import addEditGoods from './addEditGoods.vue'
 import addShip from './addShip.vue'
 import addEditAddress from './addEditAddress.vue'
 import distributionDetail from './distributionDetail.vue'
+import purchaseDetails from './purchaseDetails.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -287,6 +288,7 @@ const addEditGoodsController = Vue.extend(addEditGoods)
 const addShipController = Vue.extend(addShip)
 const addEditAddressController = Vue.extend(addEditAddress)
 const distributionDetailController = Vue.extend(distributionDetail)
+const purchaseDetailsController = Vue.extend(purchaseDetails)
 const mixin = {
   data() {
     return {
@@ -484,6 +486,13 @@ function initInstance(type) {
     // 地址
     case 'addEditAddress':
       instance = new addEditAddressController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 采购详细
+    case 'purchaseDetails':
+      instance = new purchaseDetailsController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -136,7 +136,7 @@
               <el-button
                 class="btn-deep-blue"
                 v-if="ruleForm.status !== 0"
-                @click="editDetail(scope.row.id)"
+                @click="editDetail(scope.row)"
                 >{{ $t('详情') }}</el-button
               >
             </template>
@@ -181,12 +181,6 @@
               class="btn-light-green"
               @click="viewDetail"
               >{{ $t('恢复') }}</el-button
-            >
-            <el-button
-              size="small"
-              class="btn-light-red"
-              @click="deleteTable(scope.$index, ruleForm.orders)"
-              >{{ $t('删除') }}</el-button
             >
           </template>
         </el-table-column>
@@ -263,7 +257,7 @@
       }}</el-button>
       <el-button
         size="small"
-        v-if="ruleForm.status === 3 || ruleForm.status === 4"
+        v-if="ruleForm.status === 3"
         class="btn-light-red"
         @click="onInvalid"
         >{{ $t('作废') }}</el-button
@@ -393,8 +387,12 @@ export default {
         params: { id: this.$route.params.id }
       })
     },
-    editDetail(id) {
-      console.log(id)
+    editDetail(row) {
+      console.log(row)
+      dialog({
+        type: 'purchaseDetails',
+        row
+      })
     },
     getCompany() {
       this.$request.getExpressData().then(res => {

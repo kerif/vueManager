@@ -585,17 +585,10 @@ export default {
         })
     },
     getExpress(index) {
-      // this.address_ids = this.divides[index].address.map(item => {
-      //   if (item.address) {
-      //     return item.address.id
-      //   }
-      // })
-      console.log(this.divides)
-      this.address_ids = this.divides.forEach(item => {
+      this.divides.forEach(item => {
         if (item.address) {
-          item.address.map(ele => {
+          this.address_ids = item.address.map(ele => {
             if (ele.address) {
-              console.log(ele.address)
               return ele.address.id
             }
           })
@@ -606,7 +599,9 @@ export default {
         type: this.radio
       }
       if (this.divides[index].address_type === 1) {
+        console.log(this.divides[index].address_type === 1)
         params.address_ids = this.address_ids
+        console.log(this.address_ids)
       }
       if (this.radio === 1) {
         params.is_delivery = 0
@@ -1080,13 +1075,13 @@ export default {
   padding-right: 10px;
   position: relative;
   margin-right: 20px;
-  border-right: 2px solid #eee;
 }
 .poster-right {
   width: calc(100%-342px);
   width: -moz-calc(100% - 342px);
   width: -webkit-calc(100% - 342px);
   padding: 15px;
+  border-left: 2px solid #eee;
   box-sizing: border-box;
 }
 .img {
