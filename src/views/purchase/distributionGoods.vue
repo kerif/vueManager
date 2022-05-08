@@ -45,7 +45,7 @@
       </el-steps>
     </div>
     <h3>{{ $t('分货') }}</h3>
-    <div class="distribution">
+    <div class="distribution" v-if="showInput">
       <el-row :gutter="20">
         <el-col :span="9" :offset="3">
           <el-form :inline="true" size="small">
@@ -88,7 +88,7 @@
               <el-button size="small" @click="onSelect(index)">{{ $t('选择...') }}</el-button>
             </div>
           </div>
-          <div v-if="!item.tableData.length">
+          <div>
             <div style="margin-top: 10px">
               <el-input
                 v-model="item.code"
@@ -97,12 +97,17 @@
                 clearable
                 style="width: 45%"
               ></el-input>
-              <el-button type="primary" @click="onSearch" size="small" style="margin-left: 5px">{{
-                $t('确定')
-              }}</el-button>
+              <el-button
+                type="primary"
+                @click="onSearch(index)"
+                size="small"
+                style="margin-left: 5px"
+              >
+                {{ $t('确定') }}
+              </el-button>
             </div>
           </div>
-          <div v-else style="margin-top: 10px">
+          <div style="margin-top: 10px">
             <el-table :data="item.tableData" border style="width: 100%">
               <el-table-column type="index" label="#"></el-table-column>
               <el-table-column prop="date" :label="$t('操作')">
@@ -121,7 +126,7 @@
                   <el-input
                     v-model="scope.row.remain"
                     @input="changeRemain(scope.$index, scope.row)"
-                    @blur="getNumber(scope.row.id)"
+                    @blur="getOrigin(scope.row)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -184,6 +189,7 @@
                     @select="data => handleSelect(index, data)"
                     :placeholder="$t('请输入客户ID')"
                     @change="changeSelect(index)"
+                    @input="inputSelect(index)"
                     v-model="item.user_id"
                   >
                   </el-autocomplete>
@@ -198,6 +204,7 @@
                     ref="autocompleteRef"
                     :placeholder="$t('请输入存放货位')"
                     v-model="item.location"
+                    @change="changeLocation(index)"
                   >
                   </el-autocomplete>
                 </div>
@@ -415,6 +422,7 @@ export default {
       code: '',
       nextStep: false,
       prevStep: false,
+      showInput: false,
       showSelectGoods: false,
       goodData: [
         {
@@ -454,6 +462,7 @@ export default {
       country_id: '',
       locationId: '',
       isAble: false,
+      inds: '',
       divides: [
         {
           address_type: 1,
@@ -492,6 +501,7 @@ export default {
     this.getRadio()
     this.getInsurance()
     if (this.$route.params.id) {
+      this.showInput = true
       this.getDetail()
     }
   },
@@ -546,6 +556,13 @@ export default {
         this.locationCNSearch()
       }
     },
+    changeLocation(index) {
+      console.log(index)
+    },
+    inputSelect(index) {
+      console.log(index)
+      this.inds = index
+    },
     locationCNSearch(queryString, callback) {
       var list = [{}]
       let params = {}
@@ -578,6 +595,7 @@ export default {
         if (item.address) {
           item.address.map(ele => {
             if (ele.address) {
+              console.log(ele.address)
               return ele.address.id
             }
           })
@@ -587,13 +605,6 @@ export default {
         package_ids: [this.packageId],
         type: this.radio
       }
-      // this.divides.forEach(item => {
-      //   if (item.address_type === 1) {
-      //     console.log(item.address_type === 1)
-      //     params.address_ids = [this.address_ids]
-      //     console.log(params.address_ids)
-      //   }
-      // })
       if (this.divides[index].address_type === 1) {
         params.address_ids = this.address_ids
       }
@@ -630,6 +641,7 @@ export default {
         data => {
           console.log(data)
           this.divides[index].address = JSON.parse(JSON.stringify(data))
+          console.log(this.divides[index].address)
           this.getExpress(index)
         }
       )
@@ -640,8 +652,12 @@ export default {
       this.selfAddress = row
     },
     queryCNSearch(queryString, callback) {
+      console.log(queryString)
       var list = [{}]
-      this.$request.Automatic().then(res => {
+      let params = {
+        keyword: queryString.substring(0, 6)
+      }
+      this.$request.Automatic(params).then(res => {
         for (let i of res.data) {
           i.value = i.id + '---' + i.name
         }
@@ -682,6 +698,13 @@ export default {
         this.locationId = res.data.package.warehouse_id
       })
     },
+    getOrigin(row) {
+      console.log(row)
+      if (row.remain > row.originRemain) {
+        row.remain = row.originRemain
+      }
+      this.getNumber(row.id)
+    },
     getNumber(id) {
       let number = 0
       this.goodData.forEach(item => {
@@ -698,12 +721,7 @@ export default {
       })
       this.form.goods.forEach((val, i) => {
         if (val.id === id) {
-          console.log(val.id, val.quantity)
-          // if (number > val.quantity) {
-          //   return
-          // }
           val.remain = val.quantity - number
-          console.log(705, val.remain)
           this.$set(this.form.goods[i], 'remain', val.remain)
         }
       })
@@ -713,15 +731,6 @@ export default {
       if (!patternRemain.test(row.remain)) {
         row.remain = ''
       }
-      // this.form.goods.forEach(item => {
-      //   if (item.id === row.id) {
-      //     if (row.remain > item.quantity) {
-      //       row.remain = item.quantity
-      //     } else {
-      //       row.remain
-      //     }
-      //   }
-      // })
     },
     onConfirm() {
       this.nextStep = true
@@ -734,11 +743,17 @@ export default {
       }
     },
     delbox(index) {
+      this.showInput = true
+      const ids = this.goodData[index].tableData.map(item => item.id)
       this.goodData.splice(index, 1)
+      ids.forEach(id => {
+        this.getNumber(id)
+      })
     },
     goNext() {
       this.nextStep = false
       this.prevStep = true
+      this.showInput = false
       this.divides = []
       this.goodData.forEach(item => {
         let goods = item.tableData.map(val => {
@@ -801,18 +816,12 @@ export default {
     },
     getVal(selection) {
       let selections = JSON.parse(JSON.stringify(selection))
-      let selectionId = selections.map(item => item.id)
-      this.goodData.forEach(item => {
-        if (item.tableData.length) {
-          let result = item.tableData.filter(ele => ele.id !== selectionId)
-          console.log(result)
-          let resultData = [...item.tableData, ...result]
-          this.$set(this.goodData[this.ind], 'tableData', resultData)
-        } else {
-          this.$set(this.goodData[this.ind], 'tableData', selections)
-          selections.forEach(item => {
-            this.getNumber(item.id)
-          })
+      const tableIds = this.goodData[this.ind].tableData.map(item => item.id)
+      selections.forEach(item => {
+        item.originRemain = item.remain
+        if (!tableIds.includes(item.id)) {
+          this.goodData[this.ind].tableData.push(item)
+          this.getNumber(item.id)
         }
       })
     },
@@ -854,17 +863,18 @@ export default {
       this.box.station_id = ''
       this.selfAddress = {}
     },
-    onSearch() {
-      this.goodData.forEach(item => {
-        if (item.code) {
-          item.tableData = JSON.parse(
-            JSON.stringify(this.form.goods.filter(ele => ele.barcode === item.code))
-          )
-          item.tableData.forEach(val => {
-            this.getNumber(val.id)
-          })
-        }
-      })
+    onSearch(index) {
+      const code = this.goodData[index].code
+      const items = this.form.goods.filter(ele => ele.barcode === code)[0]
+      if (!items || !items.remain) return
+      const tableIds = this.goodData[index].tableData.map(item => item.id)
+      if (!tableIds.includes(items.id)) {
+        this.goodData[index].tableData.push({
+          ...items,
+          originRemain: items.remain
+        })
+        this.getNumber(items.id)
+      }
     },
     selectStation() {
       this.addressDialog = true
@@ -1064,7 +1074,6 @@ export default {
 }
 .poster-left {
   width: 300px;
-  height: 580px;
   overflow: auto;
   text-align: center;
   padding-left: 10px;

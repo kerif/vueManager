@@ -142,7 +142,8 @@ import qaExplain from './qaExplain.vue'
 import customConfig from './customConfig.vue'
 import addEditGoods from './addEditGoods.vue'
 import addShip from './addShip.vue'
-import addEditAddress from './addEditAddress'
+import addEditAddress from './addEditAddress.vue'
+import distributionDetail from './distributionDetail.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -285,6 +286,7 @@ const customConfigController = Vue.extend(customConfig)
 const addEditGoodsController = Vue.extend(addEditGoods)
 const addShipController = Vue.extend(addShip)
 const addEditAddressController = Vue.extend(addEditAddress)
+const distributionDetailController = Vue.extend(distributionDetail)
 const mixin = {
   data() {
     return {
@@ -482,6 +484,13 @@ function initInstance(type) {
     // 地址
     case 'addEditAddress':
       instance = new addEditAddressController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //分货详细
+    case 'distributionDetail':
+      instance = new distributionDetailController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

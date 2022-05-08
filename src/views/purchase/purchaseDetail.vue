@@ -172,7 +172,7 @@
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column :label="$t('操作')" width="180">
           <template slot-scope="scope">
-            <el-button size="small" class="btn-main" @click="viewDetail">{{
+            <el-button size="small" class="btn-main" @click="viewDetail(scope.row)">{{
               $t('详情')
             }}</el-button>
             <el-button
@@ -191,7 +191,16 @@
           </template>
         </el-table-column>
         <el-table-column prop="order_sn" :label="$t('打包单号')"> </el-table-column>
-        <el-table-column prop="status" :label="$t('转运单状态')"> </el-table-column>
+        <el-table-column prop="status" :label="$t('转运单状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 1">{{ $t('待处理') }}</span>
+            <span v-if="scope.row.status === 2">{{ $t('待支付') }}</span>
+            <span v-if="scope.row.status === 3">{{ $t('待发货') }}</span>
+            <span v-if="scope.row.status === 4">{{ $t('已发货') }}</span>
+            <span v-if="scope.row.status === 5">{{ $t('已签收') }}</span>
+            <span v-if="scope.row.status === 19">{{ $t('已作废') }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="qty" :label="$t('商品数量')"></el-table-column>
         <el-table-column prop="declare_value" :label="$t('总价值')"></el-table-column>
         <el-table-column prop="country_name" :label="$t('目的地')">
@@ -205,7 +214,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="express_line.name" :label="$t('下单渠道')"></el-table-column>
-        <el-table-column prop="payment_mode" :label="$t('付款方式')"></el-table-column>
+        <el-table-column prop="payment_mode" :label="$t('付款方式')">
+          <template slot-scope="scope">
+            <span class="payment-sty" v-if="scope.row.payment_mode === 2">{{
+              $t('货到付款')
+            }}</span>
+            <span v-else>{{ $t('预付') }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="created_at" :label="$t('创建时间')"></el-table-column>
         <el-table-column prop="customer_name" :label="$t('创建人')"></el-table-column>
       </el-table>
@@ -323,9 +339,11 @@ export default {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
-    viewDetail() {
-      this.$router.push({
-        name: 'distributeDetail'
+    viewDetail(row) {
+      console.log(row)
+      dialog({
+        type: 'distributionDetail',
+        row
       })
     },
     deleteTable(index, rows) {
