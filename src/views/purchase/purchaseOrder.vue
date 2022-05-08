@@ -25,19 +25,19 @@
         }}</el-button>
         <el-button
           class="btn-deep-purple"
-          v-if="activeName === '1'"
+          v-if="activeName === '0'"
           @click="onPurchase(selectIDs)"
           >{{ $t('提交采购') }}</el-button
         >
         <el-button
           class="btn-light-red"
-          v-if="['1', '3'].includes(activeName)"
+          v-if="['0', '1', '2'].includes(activeName)"
           @click="onDelete(selectIDs)"
           >{{ $t('删除') }}</el-button
         >
         <el-button
           class="btn-main"
-          v-if="['5'].includes(activeName)"
+          v-if="['3', '5'].includes(activeName)"
           @click="onInvild(selectIDs)"
           >{{ $t('作废') }}</el-button
         >
@@ -326,7 +326,7 @@ export default {
     },
     editPurchase(id) {
       this.$router.push({
-        name: 'addPurchase',
+        name: 'editPurchase',
         params: { id }
       })
     }
