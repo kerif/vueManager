@@ -14,6 +14,16 @@
       <el-form-item :label="$t('物流单号')">
         <el-input v-model="form.logistics_sn" style="width: 45%"></el-input>
       </el-form-item>
+      <el-form-item :label="$t('收货仓库')">
+        <el-select v-model="form.warehouse_id" clearable :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in agentData"
+            :key="item.id"
+            :value="item.id"
+            :label="item.warehouse_name"
+          ></el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -29,19 +39,25 @@ export default {
       id: '',
       form: {
         logistics_company_code: '',
-        logistics_sn: ''
+        logistics_sn: '',
+        warehouse_id: ''
       },
       logistics_sn: '',
-      companyList: []
+      companyList: [],
+      agentData: []
     }
-  },
-  created() {
-    this.getCompany()
   },
   methods: {
     init() {
       this.form.logistics_sn = this.logistics_sn
       this.form.logistics_company_code = this.logistics_company_code
+      this.getCompany()
+      this.getWarehouse()
+    },
+    getWarehouse() {
+      this.$request.getSimpleWarehouse().then(res => {
+        this.agentData = res.data
+      })
     },
     getCompany() {
       this.$request.getExpressData().then(res => {

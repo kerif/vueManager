@@ -70,6 +70,18 @@
             ></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('收货仓库')" prop="warehouse_id">
+            <el-select v-model="ruleForm.warehouse_id" clearable :placeholder="$t('请选择')">
+              <el-option
+                v-for="item in agentData"
+                :key="item.id"
+                :value="item.id"
+                :label="item.warehouse_name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
     <div style="margin-top: 20px">
@@ -139,11 +151,13 @@ export default {
         sn: '',
         logistics_sn: '',
         logitics_company_code: '',
+        warehouse_id: '',
         name: '',
         remark: '',
         amount: '',
         goods: []
       },
+      agentData: [],
       companyList: [],
       imgVisible: false,
       imgSrc: '',
@@ -158,6 +172,7 @@ export default {
   components: {},
   created() {
     this.getCompany()
+    this.getWarehouse()
     if (this.$route.params.id) {
       this.getList()
     }
@@ -176,6 +191,11 @@ export default {
             this.companyList = res.data
           }
         }
+      })
+    },
+    getWarehouse() {
+      this.$request.getSimpleWarehouse().then(res => {
+        this.agentData = res.data
       })
     },
     changeCode(val) {

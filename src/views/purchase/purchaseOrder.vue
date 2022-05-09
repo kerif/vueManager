@@ -72,6 +72,7 @@
         <el-table-column prop="sn" :label="$t('PO单号')"> </el-table-column>
         <el-table-column prop="status_name" :label="$t('状态')"> </el-table-column>
         <el-table-column prop="name" :label="$t('PO单名称')"> </el-table-column>
+        <el-table-column prop="warehouse_name" :label="$t('采购仓库')"></el-table-column>
         <el-table-column prop="logistics_company" :label="$t('发货物流公司')"> </el-table-column>
         <el-table-column prop="logistics_sn" :label="$t('发货物流单号')"></el-table-column>
         <el-table-column prop="amount" :label="$t('采购总金额')"></el-table-column>
