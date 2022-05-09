@@ -6,8 +6,8 @@
     <el-table :data="form.goods" border style="width: 100%" :cell-style="editColor">
       <el-table-column type="index"></el-table-column>
       <el-table-column :label="$t('操作')">
-        <template>
-          <el-button class="btn-main">{{ $t('详情') }}</el-button>
+        <template slot-scope="scope">
+          <el-button class="btn-main" @click="viewDetail(scope.row)">{{ $t('详情') }}</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
@@ -204,6 +204,7 @@
                     ref="autocompleteRef"
                     :placeholder="$t('请输入存放货位')"
                     v-model="item.location"
+                    @select="handleLocation(index)"
                     @change="changeLocation(index)"
                   >
                   </el-autocomplete>
@@ -463,6 +464,7 @@ export default {
       locationId: '',
       isAble: false,
       inds: '',
+      indx: '',
       divides: [
         {
           address_type: 1,
@@ -522,6 +524,12 @@ export default {
         this.getExpress(index)
       })
     },
+    viewDetail(row) {
+      dialog({
+        type: 'purchaseDetails',
+        row
+      })
+    },
     // 获取收件地址列表数据
     getRecipeAddress(index) {
       this.tableLoading = true
@@ -552,6 +560,7 @@ export default {
       })
     },
     changeSelect(index) {
+      console.log(index)
       if (!this.divides[index].user_id) {
         this.locationCNSearch()
       }
@@ -566,10 +575,9 @@ export default {
     locationCNSearch(queryString, callback) {
       var list = [{}]
       let params = {}
-      this.divides.forEach(item => {
-        params.keyword = item.location
-        params.user_id = item.user_id.substring(0, 6)
-      })
+      params.keyword = queryString
+      params.user_id = this.divides[this.inds].user_id.substring(0, 6)
+      console.log(params.keyword, params.user_id)
       this.$request
         .AutoLocation(this.locationId, params)
         .then(res => {
@@ -663,10 +671,18 @@ export default {
     // 客户id
     handleSelect(index, item) {
       console.log(index, item)
+      this.inds = index
       if (item.id) {
         this.user_id = item.id
         this.getRecipeAddress(index)
         this.locationCNSearch()
+      }
+    },
+    handleLocation(index) {
+      this.indx = index
+      if (this.divides[index].user_id) {
+        console.log(index, this.divides[index].user_id)
+        // this.locationCNSearch()
       }
     },
     changeInput() {

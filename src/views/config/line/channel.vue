@@ -304,6 +304,9 @@
                 {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item class="item-sty" @click.native="availableCustoms(scope.row.id)">{{
+                  $t('可用客户')
+                }}</el-dropdown-item>
                 <el-dropdown-item class="item-sty" @click.native="editLine(scope.row.id)">
                   <span>{{ $t('修改') }}</span>
                 </el-dropdown-item>
@@ -708,6 +711,11 @@ export default {
         query: {
           state: 'edit'
         }
+      })
+    },
+    availableCustoms(id) {
+      dialog({ type: 'availableCustom', id }, () => {
+        this.getList()
       })
     },
     // 删除

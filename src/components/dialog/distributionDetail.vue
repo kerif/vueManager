@@ -13,6 +13,7 @@
             <div style="font-weight: bold">#1</div>
             <div style="font-weight: bold">{{ $t('装箱清单') }}</div>
           </div>
+          <br />
           <div class="box-top">
             <div style="font-weight: bold">{{ $t('商品名称') }}</div>
             <div>{{ row.qty }}</div>
@@ -109,10 +110,7 @@ export default {
         border-radius: 5px;
         margin-right: 10px;
         .box-top {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 10px 0;
+          flex: 1;
         }
       }
     }

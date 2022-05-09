@@ -523,6 +523,7 @@ export default {
   created() {
     this.getProp() // 获取物品属性
     // this.getService() // 获取全部服务
+    this.initQuery()
     this.getAgentData()
     this.getExpressData() // 获取全部快递公司
     if (this.$route.params.id) {
@@ -546,6 +547,11 @@ export default {
         this.updateProp = res.data
         this.localization = res.localization
       })
+    },
+    initQuery() {
+      if (this.$route.query.sn) {
+        this.user.express_num = this.$route.query.sn
+      }
     },
     // 获取全部服务
     getService(arr) {

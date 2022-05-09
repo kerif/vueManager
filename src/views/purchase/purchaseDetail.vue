@@ -170,7 +170,7 @@
       <h4>{{ $t('分货清单') }}</h4>
       <el-table :data="ruleForm.orders" border style="width: 100%">
         <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column :label="$t('操作')" width="180">
+        <el-table-column :label="$t('操作')" width="150">
           <template slot-scope="scope">
             <el-button size="small" class="btn-main" @click="viewDetail(scope.row)">{{
               $t('详情')
@@ -231,7 +231,7 @@
       >
       <el-button
         size="small"
-        v-if="ruleForm.status === 1 || ruleForm.status === 0"
+        v-if="ruleForm.status === 0"
         class="btn-deep-blue"
         @click="saveGoods"
         :loading="$store.state.btnLoading"
@@ -252,9 +252,13 @@
         class="btn-deep-purple"
         >{{ $t('添加发货信息') }}</el-button
       >
-      <el-button size="small" v-if="ruleForm.status === 2" class="btn-blue-green">{{
-        $t('入库')
-      }}</el-button>
+      <el-button
+        size="small"
+        @click="storage"
+        v-if="ruleForm.status === 2"
+        class="btn-blue-green"
+        >{{ $t('入库') }}</el-button
+      >
       <el-button
         size="small"
         v-if="ruleForm.status === 3"
@@ -332,6 +336,13 @@ export default {
     checkImg(url) {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
+    },
+    storage() {
+      this.$router.push({
+        name: 'editStorage',
+        params: { id: this.$route.params.id },
+        query: { sn: this.ruleForm.logistics_sn }
+      })
     },
     viewDetail(row) {
       console.log(row)

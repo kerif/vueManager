@@ -2,7 +2,7 @@
   <el-dialog
     :visible.sync="show"
     :title="$t('采购详情')"
-    width="35%"
+    width="45%"
     class="purchase-dialog"
     @close="clear"
   >
@@ -67,7 +67,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="20" class="container-center">
-      <el-col :span="10"
+      <el-col :span="12"
         ><span class="leftWidth">{{ $t('物品照片') }}</span>
         <img class="image" :src="$baseUrl.IMAGE_URL + row.image" @click="checkImg(row.image)" />
       </el-col>

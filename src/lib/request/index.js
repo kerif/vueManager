@@ -4261,3 +4261,13 @@ exports.purchaseCount = () => {
 exports.getAddress = params => {
   return $form.post('package-packs/user-first-address-by-id', params)
 }
+
+// 渠道优化 获取授权详情
+exports.authDetail = id => {
+  return $form.get(`express-lines/${id}/show-auth`)
+}
+
+// 用户授权
+exports.userAuth = (id, params) => {
+  return $form.put(`express-lines/${id}/update-auth`, params)
+}
