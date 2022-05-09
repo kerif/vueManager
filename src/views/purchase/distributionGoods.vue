@@ -289,7 +289,7 @@
                   <el-select
                     v-model="item.express_line_id"
                     :placeholder="$t('请选择')"
-                    @change="changeExpress"
+                    @change="changeExpress(index)"
                   >
                     <el-option
                       v-for="val in item.options"
@@ -304,8 +304,8 @@
                 <div v-if="radio === 2">
                   <div class="express-left">
                     <p>{{ $t('自提点地址') }}</p>
-                    <div class="choose-sty" v-if="selfData && selfData.id">
-                      <p>{{ selfData.address }}</p>
+                    <div class="choose-sty" v-if="item.selfData && item.selfData.id">
+                      <p>{{ item.selfData.address }}</p>
                     </div>
                   </div>
                   <div class="express-left express-right">
@@ -468,7 +468,7 @@ export default {
       multiBoxes: '',
       location: '',
       coupon_id: '',
-      station_id: '',
+      stationId: '',
       selfData: {},
       clientId: '',
       imgVisible: false,
@@ -632,7 +632,7 @@ export default {
           this.divides[index].options = res.data
           this.divides[index].express_line_id = res.data[0].id
           this.lineId = this.divides[index].express_line_id
-          this.lineStations()
+          this.lineStations(index)
           this.getId()
         } else {
           this.$notify({
@@ -876,15 +876,10 @@ export default {
       if (!this.box.station_id) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.selfData = this.selfAddress
-      if (this.selfData) {
-        this.divides.forEach(item => {
-          if (item.address) {
-            item.address.forEach(ele => {
-              ele.address_id = this.selfData.id
-            })
-          }
-        })
+      this.divides[this.selectInd].selfData = this.selfAddress
+      if (this.divides[this.selectInd].selfData) {
+        this.stationId = this.divides[this.selectInd].selfData.id
+        console.log(this.stationId)
       }
       this.addressDialog = false
     },
@@ -917,11 +912,11 @@ export default {
       console.log(userId)
       rows.splice(index, 1)
     },
-    changeExpress() {
-      this.selfData = {}
+    changeExpress(index) {
+      this.divides[index].selfData = {}
       this.divides.forEach(item => {
         this.lineId = item.express_line_id
-        this.lineStations()
+        this.lineStations(index)
         this.getId() // 获取身份证号码跟清关编码
       })
       this.divides.forEach(item => {
@@ -931,19 +926,14 @@ export default {
       })
     },
     // 获取自提点地址
-    lineStations() {
+    lineStations(index) {
       this.$request.lineStations(this.lineId).then(res => {
         if (res.ret) {
           this.stationsData = res.data
-          this.selfData = res.data[0]
-          if (this.selfData) {
-            this.divides.forEach(item => {
-              if (item.address) {
-                item.address.forEach(ele => {
-                  ele.address_id = this.selfData.id
-                })
-              }
-            })
+          this.divides[index].selfData = res.data[0]
+          if (this.divides[index].selfData) {
+            this.stationId = this.divides[index].selfData.id
+            console.log(this.stationId)
           }
         }
       })
@@ -954,8 +944,10 @@ export default {
       }
       this.divides.forEach(item => {
         delete item.options
+        delete item.selfData
         params.divides.push({
           ...item,
+          station_id: this.radio === 2 ? this.stationId : '',
           user_id: item.user_id.substring(0, 6),
           address: item.address.map(ele => {
             return {
