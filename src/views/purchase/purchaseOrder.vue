@@ -93,21 +93,21 @@
         <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
         <el-table-column :label="$t('操作')" width="280" fixed="right">
           <template slot-scope="scope">
-            <el-button class="btn-purple" @click="onDetail(scope.row.id)">{{
-              $t('详情')
-            }}</el-button>
+            <el-button
+              class="btn-purple"
+              v-if="activeName !== '0'"
+              @click="onDetail(scope.row.id)"
+              >{{ $t('详情') }}</el-button
+            >
             <el-button
               class="btn-blue-green"
               @click="goDistribution(scope.row.id)"
               v-if="['3'].includes(activeName)"
               >{{ $t('分货') }}</el-button
             >
-            <el-button
-              class="btn-green"
-              v-if="activeName === '3'"
-              @click="goStorage(scope.row.id)"
-              >{{ $t('入库信息') }}</el-button
-            >
+            <el-button class="btn-green" v-if="activeName === '3'" @click="goStorage(scope.row)">{{
+              $t('入库信息')
+            }}</el-button>
             <el-button
               class="btn-light-red"
               v-if="['2', '3', '5'].includes(activeName)"
@@ -285,9 +285,14 @@ export default {
         }
       })
     },
-    goStorage(id) {
-      console.log(id)
-      this.$router.push({ name: 'editStorage', params: { id: id } })
+    goStorage(row) {
+      console.log(row.id)
+      this.$router.push({
+        name: 'editStorage',
+        query: {
+          sn: row.logistics_sn
+        }
+      })
     },
     getRow(row) {
       console.log(row)

@@ -196,6 +196,15 @@
                     v-model="item.user_id"
                   >
                   </el-autocomplete>
+                  <!-- <el-select v-model="item.user_id" filterable :placeholder="$t('客户ID')">
+                    <el-option
+                      v-for="item in usersData"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select> -->
                 </div>
               </div>
               <br />
@@ -424,6 +433,7 @@ export default {
       goods: [],
       number: '',
       code: '',
+      usersData: [],
       nextStep: false,
       prevStep: false,
       showInput: false,
@@ -510,6 +520,7 @@ export default {
       this.showInput = true
       this.getDetail()
     }
+    this.getUserID()
   },
   methods: {
     editColor({ row, columnIndex }) {
@@ -597,15 +608,12 @@ export default {
         })
     },
     getExpress(index) {
-      this.divides.forEach(item => {
+      this.address_ids = this.divides[index].address.map(item => {
         if (item.address) {
-          this.address_ids = item.address.map(ele => {
-            if (ele.address) {
-              return ele.address.id
-            }
-          })
+          return item.address.id
         }
       })
+      console.log(this.divides[index].address)
       let params = {
         package_ids: [this.packageId],
         type: this.radio
@@ -670,6 +678,12 @@ export default {
         }
         list = res.data
         callback && callback(list)
+      })
+    },
+    getUserID() {
+      this.$request.Automatic().then(res => {
+        console.log(res)
+        this.usersData = res.data
       })
     },
     // 客户id
