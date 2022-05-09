@@ -330,6 +330,7 @@ export default {
         amount: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
         name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }]
       },
+      ids: '',
       showGoods: false,
       companyList: [],
       agentData: [],
@@ -353,6 +354,7 @@ export default {
       this.$request.purchaseDetail(this.$route.params.id).then(res => {
         console.log(res)
         this.ruleForm = res.data
+        this.ids = res.data.package.id
       })
     },
     checkImg(url) {
@@ -367,7 +369,7 @@ export default {
     storage() {
       this.$router.push({
         name: 'editStorage',
-        params: { id: this.$route.params.id },
+        params: { id: this.ids },
         query: { sn: this.ruleForm.logistics_sn }
       })
     },

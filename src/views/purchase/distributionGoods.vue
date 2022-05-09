@@ -300,7 +300,7 @@
                     </div>
                   </div>
                   <div class="express-left express-right">
-                    <p class="express-sty" @click="selectStation">{{ $t('请选择') }} ></p>
+                    <p class="express-sty" @click="selectStation(index)">{{ $t('请选择') }} ></p>
                   </div>
                 </div>
                 <div class="express-left" v-if="needCode">
@@ -493,6 +493,7 @@ export default {
       box: {
         station_id: ''
       },
+      selectInd: '',
       address_ids: [],
       ids: '',
       tableLoading: false
@@ -890,7 +891,8 @@ export default {
         this.getNumber(items.id)
       }
     },
-    selectStation() {
+    selectStation(index) {
+      this.selectInd = index
       this.addressDialog = true
     },
     checkImg(url) {
