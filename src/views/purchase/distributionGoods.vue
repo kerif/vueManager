@@ -708,8 +708,8 @@ export default {
       if (!pattern.test(this.number)) {
         this.number = ''
       }
-      if (this.number > 1000) {
-        this.number = 1000
+      if (this.number > 100) {
+        this.number = 100
       } else {
         this.number
       }

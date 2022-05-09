@@ -131,7 +131,6 @@
               @click="onDelete([scope.row.id])"
               >{{ $t('删除') }}</el-button
             >
-            <!-- <el-button class="btn-main" v-if="activeName === '4'">{{ $t('提交转运') }}</el-button> -->
             <el-button
               class="btn-deep-purple"
               v-if="activeName === '0'"

@@ -5,7 +5,13 @@
     @close="clear"
   >
     <h3>{{ $t('基础信息') }}</h3>
-    <el-form label-position="right" :rules="rules" label-width="120px" :model="ruleForm">
+    <el-form
+      label-position="right"
+      :rules="rules"
+      ref="ruleForm"
+      label-width="120px"
+      :model="ruleForm"
+    >
       <el-form-item :label="$t('中文名称')" prop="cn_name">
         <el-input
           class="input-sty"
@@ -115,7 +121,7 @@
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="submit">{{ $t('提交') }}</el-button>
+      <el-button type="primary" @click="submit('ruleForm')">{{ $t('提交') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -246,7 +252,7 @@ export default {
         }
       })
     },
-    submit() {
+    submit(formName) {
       if (this.level.length) {
         console.log(this.level[this.level.length - 1])
         this.ruleForm.category_id = this.level[this.level.length - 1]
@@ -261,13 +267,19 @@ export default {
       let params = {
         ...this.ruleForm
       }
-      if (this.state === 'edit') {
-        this.success(JSON.parse(JSON.stringify(params)))
-        this.show = false
-      } else {
-        this.show = false
-        this.success(params)
-      }
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.state === 'edit') {
+            this.success(JSON.parse(JSON.stringify(params)))
+            this.show = false
+          } else {
+            this.show = false
+            this.success(params)
+          }
+        } else {
+          return false
+        }
+      })
     },
     clear() {
       this.purchase = {}
