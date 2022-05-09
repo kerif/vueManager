@@ -8,30 +8,34 @@
   >
     <div class="distribution">
       <div class="distribution-left">
-        <div class="box">
-          <div class="box-top">
-            <div style="font-weight: bold">#1</div>
-            <div style="font-weight: bold">{{ $t('装箱清单') }}</div>
+        <div>
+          <div class="box-item">
+            <div class="num">#1</div>
+            <div>{{ $t('装箱清单') }}</div>
           </div>
-          <br />
-          <div class="box-top">
-            <div style="font-weight: bold">{{ $t('商品名称') }}</div>
-            <div>{{ row.qty }}</div>
+          <div
+            class="box-wrap"
+            style="border: 2px solid #eee; border-radius: 5px"
+            v-for="item in packageData"
+            :key="item.id"
+          >
+            <div>{{ item.name }}</div>
+            <div style="margin-top: 15px">x{{ item.qty }}</div>
           </div>
         </div>
       </div>
       <div class="distribution-right">
         <div class="info-item">
-          <div style="font-weight: bold">{{ $t('打包单号') }}</div>
+          <div class="font">{{ $t('打包单号') }}</div>
           <div>{{ row.order_sn }}</div>
         </div>
         <div class="info-item">
-          <div style="font-weight: bold">{{ $t('客户ID') }}</div>
+          <div class="font">{{ $t('客户ID') }}</div>
           <div>{{ row.user_id }}</div>
         </div>
-        <div>
-          <div style="font-weight: bold">{{ $t('收货地址') }}</div>
-          <div style="border: 1px solid #eee; padding: 10px; margin: 10px; border-radius: 6px">
+        <div style="margin-bottom: 20px">
+          <div class="font">{{ $t('收货地址') }}</div>
+          <div class="border-item">
             <span>{{ row.address && row.address.receiver_name }}</span
             >&nbsp;
             <span>{{ row.address && row.address.timezone }}</span>
@@ -46,28 +50,18 @@
           </div>
         </div>
         <div class="info-item">
-          <div style="font-weight: bold">{{ $t('下单渠道') }}</div>
+          <div class="font">{{ $t('下单渠道') }}</div>
           <div>{{ row.express_line && row.express_line.name }}</div>
         </div>
-        <div class="info-item">
+        <div>
           <div>
-            <div style="font-weight: bold">{{ $t('增值服务') }}</div>
-            <div style="border: 1px solid #eee; padding: 10px; margin: 10px; border-radius: 6px">
-              <div class="box">
-                <div class="box-top">
-                  <div>{{ $t('增值服务') }}</div>
-                  <div>
-                    <span></span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div class="font">{{ $t('增值服务') }}</div>
+            <div class="border-item"></div>
           </div>
         </div>
-        <div class="info-item">
+        <div>
           <div style="font-weight: bold">{{ $t('付款方式') }}</div>
-          <br />
-          <div style="border: 1px solid #eee; padding: 10px; margin: 10px; border-radius: 6px">
+          <div class="border-item">
             <span class="payment-sty" v-if="row.payment_mode === 2">{{ $t('货到付款') }}</span>
             <span v-else>{{ $t('预付') }}</span>
           </div>
@@ -82,15 +76,27 @@ export default {
   data() {
     return {
       row: {},
-      servicesData: []
+      servicesData: [],
+      packageData: []
     }
   },
   methods: {
+    init() {
+      if (this.row.id) {
+        this.getGoodsDetail()
+      }
+      this.getService()
+    },
     getService() {
       this.$request.servicesPackage().then(res => {
         if (res.ret) {
           this.servicesData = res.data
         }
+      })
+    },
+    getGoodsDetail() {
+      this.$request.packageDetails(this.row.id).then(res => {
+        this.packageData = res.data
       })
     },
     clear() {}
@@ -100,18 +106,36 @@ export default {
 
 <style lang="scss">
 .distribution-dialog {
+  .font {
+    font-weight: bold;
+  }
+  .border-item {
+    width: 420px;
+    border: 2px solid #eee;
+    padding: 10px;
+    margin: 10px 0 0 60px;
+    border-radius: 6px;
+  }
   .distribution {
     display: flex;
     .distribution-left {
-      .box {
-        width: 200px;
+      width: 240px;
+      padding: 0 10px;
+      .box-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 10px;
-        border: 1px solid #eee;
-        border-radius: 5px;
-        margin-right: 10px;
-        .box-top {
-          flex: 1;
+        .num {
+          font-weight: bold;
+          font-size: 24px;
         }
+      }
+      .box-wrap {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 10px;
       }
     }
     .distribution-right {

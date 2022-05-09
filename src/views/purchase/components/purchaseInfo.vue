@@ -46,6 +46,13 @@
           ><span>{{ form.amount }}</span>
         </div>
       </el-col>
+      <el-col :span="12">
+        <div>
+          <span class="purchase-item">{{ $t('收货仓库') }}</span>
+          <span v-if="form.warehouse_name">{{ form.warehouse_name }}</span>
+          <span v-else>{{ $t('暂无') }}</span>
+        </div>
+      </el-col>
     </el-row>
     <el-row :gutter="20">
       <el-col :span="12">
