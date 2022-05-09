@@ -13,12 +13,7 @@
             <div class="num">#1</div>
             <div>{{ $t('装箱清单') }}</div>
           </div>
-          <div
-            class="box-wrap"
-            style="border: 2px solid #eee; border-radius: 5px"
-            v-for="item in packageData"
-            :key="item.id"
-          >
+          <div class="box-wrap" v-for="item in packageData" :key="item.id">
             <div>{{ item.name }}</div>
             <div style="margin-top: 15px">x{{ item.qty }}</div>
           </div>
@@ -27,11 +22,11 @@
       <div class="distribution-right">
         <div class="info-item">
           <div class="font">{{ $t('打包单号') }}</div>
-          <div>{{ row.order_sn }}</div>
+          <div style="font-weight: bold; font-size: 20px">{{ row.order_sn }}</div>
         </div>
         <div class="info-item">
           <div class="font">{{ $t('客户ID') }}</div>
-          <div>{{ row.user_id }}</div>
+          <div>{{ row.user_id }} --- {{ row.user_name }}</div>
         </div>
         <div style="margin-bottom: 20px">
           <div class="font">{{ $t('收货地址') }}</div>
@@ -136,6 +131,8 @@ export default {
         justify-content: space-between;
         flex-direction: column;
         padding: 10px;
+        border: 2px solid #eee;
+        border-radius: 5px;
       }
     }
     .distribution-right {

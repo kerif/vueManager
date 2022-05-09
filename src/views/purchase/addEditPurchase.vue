@@ -321,6 +321,7 @@ export default {
 }
 .img {
   width: 30px;
+  cursor: pointer;
 }
 .img_box {
   text-align: center;

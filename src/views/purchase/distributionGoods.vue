@@ -142,11 +142,11 @@
     </div>
     <div v-if="prevStep">
       <div style="width: 70%; margin: 0 auto">
-        <div class="address-main">
-          <div class="express-left">
+        <div class="receive-info">
+          <div>
             <p>{{ $t('收货形式') }}</p>
           </div>
-          <div class="express-left right-margin">
+          <div style="margin-left: 20px">
             <el-radio-group v-model="radio" @change="changeRadio">
               <el-radio :label="1" :disabled="isAble">{{ $t('送货上门') }}</el-radio>
               <el-radio :label="2">{{ $t('自提点提货') }}</el-radio>
@@ -157,7 +157,10 @@
       <div class="boxing-container" v-for="(item, index) in divides" :key="index">
         <div class="apply-main">
           <div class="poster-left">
-            <div class="choose-sty key"># {{ index + 1 }}</div>
+            <div class="good">
+              <div class="choose-sty key"># {{ index + 1 }}</div>
+              <div>{{ $t('装货清单') }}</div>
+            </div>
             <div class="left-top">
               <ul>
                 <li class="main-sty" v-for="ele in item.goods" :key="ele.id">
@@ -171,7 +174,7 @@
                   <div class="apply-express">
                     <div class="express-left">
                       <p>
-                        <strong>{{ ele.quantity }}</strong>
+                        <strong>x{{ ele.quantity }}</strong>
                       </p>
                     </div>
                   </div>
@@ -183,7 +186,7 @@
             <div class="recipient-address apply-express">
               <div class="address-main">
                 <div class="express-left">{{ $t('客户ID') }}</div>
-                <div class="express-left right-margin">
+                <div class="express-left right-margin" style="padding-left: 15px">
                   <el-autocomplete
                     :fetch-suggestions="queryCNSearch"
                     @select="data => handleSelect(index, data)"
@@ -987,6 +990,11 @@ export default {
   font-weight: bold;
   color: black;
 }
+.receive-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 .goods {
   display: flex;
   border: 1px solid #eee;
@@ -1033,7 +1041,7 @@ export default {
     overflow: hidden;
   }
   .main-sty {
-    border: 1px solid #f5f5f5;
+    border: 2px solid #eee;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
@@ -1099,6 +1107,12 @@ export default {
   padding: 15px;
   border-left: 2px solid #eee;
   box-sizing: border-box;
+}
+.good {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 .img {
   width: 30px;

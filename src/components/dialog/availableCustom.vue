@@ -209,10 +209,6 @@ export default {
 </script>
 
 <style lang="scss">
-.el-checkbox {
-  margin: 10px 0;
-  display: block;
-}
 .box {
   display: flex;
   margin: 20px 0;
@@ -232,6 +228,10 @@ export default {
       padding: 10px;
       height: 300px;
       overflow: auto;
+      .el-checkbox {
+        margin: 10px 0;
+        display: block;
+      }
     }
   }
   .box-two {
@@ -251,6 +251,10 @@ export default {
       padding: 10px;
       height: 300px;
       overflow: auto;
+      .el-checkbox {
+        margin: 10px 0;
+        display: block;
+      }
     }
   }
   .box-three {

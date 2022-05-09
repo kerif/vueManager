@@ -196,7 +196,13 @@
             >
           </template>
         </el-table-column>
-        <el-table-column prop="order_sn" :label="$t('打包单号')"> </el-table-column>
+        <el-table-column prop="order_sn" :label="$t('打包单号')">
+          <template slot-scope="scope">
+            <span class="choose-order" @click="orderDetail(scope.row.id)">{{
+              scope.row.order_sn
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="status" :label="$t('转运单状态')">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 1">{{ $t('待处理') }}</span>
@@ -375,6 +381,14 @@ export default {
     deleteTable(index, rows) {
       rows.splice(index, 1)
     },
+    orderDetail(id) {
+      this.$router.push({
+        name: 'billDetails',
+        params: {
+          id
+        }
+      })
+    },
     saveGoods() {
       delete this.ruleForm.logs
       let params = { ...this.ruleForm, is_approved: 0 }
@@ -526,8 +540,14 @@ export default {
     justify-content: flex-start;
     align-items: center;
   }
+  .choose-order {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+  }
   .img {
     width: 30px;
+    cursor: pointer;
   }
   .img_box {
     text-align: center;
