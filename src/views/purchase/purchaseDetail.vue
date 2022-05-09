@@ -298,9 +298,6 @@
         @click="editDistributionGoods"
         >{{ $t('分货') }}</el-button
       >
-      <el-button size="small" v-if="ruleForm.status === 10" class="btn-main">{{
-        $t('恢复')
-      }}</el-button>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -373,7 +370,7 @@ export default {
     storage() {
       this.$router.push({
         name: 'editStorage',
-        params: { id: this.ids },
+        params: { id: this.ids, state: 'purchase' },
         query: { sn: this.ruleForm.logistics_sn }
       })
     },

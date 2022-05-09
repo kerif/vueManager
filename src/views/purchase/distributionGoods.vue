@@ -468,7 +468,6 @@ export default {
       multiBoxes: '',
       location: '',
       coupon_id: '',
-      stationId: '',
       selfData: {},
       clientId: '',
       imgVisible: false,
@@ -654,7 +653,6 @@ export default {
           counts
         },
         data => {
-          console.log(data)
           this.divides[index].address = JSON.parse(JSON.stringify(data))
           console.log(this.divides[index].address)
           this.getExpress(index)
@@ -792,26 +790,28 @@ export default {
             quantity: val.remain
           }
         })
-        this.divides.push({
-          address_type: 1,
-          location: '',
-          user_id: '',
-          address: [],
-          options: [],
-          express_line_id: '',
-          clearance_code: '',
-          personal_code: '',
-          id_card: '',
-          coupon_id: '',
-          is_insurance: 0,
-          is_tariff: 0,
-          add_service: [],
-          payment_mode: 1,
-          station_id: '',
-          batch_mode: '',
-          single_mode: '',
-          goods: goods
-        })
+        if (item.tableData.length) {
+          this.divides.push({
+            address_type: 1,
+            location: '',
+            user_id: '',
+            address: [],
+            options: [],
+            express_line_id: '',
+            clearance_code: '',
+            personal_code: '',
+            id_card: '',
+            coupon_id: '',
+            is_insurance: 0,
+            is_tariff: 0,
+            add_service: [],
+            payment_mode: 1,
+            station_id: '',
+            batch_mode: '',
+            single_mode: '',
+            goods: goods
+          })
+        }
       })
     },
     getId() {
@@ -878,8 +878,9 @@ export default {
       }
       this.divides[this.selectInd].selfData = this.selfAddress
       if (this.divides[this.selectInd].selfData) {
-        this.stationId = this.divides[this.selectInd].selfData.id
-        console.log(this.stationId)
+        this.divides[this.selectInd].station_id = JSON.parse(
+          JSON.stringify(this.divides[this.selectInd].selfData.id)
+        )
       }
       this.addressDialog = false
     },
@@ -914,16 +915,12 @@ export default {
     },
     changeExpress(index) {
       this.divides[index].selfData = {}
-      this.divides.forEach(item => {
-        this.lineId = item.express_line_id
-        this.lineStations(index)
-        this.getId() // 获取身份证号码跟清关编码
-      })
-      this.divides.forEach(item => {
-        item.clearance_code = ''
-        item.id_card = ''
-        item.personal_code = ''
-      })
+      this.lineId = this.divides[index].express_line_id
+      this.lineStations(index)
+      this.getId() // 获取身份证号码跟清关编码
+      this.divides[index].clearance_code = ''
+      this.divides[index].id_card = ''
+      this.divides[index].personal_code = ''
     },
     // 获取自提点地址
     lineStations(index) {
@@ -932,8 +929,9 @@ export default {
           this.stationsData = res.data
           this.divides[index].selfData = res.data[0]
           if (this.divides[index].selfData) {
-            this.stationId = this.divides[index].selfData.id
-            console.log(this.stationId)
+            this.divides[index].station_id = JSON.parse(
+              JSON.stringify(this.divides[index].selfData.id)
+            )
           }
         }
       })
@@ -947,7 +945,6 @@ export default {
         delete item.selfData
         params.divides.push({
           ...item,
-          station_id: this.radio === 2 ? this.stationId : '',
           user_id: item.user_id.substring(0, 6),
           address: item.address.map(ele => {
             return {

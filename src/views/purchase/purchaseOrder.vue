@@ -208,10 +208,17 @@ export default {
         })
     },
     getCounts() {
-      this.$request.purchaseCount().then(res => {
-        this.statusList = res.data
-        console.log(this.statusList[0].counts)
-      })
+      this.$request
+        .purchaseCount({
+          begin_date: this.searchData.timeList ? this.searchData.timeList[0] : '',
+          end_date: this.searchData.timeList ? this.searchData.timeList[1] : '',
+          status: this.activeName === 'all' ? '' : this.activeName,
+          keyword: this.page_params.keyword,
+          ...this.searchData
+        })
+        .then(res => {
+          this.statusList = res.data
+        })
     },
     goSearch() {
       this.getList()

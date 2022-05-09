@@ -931,6 +931,39 @@ export default {
                   })
                 }
               })
+          } else if (this.$route.params.state === 'purchase') {
+            console.log(this.$route.params.state)
+            this.tableLoading = true
+            this.user.user_id = this.user.user_id.split('---')[0]
+            const chosen_services = this.updateService
+              .filter(item => this.user.chosen_services.includes(item.id))
+              .map(item => {
+                return {
+                  id: item.id,
+                  price: item.price
+                }
+              })
+            this.$request.getExpress({ ...this.user, chosen_services }).then(res => {
+              this.tableLoading = false
+              if (res.ret === 1) {
+                this.$notify({
+                  type: 'success',
+                  title: this.$t('操作成功'),
+                  message: res.msg
+                })
+                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.brand_name =
+                  ''
+                this.user.user_id = this.user.warehouse_id = this.user.package_value = ''
+                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
+                  ''
+                this.goodsImgList = []
+                this.user.props = []
+                this.user.chosen_services = []
+                this.user.location = this.user.country_id = ''
+                this.hasStore = true
+                this.shipNum = ''
+              }
+            })
           } else {
             this.tableLoading = true
             this.user.user_id = this.user.user_id.split('---')[0]

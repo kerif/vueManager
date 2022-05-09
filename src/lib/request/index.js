@@ -4253,8 +4253,8 @@ exports.exportPurchase = ids => {
 }
 
 // 采购 统计
-exports.purchaseCount = () => {
-  return $form.get('purchase-orders/status-counts')
+exports.purchaseCount = params => {
+  return $form.get('purchase-orders/status-counts', { params })
 }
 
 // 采购 获取地址
