@@ -284,9 +284,13 @@
         @click="onInvalid"
         >{{ $t('作废') }}</el-button
       >
-      <el-button size="small" v-if="ruleForm.status === 3" class="btn-blue-green">{{
-        $t('入库信息')
-      }}</el-button>
+      <el-button
+        size="small"
+        @click="storage"
+        v-if="ruleForm.status === 3"
+        class="btn-blue-green"
+        >{{ $t('入库信息') }}</el-button
+      >
       <el-button
         size="small"
         v-if="ruleForm.status === 3"

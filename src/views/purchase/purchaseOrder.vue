@@ -105,9 +105,6 @@
               v-if="['3'].includes(activeName)"
               >{{ $t('分货') }}</el-button
             >
-            <el-button class="btn-green" v-if="activeName === '3'" @click="goStorage(scope.row)">{{
-              $t('入库信息')
-            }}</el-button>
             <el-button
               class="btn-light-red"
               v-if="['2', '3', '5'].includes(activeName)"
@@ -282,15 +279,6 @@ export default {
             message: res.msg,
             type: 'error'
           })
-        }
-      })
-    },
-    goStorage(row) {
-      console.log(row.id)
-      this.$router.push({
-        name: 'editStorage',
-        query: {
-          sn: row.logistics_sn
         }
       })
     },
