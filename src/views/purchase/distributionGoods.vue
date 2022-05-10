@@ -123,10 +123,7 @@
               <el-table-column prop="brand" :label="$t('品牌')"> </el-table-column>
               <el-table-column prop="remain" :label="$t('装箱数量')">
                 <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.remain"
-                    @blur="getOrigin(scope.row, scope.$index)"
-                  ></el-input>
+                  <el-input v-model="scope.row.remain" @blur="getOrigin(scope.row)"></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -747,17 +744,29 @@ export default {
         this.locationId = res.data.package.warehouse_id
       })
     },
-    getOrigin(row, index) {
-      console.log(row, index)
+    getOrigin(row) {
       if (!row.remain) {
         this.$message.error('装箱数量不能为空')
+        row.remain = 0
+      } else if (Number.isNaN(Number(row.remain))) {
+        this.$message.error('请输入数字')
+        row.remain = 0
       }
-      // if (Number(row.remain) > Number(row.originRemain)) {
-      //   row.remain = row.originRemain
-      // }
-      const originRemain = this.form.goods.filter(item => item.id === row.id)[0].remain
-      if (Number(row.remain) > originRemain || Number(row.remain) < 0) {
-        row.remain = originRemain
+      let totalCount = 0
+      this.goodData.forEach(item => {
+        if (item.tableData) {
+          item.tableData.forEach(ele => {
+            if (ele.id === row.id) {
+              totalCount += ele.remain ? Number(ele.remain) : 0
+            }
+          })
+        }
+      })
+      totalCount -= row.remain ? Number(row.remain) : 0
+      const quantity = this.form.goods.filter(item => item.id === row.id)[0].quantity
+      const minus = quantity - totalCount
+      if (minus < Number(row.remain) || Number(row.remain) <= 0) {
+        row.remain = minus
       }
       this.getNumber(row.id)
     },
