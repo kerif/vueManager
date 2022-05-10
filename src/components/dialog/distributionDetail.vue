@@ -114,7 +114,7 @@ export default {
   .distribution {
     display: flex;
     .distribution-left {
-      width: 240px;
+      width: 260px;
       padding: 0 10px;
       .box-item {
         display: flex;

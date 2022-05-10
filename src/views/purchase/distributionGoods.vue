@@ -750,6 +750,9 @@ export default {
         if (val.id === id) {
           val.remain = val.quantity - number
           this.$set(this.form.goods[i], 'remain', val.remain)
+          if (val.remain < 0) {
+            this.$message.error('装箱数量不能大于剩余可拆数量')
+          }
         }
       })
     },
@@ -945,6 +948,7 @@ export default {
         delete item.selfData
         params.divides.push({
           ...item,
+          type: this.radio,
           user_id: item.user_id.substring(0, 6),
           address: item.address.map(ele => {
             return {
