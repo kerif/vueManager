@@ -125,7 +125,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.remain"
-                    @input="getOrigin(scope.row, scope.$index)"
+                    @blur="getOrigin(scope.row, scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -137,7 +137,7 @@
     <div style="text-align: center; margin-top: 10px">
       <el-button
         v-if="nextStep"
-        :disabled="isBtn"
+        :disabled="isBtns"
         :loading="$store.state.btnLoading"
         type="primary"
         size="small"
@@ -451,7 +451,7 @@ export default {
       ],
       ind: '',
       i: '',
-      isBtn: false,
+      // isBtn: false,
       user_id: '',
       needCode: '',
       explanation: '',
@@ -517,6 +517,23 @@ export default {
   components: {
     purchaseInfo,
     selectGoods
+  },
+  computed: {
+    isBtns() {
+      let isBtn = false
+      this.goodData.forEach(item => {
+        if (item.tableData.length) {
+          item.tableData.forEach(ele => {
+            if (!ele.remain || !Number(ele.remain)) {
+              isBtn = true
+            }
+          })
+        } else {
+          isBtn = true
+        }
+      })
+      return isBtn
+    }
   },
   created() {
     this.getRadio()
@@ -733,18 +750,15 @@ export default {
     },
     getOrigin(row, index) {
       console.log(row, index)
-      this.isBtn = false
-      let patternRemain = /^[1-9][0-9]*$/
-      if (!patternRemain.test(row.remain)) {
-        row.remain = ''
-      }
-      if (row.remain > row.originRemain) {
-        row.remain = row.originRemain
-      }
-      if (row.remain === '') {
-        this.isBtn = true
+      if (!row.remain) {
         this.$message.error('装箱数量不能为空')
-        console.log(this.isBtn)
+      }
+      // if (Number(row.remain) > Number(row.originRemain)) {
+      //   row.remain = row.originRemain
+      // }
+      const originRemain = this.form.goods.filter(item => item.id === row.id)[0].remain
+      if (Number(row.remain) > originRemain || Number(row.remain) < 0) {
+        row.remain = originRemain
       }
       this.getNumber(row.id)
     },
@@ -768,13 +782,18 @@ export default {
           this.$set(this.form.goods[i], 'remain', val.remain)
           if (val.remain < 0) {
             this.$message.error('装箱数量不能大于剩余可拆数量')
-            this.isBtn = true
+            // this.isBtn = true
           }
         }
       })
     },
     onConfirm() {
       this.nextStep = true
+      if (this.goodData.length) {
+        this.form.goods.forEach(item => {
+          item.remain = item.quantity
+        })
+      }
       this.goodData = []
       for (let i = 1; i <= this.number; i++) {
         this.goodData.push({
@@ -842,6 +861,7 @@ export default {
     prev() {
       this.nextStep = true
       this.prevStep = false
+      this.showInput = true
     },
     getRadio() {
       this.$request.servicesPackage().then(res => {
