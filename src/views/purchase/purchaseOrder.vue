@@ -1,14 +1,38 @@
 <template>
   <div class="purchase-list">
     <el-tabs v-model="activeName" stretch @tab-click="handleClick" class="tab-length">
-      <el-tab-pane :label="`${$t('全部')}(${statusList[7].counts})`" name="all"></el-tab-pane>
-      <el-tab-pane :label="`${$t('草稿')}(${statusList[0].counts})`" name="0"></el-tab-pane>
-      <el-tab-pane :label="`${$t('未发货')}(${statusList[1].counts})`" name="1"></el-tab-pane>
-      <el-tab-pane :label="`${$t('已发货')}(${statusList[2].counts})`" name="2"></el-tab-pane>
-      <el-tab-pane :label="`${$t('已入库')}(${statusList[3].counts})`" name="3"></el-tab-pane>
-      <el-tab-pane :label="`${$t('已分货')}(${statusList[4].counts})`" name="4"></el-tab-pane>
-      <el-tab-pane :label="`${$t('已转运')}(${statusList[5].counts})`" name="5"></el-tab-pane>
-      <el-tab-pane :label="`${$t('作废')}(${statusList[6].counts})`" name="10"></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('全部')}(${statusList[7] ? statusList[7].counts : 0})`"
+        name="all"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('草稿')}(${statusList[0] ? statusList[0].counts : 0})`"
+        name="0"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('未发货')}(${statusList[1] ? statusList[1].counts : 0})`"
+        name="1"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('已发货')}(${statusList[2] ? statusList[2].counts : 0})`"
+        name="2"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('已入库')}(${statusList[3] ? statusList[3].counts : 0})`"
+        name="3"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('已分货')}(${statusList[4] ? statusList[4].counts : 0})`"
+        name="4"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('已转运')}(${statusList[5] ? statusList[5].counts : 0})`"
+        name="5"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('作废')}(${statusList[6] ? statusList[6].counts : 0})`"
+        name="10"
+      ></el-tab-pane>
     </el-tabs>
     <purchase-search
       v-show="hasFilterCondition"

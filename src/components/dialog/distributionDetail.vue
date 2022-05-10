@@ -51,7 +51,11 @@
         <div>
           <div>
             <div class="font">{{ $t('增值服务') }}</div>
-            <div class="border-item"></div>
+            <div class="border-item">
+              <div style="margin-bottom: 10px" v-for="item in arrList" :key="item.id">
+                {{ item.name }} -- {{ item.price }}
+              </div>
+            </div>
           </div>
         </div>
         <div>
@@ -72,7 +76,8 @@ export default {
     return {
       row: {},
       servicesData: [],
-      packageData: []
+      packageData: [],
+      arrList: []
     }
   },
   methods: {
@@ -86,6 +91,12 @@ export default {
       this.$request.servicesPackage().then(res => {
         if (res.ret) {
           this.servicesData = res.data
+          let ids = this.row.add_service.map(item => Number(item))
+          this.servicesData.forEach(item => {
+            if (ids.includes(item.id)) {
+              this.arrList.push({ id: item.id, name: item.name, price: item.price })
+            }
+          })
         }
       })
     },

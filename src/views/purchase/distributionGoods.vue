@@ -451,7 +451,6 @@ export default {
       ],
       ind: '',
       i: '',
-      // isBtn: false,
       user_id: '',
       needCode: '',
       explanation: '',
