@@ -962,6 +962,12 @@ export default {
                 this.user.location = this.user.country_id = ''
                 this.hasStore = true
                 this.shipNum = ''
+              } else {
+                this.$message({
+                  title: this.$t('操作失败'),
+                  message: res.msg,
+                  type: 'warning'
+                })
               }
             })
           } else {

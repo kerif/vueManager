@@ -733,6 +733,7 @@ export default {
     },
     getOrigin(row, index) {
       console.log(row, index)
+      this.isBtn = false
       let patternRemain = /^[1-9][0-9]*$/
       if (!patternRemain.test(row.remain)) {
         row.remain = ''
@@ -740,11 +741,15 @@ export default {
       if (row.remain > row.originRemain) {
         row.remain = row.originRemain
       }
+      if (row.remain === '') {
+        this.isBtn = true
+        this.$message.error('装箱数量不能为空')
+        console.log(this.isBtn)
+      }
       this.getNumber(row.id)
     },
     getNumber(id) {
       let number = 0
-      this.isBtn = false
       this.goodData.forEach(item => {
         console.log(item)
         if (item.tableData) {
