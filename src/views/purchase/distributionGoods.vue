@@ -125,8 +125,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.remain"
-                    @input="changeRemain(scope.$index, scope.row)"
-                    @blur="getOrigin(scope.row)"
+                    @input="getOrigin(scope.row, scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -136,9 +135,15 @@
       </div>
     </div>
     <div style="text-align: center; margin-top: 10px">
-      <el-button v-if="nextStep" :disabled="isBtn" type="primary" size="small" @click="goNext">{{
-        $t('下一步')
-      }}</el-button>
+      <el-button
+        v-if="nextStep"
+        :disabled="isBtn"
+        :loading="$store.state.btnLoading"
+        type="primary"
+        size="small"
+        @click="goNext"
+        >{{ $t('下一步') }}</el-button
+      >
     </div>
     <div v-if="prevStep">
       <div style="width: 70%; margin: 0 auto">
@@ -726,8 +731,12 @@ export default {
         this.locationId = res.data.package.warehouse_id
       })
     },
-    getOrigin(row) {
-      console.log(row)
+    getOrigin(row, index) {
+      console.log(row, index)
+      let patternRemain = /^[1-9][0-9]*$/
+      if (!patternRemain.test(row.remain)) {
+        row.remain = ''
+      }
       if (row.remain > row.originRemain) {
         row.remain = row.originRemain
       }
@@ -735,6 +744,7 @@ export default {
     },
     getNumber(id) {
       let number = 0
+      this.isBtn = false
       this.goodData.forEach(item => {
         console.log(item)
         if (item.tableData) {
@@ -753,17 +763,10 @@ export default {
           this.$set(this.form.goods[i], 'remain', val.remain)
           if (val.remain < 0) {
             this.$message.error('装箱数量不能大于剩余可拆数量')
-            this.isBtn = false
+            this.isBtn = true
           }
         }
       })
-    },
-    changeRemain(index, row) {
-      let patternRemain = /^[1-9][0-9]*$/
-      if (!patternRemain.test(row.remain)) {
-        row.remain = ''
-      }
-      this.getNumber(row.id)
     },
     onConfirm() {
       this.nextStep = true
