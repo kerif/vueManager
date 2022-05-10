@@ -1022,7 +1022,7 @@ export default {
     //仅保存和保存并提交
     async savePacked(type) {
       this.user.services = this.updateProp
-        .filter(item => item.checked)
+        .filter(item => this.user.services.includes(item.id))
         .map(item => {
           return {
             id: item.id,
@@ -1196,8 +1196,8 @@ export default {
         this.user.pack_pictures = res.data.pack_pictures
         this.goodsImgList = res.data.in_warehouse_pictures
         this.baleImgList = res.data.pack_pictures
-        this.services = res.data.services
-        this.getProp(res.data.services)
+        this.services = JSON.parse(JSON.stringify(res.data.services))
+        this.getProp(JSON.parse(JSON.stringify(res.data.services)))
         this.express.CName = this.form.express_line.cn_name
         this.express.MaxWeight = this.form.express_line.max_weight
         this.user.express_line_id = this.form.express_line.id

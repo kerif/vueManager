@@ -136,7 +136,7 @@
       </div>
     </div>
     <div style="text-align: center; margin-top: 10px">
-      <el-button v-if="nextStep" type="primary" size="small" @click="goNext">{{
+      <el-button v-if="nextStep" :disabled="isBtn" type="primary" size="small" @click="goNext">{{
         $t('下一步')
       }}</el-button>
     </div>
@@ -446,6 +446,7 @@ export default {
       ],
       ind: '',
       i: '',
+      isBtn: false,
       user_id: '',
       needCode: '',
       explanation: '',
@@ -752,6 +753,7 @@ export default {
           this.$set(this.form.goods[i], 'remain', val.remain)
           if (val.remain < 0) {
             this.$message.error('装箱数量不能大于剩余可拆数量')
+            this.isBtn = false
           }
         }
       })
@@ -761,6 +763,7 @@ export default {
       if (!patternRemain.test(row.remain)) {
         row.remain = ''
       }
+      this.getNumber(row.id)
     },
     onConfirm() {
       this.nextStep = true
