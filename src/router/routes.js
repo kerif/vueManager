@@ -2240,20 +2240,20 @@ export default [
         path: 'purchase',
         component: LayoutContainer,
         icon: 'icon-shuju',
-        id: 1100,
+        id: 1400,
         children: [
           {
             path: '/purchase/purchaseOrder',
             name: 'purchaseOrder',
             component: purchase,
-            id: 1101,
+            id: 1401,
             meta: { level: 2, group: '采购', name: '采购单' }
           },
           {
             path: '/purchase/addEditPurchase',
             name: 'addPurchase',
             component: addPurchase,
-            id: 1102,
+            id: 1401,
             meta: {
               level: 3,
               group: '采购',
@@ -2265,7 +2265,7 @@ export default [
             path: '/purchase/addEditPurchase/:id',
             name: 'editPurchase',
             component: editPurchase,
-            id: 1102,
+            id: 1401,
             meta: {
               level: 3,
               group: '采购',
@@ -2277,7 +2277,7 @@ export default [
             path: '/purchase/purchaseDetail/:id',
             name: 'purchaseDetail',
             component: purchaseDetail,
-            id: 1102,
+            id: 1401,
             meta: {
               level: 3,
               group: '采购',
@@ -2289,7 +2289,7 @@ export default [
             path: '/purchase/distributionGoods/:id',
             name: 'distributionGoods',
             component: distributionGoods,
-            id: 1102,
+            id: 1401,
             meta: {
               level: 3,
               group: '采购',
@@ -2301,7 +2301,7 @@ export default [
             path: '/purchase/distributeDetail/:id',
             name: 'distributeDetail',
             component: distributeDetail,
-            id: 1102,
+            id: 1401,
             meta: {
               level: 3,
               group: '采购',
