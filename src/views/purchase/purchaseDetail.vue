@@ -187,13 +187,6 @@
             <el-button size="small" class="btn-main" @click="viewDetail(scope.row)">{{
               $t('详情')
             }}</el-button>
-            <el-button
-              size="small"
-              v-if="scope.row.status === 19"
-              class="btn-light-green"
-              @click="viewDetail"
-              >{{ $t('恢复') }}</el-button
-            >
           </template>
         </el-table-column>
         <el-table-column prop="order_sn" :label="$t('打包单号')">
