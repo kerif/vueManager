@@ -142,17 +142,8 @@ export default {
     },
     getSelectData() {
       this.$request.customData(this.id).then(res => {
-        this.shipData.forEach(item => {
-          if (item.id === Number(res.data.shipType)) {
-            this.form.shipType = item.name
-          }
-        })
-        this.packageData.forEach(item => {
-          console.log(item.id, res.data.packageType)
-          if (item.id === Number(res.data.packageType)) {
-            this.form.packageType = item.name
-          }
-        })
+        this.form.shipType = Number(res.data.shipType) ? Number(res.data.shipType) : ''
+        this.form.packageType = Number(res.data.packageType) ? Number(res.data.packageType) : ''
         this.form.deliveryType = res.data.deliveryType
         this.form.expressType = res.data.expressType
         this.form.payType = res.data.payType
