@@ -133,9 +133,9 @@
             >{{ $t('多选删除') }}</el-button
           >
           <div>
-            <el-button class="btn-main" style="margin: 5px 10px 2px 0" @click="customConfig">{{
+            <!-- <el-button class="btn-main" style="margin: 5px 10px 2px 0" @click="customConfig">{{
               $t('自定义配置')
-            }}</el-button>
+            }}</el-button> -->
             <add-btn @click.native="addNew" v-if="thirdStatus === 0 || thirdStatus === 3">{{
               $t('新增')
             }}</add-btn>
@@ -251,9 +251,9 @@
               >{{ $t('多选删除') }}</el-button
             >
             <div>
-              <el-button class="btn-main" style="margin: 5px 10px 2px 0" @click="customConfig">{{
+              <!-- <el-button class="btn-main" style="margin: 5px 10px 2px 0" @click="customConfig">{{
                 $t('自定义配置')
-              }}</el-button>
+              }}</el-button> -->
               <add-btn
                 @click.native="addNewLine(item.items)"
                 v-if="thirdStatus === 0 || thirdStatus === 3"
@@ -395,7 +395,7 @@
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import AddBtn from '@/components/addBtn'
-import dialog from '@/components/dialog'
+// import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -476,7 +476,7 @@ export default {
     this.getList()
     this.getNormal()
     if (this.id) {
-      this.customConfig()
+      // this.customConfig()
     }
   },
   activated() {
@@ -735,13 +735,13 @@ export default {
         }
       })
     },
-    customConfig() {
-      this.show = false
-      dialog({
-        type: 'customConfig',
-        id: this.id
-      })
-    },
+    // customConfig() {
+    //   this.show = false
+    //   dialog({
+    //     type: 'customConfig',
+    //     id: this.id
+    //   })
+    // },
     saveNormal() {
       let params = {
         declare_tax_number: this.declareForm.declare_tax_number,
