@@ -12,7 +12,9 @@
         ? $t('编辑拼团订单编号规则')
         : name === 5
         ? $t('编辑发货单编号规则')
-        : $t('编辑盘点单编号规则')
+        : name === 7
+        ? $t('编辑盘点单编号规则')
+        : $t('编辑采购单编号')
     "
     class="dialog-edit-rules"
     @close="clear"
@@ -138,6 +140,16 @@
       <el-form-item :label="$t('盘点单前缀')">
         <el-input
           v-model="inventoryRules.prefix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <!-- 采购单编号 -->
+    <el-form :model="purchaseRules" label-width="140px" v-if="this.name === 8">
+      <el-form-item :label="$t('采购单前缀')">
+        <el-input
+          v-model="purchaseRules.prefix"
           class="input-sty"
           :placeholder="$t('请输入')"
         ></el-input>
@@ -283,7 +295,8 @@ export default {
       },
       inventoryRules: {
         prefix: ''
-      }
+      },
+      purchaseRules: { prefix: '' }
     }
   },
   mixins: [pagination],
@@ -309,8 +322,10 @@ export default {
             this.groupRules.suffix = res.data.suffix
           } else if (this.name === 5) {
             this.invoiceRules.prefix = res.data.prefix
-          } else {
+          } else if (this.name === 7) {
             this.inventoryRules.prefix = res.data.prefix
+          } else {
+            this.purchaseRules.prefix = res.data.prefix
           }
         }
       })
@@ -436,10 +451,31 @@ export default {
               })
             }
           })
-      } else {
+      } else if (this.name === 7) {
         this.$request
           .updateRules(this.id, {
             prefix: this.inventoryRules.prefix
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .updateRules(this.id, {
+            prefix: this.purchaseRules.prefix
           })
           .then(res => {
             if (res.ret) {
@@ -476,6 +512,7 @@ export default {
       this.boxRules.boxNum = ''
       this.groupRules.subOrederNum = ''
       this.groupRules.suffix = ''
+      this.purchaseRules.prefix = ''
     }
   }
 }

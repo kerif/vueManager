@@ -45,7 +45,9 @@
         <el-button class="btn-blue-green" size="small" @click="claimList">{{
           $t('认领记录')
         }}</el-button>
-        <!-- <el-button class="btn-main" size="small" @click="goClaim">{{ $t('批量认领') }}</el-button> -->
+        <!-- <el-button class="btn-main" size="small" @click="goClaim(deleteNum)">{{
+          $t('批量认领')
+        }}</el-button> -->
         <el-button type="success" plain size="small" @click="uploadList">{{
           $t('导出清单')
         }}</el-button>
@@ -212,6 +214,7 @@ export default {
       imgSrc: '',
       hasFilterCondition: false,
       express_num: ''
+      // deleteNum: ''
     }
   },
   methods: {
@@ -380,6 +383,9 @@ export default {
     },
     // 认领包裹
     goClaim(id) {
+      // if (!ids.length) {
+      //   return this.$message.error(this.$t('请选择'))
+      // }
       dialog({ type: 'claim', id: id }, () => {
         this.getList()
       })

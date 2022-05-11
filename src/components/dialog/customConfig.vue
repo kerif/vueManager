@@ -113,7 +113,7 @@ export default {
             })
             this.packageData = Object.keys(packages).map(item => {
               return {
-                id: item,
+                id: Number(item),
                 name: packages[item]
               }
             })
@@ -125,7 +125,7 @@ export default {
             })
             this.shipData = Object.keys(ship).map(item => {
               return {
-                id: item,
+                id: Number(item),
                 name: ship[item]
               }
             })
@@ -143,12 +143,13 @@ export default {
     getSelectData() {
       this.$request.customData(this.id).then(res => {
         this.shipData.forEach(item => {
-          if (item.id === res.data.shipType) {
+          if (item.id === Number(res.data.shipType)) {
             this.form.shipType = item.name
           }
         })
         this.packageData.forEach(item => {
-          if (item.id === res.data.packageType) {
+          console.log(item.id, res.data.packageType)
+          if (item.id === Number(res.data.packageType)) {
             this.form.packageType = item.name
           }
         })
@@ -158,13 +159,6 @@ export default {
       })
     },
     onConfirm() {
-      this.form.packageType = this.packageData
-        .filter(item => item.name === this.form.packageType)
-        .map(item => item.id)
-      console.log(this.form.packageType)
-      this.form.shipType = this.shipData
-        .filter(item => item.name === this.form.shipType)
-        .map(item => item.id)
       let params = {
         ...this.form
       }
