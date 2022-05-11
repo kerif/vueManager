@@ -13,7 +13,7 @@
       <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
       <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
       <el-table-column prop="brand" :label="$t('品牌')"></el-table-column>
-      <el-table-column prop="category_id" :label="$t('商品分类')"></el-table-column>
+      <el-table-column prop="category_name" :label="$t('商品分类')"></el-table-column>
       <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
       <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
       <el-table-column prop="remain" :label="$t('剩余可拆数量')"></el-table-column>
