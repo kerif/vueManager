@@ -4,14 +4,28 @@
       <span style="display: inline-block; width: 150px">{{ $t('可用该渠道客户') }}</span>
       <el-radio-group v-model="auth_target">
         <el-radio :label="1">{{ $t('所有客户') }}</el-radio>
-        <el-radio :label="2">{{ $t('部分客户') }}</el-radio>
+        <el-radio :label="2"
+          >{{ $t('部分客户') }}
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="
+              $t(
+                '选择部分客户可用时，仅限制客户端是否可见（即客户只能看到自己有权限的渠道）；后台操作（集包/打包）时无限制，可给客户选用所有渠道。'
+              )
+            "
+            placement="top"
+          >
+            <i class="el-icon-question" style="font-size: 18px; color: #3540a5"></i>
+          </el-tooltip>
+        </el-radio>
       </el-radio-group>
     </div>
     <div class="box" v-if="auth_target === 2">
       <div class="box-one">
         <div class="box-one-top">
           <div>{{ $t('用户组') }}</div>
-          <div>{{ modeList.length }}</div>
+          <div>{{ userList.length }}</div>
         </div>
         <div class="box-one-bottom">
           <el-checkbox-group v-model="userList">
@@ -24,7 +38,7 @@
       <div class="box-two">
         <div class="box-two-left">
           <div>{{ $t('特定等级组') }}</div>
-          <div>{{ vipList.length }}</div>
+          <div>{{ levelList.length }}</div>
         </div>
         <div class="box-two-bottom">
           <el-checkbox-group v-model="levelList">

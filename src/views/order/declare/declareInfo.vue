@@ -126,7 +126,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center">
           <el-button
             @click="deleteRow"
-            v-show="thirdStatus === 0 || thirdStatus === 3"
+            v-if="thirdStatus === 0 || thirdStatus === 3"
             size="small"
             class="btn-light-red"
             style="margin: 10px 0"
@@ -136,7 +136,7 @@
             <el-button class="btn-main" style="margin: 5px 10px 2px 0" @click="customConfig">{{
               $t('自定义配置')
             }}</el-button>
-            <add-btn @click.native="addNew" v-show="thirdStatus === 0 || thirdStatus === 3">{{
+            <add-btn @click.native="addNew" v-if="thirdStatus === 0 || thirdStatus === 3">{{
               $t('新增')
             }}</add-btn>
           </div>
@@ -244,7 +244,7 @@
           <div style="display: flex; justify-content: space-between; align-items: center">
             <el-button
               @click="deleteRows"
-              v-show="thirdStatus === 0 || thirdStatus === 3"
+              v-if="thirdStatus === 0 || thirdStatus === 3"
               size="small"
               class="btn-light-red"
               style="margin: 10px 0"
@@ -256,7 +256,7 @@
               }}</el-button>
               <add-btn
                 @click.native="addNewLine(item.items)"
-                v-show="thirdStatus === 0 || thirdStatus === 3"
+                v-if="thirdStatus === 0 || thirdStatus === 3"
                 >{{ $t('新增') }}</add-btn
               >
             </div>
@@ -345,7 +345,7 @@
       </div>
       <div slot="footer">
         <el-button @click="cancel">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="submit" v-show="thirdStatus === 0 || thirdStatus === 3">{{
+        <el-button type="primary" @click="submit" v-if="thirdStatus === 0 || thirdStatus === 3">{{
           $t('保存')
         }}</el-button>
       </div>
