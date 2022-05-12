@@ -372,7 +372,7 @@
           <el-col :span="10">
             <!-- 员工组中文名 -->
             <el-form-item :label="$t('国家')">
-              <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')" filterable>
+              <!-- <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')" filterable>
                 <el-option
                   v-for="item in countryData"
                   :key="item.id"
@@ -380,7 +380,15 @@
                   :value="item.id"
                 >
                 </el-option>
-              </el-select>
+              </el-select> -->
+              <el-cascader
+                v-model="ruleForm.country_id"
+                :options="countryOptions"
+                ref="country"
+                :props="props"
+                collapse-tags
+                clearable
+              ></el-cascader>
             </el-form-item>
           </el-col>
           <el-col :span="10">
@@ -584,7 +592,7 @@ export default {
         receiver_name: '',
         phone: '',
         timezone: '',
-        country_id: '',
+        country_id: [],
         door_no: '',
         city: '',
         postcode: '',
@@ -608,7 +616,9 @@ export default {
       tipsContent: [],
       addressIds: [],
       address_ids: [],
-      id: ''
+      countryOptions: [],
+      id: '',
+      props: { checkStrictly: true }
     }
   },
   created() {
@@ -919,6 +929,30 @@ export default {
     getCountry() {
       this.$request.getCountry().then(res => {
         this.countryData = res.data
+        this.countryOptions = res.data.map(item => {
+          return {
+            value: item.id,
+            label: item.name,
+            children:
+              item.areas < 1
+                ? undefined
+                : item.areas.map(item => {
+                    return {
+                      value: item.id,
+                      label: item.name,
+                      children:
+                        item.areas < 1
+                          ? undefined
+                          : item.areas.map(item => {
+                              return {
+                                value: item.id,
+                                label: item.name
+                              }
+                            })
+                    }
+                  })
+          }
+        })
       })
     },
     chooseUser() {
@@ -934,6 +968,9 @@ export default {
           this.$request
             .addAddress({
               ...this.ruleForm,
+              country_id: this.ruleForm.country_id[0],
+              area_id: this.ruleForm.country_id[1] ? this.ruleForm.country_id[1] : '',
+              sub_area_id: this.ruleForm.country_id[2] ? this.ruleForm.country_id[2] : '',
               user_id: this.clientId
             })
             .then(res => {

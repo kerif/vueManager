@@ -146,6 +146,7 @@ import addEditAddress from './addEditAddress.vue'
 import distributionDetail from './distributionDetail.vue'
 import purchaseDetails from './purchaseDetails.vue'
 import availableCustom from './availableCustom.vue'
+import addAddress from './addAddress.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -291,6 +292,7 @@ const addEditAddressController = Vue.extend(addEditAddress)
 const distributionDetailController = Vue.extend(distributionDetail)
 const purchaseDetailsController = Vue.extend(purchaseDetails)
 const availableCustomController = Vue.extend(availableCustom)
+const addAddressController = Vue.extend(addAddress)
 const mixin = {
   data() {
     return {
@@ -502,6 +504,13 @@ function initInstance(type) {
     // 渠道优化
     case 'availableCustom':
       instance = new availableCustomController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 新增收货地址
+    case 'addAddress':
+      instance = new addAddressController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
