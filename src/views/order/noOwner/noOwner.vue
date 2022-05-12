@@ -45,7 +45,7 @@
         <el-button class="btn-blue-green" size="small" @click="claimList">{{
           $t('认领记录')
         }}</el-button>
-        <el-button class="btn-main" size="small" @click="goClaim(deleteNum)">{{
+        <el-button class="btn-main" size="small" @click="goClaim(deleteNum, 'batch')">{{
           $t('批量认领')
         }}</el-button>
         <el-button type="success" plain size="small" @click="uploadList">{{
@@ -147,7 +147,7 @@
           <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
             $t('打印标签')
           }}</el-button>
-          <el-button class="btn-deep-blue" @click="goClaim([scope.row.id])">{{
+          <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], 'alone')">{{
             $t('认领')
           }}</el-button>
           <!-- <el-button class="btn-deep-purple">详细</el-button> -->
@@ -382,11 +382,11 @@ export default {
       })
     },
     // 认领包裹
-    goClaim(ids) {
+    goClaim(ids, status) {
       if (!ids.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      dialog({ type: 'claim', id: ids }, () => {
+      dialog({ type: 'claim', id: ids, status }, () => {
         this.getList()
       })
     },

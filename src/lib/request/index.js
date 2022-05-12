@@ -4271,3 +4271,13 @@ exports.authDetail = id => {
 exports.userAuth = (id, params) => {
   return $form.put(`express-lines/${id}/update-auth`, params)
 }
+
+// 同行货授权
+exports.sameTradeAuth = (id, stgAuth) => {
+  return $form.put(`user-groups/${id}/set-stg-auth/${stgAuth}`)
+}
+
+// 批量认领
+exports.batchClaim = params => {
+  return $form.put(`packages/no-owner/owner`, params)
+}
