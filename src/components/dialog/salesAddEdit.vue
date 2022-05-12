@@ -55,7 +55,7 @@
           <div class="customer checked-list">
             <div class="customer-item" v-for="item in customerList" :key="item.id">
               {{ item.id }}---{{ item.name }}
-              <i class="el-icon-delete" style="color: red" @click="delCustomer(index)"></i>
+              <i class="el-icon-delete" style="color: red" @click="delCustomer(index, item.id)"></i>
             </div>
           </div>
         </div>
@@ -267,8 +267,12 @@ export default {
         })
         .catch(() => cb([]))
     },
-    delCustomer(ind) {
-      this.customerList.splice(ind, 1)
+    delCustomer(ind, id) {
+      for (let i = 0; i < this.customerList.length; i++) {
+        if (this.customerList[i].id === id) {
+          this.customerList.splice(i, 1)
+        }
+      }
     },
     handleSelect(item) {
       if (this.customerList.map(item => item.id).includes(item.id)) {
