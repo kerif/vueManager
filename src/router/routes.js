@@ -39,6 +39,8 @@ const sleepReminder = loadonDemand('vip/sleepReminder')
 const customerEcharts = loadonDemand('vip/customer/echarts')
 // 客户地址
 const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
+// 客户地址 批量导入地址
+const vipBatchImport = loadonDemand('vip/vipaddress/vipBatchImport')
 // 财务 流水记录
 const Transaction = loadonDemand('finance/Transaction')
 // 财务 成长值财务
@@ -548,6 +550,17 @@ export default [
               level: 2,
               group: '客户',
               name: '客户地址'
+            }
+          },
+          {
+            path: '/vip/vipaddress/vipBatchImport',
+            name: 'vipBatchImport',
+            component: vipBatchImport,
+            id: 303,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '批量导入地址'
             }
           },
           {

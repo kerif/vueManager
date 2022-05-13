@@ -1,22 +1,22 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('新建收货地址')" width="45%" @close="clear">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
+    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px">
       <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item :label="$t('客户ID')">
-            <el-select v-model="ruleForm.userId">
-              <el-option
-                v-for="item in userData"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+            <el-autocomplete
+              :fetch-suggestions="queryCNSearch"
+              @select="handleSelect"
+              :placeholder="$t('请输入客户ID')"
+              v-model="ruleForm.user_id"
+              @change="changeSelect"
+            >
+            </el-autocomplete>
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item :label="$t('国家')">
-            <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')" filterable>
+            <!-- <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')" filterable>
               <el-option
                 v-for="item in countryData"
                 :key="item.id"
@@ -24,7 +24,15 @@
                 :value="item.id"
               >
               </el-option>
-            </el-select>
+            </el-select> -->
+            <el-cascader
+              v-model="ruleForm.country_id"
+              :options="countryOptions"
+              ref="country"
+              :props="props"
+              collapse-tags
+              clearable
+            ></el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -116,10 +124,10 @@
 export default {
   data() {
     return {
-      userData: [],
       countryData: [],
+      countryOptions: [],
       ruleForm: {
-        userId: '',
+        user_id: '',
         receiver_name: '',
         phone: '',
         timezone: '',
@@ -135,7 +143,8 @@ export default {
         phone: [{ required: true, message: this.$t('请输入电话'), trigger: 'blur' }],
         receiver_name: [{ required: true, message: this.$t('请输入收件人'), trigger: 'blur' }],
         city: [{ required: true, message: this.$t('请输入城市'), trigger: 'blur' }]
-      }
+      },
+      props: { checkStrictly: true }
     }
   },
   methods: {
@@ -145,8 +154,26 @@ export default {
     getCountry() {
       this.$request.getCountry().then(res => {
         this.countryData = res.data
+        this.countryOptions = res.data
       })
     },
+    // 客户id
+    queryCNSearch(queryString, callback) {
+      var list = [{}]
+      this.$request
+        .Automatic({
+          keyword: this.ruleForm.user_id.toString()
+        })
+        .then(res => {
+          for (let i of res.data) {
+            i.value = i.id + '---' + i.name
+          }
+          list = res.data
+          callback && callback(list)
+        })
+    },
+    handleSelect() {},
+    changeSelect() {},
     confirm() {},
     clear() {}
   }

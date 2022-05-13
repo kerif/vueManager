@@ -1,5 +1,5 @@
 <template>
-  <div class="import-orderList-container">
+  <div class="vip-batch-import">
     <el-form label-position="top">
       <el-form-item :label="$t('下载模版')">
         <span class="import-sty">{{
@@ -22,7 +22,6 @@
               :on-remove="onFileRemove"
               :file-list="fileList"
               :on-exceed="handleExceed"
-              :before-upload="beforeUploadImg"
               :http-request="uploadBaleImg"
             >
               <el-button size="small" type="primary">{{ $t('点击上传') }}</el-button>
@@ -82,13 +81,23 @@ export default {
   },
   methods: {
     uploadList() {},
-    onFileRemove() {},
+    onFileRemove(file, fileList) {
+      this.fileList = fileList
+    },
+    handleExceed() {
+      return this.$message.warning(this.$t('当前限制上传1个文件'))
+    },
     uploadBaleImg() {},
-    beforeUploadImg() {},
-    onDelete() {},
+    onDelete(index, addressList) {
+      addressList.splice(index, 1)
+    },
     saveImport() {}
   }
 }
 </script>
 
-<style></style>
+<style>
+.vip-batch-import {
+  background: #fff !important;
+}
+</style>

@@ -451,13 +451,13 @@
           <el-form-item>
             <el-col :span="18">
               <div class="add-row">
-                <el-button class="btn-deep-purple" @click="batchAddRow">{{
+                <!-- <el-button class="btn-deep-purple" @click="batchAddRow">{{
                   $t('批量添加')
-                }}</el-button>
+                }}</el-button> -->
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('添加行') }}</el-button>
               </div>
               <el-table :data="user.box" style="width: 100%" border>
-                <el-table-column type="index" label="#"></el-table-column>
+                <!-- <el-table-column type="index" label="#"></el-table-column> -->
                 <el-table-column :label="$t('包裹实际重量') + this.localization.weight_unit">
                   <template slot-scope="scope">
                     <el-input

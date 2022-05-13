@@ -45,9 +45,9 @@
         <el-button class="btn-blue-green" size="small" @click="claimList">{{
           $t('认领记录')
         }}</el-button>
-        <el-button class="btn-main" size="small" @click="goClaim(deleteNum, 'batch')">{{
+        <!-- <el-button class="btn-main" size="small" @click="goClaim(deleteNum, 'batch')">{{
           $t('批量认领')
-        }}</el-button>
+        }}</el-button> -->
         <el-button type="success" plain size="small" @click="uploadList">{{
           $t('导出清单')
         }}</el-button>

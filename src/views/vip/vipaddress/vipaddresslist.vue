@@ -1,5 +1,7 @@
 <template>
   <div class="vip-address-container">
+    <!-- <el-button class="btn-main" @click="vipAddAddress">{{ $t('新增地址') }}</el-button>
+    <el-button class="btn-green" @click="batchImportAddress">{{ $t('批量导入地址') }}</el-button> -->
     <el-button class="btn-light-red" @click="uploadList" size="mini">{{
       $t('导出清单')
     }}</el-button>
@@ -113,6 +115,14 @@ export default {
           })
         }
       })
+    },
+    vipAddAddress() {
+      dialog({
+        type: 'addAddress'
+      })
+    },
+    batchImportAddress() {
+      this.$router.push({ name: 'vipBatchImport' })
     }
   }
 }

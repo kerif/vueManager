@@ -55,7 +55,11 @@
           <div class="customer checked-list">
             <div class="customer-item" v-for="item in customerList" :key="item.id">
               {{ item.id }}---{{ item.name }}
-              <i class="el-icon-delete" style="color: red" @click="delCustomer(index, item.id)"></i>
+              <i
+                class="el-icon-delete"
+                style="color: red; cursor: pointer"
+                @click="delCustomer(index, item.id)"
+              ></i>
             </div>
           </div>
         </div>
