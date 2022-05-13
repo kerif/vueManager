@@ -152,10 +152,10 @@ export default {
       this.getCountry()
     },
     getCountry() {
-      this.$request.getCountry().then(res => {
-        this.countryData = res.data
-        this.countryOptions = res.data
-      })
+      // this.$request.getCountry().then(res => {
+      //   this.countryData = res.data
+      //   this.countryOptions = res.data
+      // })
     },
     // 客户id
     queryCNSearch(queryString, callback) {

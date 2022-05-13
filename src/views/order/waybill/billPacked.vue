@@ -451,13 +451,13 @@
           <el-form-item>
             <el-col :span="18">
               <div class="add-row">
-                <!-- <el-button class="btn-deep-purple" @click="batchAddRow">{{
+                <el-button class="btn-deep-purple" @click="batchAddRow">{{
                   $t('批量添加')
-                }}</el-button> -->
+                }}</el-button>
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('添加行') }}</el-button>
               </div>
               <el-table :data="user.box" style="width: 100%" border>
-                <!-- <el-table-column type="index" label="#"></el-table-column> -->
+                <el-table-column type="index" label="#"></el-table-column>
                 <el-table-column :label="$t('包裹实际重量') + this.localization.weight_unit">
                   <template slot-scope="scope">
                     <el-input
@@ -1115,36 +1115,36 @@ export default {
         })
       }
     },
-    // batchAddRow() {
-    //   dialog(
-    //     {
-    //       type: 'batchAdd',
-    //       localization: this.localization
-    //     },
-    //     data => {
-    //       let boxData = JSON.parse(JSON.stringify(data))
-    //       let boxes = JSON.parse(JSON.stringify(data.boxes))
-    //       for (let i = 0; i < boxes; i++) {
-    //         if (this.baseMode === 0) {
-    //           this.user.box.push({
-    //             weight: boxData.weight,
-    //             length: boxData.length,
-    //             width: boxData.width,
-    //             height: boxData.height,
-    //             volume_weight: ''
-    //           })
-    //         } else {
-    //           this.user.box.push({
-    //             weight: boxData.weight,
-    //             length: boxData.length,
-    //             width: boxData.width,
-    //             height: boxData.height
-    //           })
-    //         }
-    //       }
-    //     }
-    //   )
-    // },
+    batchAddRow() {
+      dialog(
+        {
+          type: 'batchAdd',
+          localization: this.localization
+        },
+        data => {
+          let boxData = JSON.parse(JSON.stringify(data))
+          let boxes = JSON.parse(JSON.stringify(data.boxes))
+          for (let i = 0; i < boxes; i++) {
+            if (this.baseMode === 0) {
+              this.user.box.push({
+                weight: boxData.weight,
+                length: boxData.length,
+                width: boxData.width,
+                height: boxData.height,
+                volume_weight: ''
+              })
+            } else {
+              this.user.box.push({
+                weight: boxData.weight,
+                length: boxData.length,
+                width: boxData.width,
+                height: boxData.height
+              })
+            }
+          }
+        }
+      )
+    },
     // 新增行
     addRow() {
       if (this.baseMode === 0) {

@@ -53,12 +53,12 @@
             </el-autocomplete>
           </div>
           <div class="customer checked-list">
-            <div class="customer-item" v-for="item in customerList" :key="item.id">
+            <div class="customer-item" v-for="(item, index) in customerList" :key="index">
               {{ item.id }}---{{ item.name }}
               <i
                 class="el-icon-delete"
                 style="color: red; cursor: pointer"
-                @click="delCustomer(index, item.id)"
+                @click="delCustomer(index)"
               ></i>
             </div>
           </div>
@@ -271,20 +271,15 @@ export default {
         })
         .catch(() => cb([]))
     },
-    delCustomer(index, id) {
-      console.log(index, id)
-      this.customerList.splice(index, 1)
-      // for (let i = 0; i < this.customerList.length; i++) {
-      //   if (this.customerList[i].id === id) {
-      //     this.customerList.splice(i, 1)
-      //   }
-      // }
-    },
     handleSelect(item) {
       if (this.customerList.map(item => item.id).includes(item.id)) {
         return false
       }
       this.customerList.push(item)
+      this.ruleForm.ids = this.customerList.map(item => item.id)
+    },
+    delCustomer(index) {
+      this.customerList.splice(index, 1)
       this.ruleForm.ids = this.customerList.map(item => item.id)
     },
     async confirm() {
