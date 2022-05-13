@@ -190,20 +190,32 @@ export default {
       })
     },
     tradeAuth(id, stgAuth) {
-      this.$request.sameTradeAuth(id, stgAuth).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
+      this.$confirm(
+        stgAuth === 0
+          ? this.$t('您是否确认解除该客户组同行货系统授权')
+          : this.$t('您是否确认给予该客户组同行货系统授权'),
+        this.$t('提示'),
+        {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
         }
+      ).then(() => {
+        this.$request.sameTradeAuth(id, stgAuth).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     }
   }
