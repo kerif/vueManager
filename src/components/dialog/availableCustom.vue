@@ -72,8 +72,8 @@
           <div
             class="customer-item"
             style="margin: 10px"
-            v-for="item in customerList"
-            :key="item.id"
+            v-for="(item, index) in customerList"
+            :key="index"
           >
             {{ item.id }}---{{ item.name }}
             <i
