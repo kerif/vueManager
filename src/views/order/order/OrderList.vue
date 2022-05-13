@@ -472,7 +472,7 @@
             <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
               $t('打印标签')
             }}</el-button>
-            <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">{{
+            <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], 'alone')">{{
               $t('认领')
             }}</el-button>
           </template>
@@ -697,8 +697,8 @@ export default {
       dialog({ type: 'claimRecord' })
     },
     // 认领包裹
-    goClaim(id) {
-      dialog({ type: 'claim', id: id }, () => {
+    goClaim(id, status) {
+      dialog({ type: 'claim', id: id, status }, () => {
         this.getNoOwnerList()
       })
     },

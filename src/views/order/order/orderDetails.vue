@@ -33,7 +33,7 @@
             icon="el-icon-s-check"
             v-if="form.status === 0"
             class="btn-deep-blue"
-            @click="goClaim(form.id)"
+            @click="goClaim(form.id, 'alone')"
             >{{ $t('认领') }}</el-button
           >
 
@@ -422,8 +422,8 @@ export default {
       })
     },
     // 认领包裹
-    goClaim(id) {
-      dialog({ type: 'claim', id: id }, () => {
+    goClaim(id, status) {
+      dialog({ type: 'claim', id: id, status }, () => {
         this.getList()
       })
     },
