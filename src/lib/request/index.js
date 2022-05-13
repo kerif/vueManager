@@ -4294,5 +4294,5 @@ exports.uploadAddressTmp = file => {
 
 // 批量导入
 exports.batchImportAddress = params => {
-  return $form.post('user-addresses/import', params)
+  return $json.post('user-addresses/import', params)
 }

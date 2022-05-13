@@ -39,16 +39,15 @@
           height="350"
         >
           <el-table-column type="index" width="55" align="center"></el-table-column>
-          <el-table-column :label="$t('客户ID')"> </el-table-column>
-          <el-table-column :label="$t('国家')"> </el-table-column>
-          <el-table-column :label="$t('收件电话')"> </el-table-column>
-          <el-table-column :label="$t('城市')"></el-table-column>
-          <el-table-column :label="$t('收件人')"></el-table-column>
-          <el-table-column :label="$t('门牌号')"></el-table-column>
-          <el-table-column :label="$t('区号')"></el-table-column>
-          <el-table-column :label="$t('邮编')"></el-table-column>
-          <el-table-column :label="$t('附加地址')"></el-table-column>
-          <el-table-column :label="$t('街道')"></el-table-column>
+          <el-table-column :label="$t('客户ID')" prop="user_id"> </el-table-column>
+          <el-table-column :label="$t('国家')" prop="country.name"> </el-table-column>
+          <el-table-column :label="$t('收件电话')" prop="phone"> </el-table-column>
+          <el-table-column :label="$t('城市')" prop="city"></el-table-column>
+          <el-table-column :label="$t('收件人')" prop="receiver_name"></el-table-column>
+          <el-table-column :label="$t('门牌号')" prop="door_no"></el-table-column>
+          <el-table-column :label="$t('区号')" prop="timezone"></el-table-column>
+          <el-table-column :label="$t('邮编')" prop="postcode"></el-table-column>
+          <el-table-column :label="$t('街道')" prop="street"></el-table-column>
           <el-table-column :label="$t('操作')" width="260">
             <template slot-scope="scope">
               <el-button class="btn-light-red" @click="onDelete(scope.$index, addressList)">{{
@@ -116,7 +115,7 @@ export default {
         // this.$request.uploadAddressTmp(params).then(res => {
         //   this.tableLoading = false
         //   if (res.ret) {
-        //     console.log(res)
+        //     this.addressList = res.data
         //   } else {
         //     this.$notify({
         //       title: this.$t('操作失败'),
@@ -131,12 +130,16 @@ export default {
       this.data = file
       let params = new FormData()
       params.append(`files[${0}][file]`, file)
-      // return this.$request.uploadFiles(params)
+      return this.$request.uploadFiles(params)
     },
     onDelete(index, addressList) {
       addressList.splice(index, 1)
     },
-    saveImport() {}
+    saveImport() {
+      // this.$request.batchImportAddress({ ...this.addressList }).then(res => {
+      //   console.log(res)
+      // })
+    }
   }
 }
 </script>
