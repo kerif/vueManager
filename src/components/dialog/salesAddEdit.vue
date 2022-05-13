@@ -271,12 +271,14 @@ export default {
         })
         .catch(() => cb([]))
     },
-    delCustomer(ind, id) {
-      for (let i = 0; i < this.customerList.length; i++) {
-        if (this.customerList[i].id === id) {
-          this.customerList.splice(i, 1)
-        }
-      }
+    delCustomer(index, id) {
+      console.log(index, id)
+      this.customerList.splice(index, 1)
+      // for (let i = 0; i < this.customerList.length; i++) {
+      //   if (this.customerList[i].id === id) {
+      //     this.customerList.splice(i, 1)
+      //   }
+      // }
     },
     handleSelect(item) {
       if (this.customerList.map(item => item.id).includes(item.id)) {

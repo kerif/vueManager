@@ -115,15 +115,15 @@ export default {
           })
         }
       })
-    },
-    vipAddAddress() {
-      dialog({
-        type: 'addAddress'
-      })
-    },
-    batchImportAddress() {
-      this.$router.push({ name: 'vipBatchImport' })
     }
+    // vipAddAddress() {
+    //   dialog({
+    //     type: 'addAddress'
+    //   })
+    // },
+    // batchImportAddress() {
+    //   this.$router.push({ name: 'vipBatchImport' })
+    // }
   }
 }
 </script>

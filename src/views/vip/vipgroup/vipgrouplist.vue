@@ -188,24 +188,24 @@ export default {
             }
           })
       })
-    },
-    tradeAuth(id, stgAuth) {
-      this.$request.sameTradeAuth(id, stgAuth).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
     }
+    // tradeAuth(id, stgAuth) {
+    //   this.$request.sameTradeAuth(id, stgAuth).then(res => {
+    //     if (res.ret) {
+    //       this.$notify({
+    //         title: this.$t('操作成功'),
+    //         message: res.msg,
+    //         type: 'success'
+    //       })
+    //       this.getList()
+    //     } else {
+    //       this.$message({
+    //         message: res.msg,
+    //         type: 'error'
+    //       })
+    //     }
+    //   })
+    // }
   }
 }
 </script>

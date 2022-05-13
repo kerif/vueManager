@@ -147,7 +147,7 @@
           <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
             $t('打印标签')
           }}</el-button>
-          <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], 'alone')">{{
+          <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">{{
             $t('认领')
           }}</el-button>
           <!-- <el-button class="btn-deep-purple">详细</el-button> -->
@@ -382,11 +382,11 @@ export default {
       })
     },
     // 认领包裹
-    goClaim(ids, status) {
-      if (!ids.length) {
-        return this.$message.error(this.$t('请选择'))
-      }
-      dialog({ type: 'claim', id: ids, status }, () => {
+    goClaim(id) {
+      // if (!ids.length) {
+      //   return this.$message.error(this.$t('请选择'))
+      // }
+      dialog({ type: 'claim', id: id }, () => {
         this.getList()
       })
     },

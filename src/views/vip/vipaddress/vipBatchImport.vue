@@ -76,18 +76,63 @@ export default {
   data() {
     return {
       fileList: [],
-      addressList: []
+      addressList: [],
+      tableLoading: false,
+      data: null
     }
   },
   methods: {
-    uploadList() {},
+    uploadList() {
+      // this.$request.downloadAddressTmp().then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       title: this.$t('操作成功'),
+      //       message: res.msg,
+      //       type: 'success'
+      //     })
+      //     window.open(res.data.url)
+      //   } else {
+      //     this.$notify({
+      //       title: this.$t('操作失败'),
+      //       message: res.msg,
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
+    },
     onFileRemove(file, fileList) {
       this.fileList = fileList
     },
     handleExceed() {
       return this.$message.warning(this.$t('当前限制上传1个文件'))
     },
-    uploadBaleImg() {},
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        console.log(res)
+        this.tableLoading = true
+        const params = new FormData()
+        params.append('template', this.data)
+        // this.$request.uploadAddressTmp(params).then(res => {
+        //   this.tableLoading = false
+        //   if (res.ret) {
+        //     console.log(res)
+        //   } else {
+        //     this.$notify({
+        //       title: this.$t('操作失败'),
+        //       message: res.msg,
+        //       type: 'warning'
+        //     })
+        //   }
+        // })
+      })
+    },
+    onUpload(file) {
+      this.data = file
+      let params = new FormData()
+      params.append(`files[${0}][file]`, file)
+      // return this.$request.uploadFiles(params)
+    },
     onDelete(index, addressList) {
       addressList.splice(index, 1)
     },

@@ -1,10 +1,5 @@
 <template>
-  <el-dialog
-    :visible.sync="show"
-    :title="status === 'alone' ? $t('认领用户') : $t('批量认领用户')"
-    class="dialog-claim"
-    @close="clear"
-  >
+  <el-dialog :visible.sync="show" :title="$t('认领用户')" class="dialog-claim" @close="clear">
     <el-form :model="user" :rules="rules" ref="user" class="demo-ruleForm">
       <!-- 员工组中文名 -->
       <el-form-item :label="$t('认领用户')" prop="user_id">
@@ -66,30 +61,11 @@ export default {
       console.log('supplierId', this.supplierId)
       this.$refs[formName].validate(valid => {
         if (valid) {
-          if (this.status === 'alone') {
-            this.$request
-              .claimPackage(this.id, {
-                user_id: this.supplierId
-              })
-              .then(res => {
-                if (res.ret) {
-                  this.$notify({
-                    type: 'success',
-                    title: this.$t('操作成功'),
-                    message: res.msg
-                  })
-                  this.show = false
-                  this.success()
-                } else {
-                  this.$message({
-                    message: res.msg,
-                    type: 'error'
-                  })
-                }
-                this.show = false
-              })
-          } else {
-            this.$request.batchClaim({ ids: this.id, user_id: this.supplierId }).then(res => {
+          this.$request
+            .claimPackage(this.id, {
+              user_id: this.supplierId
+            })
+            .then(res => {
               if (res.ret) {
                 this.$notify({
                   type: 'success',
@@ -104,8 +80,25 @@ export default {
                   type: 'error'
                 })
               }
+              this.show = false
             })
-          }
+
+          // this.$request.batchClaim({ ids: this.id, user_id: this.supplierId }).then(res => {
+          //   if (res.ret) {
+          //     this.$notify({
+          //       type: 'success',
+          //       title: this.$t('操作成功'),
+          //       message: res.msg
+          //     })
+          //     this.show = false
+          //     this.success()
+          //   } else {
+          //     this.$message({
+          //       message: res.msg,
+          //       type: 'error'
+          //     })
+          //   }
+          // })
         } else {
           return false
         }

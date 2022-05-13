@@ -1115,36 +1115,36 @@ export default {
         })
       }
     },
-    batchAddRow() {
-      dialog(
-        {
-          type: 'batchAdd',
-          localization: this.localization
-        },
-        data => {
-          let boxData = JSON.parse(JSON.stringify(data))
-          let boxes = JSON.parse(JSON.stringify(data.boxes))
-          for (let i = 0; i < boxes; i++) {
-            if (this.baseMode === 0) {
-              this.user.box.push({
-                weight: boxData.weight,
-                length: boxData.length,
-                width: boxData.width,
-                height: boxData.height,
-                volume_weight: ''
-              })
-            } else {
-              this.user.box.push({
-                weight: boxData.weight,
-                length: boxData.length,
-                width: boxData.width,
-                height: boxData.height
-              })
-            }
-          }
-        }
-      )
-    },
+    // batchAddRow() {
+    //   dialog(
+    //     {
+    //       type: 'batchAdd',
+    //       localization: this.localization
+    //     },
+    //     data => {
+    //       let boxData = JSON.parse(JSON.stringify(data))
+    //       let boxes = JSON.parse(JSON.stringify(data.boxes))
+    //       for (let i = 0; i < boxes; i++) {
+    //         if (this.baseMode === 0) {
+    //           this.user.box.push({
+    //             weight: boxData.weight,
+    //             length: boxData.length,
+    //             width: boxData.width,
+    //             height: boxData.height,
+    //             volume_weight: ''
+    //           })
+    //         } else {
+    //           this.user.box.push({
+    //             weight: boxData.weight,
+    //             length: boxData.length,
+    //             width: boxData.width,
+    //             height: boxData.height
+    //           })
+    //         }
+    //       }
+    //     }
+    //   )
+    // },
     // 新增行
     addRow() {
       if (this.baseMode === 0) {

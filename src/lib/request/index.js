@@ -4281,3 +4281,18 @@ exports.sameTradeAuth = (id, stgAuth) => {
 exports.batchClaim = params => {
   return $form.put(`packages/no-owner/owner`, params)
 }
+
+// 批量导入地址 下载模板
+exports.downloadAddressTmp = () => {
+  return $form.get('user-addresses/template')
+}
+
+// 上传模板
+exports.uploadAddressTmp = file => {
+  return $file.post('user-addresses/parse', file)
+}
+
+// 批量导入
+exports.batchImportAddress = params => {
+  return $form.post('user-addresses/import', params)
+}
