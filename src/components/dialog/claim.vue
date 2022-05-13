@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="this.status === 'alone' ? $t('认领用户') : $t('批量认领用户')"
+    :title="status === 'alone' ? $t('认领用户') : $t('批量认领用户')"
     class="dialog-claim"
     @close="clear"
   >
@@ -119,7 +119,9 @@ export default {
       this.$refs[user].resetFields()
       this.show = false
     },
-    init() {}
+    init() {
+      console.log(this.status)
+    }
   }
 }
 </script>

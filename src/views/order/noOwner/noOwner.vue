@@ -147,7 +147,7 @@
           <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
             $t('打印标签')
           }}</el-button>
-          <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], alone)">{{
+          <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], 'alone')">{{
             $t('认领')
           }}</el-button>
           <!-- <el-button class="btn-deep-purple">详细</el-button> -->
