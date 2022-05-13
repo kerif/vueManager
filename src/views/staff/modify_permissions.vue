@@ -69,7 +69,8 @@ export default {
       arr.forEach(ele => {
         if (ele.child) {
           this.formatIds(ele.child)
-        } else if (ele.tag) {
+        }
+        if (ele.tag) {
           ele.id = `${ele.id}-1`
         }
         ele.name = this.$t(ele.name)
