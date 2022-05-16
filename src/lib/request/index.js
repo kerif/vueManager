@@ -4296,3 +4296,8 @@ exports.uploadAddressTmp = file => {
 exports.batchImportAddress = params => {
   return $json.post('user-addresses/import', params)
 }
+
+// 新增收货地址
+exports.addReceiveAddress = params => {
+  return $form.post('user-addresses', params)
+}

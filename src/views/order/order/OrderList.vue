@@ -544,7 +544,8 @@ export default {
         value_begin: '',
         value_end: '',
         keyword: '',
-        is_warning: 0
+        is_warning: 0,
+        code: ''
       },
       showBatch: false,
       packageData: []
