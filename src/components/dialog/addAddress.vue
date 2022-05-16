@@ -113,7 +113,9 @@
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
-      <el-button type="primary" @click="confirm('ruleForm')">{{ $t('确定') }}</el-button>
+      <el-button type="primary" :loading="$store.state.btnLoading" @click="confirm('ruleForm')">{{
+        $t('确定')
+      }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -227,7 +229,18 @@ export default {
         }
       })
     },
-    clear() {}
+    clear() {
+      this.ruleForm.user_id = ''
+      this.ruleForm.receiver_name = ''
+      this.ruleForm.phone = ''
+      this.ruleForm.timezone = ''
+      this.ruleForm.country_id = ''
+      this.ruleForm.door_no = ''
+      this.ruleForm.city = ''
+      this.ruleForm.postcode = ''
+      this.ruleForm.street = ''
+      this.ruleForm.address = ''
+    }
   }
 }
 </script>
