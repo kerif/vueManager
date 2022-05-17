@@ -106,23 +106,31 @@
         <el-row :gutter="10">
           <el-col :span="10">
             <div>
-              <span>{{ $t('线路下单类型') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="
-                  $t(
-                    '标准模式:包裹入库并经客户提交后,还需仓库合箱打包,称量出库(计费)数据,再生成待支付订单; 快速下单模式: 包裹入库经客户提交,即生成待支付订单(每个包裹为独立订单),入库称量数据即为出库(计费)数据'
-                  )
-                "
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
+              <span>{{ $t('客户付款节点') }}</span>
             </div>
             <el-radio-group v-model="form.order_mode">
-              <el-radio :label="0">{{ $t('标准模式') }}</el-radio>
-              <el-radio :label="1">{{ $t('快速下单(无需合箱)') }}</el-radio>
+              <el-radio :label="0"
+                >{{ $t('标准模式') }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="$t('集包后仓库打包后付款')"
+                  placement="top"
+                >
+                  <span class="el-icon-question icon-info"></span>
+                </el-tooltip>
+              </el-radio>
+              <el-radio :label="1"
+                >{{ $t('集包立即付款') }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="$t('适用于原箱出库')"
+                  placement="top"
+                >
+                  <span class="el-icon-question icon-info"></span>
+                </el-tooltip>
+              </el-radio>
             </el-radio-group>
           </el-col>
         </el-row>
