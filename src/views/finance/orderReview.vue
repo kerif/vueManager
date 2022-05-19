@@ -2,9 +2,15 @@
   <div class="order-review-container">
     <el-tabs v-model="activeName" class="tabLength">
       <!-- 支付审核 -->
-      <el-tab-pane :label="$t('支付审核')" name="0"></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('支付审核')}(${countList.payment ? countList.payment : 0})`"
+        name="0"
+      ></el-tab-pane>
       <!-- 退款审核 -->
-      <el-tab-pane :label="$t('退款审核')" name="1"></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('退款审核')}(${countList.refund ? countList.refund : 0})`"
+        name="1"
+      ></el-tab-pane>
     </el-tabs>
     <div class="order-list-search" v-show="hasFilterCondition">
       <div class="changeTime">
@@ -231,6 +237,7 @@ export default {
       payment_type: '',
       status: '',
       hasFilterCondition: false,
+      countList: {},
       statusData: [
         {
           id: 0,
@@ -265,6 +272,15 @@ export default {
           }
         })
     },
+    getFinanceCount() {
+      this.$request.financeCount().then(res => {
+        console.log(res)
+        this.countList = res.data
+        let data = JSON.stringify(res.data)
+        this.$store.commit('changeRefund', res.data)
+        localStorage.setItem('counts', data)
+      })
+    },
     goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
@@ -272,7 +288,7 @@ export default {
       this.handleQueryChange('size', this.page_params.size)
       this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
-      // this.getCounts()
+      this.getFinanceCount()
     },
     getList() {
       this.tableLoading = true
@@ -441,6 +457,7 @@ export default {
       this.activeName = this.$route.query.activeName
     }
     this.getPayment()
+    this.getFinanceCount()
   },
   activated() {
     this.getList()

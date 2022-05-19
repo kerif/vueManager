@@ -4301,3 +4301,8 @@ exports.batchImportAddress = params => {
 exports.addReceiveAddress = params => {
   return $form.post('user-addresses', params)
 }
+
+// 订单财务审核 统计
+exports.financeCount = () => {
+  return $form.get('order-finances/counts')
+}

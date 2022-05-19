@@ -30,8 +30,18 @@
             v-if="childRoute.level === 2"
             class="route-item"
             @click="onRoute(route)"
-            >{{ $t(childRoute.name) }}</el-menu-item
           >
+            <!-- <i
+              class="dot"
+              v-if="
+                (childRoute.path === '/finance/orderReview' &&
+                  (obj.payment > 0 || obj.refund > 0)) ||
+                childRoute.path === '/finance/recharge' ||
+                childRoute.path === '/finance/agency'
+              "
+            ></i> -->
+            {{ $t(childRoute.name) }}
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -67,12 +77,22 @@ export default {
             }
           })
         })
+      // console.log(formatRouterMap)
       return formatRouterMap
     },
     isCollapse() {
       return this.$store.state.isCollapse
     }
   },
+  // data() {
+  //   return {
+  //     obj: {}
+  //   }
+  // },
+  // created() {
+  //   this.obj = JSON.parse(localStorage.getItem('counts'))
+  //   console.log(this.obj)
+  // },
   methods: {
     onMenuSelect() {
       // console.log('index', index)
@@ -125,6 +145,13 @@ export default {
   }
   .route-item {
     padding-left: 60px !important;
+  }
+  .dot {
+    display: inline-block;
+    background: red !important;
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50%;
   }
   .el-menu-item-group__title {
     padding: 0;

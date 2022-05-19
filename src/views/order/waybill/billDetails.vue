@@ -936,6 +936,18 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
+            <el-form-item :label="$t('省')">
+              <el-input class="input-sty" v-model="address.province"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('区')">
+              <el-input class="input-sty" v-model="address.district"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
             <el-form-item :label="$t('街道门牌号')" class="label-sty">
               <el-input
                 class="second-sty"
@@ -1428,7 +1440,9 @@ export default {
           wechat_id: this.address.wechat_id,
           country_id: this.countryList[0],
           area_id: this.countryList[1] || '',
-          sub_area_id: this.countryList[2] || ''
+          sub_area_id: this.countryList[2] || '',
+          province: this.address.province,
+          district: this.address.district
         })
         .then(res => {
           if (res.ret) {

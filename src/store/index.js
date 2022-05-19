@@ -20,6 +20,7 @@ export default new Vuex.Store({
     languageCode: 'zhCN', // 默认简体中文
     pagePath: '', // 路径列表
     unread: 0,
+    refund: 0,
     orderListFieldData: [] // 订单列表显示字段
   },
   mutations: {
@@ -48,6 +49,10 @@ export default new Vuex.Store({
     },
     changeUnread(state, data) {
       state.unread = data
+    },
+    changeRefund(state, data) {
+      state.refund = data.refund
+      state.payment = data.payment
     },
     switchCollapse(state, isCollapse) {
       state.isCollapse = isCollapse
