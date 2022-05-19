@@ -229,6 +229,7 @@ export default {
     },
     // 修改仓库
     editChannel(id) {
+      console.log(id)
       this.$router.push({
         name: 'channelLine',
         params: {

@@ -82,22 +82,22 @@ export default {
   },
   methods: {
     uploadList() {
-      this.$request.downloadAddressTmp().then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          window.open(res.data.url)
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      // this.$request.downloadAddressTmp().then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       title: this.$t('操作成功'),
+      //       message: res.msg,
+      //       type: 'success'
+      //     })
+      //     window.open(res.data.url)
+      //   } else {
+      //     this.$notify({
+      //       title: this.$t('操作失败'),
+      //       message: res.msg,
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
     },
     onFileRemove(file, fileList) {
       this.fileList = fileList
@@ -112,18 +112,18 @@ export default {
         this.tableLoading = true
         const params = new FormData()
         params.append('template', this.data)
-        this.$request.uploadAddressTmp(params).then(res => {
-          this.tableLoading = false
-          if (res.ret) {
-            this.addressList = res.data
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+        // this.$request.uploadAddressTmp(params).then(res => {
+        //   this.tableLoading = false
+        //   if (res.ret) {
+        //     this.addressList = res.data
+        //   } else {
+        //     this.$notify({
+        //       title: this.$t('操作失败'),
+        //       message: res.msg,
+        //       type: 'warning'
+        //     })
+        //   }
+        // })
       })
     },
     onUpload(file) {
@@ -136,28 +136,28 @@ export default {
       addressList.splice(index, 1)
     },
     saveImport() {
-      let addressData = this.addressList.map(item => {
-        return {
-          ...item,
-          country: { id: item.country.id }
-        }
-      })
-      this.$request.batchImportAddress({ ...addressData }).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.$router.go(-1)
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      // let addressData = this.addressList.map(item => {
+      //   return {
+      //     ...item,
+      //     country: { id: item.country.id }
+      //   }
+      // })
+      // this.$request.batchImportAddress({ ...addressData }).then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       title: this.$t('操作成功'),
+      //       message: res.msg,
+      //       type: 'success'
+      //     })
+      //     this.$router.go(-1)
+      //   } else {
+      //     this.$notify({
+      //       title: this.$t('操作失败'),
+      //       message: res.msg,
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
     }
   }
 }

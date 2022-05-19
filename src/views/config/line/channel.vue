@@ -565,6 +565,7 @@ export default {
   },
   created() {
     this.lineId = this.$route.params.id
+    console.log(this.lineId)
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
     this.getLanguageList() // 获取支持语言
     // 获取线路名称筛选列表

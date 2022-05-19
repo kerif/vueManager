@@ -1151,7 +1151,7 @@ export default [
             }
           },
           {
-            path: '/config/line/channel/:id',
+            path: '/config/line/channel_list/:id',
             name: 'channelLine',
             component: channelLine,
             id: 601,
