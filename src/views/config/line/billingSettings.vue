@@ -284,7 +284,7 @@
         <el-row :gutter="10">
           <el-col :span="10">
             <div>
-              <span>{{ $t('包裹') }}{{ billingName }}{{ $t('向上取值') }}</span>
+              <span>{{ $t('订单单箱打包') }}{{ billingName }}{{ $t('向上取值') }}</span>
             </div>
             <el-select
               v-model="form.weight_rise"

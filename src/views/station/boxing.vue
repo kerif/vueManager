@@ -324,6 +324,15 @@
         </el-table-column>
         <!-- 国家 -->
         <el-table-column prop="country.name" :label="$t('国家')"> </el-table-column>
+        <el-table-column prop="area" :label="$t('区域')">
+          <template slot-scope="scope">
+            <span
+              >{{ scope.row.area ? scope.row.area.name : '' }}&nbsp;&nbsp;{{
+                scope.row.sub_area ? scope.row.sub_area.name : ''
+              }}</span
+            >
+          </template>
+        </el-table-column>
         <!-- 邮编 -->
         <el-table-column prop="postcode" :label="$t('邮编')"> </el-table-column>
         <el-table-column prop="timezone" :label="$t('区号')"> </el-table-column>
