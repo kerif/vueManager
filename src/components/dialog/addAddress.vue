@@ -198,32 +198,32 @@ export default {
     confirm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // this.$request
-          //   .addReceiveAddress({
-          //     ...this.ruleForm,
-          //     user_id: this.ruleForm.user_id.substring(0, 6),
-          //     country_id: this.ruleForm.country_id[0],
-          //     area_id: this.ruleForm.country_id[1] ? this.ruleForm.country_id[1] : '',
-          //     sub_area_id: this.ruleForm.country_id[2] ? this.ruleForm.country_id[2] : ''
-          //   })
-          //   .then(res => {
-          //     console.log(res)
-          //     if (res.ret) {
-          //       this.$notify({
-          //         title: this.$t('操作成功'),
-          //         message: res.msg,
-          //         type: 'success'
-          //       })
-          //       this.show = false
-          //       this.success()
-          //     } else {
-          //       this.$notify({
-          //         title: this.$t('操作失败'),
-          //         message: res.msg,
-          //         type: 'warning'
-          //       })
-          //     }
-          //   })
+          this.$request
+            .addReceiveAddress({
+              ...this.ruleForm,
+              user_id: this.ruleForm.user_id.substring(0, 6),
+              country_id: this.ruleForm.country_id[0],
+              area_id: this.ruleForm.country_id[1] ? this.ruleForm.country_id[1] : '',
+              sub_area_id: this.ruleForm.country_id[2] ? this.ruleForm.country_id[2] : ''
+            })
+            .then(res => {
+              console.log(res)
+              if (res.ret) {
+                this.$notify({
+                  title: this.$t('操作成功'),
+                  message: res.msg,
+                  type: 'success'
+                })
+                this.show = false
+                this.success()
+              } else {
+                this.$notify({
+                  title: this.$t('操作失败'),
+                  message: res.msg,
+                  type: 'warning'
+                })
+              }
+            })
         } else {
           return false
         }
