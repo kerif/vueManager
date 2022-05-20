@@ -43,7 +43,12 @@
             <h3 v-else>{{ item.name }}</h3>
           </div>
           <div class="rules-right">
-            <el-button @click="editState(item)" class="btn-green">{{ $t('修改') }}</el-button>
+            <el-button @click="editState(item)" v-if="!item.state" class="btn-green">{{
+              $t('修改')
+            }}</el-button>
+            <el-button type="primary" size="small" @click="saveChannles(item)" v-if="item.state">{{
+              $t('保存')
+            }}</el-button>
             <el-button @click="deleteChannel(index, channel, item.id)" class="btn-light-red">{{
               $t('删除')
             }}</el-button>
@@ -228,9 +233,9 @@
         </el-form>
         <div class="btn-sty">
           <!-- <el-button @click="cancelSave(item)" v-if="item.state">{{ $t('取消') }}</el-button> -->
-          <el-button type="primary" size="small" @click="saveChannles(item)" v-if="item.state">{{
+          <!-- <el-button type="primary" size="small" @click="saveChannles(item)" v-if="item.state">{{
             $t('保存')
-          }}</el-button>
+          }}</el-button> -->
         </div>
       </div>
     </div>

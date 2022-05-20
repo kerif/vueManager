@@ -285,6 +285,19 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('订单单箱打包') }}{{ billingName }}{{ $t('向上取值') }}</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                v-if="form.base_mode === 0"
+                :content="
+                  $t(
+                    '假设包裹出库称重2.3，向上取值设置0.5，就是按照2.5计费，向上取值1，就是按3收费'
+                  )
+                "
+                placement="top-start"
+              >
+                <i class="el-icon-question explain-icon"></i>
+              </el-tooltip>
             </div>
             <el-select
               v-model="form.weight_rise"
@@ -308,6 +321,19 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('订单多箱打包') }}{{ billingName }}{{ $t('向上取值') }}</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                v-if="form.base_mode === 0"
+                :content="
+                  $t(
+                    '假设包裹出库称重2.3，向上取值设置0.5，就是按照2.5计费，向上取值1，就是按3收费'
+                  )
+                "
+                placement="top-start"
+              >
+                <i class="el-icon-question explain-icon"></i>
+              </el-tooltip>
             </div>
             <el-select
               v-model="form.multi_boxes_ceil"
@@ -1001,5 +1027,12 @@ export default {
     width: 100%;
     overflow: auto;
   }
+}
+.explain-icon {
+  position: relative;
+  top: 2px;
+  margin-left: 5px;
+  font-size: 16px;
+  color: #74b34f;
 }
 </style>
