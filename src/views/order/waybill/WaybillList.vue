@@ -240,7 +240,7 @@
                   <img class="group-sty" src="../../../assets/group.jpg"
                 /></el-button>
                 <el-button type="text" v-if="scope.row.is_stg === 1">
-                  <img src="../../../assets/stg.jpg" class="group-sty" />
+                  <img src="../../../assets/stgv.jpg" class="group-sty" />
                 </el-button>
                 <span>
                   <el-button
