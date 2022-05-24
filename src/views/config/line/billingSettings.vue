@@ -505,7 +505,10 @@
               </el-select>
             </el-col>
             <el-col :span="5">
-              <el-input v-model="form.value" :placeholder="$t('请输入限制数值')"></el-input>
+              <div class="unit">
+                <el-input v-model="form.value" :placeholder="$t('请输入限制数值')"></el-input>
+                <span>{{ localization ? localization.length_unit : '' }}</span>
+              </div>
             </el-col>
           </el-row>
         </el-form-item>
@@ -1020,6 +1023,9 @@ export default {
   .remark {
     float: left;
     color: red;
+  }
+  .unit {
+    display: flex;
   }
 }
 .billing-select {
