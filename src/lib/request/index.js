@@ -4311,3 +4311,8 @@ exports.financeCount = () => {
 exports.batchUpdateCustom = params => {
   return $form.put('declare/custom-configs', params)
 }
+
+// 轮播图 更新排序
+exports.updateSort = params => {
+  return $form.put('ads-picture/sort-index', params)
+}
