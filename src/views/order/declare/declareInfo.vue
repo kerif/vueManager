@@ -9,6 +9,9 @@
         <el-button size="small" class="btn-purple" @click="batchSub">{{
           $t('批量提交')
         }}</el-button>
+        <el-button size="small" class="btn-main" @click="batchCustomConfig">{{
+          $t('自定义配置')
+        }}</el-button>
       </div>
       <div class="btn-left">
         <el-button size="mini" class="btn-light-red" @click="setNormal">{{
@@ -740,6 +743,15 @@ export default {
       dialog({
         type: 'customConfig',
         id: this.id
+      })
+    },
+    batchCustomConfig() {
+      if (!this.declareNum || !this.declareNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog({
+        type: 'batchCustomConfig',
+        id: this.declareNum
       })
     },
     saveNormal() {

@@ -148,6 +148,7 @@ import purchaseDetails from './purchaseDetails.vue'
 import availableCustom from './availableCustom.vue'
 import addAddress from './addAddress.vue'
 import batchAdd from './batchAdd.vue'
+import batchCustomConfig from './batchCustomConfig.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -295,6 +296,7 @@ const purchaseDetailsController = Vue.extend(purchaseDetails)
 const availableCustomController = Vue.extend(availableCustom)
 const addAddressController = Vue.extend(addAddress)
 const batchAddController = Vue.extend(batchAdd)
+const batchCustomConfigController = Vue.extend(batchCustomConfig)
 const mixin = {
   data() {
     return {
@@ -520,6 +522,13 @@ function initInstance(type) {
     // 批量添加
     case 'batchAdd':
       instance = new batchAddController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量自定义配置
+    case 'batchCustomConfig':
+      instance = new batchCustomConfigController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

@@ -4306,3 +4306,8 @@ exports.addReceiveAddress = params => {
 exports.financeCount = () => {
   return $form.get('order-finances/counts')
 }
+
+// 批量更新自定义数据
+exports.batchUpdateCustom = params => {
+  return $form.put('declare/custom-configs', params)
+}

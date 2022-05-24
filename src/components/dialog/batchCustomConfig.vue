@@ -63,7 +63,7 @@
 export default {
   data() {
     return {
-      id: '',
+      id: [],
       config: {},
       deliveryData: [],
       expressData: [],
@@ -84,7 +84,7 @@ export default {
       this.getList()
     },
     getList() {
-      this.$request.updateSelectData(this.id).then(res => {
+      this.$request.updateSelectData(this.id[0]).then(res => {
         if (res.ret) {
           this.config = res.data
           if (
@@ -123,22 +123,12 @@ export default {
                 label: pay[item]
               }
             })
-            if (Array.isArray(ship)) {
-              this.shipData = ship.map((item, index) => {
-                return {
-                  id: Number(index),
-                  name: item
-                }
-              })
-            } else {
-              this.shipData = Object.keys(ship).map(item => {
-                return {
-                  id: Number(item),
-                  name: ship[item]
-                }
-              })
-            }
-            this.getSelectData()
+            this.shipData = Object.keys(ship).map(item => {
+              return {
+                id: Number(item),
+                name: ship[item]
+              }
+            })
           }
         } else {
           this.$notify({
@@ -149,20 +139,12 @@ export default {
         }
       })
     },
-    getSelectData() {
-      this.$request.customData(this.id).then(res => {
-        this.form.shipType = Number(res.data.shipType)
-        this.form.packageType = Number(res.data.packageType) ? Number(res.data.packageType) : ''
-        this.form.deliveryType = res.data.deliveryType
-        this.form.expressType = res.data.expressType
-        this.form.payType = res.data.payType
-      })
-    },
     onConfirm() {
       let params = {
+        ids: this.id,
         ...this.form
       }
-      this.$request.updateCustomData(this.id, params).then(res => {
+      this.$request.batchUpdateCustom(params).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
@@ -190,8 +172,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.el-form-item__label {
-  width: 120px;
-}
-</style>
+<style></style>
