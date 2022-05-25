@@ -315,7 +315,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="6">
         <div class="help-center">
           <span class="title">{{ $t('帮助中心') }}</span>
           <div class="process-content">
@@ -327,10 +327,14 @@
               <img src="../../assets/软件下载.png" alt="" />
               <p>{{ $t('软件下载') }}</p>
             </div>
+            <div style="cursor: pointer">
+              <img src="../../assets/视频教程.png" alt="" />
+              <p>{{ $t('视频教程') }}</p>
+            </div>
           </div>
         </div>
       </el-col>
-      <el-col :span="7" style="padding-left: 0 !important">
+      <el-col :span="5" style="padding-left: 0 !important">
         <div class="system">
           <span class="title" @click="$router.push({ name: 'updateList' })">{{
             $t('更新日志')
