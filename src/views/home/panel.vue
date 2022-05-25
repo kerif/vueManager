@@ -327,7 +327,7 @@
               <img src="../../assets/软件下载.png" alt="" />
               <p>{{ $t('软件下载') }}</p>
             </div>
-            <div style="cursor: pointer">
+            <div @click="goVideo" style="cursor: pointer">
               <img src="../../assets/视频教程.png" alt="" />
               <p>{{ $t('视频教程') }}</p>
             </div>
@@ -959,6 +959,11 @@ export default {
     },
     uploadIos() {
       let url = 'https://apps.apple.com/cn/app/id1492557133'
+      window.open(url)
+    },
+    goVideo() {
+      let url =
+        'https://www.douyin.com/user/MS4wLjABAAAAeXrbw1-Iyj0qJbrqf-qpnBcwgQdRFpN0EzKykvs7PxZgtvzgFrP3Ka0HoYjz-i-B?relation=2'
       window.open(url)
     },
     changeApp($event) {
