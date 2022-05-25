@@ -97,6 +97,13 @@
           {{ $t('处理异常') }}
         </el-button>
         <el-button
+          class="btn-orangey-red"
+          v-if="activeName === '6'"
+          size="small"
+          @click="batchNotify"
+          >{{ $t('批量发送通知') }}</el-button
+        >
+        <el-button
           class="btn-deep-purple"
           v-if="['3', '4', '5'].includes(activeName)"
           size="small"
@@ -2586,6 +2593,31 @@ export default {
         return this.$message.error(this.$t('请选择'))
       }
       this.showHandExcept = true
+    },
+    batchNotify() {
+      if (!this.selectIDs || !this.selectIDs.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      let params = {
+        ids: this.selectIDs,
+        type: 5
+      }
+      this.$request.sendingNotify(params).then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.$refs.table.clearSelection()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
     // 饼图
   },

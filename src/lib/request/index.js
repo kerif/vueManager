@@ -4316,3 +4316,13 @@ exports.batchUpdateCustom = params => {
 exports.updateSort = params => {
   return $form.put('ads-picture/sort-index', params)
 }
+
+// 订单支付审核导出
+exports.orderPaymentExport = params => {
+  return $form.post('order-finances/payments/export', params)
+}
+
+// 订单退款审核导出
+exports.orderRefundExport = params => {
+  return $form.post('order-finances/refunds/export', params)
+}

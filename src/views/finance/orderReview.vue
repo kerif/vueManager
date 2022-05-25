@@ -53,16 +53,19 @@
       </div>
     </div>
     <div class="searchGroup">
-      <search-group
-        :placeholder="$t('请输入关键字')"
-        v-model="page_params.keyword"
-        @search="goMatch"
-      >
-      </search-group>
-      <div class="filter">
-        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
-          >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
-        ></el-button>
+      <el-button class="btn-main" @click="verifyExport">{{ $t('导出清单') }}</el-button>
+      <div class="searcg-l">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goMatch"
+        >
+        </search-group>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
       </div>
     </div>
     <div style="height: calc(100vh - 270px)">
@@ -450,6 +453,45 @@ export default {
       this.onTime(this.timeList)
       this.onPaymentChange()
       this.onStatusChange()
+    },
+    verifyExport() {
+      let params = {
+        status: this.status,
+        keyword: this.page_params.keyword
+      }
+      if (this.activeName === '0') {
+        this.$request.orderPaymentExport(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.activeName === '1') {
+        this.$request.orderRefundExport(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     }
   },
   created() {
@@ -595,8 +637,13 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    .filter {
-      margin-left: 10px;
+    .searcg-l {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      .filter {
+        margin-left: 10px;
+      }
     }
   }
   .order-list-search {
