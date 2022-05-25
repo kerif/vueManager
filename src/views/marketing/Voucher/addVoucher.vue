@@ -18,9 +18,10 @@
       </el-form-item>
       <el-form-item :label="$t('生效时间')" prop="effected_at">
         <el-date-picker
-          value-format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd HH:mm:ss"
           v-model="ruleForm.effected_at"
-          type="date"
+          format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
           :picker-options="pickerOptions"
           :placeholder="$t('请输入生效时间')"
         >
@@ -29,9 +30,10 @@
       <el-form-item :label="$t('失效时间')" prop="expired_at">
         <el-date-picker
           :picker-options="pickerOptions"
-          value-format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd HH:mm:ss"
           v-model="ruleForm.expired_at"
-          type="date"
+          format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
           :placeholder="$t('请输入失效时间')"
         >
         </el-date-picker>
