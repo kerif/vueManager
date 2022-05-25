@@ -125,6 +125,13 @@
               v-model="ruleForm.weight"
             ></el-input>
           </el-form-item>
+          <el-form-item label="COD">
+            <el-input
+              :placeholder="$t('请输入')"
+              class="input-sty"
+              v-model="ruleForm.agent_amount"
+            ></el-input>
+          </el-form-item>
         </el-form>
         <div style="display: flex; justify-content: space-between; align-items: center">
           <el-button
@@ -241,6 +248,13 @@
                 :placeholder="$t('请输入重量')"
                 class="input-sty"
                 v-model="item.weight"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="COD">
+              <el-input
+                :placeholder="$t('请输入')"
+                class="input-sty"
+                v-model="ruleForm.agent_amount"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -416,7 +430,8 @@ export default {
       boxData: [
         {
           weight: '',
-          tax_number: ''
+          tax_number: '',
+          agent_amount: ''
         }
       ],
       orderSn: '',
@@ -442,7 +457,8 @@ export default {
       third_status: '',
       ruleForm: {
         tax_number: '',
-        weight: ''
+        weight: '',
+        agent_amount: ''
       },
       declareForm: {
         declare_tax_number: '',
@@ -571,6 +587,7 @@ export default {
       this.show = false
       this.ruleForm.tax_number = ''
       this.ruleForm.weight = ''
+      this.ruleForm.agent_amount = ''
       this.boxes = []
     },
     cancelNormal() {
@@ -583,6 +600,7 @@ export default {
       this.showFill = false
       this.ruleForm.tax_number = ''
       this.ruleForm.weight = ''
+      this.ruleForm.agent_amount = ''
       this.boxes = []
     },
     editDeclareInfo(id, type) {
@@ -715,6 +733,7 @@ export default {
           this.orderSn = res.data.order_sn
           this.ruleForm.tax_number = res.data.tax_number
           this.ruleForm.weight = res.data.weight
+          this.ruleForm.agent_amount = res.data.agent_amount
           if (this.type === 1) {
             this.infoData = res.data.items
           } else {
@@ -796,13 +815,15 @@ export default {
         params.order.id = this.id
         params.order.weight = this.ruleForm.weight
         params.order.tax_number = this.ruleForm.tax_number
+        params.order.agent_amount = this.ruleForm.agent_amount
       } else {
         if (this.boxData) {
           this.boxes = this.boxData.map(item => {
             return {
               id: item.id,
               tax_number: item.tax_number,
-              weight: item.weight
+              weight: item.weight,
+              agent_amount: item.agent_amount
             }
           })
         }
