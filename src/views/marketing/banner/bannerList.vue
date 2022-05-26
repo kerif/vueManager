@@ -150,7 +150,7 @@ export default {
             this.page_params.total = res.meta.total
             this.$nextTick(() => {
               this.typeRowDrop()
-              this.$refs.table.doLayout()
+              // this.$refs.table.doLayout()
             })
           } else {
             this.$notify({
@@ -205,13 +205,7 @@ export default {
       })
     },
     typeRowUpdate() {
-      let params = this.typeSendData.map(item => {
-        return {
-          id: item.id,
-          index: item.index
-        }
-      })
-      this.vipGroupList = []
+      let params = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
       this.$request.updateSort(params).then(res => {
         if (res.ret) {
           this.$notify({
