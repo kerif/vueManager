@@ -1,7 +1,7 @@
 <template>
   <div class="agency-list-container">
     <el-tabs v-model="activeName" @tab-click="onTabChange">
-      <el-tab-pane :label="$t('全部')" name="-1">
+      <el-tab-pane :label="`${$t('全部')}(${countData.all || 0})`" name="-1">
         <auditData
           :allData="all"
           @subprice="fn"
@@ -10,7 +10,7 @@
           @passval="onSearch"
         />
       </el-tab-pane>
-      <el-tab-pane :label="$t('待审核')" name="0">
+      <el-tab-pane :label="`${$t('待审核')}(${countData.wait || 0})`" name="0">
         <auditData
           :allData="all"
           @subprice="fn"
@@ -19,7 +19,7 @@
           @passval="onSearch"
         />
       </el-tab-pane>
-      <el-tab-pane :label="$t('已审核')" name="12">
+      <el-tab-pane :label="`${$t('已审核')}(${countData.done || 0})`" name="12">
         <auditData
           :allData="all"
           @subprice="fn"
@@ -49,7 +49,8 @@ export default {
         keyword: '',
         status: ''
       },
-      totalSettlement: 0
+      totalSettlement: 0,
+      countData: {}
     }
   },
   mixins: [pagination],
@@ -60,6 +61,7 @@ export default {
   created() {
     this.getList()
     this.getSettleAccounts()
+    this.getCount()
   },
   methods: {
     getList(status, param_list = {}) {
@@ -111,6 +113,12 @@ export default {
     onSearch(params) {
       this.page_params.page = 1
       this.getList(this.activeName, params)
+    },
+    getCount() {
+      this.$request.withdrawCount().then(res => {
+        console.log(res)
+        this.countData = res.data
+      })
     }
   }
 }

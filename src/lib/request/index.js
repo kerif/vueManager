@@ -4326,3 +4326,8 @@ exports.orderPaymentExport = params => {
 exports.orderRefundExport = params => {
   return $form.post('order-finances/refunds/export', params)
 }
+
+// 代理佣金结算 统计
+exports.withdrawCount = () => {
+  return $form.get('agents/withdraw-counts')
+}
