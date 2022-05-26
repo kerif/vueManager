@@ -16,11 +16,11 @@
         v-loading="tableLoading"
         @selection-change="selectionChange"
       >
-        <!-- <el-table-column width="100px" align="center">
+        <el-table-column width="100px" align="center">
           <template>
             <i class="el-icon-sort icon-fonts"></i>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <!-- 名称 -->
         <el-table-column :label="$t('名称')" prop="picture_name"></el-table-column>
@@ -95,12 +95,12 @@
       :pageParams="page_params"
       :notNeedInitQuery="false"
     ></nle-pagination>
-    <!-- <div class="sort-sty">
+    <div class="sort-sty">
       *{{ $t('拖拽行可以进行排序') }}
       <el-button class="btn-deep-purple save-sort" @click="typeRowUpdate">{{
         $t('保存排序结果')
       }}</el-button>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -109,7 +109,7 @@ import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import dialog from '@/components/dialog'
 import { pagination } from '@/mixin'
-// import Sortable from 'sortablejs'
+import Sortable from 'sortablejs'
 export default {
   name: 'bannerList',
   components: {
@@ -149,7 +149,7 @@ export default {
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
             this.$nextTick(() => {
-              // this.typeRowDrop()
+              this.typeRowDrop()
               this.$refs.table.doLayout()
             })
           } else {
@@ -193,40 +193,40 @@ export default {
     },
     //行拖拽
     typeRowDrop() {
-      // const tbody = document.querySelector('.positions-type tbody')
-      // console.log(tbody, 'tbody')
-      // Sortable.create(tbody, {
-      //   onEnd: ({ newIndex, oldIndex }) => {
-      //     if (oldIndex === newIndex) return false
-      //     console.log(oldIndex, newIndex)
-      //     const oldItem = this.typeSendData.splice(oldIndex, 1)[0]
-      //     this.typeSendData.splice(newIndex, 0, oldItem)
-      //   }
-      // })
+      const tbody = document.querySelector('.positions-type tbody')
+      console.log(tbody, 'tbody')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          if (oldIndex === newIndex) return false
+          console.log(oldIndex, newIndex)
+          const oldItem = this.typeSendData.splice(oldIndex, 1)[0]
+          this.typeSendData.splice(newIndex, 0, oldItem)
+        }
+      })
     },
     typeRowUpdate() {
-      // let params = this.typeSendData.map(item => {
-      //   return {
-      //     id: item.id,
-      //     index: item.index
-      //   }
-      // })
-      // this.vipGroupList = []
-      // this.$request.updateSort(params).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       type: 'success',
-      //       title: this.$t('操作成功'),
-      //       message: res.msg
-      //     })
-      //     this.getList()
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
+      let params = this.typeSendData.map(item => {
+        return {
+          id: item.id,
+          index: item.index
+        }
+      })
+      this.vipGroupList = []
+      this.$request.updateSort(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)

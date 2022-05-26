@@ -303,8 +303,8 @@ export default {
           { id: 'coupon_discount_fee', name: this.$t('优惠券抵扣金额') },
           { id: 'point_amount', name: this.$t('积分抵扣金额') },
           { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` },
-          { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
-          // { id: 'coupon_name', name: this.$t('优惠券名称') }
+          { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` },
+          { id: 'coupon_name', name: this.$t('优惠券名称') }
         ]
         this.feeInfo = [
           { id: 'value_added_amount', name: this.$t('增值服务费用') },
@@ -506,8 +506,8 @@ export default {
           { id: 'coupon_discount_fee', name: this.$t('优惠券抵扣金额') },
           { id: 'point_amount', name: this.$t('积分抵扣金额') },
           { id: 'discount_payment_fee', name: `实际支付金额(${this.localization.currency_unit})` },
-          { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` }
-          // { id: 'coupon_name', name: this.$t('优惠券名称') }
+          { id: 'payment_fee', name: `预计费用(${this.localization.currency_unit})` },
+          { id: 'coupon_name', name: this.$t('优惠券名称') }
         ]
         this.feeInfo = [
           { id: 'value_added_amount', name: this.$t('增值服务费用') },
