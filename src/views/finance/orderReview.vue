@@ -53,7 +53,7 @@
       </div>
     </div>
     <div class="searchGroup">
-      <el-button class="btn-main" @click="verifyExport">{{ $t('导出清单') }}</el-button>
+      <!-- <el-button class="btn-main" @click="verifyExport">{{ $t('导出清单') }}</el-button> -->
       <div class="searcg-l">
         <search-group
           :placeholder="$t('请输入关键字')"
@@ -455,43 +455,43 @@ export default {
       this.onStatusChange()
     },
     verifyExport() {
-      let params = {
-        status: this.status,
-        keyword: this.page_params.keyword
-      }
-      if (this.activeName === '0') {
-        this.$request.orderPaymentExport(params).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-      } else if (this.activeName === '1') {
-        this.$request.orderRefundExport(params).then(res => {
-          if (res.ret) {
-            this.$notify({
-              title: this.$t('操作成功'),
-              message: res.msg,
-              type: 'success'
-            })
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-      }
+      //   let params = {
+      //     status: this.status,
+      //     keyword: this.page_params.keyword
+      //   }
+      //   if (this.activeName === '0') {
+      //     this.$request.orderPaymentExport(params).then(res => {
+      //       if (res.ret) {
+      //         this.$notify({
+      //           title: this.$t('操作成功'),
+      //           message: res.msg,
+      //           type: 'success'
+      //         })
+      //       } else {
+      //         this.$notify({
+      //           title: this.$t('操作失败'),
+      //           message: res.msg,
+      //           type: 'warning'
+      //         })
+      //       }
+      //     })
+      //   } else if (this.activeName === '1') {
+      //     this.$request.orderRefundExport(params).then(res => {
+      //       if (res.ret) {
+      //         this.$notify({
+      //           title: this.$t('操作成功'),
+      //           message: res.msg,
+      //           type: 'success'
+      //         })
+      //       } else {
+      //         this.$notify({
+      //           title: this.$t('操作失败'),
+      //           message: res.msg,
+      //           type: 'warning'
+      //         })
+      //       }
+      //     })
+      //   }
     }
   },
   created() {

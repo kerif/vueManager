@@ -210,15 +210,15 @@ export default {
         {
           id: 6,
           name: this.$t('包裹变更')
-        },
-        {
-          id: 7,
-          name: this.$t('移除')
-        },
-        {
-          id: 8,
-          name: this.$t('添加')
         }
+        // {
+        //   id: 7,
+        //   name: this.$t('移除')
+        // },
+        // {
+        //   id: 8,
+        //   name: this.$t('添加')
+        // }
       ],
       type: ''
     }
