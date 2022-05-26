@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('自定义配置')" @close="clear">
-    <el-form label-position="left" :model="form">
+    <el-form label-position="left" :model="form" label-width="150px">
       <el-form-item label="deliveryType" v-if="this.config.deliveryType">
         <el-select v-model="form.deliveryType">
           <el-option
@@ -51,6 +51,12 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="sortCode">
+        <el-input v-model="form.sortCode" class="input-sty"></el-input>
+      </el-form-item>
+      <el-form-item label="destinationSiteCode">
+        <el-input v-model="form.destinationSiteCode" class="input-sty"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -75,7 +81,9 @@ export default {
         expressType: '',
         packageType: '',
         payType: '',
-        shipType: ''
+        shipType: '',
+        sortCode: '',
+        destinationSiteCode: ''
       }
     }
   },
@@ -156,6 +164,8 @@ export default {
         this.form.deliveryType = res.data.deliveryType
         this.form.expressType = res.data.expressType
         this.form.payType = res.data.payType
+        this.form.sortCode = res.data.sortCode
+        this.form.destinationSiteCode = res.data.destinationSiteCode
       })
     },
     onConfirm() {
@@ -185,13 +195,15 @@ export default {
       this.form.packageType = ''
       this.form.payType = ''
       this.form.shipType = ''
+      this.form.sortCode = ''
+      this.form.destinationSiteCode = ''
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.el-form-item__label {
-  width: 120px;
+.input-sty {
+  width: 45%;
 }
 </style>
