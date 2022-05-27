@@ -60,6 +60,8 @@
             <span v-if="scope.row.type === 4">{{ $t('彻底删除') }}</span>
             <span v-if="scope.row.type === 5">{{ $t('恢复') }}</span>
             <span v-if="scope.row.type === 6">{{ $t('包裹变更') }}</span>
+            <span v-if="scope.row.type === 7">{{ $t('移除') }}</span>
+            <span v-if="scope.row.type === 8">{{ $t('添加') }}</span>
           </template>
         </el-table-column>
         <el-table-column

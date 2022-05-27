@@ -149,7 +149,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-tabs v-model="activeName" class="tabs">
+        <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick">
           <el-tab-pane :label="$t('基本信息')" name="0">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
@@ -608,7 +608,7 @@
               </el-table>
               <el-row class="size">
                 <el-col :span="10">
-                  <div class="bale">
+                  <div class="bale info">
                     <div class="bale-left">
                       <span>{{ $t('打包照片') }}</span>
                       <div class="left-img" v-for="item in form.pack_pictures" :key="item.id">
@@ -623,7 +623,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="bale">
+                  <div class="bale info">
                     <div class="bale-left">
                       <span>{{ $t('物品照片') }}</span>
                       <div
@@ -643,35 +643,37 @@
                     </div>
                   </div>
 
-                  <div>
+                  <div class="info">
                     {{ $t('转运公司') }}
                     {{ form.logistics_company }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('转运单号') }}
                     {{ form.logistics_sn }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('发货单单号') }}
                     {{ form.logistics_sn && form.shipment && form.shipment.sn }}
                   </div>
                 </el-col>
                 <el-col :span="10" :offset="1">
-                  <div>
+                  <div class="info">
                     {{ $t('存放货位') }}
                     {{ form.location }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('留仓物品') }}
                     {{ form.in_warehouse_item }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('仓库备注') }}
                     {{ form.remark }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('打包视频') }}
-                    {{ form.videos[0] ? form.videos[0].name : '' }}
+                    <span @click="goVideo" class="choose">
+                      {{ videoUrl }}
+                    </span>
                   </div>
                 </el-col>
               </el-row>
@@ -1066,7 +1068,8 @@ export default {
       groupDataList: [],
       options: [],
       countryList: [],
-      declare: {}
+      declare: {},
+      videoUrl: ''
     }
   },
   created() {
@@ -1082,6 +1085,20 @@ export default {
         if (res.ret) {
           this.modeData = res.data
         }
+      })
+    },
+    handleClick() {
+      if (this.activeName === '1') {
+        this.getVideo()
+      }
+    },
+    goVideo() {
+      let url = this.videoUrl
+      window.open(url)
+    },
+    getVideo() {
+      this.$request.packageVideo(this.$route.params.id).then(res => {
+        this.videoUrl = res.data[0].url
       })
     },
     // 国家列表
@@ -1510,6 +1527,14 @@ export default {
   }
   .tools {
     float: right;
+  }
+  .choose {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+  }
+  .info {
+    margin-top: 10px;
   }
   .group-status-text,
   .weight-text {

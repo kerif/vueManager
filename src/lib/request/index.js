@@ -4331,3 +4331,8 @@ exports.orderRefundExport = params => {
 exports.withdrawCount = () => {
   return $form.get('agents/withdraw-counts')
 }
+
+// 视频
+exports.packageVideo = id => {
+  return $form.get(`orders/${id}/videos`)
+}
