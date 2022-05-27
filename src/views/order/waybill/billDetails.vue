@@ -983,6 +983,13 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('清关编码')" class="label-sty">
+              <el-input class="input-sty" v-model="address.clearance_code"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer">
         <el-button @click="dialogInfo = false">{{ $t('取消') }}</el-button>
@@ -1440,7 +1447,7 @@ export default {
           city: this.address.city,
           postcode: this.address.postcode,
           address: this.address.address,
-          clearance_code: this.clearance_code,
+          clearance_code: this.address.clearance_code,
           wechat_id: this.address.wechat_id,
           country_id: this.countryList[0],
           area_id: this.countryList[1] || '',
