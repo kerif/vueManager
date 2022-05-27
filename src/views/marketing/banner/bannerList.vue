@@ -208,6 +208,7 @@ export default {
     },
     typeRowUpdate() {
       let params = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
+      this.vipGroupList = []
       this.$request.updateSort(params).then(res => {
         if (res.ret) {
           this.$notify({
