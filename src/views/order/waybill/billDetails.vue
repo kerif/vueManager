@@ -669,6 +669,10 @@
                     {{ $t('仓库备注') }}
                     {{ form.remark }}
                   </div>
+                  <div>
+                    {{ $t('打包视频') }}
+                    {{ form.videos[0] ? form.videos[0].name : '' }}
+                  </div>
                 </el-col>
               </el-row>
             </div>

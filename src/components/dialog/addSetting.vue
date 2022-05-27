@@ -188,6 +188,7 @@ export default {
       })
     },
     getPayLang() {
+      console.log(this.id)
       this.$request.getPayLang(this.id).then(res => {
         if (res.ret) {
           this.ruleForm.payment_setting_connection = res.data
@@ -234,9 +235,9 @@ export default {
           title: this.$t('新增'),
           id: this.id
         },
-        () => {
-          this.getList()
-          // this.ruleForm.payment_setting_connection.push(data)
+        data => {
+          // this.getList()
+          this.ruleForm.payment_setting_connection.push(data)
         }
       )
     },
@@ -411,6 +412,7 @@ export default {
       }
     },
     clear() {
+      this.state = ''
       this.ruleForm.name = ''
       this.ruleForm.payment_setting_connection = []
       this.ruleForm.remark = ''
@@ -429,6 +431,7 @@ export default {
       this.getLanguageList()
       console.log(this.state, 'this.state')
       if (this.state === 'edit') {
+        console.log(this.id)
         this.getList()
       }
     }
