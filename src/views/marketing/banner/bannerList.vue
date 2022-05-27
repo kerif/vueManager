@@ -1,10 +1,12 @@
 <template>
   <div class="banner-container">
-    <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
-    </div>
-    <div class="select-box">
-      <add-btn @click.native="addBanner">{{ $t('添加广告图') }}</add-btn>
+    <div style="display: flex; justify-content: flex-end">
+      <div>
+        <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+      </div>
+      <div class="select-box">
+        <add-btn @click.native="addBanner">{{ $t('添加广告图') }}</add-btn>
+      </div>
     </div>
     <div>
       <el-table
@@ -271,6 +273,7 @@ export default {
 .banner-container {
   .select-box {
     overflow: hidden;
+    margin-left: 20px;
   }
   .country-box {
     overflow: hidden;
@@ -288,7 +291,6 @@ export default {
   }
   .search-group .pull-right {
     margin-bottom: 5px;
-    width: 25% !important;
   }
 }
 </style>

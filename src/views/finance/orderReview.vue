@@ -457,7 +457,10 @@ export default {
     verifyExport() {
       let params = {
         status: this.status,
-        keyword: this.page_params.keyword
+        keyword: this.page_params.keyword,
+        payment_type: this.payment_type,
+        begin_date: this.begin_date,
+        end_date: this.end_date
       }
       if (this.activeName === '0') {
         this.$request.orderPaymentExport(params).then(res => {
