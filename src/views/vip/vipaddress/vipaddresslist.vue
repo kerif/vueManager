@@ -1,12 +1,28 @@
 <template>
   <div class="vip-address-container">
-    <el-button class="btn-main" @click="vipAddAddress">{{ $t('新增地址') }}</el-button>
-    <el-button class="btn-green" @click="batchImportAddress">{{ $t('批量导入地址') }}</el-button>
-    <el-button class="btn-light-red" @click="uploadList" size="mini">{{
-      $t('导出清单')
-    }}</el-button>
-    <div class="searchGroup">
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+    <div style="display: flex; justify-content: space-between">
+      <div>
+        <el-button class="btn-main" @click="vipAddAddress">{{ $t('新增地址') }}</el-button>
+        <el-button class="btn-green" @click="batchImportAddress">{{
+          $t('批量导入地址')
+        }}</el-button>
+        <el-button class="btn-light-red" @click="uploadList" size="mini">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
+      <div>
+        <el-select v-model="sort_code" @change="changeVal" :placeholder="$t('分拣码')" clearable>
+          <el-option
+            v-for="item in sortCode"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <div class="searchGroup">
+          <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+        </div>
+      </div>
     </div>
     <div class="clear"></div>
     <el-table
@@ -49,7 +65,18 @@ export default {
   data() {
     return {
       addressList: [],
-      tableLoading: false
+      tableLoading: false,
+      sort_code: '',
+      sortCode: [
+        {
+          id: 0,
+          name: this.$t('未设置')
+        },
+        {
+          id: 1,
+          name: this.$t('已设置')
+        }
+      ]
     }
   },
   components: {
@@ -70,7 +97,8 @@ export default {
         .getUserAddress({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          sort_code: this.sort_code
         })
         .then(res => {
           this.tableLoading = false
@@ -128,13 +156,16 @@ export default {
     },
     batchImportAddress() {
       this.$router.push({ name: 'vipBatchImport' })
+    },
+    changeVal() {
+      this.page_params.handleQueryChange('sort_code', this.sort_code)
+      this.getList()
     }
   }
 }
 </script>
 <style scoped>
 .searchGroup {
-  width: 21.5%;
   float: right;
 }
 .clear {
