@@ -4336,3 +4336,23 @@ exports.withdrawCount = () => {
 exports.packageVideo = id => {
   return $form.get(`orders/${id}/videos`)
 }
+
+// 商品分类 批量删除
+exports.batchDeleteCategory = params => {
+  return $form.put('package-categories/batch-delete', params)
+}
+
+// 客户组 模板导出
+exports.exportGroupTmp = () => {
+  return $form.get('users/user-to-group-template')
+}
+
+// 客户组 模板
+exports.importGroupTmp = file => {
+  return $file.post('users/template-update-group', file)
+}
+
+// 客户组 批量修改客户组
+exports.batchEditGroup = params => {
+  return $form.put('users/batch-update-group', params)
+}

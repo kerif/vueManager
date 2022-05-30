@@ -655,6 +655,12 @@
                     {{ $t('发货单单号') }}
                     {{ form.logistics_sn && form.shipment && form.shipment.sn }}
                   </div>
+                  <div class="info">
+                    <span>{{ $t('打包视频') }}</span>
+                    <div style="margin-left: 100px" v-if="videoUrl">
+                      <video :src="videoUrl" controls autoplay width="80%"></video>
+                    </div>
+                  </div>
                 </el-col>
                 <el-col :span="10" :offset="1">
                   <div class="info">
@@ -668,12 +674,6 @@
                   <div class="info">
                     {{ $t('仓库备注') }}
                     {{ form.remark }}
-                  </div>
-                  <div class="info">
-                    {{ $t('打包视频') }}
-                    <span @click="goVideo" class="choose">
-                      {{ videoUrl }}
-                    </span>
                   </div>
                 </el-col>
               </el-row>
@@ -1092,13 +1092,11 @@ export default {
         this.getVideo()
       }
     },
-    goVideo() {
-      let url = this.videoUrl
-      window.open(url)
-    },
     getVideo() {
       this.$request.packageVideo(this.$route.params.id).then(res => {
-        this.videoUrl = res.data[0].url
+        if (res.data.length) {
+          this.videoUrl = res.data[0].url
+        }
       })
     },
     // 国家列表
@@ -1534,7 +1532,7 @@ export default {
     text-decoration: underline;
   }
   .info {
-    margin-top: 10px;
+    margin-top: 20px;
   }
   .group-status-text,
   .weight-text {

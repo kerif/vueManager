@@ -67,6 +67,16 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item prop="order_type">
+            <el-select :placeholder="$t('订单类型')" v-model="searchFieldData.order_type">
+              <el-option
+                v-for="item in orderTypeData"
+                :key="item.id"
+                :value="item.id"
+                :label="item.name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="6" :xl="4">
           <!--第三列开始-->
@@ -324,6 +334,24 @@ export default {
         {
           id: 131,
           name: this.$t('待提交')
+        }
+      ],
+      orderTypeData: [
+        {
+          id: 0,
+          name: this.$t('全部')
+        },
+        {
+          id: 1,
+          name: this.$t('普通订单')
+        },
+        {
+          id: 2,
+          name: this.$t('拼团单')
+        },
+        {
+          id: 3,
+          name: this.$t('同行货订单')
         }
       ],
       countryProps: {

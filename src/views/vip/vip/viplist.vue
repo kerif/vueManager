@@ -141,13 +141,25 @@
           <el-button class="btn-purple" size="small" @click="goServies('services')">{{
             $t('分配客服')
           }}</el-button>
-          <el-button class="btn-purple" size="small" @click="batchAllocate">...</el-button>
+          <el-button class="btn-purple" size="small" @click="batchAllocate('services')"
+            >...</el-button
+          >
         </el-button-group>
         <el-button-group style="margin: 0 0 0 10px">
           <el-button class="btn-deep-blue" size="small" @click="goServies('sale')">{{
             $t('分配销售')
           }}</el-button>
-          <el-button class="btn-deep-blue" size="small" @click="batchAllocate">...</el-button>
+          <el-button class="btn-deep-blue" size="small" @click="batchAllocate('sale')"
+            >...</el-button
+          >
+        </el-button-group>
+        <el-button-group style="margin: 0 0 0 10px">
+          <el-button class="btn-light-green" size="small" @click="goServies('group')">{{
+            $t('客户组')
+          }}</el-button>
+          <el-button class="btn-light-green" size="small" @click="batchAllocate('group')"
+            >...</el-button
+          >
         </el-button-group>
         <div class="import-list">
           <el-button size="small" type="success" plain @click="uploadList">{{
@@ -356,16 +368,35 @@
     </el-dialog>
     <!-- 分配客服 -->
     <el-dialog
-      :title="staffStatus === 'services' ? $t('分配客服') : $t('分配销售')"
+      :title="
+        staffStatus === 'services'
+          ? $t('分配客服')
+          : staffStatus === 'sale'
+          ? $t('分配销售')
+          : $t('分配客户组')
+      "
       :visible.sync="dialogStaff"
       width="30%"
     >
-      <span>{{ $t('选择员工') }}</span
-      >&nbsp;&nbsp;
-      <el-select v-model="saleId" :placeholder="$t('请选择')">
-        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-        </el-option>
-      </el-select>
+      <div v-if="staffStatus === 'group'">
+        <span>{{ $t('选择客户组') }}</span> &nbsp;&nbsp;
+        <el-select v-model="groupId" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in groupList"
+            :key="item.id"
+            :label="item.name_cn"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </div>
+      <div v-else>
+        <span>{{ $t('选择员工') }}</span
+        >&nbsp;&nbsp;
+        <el-select v-model="saleId" :placeholder="$t('请选择')">
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </div>
       <div slot="footer">
         <el-button @click="dialogStaff = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="staffConfirm">{{ $t('确定') }}</el-button>
@@ -444,6 +475,7 @@ export default {
       target: '',
       options: [],
       saleId: '',
+      groupId: '',
       dialogStaff: false,
       dialogPwd: false,
       pwdId: '',
@@ -631,10 +663,11 @@ export default {
         confirm_password: ''
       }
     },
-    batchAllocate() {
+    batchAllocate(status) {
       dialog(
         {
-          type: 'batchAllocate'
+          type: 'batchAllocate',
+          status
         },
         () => {
           this.getList()
@@ -733,7 +766,7 @@ export default {
               })
             }
           })
-      } else {
+      } else if (this.staffStatus === 'sale') {
         this.$request
           .assignSale({
             sale_id: this.saleId,
@@ -755,6 +788,23 @@ export default {
               })
             }
           })
+      } else {
+        this.$request.batchEditGroup({ group_id: this.groupId }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.dialogStaff = false
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       }
     },
     goServies(status) {

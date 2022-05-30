@@ -309,6 +309,7 @@
             v-model="lineIds"
             multiple
             filterable
+            popper-class="selectLine"
             class="country-select"
             :placeholder="$t('请选择')"
           >
@@ -852,6 +853,12 @@ export default {
   }
   .pick {
     margin-left: 15px;
+  }
+}
+.selectLine {
+  .el-select-dropdown__item {
+    width: 100%;
+    overflow: auto;
   }
 }
 </style>

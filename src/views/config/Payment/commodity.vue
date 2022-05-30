@@ -2,6 +2,7 @@
   <div>
     <div class="select-box">
       <add-btn @click.native="addClassify">{{ $t('添加商品分类') }}</add-btn>
+      <el-button class="btn-light-red" @click="batchDelCategory()">{{ $t('批量删除') }}</el-button>
     </div>
     <el-table
       :data="CategoriesList"
@@ -10,9 +11,11 @@
       border
       class="data-list"
       @expand-change="onExpand"
+      @selection-change="handleSelectionChange"
       v-loading="tableLoading"
       height="calc(100vh - 360px)"
     >
+      <el-table-column type="selection" width="50"></el-table-column>
       <!-- 二级分类列表 -->
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -167,6 +170,7 @@ export default {
     return {
       tableLoading: false,
       languageData: [],
+      selection: [],
       page_params: {
         type: ''
       },
@@ -196,6 +200,30 @@ export default {
   methods: {
     getList() {
       this.getCategories()
+    },
+    handleSelectionChange(select) {
+      this.selection = select.map(item => item.id)
+    },
+    batchDelCategory() {
+      if (!this.selection || !this.selection.length) {
+        this.$message.error(this.$t('请选择'))
+      }
+      this.$request.batchDeleteCategory({ ids: this.selection }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getCategories()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 获取支持语言
     getLanguageList() {

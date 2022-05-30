@@ -38,7 +38,7 @@ export default {
     },
     getLanguage() {
       this.$request.getString().then(res => {
-        this.stringData = res.data.filter(item => item.language_code !== 'zh_CN')
+        this.stringData = res.data
         if (this.id) {
           this.getDetail()
         }

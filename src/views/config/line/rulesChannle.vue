@@ -60,6 +60,7 @@
             <el-select
               :disabled="!item.state"
               v-model="item.region_ids"
+              style="width: 30%"
               multiple
               :placeholder="$t('请选择')"
               clearable
@@ -77,6 +78,7 @@
             <el-select
               :disabled="!item.state"
               v-model="item.is_and"
+              style="width: 30%"
               :placeholder="$t('请选择')"
               clearable
             >

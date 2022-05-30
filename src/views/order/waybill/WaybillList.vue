@@ -1260,7 +1260,8 @@ export default {
         country_id: '',
         station: '',
         keyword: '',
-        status: ''
+        status: '',
+        order_type: ''
       },
       hasFilterCondition: false,
       page_params: {

@@ -1,7 +1,13 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="$t('批量分配客服/销售')"
+    :title="
+      status === 'services'
+        ? $t('批量分配客服')
+        : status === 'sale'
+        ? $t('批量分配销售')
+        : $t('批量分配客户组')
+    "
     class="dialog-batchAllocate"
     @close="clear"
   >
@@ -59,7 +65,8 @@ export default {
     return {
       fileList: [],
       url: '',
-      files: null
+      files: null,
+      status: ''
     }
   },
   created() {},
@@ -106,43 +113,83 @@ export default {
       })
     },
     downTemplate() {
-      this.$request.customerTmp().then(res => {
-        if (res.ret) {
-          this.url = res.data.url
-          window.open(this.url)
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      if (this.status === 'group') {
+        this.$request.exportGroupTmp().then(res => {
+          if (res.ret) {
+            this.url = res.data.url
+            window.open(this.url)
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$request.customerTmp().then(res => {
+          if (res.ret) {
+            this.url = res.data.url
+            window.open(this.url)
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     },
     submit() {
       let file = this.files
-      this.$request.batchAllocate(file).then(res => {
-        if (res.ret) {
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-          this.show = false
-          this.success()
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      if (this.status === 'group') {
+        this.$request.importGroupTmp(file).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$request.batchAllocate(file).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.show = false
+            this.success()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     },
     clear() {
       this.fileList = []
