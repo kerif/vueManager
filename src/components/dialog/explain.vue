@@ -34,11 +34,14 @@ export default {
           this.illustrate = res.data.map(item => {
             let name = item.name
             let code = item.language_code
+            let id = item.id
             return {
+              id,
               name,
               code
             }
           })
+          this.illustrate.sort(this.objectSort('id'))
           this.illustrate.forEach(item => {
             this.$set(item, item.code, '')
           })
@@ -56,6 +59,11 @@ export default {
           })
         }
       })
+    },
+    objectSort(id) {
+      return (obj1, obj2) => {
+        return obj1[id] - obj2[id]
+      }
     },
     submit() {
       if (this.type === 'getGradeTips') {
