@@ -274,6 +274,13 @@
           key="qty"
           v-if="['1', '2'].includes(activeName)"
         ></el-table-column>
+        <el-table-column :label="$t('体积')" v-if="['2'].includes(activeName)">
+          <template slot-scope="scope">
+            <span>{{
+              (scope.row.length * scope.row.width * scope.row.height) / 1000000 / (1 * 1 * 1)
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           :label="$t('商品分类')"
           prop="categories"
