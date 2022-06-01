@@ -1670,6 +1670,7 @@ export default {
           begin_date: searchData.date ? searchData.date[0] : '',
           end_date: searchData.date ? searchData.date[1] : '',
           order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
+          order_type: searchData.order_type === 0 ? '' : searchData.order_type,
           country_id:
             searchData.countryArr.length > 1
               ? searchData.countryArr[0]
@@ -1693,6 +1694,7 @@ export default {
         begin_date: searchData.date ? searchData.date[0] : '',
         end_date: searchData.date ? searchData.date[1] : '',
         order_sn: searchData.order_sn.split(/[(\r\n)\r\n]+/),
+        order_type: searchData.order_type === 0 ? '' : searchData.order_type,
         country_id:
           searchData.countryArr.length > 1
             ? searchData.countryArr[0]

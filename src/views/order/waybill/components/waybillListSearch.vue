@@ -68,7 +68,7 @@
             </el-select>
           </el-form-item>
           <el-form-item prop="order_type">
-            <el-select :placeholder="$t('订单类型')" v-model="searchFieldData.order_type">
+            <el-select :placeholder="$t('订单类型')" clearable v-model="searchFieldData.order_type">
               <el-option
                 v-for="item in orderTypeData"
                 :key="item.id"
@@ -428,6 +428,7 @@ export default {
       this.searchFieldData.end = ''
       this.searchFieldData.agent = ''
       this.searchFieldData.status = ''
+      this.searchFieldData.order_type = ''
     },
     handleSel() {
       if (this.$refs['getCountryName'].getCheckedNodes()[0]) {
