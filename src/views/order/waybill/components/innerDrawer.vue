@@ -222,6 +222,7 @@ export default {
           { id: 'line_extra_remark', name: this.$t('线路额外信息') },
           { id: 'order_sn', name: this.$t('订单号') },
           { id: 'agent_name', name: this.$t('所属代理') },
+          { id: 'user_customer', name: this.$t('所属客服') },
           { id: 'clearance_code', name: this.$t('清关编码') },
           { id: 'personal_code', name: this.$t('个人通关码') }
         ]
@@ -428,6 +429,7 @@ export default {
           { id: 'line_extra_remark', name: this.$t('线路额外信息') },
           { id: 'order_sn', name: this.$t('订单号') },
           { id: 'agent_name', name: this.$t('所属代理') },
+          { id: 'user_customer', name: this.$t('所属客服') },
           { id: 'clearance_code', name: this.$t('清关编码') },
           { id: 'personal_code', name: this.$t('个人通关码') }
         ]

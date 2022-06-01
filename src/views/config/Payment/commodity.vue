@@ -19,7 +19,7 @@
       <!-- 二级分类列表 -->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table :data="props.row.orders" @selection-change="selectionChange">
+          <el-table :data="props.row.orders" @selection-change="handleSelection">
             <el-table-column type="selection"></el-table-column>
             <!-- 二级分类名称 -->
             <el-table-column :label="$t('二级分类名称')" prop="name"></el-table-column>
@@ -210,16 +210,17 @@ export default {
       this.deleteNum = sel.map(item => item.id)
     },
     batchDelCategory() {
-      if (this.selectNum.length === 0) {
+      if (this.selectNum.length === 0 && this.deleteNum.length === 0) {
         return this.$message.error(this.$t('请选择'))
       }
+      const num = this.selectNum.concat(this.deleteNum)
       this.$confirm(this.$t('您是否确认批量删除?'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       })
         .then(() => {
-          this.$request.batchDeleteCategory({ ids: this.selectNum }).then(res => {
+          this.$request.batchDeleteCategory({ ids: num }).then(res => {
             if (res.ret) {
               this.$notify({
                 type: 'success',
@@ -227,6 +228,8 @@ export default {
                 message: res.msg
               })
               this.getCategories()
+              this.deleteNum = []
+              this.selectNum = []
             } else {
               this.$notify({
                 title: this.$t('操作失败'),
