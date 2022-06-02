@@ -272,6 +272,7 @@ export default {
       this.ruleForm.address = ''
       this.ruleForm.province = ''
       this.ruleForm.district = ''
+      this.ruleForm.email = ''
     }
   }
 }
