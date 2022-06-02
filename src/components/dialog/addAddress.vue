@@ -34,6 +34,24 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
+          <el-form-item :label="$t('省份')">
+            <el-input
+              v-model="ruleForm.province"
+              :placeholder="$t('请输入省份')"
+              class="inner-textarea"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item :label="$t('区')">
+            <el-input
+              v-model="ruleForm.district"
+              :placeholder="$t('请输入区')"
+              class="inner-textarea"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
           <el-form-item :label="$t('收件电话')">
             <el-input
               v-model="ruleForm.phone"
@@ -109,6 +127,15 @@
             ></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="10">
+          <el-form-item :label="$t('邮箱')">
+            <el-input
+              v-model="ruleForm.email"
+              class="inner-textarea"
+              :placeholder="$t('请输入邮箱')"
+            ></el-input>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
     <div slot="footer">
@@ -136,7 +163,10 @@ export default {
         city: '',
         postcode: '',
         street: '',
-        address: ''
+        address: '',
+        province: '',
+        district: '',
+        email: ''
       },
       rules: {
         country_id: [{ required: true, message: this.$t('请选择国家'), trigger: 'blur' }],
@@ -240,6 +270,8 @@ export default {
       this.ruleForm.postcode = ''
       this.ruleForm.street = ''
       this.ruleForm.address = ''
+      this.ruleForm.province = ''
+      this.ruleForm.district = ''
     }
   }
 }

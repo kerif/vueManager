@@ -25,7 +25,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="20" v-if="form.is_cn_address == 1">
+      <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item :label="$t('省份')">
             <el-input v-model="form.province"></el-input>
@@ -97,6 +97,13 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item :label="$t('邮箱')">
+            <el-input v-model="form.email"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -124,7 +131,8 @@ export default {
         wechat_id: '',
         clearance_code: '',
         id_card: '',
-        address_area: ''
+        address_area: '',
+        email: ''
       },
       supplierId: '',
       options: [],
@@ -162,6 +170,7 @@ export default {
           this.form.clearance_code = res.data.clearance_code
           this.form.id_card = res.data.id_card
           this.form.area = res.data.area
+          this.form.email = res.data.email
         }
       })
     },
