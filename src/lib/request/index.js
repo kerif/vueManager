@@ -3303,8 +3303,8 @@ exports.lineType = () => {
   return $form.get('orders/express-line-list')
 }
 // 订单列表 导出excel
-exports.uploadUserExcel = () => {
-  return $form.get('users/user-export')
+exports.uploadUserExcel = params => {
+  return $form.get('users/user-export', { params })
 }
 // 订单列表 获取订单统计数据
 exports.getCounts = params => {

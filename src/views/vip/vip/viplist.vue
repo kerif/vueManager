@@ -537,7 +537,9 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          user_group_id: this.page_params.group,
+          user_group_id: this.searchParams.user_group_id
+            ? this.searchParams.user_group_id
+            : this.page_params.group,
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
           max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
           begin_date: this.searchTime[0],
@@ -842,24 +844,36 @@ export default {
     },
     // 导出清单
     uploadList() {
-      this.$request.uploadUserExcel().then(res => {
-        if (res.ret) {
-          this.urlExcel = res.data.url
-          // window.location.href = this.urlExcel
-          window.open(this.urlExcel)
-          this.$notify({
-            title: this.$t('操作成功'),
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$notify({
-            title: this.$t('操作失败'),
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      this.$request
+        .uploadUserExcel({
+          ...this.searchParams,
+          keyword: this.page_params.keyword,
+          user_group_id: this.searchParams.user_group_id
+            ? this.searchParams.user_group_id
+            : this.page_params.group,
+          min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
+          max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
+          begin_date: this.searchTime[0],
+          end_date: this.searchTime[1]
+        })
+        .then(res => {
+          if (res.ret) {
+            this.urlExcel = res.data.url
+            // window.location.href = this.urlExcel
+            window.open(this.urlExcel)
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
     },
     invite(id) {
       dialog({ type: 'inviteList', state: 'invite', id })
