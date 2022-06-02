@@ -75,6 +75,9 @@
                   :label="item.label"
                 ></el-option>
               </el-select>
+              <el-button class="btn-light-red" @click="displayType" style="margin-left: 10px">{{
+                $t('类型说明')
+              }}</el-button>
             </el-form-item>
             <el-form-item :label="$t('收取方式')">
               <el-select v-model="form.is_forced">
@@ -130,6 +133,57 @@
           <el-button type="primary" @click="save">{{ $t('确定') }}</el-button>
         </span>
       </el-dialog>
+      <el-dialog :title="$t('类型说明')" :visible.sync="dialogInfo" width="70%" @close="onClose">
+        <div>
+          <h4>
+            {{ $t('运费比例') }} ：{{ $t('若设置值为') }}“10”，{{ $t('每票订单收取费用') }}={{
+              $t('运费')
+            }}*10%
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('整票固定费用') }}：{{ $t('若设置值为') }}“10”，{{ $t('每票订单收取费用') }}={{
+              localization.currency_unit
+            }}10
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('单箱固定费用（总箱数）') }}：{{ $t('若设置值为') }}“10”，{{
+              $t('每票订单收取费用')
+            }}={{ localization.currency_unit }}10*{{ $t('总箱数') }}
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('单位计费重量固定费用') }}：{{ $t('若设置值为') }}“10”，{{
+              $t('每票订单收取费用')
+            }}={{ localization.currency_unit }}10*{{ $t('计费重量') }}
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('单位实际重量固定费用') }}：{{ $t('若设置值为') }}“10”，{{
+              $t('每票订单收取费用')
+            }}={{ localization.currency_unit }}10*{{ $t('计费重量') }}
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('申报价值比例') }}：{{ $t('若设置值为') }}“10”，{{ $t('每票订单收取费用') }}={{
+              $t('申报价值')
+            }}*10%
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('单项固定费用（总箱数-1）') }}：{{ $t('若设置值为') }}“10”，{{
+              $t('每票订单收取费用')
+            }}={{ localization.currency_unit }}10*{{ $t('（总箱数-1）') }}
+          </h4>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -142,6 +196,7 @@ export default {
       detailsList: [],
       title: '',
       content: '',
+      dialogInfo: false,
       gridOptions: {
         columns: [
           {
@@ -443,6 +498,10 @@ export default {
       params.append(`file`, file)
       return this.$request.importServices(this.$route.params.id, params)
     },
+    displayType() {
+      this.dialogInfo = true
+    },
+    onClose() {},
     // 保存
     save() {
       let updateRecords = this.$refs.xTable.data
