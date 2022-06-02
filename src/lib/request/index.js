@@ -4356,3 +4356,8 @@ exports.importGroupTmp = file => {
 exports.batchEditGroup = params => {
   return $form.put('users/batch-update-group', params)
 }
+
+// 抵用券管理 导出优惠券
+exports.exportCoupon = params => {
+  return $form.post('coupons/export', params)
+}

@@ -35,9 +35,11 @@
           @search="goSearch"
         ></search-group>
       </div>
-      <!-- <div class="changeVou">
-        <el-button class="btn-main" style="margin-top: 5px">{{ $t('导出清单') }}</el-button>
-      </div> -->
+      <div class="changeVou">
+        <el-button class="btn-main" style="margin-top: 5px" @click="exportList">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
     </div>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -318,6 +320,31 @@ export default {
       })
     },
     shareClear() {},
+    exportList() {
+      this.$request
+        .exportCoupon({
+          status: this.status,
+          keyword: this.page_params.keyword,
+          type: this.type,
+          template_id: this.$route.query.type === '2' ? this.$route.query.id : ''
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
     // 下载二维码
     uploadCode() {
       window.open(`${this.$baseUrl.IMAGE_URL}${this.imgShare}`)
