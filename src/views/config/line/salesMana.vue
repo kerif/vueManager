@@ -62,7 +62,7 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('失效时间')" prop="expire_at" width="160"></el-table-column>
-        <el-table-column :label="$t('排序')" prop="index"></el-table-column>
+        <el-table-column :label="$t('优先级')" prop="index"></el-table-column>
         <!-- 是否启用 -->
         <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">

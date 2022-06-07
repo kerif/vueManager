@@ -17,7 +17,7 @@
         <el-input v-model="ruleForm.name" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('路线类型')">
-        <el-radio v-model="ruleForm.only_for_group" :label="0">
+        <!-- <el-radio v-model="ruleForm.only_for_group" :label="0">
           {{ $t('普通路线') }}
           <el-tooltip
             style="color: #74b34f"
@@ -37,7 +37,29 @@
             placement="top"
           >
             <span class="el-icon-question icon-info"></span> </el-tooltip
+        ></el-radio> -->
+        <el-radio v-model="ruleForm.lineType" :label="0">
+          {{ $t('普通路线') }}
+          <el-tooltip
+            style="color: #74b34f"
+            effect="dark"
+            :content="$t('常规下单与拼团下单都可选')"
+            placement="top"
+          >
+            <span class="el-icon-question icon-info"></span>
+          </el-tooltip>
+        </el-radio>
+        <el-radio v-model="ruleForm.lineType" :label="1">
+          {{ $t('仅拼团路线') }}
+          <el-tooltip
+            style="color: #74b34f"
+            effect="dark"
+            :content="$t('常规下单不可选该路线仅拼团可选用')"
+            placement="top"
+          >
+            <span class="el-icon-question icon-info"></span> </el-tooltip
         ></el-radio>
+        <el-radio v-model="ruleForm.lineType" :label="2">{{ $t('同行货路线') }}</el-radio>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -52,7 +74,9 @@ export default {
     return {
       ruleForm: {
         name: '',
-        only_for_group: 0
+        lineType: 0,
+        only_for_group: 0,
+        only_for_stg: 0
       },
       state: '',
       rules: {
@@ -80,6 +104,16 @@ export default {
         })
     },
     confirm(formName) {
+      if (this.ruleForm.lineType === 0) {
+        this.ruleForm.only_for_stg = 0
+        this.ruleForm.only_for_group = 0
+      } else if (this.ruleForm.lineType === 1) {
+        this.ruleForm.only_for_stg = 0
+        this.ruleForm.only_for_group = 1
+      } else if (this.ruleForm.lineType === 2) {
+        this.ruleForm.only_for_group = ''
+        this.ruleForm.only_for_stg = 1
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.state === 'new') {
@@ -127,6 +161,7 @@ export default {
     clear() {
       this.ruleForm.name = ''
       this.ruleForm.only_for_group = 0
+      // this.ruleForm.only_for_stg = 0
       this.ruleForm.language = ''
       this.state = ''
     },

@@ -139,7 +139,12 @@
               class="btn-deep-purple"
               v-if="['1'].includes(activeName)"
               @click="
-                addShipInfo(scope.row.id, scope.row.logistics_company_code, scope.row.logistics_sn)
+                addShipInfo(
+                  scope.row.id,
+                  scope.row.logistics_company_code,
+                  scope.row.logistics_sn,
+                  scope.row.warehouse_name
+                )
               "
               >{{ $t('确认发货') }}</el-button
             >
@@ -230,6 +235,11 @@ export default {
             this.getCounts()
           }
         })
+    },
+    initQuery() {
+      if (this.$route.query.activeName) {
+        console.log(this.$route.query.activeName)
+      }
     },
     getCounts() {
       this.$request
@@ -333,13 +343,14 @@ export default {
         }
       })
     },
-    addShipInfo(id, logistics_company_code, logistics_sn) {
+    addShipInfo(id, logistics_company_code, logistics_sn, warehouse_name) {
       dialog(
         {
           type: 'addShip',
           id,
           logistics_sn,
-          logistics_company_code
+          logistics_company_code,
+          warehouse_name
         },
         () => {
           this.getList()

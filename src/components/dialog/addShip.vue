@@ -43,14 +43,19 @@ export default {
         warehouse_id: ''
       },
       logistics_sn: '',
+      logistics_company_code: '',
+      warehouse_id: '',
       companyList: [],
       agentData: []
     }
   },
   methods: {
     init() {
+      console.log(this.logistics_company_code, 111)
       this.form.logistics_sn = this.logistics_sn
       this.form.logistics_company_code = this.logistics_company_code
+      this.form.warehouse_id = this.warehouse_id
+      this.form.warehouse_id = this.warehouse_name
       this.getCompany()
       this.getWarehouse()
     },
@@ -91,6 +96,7 @@ export default {
       this.id = ''
       this.form.logistics_company = ''
       this.form.logistics_sn = ''
+      this.form.warehouse_id = ''
     }
   }
 }

@@ -348,7 +348,7 @@ export default {
       this.$request.purchaseDetail(this.$route.params.id).then(res => {
         console.log(res)
         this.ruleForm = res.data
-        this.ids = res.data.package.id
+        this.ids = res.data.package ? res.data.package.id : ''
       })
     },
     checkImg(url) {
@@ -521,7 +521,10 @@ export default {
     addShipInfo() {
       dialog({
         type: 'addShip',
-        id: this.$route.params.id
+        id: this.$route.params.id,
+        logitics_company_code: this.ruleForm.logitics_company_code,
+        logistics_sn: this.ruleForm.logistics_sn,
+        warehouse_id: this.ruleForm.warehouse_id
       })
     }
   }

@@ -14,7 +14,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="3" :offset="1">
-          <el-form-item :label="$t('排序')">
+          <el-form-item :label="$t('优先级')">
             <el-input v-model="ruleForm.index"></el-input>
           </el-form-item>
         </el-col>

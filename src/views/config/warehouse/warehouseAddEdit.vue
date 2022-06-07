@@ -92,6 +92,16 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item :label="$t('是否同行货')">
+        <el-row>
+          <el-col :span="10">
+            <el-radio-group v-model="ruleForm.is_stg">
+              <el-radio :label="0">{{ $t('否') }}</el-radio>
+              <el-radio :label="1">{{ $t('是') }}</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item>
@@ -190,7 +200,8 @@ export default {
         auto_location: 0,
         free_store_days: 0,
         ignore_lon_lat: 1,
-        support_countries: []
+        support_countries: [],
+        is_stg: 0
       },
       all: [
         {

@@ -4361,3 +4361,8 @@ exports.batchEditGroup = params => {
 exports.exportCoupon = params => {
   return $form.post('coupons/export', params)
 }
+
+// 退回待处理
+exports.rollBack = id => {
+  return $form.put(`orders/${id}/rollback`)
+}

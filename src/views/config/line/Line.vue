@@ -25,10 +25,23 @@
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('路线')" prop="name"></el-table-column>
-        <el-table-column :label="$t('路线类型')" prop="only_for_group">
+        <el-table-column :label="$t('路线类型')" prop="only_for_group,only_for_stg">
           <template slot-scope="scope">
-            <span v-if="scope.row.only_for_group === 1">{{ $t('仅拼团路线') }}</span>
-            <span v-else>{{ $t('普通路线') }}</span>
+            <!-- <span v-if="scope.row.only_for_group === 1">{{ $t('仅拼团路线') }}</span>
+            <span v-else>{{ $t('普通路线') }}</span> -->
+            <span v-if="scope.row.only_for_group === 1 && scope.row.only_for_stg === 0">{{
+              $t('仅拼团路线')
+            }}</span>
+            <span v-if="scope.row.only_for_group === 0 && scope.row.only_for_stg === 0">{{
+              $t('普通路线')
+            }}</span>
+            <span
+              v-if="
+                scope.row.only_for_stg === 1 &&
+                (scope.row.only_for_group === 0 || scope.row.only_for_group === 1)
+              "
+              >{{ $t('同行货路线') }}</span
+            >
           </template>
         </el-table-column>
         <el-table-column :label="$t('渠道数量')" prop="express_lines_count"></el-table-column>
@@ -70,7 +83,15 @@
             }}</el-button>
             <el-button
               class="btn-blue"
-              @click="editLine(scope.row.id, scope.row.name, scope.row.only_for_group, 'edit')"
+              @click="
+                editLine(
+                  scope.row.id,
+                  scope.row.name,
+                  scope.row.only_for_group,
+                  'edit',
+                  scope.row.only_for_stg
+                )
+              "
               >{{ $t('编辑') }}</el-button
             >
             <el-button class="btn-deep-purple" @click="copyLine(scope.row.id, 'copy')">{{
@@ -122,6 +143,7 @@
             >
               <span class="el-icon-question icon-info"></span> </el-tooltip
           ></el-radio>
+          <el-radio v-model="copyData.lineType" :label="2">{{ $t('同行货线路') }}</el-radio>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -155,7 +177,9 @@ export default {
       copyId: '',
       copyData: {
         name: '',
-        only_for_group: 0
+        lineType: 0,
+        only_for_group: 0,
+        only_for_stg: 0
       },
       copyDialog: false,
       lineStatus: ''
@@ -252,22 +276,47 @@ export default {
       this.lineStatus = status
     },
     // 编辑
-    editLine(id, name, type, status) {
+    editLine(id, name, type, status, stgVal) {
+      console.log(type)
       this.copyId = id
       this.copyDialog = true
       this.copyData.name = name
-      this.copyData.only_for_group = type
+      if (stgVal === 1 && (type === 0 || type === 1)) {
+        this.copyData.lineType = stgVal
+      }
+      if (type === 0 || type === 1) {
+        this.copyData.lineType = type
+      }
+      // this.copyData.only_for_group = type
+      // this.copyData.only_for_stg = stgVal
+      // if (this.copyData.lineType === 0 || this.copyData.lineType === 1) {
+      //   this.copyData.only_for_group = type
+      // }
+      // if (this.copyData.lineType === 2) {
+      //   this.copyData.only_for_stg = stgVal
+      // }
       this.lineStatus = status
     },
     clear() {
       this.lineStatus = ''
       this.copyId = ''
       this.copyData.name = ''
+      this.copyData.lineType = 0
     },
     // 确定复制
     confirmCopy() {
       if (!this.copyData.name) {
         return this.$message.error(this.$t('请输入新线路名称'))
+      }
+      if (this.copyData.lineType === 0) {
+        this.copyData.only_for_stg = 0
+        this.copyData.only_for_group = 0
+      } else if (this.copyData.lineType === 1) {
+        this.copyData.only_for_stg = 0
+        this.copyData.only_for_group = 1
+      } else if (this.copyData.lineType === 2) {
+        this.copyData.only_for_group = ''
+        this.copyData.only_for_stg = 1
       }
       if (this.lineStatus === 'edit') {
         this.$request.editLineGroup(this.copyId, { ...this.copyData }).then(res => {

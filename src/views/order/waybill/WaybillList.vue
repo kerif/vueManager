@@ -485,9 +485,17 @@
                 >
                   {{ $t('取消') }}
                 </el-dropdown-item>
-                <el-button v-if="activeName === '19'" @click.native="checkInvalid(scope.row.id)">
+                <el-dropdown-item
+                  v-if="activeName === '19'"
+                  @click.native="checkInvalid(scope.row.id)"
+                >
                   {{ $t('日志') }}
-                </el-button>
+                </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="activeName === '2'"
+                  @click.native="returnBefore(scope.row.id)"
+                  >{{ $t('退回待处理') }}</el-dropdown-item
+                >
               </el-dropdown-menu>
             </el-dropdown>
           </template>
@@ -2596,6 +2604,29 @@ export default {
         return this.$message.error(this.$t('请选择'))
       }
       this.showHandExcept = true
+    },
+    returnBefore(id) {
+      this.$confirm(this.$t('您真的要退回待处理吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.rollBack(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      })
     },
     batchNotify() {
       if (!this.selectIDs || !this.selectIDs.length) {
