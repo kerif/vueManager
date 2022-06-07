@@ -122,7 +122,7 @@
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
         <el-form-item :label="$t('路线类型')">
-          <el-radio v-model="copyData.only_for_group" :label="0">
+          <el-radio v-model="copyData.lineType" :label="0">
             {{ $t('普通路线') }}
             <el-tooltip
               style="color: #74b34f"
@@ -133,7 +133,7 @@
               <span class="el-icon-question icon-info"></span>
             </el-tooltip>
           </el-radio>
-          <el-radio v-model="copyData.only_for_group" :label="1">
+          <el-radio v-model="copyData.lineType" :label="1">
             {{ $t('仅拼团路线') }}
             <el-tooltip
               style="color: #74b34f"
@@ -281,10 +281,10 @@ export default {
       this.copyId = id
       this.copyDialog = true
       this.copyData.name = name
-      if (stgVal === 1 && (type === 0 || type === 1)) {
-        this.copyData.lineType = stgVal
+      if (stgVal === 1) {
+        this.copyData.lineType = 2
       }
-      if (type === 0 || type === 1) {
+      if (stgVal === 0) {
         this.copyData.lineType = type
       }
       // this.copyData.only_for_group = type

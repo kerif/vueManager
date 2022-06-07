@@ -4366,3 +4366,23 @@ exports.exportCoupon = params => {
 exports.rollBack = id => {
   return $form.put(`orders/${id}/rollback`)
 }
+
+// 获取初始化信息
+exports.getInitInfo = () => {
+  return $form.get('in-out-rule/growth-value-invite-config/init')
+}
+
+// 获取详情
+exports.showGrowth = () => {
+  return $form.get('in-out-rule/growth-value-invite-config/show')
+}
+
+// 创建
+exports.createGrowth = params => {
+  return $form.post('in-out-rule/growth-value-invite-config', params)
+}
+
+// 更新
+exports.updateGrowth = (id, params) => {
+  return $form.put(`in-out-rule/growth-value-invite-config/${id}`, params)
+}

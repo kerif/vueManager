@@ -657,8 +657,8 @@
                   </div>
                   <div class="info">
                     <span>{{ $t('打包视频') }}</span>
-                    <div style="margin-left: 100px" v-if="videoUrl">
-                      <video :src="videoUrl" controls autoplay width="80%"></video>
+                    <div style="margin-left: 100px" v-for="item in videoUrl" :key="item.id">
+                      <video :src="item.url" controls autoplay width="80%"></video>
                     </div>
                   </div>
                 </el-col>
@@ -1069,7 +1069,7 @@ export default {
       options: [],
       countryList: [],
       declare: {},
-      videoUrl: ''
+      videoUrl: []
     }
   },
   created() {
@@ -1095,7 +1095,7 @@ export default {
     getVideo() {
       this.$request.packageVideo(this.$route.params.id).then(res => {
         if (res.data.length) {
-          this.videoUrl = res.data[0].url
+          this.videoUrl = res.data
         }
       })
     },
