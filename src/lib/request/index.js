@@ -4383,6 +4383,6 @@ exports.createGrowth = params => {
 }
 
 // 更新
-exports.updateGrowth = (id, params) => {
-  return $form.put(`in-out-rule/growth-value-invite-config/${id}`, params)
+exports.updateGrowth = params => {
+  return $form.put(`in-out-rule/growth-value-invite-config`, params)
 }

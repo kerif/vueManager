@@ -149,6 +149,8 @@ import availableCustom from './availableCustom.vue'
 import addAddress from './addAddress.vue'
 import batchAdd from './batchAdd.vue'
 import batchCustomConfig from './batchCustomConfig.vue'
+import cumulativeGrowth from './cumulativeGrowth.vue'
+import growthExplain from './growthExplain.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -297,6 +299,9 @@ const availableCustomController = Vue.extend(availableCustom)
 const addAddressController = Vue.extend(addAddress)
 const batchAddController = Vue.extend(batchAdd)
 const batchCustomConfigController = Vue.extend(batchCustomConfig)
+const cumulativeGrowthController = Vue.extend(cumulativeGrowth)
+const growthExplainController = Vue.extend(growthExplain)
+
 const mixin = {
   data() {
     return {
@@ -529,6 +534,20 @@ function initInstance(type) {
     // 批量自定义配置
     case 'batchCustomConfig':
       instance = new batchCustomConfigController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 邀请新用户积累成长值
+    case 'cumulativeGrowth':
+      instance = new cumulativeGrowthController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 规则说明
+    case 'growthExplain':
+      instance = new growthExplainController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

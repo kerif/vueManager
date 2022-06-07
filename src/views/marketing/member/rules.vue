@@ -117,6 +117,15 @@ export default {
             this.getInOutRule()
           }
         )
+      } else if (code === 'GROWTH_INVITE') {
+        dialog(
+          {
+            type: 'cumulativeGrowth'
+          },
+          () => {
+            this.getInOutRule()
+          }
+        )
       }
     }
   }

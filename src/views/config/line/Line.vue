@@ -277,7 +277,6 @@ export default {
     },
     // 编辑
     editLine(id, name, type, status, stgVal) {
-      console.log(type)
       this.copyId = id
       this.copyDialog = true
       this.copyData.name = name
@@ -289,12 +288,6 @@ export default {
       }
       // this.copyData.only_for_group = type
       // this.copyData.only_for_stg = stgVal
-      // if (this.copyData.lineType === 0 || this.copyData.lineType === 1) {
-      //   this.copyData.only_for_group = type
-      // }
-      // if (this.copyData.lineType === 2) {
-      //   this.copyData.only_for_stg = stgVal
-      // }
       this.lineStatus = status
     },
     clear() {
