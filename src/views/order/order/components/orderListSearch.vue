@@ -70,6 +70,7 @@
               v-model="searchFieldData.code"
             ></el-input>
           </el-form-item>
+          <!-- <el-form-item :label="$t('会员等级')"> </el-form-item> -->
         </el-col>
         <el-col :span="7" :xl="6">
           <!--包裹号搜索-->

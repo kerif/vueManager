@@ -12,6 +12,7 @@
       <el-table-column :label="$t('投放对象')" prop="user_id"></el-table-column>
       <!-- 使用时间 -->
       <el-table-column :label="$t('使用时间')" prop="used_at"></el-table-column>
+      <el-table-column :label="$t('状态')" prop="status"></el-table-column>
       <!-- 订单编码 -->
       <el-table-column :label="$t('订单编码')" prop="order_number"></el-table-column>
       <!-- 订单金额 -->

@@ -4386,3 +4386,8 @@ exports.createGrowth = params => {
 exports.updateGrowth = params => {
   return $form.put(`in-out-rule/growth-value-invite-config`, params)
 }
+
+// 自提点排序
+exports.sortPoint = params => {
+  return $form.put('self-pickup-stations/sort-index', params)
+}

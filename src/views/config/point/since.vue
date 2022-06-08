@@ -12,18 +12,29 @@
         </el-select>
       </div>
       <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
+      <div class="sort-sty">
+        *{{ $t('拖拽行可以进行排序') }}
+        <el-button @click="rowUpdate" class="btn-deep-purple save-sort">{{
+          $t('保存排序结果')
+        }}</el-button>
+      </div>
     </div>
     <div v-if="status === 1" style="height: calc(100vh - 270px)">
       <el-table
         :data="logisticsList"
         stripe
         border
-        class="data-list"
+        class="data-list positions-type"
         v-loading="tableLoading"
         height="calc(100vh - 270px)"
         ref="table"
         @selection-change="selectionChange"
       >
+        <el-table-column width="50" align="center">
+          <template>
+            <i class="el-icon-sort icon-fonts"></i>
+          </template>
+        </el-table-column>
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('自提点名称')" prop="name"></el-table-column>
         <el-table-column :label="$t('自提点编号')" prop="code"></el-table-column>
@@ -154,6 +165,7 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 // import dialog from '@/components/dialog'
+import Sortable from 'sortablejs'
 import { pagination } from '@/mixin'
 export default {
   components: {
@@ -177,6 +189,7 @@ export default {
       lineName: '',
       status: 1,
       lineDialog: false,
+      typeSendData: [],
       statusList: [
         {
           id: 1,
@@ -210,9 +223,11 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.logisticsList = res.data
+            this.typeSendData = [...res.data]
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
             this.$nextTick(() => {
+              this.typeRowDrop()
               this.$refs.table.doLayout()
             })
           } else {
@@ -223,6 +238,36 @@ export default {
             })
           }
         })
+    },
+    typeRowDrop() {
+      const tbody = document.querySelector('.positions-type tbody')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          if (oldIndex === newIndex) return false
+          console.log(oldIndex, newIndex)
+          const oldItem = this.typeSendData.splice(oldIndex, 1)[0]
+          this.typeSendData.splice(newIndex, 0, oldItem)
+        }
+      })
+    },
+    rowUpdate() {
+      const ids = this.typeSendData.map(({ id }, index) => ({ id, index }))
+      this.logisticsList = []
+      this.$request.sortPoint(ids).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     // 修改开关
     changeTransfer(event, enabled, id) {
