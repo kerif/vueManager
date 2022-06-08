@@ -72,6 +72,7 @@
                 ? $t('客户编号')
                 : $t('团长')
             }}：<span>{{ form.user_id }}---</span><span>{{ form.user_name }}</span>
+            <!-- <span>{{ $t('会员等级') }}: --- {{ form.user_member_level }}</span> -->
             <span v-if="form.group_leader_id" class="group-status-text">
               拼团状态: {{ form.group_status_name }}</span
             >

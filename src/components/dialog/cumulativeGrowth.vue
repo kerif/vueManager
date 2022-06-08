@@ -3,11 +3,11 @@
     <el-form :model="form">
       <h3>{{ $t('新用户注册') }}:</h3>
       <el-form-item :label="$t('每邀请一个新用户【注册】获得成长值:')">
-        <el-input v-model="form.register_value" style="width: 35%"></el-input>
+        <el-input v-model="form.register_value" @input="changeVal" style="width: 35%"></el-input>
       </el-form-item>
       <h3>{{ $t('新用户下单') }}:</h3>
       <el-form-item :label="$t('新用户【首次下单并支付】获得成长值:')">
-        <el-input v-model="form.first_order_value" style="width: 35%"></el-input>
+        <el-input v-model="form.first_order_value" @input="changeVal" style="width: 35%"></el-input>
       </el-form-item>
       <h3>{{ $t('成长值有效期') }}:</h3>
       <el-form-item :label="$t('成长值到账之日起计算,有效期为')">
@@ -31,7 +31,7 @@
           ></el-option>
         </el-select>
         <span class="growth">{{ $t('最高奖励成长值') }}</span>
-        <el-input v-model="form.max_value" style="width: 35%"></el-input>
+        <el-input v-model="form.max_value" @input="changeVal" style="width: 35%"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button class="btn-main" @click="setRule">{{ $t('设置规则说明') }}</el-button>
@@ -92,6 +92,17 @@ export default {
       this.$request.getInitInfo().then(res => {
         this.timeList = res.data.valid_time_list
       })
+    },
+    changeVal() {
+      if (this.form.register_value > 100000) {
+        this.form.register_value = 100000
+      }
+      if (this.form.first_order_value > 100000) {
+        this.form.first_order_value = 100000
+      }
+      if (this.form.max_value > 100000) {
+        this.form.max_value = 100000
+      }
     },
     getDetail() {
       this.$request.showGrowth().then(res => {

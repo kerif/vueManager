@@ -11,6 +11,11 @@ export default [
     checked: true
   },
   {
+    id: 'user_member_level',
+    name: '会员等级',
+    checked: true
+  },
+  {
     id: 'order_sn',
     name: '订单号',
     width: '230',

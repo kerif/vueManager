@@ -163,6 +163,13 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <!-- <el-row>
+            <el-col :span="11">
+              <el-form-item>
+                <el-select :placeholder="$t('会员等级')"></el-select>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
         </el-col>
         <el-col :span="4" :xl="3">
           <!--收货国家地区-->

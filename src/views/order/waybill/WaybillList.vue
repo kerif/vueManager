@@ -1337,6 +1337,7 @@ export default {
       const column = [
         'user_id',
         'user_name',
+        'user_member_level',
         'order_sn',
         'express_line',
         'receiver_name',

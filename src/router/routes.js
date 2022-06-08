@@ -282,6 +282,8 @@ const purchaseDetail = loadonDemand('purchase/purchaseDetail')
 const distributionGoods = loadonDemand('purchase/distributionGoods')
 // 分货详情
 const distributeDetail = loadonDemand('purchase/distributeDetail')
+// 分货转运单
+// const transshipmentBill = loadonDemand('purchase/transshipmentBill')
 // 官网管理 栏目管理
 const website = loadonDemand('website/column')
 // 官网管理 新增 编辑 栏目管理
@@ -2322,6 +2324,13 @@ export default [
               parent: '/purchase'
             }
           }
+          // {
+          //   path: '/purchase/transshipmentBill',
+          //   name: transshipmentBill,
+          //   component: transshipmentBill,
+          //   id: 1401,
+          //   meta: { level: 2, group: '采购', name: '分货转运单' }
+          // }
         ]
       },
       {

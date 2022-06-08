@@ -70,7 +70,16 @@
               v-model="searchFieldData.code"
             ></el-input>
           </el-form-item>
-          <!-- <el-form-item :label="$t('会员等级')"> </el-form-item> -->
+          <el-form-item :label="$t('会员等级')">
+            <el-select v-model="searchFieldData.member_level">
+              <el-option
+                v-for="item in vipList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="7" :xl="6">
           <!--包裹号搜索-->
@@ -156,7 +165,8 @@ export default {
         }
       ],
       simpleList: [],
-      propList: []
+      propList: [],
+      vipList: []
     }
   },
   created() {
@@ -188,6 +198,25 @@ export default {
     getPropList() {
       this.$request.getProps().then(res => {
         this.propList = res.data
+      })
+    },
+    getGradeList() {
+      this.$request.getGradeList({ size: 100 }).then(res => {
+        if (res.ret) {
+          this.vipList = res.data.map(item => {
+            let name = item.name
+            let id = item.id
+            return {
+              name,
+              id
+            }
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     }
   }

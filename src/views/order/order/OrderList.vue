@@ -174,7 +174,12 @@
             <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column :label="$t('会员等级')" v-if="activeName !== '7'"></el-table-column> -->
+        <el-table-column
+          :label="$t('会员等级')"
+          prop="user_member_level"
+          key="user_member_level"
+          v-if="activeName !== '7'"
+        ></el-table-column>
         <el-table-column
           v-if="activeName !== '7'"
           :label="$t('快递单号')"

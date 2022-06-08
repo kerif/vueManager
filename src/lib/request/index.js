@@ -4391,3 +4391,13 @@ exports.updateGrowth = params => {
 exports.sortPoint = params => {
   return $form.put('self-pickup-stations/sort-index', params)
 }
+
+// 获取配置
+exports.configInfo = () => {
+  return $form.get('panel-config')
+}
+
+// 更新配置
+exports.updateConfigInfo = params => {
+  return $form.put('panel-config', params)
+}

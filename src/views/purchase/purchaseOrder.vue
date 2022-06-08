@@ -65,7 +65,6 @@
           @click="onInvild(selectIDs)"
           >{{ $t('作废') }}</el-button
         >
-        <!-- <el-button class="btn-blue-green">{{ $t('提交转运') }}</el-button> -->
       </div>
       <div class="header-search">
         <div class="searchGroup">
@@ -127,7 +126,7 @@
               class="btn-blue-green"
               @click="goDistribution(scope.row.id)"
               v-if="['3'].includes(activeName)"
-              >{{ $t('分货') }}</el-button
+              >{{ $t('分货完成') }}</el-button
             >
             <el-button
               class="btn-light-red"
