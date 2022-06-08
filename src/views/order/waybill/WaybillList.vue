@@ -1269,7 +1269,8 @@ export default {
         station: '',
         keyword: '',
         status: '',
-        order_type: ''
+        order_type: '',
+        member_level: ''
       },
       hasFilterCondition: false,
       page_params: {

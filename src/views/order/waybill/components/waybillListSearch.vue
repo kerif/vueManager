@@ -163,13 +163,24 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- <el-row>
+          <el-row>
             <el-col :span="11">
               <el-form-item>
-                <el-select :placeholder="$t('会员等级')"></el-select>
+                <el-select
+                  v-model="searchFieldData.member_level"
+                  :placeholder="$t('会员等级')"
+                  clearable
+                >
+                  <el-option
+                    v-for="item in vipList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
-          </el-row> -->
+          </el-row>
         </el-col>
         <el-col :span="4" :xl="3">
           <!--收货国家地区-->
@@ -395,7 +406,8 @@ export default {
       lineData: [],
       wareHouseList: [],
       countryName: [],
-      pickList: []
+      pickList: [],
+      vipList: []
     }
   },
   created() {
@@ -405,6 +417,7 @@ export default {
     this.initQuery()
     this.getSimpleList()
     this.getPackagePick()
+    this.getGradeList()
   },
   activated() {
     this.initQuery()
@@ -436,6 +449,7 @@ export default {
       this.searchFieldData.agent = ''
       this.searchFieldData.status = ''
       this.searchFieldData.order_type = ''
+      this.searchFieldData.member_level = ''
     },
     handleSel() {
       if (this.$refs['getCountryName'].getCheckedNodes()[0]) {
@@ -472,6 +486,25 @@ export default {
       this.$request.getPackagePick().then(res => {
         if (res.ret) {
           this.pickList = res.data
+        }
+      })
+    },
+    getGradeList() {
+      this.$request.getGradeList({ size: 100 }).then(res => {
+        if (res.ret) {
+          this.vipList = res.data.map(item => {
+            let name = item.name
+            let id = item.id
+            return {
+              name,
+              id
+            }
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     }

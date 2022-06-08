@@ -558,7 +558,8 @@ export default {
         value_end: '',
         keyword: '',
         is_warning: 0,
-        code: ''
+        code: '',
+        member_level: ''
       },
       showBatch: false,
       packageData: []

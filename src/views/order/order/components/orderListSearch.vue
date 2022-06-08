@@ -71,7 +71,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item :label="$t('会员等级')">
-            <el-select v-model="searchFieldData.member_level">
+            <el-select v-model="searchFieldData.member_level" clearable>
               <el-option
                 v-for="item in vipList"
                 :key="item.id"
@@ -173,6 +173,7 @@ export default {
     this.initQuery()
     this.getSimpleList()
     this.getPropList()
+    this.getGradeList()
   },
   activated() {
     this.initQuery()
@@ -189,6 +190,7 @@ export default {
       this.searchFieldData.agent = ''
       this.searchFieldData.value_end = ''
       this.searchFieldData.code = ''
+      this.searchFieldData.member_level = ''
     },
     getSimpleList() {
       this.$request.getSimpleList().then(res => {
