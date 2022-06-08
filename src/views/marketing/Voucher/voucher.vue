@@ -91,6 +91,9 @@
             }}</span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('待使用数量')" prop="unused_count"></el-table-column>
+        <el-table-column :label="$t('过期数量')" prop="expired_count"></el-table-column>
+        <el-table-column :label="$t('作废数量')" prop="invalid_count"></el-table-column>
         <el-table-column
           :label="item.name"
           v-for="item in formatLangData"

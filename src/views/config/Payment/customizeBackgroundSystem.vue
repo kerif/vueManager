@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form label-width="120px" :model="form">
+    <el-form label-width="100px" label-position="left" :model="form">
       <el-form-item :label="$t('后台域名')">
         <el-tooltip
           class="info"
@@ -185,10 +185,9 @@ export default {
 .info {
   position: absolute;
   top: 10px;
-  left: -10px;
+  left: -35px;
   color: #35b85a;
   font-size: 18px;
-  /* margin: 0 5px; */
 }
 .input-sty {
   width: 60%;
