@@ -7,7 +7,8 @@
       <el-tab-pane :label="$t('待打包')" name="fourth"></el-tab-pane>
       <el-tab-pane :label="$t('已转运')" name="fourth"></el-tab-pane>
     </el-tabs>
-    <el-button class="btn-main">{{ $t('新建分货方案') }}</el-button>
+    <el-button class="btn-main" @click="addDistributeScheme">{{ $t('新建分货方案') }}</el-button>
+    <el-button class="btn-deep-purple" @click="onPick">{{ $t('开始拣货') }}</el-button>
     <div style="margin: 10px 0">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="index" label="#"> </el-table-column>
@@ -34,18 +35,24 @@ export default {
           date: '2016-05-02',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
         }
       ]
     }
   },
   methods: {
+    addDistributeScheme() {
+      console.log(1)
+      this.$router.push({
+        name: 'addScheme'
+      })
+    },
     handleClick(tab) {
       console.log(tab)
+    },
+    onPick() {
+      this.$router.push({
+        name: 'picking'
+      })
     }
   }
 }
