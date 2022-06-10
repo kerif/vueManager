@@ -658,12 +658,6 @@
                     {{ $t('发货单单号') }}
                     {{ form.logistics_sn && form.shipment && form.shipment.sn }}
                   </div>
-                  <div class="info">
-                    <span>{{ $t('打包视频') }}</span>
-                    <div style="margin-left: 100px" v-for="item in videoUrl" :key="item.id">
-                      <video :src="item.url" controls autoplay width="80%"></video>
-                    </div>
-                  </div>
                 </el-col>
                 <el-col :span="10" :offset="1">
                   <div class="info">
@@ -679,6 +673,20 @@
                     {{ form.remark }}
                   </div>
                 </el-col>
+              </el-row>
+              <el-row class="size">
+                <div class="info">
+                  <span>{{ $t('打包视频') }}</span>
+                  <div style="display: flex; flex-wrap: wrap">
+                    <div
+                      style="margin: 10px 20px; width: 320px; height: 260px"
+                      v-for="item in videoUrl"
+                      :key="item.id"
+                    >
+                      <video :src="item.url" controls autoplay width="80%"></video>
+                    </div>
+                  </div>
+                </div>
               </el-row>
             </div>
           </el-tab-pane>
