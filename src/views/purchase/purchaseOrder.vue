@@ -25,10 +25,10 @@
         :label="`${$t('已分货')}(${statusList[4] ? statusList[4].counts : 0})`"
         name="4"
       ></el-tab-pane>
-      <el-tab-pane
+      <!-- <el-tab-pane
         :label="`${$t('已转运')}(${statusList[5] ? statusList[5].counts : 0})`"
         name="5"
-      ></el-tab-pane>
+      ></el-tab-pane> -->
       <el-tab-pane
         :label="`${$t('作废')}(${statusList[6] ? statusList[6].counts : 0})`"
         name="10"
@@ -122,6 +122,7 @@
               @click="onDetail(scope.row.id)"
               >{{ $t('详情') }}</el-button
             >
+            <el-button class="btn-main" v-if="activeName === '2'">{{ $t('单号追踪') }}</el-button>
             <el-button
               class="btn-blue-green"
               @click="goDistribution(scope.row.id)"
@@ -147,6 +148,7 @@
               "
               >{{ $t('确认发货') }}</el-button
             >
+            <el-button class="btn-deep-purple" @click="onReceive">{{ $t('确认收货') }}</el-button>
             <el-button
               class="btn-deep-blue"
               v-if="['0', '1'].includes(activeName)"
@@ -356,6 +358,7 @@ export default {
         }
       )
     },
+    onReceive() {},
     handleClick() {
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)

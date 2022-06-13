@@ -900,7 +900,7 @@ export default {
     },
     // 获取增值服务
     getRadio() {
-      this.$request.servicesPackage().then(res => {
+      this.$request.servicesPackage({ size: 100 }).then(res => {
         if (res.ret) {
           this.servicesData = res.data
         }

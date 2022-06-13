@@ -65,18 +65,18 @@
             <el-row :gutter="30">
               <el-col :span="12">
                 <el-row class="sku-row">
-                  <el-col :span="4">图片</el-col>
-                  <el-col :span="5">品名</el-col>
-                  <el-col :span="5">条码</el-col>
+                  <el-col :span="4">{{ $t('图片') }}</el-col>
+                  <el-col :span="5">{{ $t('品名') }}</el-col>
+                  <el-col :span="5">{{ $t('条码') }}</el-col>
                   <el-col :span="5" class="align-center">{{ $t('预计分货') }}</el-col>
                   <el-col :span="5" class="align-center">{{ $t('实际分货') }}</el-col>
                 </el-row>
               </el-col>
               <el-col :span="12">
                 <el-row class="sku-row">
-                  <el-col :span="4">图片</el-col>
-                  <el-col :span="5">品名</el-col>
-                  <el-col :span="5">条码</el-col>
+                  <el-col :span="4">{{ $t('图片') }}</el-col>
+                  <el-col :span="5">{{ $t('品名') }}</el-col>
+                  <el-col :span="5">{{ $t('条码') }}</el-col>
                   <el-col :span="5" class="align-center">{{ $t('预计分货') }}</el-col>
                   <el-col :span="5" class="align-center">{{ $t('实际分货') }}</el-col>
                 </el-row>
@@ -104,7 +104,7 @@
         </div>
       </div>
       <div class="align-right">
-        <el-button class="save-btn">{{ $t('保存') }}</el-button>
+        <el-button>{{ $t('保存') }}</el-button>
         <el-button
           class="save-btn"
           type="primary"
@@ -135,6 +135,7 @@ export default {
 </script>
 <style lang="scss">
 .picking-container {
+  font-size: 14px;
   background: #fff !important;
   .content-box {
     padding: 20px;

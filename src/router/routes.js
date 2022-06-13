@@ -283,11 +283,13 @@ const distributionGoods = loadonDemand('purchase/distributionGoods')
 // 分货详情
 const distributeDetail = loadonDemand('purchase/distributeDetail')
 // 分货转运单
-// const transshipmentBill = loadonDemand('purchase/transshipmentBill')
+const transshipmentBill = loadonDemand('purchase/transshipmentBill')
 // 新增分货方案
-// const addEditScheme = loadonDemand('purchase/addScheme')
+const addEditScheme = loadonDemand('purchase/addScheme')
 // 开始拣货
-// const picking = loadonDemand('purchase/picking')
+const picking = loadonDemand('purchase/picking')
+// 开始打包
+const purchasePack = loadonDemand('purchase/purchasePack')
 // 官网管理 栏目管理
 const website = loadonDemand('website/column')
 // 官网管理 新增 编辑 栏目管理
@@ -2327,38 +2329,50 @@ export default [
               name: '分货详情',
               parent: '/purchase'
             }
+          },
+          {
+            path: '/purchase/transshipmentBill',
+            name: 'transshipmentBill',
+            component: transshipmentBill,
+            id: 1401,
+            meta: { level: 2, group: '采购', name: '分货转运单' }
+          },
+          {
+            path: '/purchase/transshipment/addScheme',
+            name: 'addScheme',
+            component: addEditScheme,
+            id: 1401,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '新建分货方案',
+              parent: '/purchase/transshipment'
+            }
+          },
+          {
+            path: '/purchase/transshipment/picking',
+            name: 'picking',
+            component: picking,
+            id: 1401,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '拣货',
+              parent: '/purchase/transshipment'
+            }
+          },
+          {
+            path: '/purchase/transshipment/purchasePack',
+            name: 'purchasePack',
+            component: purchasePack,
+            id: 1401,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '打包',
+              parent: '/purchase/transshipment'
+            }
           }
-          // {
-          //   path: '/purchase/transshipmentBill',
-          //   name: 'transshipmentBill',
-          //   component: transshipmentBill,
-          //   id: 1401,
-          //   meta: { level: 2, group: '采购', name: '分货转运单' }
-          // },
-          // {
-          //   path: '/purchase/transshipment/addScheme',
-          //   name: 'addScheme',
-          //   component: addEditScheme,
-          //   id: 1401,
-          //   meta: {
-          //     level: 3,
-          //     group: '采购',
-          //     name: '新建分货方案',
-          //     parent: '/purchase/transshipment'
-          //   }
-          // },
-          // {
-          //   path: '/purchase/transshipment/picking',
-          //   name: 'picking',
-          //   component: picking,
-          //   id: 1401,
-          //   meta: {
-          //     level: 3,
-          //     group: '采购',
-          //     name: '拣货',
-          //     parent: '/purchase/transshipment'
-          //   }
-          // }
         ]
       },
       {

@@ -3531,8 +3531,8 @@ exports.usableLines = params => {
   return $form.post('package-packs/usable-express-lines', params)
 }
 // 发起集包 获取增值服务
-exports.servicesPackage = () => {
-  return $form.get('package-packs/value-added-services')
+exports.servicesPackage = params => {
+  return $form.get('package-packs/value-added-services', { params })
 }
 // 发起集包 获取付款方式
 exports.packsConfig = () => {
