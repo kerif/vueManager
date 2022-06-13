@@ -134,14 +134,14 @@ export default {
     },
     // 增加语言
     addTransfer() {
-      dialog({ type: 'languageEdit', state: 'add' }, () => {
+      dialog({ type: 'languageEdit' }, () => {
         this.getList()
       })
     },
     // 编辑语言
     editTransfer(id) {
       console.log(id, 'id')
-      dialog({ type: 'languageEdit', state: 'edit', id: id }, () => {
+      dialog({ type: 'languageEdit', id: id }, () => {
         this.getList()
       })
     },

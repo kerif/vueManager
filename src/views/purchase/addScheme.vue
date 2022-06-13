@@ -21,26 +21,26 @@
     </div>
     <div class="record record-item">
       <div>PO020220606120000-3.xls</div>
-      <div class="record">
+      <div style="display: flex; align-items: center">
         <div>admin {{ $t('更新于') }} 2206-06-16 12:00:00</div>
         <div>{{ $t('下载') }}</div>
       </div>
     </div>
     <div>
       <h4>{{ $t('方案预览') }}</h4>
-      <el-row :gutter="10">
-        <el-col :span="1"><div>#1</div></el-col>
-        <el-col :span="2"
+      <el-row :gutter="10" class="review font-bold">
+        <el-col :span="5"><div>#1</div></el-col>
+        <el-col :span="5"
           ><div>{{ $t('客户') }}: 10010</div></el-col
         >
-        <el-col :span="2"
+        <el-col :span="5"
           ><div>{{ $t('收货点') }}: NM</div></el-col
         >
       </el-row>
       <el-table :data="tableData" style="width: 80%" border class="space">
-        <el-tabel-column type="index"></el-tabel-column>
-        <el-table-column prop="date" :label="$t('商品ID')" width="180"> </el-table-column>
-        <el-table-column prop="name" :label="$t('物品中文名称')" width="180"> </el-table-column>
+        <el-table-column type="index" label="#"></el-table-column>
+        <el-table-column prop="date" :label="$t('商品ID')"> </el-table-column>
+        <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
         <el-table-column prop="address" :label="$t('分货数量')"> </el-table-column>
       </el-table>
     </div>
@@ -70,15 +70,25 @@ export default {
 .add-scheme-container {
   background: #fff !important;
 }
+.review {
+  line-height: 20px;
+}
+.font-bold {
+  font-weight: bold;
+}
 .record {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .record-item {
-  width: 70%;
+  width: 80%;
 }
 .space {
   margin-top: 20px;
+}
+.flex-1 {
+  flex: 1;
 }
 </style>

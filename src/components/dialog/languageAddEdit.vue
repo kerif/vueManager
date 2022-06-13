@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="state === 'add' ? $t('添加语言') : $t('编辑语言')"
+    :title="id ? $t('编辑语言') : $t('添加语言')"
     class="invoice-container"
     @close="clear"
   >
@@ -42,8 +42,8 @@
 export default {
   data() {
     return {
+      id: '',
       innerVisible: false,
-      state: '',
       language: [],
       languageList: {
         language_code: '',
@@ -104,6 +104,8 @@ export default {
       })
     },
     clear() {
+      this.id = ''
+      this.languageList.enabled = 0
       this.languageList.language_code = ''
     },
     init() {
