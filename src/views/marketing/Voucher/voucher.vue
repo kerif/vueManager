@@ -115,7 +115,10 @@
             <!-- 投放 -->
             <el-button
               class="btn-purple detailsBtn"
-              v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2"
+              v-if="
+                (scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2) &&
+                scope.row.type !== '新用户福利'
+              "
               @click="serving(scope.row.id)"
               >{{ $t('投放') }}</el-button
             >
