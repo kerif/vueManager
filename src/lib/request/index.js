@@ -3263,8 +3263,8 @@ exports.tipStatus = () => {
 // 获取订单下的所有订单
 exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`, { params })
 // 订单列表 获取增值服务
-exports.getAdded = () => {
-  return $form.get('orders/value-added-services')
+exports.getAdded = params => {
+  return $form.get('orders/value-added-services', { params })
 }
 // 订单列表 获取团购数据
 exports.orderSecond = id => {

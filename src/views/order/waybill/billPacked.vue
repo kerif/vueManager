@@ -811,7 +811,7 @@ export default {
   methods: {
     // 获取多选框
     getProp(arr) {
-      this.$request.getAdded().then(res => {
+      this.$request.getAdded({ size: 100 }).then(res => {
         if (res.ret) {
           this.updateProp = res.data
           let ids = res.data.map(item => item.id)
