@@ -5,7 +5,7 @@
         <el-col :span="14">
           <div class="row-item">
             <el-input
-              v-model="value"
+              v-model="sn"
               :placeholder="$t('请输入或扫码拣货单号,按Enter键结束')"
               class="ipt"
               @keyup.native.enter="onOrderSn"
@@ -24,7 +24,7 @@
           <div class="font-bold scan-tips">{{ $t('请扫描拣货单号及SKU') }}</div>
         </el-col>
         <el-col :span="10">
-          <div class="right-item">{{ $t('拣货单号') }}：</div>
+          <div class="right-item">{{ $t('拣货单号') }}：{{ sn }}</div>
           <div class="flex-item right-item num-list">
             <span>
               <span>{{ $t('已扫描') }}：</span>
@@ -56,59 +56,53 @@
         </el-col>
       </el-row>
       <div class="order-list">
-        <div class="order-item flex-item">
+        <div class="order-item flex-item" v-for="(item, index) in orderList" :key="index">
           <div class="index">
-            <div>{{ $t('订单号') }}：</div>
-            <div class="font-bold index-label"></div>
+            <div>{{ $t('订单号') }}：{{ item.sn }}</div>
+            <div class="font-bold index-label">#{{ index + 1 }}</div>
           </div>
           <div class="order-content flex-1">
             <el-row :gutter="30">
-              <el-col :span="12">
-                <el-row class="sku-row">
-                  <el-col :span="4">{{ $t('图片') }}</el-col>
-                  <el-col :span="5">{{ $t('品名') }}</el-col>
-                  <el-col :span="5">{{ $t('条码') }}</el-col>
-                  <el-col :span="5" class="align-center">{{ $t('预计分货') }}</el-col>
-                  <el-col :span="5" class="align-center">{{ $t('实际分货') }}</el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row class="sku-row">
-                  <el-col :span="4">{{ $t('图片') }}</el-col>
-                  <el-col :span="5">{{ $t('品名') }}</el-col>
-                  <el-col :span="5">{{ $t('条码') }}</el-col>
-                  <el-col :span="5" class="align-center">{{ $t('预计分货') }}</el-col>
-                  <el-col :span="5" class="align-center">{{ $t('实际分货') }}</el-col>
-                </el-row>
-              </el-col>
+              <el-row class="sku-row">
+                <el-col :span="4">{{ $t('图片') }}</el-col>
+                <el-col :span="4">{{ $t('商品ID') }}</el-col>
+                <el-col :span="4">{{ $t('品名') }}</el-col>
+                <el-col :span="5">{{ $t('条码') }}</el-col>
+                <el-col :span="4" class="align-center">{{ $t('分货') }}</el-col>
+                <el-col :span="3" class="align-center">{{ $t('拣货') }}</el-col>
+              </el-row>
             </el-row>
             <el-row :gutter="30">
-              <el-col :span="12">
-                <el-row class="sku-row">
-                  <el-col :span="14">
-                    <span class="sku-item"></span>
-                  </el-col>
-                  <el-col :span="5" class="align-center font-bold num-item"></el-col>
-                  <el-col :span="5" class="align-center">
-                    <el-input
-                      class="out-num"
-                      v-model="value"
-                      type="number"
-                      :loading="$store.state.btnLoading"
-                    />
-                  </el-col>
-                </el-row>
-              </el-col>
+              <el-row class="sku-row" v-for="ele in item.goods" :key="ele.id">
+                <el-col :span="4">
+                  <span v-if="ele.p_goods">
+                    <img :src="`${$baseUrl.IMAGE_URL}${ele.p_goods.image}`" />
+                  </span>
+                </el-col>
+                <el-col :span="4">
+                  <span class="sku-item">{{ item.sn }}</span>
+                </el-col>
+                <el-col :span="4">
+                  <span class="sku-item">{{ ele.p_goods ? ele.p_goods.cn_name : '' }}</span>
+                </el-col>
+                <el-col :span="5" class="align-center">100</el-col>
+                <el-col :span="4" class="align-center font-bold num-item">{{
+                  ele.quantity
+                }}</el-col>
+                <el-col :span="3" class="align-center"
+                  ><el-input class="out-num" type="number" v-model="ele.picking_quantity"></el-input
+                ></el-col>
+              </el-row>
             </el-row>
           </div>
         </div>
       </div>
-      <div class="align-right">
-        <el-button>{{ $t('保存') }}</el-button>
+      <div class="align-right" v-if="orderList.length">
+        <el-button @click="onSave(0)">{{ $t('保存') }}</el-button>
         <el-button
           class="save-btn"
           type="primary"
-          @click="onSave"
+          @click="onSave(1)"
           :loading="$store.state.btnLoading"
           >{{ $t('拣货完成') }}</el-button
         >
@@ -120,17 +114,84 @@
 export default {
   data() {
     return {
-      value: ''
+      value: '',
+      sn: '',
+      orderId: '',
+      orderList: []
     }
   },
   methods: {
-    onOrderSn() {},
+    onOrderSn() {
+      if (this.sn) {
+        // this.$request.purchasePickSearch(this.sn).then(res => {
+        //   if (!res.data) {
+        //     this.$message.error(this.$t('拣货单不存在'))
+        //   }
+        //   this.orderId = res.data ? res.data.id : ''
+        //   this.orderList = res.data ? res.data.orders : []
+        // })
+      }
+    },
     onSku() {},
     onCheckOut() {},
-    onSave() {},
+    onSave(type) {
+      let params = {
+        is_picking_finish: type,
+        goods: []
+      }
+      this.orderList.forEach(item => {
+        if (item.goods) {
+          item.goods.forEach(ele => {
+            params.goods.push({
+              picking_quantity: ele.picking_quantity,
+              picking_divide_order_id: ele.picking_divide_order_id,
+              purchase_order_goods_id: ele.purchase_order_goods_id
+            })
+          })
+          return params.goods
+        }
+      })
+      // this.$request.purchasePick(this.orderId, params).then(res => {
+      //   if (res.ret) {
+      //     this.$notify({
+      //       title: this.$t('操作成功'),
+      //       message: res.msg,
+      //       type: 'success'
+      //     })
+      //     this.$router.push({
+      //       name: 'transshipmentBill'
+      //     })
+      //   } else {
+      //     this.$notify({
+      //       title: this.$t('操作失败'),
+      //       message: res.msg,
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
+    },
     onPicking() {}
   },
-  computed: {}
+  computed: {
+    // scanNum() {
+    //   let qty = 0
+    //   this.orderList.forEach(item => {
+    //     item.skus.forEach(ele => {
+    //       qty += Number(ele.out_quantity)
+    //     })
+    //   })
+    //   return qty
+    // },
+    // waitScanNum() {
+    //   let qty = 0
+    //   this.orderList.forEach(item => {
+    //     item.skus.forEach(ele => {
+    //       qty += ele.quantity - ele.out_quantity
+    //     })
+    //   })
+    //   return qty
+    // }
+  }
 }
 </script>
 <style lang="scss">
@@ -230,6 +291,9 @@ export default {
   .num-item {
     font-size: 26px;
     line-height: 32px;
+  }
+  .align-center {
+    text-align: center;
   }
   .out-num {
     font-size: 20px;

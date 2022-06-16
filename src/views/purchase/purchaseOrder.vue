@@ -22,13 +22,9 @@
         name="3"
       ></el-tab-pane>
       <el-tab-pane
-        :label="`${$t('已分货')}(${statusList[4] ? statusList[4].counts : 0})`"
+        :label="`${$t('已完成')}(${statusList[4] ? statusList[4].counts : 0})`"
         name="4"
       ></el-tab-pane>
-      <!-- <el-tab-pane
-        :label="`${$t('已转运')}(${statusList[5] ? statusList[5].counts : 0})`"
-        name="5"
-      ></el-tab-pane> -->
       <el-tab-pane
         :label="`${$t('作废')}(${statusList[6] ? statusList[6].counts : 0})`"
         name="10"
@@ -53,6 +49,7 @@
           @click="onPurchase(selectIDs)"
           >{{ $t('提交采购') }}</el-button
         >
+        <el-button class="btn-main" @click="onReceive(selectIDs)">{{ $t('确认收货') }}</el-button>
         <el-button
           class="btn-light-red"
           v-if="['0', '1', '2'].includes(activeName)"
@@ -122,10 +119,15 @@
               @click="onDetail(scope.row.id)"
               >{{ $t('详情') }}</el-button
             >
-            <el-button class="btn-main" v-if="activeName === '2'">{{ $t('单号追踪') }}</el-button>
+            <el-button
+              class="btn-main"
+              @click="onExpress(scope.row.logistics_sn)"
+              v-if="activeName === '2'"
+              >{{ $t('单号追踪') }}</el-button
+            >
             <el-button
               class="btn-blue-green"
-              @click="goDistribution(scope.row.id)"
+              @click="onDistribution([scope.row.id])"
               v-if="['3'].includes(activeName)"
               >{{ $t('分货完成') }}</el-button
             >
@@ -148,7 +150,9 @@
               "
               >{{ $t('确认发货') }}</el-button
             >
-            <el-button class="btn-deep-purple" @click="onReceive">{{ $t('确认收货') }}</el-button>
+            <el-button class="btn-deep-purple" @click="onReceive([scope.row.id])">{{
+              $t('确认收货')
+            }}</el-button>
             <el-button
               class="btn-deep-blue"
               v-if="['0', '1'].includes(activeName)"
@@ -258,10 +262,36 @@ export default {
     goSearch() {
       this.getList()
     },
+    onExpress(expressNum) {
+      window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
+    },
     goDistribution(id) {
       this.$router.push({
         name: 'distributionGoods',
         params: { id }
+      })
+    },
+    onDistribution() {
+      this.$confirm(this.$t('您真的确认吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        // this.$request.purchaseFinish(ids).then(res => {
+        //   if (res.ret) {
+        //     this.$notify({
+        //       type: 'success',
+        //       title: this.$t('操作成功'),
+        //       message: res.msg
+        //     })
+        //     this.getList()
+        //   } else {
+        //     this.$message({
+        //       message: res.msg,
+        //       type: 'error'
+        //     })
+        //   }
+        // })
       })
     },
     exportList(ids) {
@@ -358,7 +388,9 @@ export default {
         }
       )
     },
-    onReceive() {},
+    onReceive(ids) {
+      if (!ids.length) return this.$message.error(this.$t('请选择'))
+    },
     handleClick() {
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)

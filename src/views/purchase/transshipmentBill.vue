@@ -1,11 +1,26 @@
 <template>
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane :label="$t('全部')" name="0"></el-tab-pane>
-      <el-tab-pane :label="$t('草稿')" name="1"></el-tab-pane>
-      <el-tab-pane :label="$t('待拣货')" name="2"></el-tab-pane>
-      <el-tab-pane :label="$t('待打包')" name="3"></el-tab-pane>
-      <el-tab-pane :label="$t('已转运')" name="4"></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('全部')}(${countData[4] ? countData[4].counts : ''})`"
+        name="all"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('草稿')}(${countData[0] ? countData[0].counts : ''})`"
+        name="0"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('待拣货')}(${countData[1] ? countData[1].counts : ''})`"
+        name="1"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('待打包')}(${countData[2] ? countData[2].counts : ''})`"
+        name="2"
+      ></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('已转运')}(${countData[3] ? countData[3].counts : ''})`"
+        name="3"
+      ></el-tab-pane>
     </el-tabs>
     <purchase-search
       v-show="hasFilterCondition"
@@ -17,12 +32,14 @@
         <el-button class="btn-main" @click="addDistributeScheme">{{
           $t('新建分货方案')
         }}</el-button>
-        <el-button class="btn-deep-purple" @click="onPick">{{ $t('开始拣货') }}</el-button>
-        <el-button class="btn-light-green" @click="onPack">{{ $t('开始打包') }}</el-button>
       </div>
       <div class="header-search">
         <div class="searchGroup">
-          <search-group :placeholder="$t('请输入关键字')" v-model="keyword" @search="goSearch">
+          <search-group
+            :placeholder="$t('请输入关键字')"
+            v-model="page_params.keyword"
+            @search="goSearch"
+          >
           </search-group>
         </div>
         <div class="filter">
@@ -35,56 +52,64 @@
     <div style="margin: 10px 0">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="index" label="#"> </el-table-column>
-        <el-table-column prop="address" :label="$t('分货号')"> </el-table-column>
-        <el-table-column prop="date" :label="$t('状态')">
-          <template>
-            <span>{{ $t('草稿') }}</span>
-            <span>{{ $t('待拣货') }}</span>
-            <span>{{ $t('待打包') }}</span>
-            <span>{{ $t('已转运') }}</span>
+        <el-table-column prop="sn" :label="$t('分货号')"> </el-table-column>
+        <el-table-column prop="status" :label="$t('状态')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">{{ $t('草稿') }}</span>
+            <span v-else-if="scope.row.status === 1">{{ $t('待拣货') }}</span>
+            <span v-else-if="scope.row.status === 2">{{ $t('待打包') }}</span>
+            <span v-else>{{ $t('已转运') }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="name" :label="$t('包含采购单')"> </el-table-column>
-        <el-table-column prop="address" :label="$t('预计分货（商品数/订单）')"> </el-table-column>
-        <el-table-column prop="date" :label="$t('实际拣货')"> </el-table-column>
-        <el-table-column prop="name" :label="$t('创建时间')"> </el-table-column>
-        <el-table-column prop="address" :label="$t('创建人')"> </el-table-column>
+        <el-table-column prop="quantity" :label="$t('预计分货（商品数/订单）')"> </el-table-column>
+        <el-table-column prop="picking_quantity" :label="$t('实际拣货')"> </el-table-column>
+        <el-table-column prop="created_at" :label="$t('创建时间')"> </el-table-column>
+        <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
         <el-table-column :label="$t('操作')">
-          <template>
-            <el-button class="btn-main" v-if="['1'].includes(activeName)">{{
+          <template slot-scope="scope">
+            <el-button class="btn-main" v-if="['0'].includes(activeName)">{{
               $t('编辑')
             }}</el-button>
-            <el-button class="btn-main" v-if="['1'].includes(activeName)">{{
-              $t('提交')
-            }}</el-button>
-            <el-button class="btn-light-red" v-if="['1', '2', '3'].includes(activeName)">{{
+            <el-button
+              class="btn-main"
+              v-if="['0'].includes(activeName)"
+              @click="onSubmit(scope.row.id)"
+              >{{ $t('提交') }}</el-button
+            >
+            <el-button class="btn-light-red" v-if="['0', '1', '2'].includes(activeName)">{{
               $t('删除')
             }}</el-button>
-            <el-button class="btn-deep-purple" v-if="['2', '3', '4'].includes(activeName)">{{
-              $t('详情')
-            }}</el-button>
-            <el-button class="btn-light-green" v-if="['2'].includes(activeName)" @click="onPick">{{
+            <el-button
+              class="btn-deep-purple"
+              v-if="['all', '1', '2', '3'].includes(activeName)"
+              @click="onDetail(scope.row.id)"
+              >{{ $t('详情') }}</el-button
+            >
+            <el-button class="btn-light-green" v-if="['1'].includes(activeName)" @click="onPick">{{
               $t('开始拣货')
             }}</el-button>
-            <el-button class="btn-deep-blue" v-if="['3'].includes(activeName)" @click="onPack">{{
+            <el-button class="btn-deep-blue" v-if="['2'].includes(activeName)" @click="onPack">{{
               $t('开始打包')
             }}</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
 
 <script>
 import purchaseSearch from './components/purchaseSearch.vue'
 import { SearchGroup } from '@/components/searchs'
+import NlePagination from '@/components/pagination'
+import { pagination } from '@/mixin'
 export default {
   data() {
     return {
-      activeName: '1',
+      activeName: 'all',
       hasFilterCondition: false,
-      keyword: '',
       searchData: {
         sn: '',
         timeList: [],
@@ -92,28 +117,59 @@ export default {
         begin_date: '',
         end_date: ''
       },
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ]
+      tableData: [],
+      countData: []
     }
   },
   components: {
     purchaseSearch,
-    SearchGroup
+    SearchGroup,
+    NlePagination
+  },
+  mixins: [pagination],
+  created() {
+    this.getList()
+  },
+  activated() {
+    this.getList()
   },
   methods: {
-    goSearch() {},
+    getList() {
+      this.tableLoading = true
+      // this.$request
+      //   .transshipmentList({
+      //     keyword: this.page_params.keyword,
+      //     page: this.page_params.page,
+      //     size: this.page_params.size,
+      //     status: this.activeName === 'all' ? '' : this.activeName
+      //   })
+      //   .then(res => {
+      //     if (res.ret) {
+      //       this.tableLoading = false
+      //       this.tableData = res.data
+      //       this.page_params.page = res.meta.current_page
+      //       this.page_params.total = res.meta.total
+      //       this.onCount()
+      //     }
+      //   })
+    },
+    goSearch() {
+      this.getList()
+    },
+    onCount() {
+      // this.$request.pickOrderCount().then(res => {
+      //   this.countData = res.data
+      // })
+    },
     addDistributeScheme() {
       this.$router.push({
         name: 'addScheme'
       })
     },
-    handleClick(tab) {
-      console.log(tab)
+    handleClick() {
+      this.page_params.page = 1
+      this.page_params.handleQueryChange('page', 1)
+      this.getList()
     },
     onPick() {
       this.$router.push({
@@ -124,7 +180,14 @@ export default {
       this.$router.push({
         name: 'purchasePack'
       })
-    }
+    },
+    onDetail(id) {
+      this.$router.push({
+        name: 'transshipmentDetail',
+        params: { id }
+      })
+    },
+    onSubmit() {}
   }
 }
 </script>

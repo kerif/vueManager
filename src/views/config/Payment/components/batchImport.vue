@@ -103,6 +103,7 @@ export default {
         }
       }
       this.$request.getImportTemplate(param).then(res => {
+        console.log(res)
         downloadStreamFile(res, name, 'xlsx')
       })
     },

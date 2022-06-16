@@ -152,6 +152,7 @@ import batchCustomConfig from './batchCustomConfig.vue'
 import cumulativeGrowth from './cumulativeGrowth.vue'
 import growthExplain from './growthExplain.vue'
 import distributeScheme from './distributeScheme.vue'
+import confirmReceive from './confirmReceive.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -303,6 +304,7 @@ const batchCustomConfigController = Vue.extend(batchCustomConfig)
 const cumulativeGrowthController = Vue.extend(cumulativeGrowth)
 const growthExplainController = Vue.extend(growthExplain)
 const distributeSchemeController = Vue.extend(distributeScheme)
+const confirmReceiveController = Vue.extend(confirmReceive)
 
 const mixin = {
   data() {
@@ -557,6 +559,13 @@ function initInstance(type) {
     // 导入分货方案
     case 'distributeScheme':
       instance = new distributeSchemeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 确认收货
+    case 'confirmReceive':
+      instance = new confirmReceiveController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

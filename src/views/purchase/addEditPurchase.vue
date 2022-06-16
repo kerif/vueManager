@@ -11,13 +11,12 @@
     <el-form label-width="120px" :model="ruleForm" :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('PO单号名称')" prop="name">
+          <el-form-item :label="$t('PO单号')">
             <el-input
               v-model="ruleForm.name"
-              :disabled="$route.params.id"
               maxlength="30"
               style="width: 50%"
-              :placeholder="$t('长度限制30个字符')"
+              :placeholder="$t('请输入')"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -41,11 +40,13 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('采购总金额')" prop="amount">
+          <el-form-item :label="$t('PO单号名称')" prop="name">
             <el-input
-              v-model="ruleForm.amount"
+              v-model="ruleForm.name"
+              :disabled="$route.params.id"
+              maxlength="30"
               style="width: 50%"
-              :placeholder="$t('请输入')"
+              :placeholder="$t('长度限制30个字符')"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -61,10 +62,9 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('采购备注')" prop="remark">
+          <el-form-item :label="$t('采购总金额')" prop="amount">
             <el-input
-              v-model="ruleForm.remark"
-              type="textarea"
+              v-model="ruleForm.amount"
               style="width: 50%"
               :placeholder="$t('请输入')"
             ></el-input>
@@ -72,7 +72,12 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="$t('收货仓库')" prop="warehouse_id">
-            <el-select v-model="ruleForm.warehouse_id" clearable :placeholder="$t('请选择')">
+            <el-select
+              v-model="ruleForm.warehouse_id"
+              style="width: 50%"
+              clearable
+              :placeholder="$t('请选择')"
+            >
               <el-option
                 v-for="item in agentData"
                 :key="item.id"
@@ -83,13 +88,31 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="$t('采购备注')" prop="remark">
+            <el-input
+              v-model="ruleForm.remark"
+              type="textarea"
+              style="width: 50%"
+              :placeholder="$t('请输入')"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>{{ $t('采购清单') }}</span>
-          <el-button class="btn-main" style="float: right" @click="addGood('add')">{{
-            $t('添加')
+          <el-button
+            class="btn-main"
+            style="float: right; margin-left: 5px"
+            @click="addGood('add')"
+            >{{ $t('添加') }}</el-button
+          >
+          <el-button class="btn-light-red" style="float: right" @click="onImport(1)">{{
+            $t('批量导入')
           }}</el-button>
         </div>
         <el-table :data="ruleForm.goods" border style="width: 100%">
@@ -104,16 +127,16 @@
               }}</el-button>
             </template>
           </el-table-column>
+          <el-table-column prop="number" :label="$t('编号')"></el-table-column>
           <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
-          <el-table-column prop="brand" :label="$t('品牌')"></el-table-column>
-          <el-table-column prop="category_name" :label="$t('商品分类')"></el-table-column>
-          <el-table-column prop="prop_name" :label="$t('属性')"></el-table-column>
+          <el-table-column prop="material" :label="$t('材质')"></el-table-column>
+          <el-table-column prop="casing" :label="$t('包装')"></el-table-column>
+          <el-table-column prop="color" :label="$t('颜色')"></el-table-column>
           <el-table-column prop="purchase_price" :label="$t('物品单价')"></el-table-column>
           <el-table-column prop="quantity" :label="$t('物品明细数量')"></el-table-column>
           <el-table-column prop="box_count" :label="$t('物品总箱数')"></el-table-column>
-          <el-table-column prop="box_spec" :label="$t('物品箱规')"></el-table-column>
-          <el-table-column prop="barcode" :label="$t('条码')"></el-table-column>
+          <el-table-column prop="barcode" label="barcode"></el-table-column>
           <el-table-column prop="image" :label="$t('物品照片')">
             <template slot-scope="scope">
               <img
@@ -144,6 +167,7 @@
 
 <script>
 import dialog from '@/components/dialog'
+// import distributeSchemeVue from '../../components/dialog/distributeScheme.vue'
 export default {
   data() {
     return {
@@ -169,7 +193,6 @@ export default {
       }
     }
   },
-  components: {},
   created() {
     this.getCompany()
     this.getWarehouse()
@@ -222,6 +245,12 @@ export default {
     },
     delGoods(index, rows) {
       rows.splice(index, 1)
+    },
+    onImport(mode) {
+      dialog({
+        type: 'distributeScheme',
+        mode
+      })
     },
     onSave() {
       console.log(this.ruleForm.logitics_company_code)

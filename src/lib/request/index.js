@@ -4401,3 +4401,78 @@ exports.configInfo = () => {
 exports.updateConfigInfo = params => {
   return $form.put('panel-config', params)
 }
+
+// 获取初始配置
+exports.initConfig = params => {
+  return $form.get('panel-init-config', params)
+}
+
+// 采购 采购完成
+exports.purchaseFinish = params => {
+  return $form.put('purchase-orders/finish', params)
+}
+
+// 采购 批量导入
+exports.batchImportGood = file => {
+  return $file.post('purchase-orders/goods-excel-parse', file)
+}
+
+// 采购 分货方案  列表
+exports.transshipmentList = params => {
+  return $form.get('purchase-picking-orders', { params })
+}
+
+// 采购 分货方案 新增
+exports.addPickOrder = params => {
+  return $form.post('purchase-picking-orders', params)
+}
+
+// 采购 分货方案 审核
+exports.verifyPickOrder = id => {
+  return $form.put(`purchase-picking-orders/${id}/approved`)
+}
+
+// 采购 分货方案 打包
+exports.purchasePack = (id, params) => {
+  return $form.put(`purchase-picking-orders/order/${id}/pack`, params)
+}
+
+// 采购 分货方案 拣货
+exports.purchasePick = (id, params) => {
+  return $form.put(`purchase-picking-orders/${id}/picking`, params)
+}
+
+// 采购 分货方案  上传
+exports.uploadPickOrder = (id, file) => {
+  return $file.post(`purchase-picking-orders/${id}/order-excel-parse`, file)
+}
+
+// 采购 分货方案 详情
+exports.pickOrderDetail = id => {
+  return $form.get(`purchase-picking-orders/${id}`)
+}
+
+// 采购 商品模板
+exports.importGoodTmp = () => {
+  return $form.get('download-goods-template', {}, { responseType: 'blob' })
+}
+
+// 采购 分货模板
+exports.importPickOrderTmp = () => {
+  return $form.get('purchase-picking-orders/download-order-template', {}, { responseType: 'blob' })
+}
+
+// 采购 分货方案  数量统计
+exports.pickOrderCount = () => {
+  return $form.get('purchase-picking-orders/status-counts')
+}
+
+// 采购 分货方案 拣货
+exports.purchasePickSearch = sn => {
+  return $form.get(`purchase-picking-orders/sn/${sn}`)
+}
+
+// 采购 确认收货
+exports.confirmReceive = id => {
+  return $form.put(`purchase-orders/${id}/in-storage`)
+}

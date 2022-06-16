@@ -285,7 +285,8 @@ export default {
           { id: 'box_package_number', name: this.$t('分箱货品数量') },
           { id: 'box_package_names', name: this.$t('分箱包裹名称') },
           { id: 'box_package_props', name: this.$t('分箱包裹属性') },
-          { id: 'box_package_categories', name: this.$t('分箱包裹类型') }
+          { id: 'box_package_categories', name: this.$t('分箱包裹类型') },
+          { id: 'box_items', name: this.$t('申报品名') }
         ]
         // 出库信息总计
         this.outboundSum = [
@@ -492,7 +493,8 @@ export default {
           { id: 'box_package_number', name: this.$t('分箱货品数量') },
           { id: 'box_package_names', name: this.$t('分箱包裹名称') },
           { id: 'box_package_props', name: this.$t('分箱包裹属性') },
-          { id: 'box_package_categories', name: this.$t('分箱包裹类型') }
+          { id: 'box_package_categories', name: this.$t('分箱包裹类型') },
+          { id: 'box_items', name: this.$t('申报品名') }
         ]
         // 出库信息总计
         this.outboundSum = [

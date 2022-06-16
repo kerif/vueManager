@@ -5,28 +5,33 @@
         <el-input
           :placeholder="$t('请输入或扫入拣货单号')"
           class="search-ipt flex-1"
-          v-model="value"
+          v-model="pickingSN"
           @keyup.native.enter="getCloudDetail"
         ></el-input>
         <el-button type="primary" @click="getCloudDetail">{{ $t('查询') }}</el-button>
       </div>
-      <div class="has-border order-box remark">
+      <div class="has-border order-box remark" v-if="pickingSN">
         <el-row :gutter="10">
           <el-col :span="5">
-            <div class="font-bold">{{ $t('分货方案名称') }}</div>
+            <div class="font-bold">{{ name }}</div>
           </el-col>
           <el-col :span="19">
-            <div>{{ $t('分货方案备注') }}</div>
+            <div>{{ remark }}</div>
           </el-col>
         </el-row>
       </div>
       <div class="has-border">
-        <el-row class="order-box" type="flex">
+        <el-row class="order-box" type="flex" v-show="orderList.length">
           <el-col :span="5">
             <div class="font-bold left-title">{{ $t('请选择订单号') }}</div>
             <div class="order-list">
-              <div class="order-item flex-item cursor-pointer" @click="onOrder">
-                <span class="font-bold">#4546557542</span>
+              <div
+                class="order-item flex-item cursor-pointer"
+                v-for="item in orderList"
+                :key="item.id"
+                @click="onOrder(item)"
+              >
+                <span class="font-bold">#{{ item.sn }}</span>
                 <span>{{ $t('已打包') }}</span>
               </div>
             </div>
@@ -43,11 +48,11 @@
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('收货点') }}：</span>
-                      <el-select v-model="value"></el-select>
+                      <span class="font-bold"></span>
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('客户编号') }}：</span>
-                      <el-select v-model="value"></el-select>
+                      <span class="font-bold"></span>
                     </el-col>
                   </el-row>
                   <el-row class="row-item">
@@ -57,7 +62,14 @@
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('订单属性') }}：</span>
-                      <el-select v-model="value"></el-select>
+                      <el-select v-model="prop">
+                        <el-option
+                          v-for="item in propList"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        ></el-option>
+                      </el-select>
                     </el-col>
                   </el-row>
                 </div>
@@ -69,64 +81,120 @@
                     <el-button type="primary" @click="onAddBox">{{ $t('添加箱子') }}</el-button>
                   </div>
                   <div class="weight-box">
-                    <el-row :gutter="10" class="weight-row">
+                    <el-row :gutter="10">
+                      <el-col :offset="1" :span="4">
+                        <div>
+                          <span class="red-text">*</span>
+                          <span>{{ $t('重量') }}</span>
+                        </div>
+                      </el-col>
+                      <el-col :span="4">
+                        <div>{{ $t('尺寸') }}</div>
+                      </el-col>
+                    </el-row>
+                    <el-row
+                      :gutter="10"
+                      class="weight-row"
+                      v-for="(item, index) in boxList"
+                      :key="index"
+                    >
                       <el-col :span="1">
-                        <div class="index-label font-bold">#1</div>
+                        <div class="index-label font-bold">#{{ index + 1 }}</div>
                       </el-col>
-                      <el-col :span="7" :offset="1"
-                        ><div class="item-weight">
-                          <span>{{ $t('已装箱数') }}：</span><span>30</span>
-                        </div></el-col
-                      >
-                      <el-col :span="8">
-                        <el-input :placeholder="$t('请扫入商品条码装箱')"></el-input>
+                      <el-col :span="4">
+                        <el-input
+                          :placeholder="$t('重量')"
+                          size="large"
+                          class="weight-ipt"
+                          v-model="item.weight"
+                        />
                       </el-col>
-                      <el-col :span="4" :offset="3">
+                      <el-col :span="4">
+                        <el-input
+                          size="large"
+                          :placeholder="$t('长')"
+                          class="weight-ipt"
+                          v-model="item.length"
+                        />
+                      </el-col>
+                      <el-col :span="4">
+                        <el-input
+                          size="large"
+                          :placeholder="$t('宽')"
+                          class="weight-ipt"
+                          v-model="item.width"
+                        />
+                      </el-col>
+                      <el-col :span="4">
+                        <el-input
+                          size="large"
+                          :placeholder="$t('高')"
+                          class="weight-ipt"
+                          v-model="item.height"
+                        />
+                      </el-col>
+                      <el-col :span="3">
                         <div class="item-weight">
-                          <span class="btn-red" @click="onDelBox(index)"> {{ $t('移除') }}</span>
+                          <span class="btn-red" v-if="index > 0" @click="onDelBox(index)">
+                            {{ $t('移除') }}</span
+                          >
                         </div>
                       </el-col>
                     </el-row>
                   </div>
-                  <el-table :data="skuList">
-                    <el-table-column label="#" type="index"></el-table-column>
-                    <el-table-column :label="$t('状态')" prop="status">
-                      <template>
-                        <span class="red-text">{{ $t('未装箱') }}</span>
-                        <span>{{ $t('已装箱') }}</span>
-                        <span>{{ $t('部分装箱') }}</span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column :label="$t('图片')" prop="img">
-                      <template>
-                        <img class="img-goods" />
-                      </template>
-                    </el-table-column>
-                    <el-table-column :label="$t('商品ID')" prop="goodId"></el-table-column>
-                    <el-table-column :label="$t('名称')" prop="name"> </el-table-column>
-                    <el-table-column :label="$t('颜色')" prop="color"></el-table-column>
-                    <el-table-column :label="$t('总数')" prop="total"></el-table-column>
-                    <el-table-column :label="$t('已装箱')">
-                      <template slot-scope="scope">
-                        <el-row style="margin-bottom: 10px">
-                          <el-col :span="3">
-                            <span>#1</span>
-                          </el-col>
-                          <el-col :span="11" :offset="2">
-                            <el-input type="number" v-model="scope.row.box"></el-input>
-                          </el-col>
-                        </el-row>
-                        <el-row style="margin-bottom: 10px">
-                          <el-col :span="3">
-                            <span>#1</span>
-                          </el-col>
-                          <el-col :span="11" :offset="2">
-                            <el-input type="number" v-model="scope.row.box"></el-input>
-                          </el-col>
-                        </el-row>
-                      </template>
-                    </el-table-column>
-                  </el-table>
+                  <div
+                    style="
+                      padding: 20px;
+                      margin-top: 10px;
+                      border: 1px solid #000;
+                      border-radius: 5px;
+                    "
+                  >
+                    <el-row :gutter="10">
+                      <el-col :span="3"><div>状态</div></el-col>
+                      <el-col :span="3"><div>图片</div></el-col>
+                      <el-col :span="4"><div>条码</div></el-col>
+                      <el-col :span="3"><div>名称</div></el-col>
+                      <el-col :span="3"><div>颜色</div></el-col>
+                      <el-col :span="3"><div>总数</div></el-col>
+                      <el-col :span="5"><div>已装箱</div></el-col>
+                    </el-row>
+                    <el-row
+                      :gutter="10"
+                      style="margin: 20px 0"
+                      v-for="(item, index) in skuList"
+                      :key="index"
+                    >
+                      <el-col :span="3"><div>未装箱</div></el-col>
+                      <el-col :span="3"
+                        ><span v-if="item.p_goods"
+                          ><img :src="`${$baseUrl.IMAGE_URL}${item.p_goods.image}`" /> </span
+                      ></el-col>
+                      <el-col :span="4"
+                        ><div>{{ item.p_goods ? item.p_goods.barcode : '' }}</div></el-col
+                      >
+                      <el-col :span="3"
+                        ><div>{{ item.p_goods ? item.p_goods.cn_name : '' }}</div></el-col
+                      >
+                      <el-col :span="3"><div>蓝色</div></el-col>
+                      <el-col :span="3"
+                        ><div>{{ item.p_goods ? item.p_goods.quantity : '' }}</div></el-col
+                      >
+                      <el-col :span="5">
+                        <div
+                          style="display: flex; align-items: center"
+                          v-for="(item, index) in packData"
+                          :key="index"
+                        >
+                          <span>#{{ index + 1 }}</span>
+                          <el-input
+                            type="number"
+                            v-model="item.pack_quantity"
+                            style="margin: 3px 0 0 10px"
+                          ></el-input></div
+                      ></el-col>
+                    </el-row>
+                  </div>
                 </div>
               </div>
             </div>
@@ -153,39 +221,77 @@ export default {
   data() {
     return {
       value: '',
-      reviewTypes: [
-        { id: 0, name: '无需复核单箱称重' },
-        { id: 1, name: '复核多箱称重' }
-      ],
-      skuList: [
-        {
-          status: 1,
-          img: '',
-          goodId: 1122223,
-          name: '裙子',
-          color: '白色',
-          total: 20,
-          box: 20
-        }
-      ]
+      pickingSN: '',
+      orderList: [],
+      name: '',
+      remark: '',
+      boxList: [],
+      propList: [],
+      prop: '',
+      skuList: [],
+      packData: []
     }
   },
   created() {
-    this.getProps()
+    this.getPropList()
     this.orderAddValues()
   },
   methods: {
-    getCloudDetail() {},
-    getProps() {},
+    getCloudDetail() {
+      if (!this.pickingSN) return
+      this.tableLoading = true
+      // this.$request
+      //   .purchasePickSearch(this.pickingSN)
+      //   .then(res => {
+      //     if (res.data) {
+      //       this.orderList = res.data.orders
+      //       this.name = res.data.name
+      //       this.remark = res.data.remark
+      //       res.data.orders.forEach(item => {
+      //         item.goods.forEach(ele => {
+      //           this.skuList.push({
+      //             p_goods: ele.p_goods,
+      //             purchase_order_goods_id: ele.purchase_order_goods_id
+      //           })
+      //         })
+      //       })
+      //       console.log(this.skuList)
+      //     } else {
+      //       this.$message.error(this.$t('拣货单号不存在'))
+      //     }
+      //   })
+      //   .finally(() => {
+      //     this.tableLoading = false
+      //   })
+    },
+    getPropList() {
+      this.$request.getProps().then(res => {
+        this.propList = res.data
+      })
+    },
     orderAddValues() {},
     getLines() {},
     getLineService() {},
     onSku() {},
-    onAddBox() {},
-    onDelBox() {},
-    onOrder() {},
+    onAddBox() {
+      console.log(this.boxList, 1111)
+      this.boxList.push({ weight: '', length: '', height: '', width: '' })
+      for (let i = 0; i <= this.boxList.length; i++) {
+        this.packData.push({
+          pack_quantity: ''
+        })
+      }
+      console.log(this.boxList)
+      console.log(this.packData)
+    },
+    onDelBox(index) {
+      this.boxList.splice(index, 1)
+      this.packData.splice(index, 1)
+    },
+    onOrder(item) {
+      console.log(item)
+    },
     getOrderDetail() {},
-    calcVolumn() {},
     onReviewType() {},
     onPack() {}
   },

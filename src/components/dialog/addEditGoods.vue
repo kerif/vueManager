@@ -12,6 +12,13 @@
       label-width="120px"
       :model="ruleForm"
     >
+      <el-form-item label="no" prop="number">
+        <el-input
+          v-model="ruleForm.number"
+          :placeholder="$t('请输入')"
+          class="input-sty"
+        ></el-input>
+      </el-form-item>
       <el-form-item :label="$t('中文名称')" prop="cn_name">
         <el-input
           class="input-sty"
@@ -26,55 +33,45 @@
           :placeholder="$t('请输入')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('品牌')" prop="brand">
-        <el-input class="input-sty" v-model="ruleForm.brand" :placeholder="$t('请输入')"></el-input>
+      <el-form-item :label="$t('包装')" prop="casing">
+        <el-input
+          class="input-sty"
+          v-model="ruleForm.casing"
+          :placeholder="$t('请输入')"
+        ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('商品分类')" prop="category_id">
-        <el-cascader
-          v-model="ruleForm.category_id"
-          :options="classifyList"
-          ref="good"
-          :props="props"
-          :show-all-levels="false"
-          @change="handleVal"
-        ></el-cascader>
+      <el-form-item :label="$t('材质')" prop="material">
+        <el-input
+          class="input-sty"
+          v-model="ruleForm.material"
+          :placeholder="$t('请输入')"
+        ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('商品属性')" prop="prop_id">
-        <el-radio-group v-model="ruleForm.prop_id" @change="handleClick">
-          <el-radio v-for="item in propList" :key="item.id" :label="item.id">{{
-            item.name
-          }}</el-radio>
-        </el-radio-group>
+      <el-form-item :label="$t('颜色')" prop="color">
+        <el-input class="input-sty" v-model="ruleForm.color" :placeholder="$t('请输入')"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('采购单价')" prop="purchase_price">
+      <el-form-item :label="$t('价格')" prop="purchase_price">
         <el-input
           class="input-sty"
           v-model="ruleForm.purchase_price"
           :placeholder="$t('请输入')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('物品总数量')" prop="quantity">
+      <el-form-item :label="$t('应到数量')" prop="quantity">
         <el-input
           class="input-sty"
           v-model="ruleForm.quantity"
           :placeholder="$t('请输入')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('总箱数')" prop="box_count">
+      <el-form-item :label="$t('装箱数')" prop="box_count">
         <el-input
           class="input-sty"
           v-model="ruleForm.box_count"
           :placeholder="$t('请输入')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('箱规')" prop="box_spec">
-        <el-input
-          class="input-sty"
-          v-model="ruleForm.box_spec"
-          :placeholder="$t('请输入')"
-        ></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('条码')" prop="barcode">
+      <el-form-item label="barcode" prop="barcode">
         <el-input
           class="input-sty"
           v-model="ruleForm.barcode"
@@ -101,23 +98,6 @@
           <i class="el-icon-plus"> </i>
         </el-upload>
       </el-form-item>
-      <el-form-item :label="$t('供应商')" prop="distributor">
-        <el-input
-          class="input-sty"
-          v-model="ruleForm.distributor"
-          :placeholder="$t('请输入')"
-        ></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('HS CODE')" prop="hs_code">
-        <el-input
-          class="input-sty"
-          v-model="ruleForm.hs_code"
-          :placeholder="$t('请输入')"
-        ></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('SKU')" prop="sku">
-        <el-input class="input-sty" v-model="ruleForm.sku" :placeholder="$t('请输入')"></el-input>
-      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -135,33 +115,26 @@ export default {
       state: '',
       options: [],
       ruleForm: {
+        number: '',
+        material: '',
+        casing: '',
+        color: '',
         cn_name: '',
         en_name: '',
-        brand: '',
-        category_id: '',
-        category_name: '',
         barcode: '',
-        prop_id: '',
-        prop_name: '',
-        distributor: '',
-        sku: '',
-        hs_code: '',
         quantity: '',
         purchase_price: '',
-        box_spec: '',
+        box_count: '',
         image: ''
       },
       propList: [],
       level: [],
-      props: { checkStrictly: false },
       label: '',
       classifyList: [],
       rules: {
         cn_name: [{ required: true, message: this.$t('请输入中文名称'), trigger: 'blur' }],
         en_name: [{ required: true, message: this.$t('请输入英文名称'), trigger: 'blur' }],
-        prop_id: [{ required: true, message: this.$t('请选择商品属性'), trigger: 'change' }],
-        quantity: [{ required: true, message: this.$t('请输入物品总数量'), trigger: 'blur' }],
-        category_id: [{ required: true, message: this.$t('请选择商品分类'), trigger: 'change' }]
+        quantity: [{ required: true, message: this.$t('请输入物品总数量'), trigger: 'blur' }]
       }
     }
   },
@@ -200,7 +173,6 @@ export default {
       this.ruleForm.image = ''
     },
     handleVal(val) {
-      console.log(val)
       this.level = val
       this.label = this.$refs.good.getCheckedNodes()[0].label
     },
@@ -253,17 +225,6 @@ export default {
       })
     },
     submit(formName) {
-      if (this.level.length) {
-        console.log(this.level[this.level.length - 1])
-        this.ruleForm.category_id = this.level[this.level.length - 1]
-      }
-      console.log(this.ruleForm.category_id)
-      this.ruleForm.category_name = this.label
-      this.propList.forEach(item => {
-        if (item.id === this.ruleForm.prop_id) {
-          this.ruleForm.prop_name = item.name
-        }
-      })
       let params = {
         ...this.ruleForm
       }
@@ -283,19 +244,16 @@ export default {
     },
     clear() {
       this.purchase = {}
+      this.ruleForm.number = ''
+      this.ruleForm.material = ''
+      this.ruleForm.color = ''
+      this.ruleForm.casing = ''
       this.ruleForm.cn_name = ''
       this.ruleForm.en_name = ''
-      this.ruleForm.brand = ''
-      this.ruleForm.category_id = ''
       this.ruleForm.barcode = ''
-      this.ruleForm.prop_id = ''
-      this.ruleForm.distributor = ''
-      this.ruleForm.sku = ''
       this.ruleForm.box_count = ''
-      this.ruleForm.hs_code = ''
       this.ruleForm.quantity = ''
       this.ruleForm.purchase_price = ''
-      this.ruleForm.box_spec = ''
       this.ruleForm.image = ''
     }
   }
