@@ -1,5 +1,6 @@
 <template>
-  <div class="transshipment-detail-container">
+  <div></div>
+  <!-- <div class="transshipment-detail-container">
     <div class="title">
       <h4>{{ $t('基本信息') }}</h4>
       <div style="margin-left: 30px">
@@ -98,14 +99,15 @@
           <el-col :span="5"
             ><div>
               {{ $t('客户') }}: {{ item.user_id }}
-              <!-- {{ item.user ? item.user.name : '' }} -->
             </div></el-col
           >
           <el-col :span="5"
             ><div>{{ $t('收货点') }}: {{ item.station ? item.station.code : '' }}</div></el-col
           >
           <el-col :span="3"
-            ><el-button>{{ $t('下载面单') }}</el-button></el-col
+            ><el-button class="btn-main" @click="onDownload">{{
+              $t('下载面单')
+            }}</el-button></el-col
           >
         </el-row>
         <el-table
@@ -143,11 +145,11 @@
         $t('保存并提交')
       }}</el-button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
-import dialog from '@/components/dialog'
+// import dialog from '@/components/dialog'
 export default {
   data() {
     return {
@@ -168,95 +170,101 @@ export default {
     this.getList()
   },
   methods: {
-    getList() {
-      this.$request.pickOrderDetail(this.$route.params.id).then(res => {
-        console.log(res)
-        this.status = res.data.status
-        this.statusName = res.data.status_name
-        this.sn = res.data.sn
-        this.name = res.data.name
-        this.orders = res.data.orders
-        this.remark = res.data.remark
-        this.records = res.data.records
-        this.form.name = res.data.name
-        this.form.remark = res.data.remark
-        this.orders.forEach(item => {
-          this.goodData.push({
-            number: item.number,
-            station_code: item.station.code,
-            user: item.user,
-            user_id: item.user_id,
-            sn: item.sn,
-            boxs: item.boxs,
-            goods: item.goods.map(ele => {
-              return { ...ele.p_goods, quantity: ele.quantity }
-            })
-          })
-        })
-        this.goodData.forEach(item => {
-          if (item.goods) {
-            item.goods.forEach(ele => {
-              ele.name = ele.cn_name
-            })
-          }
-        })
-        console.log(this.goodData)
-      })
-    },
-    onImport(mode) {
-      dialog(
-        {
-          type: 'distributeScheme',
-          mode,
-          id: this.$route.params.id
-        },
-        goodsList => {
-          console.log(goodsList, 333)
-          this.goodData.push(...goodsList)
-          // this.getList()
-        }
-      )
-    },
-    downloadFile() {},
-    handleClick() {
-      this.getList()
-    },
-    onSubmit(isFinish) {
-      let params = {}
-      params.orders = this.goodData.map(item => {
-        const prop_ids = [item.prop.id]
-        const goods = item.goods
-        const number = item.number
-        const station_code = item.station_code
-        const user_id = item.user_id
-        return {
-          prop_ids,
-          goods,
-          number,
-          station_code,
-          user_id
-        }
-      })
-      this.$request
-        .addPickOrder({ ...this.form, is_finish: isFinish, orders: params.orders })
-        .then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'transshipmentBill'
-            })
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
-    }
+    // getList() {
+    //   this.$request.pickOrderDetail(this.$route.params.id).then(res => {
+    //     console.log(res)
+    //     this.status = res.data.status
+    //     this.statusName = res.data.status_name
+    //     this.sn = res.data.sn
+    //     this.name = res.data.name
+    //     this.orders = res.data.orders
+    //     this.remark = res.data.remark
+    //     this.records = res.data.records
+    //     this.form.name = res.data.name
+    //     this.form.remark = res.data.remark
+    //     this.orders.forEach(item => {
+    //       this.goodData.push({
+    //         number: item.number,
+    //         station_code: item.station.code,
+    //         user: item.user,
+    //         user_id: item.user_id,
+    //         sn: item.sn,
+    //         boxs: item.boxs,
+    //         goods: item.goods.map(ele => {
+    //           return { ...ele.p_goods, quantity: ele.quantity }
+    //         })
+    //       })
+    //     })
+    //     this.goodData.forEach(item => {
+    //       if (item.goods) {
+    //         item.goods.forEach(ele => {
+    //           ele.name = ele.cn_name
+    //         })
+    //       }
+    //     })
+    //     console.log(this.goodData)
+    //   })
+    // },
+    // onImport(mode) {
+    //   dialog(
+    //     {
+    //       type: 'distributeScheme',
+    //       mode,
+    //       id: this.$route.params.id
+    //     },
+    //     goodsList => {
+    //       console.log(goodsList, 333)
+    //       this.goodData.push(...goodsList)
+    //       // this.getList()
+    //     }
+    //   )
+    // },
+    // downloadFile() {},
+    // onDownload() {
+    //   let params = {}
+    //   this.$request.downloadNoodleSheet(params).then(res => {
+    //     console.log(res)
+    //   })
+    // },
+    // handleClick() {
+    //   this.getList()
+    // },
+    // onSubmit(isFinish) {
+    //   let params = {}
+    //   params.orders = this.goodData.map(item => {
+    //     const prop_ids = [item.prop.id]
+    //     const goods = item.goods
+    //     const number = item.number
+    //     const station_code = item.station_code
+    //     const user_id = item.user_id
+    //     return {
+    //       prop_ids,
+    //       goods,
+    //       number,
+    //       station_code,
+    //       user_id
+    //     }
+    //   })
+    //   this.$request
+    //     .addPickOrder({ ...this.form, is_finish: isFinish, orders: params.orders })
+    //     .then(res => {
+    //       if (res.ret) {
+    //         this.$notify({
+    //           type: 'success',
+    //           title: this.$t('操作成功'),
+    //           message: res.msg
+    //         })
+    //         this.$router.push({
+    //           name: 'transshipmentBill'
+    //         })
+    //       } else {
+    //         this.$message({
+    //           message: res.msg,
+    //           type: 'error'
+    //         })
+    //       }
+    //     })
+    // }
   }
 }
 </script>

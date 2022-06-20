@@ -4491,3 +4491,8 @@ exports.channelData = id => {
 exports.delPickOrder = id => {
   return $form.delete(`purchase-picking-orders/${id}`)
 }
+
+//采购 下载面单
+exports.downloadNoodleSheet = params => {
+  return $form.post(`purchase-picking-orders/order/order-label-pdfs`, params)
+}

@@ -1,5 +1,6 @@
 <template>
-  <div class="pack-container">
+  <div></div>
+  <!-- <div class="pack-container">
     <div class="content-box">
       <div class="flex-item search-box">
         <el-input
@@ -33,7 +34,7 @@
                 @click="onOrder(item)"
               >
                 <span class="font-bold">#{{ item.sn }}</span>
-                <span>{{ statusName }}</span>
+                <span>{{ item.status === 2 ? $t('待打包') : $t('已打包') }}</span>
               </div>
             </div>
           </el-col>
@@ -156,7 +157,7 @@
                     style="
                       padding: 20px 0px;
                       margin-top: 10px;
-                      border: 1px solid #000;
+                      border: 1px solid #eff1f2;
                       border-radius: 5px;
                       text-align: center;
                     "
@@ -241,7 +242,7 @@
         </el-row>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 <script>
 export default {
@@ -276,169 +277,199 @@ export default {
       ids: '',
       statusName: '',
       stationId: '',
-      boxedSum: ''
+      boxedSum: '',
+      orderData: [],
+      pack: []
     }
   },
   created() {
     this.getPropList()
     this.getLineType()
+    if (this.$route.query.sn) {
+      this.pickingSN = this.$route.query.sn
+      this.getCloudDetail()
+    }
   },
   methods: {
-    getCloudDetail() {
-      if (!this.pickingSN) return
-      this.tableLoading = true
-      this.$request
-        .purchasePickSearch(this.pickingSN)
-        .then(res => {
-          if (res.data) {
-            this.orderList = res.data.orders
-            this.name = res.data.name
-            this.remark = res.data.remark
-            this.statusName = res.data.status_name
-            this.box = [
-              {
-                weight: '',
-                length: '',
-                height: '',
-                width: ''
-              }
-            ]
-            this.skuList.forEach(item => {
-              item.packData = [
-                {
-                  pack_quantity: ''
-                }
-              ]
-            })
-            this.order = []
-          } else {
-            this.$message.error(this.$t('拣货单号不存在'))
-          }
-        })
-        .finally(() => {
-          this.tableLoading = false
-        })
-    },
-    getPropList() {
-      this.$request.getProps().then(res => {
-        this.propList = res.data
-      })
-    },
-    onAddBox() {
-      this.skuList.forEach(item => {
-        item.packData = []
-      })
-      for (let i = 0; i <= this.box.length; i++) {
-        this.skuList.forEach(item => {
-          item.packData.push({
-            pack_quantity: ''
-          })
-        })
-      }
-      this.box.push({ weight: '', length: '', height: '', width: '' })
-    },
-    onDelBox(index) {
-      this.box.splice(index, 1)
-      this.skuList.forEach(item => {
-        item.packData.splice(index, 1)
-      })
-    },
-    onOrder(item) {
-      console.log(item)
-      this.order = this.orderList.filter(ele => ele.sn === item.sn)
-      this.ids = this.order[0].id
-      this.box = [
-        {
-          weight: '',
-          length: '',
-          height: '',
-          width: ''
-        }
-      ]
-      this.skuList = []
-      this.order.forEach(item => {
-        item.goods.forEach(ele => {
-          this.skuList.push({
-            ...ele.p_goods,
-            purchase_order_goods_id: ele.purchase_order_goods_id,
-            packData: [{ pack_quantity: '' }]
-          })
-        })
-      })
-      console.log(this.skuList)
-      this.stationId = item.station_id
-      this.getChannel(this.stationId)
-      this.prop_ids = item.props.map(item => item.id)
-    },
-    getChannel() {
-      this.$request.channelData(this.stationId).then(res => {
-        console.log(res)
-      })
-    },
-    getLineType() {
-      this.$request.lineType().then(res => {
-        this.lineData = res.data
-      })
-    },
-    onCheckOut(item, index) {
-      console.log(item, index)
-      this.boxedSum = this.sum(item.packData)
-      console.log(this.boxedSum)
-      console.log(item.quantity)
-      if (this.boxedSum) {
-        return this.$message.error(this.$t('已装箱不能大于总数'))
-      }
-    },
+    // getCloudDetail() {
+    //   if (!this.pickingSN) return
+    //   this.tableLoading = true
+    //   this.$request
+    //     .purchasePickSearch(this.pickingSN)
+    //     .then(res => {
+    //       if (res.data) {
+    //         this.orderList = res.data.orders
+    //         this.name = res.data.name
+    //         this.remark = res.data.remark
+    //         this.statusName = res.data.status_name
+    //         this.box = [
+    //           {
+    //             weight: '',
+    //             length: '',
+    //             height: '',
+    //             width: ''
+    //           }
+    //         ]
+    //         this.skuList.forEach(item => {
+    //           item.packData = [
+    //             {
+    //               pack_quantity: ''
+    //             }
+    //           ]
+    //         })
+    //         this.order = []
+    //       } else {
+    //         this.$message.error(this.$t('拣货单号不存在'))
+    //       }
+    //     })
+    //     .finally(() => {
+    //       this.tableLoading = false
+    //     })
+    // },
+    // getPropList() {
+    //   this.$request.getProps().then(res => {
+    //     this.propList = res.data
+    //   })
+    // },
+    // onAddBox() {
+    //   this.skuList.forEach(item => {
+    //     item.packData = []
+    //   })
+    //   for (let i = 0; i <= this.box.length; i++) {
+    //     this.skuList.forEach(item => {
+    //       item.packData.push({
+    //         pack_quantity: ''
+    //       })
+    //     })
+    //   }
+    //   this.box.push({ weight: '', length: '', height: '', width: '' })
+    // },
+    // onDelBox(index) {
+    //   this.box.splice(index, 1)
+    //   this.skuList.forEach(item => {
+    //     item.packData.splice(index, 1)
+    //   })
+    // },
+    // onOrder(item) {
+    //   this.order = this.orderList.filter(ele => ele.sn === item.sn)
+    //   this.ids = this.order[0].id
+    //   this.box = [
+    //     {
+    //       weight: '',
+    //       length: '',
+    //       height: '',
+    //       width: ''
+    //     }
+    //   ]
+    //   this.skuList = []
+    //   this.order.forEach(item => {
+    //     item.goods.forEach(ele => {
+    //       this.skuList.push({
+    //         ...ele.p_goods,
+    //         purchase_order_goods_id: ele.purchase_order_goods_id,
+    //         packData: [{ pack_quantity: '' }]
+    //       })
+    //     })
+    //   })
+    //   this.stationId = item.station_id
+    //   this.getChannel(this.stationId)
+    //   this.prop_ids = item.props.map(item => item.id)
+    //   if (item.status === 3) {
+    //     this.orderList.forEach(item => {
+    //       if (item.boxes.length) {
+    //         item.boxes.forEach(val => {
+    //           this.pack = val.goods.map(o => {
+    //             return {
+    //               pack_quantity: o.pivot ? o.pivot.quantity : ''
+    //             }
+    //           })
+    //         })
+    //         console.log(this.pack)
+    //         this.box = item.boxes.map(ele => {
+    //           return {
+    //             width: ele.width,
+    //             length: ele.length,
+    //             height: ele.height,
+    //             weight: ele.weight
+    //           }
+    //         })
+    //       }
+    //     })
+    //     for (let i in this.skuList) {
+    //       console.log(i)
+    //       // this.skuList[i].packData = this.pack
+    //     }
+    //   }
+    // },
+    // getChannel() {
+    //   this.$request.channelData(this.stationId).then(res => {
+    //     console.log(res)
+    //   })
+    // },
+    // getLineType() {
+    //   this.$request.lineType().then(res => {
+    //     this.lineData = res.data
+    //   })
+    // },
+    // onCheckOut(item, index) {
+    //   console.log(item, index)
+    //   this.boxedSum = this.sum(item.packData)
+    //   console.log(this.boxedSum)
+    //   if (this.boxedSum) {
+    //     return this.$message.error(this.$t('已装箱不能大于总数'))
+    //   }
+    // },
     // sum(arr) {
     //   return arr.reduce((prev, curr) => prev + curr)
     // },
-    onPack(type) {
-      if (!this.express_line_id) {
-        return this.$message.error(this.$t('请选择渠道'))
-      } else if (!this.prop_ids) {
-        return this.$message.error(this.$t('请选择属性'))
-      }
-      let goods = this.skuList.map(item => {
-        // const pack_quantity = this.sum(item.packData)
-        return {
-          purchase_order_goods_id: item.purchase_order_goods_id,
-          pack_quantity: item.packData.map(ele => ele.pack_quantity)[0]
-        }
-      })
-      let params = {
-        is_pack_finish: type,
-        express_line_id: this.express_line_id,
-        prop_ids: [this.prop_ids],
-        box: []
-      }
-      params.box = [...this.box]
-      for (let i in params.box) {
-        params.box[i].goods = goods
-      }
-      this.$request.purchasePack(this.ids, params).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          if (type === 0) {
-            this.$router.push({
-              name: 'transshipmentBill'
-            })
-          } else {
-            this.$router.push({
-              name: 'transshipmentBill'
-            })
-          }
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    }
+    // onPack(type) {
+    //   if (!this.express_line_id) {
+    //     return this.$message.error(this.$t('请选择渠道'))
+    //   } else if (!this.prop_ids) {
+    //     return this.$message.error(this.$t('请选择属性'))
+    //   }
+    //   let goods = this.skuList.map(item => {
+    //     // const pack_quantity = this.sum(item.packData)
+    //     return {
+    //       purchase_order_goods_id: item.purchase_order_goods_id,
+    //       pack_quantity: item.packData.map(ele => ele.pack_quantity)[0]
+    //     }
+    //   })
+    //   let params = {
+    //     is_pack_finish: type,
+    //     express_line_id: this.express_line_id,
+    //     prop_ids: [this.prop_ids],
+    //     box: []
+    //   }
+    //   params.box = [...this.box]
+    //   for (let i in params.box) {
+    //     params.box[i].goods = goods
+    //   }
+    //   this.$request.purchasePack(this.ids, params).then(res => {
+    //     if (res.ret) {
+    //       this.$notify({
+    //         type: 'success',
+    //         title: this.$t('操作成功'),
+    //         message: res.msg
+    //       })
+    //       if (type === 0) {
+    //         this.$router.push({
+    //           name: 'transshipmentBill',
+    //           query: { activeName: '2' }
+    //         })
+    //       } else {
+    //         this.$router.push({
+    //           name: 'transshipmentBill'
+    //         })
+    //       }
+    //     } else {
+    //       this.$message({
+    //         message: res.msg,
+    //         type: 'error'
+    //       })
+    //     }
+    //   })
+    // }
   },
   computed: {},
   components: {}

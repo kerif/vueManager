@@ -1087,7 +1087,7 @@ export default {
     if (this.$route.params.id) {
       this.getList()
       this.getProduct()
-      this.getPurchaseDetail()
+      // this.getPurchaseDetail()
     }
   },
   methods: {
@@ -1456,11 +1456,11 @@ export default {
       this.getAddress()
       this.boxDialog = true
     },
-    getPurchaseDetail() {
-      this.$request.transportGoodList(this.$route.params.id).then(res => {
-        console.log(res)
-      })
-    },
+    // getPurchaseDetail() {
+    //   this.$request.transportGoodList(this.$route.params.id).then(res => {
+    //     console.log(res)
+    //   })
+    // },
     // 编辑
     goEdit() {
       // this.unEdit = true

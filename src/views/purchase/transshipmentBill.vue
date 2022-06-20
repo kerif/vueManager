@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div></div>
+  <!-- <div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane
         :label="`${$t('全部')}(${countData[4] ? countData[4].counts : ''})`"
@@ -92,25 +93,31 @@
               @click="onDetail(scope.row.id)"
               >{{ $t('详情') }}</el-button
             >
-            <el-button class="btn-light-green" v-if="['1'].includes(activeName)" @click="onPick">{{
-              $t('开始拣货')
-            }}</el-button>
-            <el-button class="btn-deep-blue" v-if="['2'].includes(activeName)" @click="onPack">{{
-              $t('开始打包')
-            }}</el-button>
+            <el-button
+              class="btn-light-green"
+              v-if="['1'].includes(activeName)"
+              @click="onPick(scope.row.sn)"
+              >{{ $t('开始拣货') }}</el-button
+            >
+            <el-button
+              class="btn-deep-blue"
+              v-if="['2'].includes(activeName)"
+              @click="onPack(scope.row.sn)"
+              >{{ $t('开始打包') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
-  </div>
+  </div> -->
 </template>
 
 <script>
-import purchaseSearch from './components/purchaseSearch.vue'
-import { SearchGroup } from '@/components/searchs'
-import NlePagination from '@/components/pagination'
-import { pagination } from '@/mixin'
+// import purchaseSearch from './components/purchaseSearch.vue'
+// import { SearchGroup } from '@/components/searchs'
+// import NlePagination from '@/components/pagination'
+// import { pagination } from '@/mixin'
 export default {
   data() {
     return {
@@ -128,105 +135,113 @@ export default {
     }
   },
   components: {
-    purchaseSearch,
-    SearchGroup,
-    NlePagination
+    // purchaseSearch,
+    // SearchGroup,
+    // NlePagination
   },
-  mixins: [pagination],
+  // mixins: [pagination],
   created() {
     this.getList()
+    this.initQuery()
   },
   activated() {
     this.getList()
   },
   methods: {
-    getList() {
-      this.tableLoading = true
-      this.$request
-        .transshipmentList({
-          keyword: this.page_params.keyword,
-          page: this.page_params.page,
-          size: this.page_params.size,
-          status: this.activeName === 'all' ? '' : this.activeName
-        })
-        .then(res => {
-          if (res.ret) {
-            this.tableLoading = false
-            this.tableData = res.data
-            this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
-            this.onCount()
-          }
-        })
-    },
-    goSearch() {
-      this.getList()
-    },
-    onCount() {
-      this.$request.pickOrderCount().then(res => {
-        this.countData = res.data
-      })
-    },
-    addDistributeScheme() {
-      this.$router.push({
-        name: 'addScheme'
-      })
-    },
-    handleClick() {
-      this.page_params.page = 1
-      this.page_params.handleQueryChange('page', 1)
-      this.getList()
-    },
-    onPick() {
-      this.$router.push({
-        name: 'picking'
-      })
-    },
-    onPack() {
-      this.$router.push({
-        name: 'purchasePack'
-      })
-    },
-    onDetail(id) {
-      this.$router.push({
-        name: 'transshipmentDetail',
-        params: { id }
-      })
-    },
-    onDelete(id) {
-      this.$request.delPickOrder(id).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    },
-    onSubmit(id) {
-      this.$request.verifyPickOrder(id).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    }
+    // getList() {
+    //   this.tableLoading = true
+    //   this.$request
+    //     .transshipmentList({
+    //       keyword: this.page_params.keyword,
+    //       page: this.page_params.page,
+    //       size: this.page_params.size,
+    //       status: this.activeName === 'all' ? '' : this.activeName
+    //     })
+    //     .then(res => {
+    //       if (res.ret) {
+    //         this.tableLoading = false
+    //         this.tableData = res.data
+    //         this.page_params.page = res.meta.current_page
+    //         this.page_params.total = res.meta.total
+    //         this.onCount()
+    //       }
+    //     })
+    // },
+    // goSearch() {
+    //   this.getList()
+    // },
+    // initQuery() {
+    //   if (this.$route.query.activeName) {
+    //     this.activeName = this.$route.query.activeName
+    //   }
+    // },
+    // onCount() {
+    //   this.$request.pickOrderCount().then(res => {
+    //     this.countData = res.data
+    //   })
+    // },
+    // addDistributeScheme() {
+    //   this.$router.push({
+    //     name: 'addScheme'
+    //   })
+    // },
+    // handleClick() {
+    //   this.page_params.page = 1
+    //   this.page_params.handleQueryChange('page', 1)
+    //   this.getList()
+    // },
+    // onPick(sn) {
+    //   this.$router.push({
+    //     name: 'picking',
+    //     query: { sn }
+    //   })
+    // },
+    // onPack(sn) {
+    //   this.$router.push({
+    //     name: 'purchasePack',
+    //     query: { sn }
+    //   })
+    // },
+    // onDetail(id) {
+    //   this.$router.push({
+    //     name: 'transshipmentDetail',
+    //     params: { id }
+    //   })
+    // },
+    // onDelete(id) {
+    //   this.$request.delPickOrder(id).then(res => {
+    //     if (res.ret) {
+    //       this.$notify({
+    //         type: 'success',
+    //         title: this.$t('操作成功'),
+    //         message: res.msg
+    //       })
+    //       this.getList()
+    //     } else {
+    //       this.$message({
+    //         message: res.msg,
+    //         type: 'error'
+    //       })
+    //     }
+    //   })
+    // },
+    // onSubmit(id) {
+    //   this.$request.verifyPickOrder(id).then(res => {
+    //     if (res.ret) {
+    //       this.$notify({
+    //         type: 'success',
+    //         title: this.$t('操作成功'),
+    //         message: res.msg
+    //       })
+    //       this.getList()
+    //     } else {
+    //       this.$message({
+    //         message: res.msg,
+    //         type: 'error'
+    //       })
+    //     }
+    //   })
+    // }
   }
 }
 </script>
