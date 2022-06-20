@@ -1,5 +1,9 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('导入分货方案')" @close="clear">
+  <el-dialog
+    :visible.sync="show"
+    :title="mode === 1 ? $t('导入采购清单') : $t('导入分货方案')"
+    @close="clear"
+  >
     <el-form>
       <el-form-item :label="$t('第一步: 下载模板')">
         <el-button size="small" class="save-btn" @click="downloadTmp">{{ $t('模板') }}</el-button>
@@ -32,6 +36,7 @@ export default {
       fileList: [],
       mode: '',
       goodsList: [],
+      goodsData: [],
       id: ''
     }
   },
@@ -42,8 +47,7 @@ export default {
         this.$request
           .importGoodTmp()
           .then(res => {
-            console.log(res)
-            downloadStreamFile(res)
+            downloadStreamFile(res, '采购清单')
           })
           .catch(err => {
             console.log(err)
@@ -52,8 +56,7 @@ export default {
         this.$request
           .importPickOrderTmp()
           .then(res => {
-            console.log(res)
-            downloadStreamFile(res)
+            downloadStreamFile(res, '分货方案')
           })
           .catch(err => {
             console.log(err)
@@ -99,6 +102,9 @@ export default {
               type: 'success'
             })
             this.show = false
+            this.goodsData = res.data
+            console.log(this.goodsData)
+            this.success(this.goodsData)
           } else {
             this.$notify({
               title: this.$t('操作失败'),

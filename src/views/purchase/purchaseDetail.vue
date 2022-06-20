@@ -265,10 +265,10 @@
       >
       <el-button
         size="small"
-        @click="storage"
+        @click="onReceive"
         v-if="ruleForm.status === 2"
         class="btn-blue-green"
-        >{{ $t('入库') }}</el-button
+        >{{ $t('确认收货') }}</el-button
       >
       <el-button
         size="small"
@@ -365,6 +365,12 @@ export default {
         name: 'editStorage',
         params: { id: this.ids, state: 'purchase' },
         query: { sn: this.ruleForm.logistics_sn }
+      })
+    },
+    onReceive() {
+      dialog({
+        type: 'confirmReceive',
+        id: this.$route.params.id
       })
     },
     viewDetail(row) {
@@ -534,6 +540,7 @@ export default {
 <style lang="scss">
 .purchaseDetail-container {
   background: #fff !important;
+  min-height: calc(100vh - 150px);
   .purchase-top {
     display: flex;
     justify-content: flex-start;

@@ -4454,12 +4454,12 @@ exports.pickOrderDetail = id => {
 
 // 采购 商品模板
 exports.importGoodTmp = () => {
-  return $form.get('download-goods-template', {}, { responseType: 'blob' })
+  return $form.get('download-goods-template', { responseType: 'blob' })
 }
 
 // 采购 分货模板
 exports.importPickOrderTmp = () => {
-  return $form.get('purchase-picking-orders/download-order-template', {}, { responseType: 'blob' })
+  return $form.get('purchase-picking-orders/download-order-template', { responseType: 'blob' })
 }
 
 // 采购 分货方案  数量统计
@@ -4475,4 +4475,19 @@ exports.purchasePickSearch = sn => {
 // 采购 确认收货
 exports.confirmReceive = id => {
   return $form.put(`purchase-orders/${id}/in-storage`)
+}
+
+// 获取分货转运单商品列表
+exports.transportGoodList = orderId => {
+  return $form.get(`purchase-picking-orders/order/${orderId}/goods`)
+}
+
+// 通过自提点获取渠道列表
+exports.channelData = id => {
+  return $form.get(`self-pickup-stations/${id}/express-lines`)
+}
+
+// 采购 采购分货 删除
+exports.delPickOrder = id => {
+  return $form.delete(`purchase-picking-orders/${id}`)
 }

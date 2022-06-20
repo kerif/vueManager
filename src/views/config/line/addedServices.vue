@@ -269,6 +269,10 @@ export default {
         {
           value: 7,
           label: this.$t('单箱固定费用(总箱数-1)')
+        },
+        {
+          value: 8,
+          label: this.$t('包裹固定费用(原始包裹数)')
         }
       ],
       forcedList: [

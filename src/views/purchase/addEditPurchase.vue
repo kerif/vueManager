@@ -13,7 +13,7 @@
         <el-col :span="12">
           <el-form-item :label="$t('PO单号')">
             <el-input
-              v-model="ruleForm.name"
+              v-model="ruleForm.sn"
               maxlength="30"
               style="width: 50%"
               :placeholder="$t('请输入')"
@@ -167,7 +167,6 @@
 
 <script>
 import dialog from '@/components/dialog'
-// import distributeSchemeVue from '../../components/dialog/distributeScheme.vue'
 export default {
   data() {
     return {
@@ -247,10 +246,15 @@ export default {
       rows.splice(index, 1)
     },
     onImport(mode) {
-      dialog({
-        type: 'distributeScheme',
-        mode
-      })
+      dialog(
+        {
+          type: 'distributeScheme',
+          mode
+        },
+        goodsData => {
+          this.ruleForm.goods.push(...goodsData)
+        }
+      )
     },
     onSave() {
       console.log(this.ruleForm.logitics_company_code)
@@ -347,6 +351,7 @@ export default {
 <style lang="scss">
 .addPurchase-container {
   background: #fff !important;
+  min-height: calc(100vh - 150px);
 }
 .img {
   width: 30px;

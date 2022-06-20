@@ -1,20 +1,20 @@
 <template>
-  <el-dialog :visible.sync="show" :title="$t('确认收货')">
-    <el-form>
+  <el-dialog :visible.sync="show" :title="$t('确认收货')" @close="clear">
+    <el-form :model="form" label-width="100px">
       <el-form-item :label="$t('收货箱数')">
-        <el-input v-model="value"></el-input>
+        <el-input v-model="form.box_count"></el-input>
       </el-form-item>
       <el-form-item :label="$t('照片')">
-        <span class="img-item" v-if="image">
-          <img :src="$baseUrl.IMAGE_URL + image" alt="" class="goods-img" />
+        <span class="img-item" v-if="form.images">
+          <img :src="$baseUrl.IMAGE_URL + form.images" alt="" class="goods-img" />
           <span class="model-box"></span>
           <span class="operat-box">
-            <i class="el-icon-zoom-in" @click="onPreview(image)"></i>
+            <i class="el-icon-zoom-in" @click="onPreview(form.images)"></i>
             <i class="el-icon-delete" @click="onDeleteImg"></i>
           </span>
         </span>
         <el-upload
-          v-show="!image"
+          v-show="!form.images"
           class="avatar-uploader"
           action=""
           list-type="picture-card"
@@ -25,7 +25,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item :label="$t('备注')">
-        <el-input type="textarea" v-model="value"></el-input>
+        <el-input type="textarea" v-model="form.remark"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -40,8 +40,12 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      image: '',
-      value: ''
+      id: '',
+      form: {
+        box_count: '',
+        images: '',
+        remark: ''
+      }
     }
   },
   methods: {
@@ -52,15 +56,43 @@ export default {
       })
     },
     onDeleteImg() {
-      this.image = ''
+      this.form.images = ''
     },
     onUpload(file) {
       let params = new FormData()
       params.append(`images[${0}][file]`, file)
       return this.$request.uploadImg(params)
     },
-    uploadBaleImg() {},
-    submit() {}
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          this.form.images = res.data[0].path
+        }
+      })
+    },
+    clear() {
+      this.form.box_count = ''
+      this.form.images = ''
+      this.form.remark = ''
+    },
+    submit() {
+      this.$request.confirmReceive(this.id, this.form).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.show = false
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    }
   }
 }
 </script>

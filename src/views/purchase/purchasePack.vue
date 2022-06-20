@@ -8,9 +8,9 @@
           v-model="pickingSN"
           @keyup.native.enter="getCloudDetail"
         ></el-input>
-        <el-button type="primary" @click="getCloudDetail">{{ $t('查询') }}</el-button>
+        <el-button type="primary" size="small" @click="getCloudDetail">{{ $t('查询') }}</el-button>
       </div>
-      <div class="has-border order-box remark" v-if="pickingSN">
+      <div class="has-border order-box programmes" v-if="pickingSN">
         <el-row :gutter="10">
           <el-col :span="5">
             <div class="font-bold">{{ name }}</div>
@@ -27,42 +27,50 @@
             <div class="order-list">
               <div
                 class="order-item flex-item cursor-pointer"
+                :class="{ selected: item.id === ids }"
                 v-for="item in orderList"
                 :key="item.id"
                 @click="onOrder(item)"
               >
                 <span class="font-bold">#{{ item.sn }}</span>
-                <span>{{ $t('已打包') }}</span>
+                <span>{{ statusName }}</span>
               </div>
             </div>
           </el-col>
           <el-col :span="19" class="right-box">
-            <div class="top-box">
+            <div class="top-box" v-if="order.length">
               <div class="right-item has-border">
                 <div class="font-bold right-tile">{{ $t('打包详细') }}</div>
-                <div class="detail-box">
+                <div class="detail-box" v-for="item in order" :key="item.id">
                   <el-row class="row-item">
                     <el-col :span="8">
                       <span>{{ $t('订单号') }}：</span>
-                      <span class="font-bold"></span>
+                      <span class="font-bold">{{ item.sn }}</span>
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('收货点') }}：</span>
-                      <span class="font-bold"></span>
+                      <span class="font-bold">{{ item.station ? item.station.name : '' }}</span>
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('客户编号') }}：</span>
-                      <span class="font-bold"></span>
+                      <span class="font-bold">{{ item.user_id }}</span>
                     </el-col>
                   </el-row>
                   <el-row class="row-item">
                     <el-col :span="8">
                       <span>{{ $t('渠道') }}：</span>
-                      <el-select v-model="value"></el-select>
+                      <el-select v-model="express_line_id">
+                        <el-option
+                          v-for="item in lineData"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        ></el-option>
+                      </el-select>
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('订单属性') }}：</span>
-                      <el-select v-model="prop">
+                      <el-select v-model="prop_ids">
                         <el-option
                           v-for="item in propList"
                           :key="item.id"
@@ -78,7 +86,9 @@
                 <div class="weight-content">
                   <div class="flex-item title-list">
                     <div class="font-bold">{{ $t('装箱') }}</div>
-                    <el-button type="primary" @click="onAddBox">{{ $t('添加箱子') }}</el-button>
+                    <el-button type="primary" size="small" @click="onAddBox">{{
+                      $t('添加箱子')
+                    }}</el-button>
                   </div>
                   <div class="weight-box">
                     <el-row :gutter="10">
@@ -95,7 +105,7 @@
                     <el-row
                       :gutter="10"
                       class="weight-row"
-                      v-for="(item, index) in boxList"
+                      v-for="(item, index) in box"
                       :key="index"
                     >
                       <el-col :span="1">
@@ -144,20 +154,35 @@
                   </div>
                   <div
                     style="
-                      padding: 20px;
+                      padding: 20px 0px;
                       margin-top: 10px;
                       border: 1px solid #000;
                       border-radius: 5px;
+                      text-align: center;
                     "
                   >
                     <el-row :gutter="10">
-                      <el-col :span="3"><div>状态</div></el-col>
-                      <el-col :span="3"><div>图片</div></el-col>
-                      <el-col :span="4"><div>条码</div></el-col>
-                      <el-col :span="3"><div>名称</div></el-col>
-                      <el-col :span="3"><div>颜色</div></el-col>
-                      <el-col :span="3"><div>总数</div></el-col>
-                      <el-col :span="5"><div>已装箱</div></el-col>
+                      <el-col :span="3"
+                        ><div>{{ $t('状态') }}</div></el-col
+                      >
+                      <el-col :span="4"
+                        ><div>{{ $t('图片') }}</div></el-col
+                      >
+                      <el-col :span="4"
+                        ><div>{{ $t('条码') }}</div></el-col
+                      >
+                      <el-col :span="3"
+                        ><div>{{ $t('名称') }}</div></el-col
+                      >
+                      <el-col :span="3"
+                        ><div>{{ $t('颜色') }}</div></el-col
+                      >
+                      <el-col :span="4"
+                        ><div>{{ $t('总数') }}</div></el-col
+                      >
+                      <el-col :span="3"
+                        ><div>{{ $t('已装箱') }}</div></el-col
+                      >
                     </el-row>
                     <el-row
                       :gutter="10"
@@ -166,31 +191,32 @@
                       :key="index"
                     >
                       <el-col :span="3"><div>未装箱</div></el-col>
-                      <el-col :span="3"
-                        ><span v-if="item.p_goods"
-                          ><img :src="`${$baseUrl.IMAGE_URL}${item.p_goods.image}`" /> </span
+                      <el-col :span="4"
+                        ><span><img :src="`${$baseUrl.IMAGE_URL}${item.image}`" /> </span
                       ></el-col>
                       <el-col :span="4"
-                        ><div>{{ item.p_goods ? item.p_goods.barcode : '' }}</div></el-col
+                        ><div>{{ item.barcode }}</div></el-col
                       >
                       <el-col :span="3"
-                        ><div>{{ item.p_goods ? item.p_goods.cn_name : '' }}</div></el-col
+                        ><div>{{ item.cn_name }}</div></el-col
                       >
-                      <el-col :span="3"><div>蓝色</div></el-col>
                       <el-col :span="3"
-                        ><div>{{ item.p_goods ? item.p_goods.quantity : '' }}</div></el-col
+                        ><div>{{ item.color }}</div></el-col
                       >
-                      <el-col :span="5">
-                        <div
-                          style="display: flex; align-items: center"
-                          v-for="(item, index) in packData"
-                          :key="index"
-                        >
+                      <el-col :span="4"
+                        ><div class="num-item">
+                          {{ item.quantity }}
+                        </div></el-col
+                      >
+                      <el-col :span="3">
+                        <div class="flex-item" v-for="(ele, index) in item.packData" :key="index">
                           <span>#{{ index + 1 }}</span>
                           <el-input
                             type="number"
-                            v-model="item.pack_quantity"
+                            size="small"
+                            v-model="ele.pack_quantity"
                             style="margin: 3px 0 0 10px"
+                            @blur="onCheckOut(item, index)"
                           ></el-input></div
                       ></el-col>
                     </el-row>
@@ -198,14 +224,15 @@
                 </div>
               </div>
             </div>
-            <div class="bottom-box flex-item">
-              <div>
-                <el-button>{{ $t('保存') }}</el-button>
+            <div class="bottom-box">
+              <div v-if="order.length">
+                <el-button @click="onPack(0)" size="small">{{ $t('保存') }}</el-button>
                 <el-button
                   type="primary"
+                  size="small"
                   class="calc-btn"
                   :loading="$store.state.btnLoading"
-                  @click="onPack"
+                  @click="onPack(1)"
                   >{{ $t('打包完成') }}</el-button
                 >
               </div>
@@ -220,80 +247,198 @@
 export default {
   data() {
     return {
-      value: '',
+      express_line_id: '',
+      lineData: '',
       pickingSN: '',
+      order: [],
       orderList: [],
       name: '',
       remark: '',
-      boxList: [],
+      box: [
+        {
+          weight: '',
+          length: '',
+          height: '',
+          width: ''
+        }
+      ],
       propList: [],
-      prop: '',
-      skuList: [],
-      packData: []
+      prop_ids: [],
+      skuList: [
+        {
+          packData: [
+            {
+              pack_quantity: ''
+            }
+          ]
+        }
+      ],
+      ids: '',
+      statusName: '',
+      stationId: '',
+      boxedSum: ''
     }
   },
   created() {
     this.getPropList()
-    this.orderAddValues()
+    this.getLineType()
   },
   methods: {
     getCloudDetail() {
       if (!this.pickingSN) return
       this.tableLoading = true
-      // this.$request
-      //   .purchasePickSearch(this.pickingSN)
-      //   .then(res => {
-      //     if (res.data) {
-      //       this.orderList = res.data.orders
-      //       this.name = res.data.name
-      //       this.remark = res.data.remark
-      //       res.data.orders.forEach(item => {
-      //         item.goods.forEach(ele => {
-      //           this.skuList.push({
-      //             p_goods: ele.p_goods,
-      //             purchase_order_goods_id: ele.purchase_order_goods_id
-      //           })
-      //         })
-      //       })
-      //       console.log(this.skuList)
-      //     } else {
-      //       this.$message.error(this.$t('拣货单号不存在'))
-      //     }
-      //   })
-      //   .finally(() => {
-      //     this.tableLoading = false
-      //   })
+      this.$request
+        .purchasePickSearch(this.pickingSN)
+        .then(res => {
+          if (res.data) {
+            this.orderList = res.data.orders
+            this.name = res.data.name
+            this.remark = res.data.remark
+            this.statusName = res.data.status_name
+            this.box = [
+              {
+                weight: '',
+                length: '',
+                height: '',
+                width: ''
+              }
+            ]
+            this.skuList.forEach(item => {
+              item.packData = [
+                {
+                  pack_quantity: ''
+                }
+              ]
+            })
+            this.order = []
+          } else {
+            this.$message.error(this.$t('拣货单号不存在'))
+          }
+        })
+        .finally(() => {
+          this.tableLoading = false
+        })
     },
     getPropList() {
       this.$request.getProps().then(res => {
         this.propList = res.data
       })
     },
-    orderAddValues() {},
-    getLines() {},
-    getLineService() {},
-    onSku() {},
     onAddBox() {
-      console.log(this.boxList, 1111)
-      this.boxList.push({ weight: '', length: '', height: '', width: '' })
-      for (let i = 0; i <= this.boxList.length; i++) {
-        this.packData.push({
-          pack_quantity: ''
+      this.skuList.forEach(item => {
+        item.packData = []
+      })
+      for (let i = 0; i <= this.box.length; i++) {
+        this.skuList.forEach(item => {
+          item.packData.push({
+            pack_quantity: ''
+          })
         })
       }
-      console.log(this.boxList)
-      console.log(this.packData)
+      this.box.push({ weight: '', length: '', height: '', width: '' })
     },
     onDelBox(index) {
-      this.boxList.splice(index, 1)
-      this.packData.splice(index, 1)
+      this.box.splice(index, 1)
+      this.skuList.forEach(item => {
+        item.packData.splice(index, 1)
+      })
     },
     onOrder(item) {
       console.log(item)
+      this.order = this.orderList.filter(ele => ele.sn === item.sn)
+      this.ids = this.order[0].id
+      this.box = [
+        {
+          weight: '',
+          length: '',
+          height: '',
+          width: ''
+        }
+      ]
+      this.skuList = []
+      this.order.forEach(item => {
+        item.goods.forEach(ele => {
+          this.skuList.push({
+            ...ele.p_goods,
+            purchase_order_goods_id: ele.purchase_order_goods_id,
+            packData: [{ pack_quantity: '' }]
+          })
+        })
+      })
+      console.log(this.skuList)
+      this.stationId = item.station_id
+      this.getChannel(this.stationId)
+      this.prop_ids = item.props.map(item => item.id)
     },
-    getOrderDetail() {},
-    onReviewType() {},
-    onPack() {}
+    getChannel() {
+      this.$request.channelData(this.stationId).then(res => {
+        console.log(res)
+      })
+    },
+    getLineType() {
+      this.$request.lineType().then(res => {
+        this.lineData = res.data
+      })
+    },
+    onCheckOut(item, index) {
+      console.log(item, index)
+      this.boxedSum = this.sum(item.packData)
+      console.log(this.boxedSum)
+      console.log(item.quantity)
+      if (this.boxedSum) {
+        return this.$message.error(this.$t('已装箱不能大于总数'))
+      }
+    },
+    // sum(arr) {
+    //   return arr.reduce((prev, curr) => prev + curr)
+    // },
+    onPack(type) {
+      if (!this.express_line_id) {
+        return this.$message.error(this.$t('请选择渠道'))
+      } else if (!this.prop_ids) {
+        return this.$message.error(this.$t('请选择属性'))
+      }
+      let goods = this.skuList.map(item => {
+        // const pack_quantity = this.sum(item.packData)
+        return {
+          purchase_order_goods_id: item.purchase_order_goods_id,
+          pack_quantity: item.packData.map(ele => ele.pack_quantity)[0]
+        }
+      })
+      let params = {
+        is_pack_finish: type,
+        express_line_id: this.express_line_id,
+        prop_ids: [this.prop_ids],
+        box: []
+      }
+      params.box = [...this.box]
+      for (let i in params.box) {
+        params.box[i].goods = goods
+      }
+      this.$request.purchasePack(this.ids, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          if (type === 0) {
+            this.$router.push({
+              name: 'transshipmentBill'
+            })
+          } else {
+            this.$router.push({
+              name: 'transshipmentBill'
+            })
+          }
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    }
   },
   computed: {},
   components: {}
@@ -337,12 +482,15 @@ export default {
   .row-item {
     margin-bottom: 20px;
   }
-  .remark {
+  .programmes {
     padding: 15px;
     margin-bottom: 10px;
   }
   .cursor-pointer {
     cursor: pointer;
+  }
+  .align-center {
+    text-align: center;
   }
   .red-text {
     color: #f00;
@@ -450,6 +598,10 @@ export default {
   }
   .scan-num {
     color: #fa808c;
+  }
+  .num-item {
+    font-size: 26px;
+    font-weight: bold;
   }
   .scan-tips {
     color: #ff4154;

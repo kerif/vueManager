@@ -49,7 +49,7 @@
           @click="onPurchase(selectIDs)"
           >{{ $t('提交采购') }}</el-button
         >
-        <el-button class="btn-main" @click="onReceive(selectIDs)">{{ $t('确认收货') }}</el-button>
+        <!-- <el-button class="btn-main" @click="onReceive(selectIDs)">{{ $t('确认收货') }}</el-button> -->
         <el-button
           class="btn-light-red"
           v-if="['0', '1', '2'].includes(activeName)"
@@ -111,7 +111,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
-        <el-table-column :label="$t('操作')" width="280" fixed="right">
+        <el-table-column :label="$t('操作')" width="300" fixed="right">
           <template slot-scope="scope">
             <el-button
               class="btn-purple"
@@ -150,9 +150,12 @@
               "
               >{{ $t('确认发货') }}</el-button
             >
-            <el-button class="btn-deep-purple" @click="onReceive([scope.row.id])">{{
-              $t('确认收货')
-            }}</el-button>
+            <el-button
+              class="btn-deep-purple"
+              v-if="activeName === '2'"
+              @click="onReceive(scope.row.id)"
+              >{{ $t('确认收货') }}</el-button
+            >
             <el-button
               class="btn-deep-blue"
               v-if="['0', '1'].includes(activeName)"
@@ -271,27 +274,27 @@ export default {
         params: { id }
       })
     },
-    onDistribution() {
+    onDistribution(ids) {
       this.$confirm(this.$t('您真的确认吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        // this.$request.purchaseFinish(ids).then(res => {
-        //   if (res.ret) {
-        //     this.$notify({
-        //       type: 'success',
-        //       title: this.$t('操作成功'),
-        //       message: res.msg
-        //     })
-        //     this.getList()
-        //   } else {
-        //     this.$message({
-        //       message: res.msg,
-        //       type: 'error'
-        //     })
-        //   }
-        // })
+        this.$request.purchaseFinish(ids).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     exportList(ids) {
@@ -388,8 +391,16 @@ export default {
         }
       )
     },
-    onReceive(ids) {
-      if (!ids.length) return this.$message.error(this.$t('请选择'))
+    onReceive(id) {
+      dialog(
+        {
+          type: 'confirmReceive',
+          id
+        },
+        () => {
+          this.getList()
+        }
+      )
     },
     handleClick() {
       this.page_params.page = 1

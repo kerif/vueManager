@@ -26,13 +26,16 @@
         $t('导入分货方案')
       }}</el-button>
     </div>
-    <div class="record record-item">
-      <div>PO020220606120000-3.xls</div>
-      <div style="display: flex; align-items: center">
-        <div>admin {{ $t('更新于') }} 2206-06-16 12:00:00</div>
-        <div>{{ $t('下载') }}</div>
-      </div>
-    </div>
+    <el-row
+      :gutter="10"
+      v-for="item in records"
+      :key="item.id"
+      style="margin-top: 15px; cursor: pointer"
+    >
+      <el-col :span="7"><i class="el-icon-document"></i>&nbsp;&nbsp;{{ item.name }}</el-col>
+      <el-col :span="5" :offset="5">{{ $t('更新于') }}{{ item.updated_at }}</el-col>
+      <el-col :span="6" :offset="1"><i class="el-icon-download" @click="downloadFile"></i></el-col>
+    </el-row>
     <div>
       <h4 v-if="goodData.length">{{ $t('方案预览') }}</h4>
       <div v-for="(item, index) in goodData" :key="index">
@@ -55,7 +58,7 @@
         </el-table>
       </div>
     </div>
-    <div style="margin-top: 20px">
+    <div style="margin-top: 20px" v-if="goodData.length">
       <el-button @click="onSubmit(0)" type="primary">{{ $t('保存') }}</el-button>
       <el-button class="save-btn" type="primary" @click="onSubmit(1)">{{
         $t('保存并提交')
@@ -74,7 +77,8 @@ export default {
       form: {
         remark: '',
         name: ''
-      }
+      },
+      records: []
     }
   },
   methods: {
@@ -90,8 +94,7 @@ export default {
         }
       )
     },
-    onSubmit() {
-      // isFinish
+    onSubmit(isFinish) {
       let params = {}
       params.orders = this.goodData.map(item => {
         const prop_ids = [item.prop.id]
@@ -107,25 +110,25 @@ export default {
           user_id
         }
       })
-      // this.$request
-      //   .addPickOrder({ ...this.form, is_finish: isFinish, orders: params.orders })
-      //   .then(res => {
-      //     if (res.ret) {
-      //       this.$notify({
-      //         type: 'success',
-      //         title: this.$t('操作成功'),
-      //         message: res.msg
-      //       })
-      //       this.$router.push({
-      //         name: 'transshipmentBill'
-      //       })
-      //     } else {
-      //       this.$message({
-      //         message: res.msg,
-      //         type: 'error'
-      //       })
-      //     }
-      //   })
+      this.$request
+        .addPickOrder({ ...this.form, is_finish: isFinish, orders: params.orders })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'transshipmentBill'
+            })
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
     }
   }
 }
@@ -134,6 +137,7 @@ export default {
 <style lang="scss">
 .add-scheme-container {
   background: #fff !important;
+  min-height: calc(100vh - 150px);
 }
 .review {
   line-height: 20px;

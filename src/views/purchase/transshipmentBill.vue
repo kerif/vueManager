@@ -66,20 +66,26 @@
         <el-table-column prop="picking_quantity" :label="$t('实际拣货')"> </el-table-column>
         <el-table-column prop="created_at" :label="$t('创建时间')"> </el-table-column>
         <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" width="220">
           <template slot-scope="scope">
-            <el-button class="btn-main" v-if="['0'].includes(activeName)">{{
-              $t('编辑')
-            }}</el-button>
+            <el-button
+              class="btn-main"
+              v-if="['0'].includes(activeName)"
+              @click="onDetail(scope.row.id)"
+              >{{ $t('编辑') }}</el-button
+            >
             <el-button
               class="btn-main"
               v-if="['0'].includes(activeName)"
               @click="onSubmit(scope.row.id)"
               >{{ $t('提交') }}</el-button
             >
-            <el-button class="btn-light-red" v-if="['0', '1', '2'].includes(activeName)">{{
-              $t('删除')
-            }}</el-button>
+            <el-button
+              class="btn-light-red"
+              v-if="['0', '1', '2'].includes(activeName)"
+              @click="onDelete(id)"
+              >{{ $t('删除') }}</el-button
+            >
             <el-button
               class="btn-deep-purple"
               v-if="['all', '1', '2', '3'].includes(activeName)"
@@ -136,30 +142,30 @@ export default {
   methods: {
     getList() {
       this.tableLoading = true
-      // this.$request
-      //   .transshipmentList({
-      //     keyword: this.page_params.keyword,
-      //     page: this.page_params.page,
-      //     size: this.page_params.size,
-      //     status: this.activeName === 'all' ? '' : this.activeName
-      //   })
-      //   .then(res => {
-      //     if (res.ret) {
-      //       this.tableLoading = false
-      //       this.tableData = res.data
-      //       this.page_params.page = res.meta.current_page
-      //       this.page_params.total = res.meta.total
-      //       this.onCount()
-      //     }
-      //   })
+      this.$request
+        .transshipmentList({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size,
+          status: this.activeName === 'all' ? '' : this.activeName
+        })
+        .then(res => {
+          if (res.ret) {
+            this.tableLoading = false
+            this.tableData = res.data
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.onCount()
+          }
+        })
     },
     goSearch() {
       this.getList()
     },
     onCount() {
-      // this.$request.pickOrderCount().then(res => {
-      //   this.countData = res.data
-      // })
+      this.$request.pickOrderCount().then(res => {
+        this.countData = res.data
+      })
     },
     addDistributeScheme() {
       this.$router.push({
@@ -187,7 +193,40 @@ export default {
         params: { id }
       })
     },
-    onSubmit() {}
+    onDelete(id) {
+      this.$request.delPickOrder(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    onSubmit(id) {
+      this.$request.verifyPickOrder(id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    }
   }
 }
 </script>

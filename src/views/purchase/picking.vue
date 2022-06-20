@@ -15,12 +15,14 @@
             <el-input
               :placeholder="$t('请输入或扫码SKU')"
               class="ipt"
-              v-model="value"
-              ref="sku"
+              v-model="barcode"
+              ref="barcode"
               @keyup.native.enter="onSku"
             />
+            <el-button type="primary" size="small" class="confirm-btn" @click="onSku">{{
+              $t('确认')
+            }}</el-button>
           </div>
-          <el-button type="primary" class="confirm-btn" @click="onSku">{{ $t('确认') }}</el-button>
           <div class="font-bold scan-tips">{{ $t('请扫描拣货单号及SKU') }}</div>
         </el-col>
         <el-col :span="10">
@@ -28,15 +30,15 @@
           <div class="flex-item right-item num-list">
             <span>
               <span>{{ $t('已扫描') }}：</span>
-              <span class="font-bold num"></span>
+              <span class="font-bold num">{{ scanNum }}</span>
             </span>
             <span>
               <span>{{ $t('未扫描') }}：</span>
-              <span class="font-bold num"></span>
+              <span class="font-bold num">{{ waitScanNum }}</span>
             </span>
             <span>
               <span>{{ $t('箱号') }}：</span>
-              <span class="font-bold num"></span>
+              <span class="font-bold num">{{ orderList.length }}</span>
             </span>
           </div>
           <div>
@@ -64,17 +66,17 @@
           <div class="order-content flex-1">
             <el-row :gutter="30">
               <el-row class="sku-row">
-                <el-col :span="4">{{ $t('图片') }}</el-col>
+                <el-col :span="4" :offset="1">{{ $t('图片') }}</el-col>
                 <el-col :span="4">{{ $t('商品ID') }}</el-col>
                 <el-col :span="4">{{ $t('品名') }}</el-col>
-                <el-col :span="5">{{ $t('条码') }}</el-col>
+                <el-col :span="4">{{ $t('条码') }}</el-col>
                 <el-col :span="4" class="align-center">{{ $t('分货') }}</el-col>
                 <el-col :span="3" class="align-center">{{ $t('拣货') }}</el-col>
               </el-row>
             </el-row>
             <el-row :gutter="30">
               <el-row class="sku-row" v-for="ele in item.goods" :key="ele.id">
-                <el-col :span="4">
+                <el-col :span="4" :offset="1">
                   <span v-if="ele.p_goods">
                     <img :src="`${$baseUrl.IMAGE_URL}${ele.p_goods.image}`" />
                   </span>
@@ -85,12 +87,17 @@
                 <el-col :span="4">
                   <span class="sku-item">{{ ele.p_goods ? ele.p_goods.cn_name : '' }}</span>
                 </el-col>
-                <el-col :span="5" class="align-center">100</el-col>
+                <el-col :span="4">{{ ele.p_goods ? ele.p_goods.barcode : '' }}</el-col>
                 <el-col :span="4" class="align-center font-bold num-item">{{
                   ele.quantity
                 }}</el-col>
                 <el-col :span="3" class="align-center"
-                  ><el-input class="out-num" type="number" v-model="ele.picking_quantity"></el-input
+                  ><el-input
+                    class="out-num"
+                    size="small"
+                    type="number"
+                    v-model="ele.picking_quantity"
+                  ></el-input
                 ></el-col>
               </el-row>
             </el-row>
@@ -114,7 +121,7 @@
 export default {
   data() {
     return {
-      value: '',
+      barcode: '',
       sn: '',
       orderId: '',
       orderList: []
@@ -123,16 +130,29 @@ export default {
   methods: {
     onOrderSn() {
       if (this.sn) {
-        // this.$request.purchasePickSearch(this.sn).then(res => {
-        //   if (!res.data) {
-        //     this.$message.error(this.$t('拣货单不存在'))
-        //   }
-        //   this.orderId = res.data ? res.data.id : ''
-        //   this.orderList = res.data ? res.data.orders : []
-        // })
+        this.$request.purchasePickSearch(this.sn).then(res => {
+          if (!res.data) {
+            this.$message.error(this.$t('拣货单不存在'))
+          }
+          this.orderId = res.data ? res.data.id : ''
+          this.orderList = res.data ? res.data.orders : []
+        })
       }
     },
-    onSku() {},
+    onSku() {
+      if (this.barcode) {
+        this.$refs.barcode.select()
+        this.orderList.forEach(item => {
+          let flag = true
+          item.goods.forEach(ele => {
+            if (ele.barcode === this.barcode && ele.picking_quantity < ele.quantity && flag) {
+              ele.picking_quantity++
+              flag = false
+            }
+          })
+        })
+      }
+    },
     onCheckOut() {},
     onSave(type) {
       let params = {
@@ -151,46 +171,46 @@ export default {
           return params.goods
         }
       })
-      // this.$request.purchasePick(this.orderId, params).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       title: this.$t('操作成功'),
-      //       message: res.msg,
-      //       type: 'success'
-      //     })
-      //     this.$router.push({
-      //       name: 'transshipmentBill'
-      //     })
-      //   } else {
-      //     this.$notify({
-      //       title: this.$t('操作失败'),
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //   }
-      // })
+      this.$request.purchasePick(this.orderId, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.$router.push({
+            name: 'transshipmentBill'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     onPicking() {}
   },
   computed: {
-    // scanNum() {
-    //   let qty = 0
-    //   this.orderList.forEach(item => {
-    //     item.skus.forEach(ele => {
-    //       qty += Number(ele.out_quantity)
-    //     })
-    //   })
-    //   return qty
-    // },
-    // waitScanNum() {
-    //   let qty = 0
-    //   this.orderList.forEach(item => {
-    //     item.skus.forEach(ele => {
-    //       qty += ele.quantity - ele.out_quantity
-    //     })
-    //   })
-    //   return qty
-    // }
+    scanNum() {
+      let qty = 0
+      this.orderList.forEach(item => {
+        item.goods.forEach(ele => {
+          qty += Number(ele.picking_quantity)
+        })
+      })
+      return qty
+    },
+    waitScanNum() {
+      let qty = 0
+      this.orderList.forEach(item => {
+        item.goods.forEach(ele => {
+          qty += ele.quantity - ele.picking_quantity
+        })
+      })
+      return qty
+    }
   }
 }
 </script>
@@ -198,10 +218,12 @@ export default {
 .picking-container {
   font-size: 14px;
   background: #fff !important;
+  min-height: calc(100vh - 150px);
   .content-box {
     padding: 20px;
   }
   .confirm-btn {
+    margin-left: 10px;
     min-width: 100px;
   }
   .row-item {
