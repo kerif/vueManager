@@ -469,8 +469,7 @@ export default {
           })
           if (type === 0) {
             this.$router.push({
-              name: 'transshipmentBill',
-              query: { activeName: this.status.toString() }
+              name: 'transshipmentBill'
             })
           } else {
             this.$router.push({

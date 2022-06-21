@@ -21,7 +21,8 @@ export default new Vuex.Store({
     pagePath: '', // 路径列表
     unread: 0,
     refund: 0,
-    orderListFieldData: [] // 订单列表显示字段
+    orderListFieldData: [], // 订单列表显示字段
+    siderBarImage: ''
   },
   mutations: {
     updateOrderListFieldData(state, data) {
@@ -60,6 +61,9 @@ export default new Vuex.Store({
     saveName(state, data) {
       state.userName = data
       localStorage.setItem('NAME', data)
+    },
+    saveSiderBarImage(state, data) {
+      state.siderBarImage = data
     },
     saveMe(state, data) {
       state.groupMe = data

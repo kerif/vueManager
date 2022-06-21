@@ -187,16 +187,10 @@ export default {
   },
   created() {
     this.getList()
-    this.getInit()
   },
   methods: {
     getList() {
       this.$request.configInfo().then(res => {
-        this.form = res.data
-      })
-    },
-    getInit() {
-      this.$request.initConfig({ domain: this.form.domain }).then(res => {
         this.form = res.data
       })
     },

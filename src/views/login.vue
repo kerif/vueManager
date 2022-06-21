@@ -1,14 +1,17 @@
 <template>
   <div class="login-container">
     <div class="login-header">
-      <img src="../assets/logo-top.png" class="img-sty" />
-      <span>{{ $t('海鸥集运管理系统') }}</span>
+      <img v-if="customData.login_logo" src="customData.login_logo" alt="" />
+      <img v-else src="../assets/logo-top.png" class="img-sty" />
+      <span v-if="customData.login_title">{{ customData.login_title }}</span>
+      <span v-else>{{ $t('海鸥集运管理系统') }}</span>
     </div>
     <div class="main">
       <!-- 登陆页面 -->
       <div class="login-main" v-show="welcome === 1">
         <div class="main-container">
-          <div class="login-logo"></div>
+          <div v-if="customData.login_logo">{{ customData.login_logo }}</div>
+          <div v-else class="login-logo"></div>
           <div class="info-box">
             <div class="info-title">
               <span class="welcome-sty"
@@ -323,6 +326,7 @@ export default {
       keep: false,
       centerDialogVisible: false,
       captha: '',
+      customData: {},
       userInfo: {
         username: '',
         password: '',
@@ -389,8 +393,15 @@ export default {
   },
   created() {
     this.getCaptcha() // 获取图型验证码
+    this.getInit()
   },
   methods: {
+    getInit() {
+      this.$request.initConfig({ domain: document.domain }).then(res => {
+        this.customData = res.data
+        this.$store.commit('saveSiderBarImage', res.data.sidebar_image)
+      })
+    },
     languageCut(locale) {
       this.$store.commit('saveLanguageCode', { locale, reload: false })
     },

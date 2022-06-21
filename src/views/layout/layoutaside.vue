@@ -5,7 +5,8 @@
       <span>{{ $t('管理系统') }}</span>
     </div>
     <div v-else class="unTop">
-      <img src="../../assets/top.png" />
+      <img v-if="$store.state.saveSiderBarImage" src="" alt="" />
+      <img v-else src="../../assets/top.png" />
     </div>
     <el-menu
       :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"
