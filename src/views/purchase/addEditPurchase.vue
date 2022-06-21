@@ -140,8 +140,9 @@
           <el-table-column prop="image" :label="$t('物品照片')">
             <template slot-scope="scope">
               <img
-                :src="$baseUrl.IMAGE_URL + scope.row.image"
-                @click="checkImg(scope.row.image)"
+                v-if="scope.row.image"
+                :src="$baseUrl.IMAGE_URL + scope.row.image.path"
+                @click="checkImg(scope.row.image.path)"
                 class="img"
               />
             </template>
@@ -252,6 +253,7 @@ export default {
           mode
         },
         goodsData => {
+          console.log(goodsData)
           this.ruleForm.goods.push(...goodsData)
         }
       )
@@ -262,6 +264,10 @@ export default {
         ...this.ruleForm,
         is_approved: 0
       }
+      this.ruleForm.goods.forEach(item => {
+        item.image = item.image ? item.image.path : ''
+      })
+      console.log(this.ruleForm.goods)
       if (!this.$route.params.id) {
         this.$request.addPurchase(params).then(res => {
           if (res.ret) {
@@ -298,6 +304,9 @@ export default {
     },
     onSubmit() {
       let params = { ...this.ruleForm, is_approved: 1 }
+      this.ruleForm.goods.forEach(item => {
+        item.image = item.image ? item.image.path : ''
+      })
       if (!this.$route.params.id) {
         this.$request.addPurchase(params).then(res => {
           if (res.ret) {

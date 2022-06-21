@@ -186,7 +186,7 @@ export default {
             user: item.user,
             user_id: item.user_id,
             sn: item.sn,
-            boxs: item.boxs,
+            boxs: item.boxes,
             goods: item.goods.map(ele => {
               return { ...ele.p_goods, quantity: ele.quantity }
             })
@@ -212,9 +212,9 @@ export default {
         goodsList => {
           console.log(goodsList, 333)
           this.goodData = []
-          this.goodData.concat(JSON.parse(JSON.stringify(goodsList)))
-          console.log(this.goodData)
           this.getList()
+          this.goodData.push(JSON.parse(JSON.stringify(...goodsList)))
+          console.log(this.goodData)
         }
       )
     },
