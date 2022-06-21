@@ -99,7 +99,10 @@
                         </div>
                       </el-col>
                       <el-col :span="4">
-                        <div>{{ $t('尺寸') }}</div>
+                        <div>
+                          <span class="red-text">*</span>
+                          <span>{{ $t('尺寸') }}</span>
+                        </div>
                       </el-col>
                     </el-row>
                     <el-row
@@ -279,8 +282,7 @@ export default {
       boxedSum: '',
       orderData: [],
       pack: [],
-      num: '',
-      obj: {}
+      num: ''
     }
   },
   created() {
@@ -417,16 +419,12 @@ export default {
     },
     onCheckOut(item, index) {
       console.log(item, index)
-      this.obj = item
-      console.log(this.obj.packData)
-      this.boxedSum = item.packData.map(ele => ele.pack_quantity)[0]
-      console.log(this.boxedSum)
-      this.obj.packData.forEach(ele => {
-        this.num = 0
-        this.num = this.num + Number(ele.pack_quantity)
-      })
-      if (this.boxedSum > item.quantity) {
+      console.log(item.packData[index].pack_quantity)
+      this.num = item.packData[index].pack_quantity
+      if (this.num > item.quantity) {
         return this.$message.error(this.$t('已装箱不能大于总数'))
+      } else if (this.num < 0) {
+        return this.$message.error(this.$t('已装箱数量不能为负值'))
       }
     },
     sum(arr) {
@@ -466,7 +464,7 @@ export default {
           if (type === 0) {
             this.$router.push({
               name: 'transshipmentBill',
-              query: { activeName: '2' }
+              query: { activeName: this.status.toString() }
             })
           } else {
             this.$router.push({

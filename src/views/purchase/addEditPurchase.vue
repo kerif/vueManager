@@ -285,7 +285,9 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.push({ name: 'purchaseOrder' })
+            this.$router.push({
+              name: 'purchaseOrder'
+            })
           } else {
             this.$message({
               message: res.msg,
@@ -327,7 +329,9 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.push({ name: 'purchaseOrder', query: { activeName: this.status++ } })
+            this.$router.push({
+              name: 'purchaseOrder'
+            })
           } else {
             this.$message({
               message: res.msg,
