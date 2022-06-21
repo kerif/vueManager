@@ -4404,7 +4404,7 @@ exports.updateConfigInfo = params => {
 
 // 获取初始配置
 exports.initConfig = params => {
-  return $form.get('panel-init-config', params)
+  return $form.get('panel-init-config', { params })
 }
 
 // 采购 采购完成

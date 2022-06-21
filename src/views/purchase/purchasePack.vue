@@ -193,9 +193,15 @@
                       v-for="(item, index) in skuList"
                       :key="index"
                     >
-                      <el-col :span="3"><div>未装箱</div></el-col>
+                      <el-col :span="3"
+                        ><div>{{ $t('未装箱') }}</div></el-col
+                      >
                       <el-col :span="4"
-                        ><span><img :src="`${$baseUrl.IMAGE_URL}${item.image}`" /> </span
+                        ><span
+                          ><img
+                            style="width: 20%; cursor: pointer"
+                            :src="`${$baseUrl.IMAGE_URL}${item.image}`"
+                          /> </span
                       ></el-col>
                       <el-col :span="4"
                         ><div>{{ item.barcode }}</div></el-col
@@ -489,6 +495,10 @@ export default {
   font-size: 14px;
   .content-box {
     padding: 20px;
+  }
+  .el-row {
+    display: flex;
+    flex-wrap: wrap;
   }
   .search-box {
     padding: 20px;

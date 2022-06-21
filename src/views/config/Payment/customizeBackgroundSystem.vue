@@ -191,14 +191,14 @@ export default {
   },
   methods: {
     getList() {
-      // this.$request.configInfo().then(res => {
-      //   this.form = res.data
-      // })
+      this.$request.configInfo().then(res => {
+        this.form = res.data
+      })
     },
     getInit() {
-      // this.$request.initConfig({ domain: this.form.domain }).then(res => {
-      //   this.form = res.data
-      // })
+      this.$request.initConfig({ domain: this.form.domain }).then(res => {
+        this.form = res.data
+      })
     },
     onPreview(image) {
       dialog({
@@ -251,20 +251,20 @@ export default {
       })
     },
     onConfirm() {
-      // this.$request.updateConfigInfo({ ...this.form }).then(res => {
-      //   if (res.ret) {
-      //     this.$notify({
-      //       type: 'success',
-      //       title: this.$t('操作成功'),
-      //       message: res.msg
-      //     })
-      //   } else {
-      //     this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
+      this.$request.updateConfigInfo({ ...this.form }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }

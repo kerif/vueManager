@@ -84,9 +84,9 @@
                   <el-menu-item index="5">
                     {{ $t('客户登录配置') }}
                   </el-menu-item>
-                  <!-- <el-menu-item index="6">
+                  <el-menu-item index="6">
                     {{ $t('自定义后台系统') }}
-                  </el-menu-item> -->
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -111,9 +111,9 @@
               <login-configure></login-configure>
             </el-col>
             <!-- 自定义后台系统 -->
-            <!-- <el-col :span="19" v-if="secondTab2 === '6'" class="main-right">
+            <el-col :span="19" v-if="secondTab2 === '6'" class="main-right">
               <customize-background-system></customize-background-system>
-            </el-col> -->
+            </el-col>
           </el-row>
         </div>
       </el-tab-pane>
@@ -226,7 +226,7 @@ import ExpressCompany from './expressCompany.vue'
 import CustomTrack from './customTrack.vue'
 import CustomLabel from './customLabel.vue'
 import LoginConfigure from './loginConfigure.vue'
-// import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
+import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -247,8 +247,8 @@ export default {
     ExpressCompany,
     CustomTrack,
     CustomLabel,
-    LoginConfigure
-    // customizeBackgroundSystem
+    LoginConfigure,
+    customizeBackgroundSystem
     // GroupConfigure
   },
   mixins: [pagination],
