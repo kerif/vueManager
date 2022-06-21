@@ -145,7 +145,8 @@
                   scope.row.id,
                   scope.row.logistics_company_code,
                   scope.row.logistics_sn,
-                  scope.row.warehouse_name
+                  scope.row.warehouse_name,
+                  scope.row.warehouse_id
                 )
               "
               >{{ $t('确认发货') }}</el-button
@@ -377,14 +378,15 @@ export default {
         }
       })
     },
-    addShipInfo(id, logistics_company_code, logistics_sn, warehouse_name) {
+    addShipInfo(id, logistics_company_code, logistics_sn, warehouse_name, warehouseId) {
       dialog(
         {
           type: 'addShip',
           id,
           logistics_sn,
           logistics_company_code,
-          warehouse_name
+          warehouse_name,
+          warehouseId
         },
         () => {
           this.getList()

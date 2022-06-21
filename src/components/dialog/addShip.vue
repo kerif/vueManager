@@ -45,6 +45,7 @@ export default {
       logistics_sn: '',
       logistics_company_code: '',
       warehouse_id: '',
+      warehouseId: '',
       companyList: [],
       agentData: []
     }
@@ -55,6 +56,7 @@ export default {
       this.form.logistics_sn = this.logistics_sn
       this.form.logistics_company_code = this.logistics_company_code
       this.form.warehouse_id = this.warehouse_id
+      this.form.warehouse_id = this.warehouseId
       // this.form.warehouse_id = this.warehouse_name
       this.getCompany()
       this.getWarehouse()
@@ -83,7 +85,7 @@ export default {
           })
           this.show = false
           this.success()
-          this.$router.push({ name: 'purchaseOrder' })
+          this.$router.push({ name: 'purchaseOrder', query: { activeName: '2' } })
         } else {
           this.$message({
             message: res.msg,

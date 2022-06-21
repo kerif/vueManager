@@ -407,7 +407,7 @@ export default {
     },
     getChannel() {
       this.$request.channelData(this.stationId).then(res => {
-        console.log(res)
+        this.express_line_id = res.data.map(item => item.id)[0]
       })
     },
     getLineType() {

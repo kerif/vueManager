@@ -77,8 +77,18 @@
           <el-table-column prop="number" :label="$t('商品ID')"> </el-table-column>
           <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="quantity" :label="$t('分货数量')"> </el-table-column>
-          <el-table-column v-if="status === 2" :label="$t('实际分货数量')"></el-table-column>
-          <el-table-column v-if="status === 2" :label="$t('装箱')"></el-table-column>
+          <el-table-column
+            v-if="status === 2"
+            prop="picking_quantity"
+            :label="$t('实际分货数量')"
+          ></el-table-column>
+          <el-table-column v-if="status === 2" :label="$t('装箱')">
+            <template>
+              <span v-for="(ele, index) in item.boxes" :key="index">
+                #{{ index + 1 }}({{ ele.quantity }})</span
+              >
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -184,9 +194,13 @@ export default {
             user: item.user,
             user_id: item.user_id,
             sn: item.sn,
-            boxs: item.boxes,
+            boxes: item.boxes,
             goods: item.goods.map(ele => {
-              return { ...ele.p_goods, quantity: ele.quantity }
+              return {
+                ...ele.p_goods,
+                quantity: ele.quantity,
+                picking_quantity: ele.picking_quantity
+              }
             })
           })
         })
