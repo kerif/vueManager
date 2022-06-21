@@ -279,7 +279,8 @@ export default {
       boxedSum: '',
       orderData: [],
       pack: [],
-      num: ''
+      num: '',
+      obj: {}
     }
   },
   created() {
@@ -416,8 +417,14 @@ export default {
     },
     onCheckOut(item, index) {
       console.log(item, index)
+      this.obj = item
+      console.log(this.obj.packData)
       this.boxedSum = item.packData.map(ele => ele.pack_quantity)[0]
       console.log(this.boxedSum)
+      this.obj.packData.forEach(ele => {
+        this.num = 0
+        this.num = this.num + Number(ele.pack_quantity)
+      })
       if (this.boxedSum > item.quantity) {
         return this.$message.error(this.$t('已装箱不能大于总数'))
       }
@@ -434,9 +441,6 @@ export default {
         return this.$message.error(this.$t('请选择属性'))
       }
       let goods = this.skuList.map(item => {
-        item.packData.forEach(ele => {
-          this.num = Number(ele.pack_quantity) + Number(ele.pack_quantity)
-        })
         return {
           purchase_order_goods_id: item.purchase_order_goods_id,
           pack_quantity: this.num

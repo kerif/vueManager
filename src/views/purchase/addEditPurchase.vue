@@ -141,10 +141,11 @@
             <template slot-scope="scope">
               <img
                 v-if="scope.row.image"
-                :src="$baseUrl.IMAGE_URL + scope.row.image.path"
-                @click="checkImg(scope.row.image.path)"
+                :src="$baseUrl.IMAGE_URL + scope.row.image"
+                @click="checkImg(scope.row.image)"
                 class="img"
               />
+              <div v-else>{{ $t('暂无此图') }}</div>
             </template>
           </el-table-column>
         </el-table>
@@ -253,7 +254,12 @@ export default {
           mode
         },
         goodsData => {
-          console.log(goodsData)
+          goodsData = goodsData.map(item => {
+            return {
+              ...item,
+              image: item.image ? item.image.path : ''
+            }
+          })
           this.ruleForm.goods.push(...goodsData)
         }
       )
@@ -264,8 +270,11 @@ export default {
         ...this.ruleForm,
         is_approved: 0
       }
-      this.ruleForm.goods.forEach(item => {
-        item.image = item.image ? item.image.path : ''
+      this.ruleForm.goods = this.ruleForm.goods.map(item => {
+        return {
+          ...item,
+          image: item.image ? item.image.path : ''
+        }
       })
       console.log(this.ruleForm.goods)
       if (!this.$route.params.id) {
@@ -304,8 +313,11 @@ export default {
     },
     onSubmit() {
       let params = { ...this.ruleForm, is_approved: 1 }
-      this.ruleForm.goods.forEach(item => {
-        item.image = item.image ? item.image.path : ''
+      this.ruleForm.goods = this.ruleForm.goods.map(item => {
+        return {
+          ...item,
+          image: item.image ? item.image.path : ''
+        }
       })
       if (!this.$route.params.id) {
         this.$request.addPurchase(params).then(res => {
