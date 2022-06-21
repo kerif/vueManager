@@ -55,7 +55,7 @@ export default {
       this.form.logistics_sn = this.logistics_sn
       this.form.logistics_company_code = this.logistics_company_code
       this.form.warehouse_id = this.warehouse_id
-      this.form.warehouse_id = this.warehouse_name
+      // this.form.warehouse_id = this.warehouse_name
       this.getCompany()
       this.getWarehouse()
     },

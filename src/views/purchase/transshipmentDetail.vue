@@ -54,9 +54,7 @@
       <el-row :gutter="10">
         <el-col :span="7"><i class="el-icon-document"></i>&nbsp;&nbsp;{{ item.name }}</el-col>
         <el-col :span="4" :offset="9">{{ $t('更新于') }}&nbsp;&nbsp;{{ item.updated_at }}</el-col>
-        <el-col :span="1" :offset="3"
-          ><i class="el-icon-download" @click="downloadFile"></i
-        ></el-col>
+        <el-col :span="1" :offset="3"><i class="el-icon-download"></i></el-col>
       </el-row>
     </div>
     <div v-if="status === 0 || status === 1 || status === 2">
@@ -210,15 +208,12 @@ export default {
           id: this.$route.params.id
         },
         goodsList => {
-          console.log(goodsList, 333)
           this.goodData = []
           this.getList()
-          this.goodData.push(JSON.parse(JSON.stringify(...goodsList)))
-          console.log(this.goodData)
+          this.goodData.push(...goodsList)
         }
       )
     },
-    downloadFile() {},
     onDownload() {
       let params = {
         type: 2

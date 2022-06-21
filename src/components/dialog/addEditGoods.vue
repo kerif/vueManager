@@ -12,7 +12,7 @@
       label-width="120px"
       :model="ruleForm"
     >
-      <el-form-item label="no" prop="number">
+      <el-form-item :label="$t('商品编号')" prop="number">
         <el-input
           v-model="ruleForm.number"
           :placeholder="$t('请输入')"
@@ -132,9 +132,13 @@ export default {
       label: '',
       classifyList: [],
       rules: {
+        purchase_price: [{ required: true, message: this.$t('请输入价格'), trigger: 'blur' }],
+        number: [{ required: true, message: this.$t('请输入商品编号'), trigger: 'blur' }],
         cn_name: [{ required: true, message: this.$t('请输入中文名称'), trigger: 'blur' }],
         en_name: [{ required: true, message: this.$t('请输入英文名称'), trigger: 'blur' }],
-        quantity: [{ required: true, message: this.$t('请输入物品总数量'), trigger: 'blur' }]
+        quantity: [{ required: true, message: this.$t('请输入物品总数量'), trigger: 'blur' }],
+        barcode: [{ required: true, message: this.$t('请输入barcode'), trigger: 'blur' }],
+        image: [{ required: true, message: this.$t('请上传图片'), trigger: 'change' }]
       }
     }
   },

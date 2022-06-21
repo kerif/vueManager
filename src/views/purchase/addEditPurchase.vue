@@ -127,7 +127,7 @@
               }}</el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="number" :label="$t('编号')"></el-table-column>
+          <el-table-column prop="number" :label="$t('商品编号')"></el-table-column>
           <el-table-column prop="cn_name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="en_name" :label="$t('物品英文名称')"> </el-table-column>
           <el-table-column prop="material" :label="$t('材质')"></el-table-column>
