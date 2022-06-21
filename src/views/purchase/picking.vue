@@ -1,6 +1,5 @@
 <template>
-  <div></div>
-  <!-- <div class="picking-container">
+  <div class="picking-container">
     <div class="content-box">
       <el-row>
         <el-col :span="14">
@@ -116,7 +115,7 @@
         >
       </div>
     </div>
-  </div> -->
+  </div>
 </template>
 <script>
 export default {
@@ -135,95 +134,95 @@ export default {
     }
   },
   methods: {
-    // onOrderSn() {
-    //   if (this.sn) {
-    //     this.$request.purchasePickSearch(this.sn).then(res => {
-    //       if (!res.data) {
-    //         this.$message.error(this.$t('拣货单不存在'))
-    //       }
-    //       this.orderId = res.data ? res.data.id : ''
-    //       this.orderList = res.data ? res.data.orders : []
-    //     })
-    //   }
-    // },
-    // onSku() {
-    //   if (this.barcode) {
-    //     this.$refs.barcode.select()
-    //     this.orderList.forEach(item => {
-    //       let flag = true
-    //       item.goods.forEach(ele => {
-    //         if (ele.barcode === this.barcode && ele.picking_quantity < ele.quantity && flag) {
-    //           ele.picking_quantity++
-    //           flag = false
-    //         }
-    //       })
-    //     })
-    //   }
-    // },
-    // onSave(type) {
-    //   let params = {
-    //     is_picking_finish: type,
-    //     goods: []
-    //   }
-    //   this.orderList.forEach(item => {
-    //     if (item.goods) {
-    //       item.goods.forEach(ele => {
-    //         params.goods.push({
-    //           picking_quantity: ele.picking_quantity,
-    //           picking_divide_order_id: ele.picking_divide_order_id,
-    //           purchase_order_goods_id: ele.purchase_order_goods_id
-    //         })
-    //       })
-    //       return params.goods
-    //     }
-    //   })
-    //   this.$request.purchasePick(this.orderId, params).then(res => {
-    //     if (res.ret) {
-    //       this.$notify({
-    //         title: this.$t('操作成功'),
-    //         message: res.msg,
-    //         type: 'success'
-    //       })
-    //       if (type === 0) {
-    //         this.$router.push({
-    //           name: 'transshipmentBill',
-    //           query: { activeName: '1' }
-    //         })
-    //       } else {
-    //         this.$router.push({
-    //           name: 'transshipmentBill',
-    //           query: { activeName: '2' }
-    //         })
-    //       }
-    //     } else {
-    //       this.$notify({
-    //         title: this.$t('操作失败'),
-    //         message: res.msg,
-    //         type: 'warning'
-    //       })
-    //     }
-    //   })
-    // }
+    onOrderSn() {
+      if (this.sn) {
+        this.$request.purchasePickSearch(this.sn).then(res => {
+          if (!res.data) {
+            this.$message.error(this.$t('拣货单不存在'))
+          }
+          this.orderId = res.data ? res.data.id : ''
+          this.orderList = res.data ? res.data.orders : []
+        })
+      }
+    },
+    onSku() {
+      if (this.barcode) {
+        this.$refs.barcode.select()
+        this.orderList.forEach(item => {
+          let flag = true
+          item.goods.forEach(ele => {
+            if (ele.barcode === this.barcode && ele.picking_quantity < ele.quantity && flag) {
+              ele.picking_quantity++
+              flag = false
+            }
+          })
+        })
+      }
+    },
+    onSave(type) {
+      let params = {
+        is_picking_finish: type,
+        goods: []
+      }
+      this.orderList.forEach(item => {
+        if (item.goods) {
+          item.goods.forEach(ele => {
+            params.goods.push({
+              picking_quantity: ele.picking_quantity,
+              picking_divide_order_id: ele.picking_divide_order_id,
+              purchase_order_goods_id: ele.purchase_order_goods_id
+            })
+          })
+          return params.goods
+        }
+      })
+      this.$request.purchasePick(this.orderId, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          if (type === 0) {
+            this.$router.push({
+              name: 'transshipmentBill',
+              query: { activeName: '1' }
+            })
+          } else {
+            this.$router.push({
+              name: 'transshipmentBill',
+              query: { activeName: '2' }
+            })
+          }
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    }
   },
   computed: {
-    // scanNum() {
-    //   let qty = 0
-    //   this.orderList.forEach(item => {
-    //     item.goods.forEach(ele => {
-    //       qty += Number(ele.picking_quantity)
-    //     })
-    //   })
-    //   return qty
-    // },
-    // waitScanNum() {
-    //   let qty = 0
-    //   this.orderList.forEach(item => {
-    //     item.goods.forEach(ele => {
-    //       qty += ele.quantity - ele.picking_quantity
-    //     })
-    //   })
-    //   return qty
-    // }
+    scanNum() {
+      let qty = 0
+      this.orderList.forEach(item => {
+        item.goods.forEach(ele => {
+          qty += Number(ele.picking_quantity)
+        })
+      })
+      return qty
+    },
+    waitScanNum() {
+      let qty = 0
+      this.orderList.forEach(item => {
+        item.goods.forEach(ele => {
+          qty += ele.quantity - ele.picking_quantity
+        })
+      })
+      return qty
+    }
   }
 }
 </script>
