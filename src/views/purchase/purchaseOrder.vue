@@ -2,7 +2,7 @@
   <div class="purchase-list">
     <el-tabs v-model="activeName" stretch @tab-click="handleClick" class="tab-length">
       <el-tab-pane
-        :label="`${$t('全部')}(${statusList[7] ? statusList[7].counts : 0})`"
+        :label="`${$t('全部')}(${statusList[6] ? statusList[6].counts : 0})`"
         name="all"
       ></el-tab-pane>
       <el-tab-pane

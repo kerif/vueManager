@@ -13,7 +13,7 @@
           </div>
           <div class="row-item">
             <el-input
-              :placeholder="$t('请输入或扫码SKU')"
+              :placeholder="$t('请输入或扫码条码')"
               class="ipt"
               v-model="barcode"
               ref="barcode"
@@ -23,7 +23,7 @@
               $t('确认')
             }}</el-button>
           </div>
-          <div class="font-bold scan-tips">{{ $t('请扫描拣货单号及SKU') }}</div>
+          <div class="font-bold scan-tips">{{ $t('请扫描拣货单号及条码') }}</div>
         </el-col>
         <el-col :span="10">
           <div class="right-item">{{ $t('拣货单号') }}：{{ sn }}</div>
@@ -78,7 +78,11 @@
               <el-row class="sku-row" v-for="ele in item.goods" :key="ele.id">
                 <el-col :span="4" :offset="1">
                   <span v-if="ele.p_goods">
-                    <img :src="`${$baseUrl.IMAGE_URL}${ele.p_goods.image}`" />
+                    <img
+                      class="img"
+                      :src="`${$baseUrl.IMAGE_URL}${ele.p_goods.image}`"
+                      @click="onPic(ele.p_goods.image)"
+                    />
                   </span>
                 </el-col>
                 <el-col :span="4">
@@ -115,6 +119,11 @@
         >
       </div>
     </div>
+    <el-dialog :visible.sync="imgVisible" size="small">
+      <div class="img_box">
+        <img :src="imgSrc" class="imgDialog" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -124,7 +133,9 @@ export default {
       barcode: '',
       sn: '',
       orderId: '',
-      orderList: []
+      orderList: [],
+      imgVisible: false,
+      imgSrc: ''
     }
   },
   created() {
@@ -151,13 +162,27 @@ export default {
         this.orderList.forEach(item => {
           let flag = true
           item.goods.forEach(ele => {
-            if (ele.barcode === this.barcode && ele.picking_quantity < ele.quantity && flag) {
-              ele.picking_quantity++
-              flag = false
+            console.log(ele.barcode)
+            if (ele.p_goods) {
+              if (
+                ele.p_goods.barcode === this.barcode &&
+                ele.picking_quantity < ele.quantity &&
+                flag
+              ) {
+                ele.picking_quantity++
+                flag = false
+              } else if (ele.picking_quantity > ele.quantity) {
+                this.$message.error(this.$t('拣货数量不能大于分货数量'))
+                ele.picking_quantity = ele.quantity
+              }
             }
           })
         })
       }
+    },
+    onPic(url) {
+      this.imgVisible = true
+      this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
     onSave(type) {
       let params = {
@@ -328,6 +353,16 @@ export default {
   }
   .align-center {
     text-align: center;
+  }
+  .img {
+    width: 20%;
+    cursor: pointer;
+  }
+  .img_box {
+    text-align: center;
+    .imgDialog {
+      width: 50%;
+    }
   }
   .out-num {
     font-size: 20px;
