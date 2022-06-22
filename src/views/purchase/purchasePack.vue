@@ -194,7 +194,7 @@
                       :key="index"
                     >
                       <el-col :span="3"
-                        ><div>{{ $t('未装箱') }}</div></el-col
+                        ><div>{{ item.packData | getStatus(item.quantity) }}</div></el-col
                       >
                       <el-col :span="4"
                         ><span
@@ -225,7 +225,6 @@
                             size="small"
                             v-model="ele.pack_quantity"
                             style="margin: 3px 0 0 10px"
-                            @blur="onCheckOut(item, index)"
                           ></el-input></div
                       ></el-col>
                     </el-row>
@@ -253,6 +252,7 @@
   </div>
 </template>
 <script>
+import { Message } from 'element-ui'
 export default {
   data() {
     return {
@@ -297,6 +297,27 @@ export default {
     if (this.$route.query.sn) {
       this.pickingSN = this.$route.query.sn
       this.getCloudDetail()
+    }
+  },
+  filters: {
+    getStatus(pack_quantity, quantity) {
+      console.log(quantity)
+      let num = pack_quantity.reduce(function (acr, pcc) {
+        if (!pcc.pack_quantity) {
+          return acr
+        }
+        return acr + Number(pcc.pack_quantity)
+      }, 0)
+      if (num === 0) {
+        return '未装箱'
+      } else if (num === quantity) {
+        return '已装箱'
+      } else if (num < quantity) {
+        return '部分装箱'
+      } else if (num > quantity) {
+        Message.error('装箱数量大于总数')
+        return '装箱数量大于总数'
+      }
     }
   },
   methods: {
@@ -423,43 +444,30 @@ export default {
         this.lineData = res.data
       })
     },
-    onCheckOut(item, index) {
-      console.log(item, index)
-      console.log(item.packData[index].pack_quantity)
-      this.num = item.packData[index].pack_quantity
-      if (this.num > item.quantity) {
-        return this.$message.error(this.$t('已装箱不能大于总数'))
-      } else if (this.num < 0) {
-        return this.$message.error(this.$t('已装箱数量不能为负值'))
-      }
-    },
-    sum(arr) {
-      return arr.reduce((acr, cur) => {
-        return acr + cur
-      })
-    },
     onPack(type) {
       if (!this.express_line_id) {
         return this.$message.error(this.$t('请选择渠道'))
       } else if (!this.prop_ids) {
         return this.$message.error(this.$t('请选择属性'))
       }
-      let goods = this.skuList.map(item => {
-        return {
-          purchase_order_goods_id: item.purchase_order_goods_id,
-          pack_quantity: this.num
-        }
+      let boxList = []
+      this.box.forEach((item, index) => {
+        const boxItem = { ...item, goods: [] }
+        this.skuList.forEach(ele => {
+          boxItem.goods.push({
+            purchase_order_goods_id: ele.purchase_order_goods_id,
+            pack_quantity: ele.packData[index].pack_quantity
+          })
+        })
+        boxList.push(boxItem)
       })
       let params = {
         is_pack_finish: type,
         express_line_id: this.express_line_id,
         prop_ids: [this.prop_ids],
-        box: []
+        box: boxList
       }
-      params.box = [...this.box]
-      for (let i in params.box) {
-        params.box[i].goods = goods
-      }
+      console.log(params)
       this.$request.purchasePack(this.ids, params).then(res => {
         if (res.ret) {
           this.$notify({

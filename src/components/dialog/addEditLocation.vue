@@ -16,6 +16,16 @@
     <el-form ref="form" :model="location" label-width="140px">
       <el-row :gutter="20">
         <el-col :span="12">
+          <el-form-item :label="$t('货位生成方式')">
+            <el-radio-group v-model="radio">
+              <el-radio :label="0">{{ $t('规则生成') }}</el-radio>
+              <el-radio :label="1">{{ $t('自定义添加') }}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
           <el-form-item :label="$t('*区域编号')" v-if="this.state === 'edit'">
             <el-input
               v-model="location.number"
@@ -34,7 +44,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <div class="unit">
+          <div class="unit" v-if="radio === 0">
             <span>{{ $t('货架规格') }}</span
             >&nbsp;&nbsp;
             <el-input
@@ -52,7 +62,7 @@
             ></el-input
             >*{{ $t('层') }}
           </div>
-          <el-form-item :label="$t('仓位数量')">
+          <el-form-item :label="$t('仓位数量')" v-if="radio === 0">
             <el-input v-model="qty" disabled></el-input>
           </el-form-item>
           <el-form-item :label="$t('同一客户包裹货位规则')">
@@ -86,10 +96,15 @@
         <el-button type="primary" @click="confirm">{{ $t('生成货位') }}</el-button>
       </div>
     </el-form>
+    <div v-if="this.state === 'edit'">
+      <el-button class="btn-main">{{ $t('批量导入') }}</el-button>
+      <el-button class="btn-main">{{ $t('添加') }}</el-button>
+    </div>
     <el-table v-if="this.state === 'edit'" :data="tableData" border style="width: 100%">
       <el-table-column type="index"> </el-table-column>
       <!-- 客户ID -->
       <el-table-column prop="number" :label="$t('区域编号')"> </el-table-column>
+      <el-table-column :label="$t('货位编码')"></el-table-column>
       <!-- 客户昵称 -->
       <el-table-column prop="column" :label="$t('列数')"> </el-table-column>
       <el-table-column prop="row" :label="$t('层数')"> </el-table-column>
@@ -124,6 +139,7 @@
             @click="lockLocation(scope.row.id, 1)"
             >{{ $t('锁定') }}</el-button
           >
+          <el-button>{{ $t('删除') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -173,6 +189,7 @@ export default {
       finishId: '',
       finishCode: '',
       finishData: [],
+      radio: 0,
       capacityData: [
         {
           id: 0,

@@ -103,7 +103,6 @@ export default {
             })
             this.show = false
             this.goodsData = res.data
-            console.log(this.goodsData)
             this.success(this.goodsData)
           } else {
             this.$notify({

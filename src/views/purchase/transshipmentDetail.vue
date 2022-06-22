@@ -54,7 +54,9 @@
       <el-row :gutter="10">
         <el-col :span="7"><i class="el-icon-document"></i>&nbsp;&nbsp;{{ item.name }}</el-col>
         <el-col :span="4" :offset="9">{{ $t('更新于') }}&nbsp;&nbsp;{{ item.updated_at }}</el-col>
-        <el-col :span="1" :offset="3"><i class="el-icon-download"></i></el-col>
+        <el-col :span="1" :offset="3"
+          ><i class="el-icon-download" @click="onDownloadFile(item.path)"></i
+        ></el-col>
       </el-row>
     </div>
     <div v-if="status === 0 || status === 1 || status === 2">
@@ -177,7 +179,6 @@ export default {
   methods: {
     getList() {
       this.$request.pickOrderDetail(this.$route.params.id).then(res => {
-        console.log(res)
         this.status = res.data.status
         this.statusName = res.data.status_name
         this.sn = res.data.sn
@@ -234,11 +235,25 @@ export default {
       }
       params.ids = this.orders.map(item => item.id)
       this.$request.downloadNoodleSheet(params).then(res => {
-        console.log(res)
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     },
     handleClick() {
       this.getList()
+    },
+    onDownloadFile(path) {
+      console.log(path)
     },
     onSubmit(isFinish) {
       let params = {}
