@@ -1,7 +1,12 @@
 <template>
   <div class="login-container">
     <div class="login-header">
-      <img v-if="customData.login_logo" src="customData.login_logo" alt="" />
+      <img
+        v-if="customData.login_logo"
+        style="width: 46px; height: 46px"
+        :src="$baseUrl.IMAGE_URL + customData.login_logo"
+        alt=""
+      />
       <img v-else src="../assets/logo-top.png" class="img-sty" />
       <span v-if="customData.login_title">{{ customData.login_title }}</span>
       <span v-else>{{ $t('海鸥集运管理系统') }}</span>
@@ -10,7 +15,13 @@
       <!-- 登陆页面 -->
       <div class="login-main" v-show="welcome === 1">
         <div class="main-container">
-          <div v-if="customData.login_logo">{{ customData.login_logo }}</div>
+          <div v-if="customData.login_logo">
+            <img
+              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              style="width: 500px; height: 450px"
+              alt=""
+            />
+          </div>
           <div v-else class="login-logo"></div>
           <div class="info-box">
             <div class="info-title">
@@ -77,7 +88,14 @@
       <!-- 忘记密码 -->
       <div class="login-main" v-show="welcome === 2">
         <div class="main-container">
-          <div class="login-logo"></div>
+          <div v-if="customData.login_logo">
+            <img
+              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              style="width: 500px; height: 450px"
+              alt=""
+            />
+          </div>
+          <div v-else class="login-logo"></div>
           <div class="info-box">
             <div class="step-box">
               <span :class="['step-item', { select: forgetStep <= 3 }]">{{ $t('验证身份') }}</span>
@@ -163,7 +181,14 @@
       <!-- 注册账号 -->
       <div class="login-main" v-show="welcome === 3">
         <div class="main-container">
-          <div class="login-logo"></div>
+          <div v-if="customData.login_logo">
+            <img
+              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              style="width: 500px; height: 450px"
+              alt=""
+            />
+          </div>
+          <div v-else class="login-logo"></div>
           <div class="info-box">
             <!-- <p class="info-title">{{$t('注册')}}</p> -->
             <div class="info-title">
@@ -397,7 +422,7 @@ export default {
   },
   methods: {
     getInit() {
-      this.$request.initConfig({ domain: document.domain }).then(res => {
+      this.$request.initConfig({ domain: location.hostname }).then(res => {
         this.customData = res.data
         this.$store.commit('saveSiderBarImage', res.data.sidebar_image)
       })

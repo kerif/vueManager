@@ -1,11 +1,21 @@
 <template>
   <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']">
     <div v-if="!isCollapse" class="aside-top">
-      <span class="app-name">{{ $t('集运') }}</span>
-      <span>{{ $t('管理系统') }}</span>
+      <div v-if="customData.sidebar_title">
+        <span>{{ customData.sidebar_title }}</span>
+      </div>
+      <div v-else>
+        <span class="app-name">{{ $t('集运') }}</span>
+        <span>{{ $t('管理系统') }}</span>
+      </div>
     </div>
     <div v-else class="unTop">
-      <img v-if="$store.state.saveSiderBarImage" src="" alt="" />
+      <img
+        v-if="customData.sidebar_image"
+        style="width: 61px; height: 65px"
+        :src="$baseUrl.IMAGE_URL + customData.sidebar_image"
+        alt=""
+      />
       <img v-else src="../../assets/top.png" />
     </div>
     <el-menu
@@ -94,6 +104,14 @@ export default {
   //   this.obj = JSON.parse(localStorage.getItem('counts'))
   //   console.log(this.obj)
   // },
+  data() {
+    return {
+      customData: {}
+    }
+  },
+  created() {
+    this.getInit()
+  },
   methods: {
     onMenuSelect() {
       // console.log('index', index)
@@ -102,6 +120,12 @@ export default {
     onRoute() {
       // console.log('route', route)
       // console.log('$route', this.$route)
+    },
+    getInit() {
+      this.$request.initConfig({ domain: location.hostname }).then(res => {
+        this.customData = res.data
+        this.$store.commit('saveSiderBarImage', res.data.sidebar_image)
+      })
     }
   }
 }

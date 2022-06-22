@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import { changeFavicon } from '@/utils/index'
 export default {
   data() {
     return {
@@ -15,8 +16,16 @@ export default {
   },
   methods: {
     getInit() {
-      this.$request.initConfig({ domain: document.domain }).then(res => {
+      this.$request.initConfig({ domain: location.hostname }).then(res => {
         this.customData = res.data
+        if (this.customData.title) {
+          document.title = this.customData.title
+        }
+        if (this.customData.icon) {
+          console.log(this.customData.icon)
+          let iconUrl = `${this.$baseUrl.IMAGE_URL}${this.customData.icon}`
+          changeFavicon(iconUrl)
+        }
         this.$store.commit('saveSiderBarImage', res.data.sidebar_image)
       })
     }
