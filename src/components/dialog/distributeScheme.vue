@@ -8,7 +8,7 @@
       <el-form-item :label="$t('第一步: 下载模板')">
         <el-button size="small" class="save-btn" @click="downloadTmp">{{ $t('模板') }}</el-button>
       </el-form-item>
-      <el-form-item :label="$t('第二步: 上传模板')">
+      <el-form-item :label="$t('第二步: 上传模板')" v-if="mode === 1">
         <el-upload
           class="upload-demo"
           action=""
@@ -16,6 +16,18 @@
           :on-remove="onFileRemove"
           :file-list="fileList"
           :http-request="uploadTmp"
+        >
+          <el-button type="primary" size="small" class="save-btn">{{ $t('点击上传') }}</el-button>
+        </el-upload>
+      </el-form-item>
+      <el-form-item :label="$t('第二步: 上传模板')" v-else>
+        <el-upload
+          class="upload-demo"
+          action=""
+          :limit="1"
+          :on-remove="onFileRemove"
+          :file-list="fileList"
+          :http-request="uploadPurchaseTmp"
         >
           <el-button type="primary" size="small" class="save-btn">{{ $t('点击上传') }}</el-button>
         </el-upload>
@@ -37,7 +49,11 @@ export default {
       mode: '',
       goodsList: [],
       goodsData: [],
-      id: ''
+      id: '',
+      param: '',
+      params: '',
+      paramFile: '',
+      paramsFile: ''
     }
   },
   methods: {
@@ -70,9 +86,34 @@ export default {
       this.param.append(`file`, file)
       return this.$request.uploadFiles(this.params)
     },
+    onUploadFile(file) {
+      this.paramsFile = new FormData()
+      this.paramsFile.append(`files[${0}][file]`, file)
+      this.paramFile = new FormData()
+      this.paramFile.append(`file`, file)
+      return this.$request.uploadFiles(this.params)
+    },
     uploadTmp(item) {
       let file = item.file
       this.onUpload(file).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    uploadPurchaseTmp(item) {
+      let file = item.file
+      this.onUploadFile(file).then(res => {
         if (res.ret) {
           this.$notify({
             title: this.$t('操作成功'),
@@ -92,8 +133,8 @@ export default {
       this.fileList = fileList
     },
     confirm() {
-      let file = this.param
       if (this.mode === 1) {
+        let file = this.param
         this.$request.batchImportGood(file).then(res => {
           if (res.ret) {
             this.$notify({
@@ -114,6 +155,7 @@ export default {
         })
       } else {
         let id = this.id ? this.id : 0
+        let file = this.paramFile
         this.$request.uploadPickOrder(id, file).then(res => {
           if (res.ret) {
             this.$notify({

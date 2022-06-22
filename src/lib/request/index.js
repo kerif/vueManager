@@ -118,7 +118,7 @@ exports.updateCosts = (id, params) => {
 exports.addLinesCost = params => {
   return $form.post('express-lines/costs', params)
 }
-// 配置 路线 复制 线路
+// 配置 路线 复制 线路ids
 exports.copyLine = (id, params) => {
   return $form.post(`express-lines/${id}/copy`, params)
 }
@@ -4407,9 +4407,9 @@ exports.initConfig = params => {
   return $form.get('panel-init-config', { params })
 }
 
-// 采购 采购完成
-exports.purchaseFinish = params => {
-  return $form.put('purchase-orders/finish', params)
+// 采购 采购完成ids
+exports.purchaseFinish = ids => {
+  return $form.put('purchase-orders/finish', ids)
 }
 
 // 采购 批量导入

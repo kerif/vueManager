@@ -253,7 +253,8 @@ export default {
       this.getList()
     },
     onDownloadFile(path) {
-      console.log(path)
+      let url = `${this.$baseUrl.IMAGE_URL}${path}`
+      window.open(url)
     },
     onSubmit(isFinish) {
       let params = {}
@@ -316,7 +317,7 @@ export default {
   width: 80%;
   margin-top: 10px;
   cursor: pointer;
-  background: #eee;
+  background: #eff1f2;
   padding: 8px;
   border-radius: 5px;
   font-size: 14px;

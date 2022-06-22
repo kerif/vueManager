@@ -26,7 +26,7 @@
         name="4"
       ></el-tab-pane>
       <el-tab-pane
-        :label="`${$t('作废')}(${statusList[6] ? statusList[6].counts : 0})`"
+        :label="`${$t('作废')}(${statusList[5] ? statusList[5].counts : 0})`"
         name="10"
       ></el-tab-pane>
     </el-tabs>
@@ -275,13 +275,13 @@ export default {
         params: { id }
       })
     },
-    onDistribution(ids) {
+    onDistribution(id) {
       this.$confirm(this.$t('您真的确认吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
       }).then(() => {
-        this.$request.purchaseFinish(ids).then(res => {
+        this.$request.purchaseFinish({ ids: id }).then(res => {
           if (res.ret) {
             this.$notify({
               type: 'success',
@@ -362,20 +362,26 @@ export default {
     },
     onInvild(ids) {
       if (!ids.length) return this.$message.error(this.$t('请选择'))
-      this.$request.invalidPurchase(ids).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
+      this.$confirm(this.$t('您真的要作废吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.invalidPurchase(ids).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     addShipInfo(id, logistics_company_code, logistics_sn, warehouse_name, warehouseId) {

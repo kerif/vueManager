@@ -83,7 +83,7 @@
             <el-button
               class="btn-light-red"
               v-if="['0', '1', '2'].includes(activeName)"
-              @click="onDelete(id)"
+              @click="onDelete(scope.row.id)"
               >{{ $t('删除') }}</el-button
             >
             <el-button
@@ -208,20 +208,26 @@ export default {
       })
     },
     onDelete(id) {
-      this.$request.delPickOrder(id).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          this.getList()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.delPickOrder(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     onSubmit(id) {
