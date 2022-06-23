@@ -255,7 +255,8 @@ export default {
           { id: 'package_size', name: this.$t('包裹尺寸(长宽高)') },
           { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` },
           { id: 'package_value', name: this.$t('包裹申报价值') },
-          { id: 'package_in_storage_at', name: this.$t('包裹入库时间') }
+          { id: 'package_in_storage_at', name: this.$t('包裹入库时间') },
+          { id: 'location', name: this.$t('包裹货位') }
         ]
         // 入库信息 总计
         this.warehouseSum = [
@@ -463,7 +464,8 @@ export default {
           { id: 'package_size', name: this.$t('包裹尺寸(长宽高)') },
           { id: 'package_weight', name: `包裹重量 (${this.localization.weight_unit})` },
           { id: 'package_value', name: this.$t('包裹申报价值') },
-          { id: 'package_in_storage_at', name: this.$t('包裹入库时间') }
+          { id: 'package_in_storage_at', name: this.$t('包裹入库时间') },
+          { id: 'location', name: this.$t('包裹货位') }
         ]
         // 入库信息 总计
         this.warehouseSum = [

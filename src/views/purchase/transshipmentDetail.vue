@@ -146,11 +146,15 @@
         </el-table>
       </div>
     </div>
-    <div style="margin-top: 50px; text-align: left" v-if="status === 0 || status === 1">
-      <el-button @click="onSubmit(0)" type="primary">{{ $t('保存') }}</el-button>
-      <el-button class="save-btn" type="primary" @click="onSubmit(1)">{{
+    <div style="margin-top: 50px; text-align: left">
+      <el-button @click="onSubmit(0)" v-if="status === 0" type="primary">{{
+        $t('保存')
+      }}</el-button>
+      <el-button class="save-btn" v-if="status === 0" type="primary" @click="onSubmit(1)">{{
         $t('保存并提交')
       }}</el-button>
+      <el-button v-if="status === 1" type="primary" @click="onPick">{{ $t('拣货') }}</el-button>
+      <el-button v-if="status === 2" type="primary" @click="onPack">{{ $t('打包') }}</el-button>
     </div>
   </div>
 </template>
@@ -256,6 +260,18 @@ export default {
     onDownloadFile(path) {
       let url = `${this.$baseUrl.IMAGE_URL}${path}`
       window.open(url)
+    },
+    onPick() {
+      this.$router.push({
+        name: 'picking',
+        query: { sn: this.sn }
+      })
+    },
+    onPack() {
+      this.$router.push({
+        name: 'purchasePack',
+        query: { sn: this.sn }
+      })
     },
     onSubmit(isFinish) {
       let params = {}

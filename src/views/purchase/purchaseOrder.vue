@@ -410,9 +410,10 @@ export default {
         }
       )
     },
-    handleClick() {
+    handleClick(tab) {
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)
+      this.page_params.handleQueryChange('activeName', tab.name)
       this.getList()
     },
     handleSelectionChange(val) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick" class="tab-length">
       <el-tab-pane
         :label="`${$t('全部')}(${countData[4] ? countData[4].counts : ''})`"
         name="all"
@@ -184,9 +184,10 @@ export default {
         name: 'addScheme'
       })
     },
-    handleClick() {
+    handleClick(tab) {
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)
+      this.page_params.handleQueryChange('activeName', tab.name)
       this.getList()
     },
     onPick(sn) {
@@ -267,5 +268,8 @@ export default {
       margin: 0 20px;
     }
   }
+}
+.tab-length {
+  width: 500px !important;
 }
 </style>

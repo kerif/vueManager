@@ -159,25 +159,23 @@ export default {
     onSku() {
       if (this.barcode) {
         this.$refs.barcode.select()
-        this.orderList.forEach(item => {
+        for (let i = 0; i < this.orderList.length; i++) {
           let flag = true
-          item.goods.forEach(ele => {
-            if (ele.p_goods) {
-              if (
-                ele.p_goods.barcode === this.barcode &&
-                ele.picking_quantity < ele.quantity &&
-                flag
-              ) {
-                ele.picking_quantity++
-                flag = false
-                // if ((ele.picking_quantity = ele.quantity)) return
-              } else if (ele.picking_quantity > ele.quantity) {
-                this.$message.error(this.$t('拣货数量不能大于分货数量'))
-                ele.picking_quantity = ele.quantity
-              }
+          for (let j = 0; j < this.orderList[i].goods.length; j++) {
+            if (
+              this.orderList[i].goods[j].p_goods.barcode === this.barcode &&
+              this.orderList[i].goods[j].picking_quantity < this.orderList[i].goods[j].quantity &&
+              flag
+            ) {
+              flag = false
+              this.orderList[i].goods[j].picking_quantity++
+              break
             }
-          })
-        })
+          }
+          if (!flag) {
+            break
+          }
+        }
       }
     },
     onPic(url) {

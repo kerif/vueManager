@@ -238,6 +238,7 @@
                 <el-button
                   type="primary"
                   size="small"
+                  :disabled="isBtns"
                   class="calc-btn"
                   :loading="$store.state.btnLoading"
                   @click="onPack(1)"
@@ -483,15 +484,9 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          if (type === 0) {
-            this.$router.push({
-              name: 'transshipmentBill'
-            })
-          } else {
-            this.$router.push({
-              name: 'transshipmentBill'
-            })
-          }
+          this.$router.push({
+            name: 'transshipmentBill'
+          })
         } else {
           this.$message({
             message: res.msg,
@@ -501,7 +496,23 @@ export default {
       })
     }
   },
-  computed: {},
+  computed: {
+    isBtns() {
+      let isBtn = false
+      this.skuList.forEach(item => {
+        if (item.packData.length) {
+          item.packData.forEach(ele => {
+            if (!ele.pack_quantity || ele.pack_quantity > item.quantity) {
+              isBtn = true
+            }
+          })
+        } else {
+          isBtn = true
+        }
+      })
+      return isBtn
+    }
+  },
   components: {}
 }
 </script>
