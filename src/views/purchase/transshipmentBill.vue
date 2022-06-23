@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick" class="tab-length">
+    <el-tabs v-model="activeName" @tab-click="handleClick" class="tab-length" stretch>
       <el-tab-pane
         :label="`${$t('全部')}(${countData[4] ? countData[4].counts : ''})`"
         name="all"
@@ -141,13 +141,13 @@ export default {
   mixins: [pagination],
   created() {
     this.getList()
-    this.initQuery()
   },
   activated() {
     this.getList()
   },
   methods: {
     getList() {
+      this.initQuery()
       this.tableLoading = true
       this.$request
         .transshipmentList({
@@ -162,6 +162,7 @@ export default {
             this.tableData = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
+
             this.onCount()
           }
         })
@@ -175,9 +176,14 @@ export default {
       }
     },
     onCount() {
-      this.$request.pickOrderCount().then(res => {
-        this.countData = res.data
-      })
+      this.$request
+        .pickOrderCount({
+          status: this.activeName === 'all' ? '' : this.activeName,
+          keyword: this.page_params.keyword
+        })
+        .then(res => {
+          this.countData = res.data
+        })
     },
     addDistributeScheme() {
       this.$router.push({
@@ -185,6 +191,7 @@ export default {
       })
     },
     handleClick(tab) {
+      console.log(tab, tab.name)
       this.page_params.page = 1
       this.page_params.handleQueryChange('page', 1)
       this.page_params.handleQueryChange('activeName', tab.name)

@@ -30,7 +30,7 @@
                 :class="{ selected: item.id === ids }"
                 v-for="item in orderList"
                 :key="item.id"
-                @click="onOrder(item, index)"
+                @click="onOrder(item)"
               >
                 <span class="font-bold">#{{ item.sn }}</span>
                 <span>{{ item.status === 2 ? $t('待打包') : $t('已打包') }}</span>
@@ -382,8 +382,8 @@ export default {
         item.packData.splice(index, 1)
       })
     },
-    onOrder(item, index) {
-      console.log(index, item)
+    onOrder(item) {
+      console.log(item)
       this.order = this.orderList.filter(ele => ele.sn === item.sn)
       this.ids = this.order[0].id
       this.box = [
@@ -409,7 +409,6 @@ export default {
       this.stationId = item.station_id
       this.getChannel(this.stationId)
       this.prop_ids = item.props.map(ele => ele.id)[0]
-
       if (item.status === 3) {
         this.express_line_id = this.order[0].express_line_id
         this.prop_ids = this.order[0].props.map(ele => ele.id)[0]

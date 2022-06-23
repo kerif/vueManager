@@ -4463,8 +4463,8 @@ exports.importPickOrderTmp = () => {
 }
 
 // 采购 分货方案  数量统计
-exports.pickOrderCount = () => {
-  return $form.get('purchase-picking-orders/status-counts')
+exports.pickOrderCount = params => {
+  return $form.get('purchase-picking-orders/status-counts', { params })
 }
 
 // 采购 分货方案 拣货
