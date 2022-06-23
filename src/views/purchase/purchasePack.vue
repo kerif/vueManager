@@ -397,8 +397,10 @@ export default {
         this.skuList = []
         this.order.forEach(item => {
           item.goods.forEach(ele => {
+            delete ele.p_goods.quantity
             this.skuList.push({
               ...ele.p_goods,
+              quantity: ele.quantity,
               purchase_order_goods_id: ele.purchase_order_goods_id,
               packData: [{ pack_quantity: '' }]
             })
