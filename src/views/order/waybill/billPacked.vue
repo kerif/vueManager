@@ -451,7 +451,7 @@
           <el-form-item>
             <el-col :span="18">
               <div class="add-row">
-                <el-button class="btn-light-red" @click="clearRow">{{ $t('清空') }}</el-button>
+                <!-- <el-button class="btn-light-red" @click="clearRow">{{ $t('清空') }}</el-button> -->
                 <el-button class="btn-deep-purple" @click="batchAddRow">{{
                   $t('批量添加')
                 }}</el-button>

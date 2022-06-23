@@ -170,7 +170,7 @@ export default {
               ) {
                 ele.picking_quantity++
                 flag = false
-                return
+                // if ((ele.picking_quantity = ele.quantity)) return
               } else if (ele.picking_quantity > ele.quantity) {
                 this.$message.error(this.$t('拣货数量不能大于分货数量'))
                 ele.picking_quantity = ele.quantity

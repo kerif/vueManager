@@ -241,6 +241,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
+          window.open(res.data.url)
         } else {
           this.$message({
             message: res.msg,

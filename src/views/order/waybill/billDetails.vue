@@ -1080,14 +1080,14 @@ export default {
       options: [],
       countryList: [],
       declare: {},
-      videoUrl: []
+      videoUrl: [],
+      picking_divide_order_id: ''
     }
   },
   created() {
     if (this.$route.params.id) {
       this.getList()
       this.getProduct()
-      // this.getPurchaseDetail()
     }
   },
   methods: {
@@ -1171,6 +1171,11 @@ export default {
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization
+        if (res.data.picking_divide_order_id !== '') {
+          this.picking_divide_order_id = res.data.picking_divide_order_id
+          console.log(this.picking_divide_order_id)
+          this.getPurchaseDetail()
+        }
         if (res.data.pre_declare) {
           this.declare = res.data.pre_declare
         }
@@ -1456,11 +1461,11 @@ export default {
       this.getAddress()
       this.boxDialog = true
     },
-    // getPurchaseDetail() {
-    //   this.$request.transportGoodList(this.$route.params.id).then(res => {
-    //     console.log(res)
-    //   })
-    // },
+    getPurchaseDetail() {
+      this.$request.transportGoodList(this.$route.params.id).then(res => {
+        console.log(res)
+      })
+    },
     // 编辑
     goEdit() {
       // this.unEdit = true
