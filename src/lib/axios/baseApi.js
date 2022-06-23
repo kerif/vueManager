@@ -2,6 +2,7 @@ const hostName = location.hostname
 let baseUrl
 switch (hostName) {
   case 'localhost':
+  case 'dev-admin.haiouoms.com':
     baseUrl = {
       BASE_API_URL: 'https://dev-api.haiouoms.com/api/admin',
       IMAGE_URL: 'https://dev-api.haiouoms.com',
