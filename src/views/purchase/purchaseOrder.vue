@@ -224,6 +224,7 @@ export default {
   },
   methods: {
     getList() {
+      this.initQuery()
       this.tableLoading = true
       this.$request
         .purchaseList({
@@ -247,7 +248,7 @@ export default {
     },
     initQuery() {
       if (this.$route.query.activeName) {
-        console.log(this.$route.query.activeName)
+        this.activeName = this.$route.query.activeName
       }
     },
     getCounts() {

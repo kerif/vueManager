@@ -182,6 +182,20 @@
             <el-radio :label="1" class="select-sty" style="margin-left: 10px">{{
               $t('尺寸判断')
             }}</el-radio>
+            <!-- <el-radio :label="1" class="select-sty" style="margin-left: 10px">{{
+              $t('自动判断')
+            }}</el-radio>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="$t('同时设置尺寸限制、重量限制时,超出其中一项时即会判断为大货')"
+              placement="top"
+            >
+              <span
+                class="el-icon-question question-icon"
+                style="font-size: 18px; position: absolute; top: 10px; left: 210px"
+              ></span>
+            </el-tooltip> -->
             <el-tooltip
               class="item"
               effect="dark"
@@ -194,6 +208,26 @@
               ></span>
             </el-tooltip>
           </el-radio-group>
+          <!-- <el-checkbox-group v-model="checkList">
+            <div style="display: flex; margin-left: 120px">
+              <el-checkbox label="尺寸判断(cm)"></el-checkbox>
+              <div style="margin-left: 5px">
+                <el-input v-model="value" class="ipt" :placeholder="$t('请输入长')"></el-input>
+                <el-input v-model="value" class="ipt" :placeholder="$t('请输入宽')"></el-input>
+                <el-input v-model="value" class="ipt" :placeholder="$t('请输入高')"></el-input>
+              </div>
+            </div>
+            <div style="display: flex; margin-left: 120px">
+              <el-checkbox label="重量判断(KG)"></el-checkbox>
+              <div style="margin-left: 5px">
+                <el-input
+                  v-model="value"
+                  style="width: 50%"
+                  :placeholder="$t('请输入重量')"
+                ></el-input>
+              </div>
+            </div>
+          </el-checkbox-group> -->
           <div v-if="ruleForm.big_rule === 1">
             <el-input
               v-model="ruleForm.location_size.length"
@@ -261,7 +295,9 @@ export default {
         { id: 0, name: this.$t('打包完成') },
         { id: 1, name: this.$t('拣货完成') }
       ],
-      selectList: []
+      selectList: [],
+      checkList: [],
+      value: ''
     }
   },
   created() {
