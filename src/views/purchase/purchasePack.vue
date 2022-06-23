@@ -30,7 +30,7 @@
                 :class="{ selected: item.id === ids }"
                 v-for="item in orderList"
                 :key="item.id"
-                @click="onOrder(item)"
+                @click="onOrder(item, index)"
               >
                 <span class="font-bold">#{{ item.sn }}</span>
                 <span>{{ item.status === 2 ? $t('待打包') : $t('已打包') }}</span>
@@ -382,66 +382,66 @@ export default {
         item.packData.splice(index, 1)
       })
     },
-    onOrder(item) {
+    onOrder(item, index) {
+      console.log(index, item)
       this.order = this.orderList.filter(ele => ele.sn === item.sn)
       this.ids = this.order[0].id
-      if (item.status === 2) {
-        this.box = [
-          {
-            weight: '',
-            length: '',
-            height: '',
-            width: ''
-          }
-        ]
-        this.skuList = []
-        this.order.forEach(item => {
-          item.goods.forEach(ele => {
-            delete ele.p_goods.quantity
-            this.skuList.push({
-              ...ele.p_goods,
-              quantity: ele.quantity,
-              purchase_order_goods_id: ele.purchase_order_goods_id,
-              packData: [{ pack_quantity: '' }]
-            })
+      this.box = [
+        {
+          weight: '',
+          length: '',
+          height: '',
+          width: ''
+        }
+      ]
+      this.skuList = []
+      this.order.forEach(item => {
+        item.goods.forEach(ele => {
+          delete ele.p_goods.quantity
+          this.skuList.push({
+            ...ele.p_goods,
+            quantity: ele.quantity,
+            purchase_order_goods_id: ele.purchase_order_goods_id,
+            packData: [{ pack_quantity: '' }]
           })
         })
-        this.stationId = item.station_id
-        this.getChannel(this.stationId)
-        this.prop_ids = item.props.map(ele => ele.id)[0]
-      } else if (item.status === 3) {
-        this.orderList.forEach(item => {
-          console.log(item.boxes)
-          if (item.express_line_id) {
-            this.express_line_id = item.express_line_id
-          }
-          if (item.props) {
-            this.prop_ids = item.props.map(ele => ele.id)[0]
-          }
-          this.box = item.boxes.map(ele => {
+      })
+      this.stationId = item.station_id
+      this.getChannel(this.stationId)
+      this.prop_ids = item.props.map(ele => ele.id)[0]
+
+      if (item.status === 3) {
+        this.express_line_id = this.order[0].express_line_id
+        this.prop_ids = this.order[0].props.map(ele => ele.id)[0]
+        this.order.forEach(item => {
+          this.box = item.boxes.map(val => {
             return {
-              width: ele.width,
-              length: ele.length,
-              height: ele.height,
-              weight: ele.weight
+              width: val.width,
+              height: val.height,
+              length: val.length,
+              weight: val.weight
             }
           })
-          console.log(this.box)
-          item.boxes.map(it => {
-            it.goods.forEach((ite, idx) => {
-              console.log(idx)
+          this.skuList = []
+          const tempList = item.goods.map(ele => {
+            return {
+              ...ele.p_goods,
+              quantity: ele.quantity,
+              packData: []
+            }
+          })
+          item.boxes.forEach(box => {
+            box.goods.forEach(goods => {
+              tempList.forEach(ele => {
+                if (ele.id === goods.id) {
+                  ele.packData.push({
+                    pack_quantity: goods.pivot.quantity
+                  })
+                }
+              })
             })
           })
-          // item.boxes.forEach(ite => {
-          //   ite.goods.forEach(it => {
-          //     this.skuList.forEach(val => {
-          //       val.packData.forEach(v => {
-          //         v.pack_quantity = it.pivot.quantity
-          //         console.log(v.pack_quantity)
-          //       })
-          //     })
-          //   })
-          // })
+          this.skuList = tempList
         })
       }
     },
@@ -478,7 +478,6 @@ export default {
         prop_ids: [this.prop_ids],
         box: boxList
       }
-      console.log(params)
       this.$request.purchasePack(this.ids, params).then(res => {
         if (res.ret) {
           this.$notify({
@@ -502,9 +501,13 @@ export default {
     isBtns() {
       let isBtn = false
       this.skuList.forEach(item => {
-        if (item.packData.length) {
+        if (item.packData) {
           item.packData.forEach(ele => {
-            if (!ele.pack_quantity || ele.pack_quantity > item.quantity) {
+            if (
+              !ele.pack_quantity ||
+              ele.pack_quantity > item.quantity ||
+              ele.pack_quantity < item.quantity
+            ) {
               isBtn = true
             }
           })

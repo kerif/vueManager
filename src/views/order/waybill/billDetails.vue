@@ -1002,6 +1002,11 @@
               <el-input class="input-sty" v-model="address.clearance_code"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('邮箱')" class="label-sty">
+              <el-input class="input-sty" v-model="address.email"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <div slot="footer">
@@ -1490,7 +1495,8 @@ export default {
           area_id: this.countryList[1] || '',
           sub_area_id: this.countryList[2] || '',
           province: this.address.province,
-          district: this.address.district
+          district: this.address.district,
+          email: this.address.email
         })
         .then(res => {
           if (res.ret) {
