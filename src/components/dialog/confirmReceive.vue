@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="show" :title="$t('确认收货')" @close="clear">
-    <el-form :model="form" label-width="100px">
-      <el-form-item :label="$t('收货箱数')">
+    <el-form :model="form" label-width="100px" :rules="rules">
+      <el-form-item :label="$t('收货箱数')" prop="box_count">
         <el-input v-model="form.box_count"></el-input>
       </el-form-item>
       <el-form-item :label="$t('照片')">
@@ -45,6 +45,9 @@ export default {
         box_count: '',
         images: '',
         remark: ''
+      },
+      rules: {
+        box_count: [{ required: true, message: this.$t('请输入收货箱数'), trigger: 'blur' }]
       }
     }
   },

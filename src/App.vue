@@ -12,7 +12,9 @@ export default {
     }
   },
   created() {
-    this.getInit()
+    if (location.hostname) {
+      this.getInit()
+    }
   },
   methods: {
     getInit() {
@@ -22,7 +24,6 @@ export default {
           document.title = this.customData.title
         }
         if (this.customData.icon) {
-          console.log(this.customData.icon)
           let iconUrl = `${this.$baseUrl.IMAGE_URL}${this.customData.icon}`
           changeFavicon(iconUrl)
         }

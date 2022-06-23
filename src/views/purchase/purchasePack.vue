@@ -301,22 +301,23 @@ export default {
   },
   filters: {
     getStatus(pack_quantity, quantity) {
-      console.log(quantity)
-      let num = pack_quantity.reduce(function (acr, pcc) {
-        if (!pcc.pack_quantity) {
-          return acr
+      if (pack_quantity) {
+        let num = pack_quantity.reduce(function (acr, pcc) {
+          if (!pcc.pack_quantity) {
+            return acr
+          }
+          return acr + Number(pcc.pack_quantity)
+        }, 0)
+        if (num === 0) {
+          return '未装箱'
+        } else if (num === quantity) {
+          return '已装箱'
+        } else if (num < quantity) {
+          return '部分装箱'
+        } else if (num > quantity) {
+          Message.error('装箱数量大于总数')
+          return '装箱数量大于总数'
         }
-        return acr + Number(pcc.pack_quantity)
-      }, 0)
-      if (num === 0) {
-        return '未装箱'
-      } else if (num === quantity) {
-        return '已装箱'
-      } else if (num < quantity) {
-        return '部分装箱'
-      } else if (num > quantity) {
-        Message.error('装箱数量大于总数')
-        return '装箱数量大于总数'
       }
     }
   },
@@ -383,54 +384,61 @@ export default {
     onOrder(item) {
       this.order = this.orderList.filter(ele => ele.sn === item.sn)
       this.ids = this.order[0].id
-      this.box = [
-        {
-          weight: '',
-          length: '',
-          height: '',
-          width: ''
-        }
-      ]
-      this.skuList = []
-      this.order.forEach(item => {
-        item.goods.forEach(ele => {
-          this.skuList.push({
-            ...ele.p_goods,
-            purchase_order_goods_id: ele.purchase_order_goods_id,
-            packData: [{ pack_quantity: '' }]
+      if (item.status === 2) {
+        this.box = [
+          {
+            weight: '',
+            length: '',
+            height: '',
+            width: ''
+          }
+        ]
+        this.skuList = []
+        this.order.forEach(item => {
+          item.goods.forEach(ele => {
+            this.skuList.push({
+              ...ele.p_goods,
+              purchase_order_goods_id: ele.purchase_order_goods_id,
+              packData: [{ pack_quantity: '' }]
+            })
           })
         })
-      })
-      this.stationId = item.station_id
-      this.getChannel(this.stationId)
-      this.prop_ids = item.props.map(ele => ele.id)[0]
-      if (item.status === 3) {
+        this.stationId = item.station_id
+        this.getChannel(this.stationId)
+        this.prop_ids = item.props.map(ele => ele.id)[0]
+      } else if (item.status === 3) {
         this.orderList.forEach(item => {
+          console.log(item.boxes)
           if (item.express_line_id) {
             this.express_line_id = item.express_line_id
           }
           if (item.props) {
             this.prop_ids = item.props.map(ele => ele.id)[0]
           }
-          if (item.boxes.length) {
-            item.boxes.forEach(ele => {
-              ele.goods.forEach(val => {
-                this.skuList.forEach(item => {
-                  item.packData.forEach(o => {
-                    o.pack_quantity = val.pivot ? val.pivot.quantity : ''
-                  })
-                })
-              })
+          this.box = item.boxes.map(ele => {
+            return {
+              width: ele.width,
+              length: ele.length,
+              height: ele.height,
+              weight: ele.weight
+            }
+          })
+          console.log(this.box)
+          item.boxes.map(it => {
+            it.goods.forEach((ite, idx) => {
+              console.log(idx)
             })
-            this.box = item.boxes.map(ele => {
-              return {
-                width: ele.width,
-                length: ele.length,
-                height: ele.height,
-                weight: ele.weight
-              }
-            })
-          }
+          })
+          // item.boxes.forEach(ite => {
+          //   ite.goods.forEach(it => {
+          //     this.skuList.forEach(val => {
+          //       val.packData.forEach(v => {
+          //         v.pack_quantity = it.pivot.quantity
+          //         console.log(v.pack_quantity)
+          //       })
+          //     })
+          //   })
+          // })
         })
       }
     },

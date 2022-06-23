@@ -162,7 +162,6 @@ export default {
         this.orderList.forEach(item => {
           let flag = true
           item.goods.forEach(ele => {
-            console.log(ele.barcode)
             if (ele.p_goods) {
               if (
                 ele.p_goods.barcode === this.barcode &&
@@ -171,6 +170,7 @@ export default {
               ) {
                 ele.picking_quantity++
                 flag = false
+                return
               } else if (ele.picking_quantity > ele.quantity) {
                 this.$message.error(this.$t('拣货数量不能大于分货数量'))
                 ele.picking_quantity = ele.quantity

@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" v-if="customData">
     <div class="login-header">
       <img
         v-if="customData.login_logo"
@@ -418,7 +418,9 @@ export default {
   },
   created() {
     this.getCaptcha() // 获取图型验证码
-    this.getInit()
+    if (location.hostname) {
+      this.getInit()
+    }
   },
   methods: {
     getInit() {

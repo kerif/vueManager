@@ -22,11 +22,11 @@
         name="3"
       ></el-tab-pane>
     </el-tabs>
-    <purchase-search
+    <transshipment-search
       v-show="hasFilterCondition"
       :searchData="searchData"
       v-on:submit="goSearch"
-    ></purchase-search>
+    ></transshipment-search>
     <div class="header-range">
       <div>
         <el-button class="btn-main" @click="addDistributeScheme">{{
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import purchaseSearch from './components/purchaseSearch.vue'
+import transshipmentSearch from './components/transshipmentSearch.vue'
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
@@ -134,7 +134,7 @@ export default {
     }
   },
   components: {
-    purchaseSearch,
+    transshipmentSearch,
     SearchGroup,
     NlePagination
   },

@@ -2336,14 +2336,14 @@ export default [
             path: '/purchase/transshipmentBill',
             name: 'transshipmentBill',
             component: transshipmentBill,
-            id: 1401,
+            id: 1402,
             meta: { level: 2, group: '采购', name: '分货转运单' }
           },
           {
             path: '/purchase/transshipmentDetail/:id',
             name: 'transshipmentDetail',
             component: transshipmentDetail,
-            id: 1401,
+            id: 1402,
             meta: {
               level: 3,
               group: '采购',
@@ -2354,7 +2354,7 @@ export default [
             path: '/purchase/transshipment/addScheme',
             name: 'addScheme',
             component: addEditScheme,
-            id: 1401,
+            id: 1402,
             meta: {
               level: 3,
               group: '采购',
@@ -2366,7 +2366,7 @@ export default [
             path: '/purchase/transshipment/picking',
             name: 'picking',
             component: picking,
-            id: 1401,
+            id: 1402,
             meta: {
               level: 3,
               group: '采购',
@@ -2378,7 +2378,7 @@ export default [
             path: '/purchase/transshipment/purchasePack',
             name: 'purchasePack',
             component: purchasePack,
-            id: 1401,
+            id: 1402,
             meta: {
               level: 3,
               group: '采购',

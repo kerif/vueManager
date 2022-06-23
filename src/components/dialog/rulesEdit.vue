@@ -1,6 +1,9 @@
 <template>
   <el-dialog
     :visible.sync="show"
+    class="dialog-edit-rules"
+    @close="clear"
+    width="60%"
     :title="
       name === 1
         ? $t('编辑会员编号规则')
@@ -14,11 +17,14 @@
         ? $t('编辑发货单编号规则')
         : name === 7
         ? $t('编辑盘点单编号规则')
-        : $t('编辑采购单编号')
+        : name === 8
+        ? $t('编辑采购单编号')
+        : name === 9
+        ? $t('编辑采购分货号')
+        : name === 10
+        ? $t('编辑采购分货转运订单编号')
+        : $t('编辑采购分货转运订单分箱号')
     "
-    class="dialog-edit-rules"
-    @close="clear"
-    width="60%"
   >
     <el-form ref="form" :model="userRules" label-width="140px" v-if="this.name === 1">
       <el-row :gutter="20">

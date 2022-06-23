@@ -55,7 +55,7 @@
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
-        <span>{{ $t('建议尺寸') }}: 16*16</span>
+        <span>{{ $t('建议尺寸') }}: 16px*16px</span>
       </el-form-item>
       <el-form-item :label="$t('登录页标题')">
         <el-input
@@ -91,7 +91,7 @@
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
-        <span>{{ $t('建议尺寸') }}: 46*46</span>
+        <span>{{ $t('建议尺寸') }}: 46px*46px</span>
       </el-form-item>
       <el-form-item :label="$t('登录页广告图')">
         <span class="img-item" v-if="form.login_image">
@@ -116,7 +116,7 @@
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
-        <span>{{ $t('建议尺寸') }}: 500*450</span>
+        <span>{{ $t('建议尺寸') }}: 500px*450px</span>
       </el-form-item>
       <el-form-item :label="$t('导航栏名称')">
         <el-input
@@ -152,7 +152,7 @@
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
-        <span>{{ $t('建议尺寸') }}: 61*65</span>
+        <span>{{ $t('建议尺寸') }}: 61px*65px</span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="onConfirm">{{ $t('保存') }}</el-button>
