@@ -49,11 +49,23 @@
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('收货点') }}：</span>
-                      <span class="font-bold">{{ item.station ? item.station.name : '' }}</span>
+                      <el-select v-model="station_id" @change="getChannel">
+                        <el-option
+                          v-for="item in pickList"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        ></el-option>
+                      </el-select>
                     </el-col>
                     <el-col :span="8">
                       <span>{{ $t('客户编号') }}：</span>
-                      <span class="font-bold">{{ item.user_id }}</span>
+                      <el-autocomplete
+                        :fetch-suggestions="queryCNSearch"
+                        :placeholder="$t('请输入客户ID')"
+                        v-model="user_id"
+                      >
+                      </el-autocomplete>
                     </el-col>
                   </el-row>
                   <el-row class="row-item">
@@ -291,12 +303,17 @@ export default {
       pack: [],
       num: '',
       status: '',
-      idx: ''
+      idx: '',
+      pickList: [],
+      station_id: '',
+      user_id: '',
+      customList: []
     }
   },
   created() {
     this.getPropList()
     this.getLineType()
+    this.getPackagePick()
     if (this.$route.query.sn) {
       this.pickingSN = this.$route.query.sn
       this.getCloudDetail()
@@ -388,7 +405,7 @@ export default {
       console.log(item, index)
       this.idx = index
       this.status = item.status
-      this.order = this.orderList.filter(ele => ele.sn === item.sn)
+      this.order = this.orderList.filter(ele => ele.id === item.id)
       this.ids = this.order[0].id
       this.box = [
         {
@@ -411,15 +428,19 @@ export default {
         })
       })
       this.stationId = item.station_id
-      if (!this.express_line_id) {
-        this.getChannel(this.stationId)
-      }
-
       this.prop_ids = item.props.map(ele => ele.id)[0]
+      this.station_id = this.stationId
+      if (item.user) {
+        this.user_id = item.user.id + '---' + item.user.name
+      }
       if (item.status === 3) {
         this.express_line_id = this.orderList[index].express_line
           ? this.orderList[index].express_line.id
           : ''
+        this.station_id = this.orderList[index].station_id
+        if (this.orderList[index].user) {
+          this.user_id = this.orderList[index].user.id + '---' + this.orderList[index].user.name
+        }
         this.prop_ids = this.orderList[index].props.map(ele => ele.id)[0]
         this.box = []
         const boxData = this.orderList[index].boxes.map(item => {
@@ -463,11 +484,35 @@ export default {
         this.lineData = res.data
       })
     },
+    getPackagePick() {
+      this.$request.getPackagePick().then(res => {
+        if (res.ret) {
+          this.pickList = res.data
+        }
+      })
+    },
+    queryCNSearch(queryString, callback) {
+      var list = [{}]
+      let params = {
+        keyword: this.user_id.toString()
+      }
+      this.$request.Automatic(params).then(res => {
+        for (let i of res.data) {
+          i.value = i.id + '---' + i.name
+        }
+        list = res.data
+        callback && callback(list)
+      })
+    },
     onPack(type) {
       if (!this.express_line_id) {
         return this.$message.error(this.$t('请选择渠道'))
       } else if (!this.prop_ids) {
         return this.$message.error(this.$t('请选择属性'))
+      } else if (!this.station_id) {
+        return this.$message.error(this.$t('请选择收货点'))
+      } else if (!this.user_id) {
+        return this.$message.error(this.$t('请选择客户编号'))
       }
       let boxList = []
       this.box.forEach((item, index) => {
@@ -484,6 +529,8 @@ export default {
         is_pack_finish: type,
         express_line_id: this.express_line_id,
         prop_ids: [this.prop_ids],
+        station_id: this.station_id,
+        user_id: this.user_id.substring(0, 6),
         box: boxList
       }
       this.$request.purchasePack(this.ids, params).then(res => {
