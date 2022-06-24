@@ -28,9 +28,9 @@
               <div
                 class="order-item flex-item cursor-pointer"
                 :class="{ selected: item.id === ids }"
-                v-for="item in orderList"
+                v-for="(item, index) in orderList"
                 :key="item.id"
-                @click="onOrder(item)"
+                @click="onOrder(item, index)"
               >
                 <span class="font-bold">#{{ item.sn }}</span>
                 <span>{{ item.status === 2 ? $t('待打包') : $t('已打包') }}</span>
@@ -233,7 +233,7 @@
               </div>
             </div>
             <div class="bottom-box">
-              <div v-if="order.length">
+              <div v-if="order.length && status !== 3">
                 <el-button @click="onPack(0)" size="small">{{ $t('保存') }}</el-button>
                 <el-button
                   type="primary"
@@ -289,7 +289,9 @@ export default {
       boxedSum: '',
       orderData: [],
       pack: [],
-      num: ''
+      num: '',
+      status: '',
+      idx: ''
     }
   },
   created() {
@@ -382,8 +384,10 @@ export default {
         item.packData.splice(index, 1)
       })
     },
-    onOrder(item) {
-      console.log(item)
+    onOrder(item, index) {
+      console.log(item, index)
+      this.idx = index
+      this.status = item.status
       this.order = this.orderList.filter(ele => ele.sn === item.sn)
       this.ids = this.order[0].id
       this.box = [
@@ -400,48 +404,53 @@ export default {
           delete ele.p_goods.quantity
           this.skuList.push({
             ...ele.p_goods,
-            quantity: ele.quantity,
+            quantity: ele.picking_quantity,
             purchase_order_goods_id: ele.purchase_order_goods_id,
             packData: [{ pack_quantity: '' }]
           })
         })
       })
       this.stationId = item.station_id
-      this.getChannel(this.stationId)
+      if (!this.express_line_id) {
+        this.getChannel(this.stationId)
+      }
+
       this.prop_ids = item.props.map(ele => ele.id)[0]
       if (item.status === 3) {
-        this.express_line_id = this.order[0].express_line_id
-        this.prop_ids = this.order[0].props.map(ele => ele.id)[0]
-        this.order.forEach(item => {
-          this.box = item.boxes.map(val => {
-            return {
-              width: val.width,
-              height: val.height,
-              length: val.length,
-              weight: val.weight
-            }
-          })
-          this.skuList = []
-          const tempList = item.goods.map(ele => {
-            return {
-              ...ele.p_goods,
-              quantity: ele.quantity,
-              packData: []
-            }
-          })
-          item.boxes.forEach(box => {
-            box.goods.forEach(goods => {
-              tempList.forEach(ele => {
-                if (ele.id === goods.id) {
-                  ele.packData.push({
-                    pack_quantity: goods.pivot.quantity
-                  })
-                }
-              })
+        this.express_line_id = this.orderList[index].express_line
+          ? this.orderList[index].express_line.id
+          : ''
+        this.prop_ids = this.orderList[index].props.map(ele => ele.id)[0]
+        this.box = []
+        const boxData = this.orderList[index].boxes.map(item => {
+          return {
+            width: item.width,
+            height: item.height,
+            length: item.length,
+            weight: item.weight
+          }
+        })
+        this.box = boxData
+        this.skuList = []
+        const tempList = this.orderList[index].goods.map(ele => {
+          return {
+            ...ele.p_goods,
+            quantity: ele.quantity,
+            packData: []
+          }
+        })
+        this.orderList[index].boxes.forEach(box => {
+          box.goods.forEach(goods => {
+            tempList.forEach(ele => {
+              if (ele.id === goods.id) {
+                ele.packData.push({
+                  pack_quantity: goods.pivot.quantity
+                })
+              }
             })
           })
-          this.skuList = tempList
         })
+        this.skuList = tempList
       }
     },
     getChannel() {
@@ -484,9 +493,15 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.$router.push({
-            name: 'transshipmentBill'
-          })
+          for (let i = 0; i < this.orderList.length; i++) {
+            if (this.orderList[i].status === 2) {
+              this.onOrder(this.orderList[i], i)
+            } else {
+              this.$router.push({
+                name: 'transshipmentBill'
+              })
+            }
+          }
         } else {
           this.$message({
             message: res.msg,
@@ -501,15 +516,15 @@ export default {
       let isBtn = false
       this.skuList.forEach(item => {
         if (item.packData) {
-          item.packData.forEach(ele => {
-            if (
-              !ele.pack_quantity ||
-              ele.pack_quantity > item.quantity ||
-              ele.pack_quantity < item.quantity
-            ) {
-              isBtn = true
+          let num = item.packData.reduce(function (acr, pcc) {
+            if (!pcc.pack_quantity) {
+              return acr
             }
-          })
+            return acr + Number(pcc.pack_quantity)
+          }, 0)
+          if (!num || num > item.quantity || num < item.quantity) {
+            isBtn = true
+          }
         } else {
           isBtn = true
         }

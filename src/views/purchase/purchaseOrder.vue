@@ -111,7 +111,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
-        <el-table-column :label="$t('操作')" width="300" fixed="right">
+        <el-table-column :label="$t('操作')" width="300" v-if="activeName !== 'all'" fixed="right">
           <template slot-scope="scope">
             <el-button
               class="btn-purple"

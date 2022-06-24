@@ -155,9 +155,14 @@
       <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSave">{{
         $t('保存')
       }}</el-button>
-      <el-button type="primary" size="small" :loading="$store.state.btnLoading" @click="onSubmit">{{
-        $t('保存并提交')
-      }}</el-button>
+      <el-button
+        type="primary"
+        size="small"
+        v-if="status !== 1"
+        :loading="$store.state.btnLoading"
+        @click="onSubmit"
+        >{{ $t('保存并提交') }}</el-button
+      >
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -187,6 +192,7 @@ export default {
       imgVisible: false,
       imgSrc: '',
       state: '',
+      status: '',
       rules: {
         sn: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
         name: [{ required: true, message: this.$t('请输入'), trigger: 'blur' }],
@@ -206,6 +212,7 @@ export default {
       this.$request.purchaseDetail(this.$route.params.id).then(res => {
         console.log(res)
         this.ruleForm = res.data
+        this.status = res.data.status
       })
     },
     getCompany() {

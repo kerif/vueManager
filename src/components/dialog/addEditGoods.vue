@@ -26,7 +26,7 @@
           :placeholder="$t('请输入')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('英文名称')" prop="en_name">
+      <el-form-item :label="$t('英文名称')">
         <el-input
           class="input-sty"
           v-model="ruleForm.en_name"
@@ -135,10 +135,7 @@ export default {
         purchase_price: [{ required: true, message: this.$t('请输入价格'), trigger: 'blur' }],
         number: [{ required: true, message: this.$t('请输入商品编号'), trigger: 'blur' }],
         cn_name: [{ required: true, message: this.$t('请输入中文名称'), trigger: 'blur' }],
-        en_name: [{ required: true, message: this.$t('请输入英文名称'), trigger: 'blur' }],
-        quantity: [{ required: true, message: this.$t('请输入物品总数量'), trigger: 'blur' }],
-        barcode: [{ required: true, message: this.$t('请输入barcode'), trigger: 'blur' }],
-        image: [{ required: true, message: this.$t('请上传图片'), trigger: 'change' }]
+        quantity: [{ required: true, message: this.$t('请输入物品总数量'), trigger: 'blur' }]
       }
     }
   },

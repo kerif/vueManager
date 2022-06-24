@@ -53,6 +53,7 @@
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="index" label="#"> </el-table-column>
         <el-table-column prop="sn" :label="$t('分货号')"> </el-table-column>
+        <el-table-column prop="name" :label="$t('分货方案名称')"></el-table-column>
         <el-table-column prop="status" :label="$t('状态')">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0">{{ $t('草稿') }}</span>
@@ -61,12 +62,21 @@
             <span v-else>{{ $t('已转运') }}</span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('打包进度')">
+          <template slot-scope="scope">
+            {{ scope.row.pack_orders_count }}/{{ scope.row.orders_count }}
+          </template>
+        </el-table-column>
         <el-table-column prop="name" :label="$t('包含采购单')"> </el-table-column>
-        <el-table-column prop="quantity" :label="$t('预计分货（商品数/订单）')"> </el-table-column>
+        <el-table-column prop="quantity,orders_count" :label="$t('预计分货(商品数/订单)')">
+          <template slot-scope="scope">
+            {{ scope.row.quantity }}/{{ scope.row.orders_count }}
+          </template>
+        </el-table-column>
         <el-table-column prop="picking_quantity" :label="$t('实际拣货')"> </el-table-column>
         <el-table-column prop="created_at" :label="$t('创建时间')"> </el-table-column>
         <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
-        <el-table-column :label="$t('操作')" width="220">
+        <el-table-column :label="$t('操作')" width="220" v-if="activeName !== 'all'">
           <template slot-scope="scope">
             <el-button
               class="btn-main"

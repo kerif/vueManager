@@ -44,15 +44,15 @@
           <div>
             <div class="flex-item color-item">
               <div class="color-tip color-green"></div>
-              <div>{{ $t('绿色为出库数量下单数量') }}</div>
+              <div>{{ $t('绿色为拣货数量等于分货数量') }}</div>
             </div>
             <div class="flex-item color-item">
               <div class="color-tip color-orange"></div>
-              <div>{{ $t('黄色为出库数量下单数量') }}</div>
+              <div>{{ $t('黄色为拣货数量不等于分货数量') }}</div>
             </div>
             <div class="flex-item color-item">
               <div class="color-tip"></div>
-              <div>{{ $t('白色为出库数量下单数量') }}</div>
+              <div>{{ $t('白色为拣货数量为0') }}</div>
             </div>
           </div>
         </el-col>
@@ -86,12 +86,40 @@
                   </span>
                 </el-col>
                 <el-col :span="4">
-                  <span class="sku-item">{{ item.sn }}</span>
+                  <span
+                    class="sku-item"
+                    :class="{
+                      all: ele.quantity === Number(ele.picking_quantity),
+                      wait:
+                        Number(ele.picking_quantity) < ele.quantity &&
+                        Number(ele.picking_quantity) !== 0
+                    }"
+                    >{{ item.sn }}</span
+                  >
                 </el-col>
                 <el-col :span="4">
-                  <span class="sku-item">{{ ele.p_goods ? ele.p_goods.cn_name : '' }}</span>
+                  <span
+                    class="sku-item"
+                    :class="{
+                      all: ele.quantity === Number(ele.picking_quantity),
+                      wait:
+                        Number(ele.picking_quantity) < ele.quantity &&
+                        Number(ele.picking_quantity) !== 0
+                    }"
+                    >{{ ele.p_goods ? ele.p_goods.cn_name : '' }}</span
+                  >
                 </el-col>
-                <el-col :span="4">{{ ele.p_goods ? ele.p_goods.barcode : '' }}</el-col>
+                <el-col
+                  :span="4"
+                  class="sku-item"
+                  :class="{
+                    all: ele.quantity === Number(ele.picking_quantity),
+                    wait:
+                      Number(ele.picking_quantity) < ele.quantity &&
+                      Number(ele.picking_quantity) !== 0
+                  }"
+                  >{{ ele.p_goods ? ele.p_goods.barcode : '' }}</el-col
+                >
                 <el-col :span="4" class="align-center font-bold num-item">{{
                   ele.quantity
                 }}</el-col>
@@ -381,8 +409,8 @@ export default {
     padding: 0 25px;
     border: 1px solid #efefef;
     &.all {
-      border-color: #efefef;
-      background-color: #efefef;
+      border-color: #3da969;
+      background-color: #3da969;
       color: #fff;
     }
     &.wait {
