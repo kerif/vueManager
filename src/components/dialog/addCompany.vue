@@ -27,11 +27,11 @@
           $t('管理发货快递公司')
         }}</el-button>
       </el-form-item>
-      <el-form-item :label="$t('*转运快递单号-二程：')" v-if="!count">
-        <el-input v-model="company.sn" class="input-select"></el-input>
+      <el-form-item :label="$t('*转运快递单号-二程：')" v-if="state == 'edit'">
+        <el-input v-model="company.sn" class="input-select" @input="companySn"></el-input>
       </el-form-item>
       <div v-else>
-        <div v-if="count === 1">
+        <div v-if="boxType === 1">
           <el-form-item :label="$t(`*快递转运单号：`)">
             <span>{{ orderSn }}</span>
             <el-input v-model="company.sn"></el-input>
@@ -63,9 +63,9 @@ export default {
       orderId: '',
       companyList: [],
       state: '',
-      count: '',
       orderSn: '',
-      box: []
+      box: [],
+      boxType: ''
     }
   },
   methods: {
@@ -91,12 +91,19 @@ export default {
         }
       })
     },
+    companySn() {
+      this.company.sn = this.company.sn.replace(/\s+/g, '')
+    },
     getOrderDetails() {
       this.$request.getOrderDetails(this.orderId).then(res => {
         if (res.ret) {
           this.orderSn = res.data.order_sn
-          this.company.company = res.data.logistics_company
-          if (this.count >= 2) {
+          this.boxType = res.data.box_type
+          if (this.boxType === 1) {
+            this.company.company = res.data.logistics_company_code
+            this.company.sn = res.data.logistics_sn
+          } else {
+            this.company.company = res.data.box[0].logistics_company_code
             this.box = res.data.box.map(item => {
               return {
                 id: item.id,
@@ -104,9 +111,16 @@ export default {
                 logistics_sn: item.logistics_sn
               }
             })
-          } else {
-            this.company.sn = res.data.logistics_sn
           }
+          //   res.data.box.length
+          //     ? (this.box = res.data.box.map(item => {
+          //         return {
+          //           id: item.id,
+          //           sn: item.sn,
+          //           logistics_sn: item.logistics_sn
+          //         }
+          //       }))
+          //     : (this.company.sn = res.data.logistics_sn)
         }
       })
     },
@@ -115,28 +129,19 @@ export default {
         return this.$message.error(this.$t('请输入转运快递公司二程'))
       }
       if (this.state === 'multiBox') {
-        if (this.count === 1) {
-          if (this.company.sn === '') {
-            return this.$message.error(this.$t('请输入转运快递单号二程'))
-          }
-        }
-        let isNull = false
+        if (this.boxType === 1 && !this.company.sn)
+          return this.$message.error(this.$t('请输入转运快递单号二程'))
         this.box.forEach(item => {
           if (!item.logistics_sn) {
-            isNull = true
+            // return this.$message.error(this.$t('请输入转运快递单号'))
           }
         })
-        if (isNull) {
-          return this.$message.error(this.$t('请输入转运快递单号'))
-        }
       } else {
-        if (this.company.sn === '') {
-          return this.$message.error(this.$t('请输入转运快递单号二程'))
-        }
+        if (!this.company.sn) return this.$message.error(this.$t('请输入转运快递单号二程'))
       }
       let res = {}
       if (this.state === 'multiBox') {
-        if (this.count === 1) {
+        if (this.boxType === 1) {
           res = await this.$request.updateLogistics([
             {
               id: this.orderId,
@@ -192,6 +197,7 @@ export default {
     clear() {
       this.company.sn = ''
       this.company.company = ''
+      this.box = []
     },
     init() {
       this.getCompany()

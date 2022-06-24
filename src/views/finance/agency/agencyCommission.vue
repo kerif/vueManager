@@ -47,6 +47,7 @@
         <el-button size="small" class="unsettled" type="primary" @click="oneSettlement">
           {{ $t('一键结算') }}
         </el-button>
+        <el-button class="btn-light-red" @click="orderSettle">{{ $t('预约结算') }}</el-button>
       </div>
       <div class="head-search">
         <el-input
@@ -64,8 +65,7 @@
         <el-table-column prop="user_name" :label="$t('下单人')" width="140"> </el-table-column>
         <el-table-column prop="order_number" :label="$t('订单号')"> </el-table-column>
         <el-table-column prop="order_status" :label="$t('订单状态')" width="100"> </el-table-column>
-        <el-table-column prop="order_amount" :label="$t('计佣金额¥')" width="100">
-        </el-table-column>
+        <el-table-column prop="order_amount" :label="$t('计佣金额')" width="100"> </el-table-column>
         <el-table-column prop="agent_name" :label="$t('代理')"> </el-table-column>
         <el-table-column prop="commission_amount" :label="$t('可获佣金')" width="100">
         </el-table-column>
@@ -92,7 +92,32 @@
         </el-table-column>
       </el-table>
     </div>
-    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    <nle-pagination :pageParams="page_params" :notNeedInitQuery="false">
+      <div class="remark-text">
+        <span>{{ $t('未结算总金额') }}:</span><span>{{ this.unsettle_amount }},</span>&nbsp;<span
+          >{{ $t('已结算佣金') }}:</span
+        ><span>{{ this.settle_amount }}</span>
+      </div>
+    </nle-pagination>
+    <el-dialog :visible.sync="show" width="45%" :title="$t('预约结算')" @close="clear">
+      <el-form ref="form" :model="ruleForm">
+        <el-form-item>
+          <div>
+            {{ $t('订单发货后')
+            }}<el-input
+              style="width: 120px"
+              :placeholder="$t('请输入天数')"
+              v-model="ruleForm.day"
+            ></el-input>
+            {{ $t('天，系统自动结算') }}
+          </div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="cancel">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -112,11 +137,17 @@ export default {
       time: '',
       settleData: [], // 待结算数据
       hasStore: false,
-      shipNum: '', // 通过快递单号拉取的包裹id
+      shipNum: '',
       settledData: [],
       timeList: [],
       unsettleId: '',
-      ids: []
+      ids: [],
+      settle_amount: '',
+      unsettle_amount: '',
+      show: false,
+      ruleForm: {
+        day: ''
+      }
     }
   },
   components: {
@@ -124,7 +155,9 @@ export default {
   },
   created() {
     this.getList()
+    this.getSettleStatistics()
     this.goInit()
+    this.getOrderSettle()
   },
   mixins: [pagination],
   methods: {
@@ -152,7 +185,7 @@ export default {
     oneSettlement() {
       this.unsettleId = this.settleData.filter(item => item.settled === 0)
       this.ids = this.unsettleId.map(item => item.id)
-      this.$confirm(this.$t('您真的确认要一键结算吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的确认要一键结算吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -216,13 +249,63 @@ export default {
       this.page_params.user_id = item.id
       this.getAreaLocation()
     },
+    // 代理结算统计
+    getSettleStatistics() {
+      this.$request.settleStatistics().then(res => {
+        console.log(res.data)
+        this.unsettle_amount = res.data.unsettle_amount
+        this.settle_amount = res.data.settle_amount
+      })
+    },
     goInit() {
       this.$request.initSettle().then(res => {
-        this.settledData = res.data.status_list
+        if (res.ret) {
+          this.settledData = res.data.status_list
+        }
       })
     },
     fm() {
       console.log(this.timeList)
+    },
+    // 预约结算
+    orderSettle() {
+      this.show = true
+    },
+    getOrderSettle() {
+      this.$request.getReserve().then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.ruleForm.day = res.data.days
+        }
+      })
+    },
+    confirm() {
+      let params = {
+        days: this.ruleForm.day
+      }
+      this.$request.reserveSettle(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            message: res.msg,
+            type: 'success',
+            title: this.$t('操作成功')
+          })
+          this.show = false
+          this.getList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    clear() {
+      // this.ruleForm.day = ''
+    },
+    cancel() {
+      this.show = false
     }
   }
 }
@@ -264,6 +347,21 @@ export default {
     .el-table .cell {
       text-align: center;
     }
+  }
+  .remark-text {
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
+  }
+  /deep/.el-dialog__header {
+    background-color: #0e102a;
+  }
+  /deep/.el-dialog__title {
+    font-size: 14px;
+    color: #fff;
+  }
+  /deep/.el-dialog__close {
+    color: #fff;
   }
 }
 </style>

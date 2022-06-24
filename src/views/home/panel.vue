@@ -315,7 +315,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="6">
         <div class="help-center">
           <span class="title">{{ $t('帮助中心') }}</span>
           <div class="process-content">
@@ -327,12 +327,18 @@
               <img src="../../assets/软件下载.png" alt="" />
               <p>{{ $t('软件下载') }}</p>
             </div>
+            <div @click="goVideo" style="cursor: pointer">
+              <img src="../../assets/视频教程.png" alt="" />
+              <p>{{ $t('视频教程') }}</p>
+            </div>
           </div>
         </div>
       </el-col>
-      <el-col :span="7" style="padding-left: 0 !important">
+      <el-col :span="5" style="padding-left: 0 !important">
         <div class="system">
-          <span class="title">{{ $t('系统通知') }}</span>
+          <span class="title" @click="$router.push({ name: 'updateList' })">{{
+            $t('更新日志')
+          }}</span>
           <div class="system-notice">
             <ul class="notice">
               <li
@@ -491,7 +497,15 @@
       >
         <div style="text-align: center">
           <img v-if="uplodaStatus === 'ios'" src="../../assets/ios.png" />
-          <img v-else src="../../assets/android.png" />
+          <div v-else>
+            <img src="../../assets/android.png" />
+            <div>
+              <span style="font-weight: bold">{{ $t('提示') }}：</span>
+              <span>{{
+                $t('微信扫码请点击打开页面右上角选择在浏览器中打开或直接使用浏览器扫码')
+              }}</span>
+            </div>
+          </div>
         </div>
       </el-dialog>
     </el-dialog>
@@ -807,7 +821,7 @@ export default {
       if (!this.isPermissionFilterArr.includes(permissionNumber)) {
         this.$message({
           type: 'error',
-          message: this.$t('当前操作暂无权限！')
+          message: this.$t('当前操作暂无权限')
         })
       } else {
         this.$router.push({ name: routerName, query: query })
@@ -936,7 +950,7 @@ export default {
       $event.currentTarget.className = 'book-sty'
     },
     uploadDesktop() {
-      let url = 'http://des-update.nle-tech.com/jiyun/update.html'
+      let url = 'http://update.tongxiao.tech/jiyun_v3/update.html'
       window.open(url)
     },
     uploadAndroid() {
@@ -945,6 +959,11 @@ export default {
     },
     uploadIos() {
       let url = 'https://apps.apple.com/cn/app/id1492557133'
+      window.open(url)
+    },
+    goVideo() {
+      let url =
+        'https://www.douyin.com/user/MS4wLjABAAAAeXrbw1-Iyj0qJbrqf-qpnBcwgQdRFpN0EzKykvs7PxZgtvzgFrP3Ka0HoYjz-i-B?relation=2'
       window.open(url)
     },
     changeApp($event) {
@@ -1396,6 +1415,7 @@ export default {
       .title {
         font-size: 16px;
         font-weight: bold;
+        cursor: pointer;
       }
       .process-content {
         padding: 5px 0;

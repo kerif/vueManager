@@ -188,7 +188,7 @@ export default {
     },
     // 删除
     deleteData() {
-      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -224,6 +224,7 @@ export default {
     },
     // 筛选
     onVocherTypeChange() {
+      this.page_params.page = 1
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },

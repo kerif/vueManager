@@ -6,7 +6,7 @@
           <div class="add-btns-l">
             <el-select
               size="mini"
-              :placeholder="$t('支持国家/地区')"
+              :placeholder="$t('支持国家地区')"
               v-model="query.countries"
               multiple
               collapse-tags
@@ -165,7 +165,7 @@
         <!-- 线路名称 -->
         <el-table-column :label="$t('渠道名称')" prop="name"></el-table-column>
         <!-- 价格模式 -->
-        <el-table-column :label="$t('价格模式')">
+        <el-table-column :label="$t('价格模式')" width="150">
           <template slot-scope="scope">
             <span v-if="scope.row.mode === 1">
               {{ $t('首重续重模式') }}
@@ -177,13 +177,13 @@
               <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
               <span v-else>({{ $t('体积计费') }})</span>
             </span>
-            <span v-if="scope.row.mode === 3"
-              >{{ $t('首重单位+阶梯价格模式') }}
+            <span v-if="scope.row.mode === 4"
+              >{{ $t('多级续重模式') }}
               <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
               <span v-else>({{ $t('体积计费') }})</span>
             </span>
-            <span v-if="scope.row.mode === 4"
-              >{{ $t('多级续重模式') }}
+            <span v-if="scope.row.mode === 5"
+              >{{ $t('阶梯首重续重模式') }}
               <span v-if="scope.row.base_mode === 0">({{ $t('重量计费') }})</span>
               <span v-else>({{ $t('体积计费') }})</span>
             </span>
@@ -304,6 +304,9 @@
                 {{ $t('操作') }}<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item class="item-sty" @click.native="availableCustoms(scope.row.id)">{{
+                  $t('可用客户')
+                }}</el-dropdown-item>
                 <el-dropdown-item class="item-sty" @click.native="editLine(scope.row.id)">
                   <span>{{ $t('修改') }}</span>
                 </el-dropdown-item>
@@ -386,9 +389,7 @@
             <span class="el-icon-question icon-info"></span>
           </el-tooltip>
           <el-radio v-model="company.order_mode" :label="0">{{ $t('标准模式') }}</el-radio>
-          <el-radio v-model="company.order_mode" :label="1">{{
-            $t('快速下单（无需合箱）')
-          }}</el-radio>
+          <el-radio v-model="company.order_mode" :label="1">{{ $t('快速下单无需合箱') }}</el-radio>
         </el-form-item>
         <el-form-item :label="$t('线路送货方式')">
           <!-- <el-radio-group></el-radio-group> -->
@@ -448,7 +449,7 @@
     <!-- 复制线路 -->
     <el-dialog :title="$t('复制')" :visible.sync="copyDialog" width="45%" @close="clear">
       <el-form ref="form" :model="copyData" label-width="100px">
-        <el-form-item :label="$t('*新线路名称')">
+        <el-form-item :label="$t('新线路名称')">
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
       </el-form>
@@ -552,7 +553,8 @@ export default {
       },
       groupId: '',
       unShow: '',
-      lineId: ''
+      lineId: '',
+      group_id: ''
     }
   },
   activated() {
@@ -563,15 +565,9 @@ export default {
   },
   created() {
     this.lineId = this.$route.params.id
-    console.log(this.lineId, 'this.lineId')
-    console.log(this.$route.query, 'query')
-    console.log(this.$route.params, 'params')
-    console.log(this.lineId, 'this.lineId')
+    console.log(this.lineId)
     this.unShow = localStorage.getItem('me') ? Number(localStorage.getItem('me')) : 0
-    console.log(this.unShow, 'this.unShow')
-    console.log(this.$route.query.size || 10, 'size')
     this.getLanguageList() // 获取支持语言
-    // this.getList()
     // 获取线路名称筛选列表
     this.getColumnList('name', 'lineNameColumn')
     // 获取支持仓库筛选列表
@@ -711,16 +707,21 @@ export default {
       this.$router.push({
         name: 'channelLineEdit',
         params: {
-          id: id
+          id
         },
         query: {
           state: 'edit'
         }
       })
     },
+    availableCustoms(id) {
+      dialog({ type: 'availableCustom', id }, () => {
+        this.getList()
+      })
+    },
     // 删除
     deleteLine(id) {
-      this.$confirm(this.$t('该操作无法恢复，请确认该路线彻底弃用后再删除'), this.$t('提示'), {
+      this.$confirm(this.$t('该操作无法恢复请确认该路线彻底弃用后再删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -974,7 +975,6 @@ export default {
     },
     // 修改语言
     onLang(line, lang) {
-      console.log(line, lang)
       this.transCode = line['trans_' + lang.language_code]
       dialog(
         { type: 'lineLang', line: line, lang: lang, transCode: this.transCode, state: 'channel' },

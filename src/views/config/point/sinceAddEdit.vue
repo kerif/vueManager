@@ -19,13 +19,13 @@
       </el-form-item>
       <el-form-item>
         <el-row :gutter="20">
-          <div>{{ $t('*所属国家/地区') }}</div>
+          <div>{{ $t('所属国家地区') }}</div>
           <el-col :span="5">
             <el-select
               v-model="form.country_id"
               @change="changeCountry"
+              @blur="trigger"
               filterable
-              :disabled="!!this.$route.params.id && !hasStore"
               class="country-select"
               :placeholder="$t('请选择')"
             >
@@ -44,7 +44,6 @@
               :props="{ checkStrictly: true }"
               :key="keyValue"
               class="country-select"
-              :disabled="!!this.$route.params.id && !hasStore"
               v-model="areaData"
               :options="newWarehouseList"
               @change="handleChange"
@@ -99,7 +98,7 @@
       </el-form-item>
       <!-- 详细地址 -->
       <el-form-item>
-        <div>{{ $t('*详细地址') }}</div>
+        <div>{{ $t('详细地址') }}</div>
         <el-row :gutter="20">
           <el-col :span="10">
             <el-input v-model="form.address" :placeholder="$t('请输入')"></el-input>
@@ -129,7 +128,7 @@
       </el-form-item>
       <!-- 联系人 -->
       <el-form-item>
-        <div>{{ $t('*联系人') }}</div>
+        <div>{{ $t('联系人') }}</div>
         <el-row>
           <el-col :span="10">
             <el-input v-model="form.contactor" :placeholder="$t('请输入')"></el-input>
@@ -138,7 +137,7 @@
       </el-form-item>
       <!-- 联系电话 -->
       <el-form-item>
-        <div>{{ $t('*联系电话') }}</div>
+        <div>{{ $t('联系电话') }}</div>
         <el-row>
           <el-col :span="10">
             <el-input v-model="form.contact_info" :placeholder="$t('请输入')"></el-input>
@@ -146,13 +145,12 @@
         </el-row>
       </el-form-item>
       <el-form-item>
-        <!-- <div>{{ $t('*联系电话') }}</div> -->
         <div>
           <span>{{ $t('自提点规则') }}</span>
           <el-tooltip
             class="item"
             effect="dark"
-            :content="$t('申请集包时如超过限制条件，则无法选择该自提点。不填写则不启用')"
+            :content="$t('申请集包时如超过限制条件则无法选择该自提点不填写则不启用')"
             placement="top"
           >
             <span class="el-icon-question icon-info"></span>
@@ -174,7 +172,7 @@
             :placeholder="`${localization.weight_unit ? localization.weight_unit : ''}`"
           ></el-input>
         </div>
-        <div>
+        <div style="margin-bottom: 10px">
           {{ $t('整票限重')
           }}<el-input
             class="input-sty"
@@ -182,6 +180,56 @@
             :placeholder="`${localization.weight_unit ? localization.weight_unit : ''}`"
           ></el-input>
         </div>
+      </el-form-item>
+      <el-form-item>
+        {{ $t('允许所有订单入库') }}
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="
+            $t('开启时,可签收所有订单;关闭时,筛选仅签收目的地为本自提点的订单,其他订单自动忽略')
+          "
+          placement="top"
+        >
+          <span class="el-icon-warning-outline icon-info"></span>
+        </el-tooltip>
+        <el-switch
+          v-model="form.allow_all_order"
+          :active-text="$t('开启')"
+          :active-value="1"
+          :inactive-value="0"
+          :inactive-text="$t('关闭')"
+          active-color="#13ce66"
+          inactive-color="gray"
+          class="warehouse"
+        >
+        </el-switch>
+      </el-form-item>
+      <el-form-item>
+        {{ $t('入库即触发取件通知') }}
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="
+            $t(
+              '开启时,订单入库即触发取件信息;关闭时,需要匹配当前自提点为客户选择自提点才会推送取件通知'
+            )
+          "
+          placement="top"
+        >
+          <span class="el-icon-warning-outline icon-info"></span>
+        </el-tooltip>
+        <el-switch
+          v-model="form.notify_after_received"
+          :active-text="$t('开启')"
+          :active-value="1"
+          :inactive-value="0"
+          :inactive-text="$t('关闭')"
+          active-color="#13ce66"
+          inactive-color="gray"
+          class="pick"
+        >
+        </el-switch>
       </el-form-item>
       <div>
         <el-form-item>
@@ -261,6 +309,7 @@
             v-model="lineIds"
             multiple
             filterable
+            popper-class="selectLine"
             class="country-select"
             :placeholder="$t('请选择')"
           >
@@ -287,7 +336,7 @@
         v-model="announcementData.opening_hours"
         type="textarea"
         :rows="4"
-        :placeholder="$t('例：周一至周六 08:00 ～ 20:00')"
+        :placeholder="$t('例周一至周六08002000')"
       >
       </el-input>
       <span>{{ $t('公告') }}</span>
@@ -329,7 +378,9 @@ export default {
         contactor: '',
         expressLines: [],
         announcement: '',
-        opening_hours: ''
+        opening_hours: '',
+        allow_all_order: 0,
+        notify_after_received: 0
       },
       areaData: null,
       referenceTime: {
@@ -369,13 +420,14 @@ export default {
     }
   },
   created() {
-    this.getWarehouse()
     this.getRules()
   },
   mounted() {
     this.initMap()
     if (this.$route.params.id) {
       this.getList()
+    } else {
+      this.getWarehouse()
     }
   },
   methods: {
@@ -456,8 +508,11 @@ export default {
         // const warehouses = res.data.warehouses.map(item => item.id)
         // this.form = res.data
         this.form.country_id = res.data.country_id
+        this.getWarehouse()
         this.form.name = res.data.name
         this.form.code = res.data.code
+        this.form.allow_all_order = res.data.allow_all_order
+        this.form.notify_after_received = res.data.notify_after_received
         this.form.announcement = res.data.announcement
         this.form.opening_hours = res.data.opening_hours
         this.form.edit_notice_jurisdiction = res.data.edit_notice_jurisdiction
@@ -509,8 +564,10 @@ export default {
       this.form.expressLines = []
       const selectList = this.countryList.find(item => item.value === this.form.country_id)
       this.newWarehouseList = selectList ? selectList.children : []
+      console.log(this.newWarehouseList)
       console.log(this.areas, 'this.areas')
     },
+    trigger() {},
     editSet() {
       this.announcementDailog = true
       this.announcementData.opening_hours = this.form.opening_hours
@@ -606,9 +663,13 @@ export default {
     confirmLines() {
       this.lineVisible = false
       console.log(this.lineIds, 'lineIds')
-      this.form.expressLines = this.lineData.filter(item => {
-        return this.lineIds.includes(item.id)
+      let selectIds = this.form.expressLines.map(item => item.id)
+      let selectLine = this.lineData.filter(item => {
+        return this.lineIds.includes(item.id) && !selectIds.includes(item.id)
       })
+      this.form.expressLines = this.form.expressLines.concat(selectLine)
+      console.log(selectLine)
+      console.log(this.form.expressLines)
     },
     clear() {
       this.lineIds = []
@@ -631,6 +692,13 @@ export default {
       rows.splice(index, 1)
     },
     handleChange() {
+      // if (this.areaData) {
+      //   this.newWarehouseList.forEach(item => {
+      //     if (item.label && !item.children) {
+      //       item.checkStrictly = true
+      //     }
+      //   })
+      // }
       this.form.area_id = this.areaData[0]
       this.form.sub_area_id = this.areaData[1]
     },
@@ -779,6 +847,18 @@ export default {
   .input-sty {
     margin-left: 10px;
     width: 10% !important;
+  }
+  .warehouse {
+    margin-left: 30px;
+  }
+  .pick {
+    margin-left: 15px;
+  }
+}
+.selectLine {
+  .el-select-dropdown__item {
+    width: 100%;
+    overflow: auto;
   }
 }
 </style>

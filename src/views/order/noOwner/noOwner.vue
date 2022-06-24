@@ -1,38 +1,40 @@
 <template>
   <div class="no-owner-container">
-    <div class="order-list-search" v-show="hasFilterCondition">
-      <div>
-        <div class="changeTime">
-          <el-date-picker
-            size="mini"
-            class="timeStyle"
-            v-model="timeList"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :range-separator="$t('至')"
-            :start-placeholder="$t('提交开始日期')"
-            :end-placeholder="$t('提交结束日期')"
-          >
-          </el-date-picker>
-        </div>
-        <div class="chooseStatus">
-          <el-select v-model="agent_name" size="mini" clearable :placeholder="$t('请选择仓库')">
-            <el-option
-              v-for="item in agentData"
-              :key="item.id"
-              :value="item.id"
-              :label="item.warehouse_name"
+    <div>
+      <div class="order-list-search" v-show="hasFilterCondition">
+        <div>
+          <div class="changeTime">
+            <el-date-picker
+              size="mini"
+              class="timeStyle"
+              v-model="timeList"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              :range-separator="$t('至')"
+              :start-placeholder="$t('提交开始日期')"
+              :end-placeholder="$t('提交结束日期')"
             >
-            </el-option>
-          </el-select>
+            </el-date-picker>
+          </div>
+          <div class="chooseStatus">
+            <el-select v-model="agent_name" size="mini" clearable :placeholder="$t('请选择仓库')">
+              <el-option
+                v-for="item in agentData"
+                :key="item.id"
+                :value="item.id"
+                :label="item.warehouse_name"
+              >
+              </el-option>
+            </el-select>
+          </div>
         </div>
-      </div>
-      <div class="submit">
-        <el-button type="primary" plain size="small" @click="submitForm">{{
-          $t('搜索')
-        }}</el-button>
-        <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+        <div class="submit">
+          <el-button type="primary" plain size="small" @click="submitForm">{{
+            $t('搜索')
+          }}</el-button>
+          <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
+        </div>
       </div>
     </div>
     <div class="headerList">
@@ -42,6 +44,9 @@
         }}</el-button>
         <el-button class="btn-blue-green" size="small" @click="claimList">{{
           $t('认领记录')
+        }}</el-button>
+        <el-button class="btn-main" size="small" @click="goClaim(deleteNum, 'batch')">{{
+          $t('批量认领')
         }}</el-button>
         <el-button type="success" plain size="small" @click="uploadList">{{
           $t('导出清单')
@@ -142,7 +147,7 @@
           <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
             $t('打印标签')
           }}</el-button>
-          <el-button class="btn-deep-blue" @click="goClaim(scope.row.id)">{{
+          <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], 'alone')">{{
             $t('认领')
           }}</el-button>
           <!-- <el-button class="btn-deep-purple">详细</el-button> -->
@@ -169,6 +174,7 @@
 </template>
 
 <script>
+// import OrderListSearch from '../order/components/orderListSearch'
 import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
@@ -177,9 +183,16 @@ export default {
   components: {
     SearchGroup,
     NlePagination
+    // OrderListSearch
   },
   name: 'noOwner',
   mixins: [pagination],
+  // props: {
+  //   activeName: {
+  //     type: String,
+  //     required: true
+  //   }
+  // },
   data() {
     return {
       tableLoading: false,
@@ -199,7 +212,9 @@ export default {
       show: false,
       labelId: '',
       imgSrc: '',
-      hasFilterCondition: false
+      hasFilterCondition: false,
+      express_num: '',
+      deleteNum: ''
     }
   },
   methods: {
@@ -225,7 +240,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(this.$t('您真的要删除这个包裹吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除这个包裹吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -367,8 +382,11 @@ export default {
       })
     },
     // 认领包裹
-    goClaim(id) {
-      dialog({ type: 'claim', id: id }, () => {
+    goClaim(ids, status) {
+      if (!ids.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      dialog({ type: 'claim', id: ids, status }, () => {
         this.getList()
       })
     },
@@ -407,7 +425,8 @@ export default {
     submitForm() {
       this.onTime(this.timeList)
       this.onAgentChange()
-    }
+    },
+    goMatch() {}
   },
   activated() {
     this.getAgentData()

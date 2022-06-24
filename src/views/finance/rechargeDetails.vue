@@ -71,7 +71,7 @@
             v-for="item in form.images"
             :key="item.id"
             style="cursor: pointer"
-            @click.stop=";(imgSrc = `${item}`), (imgVisible = true)"
+            @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
           >
             <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 150px; margin-right: 30px" />
           </span>

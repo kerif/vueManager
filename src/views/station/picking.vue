@@ -1,11 +1,25 @@
 <template>
   <div class="picking-list-container">
-    <div class="searchGroup">
-      <search-group
-        :placeholder="$t('请输入关键字')"
-        v-model="page_params.keyword"
-        @search="goSearch"
-      ></search-group>
+    <div class="select">
+      <el-select
+        v-model="type"
+        v-if="activeName === '1'"
+        :placeholder="$t('请选择')"
+        @change="changeVal"
+        :clearable="true"
+        class="selected"
+      >
+        <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
+          {{ item.name }}
+        </el-option>
+      </el-select>
+      <div class="searchGroup">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goSearch"
+        ></search-group>
+      </div>
     </div>
     <div class="clear"></div>
     <el-tabs v-model="activeName" class="tabLength" @tab-click="handleClick">
@@ -13,6 +27,7 @@
       <el-tab-pane :label="$t('入库日志')" name="1"></el-tab-pane>
       <!-- 拣货日志 -->
       <el-tab-pane :label="$t('拣货日志')" name="2"></el-tab-pane>
+      <el-tab-pane :label="$t('包裹日志')" name="3"></el-tab-pane>
     </el-tabs>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -28,6 +43,12 @@
         <!-- 操作人 -->
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column :label="$t('操作人')" prop="operator" width="155"></el-table-column>
+        <el-table-column :label="$t('操作类型')" prop="type" v-if="activeName === '2'">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type === 1">{{ $t('订单打包') }}</span>
+            <span v-else>{{ $t('订单拣货') }}</span>
+          </template>
+        </el-table-column>
         <!-- 操作时间 -->
         <el-table-column :label="$t('操作时间')" prop="created_at" width="155"></el-table-column>
         <!-- 具体操作 -->
@@ -38,6 +59,9 @@
             <span v-if="scope.row.type === 3">{{ $t('弃件') }}</span>
             <span v-if="scope.row.type === 4">{{ $t('彻底删除') }}</span>
             <span v-if="scope.row.type === 5">{{ $t('恢复') }}</span>
+            <span v-if="scope.row.type === 6">{{ $t('包裹变更') }}</span>
+            <span v-if="scope.row.type === 7">{{ $t('移除') }}</span>
+            <span v-if="scope.row.type === 8">{{ $t('添加') }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -61,11 +85,13 @@
         <!-- 重量kg -->
         <el-table-column
           :label="'重量' + this.localization.weight_unit"
+          v-if="activeName !== '3'"
           prop="weight"
         ></el-table-column>
         <!-- 长宽高cm -->
         <el-table-column
           :label="$t('长宽高') + this.localization.length_unit"
+          v-if="activeName !== '3'"
           prop="dimension"
         ></el-table-column>
         <!-- 物品属性 -->
@@ -75,8 +101,37 @@
           prop="props"
           width="155"
         ></el-table-column>
+        <!-- 操作仓库 -->
+        <el-table-column
+          :label="$t('操作仓库')"
+          prop="warehouse"
+          v-if="activeName === '1'"
+        ></el-table-column>
+        <!-- 所属客户 -->
+        <el-table-column
+          :label="$t('所属客户')"
+          prop="user_id"
+          v-if="activeName === '1'"
+        ></el-table-column>
+        <!-- 包裹id -->
+        <el-table-column :label="$t('包裹单号')" v-if="activeName === '3'">
+          <template slot-scope="scope">
+            <span>{{ scope.row.package && scope.row.package.express_num }}</span>
+          </template>
+        </el-table-column>
+        <!-- 内容 -->
+        <el-table-column
+          :label="$t('内容')"
+          prop="content"
+          v-if="activeName === '3'"
+        ></el-table-column>
         <!-- 备注 -->
-        <el-table-column :label="$t('备注')" prop="remark" width="200"></el-table-column>
+        <el-table-column
+          :label="$t('备注')"
+          v-if="activeName !== '3'"
+          prop="remark"
+          width="200"
+        ></el-table-column>
         <!-- 打包图片 -->
         <el-table-column :label="$t('打包图片')" v-if="activeName === '2'" prop="pictures">
           <template slot-scope="scope">
@@ -93,11 +148,11 @@
             </span>
           </template>
         </el-table-column>
-        <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small">删除</el-button>
-        </div>
-      </template> -->
+        <el-table-column
+          :label="$t('拣货包裹')"
+          prop="packages"
+          v-if="activeName === '2'"
+        ></el-table-column>
       </el-table>
       <nle-pagination
         style="margin-top: 5px"
@@ -132,7 +187,42 @@ export default {
       imgVisible: false,
       imgSrc: '',
       tableLoading: false,
-      localization: {}
+      localization: {},
+      typeList: [
+        {
+          id: 1,
+          name: this.$t('包裹入库')
+        },
+        {
+          id: 2,
+          name: this.$t('退回未入库')
+        },
+        {
+          id: 3,
+          name: this.$t('弃件')
+        },
+        {
+          id: 4,
+          name: this.$t('彻底删除')
+        },
+        {
+          id: 5,
+          name: this.$t('恢复')
+        },
+        {
+          id: 6,
+          name: this.$t('包裹变更')
+        },
+        {
+          id: 7,
+          name: this.$t('移除')
+        },
+        {
+          id: 8,
+          name: this.$t('添加')
+        }
+      ],
+      type: ''
     }
   },
   methods: {
@@ -153,8 +243,10 @@ export default {
     getList() {
       if (this.activeName === '1') {
         this.getOrder()
-      } else {
+      } else if (this.activeName === '2') {
         this.getPick()
+      } else {
+        this.getPackage()
       }
     },
     // 入库日志
@@ -165,7 +257,8 @@ export default {
         .getStorage({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          type: this.type
         })
         .then(res => {
           this.tableLoading = false
@@ -214,6 +307,37 @@ export default {
             })
           }
         })
+    },
+    getPackage() {
+      this.tableLoading = true
+      this.$request
+        .getPackageLog({
+          keyword: this.page_params.keyword,
+          page: this.page_params.page,
+          size: this.page_params.size
+        })
+        .then(res => {
+          this.tableLoading = false
+          if (res.ret) {
+            this.oderData = res.data
+            this.localization = res.localization
+            this.page_params.page = res.meta.current_page
+            this.page_params.total = res.meta.total
+            this.$nextTick(() => {
+              this.$refs.table.doLayout()
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
+    changeVal() {
+      this.page_params.handleQueryChange('type', this.type)
+      this.getOrder()
     }
   },
   created() {
@@ -237,7 +361,7 @@ export default {
     overflow-y: auto !important;
   }
   .tabLength {
-    width: 200px !important;
+    width: 300px !important;
   }
   .img_box {
     text-align: center;
@@ -245,10 +369,19 @@ export default {
       width: 50%;
     }
   }
-  .searchGroup {
-    width: 21.5%;
-    float: right;
+  .select {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+    .searchGroup {
+      width: 21.5%;
+      float: right;
+    }
+    .selected {
+      width: 150px;
+    }
   }
+
   .clear {
     clear: both;
   }

@@ -136,7 +136,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <el-dialog :visible.sync="imgVisible" modal-append-to-body width="30%">
+      <el-dialog :visible.sync="imgVisible" append-to-body width="30%">
         <div class="img_box">
           <img :src="imgSrc" class="imgDialog" />
         </div>
@@ -297,9 +297,9 @@ export default {
 }
 </script>
 <style lang="scss">
-// .imgDialog {
-//     width: 50% !important;
-//   }
+.imgDialog {
+  width: 50% !important;
+}
 .el-dialog__wrapper {
   background: rgba(0, 0, 0, 0.3);
 }

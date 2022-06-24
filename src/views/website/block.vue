@@ -5,7 +5,7 @@
     </div> -->
     <el-tabs v-model="activeName" class="tabLength" @tab-click="onTabChange">
       <!-- 原版官网 -->
-      <el-tab-pane :label="$t('原版官网')" name="5"></el-tab-pane>
+      <!-- <el-tab-pane :label="$t('原版官网')" name="5"></el-tab-pane> -->
       <!-- 网站 -->
       <el-tab-pane :label="$t('网站')" name="1"></el-tab-pane>
       <!-- 首页 -->
@@ -128,7 +128,7 @@ export default {
   data() {
     return {
       blockList: [],
-      activeName: '5',
+      activeName: '1',
       localization: {},
       tableLoading: false,
       timeList: [],
@@ -289,7 +289,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

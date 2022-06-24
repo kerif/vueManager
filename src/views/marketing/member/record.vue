@@ -38,7 +38,7 @@
           <el-form-item :label="$t('值')" prop="value">
             <el-input v-model="form.value" style="width: 217px"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('到账之日起计算，有效期为')">
+          <el-form-item :label="$t('到账之日起计算有效期为')">
             <el-select v-model="form.valid_time">
               <el-option
                 v-for="item in validTimeList"
@@ -200,6 +200,7 @@
         </el-table-column>
         <el-table-column prop="value" :label="$t('明细')"> </el-table-column>
         <el-table-column prop="income_outlay_rule_name" :label="$t('收支规则')"> </el-table-column>
+        <el-table-column prop="remark" :label="$t('备注')"></el-table-column>
         <el-table-column prop="order_sn" :label="$t('相关订单')"></el-table-column>
         <el-table-column prop="serial_no" :label="$t('流水号')"> </el-table-column>
         <el-table-column prop="updated_at" :label="$t('时间')" width="220"></el-table-column>
@@ -386,6 +387,9 @@ export default {
       })
     },
     search() {
+      if (!this.timeList) {
+        this.timeList = []
+      }
       this.page_params.begin_date = this.timeList[0]
       this.page_params.end_date = this.timeList[1]
       this.getList()

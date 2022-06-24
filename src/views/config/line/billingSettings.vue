@@ -19,7 +19,7 @@
           <el-col :span="10">
             <el-input v-model="form.min_weight" :placeholder="$t('请输入内容')"></el-input>
             <el-checkbox v-model="form.ceil_weight"
-              >{{ $t('包裹重量不足最小，') }}{{ billingName }}{{ $t('时') }}{{ $t('按最小')
+              >{{ $t('包裹重量不足最小') }}{{ billingName }}{{ $t('时') }}{{ $t('按最小')
               }}{{ billingName }}{{ $t('计算') }}</el-checkbox
             >
           </el-col>
@@ -28,7 +28,7 @@
       <!-- 计费价格模式 -->
       <el-form-item>
         <div>
-          {{ $t('*计费价格模式')
+          {{ $t('计费价格模式')
           }}<el-button style="margin-left: 10px" class="btn-green" @click="goIntroduction">{{
             $t('说明')
           }}</el-button>
@@ -76,7 +76,7 @@
                 {{ $t('*首重') + unitName }}
               </div>
               <div v-if="form.base_mode === 1 && form.mode === 1">
-                {{ $t('*首费体积') + localization.currency_unit + '/' + unitName }}
+                {{ $t('首费体积') + localization.currency_unit + '/' + unitName }}
               </div>
               <el-input v-model="form.first_weight" :placeholder="$t('请输入内容')"></el-input>
             </el-col>
@@ -89,48 +89,60 @@
           </el-row>
         </el-form-item>
         <el-form-item>
-          <el-col :span="16">
-            <div class="add-row">
-              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-            </div>
-            <el-table :data="form.grades" style="width: 100%" border>
-              <el-table-column
-                v-if="form.mode === 1"
-                :label="$t('起始') + billingName + unitName + ' >='"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-if="form.mode === 1 && scope.$index === 0"
-                    v-model="form.first_weight"
-                    :disabled="form.mode === 1 && scope.$index === 0"
-                  ></el-input>
-                  <el-input v-else v-model="scope.row.start"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                v-if="form.mode === 1"
-                :label="'*' + $t('截止') + billingName + unitName + ' <'"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('单位续重') + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.unit_weight"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent="deleteRow(scope.$index, form.grades)"
-                    class="btn-light-red"
-                    >{{ $t('移除') }}</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
+          <el-row :gutter="10">
+            <el-col :span="16">
+              <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
+              <div class="add-row">
+                <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+              </div>
+              <el-table :data="form.grades" style="width: 100%" border>
+                <el-table-column
+                  v-if="form.mode === 1"
+                  :label="$t('起始') + billingName + unitName + ' >='"
+                >
+                  <template slot-scope="scope">
+                    <el-input
+                      v-if="form.mode === 1 && scope.$index === 0"
+                      v-model="form.first_weight"
+                      :disabled="form.mode === 1 && scope.$index === 0"
+                    ></el-input>
+                    <el-input v-else v-model="scope.row.start"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  v-if="form.mode === 1"
+                  :label="'*' + $t('截止') + billingName + unitName + ' <'"
+                >
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.end" @input="inputEnd(scope)"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('单位续重') + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.unit_weight"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('操作')">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click.native.prevent="deleteRow(scope.$index, form.grades)"
+                      class="btn-light-red"
+                      >{{ $t('移除') }}</el-button
+                    >
+                    <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                      $t('插入')
+                    }}</el-button>
+                    <el-button
+                      v-if="scope.$index === form.grades.length - 1"
+                      @click="addRow"
+                      class="btn-deep-purple"
+                      >{{ $t('新增') }}</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item v-if="form.base_mode === 0 && (form.mode === 2 || form.mode === 3)">
           <el-row :gutter="10">
@@ -144,74 +156,116 @@
           </el-row>
         </el-form-item>
       </div>
+      <!-- 开闭区间 -->
+      <p v-if="form.mode === 2 || form.mode === 5">
+        <span>{{ $t('开闭区间选择') }}</span>
+        <el-tooltip
+          style="color: #7bc764; padding: 0 20px 0 5px"
+          effect="dark"
+          :content="
+            $t(
+              '例：如果设置10~50区间，左闭右开为[10,50)“大于等于10且小于50”，左开右闭为(10,50]“大于10且小于等于50”'
+            )
+          "
+          placement="top-end"
+        >
+          <i class="el-icon-info"></i>
+        </el-tooltip>
+        <el-radio v-model="form.range" :label="0">{{ $t('左闭右开') }}</el-radio>
+        <el-radio v-model="form.range" :label="1">{{ $t('左开右闭') }}</el-radio>
+      </p>
       <div v-if="form.mode === 2 || form.mode === 3">
         <el-form-item>
-          <el-col :span="16">
-            <div class="add-row">
-              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-            </div>
-            <el-table :data="form.grades" style="width: 100%" border>
-              <el-table-column :label="$t('起始') + billingName + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.start"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="'*' + $t('截止') + billingName + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent="deleteRow(scope.$index, form.grades)"
-                    class="btn-light-red"
-                    >{{ $t('移除') }}</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
+          <el-row>
+            <el-col :span="16">
+              <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
+              <div class="add-row">
+                <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+              </div>
+              <el-table :data="form.grades" style="width: 100%" border>
+                <el-table-column :label="$t('起始') + billingName + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.start"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="'*' + $t('截止') + billingName + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.end"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('操作')">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click.native.prevent="deleteRow(scope.$index, form.grades)"
+                      class="btn-light-red"
+                      >{{ $t('移除') }}</el-button
+                    >
+                    <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                      $t('插入')
+                    }}</el-button>
+                    <el-button
+                      v-if="scope.$index === form.grades.length - 1"
+                      @click="addRow"
+                      class="btn-deep-purple"
+                      >{{ $t('新增') }}</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-form-item>
       </div>
       <div v-if="form.mode === 5">
         <el-form-item>
-          <el-col :span="16">
-            <div class="add-row">
-              <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
-            </div>
-            <el-table :data="form.grades" style="width: 100%" border>
-              <el-table-column :label="$t('起始') + billingName + unitName + ' >='">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.start"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="'*' + $t('截止') + billingName + unitName + ' <'">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.end"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('首重') + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.first_weight"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('单位续重') + unitName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.unit_weight"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('操作')">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent="deleteRow(scope.$index, form.grades)"
-                    class="btn-light-red"
-                    >{{ $t('移除') }}</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
+          <el-row>
+            <el-col :span="18">
+              <div class="remark">{{ $t('注意修改计费重量后对应的价格表要重新设置') }}</div>
+              <div class="add-row">
+                <el-button @click="addRow" class="btn-deep-purple">{{ $t('新增') }}</el-button>
+              </div>
+              <el-table :data="form.grades" style="width: 100%" border>
+                <el-table-column :label="$t('起始') + billingName + unitName + ' >='">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.start"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="'*' + $t('截止') + billingName + unitName + ' <'">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.end"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('首重') + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.first_weight"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('单位续重') + unitName">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.unit_weight"></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('操作')">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click.native.prevent="deleteRow(scope.$index, form.grades)"
+                      class="btn-light-red"
+                      >{{ $t('移除') }}</el-button
+                    >
+                    <el-button @click="insert(scope.$index, form.grades)" class="btn-deep-blue">{{
+                      $t('插入')
+                    }}</el-button>
+                    <el-button
+                      v-if="scope.$index === form.grades.length - 1"
+                      @click="addRow"
+                      class="btn-deep-purple"
+                      >{{ $t('新增') }}</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item v-if="form.base_mode === 0 && (form.mode === 2 || form.mode === 3)">
           <el-row :gutter="10">
@@ -230,17 +284,20 @@
         <el-row :gutter="10">
           <el-col :span="10">
             <div>
-              <span>{{ $t('包裹') }}{{ billingName }}{{ $t('向上取值') }}</span>
-              <!-- <el-tooltip
+              <span>{{ $t('订单单箱打包') }}{{ billingName }}{{ $t('向上取值') }}</span>
+              <el-tooltip
                 class="item"
                 effect="dark"
+                v-if="form.base_mode === 0"
                 :content="
-                  $t('例如包裹重量1.1kg,向上取整0.5，就会变成1.5kg。向上取整1，就会变成2kg。')
+                  $t(
+                    '假设包裹出库称重2.3，向上取值设置0.5，就是按照2.5计费，向上取值1，就是按3收费'
+                  )
                 "
-                placement="top"
+                placement="top-start"
               >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
+                <i class="el-icon-question explain-icon"></i>
+              </el-tooltip>
             </div>
             <el-select
               v-model="form.weight_rise"
@@ -264,14 +321,19 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('订单多箱打包') }}{{ billingName }}{{ $t('向上取值') }}</span>
-              <!-- <el-tooltip
+              <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('订单多箱打包时，每个打包箱重量分别上浮，而不是整个上浮。')"
-                placement="top"
+                v-if="form.base_mode === 0"
+                :content="
+                  $t(
+                    '假设包裹出库称重2.3，向上取值设置0.5，就是按照2.5计费，向上取值1，就是按3收费'
+                  )
+                "
+                placement="top-start"
               >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
+                <i class="el-icon-question explain-icon"></i>
+              </el-tooltip>
             </div>
             <el-select
               v-model="form.multi_boxes_ceil"
@@ -295,19 +357,12 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('多箱出库计价方式') }}</span>
-              <!-- <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('订单多箱打包时，每个打包箱重量分别上浮，而不是整个上浮。')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
             </div>
             <el-select
               v-model="form.multi_boxes"
               filterable
               class="country-select"
+              popper-class="billing-select"
               :placeholder="$t('请选择')"
             >
               <el-option
@@ -318,6 +373,54 @@
               >
               </el-option>
             </el-select>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item v-if="form.base_mode !== 0">
+        <el-row>
+          <el-col :span="10">
+            <div>
+              <span>{{ $t('开启超重换算') }}</span>
+              <el-tooltip
+                style="color: #7bc764; padding: 0 20px 0 5px"
+                effect="dark"
+                :content="$t('开启超重换算时，可考虑超重订单比大计费，如果超过会进行计费换算')"
+                placement="top-end"
+              >
+                <i class="el-icon-info"></i>
+              </el-tooltip>
+            </div>
+            <el-switch
+              v-model="form.weight_trans"
+              :active-text="$t('开')"
+              :active-value="1"
+              :inactive-value="0"
+              :inactive-text="$t('关')"
+              active-color="#13ce66"
+              inactive-color="gray"
+            >
+            </el-switch>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item v-if="form.weight_trans === 1 && form.base_mode !== 0">
+        <el-row>
+          <el-col :span="10">
+            <div>
+              <span>{{ $t('重量系数') }}</span>
+              <el-tooltip
+                style="color: #7bc764; padding: 0 20px 0 5px"
+                effect="dark"
+                :content="
+                  $t(`计算方式：超重体积=实重/重量系数。当•1超重体积一大于“出库体积”时，以超垂体积计费。
+【例：设置重量系数为500,则当一个订单出库体积为2立方米”，但出库实更为“1800KG-时，超重体积为1800/500=3.6立方米。此时超垂体积大于出库体积，以超重体积3.6立方米计费】`)
+                "
+                placement="top-end"
+              >
+                <i class="el-icon-info"></i>
+              </el-tooltip>
+            </div>
+            <el-input v-model="form.weight_factor" :placeholder="$t('请输入内容')"></el-input>
           </el-col>
         </el-row>
       </el-form-item>
@@ -367,7 +470,7 @@
               ><br />
               <span style="padding-left: 20px"
                 >{{ $t('计费重量') }}：{{ $t('(实际重量 + 体积重量）/2') }}</span
-              >
+              ><span style="padding-left: 20px">{{ $t('体积重大于实重时生效') }}</span>
             </el-col>
           </el-row>
         </el-form-item>
@@ -402,7 +505,10 @@
               </el-select>
             </el-col>
             <el-col :span="5">
-              <el-input v-model="form.value" :placeholder="$t('请输入限制数值')"></el-input>
+              <div class="unit">
+                <el-input v-model="form.value" :placeholder="$t('请输入限制数值')"></el-input>
+                <span>{{ localization ? localization.length_unit : '' }}</span>
+              </div>
             </el-col>
           </el-row>
         </el-form-item>
@@ -422,78 +528,86 @@
         <img :src="imgSrc" class="imgDialog" />
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="setVisible" :title="$t('抛货配置')">
-      <el-form></el-form>
-    </el-dialog>
-    <el-dialog :title="$t('计费价格模式说明')" :visible.sync="dialogDescription">
+    <el-dialog
+      :title="$t('计费价格模式说明')"
+      :visible.sync="dialogDescription"
+      class="billing-settings-dialog dialog-container"
+      width="50%"
+    >
       <div>
-        <h3>1、{{ $t('首重续重模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('运费=首费+续重*续费 (超出续重部分按下一续重计费)') }}</span
-          ><br />
-          <span>{{ $t('例如 若续重为每1kg，7.3KG包裹则按照8KG计费;') }} </span><br />
-          <span>{{ $t('若续重为每0.5kg，7.3KG包裹则按7.5KG计费') }}</span>
+        <h3>【{{ $t('价格配置方式') }}】</h3>
+        <div>{{ $t('价格设置需再在三个选项卡中配置') }}:</div>
+        <div>1、{{ $t('计费设置页面配置计费类型与首重续重重量阶梯等基础数据') }}</div>
+        <div>2、{{ $t('分区表中设置不同区域分组') }}</div>
+        <div>3、{{ $t('在12步骤完成后系统生成空白价格表在价格表中配置具体价格') }}</div>
+        <img src="../../../assets/table1.png" />
+      </div>
+      <div>
+        <h3>【{{ $t('计费维度') }}】</h3>
+        <div>
+          {{
+            $t(
+              '系统计费维度分为“重量计费“与”体积计费“，重量计费包含考虑体积重量的”全抛“与”半抛“模式；体积计费则根据包裹长宽高（cm）自动换算体积（立方米），以体积计算价格。'
+            )
+          }}
         </div>
       </div>
       <div>
-        <h3>2、{{ $t('阶梯价格模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('运费=对应阶梯单价*重量') }}</span
-          ><br />
-          <span>{{ $t('例如设置为') }}： </span><br />
-          <span>{{ $t('阶梯价格:1~5KG 价格10元，') }}</span
-          ><br />
-          <span>{{ $t(' 5~10kg价格8元，则7.3KG计费为:8*7.3') }}</span>
+        <h3>【{{ $t('计费模式') }}】</h3>
+        <h4>a) {{ $t('首重续重模式') }}</h4>
+        <div>{{ $t('例生成价格表样式如下时') }}:</div>
+        <img src="../../../assets/table2.png" />
+        <div>{{ $t('计算方式以分区一为例') }}:</div>
+        <div>0～5KG：{{ $t('总价') }}50</div>
+        <div>
+          5～10KG：{{ $t('首费') }}50+（{{ $t('总重量') }}-{{ $t('首重') }}5KG）*
+          {{ $t('续单价') }}18/KG
         </div>
-      </div>
-      <div>
-        <h3>3、{{ $t('单位价格+阶梯总价模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('运费=单位价格*重量+对应阶梯价格') }}</span
-          ><br />
-          <span>{{ $t('例如设置为') }}：</span><br />
-          <span>{{ $t('单位价格:5元') }}</span
-          ><br />
-          <span>{{ $t('阶梯价格:1~5KG 价格100元') }}</span
-          ><br />
-          <span>{{ $t(' 5~10kg价格180元，则7KG计费为:5*7+180') }}</span
-          ><br />
+        <div>
+          10～100KG：{{ $t('首费') }}50+ {{ $t('续费') }}5 * 18 +（{{ $t('总重量') }}-10）*
+          {{ $t('续单价') }}15/KG
         </div>
-      </div>
-      <div>
-        <h3>4、{{ $t('多级续重模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('运费=首费+续重*续费（可设置多级续重模式') }}</span
-          ><br />
-          <span>{{ $t('例如设置为') }}：</span><br />
-          <span>{{ $t('首重 5元/KG') }}</span
-          ><br />
-          <span>{{ $t('续重一：4元/1KG') }}</span
-          ><br />
-          <span>{{ $t('续重二：3元/0.5KG') }}</span
-          ><br />
-          <span>{{ $t('则1.4KG收费为5+3') }}</span
-          ><br />
-          <span>{{ $t('1.7KG收费为5+4') }}</span
-          ><br />
-          <span>{{ $t('2.3KG收费为5+4*1+3') }}</span
-          ><br />
+        <div>
+          100～999KG：{{ $t('首费') }}50+ {{ $t('续费') }}5 * 18 + {{ $t('续费') }}90 * 15 + （{{
+            $t('总重量')
+          }}-100）/5 * 35
         </div>
-      </div>
-      <div>
-        <h3>5、{{ $t('阶梯首重续重模式') }}</h3>
-        <div style="padding-left: 20px">
-          <span>{{ $t('按照计费重量所属阶梯的计费方式计费') }}</span
-          ><br />
-          <span>{{ $t('例如设置为') }}：</span><br />
-          <span>{{ $t('0～5KG') }}:</span><span>{{ $t('首费20/1KG，续费8/1KG') }}</span
-          ><br />
-          <span>{{ $t('5～20KG') }}:</span><span>{{ $t('首费25/3KG，续费6/1KG') }}</span
-          ><br />
-          <span>{{ $t('则当计费重量属于0～5KG时，按照前者计费') }}</span
-          ><br />
-          <span>{{ $t('计费重量属于5～20KG时按照后者计费') }}</span
-          ><br />
+        <div>{{ $t('注灰色部分向上取整') }}</div>
+        <h4>b) {{ $t('阶梯价格模式') }}</h4>
+        <div>{{ $t('例生成价格表样式如下时') }}:</div>
+        <img src="../../../assets/table3.png" />
+        <div>
+          {{ $t('计算方式重量处于哪一个区间即采用该区间对应的基价单价计算费用') }}
+        </div>
+        <div>{{ $t('总费用= 基价 + 总重量 * 该区间单价') }}</div>
+        <h4>c) {{ $t('多级续重模式') }}</h4>
+        <div>{{ $t('例生成价格表样式如下时') }}:</div>
+        <img src="../../../assets/table4.png" />
+        <div>{{ $t('计算方式') }}：</div>
+        <div>
+          {{ $t('假设计费重量为') }}5.8KG，{{ $t('首重') }}5，{{ $t('续重') }}0.8，{{
+            $t('大于')
+          }}0.5{{ $t('不足') }}1，{{ $t('计费为首费') }}50 + 8
+        </div>
+        <div>
+          {{ $t('假设计费重量为') }}5.4KG，{{ $t('首重') }}5，{{ $t('续重') }}0.5，{{
+            $t('大于')
+          }}0.3{{ $t('不足') }}0.5，{{ $t('计费为首费') }}50 + 5
+        </div>
+        <div>
+          {{ $t('假设计费重量为') }}5.2KG，{{ $t('首重') }}5，{{ $t('续重') }}0.2，{{
+            $t('不足')
+          }}0.3，{{ $t('计费为首费') }}50 + 4元
+        </div>
+        <h4>d) {{ $t('阶梯首重续重模式') }}</h4>
+        <div>{{ $t('例生成价格表样式如下时') }}:</div>
+        <img src="../../../assets/table5.png" />
+        <div>
+          {{ $t('计算方式重量处于哪一个区间即采用该区间对应的首费续单价计算费用') }}
+        </div>
+        <div>
+          {{ $t('总费用') }} = {{ $t('首费') }} + （{{ $t('总重量') }}-{{ $t('首重') }}） *
+          {{ $t('该区间续单价') }}
         </div>
       </div>
     </el-dialog>
@@ -506,6 +620,7 @@ export default {
     return {
       // is_avg_weight: 0,
       form: {
+        weight_factor: '',
         factor: '',
         base_mode: '',
         min_weight: '',
@@ -527,7 +642,9 @@ export default {
         clearance_code_remark: '',
         multi_boxes: 0,
         grades: [],
-        has_factor: 0
+        weight_trans: 0,
+        has_factor: 0,
+        range: 0
       },
       dialogDescription: false,
       value: [],
@@ -539,10 +656,6 @@ export default {
         {
           id: 2,
           name: this.$t('阶梯价格模式')
-        },
-        {
-          id: 3,
-          name: this.$t('单位价格+阶梯总价模式')
         },
         {
           id: 4,
@@ -561,11 +674,21 @@ export default {
         {
           id: 2,
           name: this.$t('阶梯价格模式')
+        },
+        {
+          id: 5,
+          name: this.$t('阶梯首重续重模式')
         }
       ],
       priceData: [
         {
           name: 0
+        },
+        {
+          name: 0.1
+        },
+        {
+          name: 0.2
         },
         {
           name: 0.5
@@ -577,24 +700,24 @@ export default {
       ceilData: [
         {
           id: 0,
-          name: `${this.$t('不开启多箱计价(按总重量/体积计算价格)')}`
+          name: `${this.$t('不开启多箱计价按总重量体积计算价格')}`
         },
         {
           id: 2,
-          name: `${this.$t('多箱单独计算计费重量(重量/体积相加后计算价格)')}`
+          name: `${this.$t('多箱单独计算计费重量重量体积相加后计算价格')}`
         },
         {
           id: 1,
-          name: this.$t('多箱单独计算价格后，相加为总价')
+          name: this.$t('多箱单独计算价格后相加为总价')
         }
       ],
       localization: {},
       imgVisible: false,
       imgSrc: '',
       itemArr: {},
-      setVisible: false,
       dialogVisible: false,
       status: true,
+      weight_factor: '',
       paramsOptions: [
         {
           id: 1,
@@ -607,6 +730,10 @@ export default {
         {
           id: 3,
           name: this.$t('三边之和')
+        },
+        {
+          id: 4,
+          name: this.$t('长宽高乘积')
         }
       ],
       conditionOptions: [
@@ -635,7 +762,7 @@ export default {
     'form.base_mode': function (val) {
       console.log(val, 'val')
       this.billingName = val === 0 ? this.$t('重量') : this.$t('体积')
-      this.unitName = val === 0 ? this.localization.weight_unit : this.$t('(立方)')
+      this.unitName = val === 0 ? this.localization.weight_unit : this.$t('立方')
       console.log(this.billingName, 'this.billingName')
       console.log(this.unitName, 'this.unitName')
     }
@@ -694,6 +821,10 @@ export default {
         this.form.multi_boxes_ceil = res.data.multi_boxes_ceil
         this.form.first_weight = res.data.first_weight
         this.form.is_avg_weight = res.data.is_avg_weight
+        this.form.range = res.data.range
+        this.form.weight_trans = res.data.weight_trans
+        this.form.weight_factor = res.data.weight_factor
+        this.weight_factor = res.data.weight_factor
         if (res.data.no_throw_condition) {
           console.log(res.data.no_throw_condition.checked, 'res.data.no_throw_condition.checked')
           this.form.type = res.data.no_throw_condition.type
@@ -718,37 +849,76 @@ export default {
     addIcon() {
       this.$router.push({ name: 'IconAdd' })
     },
-    // 新增行
-    addRow() {
-      console.log(this.form.grades, 'this.form.grades')
-      this.form.grades.push({
+    // 插入行
+    insert(index, arr) {
+      arr.splice(index, 0, {
         start: '',
         end: '',
         unit_weight: ''
       })
     },
+    // 新增行
+    addRow() {
+      if (this.form.mode === 1 || this.form.mode === 2 || this.form.mode === 5) {
+        if (this.form.grades.length && this.form.grades[this.form.grades.length - 1].end) {
+          this.form.grades.push({
+            start: this.form.grades[this.form.grades.length - 1].end,
+            end: '',
+            unit_weight: ''
+          })
+        } else {
+          this.form.grades.push({
+            start: '',
+            end: '',
+            unit_weight: ''
+          })
+        }
+      } else {
+        this.form.grades.push({
+          start: '',
+          end: '',
+          unit_weight: ''
+        })
+      }
+    },
+    inputEnd(scope) {
+      if (this.form.mode === 1 || this.form.mode === 2 || this.form.mode === 5) {
+        if (
+          this.form.grades.length - 1 > scope.$index &&
+          scope.$index !== this.form.grades.length - 1
+        ) {
+          this.form.grades[scope.$index + 1].start = this.form.grades[scope.$index].end
+        }
+      }
+    },
     deleteRow(index, rows) {
       rows.splice(index, 1)
     },
     saveLine() {
-      console.log(this.form.mode, 'mode')
-      if (this.form.grades.length) {
+      if (this.form.mode === 1 && this.form.grades.length) {
         this.form.grades[0].start = this.form.first_weight
         this.itemArr = JSON.stringify(this.form.grades)
       }
-      console.log(this.itemArr, 'this.itemArr')
       if (this.form.mode === 2 && this.itemArr === '') {
         this.$message.error('不能为空')
       }
-      if (this.form.mode === 1 && this.form.first_weight === '') {
+      if (this.form.mode === 1 && this.form.first_weight === '')
         return this.$message.error(this.$t('请输入首重'))
+      this.form.grades.forEach(item => {
+        if (!item.first_weight) {
+          item.first_weight = 0
+        }
+      })
+      if (this.form.mode !== 2) {
+        let flag = this.form.grades.some(item => {
+          return !item.unit_weight
+        })
+        if (flag) return this.$message.error(this.$t('单位续重不能为空或为0'))
       }
       if (this.$route.params.id) {
         // 编辑状态
-        console.log(this.form.checked, 'form.checked')
         let checkStatus = this.form.checked ? Number(this.form.checked) : ''
-        console.log(Number(this.form.checked), '转换1')
-        delete this.form.checked
+        // delete this.form.checked
         this.$request
           .updateBillingConfig(this.$route.params.id, {
             ...this.form,
@@ -786,6 +956,11 @@ export default {
   padding: 20px;
   .country-select {
     width: 100%;
+  }
+  .billing-settings-dialog {
+    img {
+      max-width: 100%;
+    }
   }
   .sava-btn {
     min-width: 100px;
@@ -845,5 +1020,25 @@ export default {
   .checkbox-sty {
     margin-right: 0;
   }
+  .remark {
+    float: left;
+    color: red;
+  }
+  .unit {
+    display: flex;
+  }
+}
+.billing-select {
+  .el-select-dropdown__item {
+    width: 100%;
+    overflow: auto;
+  }
+}
+.explain-icon {
+  position: relative;
+  top: 2px;
+  margin-left: 5px;
+  font-size: 16px;
+  color: #74b34f;
 }
 </style>

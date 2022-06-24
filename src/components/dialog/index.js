@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import router from '@/router'
+import i18n from '@/utils/i18n'
 import store from '@/store'
 import VipGroup from './vipgroup.vue'
 import addStaff from './addStaff.vue'
@@ -54,7 +55,9 @@ import videoLang from './videoLang.vue'
 import pcLang from './pcLang.vue'
 import propsLang from './propsLang.vue'
 import bannerList from './bannerAddEdit.vue'
+import advertiseList from './advertiseAddEdit.vue'
 import bannerLang from './bannerLang.vue'
+import advertiseLang from './advertiseLang.vue'
 import warehouseSelf from './warehouseSelf.vue'
 import paypalSet from './paypalSet.vue'
 import expressEditAdd from './expressAddEdit.vue'
@@ -118,7 +121,38 @@ import growthValueBuy from './growthValueBuy.vue'
 import baseTable from './baseTable.vue'
 import discountTable from './discountTable.vue'
 import salesAddEdit from './salesAddEdit.vue'
+import addCustomLabel from './addCustomLabel.vue'
 import addLabel from './addLabel.vue'
+import addPaid from './addPaid.vue'
+import addMenu from './addMenu.vue'
+import addRule from './addRule.vue'
+import batchToTransport from './batchToTransport.vue'
+import setRules from './setRules.vue'
+import batchAllocate from './batchAllocate.vue'
+import abnormalLog from './abnormalLog.vue'
+import batchImportInvoice from './batchImportInvoice.vue'
+import countryLang from './countryLang.vue'
+import addExplain from './addExplain.vue'
+import qaCumulative from './qaCumulative.vue'
+import supplementSheet from './supplementSheet.vue'
+import replenishMsg from './replenishMsg.vue'
+import replyInfo from './replyInfo.vue'
+import qaPointTable from './qaPointTable.vue'
+import qaExplain from './qaExplain.vue'
+import customConfig from './customConfig.vue'
+import addEditGoods from './addEditGoods.vue'
+import addShip from './addShip.vue'
+import addEditAddress from './addEditAddress.vue'
+import distributionDetail from './distributionDetail.vue'
+import purchaseDetails from './purchaseDetails.vue'
+import availableCustom from './availableCustom.vue'
+import addAddress from './addAddress.vue'
+import batchAdd from './batchAdd.vue'
+import batchCustomConfig from './batchCustomConfig.vue'
+import cumulativeGrowth from './cumulativeGrowth.vue'
+import growthExplain from './growthExplain.vue'
+import distributeScheme from './distributeScheme.vue'
+import confirmReceive from './confirmReceive.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -173,7 +207,9 @@ const VideoLangController = Vue.extend(videoLang)
 const PcLangController = Vue.extend(pcLang)
 const PropsLangController = Vue.extend(propsLang)
 const BannerListController = Vue.extend(bannerList)
+const AdvertiseListController = Vue.extend(advertiseList)
 const BannerLangController = Vue.extend(bannerLang)
+const AdvertiseLangController = Vue.extend(advertiseLang)
 const WarehouseSelfController = Vue.extend(warehouseSelf)
 const PayPalSetController = Vue.extend(paypalSet)
 const ExpressDetailsController = Vue.extend(expressEditAdd)
@@ -237,7 +273,38 @@ const GrowthValueBuy = Vue.extend(growthValueBuy)
 const BaseTable = Vue.extend(baseTable)
 const DiscountTable = Vue.extend(discountTable)
 const SalesAddEditController = Vue.extend(salesAddEdit)
+const AddCustomLabelController = Vue.extend(addCustomLabel)
 const AddLabelController = Vue.extend(addLabel)
+const AddPaidController = Vue.extend(addPaid)
+const AddMenuController = Vue.extend(addMenu)
+const AddRuleController = Vue.extend(addRule)
+const BatchToTransportController = Vue.extend(batchToTransport)
+const SetRulesController = Vue.extend(setRules)
+const BatchAllocateController = Vue.extend(batchAllocate)
+const AbnormalLogController = Vue.extend(abnormalLog)
+const BatchImportInvoiceController = Vue.extend(batchImportInvoice)
+const countryLangController = Vue.extend(countryLang)
+const addExplainController = Vue.extend(addExplain)
+const qaCumulativeController = Vue.extend(qaCumulative)
+const supplementSheetController = Vue.extend(supplementSheet)
+const replenishMsgController = Vue.extend(replenishMsg)
+const replyInfoController = Vue.extend(replyInfo)
+const qaPointTableController = Vue.extend(qaPointTable)
+const qaExplainController = Vue.extend(qaExplain)
+const customConfigController = Vue.extend(customConfig)
+const addEditGoodsController = Vue.extend(addEditGoods)
+const addShipController = Vue.extend(addShip)
+const addEditAddressController = Vue.extend(addEditAddress)
+const distributionDetailController = Vue.extend(distributionDetail)
+const purchaseDetailsController = Vue.extend(purchaseDetails)
+const availableCustomController = Vue.extend(availableCustom)
+const addAddressController = Vue.extend(addAddress)
+const batchAddController = Vue.extend(batchAdd)
+const batchCustomConfigController = Vue.extend(batchCustomConfig)
+const cumulativeGrowthController = Vue.extend(cumulativeGrowth)
+const growthExplainController = Vue.extend(growthExplain)
+const distributeSchemeController = Vue.extend(distributeScheme)
+const confirmReceiveController = Vue.extend(confirmReceive)
 
 const mixin = {
   data() {
@@ -246,6 +313,7 @@ const mixin = {
     }
   },
   router,
+  i18n,
   store
 }
 
@@ -383,6 +451,132 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 审核
+    case 'replenishMsg':
+      instance = new replenishMsgController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 回复
+    case 'replyInfo':
+      instance = new replyInfoController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 问答积累积分
+    case 'qaPointTable':
+      instance = new qaPointTableController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 问答规则说明
+    case 'qaExplain':
+      instance = new qaExplainController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自定义配置
+    case 'customConfig':
+      instance = new customConfigController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 添加商品
+    case 'addGoods':
+      instance = new addEditGoodsController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 添加发货公司
+    case 'addShip':
+      instance = new addShipController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 地址
+    case 'addEditAddress':
+      instance = new addEditAddressController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 采购详细
+    case 'purchaseDetails':
+      instance = new purchaseDetailsController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 渠道优化
+    case 'availableCustom':
+      instance = new availableCustomController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 新增收货地址
+    case 'addAddress':
+      instance = new addAddressController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量添加
+    case 'batchAdd':
+      instance = new batchAddController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量自定义配置
+    case 'batchCustomConfig':
+      instance = new batchCustomConfigController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 邀请新用户积累成长值
+    case 'cumulativeGrowth':
+      instance = new cumulativeGrowthController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 规则说明
+    case 'growthExplain':
+      instance = new growthExplainController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 导入分货方案
+    case 'distributeScheme':
+      instance = new distributeSchemeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 确认收货
+    case 'confirmReceive':
+      instance = new confirmReceiveController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //分货详细
+    case 'distributionDetail':
+      instance = new distributionDetailController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 添加物流公司
     case 'addCompany':
       instance = new AddCompanyController({
@@ -508,6 +702,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 订单 异常件 异常说明
+    case 'abnormalLog':
+      instance = new AbnormalLogController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 修改所属仓库
     case 'warehouseTo':
       instance = new WarehouseToController({
@@ -537,6 +738,13 @@ function initInstance(type) {
       })
       break
     // 自定义标签 新增 编辑
+    case 'addCustomLabel':
+      instance = new AddCustomLabelController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 配置 路线 基础信息
     case 'addLabel':
       instance = new AddLabelController({
         el: document.createElement('div'),
@@ -585,6 +793,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    //仓库地址配置 货位管理 上架规则
+    // case 'shelfRules':
+    //   instance = new ShelfRulesController({
+    //     el: document.createElement('div'),
+    //     mixins: [mixin]
+    //   })
+    //   break
     // 更多配置 支付转账配置 双语弹窗
     case 'payLang':
       instance = new PayLangController({
@@ -634,6 +849,12 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    case 'advertiseList':
+      instance = new AdvertiseListController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 营销管理 广告图语言修改
     case 'bannerLang':
       instance = new BannerLangController({
@@ -641,9 +862,29 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 营销管理 问答累积积分
+    case 'qaCumulative':
+      instance = new qaCumulativeController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    case 'advertiseLang':
+      instance = new AdvertiseLangController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 仓库自提 设为自提
     case 'warehouseSelf':
       instance = new WarehouseSelfController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 自提点 转运包裹管理
+    case 'batchToTransport':
+      instance = new BatchToTransportController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
@@ -718,6 +959,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    //更多配置 发货快递公司 规则设置
+    case 'setRules':
+      instance = new SetRulesController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 发货单 添加物流信息
     case 'batchExpress':
       instance = new BatchController({
@@ -788,6 +1036,13 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 财务 订单补款
+    case 'supplementSheet':
+      instance = new supplementSheetController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 客户 查看个人信息
     case 'editInfo':
       instance = new EditVipInfoController({
@@ -837,9 +1092,30 @@ function initInstance(type) {
         mixins: [mixin]
       })
       break
+    // 添加说明
+    case 'addExplain':
+      instance = new addExplainController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
     // 员工组列表 自提点权限
     case 'pickPoint':
       instance = new PickPiontController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量分配员工
+    case 'batchAllocate':
+      instance = new BatchAllocateController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 批量导入发货单
+    case 'batchImportInvoice':
+      instance = new BatchImportInvoiceController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
@@ -882,6 +1158,27 @@ function initInstance(type) {
     // 订单列表 详情 添加包裹
     case 'addPackages':
       instance = new AddPackagesController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //订单列表 待支付 改为已付款
+    case 'addPaid':
+      instance = new AddPaidController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //配置 更多配置 自动回复
+    case 'addRule':
+      instance = new AddRuleController({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    //配置 更多配置 系统服务配置 公众号配置 自定义菜单
+    case 'addMenu':
+      instance = new AddMenuController({
         el: document.createElement('div'),
         mixins: [mixin]
       })
@@ -1001,6 +1298,13 @@ function initInstance(type) {
     // 路线 新路线 编辑多语言
     case 'LingLang':
       instance = new LineLangAddEdit({
+        el: document.createElement('div'),
+        mixins: [mixin]
+      })
+      break
+    // 语言
+    case 'countryLang':
+      instance = new countryLangController({
         el: document.createElement('div'),
         mixins: [mixin]
       })

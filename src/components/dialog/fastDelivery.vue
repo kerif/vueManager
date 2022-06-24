@@ -11,7 +11,7 @@
         <el-input
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 8 }"
-          :placeholder="$t('多个包裹单号，请用回车分割')"
+          :placeholder="$t('多个包裹单号请用回车分割')"
           v-model="textarea2"
         >
         </el-input>

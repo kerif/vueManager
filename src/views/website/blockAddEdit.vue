@@ -9,7 +9,7 @@
           >
         </el-row>
       </el-form-item>
-      <el-form-item :label="$t('*标签')" v-if="this.status === 'origin'">
+      <el-form-item :label="$t('标签')" v-if="this.status === 'origin'">
         <el-row>
           <el-col :span="10"
             ><el-input :placeholder="$t('请输入标签')" v-model="params.description"></el-input
@@ -27,26 +27,17 @@
       <el-form-item :label="this.status === 'origin' ? $t('区块详情') : $t('内容')">
         <el-row>
           <el-col :span="20">
-            <div id="editor" :value="params.content" @input="changeText"></div>
+            <editor :content="params.content" @submit="saveNotice" />
           </el-col>
         </el-row>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          class="save-btn"
-          @click="saveNotice"
-          :loading="$store.state.btnLoading"
-          >{{ $t('保存') }}</el-button
-        >
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
-import Wangeditor from 'wangeditor'
-import baseApi from '@/lib/axios/baseApi'
+import editor from '@/components/editor.vue'
 export default {
+  components: { editor },
   data() {
     return {
       params: {
@@ -58,55 +49,10 @@ export default {
       status: ''
     }
   },
-  mounted() {
-    this.editor = new Wangeditor('#editor')
-    this.editor.customConfig.menus = [
-      'head',
-      'fontSize',
-      'fontName',
-      'bold',
-      'italic',
-      'underline',
-      'strikeThrough',
-      'foreColor',
-      'backColor',
-      'link',
-      'list',
-      'justify',
-      'quote',
-      'video',
-      'image',
-      'table'
-    ]
-    this.editor.customConfig.onchange = html => {
-      this.params.content = html
-    }
-    this.editor.customConfig.uploadImgServer = `${baseApi.BASE_API_URL}/upload/images`
-    this.editor.customConfig.uploadImgParams = {}
-    this.editor.customConfig.uploadImgHeaders = {
-      Authorization: this.$store.state.token
-    }
-    this.editor.customConfig.uploadFileName = `images[${0}][file]`
-    this.editor.customConfig.uploadImgHooks = {
-      customInsert: (insertImg, result) => {
-        console.log(result)
-        if (result.ret === 1) {
-          this.$message.success(this.$t('上传成功'))
-          let url = `${baseApi.IMAGE_URL}${result.data[0].path}`
-          insertImg(url)
-        }
-      }
-    }
-    this.editor.customConfig.zIndex = 500
-    this.editor.customConfig.showLinkImg = true
-    this.editor.create()
-    console.log(this.editor, 'this.editor')
-  },
   created() {
     if (this.$route.params.id) {
       this.getList()
       this.status = this.$route.params.status
-      console.log(this.status, 'status')
     }
   },
   methods: {
@@ -116,15 +62,11 @@ export default {
           this.params.name = res.data.name
           this.params.content = res.data.content
           this.params.description = res.data.description
-          this.editor.txt.html(this.params.content)
         }
       })
     },
-    // 判断是新增 还是 编辑
-    changeText() {
-      this.$emit('input', this.editor.txt.html())
-    },
-    saveNotice() {
+    saveNotice(data) {
+      this.params.content = data
       if (!this.params.description) {
         return this.$message.error(this.$t('请输入标签'))
       }

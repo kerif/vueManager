@@ -84,6 +84,9 @@
                   <el-menu-item index="5">
                     {{ $t('客户登录配置') }}
                   </el-menu-item>
+                  <el-menu-item index="6">
+                    {{ $t('自定义后台系统') }}
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-menu>
             </el-col>
@@ -106,6 +109,10 @@
             <!-- 客户登录配置 -->
             <el-col :span="19" v-if="secondTab2 === '5'" class="main-right">
               <login-configure></login-configure>
+            </el-col>
+            <!-- 自定义后台系统 -->
+            <el-col :span="19" v-if="secondTab2 === '6'" class="main-right">
+              <customize-background-system></customize-background-system>
             </el-col>
           </el-row>
         </div>
@@ -219,6 +226,7 @@ import ExpressCompany from './expressCompany.vue'
 import CustomTrack from './customTrack.vue'
 import CustomLabel from './customLabel.vue'
 import LoginConfigure from './loginConfigure.vue'
+import customizeBackgroundSystem from './customizeBackgroundSystem.vue'
 // import GroupConfigure from './groupConfigure.vue'
 export default {
   components: {
@@ -239,7 +247,8 @@ export default {
     ExpressCompany,
     CustomTrack,
     CustomLabel,
-    LoginConfigure
+    LoginConfigure,
+    customizeBackgroundSystem
     // GroupConfigure
   },
   mixins: [pagination],
@@ -299,7 +308,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .configuration-container {
   .save-btn {
     color: #fff;

@@ -10,8 +10,8 @@
                 <span class="leftWidth">{{ $t('客户ID') }}</span
                 >&nbsp;&nbsp;&nbsp;&nbsp;
                 <span
-                  ><i class="idNum">{{ detailData.user.id }}</i
-                  >&nbsp;&nbsp;&nbsp;{{ detailData.user.name }}</span
+                  ><i class="idNum">{{ detailData.user && detailData.user.id }}</i
+                  >&nbsp;&nbsp;&nbsp;{{ detailData.user && detailData.user.name }}</span
                 >
               </el-col>
             </el-row>
@@ -48,7 +48,7 @@
             </el-col>
             <!-- 提现金额¥ -->
             <el-col :span="8" :offset="4">
-              <span class="withdrawal">{{ $t('提现金额¥') }}</span>
+              <span class="withdrawal">{{ $t('提现金额') }}</span>
               <span>{{ detailData.amount }}</span>
             </el-col>
           </el-row>
@@ -60,7 +60,7 @@
             </el-col>
             <!-- 客户备注 -->
             <el-col :span="8" :offset="4">
-              <span class="withdrawal">{{ $t('客户备注：') }}</span>
+              <span class="withdrawal">{{ $t('客户备注') }}</span>
               <span>{{ detailData.remark }}</span>
             </el-col>
           </el-row>
@@ -159,7 +159,7 @@
             </el-col>
             <!-- 提现金额¥ -->
             <el-col :span="8" :offset="4">
-              <span class="withdrawal">{{ $t('提现金额¥') }}</span>
+              <span class="withdrawal">{{ $t('提现金额') }}</span>
               <span>{{ detailData.amount }}</span>
             </el-col>
           </el-row>
@@ -171,7 +171,7 @@
             </el-col>
             <!-- 客户备注 -->
             <el-col :span="8" :offset="4">
-              <span class="withdrawal">{{ $t('客户备注：') }}</span>
+              <span class="withdrawal">{{ $t('客户备注') }}</span>
               <span>{{ detailData.remark }}</span>
             </el-col>
           </el-row>
@@ -181,6 +181,11 @@
         <h3>{{ $t('日志') }}</h3>
         <div class="daily-card">
           <div class="text">2021-08-01&nbsp; 12:00:00&nbsp; 提交申请&nbsp; 100392</div>
+          <div v-if="this.log">
+            <div v-for="item in log" :key="item.id" class="text">
+              {{ item.created_at }}&nbsp;{{ item.sn }}&nbsp;{{ item.content }}
+            </div>
+          </div>
         </div>
         <h3>{{ $t('审核备注') }}</h3>
         <div class="remarks-card" v-if="this.detailData.type === '银行卡'">
@@ -192,7 +197,7 @@
               {{ detailData.customer_remark }}
             </div>
             <div class="screenshot" v-if="detailData.customer_images">
-              <span
+              <!-- <span
                 style="cursor: pointer"
                 @click.stop="
                   ;(imgSrc = `${$baseUrl.IMAGE_URL}${detailData.customer_images}`),
@@ -203,7 +208,15 @@
                   :src="`${$baseUrl.IMAGE_URL}${detailData.customer_images}`"
                   style="width: 100px"
                 />
-              </span>
+              </span> -->
+              <img
+                style="cursor: pointer; width: 100px"
+                v-for="item in detailData.customer_images"
+                :key="item.index"
+                class="image"
+                :src="$baseUrl.IMAGE_URL + item"
+                @click="checkImg(item)"
+              />
             </div>
           </div>
         </div>
@@ -216,7 +229,7 @@
               {{ detailData.customer_remark }}
             </div>
             <div class="screenshot" v-if="detailData.customer_images">
-              <span
+              <!-- <span
                 style="cursor: pointer"
                 @click.stop="
                   ;(imgSrc = `${$baseUrl.IMAGE_URL}${detailData.customer_images}`),
@@ -227,7 +240,15 @@
                   :src="`${$baseUrl.IMAGE_URL}${detailData.customer_images}`"
                   style="width: 100px"
                 />
-              </span>
+              </span> -->
+              <img
+                style="cursor: pointer; width: 100px"
+                v-for="item in detailData.customer_images"
+                :key="item.index"
+                class="image"
+                :src="$baseUrl.IMAGE_URL + item"
+                @click="checkImg(item)"
+              />
             </div>
           </div>
         </div>
@@ -252,11 +273,10 @@
           <!--表格-->
           <el-table border style="width: 100%" :data="charge">
             <el-table-column type="index" label="#" width="120"></el-table-column>
-            <el-table-column prop="order_number" label="订单号"></el-table-column>
-            <el-table-column prop="order_status" label="状态"></el-table-column>
-            <el-table-column prop="order_amount" label="总金额￥"></el-table-column>
-            <!-- <el-table-column prop="proportion" label="佣金方式"></el-table-column> -->
-            <el-table-column prop="commission_amount" label="可得佣金￥"></el-table-column>
+            <el-table-column prop="order_number" :label="$t('订单号')"></el-table-column>
+            <el-table-column prop="order_status" :label="$t('状态')"></el-table-column>
+            <el-table-column prop="order_amount" :label="$t('总金额')"></el-table-column>
+            <el-table-column prop="commission_amount" :label="$t('可得佣金')"></el-table-column>
           </el-table>
         </div>
       </el-card>
@@ -264,10 +284,14 @@
         <el-button type="danger" @click="viewRejused">{{ $t('审核拒绝') }}</el-button>
         <el-button type="primary" @click="viewApproved">{{ $t('审核通过') }}</el-button>
       </el-row>
+      <el-row class="auditStatus" v-if="this.withdraw_status === 4">
+        <el-button type="danger" @click="goReapply">{{ $t('重新申请') }}</el-button>
+      </el-row>
     </div>
-    <el-dialog :visible.sync="imgVisible" size="small">
-      <div class="img_box">
-        <img :src="imgSrc" class="imgDialog" />
+    <!-- 查看图片 -->
+    <el-dialog :visible.sync="imgDialog">
+      <div style="text-align: center">
+        <img :src="imgUrl" style="max-width: 100%" />
       </div>
     </el-dialog>
   </div>
@@ -285,7 +309,11 @@ export default {
       charge: [],
       tableLoading: false,
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      imgDialog: false,
+      imgUrl: '',
+      log: [],
+      withdraw_status: ''
     }
   },
   created() {
@@ -298,6 +326,30 @@ export default {
         this.detailData = res.data
         this.info = res.data.bank_card_info || {}
         this.charge = res.data.commissions
+        this.log = res.data.third_withdraw_logs
+        this.withdraw_status = res.data.withdraw_status
+      })
+    },
+    checkImg(url) {
+      this.imgDialog = true
+      this.imgUrl = this.$baseUrl.IMAGE_URL + url
+    },
+    // 重新申请
+    goReapply() {
+      this.$request.withdrawThird(this.detailData.user.id, this.$route.params.id).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
       })
     },
     // 审核通过
@@ -306,7 +358,8 @@ export default {
         {
           type: 'confirmAudit',
           userid: this.detailData.user.id,
-          withdrawsId: this.$route.params.id
+          withdrawsId: this.$route.params.id,
+          amount: this.detailData.amount
         },
         () => {
           this.$router.go(-1)
@@ -533,6 +586,11 @@ export default {
     .imgDialog {
       width: 50%;
     }
+  }
+  .image {
+    max-width: 100px;
+    cursor: pointer;
+    text-align: center;
   }
 }
 </style>

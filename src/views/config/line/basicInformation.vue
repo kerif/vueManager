@@ -5,8 +5,21 @@
         <el-row v-if="$route.query.state === 'edit'">
           <el-col :span="10">
             <div>{{ $t('所属路线') }}</div>
-            <span>{{ groupName }}</span>
-            <!-- <el-input :placeholder="$t('请输入内容')" v-model="form.name"></el-input> -->
+            <el-select
+              v-model="group_id"
+              filterable
+              clearable
+              class="country-select"
+              :placeholder="$t('请选择路线')"
+            >
+              <el-option
+                v-for="item in lineList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-col>
         </el-row>
       </el-form-item>
@@ -21,7 +34,7 @@
       <el-form-item>
         <el-row :gutter="20">
           <el-col :span="10">
-            <div>{{ $t('*支持仓库') }}</div>
+            <div>{{ $t('支持仓库') }}</div>
             <el-select
               v-model="form.warehouse_ids"
               multiple
@@ -43,7 +56,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*渠道属性') }}</div>
+            <div>{{ $t('渠道属性') }}</div>
             <el-checkbox-group v-model="form.prop_ids">
               <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
                 {{ item.name }}</el-checkbox
@@ -58,7 +71,7 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*送货方式') }}</div>
+            <div>{{ $t('送货方式') }}</div>
             <el-radio @change="changeDelivery" v-model="form.is_delivery" :label="0">{{
               $t('仅送货上门')
             }}</el-radio>
@@ -89,34 +102,52 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <!-- 设为推荐 -->
-      <!-- <el-form-item>
-        <el-row>
+      <el-form-item>
+        <el-row :gutter="10">
           <el-col :span="10">
             <div>
-              <span>{{ $t('设为推荐') }}</span>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="$t('设为推荐后，该路线标为推荐路线。')"
-                placement="top"
-              >
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip>
+              <span>{{ $t('客户付款节点') }}</span>
             </div>
-            <el-switch
-              v-model="form.is_great_value"
-              :active-text="$t('开')"
-              :active-value="1"
-              :inactive-value="0"
-              :inactive-text="$t('关')"
-              active-color="#13ce66"
-              inactive-color="gray"
-            >
-            </el-switch>
+            <el-radio-group v-model="form.order_mode">
+              <el-radio :label="0"
+                >{{ $t('标准模式') }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="$t('集包后仓库打包后付款')"
+                  placement="top"
+                >
+                  <span class="el-icon-question icon-info"></span>
+                </el-tooltip>
+              </el-radio>
+              <el-radio :label="1"
+                >{{ $t('集包立即付款') }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="$t('适用于原箱出库')"
+                  placement="top"
+                >
+                  <span class="el-icon-question icon-info"></span>
+                </el-tooltip>
+              </el-radio>
+            </el-radio-group>
           </el-col>
         </el-row>
-      </el-form-item> -->
+      </el-form-item>
+      <el-form-item>
+        <el-row :gutter="10">
+          <el-col :span="10">
+            <div>
+              <span>{{ $t('打包必填尺寸') }}</span>
+            </div>
+            <el-radio-group v-model="form.require_size">
+              <el-radio :label="1">{{ $t('开启') }}</el-radio>
+              <el-radio :label="0">{{ $t('关闭') }}</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <!-- 清关编码 -->
       <el-form-item>
         <el-row :gutter="10">
@@ -127,7 +158,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('开启表示需要提供收件人清关编码。')"
+                :content="$t('开启表示需要提供收件人清关编码')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -180,9 +211,6 @@
           <el-col :span="10">
             <div>
               <span>{{ $t('下单是否需要身份证') }}</span>
-              <!-- <el-tooltip class="item" effect="dark" content="开启表示需要提供收件人清关编码。" placement="top">
-                <span class="el-icon-question icon-info"></span>
-              </el-tooltip> -->
             </div>
             <el-switch
               v-model="form.need_id_card"
@@ -264,19 +292,19 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('渠道标签在客户端仅作展示，无特定功能')"
+                :content="$t('渠道标签在客户端仅作展示无特定功能')"
                 placement="top"
               >
-                <span class="el-icon-warning-outline"></span>
+                <span class="el-icon-warning-outline icon-info"></span>
               </el-tooltip>
-              <el-checkbox-group v-model="form.prop_ids">
-                <el-checkbox v-for="item in typeList" :key="item.id" :label="item.id">
-                  {{ item.name }}</el-checkbox
-                >
+              <el-checkbox-group v-model="form.label_ids">
+                <el-checkbox v-for="item in labelList" :key="item.id" :label="item.id">
+                  {{ item.name }}
+                </el-checkbox>
               </el-checkbox-group>
             </div>
-            <div style="width: 100px; margin-top: 25px">
-              <el-button type="primary" @click="addIcon">+ {{ $t('新增icon') }}</el-button>
+            <div style="width: 100px; margin-top: 25px" class="country-btn">
+              <el-button type="primary" @click="addLabels">+ {{ $t('添加标签') }}</el-button>
             </div>
           </el-col>
         </el-row>
@@ -284,11 +312,11 @@
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <div>{{ $t('*备注') }}</div>
+            <div>{{ $t('备注') }}</div>
             <el-input
               v-model="form.remark"
               :placeholder="$t('请输入内容')"
-              :rows="4"
+              :rows="8"
               type="textarea"
             ></el-input>
           </el-col>
@@ -352,7 +380,10 @@ export default {
         // ceil_weight: 0,
         // multi_boxes: 0,
         default_pickup_station_id: '',
-        is_delivery: 0
+        is_delivery: 0,
+        label_ids: [],
+        order_mode: 0,
+        require_size: 0
       },
       referenceTime: {
         minTime: '',
@@ -389,7 +420,9 @@ export default {
       ],
       iconList: [],
       warehouseList: [], // 获取全部仓库
+      lineList: [], //获取所有路线
       typeList: [],
+      labelList: [],
       localization: {},
       warehouseIds: [], // 保存支持仓库的id
       imgVisible: false,
@@ -431,11 +464,13 @@ export default {
         }
       ],
       pickList: [],
-      groupName: ''
+      groupName: '',
+      id: '',
+      group_id: ''
     }
   },
   created() {
-    console.log(this.$route.query.channelId, 'id')
+    // console.log(this.$route.query.channelId, 'id')
     const add = localStorage.getItem('add')
     console.log(add, 'add')
     if (add) {
@@ -470,12 +505,15 @@ export default {
         // ceil_weight: 0,
         // multi_boxes: 0,
         is_delivery: 0,
-        default_pickup_station_id: ''
+        default_pickup_station_id: '',
+        label_ids: []
       }
     }
     this.getProp()
+    this.getLine()
     this.getWarehouse()
     this.getIcon()
+    this.getChannelLabel()
     if (this.$route.params.id) {
       console.log('bianji')
       this.getList()
@@ -495,6 +533,7 @@ export default {
     getList() {
       this.$request.configBasic(this.$route.params.id).then(res => {
         this.groupName = res.data.group_name
+        this.group_id = res.data.group_id
         this.form.name = res.data.name
         this.form.is_great_value = res.data.is_great_value
         this.form.remark = res.data.remark
@@ -507,7 +546,10 @@ export default {
         this.form.need_personal_code = res.data.need_personal_code
         this.form.need_id_card = res.data.need_id_card
         this.form.is_delivery = res.data.is_delivery
+        this.form.order_mode = res.data.order_mode
+        this.form.require_size = res.data.require_size
         this.form.default_pickup_station_id = res.data.default_pickup_station_id
+        this.form.label_ids = res.data.labels.map(item => item.id)
       })
     },
     onSelectChange(e) {
@@ -527,6 +569,12 @@ export default {
     addProps() {
       dialog({ type: 'addPackage' }, () => {
         this.getProp()
+      })
+    },
+    // 添加标签
+    addLabels() {
+      dialog({ type: 'addLabel' }, () => {
+        this.getChannelLabel()
       })
     },
     changeDelivery() {
@@ -570,6 +618,21 @@ export default {
         this.warehouseList = res.data
       })
     },
+    // 获取全部路线
+    getLine() {
+      this.$request.getLineGroup().then(res => {
+        this.lineList = res.data
+      })
+    },
+    // 获取渠道标签多选框
+    getChannelLabel() {
+      this.$request.lineLabel().then(res => {
+        console.log(res)
+        if (res.ret) {
+          this.labelList = res.data
+        }
+      })
+    },
     saveLine() {
       if (this.form.name === '') {
         return this.$message.error(this.$t('请输入线路名称'))
@@ -582,9 +645,11 @@ export default {
       }
       if (this.$route.params.id) {
         // 编辑状态
+        console.log(this.groupName, '1111')
         this.$request
           .updateConfigBasic(this.$route.params.id, {
             ...this.form,
+            group_id: this.group_id,
             is_unique: Number(this.form.is_unique)
           })
           .then(res => {
@@ -613,7 +678,7 @@ export default {
           .then(res => {
             if (res.ret) {
               const dataId = res.data.id
-              this.$router.push({
+              this.$router.replace({
                 name: 'channelLineEdit',
                 params: {
                   id: dataId

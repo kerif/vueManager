@@ -108,7 +108,7 @@
                 inactive-color="gray">
               </el-switch>
             </el-form-item> -->
-            <div class="form-title">{{ $t('短信配置——聚合') }}</div>
+            <div class="form-title">{{ $t('短信配置聚合') }}</div>
             <el-form-item label="Appkey" prop="juhe_key">
               <el-input
                 v-model="logisticsData.juhe_key"
@@ -276,7 +276,7 @@
     <el-dialog
       :visible.sync="rechargeDialog"
       width="30%"
-      :title="$t('*预设充值金额')"
+      :title="$t('预设充值金额')"
       @close="clear"
     >
       <el-input v-model="amount"></el-input>
@@ -834,7 +834,7 @@ export default {
     },
     // 删除单条转账支付
     deleteTransfer(id) {
-      this.$confirm(this.$t('您真的要删除转账支付吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除转账支付吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -924,7 +924,7 @@ export default {
     },
     // 删除单条邮件模版
     deleteEmail(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -949,7 +949,7 @@ export default {
     },
     // 删除国家地区
     deleteCountry(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -974,7 +974,7 @@ export default {
     },
     regenerate() {
       this.$confirm(
-        this.$t('确定要重新生成会员编号吗？原来的编号将会被重置，可能会部分影响到包裹订单出入库'),
+        this.$t('确定要重新生成会员编号吗原来的编号将会被重置可能会部分影响到包裹订单出入库'),
         this.$t('重新生成'),
         {
           confirmButtonText: this.$t('确定'),
@@ -1038,7 +1038,7 @@ export default {
     },
     // 关税服务 删除
     deleteTariff(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1086,7 +1086,7 @@ export default {
     },
     // 订单 删除 增值服务
     deleteService(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1123,7 +1123,7 @@ export default {
     },
     // 订单 删除 快递公司
     deleteExpress(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1148,7 +1148,7 @@ export default {
     },
     // 包裹 删除增值服务
     deleteParcel(id) {
-      this.$confirm(this.$t('您真的要删除增值服务吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除增值服务吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1231,7 +1231,7 @@ export default {
     },
     // 删除单条商品分类
     deleteCategories(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1824,7 +1824,7 @@ export default {
     },
     // 拼团配置 删除
     deleteGroup(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1875,7 +1875,7 @@ export default {
     },
     // 汇率 删除
     deleteRate(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -2081,7 +2081,7 @@ export default {
       console.log(event, 'event')
       if (event === 0) {
         this.$confirm(
-          this.$t('停止支持该国家后，再次开启时需重新添加支持仓库与路线'),
+          this.$t('停止支持该国家后再次开启时需重新添加支持仓库与路线'),
           this.$t('提示'),
           {
             confirmButtonText: this.$t('确定'),
@@ -2156,7 +2156,7 @@ export default {
     },
     // 删除 自定义物流
     deleteLogisticsType(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

@@ -1,157 +1,190 @@
 <template>
-  <div class="added-services">
-    <vxe-modal
-      v-model="dialogVisible"
-      @hide="closeDialog"
-      id="myModal6"
-      width="70%"
-      show-footer
-      esc-closable
-      type="modal"
-      :title="title"
-    >
-      <div>
-        <el-form ref="form" :model="form" label-width="120px">
-          <el-form-item :label="$t('增值费用名称')">
-            <el-input
-              v-model="form.name"
-              :placeholder="$t('请输入')"
-              style="width: 217px"
-            ></el-input>
-            <el-input
-              v-model="form.remark"
-              :placeholder="$t('请输入费用说明')"
-              style="width: 300px; padding-left: 20px"
-            ></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('类型')"
-            ><el-select v-model="form.type">
-              <el-option
-                v-for="item in typeList"
-                :key="item.value"
-                :value="item.value"
-                :label="item.label"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$t('收取方式')">
-            <el-select v-model="form.is_forced">
-              <el-option
-                v-for="item in forcedList"
-                :key="item.value"
-                :value="item.value"
-                :label="item.label"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$t('费用值')">
-            <vxe-table
-              border
-              resizable
-              show-overflow
-              align="center"
-              ref="xTable"
-              :data="detailsList"
-              :edit-config="{ trigger: 'click', mode: 'cell' }"
+  <div>
+    <h5 style="color: #f40b00">
+      *{{ $t('可在此界面设置渠道专用增值服务如加固费打包费保价费偏远地区配送费等。') }}
+    </h5>
+    <div class="added-services">
+      <vxe-grid
+        ref="xGrid"
+        resizable
+        auto-resize
+        show-overflow
+        highlight-hover-row
+        :export-config="{}"
+        :tooltip-config="{ enterable: true }"
+        :data="servicesList"
+        v-bind="gridOptions"
+      >
+        <template #toolbar_buttons>
+          <div style="display: flex; gap: 10px">
+            <el-button size="small" type="primary" plain @click="addServices">{{
+              $t('新增')
+            }}</el-button>
+            <el-upload
+              class="upload-demo"
+              action=""
+              :http-request="uploadBaleImg"
+              :show-file-list="false"
             >
-              <vxe-table-column type="seq" title="分区" width="60"></vxe-table-column>
-              <vxe-table-column field="name" title="分区名称"></vxe-table-column>
-              <vxe-table-column field="areas" title="国家/地区"></vxe-table-column>
-              <vxe-table-column
-                field="value"
-                :title="$t('值(点击修改)')"
-                :edit-render="{ name: 'input', attrs: { type: 'text', placeholder: $t('请输入') } }"
-              ></vxe-table-column>
-            </vxe-table>
-          </el-form-item>
-        </el-form>
-        <h5>{{ $t('增值费用名称（多语言）') }}：</h5>
-        <el-form ref="langForm" :model="langForm" label-width="120px">
-          <el-form-item v-for="item in languageData" :key="item.code" :label="item.name">
-            <el-input
-              v-model="form.name_translations[item.code]"
-              :placeholder="$t(`请输入${item.name}费用名称`)"
-              style="width: 217px"
-            ></el-input>
-            <el-input
-              v-model="form.remark_translations[item.code]"
-              :placeholder="$t(`请输入${item.name}费用说明`)"
-              style="width: 300px; padding-left: 20px"
-            ></el-input>
-          </el-form-item>
-          <!-- <el-form-item label="English">
-            <el-input
-              v-model="langForm.en_US"
-              :placeholder="$t('请输入')"
-              style="width: 217px"
-            ></el-input>
-            <el-input
-              v-model="form.remark"
-              :placeholder="$t('请输入English费用说明')"
-              style="width: 300px"
-            ></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('繁体中文')">
-            <el-input
-              v-model="langForm.zh_TW"
-              :placeholder="$t('请输入')"
-              style="width: 217px"
-            ></el-input>
-            <el-input
-              v-model="form.remark"
-              :placeholder="$t('请输入繁体中文费用说明')"
-              style="width: 300px"
-            ></el-input>
-          </el-form-item> -->
-        </el-form>
-      </div>
-      <span slot="footer">
-        <el-button type="primary" @click="save">{{ $t('确 定') }}</el-button>
-      </span>
-    </vxe-modal>
-    <vxe-grid
-      ref="xGrid"
-      resizable
-      auto-resize
-      show-overflow
-      highlight-hover-row
-      :export-config="{}"
-      :tooltip-config="{ enterable: true }"
-      :data="servicesList"
-      v-bind="gridOptions"
-    >
-      <template #toolbar_buttons>
-        <div style="display: flex; gap: 10px">
-          <el-button size="small" type="primary" plain @click="addServices">{{
-            $t('新增')
-          }}</el-button>
-          <el-upload
-            class="upload-demo"
-            action=""
-            :http-request="uploadBaleImg"
-            :show-file-list="false"
-          >
-            <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
-          </el-upload>
-          <el-button size="small" @click="exportDataEvent" type="success" plain>{{
-            $t('导出')
-          }}</el-button>
-        </div>
-      </template>
-      <template #num1_header="{ column }">
-        <el-tooltip class="item" effect="dark" :content="column.params.tips" placement="top">
-          <div class="function">
-            <span>{{ column.title }}</span>
-            <span class="func-icon">
-              <i class="el-icon-edit-outline" @click="editRowEvent(column)"></i>
-              <i class="el-icon-delete" @click="deleteServices(column)"></i>
-            </span>
-            <!-- <vxe-button type="text" @click="editRowEvent(column)">{{ $t('编辑') }}</vxe-button> -->
-            <!-- <vxe-button type="text" @click="deleteServices(column)">{{ $t('删除') }}</vxe-button> -->
+              <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
+            </el-upload>
+            <el-button size="small" @click="exportDataEvent" type="success" plain>{{
+              $t('导出')
+            }}</el-button>
           </div>
-        </el-tooltip>
-      </template>
-    </vxe-grid>
+        </template>
+        <template #num1_header="{ column }">
+          <el-tooltip class="item" effect="dark" :content="column.params.tips" placement="top">
+            <div class="function">
+              <span style="overflow: hidden">{{ column.title }}</span>
+              <span class="func-icon">
+                <i class="el-icon-edit-outline" @click="editRowEvent(column)"></i>
+                <i class="el-icon-delete" @click="deleteServices(column)"></i>
+              </span>
+            </div>
+          </el-tooltip>
+        </template>
+      </vxe-grid>
+      <el-dialog
+        class="dialog-container"
+        :title="title"
+        :visible.sync="dialogVisible"
+        width="70%"
+        @close="handleClose"
+      >
+        <div>
+          <el-form ref="form" :model="form" label-width="120px">
+            <el-form-item :label="$t('增值费用名称')">
+              <el-input
+                v-model="form.name"
+                :placeholder="$t('请输入')"
+                style="width: 217px"
+              ></el-input>
+              <el-input
+                v-model="form.remark"
+                :placeholder="$t('请输入费用说明')"
+                style="width: 300px; padding-left: 20px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('类型')"
+              ><el-select v-model="form.type">
+                <el-option
+                  v-for="item in typeList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+              <el-button class="btn-light-red" @click="displayType" style="margin-left: 10px">{{
+                $t('类型说明')
+              }}</el-button>
+            </el-form-item>
+            <el-form-item :label="$t('收取方式')">
+              <el-select v-model="form.is_forced">
+                <el-option
+                  v-for="item in forcedList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('费用值')">
+              <vxe-table
+                border
+                resizable
+                show-overflow
+                align="center"
+                ref="xTable"
+                :data="detailsList"
+                :edit-config="{ trigger: 'click', mode: 'cell' }"
+              >
+                <vxe-table-column type="seq" title="分区" width="60"></vxe-table-column>
+                <vxe-table-column field="name" title="分区名称"></vxe-table-column>
+                <vxe-table-column field="areas" title="国家/地区"></vxe-table-column>
+                <vxe-table-column
+                  field="value"
+                  :title="$t('值点击修改')"
+                  :edit-render="{
+                    name: 'input',
+                    attrs: { type: 'text', placeholder: $t('请输入') }
+                  }"
+                ></vxe-table-column>
+              </vxe-table>
+            </el-form-item>
+          </el-form>
+          <h5>{{ $t('增值费用名称多语言') }}：</h5>
+          <el-form ref="langForm" :model="langForm" label-width="120px">
+            <el-form-item v-for="item in languageData" :key="item.code" :label="item.name">
+              <el-input
+                v-model="form.name_translations[item.code]"
+                :placeholder="$t(`请输入${item.name}费用名称`)"
+                style="width: 217px"
+              ></el-input>
+              <el-input
+                v-model="form.remark_translations[item.code]"
+                :placeholder="$t(`请输入${item.name}费用说明`)"
+                style="width: 300px; padding-left: 20px"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="save">{{ $t('确定') }}</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog :title="$t('类型说明')" :visible.sync="dialogInfo" width="70%" @close="onClose">
+        <div>
+          <h4>
+            {{ $t('运费比例') }} ：{{ $t('若设置值为') }}“10”，{{ $t('每票订单收取费用') }}={{
+              $t('运费')
+            }}*10%
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('整票固定费用') }}：{{ $t('若设置值为') }}“10”，{{ $t('每票订单收取费用') }}={{
+              localization.currency_unit
+            }}10
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('单箱固定费用（总箱数）') }}：{{ $t('若设置值为') }}“10”，{{
+              $t('每票订单收取费用')
+            }}={{ localization.currency_unit }}10*{{ $t('总箱数') }}
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('单位计费重量固定费用') }}：{{ $t('若设置值为') }}“10”，{{
+              $t('每票订单收取费用')
+            }}={{ localization.currency_unit }}10*{{ $t('计费重量') }}
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('单位实际重量固定费用') }}：{{ $t('若设置值为') }}“10”，{{
+              $t('每票订单收取费用')
+            }}={{ localization.currency_unit }}10*{{ $t('计费重量') }}
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('申报价值比例') }}：{{ $t('若设置值为') }}“10”，{{ $t('每票订单收取费用') }}={{
+              $t('申报价值')
+            }}*10%
+          </h4>
+        </div>
+        <div>
+          <h4>
+            {{ $t('单项固定费用（总箱数-1）') }}：{{ $t('若设置值为') }}“10”，{{
+              $t('每票订单收取费用')
+            }}={{ localization.currency_unit }}10*{{ $t('（总箱数-1）') }}
+          </h4>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -163,6 +196,7 @@ export default {
       detailsList: [],
       title: '',
       content: '',
+      dialogInfo: false,
       gridOptions: {
         columns: [
           {
@@ -218,7 +252,7 @@ export default {
         },
         {
           value: 3,
-          label: this.$t('单箱固定费用')
+          label: this.$t('单箱固定费用(总箱数)')
         },
         {
           value: 4,
@@ -231,6 +265,14 @@ export default {
         {
           value: 6,
           label: this.$t('申报价值比例')
+        },
+        {
+          value: 7,
+          label: this.$t('单箱固定费用(总箱数-1)')
+        },
+        {
+          value: 8,
+          label: this.$t('包裹固定费用(原始包裹数)')
         }
       ],
       forcedList: [
@@ -247,7 +289,7 @@ export default {
     }
   },
   created() {
-    this.getServicesList()
+    this.getList()
     this.getLanguageList()
   },
   methods: {
@@ -267,7 +309,7 @@ export default {
       })
     },
     // 获取增值服务列表
-    getServicesList() {
+    getList() {
       this.gridOptions.columns = [
         {
           type: 'seq',
@@ -288,7 +330,7 @@ export default {
           minWidth: 400
         }
       ]
-      this.$request.getServicesList(this.$route.params.id).then(res => {
+      this.$request.getServicesList(this.$route.params.id, { size: 200 }).then(res => {
         if (res.ret) {
           this.localization = res.localization
           this.servicesList = res.data.map(item => {
@@ -305,35 +347,34 @@ export default {
               item.service.forEach(ele => {
                 item[`service_${ele.id}`] = ele.value
                 if (ele.type === 1 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：运费比例 收取方式：强制收取')
+                  this.content = this.$t('类型运费比例收取方式强制收取')
                 } else if (ele.type === 2 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：整票固定费用 收取方式：强制收取')
+                  this.content = this.$t('类型整票固定费用收取方式强制收取')
                 } else if (ele.type === 3 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：单箱固定费用 收取方式：强制收取')
+                  this.content = this.$t('类型单箱固定费用收取方式强制收取')
                 } else if (ele.type === 4 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：单位计费重量固定费用 收取方式：强制收取')
+                  this.content = this.$t('类型单位计费重量固定费用收取方式强制收取')
                 } else if (ele.type === 5 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：单位实际重量固定费用 收取方式：强制收取')
+                  this.content = this.$t('类型单位实际重量固定费用 收取方式强制收取')
                 } else if (ele.type === 6 && ele.is_forced === 1) {
-                  this.content = this.$t('类型：申报价值比例 收取方式：强制收取')
+                  this.content = this.$t('类型申报价值比例 收取方式强制收取')
                 } else if (ele.type === 1 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：运费比例 收取方式：自愿勾选')
+                  this.content = this.$t('类型运费比例 收取方式自愿勾选')
                 } else if (ele.type === 2 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：整票固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型：整票固定费用 收取方式自愿勾选')
                 } else if (ele.type === 3 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单箱固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型单箱固定费用 收取方式自愿勾选')
                 } else if (ele.type === 4 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单位计费重量固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型单位计费重量固定费用收取方式自愿勾选')
                 } else if (ele.type === 5 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：单位实际重量固定费用 收取方式：自愿勾选')
+                  this.content = this.$t('类型单位实际重量固定费用收取方式自愿勾选')
                 } else if (ele.type === 6 && ele.is_forced === 0) {
-                  this.content = this.$t('类型：申报价值比例 收取方式：自愿勾选')
+                  this.content = this.$t('类型申报价值比例收取方式自愿勾选')
                 } else {
-                  this.content = this.$t(' ')
+                  this.content = ' '
                 }
                 this.gridOptions.columns.push({
                   field: `service_${ele.id}`,
-                  // title: ele.name + '(' + this.localization.currency_unit + ')',
                   title: ele.name,
                   params: {
                     tips: this.content
@@ -362,38 +403,40 @@ export default {
       this.detailsList = this.servicesList
       this.serviceId = +row.property.split('_')[1]
       // 获取编辑时表格数据
-      this.$request.getServicesDetails(this.$route.params.id, this.serviceId).then(res => {
-        if (res.ret) {
-          this.form.name = res.data.name
-          this.form.type = res.data.type
-          this.form.is_forced = res.data.is_forced
-          this.form.remark = res.data.remark
-          this.form.name_translations = res.data.name_translations
-          this.form.remark_translations = res.data.remark_translations
-          this.detailsList = res.data.prices.map(item => {
-            const name = item.region_name
-            const areas = item.areas
-              .map(item => item.country_name + item.area_name + item.sub_area_name)
-              .join('、')
-            return {
-              ...item,
-              name,
-              areas
-            }
-          })
-        }
-      })
+      this.$request
+        .getServicesDetails(this.$route.params.id, this.serviceId, { size: 200 })
+        .then(res => {
+          if (res.ret) {
+            this.form.name = res.data.name
+            this.form.type = res.data.type
+            this.form.is_forced = res.data.is_forced
+            this.form.remark = res.data.remark
+            this.form.name_translations = res.data.name_translations
+            this.form.remark_translations = res.data.remark_translations
+            this.detailsList = res.data.prices.map(item => {
+              const name = item.region_name
+              const areas = item.areas
+                .map(item => item.country_name + item.area_name + item.sub_area_name)
+                .join('、')
+              return {
+                ...item,
+                name,
+                areas
+              }
+            })
+          }
+        })
     },
     // 新增增值服务
     addServices() {
       this.title = this.$t('新增增值费用')
       this.dialogVisible = true
-      this.getServicesList()
+      this.getList()
       this.detailsList = this.servicesList
     },
     // 删除增值服务
     deleteServices(column) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -406,7 +449,7 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.getServicesList()
+            this.getList()
           } else {
             this.$message({
               message: res.msg,
@@ -444,7 +487,7 @@ export default {
             message: res.msg,
             type: 'success'
           })
-          this.getServicesList()
+          this.getList()
         } else {
           this.$notify({
             title: this.$t('操作失败'),
@@ -459,6 +502,10 @@ export default {
       params.append(`file`, file)
       return this.$request.importServices(this.$route.params.id, params)
     },
+    displayType() {
+      this.dialogInfo = true
+    },
+    onClose() {},
     // 保存
     save() {
       let updateRecords = this.$refs.xTable.data
@@ -484,7 +531,7 @@ export default {
             })
             this.dialogVisible = false
             this.detailsList = []
-            this.getServicesList()
+            this.getList()
             // this.$router.go(0)
           } else {
             this.$message({
@@ -502,7 +549,7 @@ export default {
               message: res.msg
             })
             this.dialogVisible = false
-            this.getServicesList()
+            this.getList()
           } else {
             this.$message({
               message: res.msg,
@@ -513,7 +560,7 @@ export default {
       }
     },
     // 关闭弹窗
-    closeDialog() {
+    handleClose() {
       this.detailsList.length = 0
       this.serviceId = 0
       this.form.type = ''

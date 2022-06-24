@@ -6,22 +6,15 @@
           :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
           style="font-size: 24px"
         ></i>
-        <el-select v-model="isSimple" style="margin-left: 25px">
+        <el-select v-model="languageCode" style="margin-left: 25px">
           <el-option
-            v-for="item in language"
+            v-for="item in languageList"
             :key="item.id"
             :label="item.label"
             :value="item.value"
           ></el-option>
         </el-select>
       </div>
-      <!-- <el-switch
-      v-model="isSimple"
-      :active-text="$t('简')"
-      :inactive-text="$t('繁')"
-      inactive-color="#13ce66" /> -->
-      <!-- <el-button class="upload-btn">{{$t('下载管理')}}</el-button> -->
-      <!-- <div>关于我们</div> -->
       <el-popover placement="top" width="800" trigger="click">
         <el-table :data="gridData">
           <el-table-column label="文件名">
@@ -50,15 +43,28 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button icon="el-icon-download" slot="reference" round @click="uploadManagenent"
+        <el-button
+          icon="el-icon-download download-icon"
+          slot="reference"
+          round
+          @click="uploadManagenent"
           >{{ $t('下载管理') }}
         </el-button>
       </el-popover>
+      <el-tooltip :content="$t('常见问题')" placement="top">
+        <span class="el-icon-question quest-icon" @click="getCommonProblem"></span>
+      </el-tooltip>
+      <el-badge :value="$store.state.unread > 0 ? $store.state.unread : ''" class="item">
+        <el-tooltip :content="$t('系统消息')" placement="top">
+          <span class="el-icon-message info-icon" @click="getSystemInfo"></span>
+        </el-tooltip>
+      </el-badge>
       <!-- <span class="user-box" @click="checkUser">{{ $store.state.userName }}</span> -->
       <el-popover class="user-box" placement="bottom" trigger="click" width="250">
         <p>{{ $t('公司') }}：{{ form.company_name }}</p>
         <p>{{ $t('系统有效期') }}：{{ form.expired_at }}</p>
         <p>{{ $t('所属员工组') }}：{{ form.group_name }}</p>
+        <p>{{ $t('uuid') }}：{{ form.uuid }}</p>
         <el-button slot="reference" @click="checkUser">{{ $store.state.userName }}</el-button>
       </el-popover>
       <span class="el-icon-switch-button logout-icon" @click="onLogout"></span>
@@ -76,18 +82,27 @@ export default {
   },
   data() {
     return {
-      language: [
-        { label: '简体', value: 1 },
-        { label: '繁体', value: 2 }
+      languageList: [
+        { label: '简体', value: 'zhCN' },
+        { label: '繁体', value: 'zhTW' }
+        // { label: 'English', value: 'en' }
       ],
+      language: '',
       gridData: [],
       aboutDialog: false,
       form: {
         company_name: '',
         expired_at: '',
         group_name: ''
-      }
+      },
+      unread: ''
     }
+  },
+  created() {
+    this.getCount()
+  },
+  activated() {
+    this.getCount()
   },
   methods: {
     checkUser() {
@@ -96,11 +111,12 @@ export default {
           this.form.company_name = res.data.company_name
           this.form.expired_at = res.data.expired_at
           this.form.group_name = res.data.group_name
+          this.form.uuid = res.data.uuid
         }
       })
     },
     onLogout() {
-      this.$confirm(this.$t('是否确认退出登录？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认退出登录'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -147,26 +163,34 @@ export default {
     },
     switchLeft() {
       this.$store.commit('switchCollapse', !this.$store.state.isCollapse)
+    },
+    getCommonProblem() {
+      this.$router.push({
+        name: 'commonProblem'
+      })
+    },
+    getSystemInfo() {
+      this.$router.push({
+        name: 'systemInfo'
+      })
+    },
+    getCount() {
+      this.$request.countMessage().then(res => {
+        this.unread = res.data.unread
+        this.$store.commit('changeUnread', res.data.unread)
+      })
     }
   },
   computed: {
     isCollapse() {
       return this.$store.state.isCollapse
     },
-    isSimple: {
+    languageCode: {
       get() {
-        if (this.$store.state.languageCode === 'simple') {
-          return 1
-        }
-        return 2
+        return this.$store.state.languageCode
       },
       set(val) {
-        console.log('valu', val)
-        if (val === 1) {
-          this.$store.commit('saveLanguageCode', 'simple')
-        } else {
-          this.$store.commit('saveLanguageCode', 'tradition')
-        }
+        this.$store.commit('saveLanguageCode', { locale: val, reload: true })
       }
     }
   }
@@ -207,15 +231,35 @@ export default {
       border: none;
     }
   }
+  .quest-icon {
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    margin-left: 20px;
+    vertical-align: middle;
+  }
+  .info-icon {
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    margin-left: 20px;
+    vertical-align: middle;
+  }
   .logout-icon {
     font-size: 20px;
     position: relative;
     top: 4px;
     cursor: pointer;
+    vertical-align: middle;
     &:hover {
       color: #3540a5;
       animation: move 0.3s ease-in 2;
     }
+  }
+  .download-icon {
+    vertical-align: middle;
   }
   .transfer-left {
     float: left;

@@ -18,6 +18,30 @@ exports.aboutUs = () => $form.get('about-us')
 exports.aboutMe = () => $form.get('me')
 // 下载管理 获取列表
 exports.exportsDownloads = () => $form.get('export-downloads')
+// 常见问题
+exports.problemList = params => {
+  return $form.get('problems', { params })
+}
+// 常见问题 详情
+exports.problemDetail = id => {
+  return $form.get(`problems/${id}`)
+}
+// 常见问题 分类列表
+exports.categoryList = () => {
+  return $form.get('problems/categories')
+}
+// 系统消息 列表
+exports.messageList = params => {
+  return $form.get('push-messages', { params })
+}
+// 系统消息 详情
+exports.messageDetail = id => {
+  return $form.get(`push-messages/${id}`)
+}
+// 系统消息 未读计数的
+exports.countMessage = () => {
+  return $form.get('push-messages/count')
+}
 // 配置 路线
 exports.getLines = params => {
   return $form.get('express-lines', { params })
@@ -34,6 +58,17 @@ exports.addPackageProps = params => {
 exports.updatePackageProps = (id, params) => {
   return $form.put(`package-props/${id}`, params)
 }
+
+// 配置 路线 渠道标签
+exports.channelLabel = id => {
+  return $form.get(`express-lines/${id}/basic-config`)
+}
+
+// 配置 路线 添加标签
+exports.addChannelLabel = params => {
+  return $form.post('express-lines/basic-config', params)
+}
+
 // 获取高级配置
 // exports.getSorting = (id) => {
 //   return $form.get(`orders/${id}/re-sorting`)
@@ -50,6 +85,7 @@ exports.resetRecommend = (id, status) => {
 exports.importLines = () => {
   return $form.get(`express-lines/excel-export-all`)
 }
+
 // 路线 获取拼团配置
 exports.getGroupLine = id => {
   return $form.get(`express-lines/${id}/group-config`)
@@ -82,7 +118,7 @@ exports.updateCosts = (id, params) => {
 exports.addLinesCost = params => {
   return $form.post('express-lines/costs', params)
 }
-// 配置 路线 复制 线路
+// 配置 路线 复制 线路ids
 exports.copyLine = (id, params) => {
   return $form.post(`express-lines/${id}/copy`, params)
 }
@@ -238,6 +274,26 @@ exports.regionsDelete = (id, regionId) => {
 exports.newRegions = (id, params) => {
   return $form.post(`express-lines/${id}/regions`, params)
 }
+// 配置 分区 线路分区详情
+exports.lineRegionsDetail = (id, regionId) => {
+  return $form.get(`express-lines/${id}/regions/${regionId}`)
+}
+// 配置 分区 新建线路分区
+exports.newLineRegions = (id, params) => {
+  return $json.post(`express-lines/${id}/regions`, params)
+}
+// 配置 分区 更新线路分区信息
+exports.updateRegions = (id, regionId, params) => {
+  return $json.put(`express-lines/${id}/regions/${regionId}`, params)
+}
+// 配置 分区 复制分区模板
+exports.copyPartitionTmp = (id, tmpId) => {
+  return $form.put(`express-lines/${id}/regions/copy/${tmpId}`)
+}
+// 配置 路线 保存
+exports.saveName = (id, params) => {
+  return $form.put(`express-lines/region-templates/${id}`, params)
+}
 // 新路线 基础信息 获取
 exports.configBasic = id => {
   return $form.get(`express-lines/${id}/basic-config`)
@@ -312,7 +368,7 @@ exports.regionTmpDetails = (tmpId, id) => {
 }
 // 模版 更新
 exports.updateRegionTmpDetails = (tmpId, id, params) => {
-  return $form.put(`express-lines/region-templates/${tmpId}/regions/${id}`, params)
+  return $json.put(`express-lines/region-templates/${tmpId}/regions/${id}`, params)
 }
 // 模版 删除
 exports.deleteRegionTmp = (tmpId, id) => {
@@ -320,7 +376,7 @@ exports.deleteRegionTmp = (tmpId, id) => {
 }
 // 模版 新建
 exports.newRegionTmp = (id, params) => {
-  return $form.post(`express-lines/region-templates/${id}/regions`, params)
+  return $json.post(`express-lines/region-templates/${id}/regions`, params)
 }
 // 分区 模版列表
 exports.lineRegion = params => {
@@ -334,11 +390,15 @@ exports.newTmp = params => {
 exports.deleteTmp = id => {
   return $form.delete(`express-lines/region-templates/${id}`)
 }
+// 配置 新路线 价格表 运费试算
+exports.priceTableCal = params => {
+  return $form.post(`express-lines/price-test`, params)
+}
 // 配置 新路线 获取价格表
 exports.getPriceTable = (id, params) => {
   return $form.get(`express-lines/${id}/prices`, params)
 }
-// 配置 新路线 获取价格表
+// 配置 新路线 保存价格表
 exports.editPrice = (id, params) => {
   return $form.put(`express-lines/${id}/prices`, params)
 }
@@ -352,11 +412,11 @@ exports.importPrice = (id, params) => {
 }
 // 配置 新路线 增值服务 获取列表
 exports.getServicesList = (id, params) => {
-  return $form.get(`express-lines/${id}/services`, params)
+  return $form.get(`express-lines/${id}/services`, { params })
 }
 // 配置 新路线 增值服务 获取详细
 exports.getServicesDetails = (id, serviceId, params) => {
-  return $form.get(`express-lines/${id}/services/${serviceId}`, params)
+  return $form.get(`express-lines/${id}/services/${serviceId}`, { params })
 }
 // 配置 新路线 增值服务 修改
 exports.updateServices = (id, serviceId, params) => {
@@ -465,6 +525,10 @@ exports.customerForbid = ids => {
 exports.noUsers = params => {
   return $form.get(`users/agent-search`, { params })
 }
+// 客户 个人详细信息
+exports.infoCount = id => {
+  return $form.get(`users/${id}/info-counts`)
+}
 // 客户 合并客户
 exports.mergeCustomer = (id, targetId) => {
   return $form.put(`users/merge/${id}/target/${targetId}`)
@@ -476,6 +540,14 @@ exports.assignCustomer = params => {
 // 客户 分配销售
 exports.assignSale = params => {
   return $form.put('users/assign-sale', params)
+}
+// 客户 客户模板导出
+exports.customerTmp = () => {
+  return $form.get(`users/user-template`)
+}
+// 客户 批量分配
+exports.batchAllocate = file => {
+  return $file.post('users/template-assign', file)
 }
 // 客户允许登录
 exports.customerLogin = ids => {
@@ -492,6 +564,22 @@ exports.voucherUser = (id, params) => {
 // 客户 券包 删除优惠券
 exports.deleteCoupons = (id, ids) => {
   return $form.put(`users/${id}/coupons/${ids}/disabled`)
+}
+// 客户 客户地址 导出清单
+exports.exportList = params => {
+  return $form.get('user-addresses/export', { params })
+}
+// 客户 客户包裹列表
+exports.packageList = id => {
+  return $form.get(`users/${id}/packages`)
+}
+// 客户 客户订单列表
+exports.orderList = id => {
+  return $form.get(`users/${id}/orders`)
+}
+// 客户 客户地址列表
+exports.addressList = id => {
+  return $form.get(`users/${id}/addresses`)
 }
 // 员工列表允许登录
 exports.allowUser = ids => {
@@ -519,6 +607,30 @@ exports.submitSuggest = (id, params) => {
 // 客服中心 获取评价管理列表
 exports.getComments = params => {
   return $form.get('order-comments', { params })
+}
+// 客服中心 获取评价管理列表详情
+exports.getCommentDetails = id => {
+  return $form.get(`order-comments/${id}`)
+}
+// 客服中心 回复评论
+exports.addReply = (id, params) => {
+  return $form.post(`order-comments/${id}/reply`, params)
+}
+// 客服中心 回复评论
+exports.addTime = (id, params) => {
+  return $form.put(`order-comments/${id}`, params)
+}
+// 客服中心 评价管理 新增评价
+exports.getAddEvaluate = params => {
+  return $form.post('order-comments', params)
+}
+// 客服中心 评价管理 删除
+exports.deleteComment = id => {
+  return $form.delete(`order-comments/${id}`)
+}
+// 客服中心 评价管理  获取功能配置
+exports.getFunConfig = () => {
+  return $form.get('function-config')
 }
 // 客服中心 取消或设置精选
 exports.updateRecommend = (id, status) => {
@@ -665,8 +777,8 @@ exports.uploadRecharge = params => {
   return $form.get('recharge-records/export', { params })
 }
 // 财务 充值记录 获取成长值财务列表
-exports.getGrowthFinance = () => {
-  return $form.get('growth-finances/payments')
+exports.getGrowthFinance = params => {
+  return $form.get('growth-finances/payments', { params })
 }
 // 财务 充值记录 获取成长值财务列表
 exports.getGrowthFinanceDetails = id => {
@@ -695,6 +807,14 @@ exports.uploadRecordsCommissions = (id, params) => {
 // 财务 自提点佣金结算 结算记录
 exports.commissionsRecords = (id, params) => {
   return $form.get(`station-commissions/${id}/records`, { params })
+}
+// 财务 预约结算
+exports.reserveSettle = params => {
+  return $form.put('agents/auto-settled-days', params)
+}
+// 财务 预约结算数据
+exports.getReserve = () => {
+  return $form.get('agents/auto-settled-days')
 }
 // 自提点佣金结算 结算明细
 exports.recordsDetails = (id, params) => {
@@ -776,6 +896,10 @@ exports.withdrawalMethod = () => {
 exports.clickSettlement = params => {
   return $form.put('agents/commissions/settled-all', params)
 }
+// 代理佣金结算 代理结算统计
+exports.settleStatistics = () => {
+  return $form.get('agents/deal-orders-total')
+}
 // 代理佣金计算 审核通过提现申请
 exports.approveWithdraw = (id, withdrawsId, params) => {
   return $form.put(`agents/${id}/withdraws/${withdrawsId}/approved`, params)
@@ -783,6 +907,10 @@ exports.approveWithdraw = (id, withdrawsId, params) => {
 // 代理佣金计算 审核拒绝提现申请
 exports.refusedWithdraw = (id, withdrawsId, params) => {
   return $form.put(`agents/${id}/withdraws/${withdrawsId}/refused`, params)
+}
+// 代理佣金结算 提现
+exports.withdrawThird = (id, applyId) => {
+  return $form.put(`agents/${id}/withdraws/${applyId}/withdraw-third`)
 }
 // 代理管理 审核拒绝
 exports.rechargeReject = (id, params) => {
@@ -792,6 +920,14 @@ exports.rechargeReject = (id, params) => {
 exports.withdrawData = params => {
   return $form.get('agents/withdraw-rule', { params })
 }
+// 代理管理 确定 更新代理二维码
+exports.updateAgentCode = () => {
+  return $form.put('agents/qrcode-regenerate')
+}
+// 代理管理 代理二维码 下载二维码
+exports.uploadAgentCode = (id, config) => {
+  return $form.get(`agents/${id}/mp-code`, config)
+}
 // 代理管理 确定 提现说明
 exports.updateWithdrawData = params => {
   return $form.put('agents/withdraw-rule', params)
@@ -800,13 +936,17 @@ exports.updateWithdrawData = params => {
 exports.agentTemplate = params => {
   return $form.get('agents/commission-templates', { params })
 }
+// 代理管理 代理删除
+exports.deleteAgent = id => {
+  return $form.delete(`agents/${id}`)
+}
 // 发票管理 全部
 exports.manageInvoice = params => {
   return $form.get('invoice', { params })
 }
 // 发票管理 详情
 exports.invoiceDetail = id => {
-  return $form.get(`invoice/${id}`)
+  return $json.get(`invoice/${id}`)
 }
 // 发票管理 搜索
 exports.searchMode = params => {
@@ -818,19 +958,19 @@ exports.invoiceCount = () => {
 }
 // 发票管理 开票完成
 exports.invoiceComplete = (id, params) => {
-  return $form.put(`invoice/complete/${id}`, params)
+  return $json.put(`invoice/complete/${id}`, params)
 }
 // 发票管理 开票作废
 exports.invoiceVoid = (id, params) => {
-  return $form.put(`invoice/to-void/${id}`, params)
+  return $json.put(`invoice/to-void/${id}`, params)
 }
 // 发票管理 重新开票
 exports.invoiceReopen = (id, params) => {
-  return $form.put(`invoice/reopen/${id}`, params)
+  return $json.put(`invoice/reopen/${id}`, params)
 }
 // 发票管理 开票作废
 exports.invoiceRecovery = (id, params) => {
-  return $form.put(`invoice/recovery/${id}`, params)
+  return $json.put(`invoice/recovery/${id}`, params)
 }
 // 计佣模版配置 获取form表单详情
 exports.commissionSet = id => {
@@ -1027,6 +1167,10 @@ exports.getLocationList = (id, areaId, params) => {
 // 获取路线 详情
 exports.getExpressLine = id => {
   return $form.get(`express-lines/${id}`)
+}
+// 货站 拣货日志 列表查询
+exports.getPackageLog = params => {
+  return $form.get('package-process-logs', { params })
 }
 // 路线 获取语言详情
 exports.lineLang = (id, params) => {
@@ -1250,6 +1394,10 @@ exports.importData = name => {
 exports.updateImport = params => {
   return $json.post('packages/import', params)
 }
+// 预报包裹列表 批量更新包裹属性
+exports.batchUpdate = params => {
+  return $form.put(`packages/batch-update`, params)
+}
 // 无人认领包裹
 exports.getNoOwner = params => {
   return $form.get('packages/no-owner', { params })
@@ -1394,8 +1542,8 @@ exports.updateProgramShare = params => {
   return $form.put('mini-program/share-page-info', params)
 }
 // 获取功能配置
-exports.getValidate = () => {
-  return $form.get(`mini-program/configs`)
+exports.getValidate = params => {
+  return $form.get(`mini-program/configs`, params)
 }
 // 更新 功能配置
 exports.updateValidate = params => {
@@ -1406,7 +1554,7 @@ exports.getTemplate = () => {
   return $form.get('mini-program/templates')
 }
 // 更新 消息模版
-exports.updateTemplate = params => {
+exports.updateTemplates = params => {
   return $form.put('mini-program/templates', params)
 }
 // 获取公众号消息模版
@@ -1463,6 +1611,13 @@ exports.warehouseEnabled = (id, status) => {
 exports.warehouseLocationIndex = params => {
   return $form.put('warehouse-address/sort', params)
 }
+//设置无人认领包裹专区
+exports.unclaimedArea = (id, params) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/set-nps-area`, params)
+}
+exports.offShelfStatus = (warehouseId, params) => {
+  return $form.put(`warehouse-address/${warehouseId}/goods-allocation-areas/config`, params)
+}
 // 仓位管理 锁定或开锁
 exports.updateLocks = (id, status) => {
   return $form.put(`warehouse-address/area-Unlock/${id}/status/${status}`)
@@ -1506,6 +1661,10 @@ exports.deleteWarehouseAddress = id => {
 // 配置 仓库地址配置 获取数据库全部国家
 exports.AutoCountry = params => {
   return $form.get('countries/search', { params })
+}
+// 配置 批量导入国家 获取模板类型列表
+exports.getTmpTypeList = () => {
+  return $form.get('countries/import-template-types')
 }
 // 仓库地址 获取单条仓库管理
 exports.locationArea = (id, params) => {
@@ -1666,6 +1825,26 @@ exports.getCustomSystem = () => {
 // 更多配置 购买短信服务 获取数据
 exports.serviceType = id => {
   return $form.get(`api-services/${id}/products`)
+}
+// 更多配置 发货快递公司 列表
+exports.deliveryCompanyList = id => {
+  return $form.get(`company-expresses/${id}/replacements`)
+}
+// 更多配置 发货快递公司 详情
+exports.deliveryCompanyDetail = id => {
+  return $form.get(`company-expresses/replacements/${id}`)
+}
+// 更多配置 发货快递公司 删除
+exports.deliveryCompanyDel = id => {
+  return $form.delete(`company-expresses/replacements/${id}`)
+}
+// 更多配置 发货快递公司 新建
+exports.deliveryCompanyNew = (id, params) => {
+  return $form.post(`company-expresses/${id}/replacements`, params)
+}
+// 更多配置 发货快递公司 更新
+exports.deliveryCompanyUpdate = (id, params) => {
+  return $form.put(`company-expresses/replacements/${id}`, params)
 }
 // 获取支付二维码
 exports.productsImg = (id, params) => {
@@ -1847,6 +2026,10 @@ exports.verifyKd100 = params => {
 exports.verifyTrackingMore = params => {
   return $form.post(`configs/verify-trackingmore`, params)
 }
+// 更多配置 服务配置 检测trackmore 配置
+exports.verifyTrackMore = params => {
+  return $form.post(`/api-services/tracking/verify/17-track`, params)
+}
 // 更多配置 服务配置 检测邮件发件信息配置
 exports.verifySmtp = params => {
   return $form.post(`configs/verify-smtp`, params)
@@ -1854,6 +2037,74 @@ exports.verifySmtp = params => {
 // 更多配置 服务配置 检测Juhe
 exports.verifyJuhe = params => {
   return $form.post(`configs/verify-juhe`, params)
+}
+// 配置 下载国际导入模板
+exports.getImportTemplate = params => {
+  return $form.get(`countries/import-template`, params)
+}
+// 配置 批量导入
+exports.batchImport = file => {
+  return $file.post('countries/import', file)
+}
+// 配置 更新国家背景颜色
+exports.updateColor = (id, params) => {
+  return $form.put(`countries/${id}/rgb-color`, params)
+}
+// 配置 设置功能状态
+exports.setFunctionStatus = (func, status) => {
+  return $form.put(`wechat-oa-config/${func}/status/${status}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 列表
+exports.customMenuList = () => {
+  return $form.get('wechat-oa-config/menus')
+}
+// 配置 更多配置 系统服务配置 公众号配置 详情
+exports.getMenuDetail = id => {
+  return $form.get(`wechat-oa-config/menus/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 新建
+exports.getNewMenu = params => {
+  return $form.post('wechat-oa-config/menus', params)
+}
+// 配置 更多配置 系统服务配置 公众号配置 更新
+exports.updateMenu = (id, params) => {
+  return $form.put(`wechat-oa-config/menus/${id}`, params)
+}
+// 配置 更多配置 系统服务配置 公众号配置 删除
+exports.deleteMenu = id => {
+  return $form.delete(`wechat-oa-config/menus/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 发布菜单
+exports.publishMenu = () => {
+  return $form.post('wechat-oa-config/menus/publish')
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 列表
+exports.replyMessageList = params => {
+  return $form.get('wechat-oa-config/messages', { params })
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 详情
+exports.replyMessageDetail = id => {
+  return $form.get(`wechat-oa-config/messages/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 新建
+exports.addReplyMessage = params => {
+  return $form.post('wechat-oa-config/messages', params)
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 更新
+exports.updateReplyMessage = (id, params) => {
+  return $form.put(`wechat-oa-config/messages/${id}`, params)
+}
+// 配置 更多配置 系统服务配置 公众号配置 回复消息 删除
+exports.deleteReplyMessage = id => {
+  return $form.delete(`wechat-oa-config/messages/${id}`)
+}
+// 配置 更多配置 系统服务配置 公众号配置 获取被关注回复或收到消息回复
+exports.getMsgReply = params => {
+  return $form.get('wechat-oa-config/messages/replies', { params })
+}
+// 配置 更多配置 系统服务配置 公众号配置 更新关注回复和收到消息回复
+exports.updateMsgReply = params => {
+  return $form.put('wechat-oa-config/messages/replies', params)
 }
 // 新增 邮件模版
 exports.addEmail = params => {
@@ -1898,6 +2149,10 @@ exports.getLanguageList = () => {
 // 语言包 删除
 exports.deleteLG = id => {
   return $form.delete(`languages/${id}`)
+}
+// 语言包 删除字符串
+exports.deleteLg = id => {
+  return $form.delete(`string-translations/${id}`)
 }
 // 语言包 设为默认
 exports.defaultLg = id => {
@@ -2152,6 +2407,50 @@ exports.orderCompare = params => {
 exports.packageCompare = params => {
   return $form.get('order-overviews/package/compare-data', { params })
 }
+// 订单 申报信息 列表查询
+exports.declareList = params => {
+  return $form.get('declare', { params })
+}
+// 订单 申报信息 获取详情
+exports.declareDetail = id => {
+  return $form.get(`declare/${id}`)
+}
+// 订单 申报信息 编辑
+exports.editDeclare = (id, params) => {
+  return $form.put(`declare/${id}`, params)
+}
+// 订单 申报信息 提交
+exports.submitDecalre = ids => {
+  return $form.put('declare/commit', ids)
+}
+// 订单 申报信息 获取编辑初始化信息
+exports.initDeclare = () => {
+  return $form.get('declare/init')
+}
+// 订单 异常件 异常说明
+exports.exceptDescription = id => {
+  return $form.get(`orders/${id}/exception`)
+}
+// 订单 申报信息 对接日志
+exports.dockingLog = id => {
+  return $form.get(`declare/${id}/third-logs`)
+}
+// 订单 申报信息 申报单填充
+exports.fillDeclare = (id, params) => {
+  return $form.put(`declare/${id}/update-party`, params)
+}
+// 订单 申报信息 申报多箱填充
+exports.fillDeclareBox = (id, params) => {
+  return $form.put(`declare/${id}/update-boxes-party`, params)
+}
+// 订单 申报信息 设置默认值
+exports.setDefaultValue = params => {
+  return $form.put(`declare-settings`, params)
+}
+//订单 申报信息 获取默认值详情
+exports.getDefaultValue = () => {
+  return $form.get('declare-settings')
+}
 // 财务 财务概览 柱状图
 exports.financeColumnar = params => {
   return $form.get('transaction-overviews/trade-count', { params })
@@ -2340,6 +2639,10 @@ exports.addSelf = params => {
 exports.deleteSelf = id => {
   return $form.delete(`self-pickup-stations/${id}`)
 }
+// 自提点 批量通知
+exports.batchNotify = ids => {
+  return $form.post('stations/notify', ids)
+}
 //自定义标签 列表查询
 exports.lineLabel = () => {
   return $form.get('express-line-labels')
@@ -2361,8 +2664,8 @@ exports.sortLabel = params => {
   return $form.put('express-line-labels/sort', params)
 }
 //自定义标签 翻译
-exports.getTranslate = id => {
-  return $form.put(`express-line-labels/${id}/translate-data`)
+exports.getTranslate = (id, params) => {
+  return $form.put(`express-line-labels/${id}/translate-data`, params)
 }
 //自定义标签 批量删除
 exports.deleteLabel = ids => {
@@ -2399,6 +2702,14 @@ exports.updatePickRules = (id, params) => {
 // 自提点 计佣方式列表 删除
 exports.deletePickRules = id => {
   return $form.delete(`self-pickup-stations/rules/${id}`)
+}
+// 营销管理 会员体系 等级配置 启用成长值、积分
+exports.updateGradeBtn = params => {
+  return $form.post(`member-config`, params)
+}
+// 营销管理 会员体系 等级配置 获取成长值、积分开关状态
+exports.getGradeBtn = () => {
+  return $form.get(`member-config/show`)
 }
 // 营销管理 会员体系 等级配置 列表
 exports.getGradeList = params => {
@@ -2656,6 +2967,10 @@ exports.rebateLang = params => {
 exports.updateRebateLang = params => {
   return $form.put(`ordering-coupon/translate-data`, params)
 }
+// 营销管理 用户福利 用户福利券各类型统计
+exports.typeStatistics = id => {
+  return $form.get(`new-user-coupons/type/${id}/total`)
+}
 // 抵用券管理 路线列表
 exports.getLineList = params => {
   return $form.get('coupons/express-line-list', { params })
@@ -2781,8 +3096,8 @@ exports.addCoupons = params => {
   return $form.post('coupons', params)
 }
 // 营销管理 渠道管理列表
-exports.getChannel = () => {
-  return $form.get('channels')
+exports.getChannel = params => {
+  return $form.get('channels', { params })
 }
 // 新增 渠道管理
 exports.addChannel = params => {
@@ -2804,6 +3119,11 @@ exports.deleteChannel = id => {
 exports.getChannelsData = (id, params) => {
   return $form.get(`channels/${id}/data`, { params })
 }
+// 营销管理  渠道管理 引流列表 下载二维码
+exports.getCodeImg = (id, config) => {
+  return $form.get(`channels/${id}/hd-wxa-code`, config)
+}
+
 // 获取结算方式
 exports.getSettlement = () => {
   return $form.get('channels/settlement-methods')
@@ -2943,8 +3263,8 @@ exports.tipStatus = () => {
 // 获取订单下的所有订单
 exports.getOrdersByShipment = (id, params) => $form.get(`shipments/${id}/orders`, { params })
 // 订单列表 获取增值服务
-exports.getAdded = () => {
-  return $form.get('orders/value-added-services')
+exports.getAdded = params => {
+  return $form.get('orders/value-added-services', { params })
 }
 // 订单列表 获取团购数据
 exports.orderSecond = id => {
@@ -2983,12 +3303,36 @@ exports.lineType = () => {
   return $form.get('orders/express-line-list')
 }
 // 订单列表 导出excel
-exports.uploadUserExcel = () => {
-  return $form.get('users/user-export')
+exports.uploadUserExcel = params => {
+  return $form.get('users/user-export', { params })
 }
 // 订单列表 获取订单统计数据
 exports.getCounts = params => {
   return $form.get('orders/order-counts', { params })
+}
+// 订单列表 打包处理 订单价格计算
+exports.calOrderPrice = (id, params) => {
+  return $form.post(`orders/${id}/price-counter`, params)
+}
+// 订单列表 打包处理 订单数据保存
+exports.saveOrderData = (id, params) => {
+  return $form.put(`orders/${id}/save`, params)
+}
+//订单列表 待支付 改为已付款
+exports.paid = (id, params) => {
+  return $form.put(`orders/${id}/paid`, params)
+}
+//订单列表 待支付 获取支付方式
+exports.payMethod = () => {
+  return $form.get('orders/pay-method')
+}
+// 订单列表 将异常订单恢复
+exports.restoreOrder = params => {
+  return $form.put('orders/exceptional/restore', params)
+}
+// 订单列表 订单设置成异常件
+exports.AbnormalPiece = params => {
+  return $form.put('orders/exceptional', params)
 }
 // 发货单 获取弹窗里可使用的物流状态
 exports.getOrderStatus = () => {
@@ -3021,6 +3365,38 @@ exports.updateMultiLogistics = params => {
 // 订单列表 获取一键打包数据
 exports.getOrderBatch = params => {
   return $form.get(`orders`, { params })
+}
+//订单 订单列表 货量统计
+exports.volumeStatistics = params => {
+  return $form.get(`orders/statistics`, { params })
+}
+// 订单 订单列表 导出清单 列表查询
+exports.listQuery = params => {
+  return $form.get(`export-templates`, { params })
+}
+// 订单 订单列表 导出清单 获取详情
+exports.listDetail = id => {
+  return $form.get(`export-templates/${id}`)
+}
+// 订单 订单列表 导出清单 获取编码列表
+exports.getCodeList = () => {
+  return $form.get('export-templates/codes')
+}
+// 订单 订单列表 导出清单 获取模板
+exports.getListTemplate = code => {
+  return $form.get(`export-templates/template/${code}`)
+}
+// 订单 订单列表 导出清单 新增
+exports.addTemplate = params => {
+  return $form.post('export-templates', params)
+}
+// 订单 订单列表 导出清单 删除
+exports.deleteTemplate = id => {
+  return $form.delete(`export-templates/${id}`)
+}
+// 订单 订单列表 导出清单 修改
+exports.editTemplate = (id, params) => {
+  return $form.put(`export-templates/${id}`, params)
 }
 // 一键更改支付方式
 exports.changePayMode = params => {
@@ -3130,6 +3506,10 @@ exports.getAloneSelf = id => {
 exports.packs = params => {
   return $form.get('package-packs/packages', { params })
 }
+// 货站 发货单 发货单详情
+exports.dispatchList = (id, params) => {
+  return $form.get(`shipments/${id}/order-export`, { params })
+}
 // 集包 新增收货地址
 exports.addAddress = params => {
   return $form.post(`package-packs/user-address`, params)
@@ -3151,8 +3531,8 @@ exports.usableLines = params => {
   return $form.post('package-packs/usable-express-lines', params)
 }
 // 发起集包 获取增值服务
-exports.servicesPackage = () => {
-  return $form.get('package-packs/value-added-services')
+exports.servicesPackage = params => {
+  return $form.get('package-packs/value-added-services', { params })
 }
 // 发起集包 获取付款方式
 exports.packsConfig = () => {
@@ -3183,8 +3563,8 @@ exports.shipmentCompanies = () => {
   return $form.get(`shipments/company-expresses`)
 }
 // 发货单 导出清单
-exports.uploadExcel = ids => {
-  return $form.post(`shipments/order-export-batch`, ids)
+exports.uploadExcel = (ids, params) => {
+  return $form.post(`shipments/order-export-batch`, ids, params)
 }
 // 订单列表 导出发票
 exports.uploadOrder = ids => {
@@ -3194,21 +3574,25 @@ exports.uploadOrder = ids => {
 exports.orderExport = params => {
   return $form.get('orders/export', { params })
 }
+// 订单列表 导出清单
+exports.ordersExport = params => {
+  return $form.get(`orders/export`, { params })
+}
 // 订单列表 详情 移除包裹清单
 exports.removePackage = (orderId, packageId) => {
   return $form.put(`orders/${orderId}/packages/${packageId}/remove`)
 }
 //预报包裹列表 批量上架 获取包裹货位导入模板
-exports.importPackage = () => {
+exports.getPackageTemplate = () => {
   return $form.get('packages/location-template')
 }
 //预报包裹列表 批量上架 上传模板获取解析后的数据
 exports.importPackageData = file => {
-  return $form.post('packages/location-import-data', file)
+  return $file.post('packages/location-import-data', file)
 }
 //预报包裹列表 批量上架 导入包裹货位数据
-exports.packageLocationData = params => {
-  return $json.post('packages/location-import', params)
+exports.savePackageData = params => {
+  return $form.post('packages/location-import', params)
 }
 // 发货单 详情批量导出发货单
 exports.uploadShipmentLabel = (id, ids) => {
@@ -3233,6 +3617,10 @@ exports.getAloneShip = id => {
 // 详情里的导出
 exports.uploadAloneExcel = id => {
   return $form.get(`shipments/${id}/order-export`)
+}
+// 发货单 发货单详情 导出清单
+exports.uploadShipExcel = (id, params) => {
+  return $form.get(`shipments/${id}/order-export`, { params })
 }
 // 运单 获取审核
 exports.getTransfer = id => {
@@ -3406,6 +3794,9 @@ exports.getMe = () => $form.get('me')
 // 获取视频上传临时 token
 exports.getVideoUploadToken = () => $form.get('videos/upload-token')
 
+// 获取获取临时密钥
+exports.getTempKeys = () => $form.get('upload/temp-keys')
+
 // 新建视频
 exports.addVideo = params => $json.post('videos', params)
 // 修改视频
@@ -3418,6 +3809,14 @@ export default exports
 // 自提点 转运包裹管理 获取自提点信息筛选
 exports.packagePick = () => {
   return $form.get('stations')
+}
+// 自提点 转运包裹管理 获取自提点信息筛选
+exports.getPackagePick = params => {
+  return $form.get('stations', { params })
+}
+// 自提点 转运订单
+exports.transformOrder = params => {
+  return $form.put('stations/transport', params)
 }
 // 自提点 自提点概览 获取佣金报表
 exports.commissionRecords = params => {
@@ -3546,4 +3945,554 @@ exports.onGeocoder = params => {
     params,
     baseURL: 'https://apis.map.qq.com'
   })
+}
+// 自定义显示列 获取模板code
+exports.getTemplateCode = () => {
+  return $form.get('list-templates/codes')
+}
+// 自定义显示列字段
+exports.getTemplateColumn = code => {
+  return $form.get(`list-templates/template/${code}`)
+}
+// 修改自定义显示列字段模板
+exports.updateTemplate = (code, params) => {
+  return $form.put(`list-templates/template/${code}`, params)
+}
+
+// 弹窗广告图管理 列表
+exports.advertiseList = params => {
+  return $form.get('ads-picture/alert-ads', { params })
+}
+
+// 弹窗广告图管理 选择数据
+exports.getDropData = () => {
+  return $form.get('ads-picture/alert-ads/selects')
+}
+
+// 弹窗广告图管理 新增
+exports.newAdvertise = params => {
+  return $form.post('ads-picture/alert-ads', params)
+}
+
+// 弹窗广告图管理 更新
+exports.updateAdvertise = (id, params) => {
+  return $form.put(`ads-picture/alert-ads/${id}`, params)
+}
+
+// 弹窗广告图管理 删除
+exports.deleteAdvertise = id => {
+  return $form.delete(`ads-picture/alert-ads/${id}`)
+}
+
+// 弹窗广告图管理 更新翻译数据
+exports.updateTranslateData = (id, params) => {
+  return $form.put(`ads-picture/alert-ads/${id}/translate-data`, params)
+}
+
+// 弹窗广告图管理 详情
+exports.advertiseDetail = id => {
+  return $form.get(`ads-picture/alert-ads/${id}`)
+}
+
+// 员工 导出员工数据
+exports.exportEmployData = params => {
+  return $form.post(`admins/work-count-export`, params)
+}
+
+// 客户  修改密码
+exports.editCustomPwd = (id, params) => {
+  return $form.put(`users/${id}/password`, params)
+}
+
+// 下载发货单模板
+exports.downLoadInvoiceTmp = () => {
+  return $form.get('shipments/import/template')
+}
+
+// 批量加入发货单
+exports.importInvoiceTmp = params => {
+  return $file.post('shipments/import', params)
+}
+
+// 货位参数配置
+exports.allocationConfig = (id, params) => {
+  return $form.put(`warehouse-address/${id}/goods-allocation-areas/config`, params)
+}
+
+// 预报包裹 批量预报 获取模板
+exports.getForecastTemplate = () => {
+  return $form.get('packages/forecast-template')
+}
+
+// 预报包裹 批量预报 解析数据
+exports.parseData = params => {
+  return $file.post('packages/forecast-parse', params)
+}
+
+// 预报包裹 批量预报
+exports.importForecast = params => {
+  return $json.post('packages/forecast-import', params)
+}
+
+// 导出产能
+exports.exportOrderData = params => {
+  return $form.post(`orders/work-count-export`, params)
+}
+
+// 获取
+exports.getCountryDetail = id => {
+  return $form.get(`countries/${id}`)
+}
+
+// 更新
+exports.updateCountryLang = (id, params) => {
+  return $form.put(`countries/${id}/translation`, params)
+}
+
+// 客服中心 问答管理 列表
+exports.qaList = params => {
+  return $form.get('qa', { params })
+}
+
+// 客服中心 问答管理 删除问题
+exports.deleteQuestion = id => {
+  return $form.delete(`qa/${id}`)
+}
+
+// 客服中心 问答管理 删除回答
+exports.deleteAnswer = id => {
+  return $form.delete(`qa/answers/${id}`)
+}
+
+// 客服中心 问答管理 设置推荐
+exports.setFeatured = (id, status) => {
+  return $form.put(`qa/${id}/featured/${status}`)
+}
+
+// 更新渠道规则备注
+exports.updateRuleRemark = (id, params) => {
+  return $form.put(`express-lines/${id}/rule-remark`, params)
+}
+
+// 获取渠道规则备注
+exports.getRuleRemark = id => {
+  return $form.get(`express-lines/${id}/rule-remark`)
+}
+
+// 财务 订单补款 列表
+exports.replenishmentList = params => {
+  return $form.get('order-additional-fees', { params })
+}
+
+// 财务 订单补款 获取支付类型
+exports.paymentData = () => {
+  return $form.get('order-additional-fees/payment-types')
+}
+
+// 财务 订单补款 创建
+exports.createReplenish = params => {
+  return $form.post('order-additional-fees', params)
+}
+
+// 财务 订单补款 详情
+exports.getReplenishDeatil = id => {
+  return $form.get(`order-additional-fees/${id}`)
+}
+
+// 财务 订单补款 更新
+exports.updateReplenish = (id, params) => {
+  return $form.put(`order-additional-fees/${id}`, params)
+}
+
+// 财务 订单补款 更新支付类型
+exports.updatePaymentType = ids => {
+  return $form.put('order-additional-fees/payment-types', ids)
+}
+
+// 财务 订单补款  审核通过
+exports.orderApproved = (id, params) => {
+  return $form.put(`order-additional-fees/${id}/accepted`, params)
+}
+
+// 财务 订单补款 审核拒绝
+exports.orderRefused = (id, params) => {
+  return $form.put(`order-additional-fees/${id}/refused`, params)
+}
+
+// 财务 订单补款 详情
+exports.replenishDetail = id => {
+  return $form.get(`order-additional-fees/${id}`)
+}
+
+// 财务 订单补款 作废
+exports.invalidOrder = id => {
+  return $form.put(`order-additional-fees/${id}/invalid`)
+}
+
+// 申报信息 获取自定义数据
+exports.customData = id => {
+  return $form.get(`declare/${id}/custom-configs`)
+}
+
+// 申报信息 更新自定义数据
+exports.updateCustomData = (id, params) => {
+  return $form.put(`declare/${id}/custom-configs`, params)
+}
+
+// 申报信息 更新自定义选择数据
+exports.updateSelectData = id => {
+  return $form.get(`declare/${id}/custom-configs/data`)
+}
+
+// 统计 订单补款
+exports.getReplenishCount = () => {
+  return $form.get(`order-additional-fees/counts`)
+}
+
+// 问答管理 回复
+exports.answerInfo = (id, params) => {
+  return $form.post(`qa/${id}/answers`, params)
+}
+
+// 问答积累积分 详情
+exports.getqaDetail = () => {
+  return $form.get('in-out-rule/point-qa-config/show')
+}
+
+// 问答积累积分 获取初始化信息
+exports.qaInitConfig = () => {
+  return $form.get('in-out-rule/point-qa-config/init')
+}
+
+// 问答积累积分 更新
+exports.updateQa = params => {
+  return $form.post('in-out-rule/point-qa-config', params)
+}
+
+// 问答积累积分 获取详情
+exports.getQaCumulativeDetail = id => {
+  return $form.get(`in-out-rule/point-qa/${id}`)
+}
+
+// 问答积累积分 新增
+exports.addQa = params => {
+  return $form.post('in-out-rule/point-qa', params)
+}
+
+// 问答积累积分 删除
+exports.deleteQa = id => {
+  return $form.delete(`in-out-rule/point-qa/${id}`)
+}
+
+// 问答积累积分 列表查询
+exports.QaListSearch = params => {
+  return $form.get('in-out-rule/point-qa', { params })
+}
+
+// 问答积累积分 修改
+exports.editQa = (id, params) => {
+  return $form.put(`in-out-rule/point-qa/${id}`, params)
+}
+
+// 采购 采购列表
+exports.purchaseList = params => {
+  return $form.get('purchase-orders', { params })
+}
+
+// 采购 获取详情
+exports.purchaseDetail = id => {
+  return $form.get(`purchase-orders/${id}`)
+}
+
+// 采购 新增
+exports.addPurchase = params => {
+  return $form.post('purchase-orders', params)
+}
+
+// 采购 修改
+exports.editPurchase = (id, params) => {
+  return $form.put(`purchase-orders/${id}`, params)
+}
+
+// 采购 更新商品列表
+exports.updateGoodsList = (id, params) => {
+  return $form.put(`purchase-orders/${id}/update-goods`, params)
+}
+
+// 采购 提交采购单
+exports.submitPurchase = id => {
+  return $form.put(`purchase-orders/${id}/approved`)
+}
+
+// 采购 发货
+exports.deliverGoods = (id, params) => {
+  return $form.put(`purchase-orders/${id}/delivery`, params)
+}
+// 采购 发货
+exports.addGoods = (id, params) => {
+  return $form.post(`purchase-orders/${id}/delivery`, params)
+}
+// 采购 删除
+exports.deletPurchase = id => {
+  return $form.delete(`purchase-orders/${id}`)
+}
+
+// 采购 作废
+exports.invalidPurchase = id => {
+  return $form.put(`purchase-orders/${id}/quit`)
+}
+
+// 采购 分货
+exports.dividePurchase = (id, params) => {
+  return $form.put(`purchase-orders/${id}/divide`, params)
+}
+
+// 采购 导出清单
+exports.exportPurchase = ids => {
+  return $form.post(`purchase-orders/export`, ids)
+}
+
+// 采购 统计
+exports.purchaseCount = params => {
+  return $form.get('purchase-orders/status-counts', { params })
+}
+
+// 采购 获取地址
+exports.getAddress = params => {
+  return $form.post('package-packs/user-first-address-by-id', params)
+}
+
+// 渠道优化 获取授权详情
+exports.authDetail = id => {
+  return $form.get(`express-lines/${id}/show-auth`)
+}
+
+// 用户授权
+exports.userAuth = (id, params) => {
+  return $form.put(`express-lines/${id}/update-auth`, params)
+}
+
+// 同行货授权
+exports.sameTradeAuth = (id, stgAuth) => {
+  return $form.put(`user-groups/${id}/set-stg-auth/${stgAuth}`)
+}
+
+// 批量认领
+exports.batchClaim = params => {
+  return $form.put(`packages/no-owner/owner`, params)
+}
+
+// 批量导入地址 下载模板
+exports.downloadAddressTmp = () => {
+  return $form.get('user-addresses/template')
+}
+
+// 上传模板
+exports.uploadAddressTmp = file => {
+  return $file.post('user-addresses/parse', file)
+}
+
+// 批量导入
+exports.batchImportAddress = params => {
+  return $json.post('user-addresses/import', params)
+}
+
+// 新增收货地址
+exports.addReceiveAddress = params => {
+  return $form.post('user-addresses', params)
+}
+
+// 订单财务审核 统计
+exports.financeCount = () => {
+  return $form.get('order-finances/counts')
+}
+
+// 批量更新自定义数据
+exports.batchUpdateCustom = params => {
+  return $form.put('declare/custom-configs', params)
+}
+
+// 轮播图 更新排序
+exports.updateSort = params => {
+  return $form.put('ads-picture/sort-index', params)
+}
+
+// 订单支付审核导出
+exports.orderPaymentExport = params => {
+  return $form.post('order-finances/payments/export', params)
+}
+
+// 订单退款审核导出
+exports.orderRefundExport = params => {
+  return $form.post('order-finances/refunds/export', params)
+}
+
+// 代理佣金结算 统计
+exports.withdrawCount = () => {
+  return $form.get('agents/withdraw-counts')
+}
+
+// 视频
+exports.packageVideo = id => {
+  return $form.get(`orders/${id}/videos`)
+}
+
+// 商品分类 批量删除
+exports.batchDeleteCategory = params => {
+  return $form.put('package-categories/batch-delete', params)
+}
+
+// 客户组 模板导出
+exports.exportGroupTmp = () => {
+  return $form.get('users/user-to-group-template')
+}
+
+// 客户组 模板
+exports.importGroupTmp = file => {
+  return $file.post('users/template-update-group', file)
+}
+
+// 客户组 批量修改客户组
+exports.batchEditGroup = params => {
+  return $form.put('users/batch-update-group', params)
+}
+
+// 抵用券管理 导出优惠券
+exports.exportCoupon = params => {
+  return $form.post('coupons/export', params)
+}
+
+// 退回待处理
+exports.rollBack = id => {
+  return $form.put(`orders/${id}/rollback`)
+}
+
+// 获取初始化信息
+exports.getInitInfo = () => {
+  return $form.get('in-out-rule/growth-value-invite-config/init')
+}
+
+// 获取详情
+exports.showGrowth = () => {
+  return $form.get('in-out-rule/growth-value-invite-config/show')
+}
+
+// 创建
+exports.createGrowth = params => {
+  return $form.post('in-out-rule/growth-value-invite-config', params)
+}
+
+// 更新
+exports.updateGrowth = params => {
+  return $form.put(`in-out-rule/growth-value-invite-config`, params)
+}
+
+// 自提点排序
+exports.sortPoint = params => {
+  return $form.put('self-pickup-stations/sort-index', params)
+}
+
+// 获取配置
+exports.configInfo = () => {
+  return $form.get('panel-config')
+}
+
+// 更新配置
+exports.updateConfigInfo = params => {
+  return $form.put('panel-config', params)
+}
+
+// 获取初始配置
+exports.initConfig = params => {
+  return $form.get('panel-init-config', { params })
+}
+
+// 采购 采购完成ids
+exports.purchaseFinish = ids => {
+  return $form.put('purchase-orders/finish', ids)
+}
+
+// 采购 批量导入
+exports.batchImportGood = file => {
+  return $file.post('purchase-orders/goods-excel-parse', file)
+}
+
+// 采购 分货方案  列表
+exports.transshipmentList = params => {
+  return $form.get('purchase-picking-orders', { params })
+}
+
+// 采购 分货方案 新增
+exports.addPickOrder = params => {
+  return $form.post('purchase-picking-orders', params)
+}
+
+// 采购 分货方案 审核
+exports.verifyPickOrder = id => {
+  return $form.put(`purchase-picking-orders/${id}/approved`)
+}
+
+// 采购 分货方案 打包
+exports.purchasePack = (id, params) => {
+  return $form.put(`purchase-picking-orders/order/${id}/pack`, params)
+}
+
+// 采购 分货方案 拣货
+exports.purchasePick = (id, params) => {
+  return $form.put(`purchase-picking-orders/${id}/picking`, params)
+}
+
+// 采购 分货方案  上传
+exports.uploadPickOrder = (id, file) => {
+  return $file.post(`purchase-picking-orders/${id}/order-excel-parse`, file)
+}
+
+// 采购 分货方案 详情
+exports.pickOrderDetail = id => {
+  return $form.get(`purchase-picking-orders/${id}`)
+}
+
+// 采购 商品模板
+exports.importGoodTmp = () => {
+  return $form.get('download-goods-template', { responseType: 'blob' })
+}
+
+// 采购 分货模板
+exports.importPickOrderTmp = () => {
+  return $form.get('purchase-picking-orders/download-order-template', { responseType: 'blob' })
+}
+
+// 采购 分货方案  数量统计
+exports.pickOrderCount = params => {
+  return $form.get('purchase-picking-orders/status-counts', { params })
+}
+
+// 采购 分货方案 拣货
+exports.purchasePickSearch = sn => {
+  return $form.get(`purchase-picking-orders/sn/${sn}`)
+}
+
+// 采购 确认收货
+exports.confirmReceive = id => {
+  return $form.put(`purchase-orders/${id}/in-storage`)
+}
+
+// 获取分货转运单商品列表
+exports.transportGoodList = orderId => {
+  return $form.get(`purchase-picking-orders/order/${orderId}/goods`)
+}
+
+// 通过自提点获取渠道列表
+exports.channelData = id => {
+  return $form.get(`self-pickup-stations/${id}/express-lines`)
+}
+
+// 采购 采购分货 删除
+exports.delPickOrder = id => {
+  return $form.delete(`purchase-picking-orders/${id}`)
+}
+
+//采购 下载面单
+exports.downloadNoodleSheet = params => {
+  return $form.post(`purchase-picking-orders/order/order-label-pdfs`, params)
 }

@@ -15,13 +15,14 @@
         margin-bottom: 20px;
         margin-top: 20px;
         line-height: 30px;
+        overflow: hidden;
       "
     >
       {{ $t('订单详情') }}({{ form.warehouse && form.warehouse.warehouse_name }}) <Br />
       <div v-if="form.group_leader_id > 0" class="group-text">=======拼团订单=======</div>
       <el-alert
         v-if="form.status === 19"
-        title="提示"
+        :title="$t('提示')"
         type="warning"
         description="订单已作废"
         show-icon
@@ -44,13 +45,9 @@
           v-if="1 === form.status"
           >{{ $t('打包') }}</el-button
         >
-        <el-button
-          @click="edit"
-          icon="el-icon-edit"
-          @click.native="editPacked()"
-          v-if="2 === form.status"
-          >{{ $t('编辑') }}</el-button
-        >
+        <el-button icon="el-icon-edit" @click="editPacked()" v-if="form.status === 2">{{
+          $t('编辑')
+        }}</el-button>
 
         <el-button @click="batchEditCompany" v-if="[3, 4].includes(form.status)">{{
           $t('更新二程单号')
@@ -80,7 +77,10 @@
             >
           </div>
           <div class="number-top">
-            {{ $t('转运单号') }}：<span>{{ form.order_sn }}</span
+            <span>{{ $t('会员等级') }}: --- {{ form.user_member_level }}</span>
+          </div>
+          <div class="number-top">
+            {{ $t('转运单号') }}：<span>{{ form.logistics_sn }}</span
             ><span>({{ form.logistics_company }})</span>
           </div>
         </div>
@@ -152,13 +152,18 @@
             </div>
           </el-col>
         </el-row>
-        <el-tabs v-model="activeName" class="tabs">
+        <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick">
           <el-tab-pane :label="$t('基本信息')" name="0">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span>{{ $t('收货人信息') }}</span>
                 <el-button
-                  v-if="this.form.status === 1 || this.form.status === 2"
+                  v-if="
+                    this.form.status === 1 ||
+                    this.form.status === 2 ||
+                    this.form.status === 3 ||
+                    this.form.status === 4
+                  "
                   class="change-sty msg-sty btn-deep-purple"
                   @click="changeReceive"
                   >{{ $t('更换收货人信息') }}</el-button
@@ -166,7 +171,12 @@
                 <el-button
                   class="btn-deep-blue change-sty msg-sty"
                   @click="goEdit"
-                  v-if="this.form.status === 1 || this.form.status === 2"
+                  v-if="
+                    this.form.status === 1 ||
+                    this.form.status === 2 ||
+                    this.form.status === 3 ||
+                    this.form.status === 4
+                  "
                   >{{ $t('编辑收货人') }}</el-button
                 >
               </div>
@@ -180,19 +190,32 @@
                   </tr>
 
                   <tr>
-                    <td>{{ $t('国家/地区') }}</td>
+                    <td>{{ $t('国家地区') }}</td>
                     <th>{{ form.address.code }} {{ form.address.country.cn_name }}</th>
-                    <td>{{ $t('省/市/区') }}</td>
-                    <th>
-                      {{ form.address.province }},{{ form.address.city }},{{
-                        form.address.district
-                      }}
+                    <td>{{ $t('省') }}</td>
+                    <th class="part">
+                      {{ form.address.province }}
+                    </th>
+                  </tr>
+
+                  <tr>
+                    <td>{{ $t('市') }}</td>
+                    <th class="part">
+                      {{ form.address.city }}
+                    </th>
+                    <td>{{ $t('区') }}</td>
+                    <th class="part">
+                      {{ form.address.district }}
                     </th>
                   </tr>
 
                   <tr>
                     <td>{{ $t('区域') }}</td>
-                    <th>{{ form.address.area.name }}</th>
+                    <th>
+                      {{ form.address && form.address.area && form.address.area.name }}&nbsp;{{
+                        form.address && form.address.sub_area && form.address.sub_area.name
+                      }}
+                    </th>
                     <td>{{ $t('邮编') }}</td>
                     <th>{{ form.address.postcode }}</th>
                   </tr>
@@ -206,7 +229,9 @@
 
                   <tr class="one-line">
                     <td>{{ $t('附加地址') }}</td>
-                    <th colspan="3">{{ form.address.address }}</th>
+                    <th>{{ form.address.address }}</th>
+                    <td>{{ $t('邮箱') }}</td>
+                    <th>{{ form.address.email }}</th>
                   </tr>
 
                   <tr class="one-line" v-if="form.address.wechat_id">
@@ -299,17 +324,11 @@
                 <!-- 支付状态 -->
                 <el-table-column :label="$t('支付状态')">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status >= 3 || scope.row.status < 11" class="packaged">{{
-                      $t('已支付')
-                    }}</span>
-                    <span v-if="scope.row.status === 11">{{ $t('待审核') }}</span>
-                    <router-link
+                    <div
                       v-if="scope.row.status === 12"
-                      class="choose-order"
-                      :to="`/order/review/?id=${scope.row.id}`"
-                    >
-                      {{ $t('审核拒绝') }}
-                    </router-link>
+                      @click="$router.push(`/order/review/?id=${scope.row.id}`)"
+                    ></div>
+                    <div v-else>{{ scope.row.status_name }}</div>
                   </template>
                 </el-table-column>
                 <!-- 转运快递单号 -->
@@ -320,7 +339,7 @@
                   prop="address.receiver_name"
                 ></el-table-column>
                 <el-table-column
-                  :label="$t('收货国家/地区')"
+                  :label="$t('收货国家地区')"
                   prop="address.country_name"
                   width="155"
                 ></el-table-column>
@@ -331,12 +350,12 @@
                 </el-table-column>
                 <el-table-column
                   :label="$t('实际重量') + localization.weight_unit"
-                  :prop="actual_weight"
+                  prop="actual_weight"
                 ></el-table-column>
                 <!-- 详见产品图 -->
                 <el-table-column
                   :label="$t('实际费用') + localization.currency_unit"
-                  :prop="actual_payment_fee"
+                  prop="actual_payment_fee"
                 ></el-table-column>
                 <el-table-column
                   :label="$t('申报价值') + localization.currency_unit"
@@ -592,7 +611,7 @@
               </el-table>
               <el-row class="size">
                 <el-col :span="10">
-                  <div class="bale">
+                  <div class="bale info">
                     <div class="bale-left">
                       <span>{{ $t('打包照片') }}</span>
                       <div class="left-img" v-for="item in form.pack_pictures" :key="item.id">
@@ -607,7 +626,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="bale">
+                  <div class="bale info">
                     <div class="bale-left">
                       <span>{{ $t('物品照片') }}</span>
                       <div
@@ -627,33 +646,47 @@
                     </div>
                   </div>
 
-                  <div>
+                  <div class="info">
                     {{ $t('转运公司') }}
                     {{ form.logistics_company }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('转运单号') }}
                     {{ form.logistics_sn }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('发货单单号') }}
                     {{ form.logistics_sn && form.shipment && form.shipment.sn }}
                   </div>
                 </el-col>
                 <el-col :span="10" :offset="1">
-                  <div>
+                  <div class="info">
                     {{ $t('存放货位') }}
                     {{ form.location }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('留仓物品') }}
                     {{ form.in_warehouse_item }}
                   </div>
-                  <div>
+                  <div class="info">
                     {{ $t('仓库备注') }}
                     {{ form.remark }}
                   </div>
                 </el-col>
+              </el-row>
+              <el-row class="size">
+                <div class="info">
+                  <span>{{ $t('打包视频') }}</span>
+                  <div style="display: flex; flex-wrap: wrap">
+                    <div
+                      style="margin: 10px 20px; width: 320px; height: 260px"
+                      v-for="item in videoUrl"
+                      :key="item.id"
+                    >
+                      <video :src="item.url" controls autoplay width="80%"></video>
+                    </div>
+                  </div>
+                </div>
               </el-row>
             </div>
           </el-tab-pane>
@@ -692,7 +725,7 @@
                   :label="$t('金额') + localization.currency_unit"
                 >
                   <template slot-scope="scope">
-                    {{ scope.row.amout }}
+                    {{ scope.row.amount }}
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('描述')" prop="remark"> </el-table-column>
@@ -726,13 +759,13 @@
           <el-tab-pane :label="$t('签收日志')" name="3">
             <div class="bale package-details">
               <div class="bale-left packed-details">
-                <span>{{ $t('签收时间:') }}</span>
+                <span>{{ $t('签收时间') }}</span>
                 <span>
                   {{ form.signed_at }}
                 </span>
               </div>
               <div class="bale-left packed-details">
-                <span>{{ $t('签收照片:') }}</span>
+                <span>{{ $t('签收照片') }}</span>
                 <div class="left-img" v-for="item in form.sign_images" :key="item.id">
                   <span
                     style="cursor: pointer"
@@ -743,9 +776,39 @@
                 </div>
               </div>
               <div style="margin-top: 20px; font-size: 14px">
-                {{ $t('评价:') }}
+                {{ $t('评价') }}
                 <span>{{ form.comment && form.comment.content }}</span>
               </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane :label="$t('预申报信息')" name="4">
+            <div class="declare-info">
+              <el-form label-width="100px">
+                <el-form-item :label="$t('税号')">
+                  <span>{{ declare.tax_number }}</span>
+                </el-form-item>
+                <el-form-item :label="$t('海关编码')">
+                  <span>{{ declare.hs_code }}</span>
+                </el-form-item>
+                <el-form-item :label="$t('申报类型')">
+                  <span>{{ declare.type_name }}</span>
+                </el-form-item>
+                <el-form-item :label="$t('付费方式')">
+                  <span>{{ declare.payment_mode }}</span>
+                </el-form-item>
+              </el-form>
+              <el-table :data="declare.items" border stripe class="data-list">
+                <el-table-column type="index"></el-table-column>
+                <el-table-column :label="$t('中文品名')" prop="cn_name"></el-table-column>
+                <el-table-column :label="$t('英文品名')" prop="en_name"></el-table-column>
+                <el-table-column :label="$t('sku')" prop="sku"></el-table-column>
+                <el-table-column :label="$t('海关编码')" prop="hs_code"></el-table-column>
+                <el-table-column :label="$t('数量')" prop="quantity"></el-table-column>
+                <el-table-column :label="$t('单位')" prop="unit_name"> </el-table-column>
+                <el-table-column :label="$t('单价')" prop="unit_value"></el-table-column>
+                <el-table-column :label="$t('总价值')" prop="value"></el-table-column>
+                <el-table-column :label="$t('币种')" prop="currency_name"></el-table-column>
+              </el-table>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -790,7 +853,7 @@
           </template>
         </el-table-column>
         <!-- 国家 -->
-        <el-table-column prop="country.cn_name" :label="$t('国家')"> </el-table-column>
+        <el-table-column prop="country.name" :label="$t('国家')"> </el-table-column>
         <!-- 收件人 -->
         <el-table-column prop="receiver_name" :label="$t('收件人')"> </el-table-column>
         <!-- 收件电话 -->
@@ -855,7 +918,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('手机/联系电话')" class="label-sty">
+            <el-form-item :label="$t('手机联系电话')" class="label-sty">
               <el-input
                 class="second-sty"
                 v-model="address.timezone"
@@ -871,7 +934,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="$t('国家/地区')" class="label-sty">
+            <el-form-item :label="$t('国家地区')" class="label-sty">
               <el-cascader
                 v-model="countryList"
                 :options="options"
@@ -890,7 +953,19 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="$t('街道/门牌号')" class="label-sty">
+            <el-form-item :label="$t('省')">
+              <el-input class="input-sty" v-model="address.province"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('区')">
+              <el-input class="input-sty" v-model="address.district"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('街道门牌号')" class="label-sty">
               <el-input
                 class="second-sty"
                 v-model="address.street"
@@ -918,6 +993,18 @@
           <el-col :span="12">
             <el-form-item :label="$t('微信号')" class="label-sty">
               <el-input class="input-sty" v-model="address.wechat_id"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="$t('清关编码')" class="label-sty">
+              <el-input class="input-sty" v-model="address.clearance_code"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('邮箱')" class="label-sty">
+              <el-input class="input-sty" v-model="address.email"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -996,7 +1083,10 @@ export default {
       dialogInfo: false,
       groupDataList: [],
       options: [],
-      countryList: []
+      countryList: [],
+      declare: {},
+      videoUrl: [],
+      picking_divide_order_id: ''
     }
   },
   created() {
@@ -1014,11 +1104,23 @@ export default {
         }
       })
     },
+    handleClick() {
+      if (this.activeName === '1') {
+        this.getVideo()
+      }
+    },
+    getVideo() {
+      this.$request.packageVideo(this.$route.params.id).then(res => {
+        if (res.data.length) {
+          this.videoUrl = res.data
+        }
+      })
+    },
     // 国家列表
     getCountrys() {
       this.$request.getCountry().then(res => {
         if (res.ret) {
-          ;(this.options = res.data.map(item => {
+          this.options = res.data.map(item => {
             return {
               value: item.id,
               label: item.name,
@@ -1039,10 +1141,16 @@ export default {
                   })
                 : []
             }
-          })),
-            (this.countryList = [+this.address.country_id])
-          if (this.address.area_id) this.countryList.push(this.address.sub_area_id)
-          if (this.address.sub_area_id) this.countryList.push(this.address.sub_area_id)
+          })
+          if (this.address.country_id) {
+            this.countryList.push(+this.address.country_id)
+          }
+          if (this.address.area_id) {
+            this.countryList.push(+this.address.area_id)
+          }
+          if (this.address.sub_area_id) {
+            this.countryList.push(+this.address.sub_area_id)
+          }
         }
       })
     },
@@ -1068,12 +1176,20 @@ export default {
         this.PackageData = res.data.packages
         this.services = res.data.services
         this.localization = res.localization
+        if (res.data.picking_divide_order_id !== '') {
+          this.picking_divide_order_id = res.data.picking_divide_order_id
+          console.log(this.picking_divide_order_id)
+          this.getPurchaseDetail()
+        }
+        if (res.data.pre_declare) {
+          this.declare = res.data.pre_declare
+        }
         let groupStatusName = ['进行中', '已结束', '已取消']
         this.form.group_status_name = groupStatusName[this.form.group_status]
         this.paymentData = [
           {
             name: this.$t('运费'),
-            amout: res.data.payment.freight_amount,
+            amount: res.data.payment.freight_amount,
             remark:
               '首费:' +
               res.data.payment.freights.first_freight_fee +
@@ -1084,41 +1200,49 @@ export default {
           },
           {
             name: this.$t('增值服务费'),
-            amout: res.data.payment.value_added_amount,
-            remark: ''
+            amount: +res.data.payment.value_added_amount,
+            remark: res.data.services.map(item => `${item.name}: ${item.price}`).join('，')
           },
           {
             name: this.$t('渠道服务费'),
-            amout: res.data.payment.line_service_fee,
-            remark: ''
+            amount: +res.data.payment.line_service_fee,
+            remark: res.data.payment.line_services
+              .map(item => `${item.name}: ${item.price}`)
+              .join('，')
           },
           {
             name: this.$t('渠道规则费'),
-            amout: res.data.payment.line_rule_fee,
-            remark: ''
+            amount: +res.data.payment.line_rule_fee,
+            remark: res.data.payment.line_rules
+              .map(item => `${item.name}: ${item.price}`)
+              .join('，')
           },
           {
             name: this.$t('保险费用'),
-            amout: res.data.payment.insurance_fee,
+            amount: +res.data.payment.insurance_fee,
+            remark: ''
+          },
+          {
+            name: this.$t('关税费用'),
+            amount: +res.data.payment.tariff_fee,
             remark: ''
           },
           {
             name: this.$t('抵用券减免'),
-            amout: res.data.payment.coupon_amount * -1,
+            amount: +res.data.payment.coupon_amount,
             remark: ''
           },
           {
             name: this.$t('积分抵扣'),
-            amout: res.data.payment.point_amount * -1,
+            amount: +res.data.payment.point_amount,
+            remark: ''
+          },
+          {
+            name: this.$t('包裹增值服务'),
+            amount: +res.data.payment.package_service_fee,
             remark: ''
           }
         ]
-        if (this.services.length > 0) {
-          for (let index = 0; index < this.services.length; index++) {
-            this.paymentData[1].remark +=
-              this.services[index].name + ':' + this.services[index].price + ';'
-          }
-        }
         this.TrackingData = [
           {
             context: '签收时间',
@@ -1186,8 +1310,12 @@ export default {
             this.form.active = 0
             break
         }
-        if (res.data.payment && res.data.payment.value_added_service) {
+        if (
+          res.data.payment &&
+          (res.data.payment.value_added_service || res.data.payment.line_services)
+        ) {
           this.addedData = res.data.payment.value_added_service
+          this.addedData.push(...res.data.payment.line_services)
         }
         if (this.form.is_parent === 1) this.loadGroupData(this.form.id)
       })
@@ -1202,7 +1330,7 @@ export default {
     },
     // 导出发票
     downloadInvoice() {
-      this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认导出'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -1266,8 +1394,8 @@ export default {
       dialog(
         {
           type: 'addCompany',
-          id: this.$route.params.id,
-          state: 'edit'
+          orderId: this.$route.params.id,
+          state: 'multiBox'
         },
         () => {
           this.getList()
@@ -1331,11 +1459,17 @@ export default {
     clear() {
       this.chooseId = ''
       this.user = {}
+      this.countryList = []
     },
     // 更换收件人信息
     changeReceive() {
       this.getAddress()
       this.boxDialog = true
+    },
+    getPurchaseDetail() {
+      this.$request.transportGoodList(this.$route.params.id).then(res => {
+        console.log(res)
+      })
     },
     // 编辑
     goEdit() {
@@ -1355,11 +1489,14 @@ export default {
           city: this.address.city,
           postcode: this.address.postcode,
           address: this.address.address,
-          clearance_code: this.clearance_code,
+          clearance_code: this.address.clearance_code,
           wechat_id: this.address.wechat_id,
           country_id: this.countryList[0],
           area_id: this.countryList[1] || '',
-          sub_area_id: this.countryList[2] || ''
+          sub_area_id: this.countryList[2] || '',
+          province: this.address.province,
+          district: this.address.district,
+          email: this.address.email
         })
         .then(res => {
           if (res.ret) {
@@ -1409,13 +1546,21 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .bill-details-container {
   .container-center {
     margin-bottom: 20px;
   }
   .tools {
     float: right;
+  }
+  .choose {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+  }
+  .info {
+    margin-top: 20px;
   }
   .group-status-text,
   .weight-text {
@@ -1455,6 +1600,9 @@ export default {
         text-align: right;
         width: 15%;
         padding-right: 15px;
+      }
+      .part {
+        width: 10% !important;
       }
       th {
         height: 35px;
@@ -1715,6 +1863,13 @@ export default {
   }
   .input-sty {
     width: 60%;
+  }
+  .declare-info {
+    background: #fff;
+    padding: 10px;
+    .el-form-item {
+      margin-bottom: 0;
+    }
   }
 }
 </style>

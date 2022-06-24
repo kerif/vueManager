@@ -146,7 +146,7 @@
         >
           <i class="el-icon-plus"> </i>
         </el-upload>
-        <p class="px-sty" v-if="ruleForm.type === 1">{{ $t('建议尺寸：355px * 160px') }}</p>
+        <p class="px-sty" v-if="ruleForm.type === 1">{{ $t('建议尺寸：710px * 400px') }}</p>
         <p class="px-sty" v-if="ruleForm.type === 2">{{ $t('建议尺寸：690px * 168px') }}</p>
       </el-col>
     </el-row>

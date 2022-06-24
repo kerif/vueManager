@@ -6,58 +6,7 @@
       <!-- 审核拒绝 -->
       <el-tab-pane :label="$t('审核拒绝')" name="2"></el-tab-pane>
     </el-tabs>
-    <!-- <search-group placeholder="请输入关键字" v-model="page_params.keyword" @search="goSearch">
-      <div class="changeTime"> -->
-    <!-- 提交时间 -->
-    <!-- <el-date-picker
-        class="timeStyle"
-        v-model="timeList"
-        type="daterange"
-        @change="onTime"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="提交开始日期"
-        end-placeholder="提交结束日期">
-      </el-date-picker> -->
-    <!-- 称重时间 -->
-    <!-- <el-date-picker
-        v-if="activeName === '2'"
-        class="timeStyle"
-        v-model="storageList"
-        type="daterange"
-        @change="onStorage"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-        range-separator="至"
-        start-placeholder="称重开始日期"
-        end-placeholder="称重结束日期">
-      </el-date-picker>
-    </div>
-      <div class="chooseStatus">
-        <el-select v-model="agent_name" @change="onAgentChange" clearable
-        placeholder="请选择仓库">
-          <el-option
-            v-for="item in agentData"
-            :key="item.id"
-            :value="item.id"
-            :label="item.warehouse_name">
-          </el-option>
-        </el-select>
-      </div>
-    </search-group> -->
-    <!-- <div class="agentRight" v-if="activeName === '1' || activeName === '2'"> -->
-    <!-- <el-select v-model="agent_name" @change="getList" clearable>
-      <el-option
-      v-for="item in agentData"
-      :key="item.id"
-      :value="item.user_id"
-      :label="item.agent_name">
-      </el-option>
-    </el-select> -->
-    <!-- </div> -->
     <el-table
-      v-if="oderData.length"
       class="data-list"
       border
       stripe
@@ -88,8 +37,12 @@
           {{ scope.row.info.phone }}
         </template>
       </el-table-column>
+      <el-table-column :label="$t('微信号')">
+        <template slot-scope="scope">
+          {{ scope.row.info.wechat_id }}
+        </template>
+      </el-table-column>
       <!-- 状态 -->
-      <!-- <el-table-column :label="$t('状态')" prop="status"></el-table-column> -->
       <!-- 申请时间 -->
       <el-table-column :label="$t('申请时间')" prop="created_at"></el-table-column>
       <!-- 审核时间 -->
@@ -135,7 +88,6 @@
         </div>
       </template> -->
     </el-table>
-    <div class="noDate" v-else>{{ $t('暂无数据') }}</div>
     <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
   </div>
 </template>
@@ -222,7 +174,7 @@ export default {
     },
     // 审核拒绝
     rejectProxy(id) {
-      this.$confirm(this.$t('您真的要审核拒绝吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要审核拒绝吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -246,7 +198,7 @@ export default {
     },
     // 删除
     deleteProxy(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -275,7 +227,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(this.$t('您真的要删除这个包裹吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除这个包裹吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

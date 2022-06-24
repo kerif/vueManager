@@ -55,7 +55,12 @@
             <el-button class="btn-dark-green" @click="editString(scope.row.id)">{{
               $t('编辑')
             }}</el-button>
-            <!-- <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{$t('删除')}}</el-button> -->
+            <el-button class="btn-light-red" @click="deleteString(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
+            <!-- <el-button class="btn-light-red" @click="deleteTransfer(scope.row.id)">{{
+              $t('删除')
+            }}</el-button> -->
             <!-- 设为默认 -->
             <!-- <el-button v-if="scope.row.is_default === 0" class="btn-deep-purple" @click="setDefault(scope.row.id)">{{$t('设为默认')}}</el-button> -->
           </template>
@@ -124,7 +129,7 @@ export default {
     },
     // 设为默认
     setDefault(id) {
-      this.$confirm(this.$t('您真的要设为默认吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要设为默认吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -180,9 +185,34 @@ export default {
         this.getList()
       })
     },
+    // 删除字符串
+    deleteString(id) {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteLg(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      })
+    },
     // 删除语言
     deleteTransfer(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

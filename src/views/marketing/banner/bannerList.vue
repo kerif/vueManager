@@ -1,22 +1,28 @@
 <template>
   <div class="banner-container">
+    <div style="display: flex; justify-content: flex-end">
+      <div>
+        <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
+      </div>
+      <div class="select-box">
+        <add-btn @click.native="addBanner">{{ $t('添加广告图') }}</add-btn>
+      </div>
+    </div>
     <div>
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
-    </div>
-    <div class="select-box">
-      <add-btn @click.native="addBanner">{{ $t('添加广告图') }}</add-btn>
-    </div>
-    <div style="height: calc(100vh - 270px)">
       <el-table
         :data="vipGroupList"
         stripe
-        height="calc(100vh - 270px)"
         ref="table"
         border
-        class="data-list"
+        class="data-list positions-type"
         v-loading="tableLoading"
         @selection-change="selectionChange"
       >
+        <el-table-column width="100px" align="center">
+          <template>
+            <i class="el-icon-sort icon-fonts"></i>
+          </template>
+        </el-table-column>
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <!-- 名称 -->
         <el-table-column :label="$t('名称')" prop="picture_name"></el-table-column>
@@ -91,6 +97,12 @@
       :pageParams="page_params"
       :notNeedInitQuery="false"
     ></nle-pagination>
+    <div class="sort-sty">
+      *{{ $t('拖拽行可以进行排序') }}
+      <el-button class="btn-deep-purple save-sort" @click="typeRowUpdate">{{
+        $t('保存排序结果')
+      }}</el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -99,6 +111,7 @@ import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import dialog from '@/components/dialog'
 import { pagination } from '@/mixin'
+import Sortable from 'sortablejs'
 export default {
   name: 'bannerList',
   components: {
@@ -110,6 +123,7 @@ export default {
   data() {
     return {
       vipGroupList: [],
+      typeSendData: [],
       tableLoading: false,
       deleteNum: [],
       languageData: [],
@@ -133,10 +147,12 @@ export default {
           this.tableLoading = false
           if (res.ret) {
             this.vipGroupList = res.data
+            this.typeSendData = [...res.data]
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
             this.$nextTick(() => {
-              this.$refs.table.doLayout()
+              this.typeRowDrop()
+              // this.$refs.table.doLayout()
             })
           } else {
             this.$notify({
@@ -177,13 +193,45 @@ export default {
         }
       })
     },
+    //行拖拽
+    typeRowDrop() {
+      const tbody = document.querySelector('.positions-type tbody')
+      console.log(tbody, 'tbody')
+      Sortable.create(tbody, {
+        onEnd: ({ newIndex, oldIndex }) => {
+          if (oldIndex === newIndex) return false
+          console.log(oldIndex, newIndex)
+          const oldItem = this.typeSendData.splice(oldIndex, 1)[0]
+          this.typeSendData.splice(newIndex, 0, oldItem)
+        }
+      })
+    },
+    typeRowUpdate() {
+      let params = this.typeSendData.map(({ id, context }, index) => ({ id, index, context }))
+      this.vipGroupList = []
+      this.$request.updateSort(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
     // 删除单条转账支付
     deleteBanner(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -226,6 +274,7 @@ export default {
 .banner-container {
   .select-box {
     overflow: hidden;
+    margin-left: 20px;
   }
   .country-box {
     overflow: hidden;
@@ -243,7 +292,6 @@ export default {
   }
   .search-group .pull-right {
     margin-bottom: 5px;
-    width: 25% !important;
   }
 }
 </style>

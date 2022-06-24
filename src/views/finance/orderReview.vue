@@ -2,9 +2,15 @@
   <div class="order-review-container">
     <el-tabs v-model="activeName" class="tabLength">
       <!-- 支付审核 -->
-      <el-tab-pane :label="$t('支付审核')" name="0"></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('支付审核')}(${countList.payment ? countList.payment : 0})`"
+        name="0"
+      ></el-tab-pane>
       <!-- 退款审核 -->
-      <el-tab-pane :label="$t('退款审核')" name="1"></el-tab-pane>
+      <el-tab-pane
+        :label="`${$t('退款审核')}(${countList.refund ? countList.refund : 0})`"
+        name="1"
+      ></el-tab-pane>
     </el-tabs>
     <div class="order-list-search" v-show="hasFilterCondition">
       <div class="changeTime">
@@ -47,16 +53,19 @@
       </div>
     </div>
     <div class="searchGroup">
-      <search-group
-        :placeholder="$t('请输入关键字')"
-        v-model="page_params.keyword"
-        @search="goMatch"
-      >
-      </search-group>
-      <div class="filter">
-        <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
-          >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
-        ></el-button>
+      <el-button class="btn-main" @click="verifyExport">{{ $t('导出清单') }}</el-button>
+      <div class="searcg-l">
+        <search-group
+          :placeholder="$t('请输入关键字')"
+          v-model="page_params.keyword"
+          @search="goMatch"
+        >
+        </search-group>
+        <div class="filter">
+          <el-button @click="hasFilterCondition = !hasFilterCondition" type="text"
+            >{{ $t('高级搜索') }}<i class="el-icon-arrow-down"></i
+          ></el-button>
+        </div>
       </div>
     </div>
     <div style="height: calc(100vh - 270px)">
@@ -231,6 +240,7 @@ export default {
       payment_type: '',
       status: '',
       hasFilterCondition: false,
+      countList: {},
       statusData: [
         {
           id: 0,
@@ -265,6 +275,15 @@ export default {
           }
         })
     },
+    getFinanceCount() {
+      this.$request.financeCount().then(res => {
+        console.log(res)
+        this.countList = res.data
+        let data = JSON.stringify(res.data)
+        this.$store.commit('changeRefund', res.data)
+        localStorage.setItem('counts', data)
+      })
+    },
     goMatch() {
       this.page_params.page = 1
       this.page_params.size = 10
@@ -272,7 +291,7 @@ export default {
       this.handleQueryChange('size', this.page_params.size)
       this.handleQueryChange('keyword', this.page_params.keyword)
       this.getList()
-      // this.getCounts()
+      this.getFinanceCount()
     },
     getList() {
       this.tableLoading = true
@@ -434,6 +453,48 @@ export default {
       this.onTime(this.timeList)
       this.onPaymentChange()
       this.onStatusChange()
+    },
+    verifyExport() {
+      let params = {
+        status: this.status,
+        keyword: this.page_params.keyword,
+        payment_type: this.payment_type,
+        begin_date: this.begin_date,
+        end_date: this.end_date
+      }
+      if (this.activeName === '0') {
+        this.$request.orderPaymentExport(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else if (this.activeName === '1') {
+        this.$request.orderRefundExport(params).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+      }
     }
   },
   created() {
@@ -441,6 +502,7 @@ export default {
       this.activeName = this.$route.query.activeName
     }
     this.getPayment()
+    this.getFinanceCount()
   },
   activated() {
     this.getList()
@@ -578,8 +640,13 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    .filter {
-      margin-left: 10px;
+    .searcg-l {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      .filter {
+        margin-left: 10px;
+      }
     }
   }
   .order-list-search {

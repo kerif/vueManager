@@ -9,7 +9,7 @@
         <div class="clear"></div>
         <div class="tips-sty">
           <span class="el-icon-warning-outline icon-info"></span>
-          {{ $t('提示：仅“阶梯计价”模式路线可开启拼团') }}
+          {{ $t('提示仅阶梯计价模式路线可开启拼团') }}
         </div>
         <el-table
           border
@@ -22,7 +22,7 @@
         >
           <el-table-column type="index" :index="1"></el-table-column>
           <el-table-column :label="$t('线路名称')" prop="name"></el-table-column>
-          <el-table-column :label="$t('支持国家/地区')" :show-overflow-tooltip="true" width="150">
+          <el-table-column :label="$t('支持国家地区')" :show-overflow-tooltip="true" width="150">
             <template slot-scope="scope">
               <span v-for="item in scope.row.countries" :key="item.id">
                 {{ item.name }}&nbsp;
@@ -36,7 +36,7 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('参考时效')" prop="reference_time"></el-table-column>
+          <!-- <el-table-column :label="$t('参考时效')" prop="reference_time"></el-table-column> -->
           <el-table-column :label="$t('最小重量')" prop="min_weight"></el-table-column>
           <el-table-column :label="$t('开启拼团')" width="110">
             <template slot-scope="scope">
@@ -65,11 +65,33 @@
       </el-tab-pane>
       <!-- 审核拒绝 -->
       <el-tab-pane :label="$t('其他配置')" name="1">
-        <span>{{ $t('默认支付模式') }}</span>
-        <el-radio-group v-model="mode" style="margin-left: 20px">
-          <el-radio :label="0" @change="changeRadio">{{ $t('团员自付') }}</el-radio>
-          <el-radio :label="1" @change="changeRadio">{{ $t('团长代付') }}</el-radio>
-        </el-radio-group>
+        <div style="background: #fff; padding: 20px 10px">
+          <span>{{ $t('默认支付模式') }}</span>
+          <el-radio-group v-model="mode" style="margin-left: 20px">
+            <el-radio :label="0" @change="changeRadio">{{ $t('团员自付') }}</el-radio>
+            <el-radio :label="1" @change="changeRadio">{{ $t('团长代付') }}</el-radio>
+          </el-radio-group>
+          <br />
+          <div style="margin-top: 10px"></div>
+          <span>{{ $t('最小拼团人数') }}</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="$t('当参团人数(包括团长)小于最小人数时, 团长无法提交拼团')"
+            placement="top-start"
+          >
+            <i class="el-icon-warning-outline" style="font-size: 18px"></i>
+          </el-tooltip>
+          <el-input
+            v-model="min_member"
+            size="small"
+            style="margin-left: 20px; width: 240px"
+            :placeholder="$t('请输入最小拼团人数')"
+          ></el-input>
+          <el-button style="margin-left: 5px" class="btn-main" @click="saveNumber">{{
+            $t('保存')
+          }}</el-button>
+        </div>
       </el-tab-pane>
     </el-tabs>
     <el-dialog
@@ -137,7 +159,8 @@ export default {
       // is_ignore_warehouse: 0,
       group_raise_factor: '',
       group_raise_threshold: '',
-      mode: 0
+      mode: 0,
+      min_member: ''
     }
   },
   components: {
@@ -256,6 +279,7 @@ export default {
       this.$request.getGlobal().then(res => {
         if (res.ret) {
           this.mode = res.data.mode
+          this.min_member = res.data.min_member
         } else {
           this.$message({
             message: res.msg,
@@ -285,6 +309,23 @@ export default {
             })
           }
         })
+    },
+    saveNumber() {
+      this.$request.updateGlobal({ mode: this.mode, min_member: this.min_member }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.getGlobal()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     }
   },
   watch: {

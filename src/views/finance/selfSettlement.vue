@@ -71,7 +71,7 @@
         <!-- 自提点名称 -->
         <el-table-column :label="$t('自提点名称')" prop="name"> </el-table-column>
         <!-- 所属国家/地区 -->
-        <el-table-column :label="$t('所属国家/地区')" prop="country_name"> </el-table-column>
+        <el-table-column :label="$t('所属国家地区')" prop="country_name"> </el-table-column>
         <!-- 联系人 -->
         <el-table-column :label="$t('联系人')" prop="contactor"> </el-table-column>
         <!-- 联系电话 -->

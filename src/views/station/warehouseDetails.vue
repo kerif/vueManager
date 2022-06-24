@@ -11,12 +11,12 @@
           </el-col>
           <!-- 手机/联系电话 -->
           <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('手机/联系电话') }}</span>
+            <span class="leftWidth">{{ $t('手机联系电话') }}</span>
             <span>{{ form.address && form.address.phone }}</span>
           </el-col>
           <!-- 国家或地区 -->
           <el-col :span="7" :offset="1">
-            <span class="leftWidth">{{ $t('国家/地区') }}</span>
+            <span class="leftWidth">{{ $t('国家地区') }}</span>
             <span>{{ form.address && form.address.country.cn_name }}</span>
           </el-col>
         </el-row>
@@ -131,7 +131,7 @@
         prop="volume_weight"
       ></el-table-column>
       <!-- 尺寸（长宽高cm） -->
-      <el-table-column :label="$t('尺寸（长宽高）') + this.localization.length_unit">
+      <el-table-column :label="$t('尺寸长宽高') + this.localization.length_unit">
         <template slot-scope="scope">
           <span>{{ scope.row.length }}*</span>
           <span>{{ scope.row.width }}*</span>

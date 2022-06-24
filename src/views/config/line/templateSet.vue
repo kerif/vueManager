@@ -3,6 +3,7 @@
     <!-- <div class="searchGroup">
       <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
     </div> -->
+    <div class="top-title">预设分区表</div>
     <div class="bottom-sty">
       <div class="addUser">
         <div class="searchGroup">
@@ -41,9 +42,11 @@
         </el-table-column> -->
         <el-table-column :label="$t('操作')" width="140">
           <template slot-scope="scope">
-            <el-button class="btn-green edit-sty" @click="editPartition(scope.row.id)">{{
-              $t('编辑')
-            }}</el-button>
+            <el-button
+              class="btn-green edit-sty"
+              @click="editPartition(scope.row.id, scope.row.name)"
+              >{{ $t('编辑') }}</el-button
+            >
             <el-button class="btn-light-red" @click="deletePart(scope.row.id)">{{
               $t('删除')
             }}</el-button>
@@ -58,7 +61,7 @@
     ></nle-pagination>
     <el-dialog :title="$t('新增')" :visible.sync="dialogVisible" width="35%" @close="clearTmp">
       <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item :label="$t('*请输入模版名称')">
+        <el-form-item :label="$t('请输入模版名称')">
           <el-input v-model="form.name" :placeholder="$t('请输入')"></el-input>
         </el-form-item>
       </el-form>
@@ -136,7 +139,7 @@ export default {
     },
     // 删除
     deletePart(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -159,8 +162,8 @@ export default {
         })
       })
     },
-    editPartition(id) {
-      this.$router.push({ name: 'partition', query: { id } })
+    editPartition(id, name) {
+      this.$router.push({ name: 'partition', query: { id, name } })
     },
     // 获取支持语言
     getLanguageList() {
@@ -212,7 +215,6 @@ export default {
               message: res.msg,
               type: 'error'
             })
-            // this.getList()
           }
         })
     }
@@ -228,6 +230,9 @@ export default {
 .template-set-container {
   .addUser > .add-btn-container {
     margin-left: 10px;
+  }
+  .top-title {
+    color: red;
   }
   .import-list {
     display: inline-block;

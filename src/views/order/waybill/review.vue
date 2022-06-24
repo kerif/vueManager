@@ -150,6 +150,7 @@ export default {
     // if (this.$route.query.id) {
     //   this.getList()
     // }
+    console.log(this.$route.query.state)
     if (this.$route.query.state === 'transaction') {
       this.getTransaction()
     } else {

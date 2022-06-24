@@ -13,20 +13,19 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item :label="'*' + $t('国家/地区')">
-            <el-select
+          <el-form-item :label="'*' + $t('国家地区')">
+            <el-cascader
               v-model="form.country_id"
-              filterable
+              :options="options"
+              :props="{ checkStrictly: true }"
+              clearable
               class="country-select"
-              :placeholder="$t('请选择国家/地区')"
             >
-              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-              </el-option>
-            </el-select>
+            </el-cascader>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="20" v-if="form.is_cn_address == 1">
+      <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item :label="$t('省份')">
             <el-input v-model="form.province"></el-input>
@@ -82,7 +81,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item :label="$t('区域')">
-            <el-input v-model="form.area"></el-input>
+            <el-input v-model="form.address_area"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -95,6 +94,13 @@
         <el-col :span="10">
           <el-form-item :label="$t('身份证号码')">
             <el-input v-model="form.id_card"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item :label="$t('邮箱')">
+            <el-input v-model="form.email"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -114,7 +120,7 @@ export default {
         receiver_name: '',
         phone: '',
         timezone: '',
-        country_id: '',
+        country_id: [],
         door_no: '',
         province: '',
         district: '',
@@ -125,12 +131,17 @@ export default {
         wechat_id: '',
         clearance_code: '',
         id_card: '',
-        area: ''
+        address_area: '',
+        email: ''
       },
       supplierId: '',
       options: [],
+      countryList: [],
       id: '',
-      userId: ''
+      userId: '',
+      country: {},
+      area_id: '',
+      sub_area_id: ''
     }
   },
   methods: {
@@ -141,7 +152,13 @@ export default {
           this.form.receiver_name = res.data.receiver_name
           this.form.phone = res.data.phone
           this.form.timezone = res.data.timezone
-          this.form.country_id = res.data.country.id
+          this.form.country_id = [res.data.country.id]
+          if (res.data.area_id) {
+            this.form.country_id.push(+res.data.area_id)
+          }
+          if (res.data.sub_area_id) {
+            this.form.country_id.push(+res.data.sub_area_id)
+          }
           this.form.door_no = res.data.door_no
           this.form.province = res.data.province
           this.form.city = res.data.city
@@ -153,18 +170,23 @@ export default {
           this.form.clearance_code = res.data.clearance_code
           this.form.id_card = res.data.id_card
           this.form.area = res.data.area
+          this.form.email = res.data.email
         }
       })
     },
     submit() {
-      if (this.form.country_id === '') {
-        return this.$message.error(this.$t('请选择国家/地区'))
-      } else if (this.form.receiver_name === '') {
+      if (this.form.receiver_name === '') {
         return this.$message.error(this.$t('请输入收件人'))
       } else if (this.form.phone === '') {
         return this.$message.error(this.$t('请输入联系电话'))
       }
-      this.$request.updateSingleAddress(this.id, this.form).then(res => {
+      let param = {
+        ...this.form,
+        country_id: this.form.country_id[0],
+        area_id: this.form.country_id[1] || '',
+        sub_area_id: this.form.country_id[2] || ''
+      }
+      this.$request.updateSingleAddress(this.id, param).then(res => {
         if (res.ret) {
           this.$notify({
             type: 'success',
@@ -172,21 +194,42 @@ export default {
             message: res.msg
           })
           this.show = false
+          this.success()
         } else {
           this.$message({
             message: res.msg,
             type: 'error'
           })
         }
-        this.show = false
+        // this.show = false
       })
     },
     // 获取支持国家数据
     searchCountry() {
-      console.log('111')
       this.$request.countryLocation().then(res => {
         if (res.ret) {
-          this.options = res.data
+          this.options = res.data.map(item => {
+            return {
+              value: item.id,
+              label: item.name,
+              children: item.areas.length
+                ? item.areas.map(item2 => {
+                    return {
+                      value: item2.id,
+                      label: item2.name,
+                      children: item2.areas.length
+                        ? item2.areas.map(item3 => {
+                            return {
+                              value: item3.id,
+                              label: item3.name
+                            }
+                          })
+                        : []
+                    }
+                  })
+                : []
+            }
+          })
         } else {
           this.$message({
             message: res.msg,

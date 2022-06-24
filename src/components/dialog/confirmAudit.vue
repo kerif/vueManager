@@ -14,6 +14,7 @@
           :autosize="{ minRows: 2, maxRows: 4 }"
           v-model="ruleForm.customer_remark"
           :placeholder="$t('请输入备注')"
+          class="text"
         ></el-input>
       </el-form-item>
       <!--上传照片-->
@@ -73,7 +74,8 @@ export default {
       withdrawsId: '',
       baleImgList: [],
       confirm_amount: '',
-      customer_remark: ''
+      customer_remark: '',
+      amount: ''
     }
   },
   methods: {
@@ -132,6 +134,9 @@ export default {
         this.show = false
       })
     },
+    init() {
+      this.ruleForm.confirm_amount = this.amount
+    },
     clear() {
       this.$refs['ruleForm'].resetFields()
       this.$refs['ruleForm'].clearValidate()
@@ -145,7 +150,7 @@ export default {
 
 <style lang="scss" scoped>
 .dialog-confirmAudit {
-  .el-dialog__header {
+  /deep/.el-dialog__header {
     background-color: #0e102a;
   }
   .el-input {
@@ -154,7 +159,7 @@ export default {
   .el-textarea {
     width: 50%;
   }
-  .el-dialog__title {
+  /deep/.el-dialog__title {
     font-size: 14px;
     color: #fff;
   }

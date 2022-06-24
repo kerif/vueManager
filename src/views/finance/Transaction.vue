@@ -70,6 +70,8 @@
         <el-table-column type="index" :index="1"></el-table-column>
         <!-- 客户ID -->
         <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+        <!-- 用户名 -->
+        <el-table-column :label="$t('用户名')" prop="user_name"></el-table-column>
         <!-- 类型 -->
         <el-table-column :label="$t('类型')">
           <template slot-scope="scope">
@@ -79,6 +81,7 @@
             <span v-if="scope.row.type === 4">{{ $t('提现') }}</span>
             <span v-if="scope.row.type === 5">{{ $t('扣款') }}</span>
             <span v-if="scope.row.type === 6">{{ $t('充值赠送') }}</span>
+            <span v-if="scope.row.type === 7">{{ $t('补款') }}</span>
           </template>
         </el-table-column>
         <!-- 支付类型 -->
@@ -95,6 +98,13 @@
           :label="$t('抵用券金额') + this.localization.currency_unit"
           prop="coupon_amount"
           width="105"
+          align="right"
+        ></el-table-column>
+        <!-- 积分抵扣金额 -->
+        <el-table-column
+          :label="$t('积分抵扣金额') + this.localization.currency_unit"
+          prop="point_amount"
+          width="115"
           align="right"
         ></el-table-column>
         <!-- 支付金额¥ -->

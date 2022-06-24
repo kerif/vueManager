@@ -75,7 +75,11 @@
         <!-- 二维码头像尺寸 -->
         <el-form-item :label="$t('二维码尺寸')" class="slogan">
           <el-input v-model="backgroundList.avatar_size" @blur="changeSize"> </el-input>px
-          <p class="slogan-height">{{ $t('高和宽一致，只需要填写一个参数') }}</p>
+          <p class="slogan-height">{{ $t('高和宽一致只需要填写一个参数') }}</p>
+        </el-form-item>
+        <!-- 颜色选择 -->
+        <el-form-item :label="$t('背景色选择')">
+          <el-color-picker v-model="backgroundList.background_images_rgb"></el-color-picker>
         </el-form-item>
         <!-- 背景图像 -->
         <el-form-item :label="$t('背景图像')">
@@ -121,9 +125,7 @@
           >
             <i class="el-icon-plus"> </i> </el-upload
           ><br />
-          <span class="suggest-btn">{{
-            $t('链接自定义图片只需要上传一张，显示图片长宽比5:4')
-          }}</span>
+          <span class="suggest-btn">{{ $t('链接自定义图片只需要上传一张显示图片长宽比54') }}</span>
         </el-form-item>
         <div class="background-btn">
           <el-button class="save-btn" @click="updateBackground">{{ $t('保存') }}</el-button>
@@ -160,7 +162,8 @@ export default {
         avatar_size: '',
         background_images: [],
         share_image: '',
-        share_info: ''
+        share_info: '',
+        background_images_rgb: ''
       },
       params: {
         instruction: ''
@@ -181,6 +184,7 @@ export default {
     getBackground() {
       this.$request.getProgramShare().then(res => {
         this.backgroundList = res.data
+        this.backgroundList.background_images_rgb = res.data.background_images_rgb || '#fec6a7'
         res.data.background_images && (this.backgroundImg = res.data.background_images)
         res.data.share_image && (this.shareImg[0] = res.data.share_image)
       })
@@ -209,7 +213,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.$router.go(-1)
+          this.getBackground()
         } else {
           this.$message({
             message: res.msg,
@@ -493,7 +497,6 @@ export default {
     display: inline-block;
     background-color: #fff;
     padding: 15px;
-    height: 1080px;
     box-sizing: border-box;
   }
   .background-btn {

@@ -142,6 +142,7 @@ export default {
   data() {
     return {
       languageData: [],
+      id: '',
       ruleForm: {
         name: '',
         payment_setting_connection: [],
@@ -187,6 +188,7 @@ export default {
       })
     },
     getPayLang() {
+      console.log(this.id)
       this.$request.getPayLang(this.id).then(res => {
         if (res.ret) {
           this.ruleForm.payment_setting_connection = res.data
@@ -236,7 +238,6 @@ export default {
         data => {
           // this.getList()
           this.ruleForm.payment_setting_connection.push(data)
-          console.log(this.ruleForm.payment_setting_connection, ' data')
         }
       )
     },
@@ -277,7 +278,7 @@ export default {
     },
     //删除转账支付内容
     deletePay(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -349,7 +350,7 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
+          // this.show = false
         })
       } else {
         this.$request.updatePayments(this.id, this.ruleForm).then(res => {
@@ -367,7 +368,7 @@ export default {
               type: 'error'
             })
           }
-          this.show = false
+          // this.show = false
         })
       }
     },
@@ -411,6 +412,7 @@ export default {
       }
     },
     clear() {
+      this.state = ''
       this.ruleForm.name = ''
       this.ruleForm.payment_setting_connection = []
       this.ruleForm.remark = ''
@@ -429,6 +431,7 @@ export default {
       this.getLanguageList()
       console.log(this.state, 'this.state')
       if (this.state === 'edit') {
+        console.log(this.id)
         this.getList()
       }
     }

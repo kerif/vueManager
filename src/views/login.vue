@@ -1,14 +1,28 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" v-if="customData">
     <div class="login-header">
-      <img src="../assets/logo-top.png" class="img-sty" />
-      <span>{{ $t('海鸥集运管理系统') }}</span>
+      <img
+        v-if="customData.login_logo"
+        style="width: 46px; height: 46px"
+        :src="$baseUrl.IMAGE_URL + customData.login_logo"
+        alt=""
+      />
+      <img v-else src="../assets/logo-top.png" class="img-sty" />
+      <span v-if="customData.login_title">{{ customData.login_title }}</span>
+      <span v-else>{{ $t('海鸥集运管理系统') }}</span>
     </div>
     <div class="main">
       <!-- 登陆页面 -->
       <div class="login-main" v-show="welcome === 1">
         <div class="main-container">
-          <div class="login-logo"></div>
+          <div v-if="customData.login_logo">
+            <img
+              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              style="width: 500px; height: 450px"
+              alt=""
+            />
+          </div>
+          <div v-else class="login-logo"></div>
           <div class="info-box">
             <div class="info-title">
               <span class="welcome-sty"
@@ -74,7 +88,14 @@
       <!-- 忘记密码 -->
       <div class="login-main" v-show="welcome === 2">
         <div class="main-container">
-          <div class="login-logo"></div>
+          <div v-if="customData.login_logo">
+            <img
+              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              style="width: 500px; height: 450px"
+              alt=""
+            />
+          </div>
+          <div v-else class="login-logo"></div>
           <div class="info-box">
             <div class="step-box">
               <span :class="['step-item', { select: forgetStep <= 3 }]">{{ $t('验证身份') }}</span>
@@ -149,7 +170,7 @@
               <div class="happy-img">
                 <img src="../assets/happy.png" />
               </div>
-              <p class="account-btn">{{ $t('修改密码成功！') }}</p>
+              <p class="account-btn">{{ $t('修改密码成功') }}</p>
               <div class="register">
                 <p @click="changeWelcome(1)">{{ $t('去登录') }}</p>
               </div>
@@ -160,7 +181,14 @@
       <!-- 注册账号 -->
       <div class="login-main" v-show="welcome === 3">
         <div class="main-container">
-          <div class="login-logo"></div>
+          <div v-if="customData.login_logo">
+            <img
+              :src="$baseUrl.IMAGE_URL + customData.login_logo"
+              style="width: 500px; height: 450px"
+              alt=""
+            />
+          </div>
+          <div v-else class="login-logo"></div>
           <div class="info-box">
             <!-- <p class="info-title">{{$t('注册')}}</p> -->
             <div class="info-title">
@@ -182,7 +210,7 @@
               <el-form-item prop="password">
                 <el-input
                   type="password"
-                  :placeholder="$t('请输入8-20位密码，区分大小写')"
+                  :placeholder="$t('请输入820位密码区分大小写')"
                   prefix-icon="el-icon-unlock"
                   v-model="reAccount.password"
                 ></el-input>
@@ -246,17 +274,17 @@
       <div class="login-footer">
         <div class="language-sty">
           <p>
-            <span :class="{ active: active === 'simple' }" @click="languageCut('simple')"
+            <span :class="{ active: languageCode === 'zhCN' }" @click="languageCut('zhCN')"
               >简体中文</span
             >
             |
-            <span :class="{ active: active === 'tradition' }" @click="languageCut('tradition')"
+            <span :class="{ active: languageCode === 'zhTW' }" @click="languageCut('zhTW')"
               >繁体中文</span
             >
           </p>
         </div>
-        © ({{ year }}) haiouoms.com
-        <a href="http://www.beian.miit.gov.cn" target="_blank">{{ $t('湘ICP备17000173号-5') }}</a>
+        <!-- © ({{ year }}) haiouoms.com
+        <a href="http://www.beian.miit.gov.cn" target="_blank">{{ $t('湘ICP备17000173号-5') }}</a> -->
       </div>
     </div>
     <!-- 身份验证弹窗 -->
@@ -278,6 +306,7 @@
   </div>
 </template>
 <script>
+import JSEncrypt from 'jsencrypt'
 export default {
   name: 'login',
   data() {
@@ -322,6 +351,7 @@ export default {
       keep: false,
       centerDialogVisible: false,
       captha: '',
+      customData: {},
       userInfo: {
         username: '',
         password: '',
@@ -347,7 +377,6 @@ export default {
       welcome: 1,
       forgetStep: 1,
       groupBuy: '',
-      active: '',
       rules: {
         email: [
           { required: true, message: this.$t('请输入邮箱地址'), trigger: 'blur' },
@@ -375,6 +404,9 @@ export default {
     }
   },
   computed: {
+    languageCode() {
+      return this.$store.state.languageCode
+    },
     year: function () {
       return new Date().getFullYear()
     }
@@ -385,29 +417,36 @@ export default {
     if (this.userInfo.username && this.userInfo.password) this.keep = true
   },
   created() {
-    this.active = localStorage.getItem('language') || 'simple'
-    this.languageCut(this.active)
     this.getCaptcha() // 获取图型验证码
+    if (location.hostname) {
+      this.getInit()
+    }
   },
   methods: {
+    getInit() {
+      this.$request.initConfig({ domain: location.hostname }).then(res => {
+        this.customData = res.data
+        this.$store.commit('saveSiderBarImage', res.data.sidebar_image)
+      })
+    },
     languageCut(locale) {
-      this.active = locale
-      // this.$i18n.locale = locale
-      localStorage.setItem('language', locale)
-      this.$store.commit('saveLanguageCode', locale)
-      // this.$store.commit('switchLang', { lang: locale })
+      this.$store.commit('saveLanguageCode', { locale, reload: false })
     },
     // 获取是否显示拼团配置
     getMe() {
       this.$request.getMe().then(res => {
         if (res.ret) {
           this.groupBuy = Number(res.data.group_buying_config)
-          console.log(this.groupBuy, 'this.groupBuy')
         }
       })
     },
     // 登录
     onLogin() {
+      let params = {
+        ...this.userInfo
+      }
+      // 加密
+      params.password = this.excrypt(this.userInfo.password)
       if (!this.userInfo.username.trim()) {
         return this.$message.info(this.$t('请输入邮箱或手机号'))
       } else if (!this.userInfo.password.trim()) {
@@ -419,7 +458,7 @@ export default {
         localStorage.setItem('USERNAME', this.userInfo.username.trim())
         localStorage.setItem('PASSWORD', this.userInfo.password.trim())
         this.$request
-          .login(this.userInfo)
+          .login(params)
           .then(res => {
             if (res.ret) {
               this.$notify({
@@ -451,7 +490,7 @@ export default {
         localStorage.removeItem('USERNAME')
         localStorage.removeItem('PASSWORD')
         this.$request
-          .login(this.userInfo)
+          .login(params)
           .then(res => {
             if (res.ret) {
               this.$notify({
@@ -661,6 +700,20 @@ export default {
           this.$message.error(res.msg)
         }
       })
+    },
+    excrypt(data) {
+      const publicKey = `-----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwfxIAFQxipEEKJMc4RhD
+    LJQ7WxMGWLpinEEbJbMoXfSqlDjhxfVx5//itbwWmIKM1A8n0MTerudTvjdDmG9k
+    37+EDS/dcYmxZ7KCqEp4teBsRmg8v9EgnblgkEVpwTA7M5zgldMFJnearrBx2IwL
+    hWqK3IKADSiLcvrO25crz89bkPq2jgmi2QOsKEIATOErrkyFTxRVYqw8/UB0q5Za
+    /KWAE9xTgU7+oteoRnI7ZdXlJZ1ENyMPN+DAT4WZoR+nWmKCVPFNgwdN2b3D8Rum
+    6L1bQcOMbK2wS9Ooc1uu6+AfT8/HTODNmMnBf4/LBWpwjOLUhz1YLaeNnYqgpUzS
+    HwIDAQAB
+    -----END PUBLIC KEY-----`
+      const encryptor = new JSEncrypt()
+      encryptor.setPublicKey(publicKey)
+      return encryptor.encrypt(data)
     }
   }
 }

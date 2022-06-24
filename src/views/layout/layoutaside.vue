@@ -1,11 +1,22 @@
 <template>
   <el-aside class="layout-aside" :class="[isCollapse ? 'isCollapse' : '']">
     <div v-if="!isCollapse" class="aside-top">
-      <span class="app-name">{{ $t('集运') }}</span>
-      <span>{{ $t('管理系统') }}</span>
+      <div v-if="customData.sidebar_title">
+        <span>{{ customData.sidebar_title }}</span>
+      </div>
+      <div v-else>
+        <span class="app-name">{{ $t('集运') }}</span>
+        <span>{{ $t('管理系统') }}</span>
+      </div>
     </div>
     <div v-else class="unTop">
-      <img src="../../assets/top.png" />
+      <img
+        v-if="customData.sidebar_image"
+        style="width: 61px; height: 65px"
+        :src="$baseUrl.IMAGE_URL + customData.sidebar_image"
+        alt=""
+      />
+      <img v-else src="../../assets/top.png" />
     </div>
     <el-menu
       :default-active="$route.meta.level === 3 ? $route.meta.parent : $route.path"
@@ -30,8 +41,18 @@
             v-if="childRoute.level === 2"
             class="route-item"
             @click="onRoute(route)"
-            >{{ $t(childRoute.name) }}</el-menu-item
           >
+            <!-- <i
+              class="dot"
+              v-if="
+                (childRoute.path === '/finance/orderReview' &&
+                  (obj.payment > 0 || obj.refund > 0)) ||
+                childRoute.path === '/finance/recharge' ||
+                childRoute.path === '/finance/agency'
+              "
+            ></i> -->
+            {{ $t(childRoute.name) }}
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -67,11 +88,29 @@ export default {
             }
           })
         })
+      // console.log(formatRouterMap)
       return formatRouterMap
     },
     isCollapse() {
       return this.$store.state.isCollapse
     }
+  },
+  // data() {
+  //   return {
+  //     obj: {}
+  //   }
+  // },
+  // created() {
+  //   this.obj = JSON.parse(localStorage.getItem('counts'))
+  //   console.log(this.obj)
+  // },
+  data() {
+    return {
+      customData: {}
+    }
+  },
+  created() {
+    this.getInit()
   },
   methods: {
     onMenuSelect() {
@@ -81,6 +120,12 @@ export default {
     onRoute() {
       // console.log('route', route)
       // console.log('$route', this.$route)
+    },
+    getInit() {
+      this.$request.initConfig({ domain: location.hostname }).then(res => {
+        this.customData = res.data
+        this.$store.commit('saveSiderBarImage', res.data.sidebar_image)
+      })
     }
   }
 }
@@ -125,6 +170,13 @@ export default {
   }
   .route-item {
     padding-left: 60px !important;
+  }
+  .dot {
+    display: inline-block;
+    background: red !important;
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50%;
   }
   .el-menu-item-group__title {
     padding: 0;

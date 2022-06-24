@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="12">
         <el-tree
-          :data="ViewPermissionMenu"
+          :data="permissionMenu"
           show-checkbox
           node-key="id"
           class="tree"
@@ -27,9 +27,7 @@ export default {
   name: 'modifyPermissions',
   data() {
     return {
-      filterText: '',
       permissionMenu: [],
-      data: [],
       defaultShowNodes: [],
       defaultProps: {
         children: 'child',
@@ -43,16 +41,6 @@ export default {
     }
   },
   computed: {
-    ViewPermissionMenu() {
-      return this.permissionMenu.map(item => {
-        return {
-          ...item,
-          child: item.child.map(item => ({ ...item, name: this.$t(item.name) })),
-          name: this.$t(item.name),
-          id: `${item.id}-1`
-        }
-      })
-    },
     defaultChecked() {
       return getCheckedChild(this.permissionMenu)
     }
@@ -62,18 +50,30 @@ export default {
       this.$request.getPermissions(this.$route.params.id).then(res => {
         // this.permissionMenu = res.data
         if (res.ret) {
-          this.permissionMenu = res.data.map(item => {
-            return {
-              ...item,
-              child: item.child.map(item => ({ ...item, name: item.name })),
-              name: item.name,
-              id: `${item.id}-1`
-            }
-          })
-          console.log(this.permissionMenu, 'permissionMenu')
+          // this.permissionMenu = res.data.map(item => {
+          //   return {
+          //     ...item,
+          //     child: item.child.map(item => ({ ...item, name: item.name })),
+          //     name: item.name,
+          //     id: `${item.id}-1`
+          //   }
+          // })
+          this.formatIds(res.data)
+          this.permissionMenu = res.data
         } else {
           this.$message.error(res.msg)
         }
+      })
+    },
+    formatIds(arr) {
+      arr.forEach(ele => {
+        if (ele.child) {
+          this.formatIds(ele.child)
+        }
+        if (ele.tag) {
+          ele.id = `${ele.id}-1`
+        }
+        ele.name = this.$t(ele.name)
       })
     },
     confirmSubmit() {
@@ -94,15 +94,10 @@ export default {
     }
   },
   watch: {
-    filterText(val) {
-      console.log(val, 'val')
-      this.$refs.tree.filter(val)
-    },
     permissionMenu: {
       handler() {
         this.permissionMenu.forEach(item => {
           this.defaultShowNodes.push(item.id)
-          console.log(this.defaultShowNodes, 'this.defaultShowNodes')
         })
       }
     }

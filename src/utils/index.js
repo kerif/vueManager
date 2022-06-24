@@ -65,3 +65,45 @@ export const countryCallback = list => {
     leaf: item.areas.length ? '' : 'leaf'
   }))
 }
+export const downloadStreamFile = (data, name = 'file', type = 'xlsx') => {
+  if (data && data.code && data.code === 5000) return
+  let url = window.URL.createObjectURL(new Blob([data]))
+  let link = document.createElement('a')
+  link.style.display = 'none'
+  link.href = url
+  link.setAttribute('download', `${name}.${type}`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+export const getIds = (arr, result = [], newResult = []) => {
+  for (let i = 0; i < arr.length; i++) {
+    let ids = newResult.concat([arr[i].id])
+    if (arr[i].areas && arr[i].areas.length > 0) {
+      getIds(arr[i].areas, result, ids)
+    } else {
+      result.push(ids)
+    }
+  }
+}
+
+export const getId = (arr, result = []) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].areas && arr[i].areas.length > 0) {
+      getId(arr[i].areas, result)
+    }
+  }
+}
+
+export const changeFavicon = link => {
+  let $favicon = document.querySelector('link[rel="icon"]')
+  if ($favicon !== null) {
+    $favicon.href = link
+  } else {
+    $favicon = document.createElement('link')
+    $favicon.rel = 'icon'
+    $favicon.href = link
+    document.head.appendChild($favicon)
+  }
+}

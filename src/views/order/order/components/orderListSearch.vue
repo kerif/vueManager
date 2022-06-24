@@ -8,18 +8,18 @@
       label-width="110px"
     >
       <el-row :gutter="20">
-        <el-col :span="4" :xl="10">
+        <el-col :span="5" :xl="8">
           <!--包裹号搜索-->
           <el-form-item prop="express_num" label-width="0">
             <el-input
               v-model="searchFieldData.express_num"
               :autosize="{ minRows: 4, maxRows: 5 }"
               type="textarea"
-              :placeholder="$t('请输入快递单号搜索，多个单号请用回车区分')"
+              :placeholder="$t('请输入快递单号搜索多个单号请用回车区分')"
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" :xl="6">
+        <el-col :span="12" :xl="10">
           <!--时间搜索-->
           <el-form-item :label="$t('时间')" prop="date_type">
             <el-select v-model="searchFieldData.date_type" clearable :placeholder="$t('请选择')">
@@ -62,8 +62,26 @@
               onkeypress="return( /[\d.]/.test(String.fromCharCode(event.keyCode) ) )"
             ></el-input>
           </el-form-item>
+          <el-form-item :label="$t('包裹编码')">
+            <el-input
+              :placeholder="$t('请输入包裹编码')"
+              clearable
+              style="width: 60%"
+              v-model="searchFieldData.code"
+            ></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('会员等级')">
+            <el-select v-model="searchFieldData.member_level" clearable>
+              <el-option
+                v-for="item in vipList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
-        <el-col :span="5" :xl="4">
+        <el-col :span="7" :xl="6">
           <!--包裹号搜索-->
           <el-form-item :label="$t('仓库')" prop="warehouse">
             <el-select v-model="searchFieldData.warehouse" clearable :placeholder="$t('请选择')">
@@ -76,7 +94,17 @@
               </el-option>
             </el-select>
           </el-form-item>
-
+          <!-- 物品属性 -->
+          <el-form-item :label="$t('物品属性')" prop="prop">
+            <el-select v-model="searchFieldData.prop" clearable :placeholder="$t('请选择')">
+              <el-option
+                v-for="item in propList"
+                :key="item.id"
+                :value="item.id"
+                :label="item.cn_name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item prop="is_warning">
             <!-- v-if="['0', '1'].includes(activeName)" -->
             <el-checkbox
@@ -88,14 +116,12 @@
               {{ $t('包裹预警') }}
             </el-checkbox>
           </el-form-item>
-        </el-col>
-        <el-col :span="3" :xl="2">
-          <div class="submit">
+          <el-form-item>
             <el-button type="primary" plain size="small" @click="submitForm">{{
               $t('搜索')
             }}</el-button>
             <el-button size="small" @click="resetForm">{{ $t('重置') }}</el-button>
-          </div>
+          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -138,12 +164,16 @@ export default {
           name: this.$t('审核拒绝')
         }
       ],
-      simpleList: []
+      simpleList: [],
+      propList: [],
+      vipList: []
     }
   },
   created() {
     this.initQuery()
     this.getSimpleList()
+    this.getPropList()
+    this.getGradeList()
   },
   activated() {
     this.initQuery()
@@ -159,10 +189,36 @@ export default {
       this.searchFieldData.end = ''
       this.searchFieldData.agent = ''
       this.searchFieldData.value_end = ''
+      this.searchFieldData.code = ''
+      this.searchFieldData.member_level = ''
     },
     getSimpleList() {
       this.$request.getSimpleList().then(res => {
         this.simpleList = res.data
+      })
+    },
+    getPropList() {
+      this.$request.getProps().then(res => {
+        this.propList = res.data
+      })
+    },
+    getGradeList() {
+      this.$request.getGradeList({ size: 100 }).then(res => {
+        if (res.ret) {
+          this.vipList = res.data.map(item => {
+            let name = item.name
+            let id = item.id
+            return {
+              name,
+              id
+            }
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
       })
     }
   }
@@ -196,7 +252,7 @@ export default {
       display: flex;
     }
     .submit {
-      padding-top: 50px;
+      padding-top: 30px;
       text-align: right;
     }
   }

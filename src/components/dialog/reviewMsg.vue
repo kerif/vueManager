@@ -22,7 +22,7 @@
           :placeholder="$t('请输入备注')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('*备注')" v-if="state === 'reject'">
+      <el-form-item :label="$t('备注')" v-if="state === 'reject'">
         <el-input
           type="textarea"
           v-model="ruleForm.customer_remark"

@@ -1,20 +1,33 @@
 <template>
   <div class="partition-container">
-    <!-- <div class="searchGroup">
-      <search-group v-model="page_params.keyword" @search="goSearch"></search-group>
-    </div> -->
     <div class="bottom-sty">
-      <div>
+      <div style="width: 500px" v-if="!this.$route.params.id">
         <!-- <el-button size="small" type="warning" plain>{{ $t('导入') }}</el-button>
         <el-button size="small" type="success" plain>{{ $t('导出') }}</el-button> -->
         <!-- <el-button size="small" @click="chooseTemplate" type="danger" plain>{{
           $t('选择模版')
         }}</el-button> -->
+        <el-input
+          size="small"
+          :placeholder="$t('分区表名称')"
+          v-model="name"
+          class="edit"
+        ></el-input>
+        <el-button type="primary" size="mini" @click="saveName" style="margin-left: 5px">{{
+          $t('保存')
+        }}</el-button>
       </div>
       <div class="addUser">
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
         </div>
+        <el-button
+          type="danger"
+          v-if="this.$route.params.id"
+          plain
+          @click.native="selectPartition"
+          >{{ $t('选用预设分区表') }}</el-button
+        >
         <add-btn @click.native="addPartition">{{ $t('新增') }}</add-btn>
       </div>
     </div>
@@ -30,14 +43,25 @@
       >
         <el-table-column type="index" :index="1"></el-table-column>
         <el-table-column :label="$t('分区名称')" prop="name"></el-table-column>
-        <el-table-column :label="$t('启用国家/地区')" :show-overflow-tooltip="true" width="150">
+        <el-table-column :label="$t('分区类型')">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.areas" :key="item.id"
-              >{{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}&nbsp;</span
-            >
+            <span v-if="scope.row.type === 1">{{ $t('国家地区') }}</span>
+            <span v-else>{{ $t('国家邮编') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('启用国家/地区总数量')" prop="areas_count"></el-table-column>
+        <el-table-column :label="$t('启用国家地区')" :show-overflow-tooltip="true" width="150">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type === 1">
+              <span v-for="item in scope.row.areas" :key="item.id"
+                >{{ item.country_name }}{{ item.area_name }}{{ item.sub_area_name }}&nbsp;</span
+              >
+            </span>
+            <span v-else>
+              {{ scope.row.country.name }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('启用国家地区总数量')" prop="areas_count"></el-table-column>
         <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
             <el-switch
@@ -87,7 +111,7 @@
     ></nle-pagination>
     <el-dialog :title="$t('选择模版')" :visible.sync="dialogVisible" width="35%" @close="clearTmp">
       <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item :label="$t('*请选择预设模版')">
+        <el-form-item :label="$t('请选择预设模版')">
           <el-select v-model="form.templateId" :placeholder="$t('请选择')">
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
@@ -97,6 +121,28 @@
       <span slot="footer">
         <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
         <el-button type="primary" @click="confirmAdd">{{ $t('确定') }}</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      :title="$t('选用预设分区表')"
+      :visible.sync="show"
+      class="dialog-preset"
+      width="35%"
+      @close="clearPreset"
+    >
+      <div class="remark">
+        {{ $t('选用预设分区表后将在当前渠道增加分区需设置价格表后再启用分区') }}
+      </div>
+      <el-form ref="form" :model="form" label-width="120px">
+        <el-radio-group v-model="radio">
+          <el-radio class="options" v-for="item in tmpData" :key="item.id" :label="item.id"
+            >{{ item.name }} ({{ item.regions_count }}{{ $t('个分区') }})</el-radio
+          ><br />
+        </el-radio-group>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="show = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -118,7 +164,11 @@ export default {
       options: [],
       form: {
         templateId: ''
-      }
+      },
+      show: false,
+      radio: 1,
+      tmpData: [],
+      name: ''
     }
   },
   components: {
@@ -131,18 +181,27 @@ export default {
     this.getList()
     this.getLanguageList() // 获取支持语言
   },
-  created() {},
+  created() {
+    this.getTmp()
+    this.name = this.$route.query.name
+  },
   methods: {
     // 获取分区
     async getList() {
       let res = {}
       this.tableLoading = true
+      let page_params = {
+        keyword: this.page_params.keyword,
+        page: this.page_params.page,
+        size: this.page_params.size,
+        total: this.page_params.total
+      }
       if (this.$route.params.id) {
         // 获取分区模板
-        res = await this.$request.getRegions(this.$route.params.id, { ...this.page_params })
+        res = await this.$request.getRegions(this.$route.params.id, { ...page_params })
       } else {
         // 获取预设分区模板
-        res = await this.$request.regionTemplates(this.$route.query.id, { ...this.page_params })
+        res = await this.$request.regionTemplates(this.$route.query.id, { ...page_params })
       }
       this.tableLoading = false
       if (res.ret) {
@@ -192,9 +251,21 @@ export default {
         }
       )
     },
+    // 获取模板的分区个数
+    getTmp() {
+      this.$request.lineRegion().then(res => {
+        if (res.ret) {
+          this.tmpData = res.data
+        }
+      })
+    },
+    //选用预设分区表
+    selectPartition() {
+      this.show = true
+    },
     // 删除
     deletePart(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -277,6 +348,26 @@ export default {
     clearTmp() {
       this.form.templateId = ''
     },
+    clearPreset() {},
+    saveName() {
+      let params = {
+        name: this.name
+      }
+      this.$request.saveName(this.$route.query.id, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     confirmAdd() {
       if (!this.form.templateId) {
         return this.$message.error(this.$t('模版不能为空'))
@@ -295,7 +386,25 @@ export default {
             message: res.msg,
             type: 'error'
           })
-          // this.getList()
+        }
+      })
+    },
+    confirm() {
+      this.$request.copyPartitionTmp(this.$route.params.id, this.radio).then(res => {
+        if (res.ret) {
+          console.log(res)
+          this.$notify({
+            type: 'success',
+            title: this.$t('操作成功'),
+            message: res.msg
+          })
+          this.show = false
+          this.getList()
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     }
@@ -317,28 +426,39 @@ export default {
     margin-left: 10px;
     // text-align: right;
   }
+  .remark {
+    color: red;
+    margin-bottom: 10px;
+  }
   .addUser {
     display: flex;
     justify-content: flex-end;
     flex: 1;
     .searchGroup {
-      // width: 29.42%;
-      // float: left;
       margin-right: 10px;
     }
   }
   .bottom-sty {
     width: 100%;
-    // margin-top: 20px;
     margin-bottom: 10px;
     float: left;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .edit {
+      width: 150px;
+    }
   }
   .searchGroup {
     width: 21.5%;
     float: right;
+  }
+  .el-dialog__header {
+    background-color: #0e102a;
+  }
+  .el-dialog__title {
+    font-size: 14px;
+    color: #fff;
   }
   .clear {
     clear: both;
@@ -360,6 +480,10 @@ export default {
   }
   .edit-sty {
     margin-right: 5px;
+  }
+  .options {
+    display: block;
+    margin-bottom: 10px;
   }
 }
 </style>

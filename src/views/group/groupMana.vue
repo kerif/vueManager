@@ -1,6 +1,10 @@
 <template>
   <div class="group-list-container">
     <div class="bottom-sty">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane :label="$t('进行中')" name="0"></el-tab-pane>
+        <el-tab-pane :label="$t('已结束')" name="1"></el-tab-pane>
+      </el-tabs>
       <div class="addUser">
         <div class="searchGroup">
           <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
@@ -73,9 +77,26 @@
         :label="$t('体积重量') + `${localization.weight_unit ? localization.weight_unit : ''}`"
         prop="package_volume_weight"
       ></el-table-column>
-      <el-table-column :label="$t('开始时间')" prop="created_at"></el-table-column>
-      <el-table-column :label="$t('剩余时间')" prop="remaining_time"></el-table-column>
-      <el-table-column :label="$t('操作')" width="116px" fixed="right">
+      <el-table-column
+        :label="$t('开始时间')"
+        prop="created_at"
+        v-if="activeName === '0'"
+      ></el-table-column>
+      <el-table-column :label="$t('剩余时间')" v-if="activeName === '0'">
+        <template slot-scope="scope">
+          <span>{{ scope.row.remaining_time }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('订单状态')" v-if="activeName === '1'">
+        <template slot-scope="scope">
+          <span v-if="scope.row.order_status === 1">{{ $t('待处理') }}</span>
+          <span v-if="scope.row.order_status === 2">{{ $t('待支付') }}</span>
+          <span v-if="scope.row.order_status === 3">{{ $t('待发货') }}</span>
+          <span v-if="scope.row.order_status === 4">{{ $t('已发货') }}</span>
+          <span v-if="scope.row.order_status === 5">{{ $t('已签收') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="activeName === '0'">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary" plain>
@@ -109,6 +130,15 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作')" width="116px" fixed="right" v-if="activeName === '1'">
+        <template slot-scope="scope">
+          <el-button
+            class="btn-deep-purple"
+            @click="goDetail(scope.row.sn, scope.row.order_status)"
+            >{{ $t('详情') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -160,14 +190,14 @@
       </el-table>
       <div>
         <el-col :offset="1" :span="5">
-          {{ $t('合计已提交包裹：') }}{{ packagesCount }} {{ $t('个') }}</el-col
+          {{ $t('合计已提交包裹') }}{{ packagesCount }} {{ $t('个') }}</el-col
         >
         <el-col :offset="1" :span="5">
-          {{ $t('重量：') }}{{ packageWeight }}
+          {{ $t('重量') }}{{ packageWeight }}
           {{ `${localization.weight_unit ? localization.weight_unit : ''}` }}</el-col
         >
         <el-col :span="5">
-          {{ $t('体积重量：') }}{{ volumeWeight }}
+          {{ $t('体积重量') }}{{ volumeWeight }}
           {{ `${localization.weight_unit ? localization.weight_unit : ''}` }}</el-col
         >
       </div>
@@ -205,7 +235,8 @@ export default {
       localization: {},
       clientGroupList: [],
       page_params: {
-        group: ''
+        group: '',
+        status: ''
       },
       urlExcel: '',
       dialogVisible: false,
@@ -216,7 +247,8 @@ export default {
       packagesCount: '',
       days: '',
       dialogDays: false,
-      proId: ''
+      proId: '',
+      activeName: '0'
     }
   },
   mixins: [pagination],
@@ -224,12 +256,17 @@ export default {
     if (this.$route.query.group) {
       this.page_params.group = Number(this.$route.query.group)
     }
+    this.initQuery()
+    this.getList()
+    this.handleClick(this.activeName)
   },
   mounted() {
     this.getList()
+    // this.handleClick(this.activeName)
   },
   activated() {
     this.getList()
+    // this.handleClick(this.activeName)
     this.$nextTick(() => {
       this.$refs.table.doLayout()
     })
@@ -241,7 +278,8 @@ export default {
         .groupList({
           keyword: this.page_params.keyword,
           page: this.page_params.page,
-          size: this.page_params.size
+          size: this.page_params.size,
+          status: this.page_params.status
         })
         .then(res => {
           this.tableLoading = false
@@ -277,6 +315,20 @@ export default {
     proLong(id) {
       this.proId = id
       this.dialogDays = true
+    },
+    goDetail(orderSn, orderStatus) {
+      console.log(orderStatus)
+      this.$router.push({
+        name: 'wayBillList',
+        query: {
+          order_sn: orderSn,
+          activeName: orderStatus.toString()
+        }
+      })
+    },
+    goSearch() {
+      this.page_params.page = 1
+      this.getList()
     },
     // 延长拼团时间
     submitTimes() {
@@ -342,6 +394,18 @@ export default {
       this.dialogVisible = true
       this.getDetails()
     },
+    initQuery() {
+      if (this.$route.query.activeName) {
+        this.activeName = this.$route.query.activeName
+      }
+    },
+    handleClick(tab) {
+      this.page_params.page = 1
+      this.page_params.status = tab.name ? tab.name : tab
+      this.page_params.handleQueryChange('page', 1)
+      this.page_params.handleQueryChange('activeName', tab.name)
+      this.getList()
+    },
     // 获取参团详情数据
     getDetails() {
       this.$request.groupDetails(this.detailsId).then(res => {
@@ -356,7 +420,7 @@ export default {
     // 移除拼团
     removeGroup(id) {
       this.$confirm(
-        this.$t('移除该团员后，团员已提交的拼团包裹将会退回原仓库，您确定要移除该团员吗？'),
+        this.$t('移除该团员后团员已提交的拼团包裹将会退回原仓库您确定要移除该团员吗'),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),
@@ -385,7 +449,7 @@ export default {
     // 取消拼团
     cancelGroup(id) {
       this.$confirm(
-        this.$t('取消拼团后，团员已提交的拼团包裹将会退回原仓库，您确定要取消该拼团吗？'),
+        this.$t('取消拼团后团员已提交的拼团包裹将会退回原仓库您确定要取消该拼团吗'),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),
@@ -415,7 +479,7 @@ export default {
     submitGroup(subCount, count, id) {
       if (subCount < count) {
         this.$confirm(
-          this.$t('还有团员未提交包裹，提交包裹会自动踢出该团员，您确定要提交该拼团吗？'),
+          this.$t('还有团员未提交包裹提交包裹会自动踢出该团员您确定要提交该拼团吗'),
           this.$t('提示'),
           {
             confirmButtonText: this.$t('确定'),
@@ -441,7 +505,7 @@ export default {
           })
         })
       } else {
-        this.$confirm(this.$t('您确定提交该拼团吗？'), this.$t('提示'), {
+        this.$confirm(this.$t('您确定提交该拼团吗'), this.$t('提示'), {
           confirmButtonText: this.$t('确定'),
           cancelButtonText: this.$t('取消'),
           type: 'warning'

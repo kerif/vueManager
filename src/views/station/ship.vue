@@ -70,9 +70,12 @@
           </el-radio-group> -->
         </el-dropdown>
         <el-button class="btn-deep-purple" size="small" @click="batchNum">{{
-          $t('批量更新单号-二程')
+          $t('批量更新单号二程')
         }}</el-button>
-        <el-button size="small" type="success" plain @click="deleteData">{{
+        <el-button size="small" class="btn-blue" @click="batchInvoice">{{
+          $t('批量导入发货单')
+        }}</el-button>
+        <el-button size="small" type="success" plain @click="uploadListExcel">{{
           $t('导出清单')
         }}</el-button>
       </div>
@@ -141,7 +144,7 @@
         <!-- 发货时间 -->
         <el-table-column :label="$t('发货时间')" prop="shipped_at" width="155"></el-table-column>
 
-        <el-table-column :label="$t('转运快递单号-头程')" width="155">
+        <el-table-column :label="$t('转运快递单号头程')" width="155">
           <template slot-scope="scope">
             <span>{{ scope.row.logistics_company }}&nbsp;{{ scope.row.logistics_sn }}</span>
           </template>
@@ -247,6 +250,7 @@
       style="margin-top: 5px"
       :pageParams="page_params"
       :notNeedInitQuery="false"
+      saveSize="ship"
     ></nle-pagination>
     <el-dialog :visible.sync="trackDialog" width="30%" :title="$t('轨迹')" @close="clear">
       <el-form label-position="top" :model="form" ref="form">
@@ -270,7 +274,7 @@
     </el-dialog>
     <!-- 轨迹 -->
     <el-dialog :visible.sync="showDialog" width="45%" :title="$t('更新物流状态')" @close="clearSn">
-      <div class="table-sty">{{ $t('发货单号：') }}{{ this.tableSn }}</div>
+      <div class="table-sty">{{ $t('发货单号') }}{{ this.tableSn }}</div>
       <el-table :data="tableData" stripe border style="width: 100%">
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column :label="$t('物流轨迹')" prop="context"></el-table-column>
@@ -304,6 +308,9 @@
           <el-button @click="uploadList(2)" type="warning" plain size="small">
             {{ $t('分箱模版下载') }}</el-button
           >
+          <el-button @click="uploadList(3)" type="warning" plain size="small">{{
+            $t('简单模板下载')
+          }}</el-button>
           <div class="batch-sty">1，{{ $t('请根据需求选择模板并下载') }}</div>
           <div class="batch-sty">2，{{ $t('根据模版内容填充物流信息') }}</div>
           <div class="batch-sty">3，{{ $t('上传') }}</div>
@@ -312,6 +319,7 @@
           <el-radio-group v-model="type">
             <el-radio :label="1">{{ $t('标准模版下载') }}</el-radio>
             <el-radio :label="2">{{ $t('分箱模版下载') }}</el-radio>
+            <el-radio :label="3">{{ $t('简单模板下载') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('模版上传')">
@@ -336,6 +344,13 @@
         <el-button type="primary" @click="confirmBatch">{{ $t('确定') }}</el-button>
       </div>
     </el-dialog>
+    <waybill-list-tmp-drawer
+      :showTmpDrawer="showTmpDrawer"
+      :deleteNum="deleteNum"
+      :uploadType="uploadType"
+      @receiveTmp="receiveTmp"
+      class="tmp"
+    ></waybill-list-tmp-drawer>
   </div>
 </template>
 <script>
@@ -344,11 +359,13 @@ import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
+import WaybillListTmpDrawer from '@/views/order/waybill/components/waybillListTmpDrawer'
 export default {
   components: {
     SearchGroup,
     NlePagination,
-    AddBtn
+    AddBtn,
+    WaybillListTmpDrawer
   },
   mixins: [pagination],
   name: 'shipContainer',
@@ -394,11 +411,18 @@ export default {
       fileList: [],
       hasFilterCondition: false,
       radio: '',
-      type: 1
+      type: 1,
+      showTmpDrawer: false,
+      uploadType: 3
     }
   },
-  created() {},
+  created() {
+    this.getList()
+    this.initSize()
+  },
   activated() {
+    this.initSize()
+    this.getList()
     if (this.$route.query.shipment_sn) {
       this.page_params.keyword = this.$route.query.shipment_sn
       this.getList()
@@ -415,6 +439,11 @@ export default {
     this.getList()
   },
   methods: {
+    initSize() {
+      if (localStorage.getItem('ship_size')) {
+        this.page_params.size = Number(localStorage.getItem('ship_size'))
+      }
+    },
     getList() {
       this.tableLoading = true
       let params = {
@@ -479,6 +508,19 @@ export default {
             })
           }
         })
+    },
+    batchInvoice() {
+      dialog(
+        {
+          type: 'batchImportInvoice'
+        },
+        () => {
+          this.getList()
+        }
+      )
+    },
+    uploadListExcel() {
+      this.showTmpDrawer = true
     },
     uploadBaleImg(item) {
       let file = item.file
@@ -631,6 +673,9 @@ export default {
       this.tableSn = ''
       this.tableId = ''
     },
+    receiveTmp() {
+      this.showTmpDrawer = false
+    },
     // 更新物流状态
     updateTracking() {
       if (!this.deleteNum || !this.deleteNum.length) {
@@ -645,7 +690,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('是否确认导出？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认导出'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -730,7 +775,7 @@ export default {
     },
     // 取消发货
     cancelShip(id) {
-      this.$confirm(this.$t('您真的要取消发货吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要取消发货吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -775,7 +820,7 @@ export default {
     },
     // 删除发货单
     deleteShip(id) {
-      this.$confirm(this.$t('您真的要删除发货单吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除发货单吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -819,7 +864,7 @@ export default {
       })
     },
     goInvoice(id) {
-      this.$confirm(this.$t('您真的要发货吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要发货吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

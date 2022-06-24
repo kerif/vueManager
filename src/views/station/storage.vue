@@ -1,334 +1,362 @@
 /* eslint-disable no-array-constructor */
 <template>
   <div class="storage-container">
-    <el-row class="container-top">
+    <div class="container-top">
       <el-form ref="user" :model="user" label-width="140px" label-position="left">
-        <el-col :lg="12">
-          <!-- 重量 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('*重量')" class="weight-style">
-                <el-input v-model="user.package_weight" :placeholder="$t('请输入重量')">
-                  <template slot="append">{{ this.localization.weight_unit }}</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <div class="line-center"></div>
-          <!-- 快递单号 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('*快递单号')">
-                <el-input
-                  v-model="user.express_num"
-                  :placeholder="$t('请输入快递单号')"
-                  @blur="getNum(user.express_num)"
-                  :disabled="!!this.$route.params.id && !hasStore"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 寄往仓库 -->
-          <!-- :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('*寄往仓库')">
-                <el-select
-                  v-model="user.warehouse_id"
-                  clearable
-                  @change="getAreaData"
-                  :placeholder="$t('请选择')"
-                >
-                  <el-option
-                    v-for="item in agentData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="item.warehouse_name"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 客户id -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('客户ID')" class="changeQuery">
-                <el-autocomplete
-                  :fetch-suggestions="queryCNSearch"
-                  @select="handleSelect"
-                  :placeholder="$t('请输入客户ID，不填则默认无人认领包裹')"
-                  v-model="user.user_id"
-                  :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
-                >
-                </el-autocomplete>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品名称 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品名称')">
-                <el-input
-                  v-model="user.package_name"
-                  :placeholder="$t('请输入物品名称')"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 品牌 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('品牌')">
-                <el-input v-model="user.brand_name" :placeholder="$t('请输入品牌')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品总价值 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品总价值') + this.localization.currency_unit">
-                <el-input
-                  v-model="user.package_value"
-                  :placeholder="$t('请输入物品总价值')"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 备注 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('备注')">
-                <el-input
-                  v-model="user.remark"
-                  :placeholder="$t('请输入备注')"
-                  type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 4 }"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品照片 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item prop="password_confirmation" class="updateChe" :label="$t('物品照片')">
-                <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
-                  <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
-                  <span class="model-box"></span>
-                  <span class="operat-box">
-                    <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
-                    <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
-                  </span>
-                </span>
-                <el-upload
-                  v-show="goodsImgList.length < 3"
-                  class="avatar-uploader"
-                  list-type="picture-card"
-                  action=""
-                  :before-upload="beforeUploadImg"
-                  :http-request="uploadGoodsImg"
-                  :show-file-list="false"
-                >
-                  <i class="el-icon-plus"> </i>
-                </el-upload>
-                <div class="updateImg">
-                  {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 保存 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item class="saveBtn">
-                <el-button @click="submitStorage" :loading="$store.state.btnLoading">{{
-                  $t('保存')
-                }}</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :lg="12">
-          <!-- 服务 -->
-          <el-row :gutter="20">
-            <el-col>
-              <el-form-item :label="$t('服务')" class="service-style">
-                <el-checkbox-group v-model="user.chosen_services">
-                  <el-checkbox v-for="item in updateService" :key="item.id" :label="item.id"
-                    >{{ item.name }}
-                  </el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <div class="line-center"></div>
-          <!-- 快递公司 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('快递公司')">
-                <el-select v-model="user.express_company_id" clearable :placeholder="$t('请选择')">
-                  <el-option
-                    v-for="item in expressData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="item.name"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 寄往地区 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('寄往地区')">
-                <el-select
-                  v-model="user.country_id"
-                  :disabled="this.user.warehouse_id === '' || this.shipNum != ''"
-                  clearable
-                  :placeholder="$t('请选择')"
-                >
-                  <el-option
-                    v-for="item in shipData"
-                    :key="item.id"
-                    :value="item.id"
-                    :label="item.name"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 尺寸 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('尺寸')">
-                <el-input
-                  v-model="user.length"
-                  class="sizeLength"
-                  :placeholder="$t('长') + this.localization.length_unit"
-                ></el-input>
-                <el-input
-                  v-model="user.width"
-                  class="sizeLength"
-                  :placeholder="$t('宽') + this.localization.length_unit"
-                ></el-input>
-                <el-input
-                  v-model="user.height"
-                  class="sizeLength"
-                  :placeholder="$t('高') + this.localization.length_unit"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 商品数量 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('商品数量')">
-                <el-input v-model="user.qty" :placeholder="$t('请输入件数')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 件数 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('件数')">
-                <el-input v-model="user.number" :placeholder="$t('请输入件数')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 存放货位 -->
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item>
-                <div slot="label">
-                  <span>{{ $t('存放货位') }}</span>
-                  <el-tooltip
-                    effect="dark"
-                    :content="
-                      $t('当您为仓库添加了货位，系统会自动分配货位，同时您也可以自定义填写货位')
-                    "
-                    placement="top"
-                  >
-                    <span class="el-icon-question icon-question"></span>
+        <!-- 重量 -->
+        <el-row :gutter="20">
+          <el-col :span="10">
+            <el-form-item :label="$t('重量')" class="weight-style">
+              <el-input v-model="user.package_weight" :placeholder="$t('请输入重量')">
+                <template slot="append">{{ this.localization.weight_unit }}</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :offset="2" v-if="this.$route.params.id">
+            <el-form-item :label="$t('服务')" class="service-style">
+              <el-checkbox-group v-model="user.chosen_services">
+                <div v-for="item in updateService" :key="item.id" class="service">
+                  <!-- <div class="serviceLeft"> -->
+                  <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
+                  <el-tooltip effect="dark" :content="item.remark" placement="top">
+                    <span class="el-icon-warning icon-info"></span>
                   </el-tooltip>
+                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                  <!-- </div> -->
+                  <!-- <div class="serviceRight"> -->
+                  <!-- </div> -->
                 </div>
-                <el-autocomplete
-                  :disabled="this.user.warehouse_id === ''"
-                  :fetch-suggestions="locationCNSearch"
-                  ref="autocompleteRef"
-                  @select="locationSelect"
-                  :placeholder="$t('请输入存放货位')"
-                  v-model="user.location"
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :offset="2" v-else>
+            <el-form-item :label="$t('服务')" class="service-style">
+              <el-checkbox-group v-model="user.chosen_services">
+                <div v-for="item in updateService" :key="item.id" class="service">
+                  <el-checkbox :label="item.id">{{ item.name }} </el-checkbox>
+                  <el-tooltip effect="dark" :content="item.remark" placement="top">
+                    <span class="el-icon-warning icon-info"></span>
+                  </el-tooltip>
+                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                </div>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div class="line-center"></div>
+        <!-- 快递单号 -->
+        <el-row>
+          <el-col :lg="12">
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('快递单号')">
+                  <el-input
+                    v-model="user.express_num"
+                    :placeholder="$t('请输入快递单号')"
+                    @blur="getNum(user.express_num)"
+                    :disabled="!!this.$route.params.id && !hasStore"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 寄往仓库 -->
+            <!-- :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''" -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('寄往仓库')">
+                  <el-select
+                    v-model="user.warehouse_id"
+                    clearable
+                    @change="getAreaData"
+                    :placeholder="$t('请选择')"
+                  >
+                    <el-option
+                      v-for="item in agentData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.warehouse_name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 客户id -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('客户ID')" class="changeQuery">
+                  <el-autocomplete
+                    :fetch-suggestions="queryCNSearch"
+                    @select="handleSelect"
+                    :placeholder="$t('请输入客户ID，不填则默认无人认领包裹')"
+                    v-model="user.user_id"
+                    @change="changeSelect"
+                    :disabled="(!!this.$route.params.id && !hasStore) || this.shipNum != ''"
+                  >
+                  </el-autocomplete>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品名称 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('物品名称')">
+                  <el-input
+                    v-model="user.package_name"
+                    :placeholder="$t('请输入物品名称')"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 品牌 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('品牌')">
+                  <el-input v-model="user.brand_name" :placeholder="$t('请输入品牌')"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品总价值 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('物品总价值') + this.localization.currency_unit">
+                  <el-input
+                    v-model="user.package_value"
+                    :placeholder="$t('请输入物品总价值')"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 备注 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('备注')">
+                  <el-input
+                    v-model="user.remark"
+                    :placeholder="$t('请输入备注')"
+                    type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 4 }"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品照片 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item
+                  prop="password_confirmation"
+                  class="updateChe"
+                  :label="$t('物品照片')"
                 >
-                </el-autocomplete>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8" v-if="locationCode">
-              <p style="margin-top: 8px">
-                {{ $t('推荐货位') }}
-                <span>{{ locationCode }}</span>
-              </p>
-            </el-col>
-          </el-row>
-          <!-- 包裹编码 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('包裹编码')">
-                <el-input v-model="user.code" :placeholder="$t('请输入包裹编码')"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20" v-if="this.$route.params.id && this.user.express_line">
-            <el-col :span="18">
-              <el-form-item :label="$t('更改线路')" class="express">
-                <span class="change-line"
-                  >{{ user.CName }}---{{ $t('限重') }}{{ user.MaxWeight }}KG</span
-                >
-                <el-button class="btn-main change-btn" @click="changeLine">{{
-                  $t('更改')
-                }}</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 异常件 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('异常件')" class="service-style">
-                <el-radio-group v-model="user.is_exceptional">
-                  <el-radio :label="0">{{ $t('正常件') }}</el-radio>
-                  <el-radio :label="1">{{ $t('异常件') }}</el-radio>
-                </el-radio-group>
-                <el-input
-                  v-if="user.is_exceptional === 1"
-                  type="textarea"
-                  v-model="user.exceptional_remark"
-                  :placeholder="$t('请输入异常件备注,不能超过250个字')"
-                  style="width: 100%"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 物品属性 -->
-          <el-row :gutter="20">
-            <el-col :span="18">
-              <el-form-item :label="$t('物品属性')" class="service-style">
-                <el-checkbox-group v-model="user.props">
-                  <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id"
-                    >{{ item.cn_name }}
-                  </el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-        <!-- <el-form-item class="saveBtn"> -->
-        <!-- </el-form-item> -->
-        <!-- <div class="save-btn">
+                  <span class="img-item" v-for="(item, index) in goodsImgList" :key="index">
+                    <img :src="$baseUrl.IMAGE_URL + item" alt="" class="goods-img" />
+                    <span class="model-box"></span>
+                    <span class="operat-box">
+                      <i class="el-icon-zoom-in" @click="onPreview(item)"></i>
+                      <i class="el-icon-delete" @click="onDeleteImg(index)"></i>
+                    </span>
+                  </span>
+                  <el-upload
+                    v-show="goodsImgList.length < 3"
+                    class="avatar-uploader"
+                    list-type="picture-card"
+                    action=""
+                    :before-upload="beforeUploadImg"
+                    :http-request="uploadGoodsImg"
+                    :show-file-list="false"
+                  >
+                    <i class="el-icon-plus"> </i>
+                  </el-upload>
+                  <div class="updateImg">
+                    {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 保存 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item class="saveBtn">
+                  <el-button @click="submitStorage" :loading="$store.state.btnLoading">{{
+                    $t('保存')
+                  }}</el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :lg="12">
+            <!-- 快递公司 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('快递公司')">
+                  <el-select
+                    v-model="user.express_company_id"
+                    clearable
+                    :placeholder="$t('请选择')"
+                  >
+                    <el-option
+                      v-for="item in expressData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 寄往地区 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('寄往地区')">
+                  <el-select
+                    v-model="user.country_id"
+                    :disabled="this.user.warehouse_id === '' || this.shipNum != ''"
+                    clearable
+                    :placeholder="$t('请选择')"
+                  >
+                    <el-option
+                      v-for="item in shipData"
+                      :key="item.id"
+                      :value="item.id"
+                      :label="item.name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 尺寸 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('尺寸')">
+                  <el-input
+                    v-model="user.length"
+                    class="sizeLength"
+                    :placeholder="$t('长') + this.localization.length_unit"
+                  ></el-input>
+                  <el-input
+                    v-model="user.width"
+                    class="sizeLength"
+                    :placeholder="$t('宽') + this.localization.length_unit"
+                  ></el-input>
+                  <el-input
+                    v-model="user.height"
+                    class="sizeLength"
+                    :placeholder="$t('高') + this.localization.length_unit"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 商品数量 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('商品数量')">
+                  <el-input v-model="user.qty" :placeholder="$t('请输入件数')"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 件数 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('件数')">
+                  <el-input v-model="user.number" :placeholder="$t('请输入件数')"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 存放货位 -->
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item>
+                  <div slot="label">
+                    <span>{{ $t('存放货位') }}</span>
+                    <el-tooltip
+                      effect="dark"
+                      :content="
+                        $t('当您为仓库添加了货位系统会自动分配货位同时您也可以自定义填写货位')
+                      "
+                      placement="top"
+                    >
+                      <span class="el-icon-question icon-question"></span>
+                    </el-tooltip>
+                  </div>
+                  <el-autocomplete
+                    :disabled="this.user.warehouse_id === ''"
+                    :fetch-suggestions="locationCNSearch"
+                    ref="autocompleteRef"
+                    @select="locationSelect"
+                    :placeholder="$t('请输入存放货位')"
+                    v-model="user.location"
+                  >
+                  </el-autocomplete>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="locationCode">
+                <p style="margin-top: 8px">
+                  {{ $t('推荐货位') }}
+                  <span>{{ locationCode }}</span>
+                </p>
+              </el-col>
+            </el-row>
+            <!-- 包裹编码 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('包裹编码')">
+                  <el-input v-model="user.code" :placeholder="$t('请输入包裹编码')"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20" v-if="this.$route.params.id && this.user.express_line">
+              <el-col :span="18">
+                <el-form-item :label="$t('更改线路')" class="express">
+                  <span class="change-line"
+                    >{{ user.CName }}---{{ $t('限重') }}{{ user.MaxWeight }}KG</span
+                  >
+                  <el-button class="btn-main change-btn" @click="changeLine">{{
+                    $t('更改')
+                  }}</el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 异常件 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('异常件')" class="service-style">
+                  <el-radio-group v-model="user.is_exceptional">
+                    <el-radio :label="0">{{ $t('正常件') }}</el-radio>
+                    <el-radio :label="1">{{ $t('异常件') }}</el-radio>
+                  </el-radio-group>
+                  <el-input
+                    v-if="user.is_exceptional === 1"
+                    type="textarea"
+                    v-model="user.exceptional_remark"
+                    :placeholder="$t('请输入异常件备注不能超过250个字')"
+                    style="width: 100%"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- 物品属性 -->
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-form-item :label="$t('物品属性')" class="service-style">
+                  <el-checkbox-group v-model="user.props">
+                    <el-checkbox v-for="item in updateProp" :key="item.id" :label="item.id"
+                      >{{ item.cn_name }}
+                    </el-checkbox>
+                  </el-checkbox-group>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+          <!-- <el-form-item class="saveBtn"> -->
+          <!-- </el-form-item> -->
+          <!-- <div class="save-btn">
       <el-button @click="submitStorage" type="primary" :loading="$store.state.btnLoading">保存</el-button>
     </div> -->
+        </el-row>
       </el-form>
-    </el-row>
+    </div>
     <div class="noExpress" v-if="this.shipNum || this.$route.params.id">
       <div class="select-box">
         <h4>{{ $t('商品清单') }}</h4>
@@ -338,7 +366,7 @@
       </div>
       <el-row :gutter="20" class="id-style">
         <el-col :span="6">
-          <p class="upload-top">{{ $t('原始上传清单：') }}</p>
+          <p class="upload-top">{{ $t('原始上传清单') }}</p>
           <div v-if="user.item_pictures">
             <div class="left-img" v-for="(item, index) in user.item_pictures" :key="index">
               <span
@@ -351,9 +379,9 @@
           </div>
           <div v-else class="nullProduct">{{ $t('无') }}</div>
           <p>
-            {{ $t('原始商品数量：') }}<span class="remark-font">{{ user.qty }}</span>
+            {{ $t('原始商品数量') }}<span class="remark-font">{{ user.qty }}</span>
           </p>
-          <p>{{ $t('原始商品备注：') }}</p>
+          <p>{{ $t('原始商品备注') }}</p>
           <p v-if="user.remark" class="remark-font">{{ user.remark }}</p>
           <p v-else class="noDate">{{ $t('暂无数据') }}</p>
         </el-col>
@@ -433,14 +461,12 @@
 </template>
 
 <script>
-// import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 import AddBtn from '@/components/addBtn'
 export default {
   mixins: [pagination],
   components: {
-    // NlePagination,
     AddBtn
   },
   data() {
@@ -490,12 +516,14 @@ export default {
       shipNum: '', // 通过快递单号拉取的包裹id
       expressNum: '', // 保存的快递单号
       userId: '',
-      locationCode: ''
+      locationCode: '',
+      user_id: ''
     }
   },
   created() {
     this.getProp() // 获取物品属性
-    this.getService() // 获取全部服务
+    // this.getService() // 获取全部服务
+    this.initQuery()
     this.getAgentData()
     this.getExpressData() // 获取全部快递公司
     if (this.$route.params.id) {
@@ -508,6 +536,8 @@ export default {
       //   let props = JSON.parse(this.$route.query.props)
       //   this.user.props = props.map(item => item.id)
       // }
+    } else {
+      this.getServices()
     }
   },
   methods: {
@@ -518,8 +548,30 @@ export default {
         this.localization = res.localization
       })
     },
+    initQuery() {
+      if (this.$route.query.sn) {
+        this.user.express_num = this.$route.query.sn
+      }
+    },
     // 获取全部服务
-    getService() {
+    getService(arr) {
+      console.log('aarr', arr)
+      this.$request.getAllService().then(res => {
+        this.updateService = res.data.map(item => {
+          let price = item.price
+          arr.forEach(ele => {
+            if (ele.service_id === item.id) {
+              price = ele.price
+            }
+          })
+          return {
+            ...item,
+            price
+          }
+        })
+      })
+    },
+    getServices() {
       this.$request.getAllService().then(res => {
         this.updateService = res.data
       })
@@ -573,15 +625,15 @@ export default {
       }
       this.$request.getProductDetails(id).then(res => {
         if (res.ret) {
+          const services = JSON.parse(JSON.stringify(res.data.chosen_services))
           this.user = res.data
           if (res.data.user_id) {
             this.userId = res.data.user_id
-            console.log(this.userId, 'userId')
           }
-          // this.user.express_num = this.$route.params.express_num
           this.user.user_id = res.data.user_id + '---' + res.data.user_name
           this.user.props = res.data.props.map(item => item.id)
           this.user.chosen_services = res.data.chosen_services.map(item => item.service_id)
+          this.getService(services)
           this.user.warehouse_id = res.data.warehouse.id
           this.getAreaLocation()
           if (res.data.express_line) {
@@ -638,7 +690,6 @@ export default {
         this.locationId = id
         this.user.location = ''
         this.locationCNSearch()
-        console.log(this.locationId, '我是改变的locationId')
         this.getAreaLocation()
         this.$request.getArea(id).then(res => {
           if (res.ret) {
@@ -650,18 +701,13 @@ export default {
     // 更改线路
     changeLine() {
       dialog({ type: 'expressChange' }, data => {
-        console.log(data, 'data')
-        // this.$set(this.user, 'CName', data.cn_name)
-        console.log(this.user, 'CName', data.name)
         this.user.CName = data.name
         this.user.MaxWeight = data.max_weight
         this.user.express_line_id = data.id
       })
     },
     changeShip(e) {
-      console.log(e)
       this.$set(this.user, 'country_id', e)
-      console.log(this.user.country_id, 'user.country_id')
     },
     // 通过仓库id拉取相对应的地区
     updateAreaData() {
@@ -707,7 +753,7 @@ export default {
     },
     // 删除商品清单
     deleteProduct(ele) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -787,17 +833,16 @@ export default {
     },
     // 货位搜索
     locationCNSearch(queryString, callback) {
-      console.log(this.user.location, 'location')
       var list = [{}]
       this.$request
         .AutoLocation(this.locationId, {
-          keyword: this.user.location
+          keyword: this.user.location,
+          user_id: this.user.user_id.substring(0, 6)
         })
         .then(res => {
           console.log(res.data, 'res data')
           for (let i of res.data) {
             i.value = i.code
-            // i.value = i.id + '---' + i.name
           }
           if (!this.user.location) {
             this.user.location = res.data[0].code
@@ -813,18 +858,22 @@ export default {
     },
     // 客户id
     handleSelect(item) {
-      console.log(item)
+      console.log(this.user.user_id, 'user.user_id')
       this.supplierId = item.id
       this.userId = item.id
       this.supplierName = item.name
+      this.user.location = ''
       this.getAreaLocation()
+      this.locationCNSearch()
+    },
+    changeSelect() {
+      if (!this.user.user_id) {
+        this.locationCNSearch()
+      }
     },
     // 货位
     locationSelect(item) {
-      // this.ruleForm.en_name = item.name
       console.log(item)
-      // this.supplierId = item.id
-      // this.supplierName = item.name
     },
     // 保存
     submitStorage() {
@@ -841,18 +890,70 @@ export default {
           if (this.$route.params.state === 'editWarehouse') {
             this.tableLoading = true
             this.user.user_id = this.user.user_id.split('---')[0]
-            this.$request.submitEditPackage(this.$route.params.id, this.user).then(res => {
+            const chosen_services = this.updateService
+              .filter(item => this.user.chosen_services.includes(item.id))
+              .map(item => {
+                return {
+                  id: item.id,
+                  price: item.price
+                }
+              })
+            this.$request
+              .submitEditPackage(this.$route.params.id, {
+                ...this.user,
+                chosen_services
+              })
+              .then(res => {
+                this.tableLoading = false
+                if (res.ret) {
+                  this.$notify({
+                    type: 'success',
+                    title: this.$t('操作成功'),
+                    message: res.msg
+                  })
+                  this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
+                    ''
+                  this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
+                    ''
+                  this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
+                    ''
+                  this.goodsImgList = []
+                  this.user.props = []
+                  this.user.chosen_services = []
+                  this.user.location = this.user.country_id = ''
+                  this.hasStore = true
+                  this.$router.replace('/station/storage')
+                } else {
+                  this.$message({
+                    title: this.$t('操作失败'),
+                    message: res.msg,
+                    type: 'warning'
+                  })
+                }
+              })
+          } else if (this.$route.params.state === 'purchase') {
+            console.log(this.$route.params.state)
+            this.tableLoading = true
+            this.user.user_id = this.user.user_id.split('---')[0]
+            const chosen_services = this.updateService
+              .filter(item => this.user.chosen_services.includes(item.id))
+              .map(item => {
+                return {
+                  id: item.id,
+                  price: item.price
+                }
+              })
+            this.$request.getExpress({ ...this.user, chosen_services }).then(res => {
               this.tableLoading = false
-              if (res.ret) {
+              if (res.ret === 1) {
                 this.$notify({
                   type: 'success',
                   title: this.$t('操作成功'),
                   message: res.msg
                 })
-                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
+                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.brand_name =
                   ''
-                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
-                  ''
+                this.user.user_id = this.user.warehouse_id = this.user.package_value = ''
                 this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
                   ''
                 this.goodsImgList = []
@@ -860,7 +961,7 @@ export default {
                 this.user.chosen_services = []
                 this.user.location = this.user.country_id = ''
                 this.hasStore = true
-                this.$router.replace('/station/storage')
+                this.shipNum = ''
               } else {
                 this.$message({
                   title: this.$t('操作失败'),
@@ -872,41 +973,61 @@ export default {
           } else {
             this.tableLoading = true
             this.user.user_id = this.user.user_id.split('---')[0]
-            this.$request.submitPackage(this.$route.params.id, this.user).then(res => {
-              this.tableLoading = false
-              if (res.ret) {
-                this.$notify({
-                  type: 'success',
-                  title: this.$t('操作成功'),
-                  message: res.msg
-                })
-                this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
-                  ''
-                this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
-                  ''
-                this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
-                  ''
-                this.goodsImgList = []
-                this.user.props = []
-                this.user.chosen_services = []
-                this.user.location = this.user.country_id = ''
-                this.hasStore = true
-                this.$router.replace('/station/storage')
-              } else {
-                this.$message({
-                  title: this.$t('操作失败'),
-                  message: res.msg,
-                  type: 'warning'
-                })
-              }
-            })
+            const chosen_services = this.updateService
+              .filter(item => this.user.chosen_services.includes(item.id))
+              .map(item => {
+                return {
+                  id: item.id,
+                  price: item.price
+                }
+              })
+            this.$request
+              .submitPackage(this.$route.params.id, {
+                ...this.user,
+                chosen_services
+              })
+              .then(res => {
+                this.tableLoading = false
+                if (res.ret) {
+                  this.$notify({
+                    type: 'success',
+                    title: this.$t('操作成功'),
+                    message: res.msg
+                  })
+                  this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_value =
+                    ''
+                  this.user.user_id = this.user.warehouse_id = this.user.package_name = this.user.brand_name =
+                    ''
+                  this.user.express_num = this.user.remark = this.user.express_company_id = this.user.number = this.user.qty = this.user.code =
+                    ''
+                  this.goodsImgList = []
+                  this.user.props = []
+                  this.user.chosen_services = []
+                  this.user.location = this.user.country_id = ''
+                  this.hasStore = true
+                  this.$router.replace('/station/storage')
+                } else {
+                  this.$message({
+                    title: this.$t('操作失败'),
+                    message: res.msg,
+                    type: 'warning'
+                  })
+                }
+              })
           }
         } else {
           // 如果是添加
           this.tableLoading = true
           this.user.user_id = this.user.user_id.split('---')[0]
-          console.log(this.user.user_id, 'this.user.user_id')
-          this.$request.getExpress(this.user).then(res => {
+          const chosen_services = this.updateService
+            .filter(item => this.user.chosen_services.includes(item.id))
+            .map(item => {
+              return {
+                id: item.id,
+                price: item.price
+              }
+            })
+          this.$request.getExpress({ ...this.user, chosen_services }).then(res => {
             this.tableLoading = false
             if (res.ret === 1) {
               this.$notify({
@@ -927,22 +1048,27 @@ export default {
               this.shipNum = ''
               console.log(this.hasStore, 'this.hasStore')
             } else if (res.ret === 2) {
-              this.$confirm(
-                this.$t('快递单号不存在或客户未预报，请确认是否入库'),
-                this.$t('提示'),
-                {
-                  confirmButtonText: this.$t('确定'),
-                  cancelButtonText: this.$t('取消'),
-                  type: 'warning'
-                }
-              ).then(() => {
-                this.$request.addShipment(this.user).then(res => {
+              this.$confirm(this.$t('快递单号不存在或客户未预报请确认是否入库'), this.$t('提示'), {
+                confirmButtonText: this.$t('确定'),
+                cancelButtonText: this.$t('取消'),
+                type: 'warning'
+              }).then(() => {
+                const chosen_services = this.updateService
+                  .filter(item => this.user.chosen_services.includes(item.id))
+                  .map(item => {
+                    return {
+                      id: item.id,
+                      price: item.price
+                    }
+                  })
+                this.$request.addShipment({ ...this.user, chosen_services }).then(res => {
                   if (res.ret) {
                     this.$notify({
                       title: this.$t('操作成功'),
                       message: res.msg,
                       type: 'success'
                     })
+                    this.getServices()
                     this.user.length = this.user.width = this.user.height = this.user.package_weight = this.user.package_name = this.user.package_value = this.user.brand_name =
                       ''
                     this.user.user_id = this.user.warehouse_id = ''
@@ -1005,6 +1131,7 @@ export default {
   .weight-style {
     .el-form-item__content .el-input-group {
       height: 80px !important;
+      // width: 450px;
     }
     .el-input-group--append .el-input__inner {
       height: 80px !important;
@@ -1014,7 +1141,7 @@ export default {
   }
   .service-style {
     .el-checkbox-group {
-      height: 80px !important;
+      // height: 120px !important;
     }
   }
   .line-center {
@@ -1115,7 +1242,8 @@ export default {
   .remark-font {
     color: #ff9a20;
   }
-  .icon-question {
+  .icon-question,
+  .icon-info {
     margin-left: 5px;
     font-size: 18px;
     color: #67c23a;
@@ -1127,6 +1255,27 @@ export default {
   }
   .change-btn {
     margin-left: 10px;
+  }
+  .service {
+    float: left;
+    width: 310px;
+    margin-right: 25px;
+    overflow: hidden;
+    .add-value-ipt {
+      width: 100px;
+      margin-left: 5px;
+    }
+    // .serviceLeft {
+    //   display: inline-block;
+    //   float: left;
+    // }
+    // .serviceRight {
+    //   display: inline-block;
+    //   float: right;
+    //   .add-value-ipt {
+    //     width: 100px;
+    //   }
+    // }
   }
 }
 </style>

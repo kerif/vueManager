@@ -4,6 +4,7 @@
       <el-col :span="10">
         <div class="select-box">
           <el-button @click="regionalMana">{{ $t('地域通知管理') }}</el-button>
+          <el-button style="margin: 0 10px" @click="batchToImport">{{ $t('批量导入') }}</el-button>
           <add-btn @click.native="addCountry">{{ $t('添加国家') }}</add-btn>
         </div>
         <el-table
@@ -20,7 +21,7 @@
             </template>
           </el-table-column>
           <!-- 前缀字符 -->
-          <el-table-column prop="name" :label="$t('国家/地区')"> </el-table-column>
+          <el-table-column prop="name" :label="$t('国家地区')"> </el-table-column>
           <!-- 状态 -->
           <el-table-column :label="$t('状态')">
             <template slot-scope="scope">
@@ -44,8 +45,13 @@
                 $t('删除')
               }}</el-button>
               <!-- 详情 -->
-              <el-button class="btn-purple" @click="goDeatils(scope.row.name, scope.row.id)">{{
-                $t('详情')
+              <el-button
+                class="btn-purple"
+                @click="goDeatils(scope.row.name, scope.row.id, scope.row.rgb_color)"
+                >{{ $t('详情') }}</el-button
+              >
+              <el-button class="btn-green btn-sty" @click="editCountryLang(scope.row.id)">{{
+                $t('编辑')
               }}</el-button>
             </template>
           </el-table-column>
@@ -60,9 +66,7 @@
       </el-col>
       <el-col :span="14">
         <div class="tips-sty">
-          {{
-            $t('提示：系统仅支持三级区域，对上一级地址操作启用/关闭，或删除时，对下级所有区域生效')
-          }}
+          {{ $t('提示系统仅支持三级区域，对上一级地址操作启用关闭或删除时对下级所有区域生效') }}
         </div>
         <div style="margin-top: 15px; overflow: hidden">
           <!-- <el-switch
@@ -76,9 +80,31 @@
             inactive-color="gray">
           </el-switch> -->
           {{ $t('当前') }}：{{ countryName }}
+          <el-color-picker
+            v-model="color"
+            size="mini"
+            class="color-sty"
+            color-format="rgb"
+            @change="updateBgColor"
+          ></el-color-picker>
           <div class="top-right">
+            <!-- <el-upload
+              class="upload-demo"
+              action=""
+              :show-file-list="false"
+              :http-request="uploadBaleImg"
+            >
+              <el-button class="btn-blue" @click="uploadList" style="margin: 0 10px">{{
+                $t('下载国家导入模板')
+              }}</el-button>
+              <el-button class="btn-light-red" style="margin: 0 10px" slot="trigger">{{
+                $t('批量导入')
+              }}</el-button> -->
             <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
             <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button>
+            <!-- </el-upload> -->
+            <!-- <el-button class="btn-light-red" @click="batchDelete">{{ $t('批量删除') }}</el-button>
+            <el-button class="btn-blue" @click="addLowLevelCountry">{{ $t('添加') }}</el-button> -->
           </div>
           <!-- @expand-change="onExpand" -->
           <div style="height: calc(100vh - 480px)">
@@ -178,7 +204,7 @@
         <el-col :span="21">
           <div class="tips-main">
             <i class="el-icon-warning code-sty"></i>
-            {{ $t('添加通知信息后，客户在下单选择该地区的地址时，会弹出对应提示') }}
+            {{ $t('添加通知信息后客户在下单选择该地区的地址时会弹出对应提示') }}
           </div>
         </el-col>
         <el-col :span="3">
@@ -243,11 +269,8 @@
           <el-button type="primary" @click="newCountry">{{ $t('确定') }}</el-button>
         </div>
       </el-dialog>
-      <!-- <div slot="footer" class="dialog-footer">
-        <el-button @click="outerVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="innerVisible = true">{{ $t('确定') }}</el-button>
-      </div> -->
     </el-dialog>
+    <batch-import :showImport="showImport" @passVal="passVal" ref="batch"></batch-import>
   </div>
 </template>
 
@@ -257,10 +280,13 @@ import dialog from '@/components/dialog'
 import Sortable from 'sortablejs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
+// import { downloadStreamFile } from '@/utils/index'
+import batchImport from './components/batchImport'
 export default {
   components: {
     AddBtn,
-    NlePagination
+    NlePagination,
+    batchImport
   },
   mixins: [pagination],
   data() {
@@ -287,7 +313,12 @@ export default {
         content_translations: {}
       },
       state: '',
-      areasId: ''
+      areasId: '',
+      fileList: [],
+      file: '',
+      showImport: false,
+      color: 'rgb(0,0,0)',
+      cid: ''
     }
   },
   created() {
@@ -302,8 +333,9 @@ export default {
         if (res.ret) {
           this.countryData = res.data
           this.countryId = res.data[0].id
+          this.color = 'rgb(' + res.data[0].rgb_color.join(',') + ')'
           if (this.countryId) {
-            this.goDeatils(res.data[0].name, this.countryId)
+            this.goDeatils(res.data[0].name, this.countryId, this.color)
           }
           this.countrySendData = [...res.data]
           console.log('countryData')
@@ -326,7 +358,7 @@ export default {
     },
     // 删除国家地区
     deleteCountry(ids) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -354,7 +386,7 @@ export default {
       console.log(event, 'event')
       if (event === 0) {
         this.$confirm(
-          this.$t('停止支持该国家后，再次开启时需重新添加支持仓库与路线'),
+          this.$t('停止支持该国家后再次开启时需重新添加支持仓库与路线'),
           this.$t('提示'),
           {
             confirmButtonText: this.$t('确定'),
@@ -406,9 +438,7 @@ export default {
     },
     // 确定拖拽 国家地区
     rowUpdate() {
-      // eslint-disable-next-line camelcase
       const ids = this.countrySendData.map(({ id, name }, index) => ({ id, index, name }))
-      console.log(ids)
       this.countryData = []
       this.$request.countryLocationIndex(ids).then(res => {
         if (res.ret) {
@@ -440,13 +470,21 @@ export default {
       })
     },
     // 详情
-    goDeatils(name, id) {
+    goDeatils(name, id, rgb) {
       this.countryId = id
-      console.log(this.countryId, 'this.countryId111')
+      this.cid = id
       this.countryName = name
+      // console.log(rgb, typeof rgb)
+      // console.log(Array.isArray(rgb))
+      let bgCol = rgb
+      if (Array.isArray(rgb)) {
+        this.color = 'rgb(' + bgCol.join(',') + ')'
+        console.log(this.color, typeof this.color)
+      }
       this.$request.superiorArea(this.countryId).then(res => {
         if (res.ret) {
           this.currentCountryList = res.data
+          console.log(this.currentCountryList)
         }
       })
     },
@@ -519,7 +557,7 @@ export default {
             title: this.$t('操作成功'),
             message: res.msg
           })
-          this.goDeatils(this.countryName, this.countryId)
+          this.goDeatils(this.countryName, this.countryId, this.color)
         } else {
           this.$message({
             message: res.msg,
@@ -532,7 +570,7 @@ export default {
     deleteLOwLevel(id) {
       console.log(id, 'id')
       this.$confirm(
-        this.$t('您是否确认批量删除？如果是批量删除二级地址的话，该分级下所有的三级地址也会删除'),
+        this.$t('您是否确认批量删除如果是批量删除二级地址的话该分级下所有的三级地址也会删除'),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),
@@ -551,7 +589,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               })
-              this.goDeatils(this.countryName, this.countryId)
+              this.goDeatils(this.countryName, this.countryId, this.color)
             } else {
               this.$notify({
                 title: this.$t('操作成功'),
@@ -562,6 +600,69 @@ export default {
           })
       })
     },
+    // 批量导入
+    uploadBaleImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          this.currentCountryList = res.data
+          this.goDeatils(this.countryName, this.countryId, this.color)
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 背景色
+    updateBgColor() {
+      console.log(this.color, 'this.color')
+      const bgColor = this.color.slice(4, -1).split(',')
+      console.log(bgColor, typeof bgColor)
+      const arr = bgColor.map(item => {
+        return +item
+      })
+      console.log(arr)
+      // const bgColor = this.color.slice(1)
+      // const arr = [
+      //   Number(`0x${bgColor.slice(0, 2)}`),
+      //   Number(`0x${bgColor.slice(2, 4)}`),
+      //   Number(`0x${bgColor.slice(4)}`)
+      // ]
+      let id = this.countryId
+      this.$request.updateColor(id, { rgb_color: arr }).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.color = 'rgb(' + arr.join(',') + ')'
+          this.getCountryList()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onUpload(file) {
+      let params = new FormData()
+      params.append(`file`, file)
+      return this.$request.batchImport(params)
+    },
+    handleExceed() {
+      return this.$message.warning(this.$t('当前限制上传1个文件'))
+    },
+    // 文件删除
+    onFileRemove(file, fileList) {
+      this.fileList = fileList
+    },
+    beforeUploadImg() {},
     // 批量删除
     batchDelete() {
       if (this.deleteNum.length === 0 && this.secondNum.length === 0) {
@@ -584,10 +685,10 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this.goDeatils(this.countryName, this.countryId)
+            this.goDeatils(this.countryName, this.countryId, this.color)
           } else {
             this.$notify({
-              title: this.$t('操作成功'),
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })
@@ -598,7 +699,7 @@ export default {
     // 新增二三级国家
     addLowLevelCountry() {
       dialog({ type: 'superiorAddEdit', state: 'add', countryId: this.countryId }, () => {
-        this.goDeatils(this.countryName, this.countryId)
+        this.goDeatils(this.countryName, this.countryId, this.color)
       })
     },
     // 编辑二三级国家
@@ -606,6 +707,9 @@ export default {
       dialog({ type: 'superiorAddEdit', id: id, state: 'edit' }, () => {
         this.goDeatils(this.countryName, this.countryId)
       })
+    },
+    editCountryLang(id) {
+      dialog({ type: 'countryLang', id: id })
     },
     // 地域通知管理
     regionalMana() {
@@ -658,7 +762,7 @@ export default {
     },
     // 删除地域
     deleteRegional(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -795,6 +899,14 @@ export default {
       this.form.content_translations = {}
       this.innerVisible = false
       this.outerVisible = true
+    },
+    // 批量导入
+    batchToImport() {
+      this.showImport = true
+      this.$refs.batch.getList()
+    },
+    passVal() {
+      this.showImport = false
     }
   }
 }
@@ -820,6 +932,7 @@ export default {
   .top-right {
     display: inline-block;
     float: right;
+    margin-top: 10px;
   }
   .code-sty {
     padding-left: 5px;
@@ -831,6 +944,21 @@ export default {
     background-color: #f5f5f5;
     line-height: 30px;
     padding-right: 20px;
+  }
+  .color-sty {
+    position: absoulte;
+    top: 10px;
+    right: 0px;
+  }
+  // .upload-demo .el-upload-list {
+  //   display: inline-block;
+  //   transform: translateY(8px);
+  // }
+  .el-upload-list__item-name {
+    // display: none;
+  }
+  .btn-sty {
+    margin-left: 0;
   }
 }
 .innnerClass {

@@ -1,6 +1,6 @@
 <template>
   <div class="packed-container">
-    <div class="receiverMSg">
+    <div class="receiver-msg">
       <h4>{{ $t('收货人信息') }}</h4>
       <el-row class="container-center" :gutter="20">
         <!-- 姓名 -->
@@ -10,12 +10,12 @@
         </el-col>
         <!-- 手机/联系电话 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{ $t('手机/联系电话') }}</span>
+          <span class="leftWidth">{{ $t('手机联系电话') }}</span>
           <span>{{ form.address && form.address.phone }}</span>
         </el-col>
         <!-- 国家/地区 -->
         <el-col :span="7" :offset="1">
-          <span class="leftWidth">{{ $t('国家/地区') }}</span>
+          <span class="leftWidth">{{ $t('国家地区') }}</span>
           <span>{{ form.address && form.address.country.cn_name }}</span>
         </el-col>
       </el-row>
@@ -55,7 +55,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="receiverMSg">
+    <div class="receiver-msg">
       <h4 class="all-group">{{ $t('打包详情') }}</h4>
       <!-- <div class="all-group all-sty" v-if="this.$route.params.activeName === '1' && form.is_all_submitted === 1">
         <el-button class="btn-light-red">{{$t('全团已提交')}}</el-button>
@@ -96,7 +96,7 @@
     </div>
     <!-- 打包清单 -->
     <h4>{{ $t('包裹清单') }}</h4>
-    <div class="add-sty" v-if="this.$route.params.activeName === '1'">
+    <div class="add-sty" v-if="this.$route.params.activeName">
       <el-button class="btn-blue" @click="addPackages">{{ $t('添加包裹') }}</el-button>
     </div>
     <el-table :data="PackageData" v-loading="tableLoading" class="data-list" border stripe>
@@ -129,7 +129,7 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('货位')" prop="location"></el-table-column>
-      <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName === '1'">
+      <el-table-column :label="$t('操作')" width="140" v-if="$route.params.activeName">
         <template slot-scope="scope">
           <el-button @click="packageDetails(scope.row.id)" class="btn-deep-purple">
             {{ $t('详情') }}
@@ -181,7 +181,133 @@
       <!-- 所属包裹 -->
       <el-table-column :label="$t('所属包裹')" prop="express_num"></el-table-column>
     </el-table>
-    <div class="receiverMSg">
+    <h4 style="margin-bottom: 45px">
+      {{ $t('预申报信息') }}
+      <i
+        :class="showDeclare ? 'el-icon-arrow-down' : 'el-icon-arrow-up'"
+        @click="displayInfo"
+        style="cursor: pointer"
+      >
+      </i>
+    </h4>
+    <div v-show="showDeclare">
+      <el-form :model="infoForm" label-width="100px">
+        <el-form-item :label="$t('税号')">
+          <el-input
+            :placeholder="$t('请输入税号')"
+            class="input-sty"
+            v-model="infoForm.tax_number"
+          ></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('海关编码')">
+          <el-input
+            :placeholder="$t('请输入海关编码')"
+            class="input-sty"
+            v-model="infoForm.hs_code"
+          ></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('申报类型')">
+          <el-select v-model="infoForm.type">
+            <el-option
+              v-for="item in declareType"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('付费方式')">
+          <el-input
+            v-model="infoForm.payment_mode"
+            class="input-sty"
+            :placeholder="$t('请输入付费方式')"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button size="small" @click="deleteRowData" class="btn-light-red" style="margin: 5px 0">
+        {{ $t('多选删除') }}
+      </el-button>
+      <add-btn @click.native="addNew">{{ $t('新增') }}</add-btn>
+      <el-table
+        :data="items"
+        ref="multipleTable"
+        border
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        class="data-list"
+      >
+        <el-table-column type="selection" width="60"> </el-table-column>
+        <el-table-column :label="$t('中文品名')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.cn_name"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('英文品名')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.en_name"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="sku">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.sku"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('海关编码')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.hs_code"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('数量')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.quantity" @blur="changeVal(scope.row)"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('单位')">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.unit" :placeholder="$t('请选择单位')">
+              <el-option
+                v-for="item in unitList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('单价')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.unit_value" @blur="changeVal(scope.row)"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('总价值')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.value"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('币种')" width="140">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.currency" :placeholder="$t('请选择币种')">
+              <el-option
+                v-for="item in currencyList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button size="small" class="btn-light-red" @click="deleteInfo(scope.$index, items)">
+              {{ $t('删除') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div class="receiver-msg">
       <el-form
         ref="params"
         :model="user"
@@ -254,7 +380,7 @@
         <!-- 重量 -->
         <el-row :gutter="20" v-if="user.box_type === 1">
           <el-col :span="11">
-            <el-form-item :label="$t('*重量')" prop="weight">
+            <el-form-item :label="$t('重量')" prop="weight">
               <el-input v-model="user.weight" :placeholder="$t('请输入重量')">
                 <template slot="append">{{ this.localization.weight_unit }}</template>
               </el-input>
@@ -265,7 +391,7 @@
           </el-col>
           <!-- 尺寸 -->
           <el-col :span="10" :offset="2" v-if="$route.params.parent == 0">
-            <el-form-item :label="$t('*尺寸')">
+            <el-form-item :label="$t('尺寸')">
               <el-input
                 v-model="user.length"
                 class="sizeLength"
@@ -284,13 +410,55 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 子订单单价 -->
+        <el-row :gutter="20" v-if="$route.params.parent != 0">
+          <el-col :span="10">
+            <el-form-item :label="$t('子订单单价(选填)')">
+              <el-input v-model="user.unit_price" :placeholder="$t('请输入子订单单价')"></el-input>
+              <span style="color: red">{{
+                $t('填写该项则优先使用该单价计算团购单费用，不再使用渠道中所设置的单价')
+              }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 打包图片 -->
+        <el-row :gutter="20" v-if="$route.params.parent != 0">
+          <el-col :span="11">
+            <el-form-item :label="$t('上传打包照片')" class="updateChe">
+              <span class="img-item" v-for="(item, index) in baleImgList" :key="item.name">
+                <img :src="$baseUrl.IMAGE_URL + item.url" alt class="goods-img" />
+                <span class="model-box"></span>
+                <span class="operat-box">
+                  <i class="el-icon-zoom-in" @click="onPreview(item.url)"></i>
+                  <i class="el-icon-delete" @click="onDeleteImg('bale', index)"></i>
+                </span>
+              </span>
+              <el-upload
+                class="avatar-uploader"
+                action
+                list-type="picture-card"
+                :before-upload="beforeUploadImg"
+                :http-request="uploadBaleImg"
+                :show-file-list="false"
+              >
+                <i class="el-icon-plus"></i>
+              </el-upload>
+              <div class="updateImg">{{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M') }}</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row :gutter="20" v-if="user.box_type === 2">
           <el-form-item>
             <el-col :span="18">
               <div class="add-row">
+                <!-- <el-button class="btn-light-red" @click="clearRow">{{ $t('清空') }}</el-button> -->
+                <el-button class="btn-deep-purple" @click="batchAddRow">{{
+                  $t('批量添加')
+                }}</el-button>
                 <el-button @click="addRow" class="btn-deep-purple">{{ $t('添加行') }}</el-button>
               </div>
               <el-table :data="user.box" style="width: 100%" border>
+                <el-table-column type="index" label="#"></el-table-column>
                 <el-table-column :label="$t('包裹实际重量') + this.localization.weight_unit">
                   <template slot-scope="scope">
                     <el-input
@@ -426,15 +594,17 @@
         <el-row :gutter="20" v-if="$route.params.parent == 0">
           <el-col>
             <el-form-item :label="$t('增值服务')">
-              <div v-for="item in updateProp" :key="item.id" class="service">
-                <div class="serviceLeft">
-                  <el-checkbox v-model="item.checked">{{ item.name }}</el-checkbox>
+              <el-checkbox-group v-model="user.services">
+                <div v-for="item in updateProp" :key="item.id" class="service">
+                  <div class="serviceLeft">
+                    <el-checkbox :label="item.id">{{ item.name }}</el-checkbox>
+                  </div>
+                  <div class="serviceRight">
+                    <span>{{ localization.currency_unit }}</span>
+                    <el-input v-model="item.price" class="add-value-ipt"></el-input>
+                  </div>
                 </div>
-                <div class="serviceRight">
-                  <span>{{ localization.currency_unit }}</span>
-                  <el-input v-model="item.price" class="add-value-ipt"></el-input>
-                </div>
-              </div>
+              </el-checkbox-group>
             </el-form-item>
           </el-col>
         </el-row>
@@ -449,9 +619,9 @@
                       item.name
                     }}</el-checkbox>
                   </div>
-                  <div class="serviceRight">
-                    <span>{{ localization.currency_unit }}</span>
-                    <el-input v-model="item.value" disabled class="add-value-ipt"></el-input>
+                  <div class="service-right">
+                    <span>{{ localization.currency_unit }} {{ item.value }}</span>
+                    <!-- <el-input v-model="item.value" disabled class="add-value-ipt"></el-input> -->
                   </div>
                 </div>
               </el-checkbox-group>
@@ -471,15 +641,57 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 包裹增值服务 -->
+        <el-row :gutter="20" v-if="$route.params.parent == 0">
+          <el-col>
+            <el-form-item :label="$t('包裹增值服务')">
+              <div class="service">
+                <div class="serviceLeft">
+                  <span>{{ localization.currency_unit }}</span>
+                  <el-input
+                    v-model="user.package_service_fee"
+                    class="add-value-ipt"
+                    disabled
+                  ></el-input>
+                </div>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
+    <!-- 运费计算 -->
+    <div class="receiver-msg" v-if="$route.params.parent == 0">
+      <div class="leftBtn">
+        <el-button type="danger" @click="getCalOrderPrice">{{ $t('计算') }}</el-button>
+      </div>
+      <div class="rightTab">
+        <div v-for="item in freightData" :key="item.index" class="check">
+          <div style="padding-top: 10px">{{ item.name }}</div>
+          <div style="padding-top: 10px">
+            {{ item.value }}
+          </div>
+        </div>
+        <div v-if="freightData.length === 0" class="text">请填写重量体积后，点击计算核算价格</div>
+        <div style="margin-left: 100px">
+          <div class="total">
+            {{ $t('合计') }}<span class="color_fee">{{ this.total_fee }}</span>
+          </div>
+          <div class="changePrice">
+            <el-checkbox v-model="is_checked"> {{ $t('改价') }} </el-checkbox>
+            <el-input v-model="final_price" clearable class="inpLength"></el-input>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- 保存 -->
-    <el-row :gutter="20">
-      <el-col :span="18">
-        <el-button @click="savePacked" type="primary" :loading="$store.state.btnLoading">{{
-          $t('保存')
-        }}</el-button>
-      </el-col>
+    <el-row>
+      <el-button type="primary" @click="savePacked(1)" :loading="$store.state.btnLoading">{{
+        $t('仅保存')
+      }}</el-button>
+      <el-button @click="savePacked(2)" type="primary" :loading="$store.state.btnLoading">{{
+        $t('保存并提交')
+      }}</el-button>
     </el-row>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -490,6 +702,7 @@
 </template>
 <script>
 import dialog from '@/components/dialog'
+import AddBtn from '@/components/addBtn'
 export default {
   data() {
     return {
@@ -513,12 +726,14 @@ export default {
         warehouse_id: '',
         insurance_fee: '',
         tariff_fee: '',
+        unit_price: '',
         services: [],
         in_warehouse_item: '',
         in_warehouse_pictures: [], // 留仓物品照片
         pack_pictures: [], // 打包照片
         box: [],
-        line_service_ids: []
+        line_service_ids: [],
+        order_service_ids: []
       },
       baseMode: 0,
       lineServices: [],
@@ -537,41 +752,87 @@ export default {
       weightName: '',
       express: {
         MaxWeight: '',
-        cName: ''
+        CName: ''
       },
       warehouse: {
         warehouse_name: ''
       },
-      factor: ''
+      factor: '',
+      freightData: [],
+      final_price: '',
+      is_checked: false,
+      total_fee: '',
+      line_rules_fee: '',
+      freight: '',
+      first: '',
+      next: '',
+      service: [],
+      items: [],
+      infoForm: {
+        tax_number: '',
+        hs_code: '',
+        type: '',
+        payment_mode: ''
+      },
+      currencyList: [],
+      unitList: [],
+      showDeclare: false,
+      unit: '',
+      currency: '',
+      declareType: [
+        {
+          id: 1,
+          name: this.$t('个人')
+        },
+        {
+          id: 2,
+          name: this.$t('公司')
+        },
+        {
+          id: 3,
+          name: this.$t('个人简易')
+        },
+        {
+          id: 4,
+          name: this.$t('公司简易')
+        }
+      ]
     }
+  },
+  components: {
+    AddBtn
   },
   created() {
     this.getPackage()
     this.getExpress()
     this.getProduct()
+    this.getInit()
     // this.getProp() // 获取多选框数据
   },
   methods: {
     // 获取多选框
     getProp(arr) {
-      this.$request.getAdded().then(res => {
+      this.$request.getAdded({ size: 100 }).then(res => {
         if (res.ret) {
+          this.updateProp = res.data
           let ids = res.data.map(item => item.id)
-          this.updateProp = res.data.map(item => {
-            return {
-              ...item,
-              checked: false
-            }
-          })
           arr.forEach(item => {
             let index = ids.indexOf(item.service_id)
             if (index !== -1) {
               this.updateProp[index].checked = true
               this.updateProp[index].price = item.price
+              this.user.services.push(this.updateProp[index].id)
+            } else {
+              this.updateProp[index].checked = false
             }
           })
         }
       })
+    },
+    changeVal(row) {
+      if (row.quantity && row.unit_value) {
+        row.value = row.quantity * row.unit_value
+      }
     },
     //获取渠道增值服务
     getExpressServes() {
@@ -658,6 +919,21 @@ export default {
         this.unitVolume()
       }
     },
+    displayInfo() {
+      this.showDeclare = !this.showDeclare
+      if (this.showDeclare) {
+        this.getNormal()
+      }
+    },
+    getNormal() {
+      this.$request.getDefaultValue().then(res => {
+        if (res.ret) {
+          this.infoForm.tax_number = res.data.declare_tax_number
+          this.unit = res.data.declare_unit
+          this.currency = res.data.declare_currency
+        }
+      })
+    },
     // 计算实际总重量
     _onTotalWeight() {
       this.TotalWeight =
@@ -680,16 +956,86 @@ export default {
                 0
               )
     },
-    savePacked() {
+    //订单价格计算
+    getCalOrderPrice() {
+      if (this.user.weight === '') {
+        return this.$message.error(this.$t('重量不能为空'))
+      }
+      let services = []
+      services = this.updateProp
+        .filter(ele => this.user.services.includes(ele.id))
+        .map(ele => {
+          let id = ele.id
+          let price = ele.price
+          return { id, price }
+        })
+      this.$request
+        .calOrderPrice(this.$route.params.id, {
+          ...this.user,
+          services,
+          width: this.user.width || '',
+          height: this.user.height || '',
+          length: this.user.length || '',
+          weight: this.user.weight || ''
+        })
+        .then(res => {
+          if (res.ret) {
+            this.total_fee = res.data.total_fee
+            let line_services = res.data.line_services.services.map(item => {
+              let name = item.name
+              let value = item.price
+              return { name, value }
+            })
+            let order_services = res.data.order_services.services.map(item => {
+              let name = item.name
+              let value = item.price
+              return { name, value }
+            })
+            this.freightData = []
+            this.freightData.push(
+              {
+                name: '运费',
+                value: res.data.freight.first + res.data.freight.next
+              },
+              {
+                name: '关税费',
+                value: res.data.tariff_fee
+              },
+              {
+                name: '保险费',
+                value: res.data.insurance_fee
+              },
+              ...order_services,
+              ...line_services,
+              {
+                name: '渠道限制费',
+                value: res.data.line_rules.fee
+              },
+              {
+                name: '包裹增值服务',
+                value: res.data.package_service_fee
+              }
+            )
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+    },
+    //仅保存和保存并提交
+    async savePacked(type) {
       this.user.services = this.updateProp
-        .filter(item => item.checked)
+        .filter(item => this.user.services.includes(item.id))
         .map(item => {
           return {
             id: item.id,
             price: item.price
           }
         })
-      console.log('ser', this.user.services)
+      this.user.in_warehouse_pictures = this.goodsImgList
+      this.user.pack_pictures = this.baleImgList
       this.user.in_warehouse_pictures = this.goodsImgList.map(item => {
         return {
           url: item.url
@@ -700,22 +1046,108 @@ export default {
           url: item.url
         }
       })
-      this.$request.saveOrderPack(this.$route.params.id, this.user).then(res => {
-        if (res.ret) {
-          this.$notify({
-            type: 'success',
-            title: this.$t('操作成功'),
-            message: res.msg
-          })
-          // this.$router.push({ name: 'wayBillList' })
-          this.$router.go(-1)
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
+      this.user.unit_price = this.user.unit_price || ''
+      let res = {}
+      if (type === 1) {
+        let params = {
+          ...this.user
         }
-      })
+        params.declare = {
+          items: [],
+          tax_number: ''
+        }
+        params.declare.items = this.items
+        params.declare.tax_number = this.infoForm.tax_number
+        params.declare.hs_code = this.infoForm.hs_code
+        params.declare.type = this.infoForm.type
+        params.declare.payment_mode = this.infoForm.payment_mode
+        res = await this.$request.saveOrderData(this.$route.params.id, params)
+      } else {
+        let params = {}
+        params = {
+          ...this.user
+        }
+        params.declare = {
+          items: [],
+          tax_number: ''
+        }
+        params.declare.items = this.items
+        params.declare.tax_number = this.infoForm.tax_number
+        params.declare.hs_code = this.infoForm.hs_code
+        params.declare.type = this.infoForm.type
+        params.declare.payment_mode = this.infoForm.payment_mode
+        if (this.is_checked) {
+          params.final_price = this.final_price || ''
+        }
+        if (this.user.box_type === 1) {
+          params.width = this.user.width || ''
+          params.height = this.user.height || ''
+          params.length = this.user.length || ''
+          params.weight = this.user.weight || ''
+        } else {
+          params.width = ''
+          params.height = ''
+          params.length = ''
+          params.weight = ''
+        }
+        res = await this.$request.saveOrderPack(
+          this.$route.params.id,
+          params
+          //{
+          // ...this.user,
+          // width: this.user.width || '',
+          // height: this.user.height || '',
+          // length: this.user.length || '',
+          // weight: this.user.weight || ''
+          //}
+        )
+      }
+      if (res.ret) {
+        this.$notify({
+          type: 'success',
+          title: this.$t('操作成功'),
+          message: res.msg
+        })
+        this.$router.go(-1)
+      } else {
+        this.$message({
+          message: res.msg,
+          type: 'error'
+        })
+      }
+    },
+    clearRow() {
+      this.user.box = []
+    },
+    batchAddRow() {
+      dialog(
+        {
+          type: 'batchAdd',
+          localization: this.localization
+        },
+        data => {
+          let boxData = JSON.parse(JSON.stringify(data))
+          let boxes = JSON.parse(JSON.stringify(data.boxes))
+          for (let i = 0; i < boxes; i++) {
+            if (this.baseMode === 0) {
+              this.user.box.push({
+                weight: boxData.weight,
+                length: boxData.length,
+                width: boxData.width,
+                height: boxData.height,
+                volume_weight: ''
+              })
+            } else {
+              this.user.box.push({
+                weight: boxData.weight,
+                length: boxData.length,
+                width: boxData.width,
+                height: boxData.height
+              })
+            }
+          }
+        }
+      )
     },
     // 新增行
     addRow() {
@@ -741,6 +1173,83 @@ export default {
       this._onTotalWeight()
       this.unitVolume()
     },
+    addNew() {
+      this.items.push({
+        cn_name: '',
+        en_name: '',
+        sku: '',
+        hs_code: '',
+        quantity: '',
+        unit: this.unit,
+        unit_value: '',
+        value: '',
+        currency: this.currency
+      })
+    },
+    handleSelectionChange(val) {
+      this.sels = val
+    },
+    deleteRowData() {
+      let val = this.sels
+      if (val) {
+        val.forEach((va, index) => {
+          console.log(index)
+          this.items.forEach((v, i) => {
+            if (va.id === v.id) {
+              this.items.splice(i, 1)
+            }
+          })
+        })
+      }
+      this.$refs.multipleTable.clearSelection()
+    },
+    getInit() {
+      this.$request.initDeclare().then(res => {
+        if (res.ret) {
+          this.currencyList = res.data.currency_list
+          this.unitList = res.data.unit_list
+        }
+      })
+    },
+    deleteInfo(index, rows) {
+      rows.splice(index, 1)
+    },
+    getPackage() {
+      this.$request.getOrderDetails(this.$route.params.id).then(res => {
+        this.form = res.data
+        this.PackageData = res.data.packages
+        this.user.tariff_fee = res.data.payment.tariff_fee
+        this.user.insurance_fee = res.data.payment.insurance_fee
+        this.user.box_type = res.data.box_type
+        this.user.box = res.data.box
+        this.user.remark = res.data.remark
+        this.user.location = res.data.location
+        this.user.in_warehouse_item = res.data.in_warehouse_item
+        this.user.weight = res.data.weight
+        this.user.unit_price = res.data.unit_price
+        this.user.length = res.data.length
+        this.user.height = res.data.height
+        this.user.width = res.data.width
+        this.user.in_warehouse_pictures = res.data.in_warehouse_pictures
+        this.user.pack_pictures = res.data.pack_pictures
+        this.goodsImgList = res.data.in_warehouse_pictures
+        this.baleImgList = res.data.pack_pictures
+        this.services = JSON.parse(JSON.stringify(res.data.services))
+        this.getProp(JSON.parse(JSON.stringify(res.data.services)))
+        this.express.CName = this.form.express_line.cn_name
+        this.express.MaxWeight = this.form.express_line.max_weight
+        this.user.express_line_id = this.form.express_line.id
+        this.user.warehouse_id = this.form.warehouse.id
+        this.user.line_rule_fee = res.data.payment.line_rule_fee
+        this.user.package_service_fee = res.data.payment.package_service_fee
+        this.warehouse.warehouse_name = this.form.warehouse.warehouse_name
+        this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
+        this.localization = res.localization
+        this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
+        this.baseMode = this.form.express_line.base_mode
+        this.getExpressServes()
+      })
+    },
     // 更改仓库
     changeWarehouse() {
       dialog({ type: 'lineChange', state: 'warehouse' }, data => {
@@ -754,7 +1263,9 @@ export default {
     changeLine() {
       dialog({ type: 'lineChange', state: 'line', id: this.user.warehouse_id }, data => {
         console.log(data, 'data')
-        this.express.CName = data.name
+        // this.express.CName = data.name
+        this.$set(this.express, 'CName', data.name)
+        console.log(this.express)
         this.express.MaxWeight = data.max_weight
         this.user.express_line_id = data.id
       })
@@ -781,28 +1292,6 @@ export default {
         this.user.height = this.PackageData[0].height
       }
     },
-    getPackage() {
-      this.$request.getOrderDetails(this.$route.params.id).then(res => {
-        this.form = res.data
-        this.PackageData = res.data.packages
-        this.user.tariff_fee = res.data.payment.tariff_fee
-        this.user.insurance_fee = res.data.payment.insurance_fee
-        this.user.box_type = res.data.box_type
-        this.services = res.data.services
-        this.getProp(res.data.services)
-        this.express.CName = this.form.express_line.cn_name
-        this.express.MaxWeight = this.form.express_line.max_weight
-        this.user.express_line_id = this.form.express_line.id
-        this.user.warehouse_id = this.form.warehouse.id
-        this.user.line_rule_fee = res.data.payment.line_rule_fee
-        this.warehouse.warehouse_name = this.form.warehouse.warehouse_name
-        this.factor = res.data.express_line.factor > 0 ? res.data.express_line.factor : 6000
-        this.localization = res.localization
-        this.lineServiceId = res.data.payment.line_services.map(item => item.line_service_id)
-        this.baseMode = this.form.express_line.base_mode
-        this.getExpressServes()
-      })
-    },
     // 获取全部线路详情
     getExpress() {
       this.$request.getUsable(this.$route.params.id).then(res => {
@@ -824,6 +1313,8 @@ export default {
         this.baleImgList.splice(index, 1)
       } else if (type === 'goods') {
         this.goodsImgList.splice(index, 1)
+      } else if (type === 'pack') {
+        this.packImgList.splice(index, 1)
       }
     },
     beforeUploadImg(file) {
@@ -864,6 +1355,21 @@ export default {
         }
       })
     },
+    // 上传打包照片
+    uploadPackImg(item) {
+      let file = item.file
+      this.onUpload(file).then(res => {
+        if (res.ret) {
+          res.data.forEach(item => {
+            this.packImgList.push({
+              name: item.name,
+              url: item.path
+            })
+          })
+        }
+      })
+    },
+
     // 上传图片
     onUpload(file) {
       let params = new FormData()
@@ -882,7 +1388,6 @@ export default {
           arr[index].checked = true
         }
       })
-      console.log('dcd', this.arr)
       return arr
     }
   }
@@ -930,6 +1435,10 @@ export default {
     .serviceRight {
       display: inline-block;
       float: right;
+    }
+    .service-right {
+      display: inline-block;
+      padding-left: 10px;
     }
   }
   .saveBtn {
@@ -998,10 +1507,46 @@ export default {
   .container-center {
     margin-bottom: 20px;
   }
-  .receiverMSg {
+  .receiver-msg {
     padding: 10px;
     margin-bottom: 20px;
     background-color: #fff !important;
+    .leftBtn {
+      float: left;
+      height: 200px;
+      margin: 0 20px;
+      .el-button {
+        height: 160px;
+      }
+    }
+    .rightTab {
+      font-size: 14px;
+      .check {
+        width: 120px;
+        height: 80px;
+        border: 1px solid #dcdfe6;
+        vertical-align: top;
+        display: inline-block;
+        text-align: center;
+      }
+      .text {
+        padding-top: 70px;
+      }
+      .total {
+        margin-top: 40px;
+        font-size: 20px;
+        font-weight: bold;
+        .color_fee {
+          color: red;
+        }
+      }
+      .changePrice {
+        margin: -26px 0 0 300px;
+        .inpLength {
+          width: 10% !important;
+        }
+      }
+    }
   }
   .leftWidth {
     display: inline-block;
@@ -1045,6 +1590,12 @@ export default {
   }
   .add-sty {
     text-align: right;
+  }
+  /deep/.el-checkbox-group {
+    font-size: 14px;
+  }
+  .input-sty {
+    width: 35% !important;
   }
 }
 </style>

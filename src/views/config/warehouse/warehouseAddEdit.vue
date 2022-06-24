@@ -3,7 +3,7 @@
     <div class="tips-box">
       <span class="tips-title">{{ $t('温馨提示') }}: </span>
       <span class="tips-content">{{
-        $t('当前页面配置的地址为用户发往仓库的真实收件地址，请填写有效准确的信息，请不要填写座机')
+        $t('当前页面配置的地址为用户发往仓库的真实收件地址请填写有效准确的信息请不要填写座机')
       }}</span>
     </div>
     <el-form
@@ -57,7 +57,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('选择开启会忽略当次地址精确度检查。')"
+                :content="$t('选择开启会忽略当次地址精确度检查')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -92,15 +92,25 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item :label="$t('是否同行货')">
+        <el-row>
+          <el-col :span="10">
+            <el-radio-group v-model="ruleForm.is_stg">
+              <el-radio :label="0">{{ $t('否') }}</el-radio>
+              <el-radio :label="1">{{ $t('是') }}</el-radio>
+            </el-radio-group>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item>
             <div>
-              <span class="address-sty">{{ $t('免费仓储期(天)') }}</span>
+              <span class="address-sty">{{ $t('免费仓储期天') }}</span>
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="$t('仓储期按自然日计算，称重当日为仓储第一天')"
+                :content="$t('仓储期按自然日计算称重当日为仓储第一天')"
                 placement="top"
               >
                 <span class="el-icon-question icon-info"></span>
@@ -125,7 +135,7 @@
         </el-col>
       </el-row>
       <el-form-item
-        :label="$t('温馨提示（主要提醒客户需要注意的事项，在客户端仓库地址页面显示）')"
+        :label="$t('温馨提示主要提醒客户需要注意的事项在客户端仓库地址页面显示）')"
         prop="tips"
       >
         <el-row>
@@ -139,21 +149,25 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item prop="support_countries" :label="$t('支持国家/地区')">
+      <el-form-item prop="support_countries" :label="$t('支持国家地区')">
         <el-col :span="10">
           <el-select
             v-model="ruleForm.support_countries"
             multiple
             filterable
+            ref="select"
+            collapse-tags
             class="country-select"
-            :placeholder="$t('请选择国家/地区')"
+            @change="handleSelect"
+            :placeholder="$t('请选择国家地区')"
+            @remove-tag="removeTag"
           >
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
         </el-col>
         <el-col :span="4" class="country-btn">
-          <el-button type="primary" @click="onAddCountry">+ {{ $t('新增国家/地区') }}</el-button>
+          <el-button type="primary" @click="onAddCountry">+ {{ $t('新增国家地区') }}</el-button>
         </el-col>
       </el-form-item>
       <el-form-item>
@@ -186,8 +200,15 @@ export default {
         auto_location: 0,
         free_store_days: 0,
         ignore_lon_lat: 1,
-        support_countries: ''
+        support_countries: [],
+        is_stg: 0
       },
+      all: [
+        {
+          id: -1,
+          name: '全选'
+        }
+      ],
       options: [],
       localization: {},
       rules: {
@@ -234,31 +255,51 @@ export default {
     getCountry() {
       this.$request.getEnabledCountry().then(res => {
         this.options = res.data
+        this.options.unshift({ id: -1, name: '全选' })
         this.localization = res.localization
       })
     },
+    handleSelect(val) {
+      if (val.includes(-1)) {
+        this.ruleForm.support_countries = this.options.map(item => {
+          return item.id
+        })
+      } else if (val.includes(-1) && val.length - 1 < this.options.length) {
+        this.ruleForm.support_countries = this.ruleForm.support_countries.filter(item => {
+          return item.id !== -1
+        })
+      }
+    },
+    removeTag(tag) {
+      if (tag === -1) {
+        this.ruleForm.support_countries = []
+      }
+    },
     submit(formName) {
       // 编辑状态
+      this.ruleForm.support_countries = this.ruleForm.support_countries.filter(item => item !== -1)
       if (this.$route.params.id) {
-        this.$request.editWarehouseAddress(this.$route.params.id, this.ruleForm).then(res => {
-          if (res.ret) {
-            this.$notify({
-              type: 'success',
-              title: this.$t('操作成功'),
-              message: res.msg
-            })
-            this.$router.push({ name: 'warehouse' })
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        })
+        this.$request
+          .editWarehouseAddress(this.$route.params.id, { ...this.ruleForm })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.$router.push({ name: 'warehouse' })
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
       } else {
         this.$refs[formName].validate(valid => {
           if (valid) {
-            this.$request.addWarehouseAddress(this.ruleForm).then(res => {
+            this.$request.addWarehouseAddress({ ...this.ruleForm }).then(res => {
               if (res.ret) {
                 this.$notify({
                   type: 'success',

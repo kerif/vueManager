@@ -70,7 +70,7 @@
     </el-row>
     <!-- 短信模版（系统内） -->
     <div v-if="ruleForm.type === 2">
-      <h2 class="template-sty">{{ $t('短信模版（系统内）') }}</h2>
+      <h2 class="template-sty">{{ $t('短信模版系统内') }}</h2>
       <!-- <el-button class="template-sty btn-green" @click="templateExample">{{$t('模版示例')}}</el-button> -->
       <div class="svs-template">
         <el-row :gutter="20">
@@ -169,6 +169,7 @@
             <span v-if="scope.row.type === 2">{{ $t('国际') }}</span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('扣除次数')" prop="fee"> </el-table-column>
       </el-table>
       <div class="dialog-bottom">
         <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>

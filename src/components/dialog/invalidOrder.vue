@@ -6,6 +6,12 @@
     width="55%"
     @close="clear"
   >
+    <div class="tip-box">
+      <p>
+        <span class="el-icon-warning icon-info"></span>
+        {{ $t('已付款订单作废后，退款将进入财务模块进行审核') }}
+      </p>
+    </div>
     <div v-if="parent === 1" class="invalid-sty">
       <el-checkbox v-model="ruleForm.should_invalid_packages">{{
         $t('是否同时作废所有包裹')
@@ -102,7 +108,6 @@
           {{ $t('支持图片格式：jpeg.png.jpg... 图片大小限2M，最多上传3张') }}
         </div>
       </el-form-item>
-      <div class="tips-sty">*{{ $t('已付款订单作废后，退款将进入财务模块进行审核') }}</div>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -368,8 +373,20 @@ export default {
   .invalid-sty {
     margin-bottom: 15px;
   }
-  .tips-sty {
-    color: red;
+  .tip-box {
+    width: 500px;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 25px;
+    background: #fef0f0;
+    p {
+      color: red;
+    }
+  }
+  .icon-info {
+    position: relative;
+    top: 2px;
+    font-size: 18px;
   }
 }
 </style>

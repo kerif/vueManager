@@ -73,7 +73,7 @@
           class="item"
           effect="dark"
           :content="
-            $t('开启后，若预报包裹超过设定时间未入库，将会在包裹列表进行提示，表示包裹有丢失风险')
+            $t('开启后若预报包裹超过设定时间未入库将会在包裹列表进行提示表示包裹有丢失风险')
           "
           placement="top"
         >
@@ -114,6 +114,19 @@
         >
         </el-switch>
       </el-form-item>
+      <el-form-item :label="$t('入库自动生成包裹编码')">
+        <el-switch
+          v-model="basic.package_auto_code"
+          @change="changeBasic($event)"
+          :active-text="$t('开')"
+          :inactive-text="$t('关')"
+          :active-value="1"
+          :inactive-value="0"
+          active-color="#13ce66"
+          inactive-color="gray"
+        >
+        </el-switch>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -133,7 +146,8 @@ export default {
         size: '',
         location: '',
         package_warning: 0,
-        prop_type: 0
+        prop_type: 0,
+        package_auto_code: ''
       }
     }
   },
@@ -215,7 +229,8 @@ export default {
           size: this.basic.size,
           location: this.basic.location,
           package_warning: this.basic.package_warning,
-          prop_type: this.basic.prop_type
+          prop_type: this.basic.prop_type,
+          package_auto_code: this.basic.package_auto_code
         })
         .then(res => {
           if (res.ret) {
@@ -241,12 +256,13 @@ export default {
           this.basic.location = res.data.location
           this.basic.package_warning = res.data.package_warning
           this.basic.prop_type = res.data.prop_type
+          this.basic.package_auto_code = res.data.package_auto_code
         }
       })
     },
     handleClose(id) {
       this.$confirm(
-        this.$t('您真的要删除物品属性吗？会影响到系统内的包裹，请谨慎操作。'),
+        this.$t('您真的要删除物品属性吗会影响到系统内的包裹请谨慎操作。'),
         this.$t('提示'),
         {
           confirmButtonText: this.$t('确定'),

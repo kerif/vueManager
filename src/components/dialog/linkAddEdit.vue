@@ -58,7 +58,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item :label="$t('*标题列表')" v-if="ruleForm.type === 1 || ruleForm.type === 3">
+      <el-form-item :label="$t('标题列表')" v-if="ruleForm.type === 1 || ruleForm.type === 3">
         <el-button class="btn-deep-blue" @click="chooseLine">{{ $t('选择标题') }}</el-button>
         <p>{{ ruleForm.title }}</p>
         <!-- <div class="display-line" v-if="this.lineName">

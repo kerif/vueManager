@@ -44,62 +44,78 @@
             </div>
             <div class="express-left right-margin">
               <el-radio-group v-model="radio" @change="changeRadio">
-                <el-radio :label="1">{{ $t('送货上门') }}</el-radio>
+                <el-radio :label="1" :disabled="this.address_type === 2">{{
+                  $t('送货上门')
+                }}</el-radio>
                 <el-radio :label="2">{{ $t('自提点提货') }}</el-radio>
               </el-radio-group>
             </div>
             <div class="line-sty"></div>
             <!-- 收件地址 -->
-            <div>
-              <div class="express-left">
-                <p>{{ $t('收件地址') }}</p>
-              </div>
-              <el-table
-                :data="addressList"
-                stripe
-                border
-                class="data-list"
-                v-loading="tableLoading"
-              >
-                <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
-                <el-table-column :label="$t('选择包裹数与件数')">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
-                  </template>
-                </el-table-column>
-                <el-table-column :label="$t('默认收货信息')">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.address && scope.row.address.receiver_name }}</span
-                    >&nbsp;
-                    <span>{{ scope.row.address && scope.row.address.timezone }}</span>
-                    <span v-if="scope.row.address && scope.row.address.timezone">-</span>
-                    <span>{{ scope.row.address && scope.row.address.phone }}</span
-                    >&nbsp; <span>{{ scope.row.address && scope.row.address.country_name }}</span
-                    >&nbsp; <span>{{ scope.row.address && scope.row.address.postcode }}</span
-                    >&nbsp; <span>{{ scope.row.address && scope.row.address.city }}</span
-                    >&nbsp; <span>{{ scope.row.address && scope.row.address.street }}</span
-                    >&nbsp;
-                    <span>{{ scope.row.address && scope.row.address.door_no }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column :label="$t('操作')">
-                  <template slot-scope="scope">
-                    <!-- 更改地址 -->
-                    <el-button
-                      class="btn-green"
-                      @click="changeAddress(scope.row.user_id, scope.row, addressList)"
-                      >{{ $t('更改地址') }}</el-button
-                    >
-                    <!-- 删除 -->
-                    <el-button
-                      class="btn-light-red"
-                      @click="deleteAddress(scope.$index, addressList, scope.row.user_id)"
-                      >{{ $t('删除') }}</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-              <!-- <div v-if="this.userData && this.userData.user_id">
+            <div class="express-left">
+              <p>{{ $t('收件地址') }}</p>
+            </div>
+            <div class="express-left right-margin">
+              <el-radio-group v-model="address_type" @change="changeAdd">
+                <el-radio :label="1">{{ $t('使用客户地址') }}</el-radio>
+                <el-radio :label="2" :disabled="this.radio === 1">{{
+                  $t('使用自提点地址')
+                }}</el-radio>
+              </el-radio-group>
+            </div>
+            <div class="line-sty"></div>
+            <el-table
+              :data="addressList"
+              stripe
+              border
+              class="data-list"
+              v-loading="tableLoading"
+              v-if="this.address_type === 1"
+            >
+              <el-table-column :label="$t('客户ID')" prop="user_id"></el-table-column>
+              <el-table-column :label="$t('选择包裹数与件数')">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.package_count }}（{{ scope.row.number }}）</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('默认收货信息')">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.address && scope.row.address.receiver_name }}</span
+                  >&nbsp;
+                  <span>{{ scope.row.address && scope.row.address.timezone }}</span>
+                  <span v-if="scope.row.address && scope.row.address.timezone">-</span>
+                  <span>{{ scope.row.address && scope.row.address.phone }}</span
+                  >&nbsp; <span>{{ scope.row.address && scope.row.address.country_name }}</span
+                  >&nbsp; <span>{{ scope.row.address && scope.row.address.postcode }}</span
+                  >&nbsp; <span>{{ scope.row.address && scope.row.address.city }}</span
+                  >&nbsp; <span>{{ scope.row.address && scope.row.address.street }}</span
+                  >&nbsp;
+                  <span>{{ scope.row.address && scope.row.address.door_no }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('清关编码')" prop="clearance_code">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.address && scope.row.address.clearance_code }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('操作')">
+                <template slot-scope="scope">
+                  <!-- 更改地址 -->
+                  <el-button
+                    class="btn-green"
+                    @click="changeAddress(scope.row.user_id, scope.row, addressList)"
+                    >{{ $t('更改地址') }}</el-button
+                  >
+                  <!-- 删除 -->
+                  <el-button
+                    class="btn-light-red"
+                    @click="deleteAddress(scope.$index, addressList, scope.row.user_id)"
+                    >{{ $t('删除') }}</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- <div v-if="this.userData && this.userData.user_id">
                   <p>{{userData.receiver_name}}</p>
                   <p>{{userData.phone}}</p>
                   <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.city}}
@@ -111,10 +127,9 @@
                   <p>{{userData.country && userData.country.cn_name}}&nbsp;{{userData.address}}
                   </p>
                 </div> -->
-              <!-- <div class="express-left express-right">
+            <!-- <div class="express-left express-right">
                 <p class="express-sty" @click="chooseUser">{{$t('请选择')}} ></p>
               </div> -->
-            </div>
             <div class="line-sty"></div>
             <div class="express-left">
               <p>{{ $t('快递方式') }}</p>
@@ -139,7 +154,7 @@
             <div v-if="this.radio === 2">
               <div class="express-left">
                 <p>{{ $t('自提点地址') }}</p>
-                <div class="choose-sty" v-if="this.selfData.id">
+                <div class="choose-sty" v-if="this.selfData && this.selfData.id">
                   <p>{{ selfData.address }}</p>
                 </div>
               </div>
@@ -308,7 +323,16 @@
           </template>
         </el-table-column>
         <!-- 国家 -->
-        <el-table-column prop="country.cn_name" :label="$t('国家')"> </el-table-column>
+        <el-table-column prop="country.name" :label="$t('国家')"> </el-table-column>
+        <el-table-column prop="area" :label="$t('区域')">
+          <template slot-scope="scope">
+            <span
+              >{{ scope.row.area ? scope.row.area.name : '' }}&nbsp;&nbsp;{{
+                scope.row.sub_area ? scope.row.sub_area.name : ''
+              }}</span
+            >
+          </template>
+        </el-table-column>
         <!-- 邮编 -->
         <el-table-column prop="postcode" :label="$t('邮编')"> </el-table-column>
         <el-table-column prop="timezone" :label="$t('区号')"> </el-table-column>
@@ -357,7 +381,7 @@
           <el-col :span="10">
             <!-- 员工组中文名 -->
             <el-form-item :label="$t('国家')">
-              <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')" filterable>
+              <!-- <el-select v-model="ruleForm.country_id" :placeholder="$t('请选择国家')" filterable>
                 <el-option
                   v-for="item in countryData"
                   :key="item.id"
@@ -365,7 +389,15 @@
                   :value="item.id"
                 >
                 </el-option>
-              </el-select>
+              </el-select> -->
+              <el-cascader
+                v-model="ruleForm.country_id"
+                :options="countryOptions"
+                ref="country"
+                :props="props"
+                collapse-tags
+                clearable
+              ></el-cascader>
             </el-form-item>
           </el-col>
           <el-col :span="10">
@@ -535,6 +567,7 @@ export default {
       userData: {},
       optionsId: [],
       radio: 1,
+      address_type: 1,
       servicesData: [],
       localization: {},
       insurance: {},
@@ -568,7 +601,7 @@ export default {
         receiver_name: '',
         phone: '',
         timezone: '',
-        country_id: '',
+        country_id: [],
         door_no: '',
         city: '',
         postcode: '',
@@ -590,7 +623,11 @@ export default {
       changeUpdate: 1,
       tipsDialog: false,
       tipsContent: [],
-      addressIds: []
+      addressIds: [],
+      address_ids: [],
+      countryOptions: [],
+      id: '',
+      props: { checkStrictly: true }
     }
   },
   created() {
@@ -604,8 +641,8 @@ export default {
       this.getBatch()
       this.radio = 2
       this.packageId = this.$route.query.packageId
-      this.getRecipeAddress()
     }
+    this.getRecipeAddress()
   },
   methods: {
     getList() {
@@ -617,6 +654,7 @@ export default {
           if (res.ret) {
             this.packageData = res.data.packages
             this.userId = res.data.packages[0].user_id
+            this.clientId = res.data.packages[0].user_id
             if (this.userId) {
               this.getAddressDialog() // 获取收件地址
               this.getCountry() // 获取新建收件地址的国家
@@ -629,6 +667,7 @@ export default {
             this.box.is_insurance = res.data.items.insurance
             this.box.is_tariff = res.data.items.is_tariff
             this.box.payment_mode = res.data.items.payment_mode
+            this.getExpress()
           } else {
             this.$notify({
               title: this.$t('操作失败'),
@@ -648,7 +687,6 @@ export default {
           if (res.ret) {
             this.packageData = res.data.packages
             this.userId = res.data.packages[0].user_id
-            console.log(this.userId, 'this.userId')
             if (this.userId) {
               this.getAddressDialog() // 获取收件地址
               this.getCountry() // 获取新建收件地址的国家
@@ -687,7 +725,6 @@ export default {
                 this.addressIds = item.address.sub_area_id
                   ? [item.address.sub_area_id]
                   : [item.address.area_id]
-                console.log(this.addressIds, 'this.addressIds')
                 this.getTips()
               }
             })
@@ -706,7 +743,6 @@ export default {
             if (this.tipsContent.length) {
               this.tipsDialog = true
             }
-            console.log(res.data, 'data')
           }
         })
     },
@@ -715,16 +751,19 @@ export default {
       this.addressList = this.addressList.filter(item => item.user_id !== userId)
       this.packageData = this.packageData.filter(item => item.user_id !== userId)
       this.packageId = this.packageData.map(item => item.id)
-      console.log(this.packageId, 'this.packageId')
     },
     // 更改地址
     changeAddress(userId, counts, addressList) {
-      console.log(addressList, 'addressList')
       this.clientId = userId // 客户ID
       this.counts = counts // 选择包果数
       this.addressData = addressList // 收件地址数据
       this.boxDialog = true
       this.getAddressDialog()
+    },
+    changeAdd() {
+      this.box.express_line_id = ''
+      this.options = []
+      this.getExpress()
     },
     // 确定 更改地址
     selectAddress() {
@@ -760,7 +799,6 @@ export default {
               this.addressIds = item.address.sub_area_id
                 ? [item.address.sub_area_id]
                 : [item.address.area_id]
-              console.log(this.addressIds, 'this.addressIds')
               this.getTips()
             }
           })
@@ -777,37 +815,43 @@ export default {
     },
     // 获取快递方式
     getExpress() {
-      let address_ids = []
-      address_ids = this.addressList.map(item => item.address.id)
-      this.$request
-        .usableLines({
-          address_ids,
-          package_ids: this.optionsId,
-          type: this.radio
-        })
-        .then(res => {
-          if (res.ret) {
-            this.options = res.data
-            this.box.express_line_id = res.data[0].id
-            this.lineId = this.box.express_line_id
-            this.lineStations()
-            this.getId()
-            console.log(this.box.express_line_id, 'this.box.express_line_id')
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
+      // address_ids = this.addressList.map(item => item.address.id)
+      this.address_ids = this.addressList.map(item => {
+        if (item.address) {
+          return item.address.id
+        }
+      })
+      let params = {
+        package_ids: this.optionsId,
+        type: this.radio
+      }
+      if (this.address_type === 1) {
+        params.address_ids = this.address_ids
+      }
+      if (this.radio === 1) {
+        params.is_delivery = 0
+      }
+      this.$request.usableLines(params).then(res => {
+        if (res.ret) {
+          this.options = res.data
+          this.box.express_line_id = res.data[0].id
+          this.lineId = this.box.express_line_id
+          this.lineStations()
+          this.getId()
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
     },
     // 更换快递方式
     changeExpress() {
       // this.options = []
       this.selfData = {}
       this.lineId = this.box.express_line_id
-      console.log(this.lineId, 'this.lineId')
       // this.clearance_code = val.need_clearance_code
       // this.need_id_card = val.need_id_card
       this.lineStations()
@@ -823,18 +867,15 @@ export default {
     getId() {
       this.$request.idCards(this.lineId).then(res => {
         if (res.ret) {
-          console.log(res.data, 'res')
           this.needCode = res.data.need_clearance_code
           this.idCode = res.data.need_id_card
           this.personalCode = res.data.need_personal_code
           this.isDelivery = res.data.is_delivery
           this.multiBoxes = res.data.multi_boxes
-          console.log(this.isDelivery, 'this.isDelivery')
         }
       })
     },
     changeRadio() {
-      console.log(this.radio, 'radio')
       this.box.express_line_id = ''
       this.options = []
       this.getExpress()
@@ -844,11 +885,11 @@ export default {
       this.$request.lineStations(this.lineId).then(res => {
         if (res.ret) {
           this.stationsData = res.data
+          console.log(this.stationsData)
           this.selfData = res.data[0]
-          console.log(this.selfData, 'this.selfData.id')
+          console.log(this.selfData)
           if (this.selfData) {
             this.box.address_id = this.selfData.id
-            console.log(this.box.address_id, 'box.address_id')
           }
         }
       })
@@ -859,7 +900,7 @@ export default {
     },
     // 获取增值服务
     getRadio() {
-      this.$request.servicesPackage().then(res => {
+      this.$request.servicesPackage({ size: 100 }).then(res => {
         if (res.ret) {
           this.servicesData = res.data
         }
@@ -889,7 +930,6 @@ export default {
             this.userData = this.tableData[0]
             if (this.userData) {
               this.box.address_id = this.userData.id
-              console.log(this.box.address_id, 'this.address_id')
             }
           }
         })
@@ -898,6 +938,30 @@ export default {
     getCountry() {
       this.$request.getCountry().then(res => {
         this.countryData = res.data
+        this.countryOptions = res.data.map(item => {
+          return {
+            value: item.id,
+            label: item.name,
+            children:
+              item.areas < 1
+                ? undefined
+                : item.areas.map(item => {
+                    return {
+                      value: item.id,
+                      label: item.name,
+                      children:
+                        item.areas < 1
+                          ? undefined
+                          : item.areas.map(item => {
+                              return {
+                                value: item.id,
+                                label: item.name
+                              }
+                            })
+                    }
+                  })
+          }
+        })
       })
     },
     chooseUser() {
@@ -913,6 +977,9 @@ export default {
           this.$request
             .addAddress({
               ...this.ruleForm,
+              country_id: this.ruleForm.country_id[0],
+              area_id: this.ruleForm.country_id[1] ? this.ruleForm.country_id[1] : '',
+              sub_area_id: this.ruleForm.country_id[2] ? this.ruleForm.country_id[2] : '',
               user_id: this.clientId
             })
             .then(res => {
@@ -972,29 +1039,25 @@ export default {
     },
     // 提交
     saveBoxing() {
-      // if (this.radio === 1 && !this.userData) {
-      //   return this.$message.error('请选择收件地址')
-      // }
       let params = this.addressList.map(item => {
-        console.log(item.address, 'item111')
         return {
           user_id: item.user_id,
           address_id: item.address ? item.address.id : ''
         }
       })
-      console.log(params, 'params111')
-      // console.log(this.box.address_id, 'address_id')
-      // console.log(this.box.add_service, 'box.add_service')
+      let address
+      if (this.address_type === 1) {
+        address = params
+      }
       if (this.changeUpdate === 1) {
         this.$request
           .savePacksUser({
             ...this.box,
             station_id: this.radio === 2 ? this.box.address_id : '',
-            address: params,
+            address: address,
             package_ids: this.packageId,
             address_type: this.radio === 2 ? 2 : 1,
             batch_mode: this.$route.query.packageId ? 1 : '',
-            // address_type: (this.userData && this.userData.contact_info === '') ? '' : 2,
             type: this.radio === 2 ? 2 : ''
           })
           .then(res => {
@@ -1018,7 +1081,7 @@ export default {
           .savePacksAlone({
             ...this.box,
             station_id: this.radio === 2 ? this.box.address_id : '',
-            address: params,
+            address: address,
             package_ids: this.packageId,
             address_type: this.radio === 2 ? 2 : 1,
             batch_mode: this.$route.query.packageId ? 1 : '',
@@ -1048,9 +1111,7 @@ export default {
       if (!this.chooseId) {
         return this.$message.error(this.$t('请选择'))
       }
-      console.log(this.user, 'user')
       this.userData = this.user
-      console.log(this.userData, 'this.userData1111')
       this.boxDialog = false
       this.selfDialog = false
     },
@@ -1076,10 +1137,10 @@ export default {
       if (!this.box.station_id) {
         return this.$message.error(this.$t('请选择'))
       }
-      console.log(this.selfAddress, 'selfAddress')
       this.selfData = this.selfAddress
-      this.box.address_id = this.selfData.id
-      console.log(this.selfData, 'selfData')
+      if (this.selfData) {
+        this.box.address_id = this.selfData.id
+      }
       this.addressDialog = false
     },
     clearSelf() {

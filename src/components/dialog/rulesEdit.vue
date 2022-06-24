@@ -1,10 +1,30 @@
 <template>
   <el-dialog
     :visible.sync="show"
-    :title="name === 1 ? $t('编辑会员编号规则') : $t('编辑订单编号规则')"
     class="dialog-edit-rules"
     @close="clear"
     width="60%"
+    :title="
+      name === 1
+        ? $t('编辑会员编号规则')
+        : name === 2
+        ? $t('编辑订单编号规则')
+        : name === 3
+        ? $t('编辑订单分箱号规则')
+        : name === 4
+        ? $t('编辑拼团订单编号规则')
+        : name === 5
+        ? $t('编辑发货单编号规则')
+        : name === 7
+        ? $t('编辑盘点单编号规则')
+        : name === 8
+        ? $t('编辑采购单编号')
+        : name === 9
+        ? $t('编辑采购分货号')
+        : name === 10
+        ? $t('编辑采购分货转运订单编号')
+        : $t('编辑采购分货转运订单分箱号')
+    "
   >
     <el-form ref="form" :model="userRules" label-width="140px" v-if="this.name === 1">
       <el-row :gutter="20">
@@ -55,6 +75,91 @@
           </template>
         </el-table-column>
       </el-table>
+    </el-form>
+    <el-form ref="form" :model="boxRules" label-width="140px" v-if="this.name === 3">
+      <!-- 连接符 -->
+      <el-form-item :label="$t('连接符')">
+        <el-select v-model="boxRules.connector" :placeholder="$t('请选择')">
+          <el-option
+            v-for="(item, index) in linkOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.label"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 分箱号 -->
+      <el-form-item :label="$t('分箱号')">
+        <el-select v-model="boxRules.boxNum" :placeholder="$t('请选择')">
+          <el-option
+            v-for="item in boxNumOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <el-form :model="groupRules" label-width="140px" v-if="this.name === 4">
+      <!-- 拼团订单后缀 -->
+      <el-form-item :label="$t('拼团订单后缀')">
+        <el-input
+          v-model="groupRules.suffix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
+      <!-- 连接符 -->
+      <el-form-item :label="$t('连接符')">
+        <el-select v-model="groupRules.connector" :placeholder="$t('请选择')">
+          <el-option
+            v-for="(item, index) in connectOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.label"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 子订单号-->
+      <el-form-item :label="$t('子订单号')">
+        <el-select v-model="groupRules.subOrederNum" :placeholder="$t('请选择')">
+          <el-option v-for="item in subOptions" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <!-- 发货单前缀-->
+    <el-form :model="invoiceRules" label-width="140px" v-if="this.name === 5">
+      <el-form-item :label="$t('发货单前缀')">
+        <el-input
+          v-model="invoiceRules.prefix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <!-- 盘点单编号 -->
+    <el-form :model="inventoryRules" label-width="140px" v-if="this.name === 7">
+      <el-form-item :label="$t('盘点单前缀')">
+        <el-input
+          v-model="inventoryRules.prefix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <!-- 采购单编号 -->
+    <el-form :model="purchaseRules" label-width="140px" v-if="this.name === 8">
+      <el-form-item :label="$t('采购单前缀')">
+        <el-input
+          v-model="purchaseRules.prefix"
+          class="input-sty"
+          :placeholder="$t('请输入')"
+        ></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="show = false">{{ $t('取消') }}</el-button>
@@ -119,7 +224,85 @@ export default {
       },
       name: '',
       warehouseName: '',
-      id: ''
+      id: '',
+      options: [],
+      value: '',
+      connectOptions: [
+        {
+          label: '-'
+        },
+        {
+          label: '/'
+        },
+        {
+          label: '()'
+        },
+        {
+          label: '_'
+        }
+      ],
+      linkOptions: [
+        {
+          label: '-'
+        },
+        {
+          label: '/'
+        },
+        {
+          label: '()'
+        },
+        {
+          label: '_'
+        }
+      ],
+      boxNumOptions: [
+        {
+          id: 0,
+          name: this.$t('数字(1,2,3,4,5......)')
+        },
+        {
+          id: 1,
+          name: this.$t('小写字母(a,b,c,d,e......)')
+        },
+        {
+          id: 2,
+          name: this.$t('大写字母(A,B,C,D,E......)')
+        }
+      ],
+      subOptions: [
+        {
+          id: 0,
+          name: this.$t('数字(1,2,3,4,5......)')
+        },
+        {
+          id: 1,
+          name: this.$t('小写字母(a,b,c,d,e......)')
+        },
+        {
+          id: 2,
+          name: this.$t('大写字母(A,B,C,D,E......)')
+        },
+        {
+          id: 3,
+          name: this.$t('客户ID')
+        }
+      ],
+      boxRules: {
+        boxNum: 1,
+        connector: '-'
+      },
+      groupRules: {
+        suffix: 'G',
+        connector: '-',
+        subOrederNum: 1
+      },
+      invoiceRules: {
+        prefix: 'SH'
+      },
+      inventoryRules: {
+        prefix: ''
+      },
+      purchaseRules: { prefix: '' }
     }
   },
   mixins: [pagination],
@@ -136,6 +319,19 @@ export default {
           } else if (this.name === 2) {
             this.orderRules.prefix = res.data.prefix
             this.orderRules.tableData = res.data.warehouse_prefix
+          } else if (this.name === 3) {
+            this.boxRules.connector = res.data.link
+            this.boxRules.boxNum = res.data.sn
+          } else if (this.name === 4) {
+            this.groupRules.connector = res.data.link
+            this.groupRules.subOrederNum = res.data.sn
+            this.groupRules.suffix = res.data.suffix
+          } else if (this.name === 5) {
+            this.invoiceRules.prefix = res.data.prefix
+          } else if (this.name === 7) {
+            this.inventoryRules.prefix = res.data.prefix
+          } else {
+            this.purchaseRules.prefix = res.data.prefix
           }
         }
       })
@@ -171,12 +367,121 @@ export default {
             }
             this.show = false
           })
-      } else {
+      } else if (this.name === 2) {
         console.log(this.orderRules, 'orderRules')
         this.$request
           .updateRules(this.id, {
             prefix: this.orderRules.prefix,
             warehouse_prefix: this.orderRules.tableData
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else if (this.name === 3) {
+        this.$request
+          .updateRules(this.id, {
+            link: this.boxRules.connector,
+            sn: this.boxRules.boxNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else if (this.name === 4) {
+        this.$request
+          .updateRules(this.id, {
+            suffix: this.groupRules.suffix,
+            link: this.groupRules.connector,
+            sn: this.groupRules.subOrederNum,
+            for_new_user: Number(this.userRules.for_new_user)
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else if (this.name === 5) {
+        this.$request
+          .updateRules(this.id, {
+            prefix: this.invoiceRules.prefix
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else if (this.name === 7) {
+        this.$request
+          .updateRules(this.id, {
+            prefix: this.inventoryRules.prefix
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.show = false
+              this.success()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      } else {
+        this.$request
+          .updateRules(this.id, {
+            prefix: this.purchaseRules.prefix
           })
           .then(res => {
             if (res.ret) {
@@ -206,6 +511,14 @@ export default {
       this.userRules.length = ''
       this.userRules.system = ''
       this.userRules.for_new_user = ''
+      this.invoiceRules.prefix = ''
+      this.inventoryRules.prefix = ''
+      this.groupRules.connector = ''
+      this.boxRules.connector = ''
+      this.boxRules.boxNum = ''
+      this.groupRules.subOrederNum = ''
+      this.groupRules.suffix = ''
+      this.purchaseRules.prefix = ''
     }
   }
 }
@@ -225,6 +538,9 @@ export default {
   .el-dialog__close {
     color: #fff;
   }
+  .input-sty {
+    width: 40% !important;
+  }
   .tips {
     margin-bottom: 30px;
     background-color: #fff2f1;
@@ -243,6 +559,12 @@ export default {
   .bottom-btn {
     margin-left: 70px;
     margin-bottom: 20px;
+  }
+  .input-sty {
+    width: 40% !important;
+  }
+  .el-select {
+    width: 40% !important;
   }
 }
 </style>

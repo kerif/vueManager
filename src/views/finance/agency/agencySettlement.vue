@@ -1,27 +1,30 @@
 <template>
   <div class="agency-list-container">
     <el-tabs v-model="activeName" @tab-click="onTabChange">
-      <el-tab-pane :label="$t('全部')" name="-1">
+      <el-tab-pane :label="`${$t('全部')}(${countData.all || 0})`" name="-1">
         <auditData
           :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
+          :activeName="activeName"
           @passval="onSearch"
         />
       </el-tab-pane>
-      <el-tab-pane :label="$t('待审核')" name="0">
+      <el-tab-pane :label="`${$t('待审核')}(${countData.wait || 0})`" name="0">
         <auditData
           :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
+          :activeName="activeName"
           @passval="onSearch"
         />
       </el-tab-pane>
-      <el-tab-pane :label="$t('已审核')" name="12">
+      <el-tab-pane :label="`${$t('已审核')}(${countData.done || 0})`" name="12">
         <auditData
           :allData="all"
           @subprice="fn"
           :totalSettlement="totalSettlement"
+          :activeName="activeName"
           @passval="onSearch"
         />
       </el-tab-pane>
@@ -41,8 +44,13 @@ export default {
       all: [],
       resultData: [],
       passData: [],
-      page_params: {},
-      totalSettlement: 0
+      localization: {},
+      page_params: {
+        keyword: '',
+        status: ''
+      },
+      totalSettlement: 0,
+      countData: {}
     }
   },
   mixins: [pagination],
@@ -53,20 +61,22 @@ export default {
   created() {
     this.getList()
     this.getSettleAccounts()
+    this.getCount()
   },
   methods: {
-    getList(status, param_list) {
+    getList(status, param_list = {}) {
       this.$request
         .pendingReview({
-          keyword: this.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          status: status !== '-1' ? status : '',
-          ...param_list
+          keyword: this.keyword,
+          ...param_list,
+          status: this.page_params.status || param_list.status
         })
         .then(res => {
           if (res.ret) {
             this.all = res.data
+            this.localization = res.localization
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
           }
@@ -97,11 +107,18 @@ export default {
     },
     onTabChange(tab) {
       this.page_params.page = 1
+      this.page_params.status = tab.name == -1 ? '' : tab.name
       this.getList(tab.name)
     },
     onSearch(params) {
       this.page_params.page = 1
       this.getList(this.activeName, params)
+    },
+    getCount() {
+      this.$request.withdrawCount().then(res => {
+        console.log(res)
+        this.countData = res.data
+      })
     }
   }
 }

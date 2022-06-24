@@ -62,7 +62,7 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('失效时间')" prop="expire_at" width="160"></el-table-column>
-        <el-table-column :label="$t('排序')" prop="index"></el-table-column>
+        <el-table-column :label="$t('优先级')" prop="index"></el-table-column>
         <!-- 是否启用 -->
         <el-table-column :label="$t('是否启用')" width="120">
           <template slot-scope="scope">
@@ -107,7 +107,7 @@
     <!-- 复制线路 -->
     <el-dialog :title="$t('复制价格表')" :visible.sync="copyDialog" width="45%" @close="clear">
       <el-form ref="form" :model="copyData" label-width="100px">
-        <el-form-item :label="$t('*价格表名称')">
+        <el-form-item :label="$t('价格表名称')">
           <el-input v-model="copyData.name"></el-input>
         </el-form-item>
       </el-form>
@@ -258,7 +258,7 @@ export default {
     },
     // 删除
     deleteSales(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

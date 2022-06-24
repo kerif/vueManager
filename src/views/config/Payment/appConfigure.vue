@@ -187,7 +187,7 @@ export default {
         return this.$message.error(this.$t('请输入模版标示'))
       }
       this.$request
-        .updateTemplate({
+        .updateTemplates({
           type: row.type,
           template_id: row.template_id
         })
@@ -200,6 +200,7 @@ export default {
             })
             row.copySN = row.template_id
             row.disabled = true
+            // this.getPick()
           } else {
             this.$notify({
               title: this.$t('操作失败'),

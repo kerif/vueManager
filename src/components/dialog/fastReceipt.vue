@@ -135,9 +135,16 @@ export default {
           size: this.page_params.size
         })
         .then(res => {
-          this.tableData = res.data
-          this.tableLength = this.tableData.length
-          this.localization = res.localization
+          if (res.ret) {
+            this.tableData = res.data
+            this.tableLength = this.tableData.length
+            this.localization = res.localization
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
           // this.page_params.page = res.meta.current_page
           // this.page_params.total = res.meta.total
         })

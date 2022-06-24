@@ -95,7 +95,8 @@ export default {
       subtotal: '',
       total: '',
       order_id: '',
-      invoices_id: ''
+      invoices_id: '',
+      create_detailed: []
     }
   },
   methods: {
@@ -132,6 +133,7 @@ export default {
     },
     submit() {
       let money = this.ruleForm.money
+      let invoices_number = this.ruleForm.invoices_number
       let enclosure = this.baleImgList
       let remarks = this.ruleForm.remarks
       if (this.state === 'complete') {
@@ -145,7 +147,9 @@ export default {
             order_id: this.order_id,
             invoices_id: this.invoices_id,
             money,
-            enclosure
+            invoices_number,
+            enclosure,
+            remarks
           })
           .then(res => {
             console.log(res)
@@ -174,8 +178,10 @@ export default {
             total: this.total,
             order_id: this.order_id,
             invoices_id: this.invoices_id,
-            remarks,
-            enclosure
+            money,
+            invoices_number,
+            enclosure,
+            remarks
           })
           .then(res => {
             console.log(res)
@@ -205,7 +211,9 @@ export default {
             order_id: this.order_id,
             invoices_id: this.invoices_id,
             money,
-            enclosure
+            invoices_number,
+            enclosure,
+            remarks
           })
           .then(res => {
             console.log(res)

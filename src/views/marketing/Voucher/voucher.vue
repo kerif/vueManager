@@ -35,6 +35,11 @@
           @search="goSearch"
         ></search-group>
       </div>
+      <div class="changeVou">
+        <el-button class="btn-main" style="margin-top: 5px" @click="exportList">{{
+          $t('导出清单')
+        }}</el-button>
+      </div>
     </div>
     <div style="height: calc(100vh - 270px)">
       <el-table
@@ -86,6 +91,9 @@
             }}</span>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('待使用数量')" prop="unused_count"></el-table-column>
+        <el-table-column :label="$t('过期数量')" prop="expired_count"></el-table-column>
+        <el-table-column :label="$t('作废数量')" prop="invalid_count"></el-table-column>
         <el-table-column
           :label="item.name"
           v-for="item in formatLangData"
@@ -107,7 +115,10 @@
             <!-- 投放 -->
             <el-button
               class="btn-purple detailsBtn"
-              v-if="scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2"
+              v-if="
+                (scope.row.status === '' || scope.row.status === 1 || scope.row.status === 2) &&
+                scope.row.type !== '新用户福利'
+              "
               @click="serving(scope.row.id)"
               >{{ $t('投放') }}</el-button
             >
@@ -130,11 +141,8 @@
             >
             <el-button
               size="small"
-              v-if="
-                (activeName === '1' || activeName === '2' || activeName === '3') &&
-                scope.row.share_status !== 0
-              "
               class="btn-pink detailsBtn"
+              v-if="scope.row.type === $t('用户抢券')"
               @click="share(scope.row.id)"
               >{{ $t('分享') }}</el-button
             >
@@ -318,13 +326,38 @@ export default {
       })
     },
     shareClear() {},
+    exportList() {
+      this.$request
+        .exportCoupon({
+          status: this.status,
+          keyword: this.page_params.keyword,
+          type: this.type,
+          template_id: this.$route.query.type === '2' ? this.$route.query.id : ''
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
     // 下载二维码
     uploadCode() {
       window.open(`${this.$baseUrl.IMAGE_URL}${this.imgShare}`)
     },
     // 作废
     obsolete(id) {
-      this.$confirm(this.$t('确定要作废优惠券吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('确定要作废优惠券吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -481,6 +514,7 @@ export default {
     },
     // 选择不同类型优惠券
     onVocherTypeChange() {
+      console.log(this.type)
       this.page_params.handleQueryChange('type', this.type)
       this.getList()
     },

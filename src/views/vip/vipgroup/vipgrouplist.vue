@@ -32,7 +32,13 @@
       <el-table-column :label="$t('客户组英文名')" prop="name_en"></el-table-column>
       <el-table-column :label="$t('成员数量')" prop="user_count"></el-table-column>
       <el-table-column :label="$t('客户组描述')" prop="description"></el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('同行货系统')" prop="stg_auth">
+        <template slot-scope="scope">
+          <span v-if="scope.row.stg_auth === 0">{{ $t('未授权') }}</span>
+          <span v-else>{{ $t('已授权') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('操作')" width="350">
         <template slot-scope="scope">
           <el-button
             class="btn-green"
@@ -42,6 +48,15 @@
             >{{ $t('修改资料') }}</el-button
           >
           <el-button class="btn-main" @click="member(scope.row.id)">{{ $t('成员') }}</el-button>
+          <el-button
+            class="btn-deep-purple"
+            v-if="scope.row.stg_auth === 0"
+            @click="tradeAuth(scope.row.id, 1)"
+            >{{ $t('同行货授权') }}</el-button
+          >
+          <el-button class="btn-light-red" v-else @click="tradeAuth(scope.row.id, 0)">{{
+            $t('解除授权')
+          }}</el-button>
         </template>
       </el-table-column>
       <!-- <template slot="append">
@@ -148,7 +163,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择客户组'))
       }
-      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -172,6 +187,35 @@ export default {
               })
             }
           })
+      })
+    },
+    tradeAuth(id, stgAuth) {
+      this.$confirm(
+        stgAuth === 0
+          ? this.$t('您是否确认解除该客户组同行货系统授权')
+          : this.$t('您是否确认给予该客户组同行货系统授权'),
+        this.$t('提示'),
+        {
+          confirmButtonText: this.$t('确定'),
+          cancelButtonText: this.$t('取消'),
+          type: 'warning'
+        }
+      ).then(() => {
+        this.$request.sameTradeAuth(id, stgAuth).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     }
   }

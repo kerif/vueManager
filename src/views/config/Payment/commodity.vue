@@ -2,6 +2,7 @@
   <div>
     <div class="select-box">
       <add-btn @click.native="addClassify">{{ $t('添加商品分类') }}</add-btn>
+      <el-button class="btn-light-red" @click="batchDelCategory()">{{ $t('批量删除') }}</el-button>
     </div>
     <el-table
       :data="CategoriesList"
@@ -10,13 +11,16 @@
       border
       class="data-list"
       @expand-change="onExpand"
+      @selection-change="selectionChange"
       v-loading="tableLoading"
       height="calc(100vh - 360px)"
     >
+      <el-table-column type="selection" width="50"></el-table-column>
       <!-- 二级分类列表 -->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table :data="props.row.orders">
+          <el-table :data="props.row.orders" @selection-change="handleSelection">
+            <el-table-column type="selection"></el-table-column>
             <!-- 二级分类名称 -->
             <el-table-column :label="$t('二级分类名称')" prop="name"></el-table-column>
             <!-- 是否显示 -->
@@ -167,6 +171,8 @@ export default {
     return {
       tableLoading: false,
       languageData: [],
+      selectNum: [],
+      deleteNum: [],
       page_params: {
         type: ''
       },
@@ -196,6 +202,46 @@ export default {
   methods: {
     getList() {
       this.getCategories()
+    },
+    selectionChange(select) {
+      this.selectNum = select.map(item => item.id)
+    },
+    handleSelection(sel) {
+      this.deleteNum = sel.map(item => item.id)
+    },
+    batchDelCategory() {
+      if (this.selectNum.length === 0 && this.deleteNum.length === 0) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      const num = this.selectNum.concat(this.deleteNum)
+      this.$confirm(this.$t('您是否确认批量删除?'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      })
+        .then(() => {
+          this.$request.batchDeleteCategory({ ids: num }).then(res => {
+            if (res.ret) {
+              this.$notify({
+                type: 'success',
+                title: this.$t('操作成功'),
+                message: res.msg
+              })
+              this.getCategories()
+              this.deleteNum = []
+              this.selectNum = []
+            } else {
+              this.$notify({
+                title: this.$t('操作失败'),
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     // 获取支持语言
     getLanguageList() {
@@ -333,7 +379,7 @@ export default {
     },
     // 删除单条商品分类
     deleteCategories(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -348,7 +394,7 @@ export default {
             this.getList()
           } else {
             this.$notify({
-              title: this.$t('操作成功'),
+              title: this.$t('操作失败'),
               message: res.msg,
               type: 'warning'
             })

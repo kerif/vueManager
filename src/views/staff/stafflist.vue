@@ -13,6 +13,9 @@
         <el-button class="btn-light-red" size="small" @click="deleteData">{{
           $t('删除')
         }}</el-button>
+        <el-button class="btn-main" size="small" @click="exportData">{{
+          $t('导出产能')
+        }}</el-button>
       </div>
       <div class="headerList">
         <div class="searchGroup">
@@ -74,6 +77,21 @@
       </el-table>
       <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
+    <el-dialog :visible.sync="show" :title="$t('请选择导出范围')" @close="clear">
+      <el-date-picker
+        type="daterange"
+        v-model="time"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :range-separator="$t('至')"
+        :start-placeholder="$t('开始日期')"
+        :end-placeholder="$t('结束日期')"
+      >
+      </el-date-picker>
+      <div slot="footer">
+        <el-button type="primary" @click="confirmExport">{{ $t('确定') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -97,8 +115,10 @@ export default {
       deleteNum: [],
       deleteSelectionLoading: false,
       tableLoading: false,
+      show: false,
       normal: 1,
       clientGroupList: [],
+      time: [],
       page_params: {
         group: ''
       }
@@ -172,7 +192,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择员工'))
       }
-      this.$confirm(this.$t('是否确认删除？'), this.$t('提示'), {
+      this.$confirm(this.$t('是否确认删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -247,6 +267,36 @@ export default {
             }
           })
       }
+    },
+    exportData() {
+      this.show = true
+    },
+    confirmExport() {
+      this.$request
+        .exportEmployData({
+          begin_date: this.time[0],
+          end_date: this.time[1]
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.show = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
+    clear() {
+      this.time = []
     },
     // 选择员工组
     onGroupChange() {

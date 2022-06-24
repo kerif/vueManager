@@ -33,7 +33,7 @@
             icon="el-icon-s-check"
             v-if="form.status === 0"
             class="btn-deep-blue"
-            @click="goClaim(form.id)"
+            @click="goClaim(form.id, 'alone')"
             >{{ $t('认领') }}</el-button
           >
 
@@ -100,22 +100,26 @@
               <span class="leftWidth">{{ $t('客户ID') }}</span>
               <span>{{ form.user_id }}---{{ form.user_name }}</span>
             </el-col>
+            <el-col :span="7" :offset="1">
+              <span class="leftWidth">{{ $t('会员等级') }}</span>
+              <span>{{ form.user_member_level }}</span>
+            </el-col>
             <!-- 入库时间 -->
             <el-col :span="7" :offset="1">
               <span class="leftWidth">{{ $t('预报仓库') }}</span>
               <span>{{ form.warehouse && form.warehouse.warehouse_name }}</span>
             </el-col>
+          </el-row>
+          <el-row class="container-center" :gutter="20">
             <!-- 所属订单 -->
-            <el-col :span="7" :offset="1">
+            <el-col :span="7">
               <!-- <span class="leftWidth">{{ $t('所属订单') }}</span>
               <span>{{ form.order && form.order.order_sn }}</span> -->
               <span class="leftWidth">{{ $t('寄往地区') }}</span>
               <span>{{ form.country && form.country.name }}</span>
             </el-col>
-          </el-row>
-          <el-row class="container-center" :gutter="20">
             <!-- 寄往仓库 -->
-            <el-col :span="7">
+            <el-col :span="7" :offset="1">
               <span class="leftWidth">{{ $t('预报时间') }}</span>
               <span>{{ form.created_at }}</span>
             </el-col>
@@ -158,7 +162,7 @@
           <el-col :span="7" :offset="1">
             <span class="leftWidth">{{ $t('物品分类') }}</span>
             <span v-for="item in form.categories" :key="item.id">
-              {{ item.name }}
+              {{ item.name_cn }}
             </span>
           </el-col>
           <!-- <el-col :span="7" :offset="1">
@@ -422,8 +426,8 @@ export default {
       })
     },
     // 认领包裹
-    goClaim(id) {
-      dialog({ type: 'claim', id: id }, () => {
+    goClaim(id, status) {
+      dialog({ type: 'claim', id: id, status }, () => {
         this.getList()
       })
     },

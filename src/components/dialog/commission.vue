@@ -33,10 +33,17 @@
           </el-option>
         </el-select>
       </el-form-item> -->
-      <el-form-item v-if="ruleForm.template_id === 0">
-        <el-checkbox v-model="ruleForm.mode">{{
-          $t('按比例计佣时，仅计算实际运费佣金（不包含增值费用、保险费用、抵用券等）')
-        }}</el-checkbox>
+      <el-form-item v-if="ruleForm.template_id === 0" :label="$t('计佣金额')">
+        <!-- <el-checkbox v-model="ruleForm.mode">{{
+          $t('按比例计佣时仅计算实际运费佣金不包含增值费用保险费用抵用券等')
+        }}</el-checkbox> -->
+        <el-radio-group v-model="ruleForm.mode">
+          <el-radio :label="0">{{ $t('应付总额') }}{{ $t('不含优惠券、积分抵扣等') }}</el-radio>
+          <el-radio :label="1"
+            >{{ $t('应付运费') }}{{ $t('(不含增值服务、优惠券、积分抵扣等)') }}</el-radio
+          >
+          <el-radio :label="2">{{ $t('实付总额') }}</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('默认佣金')" v-if="ruleForm.template_id === 0">
         <el-input v-model="ruleForm.commission" class="input-select"></el-input>
@@ -59,7 +66,7 @@
         </template>
       </el-table-column>
       <!-- 值 -->
-      <el-table-column :label="$t('值')">
+      <el-table-column :label="`${$t('值')}(${$t('比例%/金额￥/单位金额￥')})`">
         <template slot-scope="scope">
           <el-input v-model="scope.row.commission"></el-input>
         </template>
@@ -87,7 +94,7 @@ export default {
       ruleForm: {
         commission: '',
         template_id: '',
-        mode: '',
+        mode: 0,
         type: ''
       },
       templateData: [],
@@ -102,7 +109,7 @@ export default {
         },
         {
           id: 3,
-          name: this.$t('按计费重量计佣（设置每单位重量佣金）')
+          name: this.$t('按计费重量计佣设置每单位重量佣金')
         }
       ],
       agentName: '',
@@ -140,7 +147,7 @@ export default {
     getAgent() {
       this.$request.getEditAgent(this.id).then(res => {
         if (res.ret) {
-          this.ruleForm.mode = Boolean(res.data.mode)
+          this.ruleForm.mode = res.data.mode
           this.ruleForm.commission = res.data.commission
           this.ruleForm.template_id = res.data.template_id
           this.ruleForm.type = res.data.type
@@ -192,7 +199,7 @@ export default {
       this.page_params.page = 1
       this.ruleForm.commission = ''
       this.ruleForm.template_id = ''
-      this.ruleForm.mode = ''
+      this.ruleForm.mode = 0
       this.ruleForm.type = ''
     }
   }

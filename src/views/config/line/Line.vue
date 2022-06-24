@@ -25,6 +25,25 @@
       >
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <el-table-column :label="$t('路线')" prop="name"></el-table-column>
+        <el-table-column :label="$t('路线类型')" prop="only_for_group,only_for_stg">
+          <template slot-scope="scope">
+            <!-- <span v-if="scope.row.only_for_group === 1">{{ $t('仅拼团路线') }}</span>
+            <span v-else>{{ $t('普通路线') }}</span> -->
+            <span v-if="scope.row.only_for_group === 1 && scope.row.only_for_stg === 0">{{
+              $t('仅拼团路线')
+            }}</span>
+            <span v-if="scope.row.only_for_group === 0 && scope.row.only_for_stg === 0">{{
+              $t('普通路线')
+            }}</span>
+            <span
+              v-if="
+                scope.row.only_for_stg === 1 &&
+                (scope.row.only_for_group === 0 || scope.row.only_for_group === 1)
+              "
+              >{{ $t('同行货路线') }}</span
+            >
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('渠道数量')" prop="express_lines_count"></el-table-column>
         <!-- 是否启用 -->
         <el-table-column :label="$t('是否启用')" width="120">
@@ -62,9 +81,19 @@
             <el-button class="btn-green" @click="editChannel(scope.row.id)">{{
               $t('渠道')
             }}</el-button>
-            <el-button class="btn-blue" @click="editLine(scope.row.id, scope.row.name, 'edit')">{{
-              $t('编辑')
-            }}</el-button>
+            <el-button
+              class="btn-blue"
+              @click="
+                editLine(
+                  scope.row.id,
+                  scope.row.name,
+                  scope.row.only_for_group,
+                  'edit',
+                  scope.row.only_for_stg
+                )
+              "
+              >{{ $t('编辑') }}</el-button
+            >
             <el-button class="btn-deep-purple" @click="copyLine(scope.row.id, 'copy')">{{
               $t('复制')
             }}</el-button>
@@ -73,11 +102,6 @@
             }}</el-button>
           </template>
         </el-table-column>
-        <!-- <template slot="append">
-        <div class="append-box">
-          <el-button size="small" class="btn-light-red" @click="deleteData">删除</el-button>
-        </div>
-      </template> -->
       </el-table>
     </div>
     <nle-pagination
@@ -87,14 +111,39 @@
     ></nle-pagination>
     <!-- 复制线路 -->
     <el-dialog
+      class="dialog-line-lang"
       :title="lineStatus === 'edit' ? $t('编辑路线') : $t('复制路线')"
       :visible.sync="copyDialog"
       width="45%"
       @close="clear"
     >
       <el-form ref="form" :model="copyData" label-width="100px">
-        <el-form-item :label="lineStatus === 'edit' ? $t('*线路名称') : $t('*新线路名称')">
+        <el-form-item :label="lineStatus === 'edit' ? $t('线路名称') : $t('新线路名称')">
           <el-input v-model="copyData.name"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('路线类型')">
+          <el-radio v-model="copyData.lineType" :label="0">
+            {{ $t('普通路线') }}
+            <el-tooltip
+              style="color: #74b34f"
+              effect="dark"
+              :content="$t('常规下单与拼团下单都可选')"
+              placement="top"
+            >
+              <span class="el-icon-question icon-info"></span>
+            </el-tooltip>
+          </el-radio>
+          <el-radio v-model="copyData.lineType" :label="1">
+            {{ $t('仅拼团路线') }}
+            <el-tooltip
+              style="color: #74b34f"
+              effect="dark"
+              :content="$t('常规下单不可选该路线仅拼团可选用')"
+              placement="top"
+            >
+              <span class="el-icon-question icon-info"></span> </el-tooltip
+          ></el-radio>
+          <el-radio v-model="copyData.lineType" :label="2">{{ $t('同行货线路') }}</el-radio>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -127,7 +176,10 @@ export default {
       transCode: '',
       copyId: '',
       copyData: {
-        name: ''
+        name: '',
+        lineType: 0,
+        only_for_group: 0,
+        only_for_stg: 0
       },
       copyDialog: false,
       lineStatus: ''
@@ -183,8 +235,6 @@ export default {
     },
     // 修改开关
     changeTransfer(event, enabled, id) {
-      console.log(typeof event, '我是event')
-      console.log(event, 'event')
       this.$request.lineGroupEnabled(id, Number(event)).then(res => {
         if (res.ret) {
           this.$notify({
@@ -203,6 +253,7 @@ export default {
     },
     // 修改仓库
     editChannel(id) {
+      console.log(id)
       this.$router.push({
         name: 'channelLine',
         params: {
@@ -225,66 +276,77 @@ export default {
       this.lineStatus = status
     },
     // 编辑
-    editLine(id, name, status) {
+    editLine(id, name, type, status, stgVal) {
       this.copyId = id
       this.copyDialog = true
       this.copyData.name = name
+      if (stgVal === 1) {
+        this.copyData.lineType = 2
+      }
+      if (stgVal === 0) {
+        this.copyData.lineType = type
+      }
+      // this.copyData.only_for_group = type
+      // this.copyData.only_for_stg = stgVal
       this.lineStatus = status
     },
     clear() {
       this.lineStatus = ''
       this.copyId = ''
       this.copyData.name = ''
+      this.copyData.lineType = 0
     },
     // 确定复制
     confirmCopy() {
       if (!this.copyData.name) {
         return this.$message.error(this.$t('请输入新线路名称'))
       }
+      if (this.copyData.lineType === 0) {
+        this.copyData.only_for_stg = 0
+        this.copyData.only_for_group = 0
+      } else if (this.copyData.lineType === 1) {
+        this.copyData.only_for_stg = 0
+        this.copyData.only_for_group = 1
+      } else if (this.copyData.lineType === 2) {
+        this.copyData.only_for_group = ''
+        this.copyData.only_for_stg = 1
+      }
       if (this.lineStatus === 'edit') {
-        this.$request
-          .editLineGroup(this.copyId, {
-            name: this.copyData.name
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.copyDialog = false
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
+        this.$request.editLineGroup(this.copyId, { ...this.copyData }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.copyDialog = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       } else {
-        this.$request
-          .copyGroupLine(this.copyId, {
-            name: this.copyData.name
-          })
-          .then(res => {
-            if (res.ret) {
-              this.$notify({
-                title: this.$t('操作成功'),
-                message: res.msg,
-                type: 'success'
-              })
-              this.copyDialog = false
-              this.getList()
-            } else {
-              this.$notify({
-                title: this.$t('操作失败'),
-                message: res.msg,
-                type: 'warning'
-              })
-            }
-          })
+        this.$request.copyGroupLine(this.copyId, { ...this.copyData }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.copyDialog = false
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       }
     },
     selectionChange(selection) {
@@ -293,7 +355,7 @@ export default {
     },
     // 删除
     deleteLine(id) {
-      this.$confirm(this.$t('您真的要删除此路线？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除此路线'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

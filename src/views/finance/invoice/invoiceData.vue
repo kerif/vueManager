@@ -51,6 +51,7 @@
             <span v-if="scope.row.order_status === 3">{{ $t('待发货') }}</span>
             <span v-if="scope.row.order_status === 4">{{ $t('已发货') }}</span>
             <span v-if="scope.row.order_status === 5">{{ $t('已签收') }}</span>
+            <span v-if="scope.row.order_status === 19">{{ $t('已作废') }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('客户ID')" width="160">
@@ -79,9 +80,9 @@
         </el-table-column>
         <el-table-column prop="created_at" :label="$t('申请时间')" width="160"> </el-table-column>
         <el-table-column prop="handler" :label="$t('处理人')" width="160"> </el-table-column>
-        <el-table-column prop="handle_at" :label="$t('处理时间')" width="160"> </el-table-column>
+        <el-table-column prop="updated_at" :label="$t('处理时间')" width="160"> </el-table-column>
         <el-table-column prop="invoices_number" :label="$t('发票号码')"> </el-table-column>
-        <el-table-column :label="$t('操作')">
+        <el-table-column :label="$t('操作')" fixed="right">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.state === 1"
@@ -134,6 +135,10 @@ export default {
         {
           id: 5,
           name: this.$t('已签收')
+        },
+        {
+          id: 19,
+          name: this.$t('已作废')
         }
       ],
       stateData: [
@@ -161,10 +166,13 @@ export default {
       this.$emit('transVal', id)
     },
     triggerVal() {
+      console.log(this.timeList)
+      if (!this.timeList) {
+        this.timeList = []
+      }
       this.page_params.begin_date = this.timeList[0]
       this.page_params.end_date = this.timeList[1]
       this.$emit('passval', this.page_params)
-      console.log(this.page_params)
     }
   }
 }

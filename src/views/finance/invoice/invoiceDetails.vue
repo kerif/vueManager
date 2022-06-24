@@ -119,9 +119,45 @@
           {{ item.created_at }}&nbsp; {{ item.content }}&nbsp; {{ item.handler }}
         </div>
       </div>
-      <h3>{{ $t('审核备注') }}</h3>
+      <h3>{{ $t('开票备注') }}</h3>
       <div class="remarks-card">
-        <div class="condition">{{ invoiceStatus.remarks }}</div>
+        <div class="condition" v-if="invoiceStatus.state === 1">{{ $t('该申请还未开票') }}</div>
+        <div class="invoice-remark" v-if="invoiceStatus.state === 2">
+          <div class="text">{{ $t('开票金额') }}{{ invoiceStatus.money }}</div>
+          <div class="text">{{ $t('发票号码') }}{{ invoiceStatus.invoices_number }}</div>
+          <div class="text">{{ $t('备注') }}{{ invoiceStatus.remarks }}</div>
+          <div class="screenshot">
+            <!-- <span
+              style="cursor: pointer"
+              @click.stop="
+                ;(imgSrc = `${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`), (imgVisible = true)
+              "
+            >
+              <img :src="`${$baseUrl.IMAGE_URL}${invoiceStatus.enclosure}`" style="width: 100px" />
+            </span> -->
+            <img
+              style="cursor: pointer; width: 100px"
+              v-for="item in invoiceStatus.enclosure"
+              :key="item.index"
+              class="image"
+              :src="$baseUrl.IMAGE_URL + item"
+              @click="checkImg(item)"
+            />
+          </div>
+        </div>
+        <div class="invoice-remark" v-if="invoiceStatus.state === 3">
+          <div class="text">{{ $t('备注:') }}{{ invoiceStatus.remarks }}</div>
+          <div class="screenshot">
+            <img
+              style="cursor: pointer; width: 100px"
+              v-for="item in invoiceStatus.enclosure"
+              :key="item.index"
+              class="image"
+              :src="$baseUrl.IMAGE_URL + item"
+              @click="checkImg(item)"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div class="clearfix">
@@ -130,7 +166,7 @@
         <el-row :gutter="20">
           <!-- 订单金额¥ -->
           <el-col :span="5">
-            <span class="withdrawal">{{ $t('订单金额¥') }}</span>
+            <span class="withdrawal">{{ $t('订单金额') }}</span>
             <span class="withdrawal_amount">{{ invoiceStatus.money }}</span>
           </el-col>
           <!-- 添加明细 -->
@@ -159,22 +195,22 @@
                 <el-input v-model="scope.row.quantity"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="unit_price" :label="$t('单价（¥）')" width="180">
+            <el-table-column prop="unit_price" :label="$t('单价')" width="180">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.unit_price"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="money" :label="$t('金额（¥）')" width="180">
+            <el-table-column prop="money" :label="$t('金额')" width="180">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.money"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="tax_rate" :label="$t('税率（%）')">
+            <el-table-column prop="tax_rate" :label="$t('税率')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.tax_rate"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="taxes" :label="$t('税款（¥）')">
+            <el-table-column prop="taxes" :label="$t('税款')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.taxes"></el-input>
               </template>
@@ -185,7 +221,7 @@
                   type="success"
                   plain
                   size="mini"
-                  @click="delete (scope.$index, scope.row)"
+                  @click="deleteTrack(scope.$index, costData)"
                   >{{ $t('删除') }}</el-button
                 >
               </template>
@@ -193,10 +229,10 @@
           </el-table>
           <div class="total">
             <tr>
-              <td>合计金额:¥{{ sumAmount.toFixed(2) }}</td>
+              <td>{{ $t('合计金额') }}:¥{{ sumAmount.toFixed(2) }}</td>
               <td></td>
-              <td>合计税款:¥{{ sumTaxes.toFixed(2) }}</td>
-              <td>小计:¥{{ (sumAmount + sumTaxes).toFixed(2) }}</td>
+              <td>{{ $t('合计税款') }}:¥{{ sumTaxes.toFixed(2) }}</td>
+              <td>{{ $t('小计') }}:¥{{ (sumAmount + sumTaxes).toFixed(2) }}</td>
             </tr>
           </div>
         </div>
@@ -216,6 +252,12 @@
         <el-button type="primary" @click="recovery">{{ $t('恢复申请') }}</el-button>
       </el-row>
     </div>
+    <!-- 查看图片 -->
+    <el-dialog :visible.sync="imgDialog">
+      <div style="text-align: center">
+        <img :src="imgUrl" style="max-width: 100%" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -235,7 +277,9 @@ export default {
       subtotal: '',
       total: '',
       order_id: '',
-      invoices_id: ''
+      invoices_id: '',
+      imgDialog: false,
+      imgUrl: ''
     }
   },
   created() {
@@ -252,13 +296,16 @@ export default {
   methods: {
     getInvoiceDetail() {
       this.$request.invoiceDetail(this.$route.params.id).then(res => {
-        console.log(res)
         if (res.ret) {
           this.invoiceStatus = res.data
           this.costData = res.data.orderCostDetailed
           this.log = res.data.log
         }
       })
+    },
+    checkImg(url) {
+      this.imgDialog = true
+      this.imgUrl = this.$baseUrl.IMAGE_URL + url
     },
     invoiceToComplete(state) {
       dialog(
@@ -276,6 +323,7 @@ export default {
         },
         () => {
           this.$router.go(-1)
+          this.getInvoiceDetail()
         }
       )
     },
@@ -295,6 +343,7 @@ export default {
         },
         () => {
           this.$router.go(-1)
+          this.getInvoiceDetail()
         }
       )
     },
@@ -314,17 +363,18 @@ export default {
         },
         () => {
           this.$router.go(-1)
+          this.getInvoiceDetail()
         }
       )
     },
     addTable() {
       this.costData.push({ money: 0, taxes: 0 })
     },
-    delete(index) {
-      this.costData.splice(index, 1)
+    deleteTrack(index, rows) {
+      rows.splice(index, 1)
     },
     recovery() {
-      this.$confirm(this.$t('您确认要恢复该开票申请吗？'), this.$t('恢复申请'), {
+      this.$confirm(this.$t('您确认要恢复该开票申请吗'), this.$t('恢复申请'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -443,13 +493,13 @@ export default {
         text-align: center;
       }
       .text {
-        padding: 5px 40px;
+        padding: 5px 20px;
+        word-wrap: break-word;
       }
       .screenshot {
-        width: 260px;
-        height: 180px;
-        margin: 0 auto;
-        background-color: #ccc;
+        width: 100px;
+        height: 80px;
+        margin: 10px 20px;
       }
     }
   }
@@ -517,6 +567,17 @@ export default {
   }
   .col_green {
     color: green;
+  }
+  .img_box {
+    text-align: center;
+    .imgDialog {
+      width: 50%;
+    }
+  }
+  .image {
+    max-width: 100px;
+    cursor: pointer;
+    text-align: center;
   }
 }
 </style>

@@ -129,11 +129,9 @@ export default {
 .dialog-line-lang {
   .el-input {
     width: 40% !important;
-    margin-left: 50px;
   }
   .el-textarea {
     width: 40% !important;
-    margin-left: 50px;
   }
   .el-form-item__label {
     width: 200px;

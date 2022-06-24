@@ -11,6 +11,7 @@
       <el-tab-pane :label="`${$t('已发货')} (${countData.shipped || 0})`" name="4"></el-tab-pane>
       <el-tab-pane :label="`${$t('已收货')} (${countData.received || 0})`" name="5"></el-tab-pane>
       <el-tab-pane :label="$t('弃件包裹')" name="6"></el-tab-pane>
+      <el-tab-pane :label="`${$t('无人认领')} (${countData.no_owner || 0})`" name="7"></el-tab-pane>
     </el-tabs>
     <order-list-search
       v-show="hasFilterCondition"
@@ -36,9 +37,13 @@
         <el-button class="btn-green" size="small" @click="batchPackage" v-if="activeName === '2'">{{
           $t('批量集包')
         }}</el-button>
-        <el-button class="btn-pink" size="small" @click="goNotify" v-if="activeName === '2'">{{
-          $t('批量发送通知')
-        }}</el-button>
+        <el-button
+          class="btn-pink notify"
+          size="small"
+          @click="goNotify"
+          v-if="activeName === '2'"
+          >{{ $t('批量发送通知') }}</el-button
+        >
         <el-button class="btn-dark-green" size="small" v-if="activeName === '6'" @click="restore">{{
           $t('恢复')
         }}</el-button>
@@ -51,15 +56,24 @@
         >
         <el-button
           class="btn-purple"
-          v-if="activeName !== '6'"
+          v-if="activeName !== '6' && activeName !== '7'"
           @click="importOrder"
           size="small"
           plain
           >{{ $t('批量入库') }}</el-button
         >
         <el-button
+          class="btn-blue"
+          v-if="activeName !== '6' && activeName !== '7'"
+          @click="batchForecast"
+          size="small"
+          plain
+        >
+          {{ $t('批量预报') }}
+        </el-button>
+        <el-button
           class="btn-yellow"
-          v-if="activeName !== '6'"
+          v-if="activeName !== '6' && activeName !== '7'"
           @click="uploadList"
           size="small"
           type="success"
@@ -69,13 +83,44 @@
         </el-button>
         <el-button
           class="btn-light-red"
-          v-if="activeName !== '6'"
+          v-if="activeName !== '1' && activeName !== '6' && activeName !== '7'"
           @click="batchShelves"
           size="small"
           plain
         >
           {{ $t('批量上架') }}
         </el-button>
+        <el-button
+          class="btn-light-red"
+          v-if="activeName === '2'"
+          @click="batchModify"
+          size="small"
+          plain
+        >
+          {{ $t('批量修改') }}
+        </el-button>
+        <el-button
+          class="btn-light-red"
+          size="small"
+          v-if="activeName === '7'"
+          @click="deleteListData"
+          >{{ $t('删除') }}</el-button
+        >
+        <el-button
+          class="btn-blue-green"
+          size="small"
+          v-if="activeName === '7'"
+          @click="claimList"
+          >{{ $t('认领记录') }}</el-button
+        >
+        <el-button
+          type="success"
+          plain
+          size="small"
+          v-if="activeName === '7'"
+          @click="uploadListData"
+          >{{ $t('导出清单') }}</el-button
+        >
       </div>
       <div class="header-search">
         <el-input
@@ -100,7 +145,7 @@
         </div>
       </div>
     </div>
-    <div style="height: calc(100vh - 270px)">
+    <div style="height: calc(100vh - 270px)" v-if="activeName !== '7'">
       <el-table
         border
         stripe
@@ -112,19 +157,44 @@
         class="order-data-list"
       >
         <el-table-column
+          v-if="activeName !== '7'"
           :type="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
           :key="['1', '2', '6'].includes(activeName) ? 'selection' : 'index'"
           width="55"
           align="center"
         ></el-table-column>
-        <el-table-column :label="$t('客户ID')" key="user_id" width="120" show-overflow-tooltip>
+        <el-table-column
+          :label="$t('客户ID')"
+          v-if="activeName !== '7'"
+          key="user_id"
+          width="120"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
             <span>{{ scope.row.user_id }}---{{ scope.row.user_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('快递单号')" key="express_num" width="180">
+        <el-table-column
+          :label="$t('会员等级')"
+          prop="user_member_level"
+          key="user_member_level"
+          v-if="activeName !== '7'"
+        ></el-table-column>
+        <el-table-column
+          v-if="activeName !== '7'"
+          :label="$t('快递单号')"
+          key="express_num"
+          width="180"
+        >
           <template slot-scope="scope">
-            <el-button @click="oderDetails(scope.row.id)" type="text"
+            <el-button
+              v-if="activeName === '2'"
+              :class="scope.row.is_claimed === 1 ? 'colorsty' : ''"
+              @click="oderDetails(scope.row.id)"
+              type="text"
+              >{{ scope.row.express_num }}
+            </el-button>
+            <el-button v-else @click="oderDetails(scope.row.id)" type="text"
               >{{ scope.row.express_num }}
             </el-button>
             <span v-if="scope.row.code != ''" style="color: #66666">({{ scope.row.code }})</span>
@@ -137,13 +207,14 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('状态')" key="status">
+        <el-table-column :label="$t('状态')" key="status" v-if="activeName !== '7'">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 1">{{ $t('未入库') }}</span>
             <span v-if="scope.row.status === 2">{{ $t('已入库') }}</span>
             <span v-if="scope.row.status === 3 || scope.row.status === 4">{{ $t('已集包') }}</span>
             <span v-if="scope.row.status === 5">{{ $t('已发货') }}</span>
             <span v-if="scope.row.status === 6">{{ $t('已收货') }}</span>
+            <!-- <span v-if="scope.row.status === 999">{{ $t('无人认领') }}</span> -->
 
             <el-tooltip
               v-if="scope.row.status === 1 && scope.row.is_warning === 1"
@@ -171,20 +242,23 @@
           prop="package_name"
           key="package_name"
           width="150"
+          v-if="activeName !== '7'"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           :label="$t('物品价值') + localization.currency_unit"
+          v-if="activeName !== '7'"
           prop="package_value"
           key="package_value"
         ></el-table-column>
         <el-table-column
           :label="$t('物品单价') + localization.currency_unit + '/' + localization.weight_unit"
+          v-if="activeName !== '7'"
           prop="unit_value"
           key="unit_value"
           min-width="100"
         ></el-table-column>
-        <el-table-column :label="$t('物品属性')" key="props">
+        <el-table-column :label="$t('物品属性')" key="props" v-if="activeName !== '7'">
           <template slot-scope="scope">
             <span v-for="item in scope.row.props" :key="item.id">
               {{ item.cn_name }}
@@ -206,6 +280,13 @@
           key="qty"
           v-if="['1', '2'].includes(activeName)"
         ></el-table-column>
+        <el-table-column :label="$t('体积(m³)')" v-if="['2'].includes(activeName)">
+          <template slot-scope="scope">
+            <span>{{
+              (scope.row.length * scope.row.width * scope.row.height) / 1000000 / (1 * 1 * 1)
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           :label="$t('商品分类')"
           prop="categories"
@@ -222,11 +303,13 @@
           :label="$t('寄往国家')"
           prop="destination_country.cn_name"
           key="destination_country.cn_name"
+          v-if="activeName !== '7'"
         ></el-table-column>
         <el-table-column
           :label="$t('仓库')"
           prop="warehouse.warehouse_name"
           key="warehouse.warehouse_name"
+          v-if="activeName !== '7'"
           width="155"
         >
         </el-table-column>
@@ -255,9 +338,21 @@
           key="in_storage_at"
           v-if="activeName === '2' || activeName === '3'"
         ></el-table-column>
-        <el-table-column :label="$t('提交时间')" prop="created_at" key="created_at" width="155">
+        <el-table-column
+          :label="$t('提交时间')"
+          prop="created_at"
+          v-if="activeName !== '7'"
+          key="created_at"
+          width="155"
+        >
         </el-table-column>
-        <el-table-column :label="$t('操作')" fixed="right" key="operator" width="116px">
+        <el-table-column
+          :label="$t('操作')"
+          fixed="right"
+          v-if="activeName !== '7'"
+          key="operator"
+          width="116px"
+        >
           <template slot-scope="scope">
             <el-dropdown>
               <el-button type="primary" plain>
@@ -305,11 +400,98 @@
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination style="margin-top: 5px" :pageParams="page_params" :notNeedInitQuery="false">
+      <nle-pagination
+        style="margin-top: 5px"
+        :pageParams="page_params"
+        :notNeedInitQuery="false"
+        saveSize="package"
+      >
         <div class="remark-text">
           <span>{{ $t('总实际重量') }}:</span><span>{{ sumData.weight }} KG</span>
         </div>
       </nle-pagination>
+    </div>
+    <div style="height: calc(100vh - 270px)" v-if="activeName === '7'">
+      <el-table
+        class="data-list"
+        border
+        stripe
+        :data="ownerData"
+        @selection-change="selectionChange"
+        v-loading="tableLoading"
+        height="calc(100vh - 275px)"
+        ref="table"
+      >
+        <!-- height="550" -->
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <!-- 快递单号 -->
+        <el-table-column :label="$t('快递单号')" width="155">
+          <template slot-scope="scope">
+            <el-button @click="oderDetails(scope.row.id)" type="text">{{
+              scope.row.express_num
+            }}</el-button>
+            <span
+              :title="$t('复制单号')"
+              class="copy-number"
+              @click="copyNumber(scope.row.express_num)"
+            >
+              <i class="el-icon-copy-document"></i>
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 包裹编码 -->
+        <el-table-column :label="$t('包裹编码')" prop="code"></el-table-column>
+        <!-- 物品价值 -->
+        <el-table-column
+          :label="$t('包裹重量') + this.localization.weight_unit"
+          prop="package_weight"
+          width="155"
+        ></el-table-column>
+        <!-- 物品属性 -->
+        <el-table-column :label="$t('物品属性')">
+          <template slot-scope="scope">
+            <span v-for="item in scope.row.props" :key="item.id">
+              {{ item.cn_name }}
+            </span>
+          </template>
+        </el-table-column>
+        <!-- 规格 -->
+        <el-table-column
+          :label="$t('规格') + this.localization.length_unit"
+          prop="dimension"
+          width="120px"
+        ></el-table-column>
+        <!-- 提交时间 -->
+        <el-table-column :label="$t('提交时间')" prop="created_at" width="155"> </el-table-column>
+        <!-- 仓库 -->
+        <el-table-column :label="$t('仓库')" prop="warehouse.warehouse_name" width="155">
+        </el-table-column>
+        <el-table-column :label="$t('货位')" prop="location"> </el-table-column>
+        <!-- 包裹图片 -->
+        <el-table-column :label="$t('包裹图片')" prop="package_pictures" width="150">
+          <template slot-scope="scope">
+            <span
+              v-for="(item, index) in scope.row.package_pictures"
+              :key="index"
+              style="cursor: pointer"
+              @click.stop=";(imgSrc = `${$baseUrl.IMAGE_URL}${item}`), (imgVisible = true)"
+            >
+              <img :src="`${$baseUrl.IMAGE_URL}${item}`" style="width: 40px; margin-right: 5px" />
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')" width="220" fixed="right">
+          <template slot-scope="scope">
+            <el-button size="small" @click="getLabel(scope.row.id)" class="btn-pink">{{
+              $t('打印标签')
+            }}</el-button>
+            <el-button class="btn-deep-blue" @click="goClaim([scope.row.id], 'alone')">{{
+              $t('认领')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img-box">
@@ -325,18 +507,26 @@
         <el-button type="primary" @click="updateLabel">{{ $t('下载') }}</el-button>
       </div>
     </el-dialog>
+    <batch-modify
+      :showBatch="showBatch"
+      :deleteNum="deleteNum"
+      :packageData="packageData"
+      @passVal="passVal"
+    ></batch-modify>
   </div>
 </template>
 
 <script>
 import OrderListSearch from './components/orderListSearch'
+import BatchModify from './components/batchModify'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
 export default {
   components: {
     OrderListSearch,
-    NlePagination
+    NlePagination,
+    BatchModify
   },
   name: 'orderlist',
   mixins: [pagination],
@@ -359,6 +549,7 @@ export default {
       urlExcel: '',
       hasFilterCondition: false,
       sumData: {},
+      ownerData: [],
       searchFieldData: {
         begin_date: '',
         end_date: '',
@@ -369,11 +560,16 @@ export default {
         value_begin: '',
         value_end: '',
         keyword: '',
-        is_warning: 0
-      }
+        is_warning: 0,
+        code: '',
+        member_level: ''
+      },
+      showBatch: false,
+      packageData: []
     }
   },
   activated() {
+    this.initSize()
     this.getList()
     this.getCounts()
     this.$nextTick(() => {
@@ -381,6 +577,7 @@ export default {
     })
   },
   created() {
+    this.initSize()
     this.getList()
     this.getCounts()
     this.$nextTick(() => {
@@ -392,6 +589,11 @@ export default {
   },
   mounted() {},
   methods: {
+    initSize() {
+      if (localStorage.getItem('package_size')) {
+        this.page_params.size = Number(localStorage.getItem('package_size'))
+      }
+    },
     // 获取订单统计数据
     getCounts() {
       const params = this.computedParams()
@@ -405,6 +607,9 @@ export default {
           })
         }
       })
+    },
+    passVal() {
+      this.showBatch = false
     },
     goMatch() {
       this.page_params.page = 1
@@ -435,6 +640,9 @@ export default {
       if (this.activeName === '6') {
         return this.getDiscard()
       }
+      if (this.activeName === '7') {
+        return this.getNoOwnerList()
+      }
       this.tableLoading = true
       const params = this.computedParams()
       this.$request
@@ -442,11 +650,15 @@ export default {
         .then(res => {
           this.tableLoading = false
           if (res.ret) {
-            this.orderData = res.data
+            this.orderData = res.data.filter(item => item.user_id !== 0)
             this.sumData = res.sum
             this.localization = res.localization
             this.page_params.page = res.meta.current_page
-            this.page_params.total = res.meta.total
+            if (this.orderData.length) {
+              this.page_params.total = res.meta.total
+            } else {
+              this.page_params.total = 0
+            }
             this.$nextTick(() => {
               this.$refs.table.doLayout()
             })
@@ -465,6 +677,9 @@ export default {
     },
     batchShelves() {
       this.$router.push({ name: 'BatchShelves' })
+    },
+    batchForecast() {
+      this.$router.push({ name: 'BatchForecast' })
     },
     getDiscard() {
       this.tableLoading = true
@@ -495,12 +710,116 @@ export default {
     editWarehoused(id) {
       this.$router.push({ name: 'editWarehouse', params: { id: id, state: 'editWarehouse' } })
     },
+    // 认领记录
+    claimList() {
+      dialog({ type: 'claimRecord' })
+    },
+    // 认领包裹
+    goClaim(id, status) {
+      dialog({ type: 'claim', id: id, status }, () => {
+        this.getNoOwnerList()
+      })
+    },
+    uploadListData() {
+      const searchData = this.searchFieldData
+      let params = {
+        ...searchData,
+        express_num: searchData.express_num.split(/[(\r\n)\r\n]+/),
+        begin_date: searchData.date ? searchData.date[0] : '',
+        end_date: searchData.date ? searchData.date[1] : '',
+        page: this.page_params.page,
+        size: this.page_params.size,
+        keyword: searchData.keyword
+      }
+      this.$request.uploadNoOwner(params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    deleteListData() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择包裹'))
+      }
+      this.$confirm(this.$t('您真的要删除这个包裹吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        console.log(this.deleteNum, '2222')
+        this.$request
+          .deleteNoOwner({
+            DELETE: this.deleteNum
+          })
+          .then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+              this.getList()
+            } else {
+              this.$message({
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          })
+      })
+    },
+    // 获取无人认领列表
+    getNoOwnerList() {
+      this.tableLoading = true
+      this.ownerData = []
+      const searchData = this.searchFieldData
+      let params = {
+        ...searchData,
+        express_num: searchData.express_num.split(/[(\r\n)\r\n]+/),
+        begin_date: searchData.date ? searchData.date[0] : '',
+        end_date: searchData.date ? searchData.date[1] : '',
+        page: this.page_params.page,
+        size: this.page_params.size,
+        keyword: searchData.keyword
+      }
+      this.$request.getNoOwner(params).then(res => {
+        this.tableLoading = false
+        if (res.ret) {
+          this.ownerData = res.data
+          this.localization = res.localization
+          this.page_params.page = res.meta.current_page
+          this.page_params.total = res.meta.total
+          this.$nextTick(() => {
+            this.$refs.table.doLayout()
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
     // 快速合箱
     fastClosing(userId) {
       this.$router.push({ name: 'applyPackage', query: { userId: userId } })
     },
     selectionChange(selection) {
+      console.log(selection, 'selection-change')
       this.deleteNum = selection.map(item => item.id)
+      console.log(this.deleteNum)
+      this.packageData = selection
     },
     goExpress(expressNum) {
       window.open(`https://m.kuaidi100.com/app/query/?coname=uc&nu=${expressNum}`)
@@ -510,7 +829,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择'))
       }
-      this.$confirm(this.$t('您真的要批量发送通知吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要批量发送通知吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -567,7 +886,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(this.$t('您真的要删除这个包裹吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除这个包裹吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -633,7 +952,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(this.$t('您真的要彻底删除？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要彻底删除'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -665,7 +984,7 @@ export default {
       if (!this.deleteNum || !this.deleteNum.length) {
         return this.$message.error(this.$t('请选择包裹'))
       }
-      this.$confirm(this.$t('您真的要恢复包裹吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要恢复包裹吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -736,7 +1055,21 @@ export default {
     },
     // 导出清单
     uploadList() {
-      const params = this.computedParams()
+      // const params = this.computedParams()
+      const searchData = this.searchFieldData
+      let param = {
+        page: this.page_params.page,
+        size: this.page_params.size,
+        status: this.activeName === '6' ? 19 : this.activeName,
+        keyword: this.searchFieldData.keyword
+      }
+      let params = {
+        ...param,
+        ...searchData,
+        express_num: searchData.express_num.split(/[(\r\n)\r\n]+/),
+        begin_date: searchData.date ? searchData.date[0] : '',
+        end_date: searchData.date ? searchData.date[1] : ''
+      }
       this.$request.uploadPackage(params).then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
@@ -766,6 +1099,12 @@ export default {
     onTabChange() {
       this.page_params.page = 1
       this.getList()
+    },
+    batchModify() {
+      if (!this.deleteNum || !this.deleteNum.length) {
+        return this.$message.error(this.$t('请选择'))
+      }
+      this.showBatch = true
     }
   }
 }
@@ -800,7 +1139,7 @@ export default {
     background-color: inherit;
   }
   .tab-length {
-    width: 870px !important;
+    width: 950px !important;
   }
   .copy-number {
     padding-left: 5px;
@@ -832,6 +1171,19 @@ export default {
   }
   .warning-sty {
     color: red;
+  }
+  // .el-button--text {
+  //   color: blue;
+  // }
+  .colorsty {
+    color: #3cb371;
+  }
+  .notify {
+    &:focus {
+      background: pink !important;
+      border: 1px solid pink !important;
+      color: white !important;
+    }
   }
 }
 </style>

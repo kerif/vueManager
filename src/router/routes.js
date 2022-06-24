@@ -5,9 +5,18 @@ const Layout = loadonDemand('layout/layouttop')
 const LayoutContainer = loadonDemand('layout/layoutcontainer')
 const Panel = loadonDemand('home/panel')
 const homeNotice = loadonDemand('home/notice')
+const updateList = loadonDemand('home/updateList')
 
 // 修改密码
 const ResetPassword = loadonDemand('home/reset-password')
+// 常见问题
+const CommonProblem = loadonDemand('home/commonProblem')
+// 常见问题详情
+const ProblemDetails = loadonDemand('home/problemDetails')
+// 系统消息
+const SystemInfo = loadonDemand('home/systemInfo')
+// 系统消息详情
+const InfoDetails = loadonDemand('home/infoDetails')
 // 员工列表
 const StaffList = loadonDemand('staff/stafflist')
 // 员工组列表
@@ -18,6 +27,8 @@ const StaffEdit = loadonDemand('staff/staffaddedit')
 const modifyPre = loadonDemand('staff/modify_permissions')
 // 客户列表
 const VipList = loadonDemand('vip/vip/viplist')
+// 客户列表详情
+const vipListDetails = loadonDemand('vip/vip/vipListDetails')
 // 客户组列表
 const VipGroupList = loadonDemand('vip/vipgroup/vipgrouplist')
 // 客户 代理申请管理
@@ -28,6 +39,8 @@ const sleepReminder = loadonDemand('vip/sleepReminder')
 const customerEcharts = loadonDemand('vip/customer/echarts')
 // 客户地址
 const VipAddressList = loadonDemand('vip/vipaddress/vipaddresslist')
+// 客户地址 批量导入地址
+const vipBatchImport = loadonDemand('vip/vipaddress/vipBatchImport')
 // 财务 流水记录
 const Transaction = loadonDemand('finance/Transaction')
 // 财务 成长值财务
@@ -44,6 +57,10 @@ const Recharge = loadonDemand('finance/recharge')
 const balance = loadonDemand('finance/balance')
 // 财务 审核跟详情页面
 const RechargeDetails = loadonDemand('finance/rechargeDetails')
+// 财务 订单补款
+const orderReplenishment = loadonDemand('finance/orderReplenishment')
+// 财务 订单补款详情页面
+const orderReplenishDetail = loadonDemand('finance/orderReplenishDetail')
 // 财务 财务概览
 const financeCharts = loadonDemand('finance/financeCharts')
 // 财务 订单财务审核
@@ -124,6 +141,10 @@ const configurationMore = loadonDemand('config/Payment/configuration')
 const smsServices = loadonDemand('config/Payment/smsService')
 // 配置 更多配置 物流查询服务
 const trackingService = loadonDemand('config/Payment/trackingService')
+// 配置 更多配置 系统服务配置 公众号配置 自定义菜单
+const customMenu = loadonDemand('config/Payment/customMenu')
+// 配置 更多配置 系统服务配置 公众号配置 自动回复
+const autoReply = loadonDemand('config/Payment/autoReply')
 // 配置 更多配置 商品分类管理 风险提示
 const EditSick = loadonDemand('config/Payment/sickTips')
 // 更多配置 修改或新增邮件模版
@@ -134,6 +155,8 @@ const emailLang = loadonDemand('config/Payment/emailLang')
 const categoriesLang = loadonDemand('config/Payment/categoriesLang')
 // 更多配置 邮件配置
 const mailConfigure = loadonDemand('config/Payment/mailConfigure')
+// 更多配置 发货快递公司
+const deliveryCompany = loadonDemand('config/Payment/deliveryCompany')
 // 包裹快速入库
 const Storage = loadonDemand('station/storage')
 // 自提点 转运包裹管理
@@ -170,6 +193,10 @@ const oderDetails = loadonDemand('order/order/orderDetails')
 const ImportOrder = loadonDemand('order/order/importOrder')
 // 订单 预报包裹列表 批量上架
 const BatchShelves = loadonDemand('order/order/batchShelves')
+// 订单 预报包裹列表 批量预报
+const BatchForecast = loadonDemand('order/order/batchForecast')
+// // 订单 订单列表 货量统计
+// const VolumeStatistics = loadonDemand('order/order/volumeStatistics')
 // 订单 无人认领包裹
 const noOwner = loadonDemand('order/noOwner/noOwner')
 // 订单 运单列表
@@ -186,6 +213,8 @@ const Billpacked = loadonDemand('order/waybill/billPacked')
 const Freight = loadonDemand('order/freight/freight')
 // 订单 运费查询 路线详情
 const freightDetail = loadonDemand('order/freight/freightDetail')
+// 订单 申报信息
+const declareInfo = loadonDemand('order/declare/declareInfo')
 // 订单 包裹订单概览
 const orderEcharts = loadonDemand('order/echarts/orderEcharts')
 // 营销管理 会员体制
@@ -219,6 +248,8 @@ const poster = loadonDemand('marketing/poster')
 // 营销管理 广告图管理 页面广告管理
 const imageSet = loadonDemand('marketing/imageSet')
 // const imageSet2 = loadonDemand('marketing/imageSet2')
+// 营销管理 弹窗广告管理
+const advertiseList = loadonDemand('marketing/advertise/advertiseList')
 // 营销管理 新增或编辑渠道管理
 const AddEditChannel = loadonDemand('marketing/channel/AddEditChannel')
 // 营销管理 引流列表
@@ -229,6 +260,8 @@ const SuggestList = loadonDemand('customer/suggest/Suggest')
 const Evaluation = loadonDemand('customer/evaluation')
 // 客服中心 公告管理
 const PublicList = loadonDemand('customer/public')
+// 客服中心 问答管理
+const QuestionAndAnswer = loadonDemand('customer/question')
 // 公告新增或编辑
 const AddEditPublic = loadonDemand('customer/publicAddEdit')
 // 公告管理 语言详情
@@ -237,6 +270,28 @@ const publicLang = loadonDemand('customer/publicLang')
 const LanguageSupport = loadonDemand('language/support')
 // 字符串翻译
 const stringTranslate = loadonDemand('language/string')
+// 采购
+const purchase = loadonDemand('purchase/purchaseOrder')
+// 新增采购单
+const addPurchase = loadonDemand('purchase/addEditPurchase')
+// 编辑采购单
+const editPurchase = loadonDemand('purchase/addEditPurchase')
+// 采购单详情
+const purchaseDetail = loadonDemand('purchase/purchaseDetail')
+// 编辑分货
+const distributionGoods = loadonDemand('purchase/distributionGoods')
+// 分货详情
+const distributeDetail = loadonDemand('purchase/distributeDetail')
+// 分货转运单
+const transshipmentBill = loadonDemand('purchase/transshipmentBill')
+// 分货详情
+const transshipmentDetail = loadonDemand('purchase/transshipmentDetail')
+// 新增分货方案
+const addEditScheme = loadonDemand('purchase/addScheme')
+// 开始拣货
+const picking = loadonDemand('purchase/picking')
+// 开始打包
+const purchasePack = loadonDemand('purchase/purchasePack')
 // 官网管理 栏目管理
 const website = loadonDemand('website/column')
 // 官网管理 新增 编辑 栏目管理
@@ -307,6 +362,18 @@ export default [
             }
           },
           {
+            path: '/home/update_list',
+            name: 'updateList',
+            component: updateList,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '更新日志',
+              parent: '/home/panel'
+            }
+          },
+          {
             path: '/home/notice/:id',
             name: 'systemNotice',
             component: homeNotice,
@@ -314,7 +381,7 @@ export default [
             meta: {
               level: 3,
               group: '首页',
-              name: '更新日志',
+              name: '更新日志详情',
               parent: '/home/panel'
             }
           },
@@ -327,6 +394,54 @@ export default [
               level: 2,
               group: '首页',
               name: '修改密码'
+            }
+          },
+          {
+            path: '/home/commonProblem',
+            name: 'commonProblem',
+            component: CommonProblem,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '常见问题',
+              parent: '/home'
+            }
+          },
+          {
+            path: '/home/problemDetails/:id',
+            name: 'problemDetails',
+            component: ProblemDetails,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '常见问题详情',
+              parent: '/home'
+            }
+          },
+          {
+            path: '/home/systemInfo',
+            name: 'systemInfo',
+            component: SystemInfo,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '系统消息',
+              parent: '/home'
+            }
+          },
+          {
+            path: '/home/infoDetails/:id',
+            name: 'infoDetails',
+            component: InfoDetails,
+            id: 101,
+            meta: {
+              level: 3,
+              group: '首页',
+              name: '系统消息详情',
+              parent: '/home'
             }
           }
         ]
@@ -415,6 +530,17 @@ export default [
             }
           },
           {
+            path: '/vip/vipListDetails/:id',
+            name: 'vipListDetails',
+            component: vipListDetails,
+            id: 301,
+            meta: {
+              group: '客户',
+              level: 3,
+              name: '客户详情'
+            }
+          },
+          {
             path: '/vip/vipgrouplist',
             name: 'vipgrouplist',
             component: VipGroupList,
@@ -434,6 +560,17 @@ export default [
               level: 2,
               group: '客户',
               name: '客户地址'
+            }
+          },
+          {
+            path: '/vip/vipaddress/vipBatchImport',
+            name: 'vipBatchImport',
+            component: vipBatchImport,
+            id: 303,
+            meta: {
+              level: 3,
+              group: '客户',
+              name: '批量导入地址'
             }
           },
           {
@@ -596,6 +733,18 @@ export default [
             }
           },
           {
+            path: '/order/orderlist/batchForecast',
+            component: BatchForecast,
+            name: 'BatchForecast',
+            id: 401,
+            meta: {
+              level: 3,
+              group: '订单',
+              name: '批量预报',
+              parent: '/order/orderlist'
+            }
+          },
+          {
             path: '/order/orderlist/batchShelves',
             component: BatchShelves,
             name: 'BatchShelves',
@@ -630,6 +779,17 @@ export default [
               name: '订单列表'
             }
           },
+          // {
+          //   path: '/order/order/volumeStatistics',
+          //   component: VolumeStatistics,
+          //   name: 'VolumeStatistics',
+          //   id: 402,
+          //   meta: {
+          //     level: 3,
+          //     group: '订单',
+          //     name: '货量统计'
+          //   }
+          // },
           {
             path: '/order/noOwner',
             component: noOwner,
@@ -710,6 +870,17 @@ export default [
               group: '订单',
               name: '打包处理',
               parent: '/order/waybill_list'
+            }
+          },
+          {
+            path: '/order/declareInfo',
+            name: 'declareInfo',
+            component: declareInfo,
+            id: 405,
+            meta: {
+              level: 2,
+              group: '订单',
+              name: '申报信息'
             }
           },
           {
@@ -990,7 +1161,7 @@ export default [
             }
           },
           {
-            path: '/config/line/channel/:id',
+            path: '/config/line/channel_list/:id',
             name: 'channelLine',
             component: channelLine,
             id: 601,
@@ -1260,6 +1431,30 @@ export default [
             }
           },
           {
+            path: '/config/auto-reply',
+            name: 'autoReply',
+            component: autoReply,
+            id: 606,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '自动回复',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/custom-menu',
+            name: 'customMenu',
+            component: customMenu,
+            id: 606,
+            meta: {
+              level: 3,
+              group: '配置',
+              name: '自定义菜单',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
             path: '/config/sms-services',
             name: 'smsServices',
             component: smsServices,
@@ -1340,6 +1535,18 @@ export default [
               group: '配置',
               level: 3,
               name: '修改邮件模版',
+              parent: '/config/configuration-more'
+            }
+          },
+          {
+            path: '/config/payment/delivery-company/:id/:name',
+            component: deliveryCompany,
+            name: 'deliveryCompany',
+            id: 606,
+            meta: {
+              group: '配置',
+              level: 3,
+              name: '详情',
               parent: '/config/configuration-more'
             }
           }
@@ -1430,6 +1637,29 @@ export default [
               group: '财务',
               level: 2,
               name: '余额扣款处理'
+            }
+          },
+          {
+            path: '/finance/orderReplenishment',
+            name: 'orderReplenishment',
+            component: orderReplenishment,
+            id: 710,
+            meta: {
+              group: '财务',
+              level: 2,
+              name: '订单补款'
+            }
+          },
+          {
+            path: '/finance/orderReplenishDetail/:id',
+            name: 'orderReplenishDetail',
+            component: orderReplenishDetail,
+            id: 710,
+            meta: {
+              group: '财务',
+              level: 3,
+              name: '订单补款详情',
+              parent: '/finance/orderReplenishment'
             }
           },
           {
@@ -1535,7 +1765,7 @@ export default [
             }
           },
           {
-            path: '/finance/agency/agencyCommission/:id',
+            path: '/finance/agency/agencyCommission',
             name: 'agencyCommission',
             component: agencyCommission,
             id: 708,
@@ -1821,6 +2051,18 @@ export default [
               name: '页面广告管理',
               parent: '/marketing/advertising'
             }
+          },
+          {
+            path: '/marketing/advertise',
+            name: 'advertiseList',
+            component: advertiseList,
+            id: 805,
+            meta: {
+              level: 3,
+              group: '营销管理',
+              name: '弹窗广告管理',
+              parent: '/marketing/advertising'
+            }
           }
           // {
           //   path: '/marketing/advertising/imageSet2',
@@ -1973,6 +2215,17 @@ export default [
               name: '公告管理的翻译内容',
               parent: '/customer/Public'
             }
+          },
+          {
+            path: '/customer/question',
+            name: 'question',
+            component: QuestionAndAnswer,
+            id: 904,
+            meta: {
+              level: 2,
+              group: '客服中心',
+              name: '问答管理'
+            }
           }
         ]
       },
@@ -2002,6 +2255,135 @@ export default [
               level: 2,
               group: '语言包',
               name: '字符串翻译'
+            }
+          }
+        ]
+      },
+      {
+        path: 'purchase',
+        component: LayoutContainer,
+        icon: 'icon-shuju',
+        id: 1400,
+        children: [
+          {
+            path: '/purchase/purchaseOrder',
+            name: 'purchaseOrder',
+            component: purchase,
+            id: 1401,
+            meta: { level: 2, group: '采购', name: '采购单' }
+          },
+          {
+            path: '/purchase/addEditPurchase',
+            name: 'addPurchase',
+            component: addPurchase,
+            id: 1401,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '新增采购单',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/addEditPurchase/:id',
+            name: 'editPurchase',
+            component: editPurchase,
+            id: 1401,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '编辑采购单',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/purchaseDetail/:id',
+            name: 'purchaseDetail',
+            component: purchaseDetail,
+            id: 1401,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '采购单详情',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/distributionGoods/:id',
+            name: 'distributionGoods',
+            component: distributionGoods,
+            id: 1401,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '编辑分货',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/distributeDetail/:id',
+            name: 'distributeDetail',
+            component: distributeDetail,
+            id: 1401,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '分货详情',
+              parent: '/purchase'
+            }
+          },
+          {
+            path: '/purchase/transshipmentBill',
+            name: 'transshipmentBill',
+            component: transshipmentBill,
+            id: 1402,
+            meta: { level: 2, group: '采购', name: '分货转运单' }
+          },
+          {
+            path: '/purchase/transshipmentDetail/:id',
+            name: 'transshipmentDetail',
+            component: transshipmentDetail,
+            id: 1402,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '详情'
+            }
+          },
+          {
+            path: '/purchase/transshipment/addScheme',
+            name: 'addScheme',
+            component: addEditScheme,
+            id: 1402,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '新建分货方案',
+              parent: '/purchase/transshipment'
+            }
+          },
+          {
+            path: '/purchase/transshipment/picking',
+            name: 'picking',
+            component: picking,
+            id: 1402,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '拣货',
+              parent: '/purchase/transshipment'
+            }
+          },
+          {
+            path: '/purchase/transshipment/purchasePack',
+            name: 'purchasePack',
+            component: purchasePack,
+            id: 1402,
+            meta: {
+              level: 3,
+              group: '采购',
+              name: '打包',
+              parent: '/purchase/transshipment'
             }
           }
         ]

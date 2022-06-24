@@ -12,7 +12,7 @@
         @click.middle.native="!isAffix(tag) ? closeSelectedTag(tag) : ''"
         @contextmenu.prevent.native="openMenu(tag, $event)"
       >
-        {{ $t(tag.title) }}
+        <span class="tags-title" :title="tag.title">{{ $t(tag.title) }}</span>
         <span
           v-if="!isAffix(tag)"
           class="el-icon-close"
@@ -235,8 +235,13 @@ export default {
   }
   .tags-view-wrapper {
     width: calc(100% - 63px);
+    ::v-deep .el-scrollbar__view {
+      display: flex;
+    }
     .tags-view-item {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       position: relative;
       cursor: pointer;
       height: 26px;
@@ -250,6 +255,11 @@ export default {
       margin-top: 4px;
       &:last-of-type {
         margin-right: 15px;
+      }
+      .tags-title {
+        width: 50px;
+        padding-right: 5px;
+        overflow: hidden;
       }
       &.active {
         background-color: #3540a5;

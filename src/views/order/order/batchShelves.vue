@@ -43,16 +43,22 @@
           <el-table-column type="index" width="55" align="center"></el-table-column>
           <el-table-column :label="$t('仓库')" prop="warehouse_name"> </el-table-column>
           <el-table-column :label="$t('货位')" prop="location"></el-table-column>
-          <!-- 商品名称 -->
-          <el-table-column :label="$t('上架数量')" prop="packages_count"> </el-table-column>
+          <!-- 上架数量 -->
+          <!-- <el-table-column :label="$t('上架数量')" prop="packages_count"> </el-table-column> -->
           <el-table-column :label="$t('包裹')" prop="express_num"></el-table-column>
           <el-table-column :label="$t('操作')" width="260">
-            <template>
+            <template slot-scope="scope">
               <!-- 删除 -->
-              <el-button class="btn-light-red">{{ $t('删除') }}</el-button>
+              <el-button class="btn-light-red" @click="deleteTrack(scope.$index, packageList)">{{
+                $t('删除')
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <div v-if="packageList.length">
+          <span>货位:{{ locations }} 个</span
+          ><span style="margin-left: 10px">上架包裹:{{ packages }} 个</span>
+        </div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="save-btn" @click="saveImport">{{ $t('保存') }}</el-button>
@@ -70,36 +76,33 @@ export default {
       packageList: [],
       localization: {},
       urlName: '',
-      file: ''
+      file: '',
+      locations: '',
+      packages: ''
     }
   },
   created() {},
   methods: {
-    getList() {
-      this.tableLoading = true
-      this.$request
-        .importPackageData({
-          file: this.fileList
-        })
-        .then(res => {
-          this.tableLoading = false
-          console.log(res)
-          if (res.ret) {
-            this.packageList = res.data
-            this.localization = res.localization
-          } else {
-            this.$notify({
-              title: this.$t('操作失败'),
-              message: res.msg,
-              type: 'warning'
-            })
-          }
-        })
-    },
+    //上传获取解析后的数据
+    // getList() {
+    //   this.tableLoading = true
+    //   this.$request.getPackageTemplate().then(res => {
+    //     this.tableLoading = false
+    //     if (res.ret) {
+    //       this.packageList = res.data
+    //       this.localization = res.localization
+    //     } else {
+    //       this.$notify({
+    //         title: this.$t('操作失败'),
+    //         message: res.msg,
+    //         type: 'warning'
+    //       })
+    //     }
+    //   })
+    // },
     // 下载excel
     uploadList() {
-      this.$request.importPackage().then(res => {
-        console.log(res)
+      this.$request.getPackageTemplate().then(res => {
         if (res.ret) {
           this.urlExcel = res.data.url
           window.open(this.urlExcel)
@@ -120,26 +123,29 @@ export default {
     handleExceed() {
       return this.$message.warning(this.$t('当前限制上传1个文件'))
     },
+    // 自定义上传方法
     uploadBaleImg(item) {
       let file = item.file
       this.onUpload(file).then(res => {
+        console.log(res)
         if (res.ret) {
-          res.data.forEach(item => {
-            this.fileList.push({
-              name: item.name,
-              url: item.path
-            })
+          this.packageList = res.data.data
+          this.locations = res.data.locations_count
+          this.packages = res.data.packages_count
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
           })
-          this.urlName = res.data[0].name
-          console.log(this.urlName, 'urlName')
-          this.getList()
         }
       })
     },
     onUpload(file) {
+      // 通过FormData对象上传文件
       let params = new FormData()
-      params.append(`files[${0}][file]`, file)
-      return this.$request.uploadFiles(params)
+      params.append(`file`, file)
+      return this.$request.importPackageData(params)
     },
     // 文件删除
     onFileRemove(file, fileList) {
@@ -147,7 +153,7 @@ export default {
     },
     saveImport() {
       this.$request
-        .packageLocationData({
+        .savePackageData({
           ...this.packageList
         })
         .then(res => {
@@ -166,6 +172,10 @@ export default {
             })
           }
         })
+    },
+    // 表格删除
+    deleteTrack(index, rows) {
+      rows.splice(index, 1)
     },
     beforeUploadImg() {}
   }

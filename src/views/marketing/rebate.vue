@@ -51,6 +51,27 @@
           <template slot="append">{{ $t('天') }}</template>
         </el-input>
       </el-form-item>
+      <el-form-item :label="$t('有效日期')" v-if="$route.params.type === 1">
+        <el-date-picker
+          :disabled="statusEdit"
+          v-model="ruleForm.begin_at"
+          value-format="yyyy-MM-dd"
+          format="yyyy-MM-dd"
+          type="date"
+          :placeholder="$t('请选择开始日期')"
+        >
+        </el-date-picker>
+        &nbsp;&nbsp;<span style="display: inline-block; width: 10px">-</span>&nbsp;&nbsp;
+        <el-date-picker
+          :disabled="statusEdit"
+          v-model="ruleForm.end_at"
+          value-format="yyyy-MM-dd"
+          format="yyyy-MM-dd"
+          type="date"
+          :placeholder="$t('请选择结束日期')"
+        >
+        </el-date-picker>
+      </el-form-item>
       <el-form-item :label="$t('使用范围')" prop="scope">
         <el-radio-group v-model="ruleForm.scope">
           <el-radio :label="0" :disabled="statusEdit">{{ $t('全部') }}</el-radio>
@@ -169,6 +190,7 @@ export default {
         threshold: '',
         days: '',
         begin_at: '',
+        end_at: '',
         amount: '',
         max_coupon_amount: '',
         type: 1,

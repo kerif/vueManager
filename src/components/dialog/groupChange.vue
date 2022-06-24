@@ -7,6 +7,9 @@
     width="40%"
   >
     <el-form ref="form" :model="groupData" label-width="100px">
+      <el-form-item :label="$t('团购名称')">
+        <el-input :placeholder="$t('请输入团购名称')" v-model="groupData.name"></el-input>
+      </el-form-item>
       <el-form-item :label="$t('支付模式')">
         <el-radio-group v-model="groupData.mode">
           <el-radio :label="0">{{ $t('团员自付') }}</el-radio>
@@ -36,7 +39,7 @@
         </div>
       </div>
       <el-form-item :label="$t('收货方式')">
-        <el-radio-group v-model="groupData.is_delivery" @change="changeRadio">
+        <el-radio-group v-model="groupData.is_delivery">
           <el-radio :label="0">{{ $t('送货上门') }}</el-radio>
           <el-radio :label="1">{{ $t('自提收货') }}</el-radio>
         </el-radio-group>
@@ -80,7 +83,7 @@
         </el-table-column>
         <el-table-column :label="$t('国家')" v-if="status === 'address'">
           <template slot-scope="scope">
-            <span>{{ scope.row.country && scope.row.country.cn_name }}</span>
+            <span>{{ scope.row.country && scope.row.country.name }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -132,6 +135,7 @@ export default {
     return {
       tableData: [],
       groupData: {
+        name: '',
         is_delivery: 0,
         mode: 0,
         address_id: '',
@@ -176,14 +180,11 @@ export default {
     onRowChange(row) {
       this.chooseId = row.id
       this.group = row
-      console.log(this.group, 'choose group')
     },
     submitChoose() {
       if (!this.chooseId) {
         return this.$message.error(this.$t('请选择'))
       }
-      console.log(this.status, 'status')
-      // this.success(this.group)
       if (this.status === 'address') {
         this.groupData.address.receiver_name = this.group.receiver_name
         this.groupData.address.phone = this.group.phone
@@ -197,17 +198,12 @@ export default {
         this.stationName = this.group.name
         this.groupData.station_id = this.group.id
       }
-      console.log(this.group, 'this.group')
       this.innerVisible = false
-    },
-    changeRadio() {
-      console.log(this.groupData.is_delivery, 'groupData.is_delivery')
     },
     // 获取拼团信息
     getDetails() {
       this.$request.groupDetails(this.id).then(res => {
         if (res.ret) {
-          console.log(res.data)
           this.groupData = res.data
           if (res.data.address) {
             this.groupData.address_id = res.data.address.id
@@ -234,6 +230,7 @@ export default {
     confirm() {
       this.$request
         .updateGroupDetails(this.id, {
+          name: this.groupData.name,
           mode: this.groupData.mode,
           is_delivery: this.groupData.is_delivery,
           address_id: this.groupData.address_id,
@@ -264,6 +261,7 @@ export default {
       this.id = ''
       this.addressData = []
       this.stationName = ''
+      this.groupData.name = ''
       this.groupData.is_delivery = 0
       this.groupData.address_id = 0
       this.groupData.mode = 0

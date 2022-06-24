@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="express-company">
     <div class="select-box">
       <add-btn @click.native="addExpress">{{ $t('添加') }}</add-btn>
     </div>
@@ -9,7 +9,7 @@
       class="data-list"
       border
       stripe
-      height="550"
+      style="width: 100%"
     >
       <el-table-column type="index"></el-table-column>
       <!-- 状态 -->
@@ -59,6 +59,7 @@
         v-for="item in formatLangData"
         :key="item.id"
         align="center"
+        width="100"
       >
         <template slot-scope="scope">
           <span
@@ -69,7 +70,7 @@
           <span v-else class="el-icon-plus icon-sty" @click="onExpress(scope.row, item)"></span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('操作')">
+      <el-table-column :label="$t('操作')" width="140">
         <template slot-scope="scope">
           <el-button
             class="btn-dark-green"
@@ -82,6 +83,20 @@
             @click="deleteExpress(scope.row.id)"
             v-if="scope.row.is_default === 0"
             >{{ $t('删除') }}</el-button
+          >
+          <el-button
+            class="btn-light-red"
+            style="margin: 10px 0 0 0"
+            @click="
+              replaceTrack(
+                scope.row.id,
+                scope.row.name,
+                scope.row.logo,
+                scope.row.contact_phone,
+                scope.row.website
+              )
+            "
+            >{{ $t('轨迹替换') }}</el-button
           >
         </template>
       </el-table-column>
@@ -202,7 +217,7 @@ export default {
     },
     // 订单 删除 快递公司
     deleteExpress(id) {
-      this.$confirm(this.$t('您真的要删除吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'
@@ -224,8 +239,28 @@ export default {
           }
         })
       })
+    },
+    replaceTrack(id, name, logo, contactPhone, website) {
+      let obj = {
+        logo: logo,
+        contactPhone: contactPhone,
+        website: website
+      }
+      this.$router.push({
+        name: 'deliveryCompany',
+        params: {
+          id: id,
+          name: name
+        },
+        query: {
+          info: JSON.stringify(obj)
+        }
+      })
     }
   }
 }
 </script>
-<style scoped></style>
+<style lang="scss">
+.express-company {
+}
+</style>

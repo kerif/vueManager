@@ -99,7 +99,16 @@
             }}</el-button>
             <el-button
               class="btn-deep-purple"
-              @click="positionAdd(scope.row.id, scope.row.warehouse_name)"
+              @click="
+                positionAdd(
+                  scope.row.id,
+                  scope.row.warehouse_name,
+                  scope.row.receiver_name,
+                  scope.row.phone,
+                  scope.row.address,
+                  scope.row.support_countries
+                )
+              "
               >{{ $t('仓位管理') }}</el-button
             >
             <el-button class="btn-light-red" @click="deleteWarehouse(scope.row.id)">{{
@@ -226,12 +235,21 @@ export default {
       })
     },
     // 仓位管理
-    positionAdd(id, warehouseName) {
+    positionAdd(id, warehouseName, receiverName, phone, address, supportCountries) {
+      let obj = {
+        receiverName: receiverName,
+        phone: phone,
+        address: address,
+        supportCountries: supportCountries
+      }
       this.$router.push({
         name: 'position',
         params: {
           id: id,
           warehouseName: warehouseName
+        },
+        query: {
+          info: JSON.stringify(obj)
         }
       })
     },
@@ -241,7 +259,7 @@ export default {
     },
     // 删除
     deleteWarehouse(id) {
-      this.$confirm(this.$t('您真的要删除此仓库吗？'), this.$t('提示'), {
+      this.$confirm(this.$t('您真的要删除此仓库吗'), this.$t('提示'), {
         confirmButtonText: this.$t('确定'),
         cancelButtonText: this.$t('取消'),
         type: 'warning'

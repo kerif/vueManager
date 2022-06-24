@@ -94,10 +94,12 @@ export default {
       }
       if (this.state === 'line') {
         let user = this.expressData.filter(item => item.id === this.user.express_line_id)[0]
+        console.log(user)
         this.success(user)
         this.show = false
       } else if (this.state === 'warehouse') {
         let warehouse = this.warehouseData.filter(item => item.id === this.user.warehouse_id)[0]
+        console.log(warehouse)
         this.success(warehouse)
         this.show = false
       }

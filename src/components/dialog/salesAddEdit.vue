@@ -14,7 +14,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="3" :offset="1">
-          <el-form-item :label="$t('排序')">
+          <el-form-item :label="$t('优先级')">
             <el-input v-model="ruleForm.index"></el-input>
           </el-form-item>
         </el-col>
@@ -31,9 +31,9 @@
           v-if="ruleForm.scope === 1 || ruleForm.scope === 2"
           class="checked-list"
         >
-          <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id">{{
-            item.name
-          }}</el-checkbox>
+          <el-checkbox v-for="item in modeList" :key="item.id" :label="item.id"
+            >{{ item.name }}
+          </el-checkbox>
         </el-checkbox-group>
         <div v-if="ruleForm.scope === 3">
           <div class="search">
@@ -53,8 +53,13 @@
             </el-autocomplete>
           </div>
           <div class="customer checked-list">
-            <div class="customer-item" v-for="item in customerList" :key="item.id">
+            <div class="customer-item" v-for="(item, index) in customerList" :key="index">
               {{ item.id }}---{{ item.name }}
+              <i
+                class="el-icon-delete"
+                style="color: red; cursor: pointer"
+                @click="delCustomer(index)"
+              ></i>
             </div>
           </div>
         </div>
@@ -271,6 +276,10 @@ export default {
         return false
       }
       this.customerList.push(item)
+      this.ruleForm.ids = this.customerList.map(item => item.id)
+    },
+    delCustomer(index) {
+      this.customerList.splice(index, 1)
       this.ruleForm.ids = this.customerList.map(item => item.id)
     },
     async confirm() {

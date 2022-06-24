@@ -29,6 +29,12 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="sku" prop="sku" class="input-style">
+        <el-input v-model="ruleForm.sku" :placeholder="$t('请输入')"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('海关编码')" prop="hs_code" class="input-style">
+        <el-input v-model="ruleForm.hs_code" :placeholder="$t('请输入海关编码')"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="cancelDialog('ruleForm')">{{ $t('取消') }}</el-button>
@@ -42,7 +48,9 @@ export default {
     return {
       ruleForm: {
         name: '',
-        parent_id: 0
+        parent_id: 0,
+        sku: '',
+        hs_code: ''
       },
       classifyList: [],
       state: '',
@@ -141,6 +149,8 @@ export default {
     clear() {
       this.ruleForm.name = ''
       this.ruleForm.parent_id = 0
+      this.ruleForm.sku = ''
+      this.ruleForm.hs_code = ''
     },
     cancelDialog(ruleForm) {
       this.$refs[ruleForm].resetFields()

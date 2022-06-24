@@ -3,6 +3,7 @@
     <div class="btn">
       <add-btn router="addAgent" class="add-sty">{{ $t('添加代理') }}</add-btn>
       <add-btn router="agentTemplate">{{ $t('计佣模版配置') }}</add-btn>
+      <el-button type="primary" @click="updateAgentCode">{{ $t('更新代理二维码') }}</el-button>
       <div class="changeVou">
         <el-button @click="withdraw">{{ $t('提现说明') }}</el-button>
       </div>
@@ -31,7 +32,7 @@
           <span>{{ scope.row.user_id }}-{{ scope.row.agent_name }}-</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('佣金分成%')" prop="commission" width="100"> </el-table-column>
+      <el-table-column :label="$t('佣金分成')" prop="commission" width="100"> </el-table-column>
       <el-table-column :label="$t('下单数')">
         <template slot-scope="scope">
           <span style="color: blue">{{ scope.row.deal_order }}</span>
@@ -59,15 +60,15 @@
       <el-table-column label="操作" width="450" fixed="right">
         <template slot-scope="scope">
           <!-- 代理二维码 -->
-          <el-button
-            class="btn-green"
-            @click.stop="
-              ;(imgSrc = scope.row.qr_code), (imgVisible = true), (imgUser = scope.row.user_id)
-            "
-            >{{ $t('代理二维码') }}</el-button
-          >
+          <el-button class="btn-green" @click.stop="openAgent(scope.row)">{{
+            $t('代理二维码')
+          }}</el-button>
           <!-- 修改 -->
           <el-button class="btn-green" @click="editAgent(scope.row.id)">{{ $t('修改') }}</el-button>
+          <!-- 删除 -->
+          <el-button class="btn-light-red" @click="deleteAgent(scope.row.id)">{{
+            $t('删除')
+          }}</el-button>
           <!-- 成交记录 -->
           <!-- 设置佣金 -->
           <el-button
@@ -93,6 +94,9 @@
               $t('提现申请')
             }}</el-button>
           </el-badge>
+          <el-button class="btn-blue" @click="invite(scope.row.user_id)">{{
+            $t('邀请记录')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -100,7 +104,16 @@
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
         <img :src="imgSrc" class="imgDialog" />
-        <div>{{ imgUser }}</div>
+        <div>
+          <div class="img-code">{{ imgUser }}</div>
+          <el-button
+            size="mini"
+            class="btn-light-red"
+            style="margin-left: 20px"
+            @click="uploadAgentCode"
+            >{{ $t('下载二维码') }}</el-button
+          >
+        </div>
       </div>
     </el-dialog>
     <!-- 提现说明弹窗 -->
@@ -145,6 +158,7 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import { pagination } from '@/mixin'
 import dialog from '@/components/dialog'
+import { downloadStreamFile } from '@/utils/index'
 export default {
   data() {
     return {
@@ -160,6 +174,8 @@ export default {
       deleteNum: [],
       options: [],
       withdrawVisible: false,
+      id: '',
+      type: '',
       form: {
         content: '',
         language: ''
@@ -204,6 +220,12 @@ export default {
           }
         })
     },
+    openAgent(data) {
+      this.imgSrc = data.qr_code
+      this.imgVisible = true
+      this.imgUser = data.user_id
+      this.id = data.id
+    },
     // 修改代理
     editAgent(id) {
       console.log(id, 'id')
@@ -212,6 +234,35 @@ export default {
         query: {
           id: id
         }
+      })
+    },
+    // 邀请记录
+    invite(id) {
+      dialog({ type: 'inviteList', state: 'invite', id })
+    },
+    //删除代理
+    deleteAgent(id) {
+      this.$confirm(this.$t('您真的要删除此代理'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.deleteAgent(id).then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+            this.getList()
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       })
     },
     // 提现申请
@@ -283,6 +334,35 @@ export default {
         if (res.ret) {
           this.withdrawVisible = false
         }
+      })
+    },
+    // 更新代理二维码
+    updateAgentCode() {
+      this.$confirm(this.$t('是否确认更新代理二维码'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      })
+        .then(() => {
+          this.$request.updateAgentCode().then(res => {
+            if (res.ret) {
+              this.$notify({
+                title: this.$t('操作成功'),
+                message: res.msg,
+                type: 'success'
+              })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    // 下载二维码
+    uploadAgentCode() {
+      let param = {
+        responseType: 'blob'
+      }
+      this.$request.uploadAgentCode(this.id, param).then(res => {
+        downloadStreamFile(res, 'code', 'jpg')
       })
     },
     // 提现说明
@@ -387,5 +467,8 @@ export default {
 }
 .add-sty {
   margin-left: 10px;
+}
+.img-code {
+  display: inline-block;
 }
 </style>

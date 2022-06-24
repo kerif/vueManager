@@ -41,6 +41,7 @@
             $t('第三方物流查询服务')
           }}</el-radio>
           <div class="message-main">
+            <p>{{ $t('国内物流查询(快递100)') }}</p>
             <p>{{ $t('快递100配置') }}</p>
             <span>{{ $t('Customer ID') }}：</span><br />
             <el-input v-model="ruleForm.kuaidi100_customer_id" class="input-sty"></el-input><br />
@@ -48,11 +49,24 @@
             <el-input v-model="ruleForm.kuaidi100_key" class="input-sty"></el-input>
             <el-button class="buy-sty" @click="testExpress">{{ $t('测试') }}</el-button>
           </div>
-          <div class="message-main">
+          <div style="margin: 25px 0 10px 0">
+            <p>{{ $t('国际物流查询') }}</p>
+            <el-radio-group v-model="ruleForm.tracking_provider">
+              <el-radio :label="0">51tracking</el-radio>
+              <el-radio :label="1">17track</el-radio>
+            </el-radio-group>
+          </div>
+          <div class="message-main" v-if="ruleForm.tracking_provider === 0">
             <p>{{ $t('Tracking more配置') }}</p>
             <span>{{ $t('Appkey') }}：</span><br />
             <el-input v-model="ruleForm.tracking_app_key" class="input-sty"></el-input>
             <el-button class="buy-sty" @click="testTracking">{{ $t('测试') }}</el-button>
+          </div>
+          <div class="message-main" v-else>
+            <p>{{ $t('17Track 配置') }}</p>
+            <span>{{ $t('Appkey') }}：</span><br />
+            <el-input v-model="ruleForm.track_app_key" class="input-sty"></el-input>
+            <el-button class="buy-sty" @click="testTrack">{{ $t('测试') }}</el-button>
           </div>
         </div>
       </el-col>
@@ -87,7 +101,9 @@ export default {
         tracking_count: '',
         kuaidi100_customer_id: '',
         kuaidi100_key: '',
-        kuaidi100_count: ''
+        kuaidi100_count: '',
+        track_app_key: '',
+        tracking_provider: 0
       },
       radio: 1
     }
@@ -104,6 +120,8 @@ export default {
         this.ruleForm.kuaidi100_count = res.data.kuaidi100_count
         this.ruleForm.kuaidi100_key = res.data.kuaidi100_key
         this.ruleForm.kuaidi100_customer_id = res.data.kuaidi100_customer_id
+        this.ruleForm.track_app_key = res.data['17track_app_key']
+        this.ruleForm.tracking_provider = res.data.tracking_provider
       })
     },
     // 检测快递100
@@ -159,12 +177,37 @@ export default {
           }
         })
     },
+    testTrack() {
+      if (this.ruleForm.track_app_key === '') {
+        return this.$message.error('请输入17Track more的AppKey')
+      }
+      this.$request
+        .verifyTrackMore({
+          '17track_app_key': this.ruleForm.track_app_key
+        })
+        .then(res => {
+          if (res.ret) {
+            this.$notify({
+              title: this.$t('操作成功'),
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: this.$t('操作失败'),
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    },
     saveTemplate() {
       this.$request
         .updateTrackingSystem({
           ...this.ruleForm,
           '51tracking_app_key': this.ruleForm.tracking_app_key,
-          '51tracking_count': this.ruleForm.tracking_count
+          '51tracking_count': this.ruleForm.tracking_count,
+          '17track_app_key': this.ruleForm.track_app_key
         })
         .then(res => {
           if (res.ret) {
@@ -207,7 +250,7 @@ export default {
     margin-bottom: 10px;
     padding: 20px;
     background: #fff;
-    height: 350px;
+    height: 425px;
     .top-img {
       margin-top: 50px;
       margin-bottom: 40px;
@@ -252,7 +295,7 @@ export default {
     }
   }
   .message-main {
-    margin-top: 25px;
+    margin-top: 15px;
     .input-sty {
       margin-top: 5px;
       width: 60%;
