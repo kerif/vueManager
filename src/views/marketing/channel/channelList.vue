@@ -1,6 +1,10 @@
 <template>
   <div class="channel-container">
     <div class="select-box">
+      <!-- <el-select v-model="value"></el-select> -->
+      <!-- <div class="manage">
+        <el-button type="primary" size="small" @click="onManage">{{ $t('分类管理') }}</el-button>
+      </div> -->
       <add-btn router="addChannel">{{ $t('添加') }}</add-btn>
       <div class="searchGroup">
         <search-group v-model="page_params.keyword" @search="goSearch"> </search-group>
@@ -20,6 +24,7 @@
         <el-table-column type="index" width="55" align="center"></el-table-column>
         <!-- 渠道号 -->
         <el-table-column :label="$t('渠道号')" prop="id"></el-table-column>
+        <!-- <el-table-column :label="$t('分类')"></el-table-column> -->
         <!-- 渠道中文名 -->
         <el-table-column :label="$t('渠道中文名')" prop="channel_name"></el-table-column>
         <!-- 结算方式 -->
@@ -72,6 +77,27 @@
       :pageParams="page_params"
       :notNeedInitQuery="false"
     ></nle-pagination>
+    <!-- <el-dialog :visible.sync="showCategory" :title="$t('分类管理')" @close="clear">
+      <el-button @click="addCategory">{{ $t('新增') }}</el-button>
+      <el-table :data="tableData" border>
+        <el-table-column type="index" label="#"></el-table-column>
+        <el-table-column prop="name" :label="$t('分类')">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.name"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('操作')">
+          <template slot-scope="scope">
+            <el-button class="btn-main" @click="onAddEdit(scope.row)">{{ $t('编辑') }}</el-button>
+            <el-button class="btn-main" @click="onAddEdit(scope.row)"></el-button>
+            <el-button class="btn-light-red" @click="onDelete(scope.row.id)">{{
+              $t('删除')
+            }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -79,6 +105,7 @@ import { SearchGroup } from '@/components/searchs'
 import NlePagination from '@/components/pagination'
 import AddBtn from '@/components/addBtn'
 import { pagination } from '@/mixin'
+// import { Dialog } from 'element-ui'
 export default {
   name: 'vipGroupList',
   components: {
@@ -92,7 +119,10 @@ export default {
       vipGroupList: [],
       localization: {},
       tableLoading: false,
-      deleteNum: []
+      deleteNum: [],
+      value: '',
+      showCategory: false,
+      tableData: []
     }
   },
   created() {
@@ -175,10 +205,28 @@ export default {
         }
       })
     },
+    onManage() {
+      this.showCategory = true
+      // this.$request.categorySearch().then(res => {
+      //   console.log(res)
+      // })
+    },
+    addCategory() {
+      this.tableData.push({
+        name: ''
+      })
+    },
+    onAddEdit() {
+      // this.$request.addChannelCategory().then(res => {
+      //   console.log(res)
+      // })
+    },
+    onDelete() {},
     selectionChange(selection) {
       this.deleteNum = selection.map(item => item.id)
       console.log(this.deleteNum, 'this.deleteNum')
     },
+    clear() {},
     // 删除单条转账支付
     deleteWarehouse(id) {
       this.$confirm(this.$t('您真的要删除此仓库吗'), this.$t('提示'), {
@@ -225,6 +273,10 @@ export default {
   }
   .add-btn-container {
     margin-left: 10px;
+  }
+  .manage {
+    margin-left: 10px;
+    display: inline-block;
   }
 }
 </style>

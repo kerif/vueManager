@@ -4496,3 +4496,33 @@ exports.delPickOrder = id => {
 exports.downloadNoodleSheet = params => {
   return $form.post(`purchase-picking-orders/order/order-label-pdfs`, params)
 }
+
+// 客户来源
+exports.userSource = () => {
+  return $form.get('users/user-sources')
+}
+
+// 推广渠道 分类管理
+exports.categorySearch = () => {
+  return $form.get('channel-categories')
+}
+
+// 分类管理 获取详情
+exports.channelCategory = id => {
+  return $form.get(`channel-categories/${id}`)
+}
+
+// 分类管理 新增
+exports.addChannelCategory = () => {
+  return $form.get('channel-categories')
+}
+
+// 分类管理 修改
+exports.editChannelCategory = (id, params) => {
+  return $form.put(`channel-categories/${id}`, params)
+}
+
+// 分类管理 删除
+exports.delChannelCategory = id => {
+  return $form.delete(`channel-categories/${id}`)
+}

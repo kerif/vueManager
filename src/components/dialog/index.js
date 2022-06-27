@@ -153,6 +153,7 @@ import cumulativeGrowth from './cumulativeGrowth.vue'
 import growthExplain from './growthExplain.vue'
 import distributeScheme from './distributeScheme.vue'
 import confirmReceive from './confirmReceive.vue'
+import classifiyManage from './classifiyManage.vue'
 
 const InviteController = Vue.extend(inviteList)
 const VipGroupController = Vue.extend(VipGroup)
@@ -305,6 +306,7 @@ const cumulativeGrowthController = Vue.extend(cumulativeGrowth)
 const growthExplainController = Vue.extend(growthExplain)
 const distributeSchemeController = Vue.extend(distributeScheme)
 const confirmReceiveController = Vue.extend(confirmReceive)
+const classifiyManageController = Vue.extend(classifiyManage)
 
 const mixin = {
   data() {
@@ -568,6 +570,13 @@ function initInstance(type) {
       instance = new confirmReceiveController({
         el: document.createElement('div'),
         mixins: [mixin]
+      })
+      break
+    // 分类管理
+    case 'classifiyManage':
+      instance = new classifiyManageController({
+        el: document.createElement('div'),
+        minxins: [mixin]
       })
       break
     //分货详细

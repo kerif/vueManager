@@ -129,6 +129,7 @@
                     size="small"
                     type="number"
                     v-model="ele.picking_quantity"
+                    @blur="onCheck(ele)"
                   ></el-input
                 ></el-col>
               </el-row>
@@ -209,6 +210,12 @@ export default {
     onPic(url) {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
+    },
+    onCheck(ele) {
+      if (ele.picking_quantity > ele.quantity) {
+        this.$message.error(this.$t('拣货数量不能大于分货数量'))
+        ele.picking_quantity = ele.quantity
+      }
     },
     onSave(type) {
       let params = {

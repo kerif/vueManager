@@ -115,6 +115,21 @@
         >
         </el-date-picker>
       </div>
+      <!-- <div class="search-item">
+        <div>{{ $t('客户来源') }}</div>
+        <el-select
+          v-model="searchParams.searchSource"
+          clearable
+          :placeholder="$t('请选择客户来源')"
+        >
+          <el-option
+            v-for="item in sourceList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </div> -->
       <div class="search-item">
         <el-button size="small" class="btn-blue" @click="getList">{{ $t('搜索') }}</el-button>
         <el-button size="small" class="btn-light-red" @click="reset">{{ $t('重置') }}</el-button>
@@ -168,6 +183,19 @@
         </div>
       </div>
       <div class="addUser">
+        <!-- <el-select
+          v-model="page_params.source"
+          :placeholder="$t('客户来源')"
+          clearable
+          @change="onSource"
+        >
+          <el-option
+            v-for="item in sourceList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select> -->
         <add-btn style="margin-right: 10px" size="small" plain @click.native="addUser">{{
           $t('添加客户')
         }}</add-btn>
@@ -466,7 +494,8 @@ export default {
       localization: {},
       clientGroupList: [],
       page_params: {
-        group: ''
+        group: '',
+        source: ''
       },
       urlExcel: '',
       dialogVisible: false,
@@ -492,7 +521,8 @@ export default {
         max_point: '',
         min_point: '',
         max_order_count: '',
-        min_order_count: ''
+        min_order_count: '',
+        searchSource: ''
       },
       searchTime: [],
       gradeList: [],
@@ -501,6 +531,7 @@ export default {
       inviteList: [],
       customerList: [],
       saleList: [],
+      sourceList: [],
       inviteLoading: false,
       hasFilterCondition: false
     }
@@ -508,6 +539,7 @@ export default {
   mixins: [pagination],
   created() {
     this.getCategory()
+    this.getUserSource()
     if (this.$route.query.group) {
       this.page_params.group = Number(this.$route.query.group)
     }
@@ -537,6 +569,9 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
+          source: this.searchParams.searchSource
+            ? this.searchParams.searchSource
+            : this.page_params.source,
           user_group_id: this.searchParams.user_group_id
             ? this.searchParams.user_group_id
             : this.page_params.group,
@@ -579,6 +614,7 @@ export default {
       this.searchParams.max_point = ''
       this.searchParams.min_order_count = ''
       this.searchParams.max_order_count = ''
+      this.searchParams.searchSource = ''
       this.searchTime = []
       this.getList()
     },
@@ -602,6 +638,15 @@ export default {
           this.groupList = res.data
         }
       })
+    },
+    getUserSource() {
+      // this.$request.userSource().then(res => {
+      //   res.data.unshift({
+      //     id: '',
+      //     name: this.$t('全部')
+      //   })
+      //   this.sourceList = res.data
+      // })
     },
     inviteMethod(keyword) {
       this.inviteLoading = true
@@ -634,6 +679,10 @@ export default {
     editPassword(id) {
       this.pwdId = id
       this.dialogPwd = true
+    },
+    onSource() {
+      this.page_params.handleQueryChange('source', this.third_status)
+      this.getList()
     },
     pwdConfirm(formName) {
       this.$refs[formName].validate(valid => {
