@@ -543,6 +543,7 @@ export default {
           for (let i = 0; i < this.orderList.length; i++) {
             if (this.orderList[i].status === 2) {
               this.onOrder(this.orderList[i], i)
+              this.getCloudDetail(this.orderList[i].sn)
             } else {
               this.$router.push({
                 name: 'transshipmentBill'
