@@ -569,12 +569,12 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          source: this.searchParams.searchSource
-            ? this.searchParams.searchSource
-            : this.page_params.source,
           user_group_id: this.searchParams.user_group_id
             ? this.searchParams.user_group_id
             : this.page_params.group,
+          searchSource: this.searchParams.searchSource
+            ? this.searchParams.searchSource
+            : this.page_params.source,
           min_balance: this.searchParams.min_balance ? this.searchParams.min_balance * 100 : '',
           max_balance: this.searchParams.max_balance ? this.searchParams.max_balance * 100 : '',
           begin_date: this.searchTime[0],
@@ -640,13 +640,13 @@ export default {
       })
     },
     getUserSource() {
-      // this.$request.userSource().then(res => {
-      //   res.data.unshift({
-      //     id: '',
-      //     name: this.$t('全部')
-      //   })
-      //   this.sourceList = res.data
-      // })
+      this.$request.userSource().then(res => {
+        res.data.unshift({
+          id: '',
+          name: this.$t('全部')
+        })
+        this.sourceList = res.data
+      })
     },
     inviteMethod(keyword) {
       this.inviteLoading = true
@@ -681,7 +681,7 @@ export default {
       this.dialogPwd = true
     },
     onSource() {
-      this.page_params.handleQueryChange('source', this.third_status)
+      this.page_params.handleQueryChange('source', this.page_params.source)
       this.getList()
     },
     pwdConfirm(formName) {

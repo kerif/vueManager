@@ -277,13 +277,16 @@
         @click="onInvalid"
         >{{ $t('作废') }}</el-button
       >
-      <el-button
+      <!-- <el-button
         size="small"
         v-if="ruleForm.status === 3"
         class="btn-green"
         @click="editDistributionGoods"
         >{{ $t('分货') }}</el-button
-      >
+      > -->
+      <el-button v-if="ruleForm.status === 3" class="btn-green" @click="onDistribution">{{
+        $t('分货完成')
+      }}</el-button>
     </div>
     <el-dialog :visible.sync="imgVisible" size="small">
       <div class="img_box">
@@ -382,6 +385,31 @@ export default {
         params: {
           id
         }
+      })
+    },
+    onDistribution() {
+      this.$confirm(this.$t('您真的确认吗'), this.$t('提示'), {
+        confirmButtonText: this.$t('确定'),
+        cancelButtonText: this.$t('取消'),
+        type: 'warning'
+      }).then(() => {
+        this.$request.purchaseFinish({ ids: this.$route.params.id }).then(res => {
+          if (res.ret) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('操作成功'),
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'purchaseOrder'
+            })
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
       })
     },
     saveGoods() {

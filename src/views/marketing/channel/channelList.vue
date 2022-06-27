@@ -78,7 +78,9 @@
       :notNeedInitQuery="false"
     ></nle-pagination>
     <!-- <el-dialog :visible.sync="showCategory" :title="$t('分类管理')" @close="clear">
-      <el-button @click="addCategory">{{ $t('新增') }}</el-button>
+      <el-button @click="addCategory" style="margin-bottom: 5px" type="primary">{{
+        $t('新增')
+      }}</el-button>
       <el-table :data="tableData" border>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="name" :label="$t('分类')">
@@ -89,14 +91,16 @@
         <el-table-column :label="$t('操作')">
           <template slot-scope="scope">
             <el-button class="btn-main" @click="onAddEdit(scope.row)">{{ $t('编辑') }}</el-button>
-            <el-button class="btn-main" @click="onAddEdit(scope.row)"></el-button>
+            <el-button class="btn-main" @click="onAddEdit(scope.row)">{{ $t('保存') }}</el-button>
             <el-button class="btn-light-red" @click="onDelete(scope.row.id)">{{
               $t('删除')
             }}</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      <div style="padding: 10px 0">
+        <nle-pagination :pageParams="page_params" :notNeedInitQuery="false"></nle-pagination>
+      </div>
     </el-dialog> -->
   </div>
 </template>
