@@ -164,7 +164,8 @@ export default {
           keyword: this.page_params.keyword,
           page: this.page_params.page,
           size: this.page_params.size,
-          status: this.activeName === 'all' ? '' : this.activeName
+          status: this.activeName === 'all' ? '' : this.activeName,
+          ...this.searchData
         })
         .then(res => {
           if (res.ret) {
@@ -172,7 +173,6 @@ export default {
             this.tableData = res.data
             this.page_params.page = res.meta.current_page
             this.page_params.total = res.meta.total
-
             this.onCount()
           }
         })

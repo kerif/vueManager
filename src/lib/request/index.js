@@ -4426,6 +4426,10 @@ exports.transshipmentList = params => {
 exports.addPickOrder = params => {
   return $form.post('purchase-picking-orders', params)
 }
+// 采购 分货方案 编辑
+exports.editPickOrder = (id, params) => {
+  return $form.put(`purchase-picking-orders/${id}`, params)
+}
 
 // 采购 分货方案 审核
 exports.verifyPickOrder = id => {

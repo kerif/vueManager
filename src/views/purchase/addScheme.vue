@@ -52,7 +52,7 @@
         </el-row>
         <el-table :data="item.goods" style="width: 80%" border class="space">
           <el-table-column type="index" label="#"></el-table-column>
-          <el-table-column prop="number" :label="$t('商品ID')"> </el-table-column>
+          <el-table-column prop="number" :label="$t('商品编号')"> </el-table-column>
           <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="quantity" :label="$t('分货数量')"> </el-table-column>
         </el-table>
@@ -72,7 +72,6 @@ import dialog from '@/components/dialog'
 export default {
   data() {
     return {
-      value: '',
       goodData: [],
       form: {
         remark: '',
@@ -119,9 +118,17 @@ export default {
               title: this.$t('操作成功'),
               message: res.msg
             })
-            this.$router.push({
-              name: 'transshipmentBill'
-            })
+            if (isFinish === 0) {
+              this.$router.push({
+                name: 'transshipmentBill',
+                query: { activeName: '0' }
+              })
+            } else {
+              this.$router.push({
+                name: 'transshipmentBill',
+                query: { activeName: '1' }
+              })
+            }
           } else {
             this.$message({
               message: res.msg,

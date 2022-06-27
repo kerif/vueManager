@@ -140,11 +140,11 @@
         </div>
       </div>
       <div class="align-right" v-if="orderList.length">
-        <el-button @click="onSave(0)">{{ $t('保存') }}</el-button>
+        <el-button @click="onSave">{{ $t('保存') }}</el-button>
         <el-button
           class="save-btn"
           type="primary"
-          @click="onSave(1)"
+          @click="onSubmit"
           :loading="$store.state.btnLoading"
           >{{ $t('拣货完成') }}</el-button
         >
@@ -213,9 +213,9 @@ export default {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
-    onSave(type) {
+    onSave() {
       let params = {
-        is_picking_finish: type,
+        is_picking_finish: 0,
         goods: []
       }
       this.orderList.forEach(item => {
@@ -237,17 +237,47 @@ export default {
             message: res.msg,
             type: 'success'
           })
-          if (type === 0) {
-            this.$router.push({
-              name: 'transshipmentBill',
-              query: { activeName: '1' }
+          this.$router.push({
+            name: 'transshipmentBill',
+            query: { activeName: '1' }
+          })
+        } else {
+          this.$notify({
+            title: this.$t('操作失败'),
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    onSubmit() {
+      let params = {
+        is_picking_finish: 1,
+        goods: []
+      }
+      this.orderList.forEach(item => {
+        if (item.goods) {
+          item.goods.forEach(ele => {
+            params.goods.push({
+              picking_quantity: ele.picking_quantity,
+              picking_divide_order_id: ele.picking_divide_order_id,
+              purchase_order_goods_id: ele.purchase_order_goods_id
             })
-          } else {
-            this.$router.push({
-              name: 'transshipmentBill',
-              query: { activeName: '2' }
-            })
-          }
+          })
+          return params.goods
+        }
+      })
+      this.$request.purchasePick(this.orderId, params).then(res => {
+        if (res.ret) {
+          this.$notify({
+            title: this.$t('操作成功'),
+            message: res.msg,
+            type: 'success'
+          })
+          this.$router.push({
+            name: 'transshipmentBill',
+            query: { activeName: '2' }
+          })
         } else {
           this.$notify({
             title: this.$t('操作失败'),

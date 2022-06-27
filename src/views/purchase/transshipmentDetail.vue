@@ -125,7 +125,7 @@
           class="space"
         >
           <el-table-column type="index" label="#"></el-table-column>
-          <el-table-column prop="number" :label="$t('商品ID')">
+          <el-table-column prop="number" :label="$t('商品编号')">
             <template slot-scope="scope">
               {{ scope.row.p_goods ? scope.row.p_goods.number : '' }}
             </template>
@@ -198,11 +198,15 @@ export default {
             station_code: item.station.code,
             user: item.user,
             user_id: item.user_id,
+            prop_ids: item.props.map(ele => ele.id),
             sn: item.sn,
+            id: item.id,
             boxes: item.boxes,
             goods: item.goods.map(ele => {
               return {
                 ...ele.p_goods,
+                id: ele.id,
+                purchase_order_sn: ele.p_order ? ele.p_order.sn : '',
                 quantity: ele.quantity,
                 picking_quantity: ele.picking_quantity
               }
@@ -276,21 +280,34 @@ export default {
     onSubmit(isFinish) {
       let params = {}
       params.orders = this.goodData.map(item => {
-        const prop_ids = [item.prop.id]
-        const goods = item.goods
+        const id = item.id
+        const prop_ids = item.prop_ids
         const number = item.number
         const station_code = item.station_code
         const user_id = item.user_id
+        const goods = item.goods.map(ele => {
+          return {
+            id: ele.id,
+            number: ele.number,
+            purchase_order_sn: ele.purchase_order_sn,
+            quantity: ele.quantity
+          }
+        })
         return {
+          id,
           prop_ids,
-          goods,
           number,
           station_code,
-          user_id
+          user_id,
+          goods
         }
       })
       this.$request
-        .addPickOrder({ ...this.form, is_finish: isFinish, orders: params.orders })
+        .editPickOrder(this.$route.params.id, {
+          ...this.form,
+          is_finish: isFinish,
+          orders: params.orders
+        })
         .then(res => {
           if (res.ret) {
             this.$notify({
