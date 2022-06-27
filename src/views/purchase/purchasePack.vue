@@ -433,7 +433,7 @@ export default {
       if (item.user) {
         this.user_id = item.user.id + '---' + item.user.name
       }
-      if (item.status === 3) {
+      if (item.status === 3 || (item.status === 2 && item.boxes.length > 0)) {
         this.express_line_id = this.orderList[index].express_line
           ? this.orderList[index].express_line.id
           : ''
@@ -456,6 +456,7 @@ export default {
         const tempList = this.orderList[index].goods.map(ele => {
           return {
             ...ele.p_goods,
+            purchase_order_goods_id: ele.purchase_order_goods_id,
             quantity: ele.quantity,
             packData: []
           }
