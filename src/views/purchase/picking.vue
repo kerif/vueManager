@@ -12,8 +12,22 @@
             />
           </div>
           <div class="row-item">
+            <!-- <el-autocomplete
+              :fetch-suggestions="queryCNSearch"
+              :placeholder="$t('请选择箱号')"
+              v-model="num"
+            >
+            </el-autocomplete> -->
+            <el-select v-model="num" :placeholder="$t('请选择箱号')" clearable>
+              <el-option
+                v-for="item in boxNumber"
+                :key="item.id"
+                :value="item.id"
+                :label="item.number"
+              ></el-option>
+            </el-select>
             <el-input
-              :placeholder="$t('请输入或扫码条码')"
+              :placeholder="$t('请输入或扫入条码')"
               class="ipt"
               v-model="barcode"
               ref="barcode"
@@ -59,15 +73,15 @@
       </el-row>
       <div class="order-list">
         <div class="order-item flex-item" v-for="(item, index) in orderList" :key="index">
-          <div class="index">
+          <div class="index" :class="{ auto: item.id === num }">
             <div>{{ $t('订单号') }}：{{ item.sn }}</div>
-            <div class="font-bold index-label">#{{ index + 1 }}</div>
+            <div class="font-bold index-label">#{{ item.number }}</div>
           </div>
           <div class="order-content flex-1">
             <el-row :gutter="30">
               <el-row class="sku-row">
                 <el-col :span="4" :offset="1">{{ $t('图片') }}</el-col>
-                <el-col :span="4">{{ $t('商品ID') }}</el-col>
+                <el-col :span="4">{{ $t('商品编号') }}</el-col>
                 <el-col :span="4">{{ $t('品名') }}</el-col>
                 <el-col :span="4">{{ $t('条码') }}</el-col>
                 <el-col :span="4" class="align-center">{{ $t('分货') }}</el-col>
@@ -95,7 +109,7 @@
                           Number(ele.picking_quantity) > ele.quantity) &&
                         Number(ele.picking_quantity) !== 0
                     }"
-                    >{{ item.sn }}</span
+                    >{{ ele.p_goods.number }}</span
                   >
                 </el-col>
                 <el-col :span="4">
@@ -166,7 +180,9 @@ export default {
       orderId: '',
       orderList: [],
       imgVisible: false,
-      imgSrc: ''
+      imgSrc: '',
+      boxNumber: [],
+      num: ''
     }
   },
   created() {
@@ -184,11 +200,36 @@ export default {
           }
           this.orderId = res.data ? res.data.id : ''
           this.orderList = res.data ? res.data.orders : []
+          this.boxNumber = this.orderList.map(item => {
+            return {
+              id: item.id,
+              number: '#' + item.number
+            }
+          })
+          console.log(this.boxNumber)
         })
       }
     },
     onSku() {
-      if (this.barcode) {
+      if (this.num && this.barcode) {
+        this.orderList.forEach(item => {
+          if (item.id === this.num) {
+            item.goods.forEach(ele => {
+              let flag = true
+              if (ele.p_goods) {
+                if (
+                  this.barcode === ele.p_goods.barcode &&
+                  ele.picking_quantity < ele.quantity &&
+                  flag
+                ) {
+                  ele.picking_quantity++
+                  flag = false
+                }
+              }
+            })
+          }
+        })
+      } else if (this.barcode) {
         this.$refs.barcode.select()
         for (let i = 0; i < this.orderList.length; i++) {
           let flag = true
@@ -207,12 +248,41 @@ export default {
             break
           }
         }
+      } else if (this.num) {
+        console.log(this.num)
+        this.orderList.forEach(item => {
+          if (item.id === this.num) {
+            item.goods.forEach(ele => {
+              if (ele.picking_quantity < ele.quantity) {
+                ele.picking_quantity++
+              }
+            })
+          }
+        })
       }
     },
     onPic(url) {
       this.imgVisible = true
       this.imgSrc = this.$baseUrl.IMAGE_URL + url
     },
+    // queryCNSearch(queryString, callback) {
+    //   if (this.sn) {
+    //     this.$request.purchasePickSearch(this.sn).then(res => {
+    //       if (!res.data) {
+    //         this.$message.error(this.$t('拣货单不存在'))
+    //       }
+    //       let list
+    //       list = res.data.orders.map(item => {
+    //         return {
+    //           id: item.id,
+    //           number: item.number
+    //         }
+    //       })
+    //       console.log(list)
+    //       callback && callback(list)
+    //     })
+    //   }
+    // },
     onSave() {
       let params = {
         is_picking_finish: 0,
@@ -391,6 +461,10 @@ export default {
     padding: 20px 20px;
     border-right: 1px solid #efefef;
     position: relative;
+  }
+  .auto {
+    background: #3540a5;
+    color: #fff;
   }
   .index-label {
     font-size: 40px;

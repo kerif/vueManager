@@ -76,7 +76,7 @@
         </el-row>
         <el-table :data="item.goods" style="width: 80%" border stripe class="space">
           <el-table-column type="index" label="#"></el-table-column>
-          <el-table-column prop="number" :label="$t('商品ID')"> </el-table-column>
+          <el-table-column prop="number" :label="$t('商品编号')"> </el-table-column>
           <el-table-column prop="name" :label="$t('物品中文名称')"> </el-table-column>
           <el-table-column prop="quantity" :label="$t('分货数量')"> </el-table-column>
           <el-table-column
@@ -290,7 +290,8 @@ export default {
             id: ele.id,
             number: ele.number,
             purchase_order_sn: ele.purchase_order_sn,
-            quantity: ele.quantity
+            quantity: ele.quantity,
+            image: ele.image
           }
         })
         return {

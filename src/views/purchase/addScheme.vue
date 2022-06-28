@@ -12,7 +12,7 @@
           <el-form-item :label="$t('方案备注')">
             <el-input
               type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4 }"
+              :autosize="{ minRows: 3, maxRows: 4 }"
               v-model="form.remark"
               style="width: 55%"
             ></el-input>

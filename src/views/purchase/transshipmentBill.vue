@@ -70,10 +70,14 @@
         <el-table-column prop="name" :label="$t('包含采购单')"> </el-table-column>
         <el-table-column prop="quantity,orders_count" :label="$t('预计分货(商品数/订单)')">
           <template slot-scope="scope">
-            {{ scope.row.quantity }}/{{ scope.row.orders_count }}
+            {{ scope.row.quantity ? scope.row.quantity : 0 }}/{{ scope.row.orders_count }}
           </template>
         </el-table-column>
-        <el-table-column prop="picking_quantity" :label="$t('实际拣货')"> </el-table-column>
+        <el-table-column prop="picking_quantity" :label="$t('实际拣货')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.picking_quantity ? scope.row.picking_quantity : 0 }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="created_at" :label="$t('创建时间')"> </el-table-column>
         <el-table-column prop="creator" :label="$t('创建人')"> </el-table-column>
         <el-table-column :label="$t('操作')" width="220" v-if="activeName !== 'all'">
