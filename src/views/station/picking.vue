@@ -62,6 +62,7 @@
             <span v-if="scope.row.type === 6">{{ $t('包裹变更') }}</span>
             <span v-if="scope.row.type === 7">{{ $t('移除') }}</span>
             <span v-if="scope.row.type === 8">{{ $t('添加') }}</span>
+            <span v-if="scope.row.type === 9">{{ $t('APP签收') }}</span>
           </template>
         </el-table-column>
         <el-table-column

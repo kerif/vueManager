@@ -287,18 +287,36 @@ export default {
               ele.cn_name = ele.name
             })
           })
-          console.log(this.goodData)
-          console.log(goodsList)
-          this.goodData.push(...goodsList)
-          // this.goodData.forEach((item, index) => {
-          //   console.log(index)
-          //   goodsList.forEach((ele, ind) => {
-          //     console.log(ind)
-          //     if (item.number !== ele.number) {
-          //       this.goodData.push(...goodsList)
-          //     }
-          //   })
-          // })
+          let tableData = []
+          let num2 = this.goodData.map(item => item.number)
+          goodsList.forEach(item => {
+            if (num2.includes(item.number)) {
+              this.goodData.forEach(ele => {
+                if (ele.number === item.number) {
+                  let list = []
+                  item.goods.forEach(goods1 => {
+                    let flag = false
+                    ele.goods.forEach(goods2 => {
+                      if (
+                        goods1.purchase_order_sn === goods2.purchase_order_sn &&
+                        goods1.number === goods2.number
+                      ) {
+                        goods2.quantity = goods1.quantity
+                        flag = true
+                      }
+                    })
+                    if (!flag) {
+                      list.push(goods1)
+                    }
+                  })
+                  ele.goods = ele.goods.concat(list)
+                }
+              })
+            } else {
+              tableData.push(item)
+            }
+          })
+          this.goodData = this.goodData.concat(tableData)
         }
       )
     },
